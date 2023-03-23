@@ -114,31 +114,47 @@ $(document).ready(function(){initNavTree('plugin__hgl__parser_8h_source.html',''
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="plugin__interface__base_8h.html">hal_core/plugin_system/plugin_interface_base.h</a>&quot;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classhal_1_1_h_g_l_parser_plugin.html">   32</a></span>&#160;    <span class="keyword">class </span><a class="code" href="arch__linux_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d">PLUGIN_API</a> <a class="code" href="classhal_1_1_h_g_l_parser_plugin.html">HGLParserPlugin</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_base_plugin_interface.html">BasePluginInterface</a></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    {</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        std::string get_name() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        std::string get_version() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordtype">void</span> on_load() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordtype">void</span> on_unload() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    };</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="hgl__parser_8h.html">hgl_parser.h</a>&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="fac__extension__interface_8h.html">hal_core/plugin_system/fac_extension_interface.h</a>&quot;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;{</div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classhal_1_1_h_g_l_parser_extension.html">   34</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_h_g_l_parser_extension.html">HGLParserExtension</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_fac_extension_interface.html">FacExtensionInterface</a></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <a class="code" href="classhal_1_1_h_g_l_parser_extension.html#a7e92d928e1f27f724d3efa1d65ada521">HGLParserExtension</a>();</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    };</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classhal_1_1_h_g_l_parser_plugin.html">   40</a></span>&#160;    <span class="keyword">class </span><a class="code" href="arch__linux_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d">PLUGIN_API</a> <a class="code" href="classhal_1_1_h_g_l_parser_plugin.html">HGLParserPlugin</a> : <span class="keyword">public</span> <a class="code" href="classhal_1_1_base_plugin_interface.html">BasePluginInterface</a></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <a class="code" href="classhal_1_1_h_g_l_parser_extension.html">HGLParserExtension</a>* m_extension;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="code" href="classhal_1_1_h_g_l_parser_plugin.html">HGLParserPlugin</a>();</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        std::string get_name() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        std::string get_version() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">void</span> on_load() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordtype">void</span> on_unload() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    };</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="aclasshal_1_1_h_g_l_parser_extension_html_a7e92d928e1f27f724d3efa1d65ada521"><div class="ttname"><a href="classhal_1_1_h_g_l_parser_extension.html#a7e92d928e1f27f724d3efa1d65ada521">hal::HGLParserExtension::HGLParserExtension</a></div><div class="ttdeci">HGLParserExtension()</div><div class="ttdef"><b>Definition:</b> <a href="plugin__hgl__parser_8cpp_source.html#l00013">plugin_hgl_parser.cpp:13</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
-<div class="ttc" id="aclasshal_1_1_h_g_l_parser_plugin_html"><div class="ttname"><a href="classhal_1_1_h_g_l_parser_plugin.html">hal::HGLParserPlugin</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__hgl__parser_8h_source.html#l00032">plugin_hgl_parser.h:32</a></div></div>
-<div class="ttc" id="aclasshal_1_1_base_plugin_interface_html"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00068">plugin_interface_base.h:68</a></div></div>
+<div class="ttc" id="ahgl__parser_8h_html"><div class="ttname"><a href="hgl__parser_8h.html">hgl_parser.h</a></div></div>
+<div class="ttc" id="afac__extension__interface_8h_html"><div class="ttname"><a href="fac__extension__interface_8h.html">fac_extension_interface.h</a></div></div>
+<div class="ttc" id="aclasshal_1_1_h_g_l_parser_plugin_html"><div class="ttname"><a href="classhal_1_1_h_g_l_parser_plugin.html">hal::HGLParserPlugin</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__hgl__parser_8h_source.html#l00040">plugin_hgl_parser.h:40</a></div></div>
+<div class="ttc" id="aclasshal_1_1_base_plugin_interface_html"><div class="ttname"><a href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__interface__base_8h_source.html#l00056">plugin_interface_base.h:56</a></div></div>
+<div class="ttc" id="aclasshal_1_1_h_g_l_parser_extension_html"><div class="ttname"><a href="classhal_1_1_h_g_l_parser_extension.html">hal::HGLParserExtension</a></div><div class="ttdef"><b>Definition:</b> <a href="plugin__hgl__parser_8h_source.html#l00034">plugin_hgl_parser.h:34</a></div></div>
 <div class="ttc" id="aplugin__interface__base_8h_html"><div class="ttname"><a href="plugin__interface__base_8h.html">plugin_interface_base.h</a></div></div>
 <div class="ttc" id="aarch__linux_8h_html_afcb1b0bf7320fa3ebfc13fd896ebca4d"><div class="ttname"><a href="arch__linux_8h.html#afcb1b0bf7320fa3ebfc13fd896ebca4d">PLUGIN_API</a></div><div class="ttdeci">#define PLUGIN_API</div><div class="ttdef"><b>Definition:</b> <a href="arch__linux_8h_source.html#l00032">arch_linux.h:32</a></div></div>
+<div class="ttc" id="aclasshal_1_1_fac_extension_interface_html"><div class="ttname"><a href="classhal_1_1_fac_extension_interface.html">hal::FacExtensionInterface</a></div><div class="ttdef"><b>Definition:</b> <a href="fac__extension__interface_8h_source.html#l00054">fac_extension_interface.h:54</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6f8117b8383d882a363db20b300886ad.html">hgl_parser</a></li><li class="navelem"><a class="el" href="dir_8799f78bd7fed6d3c65cac53e3339b5f.html">include</a></li><li class="navelem"><a class="el" href="dir_26b1ccfc6012eb9af93dedb390bd1966.html">hgl_parser</a></li><li class="navelem"><a class="el" href="plugin__hgl__parser_8h.html">plugin_hgl_parser.h</a></li>
-    <li class="footer">Generated on Sun Mar 19 2023 08:26:59 for HAL by
+    <li class="footer">Generated on Thu Mar 23 2023 10:58:54 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['settings_20system_39858',['Settings System',['../group__settings.html',1,'']]],
-  ['selection_20details_20widget_39859',['Selection Details Widget',['../group__utility__widgets-selection__details.html',1,'']]]
+  ['settings_20system_40091',['Settings System',['../group__settings.html',1,'']]],
+  ['selection_20details_20widget_40092',['Selection Details Widget',['../group__utility__widgets-selection__details.html',1,'']]]
 ];

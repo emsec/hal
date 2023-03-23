@@ -1,5 +1,6 @@
 var classhal_1_1_h_g_l_writer_plugin =
 [
+    [ "HGLWriterPlugin", "classhal_1_1_h_g_l_writer_plugin.html#a7b7eefdda116db14e88a4d40c5fcc707", null ],
     [ "get_name", "classhal_1_1_h_g_l_writer_plugin.html#a780ecc22304fcb84848b7f403d2fac90", null ],
     [ "get_version", "classhal_1_1_h_g_l_writer_plugin.html#a632d1d3bbf583d4f1b0d6f1b26411573", null ],
     [ "on_load", "classhal_1_1_h_g_l_writer_plugin.html#abea937047f532b78c9b50fabf6802ca4", null ],

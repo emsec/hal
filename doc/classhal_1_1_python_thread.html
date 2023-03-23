@@ -125,7 +125,8 @@ Public Types</h2></td></tr>
 <a class="el" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8ca8df061da5c0df9cce3f8faddb9f07507">ModuleInput</a>, 
 <br />
 &#160;&#160;<a class="el" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8caae93f8e0b2de62f1fcd588ee5a5559c2">GateInput</a>, 
-<a class="el" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8ca0acb552f524268a4d595d987b042c37a">FilenameInput</a>
+<a class="el" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8ca0acb552f524268a4d595d987b042c37a">FilenameInput</a>, 
+<a class="el" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8ca4c9cc433fcd3b041167d1b64612c7541">WaitForMenuSelection</a>
 <br />
  }</td></tr>
 <tr class="separator:ae153632cff534a9bcb961ffc35718c8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -176,6 +177,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a03fc12f4cf5fdee1f6c839c8f631bf50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44a079f3177d54e73c4d7fb7613ff512"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_thread.html#a44a079f3177d54e73c4d7fb7613ff512">setInput</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> &amp;inp)</td></tr>
 <tr class="separator:a44a079f3177d54e73c4d7fb7613ff512"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92d07e84914be9c0366fa0ff7a158812"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_thread.html#a92d07e84914be9c0366fa0ff7a158812">getInput</a> (<a class="el" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8c">InputType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> prompt, <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> defaultValue)</td></tr>
+<tr class="separator:a92d07e84914be9c0366fa0ff7a158812"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fd62f01f02aa750f9480a366a807b30"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_thread.html#a0fd62f01f02aa750f9480a366a807b30">unlock</a> ()</td></tr>
+<tr class="separator:a0fd62f01f02aa750f9480a366a807b30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac97ad3e9516cd040cc53c65773e2af51"><td class="memItemLeft" align="right" valign="top">const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_thread.html#ac97ad3e9516cd040cc53c65773e2af51">stdoutBuffer</a> () const</td></tr>
 <tr class="separator:ac97ad3e9516cd040cc53c65773e2af51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7544a08e228ad8c4cecdd9f373a568ed"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_python_thread.html#a7544a08e228ad8c4cecdd9f373a568ed">flushStdout</a> ()</td></tr>
@@ -478,6 +483,7 @@ Additional Inherited Members</h2></td></tr>
 <tr><td class="fieldname"><a id="ae153632cff534a9bcb961ffc35718c8ca8df061da5c0df9cce3f8faddb9f07507"></a>ModuleInput&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ae153632cff534a9bcb961ffc35718c8caae93f8e0b2de62f1fcd588ee5a5559c2"></a>GateInput&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ae153632cff534a9bcb961ffc35718c8ca0acb552f524268a4d595d987b042c37a"></a>FilenameInput&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ae153632cff534a9bcb961ffc35718c8ca4c9cc433fcd3b041167d1b64612c7541"></a>WaitForMenuSelection&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 <p class="definition">Definition at line <a class="el" href="python__thread_8h_source.html#l00041">41</a> of file <a class="el" href="python__thread_8h_source.html">python_thread.h</a>.</p>
@@ -594,7 +600,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="python__thread_8h_source.html#l00065">65</a> of file <a class="el" href="python__thread_8h_source.html">python_thread.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__thread_8h_source.html#l00064">64</a> of file <a class="el" href="python__thread_8h_source.html">python_thread.h</a>.</p>
 
 </div>
 </div>
@@ -619,6 +625,46 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a92d07e84914be9c0366fa0ff7a158812"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92d07e84914be9c0366fa0ff7a158812">&#9670;&nbsp;</a></span>getInput()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::PythonThread::getInput </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8c">InputType</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td>
+          <td class="paramname"><em>prompt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td>
+          <td class="paramname"><em>defaultValue</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="python__thread_8cpp_source.html#l00134">134</a> of file <a class="el" href="python__thread_8cpp_source.html">python_thread.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qmutex.html#lock">QMutex::lock()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="classhal_1_1_python_thread.html#ac01eadc0c157da2027993b6f76ac928b">requireInput()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmutex.html#tryLock">QMutex::tryLock()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">type</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmutex.html#unlock">QMutex::unlock()</a>, and <a class="el" href="python__thread_8h_source.html#l00041">WaitForMenuSelection</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="python__thread_8cpp_source.html#l00153">handleConsoleInput()</a>, <a class="el" href="python__thread_8cpp_source.html#l00183">handleFilenameInput()</a>, <a class="el" href="python__thread_8cpp_source.html#l00177">handleGateInput()</a>, <a class="el" href="python__thread_8cpp_source.html#l00171">handleModuleInput()</a>, <a class="el" href="python__thread_8cpp_source.html#l00165">handleNumberInput()</a>, and <a class="el" href="python__thread_8cpp_source.html#l00159">handleStringInput()</a>.</p>
+
+</div>
+</div>
 <a id="a999ee894c665a8d55aabfeec5d60cf1e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a999ee894c665a8d55aabfeec5d60cf1e">&#9670;&nbsp;</a></span>handleConsoleInput()</h2>
 
@@ -635,9 +681,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="python__thread_8cpp_source.html#l00152">152</a> of file <a class="el" href="python__thread_8cpp_source.html">python_thread.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__thread_8cpp_source.html#l00153">153</a> of file <a class="el" href="python__thread_8cpp_source.html">python_thread.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__thread_8h_source.html#l00041">ConsoleInput</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">QVariant::toString()</a>.</p>
+<p class="reference">References <a class="el" href="python__thread_8h_source.html#l00041">ConsoleInput</a>, <a class="el" href="python__thread_8cpp_source.html#l00134">getInput()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">QVariant::toString()</a>.</p>
 
 </div>
 </div>
@@ -706,9 +752,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="python__thread_8cpp_source.html#l00182">182</a> of file <a class="el" href="python__thread_8cpp_source.html">python_thread.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__thread_8cpp_source.html#l00183">183</a> of file <a class="el" href="python__thread_8cpp_source.html">python_thread.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__thread_8h_source.html#l00041">FilenameInput</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">QVariant::toString()</a>.</p>
+<p class="reference">References <a class="el" href="python__thread_8h_source.html#l00041">FilenameInput</a>, <a class="el" href="python__thread_8cpp_source.html#l00134">getInput()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">QVariant::toString()</a>.</p>
 
 </div>
 </div>
@@ -728,9 +774,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="python__thread_8cpp_source.html#l00176">176</a> of file <a class="el" href="python__thread_8cpp_source.html">python_thread.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__thread_8cpp_source.html#l00177">177</a> of file <a class="el" href="python__thread_8cpp_source.html">python_thread.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__thread_8h_source.html#l00041">GateInput</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#value">QVariant::value()</a>.</p>
+<p class="reference">References <a class="el" href="python__thread_8h_source.html#l00041">GateInput</a>, <a class="el" href="python__thread_8cpp_source.html#l00134">getInput()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#value">QVariant::value()</a>.</p>
 
 </div>
 </div>
@@ -750,9 +796,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="python__thread_8cpp_source.html#l00170">170</a> of file <a class="el" href="python__thread_8cpp_source.html">python_thread.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__thread_8cpp_source.html#l00171">171</a> of file <a class="el" href="python__thread_8cpp_source.html">python_thread.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__thread_8h_source.html#l00041">ModuleInput</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#value">QVariant::value()</a>.</p>
+<p class="reference">References <a class="el" href="python__thread_8cpp_source.html#l00134">getInput()</a>, <a class="el" href="python__thread_8h_source.html#l00041">ModuleInput</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#value">QVariant::value()</a>.</p>
 
 </div>
 </div>
@@ -782,9 +828,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="python__thread_8cpp_source.html#l00164">164</a> of file <a class="el" href="python__thread_8cpp_source.html">python_thread.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__thread_8cpp_source.html#l00165">165</a> of file <a class="el" href="python__thread_8cpp_source.html">python_thread.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__thread_8h_source.html#l00041">NumberInput</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toInt">QVariant::toInt()</a>.</p>
+<p class="reference">References <a class="el" href="python__thread_8cpp_source.html#l00134">getInput()</a>, <a class="el" href="python__thread_8h_source.html#l00041">NumberInput</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toInt">QVariant::toInt()</a>.</p>
 
 </div>
 </div>
@@ -853,9 +899,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="python__thread_8cpp_source.html#l00158">158</a> of file <a class="el" href="python__thread_8cpp_source.html">python_thread.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__thread_8cpp_source.html#l00159">159</a> of file <a class="el" href="python__thread_8cpp_source.html">python_thread.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="python__thread_8h_source.html#l00041">StringInput</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">QVariant::toString()</a>.</p>
+<p class="reference">References <a class="el" href="python__thread_8cpp_source.html#l00134">getInput()</a>, <a class="el" href="python__thread_8h_source.html#l00041">StringInput</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">QVariant::toString()</a>.</p>
 
 </div>
 </div>
@@ -920,6 +966,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p class="reference">Referenced by <a class="el" href="python__thread_8cpp_source.html#l00134">getInput()</a>.</p>
+
 </div>
 </div>
 <a id="a3b49ef960eac1d3de38b6426c0173de5"></a>
@@ -945,7 +993,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="python__thread_8h_source.html#l00066">66</a> of file <a class="el" href="python__thread_8h_source.html">python_thread.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__thread_8h_source.html#l00065">65</a> of file <a class="el" href="python__thread_8h_source.html">python_thread.h</a>.</p>
 
 </div>
 </div>
@@ -996,7 +1044,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="python__thread_8cpp_source.html#l00188">188</a> of file <a class="el" href="python__thread_8cpp_source.html">python_thread.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__thread_8cpp_source.html#l00189">189</a> of file <a class="el" href="python__thread_8cpp_source.html">python_thread.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qmutex.html#unlock">QMutex::unlock()</a>.</p>
 
@@ -1055,7 +1103,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="python__thread_8h_source.html#l00077">77</a> of file <a class="el" href="python__thread_8h_source.html">python_thread.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__thread_8h_source.html#l00078">78</a> of file <a class="el" href="python__thread_8h_source.html">python_thread.h</a>.</p>
 
 </div>
 </div>
@@ -1087,6 +1135,27 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a0fd62f01f02aa750f9480a366a807b30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fd62f01f02aa750f9480a366a807b30">&#9670;&nbsp;</a></span>unlock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::PythonThread::unlock </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="python__thread_8cpp_source.html#l00195">195</a> of file <a class="el" href="python__thread_8cpp_source.html">python_thread.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qmutex.html#tryLock">QMutex::tryLock()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmutex.html#unlock">QMutex::unlock()</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/runner/work/hal/hal/plugins/gui/include/gui/python/<a class="el" href="python__thread_8h_source.html">python_thread.h</a></li>
 <li>/home/runner/work/hal/hal/plugins/gui/src/python/<a class="el" href="python__thread_8cpp_source.html">python_thread.cpp</a></li>
@@ -1097,7 +1166,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_python_thread.html">PythonThread</a></li>
-    <li class="footer">Generated on Sun Mar 19 2023 08:27:04 for HAL by
+    <li class="footer">Generated on Thu Mar 23 2023 10:58:59 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

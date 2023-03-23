@@ -6,13 +6,15 @@ var classhal_1_1_python_thread =
       [ "NumberInput", "classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8caa9ec369b88e5d843010f1e9f6078bbe9", null ],
       [ "ModuleInput", "classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8ca8df061da5c0df9cce3f8faddb9f07507", null ],
       [ "GateInput", "classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8caae93f8e0b2de62f1fcd588ee5a5559c2", null ],
-      [ "FilenameInput", "classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8ca0acb552f524268a4d595d987b042c37a", null ]
+      [ "FilenameInput", "classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8ca0acb552f524268a4d595d987b042c37a", null ],
+      [ "WaitForMenuSelection", "classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8ca4c9cc433fcd3b041167d1b64612c7541", null ]
     ] ],
     [ "PythonThread", "classhal_1_1_python_thread.html#ae443dafad5343e558a105cd9ef3f4964", null ],
     [ "~PythonThread", "classhal_1_1_python_thread.html#aeaff2b703ed3f6be28c98b323aae80f8", null ],
     [ "clear", "classhal_1_1_python_thread.html#a03fc12f4cf5fdee1f6c839c8f631bf50", null ],
     [ "errorMessage", "classhal_1_1_python_thread.html#a2f250190b3afc8545f84e07b5813a508", null ],
     [ "flushStdout", "classhal_1_1_python_thread.html#a7544a08e228ad8c4cecdd9f373a568ed", null ],
+    [ "getInput", "classhal_1_1_python_thread.html#a92d07e84914be9c0366fa0ff7a158812", null ],
     [ "handleConsoleInput", "classhal_1_1_python_thread.html#a999ee894c665a8d55aabfeec5d60cf1e", null ],
     [ "handleError", "classhal_1_1_python_thread.html#aa71da3d2ef97dfac0dd093c90b87e9ca", null ],
     [ "handleFilenameInput", "classhal_1_1_python_thread.html#ae6dee061ac38a7279f46c25aab255cbd", null ],
@@ -28,5 +30,6 @@ var classhal_1_1_python_thread =
     [ "setInput", "classhal_1_1_python_thread.html#a44a079f3177d54e73c4d7fb7613ff512", null ],
     [ "stdError", "classhal_1_1_python_thread.html#a0be99bef713b0bfa0a9a77a32b16a4de", null ],
     [ "stdoutBuffer", "classhal_1_1_python_thread.html#ac97ad3e9516cd040cc53c65773e2af51", null ],
-    [ "stdOutput", "classhal_1_1_python_thread.html#ab0085c92c89fe36c83d4a40d718a6d1c", null ]
+    [ "stdOutput", "classhal_1_1_python_thread.html#ab0085c92c89fe36c83d4a40d718a6d1c", null ],
+    [ "unlock", "classhal_1_1_python_thread.html#a0fd62f01f02aa750f9480a366a807b30", null ]
 ];

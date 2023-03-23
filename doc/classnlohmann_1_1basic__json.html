@@ -1252,7 +1252,7 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 <td class="markdownTableBodyNone">json.exception.invalid_iterator.214 </td><td class="markdownTableBodyNone">cannot get value </td><td class="markdownTableBodyNone">Cannot get value for iterator: Either the iterator belongs to a null value or it is an iterator to a primitive type (number, boolean, or string), but the iterator is different to <a class="el" href="classnlohmann_1_1basic__json.html#a0ff28dac23f2bdecee9564d07f51dcdc">begin()</a>.  </td></tr>
 </table>
 <p>@liveexample{The following code shows how an <code>invalid_iterator</code> exception can be caught.,invalid_iterator}</p>
-<dl class="section see"><dt>See also</dt><dd>- <a class="el" href="classnlohmann_1_1basic__json.html#a9a0aced019cb1d65bb49703406c84970">exception</a> for the <a class="el" href="plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">base</a> class <a class="el" href="_apache_01_license_8txt.html#a7ee731f5d60b203ffeb5c274118c106a">of</a> the library exceptions </dd>
+<dl class="section see"><dt>See also</dt><dd>- <a class="el" href="classnlohmann_1_1basic__json.html#a9a0aced019cb1d65bb49703406c84970">exception</a> for the base class <a class="el" href="_apache_01_license_8txt.html#a7ee731f5d60b203ffeb5c274118c106a">of</a> the library exceptions </dd>
 <dd>
 - <a class="el" href="classnlohmann_1_1basic__json.html#af1efc2468e6022be6e35fc2944cabe4d">parse_error</a> for exceptions indicating a <a class="el" href="classnlohmann_1_1basic__json.html#a5a0339361f3282cb8fd2f9ede6e17d72" title="deserialize from a compatible input">parse</a> error </dd>
 <dd>
@@ -1602,7 +1602,7 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">json.exception.other_error.501 </td><td class="markdownTableBodyNone">unsuccessful: {"op":"test","path":"/baz", "value":"bar"} </td><td class="markdownTableBodyNone">A JSON Patch operation 'test' failed. The unsuccessful operation is also printed.  </td></tr>
 </table>
-<dl class="section see"><dt>See also</dt><dd>- <a class="el" href="classnlohmann_1_1basic__json.html#a9a0aced019cb1d65bb49703406c84970">exception</a> for the <a class="el" href="plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">base</a> class <a class="el" href="_apache_01_license_8txt.html#a7ee731f5d60b203ffeb5c274118c106a">of</a> the library exceptions </dd>
+<dl class="section see"><dt>See also</dt><dd>- <a class="el" href="classnlohmann_1_1basic__json.html#a9a0aced019cb1d65bb49703406c84970">exception</a> for the base class <a class="el" href="_apache_01_license_8txt.html#a7ee731f5d60b203ffeb5c274118c106a">of</a> the library exceptions </dd>
 <dd>
 - <a class="el" href="classnlohmann_1_1basic__json.html#af1efc2468e6022be6e35fc2944cabe4d">parse_error</a> for exceptions indicating a <a class="el" href="classnlohmann_1_1basic__json.html#a5a0339361f3282cb8fd2f9ede6e17d72" title="deserialize from a compatible input">parse</a> error </dd>
 <dd>
@@ -1658,7 +1658,7 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 <td class="markdownTableBodyNone">json.exception.out_of_range.409 </td><td class="markdownTableBodyNone">BSON key cannot contain code point U+0000 (at byte 2) </td><td class="markdownTableBodyNone">Key identifiers to be serialized to BSON cannot contain code point U+0000, since the key is stored as zero-terminated c-string  </td></tr>
 </table>
 <p>@liveexample{The following code shows how an <code>out_of_range</code> exception can be caught.,out_of_range}</p>
-<dl class="section see"><dt>See also</dt><dd>- <a class="el" href="classnlohmann_1_1basic__json.html#a9a0aced019cb1d65bb49703406c84970">exception</a> for the <a class="el" href="plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">base</a> class <a class="el" href="_apache_01_license_8txt.html#a7ee731f5d60b203ffeb5c274118c106a">of</a> the library exceptions </dd>
+<dl class="section see"><dt>See also</dt><dd>- <a class="el" href="classnlohmann_1_1basic__json.html#a9a0aced019cb1d65bb49703406c84970">exception</a> for the base class <a class="el" href="_apache_01_license_8txt.html#a7ee731f5d60b203ffeb5c274118c106a">of</a> the library exceptions </dd>
 <dd>
 - <a class="el" href="classnlohmann_1_1basic__json.html#af1efc2468e6022be6e35fc2944cabe4d">parse_error</a> for exceptions indicating a <a class="el" href="classnlohmann_1_1basic__json.html#a5a0339361f3282cb8fd2f9ede6e17d72" title="deserialize from a compatible input">parse</a> error </dd>
 <dd>
@@ -1723,7 +1723,7 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 </table>
 <dl class="section note"><dt>Note</dt><dd>For an input with n bytes, 1 is the index of the first character and n+1 is the index of the terminating null byte or the end of file. This also holds true when reading a byte vector (CBOR or MessagePack).</dd></dl>
 <p>@liveexample{The following code shows how a <code>parse_error</code> exception can be caught.,parse_error}</p>
-<dl class="section see"><dt>See also</dt><dd>- <a class="el" href="classnlohmann_1_1basic__json.html#a9a0aced019cb1d65bb49703406c84970">exception</a> for the <a class="el" href="plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">base</a> class <a class="el" href="_apache_01_license_8txt.html#a7ee731f5d60b203ffeb5c274118c106a">of</a> the library exceptions </dd>
+<dl class="section see"><dt>See also</dt><dd>- <a class="el" href="classnlohmann_1_1basic__json.html#a9a0aced019cb1d65bb49703406c84970">exception</a> for the base class <a class="el" href="_apache_01_license_8txt.html#a7ee731f5d60b203ffeb5c274118c106a">of</a> the library exceptions </dd>
 <dd>
 - <a class="el" href="classnlohmann_1_1basic__json.html#ac13d32f7cbd02d616e71d8dc30dadcbf">invalid_iterator</a> for exceptions indicating errors with iterators </dd>
 <dd>
@@ -2012,7 +2012,7 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 <td class="markdownTableBodyNone">json.exception.type_error.317 </td><td class="markdownTableBodyNone">JSON value cannot be serialized to requested format </td><td class="markdownTableBodyNone">The dynamic type of the object cannot be represented in the requested serialization format (e.g. a raw <code>true</code> or <code>null</code> JSON object cannot be serialized to BSON)  </td></tr>
 </table>
 <p>@liveexample{The following code shows how a <code>type_error</code> exception can be caught.,type_error}</p>
-<dl class="section see"><dt>See also</dt><dd>- <a class="el" href="classnlohmann_1_1basic__json.html#a9a0aced019cb1d65bb49703406c84970">exception</a> for the <a class="el" href="plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">base</a> class <a class="el" href="_apache_01_license_8txt.html#a7ee731f5d60b203ffeb5c274118c106a">of</a> the library exceptions </dd>
+<dl class="section see"><dt>See also</dt><dd>- <a class="el" href="classnlohmann_1_1basic__json.html#a9a0aced019cb1d65bb49703406c84970">exception</a> for the base class <a class="el" href="_apache_01_license_8txt.html#a7ee731f5d60b203ffeb5c274118c106a">of</a> the library exceptions </dd>
 <dd>
 - <a class="el" href="classnlohmann_1_1basic__json.html#af1efc2468e6022be6e35fc2944cabe4d">parse_error</a> for exceptions indicating a <a class="el" href="classnlohmann_1_1basic__json.html#a5a0339361f3282cb8fd2f9ede6e17d72" title="deserialize from a compatible input">parse</a> error </dd>
 <dd>
@@ -9479,7 +9479,7 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 
 <p class="reference">References <a class="el" href="namespacenlohmann_1_1detail.html#a1ed8fc6239da25abcaf681d30ace4985af1f713c9e000f5d3f280adbd124df4f5">nlohmann::detail::array</a>, <a class="el" href="namespacenlohmann_1_1detail.html#a1ed8fc6239da25abcaf681d30ace4985a37a6259cc0c1dae299a7866489dff0bd">nlohmann::detail::null</a>, and <a class="el" href="namespacenlohmann_1_1detail.html#a1ed8fc6239da25abcaf681d30ace4985aa8cfde6331bd59eb2ac96f8911c4b666">nlohmann::detail::object</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="json_8hpp_source.html#l18467">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::erase()</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00187">hal::plugin_dataflow::execute()</a>, and <a class="el" href="json_8hpp_source.html#l19265">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::max_size()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="json_8hpp_source.html#l18467">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::erase()</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00196">hal::plugin_dataflow::execute()</a>, and <a class="el" href="json_8hpp_source.html#l19265">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;::max_size()</a>.</p>
 
 </div>
 </div>
@@ -12605,7 +12605,7 @@ template&lt;template&lt; typename, typename, typename... &gt; class ObjectType, 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacenlohmann.html">nlohmann</a></li><li class="navelem"><a class="el" href="classnlohmann_1_1basic__json.html">basic_json</a></li>
-    <li class="footer">Generated on Sun Mar 19 2023 08:27:05 for HAL by
+    <li class="footer">Generated on Thu Mar 23 2023 10:59:00 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

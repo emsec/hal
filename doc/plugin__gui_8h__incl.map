@@ -1,9 +1,12 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/include/gui/plugin_gui.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/plugin_gui.h">
-<area shape="rect" id="node1" title=" " alt="" coords="169,5,341,61"/>
-<area shape="rect" id="node2" href="$plugin__interface__ui_8h.html" title=" " alt="" coords="27,109,203,151"/>
-<area shape="rect" id="node6" title=" " alt="" coords="227,117,282,143"/>
-<area shape="rect" id="node7" title=" " alt="" coords="307,117,381,143"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="45,288,185,315"/>
-<area shape="rect" id="node4" href="$plugin__interface__base_8h.html" title=" " alt="" coords="24,199,205,240"/>
-<area shape="rect" id="node5" href="$program__options_8h.html" title=" " alt="" coords="230,199,378,240"/>
+<area shape="rect" id="node1" title=" " alt="" coords="455,5,627,61"/>
+<area shape="rect" id="node2" href="$plugin__interface__ui_8h.html" title=" " alt="" coords="124,109,300,151"/>
+<area shape="rect" id="node6" href="$cli__extension__interface_8h.html" title=" " alt="" coords="373,109,563,151"/>
+<area shape="rect" id="node9" title=" " alt="" coords="587,117,642,143"/>
+<area shape="rect" id="node10" title=" " alt="" coords="667,117,741,143"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="142,288,282,315"/>
+<area shape="rect" id="node4" href="$plugin__interface__base_8h.html" title=" " alt="" coords="27,199,208,240"/>
+<area shape="rect" id="node5" href="$program__options_8h.html" title=" " alt="" coords="233,199,381,240"/>
+<area shape="rect" id="node7" href="$abstract__extension__interface_8h.html" title=" " alt="" coords="405,199,632,240"/>
+<area shape="rect" id="node8" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="656,206,835,233"/>
 </map>

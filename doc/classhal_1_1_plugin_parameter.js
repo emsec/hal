@@ -18,5 +18,6 @@ var classhal_1_1_plugin_parameter =
     [ "get_tagname", "classhal_1_1_plugin_parameter.html#a55b6250af6766a763acf8e390b02c09f", null ],
     [ "get_type", "classhal_1_1_plugin_parameter.html#a9a972067bce09f2db8d806e48a124f6f", null ],
     [ "get_value", "classhal_1_1_plugin_parameter.html#a4899be73d3909de56285f9dd8886219c", null ],
+    [ "set_tagname", "classhal_1_1_plugin_parameter.html#a67c9287ade3b0ca520ba6bef496a5ebc", null ],
     [ "set_value", "classhal_1_1_plugin_parameter.html#a20c75c55d19550aec9242ed68c134b00", null ]
 ];

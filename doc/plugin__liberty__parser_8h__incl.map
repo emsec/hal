@@ -1,10 +1,13 @@
 <map id="/home/runner/work/hal/hal/plugins/liberty_parser/include/liberty_parser/plugin_liberty_parser.h" name="/home/runner/work/hal/hal/plugins/liberty_parser/include/liberty_parser/plugin_liberty_parser.h">
-<area shape="rect" id="node1" title=" " alt="" coords="233,5,455,76"/>
-<area shape="rect" id="node2" href="$plugin__interface__base_8h.html" title=" " alt="" coords="253,124,435,165"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="45,303,185,329"/>
-<area shape="rect" id="node4" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="25,221,204,247"/>
-<area shape="rect" id="node5" title=" " alt="" coords="315,303,373,329"/>
-<area shape="rect" id="node6" href="$plugin__parameter_8h.html" title=" " alt="" coords="433,213,609,255"/>
-<area shape="rect" id="node7" href="$log_8h.html" title=" " alt="" coords="228,213,359,255"/>
-<area shape="rect" id="node8" title=" " alt="" coords="536,303,579,329"/>
+<area shape="rect" id="node1" title=" " alt="" coords="242,5,465,76"/>
+<area shape="rect" id="node2" href="$plugin__interface__base_8h.html" title=" " alt="" coords="199,124,380,165"/>
+<area shape="rect" id="node10" href="$fac__extension__interface_8h.html" title=" " alt="" coords="379,213,573,255"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="73,310,213,337"/>
+<area shape="rect" id="node4" href="$log_8h.html" title=" " alt="" coords="173,213,304,255"/>
+<area shape="rect" id="node7" title=" " alt="" coords="5,310,48,337"/>
+<area shape="rect" id="node8" title=" " alt="" coords="237,310,296,337"/>
+<area shape="rect" id="node9" title=" " alt="" coords="785,310,847,337"/>
+<area shape="rect" id="node5" title=" " alt="" coords="321,310,407,337"/>
+<area shape="rect" id="node6" title=" " alt="" coords="432,310,509,337"/>
+<area shape="rect" id="node11" href="$abstract__extension__interface_8h.html" title=" " alt="" coords="533,303,760,344"/>
 </map>

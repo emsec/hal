@@ -109,12 +109,13 @@ $(document).ready(function(){initNavTree('about__dialog_8cpp_source.html',''); i
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        mLayout-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">addWidget</a>(<span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(<span class="stringliteral">&quot;Compiled with Qt Version %1&quot;</span>)</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;                                      .arg(QT_VERSION_STR)</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                                      ,<span class="keyword">this</span>));</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        mLayout-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">addWidget</a>(<span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(<span class="stringliteral">&quot;Open Source licenses:&quot;</span>),<span class="keyword">this</span>));</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        mTextedit = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qplaintextedit.html">QPlainTextEdit</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(<a class="code" href="namespacehal_1_1utils.html#a7b4623be57665e39318991c7344de89d">utils::get_open_source_licenses</a>()),<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        mTextedit-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#readOnly-prop">setReadOnly</a>(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        mLayout-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">addWidget</a>(mTextedit);</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    }</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;}</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        mLayout-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">addWidget</a>(<span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(<span class="stringliteral">&quot;Last build configured at %1 %2&quot;</span>).arg(hal_version::build_timestamp.c_str())));</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        mLayout-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">addWidget</a>(<span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlabel.html">QLabel</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>(<span class="stringliteral">&quot;Open Source licenses:&quot;</span>),<span class="keyword">this</span>));</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        mTextedit = <span class="keyword">new</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qplaintextedit.html">QPlainTextEdit</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(<a class="code" href="namespacehal_1_1utils.html#a7b4623be57665e39318991c7344de89d">utils::get_open_source_licenses</a>()),<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        mTextedit-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#readOnly-prop">setReadOnly</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        mLayout-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">addWidget</a>(mTextedit);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    }</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqvboxlayout_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a></div></div>
@@ -138,7 +139,7 @@ $(document).ready(function(){initNavTree('about__dialog_8cpp_source.html',''); i
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_7a0626338f63bd87363790a595d37c04.html">main_window</a></li><li class="navelem"><a class="el" href="about__dialog_8cpp.html">about_dialog.cpp</a></li>
-    <li class="footer">Generated on Sun Mar 19 2023 08:26:59 for HAL by
+    <li class="footer">Generated on Thu Mar 23 2023 10:58:53 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

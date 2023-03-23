@@ -89,7 +89,7 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 : <a class="el" href="structhal_1_1utils_1_1_color.html#a7a045325dfd2e6dea35c08744e9a2bcc">hal::utils::Color</a>
 </li>
 <li>s_progress_indicator_function
-: <a class="el" href="classhal_1_1plugin__dataflow.html#a51bbbb19401cc8993943fa22f6e1d106">hal::plugin_dataflow</a>
+: <a class="el" href="classhal_1_1_gui_extension_dataflow.html#af81ee43abbd5c724dd2ebc631e6adab9">hal::GuiExtensionDataflow</a>
 </li>
 <li>s_project_file
 : <a class="el" href="classhal_1_1_project_manager.html#a7d1e867b1a24286085ed197e85e76ba8">hal::ProjectManager</a>
@@ -549,8 +549,8 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 : <a class="el" href="classhal_1_1_program_arguments.html#af747a0b76c84b11d3d44fa998038df79">hal::ProgramArguments</a>
 </li>
 <li>set_parameter()
-: <a class="el" href="classhal_1_1_base_plugin_interface.html#a923a7f8262cd451e1c18aa49c916127d">hal::BasePluginInterface</a>
-, <a class="el" href="classhal_1_1plugin__dataflow.html#aa3447c2ab9a9bf1ba1821af1e07b19eb">hal::plugin_dataflow</a>
+: <a class="el" href="classhal_1_1_gui_extension_dataflow.html#ad9acd8c11a5ddd357a834adb7a9444c2">hal::GuiExtensionDataflow</a>
+, <a class="el" href="classhal_1_1_gui_extension_interface.html#af1ca25c1234985faaabb3cc5060d2eb3">hal::GuiExtensionInterface</a>
 </li>
 <li>set_parent_module()
 : <a class="el" href="classhal_1_1_module.html#a2110d4088efee9b9313fce0171d9bc40">hal::Module</a>
@@ -581,6 +581,9 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 </li>
 <li>set_state_identifier()
 : <a class="el" href="classhal_1_1_state_component.html#a1a7ea0e47fd06ce6d77439270f6d6cc3">hal::StateComponent</a>
+</li>
+<li>set_tagname()
+: <a class="el" href="classhal_1_1_plugin_parameter.html#a67c9287ade3b0ca520ba6bef496a5ebc">hal::PluginParameter</a>
 </li>
 <li>set_type()
 : <a class="el" href="classhal_1_1_base_pin.html#a2029526481170f40ec67e8268a6db869">hal::BasePin&lt; T &gt;</a>
@@ -1060,7 +1063,7 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 , <a class="el" href="classhal_1_1_groupings_of_item_model.html#a6d829c3c3ad15d176a8a45f735be893f">hal::GroupingsOfItemModel</a>
 , <a class="el" href="classhal_1_1_groupings_of_item_widget.html#a7487007c63c8fd18b21b85e48c67d575">hal::GroupingsOfItemWidget</a>
 , <a class="el" href="classhal_1_1_module_details_tab_widget.html#a55805addd37e2d10cfba3f470c6cd61e">hal::ModuleDetailsTabWidget</a>
-, <a class="el" href="classhal_1_1_module_elements_tree.html#a4d16da19a99eecfd07b8d5c5f55bcdeb">hal::ModuleElementsTree</a>
+, <a class="el" href="classhal_1_1_module_elements_tree.html#acbd731aad5696a49fb717f2fe15bf3f5">hal::ModuleElementsTree</a>
 , <a class="el" href="classhal_1_1_module_info_table.html#a9e00321720c9f545523782a47ad98509">hal::ModuleInfoTable</a>
 , <a class="el" href="classhal_1_1_module_pins_tree.html#a70fd30c5eedf69203c51b087671fa38f">hal::ModulePinsTree</a>
 , <a class="el" href="classhal_1_1_module_pins_tree_model.html#ae02c26a5fdd9dca1bcd29f5d671bdd5f">hal::ModulePinsTreeModel</a>
@@ -1202,6 +1205,12 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 : <a class="el" href="classhal_1_1_action_add_items_to_object.html#a9c5a670fe7fa42e256fea342e6302d30">hal::ActionAddItemsToObject</a>
 , <a class="el" href="classhal_1_1_action_fold_module.html#a47b36af2249c55629e60be621cd26f69">hal::ActionFoldModule</a>
 , <a class="el" href="classhal_1_1_action_unfold_module.html#a766301149fd263b0f8aae17db3214a33">hal::ActionUnfoldModule</a>
+</li>
+<li>setPluginsIconPath()
+: <a class="el" href="classhal_1_1_main_window.html#af9ed13c9d6b423e3de1293e642449471">hal::MainWindow</a>
+</li>
+<li>setPluginsIconStyle()
+: <a class="el" href="classhal_1_1_main_window.html#af6e889feddc95d885295d8916ac31651">hal::MainWindow</a>
 </li>
 <li>setPromtColor()
 : <a class="el" href="classhal_1_1_python_console_qss_adapter.html#a9a1cd30905612ce7240e5ddc2704fc43">hal::PythonConsoleQssAdapter</a>
@@ -1397,11 +1406,11 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 <li>SettingsDisplay()
 : <a class="el" href="classhal_1_1_settings_display.html#ac7935d865d895f6498744d3e16ddb103">hal::SettingsDisplay</a>
 </li>
-<li>settingsIconPath
-: <a class="el" href="classhal_1_1_main_window.html#a326fa1c3078b9e8242c2cc8272154901">hal::MainWindow</a>
+<li>settingsIconPath()
+: <a class="el" href="classhal_1_1_main_window.html#ac64152d33fcd427380d3f7db551f8fbd">hal::MainWindow</a>
 </li>
-<li>settingsIconStyle
-: <a class="el" href="classhal_1_1_main_window.html#ac3bab1d6b1d8f5ebe61c987ec0952a76">hal::MainWindow</a>
+<li>settingsIconStyle()
+: <a class="el" href="classhal_1_1_main_window.html#afe4e77b5541c8f6949aebfcddccaed7e">hal::MainWindow</a>
 </li>
 <li>SettingsItem()
 : <a class="el" href="classhal_1_1_settings_item.html#a11961197e2c8d15135d9ce975fef7707">hal::SettingsItem</a>
@@ -1629,6 +1638,9 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 <li>showBusy()
 : <a class="el" href="classhal_1_1_graph_widget.html#a4c5b9b75b65cc63dafc031a4bf0222bb">hal::GraphWidget</a>
 </li>
+<li>showCliOptions()
+: <a class="el" href="classhal_1_1_gui_plugin_table.html#aae0db39a3ae1fef3bcb01c6dbca75af3">hal::GuiPluginTable</a>
+</li>
 <li>showComments()
 : <a class="el" href="classhal_1_1_graph_context.html#a1bc78b394375158c1212190231f1de1f">hal::GraphContext</a>
 , <a class="el" href="classhal_1_1_graph_widget.html#ad063e02b7663021628287fd56f39e662">hal::GraphWidget</a>
@@ -1688,6 +1700,7 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 : <a class="el" href="classhal_1_1_dock_bar.html#a03d8bd985c7d9f05c035b6fff8200cac">hal::DockBar</a>
 , <a class="el" href="classhal_1_1_expanding_list_item.html#af73af7a4b2d2ba91b125f10b6da8c15f">hal::ExpandingListItem</a>
 , <a class="el" href="classhal_1_1_grouping_color_delegate.html#a39cd8e31605d480b767a28019fed0a8b">hal::GroupingColorDelegate</a>
+, <a class="el" href="classhal_1_1_gui_plugin_delegate.html#a1dfaca4550464a4ee77c9220efb14348">hal::GuiPluginDelegate</a>
 , <a class="el" href="classhal_1_1_recent_file_item.html#aa3230bbc1117767314698d6eeef23dde">hal::RecentFileItem</a>
 , <a class="el" href="classhal_1_1_spinner_widget.html#aada1fdd2d3fd08a86d04d1a26d15a8b8">hal::SpinnerWidget</a>
 </li>
@@ -1832,8 +1845,8 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 <li>StandardArrowNet()
 : <a class="el" href="classhal_1_1_standard_arrow_net.html#aaa48753da848056ae09ea7c789a732d6">hal::StandardArrowNet</a>
 </li>
-<li>standardColor()
-: <a class="el" href="classhal_1_1_python_console_qss_adapter.html#a56e5b311df11496f289a4e389912c3f6">hal::PythonConsoleQssAdapter</a>
+<li>standardColor
+: <a class="el" href="classhal_1_1_python_console_qss_adapter.html#abef5cc26e7b7862dd49f4d62fa462e1c">hal::PythonConsoleQssAdapter</a>
 </li>
 <li>StandardGraphicsGate()
 : <a class="el" href="classhal_1_1_standard_graphics_gate.html#ab071444fb93da8138ce2d97734c48554">hal::StandardGraphicsGate</a>
@@ -1869,6 +1882,9 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 </li>
 <li>startLogging()
 : <a class="el" href="classhal_1_1_special_log_content_manager.html#a555d10e519884af8567c73e1507194d3">hal::SpecialLogContentManager</a>
+</li>
+<li>State
+: <a class="el" href="classhal_1_1_gui_plugin_entry.html#a2c578f9e4226e51d40aa8f83e4a36e4d">hal::GuiPluginEntry</a>
 </li>
 <li>state
 : <a class="el" href="classhal_1_1_s_m_t_1_1_symbolic_execution.html#ad5cce99a9383913eacb947e0d496a8a5">hal::SMT::SymbolicExecution</a>
@@ -1967,11 +1983,11 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 <li>sub()
 : <a class="el" href="structnlohmann_1_1detail_1_1dtoa__impl_1_1diyfp.html#aeb26771af54ad73598c1a0430d65d884">nlohmann::detail::dtoa_impl::diyfp</a>
 </li>
-<li>Subfocus
-: <a class="el" href="classhal_1_1_selection_relay.html#a75d8c404b06807f7e57fe3f9c1a39ff2">hal::SelectionRelay</a>
-</li>
 <li>subfocus()
 : <a class="el" href="classhal_1_1_selection_relay.html#a58d4652d7bc4725db934ddc2673c34a1">hal::SelectionRelay</a>
+</li>
+<li>Subfocus
+: <a class="el" href="classhal_1_1_selection_relay.html#a75d8c404b06807f7e57fe3f9c1a39ff2">hal::SelectionRelay</a>
 </li>
 <li>subfocusChanged()
 : <a class="el" href="classhal_1_1_selection_relay.html#ad43860216a9fd0d75aacdf2cf229d07b">hal::SelectionRelay</a>
@@ -1983,7 +1999,7 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 : <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a2569a146f9bb7b10b5e4ca9acf66c8c7">hal::SubgraphNetlistDecorator</a>
 </li>
 <li>substitute()
-: <a class="el" href="classhal_1_1_boolean_function.html#ae9242e7d969fc9b6eb402fc5c2386153">hal::BooleanFunction</a>
+: <a class="el" href="classhal_1_1_boolean_function.html#a4074a3313f582aa925e783d633b86d90">hal::BooleanFunction</a>
 </li>
 <li>substitute_power_ground_nets()
 : <a class="el" href="classhal_1_1_boolean_function_decorator.html#a033064c8f8a022e02b093366f3997e6d">hal::BooleanFunctionDecorator</a>
@@ -2031,7 +2047,7 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Mar 19 2023 08:27:05 for HAL by
+    <li class="footer">Generated on Thu Mar 23 2023 10:59:01 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

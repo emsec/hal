@@ -2,6 +2,7 @@ var classhal_1_1_content_manager =
 [
     [ "ContentManager", "classhal_1_1_content_manager.html#a7aed870ceb7c7227ce86dceb6ed7227e", null ],
     [ "~ContentManager", "classhal_1_1_content_manager.html#a85f91915408b52a03ba3519c4cf4b3ac", null ],
+    [ "addExternalWidget", "classhal_1_1_content_manager.html#ac38f08c621d5c92dfaea2d6ce69370bf", null ],
     [ "deleteContent", "classhal_1_1_content_manager.html#a3f44df886385f5fa85dd5ea929d7e18d", null ],
     [ "getContextManagerWidget", "classhal_1_1_content_manager.html#ade3a4a020043844e16010e466b59a8cd", null ],
     [ "getGraphTabWidget", "classhal_1_1_content_manager.html#a24cbd3d2dcc3bd6b63b5a71e584a845c", null ],

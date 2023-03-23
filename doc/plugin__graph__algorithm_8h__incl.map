@@ -1,11 +1,10 @@
 <map id="/home/runner/work/hal/hal/plugins/graph_algorithm/include/graph_algorithm/plugin_graph_algorithm.h" name="/home/runner/work/hal/hal/plugins/graph_algorithm/include/graph_algorithm/plugin_graph_algorithm.h">
-<area shape="rect" id="node1" title=" " alt="" coords="317,5,545,76"/>
-<area shape="rect" id="node2" href="$plugin__interface__base_8h.html" title=" " alt="" coords="253,124,435,165"/>
-<area shape="rect" id="node9" title=" " alt="" coords="459,131,579,158"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="45,303,185,329"/>
-<area shape="rect" id="node4" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="25,221,204,247"/>
-<area shape="rect" id="node5" title=" " alt="" coords="315,303,373,329"/>
-<area shape="rect" id="node6" href="$plugin__parameter_8h.html" title=" " alt="" coords="433,213,609,255"/>
-<area shape="rect" id="node7" href="$log_8h.html" title=" " alt="" coords="228,213,359,255"/>
-<area shape="rect" id="node8" title=" " alt="" coords="536,303,579,329"/>
+<area shape="rect" id="node1" title=" " alt="" coords="183,5,411,76"/>
+<area shape="rect" id="node2" href="$plugin__interface__base_8h.html" title=" " alt="" coords="119,124,301,165"/>
+<area shape="rect" id="node8" title=" " alt="" coords="325,131,445,158"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="5,303,145,329"/>
+<area shape="rect" id="node4" href="$log_8h.html" title=" " alt="" coords="145,213,275,255"/>
+<area shape="rect" id="node5" title=" " alt="" coords="179,303,222,329"/>
+<area shape="rect" id="node6" title=" " alt="" coords="265,303,323,329"/>
+<area shape="rect" id="node7" title=" " alt="" coords="351,221,413,247"/>
 </map>

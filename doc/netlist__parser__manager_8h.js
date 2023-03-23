@@ -3,6 +3,7 @@ var netlist__parser__manager_8h =
     [ "ParserFactory", "netlist__parser__manager_8h.html#a5699b5404f73462557abe0b8bdfa70c6", null ],
     [ "can_parse", "netlist__parser__manager_8h.html#a72dbc0b71389a49406b62b83ca90ff79", null ],
     [ "get_cli_options", "netlist__parser__manager_8h.html#a63453fc628a74a43f09af54a8d9620d1", null ],
+    [ "get_parser_to_extensions", "netlist__parser__manager_8h.html#a3805ff9dddccbeb91fc3cfb94d622301", null ],
     [ "parse", "netlist__parser__manager_8h.html#af9b49cc8225fbc08027cb661bd07ac38", null ],
     [ "parse", "netlist__parser__manager_8h.html#a9ff28049722e4a8532867f675aad614e", null ],
     [ "parse_all", "netlist__parser__manager_8h.html#af1c82137bddfd220906ff6e8a2366b2d", null ],

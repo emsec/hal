@@ -288,9 +288,8 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 , <a class="el" href="classnlohmann_1_1detail_1_1wide__string__input__adapter.html#abb62b34cf77e557ce5321b7f2490c3b0">nlohmann::detail::wide_string_input_adapter&lt; WideStringType &gt;</a>
 </li>
 <li>get_cli_options()
-: <a class="el" href="classhal_1_1_c_l_i_plugin_interface.html#ad8ef97cbc2f3c5ae5280d48c6c25a7c6">hal::CLIPluginInterface</a>
-, <a class="el" href="classhal_1_1plugin__dataflow.html#a181d750108725a66b573232454842d43">hal::plugin_dataflow</a>
-, <a class="el" href="classhal_1_1_u_i_plugin_interface.html#aa402ba253b62f31e37ffa2f140600da3">hal::UIPluginInterface</a>
+: <a class="el" href="classhal_1_1_cli_extension_dataflow.html#ae219a740812f153be5fa2df859c4bf0d">hal::CliExtensionDataflow</a>
+, <a class="el" href="classhal_1_1_cli_extension_interface.html#accd330a2ef66d28e64ce3a3ef0df3d72">hal::CliExtensionInterface</a>
 </li>
 <li>get_clock_function()
 : <a class="el" href="classhal_1_1_f_f_component.html#a26af1e05ec08def8ece5890b9296cd8d">hal::FFComponent</a>
@@ -338,6 +337,9 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_constraints()
 : <a class="el" href="classhal_1_1_s_m_t_1_1_solver.html#a893f60adb9ff88b60841d02e5992277c">hal::SMT::Solver</a>
 </li>
+<li>get_context_contribution()
+: <a class="el" href="classhal_1_1_gui_extension_interface.html#a1c3bc15ce0f1f96d2a54ace22dfa9477">hal::GuiExtensionInterface</a>
+</li>
 <li>get_control_signals_of_group()
 : <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a16ce09c89aec2f247da1f86d0c940e4f">hal::dataflow::Grouping</a>
 </li>
@@ -358,6 +360,11 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 </li>
 <li>get_dependencies()
 : <a class="el" href="classhal_1_1_base_plugin_interface.html#a17ecf8929723bb20a2b154420e4e6560">hal::BasePluginInterface</a>
+</li>
+<li>get_description()
+: <a class="el" href="classhal_1_1_base_plugin_interface.html#af25dc872373babc1090fa288cf7c5291">hal::BasePluginInterface</a>
+, <a class="el" href="classhal_1_1_fac_extension_interface.html#a39fd449b0958115b8a00b2a0369599ab">hal::FacExtensionInterface</a>
+, <a class="el" href="classhal_1_1plugin__dataflow.html#a6490e4060c08737554b768b8729036de">hal::plugin_dataflow</a>
 </li>
 <li>get_design_name()
 : <a class="el" href="classhal_1_1_netlist.html#ac1f1003a5491f4fb7dd75d36b6a000f4">hal::Netlist</a>
@@ -385,6 +392,9 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_event_handler()
 : <a class="el" href="classhal_1_1_netlist.html#aedc720597caab3ff1cb6ad4e5839c429">hal::Netlist</a>
 </li>
+<li>get_extensions()
+: <a class="el" href="classhal_1_1_base_plugin_interface.html#ab695a8f41837c6b4f68081b6b5f6c095">hal::BasePluginInterface</a>
+</li>
 <li>get_fan_in_endpoint()
 : <a class="el" href="classhal_1_1_gate.html#a77f1d1747daf72237dc3d5b725548b3f">hal::Gate</a>
 </li>
@@ -409,6 +419,9 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_fan_out_nets()
 : <a class="el" href="classhal_1_1_gate.html#af5288f4473c529fa29b5a347091ffc2f">hal::Gate</a>
 </li>
+<li>get_feature()
+: <a class="el" href="classhal_1_1_fac_extension_interface.html#a54b58b668642d0c63eea595993875864">hal::FacExtensionInterface</a>
+</li>
 <li>get_ff_dependency_matrix()
 : <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a4414a642f5f41569c7d4254795d9eea0">hal::BooleanInfluencePlugin</a>
 </li>
@@ -418,6 +431,9 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_filename()
 : <a class="el" href="classhal_1_1_project_directory.html#a05266d178bc1bb73cea16768ae75d269">hal::ProjectDirectory</a>
 , <a class="el" href="classhal_1_1_project_manager.html#a4585f530d243d1ede4d4774392700987">hal::ProjectManager</a>
+</li>
+<li>get_first_extension()
+: <a class="el" href="classhal_1_1_base_plugin_interface.html#ac271e37224ec958068b963e2a763cc96">hal::BasePluginInterface</a>
 </li>
 <li>get_free_gate_ids()
 : <a class="el" href="classhal_1_1_netlist.html#a5f7900676fda58ddebf01044f10a7312">hal::Netlist</a>
@@ -705,8 +721,8 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 , <a class="el" href="classhal_1_1_module.html#a2076e8076209b704c23cfac1ac3c631f">hal::Module</a>
 </li>
 <li>get_parameter()
-: <a class="el" href="classhal_1_1_base_plugin_interface.html#a54402a70dd64522d0aeaa9b25bdeb5a6">hal::BasePluginInterface</a>
-, <a class="el" href="classhal_1_1plugin__dataflow.html#ab7318a067be15ac671b3e767a16ff90d">hal::plugin_dataflow</a>
+: <a class="el" href="classhal_1_1_gui_extension_dataflow.html#ac91f739c93f0e340c729a0c40eaeaead">hal::GuiExtensionDataflow</a>
+, <a class="el" href="classhal_1_1_gui_extension_interface.html#af4a8e7b3dfe4c26bef3294d0d3f7eee8">hal::GuiExtensionInterface</a>
 , <a class="el" href="classhal_1_1_program_arguments.html#adae86e00300f9752b2b4e49c78d574c1">hal::ProgramArguments</a>
 </li>
 <li>get_parameters()
@@ -788,7 +804,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 : <a class="el" href="classnlohmann_1_1basic__json.html#abefbb319df8ed4f8705b4fd4e4dc731c">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;</a>
 </li>
 <li>get_ref()
-: <a class="el" href="classnlohmann_1_1basic__json.html#afbd800010b67619463c0fce6e74f7878">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;</a>
+: <a class="el" href="classnlohmann_1_1basic__json.html#ac382f3d2bc6a5d52d936e4e40593f03b">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;</a>
 </li>
 <li>get_register_stage_intersect_of_group()
 : <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a710c07f941e5e7084faf8b2926f163c1">hal::dataflow::Grouping</a>
@@ -830,10 +846,10 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 : <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#a8f5e1e5548d6bcca304ae9943f582e61">hal::GraphAlgorithmPlugin</a>
 </li>
 <li>get_subgraph_function()
-: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#aa1874f9733e7608b5de773cc73f7460c">hal::SubgraphNetlistDecorator</a>
+: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a78d92aede2df7af96954115478046601">hal::SubgraphNetlistDecorator</a>
 </li>
 <li>get_subgraph_function_inputs()
-: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a455e99786471a0d9293000f56b28be7a">hal::SubgraphNetlistDecorator</a>
+: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a602fe3be3c5979579024b42b8c4439eb">hal::SubgraphNetlistDecorator</a>
 </li>
 <li>get_submodule_depth()
 : <a class="el" href="classhal_1_1_module.html#a533cbe33380469fe81fcead287efc437">hal::Module</a>
@@ -842,7 +858,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 : <a class="el" href="classhal_1_1_module.html#af1256fe9a3080693b07d7e657d9a31ba">hal::Module</a>
 </li>
 <li>get_successor()
-: <a class="el" href="classhal_1_1_gate.html#a8774b931a46ce3c96d05cb0cfd49e351">hal::Gate</a>
+: <a class="el" href="classhal_1_1_gate.html#aa5fb025fba52e715cdb47203d31b96c6">hal::Gate</a>
 </li>
 <li>get_successor_groups_of_group()
 : <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a45a6721004e248f4fceea806d9bd15e9">hal::dataflow::Grouping</a>
@@ -850,11 +866,14 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_successors()
 : <a class="el" href="classhal_1_1_gate.html#a515a1ba7f4f74ec80bf68856cfa8d2aa">hal::Gate</a>
 </li>
+<li>get_supported_file_extensions()
+: <a class="el" href="classhal_1_1_fac_extension_interface.html#a356ab41fcbc5ff2a996936f92987e2cd">hal::FacExtensionInterface</a>
+</li>
 <li>get_tagname()
 : <a class="el" href="classhal_1_1_plugin_parameter.html#a55b6250af6766a763acf8e390b02c09f">hal::PluginParameter</a>
 </li>
 <li>get_to()
-: <a class="el" href="classnlohmann_1_1basic__json.html#a65753c68f06639eda0d355f919564e01">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;</a>
+: <a class="el" href="classnlohmann_1_1basic__json.html#ab9d91cc9c3b62782b38d8f2158269937">nlohmann::basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt;</a>
 </li>
 <li>get_token_string()
 : <a class="el" href="classnlohmann_1_1detail_1_1lexer.html#a4aef7e72e539be04e139c34872421f2a">nlohmann::detail::lexer&lt; BasicJsonType &gt;</a>
@@ -1094,6 +1113,9 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>getGroupingManagerWidget()
 : <a class="el" href="classhal_1_1_content_manager.html#a98450da2fb6963ca4c510f86280bb6b8">hal::ContentManager</a>
 </li>
+<li>getGuiExtensions()
+: <a class="el" href="classhal_1_1_gui_plugin_manager.html#a664ea7d002a3eb8f8b54ecaa64a2fb53">hal::GuiPluginManager</a>
+</li>
 <li>getHeader()
 : <a class="el" href="classhal_1_1_comment_dialog.html#a152343abdfe085a3f07d357087b12525">hal::CommentDialog</a>
 , <a class="el" href="classhal_1_1_comment_entry.html#a14fe198e529ed9860ca9ebbcc39e8388">hal::CommentEntry</a>
@@ -1118,6 +1140,9 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>getIndexFromItem()
 : <a class="el" href="classhal_1_1_base_tree_model.html#aba03bbb5da24d1cbc23bbc34e07458e8">hal::BaseTreeModel</a>
 </li>
+<li>getInput()
+: <a class="el" href="classhal_1_1_python_thread.html#a92d07e84914be9c0366fa0ff7a158812">hal::PythonThread</a>
+</li>
 <li>getInputScenePosition()
 : <a class="el" href="classhal_1_1_graphics_node.html#abff0f4f7a3f5ce78c49b666b6569295b">hal::GraphicsNode</a>
 , <a class="el" href="classhal_1_1_standard_graphics_gate.html#aa419f4d8f9788331b2477e759d9ce63e">hal::StandardGraphicsGate</a>
@@ -1130,7 +1155,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 : <a class="el" href="classhal_1_1_get_in_touch_widget.html#a25e6cbcd27c08366d3170718fde88158">hal::GetInTouchWidget</a>
 </li>
 <li>getItem()
-: <a class="el" href="classhal_1_1_module_model.html#a9aefc1c8a6482d3641b15507df11f1e0">hal::ModuleModel</a>
+: <a class="el" href="classhal_1_1_module_model.html#a788da4c0a93921306f941a9a541a2c57">hal::ModuleModel</a>
 </li>
 <li>getItemFromIndex()
 : <a class="el" href="classhal_1_1_base_tree_model.html#a64847c202485e2983e7129a3e641dc76">hal::BaseTreeModel</a>
@@ -1543,11 +1568,29 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>GuiApi()
 : <a class="el" href="classhal_1_1_gui_api.html#a3fff1aea43da474f2b8c62d0e5b8117d">hal::GuiApi</a>
 </li>
+<li>GuiExtensionDataflow()
+: <a class="el" href="classhal_1_1_gui_extension_dataflow.html#aba3356bfd527c03bb5d05fd381128092">hal::GuiExtensionDataflow</a>
+</li>
+<li>GuiExtensionInterface()
+: <a class="el" href="classhal_1_1_gui_extension_interface.html#ac6042d15d4bb356c31327e77b9437382">hal::GuiExtensionInterface</a>
+</li>
 <li>GuiLayoutLocker()
 : <a class="el" href="classhal_1_1dataflow_1_1_gui_layout_locker.html#a52e1b48a294df2d55fafbb43680a1dba">hal::dataflow::GuiLayoutLocker</a>
 </li>
-<li>GUIPluginInterface()
-: <a class="el" href="classhal_1_1_g_u_i_plugin_interface.html#a2f70ba1043c75e34c90c0c05b7c52ca9">hal::GUIPluginInterface</a>
+<li>GuiPluginDelegate()
+: <a class="el" href="classhal_1_1_gui_plugin_delegate.html#a22251255840777bfc1791d024c52cfaf">hal::GuiPluginDelegate</a>
+</li>
+<li>GuiPluginEntry()
+: <a class="el" href="classhal_1_1_gui_plugin_entry.html#a18a9537f4dede9ecf839babcf562c730">hal::GuiPluginEntry</a>
+</li>
+<li>GuiPluginManager()
+: <a class="el" href="classhal_1_1_gui_plugin_manager.html#a2cbb651b4e2c5bd9e4b3f61e6cb47351">hal::GuiPluginManager</a>
+</li>
+<li>GuiPluginTable()
+: <a class="el" href="classhal_1_1_gui_plugin_table.html#ac89bd31a593a8e7179b310268df0b3d0">hal::GuiPluginTable</a>
+</li>
+<li>GuiPluginView()
+: <a class="el" href="classhal_1_1_gui_plugin_view.html#a622503b06af0dede54da2f9ad53085c1">hal::GuiPluginView</a>
 </li>
 </ul>
 </div><!-- contents -->
@@ -1555,7 +1598,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun Mar 19 2023 08:27:05 for HAL by
+    <li class="footer">Generated on Thu Mar 23 2023 10:59:01 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

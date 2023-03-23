@@ -90,131 +90,133 @@ $(document).ready(function(){initNavTree('gate__library__parser__manager_8cpp_so
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="gate__library_8h.html">hal_core/netlist/gate_library/gate_library.h</a>&quot;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="gate__library__parser_8h.html">hal_core/netlist/gate_library/gate_library_parser/gate_library_parser.h</a>&quot;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="log_8h.html">hal_core/utilities/log.h</a>&quot;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="utils_8h.html">hal_core/utilities/utils.h</a>&quot;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;regex&gt;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;sstream&gt;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;{</div>
-<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="namespacehal_1_1gate__library__parser__manager.html">   13</a></span>&#160;    <span class="keyword">namespace </span>gate_library_parser_manager</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    {</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">namespace</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        {</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;            std::unordered_map&lt;std::string, std::vector&lt;std::string&gt;&gt; m_parser_to_extensions;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            std::unordered_map&lt;std::string, std::pair&lt;std::string, ParserFactory&gt;&gt; m_extension_to_parser;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;            <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#ac953effd3772be75aa045d1723121dc1">ParserFactory</a> get_parser_factory_for_file(<span class="keyword">const</span> std::filesystem::path&amp; file_name)</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;                <span class="keyword">auto</span> extension = <a class="code" href="namespacehal_1_1utils.html#a976e31871ae699ca28b23136fd728ee5">utils::to_lower</a>(file_name.extension().string());</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                <span class="keywordflow">if</span> (!extension.empty() &amp;&amp; extension[0] != <span class="charliteral">&#39;.&#39;</span>)</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                {</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                    extension = <span class="stringliteral">&quot;.&quot;</span> + extension;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                }</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> it = m_extension_to_parser.find(extension); it != m_extension_to_parser.end())</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;                {</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                    <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;gate_library_parser&quot;</span>, <span class="stringliteral">&quot;selected gate library parser &#39;{}&#39;.&quot;</span>, it-&gt;second.first);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                    <span class="keywordflow">return</span> it-&gt;second.second;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                }</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;gate_library_parser&quot;</span>, <span class="stringliteral">&quot;no gate library parser registered for file extension &#39;{}&#39;.&quot;</span>, extension);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#ac953effd3772be75aa045d1723121dc1">ParserFactory</a>();</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            }</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        }    <span class="comment">// namespace</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="namespacehal_1_1gate__library__parser__manager.html#aaa33c455d220a45c3eea2763f28a13e3">   39</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#aaa33c455d220a45c3eea2763f28a13e3">register_parser</a>(<span class="keyword">const</span> std::string&amp; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, <span class="keyword">const</span> <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#ac953effd3772be75aa045d1723121dc1">ParserFactory</a>&amp; parser_factory, <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; supported_file_extensions)</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        {</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> ext : supported_file_extensions)</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            {</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                ext = <a class="code" href="namespacehal_1_1utils.html#a3b3244bd8945cb61cfa299c32686a601">utils::trim</a>(<a class="code" href="namespacehal_1_1utils.html#a976e31871ae699ca28b23136fd728ee5">utils::to_lower</a>(ext));</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                <span class="keywordflow">if</span> (!ext.empty() &amp;&amp; ext[0] != <span class="charliteral">&#39;.&#39;</span>)</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                {</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                    ext = <span class="stringliteral">&quot;.&quot;</span> + ext;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                }</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> it = m_extension_to_parser.find(ext); it != m_extension_to_parser.end())</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                    <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;gate_library_parser&quot;</span>, <span class="stringliteral">&quot;file extension &#39;{}&#39; is already associated with parser &#39;{}&#39;.&quot;</span>, ext, it-&gt;second.first);</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                    <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                }</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                m_extension_to_parser.emplace(ext, std::make_pair(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, parser_factory));</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                m_parser_to_extensions[<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>].push_back(ext);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;gate_library_parser&quot;</span>, <span class="stringliteral">&quot;registered gate library parser &#39;{}&#39; for file extension &#39;{}&#39;.&quot;</span>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, ext);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            }</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        }</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="namespacehal_1_1gate__library__parser__manager.html#a6f6f6a58797c41a68ccc6609326237e8">   60</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#a6f6f6a58797c41a68ccc6609326237e8">unregister_parser</a>(<span class="keyword">const</span> std::string&amp; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        {</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> it = m_parser_to_extensions.find(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>); it != m_parser_to_extensions.end())</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; ext : it-&gt;second)</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                {</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                    <span class="keywordflow">if</span> (<span class="keyword">auto</span> rm_it = m_extension_to_parser.find(ext); rm_it != m_extension_to_parser.end())</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                    {</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                        m_extension_to_parser.erase(rm_it);</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                        <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;gate_library_parser&quot;</span>, <span class="stringliteral">&quot;unregistered gate library parser &#39;{}&#39; for file extension &#39;{}&#39;.&quot;</span>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, ext);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                    }</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                }</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                m_parser_to_extensions.erase(it);</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            }</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        }</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">   76</a></span>&#160;        std::unique_ptr&lt;GateLibrary&gt; <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">parse</a>(std::filesystem::path file_path)</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        {</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            <span class="keyword">auto</span> factory = get_parser_factory_for_file(file_path);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            <span class="keywordflow">if</span> (!factory)</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            {</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            }</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <span class="keyword">auto</span> <a class="code" href="namespacecontrol.html#a81abec992ca6f2e3c38f4df65ada8445">parser</a> = factory();</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            <span class="keyword">auto</span> begin_time = std::chrono::high_resolution_clock::now();</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = <a class="code" href="namespacecontrol.html#a81abec992ca6f2e3c38f4df65ada8445">parser</a>-&gt;parse(file_path); res.is_error())</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            {</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;gate_library_parser&quot;</span>, <span class="stringliteral">&quot;error encountered while parsing gate library from file &#39;{}&#39;:\n{}&quot;</span>, file_path.string(), res.get_error().get());</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            }</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            {</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                std::unique_ptr&lt;GateLibrary&gt; gate_lib = res.get();</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;gate_library_parser&quot;</span>,</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                         <span class="stringliteral">&quot;parsed gate library &#39;{}&#39; from file &#39;{}&#39; in {:2.2f} seconds.&quot;</span>,</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                         gate_lib-&gt;get_name(),</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                         file_path.string(),</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                         (<span class="keywordtype">double</span>)std::chrono::duration_cast&lt;std::chrono::milliseconds&gt;(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                <span class="keywordflow">return</span> gate_lib;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            }</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        }</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    }    <span class="comment">// namespace gate_library_parser_manager</span></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="plugin__manager_8h.html">hal_core/plugin_system/plugin_manager.h</a>&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="log_8h.html">hal_core/utilities/log.h</a>&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="utils_8h.html">hal_core/utilities/utils.h</a>&quot;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;regex&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;sstream&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;{</div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="namespacehal_1_1gate__library__parser__manager.html">   14</a></span>&#160;    <span class="keyword">namespace </span>gate_library_parser_manager</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">namespace</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        {</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            std::unordered_map&lt;std::string, std::vector&lt;std::string&gt;&gt; m_parser_to_extensions;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;            std::unordered_map&lt;std::string, std::pair&lt;std::string, ParserFactory&gt;&gt; m_extension_to_parser;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#ac953effd3772be75aa045d1723121dc1">ParserFactory</a> get_parser_factory_for_file(<span class="keyword">const</span> std::filesystem::path&amp; file_name)</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            {</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                <span class="keyword">auto</span> extension = <a class="code" href="namespacehal_1_1utils.html#a976e31871ae699ca28b23136fd728ee5">utils::to_lower</a>(file_name.extension().string());</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                <span class="keywordflow">if</span> (!extension.empty() &amp;&amp; extension[0] != <span class="charliteral">&#39;.&#39;</span>)</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                    extension = <span class="stringliteral">&quot;.&quot;</span> + extension;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                }</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> it = m_extension_to_parser.find(extension); it != m_extension_to_parser.end())</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;                {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                    <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;gate_library_parser&quot;</span>, <span class="stringliteral">&quot;selected gate library parser &#39;{}&#39;.&quot;</span>, it-&gt;second.first);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                    <span class="keywordflow">return</span> it-&gt;second.second;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                }</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;gate_library_parser&quot;</span>, <span class="stringliteral">&quot;no gate library parser registered for file extension &#39;{}&#39;.&quot;</span>, extension);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#ac953effd3772be75aa045d1723121dc1">ParserFactory</a>();</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            }</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        }    <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="namespacehal_1_1gate__library__parser__manager.html#aaa33c455d220a45c3eea2763f28a13e3">   40</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#aaa33c455d220a45c3eea2763f28a13e3">register_parser</a>(<span class="keyword">const</span> std::string&amp; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, <span class="keyword">const</span> <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#ac953effd3772be75aa045d1723121dc1">ParserFactory</a>&amp; parser_factory, <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; supported_file_extensions)</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> ext : supported_file_extensions)</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                ext = <a class="code" href="namespacehal_1_1utils.html#a3b3244bd8945cb61cfa299c32686a601">utils::trim</a>(<a class="code" href="namespacehal_1_1utils.html#a976e31871ae699ca28b23136fd728ee5">utils::to_lower</a>(ext));</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                <span class="keywordflow">if</span> (!ext.empty() &amp;&amp; ext[0] != <span class="charliteral">&#39;.&#39;</span>)</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                {</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                    ext = <span class="stringliteral">&quot;.&quot;</span> + ext;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                }</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">auto</span> it = m_extension_to_parser.find(ext); it != m_extension_to_parser.end())</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                {</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                    <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;gate_library_parser&quot;</span>, <span class="stringliteral">&quot;file extension &#39;{}&#39; is already associated with parser &#39;{}&#39;.&quot;</span>, ext, it-&gt;second.first);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                    <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                }</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                m_extension_to_parser.emplace(ext, std::make_pair(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, parser_factory));</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                m_parser_to_extensions[<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>].push_back(ext);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;gate_library_parser&quot;</span>, <span class="stringliteral">&quot;registered gate library parser &#39;{}&#39; for file extension &#39;{}&#39;.&quot;</span>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, ext);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            }</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        }</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="namespacehal_1_1gate__library__parser__manager.html#a6f6f6a58797c41a68ccc6609326237e8">   61</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#a6f6f6a58797c41a68ccc6609326237e8">unregister_parser</a>(<span class="keyword">const</span> std::string&amp; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> it = m_parser_to_extensions.find(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>); it != m_parser_to_extensions.end())</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            {</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; ext : it-&gt;second)</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                {</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                    <span class="keywordflow">if</span> (<span class="keyword">auto</span> rm_it = m_extension_to_parser.find(ext); rm_it != m_extension_to_parser.end())</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                    {</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                        m_extension_to_parser.erase(rm_it);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                        <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;gate_library_parser&quot;</span>, <span class="stringliteral">&quot;unregistered gate library parser &#39;{}&#39; for file extension &#39;{}&#39;.&quot;</span>, <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, ext);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                    }</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                }</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                m_parser_to_extensions.erase(it);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            }</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        }</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">   77</a></span>&#160;        std::unique_ptr&lt;GateLibrary&gt; <a class="code" href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">parse</a>(std::filesystem::path file_path)</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        {</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            <span class="keyword">auto</span> factory = get_parser_factory_for_file(file_path);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            <span class="keywordflow">if</span> (!factory)</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            {</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            }</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            <span class="keyword">auto</span> <a class="code" href="namespacecontrol.html#a81abec992ca6f2e3c38f4df65ada8445">parser</a> = factory();</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            <span class="keyword">auto</span> begin_time = std::chrono::high_resolution_clock::now();</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">auto</span> res = <a class="code" href="namespacecontrol.html#a81abec992ca6f2e3c38f4df65ada8445">parser</a>-&gt;parse(file_path); res.is_error())</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            {</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;gate_library_parser&quot;</span>, <span class="stringliteral">&quot;error encountered while parsing gate library from file &#39;{}&#39;:\n{}&quot;</span>, file_path.string(), res.get_error().get());</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            {</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                std::unique_ptr&lt;GateLibrary&gt; gate_lib = res.get();</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;gate_library_parser&quot;</span>,</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                         <span class="stringliteral">&quot;parsed gate library &#39;{}&#39; from file &#39;{}&#39; in {:2.2f} seconds.&quot;</span>,</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                         gate_lib-&gt;get_name(),</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                         file_path.string(),</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                         (<span class="keywordtype">double</span>)std::chrono::duration_cast&lt;std::chrono::milliseconds&gt;(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                <span class="keywordflow">return</span> gate_lib;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            }</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        }</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    }    <span class="comment">// namespace gate_library_parser_manager</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a9b45b3e13bd9167aab02e17e08916231"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a></div><div class="ttdeci">std::string name</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">netlist_serializer.cpp:56</a></div></div>
 <div class="ttc" id="anamespacecontrol_html_a81abec992ca6f2e3c38f4df65ada8445"><div class="ttname"><a href="namespacecontrol.html#a81abec992ca6f2e3c38f4df65ada8445">control.parser</a></div><div class="ttdeci">parser</div><div class="ttdef"><b>Definition:</b> <a href="control_8py_source.html#l00013">control.py:13</a></div></div>
 <div class="ttc" id="anamespacehal_1_1gate__library__parser__manager_html_ac953effd3772be75aa045d1723121dc1"><div class="ttname"><a href="namespacehal_1_1gate__library__parser__manager.html#ac953effd3772be75aa045d1723121dc1">hal::gate_library_parser_manager::ParserFactory</a></div><div class="ttdeci">std::function&lt; std::unique_ptr&lt; GateLibraryParser &gt;()&gt; ParserFactory</div><div class="ttdef"><b>Definition:</b> <a href="gate__library__parser__manager_8h_source.html#l00047">gate_library_parser_manager.h:47</a></div></div>
 <div class="ttc" id="agate__library__parser__manager_8h_html"><div class="ttname"><a href="gate__library__parser__manager_8h.html">gate_library_parser_manager.h</a></div></div>
-<div class="ttc" id="anamespacehal_1_1gate__library__parser__manager_html_a37de54423126f56b765696a03bd78c48"><div class="ttname"><a href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">hal::gate_library_parser_manager::parse</a></div><div class="ttdeci">std::unique_ptr&lt; GateLibrary &gt; parse(std::filesystem::path file_path)</div><div class="ttdef"><b>Definition:</b> <a href="gate__library__parser__manager_8cpp_source.html#l00076">gate_library_parser_manager.cpp:76</a></div></div>
+<div class="ttc" id="anamespacehal_1_1gate__library__parser__manager_html_a37de54423126f56b765696a03bd78c48"><div class="ttname"><a href="namespacehal_1_1gate__library__parser__manager.html#a37de54423126f56b765696a03bd78c48">hal::gate_library_parser_manager::parse</a></div><div class="ttdeci">std::unique_ptr&lt; GateLibrary &gt; parse(std::filesystem::path file_path)</div><div class="ttdef"><b>Definition:</b> <a href="gate__library__parser__manager_8cpp_source.html#l00077">gate_library_parser_manager.cpp:77</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="agroup__utilities_html_ga522d6d0c8a408128993be37c86656280"><div class="ttname"><a href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a></div><div class="ttdeci">#define log_error(channel,...)</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00078">log.h:78</a></div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a3b3244bd8945cb61cfa299c32686a601"><div class="ttname"><a href="namespacehal_1_1utils.html#a3b3244bd8945cb61cfa299c32686a601">hal::utils::trim</a></div><div class="ttdeci">CORE_API T trim(const T &amp;s, const char *to_remove=&quot; \t\r\n&quot;)</div><div class="ttdef"><b>Definition:</b> <a href="utils_8h_source.html#l00356">utils.h:356</a></div></div>
-<div class="ttc" id="anamespacehal_1_1gate__library__parser__manager_html_aaa33c455d220a45c3eea2763f28a13e3"><div class="ttname"><a href="namespacehal_1_1gate__library__parser__manager.html#aaa33c455d220a45c3eea2763f28a13e3">hal::gate_library_parser_manager::register_parser</a></div><div class="ttdeci">void register_parser(const std::string &amp;name, const ParserFactory &amp;parser_factory, const std::vector&lt; std::string &gt; &amp;supported_file_extensions)</div><div class="ttdef"><b>Definition:</b> <a href="gate__library__parser__manager_8cpp_source.html#l00039">gate_library_parser_manager.cpp:39</a></div></div>
+<div class="ttc" id="anamespacehal_1_1gate__library__parser__manager_html_aaa33c455d220a45c3eea2763f28a13e3"><div class="ttname"><a href="namespacehal_1_1gate__library__parser__manager.html#aaa33c455d220a45c3eea2763f28a13e3">hal::gate_library_parser_manager::register_parser</a></div><div class="ttdeci">void register_parser(const std::string &amp;name, const ParserFactory &amp;parser_factory, const std::vector&lt; std::string &gt; &amp;supported_file_extensions)</div><div class="ttdef"><b>Definition:</b> <a href="gate__library__parser__manager_8cpp_source.html#l00040">gate_library_parser_manager.cpp:40</a></div></div>
 <div class="ttc" id="autils_8h_html"><div class="ttname"><a href="utils_8h.html">utils.h</a></div></div>
 <div class="ttc" id="agroup__utilities_html_ga5a10e8bbe0ebf932e114b116b32d7ed2"><div class="ttname"><a href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a></div><div class="ttdeci">#define log_info(channel,...)</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00070">log.h:70</a></div></div>
 <div class="ttc" id="agroup__utilities_html_gaccc921ec8323d53efb57a21a8d4be735"><div class="ttname"><a href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a></div><div class="ttdeci">#define log_warning(channel,...)</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00076">log.h:76</a></div></div>
+<div class="ttc" id="aplugin__manager_8h_html"><div class="ttname"><a href="plugin__manager_8h.html">plugin_manager.h</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
 <div class="ttc" id="agate__library__parser_8h_html"><div class="ttname"><a href="gate__library__parser_8h.html">gate_library_parser.h</a></div></div>
 <div class="ttc" id="agate__library_8h_html"><div class="ttname"><a href="gate__library_8h.html">gate_library.h</a></div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a976e31871ae699ca28b23136fd728ee5"><div class="ttname"><a href="namespacehal_1_1utils.html#a976e31871ae699ca28b23136fd728ee5">hal::utils::to_lower</a></div><div class="ttdeci">CORE_API T to_lower(const T &amp;s)</div><div class="ttdef"><b>Definition:</b> <a href="utils_8h_source.html#l00475">utils.h:475</a></div></div>
-<div class="ttc" id="anamespacehal_1_1gate__library__parser__manager_html_a6f6f6a58797c41a68ccc6609326237e8"><div class="ttname"><a href="namespacehal_1_1gate__library__parser__manager.html#a6f6f6a58797c41a68ccc6609326237e8">hal::gate_library_parser_manager::unregister_parser</a></div><div class="ttdeci">void unregister_parser(const std::string &amp;name)</div><div class="ttdef"><b>Definition:</b> <a href="gate__library__parser__manager_8cpp_source.html#l00060">gate_library_parser_manager.cpp:60</a></div></div>
+<div class="ttc" id="anamespacehal_1_1gate__library__parser__manager_html_a6f6f6a58797c41a68ccc6609326237e8"><div class="ttname"><a href="namespacehal_1_1gate__library__parser__manager.html#a6f6f6a58797c41a68ccc6609326237e8">hal::gate_library_parser_manager::unregister_parser</a></div><div class="ttdeci">void unregister_parser(const std::string &amp;name)</div><div class="ttdef"><b>Definition:</b> <a href="gate__library__parser__manager_8cpp_source.html#l00061">gate_library_parser_manager.cpp:61</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="dir_ff3bf91c1fe6286d1ab9e3da0ed2d8ad.html">gate_library</a></li><li class="navelem"><a class="el" href="dir_af5bf037fd1b511d58f51ce14d34b46e.html">gate_library_parser</a></li><li class="navelem"><a class="el" href="gate__library__parser__manager_8cpp.html">gate_library_parser_manager.cpp</a></li>
-    <li class="footer">Generated on Sun Mar 19 2023 08:27:00 for HAL by
+    <li class="footer">Generated on Thu Mar 23 2023 10:58:54 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

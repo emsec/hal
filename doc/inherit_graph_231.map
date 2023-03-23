@@ -1,4 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qvector.html" title=" " alt="" coords="5,5,179,32"/>
-<area shape="rect" id="node2" href="$classhal_1_1_node_boxes.html" title="The NodeBoxes class owns all NodeBox&#39;es from hal view." alt="" coords="227,5,349,32"/>
+<area shape="rect" id="node1" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qlist.html" title=" " alt="" coords="5,56,115,83"/>
+<area shape="rect" id="node2" href="$classhal_1_1_gate_select_history.html" title="The GateSelectHistory class singleton comprises a list of user selected modules." alt="" coords="174,5,342,32"/>
+<area shape="rect" id="node3" href="$classhal_1_1_grouping_table_history.html" title=" " alt="" coords="163,56,353,83"/>
+<area shape="rect" id="node4" href="$classhal_1_1_module_select_history.html" title="The ModuleSelectHistory class singleton comprises a list of user selected modules." alt="" coords="165,107,351,133"/>
 </map>

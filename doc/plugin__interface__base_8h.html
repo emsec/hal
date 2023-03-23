@@ -86,43 +86,41 @@ $(document).ready(function(){initNavTree('plugin__interface__base_8h.html',''); 
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">plugin_interface_base.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="defines_8h_source.html">hal_core/defines.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="include_2hal__core_2netlist_2netlist_8h_source.html">hal_core/netlist/netlist.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="plugin__parameter_8h_source.html">hal_core/plugin_system/plugin_parameter.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="log_8h_source.html">hal_core/utilities/log.h</a>&quot;</code><br />
 <code>#include &lt;set&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for plugin_interface_base.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="plugin__interface__base_8h__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2include_2hal__core_2plugin__system_2plugin__interface__base_8h" alt=""/></div>
 <map name="_2home_2runner_2work_2hal_2hal_2include_2hal__core_2plugin__system_2plugin__interface__base_8h" id="_2home_2runner_2work_2hal_2hal_2include_2hal__core_2plugin__system_2plugin__interface__base_8h">
-<area shape="rect" title=" " alt="" coords="671,5,841,76"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="149,392,289,419"/>
-<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="731,131,909,158"/>
-<area shape="rect" title=" " alt="" coords="425,392,468,419"/>
-<area shape="rect" title=" " alt="" coords="1021,392,1080,419"/>
-<area shape="rect" href="plugin__parameter_8h.html" title=" " alt="" coords="1057,124,1233,165"/>
-<area shape="rect" href="log_8h.html" title=" " alt="" coords="568,213,699,255"/>
-<area shape="rect" title=" " alt="" coords="5,467,96,493"/>
-<area shape="rect" title=" " alt="" coords="121,467,207,493"/>
-<area shape="rect" title=" " alt="" coords="231,467,318,493"/>
-<area shape="rect" title=" " alt="" coords="342,467,413,493"/>
-<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="358,213,543,255"/>
-<area shape="rect" title=" " alt="" coords="669,392,755,419"/>
-<area shape="rect" href="gate__library_8h.html" title=" " alt="" coords="307,303,469,344"/>
-<area shape="rect" title=" " alt="" coords="800,310,877,337"/>
-<area shape="rect" title=" " alt="" coords="1026,310,1081,337"/>
-<area shape="rect" title=" " alt="" coords="774,221,866,247"/>
-<area shape="rect" title=" " alt="" coords="890,221,1014,247"/>
-<area shape="rect" title=" " alt="" coords="1039,221,1153,247"/>
-<area shape="rect" href="callback__hook_8h.html" title=" " alt="" coords="544,303,675,344"/>
+<area shape="rect" title=" " alt="" coords="457,5,627,76"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="180,303,320,329"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="477,124,607,165"/>
+<area shape="rect" title=" " alt="" coords="346,303,389,329"/>
+<area shape="rect" title=" " alt="" coords="513,303,571,329"/>
+<area shape="rect" title=" " alt="" coords="597,303,660,329"/>
+<area shape="rect" title=" " alt="" coords="35,377,126,404"/>
+<area shape="rect" title=" " alt="" coords="151,377,237,404"/>
+<area shape="rect" title=" " alt="" coords="261,377,348,404"/>
+<area shape="rect" title=" " alt="" coords="372,377,443,404"/>
+<area shape="rect" href="callback__hook_8h.html" title=" " alt="" coords="46,213,177,255"/>
+<area shape="rect" title=" " alt="" coords="68,303,155,329"/>
+<area shape="rect" title=" " alt="" coords="426,303,477,329"/>
+<area shape="rect" href="program__arguments_8h.html" title=" " alt="" coords="457,213,627,255"/>
+<area shape="rect" title=" " alt="" coords="686,303,763,329"/>
+<area shape="rect" title=" " alt="" coords="788,303,843,329"/>
+<area shape="rect" href="program__options_8h.html" title=" " alt="" coords="652,213,800,255"/>
+<area shape="rect" href="utils_8h.html" title=" " alt="" coords="201,213,331,255"/>
+<area shape="rect" title=" " alt="" coords="1027,221,1091,247"/>
+<area shape="rect" title=" " alt="" coords="1115,221,1299,247"/>
 </map>
 </div>
 </div>
@@ -147,78 +145,14 @@ Typedefs</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:aa8127688230d54c42984bdd3c2bb1f72"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; BasePluginInterface &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html#aa8127688230d54c42984bdd3c2bb1f72">hal::create_plugin_instance</a> ()</td></tr>
 <tr class="separator:aa8127688230d54c42984bdd3c2bb1f72"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:a42221ae13c427234b08a21d229eb2ad9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="plugin__interface__base_8h.html#a42221ae13c427234b08a21d229eb2ad9">base</a></td></tr>
-<tr class="separator:a42221ae13c427234b08a21d229eb2ad9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9280bc62af1b57e6460d0b1c251908bd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="plugin__interface__base_8h.html#a9280bc62af1b57e6460d0b1c251908bd">cli</a></td></tr>
-<tr class="separator:a9280bc62af1b57e6460d0b1c251908bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10e7df18d8a816af76f947453883ff42"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="plugin__interface__base_8h.html#a10e7df18d8a816af76f947453883ff42">interactive_ui</a></td></tr>
-<tr class="separator:a10e7df18d8a816af76f947453883ff42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="a42221ae13c427234b08a21d229eb2ad9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a42221ae13c427234b08a21d229eb2ad9">&#9670;&nbsp;</a></span>base</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">base</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="plugin__interface__base_8h_source.html#l00059">59</a> of file <a class="el" href="plugin__interface__base_8h_source.html">plugin_interface_base.h</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2boolean__function_8cpp_source.html#l00005">hal::boolean_function_init()</a>, <a class="el" href="plugin__solve__fsm_8cpp_source.html#l00446">hal::SolveFsmPlugin::generate_dot_graph()</a>, <a class="el" href="plugin__interface__base_8cpp_source.html#l00032">hal::BasePluginInterface::has_type()</a>, <a class="el" href="json_8hpp_source.html#l10053">nlohmann::detail::json_reverse_iterator&lt; Base &gt;::key()</a>, <a class="el" href="plugins_2solve__fsm_2python_2python__bindings_8cpp_source.html#l00024">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="netlist_2boolean__function_8cpp_source.html#l00190">hal::BooleanFunction::to_string()</a>, and <a class="el" href="json_8hpp_source.html#l10060">nlohmann::detail::json_reverse_iterator&lt; Base &gt;::value()</a>.</p>
-
-</div>
-</div>
-<a id="a9280bc62af1b57e6460d0b1c251908bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9280bc62af1b57e6460d0b1c251908bd">&#9670;&nbsp;</a></span>cli</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">cli</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="plugin__interface__base_8h_source.html#l00060">60</a> of file <a class="el" href="plugin__interface__base_8h_source.html">plugin_interface_base.h</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="plugin__interface__base_8cpp_source.html#l00032">hal::BasePluginInterface::has_type()</a>, and <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00156">hal::plugin_manager::load()</a>.</p>
-
-</div>
-</div>
-<a id="a10e7df18d8a816af76f947453883ff42"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a10e7df18d8a816af76f947453883ff42">&#9670;&nbsp;</a></span>interactive_ui</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">interactive_ui</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="plugin__interface__base_8h_source.html#l00061">61</a> of file <a class="el" href="plugin__interface__base_8h_source.html">plugin_interface_base.h</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="plugin__interface__base_8cpp_source.html#l00032">hal::BasePluginInterface::has_type()</a>, and <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00156">hal::plugin_manager::load()</a>.</p>
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_6df68e7c4858c229578de4afea200fae.html">plugin_system</a></li><li class="navelem"><a class="el" href="plugin__interface__base_8h.html">plugin_interface_base.h</a></li>
-    <li class="footer">Generated on Sun Mar 19 2023 08:27:00 for HAL by
+    <li class="footer">Generated on Thu Mar 23 2023 10:58:55 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

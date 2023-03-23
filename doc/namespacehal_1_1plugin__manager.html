@@ -83,16 +83,26 @@ $(document).ready(function(){initNavTree('namespacehal_1_1plugin__manager.html',
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">hal::plugin_manager Namespace Reference<div class="ingroups"><a class="el" href="group__core.html">HAL Core</a> &raquo; <a class="el" href="group__plugins.html">Plugin System</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1plugin__manager_1_1_plugin_feature.html">PluginFeature</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a2963a3d18f0df7fa6bb9030810a058c3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1plugin__manager.html#a2963a3d18f0df7fa6bb9030810a058c3">has_valid_file_extension</a> (std::filesystem::path file_name)</td></tr>
+<tr class="separator:a2963a3d18f0df7fa6bb9030810a058c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacd4893d3d32447c4ed1f27b21a827cf"><td class="memItemLeft" align="right" valign="top">std::set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1plugin__manager.html#aacd4893d3d32447c4ed1f27b21a827cf">get_plugin_names</a> ()</td></tr>
 <tr class="separator:aacd4893d3d32447c4ed1f27b21a827cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af29b336d33b785a18be71e538a3cd48a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structhal_1_1plugin__manager_1_1_plugin_feature.html">PluginFeature</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1plugin__manager.html#af29b336d33b785a18be71e538a3cd48a">get_plugin_features</a> (std::string <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
+<tr class="separator:af29b336d33b785a18be71e538a3cd48a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3ea4574499d7a7ec9a879f1a1a5b685"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1plugin__manager.html#ac3ea4574499d7a7ec9a879f1a1a5b685">get_cli_plugin_flags</a> ()</td></tr>
 <tr class="separator:ac3ea4574499d7a7ec9a879f1a1a5b685"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7195b40f8ac66e68cfe5f8e6cf6f074"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1plugin__manager.html#ac7195b40f8ac66e68cfe5f8e6cf6f074">get_ui_plugin_flags</a> ()</td></tr>
@@ -101,20 +111,26 @@ Functions</h2></td></tr>
 <tr class="separator:ad34e384af419d40a22d5486356772c24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af13862a2a5565fb995d7cc93c0bfd980"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1plugin__manager.html#af13862a2a5565fb995d7cc93c0bfd980">load_all_plugins</a> (const std::vector&lt; std::filesystem::path &gt; &amp;directory_names)</td></tr>
 <tr class="separator:af13862a2a5565fb995d7cc93c0bfd980"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d5a62ed3f2759dda79dced8902aa376"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1plugin__manager.html#a5d5a62ed3f2759dda79dced8902aa376">load</a> (const std::string &amp;plugin_name, const std::filesystem::path &amp;file_name)</td></tr>
-<tr class="separator:a5d5a62ed3f2759dda79dced8902aa376"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5d031db41abe777dfa8da61f5583ff2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1plugin__manager.html#af5d031db41abe777dfa8da61f5583ff2">load</a> (const std::string &amp;plugin_name, const std::filesystem::path &amp;file_path_or_empty)</td></tr>
+<tr class="separator:af5d031db41abe777dfa8da61f5583ff2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb6d1f3c164b832fb19257b1df06aa53"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1plugin__manager.html#acb6d1f3c164b832fb19257b1df06aa53">unload_all_plugins</a> ()</td></tr>
 <tr class="separator:acb6d1f3c164b832fb19257b1df06aa53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54caf767ba2c2f754875e9aad4849767"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1plugin__manager.html#a54caf767ba2c2f754875e9aad4849767">unload</a> (const std::string &amp;plugin_name)</td></tr>
 <tr class="separator:a54caf767ba2c2f754875e9aad4849767"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6994c89986fbfb4dff006887d1aa5e12"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_base_plugin_interface.html">BasePluginInterface</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1plugin__manager.html#a6994c89986fbfb4dff006887d1aa5e12">get_plugin_instance</a> (const std::string &amp;plugin_name, bool <a class="el" href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">initialize</a>)</td></tr>
-<tr class="separator:a6994c89986fbfb4dff006887d1aa5e12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7b612656ec8fc57b2df14bc0d44668f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_base_plugin_interface.html">BasePluginInterface</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1plugin__manager.html#ab7b612656ec8fc57b2df14bc0d44668f">get_plugin_instance</a> (const std::string &amp;plugin_name, bool <a class="el" href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">initialize</a>, bool silent)</td></tr>
+<tr class="separator:ab7b612656ec8fc57b2df14bc0d44668f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09fe50a3d6651ef3eebbfcfb2f36cea8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1plugin__manager.html#a09fe50a3d6651ef3eebbfcfb2f36cea8">add_model_changed_callback</a> (std::function&lt; void(bool, std::string const &amp;, std::string const &amp;)&gt; callback)</td></tr>
 <tr class="separator:a09fe50a3d6651ef3eebbfcfb2f36cea8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad66fea3d4017a3c7b058436924d3dda3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1plugin__manager.html#ad66fea3d4017a3c7b058436924d3dda3">remove_model_changed_callback</a> (<a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</td></tr>
 <tr class="separator:ad66fea3d4017a3c7b058436924d3dda3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01b664fe781926cb67034f778e5242b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1plugin__manager.html#a01b664fe781926cb67034f778e5242b1">add_existing_options_description</a> (const <a class="el" href="classhal_1_1_program_options.html">ProgramOptions</a> &amp;existing_options)</td></tr>
 <tr class="separator:a01b664fe781926cb67034f778e5242b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92bf31018405affc1f416930a69f5123"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a92bf31018405affc1f416930a69f5123"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1plugin__manager.html#a92bf31018405affc1f416930a69f5123">get_plugin_instance</a> (const std::string &amp;plugin_name, bool <a class="el" href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">initialize</a>=true)</td></tr>
+<tr class="separator:a92bf31018405affc1f416930a69f5123"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40872f349c9b1e60bae16f76017e074b"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a40872f349c9b1e60bae16f76017e074b"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehal_1_1plugin__manager.html#a40872f349c9b1e60bae16f76017e074b">get_first_extension</a> (const std::string &amp;plugin_name, bool <a class="el" href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">initialize</a>=true)</td></tr>
+<tr class="separator:a40872f349c9b1e60bae16f76017e074b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The plugin manager takes care of loading and unloading plugins at runtime. </p>
@@ -143,7 +159,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00390">390</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00452">452</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
 
 </div>
 </div>
@@ -177,11 +193,11 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The id of the registered callback. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00375">375</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00437">437</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00078">log_error</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__relay_8cpp_source.html#l00007">hal::PluginRelay::PluginRelay()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugin__relay_8cpp_source.html#l00008">hal::PluginRelay::PluginRelay()</a>.</p>
 
 </div>
 </div>
@@ -203,7 +219,7 @@ Functions</h2></td></tr>
 <p>Get a mapping of flags pointing to their corresponding CLI plugin.</p>
 <dl class="section return"><dt>Returns</dt><dd>A map from flag to plugin name. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00115">115</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00140">140</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
 
 </div>
 </div>
@@ -225,18 +241,20 @@ Functions</h2></td></tr>
 <p>Get command line interface options for all plugins.</p>
 <dl class="section return"><dt>Returns</dt><dd>The program options. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00125">125</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00150">150</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a6994c89986fbfb4dff006887d1aa5e12"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6994c89986fbfb4dff006887d1aa5e12">&#9670;&nbsp;</a></span>get_plugin_instance()</h2>
+<a id="a40872f349c9b1e60bae16f76017e074b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40872f349c9b1e60bae16f76017e074b">&#9670;&nbsp;</a></span>get_first_extension()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_base_plugin_interface.html">BasePluginInterface</a> * hal::plugin_manager::get_plugin_instance </td>
+          <td class="memname">T* hal::plugin_manager::get_first_extension </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>plugin_name</em>, </td>
@@ -254,7 +272,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Gets the basic interface for a plugin specified by name. By default calls the <a class="el" href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">initialize()</a> function of the plugin.</p>
+<p>Get first plugin extension of given type T.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">plugin_name</td><td>- The name of the plugin. </td></tr>
@@ -262,7 +280,122 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The basic plugin interface.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>pointer to first extension of type T or nullptr if no such extension exists. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="plugin__manager_8h_source.html#l00160">160</a> of file <a class="el" href="plugin__manager_8h_source.html">plugin_manager.h</a>.</p>
+
+<p class="reference">References <a class="el" href="plugin__interface__base_8h_source.html#l00137">hal::BasePluginInterface::get_first_extension()</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00419">get_plugin_instance()</a>, <a class="el" href="event__log_8cpp_source.html#l00299">hal::initialize()</a>, and <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
+
+</div>
+</div>
+<a id="af29b336d33b785a18be71e538a3cd48a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af29b336d33b785a18be71e538a3cd48a">&#9670;&nbsp;</a></span>get_plugin_features()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="structhal_1_1plugin__manager_1_1_plugin_feature.html">PluginFeature</a> &gt; hal::plugin_manager::get_plugin_features </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns list of features for plugin identified by file name stem </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>file name stem </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>list of features like parser or writer </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00133">133</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00591">hal::GuiPluginEntry::updateFromLoaded()</a>.</p>
+
+</div>
+</div>
+<a id="ab7b612656ec8fc57b2df14bc0d44668f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7b612656ec8fc57b2df14bc0d44668f">&#9670;&nbsp;</a></span>get_plugin_instance() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_base_plugin_interface.html">BasePluginInterface</a> * hal::plugin_manager::get_plugin_instance </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>plugin_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>initialize</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>silent</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the basic interface for a plugin specified by name. By default calls the <a class="el" href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">initialize()</a> function of the plugin.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">plugin_name</td><td>- The name of the plugin. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">initialize</td><td>- If false, the plugin's initialize function is not called. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">silent</td><td>- If true error message gets omitted if plugin not found </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The basic plugin interface. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00419">419</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="event__log_8cpp_source.html#l00299">hal::initialize()</a>, and <a class="el" href="log_8h_source.html#l00078">log_error</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugin__manager_8h_source.html#l00160">get_first_extension()</a>, <a class="el" href="plugin__manager_8h_source.html#l00147">get_plugin_instance()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00342">hal::GuiPluginManager::getGuiExtensions()</a>, and <a class="el" href="gui__plugin__manager_8cpp_source.html#l00310">hal::GuiPluginTable::load()</a>.</p>
+
+</div>
+</div>
+<a id="a92bf31018405affc1f416930a69f5123"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92bf31018405affc1f416930a69f5123">&#9670;&nbsp;</a></span>get_plugin_instance() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T* hal::plugin_manager::get_plugin_instance </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>plugin_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>initialize</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 <p>TODO Python bindings for different types and extend by initialize flag.</p>
 <p>Gets a specific interface for a plugin specified by name. By default calls the <a class="el" href="namespacehal.html#a45f4052286462e64763c142a3e26ab93">initialize()</a> function of the plugin.</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -274,11 +407,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The specific plugin interface. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00358">358</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__manager_8h_source.html#l00147">147</a> of file <a class="el" href="plugin__manager_8h_source.html">plugin_manager.h</a>.</p>
 
-<p class="reference">References <a class="el" href="event__log_8cpp_source.html#l00299">hal::initialize()</a>, and <a class="el" href="log_8h_source.html#l00078">log_error</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00056">hal::GraphWidget::GraphWidget()</a>.</p>
+<p class="reference">References <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00419">get_plugin_instance()</a>, <a class="el" href="event__log_8cpp_source.html#l00299">hal::initialize()</a>, and <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
 </div>
 </div>
@@ -299,11 +430,11 @@ Functions</h2></td></tr>
 <p>Get the names of all loaded plugins.</p>
 <dl class="section return"><dt>Returns</dt><dd>The set of plugin names. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00105">105</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00123">123</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="_apache_01_license_8txt_source.html#l00139">names</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00056">hal::GraphWidget::GraphWidget()</a>, <a class="el" href="python__bindings_2bindings_2plugin__manager_8cpp_source.html#l00005">hal::plugin_manager_init()</a>, and <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00285">unload_all_plugins()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00342">hal::GuiPluginManager::getGuiExtensions()</a>, <a class="el" href="python__bindings_2bindings_2plugin__manager_8cpp_source.html#l00005">hal::plugin_manager_init()</a>, and <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00327">unload_all_plugins()</a>.</p>
 
 </div>
 </div>
@@ -325,12 +456,43 @@ Functions</h2></td></tr>
 <p>Get a mapping of flags pointing to their corresponding UI plugin.</p>
 <dl class="section return"><dt>Returns</dt><dd>A map from flag to plugin name. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00120">120</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00145">145</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a5d5a62ed3f2759dda79dced8902aa376"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d5a62ed3f2759dda79dced8902aa376">&#9670;&nbsp;</a></span>load()</h2>
+<a id="a2963a3d18f0df7fa6bb9030810a058c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2963a3d18f0df7fa6bb9030810a058c3">&#9670;&nbsp;</a></span>has_valid_file_extension()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::plugin_manager::has_valid_file_extension </td>
+          <td>(</td>
+          <td class="paramtype">std::filesystem::path&#160;</td>
+          <td class="paramname"><em>file_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns whether file has an extension which is legal for plugins in OS </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file_name</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>False if extension indicated that this file cannot be a plugin, true otherwise </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00103">103</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="arch__linux_8h_source.html#l00036">ALTERNATE_LIBRARY_FILE_EXTENSION</a>, <a class="el" href="utils_8h_source.html#l00145">hal::utils::ends_with()</a>, and <a class="el" href="arch__linux_8h_source.html#l00034">LIBRARY_FILE_EXTENSION</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00155">load_all_plugins()</a>.</p>
+
+</div>
+</div>
+<a id="af5d031db41abe777dfa8da61f5583ff2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5d031db41abe777dfa8da61f5583ff2">&#9670;&nbsp;</a></span>load()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -345,7 +507,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::filesystem::path &amp;&#160;</td>
-          <td class="paramname"><em>file_path</em>&#160;</td>
+          <td class="paramname"><em>file_path_or_empty</em> = <code>std::filesystem::path()</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -364,11 +526,11 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00156">156</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00181">181</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="plugin__interface__base_8h_source.html#l00060">cli</a>, <a class="el" href="classhal_1_1_u_i_plugin_interface.html#aa402ba253b62f31e37ffa2f140600da3">hal::UIPluginInterface::get_cli_options()</a>, <a class="el" href="classhal_1_1_c_l_i_plugin_interface.html#ad8ef97cbc2f3c5ae5280d48c6c25a7c6">hal::CLIPluginInterface::get_cli_options()</a>, <a class="el" href="plugin__interface__base_8h_source.html#l00061">interactive_ui</a>, <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="log_8h_source.html#l00070">log_info</a>.</p>
+<p class="reference">References <a class="el" href="fac__extension__interface_8h_source.html#l00057">hal::FacExtensionInterface::FacGatelibParser</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00057">hal::FacExtensionInterface::FacGatelibWriter</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00057">hal::FacExtensionInterface::FacNetlistParser</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00057">hal::FacExtensionInterface::FacNetlistWriter</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00068">hal::FacExtensionInterface::factory_provider</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00057">hal::FacExtensionInterface::FacUnknown</a>, <a class="el" href="classhal_1_1_cli_extension_interface.html#accd330a2ef66d28e64ce3a3ef0df3d72">hal::CliExtensionInterface::get_cli_options()</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00066">hal::FacExtensionInterface::get_description()</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00065">hal::FacExtensionInterface::get_feature()</a>, <a class="el" href="classhal_1_1_base_plugin_interface.html#a3818f63c15ebe39ad595abddbb471e4a">hal::BasePluginInterface::get_name()</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00067">hal::FacExtensionInterface::get_supported_file_extensions()</a>, <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00051">hal::FacFactoryProvider&lt; T &gt;::m_factory</a>, <a class="el" href="gate__library__parser__manager_8cpp_source.html#l00040">hal::gate_library_parser_manager::register_parser()</a>, <a class="el" href="netlist__parser__manager_8cpp_source.html#l00148">hal::netlist_parser_manager::register_parser()</a>, <a class="el" href="gate__library__writer__manager_8cpp_source.html#l00040">hal::gate_library_writer_manager::register_writer()</a>, and <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00053">hal::netlist_writer_manager::register_writer()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00130">load_all_plugins()</a>, and <a class="el" href="python__bindings_2bindings_2plugin__manager_8cpp_source.html#l00005">hal::plugin_manager_init()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00404">hal::GuiPluginTable::handleButtonPressed()</a>, <a class="el" href="gui__plugin__manager_8cpp_source.html#l00310">hal::GuiPluginTable::load()</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00155">load_all_plugins()</a>, and <a class="el" href="python__bindings_2bindings_2plugin__manager_8cpp_source.html#l00005">hal::plugin_manager_init()</a>.</p>
 
 </div>
 </div>
@@ -397,9 +559,9 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00130">130</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00155">155</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="_apache_01_license_8txt_source.html#l00109">file</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00156">load()</a>, and <a class="el" href="log_8h_source.html#l00074">log_debug</a>.</p>
+<p class="reference">References <a class="el" href="_apache_01_license_8txt_source.html#l00109">file</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00103">has_valid_file_extension()</a>, <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00181">load()</a>, and <a class="el" href="log_8h_source.html#l00074">log_debug</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2plugin__manager_8cpp_source.html#l00005">hal::plugin_manager_init()</a>, and <a class="el" href="test_2verilog__writer_8cpp_source.html#l00015">hal::VerilogWriterTest::SetUp()</a>.</p>
 
@@ -429,9 +591,9 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00385">385</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00447">447</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__relay_8cpp_source.html#l00012">hal::PluginRelay::~PluginRelay()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugin__relay_8cpp_source.html#l00013">hal::PluginRelay::~PluginRelay()</a>.</p>
 
 </div>
 </div>
@@ -459,11 +621,11 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00304">304</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00346">346</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>.</p>
+<p class="reference">References <a class="el" href="fac__extension__interface_8h_source.html#l00057">hal::FacExtensionInterface::FacGatelibParser</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00057">hal::FacExtensionInterface::FacGatelibWriter</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00057">hal::FacExtensionInterface::FacNetlistParser</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00057">hal::FacExtensionInterface::FacNetlistWriter</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00066">hal::FacExtensionInterface::get_description()</a>, <a class="el" href="fac__extension__interface_8h_source.html#l00065">hal::FacExtensionInterface::get_feature()</a>, <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, <a class="el" href="gate__library__parser__manager_8cpp_source.html#l00061">hal::gate_library_parser_manager::unregister_parser()</a>, <a class="el" href="netlist__parser__manager_8cpp_source.html#l00169">hal::netlist_parser_manager::unregister_parser()</a>, <a class="el" href="gate__library__writer__manager_8cpp_source.html#l00061">hal::gate_library_writer_manager::unregister_writer()</a>, and <a class="el" href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00074">hal::netlist_writer_manager::unregister_writer()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2plugin__manager_8cpp_source.html#l00005">hal::plugin_manager_init()</a>, and <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00285">unload_all_plugins()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__plugin__manager_8cpp_source.html#l00404">hal::GuiPluginTable::handleButtonPressed()</a>, <a class="el" href="python__bindings_2bindings_2plugin__manager_8cpp_source.html#l00005">hal::plugin_manager_init()</a>, and <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00327">unload_all_plugins()</a>.</p>
 
 </div>
 </div>
@@ -484,9 +646,9 @@ Functions</h2></td></tr>
 <p>Releases all plugins and their associated resources.</p>
 <dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00285">285</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00327">327</a> of file <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html">plugin_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00105">get_plugin_names()</a>, <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, and <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00304">unload()</a>.</p>
+<p class="reference">References <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00123">get_plugin_names()</a>, <a class="el" href="log_8h_source.html#l00074">log_debug</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">name</a>, and <a class="el" href="plugin__system_2plugin__manager_8cpp_source.html#l00346">unload()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__bindings_2bindings_2plugin__manager_8cpp_source.html#l00005">hal::plugin_manager_init()</a>, and <a class="el" href="test_2verilog__writer_8cpp_source.html#l00028">hal::VerilogWriterTest::TearDown()</a>.</p>
 
@@ -498,7 +660,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1plugin__manager.html">plugin_manager</a></li>
-    <li class="footer">Generated on Sun Mar 19 2023 08:27:04 for HAL by
+    <li class="footer">Generated on Thu Mar 23 2023 10:59:00 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

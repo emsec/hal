@@ -1,0 +1,14 @@
+<map id="hal::AbstractExtensionInterface" name="hal::AbstractExtensionInterface">
+<area shape="rect" id="node1" title=" " alt="" coords="721,5,956,97"/>
+<area shape="rect" id="node2" href="$classhal_1_1_cli_extension_interface.html" title=" " alt="" coords="315,182,504,289"/>
+<area shape="rect" id="node4" href="$classhal_1_1_fac_extension_interface.html" title=" " alt="" coords="725,145,952,325"/>
+<area shape="rect" id="node11" href="$classhal_1_1_gui_extension_interface.html" title=" " alt="" coords="1299,160,1523,311"/>
+<area shape="rect" id="node3" href="$classhal_1_1_cli_extension_dataflow.html" title=" " alt="" coords="5,395,195,502"/>
+<area shape="rect" id="node5" href="$classhal_1_1_h_g_l_parser_extension.html" title=" " alt="" coords="219,410,400,487"/>
+<area shape="rect" id="node6" href="$classhal_1_1_h_g_l_writer_extension.html" title=" " alt="" coords="425,410,605,487"/>
+<area shape="rect" id="node7" href="$classhal_1_1_liberty_parser_extension.html" title=" " alt="" coords="629,410,827,487"/>
+<area shape="rect" id="node8" href="$classhal_1_1_verilog_parser_extension.html" title=" " alt="" coords="851,410,1050,487"/>
+<area shape="rect" id="node9" href="$classhal_1_1_verilog_writer_extension.html" title=" " alt="" coords="1074,410,1273,487"/>
+<area shape="rect" id="node10" href="$classhal_1_1_v_h_d_l_parser_extension.html" title=" " alt="" coords="1297,410,1487,487"/>
+<area shape="rect" id="node12" href="$classhal_1_1_gui_extension_dataflow.html" title=" " alt="" coords="1512,373,1736,524"/>
+</map>

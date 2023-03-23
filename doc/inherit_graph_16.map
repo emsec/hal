@@ -1,3 +1,8 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html" title=" " alt="" coords="5,5,156,47"/>
+<area shape="rect" id="node1" href="$classhal_1_1_boolean_function_table_entry.html" title="An entry in the boolean function table model." alt="" coords="5,99,197,141"/>
+<area shape="rect" id="node2" href="$classhal_1_1_boolean_function_entry.html" title="A BooleanFunctionTableEntry that represents a boolean function." alt="" coords="247,5,439,32"/>
+<area shape="rect" id="node3" href="$classhal_1_1_c_p_behavior_entry.html" title="A BooleanFunctionTableEntry that represents a clear&#45;preset behavior." alt="" coords="263,56,422,83"/>
+<area shape="rect" id="node4" href="$classhal_1_1_f_f_component_entry.html" title="A entry type that represents properties (functions and behaviors) of an FFCompont." alt="" coords="255,107,430,133"/>
+<area shape="rect" id="node5" href="$classhal_1_1_latch_component_entry.html" title="An entry type that represents properties (functions or behaviors) of a LatchComponent." alt="" coords="245,157,440,184"/>
+<area shape="rect" id="node6" href="$classhal_1_1_state_component_entry.html" title="Utility class that represents a state of the StateComponent." alt="" coords="246,208,439,235"/>
 </map>

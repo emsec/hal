@@ -1,0 +1,5 @@
+<map id="hal::ExternalContentWidget" name="hal::ExternalContentWidget">
+<area shape="rect" id="node1" title=" " alt="" coords="40,667,249,773"/>
+<area shape="rect" id="node2" href="$classhal_1_1_content_widget.html" title="Abstract class for Widgets within HAL&#39;s ContentArea." alt="" coords="5,175,284,619"/>
+<area shape="rect" id="node3" href="$classhal_1_1_widget.html" title="A QWidget customized for hal." alt="" coords="91,5,199,127"/>
+</map>

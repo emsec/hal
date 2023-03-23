@@ -1,4 +1,6 @@
 <map id="hal::PluginRelay" name="hal::PluginRelay">
-<area shape="rect" id="node1" title="Forwards plugin related events from the core to the gui." alt="" coords="5,395,205,501"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="22,5,189,347"/>
+<area shape="rect" id="node1" title="Forwards plugin related events from the core to the gui." alt="" coords="50,609,250,716"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="5,205,172,547"/>
+<area shape="rect" id="node3" href="$classhal_1_1_gui_plugin_table.html" title=" " alt="" coords="196,271,389,481"/>
+<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstracttablemodel.html" title=" " alt="" coords="195,5,391,156"/>
 </map>
