@@ -191,6 +191,68 @@ namespace hal
             :rtype: int or None
         )");
 
+        py_netlist_preprocessing.def_static(
+            "decompose_gate",
+            [](Netlist* nl, Gate* g, const bool delete_gate = true) -> bool {
+                auto res = NetlistPreprocessingPlugin::decompose_gate(nl, g, delete_gate);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("nl"),
+            py::arg("g"),
+            py::arg("delete_gate") = true,
+            R"(
+            Builds the Boolean function of each output pin of the gate and constructs a gate tree implementing it.
+            Afterwards the original output net is connected to the built gate tree and the gate is deleted if the 'delete_gate' flag is set.
+
+            For the decomposition we currently only support the base operands AND, OR, INVERT.
+            The function searches in the gate library for a fitting two input gate and uses a standard HAL gate type if none is found.
+
+            :param hal_py.Netlist nl: The netlist to operate on. 
+            :param hal_py.Gate gate: The gate to decompose.
+            :param bool delete_gate: Determines whether the original gate gets deleted by the function, defaults to true. 
+            :returns: true on success, false and an error otherwise.
+            :rtype: bool
+        )");
+
+
+        py_netlist_preprocessing.def_static(
+            "decompose_gates_of_type",
+            [](Netlist* nl, const std::vector<const GateType*>& gate_types) -> std::optional<u32> {
+                auto res = NetlistPreprocessingPlugin::decompose_gates_of_type(nl, gate_types);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            py::arg("gate_types"),
+            R"(
+            Decomposes each gate of the specified type by building the Boolean function for each output pin of the gate and contructing a gate tree implementing it.
+            Afterwards the original gate is deleted and the output net is connected to the built gate tree.
+
+            For the decomposition we currently only support the base operands AND, OR, INVERT.
+            The function searches in the gate library for a fitting two input gate and uses a standard HAL gate type if none is found.
+
+            :param hal_py.Netlist nl: The netlist to operate on. 
+            :param list[hal_py.GateType] gate_types: The gate types that should be decomposed.
+
+            :returns: The number of decomposed gates on success, an error otherwise.
+            :rtype: int or None
+        )");
+
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE

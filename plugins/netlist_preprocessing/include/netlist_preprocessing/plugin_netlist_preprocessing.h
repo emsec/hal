@@ -100,7 +100,7 @@ namespace hal
          * Builds the Boolean function of each output pin of the gate and constructs a gate tree implementing it.
          * Afterwards the original output net is connected to the built gate tree and the gate is deleted if the 'delete_gate' flag is set.
          * 
-         * For the decomposition we currently only support the base operands AND, OR, INVERT.
+         * For the decomposition we currently only support the base operands AND, OR, INVERT, XOR.
          * The function searches in the gate library for a fitting two input gate and uses a standard HAL gate type if none is found.
          * 
          * @param[in] nl - The netlist to operate on. 
@@ -114,7 +114,7 @@ namespace hal
          * Decomposes each gate of the specified type by building the Boolean function for each output pin of the gate and contructing a gate tree implementing it.
          * Afterwards the original gate is deleted and the output net is connected to the built gate tree.
          * 
-         * For the decomposition we currently only support the base operands AND, OR, INVERT.
+         * For the decomposition we currently only support the base operands AND, OR, INVERT, XOR.
          * The function searches in the gate library for a fitting two input gate and uses a standard HAL gate type if none is found.
          * 
          * @param[in] nl - The netlist to operate on. 

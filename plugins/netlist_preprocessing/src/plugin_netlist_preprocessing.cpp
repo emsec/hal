@@ -725,9 +725,14 @@ namespace hal
 
         Result<Net*> build_gate_tree_from_boolean_function(Netlist* nl, const BooleanFunction& bf, const std::map<std::string, Net*>& var_name_to_net, const Gate* org_gate = nullptr)
         {
-            const auto create_gate_name = [](const Netlist* nl, const Gate* new_gate, const Gate* org_gate) -> std::string {
-                const std::string new_name = (org_gate == nullptr) ? "new_gate_" : org_gate->get_name() + "_decomposed_";
+            const auto create_gate_name = [](const Gate* new_gate, const Gate* org_gate) -> std::string {
+                const std::string new_name = (org_gate == nullptr) ? "new_gate" : org_gate->get_name() + "_decomposed_";
                 return new_name + std::to_string(new_gate->get_id());
+            };
+
+            const auto create_net_name = [](const Net* new_net, const Gate* org_gate) -> std::string {
+                const std::string new_name = (org_gate == nullptr) ? "new_net" : org_gate->get_name() + "_decomposed_";
+                return new_name + std::to_string(new_net->get_id());
             };
 
             if (bf.is_empty())
@@ -745,18 +750,17 @@ namespace hal
                 return ERR("cannot build gate tree for Boolean function: Boolean function if of size " + std::to_string(bf.size()) + " but we only handle size 1");
             }
 
-            static Net* zero = nl->get_nets([](const Net* n) { return n->is_gnd_net(); }).front();
-            static Net* one  = nl->get_nets([](const Net* n) { return n->is_vcc_net(); }).front();
-
             if (bf.is_constant())
             {
                 if (bf.has_constant_value(0))
                 {
+                    static Net* zero = nl->get_nets([](const Net* n) { return n->is_gnd_net(); }).front();
                     return OK(zero);
                 }
 
                 if (bf.has_constant_value(1))
                 {
+                    static Net* one  = nl->get_nets([](const Net* n) { return n->is_vcc_net(); }).front();
                     return OK(one);
                 }
             }
@@ -784,6 +788,7 @@ namespace hal
             static const auto inv_type_res = find_gate_type(nl->get_gate_library(), {GateTypeProperty::combinational, GateTypeProperty::c_inverter}, 1, 1);
             static const auto and_type_res = find_gate_type(nl->get_gate_library(), {GateTypeProperty::combinational, GateTypeProperty::c_and}, 2, 1);
             static const auto or_type_res  = find_gate_type(nl->get_gate_library(), {GateTypeProperty::combinational, GateTypeProperty::c_or}, 2, 1);
+            static const auto xor_type_res  = find_gate_type(nl->get_gate_library(), {GateTypeProperty::combinational, GateTypeProperty::c_xor}, 2, 1);
 
             if (inv_type_res.is_error())
             {
@@ -804,6 +809,7 @@ namespace hal
                 {BooleanFunction::NodeType::Not, inv_type_res.get()},
                 {BooleanFunction::NodeType::And, and_type_res.get()},
                 {BooleanFunction::NodeType::Or, or_type_res.get()},
+                {BooleanFunction::NodeType::Xor, xor_type_res.get()},
             };
 
             std::vector<Net*> parameter_nets;
@@ -818,15 +824,17 @@ namespace hal
             }
 
             Gate* new_gate  = nullptr;
-            Net* output_net = nullptr;
+            Net* output_net = nl->create_net("__TEMP_NET_NAME__DECOMPOSED__");
+            output_net->set_name(create_net_name(output_net, org_gate));
 
             switch (operation)
             {
                 case BooleanFunction::NodeType::Not:
                 case BooleanFunction::NodeType::And:
-                case BooleanFunction::NodeType::Or: {
+                case BooleanFunction::NodeType::Or: 
+                case BooleanFunction::NodeType::Xor: {
                     auto [gt, in_pins, out_pins] = node_type_to_gate_type.at(operation);
-                    new_gate                     = nl->create_gate(gt);
+                    new_gate                     = nl->create_gate(gt, "__TEMP_GATE_NAME__DECOMPOSED__");
                     for (u32 idx = 0; idx < parameter_nets.size(); idx++)
                     {
                         parameter_nets.at(idx)->add_destination(new_gate, in_pins.at(idx));
@@ -843,7 +851,7 @@ namespace hal
                 return ERR("Cannot build gate tree for Boolean function: failed to create gate for operation " + bf.get_top_level_node().to_string());
             }
 
-            new_gate->set_name(create_gate_name(nl, new_gate, org_gate));
+            new_gate->set_name(create_gate_name(new_gate, org_gate));
 
             return OK(output_net);
         }
