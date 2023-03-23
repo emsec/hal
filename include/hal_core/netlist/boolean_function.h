@@ -1068,11 +1068,18 @@ namespace hal
         bool has_constant_value(u64 value) const;
 
         /**
+         * Get the constant value of the node of type `Constant` as a vector of `BooleanFunction::Value`.
+         * 
+         * @returns The constant value on success, an error otherwise.
+         */
+        Result<std::vector<Value>> get_constant_value() const;
+
+        /**
          * Get the constant value of the node of type `Constant` as long as it has a size <= 64-bit.
          * 
          * @returns The constant value on success, an error otherwise.
          */
-        Result<u64> get_constant_value() const;
+        Result<u64> get_constant_value_u64() const;
 
         /**
          * Checks whether the Boolean function node is of type `Index`.

@@ -931,7 +931,15 @@ namespace hal
             :rtype: bool
         )");
 
-        py_boolean_function.def("has_constant_value", &BooleanFunction::has_constant_value, R"(
+        py_boolean_function.def("has_constant_value", py::overload_cast<const std::vector<BooleanFunction::Value>&>(&BooleanFunction::has_constant_value, py::const_), R"(
+            Checks whether the top-level node of the Boolean function is of type Constant and holds a specific value.
+
+            :param list[hal_py.BooleanFunction.Value] value: The constant value to check for.
+            :returns: True if the top-level node of the Boolean function is of type Constant and holds the given value, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function.def("has_constant_value", py::overload_cast<u64>(&BooleanFunction::has_constant_value, py::const_), R"(
             Checks whether the top-level node of the Boolean function is of type Constant and holds a specific value.
 
             :param int value: The constant value to check for.
@@ -941,8 +949,29 @@ namespace hal
 
         py_boolean_function.def(
             "get_constant_value",
-            [](const BooleanFunction& self) -> std::optional<u64> {
+            [](const BooleanFunction& self) -> std::optional<std::vector<BooleanFunction::Value>> {
                 auto res = self.get_constant_value();
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            R"(
+            Get the constant value of the top-level node of the Boolean function of type Constant as a list of ``hal_py.BooleanFunction.Value``.
+
+            :returns: The constant value on success, None otherwise.
+            :rtype: list[hal_py.BooleanFunction.Value] or None
+        )");
+
+        py_boolean_function.def(
+            "get_constant_value_u64",
+            [](const BooleanFunction& self) -> std::optional<u64> {
+                auto res = self.get_constant_value_u64();
                 if (res.is_ok())
                 {
                     return res.get();
@@ -1418,7 +1447,15 @@ namespace hal
             :rtype: bool
         )");
 
-        py_boolean_function_node.def("has_constant_value", &BooleanFunction::Node::has_constant_value, py::arg("value"), R"(
+        py_boolean_function_node.def("has_constant_value", py::overload_cast<const std::vector<BooleanFunction::Value>&>(&BooleanFunction::Node::has_constant_value, py::const_), py::arg("value"), R"(
+            Checks whether the Boolean function node is of type Constant and holds a specific value.
+
+            :param list[hal_py.BooleanFunction.Value] value: The value to check for.
+            :returns: True if the Boolean function node is of type Constant and holds the given value, False otherwise.
+            :rtype: bool
+        )");
+
+        py_boolean_function_node.def("has_constant_value", py::overload_cast<u64>(&BooleanFunction::Node::has_constant_value, py::const_), py::arg("value"), R"(
             Checks whether the Boolean function node is of type Constant and holds a specific value.
 
             :param int value: The value to check for.
@@ -1428,8 +1465,28 @@ namespace hal
 
         py_boolean_function_node.def(
             "get_constant_value",
-            [](const BooleanFunction::Node& self) -> std::optional<u64> {
+            [](const BooleanFunction::Node& self) -> std::optional<std::vector<BooleanFunction::Value>> {
                 if (const auto res = self.get_constant_value(); res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "could not get constant value:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            R"(
+            Get the constant value of the node of type `Constant` as a list of ``hal_py.BooleanFunction.Value``.
+
+            :returns: The constant value on success, None otherwise. 
+            :rtype: list[hal_py.BooleanFunction.Value] or None
+        )");
+
+        py_boolean_function_node.def(
+            "get_constant_value_u64",
+            [](const BooleanFunction::Node& self) -> std::optional<u64> {
+                if (const auto res = self.get_constant_value_u64(); res.is_ok())
                 {
                     return res.get();
                 }

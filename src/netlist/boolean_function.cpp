@@ -682,12 +682,12 @@ namespace hal
 
     Result<std::string> BooleanFunction::get_variable_name() const
     {
-        if (!this->is_variable())
+        if (this->is_empty())
         {
-            return ERR("Boolean function is not a variable");
+            return ERR("Boolean function is empty");
         }
 
-        return OK(this->m_nodes[0].variable);
+        return this->m_nodes.back().get_variable_name();
     }
 
     bool BooleanFunction::is_constant() const
@@ -707,39 +707,22 @@ namespace hal
 
     Result<std::vector<BooleanFunction::Value>> BooleanFunction::get_constant_value() const
     {
-        if (!this->is_constant())
+        if (this->is_empty())
         {
-            return ERR("Boolean function is not a constant");
+            return ERR("Boolean function is empty");
         }
 
-        return OK(this->m_nodes[0].constant);
+        return this->m_nodes.back().get_constant_value();
     }
 
     Result<u64> BooleanFunction::get_constant_value_u64() const
     {
-        if (!this->is_constant())
+        if (this->is_empty())
         {
-            return ERR("Boolean function is not a constant");
+            return ERR("Boolean function is empty");
         }
 
-        if (this->size() > 64)
-        {
-            return ERR("Boolean function constant has size > 64");
-        }
-
-        if (std::any_of(this->m_nodes[0].constant.begin(), this->m_nodes[0].constant.end(), [](auto v) { return v != BooleanFunction::Value::ONE && v != BooleanFunction::Value::ZERO; }))
-        {
-            return ERR("Boolean function constant is undefined or high-impedance");
-        }
-
-        u64 val = 0;
-        for (auto it = this->m_nodes[0].constant.rbegin(); it != this->m_nodes[0].constant.rend(); it++)
-        {
-            val <<= 1;
-            val |= *it;
-        }
-
-        return OK(val);
+        return this->m_nodes.back().get_constant_value_u64();
     }
 
     bool BooleanFunction::is_index() const
@@ -754,12 +737,12 @@ namespace hal
 
     Result<u16> BooleanFunction::get_index_value() const
     {
-        if (!this->is_index())
+        if (this->is_empty())
         {
-            return ERR("Boolean function is not an index");
+            return ERR("Boolean function is empty");
         }
 
-        return OK(this->m_nodes[0].index);
+        return this->m_nodes.back().get_index_value();
     }
 
     const BooleanFunction::Node& BooleanFunction::get_top_level_node() const
@@ -1668,7 +1651,17 @@ namespace hal
         return this->constant == bv_value;
     }
 
-    Result<u64> BooleanFunction::Node::get_constant_value() const
+    Result<std::vector<BooleanFunction::Value>> BooleanFunction::Node::get_constant_value() const
+    {
+        if (!this->is_constant())
+        {
+            return ERR("Node is not a constant");
+        }
+
+        return OK(this->constant);
+    }
+
+    Result<u64> BooleanFunction::Node::get_constant_value_u64() const
     {
         if (!this->is_constant())
         {
