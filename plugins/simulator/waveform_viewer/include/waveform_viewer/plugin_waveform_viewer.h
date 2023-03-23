@@ -43,6 +43,7 @@ namespace hal
     public:
         std::string get_name() const override;
         std::string get_version() const override;
+        std::string get_description() const override;
 
         void on_load() override;
         void on_unload() override;

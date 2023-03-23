@@ -1210,6 +1210,9 @@ hal--MainWindow
     qproperty-settingsIconStyle: "all->#FFFFFF";
     qproperty-settingsIconPath: ":/icons/settings";
 
+    qproperty-pluginsIconStyle: "all->#FFFFFF";
+    qproperty-pluginsIconPath: ":/icons/plugin";
+
     qproperty-undoIconStyle: "all->#FFFFFF";
     qproperty-undoIconPath: ":/icons/undo2";
 

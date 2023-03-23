@@ -25,41 +25,11 @@
 
 #pragma once
 
-#include "hal_core/defines.h"
-#include "hal_core/plugin_system/plugin_interface_base.h"
-#include "hal_core/utilities/program_options.h"
-
-#include <tuple>
-#include <vector>
-
-namespace hal
-{
-    /* forward declaration */
-    class Netlist;
-
-    /**
-     * @ingroup plugins
-     */
-    class CORE_API CLIPluginInterface : virtual public BasePluginInterface
+namespace hal  {
+    class AbstractExtensionInterface
     {
     public:
-        CLIPluginInterface()          = default;
-        virtual ~CLIPluginInterface() = default;
-
-        /**
-         * Returns command line interface options
-         *
-         * @returns The program options description.
-         */
-        virtual ProgramOptions get_cli_options() const = 0;
-
-        /**
-         * Entry point to handle command line interface call
-         *
-         * @param[in] netlist - The netlist.
-         * @param[in] args - Program options.
-         * @returns True on success.
-         */
-        virtual bool handle_cli_call(Netlist* netlist, ProgramArguments& args) = 0;
+        AbstractExtensionInterface() {;}
+        virtual ~AbstractExtensionInterface() {;}
     };
-}    // namespace hal
+}

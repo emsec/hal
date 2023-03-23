@@ -31,6 +31,8 @@
 
 namespace hal
 {
+    class GuiPluginTable;
+
     /** @ingroup gui
      *  @brief Forwards plugin related events from the core to the gui.
      */
@@ -60,6 +62,10 @@ namespace hal
          */
         void pluginManagerCallback(bool is_load, const std::string& plugin_name, const std::string& plugin_path);
 
+        /**
+         * GuiPluginManager table has all information about plugin properties and state
+         */
+        GuiPluginTable* mGuiPluginTable;
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted when a plugin is loaded.

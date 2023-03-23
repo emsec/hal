@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+* GUI plugin manager
+  * **WARNING:** modified plugin core API - reduced number of base classes and instead added extension components
+  * added overview of loaded plugins and their features
+  * added interactive buttons to load and unload plugins
+  * added feature to load plugin automatically if needed for file parsing
+  * prevent unload of plugin if needed as dependency
+  * changed plugin load policy to have only mandatory or user required plugins loaded at startup
 * decorators
   * added `NetlistModificationDecorator`
     * added `delete_modules` to delete all (or a filtered subset of) the modules in a netlist

@@ -38,7 +38,7 @@
 namespace hal
 {
 
-    ContentWidget* VcdViewerFactory::contentFactory() const
+    ExternalContentWidget* WaveformViewerFactory::contentFactory() const
     {
         return new WaveformViewer;
     }
@@ -58,7 +58,7 @@ namespace hal
     }
 
     WaveformViewer::WaveformViewer(QWidget *parent)
-        : ContentWidget("WaveformViewer",parent),
+        : ExternalContentWidget("waveform_viewer","WaveformViewer",parent),
           mVisualizeNetState(false), mCurrentWaveWidget(nullptr)
     {
         LogManager::get_instance()->add_channel(std::string("waveform_viewer"), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");

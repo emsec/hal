@@ -26,6 +26,7 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_ui.h"
+#include "hal_core/plugin_system/cli_extension_interface.h"
 #include <QList>
 #include <QObject>
 
@@ -34,6 +35,22 @@ Q_DECLARE_METATYPE(u32)
 namespace hal
 {
     class LayoutLocker;
+
+    class CliExtensionsGui : public CliExtensionInterface
+    {
+    public:
+        CliExtensionsGui() = default;
+        ~CliExtensionsGui() = default;
+
+        /**
+         * Returns command line interface options
+         *
+         * @returns The program options description.
+         */
+        ProgramOptions get_cli_options() const override;
+
+        virtual bool handle_cli_call(Netlist*, ProgramArguments&) override {return false; }
+    };
 
     /**
      * @ingroup gui
@@ -45,6 +62,8 @@ namespace hal
         QList<LayoutLocker*> mLayoutLockerList;
 
     public:
+        PluginGui() { m_extensions.push_back(new CliExtensionsGui); }
+
         /**
          * Returns the plugin name: 'hal_gui'
          *
@@ -60,16 +79,16 @@ namespace hal
         std::string get_version() const override;
 
         /**
+         * Short description of plugin.
+         *
+         * @returns a short description of plugin
+         */
+        std::string get_description() const override;
+
+        /**
          * Adds all gui related channels to the LogManager.
          */
         void initialize_logging() override;
-
-        /**
-         * Initializes the command line options for this plugin: '-g'/'--gui' to start the gui
-         *
-         * @returns the available command line options
-         */
-        ProgramOptions get_cli_options() const override;
 
         /**
          * Executes the gui plugin.
