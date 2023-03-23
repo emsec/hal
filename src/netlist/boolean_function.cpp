@@ -695,12 +695,27 @@ namespace hal
         return (this->is_empty()) ? false : this->get_top_level_node().is_constant();
     }
 
+    bool BooleanFunction::has_constant_value(const std::vector<Value>& value) const
+    {
+        return (this->is_empty()) ? false : this->get_top_level_node().has_constant_value(value);
+    }
+
     bool BooleanFunction::has_constant_value(u64 value) const
     {
         return (this->is_empty()) ? false : this->get_top_level_node().has_constant_value(value);
     }
 
-    Result<u64> BooleanFunction::get_constant_value() const
+    Result<std::vector<BooleanFunction::Value>> BooleanFunction::get_constant_value() const
+    {
+        if (!this->is_constant())
+        {
+            return ERR("Boolean function is not a constant");
+        }
+
+        return OK(this->m_nodes[0].constant);
+    }
+
+    Result<u64> BooleanFunction::get_constant_value_u64() const
     {
         if (!this->is_constant())
         {
@@ -1613,6 +1628,11 @@ namespace hal
     bool BooleanFunction::Node::is_constant() const
     {
         return this->is(BooleanFunction::NodeType::Constant);
+    }
+
+    bool BooleanFunction::Node::has_constant_value(const std::vector<Value>& value) const
+    {
+        return this->is_constant() && (this->constant == value);
     }
 
     bool BooleanFunction::Node::has_constant_value(u64 value) const

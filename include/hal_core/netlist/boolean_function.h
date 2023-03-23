@@ -633,14 +633,29 @@ namespace hal
          * @param[in] value - The constant value to check for.
          * @returns `true` if the Boolean function is of type `Constant` and holds the given value, `false` otherwise.
          */
+        bool has_constant_value(const std::vector<Value>& value) const;
+
+        /**
+         * Checks whether the top-level node of the Boolean function is of type `Constant` and holds a specific value.
+         * 
+         * @param[in] value - The constant value to check for.
+         * @returns `true` if the Boolean function is of type `Constant` and holds the given value, `false` otherwise.
+         */
         bool has_constant_value(u64 value) const;
+
+        /**
+         * Get the value of the top-level node of the Boolean function of type `Constant` as a vector of `BooleanFunction::Value`.
+         * 
+         * @returns The constant value on success, an error otherwise.
+         */
+        Result<std::vector<Value>> get_constant_value() const;
 
         /**
          * Get the value of the top-level node of the Boolean function of type `Constant` as long as it has a size <= 64-bit.
          * 
          * @returns The constant value on success, an error otherwise.
          */
-        Result<u64> get_constant_value() const;
+        Result<u64> get_constant_value_u64() const;
 
         /** 
          * Checks whether the top-level node of the Boolean function is of type `Index`. 
@@ -1026,6 +1041,14 @@ namespace hal
          * @returns `true` if the Boolean function node is of type `Constant`, `false` otherwise.
          */
         bool is_constant() const;
+
+        /**
+         * Checks whether the Boolean function node is of type `Constant` and holds a specific value.
+         * 
+         * @param value - The value to check for.
+         * @returns `true` if the Boolean function node is of type `Constant` and holds the given value, `false` otherwise.
+         */
+        bool has_constant_value(const std::vector<Value>& value) const;
 
         /**
          * Checks whether the Boolean function node is of type `Constant` and holds a specific value.
