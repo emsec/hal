@@ -2,12 +2,17 @@
 
 #include "hal_core/netlist/boolean_function/solver.h"
 #include "hal_core/netlist/decorators/boolean_function_decorator.h"
+#include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
+#include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
+#include "hal_core/netlist/netlist_utils.h"
 #include "hal_core/utilities/result.h"
 
+#include <fstream>
 #include <queue>
 
 namespace hal
@@ -63,12 +68,6 @@ namespace hal
 
         for (auto g : nl->get_gates([](const auto& g) { return g->get_type()->has_property(GateTypeProperty::c_lut); }))
         {
-            // TODO remove
-            // if (g->get_id() != 1102)
-            // {
-            //     continue;
-            // }
-
             // skip if the gate type has more than one fan out endpoints
             if (g->get_type()->get_output_pins().size() != 1)
             {
@@ -228,49 +227,20 @@ namespace hal
             BooleanFunction func          = functions.begin()->second;
 
             // simplify Boolean function for constant 0 or 1 inputs (takes care of, e.g., an AND2 connected to an input and logic 1)
-            for (Endpoint* ep : fan_in)
+            const auto substitute_res = BooleanFunctionDecorator(func).substitute_power_ground_pins(nl, gate);
+            if (substitute_res.is_error())
             {
-                auto sources = ep->get_net()->get_sources();
-                if (sources.size() != 1)
-                {
-                    break;
-                }
-
-                if (sources.front()->get_gate()->is_gnd_gate())
-                {
-                    if (auto sub_res = func.substitute(ep->get_pin()->get_name(), BooleanFunction::Const(BooleanFunction::ZERO)); sub_res.is_ok())
-                    {
-                        func = sub_res.get();
-                    }
-                    else
-                    {
-                        log_warning("netlist_preprocessing", "{}", sub_res.get_error().get());
-                    }
-                }
-                else if (sources.front()->get_gate()->is_vcc_gate())
-                {
-                    if (auto sub_res = func.substitute(ep->get_pin()->get_name(), BooleanFunction::Const(BooleanFunction::ONE)); sub_res.is_ok())
-                    {
-                        func = sub_res.get();
-                    }
-                    else
-                    {
-                        log_warning("netlist_preprocessing", "{}", sub_res.get_error().get());
-                    }
-                }
+                return ERR_APPEND(substitute_res.get_error(),
+                                  "Cannot replace buffers: failed to substitute pins with constants at gate " + gate->get_name() + " with ID " + std::to_string(gate->get_id()));
             }
 
-            func = func.simplify_local();
+            func = substitute_res.get().simplify_local();
 
             bool failed                      = false;
             std::vector<std::string> in_pins = gt->get_input_pin_names();
             if (func.is_variable() && std::find(in_pins.begin(), in_pins.end(), func.get_variable_name().get()) != in_pins.end())
             {
-                Net* out_net      = out_endpoint->get_net();
-                Net* buffered_net = nullptr;
-
-                bool is_global_output = out_net->is_global_output_net();
-                std::map<Module*, std::tuple<std::string, std::string, u32, PinDirection, PinType>> module_pins;
+                Net* out_net = out_endpoint->get_net();
 
                 // check all input endpoints and ...
                 for (Endpoint* in_endpoint : fan_in)
@@ -278,50 +248,11 @@ namespace hal
                     Net* in_net = in_endpoint->get_net();
                     if (in_endpoint->get_pin()->get_name() == func.get_variable_name().get())
                     {
-                        buffered_net = in_net;
-                        // safe all module pin information from the net soon to be deleted
-                        for (const auto& m : nl->get_modules())
+                        const auto merge_res = netlist_utils::merge_nets(nl, in_net, out_net, true);
+                        if (merge_res.is_error())
                         {
-                            if (const auto pin = m->get_pin_by_net(out_net); pin != nullptr)
-                            {
-                                module_pins.insert({m, {pin->get_group().first->get_name(), pin->get_name(), pin->get_group().second, pin->get_direction(), pin->get_type()}});
-                            }
-                        }
-
-                        // ... reconnect outputs if the input is passed through the buffer
-                        for (Endpoint* dst : out_net->get_destinations())
-                        {
-                            Gate* dst_gate   = dst->get_gate();
-                            GatePin* dst_pin = dst->get_pin();
-                            if (!out_net->remove_destination(dst))
-                            {
-                                log_warning("netlist_preprocessing",
-                                            "failed to remove destination from output net '{}' with ID {} of buffer gate '{}' with ID {} from netlist with ID {}.",
-                                            out_net->get_name(),
-                                            out_net->get_id(),
-                                            gate->get_name(),
-                                            gate->get_id(),
-                                            nl->get_id());
-                                failed = true;
-                                break;
-                            }
-                            if (!in_net->add_destination(dst_gate, dst_pin))
-                            {
-                                log_warning("netlist_preprocessing",
-                                            "failed to add destination to input net '{}' with ID {} of buffer gate '{}' with ID {} from netlist with ID {}.",
-                                            in_net->get_name(),
-                                            in_net->get_id(),
-                                            gate->get_name(),
-                                            gate->get_id(),
-                                            nl->get_id());
-                                failed = true;
-                                break;
-                            }
-
-                            if (failed)
-                            {
-                                break;
-                            }
+                            log_warning("netlist_preprocessing", "{}", merge_res.get_error().get());
+                            failed = true;
                         }
                     }
                     else
@@ -343,66 +274,6 @@ namespace hal
                     if (failed)
                     {
                         break;
-                    }
-                }
-
-                // delete output net and buffer gate
-                if (!failed && !nl->delete_net(out_net))
-                {
-                    log_warning("netlist_preprocessing",
-                                "failed to remove output net '{}' with ID {} of buffer gate '{}' with ID {} from netlist with ID {}.",
-                                out_net->get_name(),
-                                out_net->get_id(),
-                                gate->get_name(),
-                                gate->get_id(),
-                                nl->get_id());
-                    continue;
-                }
-
-                // ... mark the passed through net as global output
-                if (is_global_output)
-                {
-                    nl->mark_global_output_net(buffered_net);
-                }
-
-                // ... replace the output net with the passed through net for all previous module pins
-                for (auto& [m, pin_info] : module_pins)
-                {
-                    const std::string pingroup_name = std::get<0>(pin_info);
-                    const std::string pin_name      = std::get<1>(pin_info);
-                    const PinType pin_type          = std::get<4>(pin_info);
-
-                    if (auto pin = m->get_pin_by_net(buffered_net); pin != nullptr)
-                    {
-                        pin->set_name(pin_name);
-                        pin->set_type(pin_type);
-
-                        // remove pin from current pin group
-                        auto current_pin_group = pin->get_group().first;
-                        current_pin_group->remove_pin(pin).get();
-                        if (current_pin_group->get_pins().empty())
-                        {
-                            m->delete_pin_group(current_pin_group);
-                        }
-
-                        // check for existing pingroup otherwise create it
-                        auto pin_groups = m->get_pin_groups([pingroup_name](const auto& pg) { return pg->get_name() == pingroup_name; });
-                        PinGroup<ModulePin>* pin_group;
-                        if (pin_groups.empty())
-                        {
-                            pin_group = m->create_pin_group(pingroup_name, {}, PinDirection::none, pin_type).get();
-                        }
-                        else
-                        {
-                            pin_group = pin_groups.front();
-                        }
-
-                        pin_group->assign_pin(pin).get();
-                        pin_group->move_pin(pin, std::get<2>(pin_info)).get();
-                    }
-                    else
-                    {
-                        return ERR("Cannot replace buffers: Failed to get pin " + pin_name + " at module " + m->get_name() + " with ID " + std::to_string(m->get_id()));
                     }
                 }
 
@@ -823,4 +694,350 @@ namespace hal
         log_info("netlist_preprocessing", "removed {} unconnected nets from netlist with ID {}.", num_nets, nl->get_id());
         return OK(num_nets);
     }
+
+    namespace
+    {
+        Result<std::tuple<GateType*, std::vector<GatePin*>, std::vector<GatePin*>>>
+            find_gate_type(const GateLibrary* gl, const std::set<GateTypeProperty>& properties, const u32 num_inputs, const u32 num_outputs)
+        {
+            const auto get_valid_input_pins = [](const GateType* gt) -> std::vector<GatePin*> {
+                return gt->get_pins([](const GatePin* gp) { return (gp->get_direction() == PinDirection::input) && (gp->get_type() != PinType::power) && (gp->get_type() != PinType::ground); });
+            };
+
+            const auto get_valid_output_pins = [](const GateType* gt) -> std::vector<GatePin*> {
+                return gt->get_pins([](const GatePin* gp) { return (gp->get_direction() == PinDirection::output) && (gp->get_type() != PinType::power) && (gp->get_type() != PinType::ground); });
+            };
+
+            // get types that match exactly with the properties and have the exact amount of input pins (excluding power pins)
+            const auto candidates = gl->get_gate_types([properties, num_inputs, get_valid_input_pins, num_outputs, get_valid_output_pins](const GateType* gt) {
+                return (gt->get_properties() == properties) && (get_valid_input_pins(gt).size() == num_inputs) && (get_valid_output_pins(gt).size() == num_outputs);
+            });
+
+            if (candidates.empty())
+            {
+                return ERR("Unable to find gate type matching the description");
+            }
+
+            GateType* valid_gate_type = candidates.begin()->second;
+
+            return OK({valid_gate_type, get_valid_input_pins(valid_gate_type), get_valid_output_pins(valid_gate_type)});
+        }
+
+        Result<Net*> build_gate_tree_from_boolean_function(Netlist* nl, const BooleanFunction& bf, const std::map<std::string, Net*>& var_name_to_net, const Gate* org_gate = nullptr)
+        {
+            const auto create_gate_name = [](const Netlist* nl, const Gate* new_gate, const Gate* org_gate) -> std::string {
+                const std::string new_name = (org_gate == nullptr) ? "new_gate_" : org_gate->get_name() + "_decomposed_";
+                return new_name + std::to_string(new_gate->get_id());
+            };
+
+            if (bf.is_empty())
+            {
+                return ERR("cannot build gate tree for Boolean function: Boolean function is empty");
+            }
+
+            if (bf.is_index())
+            {
+                return ERR("cannot build gate tree for Boolean function: Boolean function is of type index");
+            }
+
+            if (bf.size() != 1)
+            {
+                return ERR("cannot build gate tree for Boolean function: Boolean function if of size " + std::to_string(bf.size()) + " but we only handle size 1");
+            }
+
+            static Net* zero = nl->get_nets([](const Net* n) { return n->is_gnd_net(); }).front();
+            static Net* one  = nl->get_nets([](const Net* n) { return n->is_vcc_net(); }).front();
+
+            if (bf.is_constant())
+            {
+                if (bf.has_constant_value(0))
+                {
+                    return OK(zero);
+                }
+
+                if (bf.has_constant_value(1))
+                {
+                    return OK(one);
+                }
+            }
+
+            if (bf.is_variable())
+            {
+                if (const auto it = var_name_to_net.find(bf.get_variable_name().get()); it == var_name_to_net.end())
+                {
+                    return ERR("Cannot build gate tree for Boolean function: Found variable " + bf.get_variable_name().get() + " with no corresponding net provided.");
+                }
+                else
+                {
+                    return OK(it->second);
+                }
+            }
+
+            if (!bf.get_top_level_node().is_operation())
+            {
+                return ERR("Cannot build gate tree for Boolean function: cannot handle node type of top level node " + bf.get_top_level_node().to_string());
+            }
+
+            const auto operation  = bf.get_top_level_node().type;
+            const auto parameters = bf.get_parameters();
+
+            static const auto inv_type_res = find_gate_type(nl->get_gate_library(), {GateTypeProperty::combinational, GateTypeProperty::c_inverter}, 1, 1);
+            static const auto and_type_res = find_gate_type(nl->get_gate_library(), {GateTypeProperty::combinational, GateTypeProperty::c_and}, 2, 1);
+            static const auto or_type_res  = find_gate_type(nl->get_gate_library(), {GateTypeProperty::combinational, GateTypeProperty::c_or}, 2, 1);
+
+            if (inv_type_res.is_error())
+            {
+                return ERR("Cannot build gate tree for Boolean function: failed to find valid inverter gate type");
+            }
+
+            if (and_type_res.is_error())
+            {
+                return ERR("Cannot build gate tree for Boolean function: failed to find valid and gate type");
+            }
+
+            if (or_type_res.is_error())
+            {
+                return ERR("Cannot build gate tree for Boolean function: failed to find valid or gate type");
+            }
+
+            const std::map<u16, std::tuple<GateType*, std::vector<GatePin*>, std::vector<GatePin*>>> node_type_to_gate_type = {
+                {BooleanFunction::NodeType::Not, inv_type_res.get()},
+                {BooleanFunction::NodeType::And, and_type_res.get()},
+                {BooleanFunction::NodeType::Or, or_type_res.get()},
+            };
+
+            std::vector<Net*> parameter_nets;
+            for (const auto& p : parameters)
+            {
+                const auto tree_res = build_gate_tree_from_boolean_function(nl, p, var_name_to_net, org_gate);
+                if (tree_res.is_error())
+                {
+                    return ERR_APPEND(tree_res.get_error(), "Cannot build gate tree for Boolean function: failed to do so for sub tree");
+                }
+                parameter_nets.push_back(tree_res.get());
+            }
+
+            Gate* new_gate  = nullptr;
+            Net* output_net = nullptr;
+
+            switch (operation)
+            {
+                case BooleanFunction::NodeType::Not:
+                case BooleanFunction::NodeType::And:
+                case BooleanFunction::NodeType::Or: {
+                    auto [gt, in_pins, out_pins] = node_type_to_gate_type.at(operation);
+                    new_gate                     = nl->create_gate(gt);
+                    for (u32 idx = 0; idx < parameter_nets.size(); idx++)
+                    {
+                        parameter_nets.at(idx)->add_destination(new_gate, in_pins.at(idx));
+                    }
+                    output_net->add_source(new_gate, out_pins.front());
+                    break;
+                }
+                default:
+                    break;
+            }
+
+            if (new_gate == nullptr)
+            {
+                return ERR("Cannot build gate tree for Boolean function: failed to create gate for operation " + bf.get_top_level_node().to_string());
+            }
+
+            new_gate->set_name(create_gate_name(nl, new_gate, org_gate));
+
+            return OK(output_net);
+        }
+    }    // namespace
+
+    Result<std::monostate> NetlistPreprocessingPlugin::decompose_gate(Netlist* nl, Gate* g, const bool delete_gate)
+    {
+        // build Boolean function for each output pin of the gate
+        std::map<std::string, BooleanFunction> output_pin_name_to_bf;
+        for (const auto& out_ep : g->get_fan_out_endpoints())
+        {
+            const auto bf_res = g->get_resolved_boolean_function(out_ep->get_pin());
+            if (bf_res.is_error())
+            {
+                return ERR_APPEND(bf_res.get_error(),
+                                  "unable to decompose gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": failed to resolve Boolean function for pin "
+                                      + out_ep->get_pin()->get_name());
+            }
+            output_pin_name_to_bf.insert({out_ep->get_pin()->get_name(), bf_res.get()});
+        }
+
+        // map which variables in the Boolean function belong to which net
+        std::map<std::string, Net*> var_name_to_net;
+        for (const auto& in_ep : g->get_fan_in_endpoints())
+        {
+            var_name_to_net.insert({BooleanFunctionNetDecorator(*(in_ep->get_net())).get_boolean_variable_name(), in_ep->get_net()});
+        }
+
+        // build gate tree for each output function and merge the tree output net with the origianl output net
+        for (const auto& [pin_name, bf] : output_pin_name_to_bf)
+        {
+            Net* output_net = g->get_fan_out_net(pin_name);
+            if (output_net == nullptr)
+            {
+                continue;
+            }
+
+            const auto tree_res = build_gate_tree_from_boolean_function(nl, bf, var_name_to_net, g);
+            if (tree_res.is_error())
+            {
+                return ERR_APPEND(tree_res.get_error(),
+                                  "unable to decompose gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": failed to build gate tree for output net at pin " + pin_name);
+            }
+
+            auto new_output_net  = tree_res.get();
+            const auto merge_res = netlist_utils::merge_nets(nl, new_output_net, output_net, new_output_net->is_global_input_net());
+            if (merge_res.is_error())
+            {
+                return ERR_APPEND(merge_res.get_error(),
+                                  "unable to decompose gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": failed to merge newly created output net with already existing one.");
+            }
+        }
+
+        if (delete_gate)
+        {
+            if (!nl->delete_gate(g))
+            {
+                return ERR("unable to decompose gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": failed to delete original gate.");
+            }
+        }
+
+        return OK({});
+    }
+
+    Result<u32> NetlistPreprocessingPlugin::decompose_gates_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types)
+    {
+        u32 counter = 0;
+        for (const auto& gt : gate_types)
+        {
+            std::vector<Gate*> to_delete;
+            for (const auto& g : nl->get_gates([gt](const Gate* g) { return g->get_type() == gt; }))
+            {
+                const auto decompose_res = decompose_gate(nl, g, false);
+                if (decompose_res.is_error())
+                {
+                    return ERR_APPEND(decompose_res.get_error(),
+                                      "unable to decompose gates of type " + gt->get_name() + ": failed for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                }
+                to_delete.push_back(g);
+            }
+
+            for (const auto& g : to_delete)
+            {
+                counter += 1;
+                if (!nl->delete_gate(g))
+                {
+                    return ERR("unable to decompose gates of type " + gt->get_name() + ": failed to delete gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                }
+            }
+        }
+
+        return OK(counter);
+    }
+
+    namespace
+    {
+        std::string build_combinational_verilog_module_from(const std::unordered_map<std::string, BooleanFunction>& bfs)
+        {
+            std::unordered_set<std::string> input_variable_names;
+
+            for (const auto& [name, bf] : bfs)
+            {
+                for (const auto& var_name : bf.get_variable_names())
+                {
+                    input_variable_names.insert(var_name);
+                }
+            }
+
+            std::string verilog_str = "module top (";
+
+            std::string var_str      = "";
+            std::string io_str       = "";
+            std::string function_str = "";
+
+            for (const auto& input_var : input_variable_names)
+            {
+                var_str += (input_var + ", ");
+                io_str += ("input " + input_var + ";\n");
+            }
+
+            for (const auto& [output_var, bf] : bfs)
+            {
+                var_str += (output_var + ", ");
+                io_str += ("output " + output_var + ";\n");
+                function_str += ("assign " + output_var + " = " + bf.to_string() + ";\n");
+            }
+
+            var_str = var_str.substr(0, var_str.size() - 2);
+
+            verilog_str += var_str;
+            verilog_str += ");\n";
+
+            verilog_str += io_str;
+
+            verilog_str += "\n";
+
+            verilog_str += function_str;
+
+            verilog_str += "\n";
+            verilog_str += "endmodule\n";
+            verilog_str += "\n";
+
+            return verilog_str;
+        }
+
+        void resynthesize_boolean_functions_with_abc(const std::unordered_map<std::string, BooleanFunction>& bfs, GateLibrary* gl, const bool optimize_area)
+        {
+            const auto verilog_module = build_combinational_verilog_module_from(bfs);
+
+            const std::filesystem::path base_path                  = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_abc";
+            const std::filesystem::path functional_netlist_path    = base_path / "func_netlist.v";
+            const std::filesystem::path resynthesized_netlist_path = base_path / "resynth_netlist.v";
+            const std::filesystem::path gate_library_path          = base_path / "new_gate_library.genlib";
+
+            log_info("netlist_preprocessing", "Writing Verilog file to {} ...", functional_netlist_path.string());
+
+            std::ofstream out(functional_netlist_path);
+            out << verilog_module;
+            out.close();
+
+            log_info("netlist_preprocessing", "Writing gatelibrary to file {} ...", gate_library_path.string());
+
+            gate_library_manager::save(gate_library_path, gl);
+
+            /*
+            const std::string command_corpus =  R"#(
+                read_verilog {}; 
+                read_library {}; 
+                cleanup; 
+                sweep; 
+                strash; 
+                dc2; 
+                logic; 
+                map -a;
+                write_verilog {};
+            )#";
+            const std::string command = std::format(command_corpus, functional_netlist_path, gate_library_path, resythesized_netlist_path);
+            */
+
+            const std::string command = "read_verilog " + functional_netlist_path.string() + "; read_library " + gate_library_path.string() + "; cleanup; sweep; strash; dc2; logic; map"
+                                        + (optimize_area ? "" : " -a") + "; write_verilog " + resynthesized_netlist_path.string() + ";";
+
+            return;
+        }
+
+        void resynthesize_boolean_function_with_abc(const BooleanFunction& bf, const bool optimize_area)
+        {
+            return;
+        }
+
+        void resynthesize_subgraph_with_abc(const Netlist* nl, const std::vector<Gate*> subgraph, const bool optimize_area)
+        {
+            return;
+        }
+    }    // namespace
+
 }    // namespace hal

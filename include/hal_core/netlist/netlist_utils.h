@@ -289,6 +289,19 @@ namespace hal
         CORE_API Result<std::monostate> replace_gate(Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map);
 
         /**
+         * TODO test
+         * Merge the net_in and net_out such that all sources from net_in are connected with all destinations of net_out.
+         * One net gets deleted in the process which is determined by the parameter in_survives (defaults to true).
+         *
+         * @param[in] netlist - Netlist to operate on.
+         * @param[in] net_in - Net providing the source.
+         * @param[in] net_out - Net providing the destinations.
+         * @param[in] in_survives - "Determines which net survives and which one gets deleted."
+         * @returns Ok on success, an error otherwise.
+         */
+        CORE_API Result<std::monostate> merge_nets(Netlist* netlist, Net* net_in, Net* net_out, const bool in_survives = true);
+
+        /**
          * Find a sequence of identical gates that are connected via the specified input and output pins.
          * The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
          * If input and/or output pins are specified, the gates must be connected through one of the input pins and/or one of the output pins.

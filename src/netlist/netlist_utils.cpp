@@ -857,6 +857,125 @@ namespace hal
             return OK({});
         }
 
+        Result<std::monostate> merge_nets(Netlist* netlist, Net* net_in, Net* net_out, const bool in_survives)
+        {
+            const auto survivor_net      = in_survives ? net_in : net_out;
+            const auto net_to_be_deleted = in_survives ? net_out : net_in;
+
+            // saved information
+            bool is_global = in_survives ? net_to_be_deleted->is_global_output_net() : net_to_be_deleted->is_global_input_net();
+            std::map<Module*, std::tuple<std::string, std::string, u32, PinDirection, PinType>> module_pins;
+
+            // safe all module pin information from the net soon to be deleted
+            for (const auto& m : netlist->get_modules())
+            {
+                if (const auto pin = m->get_pin_by_net(net_to_be_deleted); pin != nullptr)
+                {
+                    module_pins.insert({m, {pin->get_group().first->get_name(), pin->get_name(), pin->get_group().second, pin->get_direction(), pin->get_type()}});
+                }
+            }
+
+            if (in_survives)
+            {
+                // copy destinations to net_in
+                for (Endpoint* dst : net_out->get_destinations())
+                {
+                    Gate* dst_gate   = dst->get_gate();
+                    GatePin* dst_pin = dst->get_pin();
+                    if (!net_out->remove_destination(dst))
+                    {
+                        return ERR("unable to fuse net " + net_in->get_name() + " with ID " + std::to_string(net_in->get_id()) + " with net " + net_out->get_name() + " with ID "
+                                   + std::to_string(net_out->get_id()) + ": unable to remove destination at gate " + dst_gate->get_name() + " with ID " + std::to_string(dst_gate->get_id())
+                                   + " at pin " + dst_pin->get_name());
+                    }
+                    if (!net_in->add_destination(dst_gate, dst_pin))
+                    {
+                        return ERR("unable to fuse net " + net_in->get_name() + " with ID " + std::to_string(net_in->get_id()) + " with net " + net_out->get_name() + " with ID "
+                                   + std::to_string(net_out->get_id()) + ": unable to add destination at gate " + dst_gate->get_name() + " with ID " + std::to_string(dst_gate->get_id()) + " at pin "
+                                   + dst_pin->get_name());
+                    }
+                }
+            }
+            else
+            {
+                // copy sources to net_out
+                for (Endpoint* src : net_in->get_sources())
+                {
+                    Gate* src_gate   = src->get_gate();
+                    GatePin* src_pin = src->get_pin();
+                    if (!net_in->remove_source(src))
+                    {
+                        return ERR("unable to fuse net " + net_in->get_name() + " with ID " + std::to_string(net_in->get_id()) + " with net " + net_out->get_name() + " with ID "
+                                   + std::to_string(net_out->get_id()) + ": unable to remove source at gate " + src_gate->get_name() + " with ID " + std::to_string(src_gate->get_id()) + " at pin "
+                                   + src_pin->get_name());
+                    }
+                    if (!net_out->add_source(src_gate, src_pin))
+                    {
+                        return ERR("unable to fuse net " + net_in->get_name() + " with ID " + std::to_string(net_in->get_id()) + " with net " + net_out->get_name() + " with ID "
+                                   + std::to_string(net_out->get_id()) + ": unable to add source at gate " + src_gate->get_name() + " with ID " + std::to_string(src_gate->get_id()) + " at pin "
+                                   + src_pin->get_name());
+                    }
+                }
+            }
+
+            // delete net
+            if (!netlist->delete_net(net_to_be_deleted))
+            {
+                return ERR("unable to fuse net " + net_in->get_name() + " with ID " + std::to_string(net_in->get_id()) + " with net " + net_out->get_name() + " with ID "
+                           + std::to_string(net_out->get_id()) + ": unable to delete net " + net_to_be_deleted->get_name() + " with ID " + std::to_string(net_to_be_deleted->get_id()));
+            }
+
+            // transfer global information to survivor net
+            if (is_global)
+            {
+                if (in_survives ? !netlist->mark_global_output_net(survivor_net) : !netlist->mark_global_input_net(survivor_net))
+                {
+                    return ERR("unable to fuse net " + net_in->get_name() + " with ID " + std::to_string(net_in->get_id()) + " with net " + net_out->get_name() + " with ID "
+                               + std::to_string(net_out->get_id()) + ": unable to mark net as global " + survivor_net->get_name() + " with ID " + std::to_string(survivor_net->get_id()));
+                }
+            }
+
+            // transfer module information to survivor net
+            for (auto& [m, pin_info] : module_pins)
+            {
+                const std::string pingroup_name = std::get<0>(pin_info);
+                const std::string pin_name      = std::get<1>(pin_info);
+                const PinType pin_type          = std::get<4>(pin_info);
+
+                // get pin that was created automatically when connecting the net to a gate inside the module
+                if (auto pin = m->get_pin_by_net(survivor_net); pin != nullptr)
+                {
+                    pin->set_name(pin_name);
+                    pin->set_type(pin_type);
+
+                    // remove pin from current pin group
+                    auto current_pin_group = pin->get_group().first;
+                    current_pin_group->remove_pin(pin).get();
+                    if (current_pin_group->get_pins().empty())
+                    {
+                        m->delete_pin_group(current_pin_group);
+                    }
+
+                    // check for existing pingroup otherwise create it
+                    auto pin_groups = m->get_pin_groups([pingroup_name](const auto& pg) { return pg->get_name() == pingroup_name; });
+                    PinGroup<ModulePin>* pin_group;
+                    if (pin_groups.empty())
+                    {
+                        pin_group = m->create_pin_group(pingroup_name, {}, PinDirection::none, pin_type).get();
+                    }
+                    else
+                    {
+                        pin_group = pin_groups.front();
+                    }
+
+                    pin_group->assign_pin(pin).get();
+                    pin_group->move_pin(pin, std::get<2>(pin_info)).get();
+                }
+            }
+
+            return OK({});
+        }
+
         Result<std::vector<Gate*>>
             get_gate_chain(Gate* start_gate, const std::vector<const GatePin*>& input_pins, const std::vector<const GatePin*>& output_pins, const std::function<bool(const Gate*)>& filter)
         {
@@ -883,7 +1002,7 @@ namespace hal
             {
                 found_next_gate = false;
 
-                // check all eligable successors of current gate
+                // check all eligible successors of current gate
                 std::vector<Endpoint*> successors = current_gate->get_successors([input_pins, output_pins, target_type, filter](const GatePin* ep_pin, Endpoint* ep) {
                     if (ep->get_gate()->get_type() == target_type)
                     {

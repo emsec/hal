@@ -880,6 +880,34 @@ namespace hal
         }
     }
 
+    Result<std::string> BooleanFunction::algebraic_printer(const BooleanFunction::Node& node, std::vector<std::string>&& operands)
+    {
+        if (node.get_arity() != operands.size())
+        {
+            return ERR("could not print Boolean function: node arity of " + std::to_string(node.get_arity()) + " does not match number of operands of " + std::to_string(operands.size()));
+        }
+
+        switch (node.type)
+        {
+            case BooleanFunction::NodeType::Index:
+            case BooleanFunction::NodeType::Variable:
+                return OK(node.to_string());
+
+            case BooleanFunction::NodeType::Constant:
+                return OK("CONST" + std::string(node.has_constant_value(0) ? "0" : "1"));
+
+            case BooleanFunction::NodeType::And:
+                return OK("(" + operands[0] + "*" + operands[1] + ")");
+            case BooleanFunction::NodeType::Not:
+                return OK("(! " + operands[0] + ")");
+            case BooleanFunction::NodeType::Or:
+                return OK("(" + operands[0] + "+" + operands[1] + ")");
+
+            default:
+                return ERR("could not print Boolean function: unsupported node type '" + std::to_string(node.type) + "'");
+        }
+    }
+
     std::string BooleanFunction::to_string(std::function<Result<std::string>(const BooleanFunction::Node& node, std::vector<std::string>&& operands)>&& printer) const
     {
         // (1) early termination in case the Boolean function is empty

@@ -867,6 +867,15 @@ namespace hal
          */
         static Result<std::string> default_printer(const BooleanFunction::Node& node, std::vector<std::string>&& operands);
 
+        /**
+         * Translate a given Boolean function node into a human-readable string using an algebraic form.
+         *
+         * @param[in] node The node of a Boolean function.
+         * @param[in] operands The operands of the node .
+         * @returns A string on success or an error message otherwise.
+         */
+        static Result<std::string> algebraic_printer(const BooleanFunction::Node& node, std::vector<std::string>&& operands);
+
         /// Checks whether the Boolean function is valid.
         ///
         /// @returns Validated Boolean function on success, error message string otherwise.
