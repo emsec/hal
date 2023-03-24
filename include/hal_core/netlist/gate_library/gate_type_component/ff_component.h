@@ -40,18 +40,8 @@ namespace hal
          * @param[in] component - Another component to be added as a child component.
          * @param[in] next_state_bf - The function describing the internal state.
          * @param[in] clock_bf - The function describing the clock input.
-         * @param[in] async_reset_bf - The Boolean function describing the asynchronous reset behavior of the flip-flop. Defaults to an empty Boolean function.
-         * @param[in] async_set_bf - The Boolean function describing the asynchronous set behavior of the flip-flop. Defaults to an empty Boolean function.
-         * @param[in] behav_state - The behavior of the internal state when both asynchronous set and reset are active at the same time. Defaults to `AsyncSetResetBehavior::undef`.
-         * @param[in] behav_neg_state - The behavior of the negated internal state when both asynchronous set and reset are active at the same time. Defaults to `AsyncSetResetBehavior::undef`.
          */
-        FFComponent(std::unique_ptr<GateTypeComponent> component,
-                    const BooleanFunction& next_state_bf,
-                    const BooleanFunction& clock_bf,
-                    const BooleanFunction& async_reset_bf       = BooleanFunction(),
-                    const BooleanFunction& async_set_bf         = BooleanFunction(),
-                    const AsyncSetResetBehavior behav_state     = AsyncSetResetBehavior::undef,
-                    const AsyncSetResetBehavior behav_neg_state = AsyncSetResetBehavior::undef);
+        FFComponent(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf);
 
         /**
          * Get the type of the gate type component.

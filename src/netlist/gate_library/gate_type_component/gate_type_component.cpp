@@ -31,15 +31,9 @@ namespace hal
         return std::make_unique<LUTComponent>(std::move(component), init_ascending);
     }
 
-    std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ff_component(std::unique_ptr<GateTypeComponent> component,
-                                                                              const BooleanFunction& next_state_bf,
-                                                                              const BooleanFunction& clock_bf,
-                                                                              const BooleanFunction& async_reset_bf,
-                                                                              const BooleanFunction& async_set_bf,
-                                                                              const AsyncSetResetBehavior behav_state,
-                                                                              const AsyncSetResetBehavior behav_neg_state)
+    std::unique_ptr<GateTypeComponent> GateTypeComponent::create_ff_component(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf)
     {
-        return std::make_unique<FFComponent>(std::move(component), next_state_bf, clock_bf, async_reset_bf, async_set_bf, behav_state, behav_neg_state);
+        return std::make_unique<FFComponent>(std::move(component), next_state_bf, clock_bf);
     }
 
     std::unique_ptr<GateTypeComponent> GateTypeComponent::create_latch_component(std::unique_ptr<GateTypeComponent> component)

@@ -90,20 +90,15 @@ namespace hal
                const std::string& neg_state_identifier,
                const BooleanFunction& next_state_bf,
                const BooleanFunction& clock_bf,
-               const BooleanFunction& async_reset_bf       = BooleanFunction(),
-               const BooleanFunction& async_set_bf         = BooleanFunction(),
-               const AsyncSetResetBehavior behav_state     = AsyncSetResetBehavior::undef,
-               const AsyncSetResetBehavior behav_neg_state = AsyncSetResetBehavior::undef,
-               const std::string& init_category            = "",
-               const std::string& init_identifier          = "") -> GateType* {
+               const std::string& init_category   = "",
+               const std::string& init_identifier = "") -> GateType* {
                 std::unique_ptr<GateTypeComponent> init_component = nullptr;
                 if (!init_category.empty() && !init_identifier.empty())
                 {
                     init_component = GateTypeComponent::create_init_component(init_category, {init_identifier});
                 }
                 std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(std::move(init_component), state_identifier, neg_state_identifier);
-                std::unique_ptr<GateTypeComponent> ff_component =
-                    GateTypeComponent::create_ff_component(std::move(state_component), next_state_bf, clock_bf, async_reset_bf, async_set_bf, behav_state, behav_neg_state);
+                std::unique_ptr<GateTypeComponent> ff_component    = GateTypeComponent::create_ff_component(std::move(state_component), next_state_bf, clock_bf);
                 return self.create_gate_type(name, {GateTypeProperty::sequential, GateTypeProperty::ff}, std::move(ff_component));
             },
             py::arg("name"),
@@ -111,10 +106,6 @@ namespace hal
             py::arg("neg_state_identifier"),
             py::arg("next_state_bf"),
             py::arg("clock_bf"),
-            py::arg("async_reset_bf")  = BooleanFunction(),
-            py::arg("async_set_bf")    = BooleanFunction(),
-            py::arg("behav_state")     = AsyncSetResetBehavior::undef,
-            py::arg("behav_neg_state") = AsyncSetResetBehavior::undef,
             py::arg("init_category")   = "",
             py::arg("init_identifier") = "",
             R"(
@@ -125,10 +116,6 @@ namespace hal
             :param str neg_state_identifier: The identifier of the negated internal state.
             :param hal_py.BooleanFunction next_state_bf: The function describing the internal state.
             :param hal_py.BooleanFunction clock_bf: The function describing the clock input.
-            :param hal_py.BooleanFunction async_reset_bf: The Boolean function describing the asynchronous reset behavior of the flip-flop. Defaults to an empty Boolean function.
-            :param hal_py.BooleanFunction async_set_bf: The Boolean function describing the asynchronous set behavior of the flip-flop. Defaults to an empty Boolean function.
-            :param hal_py.AsyncSetResetBehavior behav_state: The behavior of the internal state when both asynchronous set and reset are active at the same time. Defaults to ``AsyncSetResetBehavior::undef``.
-            :param hal_py.AsyncSetResetBehavior behav_neg_state: The behavior of the negated internal state when both asynchronous set and reset are active at the same time. Defaults to ``AsyncSetResetBehavior::undef``.
             :param str init_category: The initialization data category. Defaults to an empty string.
             :param str init_identifier: The initialization data identifier. Defaults to an empty string.
             :returns: The new flip-flop gate type instance on success, None otherwise.
