@@ -687,7 +687,7 @@ namespace hal
             return ERR("Boolean function is empty");
         }
 
-        return this->m_nodes.back().get_variable_name();
+        return this->get_top_level_node().get_variable_name();
     }
 
     bool BooleanFunction::is_constant() const
@@ -712,7 +712,7 @@ namespace hal
             return ERR("Boolean function is empty");
         }
 
-        return this->m_nodes.back().get_constant_value();
+        return this->get_top_level_node().get_constant_value();
     }
 
     Result<u64> BooleanFunction::get_constant_value_u64() const
@@ -722,7 +722,7 @@ namespace hal
             return ERR("Boolean function is empty");
         }
 
-        return this->m_nodes.back().get_constant_value_u64();
+        return this->get_top_level_node().get_constant_value_u64();
     }
 
     bool BooleanFunction::is_index() const
@@ -742,7 +742,7 @@ namespace hal
             return ERR("Boolean function is empty");
         }
 
-        return this->m_nodes.back().get_index_value();
+        return this->get_top_level_node().get_index_value();
     }
 
     const BooleanFunction::Node& BooleanFunction::get_top_level_node() const

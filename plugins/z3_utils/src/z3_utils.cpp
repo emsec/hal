@@ -75,9 +75,9 @@ namespace hal
                     case BooleanFunction::NodeType::Concat:
                         return {true, z3::concat(p[0], p[1])};
                     case BooleanFunction::NodeType::Sext:
-                        return {true, z3::zext(p[0], p[1].get_numeral_uint())};
+                        return {true, z3::sext(p[0], p[1].get_numeral_uint() - p[0].get_sort().bv_size())};
                     case BooleanFunction::NodeType::Zext:
-                        return {true, z3::sext(p[0], p[1].get_numeral_uint())};
+                        return {true, z3::zext(p[0], p[1].get_numeral_uint() - p[0].get_sort().bv_size())};
                     case BooleanFunction::NodeType::Eq:
                         return {true, p[0] == p[1]};
                     case BooleanFunction::NodeType::Sle:
@@ -90,7 +90,6 @@ namespace hal
                         return {true, z3::ult(p[0], p[1])};
                     case BooleanFunction::NodeType::Ite:
                         return {true, z3::ite(p[0] == context.bv_val(1, 1), p[1], p[2])};
-
                     default:
                         log_error("netlist", "Not implemented reached for nodetype {} in z3 conversion", node.type);
                         return {false, z3::expr(context)};
@@ -123,7 +122,7 @@ namespace hal
             }
         }
 
-        Result<BooleanFunction> to_bf(const z3::expr& e)    // TODO return Result<BooleanFunction>
+        Result<BooleanFunction> to_bf(const z3::expr& e)
         {
             u64 size;
             if (e.is_bv())
@@ -135,7 +134,7 @@ namespace hal
                     return ERR("can only translate bit vector sizes < 64, but input bit vector has size " + std::to_string(size));
                 }
 
-                if (e.is_numeral())    // TODO somehow handle Index type
+                if (e.is_numeral())
                 {
                     return OK(BooleanFunction::Const(e.get_numeral_uint64(), size));
                 }
@@ -251,10 +250,23 @@ namespace hal
                     }
                     return bf_res;
                 }
-                case Z3_OP_EXTRACT:
-                case Z3_OP_ZERO_EXT:
-                case Z3_OP_SIGN_EXT:
-                    return ERR("");
+                // case Z3_OP_EXTRACT:
+                case Z3_OP_ZERO_EXT: {
+                    if (num_args != 1)
+                    {
+                        return ERR("operation 'ZEXT' must have arity 1");
+                    }
+
+                    return BooleanFunction::Zext(std::move(args.at(0)), BooleanFunction::Index(size, size), size);
+                }
+                case Z3_OP_SIGN_EXT: {
+                    if (num_args != 1)
+                    {
+                        return ERR("operation 'SEXT' must have arity 1");
+                    }
+
+                    return BooleanFunction::Sext(std::move(args.at(0)), BooleanFunction::Index(size, size), size);
+                }
                 case Z3_OP_EQ:
                     if (num_args != 2)
                     {
