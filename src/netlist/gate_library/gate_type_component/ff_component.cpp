@@ -2,8 +2,15 @@
 
 namespace hal
 {
-    FFComponent::FFComponent(std::unique_ptr<GateTypeComponent> component, const BooleanFunction& next_state_bf, const BooleanFunction& clock_bf)
-        : m_component(std::move(component)), m_next_state_bf(next_state_bf.clone()), m_clock_bf(clock_bf.clone())
+    FFComponent::FFComponent(std::unique_ptr<GateTypeComponent> component,
+                             const BooleanFunction& next_state_bf,
+                             const BooleanFunction& clock_bf,
+                             const BooleanFunction& async_reset_bf,
+                             const BooleanFunction& async_set_bf,
+                             const AsyncSetResetBehavior behav_state,
+                             const AsyncSetResetBehavior behav_neg_state)
+        : m_component(std::move(component)), m_next_state_bf(next_state_bf.clone()), m_clock_bf(clock_bf.clone()), m_async_reset_bf(async_reset_bf.clone()), m_async_set_bf(async_set_bf.clone()),
+          m_async_set_reset_behavior(std::make_pair(behav_state, behav_neg_state))
     {
     }
 
