@@ -1003,7 +1003,7 @@ namespace hal
                     {
                         if ((p[0].size() + p[1].size()) <= 64)
                         {
-                            return OK(BooleanFunction::Const((p[0].get_constant_value().get() << p[1].size()) + p[1].get_constant_value().get(), p[0].size() + p[1].size()));
+                            return OK(BooleanFunction::Const((p[0].get_constant_value_u64().get() << p[1].size()) + p[1].get_constant_value_u64().get(), p[0].size() + p[1].size()));
                         }
                     }
 
@@ -1014,12 +1014,11 @@ namespace hal
 
                         if (p1_parameter[0].is(BooleanFunction::NodeType::Slice))
                         {
-                            auto p0_parameter = p[0].get_parameters();
+                            auto p0_parameter  = p[0].get_parameters();
                             auto p10_parameter = p1_parameter[0].get_parameters();
 
                             if (p0_parameter[0] == p10_parameter[0])
                             {
-                                
                                 if (p1_parameter[1].is(BooleanFunction::NodeType::Slice))
                                 {
                                     auto p11_parameter = p1_parameter[1].get_parameters();
@@ -1076,7 +1075,8 @@ namespace hal
                             }
 
                             // CONCAT(SLICE(X, j, j), SLICE(X, i, j)) => SEXT(SLICE(X, i, j), j-i+1)
-                            if ((p1_parameter[2].get_index_value().get() == p0_parameter[1].get_index_value().get()) && (p1_parameter[2].get_index_value().get() == p0_parameter[2].get_index_value().get()))
+                            if ((p1_parameter[2].get_index_value().get() == p0_parameter[1].get_index_value().get())
+                                && (p1_parameter[2].get_index_value().get() == p0_parameter[2].get_index_value().get()))
                             {
                                 return BooleanFunction::Sext(p[1].clone(), BooleanFunction::Index(p[1].size() + 1, p[1].size() + 1), p[1].size() + 1);
                             }
@@ -1090,7 +1090,7 @@ namespace hal
 
                         if (p1_parameter[0].is(BooleanFunction::NodeType::Slice))
                         {
-                            auto p0_parameter = p[0].get_parameters();
+                            auto p0_parameter  = p[0].get_parameters();
                             auto p10_parameter = p1_parameter[0].get_parameters();
 
                             if ((p0_parameter[0] == p10_parameter[0]) && (p0_parameter[1] == p0_parameter[2]) && (p0_parameter[1].get_index_value().get() == p10_parameter[2].get_index_value().get()))
@@ -1111,12 +1111,15 @@ namespace hal
 
                             if (p10_parameter[0].is(BooleanFunction::NodeType::Slice))
                             {
-                                auto p0_parameter = p[0].get_parameters();
+                                auto p0_parameter   = p[0].get_parameters();
                                 auto p100_parameter = p10_parameter[0].get_parameters();
 
-                                if ((p0_parameter[0] == p100_parameter[0]) && (p0_parameter[1] == p0_parameter[2]) && (p0_parameter[1].get_index_value().get() == p100_parameter[2].get_index_value().get()))
+                                if ((p0_parameter[0] == p100_parameter[0]) && (p0_parameter[1] == p0_parameter[2])
+                                    && (p0_parameter[1].get_index_value().get() == p100_parameter[2].get_index_value().get()))
                                 {
-                                    if (auto extension = BooleanFunction::Sext(p10_parameter[0].clone(), BooleanFunction::Index(p1_parameter[0].size() + 1, p1_parameter[0].size() + 1), p1_parameter[0].size() + 1); extension.is_ok())
+                                    if (auto extension =
+                                            BooleanFunction::Sext(p10_parameter[0].clone(), BooleanFunction::Index(p1_parameter[0].size() + 1, p1_parameter[0].size() + 1), p1_parameter[0].size() + 1);
+                                        extension.is_ok())
                                     {
                                         return BooleanFunction::Concat(extension.get(), p1_parameter[1].clone(), extension.get().size() + p1_parameter[1].size());
                                     }
@@ -1124,7 +1127,6 @@ namespace hal
                             }
                         }
                     }
-                   
 
                     return BooleanFunction::Concat(p[0].clone(), p[1].clone(), node.size);
                 }

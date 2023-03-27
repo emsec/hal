@@ -26,7 +26,6 @@
 #pragma once
 
 #include "converter/converter.h"
-#include "hal_core/defines.h"
 
 namespace hal
 {
