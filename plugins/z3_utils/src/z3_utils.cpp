@@ -70,14 +70,14 @@ namespace hal
                         return {true, z3::srem(p[0], p[1])};
                     case BooleanFunction::NodeType::Urem:
                         return {true, z3::urem(p[0], p[1])};
-                    case BooleanFunction::NodeType::Slice:
-                        return {true, p[0].extract(p[2].get_numeral_uint(), p[1].get_numeral_uint())};
                     case BooleanFunction::NodeType::Concat:
                         return {true, z3::concat(p[0], p[1])};
-                    case BooleanFunction::NodeType::Sext:
-                        return {true, z3::sext(p[0], p[1].get_numeral_uint() - p[0].get_sort().bv_size())};
+                    case BooleanFunction::NodeType::Slice:
+                        return {true, p[0].extract(p[2].get_numeral_uint(), p[1].get_numeral_uint())};
                     case BooleanFunction::NodeType::Zext:
                         return {true, z3::zext(p[0], p[1].get_numeral_uint() - p[0].get_sort().bv_size())};
+                    case BooleanFunction::NodeType::Sext:
+                        return {true, z3::sext(p[0], p[1].get_numeral_uint() - p[0].get_sort().bv_size())};
                     case BooleanFunction::NodeType::Eq:
                         return {true, p[0] == p[1]};
                     case BooleanFunction::NodeType::Sle:
@@ -162,13 +162,6 @@ namespace hal
 
             switch (op)
             {
-                case Z3_OP_BNOT: {
-                    if (num_args != 1)
-                    {
-                        return ERR("operation 'NOT' must have arity 1");
-                    }
-                    return BooleanFunction::Not(std::move(args.at(0)), size);
-                }
                 case Z3_OP_BAND: {
                     auto bf_res = BooleanFunction::And(std::move(args.at(0)), std::move(args.at(1)), size);
                     for (u64 i = 2; i < num_args; i++)
@@ -184,6 +177,13 @@ namespace hal
                         bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Or(std::move(bf), std::move(arg), size); });
                     }
                     return bf_res;
+                }
+                case Z3_OP_BNOT: {
+                    if (num_args != 1)
+                    {
+                        return ERR("operation 'NOT' must have arity 1");
+                    }
+                    return BooleanFunction::Not(std::move(args.at(0)), size);
                 }
                 case Z3_OP_BXOR: {
                     auto bf_res = BooleanFunction::Xor(std::move(args.at(0)), std::move(args.at(1)), size);
