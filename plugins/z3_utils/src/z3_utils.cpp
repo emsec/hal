@@ -148,8 +148,9 @@ namespace hal
             auto num_args = e.num_args();
             std::vector<BooleanFunction> args;
 
-            for (const auto& arg : e.args())
+            for (u32 i = 0; i < e.num_args(); i++)
             {
+                const auto arg = e.arg(i);
                 if (const auto res = to_bf(arg); res.is_ok())
                 {
                     args.push_back(std::move(res.get()));
