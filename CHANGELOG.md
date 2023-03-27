@@ -10,7 +10,9 @@ All notable changes to this project will be documented in this file.
   * prevent unload of plugin if needed as dependency
   * changed plugin load policy to have only mandatory or user required plugins loaded at startup
 * Boolean functions
-  * changed `BooleanFunction::get_constant_value` to return a vector of `BooleanFunction::Value`, hence removing the 64-bit limit
+  * added `BooleanFunction::substitute(const std::map<std::string, std::string>&)` to substitute multiple variable names at once
+  * changed `BooleanFunction::get_constant_value` to return `std::vector<BooleanFunction::Value>`, thereby removing the 64-bit limit
+  * added `BooleanFunction::Node::get_constant_value`, `BooleanFunction::Node::get_index_value`, and `BooleanFunction::Node::get_variable_name`
   * added `BooleanFunction::get_constant_value_u64` and `BooleanFunction::Node::get_constant_value_u64` to retrieve the constant value as `u64` if it comprises less than 64-bit
   * added `BooleanFunction::has_constant_value(const std::vector<BooleanFunction::Value>&)` and `BooleanFunction::Node::has_constant_value(const std::vector<BooleanFunction::Value>&)` 
 * plugins
