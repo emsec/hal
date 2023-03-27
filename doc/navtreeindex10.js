@@ -1,5 +1,7 @@
 var NAVTREEINDEX10 =
 {
+"classhal_1_1_log_manager.html#ab0f66a23f31c9f40fd17d31d45cfd881":[4,1,3,3,7],
+"classhal_1_1_log_manager.html#ad3e0a37bb3366fc8b538251694a23b8c":[4,1,3,3,12],
 "classhal_1_1_log_manager.html#ad7f16741dd004b289a2d353b9d2e56f8":[4,1,3,3,9],
 "classhal_1_1_log_manager.html#af45a31acd9c308ffe832035b7cb9fc7f":[4,1,3,3,6],
 "classhal_1_1_log_manager.html#af9498836b0dc786c6e38c9c0a76bcb7e":[4,1,3,3,14],
@@ -247,7 +249,5 @@ var NAVTREEINDEX10 =
 "classhal_1_1_module.html#a87cf9f30579e5e461f525ab78274e1df":[6,0,0,242,20],
 "classhal_1_1_module.html#a8b32ef344fda511501b3eefcb34abfdc":[6,0,0,242,13],
 "classhal_1_1_module.html#a8c8b2088ac9d8a8b1aa77f3128598e3c":[6,0,0,242,47],
-"classhal_1_1_module.html#a8e83b6de125c04f00e5cdc18580bed8d":[6,0,0,242,16],
-"classhal_1_1_module.html#a92322b292485d719d98f11fb1102b2b9":[6,0,0,242,17],
-"classhal_1_1_module.html#a96099729eaf61532a07dd4fd18fb7d80":[6,0,0,242,55]
+"classhal_1_1_module.html#a8e83b6de125c04f00e5cdc18580bed8d":[6,0,0,242,16]
 };

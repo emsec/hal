@@ -1,5 +1,7 @@
 var NAVTREEINDEX14 =
 {
+"classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012b":[4,0,0,0,7,0],
+"classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012ba7088d0affb208681b3cdbec3f72c59e3":[4,0,0,0,7,0,0],
 "classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012bad37b1f6c0512e2118cee17fea015b699":[4,0,0,0,7,0,2],
 "classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012baed0c3d91d14f803ce7606df208aeae0f":[4,0,0,0,7,0,1],
 "classhal_1_1_open_file_widget.html":[4,0,52],
@@ -247,7 +249,5 @@ var NAVTREEINDEX14 =
 "classhal_1_1_python_console_history.html#a720587a5ac6d094e2a74e078188bcde6":[4,0,1,1,1,3],
 "classhal_1_1_python_console_history.html#aa475c3d950cf6297b6aef02132b4ae8b":[4,0,1,1,1,1],
 "classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3":[4,0,1,1,1,2],
-"classhal_1_1_python_console_history.html#add8d28f16071f60c44d2f91a70e27fbf":[4,0,1,1,1,0],
-"classhal_1_1_python_console_qss_adapter.html":[4,0,1,1,2],
-"classhal_1_1_python_console_qss_adapter.html#a3947472ea39d9abfa562e3f105efb925":[4,0,1,1,2,7]
+"classhal_1_1_python_console_history.html#add8d28f16071f60c44d2f91a70e27fbf":[4,0,1,1,1,0]
 };

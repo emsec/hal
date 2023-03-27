@@ -165,9 +165,9 @@ $(document).ready(function(){initNavTree('project__directory_8cpp_source.html','
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keywordflow">if</span> (retval.is_relative() || filename.empty() || empty()) <span class="keywordflow">return</span> retval;</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        std::string relative = filename;</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        std::string canonical_dir = <a class="code" href="classhal_1_1_project_directory.html#a2ce61d5bf709b4e75b00dce4e5ffa392">get_canonical_path</a>().string() + <span class="charliteral">&#39;/&#39;</span>;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordtype">int</span> n = canonical_dir.size();</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordflow">if</span> (!relative.compare(0,n,canonical_dir))</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <span class="keywordflow">return</span> (std::filesystem::path(relative.substr(n)));</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> = canonical_dir.size();</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordflow">if</span> (!relative.compare(0,<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>,canonical_dir))</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <span class="keywordflow">return</span> (std::filesystem::path(relative.substr(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>)));</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordflow">return</span> retval;</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    }</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;}</div>
@@ -177,6 +177,7 @@ $(document).ready(function(){initNavTree('project__directory_8cpp_source.html','
 <div class="ttc" id="aclasshal_1_1_project_directory_html_af3601b7a6040a9c94cf07fadacce232b"><div class="ttname"><a href="classhal_1_1_project_directory.html#af3601b7a6040a9c94cf07fadacce232b">hal::ProjectDirectory::get_shadow_dir</a></div><div class="ttdeci">std::filesystem::path get_shadow_dir() const</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8cpp_source.html#l00067">project_directory.cpp:67</a></div></div>
 <div class="ttc" id="aproject__directory_8h_html"><div class="ttname"><a href="project__directory_8h.html">project_directory.h</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a9b45b3e13bd9167aab02e17e08916231"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a></div><div class="ttdeci">std::string name</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">netlist_serializer.cpp:56</a></div></div>
+<div class="ttc" id="anamespacetest_html_a20eb10bb18ee6ccd51fa4518f9fd6090"><div class="ttname"><a href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">test.n</a></div><div class="ttdeci">n</div><div class="ttdef"><b>Definition:</b> <a href="test_8py_source.html#l00008">test.py:8</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_directory_html_ac9cbda73428844614b413450ba1685ff"><div class="ttname"><a href="classhal_1_1_project_directory.html#ac9cbda73428844614b413450ba1685ff">hal::ProjectDirectory::get_shadow_filename</a></div><div class="ttdeci">std::filesystem::path get_shadow_filename(const std::string &amp;extension=std::string()) const</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8cpp_source.html#l00058">project_directory.cpp:58</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_directory_html"><div class="ttname"><a href="classhal_1_1_project_directory.html">hal::ProjectDirectory</a></div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8h_source.html#l00037">project_directory.h:37</a></div></div>
@@ -191,7 +192,7 @@ $(document).ready(function(){initNavTree('project__directory_8cpp_source.html','
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_7b5d38f1875f1b693f62ca6a108a1129.html">utilities</a></li><li class="navelem"><a class="el" href="project__directory_8cpp.html">project_directory.cpp</a></li>
-    <li class="footer">Generated on Sat Mar 25 2023 16:15:26 for HAL by
+    <li class="footer">Generated on Mon Mar 27 2023 21:07:12 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -237,7 +237,7 @@ $(document).ready(function(){initNavTree('pre__processing_8cpp_source.html','');
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;                {</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;                    <span class="comment">// TODO currently only accepts FFs</span></div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;                    <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;dataflow&quot;</span>, <span class="stringliteral">&quot;identifying sequential gates&quot;</span>);</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;                    netlist_abstr.all_sequential_gates = netlist_abstr.nl-&gt;get_gates([&amp;](<span class="keyword">auto</span> <a class="code" href="namespacetest.html#a795b8c55af8ab82f1840a6502cd7938f">g</a>) { <span class="keywordflow">return</span> <a class="code" href="namespacetest.html#a795b8c55af8ab82f1840a6502cd7938f">g</a>-&gt;get_type()-&gt;has_property(<a class="code" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">GateTypeProperty::ff</a>); });</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;                    netlist_abstr.all_sequential_gates = netlist_abstr.nl-&gt;get_gates([&amp;](<span class="keyword">auto</span> <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>) { <span class="keywordflow">return</span> <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>-&gt;get_type()-&gt;has_property(<a class="code" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">GateTypeProperty::ff</a>); });</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;                    std::sort(netlist_abstr.all_sequential_gates.begin(), netlist_abstr.all_sequential_gates.end(), [](<span class="keyword">const</span> Gate* g1, <span class="keyword">const</span> Gate* g2) { return g1-&gt;get_id() &lt; g2-&gt;get_id(); });</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;                    <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;dataflow&quot;</span>, <span class="stringliteral">&quot;  #gates: {}&quot;</span>, netlist_abstr.nl-&gt;get_gates().size());</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;                    <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;dataflow&quot;</span>, <span class="stringliteral">&quot;  #sequential gates: {}&quot;</span>, netlist_abstr.all_sequential_gates.size());</div>
@@ -342,7 +342,7 @@ $(document).ready(function(){initNavTree('pre__processing_8cpp_source.html','');
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespacetest_html_a795b8c55af8ab82f1840a6502cd7938f"><div class="ttname"><a href="namespacetest.html#a795b8c55af8ab82f1840a6502cd7938f">test.g</a></div><div class="ttdeci">g</div><div class="ttdef"><b>Definition:</b> <a href="test_8py_source.html#l00005">test.py:5</a></div></div>
+<div class="ttc" id="anamespacetest__plugin_html_abd3083aec6bd8d3b9851214d6d355740"><div class="ttname"><a href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">test_plugin.g</a></div><div class="ttdeci">g</div><div class="ttdef"><b>Definition:</b> <a href="test__plugin_8py_source.html#l00032">test_plugin.py:32</a></div></div>
 <div class="ttc" id="anetlist__abstraction_8h_html"><div class="ttname"><a href="netlist__abstraction_8h.html">netlist_abstraction.h</a></div></div>
 <div class="ttc" id="aregister__stage__identification_8h_html"><div class="ttname"><a href="register__stage__identification_8h.html">register_stage_identification.h</a></div></div>
 <div class="ttc" id="anetlist__utils_8h_html"><div class="ttname"><a href="netlist__utils_8h.html">netlist_utils.h</a></div></div>
@@ -374,7 +374,7 @@ $(document).ready(function(){initNavTree('pre__processing_8cpp_source.html','');
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_383eef8607738589c737c0b430bde182.html">src</a></li><li class="navelem"><a class="el" href="dir_a701bbcd84fcc404073af6508c3c1419.html">pre_processing</a></li><li class="navelem"><a class="el" href="pre__processing_8cpp.html">pre_processing.cpp</a></li>
-    <li class="footer">Generated on Sat Mar 25 2023 16:15:23 for HAL by
+    <li class="footer">Generated on Mon Mar 27 2023 21:07:10 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

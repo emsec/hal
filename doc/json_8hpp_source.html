@@ -2664,13 +2664,13 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div class="line"><a name="l02895"></a><span class="lineno"> 2895</span>&#160;<span class="keyword">namespace </span>detail</div>
 <div class="line"><a name="l02896"></a><span class="lineno"> 2896</span>&#160;{</div>
 <div class="line"><a name="l02897"></a><span class="lineno"> 2897</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> BasicJsonType&gt;</div>
-<div class="line"><a name="l02898"></a><span class="lineno"><a class="line" href="namespacenlohmann_1_1detail.html#a1f0395aad0fe853a4539288749d3a603"> 2898</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacenlohmann_1_1detail.html#a1f0395aad0fe853a4539288749d3a603">from_json</a>(<span class="keyword">const</span> BasicJsonType&amp; j, <span class="keyword">typename</span> std::nullptr_t&amp; n)</div>
+<div class="line"><a name="l02898"></a><span class="lineno"><a class="line" href="namespacenlohmann_1_1detail.html#a1f0395aad0fe853a4539288749d3a603"> 2898</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacenlohmann_1_1detail.html#a1f0395aad0fe853a4539288749d3a603">from_json</a>(<span class="keyword">const</span> BasicJsonType&amp; j, <span class="keyword">typename</span> std::nullptr_t&amp; <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>)</div>
 <div class="line"><a name="l02899"></a><span class="lineno"> 2899</span>&#160;{</div>
 <div class="line"><a name="l02900"></a><span class="lineno"> 2900</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="json_8hpp.html#a8df7de76ab3c9445f46f6994ec205bcd">JSON_HEDLEY_UNLIKELY</a>(not j.is_null()))</div>
 <div class="line"><a name="l02901"></a><span class="lineno"> 2901</span>&#160;    {</div>
 <div class="line"><a name="l02902"></a><span class="lineno"> 2902</span>&#160;        <a class="code" href="json_8hpp.html#a6c274f6db2e65c1b66c7d41b06ad690f">JSON_THROW</a>(<a class="code" href="classnlohmann_1_1detail_1_1type__error.html#aecc083aea4b698c33d042670ba50c10f">type_error::create</a>(302, <span class="stringliteral">&quot;type must be null, but is &quot;</span> + std::string(j.type_name())));</div>
 <div class="line"><a name="l02903"></a><span class="lineno"> 2903</span>&#160;    }</div>
-<div class="line"><a name="l02904"></a><span class="lineno"> 2904</span>&#160;    n = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l02904"></a><span class="lineno"> 2904</span>&#160;    <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a name="l02905"></a><span class="lineno"> 2905</span>&#160;}</div>
 <div class="line"><a name="l02906"></a><span class="lineno"> 2906</span>&#160; </div>
 <div class="line"><a name="l02907"></a><span class="lineno"> 2907</span>&#160;<span class="comment">// overloads for basic_json template parameters</span></div>
@@ -8367,10 +8367,10 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div class="line"><a name="l09220"></a><span class="lineno"> 9220</span>&#160;        <span class="keywordflow">return</span> lhs.m_it &lt; rhs.m_it;</div>
 <div class="line"><a name="l09221"></a><span class="lineno"> 9221</span>&#160;    }</div>
 <div class="line"><a name="l09222"></a><span class="lineno"> 9222</span>&#160; </div>
-<div class="line"><a name="l09223"></a><span class="lineno"><a class="line" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html#a00ce828d0fe58046c10e0445504df7bf"> 9223</a></span>&#160;    <a class="code" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html">primitive_iterator_t</a> <a class="code" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html#a00ce828d0fe58046c10e0445504df7bf">operator+</a>(difference_type n) noexcept</div>
+<div class="line"><a name="l09223"></a><span class="lineno"><a class="line" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html#a00ce828d0fe58046c10e0445504df7bf"> 9223</a></span>&#160;    <a class="code" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html">primitive_iterator_t</a> <a class="code" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html#a00ce828d0fe58046c10e0445504df7bf">operator+</a>(difference_type <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>) noexcept</div>
 <div class="line"><a name="l09224"></a><span class="lineno"> 9224</span>&#160;    {</div>
 <div class="line"><a name="l09225"></a><span class="lineno"> 9225</span>&#160;        <span class="keyword">auto</span> result = *<span class="keyword">this</span>;</div>
-<div class="line"><a name="l09226"></a><span class="lineno"> 9226</span>&#160;        result += n;</div>
+<div class="line"><a name="l09226"></a><span class="lineno"> 9226</span>&#160;        result += <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>;</div>
 <div class="line"><a name="l09227"></a><span class="lineno"> 9227</span>&#160;        <span class="keywordflow">return</span> result;</div>
 <div class="line"><a name="l09228"></a><span class="lineno"> 9228</span>&#160;    }</div>
 <div class="line"><a name="l09229"></a><span class="lineno"> 9229</span>&#160; </div>
@@ -8405,15 +8405,15 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div class="line"><a name="l09258"></a><span class="lineno"> 9258</span>&#160;        <span class="keywordflow">return</span> result;</div>
 <div class="line"><a name="l09259"></a><span class="lineno"> 9259</span>&#160;    }</div>
 <div class="line"><a name="l09260"></a><span class="lineno"> 9260</span>&#160; </div>
-<div class="line"><a name="l09261"></a><span class="lineno"><a class="line" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html#aee01535df0b3b40137d9241029a9a203"> 9261</a></span>&#160;    <a class="code" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html">primitive_iterator_t</a>&amp; <a class="code" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html#aee01535df0b3b40137d9241029a9a203">operator+=</a>(difference_type n) noexcept</div>
+<div class="line"><a name="l09261"></a><span class="lineno"><a class="line" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html#aee01535df0b3b40137d9241029a9a203"> 9261</a></span>&#160;    <a class="code" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html">primitive_iterator_t</a>&amp; <a class="code" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html#aee01535df0b3b40137d9241029a9a203">operator+=</a>(difference_type <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>) noexcept</div>
 <div class="line"><a name="l09262"></a><span class="lineno"> 9262</span>&#160;    {</div>
-<div class="line"><a name="l09263"></a><span class="lineno"> 9263</span>&#160;        m_it += n;</div>
+<div class="line"><a name="l09263"></a><span class="lineno"> 9263</span>&#160;        m_it += <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>;</div>
 <div class="line"><a name="l09264"></a><span class="lineno"> 9264</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
 <div class="line"><a name="l09265"></a><span class="lineno"> 9265</span>&#160;    }</div>
 <div class="line"><a name="l09266"></a><span class="lineno"> 9266</span>&#160; </div>
-<div class="line"><a name="l09267"></a><span class="lineno"><a class="line" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html#a0bf83ab08abe1ae4b51c790c85cdf151"> 9267</a></span>&#160;    <a class="code" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html">primitive_iterator_t</a>&amp; <a class="code" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html#a0bf83ab08abe1ae4b51c790c85cdf151">operator-=</a>(difference_type n) noexcept</div>
+<div class="line"><a name="l09267"></a><span class="lineno"><a class="line" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html#a0bf83ab08abe1ae4b51c790c85cdf151"> 9267</a></span>&#160;    <a class="code" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html">primitive_iterator_t</a>&amp; <a class="code" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html#a0bf83ab08abe1ae4b51c790c85cdf151">operator-=</a>(difference_type <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>) noexcept</div>
 <div class="line"><a name="l09268"></a><span class="lineno"> 9268</span>&#160;    {</div>
-<div class="line"><a name="l09269"></a><span class="lineno"> 9269</span>&#160;        m_it -= n;</div>
+<div class="line"><a name="l09269"></a><span class="lineno"> 9269</span>&#160;        m_it -= <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>;</div>
 <div class="line"><a name="l09270"></a><span class="lineno"> 9270</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
 <div class="line"><a name="l09271"></a><span class="lineno"> 9271</span>&#160;    }</div>
 <div class="line"><a name="l09272"></a><span class="lineno"> 9272</span>&#160;};</div>
@@ -8870,7 +8870,7 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div class="line"><a name="l09878"></a><span class="lineno"> 9878</span>&#160;        }</div>
 <div class="line"><a name="l09879"></a><span class="lineno"> 9879</span>&#160;    }</div>
 <div class="line"><a name="l09880"></a><span class="lineno"> 9880</span>&#160; </div>
-<div class="line"><a name="l09885"></a><span class="lineno"><a class="line" href="classnlohmann_1_1detail_1_1iter__impl.html#ac0b9276f1102ed4b9cd3f5f56287e3ce"> 9885</a></span>&#160;    <a class="code" href="classnlohmann_1_1detail_1_1iter__impl.html#a5be8001be099c6b82310f4d387b953ce">reference</a> <a class="code" href="classnlohmann_1_1detail_1_1iter__impl.html#ac0b9276f1102ed4b9cd3f5f56287e3ce">operator[]</a>(<a class="code" href="classnlohmann_1_1detail_1_1iter__impl.html#a2f7ea9f7022850809c60fc3263775840">difference_type</a> n)<span class="keyword"> const</span></div>
+<div class="line"><a name="l09885"></a><span class="lineno"><a class="line" href="classnlohmann_1_1detail_1_1iter__impl.html#ac0b9276f1102ed4b9cd3f5f56287e3ce"> 9885</a></span>&#160;    <a class="code" href="classnlohmann_1_1detail_1_1iter__impl.html#a5be8001be099c6b82310f4d387b953ce">reference</a> <a class="code" href="classnlohmann_1_1detail_1_1iter__impl.html#ac0b9276f1102ed4b9cd3f5f56287e3ce">operator[]</a>(<a class="code" href="classnlohmann_1_1detail_1_1iter__impl.html#a2f7ea9f7022850809c60fc3263775840">difference_type</a> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>)<span class="keyword"> const</span></div>
 <div class="line"><a name="l09886"></a><span class="lineno"> 9886</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l09887"></a><span class="lineno"> 9887</span>&#160;        assert(m_object != <span class="keyword">nullptr</span>);</div>
 <div class="line"><a name="l09888"></a><span class="lineno"> 9888</span>&#160; </div>
@@ -8880,14 +8880,14 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div class="line"><a name="l09892"></a><span class="lineno"> 9892</span>&#160;                <a class="code" href="json_8hpp.html#a6c274f6db2e65c1b66c7d41b06ad690f">JSON_THROW</a>(<a class="code" href="classnlohmann_1_1detail_1_1invalid__iterator.html#a4e849260a3caa1b288c7e619130c6c09">invalid_iterator::create</a>(208, <span class="stringliteral">&quot;cannot use operator[] for object iterators&quot;</span>));</div>
 <div class="line"><a name="l09893"></a><span class="lineno"> 9893</span>&#160; </div>
 <div class="line"><a name="l09894"></a><span class="lineno"> 9894</span>&#160;            <span class="keywordflow">case</span> <a class="code" href="namespacenlohmann_1_1detail.html#a1ed8fc6239da25abcaf681d30ace4985af1f713c9e000f5d3f280adbd124df4f5">value_t::array</a>:</div>
-<div class="line"><a name="l09895"></a><span class="lineno"> 9895</span>&#160;                <span class="keywordflow">return</span> *std::next(m_it.<a class="code" href="structnlohmann_1_1detail_1_1internal__iterator.html#a8294a6e6f01b58e1cce8fbae66a50b5d">array_iterator</a>, n);</div>
+<div class="line"><a name="l09895"></a><span class="lineno"> 9895</span>&#160;                <span class="keywordflow">return</span> *std::next(m_it.<a class="code" href="structnlohmann_1_1detail_1_1internal__iterator.html#a8294a6e6f01b58e1cce8fbae66a50b5d">array_iterator</a>, <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>);</div>
 <div class="line"><a name="l09896"></a><span class="lineno"> 9896</span>&#160; </div>
 <div class="line"><a name="l09897"></a><span class="lineno"> 9897</span>&#160;            <span class="keywordflow">case</span> <a class="code" href="namespacenlohmann_1_1detail.html#a1ed8fc6239da25abcaf681d30ace4985a37a6259cc0c1dae299a7866489dff0bd">value_t::null</a>:</div>
 <div class="line"><a name="l09898"></a><span class="lineno"> 9898</span>&#160;                <a class="code" href="json_8hpp.html#a6c274f6db2e65c1b66c7d41b06ad690f">JSON_THROW</a>(<a class="code" href="classnlohmann_1_1detail_1_1invalid__iterator.html#a4e849260a3caa1b288c7e619130c6c09">invalid_iterator::create</a>(214, <span class="stringliteral">&quot;cannot get value&quot;</span>));</div>
 <div class="line"><a name="l09899"></a><span class="lineno"> 9899</span>&#160; </div>
 <div class="line"><a name="l09900"></a><span class="lineno"> 9900</span>&#160;            <span class="keywordflow">default</span>:</div>
 <div class="line"><a name="l09901"></a><span class="lineno"> 9901</span>&#160;            {</div>
-<div class="line"><a name="l09902"></a><span class="lineno"> 9902</span>&#160;                <span class="keywordflow">if</span> (<a class="code" href="json_8hpp.html#a355f2770653ff7bdd5c74b204b5a3ad0">JSON_HEDLEY_LIKELY</a>(m_it.<a class="code" href="structnlohmann_1_1detail_1_1internal__iterator.html#a2b3bb45f968210e42c282017eeeb63a8">primitive_iterator</a>.<a class="code" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html#ae952990886ca1756229f916661a8af81">get_value</a>() == -n))</div>
+<div class="line"><a name="l09902"></a><span class="lineno"> 9902</span>&#160;                <span class="keywordflow">if</span> (<a class="code" href="json_8hpp.html#a355f2770653ff7bdd5c74b204b5a3ad0">JSON_HEDLEY_LIKELY</a>(m_it.<a class="code" href="structnlohmann_1_1detail_1_1internal__iterator.html#a2b3bb45f968210e42c282017eeeb63a8">primitive_iterator</a>.<a class="code" href="classnlohmann_1_1detail_1_1primitive__iterator__t.html#ae952990886ca1756229f916661a8af81">get_value</a>() == -<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>))</div>
 <div class="line"><a name="l09903"></a><span class="lineno"> 9903</span>&#160;                {</div>
 <div class="line"><a name="l09904"></a><span class="lineno"> 9904</span>&#160;                    <span class="keywordflow">return</span> *m_object;</div>
 <div class="line"><a name="l09905"></a><span class="lineno"> 9905</span>&#160;                }</div>
@@ -8989,7 +8989,7 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div class="line"><a name="l10043"></a><span class="lineno">10043</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classnlohmann_1_1detail_1_1json__reverse__iterator.html#a6b2ef1d632fe49bfcc22fbd1abd62395">base_iterator</a>(*<span class="keyword">this</span>) - <a class="code" href="classnlohmann_1_1detail_1_1json__reverse__iterator.html#a6b2ef1d632fe49bfcc22fbd1abd62395">base_iterator</a>(other);</div>
 <div class="line"><a name="l10044"></a><span class="lineno">10044</span>&#160;    }</div>
 <div class="line"><a name="l10045"></a><span class="lineno">10045</span>&#160; </div>
-<div class="line"><a name="l10047"></a><span class="lineno"><a class="line" href="classnlohmann_1_1detail_1_1json__reverse__iterator.html#a8ed9e445e03c49c46612eb7f7d55bb61">10047</a></span>&#160;    <a class="code" href="classnlohmann_1_1detail_1_1json__reverse__iterator.html#a42f51a69bac7b2aebb613b2164e457f1">reference</a> <a class="code" href="classnlohmann_1_1detail_1_1json__reverse__iterator.html#a8ed9e445e03c49c46612eb7f7d55bb61">operator[]</a>(<a class="code" href="classnlohmann_1_1detail_1_1json__reverse__iterator.html#a9ab55987c05ec6427ad36082e351cc45">difference_type</a> n)<span class="keyword"> const</span></div>
+<div class="line"><a name="l10047"></a><span class="lineno"><a class="line" href="classnlohmann_1_1detail_1_1json__reverse__iterator.html#a8ed9e445e03c49c46612eb7f7d55bb61">10047</a></span>&#160;    <a class="code" href="classnlohmann_1_1detail_1_1json__reverse__iterator.html#a42f51a69bac7b2aebb613b2164e457f1">reference</a> <a class="code" href="classnlohmann_1_1detail_1_1json__reverse__iterator.html#a8ed9e445e03c49c46612eb7f7d55bb61">operator[]</a>(<a class="code" href="classnlohmann_1_1detail_1_1json__reverse__iterator.html#a9ab55987c05ec6427ad36082e351cc45">difference_type</a> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>)<span class="keyword"> const</span></div>
 <div class="line"><a name="l10048"></a><span class="lineno">10048</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l10049"></a><span class="lineno">10049</span>&#160;        <span class="keywordflow">return</span> *(this-&gt;<a class="code" href="classnlohmann_1_1detail_1_1json__reverse__iterator.html#aabf172b436988e2edde22f13f27caaed">operator+</a>(n));</div>
 <div class="line"><a name="l10050"></a><span class="lineno">10050</span>&#160;    }</div>
@@ -10853,65 +10853,65 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div class="line"><a name="l12336"></a><span class="lineno">12336</span>&#160;    <span class="comment">// UBJSON: write number (floating point)</span></div>
 <div class="line"><a name="l12337"></a><span class="lineno">12337</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> NumberType, <span class="keyword">typename</span> std::enable_if&lt;</div>
 <div class="line"><a name="l12338"></a><span class="lineno">12338</span>&#160;                 std::is_floating_point&lt;NumberType&gt;::value, <span class="keywordtype">int</span>&gt;<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">::type</a> = 0&gt;</div>
-<div class="line"><a name="l12339"></a><span class="lineno">12339</span>&#160;    <span class="keywordtype">void</span> write_number_with_ubjson_prefix(<span class="keyword">const</span> NumberType n,</div>
+<div class="line"><a name="l12339"></a><span class="lineno">12339</span>&#160;    <span class="keywordtype">void</span> write_number_with_ubjson_prefix(<span class="keyword">const</span> NumberType <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>,</div>
 <div class="line"><a name="l12340"></a><span class="lineno">12340</span>&#160;                                         <span class="keyword">const</span> <span class="keywordtype">bool</span> add_prefix)</div>
 <div class="line"><a name="l12341"></a><span class="lineno">12341</span>&#160;    {</div>
 <div class="line"><a name="l12342"></a><span class="lineno">12342</span>&#160;        <span class="keywordflow">if</span> (add_prefix)</div>
 <div class="line"><a name="l12343"></a><span class="lineno">12343</span>&#160;        {</div>
-<div class="line"><a name="l12344"></a><span class="lineno">12344</span>&#160;            oa-&gt;write_character(get_ubjson_float_prefix(n));</div>
+<div class="line"><a name="l12344"></a><span class="lineno">12344</span>&#160;            oa-&gt;write_character(get_ubjson_float_prefix(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>));</div>
 <div class="line"><a name="l12345"></a><span class="lineno">12345</span>&#160;        }</div>
-<div class="line"><a name="l12346"></a><span class="lineno">12346</span>&#160;        write_number(n);</div>
+<div class="line"><a name="l12346"></a><span class="lineno">12346</span>&#160;        write_number(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>);</div>
 <div class="line"><a name="l12347"></a><span class="lineno">12347</span>&#160;    }</div>
 <div class="line"><a name="l12348"></a><span class="lineno">12348</span>&#160; </div>
 <div class="line"><a name="l12349"></a><span class="lineno">12349</span>&#160;    <span class="comment">// UBJSON: write number (unsigned integer)</span></div>
 <div class="line"><a name="l12350"></a><span class="lineno">12350</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> NumberType, <span class="keyword">typename</span> std::enable_if&lt;</div>
 <div class="line"><a name="l12351"></a><span class="lineno">12351</span>&#160;                 std::is_unsigned&lt;NumberType&gt;::value, <span class="keywordtype">int</span>&gt;<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">::type</a> = 0&gt;</div>
-<div class="line"><a name="l12352"></a><span class="lineno">12352</span>&#160;    <span class="keywordtype">void</span> write_number_with_ubjson_prefix(<span class="keyword">const</span> NumberType n,</div>
+<div class="line"><a name="l12352"></a><span class="lineno">12352</span>&#160;    <span class="keywordtype">void</span> write_number_with_ubjson_prefix(<span class="keyword">const</span> NumberType <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>,</div>
 <div class="line"><a name="l12353"></a><span class="lineno">12353</span>&#160;                                         <span class="keyword">const</span> <span class="keywordtype">bool</span> add_prefix)</div>
 <div class="line"><a name="l12354"></a><span class="lineno">12354</span>&#160;    {</div>
-<div class="line"><a name="l12355"></a><span class="lineno">12355</span>&#160;        <span class="keywordflow">if</span> (n &lt;= <span class="keyword">static_cast&lt;</span>std::uint64_t<span class="keyword">&gt;</span>((std::numeric_limits&lt;std::int8_t&gt;::max)()))</div>
+<div class="line"><a name="l12355"></a><span class="lineno">12355</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &lt;= <span class="keyword">static_cast&lt;</span>std::uint64_t<span class="keyword">&gt;</span>((std::numeric_limits&lt;std::int8_t&gt;::max)()))</div>
 <div class="line"><a name="l12356"></a><span class="lineno">12356</span>&#160;        {</div>
 <div class="line"><a name="l12357"></a><span class="lineno">12357</span>&#160;            <span class="keywordflow">if</span> (add_prefix)</div>
 <div class="line"><a name="l12358"></a><span class="lineno">12358</span>&#160;            {</div>
 <div class="line"><a name="l12359"></a><span class="lineno">12359</span>&#160;                oa-&gt;write_character(<a class="code" href="classnlohmann_1_1detail_1_1binary__writer.html#ab77aa48692bd4e64e4f051ce6aeb6d2d">to_char_type</a>(<span class="charliteral">&#39;i&#39;</span>));  <span class="comment">// int8</span></div>
 <div class="line"><a name="l12360"></a><span class="lineno">12360</span>&#160;            }</div>
-<div class="line"><a name="l12361"></a><span class="lineno">12361</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::uint8_t<span class="keyword">&gt;</span>(n));</div>
+<div class="line"><a name="l12361"></a><span class="lineno">12361</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::uint8_t<span class="keyword">&gt;</span>(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>));</div>
 <div class="line"><a name="l12362"></a><span class="lineno">12362</span>&#160;        }</div>
-<div class="line"><a name="l12363"></a><span class="lineno">12363</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (n &lt;= (std::numeric_limits&lt;std::uint8_t&gt;::max)())</div>
+<div class="line"><a name="l12363"></a><span class="lineno">12363</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &lt;= (std::numeric_limits&lt;std::uint8_t&gt;::max)())</div>
 <div class="line"><a name="l12364"></a><span class="lineno">12364</span>&#160;        {</div>
 <div class="line"><a name="l12365"></a><span class="lineno">12365</span>&#160;            <span class="keywordflow">if</span> (add_prefix)</div>
 <div class="line"><a name="l12366"></a><span class="lineno">12366</span>&#160;            {</div>
 <div class="line"><a name="l12367"></a><span class="lineno">12367</span>&#160;                oa-&gt;write_character(<a class="code" href="classnlohmann_1_1detail_1_1binary__writer.html#ab77aa48692bd4e64e4f051ce6aeb6d2d">to_char_type</a>(<span class="charliteral">&#39;U&#39;</span>));  <span class="comment">// uint8</span></div>
 <div class="line"><a name="l12368"></a><span class="lineno">12368</span>&#160;            }</div>
-<div class="line"><a name="l12369"></a><span class="lineno">12369</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::uint8_t<span class="keyword">&gt;</span>(n));</div>
+<div class="line"><a name="l12369"></a><span class="lineno">12369</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::uint8_t<span class="keyword">&gt;</span>(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>));</div>
 <div class="line"><a name="l12370"></a><span class="lineno">12370</span>&#160;        }</div>
-<div class="line"><a name="l12371"></a><span class="lineno">12371</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (n &lt;= <span class="keyword">static_cast&lt;</span>std::uint64_t<span class="keyword">&gt;</span>((std::numeric_limits&lt;std::int16_t&gt;::max)()))</div>
+<div class="line"><a name="l12371"></a><span class="lineno">12371</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &lt;= <span class="keyword">static_cast&lt;</span>std::uint64_t<span class="keyword">&gt;</span>((std::numeric_limits&lt;std::int16_t&gt;::max)()))</div>
 <div class="line"><a name="l12372"></a><span class="lineno">12372</span>&#160;        {</div>
 <div class="line"><a name="l12373"></a><span class="lineno">12373</span>&#160;            <span class="keywordflow">if</span> (add_prefix)</div>
 <div class="line"><a name="l12374"></a><span class="lineno">12374</span>&#160;            {</div>
 <div class="line"><a name="l12375"></a><span class="lineno">12375</span>&#160;                oa-&gt;write_character(<a class="code" href="classnlohmann_1_1detail_1_1binary__writer.html#ab77aa48692bd4e64e4f051ce6aeb6d2d">to_char_type</a>(<span class="charliteral">&#39;I&#39;</span>));  <span class="comment">// int16</span></div>
 <div class="line"><a name="l12376"></a><span class="lineno">12376</span>&#160;            }</div>
-<div class="line"><a name="l12377"></a><span class="lineno">12377</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::int16_t<span class="keyword">&gt;</span>(n));</div>
+<div class="line"><a name="l12377"></a><span class="lineno">12377</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::int16_t<span class="keyword">&gt;</span>(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>));</div>
 <div class="line"><a name="l12378"></a><span class="lineno">12378</span>&#160;        }</div>
-<div class="line"><a name="l12379"></a><span class="lineno">12379</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (n &lt;= <span class="keyword">static_cast&lt;</span>std::uint64_t<span class="keyword">&gt;</span>((std::numeric_limits&lt;std::int32_t&gt;::max)()))</div>
+<div class="line"><a name="l12379"></a><span class="lineno">12379</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &lt;= <span class="keyword">static_cast&lt;</span>std::uint64_t<span class="keyword">&gt;</span>((std::numeric_limits&lt;std::int32_t&gt;::max)()))</div>
 <div class="line"><a name="l12380"></a><span class="lineno">12380</span>&#160;        {</div>
 <div class="line"><a name="l12381"></a><span class="lineno">12381</span>&#160;            <span class="keywordflow">if</span> (add_prefix)</div>
 <div class="line"><a name="l12382"></a><span class="lineno">12382</span>&#160;            {</div>
 <div class="line"><a name="l12383"></a><span class="lineno">12383</span>&#160;                oa-&gt;write_character(<a class="code" href="classnlohmann_1_1detail_1_1binary__writer.html#ab77aa48692bd4e64e4f051ce6aeb6d2d">to_char_type</a>(<span class="charliteral">&#39;l&#39;</span>));  <span class="comment">// int32</span></div>
 <div class="line"><a name="l12384"></a><span class="lineno">12384</span>&#160;            }</div>
-<div class="line"><a name="l12385"></a><span class="lineno">12385</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::int32_t<span class="keyword">&gt;</span>(n));</div>
+<div class="line"><a name="l12385"></a><span class="lineno">12385</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::int32_t<span class="keyword">&gt;</span>(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>));</div>
 <div class="line"><a name="l12386"></a><span class="lineno">12386</span>&#160;        }</div>
-<div class="line"><a name="l12387"></a><span class="lineno">12387</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (n &lt;= <span class="keyword">static_cast&lt;</span>std::uint64_t<span class="keyword">&gt;</span>((std::numeric_limits&lt;std::int64_t&gt;::max)()))</div>
+<div class="line"><a name="l12387"></a><span class="lineno">12387</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &lt;= <span class="keyword">static_cast&lt;</span>std::uint64_t<span class="keyword">&gt;</span>((std::numeric_limits&lt;std::int64_t&gt;::max)()))</div>
 <div class="line"><a name="l12388"></a><span class="lineno">12388</span>&#160;        {</div>
 <div class="line"><a name="l12389"></a><span class="lineno">12389</span>&#160;            <span class="keywordflow">if</span> (add_prefix)</div>
 <div class="line"><a name="l12390"></a><span class="lineno">12390</span>&#160;            {</div>
 <div class="line"><a name="l12391"></a><span class="lineno">12391</span>&#160;                oa-&gt;write_character(<a class="code" href="classnlohmann_1_1detail_1_1binary__writer.html#ab77aa48692bd4e64e4f051ce6aeb6d2d">to_char_type</a>(<span class="charliteral">&#39;L&#39;</span>));  <span class="comment">// int64</span></div>
 <div class="line"><a name="l12392"></a><span class="lineno">12392</span>&#160;            }</div>
-<div class="line"><a name="l12393"></a><span class="lineno">12393</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::int64_t<span class="keyword">&gt;</span>(n));</div>
+<div class="line"><a name="l12393"></a><span class="lineno">12393</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::int64_t<span class="keyword">&gt;</span>(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>));</div>
 <div class="line"><a name="l12394"></a><span class="lineno">12394</span>&#160;        }</div>
 <div class="line"><a name="l12395"></a><span class="lineno">12395</span>&#160;        <span class="keywordflow">else</span></div>
 <div class="line"><a name="l12396"></a><span class="lineno">12396</span>&#160;        {</div>
-<div class="line"><a name="l12397"></a><span class="lineno">12397</span>&#160;            <a class="code" href="json_8hpp.html#a6c274f6db2e65c1b66c7d41b06ad690f">JSON_THROW</a>(<a class="code" href="classnlohmann_1_1detail_1_1out__of__range.html#a3f6d82a6f967c4728a1ec735a7867073">out_of_range::create</a>(407, <span class="stringliteral">&quot;integer number &quot;</span> + <a class="code" href="namespacenlohmann.html#ad675d1c22f5240b2b3065c241b204477">std::to_string</a>(n) + <span class="stringliteral">&quot; cannot be represented by UBJSON as it does not fit int64&quot;</span>));</div>
+<div class="line"><a name="l12397"></a><span class="lineno">12397</span>&#160;            <a class="code" href="json_8hpp.html#a6c274f6db2e65c1b66c7d41b06ad690f">JSON_THROW</a>(<a class="code" href="classnlohmann_1_1detail_1_1out__of__range.html#a3f6d82a6f967c4728a1ec735a7867073">out_of_range::create</a>(407, <span class="stringliteral">&quot;integer number &quot;</span> + <a class="code" href="namespacenlohmann.html#ad675d1c22f5240b2b3065c241b204477">std::to_string</a>(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>) + <span class="stringliteral">&quot; cannot be represented by UBJSON as it does not fit int64&quot;</span>));</div>
 <div class="line"><a name="l12398"></a><span class="lineno">12398</span>&#160;        }</div>
 <div class="line"><a name="l12399"></a><span class="lineno">12399</span>&#160;    }</div>
 <div class="line"><a name="l12400"></a><span class="lineno">12400</span>&#160; </div>
@@ -10919,53 +10919,53 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div class="line"><a name="l12402"></a><span class="lineno">12402</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> NumberType, <span class="keyword">typename</span> std::enable_if&lt;</div>
 <div class="line"><a name="l12403"></a><span class="lineno">12403</span>&#160;                 std::is_signed&lt;NumberType&gt;::value <a class="code" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and</a></div>
 <div class="line"><a name="l12404"></a><span class="lineno">12404</span>&#160;                 not std::is_floating_point&lt;NumberType&gt;::value, <span class="keywordtype">int</span>&gt;<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">::type</a> = 0&gt;</div>
-<div class="line"><a name="l12405"></a><span class="lineno">12405</span>&#160;    <span class="keywordtype">void</span> write_number_with_ubjson_prefix(<span class="keyword">const</span> NumberType n,</div>
+<div class="line"><a name="l12405"></a><span class="lineno">12405</span>&#160;    <span class="keywordtype">void</span> write_number_with_ubjson_prefix(<span class="keyword">const</span> NumberType <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>,</div>
 <div class="line"><a name="l12406"></a><span class="lineno">12406</span>&#160;                                         <span class="keyword">const</span> <span class="keywordtype">bool</span> add_prefix)</div>
 <div class="line"><a name="l12407"></a><span class="lineno">12407</span>&#160;    {</div>
-<div class="line"><a name="l12408"></a><span class="lineno">12408</span>&#160;        <span class="keywordflow">if</span> ((std::numeric_limits&lt;std::int8_t&gt;::min)() &lt;= n <a class="code" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and</a> n &lt;= (std::numeric_limits&lt;std::int8_t&gt;::max)())</div>
+<div class="line"><a name="l12408"></a><span class="lineno">12408</span>&#160;        <span class="keywordflow">if</span> ((std::numeric_limits&lt;std::int8_t&gt;::min)() &lt;= <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> <a class="code" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and</a> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &lt;= (std::numeric_limits&lt;std::int8_t&gt;::max)())</div>
 <div class="line"><a name="l12409"></a><span class="lineno">12409</span>&#160;        {</div>
 <div class="line"><a name="l12410"></a><span class="lineno">12410</span>&#160;            <span class="keywordflow">if</span> (add_prefix)</div>
 <div class="line"><a name="l12411"></a><span class="lineno">12411</span>&#160;            {</div>
 <div class="line"><a name="l12412"></a><span class="lineno">12412</span>&#160;                oa-&gt;write_character(<a class="code" href="classnlohmann_1_1detail_1_1binary__writer.html#ab77aa48692bd4e64e4f051ce6aeb6d2d">to_char_type</a>(<span class="charliteral">&#39;i&#39;</span>));  <span class="comment">// int8</span></div>
 <div class="line"><a name="l12413"></a><span class="lineno">12413</span>&#160;            }</div>
-<div class="line"><a name="l12414"></a><span class="lineno">12414</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::int8_t<span class="keyword">&gt;</span>(n));</div>
+<div class="line"><a name="l12414"></a><span class="lineno">12414</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::int8_t<span class="keyword">&gt;</span>(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>));</div>
 <div class="line"><a name="l12415"></a><span class="lineno">12415</span>&#160;        }</div>
-<div class="line"><a name="l12416"></a><span class="lineno">12416</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<span class="keyword">static_cast&lt;</span>std::int64_t<span class="keyword">&gt;</span>((std::numeric_limits&lt;std::uint8_t&gt;::min)()) &lt;= n <a class="code" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and</a> n &lt;= <span class="keyword">static_cast&lt;</span>std::int64_t<span class="keyword">&gt;</span>((std::numeric_limits&lt;std::uint8_t&gt;::max)()))</div>
+<div class="line"><a name="l12416"></a><span class="lineno">12416</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<span class="keyword">static_cast&lt;</span>std::int64_t<span class="keyword">&gt;</span>((std::numeric_limits&lt;std::uint8_t&gt;::min)()) &lt;= <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> <a class="code" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and</a> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &lt;= <span class="keyword">static_cast&lt;</span>std::int64_t<span class="keyword">&gt;</span>((std::numeric_limits&lt;std::uint8_t&gt;::max)()))</div>
 <div class="line"><a name="l12417"></a><span class="lineno">12417</span>&#160;        {</div>
 <div class="line"><a name="l12418"></a><span class="lineno">12418</span>&#160;            <span class="keywordflow">if</span> (add_prefix)</div>
 <div class="line"><a name="l12419"></a><span class="lineno">12419</span>&#160;            {</div>
 <div class="line"><a name="l12420"></a><span class="lineno">12420</span>&#160;                oa-&gt;write_character(<a class="code" href="classnlohmann_1_1detail_1_1binary__writer.html#ab77aa48692bd4e64e4f051ce6aeb6d2d">to_char_type</a>(<span class="charliteral">&#39;U&#39;</span>));  <span class="comment">// uint8</span></div>
 <div class="line"><a name="l12421"></a><span class="lineno">12421</span>&#160;            }</div>
-<div class="line"><a name="l12422"></a><span class="lineno">12422</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::uint8_t<span class="keyword">&gt;</span>(n));</div>
+<div class="line"><a name="l12422"></a><span class="lineno">12422</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::uint8_t<span class="keyword">&gt;</span>(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>));</div>
 <div class="line"><a name="l12423"></a><span class="lineno">12423</span>&#160;        }</div>
-<div class="line"><a name="l12424"></a><span class="lineno">12424</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> ((std::numeric_limits&lt;std::int16_t&gt;::min)() &lt;= n <a class="code" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and</a> n &lt;= (std::numeric_limits&lt;std::int16_t&gt;::max)())</div>
+<div class="line"><a name="l12424"></a><span class="lineno">12424</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> ((std::numeric_limits&lt;std::int16_t&gt;::min)() &lt;= <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> <a class="code" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and</a> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &lt;= (std::numeric_limits&lt;std::int16_t&gt;::max)())</div>
 <div class="line"><a name="l12425"></a><span class="lineno">12425</span>&#160;        {</div>
 <div class="line"><a name="l12426"></a><span class="lineno">12426</span>&#160;            <span class="keywordflow">if</span> (add_prefix)</div>
 <div class="line"><a name="l12427"></a><span class="lineno">12427</span>&#160;            {</div>
 <div class="line"><a name="l12428"></a><span class="lineno">12428</span>&#160;                oa-&gt;write_character(<a class="code" href="classnlohmann_1_1detail_1_1binary__writer.html#ab77aa48692bd4e64e4f051ce6aeb6d2d">to_char_type</a>(<span class="charliteral">&#39;I&#39;</span>));  <span class="comment">// int16</span></div>
 <div class="line"><a name="l12429"></a><span class="lineno">12429</span>&#160;            }</div>
-<div class="line"><a name="l12430"></a><span class="lineno">12430</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::int16_t<span class="keyword">&gt;</span>(n));</div>
+<div class="line"><a name="l12430"></a><span class="lineno">12430</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::int16_t<span class="keyword">&gt;</span>(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>));</div>
 <div class="line"><a name="l12431"></a><span class="lineno">12431</span>&#160;        }</div>
-<div class="line"><a name="l12432"></a><span class="lineno">12432</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> ((std::numeric_limits&lt;std::int32_t&gt;::min)() &lt;= n <a class="code" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and</a> n &lt;= (std::numeric_limits&lt;std::int32_t&gt;::max)())</div>
+<div class="line"><a name="l12432"></a><span class="lineno">12432</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> ((std::numeric_limits&lt;std::int32_t&gt;::min)() &lt;= <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> <a class="code" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and</a> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &lt;= (std::numeric_limits&lt;std::int32_t&gt;::max)())</div>
 <div class="line"><a name="l12433"></a><span class="lineno">12433</span>&#160;        {</div>
 <div class="line"><a name="l12434"></a><span class="lineno">12434</span>&#160;            <span class="keywordflow">if</span> (add_prefix)</div>
 <div class="line"><a name="l12435"></a><span class="lineno">12435</span>&#160;            {</div>
 <div class="line"><a name="l12436"></a><span class="lineno">12436</span>&#160;                oa-&gt;write_character(<a class="code" href="classnlohmann_1_1detail_1_1binary__writer.html#ab77aa48692bd4e64e4f051ce6aeb6d2d">to_char_type</a>(<span class="charliteral">&#39;l&#39;</span>));  <span class="comment">// int32</span></div>
 <div class="line"><a name="l12437"></a><span class="lineno">12437</span>&#160;            }</div>
-<div class="line"><a name="l12438"></a><span class="lineno">12438</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::int32_t<span class="keyword">&gt;</span>(n));</div>
+<div class="line"><a name="l12438"></a><span class="lineno">12438</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::int32_t<span class="keyword">&gt;</span>(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>));</div>
 <div class="line"><a name="l12439"></a><span class="lineno">12439</span>&#160;        }</div>
-<div class="line"><a name="l12440"></a><span class="lineno">12440</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> ((std::numeric_limits&lt;std::int64_t&gt;::min)() &lt;= n <a class="code" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and</a> n &lt;= (std::numeric_limits&lt;std::int64_t&gt;::max)())</div>
+<div class="line"><a name="l12440"></a><span class="lineno">12440</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> ((std::numeric_limits&lt;std::int64_t&gt;::min)() &lt;= <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> <a class="code" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and</a> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &lt;= (std::numeric_limits&lt;std::int64_t&gt;::max)())</div>
 <div class="line"><a name="l12441"></a><span class="lineno">12441</span>&#160;        {</div>
 <div class="line"><a name="l12442"></a><span class="lineno">12442</span>&#160;            <span class="keywordflow">if</span> (add_prefix)</div>
 <div class="line"><a name="l12443"></a><span class="lineno">12443</span>&#160;            {</div>
 <div class="line"><a name="l12444"></a><span class="lineno">12444</span>&#160;                oa-&gt;write_character(<a class="code" href="classnlohmann_1_1detail_1_1binary__writer.html#ab77aa48692bd4e64e4f051ce6aeb6d2d">to_char_type</a>(<span class="charliteral">&#39;L&#39;</span>));  <span class="comment">// int64</span></div>
 <div class="line"><a name="l12445"></a><span class="lineno">12445</span>&#160;            }</div>
-<div class="line"><a name="l12446"></a><span class="lineno">12446</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::int64_t<span class="keyword">&gt;</span>(n));</div>
+<div class="line"><a name="l12446"></a><span class="lineno">12446</span>&#160;            write_number(<span class="keyword">static_cast&lt;</span>std::int64_t<span class="keyword">&gt;</span>(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>));</div>
 <div class="line"><a name="l12447"></a><span class="lineno">12447</span>&#160;        }</div>
 <div class="line"><a name="l12448"></a><span class="lineno">12448</span>&#160;        <span class="comment">// LCOV_EXCL_START</span></div>
 <div class="line"><a name="l12449"></a><span class="lineno">12449</span>&#160;        <span class="keywordflow">else</span></div>
 <div class="line"><a name="l12450"></a><span class="lineno">12450</span>&#160;        {</div>
-<div class="line"><a name="l12451"></a><span class="lineno">12451</span>&#160;            <a class="code" href="json_8hpp.html#a6c274f6db2e65c1b66c7d41b06ad690f">JSON_THROW</a>(<a class="code" href="classnlohmann_1_1detail_1_1out__of__range.html#a3f6d82a6f967c4728a1ec735a7867073">out_of_range::create</a>(407, <span class="stringliteral">&quot;integer number &quot;</span> + <a class="code" href="namespacenlohmann.html#ad675d1c22f5240b2b3065c241b204477">std::to_string</a>(n) + <span class="stringliteral">&quot; cannot be represented by UBJSON as it does not fit int64&quot;</span>));</div>
+<div class="line"><a name="l12451"></a><span class="lineno">12451</span>&#160;            <a class="code" href="json_8hpp.html#a6c274f6db2e65c1b66c7d41b06ad690f">JSON_THROW</a>(<a class="code" href="classnlohmann_1_1detail_1_1out__of__range.html#a3f6d82a6f967c4728a1ec735a7867073">out_of_range::create</a>(407, <span class="stringliteral">&quot;integer number &quot;</span> + <a class="code" href="namespacenlohmann.html#ad675d1c22f5240b2b3065c241b204477">std::to_string</a>(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>) + <span class="stringliteral">&quot; cannot be represented by UBJSON as it does not fit int64&quot;</span>));</div>
 <div class="line"><a name="l12452"></a><span class="lineno">12452</span>&#160;        }</div>
 <div class="line"><a name="l12453"></a><span class="lineno">12453</span>&#160;        <span class="comment">// LCOV_EXCL_STOP</span></div>
 <div class="line"><a name="l12454"></a><span class="lineno">12454</span>&#160;    }</div>
@@ -11065,11 +11065,11 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div class="line"><a name="l12559"></a><span class="lineno">12559</span>&#160;<span class="comment">          endian) and therefore need reordering on little endian systems.</span></div>
 <div class="line"><a name="l12560"></a><span class="lineno">12560</span>&#160;<span class="comment">    */</span></div>
 <div class="line"><a name="l12561"></a><span class="lineno">12561</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> NumberType, <span class="keywordtype">bool</span> OutputIsLittleEndian = false&gt;</div>
-<div class="line"><a name="l12562"></a><span class="lineno">12562</span>&#160;    <span class="keywordtype">void</span> write_number(<span class="keyword">const</span> NumberType n)</div>
+<div class="line"><a name="l12562"></a><span class="lineno">12562</span>&#160;    <span class="keywordtype">void</span> write_number(<span class="keyword">const</span> NumberType <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>)</div>
 <div class="line"><a name="l12563"></a><span class="lineno">12563</span>&#160;    {</div>
 <div class="line"><a name="l12564"></a><span class="lineno">12564</span>&#160;        <span class="comment">// step 1: write number to array of length NumberType</span></div>
 <div class="line"><a name="l12565"></a><span class="lineno">12565</span>&#160;        std::array&lt;CharType, <span class="keyword">sizeof</span>(NumberType)&gt; vec;</div>
-<div class="line"><a name="l12566"></a><span class="lineno">12566</span>&#160;        std::memcpy(vec.data(), &amp;n, <span class="keyword">sizeof</span>(NumberType));</div>
+<div class="line"><a name="l12566"></a><span class="lineno">12566</span>&#160;        std::memcpy(vec.data(), &amp;<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>, <span class="keyword">sizeof</span>(NumberType));</div>
 <div class="line"><a name="l12567"></a><span class="lineno">12567</span>&#160; </div>
 <div class="line"><a name="l12568"></a><span class="lineno">12568</span>&#160;        <span class="comment">// step 2: write array to output (with possible reordering)</span></div>
 <div class="line"><a name="l12569"></a><span class="lineno">12569</span>&#160;        <span class="keywordflow">if</span> (is_little_endian != OutputIsLittleEndian)</div>
@@ -11583,51 +11583,51 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div class="line"><a name="l13127"></a><span class="lineno">13127</span>&#160;    <span class="keywordflow">return</span> cached;</div>
 <div class="line"><a name="l13128"></a><span class="lineno">13128</span>&#160;}</div>
 <div class="line"><a name="l13129"></a><span class="lineno">13129</span>&#160; </div>
-<div class="line"><a name="l13134"></a><span class="lineno"><a class="line" href="namespacenlohmann_1_1detail_1_1dtoa__impl.html#a36ded358763b5dbcea9867660fbe4e28">13134</a></span>&#160;<span class="keyword">inline</span> <span class="keywordtype">int</span> <a class="code" href="namespacenlohmann_1_1detail_1_1dtoa__impl.html#a36ded358763b5dbcea9867660fbe4e28">find_largest_pow10</a>(<span class="keyword">const</span> std::uint32_t n, std::uint32_t&amp; pow10)</div>
+<div class="line"><a name="l13134"></a><span class="lineno"><a class="line" href="namespacenlohmann_1_1detail_1_1dtoa__impl.html#a36ded358763b5dbcea9867660fbe4e28">13134</a></span>&#160;<span class="keyword">inline</span> <span class="keywordtype">int</span> <a class="code" href="namespacenlohmann_1_1detail_1_1dtoa__impl.html#a36ded358763b5dbcea9867660fbe4e28">find_largest_pow10</a>(<span class="keyword">const</span> std::uint32_t <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>, std::uint32_t&amp; pow10)</div>
 <div class="line"><a name="l13135"></a><span class="lineno">13135</span>&#160;{</div>
 <div class="line"><a name="l13136"></a><span class="lineno">13136</span>&#160;    <span class="comment">// LCOV_EXCL_START</span></div>
-<div class="line"><a name="l13137"></a><span class="lineno">13137</span>&#160;    <span class="keywordflow">if</span> (n &gt;= 1000000000)</div>
+<div class="line"><a name="l13137"></a><span class="lineno">13137</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &gt;= 1000000000)</div>
 <div class="line"><a name="l13138"></a><span class="lineno">13138</span>&#160;    {</div>
 <div class="line"><a name="l13139"></a><span class="lineno">13139</span>&#160;        pow10 = 1000000000;</div>
 <div class="line"><a name="l13140"></a><span class="lineno">13140</span>&#160;        <span class="keywordflow">return</span> 10;</div>
 <div class="line"><a name="l13141"></a><span class="lineno">13141</span>&#160;    }</div>
 <div class="line"><a name="l13142"></a><span class="lineno">13142</span>&#160;    <span class="comment">// LCOV_EXCL_STOP</span></div>
-<div class="line"><a name="l13143"></a><span class="lineno">13143</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (n &gt;= 100000000)</div>
+<div class="line"><a name="l13143"></a><span class="lineno">13143</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &gt;= 100000000)</div>
 <div class="line"><a name="l13144"></a><span class="lineno">13144</span>&#160;    {</div>
 <div class="line"><a name="l13145"></a><span class="lineno">13145</span>&#160;        pow10 = 100000000;</div>
 <div class="line"><a name="l13146"></a><span class="lineno">13146</span>&#160;        <span class="keywordflow">return</span>  9;</div>
 <div class="line"><a name="l13147"></a><span class="lineno">13147</span>&#160;    }</div>
-<div class="line"><a name="l13148"></a><span class="lineno">13148</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (n &gt;= 10000000)</div>
+<div class="line"><a name="l13148"></a><span class="lineno">13148</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &gt;= 10000000)</div>
 <div class="line"><a name="l13149"></a><span class="lineno">13149</span>&#160;    {</div>
 <div class="line"><a name="l13150"></a><span class="lineno">13150</span>&#160;        pow10 = 10000000;</div>
 <div class="line"><a name="l13151"></a><span class="lineno">13151</span>&#160;        <span class="keywordflow">return</span>  8;</div>
 <div class="line"><a name="l13152"></a><span class="lineno">13152</span>&#160;    }</div>
-<div class="line"><a name="l13153"></a><span class="lineno">13153</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (n &gt;= 1000000)</div>
+<div class="line"><a name="l13153"></a><span class="lineno">13153</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &gt;= 1000000)</div>
 <div class="line"><a name="l13154"></a><span class="lineno">13154</span>&#160;    {</div>
 <div class="line"><a name="l13155"></a><span class="lineno">13155</span>&#160;        pow10 = 1000000;</div>
 <div class="line"><a name="l13156"></a><span class="lineno">13156</span>&#160;        <span class="keywordflow">return</span>  7;</div>
 <div class="line"><a name="l13157"></a><span class="lineno">13157</span>&#160;    }</div>
-<div class="line"><a name="l13158"></a><span class="lineno">13158</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (n &gt;= 100000)</div>
+<div class="line"><a name="l13158"></a><span class="lineno">13158</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &gt;= 100000)</div>
 <div class="line"><a name="l13159"></a><span class="lineno">13159</span>&#160;    {</div>
 <div class="line"><a name="l13160"></a><span class="lineno">13160</span>&#160;        pow10 = 100000;</div>
 <div class="line"><a name="l13161"></a><span class="lineno">13161</span>&#160;        <span class="keywordflow">return</span>  6;</div>
 <div class="line"><a name="l13162"></a><span class="lineno">13162</span>&#160;    }</div>
-<div class="line"><a name="l13163"></a><span class="lineno">13163</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (n &gt;= 10000)</div>
+<div class="line"><a name="l13163"></a><span class="lineno">13163</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &gt;= 10000)</div>
 <div class="line"><a name="l13164"></a><span class="lineno">13164</span>&#160;    {</div>
 <div class="line"><a name="l13165"></a><span class="lineno">13165</span>&#160;        pow10 = 10000;</div>
 <div class="line"><a name="l13166"></a><span class="lineno">13166</span>&#160;        <span class="keywordflow">return</span>  5;</div>
 <div class="line"><a name="l13167"></a><span class="lineno">13167</span>&#160;    }</div>
-<div class="line"><a name="l13168"></a><span class="lineno">13168</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (n &gt;= 1000)</div>
+<div class="line"><a name="l13168"></a><span class="lineno">13168</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &gt;= 1000)</div>
 <div class="line"><a name="l13169"></a><span class="lineno">13169</span>&#160;    {</div>
 <div class="line"><a name="l13170"></a><span class="lineno">13170</span>&#160;        pow10 = 1000;</div>
 <div class="line"><a name="l13171"></a><span class="lineno">13171</span>&#160;        <span class="keywordflow">return</span>  4;</div>
 <div class="line"><a name="l13172"></a><span class="lineno">13172</span>&#160;    }</div>
-<div class="line"><a name="l13173"></a><span class="lineno">13173</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (n &gt;= 100)</div>
+<div class="line"><a name="l13173"></a><span class="lineno">13173</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &gt;= 100)</div>
 <div class="line"><a name="l13174"></a><span class="lineno">13174</span>&#160;    {</div>
 <div class="line"><a name="l13175"></a><span class="lineno">13175</span>&#160;        pow10 = 100;</div>
 <div class="line"><a name="l13176"></a><span class="lineno">13176</span>&#160;        <span class="keywordflow">return</span>  3;</div>
 <div class="line"><a name="l13177"></a><span class="lineno">13177</span>&#160;    }</div>
-<div class="line"><a name="l13178"></a><span class="lineno">13178</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (n &gt;= 10)</div>
+<div class="line"><a name="l13178"></a><span class="lineno">13178</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &gt;= 10)</div>
 <div class="line"><a name="l13179"></a><span class="lineno">13179</span>&#160;    {</div>
 <div class="line"><a name="l13180"></a><span class="lineno">13180</span>&#160;        pow10 = 10;</div>
 <div class="line"><a name="l13181"></a><span class="lineno">13181</span>&#160;        <span class="keywordflow">return</span>  2;</div>
@@ -11739,8 +11739,8 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div class="line"><a name="l13291"></a><span class="lineno">13291</span>&#160;    <span class="comment">//</span></div>
 <div class="line"><a name="l13292"></a><span class="lineno">13292</span>&#160;    <span class="comment">//      rest * 2^e = (d[n-1]...d[0] * 2^-e + p2) * 2^e &lt;= delta * 2^e</span></div>
 <div class="line"><a name="l13293"></a><span class="lineno">13293</span>&#160; </div>
-<div class="line"><a name="l13294"></a><span class="lineno">13294</span>&#160;    <span class="keywordtype">int</span> n = k;</div>
-<div class="line"><a name="l13295"></a><span class="lineno">13295</span>&#160;    <span class="keywordflow">while</span> (n &gt; 0)</div>
+<div class="line"><a name="l13294"></a><span class="lineno">13294</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> = k;</div>
+<div class="line"><a name="l13295"></a><span class="lineno">13295</span>&#160;    <span class="keywordflow">while</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &gt; 0)</div>
 <div class="line"><a name="l13296"></a><span class="lineno">13296</span>&#160;    {</div>
 <div class="line"><a name="l13297"></a><span class="lineno">13297</span>&#160;        <span class="comment">// Invariants:</span></div>
 <div class="line"><a name="l13298"></a><span class="lineno">13298</span>&#160;        <span class="comment">//      M+ = buffer * 10^n + (p1 + p2 * 2^e)    (buffer = 0 for n = k)</span></div>
@@ -11758,7 +11758,7 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div class="line"><a name="l13310"></a><span class="lineno">13310</span>&#160;        <span class="comment">//      M+ = buffer * 10^(n-1) + (r + p2 * 2^e)</span></div>
 <div class="line"><a name="l13311"></a><span class="lineno">13311</span>&#160;        <span class="comment">//</span></div>
 <div class="line"><a name="l13312"></a><span class="lineno">13312</span>&#160;        p1 = r;</div>
-<div class="line"><a name="l13313"></a><span class="lineno">13313</span>&#160;        n--;</div>
+<div class="line"><a name="l13313"></a><span class="lineno">13313</span>&#160;        <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>--;</div>
 <div class="line"><a name="l13314"></a><span class="lineno">13314</span>&#160;        <span class="comment">//</span></div>
 <div class="line"><a name="l13315"></a><span class="lineno">13315</span>&#160;        <span class="comment">//      M+ = buffer * 10^n + (p1 + p2 * 2^e)</span></div>
 <div class="line"><a name="l13316"></a><span class="lineno">13316</span>&#160;        <span class="comment">//      pow10 = 10^n</span></div>
@@ -11777,7 +11777,7 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div class="line"><a name="l13329"></a><span class="lineno">13329</span>&#160;        {</div>
 <div class="line"><a name="l13330"></a><span class="lineno">13330</span>&#160;            <span class="comment">// V = buffer * 10^n, with M- &lt;= V &lt;= M+.</span></div>
 <div class="line"><a name="l13331"></a><span class="lineno">13331</span>&#160; </div>
-<div class="line"><a name="l13332"></a><span class="lineno">13332</span>&#160;            decimal_exponent += n;</div>
+<div class="line"><a name="l13332"></a><span class="lineno">13332</span>&#160;            decimal_exponent += <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>;</div>
 <div class="line"><a name="l13333"></a><span class="lineno">13333</span>&#160; </div>
 <div class="line"><a name="l13334"></a><span class="lineno">13334</span>&#160;            <span class="comment">// We may now just stop. But instead look if the buffer could be</span></div>
 <div class="line"><a name="l13335"></a><span class="lineno">13335</span>&#160;            <span class="comment">// decremented to bring V closer to w.</span></div>
@@ -12052,46 +12052,46 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div class="line"><a name="l13628"></a><span class="lineno">13628</span>&#160;    assert(max_exp &gt; 0);</div>
 <div class="line"><a name="l13629"></a><span class="lineno">13629</span>&#160; </div>
 <div class="line"><a name="l13630"></a><span class="lineno">13630</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">int</span> k = len;</div>
-<div class="line"><a name="l13631"></a><span class="lineno">13631</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">int</span> n = len + decimal_exponent;</div>
+<div class="line"><a name="l13631"></a><span class="lineno">13631</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> = len + decimal_exponent;</div>
 <div class="line"><a name="l13632"></a><span class="lineno">13632</span>&#160; </div>
 <div class="line"><a name="l13633"></a><span class="lineno">13633</span>&#160;    <span class="comment">// v = buf * 10^(n-k)</span></div>
 <div class="line"><a name="l13634"></a><span class="lineno">13634</span>&#160;    <span class="comment">// k is the length of the buffer (number of decimal digits)</span></div>
 <div class="line"><a name="l13635"></a><span class="lineno">13635</span>&#160;    <span class="comment">// n is the position of the decimal point relative to the start of the buffer.</span></div>
 <div class="line"><a name="l13636"></a><span class="lineno">13636</span>&#160; </div>
-<div class="line"><a name="l13637"></a><span class="lineno">13637</span>&#160;    <span class="keywordflow">if</span> (k &lt;= n <a class="code" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and</a> n &lt;= max_exp)</div>
+<div class="line"><a name="l13637"></a><span class="lineno">13637</span>&#160;    <span class="keywordflow">if</span> (k &lt;= <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> <a class="code" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and</a> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &lt;= max_exp)</div>
 <div class="line"><a name="l13638"></a><span class="lineno">13638</span>&#160;    {</div>
 <div class="line"><a name="l13639"></a><span class="lineno">13639</span>&#160;        <span class="comment">// digits[000]</span></div>
 <div class="line"><a name="l13640"></a><span class="lineno">13640</span>&#160;        <span class="comment">// len &lt;= max_exp + 2</span></div>
 <div class="line"><a name="l13641"></a><span class="lineno">13641</span>&#160; </div>
-<div class="line"><a name="l13642"></a><span class="lineno">13642</span>&#160;        std::memset(buf + k, <span class="charliteral">&#39;0&#39;</span>, <span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(n - k));</div>
+<div class="line"><a name="l13642"></a><span class="lineno">13642</span>&#160;        std::memset(buf + k, <span class="charliteral">&#39;0&#39;</span>, <span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> - k));</div>
 <div class="line"><a name="l13643"></a><span class="lineno">13643</span>&#160;        <span class="comment">// Make it look like a floating-point number (#362, #378)</span></div>
-<div class="line"><a name="l13644"></a><span class="lineno">13644</span>&#160;        buf[n + 0] = <span class="charliteral">&#39;.&#39;</span>;</div>
-<div class="line"><a name="l13645"></a><span class="lineno">13645</span>&#160;        buf[n + 1] = <span class="charliteral">&#39;0&#39;</span>;</div>
-<div class="line"><a name="l13646"></a><span class="lineno">13646</span>&#160;        <span class="keywordflow">return</span> buf + (n + 2);</div>
+<div class="line"><a name="l13644"></a><span class="lineno">13644</span>&#160;        buf[<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> + 0] = <span class="charliteral">&#39;.&#39;</span>;</div>
+<div class="line"><a name="l13645"></a><span class="lineno">13645</span>&#160;        buf[<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> + 1] = <span class="charliteral">&#39;0&#39;</span>;</div>
+<div class="line"><a name="l13646"></a><span class="lineno">13646</span>&#160;        <span class="keywordflow">return</span> buf + (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> + 2);</div>
 <div class="line"><a name="l13647"></a><span class="lineno">13647</span>&#160;    }</div>
 <div class="line"><a name="l13648"></a><span class="lineno">13648</span>&#160; </div>
-<div class="line"><a name="l13649"></a><span class="lineno">13649</span>&#160;    <span class="keywordflow">if</span> (0 &lt; n <a class="code" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and</a> n &lt;= max_exp)</div>
+<div class="line"><a name="l13649"></a><span class="lineno">13649</span>&#160;    <span class="keywordflow">if</span> (0 &lt; <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> <a class="code" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and</a> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &lt;= max_exp)</div>
 <div class="line"><a name="l13650"></a><span class="lineno">13650</span>&#160;    {</div>
 <div class="line"><a name="l13651"></a><span class="lineno">13651</span>&#160;        <span class="comment">// dig.its</span></div>
 <div class="line"><a name="l13652"></a><span class="lineno">13652</span>&#160;        <span class="comment">// len &lt;= max_digits10 + 1</span></div>
 <div class="line"><a name="l13653"></a><span class="lineno">13653</span>&#160; </div>
-<div class="line"><a name="l13654"></a><span class="lineno">13654</span>&#160;        assert(k &gt; n);</div>
+<div class="line"><a name="l13654"></a><span class="lineno">13654</span>&#160;        assert(k &gt; <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>);</div>
 <div class="line"><a name="l13655"></a><span class="lineno">13655</span>&#160; </div>
-<div class="line"><a name="l13656"></a><span class="lineno">13656</span>&#160;        std::memmove(buf + (n + 1), buf + n, <span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(k - n));</div>
-<div class="line"><a name="l13657"></a><span class="lineno">13657</span>&#160;        buf[n] = <span class="charliteral">&#39;.&#39;</span>;</div>
+<div class="line"><a name="l13656"></a><span class="lineno">13656</span>&#160;        std::memmove(buf + (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> + 1), buf + <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>, <span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(k - <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>));</div>
+<div class="line"><a name="l13657"></a><span class="lineno">13657</span>&#160;        buf[<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>] = <span class="charliteral">&#39;.&#39;</span>;</div>
 <div class="line"><a name="l13658"></a><span class="lineno">13658</span>&#160;        <span class="keywordflow">return</span> buf + (k + 1);</div>
 <div class="line"><a name="l13659"></a><span class="lineno">13659</span>&#160;    }</div>
 <div class="line"><a name="l13660"></a><span class="lineno">13660</span>&#160; </div>
-<div class="line"><a name="l13661"></a><span class="lineno">13661</span>&#160;    <span class="keywordflow">if</span> (min_exp &lt; n <a class="code" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and</a> n &lt;= 0)</div>
+<div class="line"><a name="l13661"></a><span class="lineno">13661</span>&#160;    <span class="keywordflow">if</span> (min_exp &lt; <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> <a class="code" href="_apache_01_license_8txt.html#a44310e8a4338596c818c9c8cc6af8d1e">and</a> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> &lt;= 0)</div>
 <div class="line"><a name="l13662"></a><span class="lineno">13662</span>&#160;    {</div>
 <div class="line"><a name="l13663"></a><span class="lineno">13663</span>&#160;        <span class="comment">// 0.[000]digits</span></div>
 <div class="line"><a name="l13664"></a><span class="lineno">13664</span>&#160;        <span class="comment">// len &lt;= 2 + (-min_exp - 1) + max_digits10</span></div>
 <div class="line"><a name="l13665"></a><span class="lineno">13665</span>&#160; </div>
-<div class="line"><a name="l13666"></a><span class="lineno">13666</span>&#160;        std::memmove(buf + (2 + -n), buf, <span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(k));</div>
+<div class="line"><a name="l13666"></a><span class="lineno">13666</span>&#160;        std::memmove(buf + (2 + -<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>), buf, <span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(k));</div>
 <div class="line"><a name="l13667"></a><span class="lineno">13667</span>&#160;        buf[0] = <span class="charliteral">&#39;0&#39;</span>;</div>
 <div class="line"><a name="l13668"></a><span class="lineno">13668</span>&#160;        buf[1] = <span class="charliteral">&#39;.&#39;</span>;</div>
-<div class="line"><a name="l13669"></a><span class="lineno">13669</span>&#160;        std::memset(buf + 2, <span class="charliteral">&#39;0&#39;</span>, <span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(-n));</div>
-<div class="line"><a name="l13670"></a><span class="lineno">13670</span>&#160;        <span class="keywordflow">return</span> buf + (2 + (-n) + k);</div>
+<div class="line"><a name="l13669"></a><span class="lineno">13669</span>&#160;        std::memset(buf + 2, <span class="charliteral">&#39;0&#39;</span>, <span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(-<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>));</div>
+<div class="line"><a name="l13670"></a><span class="lineno">13670</span>&#160;        <span class="keywordflow">return</span> buf + (2 + (-<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>) + k);</div>
 <div class="line"><a name="l13671"></a><span class="lineno">13671</span>&#160;    }</div>
 <div class="line"><a name="l13672"></a><span class="lineno">13672</span>&#160; </div>
 <div class="line"><a name="l13673"></a><span class="lineno">13673</span>&#160;    <span class="keywordflow">if</span> (k == 1)</div>
@@ -12112,7 +12112,7 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div class="line"><a name="l13688"></a><span class="lineno">13688</span>&#160;    }</div>
 <div class="line"><a name="l13689"></a><span class="lineno">13689</span>&#160; </div>
 <div class="line"><a name="l13690"></a><span class="lineno">13690</span>&#160;    *buf++ = <span class="charliteral">&#39;e&#39;</span>;</div>
-<div class="line"><a name="l13691"></a><span class="lineno">13691</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespacenlohmann_1_1detail_1_1dtoa__impl.html#a84733638b826eda624488f5fa4521e0b">append_exponent</a>(buf, n - 1);</div>
+<div class="line"><a name="l13691"></a><span class="lineno">13691</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespacenlohmann_1_1detail_1_1dtoa__impl.html#a84733638b826eda624488f5fa4521e0b">append_exponent</a>(buf, <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> - 1);</div>
 <div class="line"><a name="l13692"></a><span class="lineno">13692</span>&#160;}</div>
 <div class="line"><a name="l13693"></a><span class="lineno">13693</span>&#160; </div>
 <div class="line"><a name="l13694"></a><span class="lineno">13694</span>&#160;} <span class="comment">// namespace dtoa_impl</span></div>
@@ -16189,15 +16189,15 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div class="line"><a name="l22682"></a><span class="lineno">22682</span>&#160;} <span class="comment">// namespace std</span></div>
 <div class="line"><a name="l22683"></a><span class="lineno">22683</span>&#160; </div>
 <div class="line"><a name="l22697"></a><span class="lineno">22697</span>&#160;<a class="code" href="json_8hpp.html#a5338981b5ad9027c9e54b1c5597f4344">JSON_HEDLEY_NON_NULL</a>(1)</div>
-<div class="line"><a name="l22698"></a><span class="lineno"><a class="line" href="json_8hpp.html#ae90d59ab420a183cd5fb8588bdc95e06">22698</a></span>&#160;inline <a class="code" href="namespacenlohmann.html">nlohmann</a>::<a class="code" href="namespacenlohmann.html#a2bfd99e845a2e5cd90aeaf1b1431f474">json</a> operator &quot;&quot; _json(const <span class="keywordtype">char</span>* s, <a class="code" href="namespacestd.html">std</a>::<span class="keywordtype">size_t</span> n)</div>
+<div class="line"><a name="l22698"></a><span class="lineno"><a class="line" href="json_8hpp.html#ae90d59ab420a183cd5fb8588bdc95e06">22698</a></span>&#160;inline <a class="code" href="namespacenlohmann.html">nlohmann</a>::<a class="code" href="namespacenlohmann.html#a2bfd99e845a2e5cd90aeaf1b1431f474">json</a> operator &quot;&quot; _json(const <span class="keywordtype">char</span>* s, <a class="code" href="namespacestd.html">std</a>::<span class="keywordtype">size_t</span> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>)</div>
 <div class="line"><a name="l22699"></a><span class="lineno">22699</span>&#160;{</div>
-<div class="line"><a name="l22700"></a><span class="lineno">22700</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classnlohmann_1_1basic__json.html#a5a0339361f3282cb8fd2f9ede6e17d72">nlohmann::json::parse</a>(s, s + n);</div>
+<div class="line"><a name="l22700"></a><span class="lineno">22700</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classnlohmann_1_1basic__json.html#a5a0339361f3282cb8fd2f9ede6e17d72">nlohmann::json::parse</a>(s, s + <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>);</div>
 <div class="line"><a name="l22701"></a><span class="lineno">22701</span>&#160;}</div>
 <div class="line"><a name="l22702"></a><span class="lineno">22702</span>&#160; </div>
 <div class="line"><a name="l22716"></a><span class="lineno">22716</span>&#160;<a class="code" href="json_8hpp.html#a5338981b5ad9027c9e54b1c5597f4344">JSON_HEDLEY_NON_NULL</a>(1)</div>
-<div class="line"><a name="l22717"></a><span class="lineno"><a class="line" href="json_8hpp.html#a3e528a99a7882f8d0b97375bb6081d10">22717</a></span>&#160;inline <a class="code" href="namespacenlohmann.html">nlohmann</a>::<a class="code" href="namespacenlohmann.html#a2bfd99e845a2e5cd90aeaf1b1431f474">json</a>::json_pointer operator &quot;&quot; _json_pointer(const <span class="keywordtype">char</span>* s, <a class="code" href="namespacestd.html">std</a>::<span class="keywordtype">size_t</span> n)</div>
+<div class="line"><a name="l22717"></a><span class="lineno"><a class="line" href="json_8hpp.html#a3e528a99a7882f8d0b97375bb6081d10">22717</a></span>&#160;inline <a class="code" href="namespacenlohmann.html">nlohmann</a>::<a class="code" href="namespacenlohmann.html#a2bfd99e845a2e5cd90aeaf1b1431f474">json</a>::json_pointer operator &quot;&quot; _json_pointer(const <span class="keywordtype">char</span>* s, <a class="code" href="namespacestd.html">std</a>::<span class="keywordtype">size_t</span> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>)</div>
 <div class="line"><a name="l22718"></a><span class="lineno">22718</span>&#160;{</div>
-<div class="line"><a name="l22719"></a><span class="lineno">22719</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classnlohmann_1_1basic__json.html#a6886a5001f5b449ad316101a311ce536">nlohmann::json::json_pointer</a>(std::string(s, n));</div>
+<div class="line"><a name="l22719"></a><span class="lineno">22719</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classnlohmann_1_1basic__json.html#a6886a5001f5b449ad316101a311ce536">nlohmann::json::json_pointer</a>(std::string(s, <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>));</div>
 <div class="line"><a name="l22720"></a><span class="lineno">22720</span>&#160;}</div>
 <div class="line"><a name="l22721"></a><span class="lineno">22721</span>&#160; </div>
 <div class="line"><a name="l22722"></a><span class="lineno">22722</span>&#160;<span class="comment">// #include &lt;nlohmann/detail/macro_unscope.hpp&gt;</span></div>
@@ -16465,6 +16465,7 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div class="ttc" id="astructnlohmann_1_1detail_1_1position__t_html"><div class="ttname"><a href="structnlohmann_1_1detail_1_1position__t.html">nlohmann::detail::position_t</a></div><div class="ttdoc">struct to capture the start position of the current token</div><div class="ttdef"><b>Definition:</b> <a href="json_8hpp_source.html#l00089">json.hpp:89</a></div></div>
 <div class="ttc" id="aclassnlohmann_1_1detail_1_1serializer_html_a95460ebd1a535a543e5a0ec52e00f48b"><div class="ttname"><a href="classnlohmann_1_1detail_1_1serializer.html#a95460ebd1a535a543e5a0ec52e00f48b">nlohmann::detail::serializer::dump</a></div><div class="ttdeci">void dump(const BasicJsonType &amp;val, const bool pretty_print, const bool ensure_ascii, const unsigned int indent_step, const unsigned int current_indent=0)</div><div class="ttdoc">internal implementation of the serialization function</div><div class="ttdef"><b>Definition:</b> <a href="json_8hpp_source.html#l13837">json.hpp:13837</a></div></div>
 <div class="ttc" id="astructnlohmann_1_1detail_1_1dtoa__impl_1_1boundaries_html_ad1668c60aeade5f2557fafed8b8aee1a"><div class="ttname"><a href="structnlohmann_1_1detail_1_1dtoa__impl_1_1boundaries.html#ad1668c60aeade5f2557fafed8b8aee1a">nlohmann::detail::dtoa_impl::boundaries::w</a></div><div class="ttdeci">diyfp w</div><div class="ttdef"><b>Definition:</b> <a href="json_8hpp_source.html#l12819">json.hpp:12819</a></div></div>
+<div class="ttc" id="anamespacetest_html_a20eb10bb18ee6ccd51fa4518f9fd6090"><div class="ttname"><a href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">test.n</a></div><div class="ttdeci">n</div><div class="ttdef"><b>Definition:</b> <a href="test_8py_source.html#l00008">test.py:8</a></div></div>
 <div class="ttc" id="astructnlohmann_1_1detail_1_1is__complete__type_html"><div class="ttname"><a href="structnlohmann_1_1detail_1_1is__complete__type.html">nlohmann::detail::is_complete_type</a></div><div class="ttdef"><b>Definition:</b> <a href="json_8hpp_source.html#l02589">json.hpp:2589</a></div></div>
 <div class="ttc" id="aclassnlohmann_1_1detail_1_1binary__writer_html_ab77aa48692bd4e64e4f051ce6aeb6d2d"><div class="ttname"><a href="classnlohmann_1_1detail_1_1binary__writer.html#ab77aa48692bd4e64e4f051ce6aeb6d2d">nlohmann::detail::binary_writer::to_char_type</a></div><div class="ttdeci">static constexpr CharType to_char_type(std::uint8_t x) noexcept</div><div class="ttdef"><b>Definition:</b> <a href="json_8hpp_source.html#l12585">json.hpp:12585</a></div></div>
 <div class="ttc" id="astructnlohmann_1_1detail_1_1priority__tag_html"><div class="ttname"><a href="structnlohmann_1_1detail_1_1priority__tag.html">nlohmann::detail::priority_tag</a></div><div class="ttdef"><b>Definition:</b> <a href="json_8hpp_source.html#l02228">json.hpp:2228</a></div></div>
@@ -17094,7 +17095,7 @@ $(document).ready(function(){initNavTree('json_8hpp_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_b01ccb8cd28d03239d93b53568c12834.html">include</a></li><li class="navelem"><a class="el" href="dir_a4d2a34eb48283e8d6db65abafeda3a7.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_354c235d6e40373ee6d513ccb00c8c57.html">output_generation</a></li><li class="navelem"><a class="el" href="json_8hpp.html">json.hpp</a></li>
-    <li class="footer">Generated on Sat Mar 25 2023 16:15:23 for HAL by
+    <li class="footer">Generated on Mon Mar 27 2023 21:07:10 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

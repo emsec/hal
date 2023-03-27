@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Function &mdash; hal_py v4.1.0-12-g98d554a9c documentation</title>
+  <title>Boolean Function &mdash; hal_py v4.1.0-14-g3bea3d1aa documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-12-g98d554a9c
+                v4.1.0-14-g3bea3d1aa
               </div>
             
           
@@ -193,11 +193,11 @@
 <dl class="class">
 <dt id="hal_py.BooleanFunction">
 <em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">BooleanFunction</code><a class="headerlink" href="#hal_py.BooleanFunction" title="Permalink to this definition">¶</a></dt>
-<dd><p>A BooleanFunction represents a symbolic expression (e.g., “A &amp; B”) in order to abstract the (semantic) functionality of a single netlist gate (or even a complex subcircuit comprising multiple gates) in a formal manner. To this end, the BooleanFunction class is able to construct and display arbitrarily-nested expressions, enable symbolic simplification (e.g., simplify “A &amp; 0” to “0”), and translate Boolean functions to the SAT / SMT solver domain to use the solve constraint formulas.</p>
+<dd><p>A BooleanFunction represents a symbolic expression (e.g., <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">&amp;</span> <span class="pre">B</span></code>) in order to abstract the (semantic) functionality of a single netlist gate (or even a complex subcircuit comprising multiple gates) in a formal manner. To this end, the <code class="docutils literal notranslate"><span class="pre">BooleanFunction</span></code> class is able to construct and display arbitrarily-nested expressions, enable symbolic simplification (e.g., simplify <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">&amp;</span> <span class="pre">0</span></code> to <code class="docutils literal notranslate"><span class="pre">0</span></code>), and translate Boolean functions to the SAT / SMT solver domain to use the solve constraint formulas.</p>
 <dl class="staticmethod">
 <dt id="hal_py.BooleanFunction.Add">
 <em class="property">static </em><code class="descname">Add</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Add" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joins two Boolean functions by applying an ‘ADD’ operation. 
+<dd><p>Joins two Boolean functions by applying an ADD operation. 
 Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -223,7 +223,7 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 <dl class="staticmethod">
 <dt id="hal_py.BooleanFunction.And">
 <em class="property">static </em><code class="descname">And</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.And" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joins two Boolean functions by applying an ‘AND’ operation. 
+<dd><p>Joins two Boolean functions by applying an AND operation. 
 Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -249,7 +249,7 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 <dl class="staticmethod">
 <dt id="hal_py.BooleanFunction.Concat">
 <em class="property">static </em><code class="descname">Concat</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Concat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Concatenates two Boolean functions of potentially different bit-sizes <cite>n</cite> and <cite>m</cite> to form a single Boolean function of bit-size <cite>n+m</cite>.</p>
+<dd><p>Concatenates two Boolean functions of bit-sizes <code class="docutils literal notranslate"><span class="pre">n</span></code> and <code class="docutils literal notranslate"><span class="pre">m</span></code> to form a single Boolean function of bit-size <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">+</span> <span class="pre">m</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -257,7 +257,7 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>p0</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – First Boolean function (MSBs).</li>
 <li><strong>p1</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Second Boolean function (LSBs).</li>
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Bit-size of the concatenated Boolean function.</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Bit-size of the concatenated Boolean function, i.e., <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">+</span> <span class="pre">m</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -388,16 +388,17 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 <dt id="hal_py.BooleanFunction.Ite">
 <em class="property">static </em><code class="descname">Ite</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>p2: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Ite" title="Permalink to this definition">¶</a></dt>
 <dd><p>Joins three Boolean functions by an if-then-else operation with p0 as the condition, p1 as true-case, and p2 as false-case.
-Requires ‘p1’ to be of bit-size 1, both Boolean functions ‘p1’ and ‘p2’ to be of the specified bit-size, and produces a new Boolean function of the specified bit-size.</p>
+Requires <code class="docutils literal notranslate"><span class="pre">p1</span></code> to be of bit-size 1 and both Boolean functions <code class="docutils literal notranslate"><span class="pre">p1</span></code> and <code class="docutils literal notranslate"><span class="pre">p2</span></code> to be of the same bit-size.
+Produces a new Boolean function of the specified bit-size that must be equal to the size of <code class="docutils literal notranslate"><span class="pre">p1</span></code> and <code class="docutils literal notranslate"><span class="pre">p2</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>p0</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function condition.</li>
-<li><strong>p1</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function for true-case.</li>
-<li><strong>p1</strong> – Boolean function for false-case.</li>
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Bit-size of the operation, i.e., size of p1 and p2.</li>
+<li><strong>p1</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function for <code class="docutils literal notranslate"><span class="pre">true</span></code>-case.</li>
+<li><strong>p1</strong> – Boolean function for <code class="docutils literal notranslate"><span class="pre">false</span></code>-case.</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Bit-size of the operation, i.e., size of <code class="docutils literal notranslate"><span class="pre">p1</span></code> and <code class="docutils literal notranslate"><span class="pre">p2</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -414,7 +415,7 @@ Requires ‘p1’ to be of bit-size 1, both Boolean functions ‘p1’ and ‘p2
 <dl class="staticmethod">
 <dt id="hal_py.BooleanFunction.Mul">
 <em class="property">static </em><code class="descname">Mul</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Mul" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joins two Boolean functions by applying an ‘MUL’ operation. 
+<dd><p>Joins two Boolean functions by applying an MUL operation. 
 Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -689,7 +690,23 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 
 <dl class="method">
 <dt id="hal_py.BooleanFunction.Node.get_constant_value">
-<code class="descname">get_constant_value</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction.Node</em><span class="sig-paren">)</span> &#x2192; Optional[int]<a class="headerlink" href="#hal_py.BooleanFunction.Node.get_constant_value" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_constant_value</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction.Node</em><span class="sig-paren">)</span> &#x2192; Optional[List[hal_py.BooleanFunction.Value]]<a class="headerlink" href="#hal_py.BooleanFunction.Node.get_constant_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the constant value of the node of type <cite>Constant</cite> as a list of <code class="docutils literal notranslate"><span class="pre">hal_py.BooleanFunction.Value</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The constant value on success, None otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value">hal_py.BooleanFunction.Value</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.Node.get_constant_value_u64">
+<code class="descname">get_constant_value_u64</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction.Node</em><span class="sig-paren">)</span> &#x2192; Optional[int]<a class="headerlink" href="#hal_py.BooleanFunction.Node.get_constant_value_u64" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the constant value of the node of type <cite>Constant</cite> as long as it has a size &lt;= 64-bit.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -737,20 +754,46 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 
 <dl class="method">
 <dt id="hal_py.BooleanFunction.Node.has_constant_value">
-<code class="descname">has_constant_value</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction.Node</em>, <em>value: int</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.BooleanFunction.Node.has_constant_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks whether the Boolean function node is of type Constant and holds a specific value.</p>
+<code class="descname">has_constant_value</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.BooleanFunction.Node.has_constant_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">has_constant_value(self: hal_py.BooleanFunction.Node, value: List[hal_py.BooleanFunction.Value]) -&gt; bool</p>
+<blockquote>
+<div><p>Checks whether the Boolean function node is of type Constant and holds a specific value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The value to check for.</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.BooleanFunction.Value] value:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The value to check for.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the Boolean function node is of type Constant and holds the given value, False otherwise.</td>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">True if the Boolean function node is of type Constant and holds the given value, False otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">bool</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">has_constant_value(self: hal_py.BooleanFunction.Node, value: int) -&gt; bool</p>
+<blockquote>
+<div><p>Checks whether the Boolean function node is of type Constant and holds a specific value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param int value:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The value to check for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">True if the Boolean function node is of type Constant and holds the given value, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
@@ -1131,7 +1174,7 @@ Requires the Boolean function to be of the specified bit-size and produces a new
 <dl class="staticmethod">
 <dt id="hal_py.BooleanFunction.Or">
 <em class="property">static </em><code class="descname">Or</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Or" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joins two Boolean functions by applying an ‘OR’ operation. 
+<dd><p>Joins two Boolean functions by applying an OR operation. 
 Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1157,7 +1200,7 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 <dl class="staticmethod">
 <dt id="hal_py.BooleanFunction.Sdiv">
 <em class="property">static </em><code class="descname">Sdiv</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Sdiv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joins two Boolean functions by applying an ‘SDIV’ operation. 
+<dd><p>Joins two Boolean functions by applying an SDIV operation. 
 Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1190,7 +1233,7 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>p0</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function to extend.</li>
-<li><strong>p1</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Constant Boolean function describing the size of the sign-extended result.</li>
+<li><strong>p1</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function of type <code class="docutils literal notranslate"><span class="pre">Index</span></code> encoding the bit-size of the sign-extended result.</li>
 <li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Bit-size of the sign-extended Boolean function.</li>
 </ul>
 </td>
@@ -1233,17 +1276,17 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 <dl class="staticmethod">
 <dt id="hal_py.BooleanFunction.Slice">
 <em class="property">static </em><code class="descname">Slice</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>p2: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Slice" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the slice [i:j] of a Boolean function specified by a start index ‘i’ and an end index ‘j’ beginning at 0.
-Note that slice [i:j] includes positions ‘i’ and ‘j’ as well.</p>
+<dd><p>Returns the slice <code class="docutils literal notranslate"><span class="pre">[i:j]</span></code> of a Boolean function specified by a start index <code class="docutils literal notranslate"><span class="pre">i</span></code> and an end index <code class="docutils literal notranslate"><span class="pre">j</span></code> beginning at 0.
+Note that slice <code class="docutils literal notranslate"><span class="pre">[i:j]</span></code> includes positions <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">j</span></code> as well.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>p0</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function to slice.</li>
-<li><strong>p1</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function start index.</li>
-<li><strong>p2</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function end index.</li>
-<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Bit-size of the resulting Boolean function slice, i.e., p2 - p1 + 1.</li>
+<li><strong>p1</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function of type <code class="docutils literal notranslate"><span class="pre">Index</span></code> encoding start index <code class="docutils literal notranslate"><span class="pre">i</span></code>.</li>
+<li><strong>p2</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function of type <code class="docutils literal notranslate"><span class="pre">Index</span></code> encoding end index <code class="docutils literal notranslate"><span class="pre">j</span></code>.</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Bit-size of the resulting Boolean function slice, i.e., <code class="docutils literal notranslate"><span class="pre">j</span> <span class="pre">-</span> <span class="pre">i</span> <span class="pre">+</span> <span class="pre">1</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -1285,7 +1328,7 @@ Note that slice [i:j] includes positions ‘i’ and ‘j’ as well.</p>
 <dl class="staticmethod">
 <dt id="hal_py.BooleanFunction.Srem">
 <em class="property">static </em><code class="descname">Srem</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Srem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joins two Boolean functions by applying an ‘SREM’ operation. 
+<dd><p>Joins two Boolean functions by applying an SREM operation. 
 Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1311,7 +1354,7 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 <dl class="staticmethod">
 <dt id="hal_py.BooleanFunction.Sub">
 <em class="property">static </em><code class="descname">Sub</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Sub" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joins two Boolean functions by applying an ‘SUB’ operation. 
+<dd><p>Joins two Boolean functions by applying an SUB operation. 
 Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1337,7 +1380,7 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 <dl class="staticmethod">
 <dt id="hal_py.BooleanFunction.Udiv">
 <em class="property">static </em><code class="descname">Udiv</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Udiv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joins two Boolean functions by applying an ‘UDIV’ operation. 
+<dd><p>Joins two Boolean functions by applying an UDIV operation. 
 Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1413,7 +1456,7 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 <dl class="staticmethod">
 <dt id="hal_py.BooleanFunction.Urem">
 <em class="property">static </em><code class="descname">Urem</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Urem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joins two Boolean functions by applying an ‘UREM’ operation. 
+<dd><p>Joins two Boolean functions by applying an UREM operation. 
 Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1613,7 +1656,7 @@ Overloaded function.</p>
 <dl class="staticmethod">
 <dt id="hal_py.BooleanFunction.Xor">
 <em class="property">static </em><code class="descname">Xor</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Xor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joins two Boolean functions by applying an ‘XOR’ operation. 
+<dd><p>Joins two Boolean functions by applying an XOR operation. 
 Requires both Boolean functions to be of the specified bit-size and produces a new Boolean function of the same bit-size.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1656,7 +1699,7 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>p0</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function to extend.</li>
-<li><strong>p1</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Constant Boolean function describing the size of the zero-extended result.</li>
+<li><strong>p1</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function of type <code class="docutils literal notranslate"><span class="pre">Index</span></code> encoding the bit-size of the zero-extended result.</li>
 <li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Bit-size of the zero-extended Boolean function.</li>
 </ul>
 </td>
@@ -1672,11 +1715,29 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 </dd></dl>
 
 <dl class="method">
+<dt id="hal_py.BooleanFunction.__add__">
+<code class="descname">__add__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__add__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Joins two Boolean functions by an ADD operation.
+Requires both Boolean functions to be of the same bit-size.</p>
+<p><strong>Warning:</strong> fails if the Boolean functions have different bit-sizes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The joined Boolean Bunction.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="hal_py.BooleanFunction.__and__">
 <code class="descname">__and__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__and__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joins two Boolean functions by an ‘AND’ operation.
+<dd><p>Joins two Boolean functions by an AND operation.
 Requires both Boolean functions to be of the same bit-size.</p>
-<p>WARNING: fails if the Boolean functions have different bit-sizes.</p>
+<p><strong>Warning:</strong> fails if the Boolean functions have different bit-sizes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1711,11 +1772,47 @@ Requires both Boolean functions to be of the same bit-size.</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="hal_py.BooleanFunction.__iadd__">
+<code class="descname">__iadd__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__iadd__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Joins two Boolean functions by an ADD operation in-place.
+Requires both Boolean functions to be of the same bit-size.</p>
+<p><strong>Warning:</strong> fails if the Boolean functions have different bit-sizes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The joined Boolean Bunction.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="hal_py.BooleanFunction.__iand__">
 <code class="descname">__iand__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__iand__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joins two Boolean functions by an ‘AND’ operation in-place.
+<dd><p>Joins two Boolean functions by an AND operation in-place.
 Requires both Boolean functions to be of the same bit-size.</p>
-<p>WARNING: fails if the Boolean functions have different bit-sizes.</p>
+<p><strong>Warning:</strong> fails if the Boolean functions have different bit-sizes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The joined Boolean Bunction.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.__imul__">
+<code class="descname">__imul__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__imul__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Joins two Boolean functions by an MUL operation in-place.
+Requires both Boolean functions to be of the same bit-size.</p>
+<p><strong>Warning:</strong> fails if the Boolean functions have different bit-sizes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1753,9 +1850,27 @@ Requires both Boolean functions to be of the same bit-size.</p>
 <dl class="method">
 <dt id="hal_py.BooleanFunction.__ior__">
 <code class="descname">__ior__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__ior__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joins two Boolean functions by an ‘OR’ operation in-place.
+<dd><p>Joins two Boolean functions by an OR operation in-place.
 Requires both Boolean functions to be of the same bit-size.</p>
-<p>WARNING: fails if the Boolean functions have different bit-sizes.</p>
+<p><strong>Warning:</strong> fails if the Boolean functions have different bit-sizes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The joined Boolean Bunction.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.__isub__">
+<code class="descname">__isub__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__isub__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Joins two Boolean functions by an SUB operation in-place.
+Requires both Boolean functions to be of the same bit-size.</p>
+<p><strong>Warning:</strong> fails if the Boolean functions have different bit-sizes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1771,9 +1886,9 @@ Requires both Boolean functions to be of the same bit-size.</p>
 <dl class="method">
 <dt id="hal_py.BooleanFunction.__ixor__">
 <code class="descname">__ixor__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__ixor__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joins two Boolean functions by an ‘OR’ operation in-place.
+<dd><p>Joins two Boolean functions by an XOR operation in-place.
 Requires both Boolean functions to be of the same bit-size.</p>
-<p>WARNING: fails if the Boolean functions have different bit-sizes.</p>
+<p><strong>Warning:</strong> fails if the Boolean functions have different bit-sizes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1808,6 +1923,24 @@ Requires both Boolean functions to be of the same bit-size.</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="hal_py.BooleanFunction.__mul__">
+<code class="descname">__mul__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__mul__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Joins two Boolean functions by an MUL operation.
+Requires both Boolean functions to be of the same bit-size.</p>
+<p><strong>Warning:</strong> fails if the Boolean functions have different bit-sizes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The joined Boolean Bunction.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="hal_py.BooleanFunction.__ne__">
 <code class="descname">__ne__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.BooleanFunction.__ne__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks whether two Boolean functions are unequal.</p>
@@ -1826,9 +1959,9 @@ Requires both Boolean functions to be of the same bit-size.</p>
 <dl class="method">
 <dt id="hal_py.BooleanFunction.__or__">
 <code class="descname">__or__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__or__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joins two Boolean functions by an ‘OR’ operation.
+<dd><p>Joins two Boolean functions by an OR operation.
 Requires both Boolean functions to be of the same bit-size.</p>
-<p>WARNING: fails if the Boolean functions have different bit-sizes.</p>
+<p><strong>Warning:</strong> fails if the Boolean functions have different bit-sizes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1858,11 +1991,29 @@ Requires both Boolean functions to be of the same bit-size.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="hal_py.BooleanFunction.__sub__">
+<code class="descname">__sub__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__sub__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Joins two Boolean functions by an SUB operation.
+Requires both Boolean functions to be of the same bit-size.</p>
+<p><strong>Warning:</strong> fails if the Boolean functions have different bit-sizes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The joined Boolean Bunction.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="hal_py.BooleanFunction.__xor__">
 <code class="descname">__xor__</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal_py.BooleanFunction<a class="headerlink" href="#hal_py.BooleanFunction.__xor__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joins two Boolean functions by an ‘XOR’ operation.
+<dd><p>Joins two Boolean functions by an XOR operation.
 Requires both Boolean functions to be of the same bit-size.</p>
-<p>WARNING: fails if the Boolean functions have different bit-sizes.</p>
+<p><strong>Warning:</strong> fails if the Boolean functions have different bit-sizes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1895,7 +2046,7 @@ Requires both Boolean functions to be of the same bit-size.</p>
 <dt id="hal_py.BooleanFunction.compute_truth_table">
 <code class="descname">compute_truth_table</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>ordered_variables: List[str] = []</em>, <em>remove_unknown_variables: bool = False</em><span class="sig-paren">)</span> &#x2192; Optional[List[List[hal_py.BooleanFunction.Value]]]<a class="headerlink" href="#hal_py.BooleanFunction.compute_truth_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the truth table outputs for a Boolean function that comprises &lt;= 10 single-bit variables.</p>
-<p>WARNING: The generation of the truth table is exponential in the number of parameters.</p>
+<p><strong>Warning:</strong> The generation of the truth table is exponential in the number of parameters.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1980,7 +2131,23 @@ Requires both Boolean functions to be of the same bit-size.</p>
 
 <dl class="method">
 <dt id="hal_py.BooleanFunction.get_constant_value">
-<code class="descname">get_constant_value</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; Optional[int]<a class="headerlink" href="#hal_py.BooleanFunction.get_constant_value" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_constant_value</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; Optional[List[hal_py.BooleanFunction.Value]]<a class="headerlink" href="#hal_py.BooleanFunction.get_constant_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the constant value of the top-level node of the Boolean function of type Constant as a list of <code class="docutils literal notranslate"><span class="pre">hal_py.BooleanFunction.Value</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The constant value on success, None otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value">hal_py.BooleanFunction.Value</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BooleanFunction.get_constant_value_u64">
+<code class="descname">get_constant_value_u64</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; Optional[int]<a class="headerlink" href="#hal_py.BooleanFunction.get_constant_value_u64" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the constant value of the top-level node of the Boolean function of type Constant as long as it has a size &lt;= 64-bit.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2078,7 +2245,7 @@ Requires both Boolean functions to be of the same bit-size.</p>
 <dt id="hal_py.BooleanFunction.get_top_level_node">
 <code class="descname">get_top_level_node</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em><span class="sig-paren">)</span> &#x2192; hal::BooleanFunction::Node<a class="headerlink" href="#hal_py.BooleanFunction.get_top_level_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the top-level node of the Boolean function.</p>
-<p>WARNING: fails if the Boolean function is empty.</p>
+<p><strong>Warning:</strong> fails if the Boolean function is empty.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -2095,7 +2262,7 @@ Requires both Boolean functions to be of the same bit-size.</p>
 <dt id="hal_py.BooleanFunction.get_truth_table_as_string">
 <code class="descname">get_truth_table_as_string</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>ordered_variables: List[str] = []</em>, <em>function_name: str = ''</em>, <em>remove_unknown_variables: bool = False</em><span class="sig-paren">)</span> &#x2192; Optional[str]<a class="headerlink" href="#hal_py.BooleanFunction.get_truth_table_as_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints the truth table for a Boolean function that comprises &lt;= 10 single-bit variables.</p>
-<p>WARNING: The generation of the truth table is exponential in the number of parameters.</p>
+<p><strong>Warning:</strong> The generation of the truth table is exponential in the number of parameters.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -2151,20 +2318,46 @@ Requires both Boolean functions to be of the same bit-size.</p>
 
 <dl class="method">
 <dt id="hal_py.BooleanFunction.has_constant_value">
-<code class="descname">has_constant_value</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunction</em>, <em>arg0: int</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.BooleanFunction.has_constant_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks whether the top-level node of the Boolean function is of type Constant and holds a specific value.</p>
+<code class="descname">has_constant_value</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.BooleanFunction.has_constant_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">has_constant_value(self: hal_py.BooleanFunction, arg0: List[hal_py.BooleanFunction.Value]) -&gt; bool</p>
+<blockquote>
+<div><p>Checks whether the top-level node of the Boolean function is of type Constant and holds a specific value.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The constant value to check for.</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.BooleanFunction.Value] value:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The constant value to check for.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the top-level node of the Boolean function is of type Constant and holds the given value, False otherwise.</td>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">True if the top-level node of the Boolean function is of type Constant and holds the given value, False otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">bool</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">has_constant_value(self: hal_py.BooleanFunction, arg0: int) -&gt; bool</p>
+<blockquote>
+<div><p>Checks whether the top-level node of the Boolean function is of type Constant and holds a specific value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param int value:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The constant value to check for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">True if the top-level node of the Boolean function is of type Constant and holds the given value, False otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
@@ -2493,7 +2686,7 @@ The operation is applied to all instances of the variable in the function.</p>
 <dt id="hal_py.BooleanFunction.top_level_node">
 <code class="descname">top_level_node</code><a class="headerlink" href="#hal_py.BooleanFunction.top_level_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>The top-level node of the Boolean function.</p>
-<p>WARNING: fails if the Boolean function is empty.</p>
+<p><strong>Warning:</strong> fails if the Boolean function is empty.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

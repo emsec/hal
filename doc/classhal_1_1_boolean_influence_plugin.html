@@ -97,8 +97,8 @@ Inheritance diagram for hal::BooleanInfluencePlugin:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_boolean_influence_plugin__inherit__graph.png" border="0" usemap="#hal_1_1_boolean_influence_plugin_inherit__map" alt="Inheritance graph"/></div>
 <map name="hal_1_1_boolean_influence_plugin_inherit__map" id="hal_1_1_boolean_influence_plugin_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,204,225,413"/>
-<area shape="rect" href="classhal_1_1_base_plugin_interface.html" title=" " alt="" coords="21,5,209,156"/>
+<area shape="rect" title=" " alt="" coords="5,204,208,443"/>
+<area shape="rect" href="classhal_1_1_base_plugin_interface.html" title=" " alt="" coords="13,5,201,156"/>
 </map>
 </div>
 <div class="dynheader">
@@ -106,8 +106,8 @@ Collaboration diagram for hal::BooleanInfluencePlugin:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_boolean_influence_plugin__coll__graph.png" border="0" usemap="#hal_1_1_boolean_influence_plugin_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_boolean_influence_plugin_coll__map" id="hal_1_1_boolean_influence_plugin_coll__map">
-<area shape="rect" title=" " alt="" coords="5,204,225,413"/>
-<area shape="rect" href="classhal_1_1_base_plugin_interface.html" title=" " alt="" coords="21,5,209,156"/>
+<area shape="rect" title=" " alt="" coords="5,204,208,443"/>
+<area shape="rect" href="classhal_1_1_base_plugin_interface.html" title=" " alt="" coords="13,5,201,156"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -151,10 +151,18 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a1c693c3d0a79feacdaa2480de0618c54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d33d820ed192745957f7ce69b9460fe"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unordered_map&lt; std::string, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_influence_plugin.html#a5d33d820ed192745957f7ce69b9460fe">get_boolean_influence</a> (const z3::expr &amp;e, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> num_evaluations=32000, const std::string &amp;unique_identifier=&quot;&quot;)</td></tr>
 <tr class="separator:a5d33d820ed192745957f7ce69b9460fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0cb81e101a5dae8106c39f3c01b86cc6"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::map&lt; <a class="el" href="classhal_1_1_net.html">Net</a> *, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_influence_plugin.html#a0cb81e101a5dae8106c39f3c01b86cc6">get_boolean_influences_of_subcircuit</a> (const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;gates, const <a class="el" href="classhal_1_1_net.html">Net</a> *start_net)</td></tr>
-<tr class="separator:a0cb81e101a5dae8106c39f3c01b86cc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13b51b48783e88ba10e169735055587b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::map&lt; <a class="el" href="classhal_1_1_net.html">Net</a> *, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_influence_plugin.html#a13b51b48783e88ba10e169735055587b">get_boolean_influences_of_gate</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate)</td></tr>
-<tr class="separator:a13b51b48783e88ba10e169735055587b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33637fa422841d2e576143c9a19a511b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unordered_map&lt; std::string, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_influence_plugin.html#a33637fa422841d2e576143c9a19a511b">get_boolean_influence_deterministic</a> (const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;bf, const std::string &amp;unique_identifier=&quot;&quot;)</td></tr>
+<tr class="separator:a33637fa422841d2e576143c9a19a511b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a989b815fc56154afbd4eed4bd65e8e93"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unordered_map&lt; std::string, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_influence_plugin.html#a989b815fc56154afbd4eed4bd65e8e93">get_boolean_influence_deterministic</a> (const z3::expr &amp;e, const std::string &amp;unique_identifier=&quot;&quot;)</td></tr>
+<tr class="separator:a989b815fc56154afbd4eed4bd65e8e93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf30fa77606630dfbfaf596c5e7c5e9d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::map&lt; <a class="el" href="classhal_1_1_net.html">Net</a> *, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_influence_plugin.html#abf30fa77606630dfbfaf596c5e7c5e9d">get_boolean_influences_of_subcircuit</a> (const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;gates, const <a class="el" href="classhal_1_1_net.html">Net</a> *start_net, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> num_evaluations=32000, const std::string &amp;unique_identifier=&quot;&quot;)</td></tr>
+<tr class="separator:abf30fa77606630dfbfaf596c5e7c5e9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b73ff820de4c73bbe7098fb3d15e8ae"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::map&lt; <a class="el" href="classhal_1_1_net.html">Net</a> *, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_influence_plugin.html#a2b73ff820de4c73bbe7098fb3d15e8ae">get_boolean_influences_of_gate</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate, const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> num_evaluations=32000, const std::string &amp;unique_identifier=&quot;&quot;)</td></tr>
+<tr class="separator:a2b73ff820de4c73bbe7098fb3d15e8ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4a6538f6847f386e449ad33bfb1d630"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::map&lt; <a class="el" href="classhal_1_1_net.html">Net</a> *, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_influence_plugin.html#aa4a6538f6847f386e449ad33bfb1d630">get_boolean_influences_of_subcircuit_deterministic</a> (const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;gates, const <a class="el" href="classhal_1_1_net.html">Net</a> *start_net, const std::string &amp;unique_identifier=&quot;&quot;)</td></tr>
+<tr class="separator:aa4a6538f6847f386e449ad33bfb1d630"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f7c22003551e40542261f4a1741c885"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::map&lt; <a class="el" href="classhal_1_1_net.html">Net</a> *, double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_influence_plugin.html#a4f7c22003551e40542261f4a1741c885">get_boolean_influences_of_gate_deterministic</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate, const std::string &amp;unique_identifier=&quot;&quot;)</td></tr>
+<tr class="separator:a4f7c22003551e40542261f4a1741c885"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4414a642f5f41569c7d4254795d9eea0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::pair&lt; std::map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;, std::vector&lt; std::vector&lt; double &gt; &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_influence_plugin.html#a4414a642f5f41569c7d4254795d9eea0">get_ff_dependency_matrix</a> (const <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, bool with_boolean_influence)</td></tr>
 <tr class="separator:a4414a642f5f41569c7d4254795d9eea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -218,9 +226,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A map from the variables that appear in the function to their Boolean influence on said function on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00067">67</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00419">419</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00214">get_boolean_influences_of_subcircuit()</a>, and <a class="el" href="plugins_2boolean__influence_2python_2python__bindings_8cpp_source.html#l00022">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2boolean__influence_2python_2python__bindings_8cpp_source.html#l00022">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -268,20 +276,114 @@ Additional Inherited Members</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">e</td><td>- The z3 expression representing a Boolean function. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">num_evaluations</td><td>- The amount of evaluations that are performed for each input variable. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">unique_identifier</td><td>- A unique identifier that is applied to file names to prevent collisions during multi threadin. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">unique_identifier</td><td>- A unique identifier that is applied to file names to prevent collisions during multi threading. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A map from the variables that appear in the function to their Boolean influence on said function on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00075">75</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="_apache_01_license_8txt_source.html#l00045">from</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="netlist_2gate__library_2gate__library__manager_8cpp_source.html#l00169">hal::gate_library_manager::remove()</a>, <a class="el" href="utils_8h_source.html#l00165">hal::utils::starts_with()</a>, <a class="el" href="special__strings_8h_source.html#l00046">hal::core_strings::to()</a>, <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>, <a class="el" href="utils_8h_source.html#l00511">hal::utils::to_vector()</a>, and <a class="el" href="defines_8h_source.html#l00049">UNUSED</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00427">427</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a13b51b48783e88ba10e169735055587b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a13b51b48783e88ba10e169735055587b">&#9670;&nbsp;</a></span>get_boolean_influences_of_gate()</h2>
+<a id="a33637fa422841d2e576143c9a19a511b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33637fa422841d2e576143c9a19a511b">&#9670;&nbsp;</a></span>get_boolean_influence_deterministic() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unordered_map&lt; std::string, double &gt; &gt; hal::BooleanInfluencePlugin::get_boolean_influence_deterministic </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &amp;&#160;</td>
+          <td class="paramname"><em>bf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>unique_identifier</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Generates the Boolean influence of each input variable of a Boolean function.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">bf</td><td>- The Boolean function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">unique_identifier</td><td>- A unique identifier that is applied to file names to prevent collisions during multi-threading. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A map from the variables that appear in the function to their Boolean influence on said function on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00432">432</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugins_2boolean__influence_2python_2python__bindings_8cpp_source.html#l00022">hal::PYBIND11_PLUGIN()</a>.</p>
+
+</div>
+</div>
+<a id="a989b815fc56154afbd4eed4bd65e8e93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a989b815fc56154afbd4eed4bd65e8e93">&#9670;&nbsp;</a></span>get_boolean_influence_deterministic() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unordered_map&lt; std::string, double &gt; &gt; hal::BooleanInfluencePlugin::get_boolean_influence_deterministic </td>
+          <td>(</td>
+          <td class="paramtype">const z3::expr &amp;&#160;</td>
+          <td class="paramname"><em>e</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>unique_identifier</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Generates the Boolean influence of each input variable of a Boolean function.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">e</td><td>- The z3 expression representing a Boolean function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">unique_identifier</td><td>- A unique identifier that is applied to file names to prevent collisions during multi threading. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A map from the variables that appear in the function to their Boolean influence on said function on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00440">440</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a2b73ff820de4c73bbe7098fb3d15e8ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b73ff820de4c73bbe7098fb3d15e8ae">&#9670;&nbsp;</a></span>get_boolean_influences_of_gate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -293,8 +395,24 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::map&lt; <a class="el" href="classhal_1_1_net.html">Net</a> *, double &gt; &gt; hal::BooleanInfluencePlugin::get_boolean_influences_of_gate </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
-          <td class="paramname"><em>gate</em></td><td>)</td>
+          <td class="paramname"><em>gate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>num_evaluations</em> = <code>32000</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>unique_identifier</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -303,25 +421,74 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Generates the function of the dataport net of the given flip-flop. Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evaluated.</p>
+<p>Generates the function of the dataport net of the given flip-flop. Afterwards the generated function gets translated from a z3::expr to efficient c code, compiled, executed and evaluated.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- Pointer to the flip-flop which data input net is used to build the Boolean function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">num_evaluations</td><td>- The amount of evaluations that are performed for each input variable. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">unique_identifier</td><td>- A unique identifier that is applied to file names to prevent collisions during multi threading. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A map from the nets that appear in the function of the data net to their Boolean influence on said function on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00270">270</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00451">451</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">hal::data</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00214">get_boolean_influences_of_subcircuit()</a>, <a class="el" href="base__pin_8h_source.html#l00118">hal::BasePin&lt; T &gt;::get_direction()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00583">hal::Gate::get_fan_in_net()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00059">hal::GateType::get_name()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00199">hal::GateType::get_pins()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00127">hal::Gate::get_type()</a>, <a class="el" href="base__pin_8h_source.html#l00138">hal::BasePin&lt; T &gt;::get_type()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00090">hal::GateType::has_property()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00299">get_ff_dependency_matrix()</a>, and <a class="el" href="plugins_2boolean__influence_2python_2python__bindings_8cpp_source.html#l00022">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00467">get_ff_dependency_matrix()</a>, and <a class="el" href="plugins_2boolean__influence_2python_2python__bindings_8cpp_source.html#l00022">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
-<a id="a0cb81e101a5dae8106c39f3c01b86cc6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0cb81e101a5dae8106c39f3c01b86cc6">&#9670;&nbsp;</a></span>get_boolean_influences_of_subcircuit()</h2>
+<a id="a4f7c22003551e40542261f4a1741c885"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f7c22003551e40542261f4a1741c885">&#9670;&nbsp;</a></span>get_boolean_influences_of_gate_deterministic()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::map&lt; <a class="el" href="classhal_1_1_net.html">Net</a> *, double &gt; &gt; hal::BooleanInfluencePlugin::get_boolean_influences_of_gate_deterministic </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
+          <td class="paramname"><em>gate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>unique_identifier</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Generates the function of the dataport net of the given flip-flop. Afterwards the generated function gets translated from a z3::expr to efficient c code, compiled, executed and evaluated.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- Pointer to the flip-flop which data input net is used to build the Boolean function. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">unique_identifier</td><td>- A unique identifier that is applied to file names to prevent collisions during multi threading. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A map from the nets that appear in the function of the data net to their Boolean influence on said function on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00462">462</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugins_2boolean__influence_2python_2python__bindings_8cpp_source.html#l00022">hal::PYBIND11_PLUGIN()</a>.</p>
+
+</div>
+</div>
+<a id="abf30fa77606630dfbfaf596c5e7c5e9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf30fa77606630dfbfaf596c5e7c5e9d">&#9670;&nbsp;</a></span>get_boolean_influences_of_subcircuit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -339,7 +506,19 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classhal_1_1_net.html">Net</a> *&#160;</td>
-          <td class="paramname"><em>start_net</em>&#160;</td>
+          <td class="paramname"><em>start_net</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>num_evaluations</em> = <code>32000</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>unique_identifier</em> = <code>&quot;&quot;</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -358,16 +537,72 @@ Additional Inherited Members</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gates</td><td>- The gates of the subcircuit. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">start_net</td><td>- The output net of the subcircuit at which to start the analysis. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">num_evaluations</td><td>- The amount of evaluations that are performed for each input variable. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">unique_identifier</td><td>- A unique identifier that is applied to file names to prevent collisions during multi threading. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A map from the nets that appear in the function of the start net to their Boolean influence on said function on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00214">214</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00446">446</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa294da9f271b64311147582da631ee638">hal::combinational</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00067">get_boolean_influence()</a>, <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00018">hal::BooleanFunctionNetDecorator::get_boolean_variable_name()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00088">hal::Net::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00098">hal::Net::get_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp_source.html#l00044">hal::BooleanFunctionNetDecorator::get_net_from()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00093">hal::Net::get_netlist()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00127">hal::Gate::get_type()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00090">hal::GateType::has_property()</a>, <a class="el" href="test_8py_source.html#l00006">test::inf</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00573">hal::Gate::is_gnd_gate()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00568">hal::Gate::is_vcc_gate()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00055">net</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2boolean__influence_2python_2python__bindings_8cpp_source.html#l00022">hal::PYBIND11_PLUGIN()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00270">get_boolean_influences_of_gate()</a>, and <a class="el" href="plugins_2boolean__influence_2python_2python__bindings_8cpp_source.html#l00022">hal::PYBIND11_PLUGIN()</a>.</p>
+</div>
+</div>
+<a id="aa4a6538f6847f386e449ad33bfb1d630"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4a6538f6847f386e449ad33bfb1d630">&#9670;&nbsp;</a></span>get_boolean_influences_of_subcircuit_deterministic()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::map&lt; <a class="el" href="classhal_1_1_net.html">Net</a> *, double &gt; &gt; hal::BooleanInfluencePlugin::get_boolean_influences_of_subcircuit_deterministic </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>gates</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_net.html">Net</a> *&#160;</td>
+          <td class="paramname"><em>start_net</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>unique_identifier</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Generates the function of the net using only the given gates. Afterwards the generated function gets translated from a z3::expr to efficent c code, compiled, executed and evaluated.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">gates</td><td>- The gates of the subcircuit. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start_net</td><td>- The output net of the subcircuit at which to start the analysis. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">unique_identifier</td><td>- A unique identifier that is applied to file names to prevent collisions during multi threading. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A map from the nets that appear in the function of the start net to their Boolean influence on said function on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00457">457</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugins_2boolean__influence_2python_2python__bindings_8cpp_source.html#l00022">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -414,9 +649,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pair consisting of std::map&lt;u32, Gate*&gt;, which includes the mapping from the original gate IDs to the ones in the matrix, and a std::vector&lt;std::vector&lt;double&gt;, which is the ff dependency matrix </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00299">299</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00467">467</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00270">get_boolean_influences_of_gate()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00680">hal::Gate::get_fan_out_nets()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00204">hal::Netlist::get_gates()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00324">hal::netlist_utils::get_next_sequential_gates()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00127">hal::Gate::get_type()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00090">hal::GateType::has_property()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00057">ERR_APPEND</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00451">get_boolean_influences_of_gate()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00680">hal::Gate::get_fan_out_nets()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00204">hal::Netlist::get_gates()</a>, <a class="el" href="netlist_2netlist__utils_8cpp_source.html#l00324">hal::netlist_utils::get_next_sequential_gates()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="json_8hpp_source.html#l22620">nlohmann::to_string()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2boolean__influence_2python_2python__bindings_8cpp_source.html#l00022">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -449,7 +684,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classhal_1_1_base_plugin_interface.html#a3818f63c15ebe39ad595abddbb471e4a">hal::BasePluginInterface</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00019">19</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00018">18</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2boolean__influence_2python_2python__bindings_8cpp_source.html#l00022">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -482,7 +717,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classhal_1_1_base_plugin_interface.html#ab231f8112b0ed2264498d9c70c03c01a">hal::BasePluginInterface</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00024">24</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00023">23</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2boolean__influence_2python_2python__bindings_8cpp_source.html#l00022">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -514,7 +749,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classhal_1_1_base_plugin_interface.html#acc2948bee96f02c5a2c1236ee1f2743a">hal::BasePluginInterface</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00029">29</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__boolean__influence_8cpp_source.html#l00028">28</a> of file <a class="el" href="plugin__boolean__influence_8cpp_source.html">plugin_boolean_influence.cpp</a>.</p>
 
 </div>
 </div>
@@ -528,7 +763,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_boolean_influence_plugin.html">BooleanInfluencePlugin</a></li>
-    <li class="footer">Generated on Sat Mar 25 2023 16:15:28 for HAL by
+    <li class="footer">Generated on Mon Mar 27 2023 21:07:13 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

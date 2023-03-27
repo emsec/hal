@@ -255,30 +255,30 @@ $(document).ready(function(){initNavTree('graphics__scene_8cpp_source.html','');
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        {</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16">ItemType::Gate</a>:</div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        {</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;            <a class="code" href="classhal_1_1_graphics_gate.html">GraphicsGate</a>* <a class="code" href="namespacetest.html#a795b8c55af8ab82f1840a6502cd7938f">g</a> = <span class="keyword">static_cast&lt;</span><a class="code" href="classhal_1_1_graphics_gate.html">GraphicsGate</a>*<span class="keyword">&gt;</span>(item);</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;            <a class="code" href="classhal_1_1_graphics_gate.html">GraphicsGate</a>* <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a> = <span class="keyword">static_cast&lt;</span><a class="code" href="classhal_1_1_graphics_gate.html">GraphicsGate</a>*<span class="keyword">&gt;</span>(item);</div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;            <span class="keywordtype">int</span> i = 0;</div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            <span class="keywordflow">while</span> (i &lt; mGateItems.size())</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;            {</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;                <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a795b8c55af8ab82f1840a6502cd7938f">g</a>-&gt;id() &lt; mGateItems.at(i)-&gt;id())</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;                <span class="keywordflow">if</span> (<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>-&gt;id() &lt; mGateItems.at(i)-&gt;id())</div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;                    <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                i++;</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;            }</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;            mGateItems.insert(i, <a class="code" href="namespacetest.html#a795b8c55af8ab82f1840a6502cd7938f">g</a>);</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;            mGateItems.insert(i, <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>);</div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;            <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        }</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca">ItemType::Net</a>:</div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        {</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;            <a class="code" href="classhal_1_1_graphics_net.html">GraphicsNet</a>* n = <span class="keyword">static_cast&lt;</span><a class="code" href="classhal_1_1_graphics_net.html">GraphicsNet</a>*<span class="keyword">&gt;</span>(item);</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;            <a class="code" href="classhal_1_1_graphics_net.html">GraphicsNet</a>* <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> = <span class="keyword">static_cast&lt;</span><a class="code" href="classhal_1_1_graphics_net.html">GraphicsNet</a>*<span class="keyword">&gt;</span>(item);</div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            <span class="keywordtype">int</span> i = 0;</div>
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;            <span class="keywordflow">while</span> (i &lt; mNetItems.size())</div>
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;            {</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;                <span class="keywordflow">if</span> (n-&gt;<a class="code" href="classhal_1_1_graphics_item.html#af245ab823135383a30a131a8f173f4a0">id</a>() &lt; mNetItems.at(i)-&gt;id())</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;                <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>-&gt;id() &lt; mNetItems.at(i)-&gt;id())</div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;                    <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;                i++;</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;            }</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;            mNetItems.insert(i, n);</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;            mNetItems.insert(i, <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>);</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;            <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        }</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ae55f75a29310d7b60f7ac1d390c8ae42">ItemType::Module</a>:</div>
@@ -313,8 +313,8 @@ $(document).ready(function(){initNavTree('graphics__scene_8cpp_source.html','');
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        {</div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16">ItemType::Gate</a>:</div>
 <div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;        {</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;            <a class="code" href="classhal_1_1_graphics_gate.html">GraphicsGate</a>* <a class="code" href="namespacetest.html#a795b8c55af8ab82f1840a6502cd7938f">g</a> = <span class="keyword">static_cast&lt;</span><a class="code" href="classhal_1_1_graphics_gate.html">GraphicsGate</a>*<span class="keyword">&gt;</span>(item);</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;            <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> = <a class="code" href="namespacetest.html#a795b8c55af8ab82f1840a6502cd7938f">g</a>-&gt;id();</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;            <a class="code" href="classhal_1_1_graphics_gate.html">GraphicsGate</a>* <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a> = <span class="keyword">static_cast&lt;</span><a class="code" href="classhal_1_1_graphics_gate.html">GraphicsGate</a>*<span class="keyword">&gt;</span>(item);</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;            <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> = <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>-&gt;id();</div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;            <span class="keywordtype">int</span> i = 0;</div>
 <div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;            <span class="keywordflow">while</span> (i &lt; mGateItems.size())</div>
@@ -322,7 +322,7 @@ $(document).ready(function(){initNavTree('graphics__scene_8cpp_source.html','');
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                <span class="keywordflow">if</span> (mGateItems.at(i)-&gt;id() == <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                {</div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                    mGateItems.remove(i);</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;                    <span class="keyword">delete</span> <a class="code" href="namespacetest.html#a795b8c55af8ab82f1840a6502cd7938f">g</a>;</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;                    <span class="keyword">delete</span> <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>;</div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;                    <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;                }</div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
@@ -333,8 +333,8 @@ $(document).ready(function(){initNavTree('graphics__scene_8cpp_source.html','');
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        }</div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca">ItemType::Net</a>:</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        {</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;            <a class="code" href="classhal_1_1_graphics_net.html">GraphicsNet</a>* n = <span class="keyword">static_cast&lt;</span><a class="code" href="classhal_1_1_graphics_net.html">GraphicsNet</a>*<span class="keyword">&gt;</span>(item);</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> = n-&gt;<a class="code" href="classhal_1_1_graphics_item.html#af245ab823135383a30a131a8f173f4a0">id</a>();</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;            <a class="code" href="classhal_1_1_graphics_net.html">GraphicsNet</a>* <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> = <span class="keyword">static_cast&lt;</span><a class="code" href="classhal_1_1_graphics_net.html">GraphicsNet</a>*<span class="keyword">&gt;</span>(item);</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span> = <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>-&gt;id();</div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160; </div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            <span class="keywordtype">int</span> i = 0;</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;            <span class="keywordflow">while</span> (i &lt; mNetItems.size())</div>
@@ -342,7 +342,7 @@ $(document).ready(function(){initNavTree('graphics__scene_8cpp_source.html','');
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;                <span class="keywordflow">if</span> (mNetItems.at(i)-&gt;id() == <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>)</div>
 <div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;                {</div>
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;                    mNetItems.remove(i);</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;                    <span class="keyword">delete</span> n;</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;                    <span class="keyword">delete</span> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>;</div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;                    <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;                }</div>
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
@@ -916,10 +916,11 @@ $(document).ready(function(){initNavTree('graphics__scene_8cpp_source.html','');
 <div class="ttc" id="aclasshal_1_1_graphics_scene_html_ad3ed269a30d6af98604003dfddebc574"><div class="ttname"><a href="classhal_1_1_graphics_scene.html#ad3ed269a30d6af98604003dfddebc574">hal::GraphicsScene::stopDragShadow</a></div><div class="ttdeci">void stopDragShadow()</div><div class="ttdef"><b>Definition:</b> <a href="graphics__scene_8cpp_source.html#l00147">graphics_scene.cpp:147</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graphics_module_html"><div class="ttname"><a href="classhal_1_1_graphics_module.html">hal::GraphicsModule</a></div><div class="ttdoc">Abstract base class for modules.</div><div class="ttdef"><b>Definition:</b> <a href="graphics__module_8h_source.html#l00044">graphics_module.h:44</a></div></div>
 <div class="ttc" id="aclasshal_1_1_grouping_table_model_html_a879da62666d443facf2859a323ddba7e"><div class="ttname"><a href="classhal_1_1_grouping_table_model.html#a879da62666d443facf2859a323ddba7e">hal::GroupingTableModel::groupingColorChanged</a></div><div class="ttdeci">void groupingColorChanged(Grouping *grp)</div></div>
+<div class="ttc" id="anamespacetest__plugin_html_abd3083aec6bd8d3b9851214d6d355740"><div class="ttname"><a href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">test_plugin.g</a></div><div class="ttdeci">g</div><div class="ttdef"><b>Definition:</b> <a href="test__plugin_8py_source.html#l00032">test_plugin.py:32</a></div></div>
 <div class="ttc" id="aqgraphicsscene_html_addItem"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsscene.html#addItem">QGraphicsScene::addItem</a></div><div class="ttdeci">void addItem(QGraphicsItem *item)</div></div>
+<div class="ttc" id="anamespacetest_html_a20eb10bb18ee6ccd51fa4518f9fd6090"><div class="ttname"><a href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">test.n</a></div><div class="ttdeci">n</div><div class="ttdef"><b>Definition:</b> <a href="test_8py_source.html#l00008">test.py:8</a></div></div>
 <div class="ttc" id="aqgraphicsitem_html_update"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsitem.html#update">QGraphicsItem::update</a></div><div class="ttdeci">void update(const QRectF &amp;rect)</div></div>
 <div class="ttc" id="anamespacehal_html_a36ac15c9dc231bbb2cff96b936a5b8d4"><div class="ttname"><a href="namespacehal.html#a36ac15c9dc231bbb2cff96b936a5b8d4">hal::gContentManager</a></div><div class="ttdeci">ContentManager * gContentManager</div><div class="ttdef"><b>Definition:</b> <a href="plugin__gui_8cpp_source.html#l00051">plugin_gui.cpp:51</a></div></div>
-<div class="ttc" id="anamespacetest_html_a795b8c55af8ab82f1840a6502cd7938f"><div class="ttname"><a href="namespacetest.html#a795b8c55af8ab82f1840a6502cd7938f">test.g</a></div><div class="ttdeci">g</div><div class="ttdef"><b>Definition:</b> <a href="test_8py_source.html#l00005">test.py:5</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graphics_scene_html_a7e94fedb6cc79c14d70a0ce6612ad48f"><div class="ttname"><a href="classhal_1_1_graphics_scene.html#a7e94fedb6cc79c14d70a0ce6612ad48f">hal::GraphicsScene::handleHighlight</a></div><div class="ttdeci">void handleHighlight(const QVector&lt; const SelectionTreeItem * &gt; &amp;highlightItems)</div><div class="ttdef"><b>Definition:</b> <a href="graphics__scene_8cpp_source.html#l00543">graphics_scene.cpp:543</a></div></div>
 <div class="ttc" id="aclasshal_1_1_selection_relay_html_ac2ec1e9645338033da5a7aee713cf090"><div class="ttname"><a href="classhal_1_1_selection_relay.html#ac2ec1e9645338033da5a7aee713cf090">hal::SelectionRelay::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdef"><b>Definition:</b> <a href="selection__relay_8cpp_source.html#l00022">selection_relay.cpp:22</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_relay_html_af78c105c5f9968ca72b075403a5096e2"><div class="ttname"><a href="classhal_1_1_netlist_relay.html#af78c105c5f9968ca72b075403a5096e2">hal::NetlistRelay::groupingGateRemoved</a></div><div class="ttdeci">void groupingGateRemoved(Grouping *grp, u32 id) const</div></div>
@@ -1074,7 +1075,7 @@ $(document).ready(function(){initNavTree('graphics__scene_8cpp_source.html','');
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_62580450d675343767dbe0503393e994.html">graph_widget</a></li><li class="navelem"><a class="el" href="graphics__scene_8cpp.html">graphics_scene.cpp</a></li>
-    <li class="footer">Generated on Sat Mar 25 2023 16:15:24 for HAL by
+    <li class="footer">Generated on Mon Mar 27 2023 21:07:11 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

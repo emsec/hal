@@ -317,11 +317,20 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>get_boolean_influence()
 : <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a1c693c3d0a79feacdaa2480de0618c54">hal::BooleanInfluencePlugin</a>
 </li>
+<li>get_boolean_influence_deterministic()
+: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a33637fa422841d2e576143c9a19a511b">hal::BooleanInfluencePlugin</a>
+</li>
 <li>get_boolean_influences_of_gate()
-: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a13b51b48783e88ba10e169735055587b">hal::BooleanInfluencePlugin</a>
+: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a2b73ff820de4c73bbe7098fb3d15e8ae">hal::BooleanInfluencePlugin</a>
+</li>
+<li>get_boolean_influences_of_gate_deterministic()
+: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a4f7c22003551e40542261f4a1741c885">hal::BooleanInfluencePlugin</a>
 </li>
 <li>get_boolean_influences_of_subcircuit()
-: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#a0cb81e101a5dae8106c39f3c01b86cc6">hal::BooleanInfluencePlugin</a>
+: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#abf30fa77606630dfbfaf596c5e7c5e9d">hal::BooleanInfluencePlugin</a>
+</li>
+<li>get_boolean_influences_of_subcircuit_deterministic()
+: <a class="el" href="classhal_1_1_boolean_influence_plugin.html#aa4a6538f6847f386e449ad33bfb1d630">hal::BooleanInfluencePlugin</a>
 </li>
 <li>get_boolean_variable()
 : <a class="el" href="classhal_1_1_boolean_function_net_decorator.html#ad7f326ae8eb8cacec99e1009d28c3db4">hal::BooleanFunctionNetDecorator</a>
@@ -389,8 +398,12 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 , <a class="el" href="classhal_1_1_state_component.html#ab3273a5373a9567076f3bafb77941354">hal::StateComponent</a>
 </li>
 <li>get_constant_value()
-: <a class="el" href="classhal_1_1_boolean_function.html#ab5dcf3d2880965e2b490e65e928e7d76">hal::BooleanFunction</a>
-, <a class="el" href="structhal_1_1_boolean_function_1_1_node.html#ab384112f224843d4b5477087302b9dde">hal::BooleanFunction::Node</a>
+: <a class="el" href="classhal_1_1_boolean_function.html#a4ee676327286829f09fe28b80d4fcf53">hal::BooleanFunction</a>
+, <a class="el" href="structhal_1_1_boolean_function_1_1_node.html#ac45b5ffdc4e732d93070aaafc557a509">hal::BooleanFunction::Node</a>
+</li>
+<li>get_constant_value_u64()
+: <a class="el" href="classhal_1_1_boolean_function.html#aedca6490a5318ecc24b64e9d0753568d">hal::BooleanFunction</a>
+, <a class="el" href="structhal_1_1_boolean_function_1_1_node.html#afb0497b8ade38fd07fc86aedcc8c3c64">hal::BooleanFunction::Node</a>
 </li>
 <li>get_constraints()
 : <a class="el" href="classhal_1_1_s_m_t_1_1_solver.html#a893f60adb9ff88b60841d02e5992277c">hal::SMT::Solver</a>
@@ -904,10 +917,10 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#a8f5e1e5548d6bcca304ae9943f582e61">hal::GraphAlgorithmPlugin</a>
 </li>
 <li>get_subgraph_function()
-: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a76765575526ecebfd05f18129578a7ed">hal::SubgraphNetlistDecorator</a>
+: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a1131ad88f3e2a50f7b0720e129f195ba">hal::SubgraphNetlistDecorator</a>
 </li>
 <li>get_subgraph_function_inputs()
-: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#aabf7b9a86855378c51d9774d8980b57e">hal::SubgraphNetlistDecorator</a>
+: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a602fe3be3c5979579024b42b8c4439eb">hal::SubgraphNetlistDecorator</a>
 </li>
 <li>get_submodule_depth()
 : <a class="el" href="classhal_1_1_module.html#a533cbe33380469fe81fcead287efc437">hal::Module</a>
@@ -1213,7 +1226,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_get_in_touch_widget.html#a25e6cbcd27c08366d3170718fde88158">hal::GetInTouchWidget</a>
 </li>
 <li>getItem()
-: <a class="el" href="classhal_1_1_module_model.html#a9aefc1c8a6482d3641b15507df11f1e0">hal::ModuleModel</a>
+: <a class="el" href="classhal_1_1_module_model.html#a788da4c0a93921306f941a9a541a2c57">hal::ModuleModel</a>
 </li>
 <li>getItemFromIndex()
 : <a class="el" href="classhal_1_1_base_tree_model.html#a64847c202485e2983e7129a3e641dc76">hal::BaseTreeModel</a>
@@ -1505,14 +1518,14 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>greenColor
 : <a class="el" href="classhal_1_1_comment_dialog.html#a1070c10067626f942ae4ce7dbb99c578">hal::CommentDialog</a>
 </li>
-<li>gridBaseDotColor()
-: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a34f564cd583502946e37e851e1f25862">hal::GraphicsQssAdapter</a>
+<li>gridBaseDotColor
+: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a20397d891f58e3b5790725dfb9d8843e">hal::GraphicsQssAdapter</a>
 </li>
-<li>gridBaseLineColor
-: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#afff6b69c76ff8bae52a0cc09252c1925">hal::GraphicsQssAdapter</a>
+<li>gridBaseLineColor()
+: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a0d2a008588e0a6f3ddacb0a3963577bc">hal::GraphicsQssAdapter</a>
 </li>
-<li>gridClusterDotColor()
-: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#af9aef20d9706f52511bb341144bb4800">hal::GraphicsQssAdapter</a>
+<li>gridClusterDotColor
+: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a31b8d28575ff766a99f59a7ff88f0efe">hal::GraphicsQssAdapter</a>
 </li>
 <li>gridClusterLineColor
 : <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a93a3f1267b9ea82cf117bf5f9b493b54">hal::GraphicsQssAdapter</a>
@@ -1549,7 +1562,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_grouping_dialog.html#a31b2b5118bf361433c6b0566258d2d39">hal::GroupingDialog</a>
 </li>
 <li>Grouping()
-: <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a3368041577b46e6bdc8309d59e9709d3">hal::dataflow::Grouping</a>
+: <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a9a7e5b1cd6762b9699e58fa660e4d68e">hal::dataflow::Grouping</a>
 </li>
 <li>grouping()
 : <a class="el" href="classhal_1_1_grouping_table_entry.html#a1eddd594c0671c4b62a71119cd547402">hal::GroupingTableEntry</a>
@@ -1638,7 +1651,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_groupings_of_item_widget.html#a11b92486b219ac0edf4a9bfb30daa9ea">hal::GroupingsOfItemWidget</a>
 </li>
 <li>GroupingTableEntry()
-: <a class="el" href="classhal_1_1_grouping_table_entry.html#ae620437a3a81bef2b83bba661054135e">hal::GroupingTableEntry</a>
+: <a class="el" href="classhal_1_1_grouping_table_entry.html#a37d49df1d50dc47ef28cc039bd29a18a">hal::GroupingTableEntry</a>
 </li>
 <li>GroupingTableModel()
 : <a class="el" href="classhal_1_1_grouping_table_model.html#a361bc539eceb5a6712460cf0522b7897">hal::GroupingTableModel</a>
@@ -1665,7 +1678,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_gui_plugin_delegate.html#a22251255840777bfc1791d024c52cfaf">hal::GuiPluginDelegate</a>
 </li>
 <li>GuiPluginEntry()
-: <a class="el" href="classhal_1_1_gui_plugin_entry.html#a0246b0353cd844fa9dc0812879d3c38e">hal::GuiPluginEntry</a>
+: <a class="el" href="classhal_1_1_gui_plugin_entry.html#a18a9537f4dede9ecf839babcf562c730">hal::GuiPluginEntry</a>
 </li>
 <li>GuiPluginManager
 : <a class="el" href="classhal_1_1_gui_plugin_delegate.html#a0de770239a7ebe00cf4e39a3ed2a0fc8">hal::GuiPluginDelegate</a>
@@ -1684,7 +1697,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sat Mar 25 2023 16:15:33 for HAL by
+    <li class="footer">Generated on Mon Mar 27 2023 21:07:17 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

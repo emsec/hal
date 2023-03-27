@@ -1,5 +1,7 @@
 var NAVTREEINDEX15 =
 {
+"classhal_1_1_python_console_qss_adapter.html":[4,0,1,1,2],
+"classhal_1_1_python_console_qss_adapter.html#a3947472ea39d9abfa562e3f105efb925":[4,0,1,1,2,7],
 "classhal_1_1_python_console_qss_adapter.html#a56e5b311df11496f289a4e389912c3f6":[4,0,1,1,2,5],
 "classhal_1_1_python_console_qss_adapter.html#a77c919ee9decdd65f129bbda8c1256d6":[4,0,1,1,2,2],
 "classhal_1_1_python_console_qss_adapter.html#a8fb136f3ad1cb4d5d93c0bf8aab7c1c0":[4,0,1,1,2,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX15 =
 "classhal_1_1_recent_file_item.html#aad0eb17ef35b31c7cdcfe2f0abb7f562":[4,0,53,22],
 "classhal_1_1_recent_file_item.html#abef2349fda55960e3d55822dcb34f54a":[4,0,53,1],
 "classhal_1_1_recent_file_item.html#abf53f74bf7bddd3afef1463547b8149d":[4,0,53,16],
-"classhal_1_1_recent_file_item.html#ac0f9c33df8153c46e3d73249d2124a62":[4,0,53,2],
-"classhal_1_1_recent_file_item.html#ace21bce12087ede7676b6349d85de975":[4,0,53,19],
-"classhal_1_1_recent_file_item.html#ad6e9237537525e4512a5d779db1561b0":[4,0,53,14]
+"classhal_1_1_recent_file_item.html#ac0f9c33df8153c46e3d73249d2124a62":[4,0,53,2]
 };

@@ -149,9 +149,9 @@ $(document).ready(function(){initNavTree('special__strings_8h_source.html',''); 
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                <span class="keywordflow">return</span> toupper(c1) &lt; toupper(c2);</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            }</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="structhal_1_1core__strings_1_1_case_insensitive_char_traits.html#a0a2d016644e01f43d60895e8e04246e0">  107</a></span>&#160;            <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="structhal_1_1core__strings_1_1_case_insensitive_char_traits.html#a0a2d016644e01f43d60895e8e04246e0">compare</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* s1, <span class="keyword">const</span> <span class="keywordtype">char</span>* s2, <span class="keywordtype">size_t</span> n)</div>
+<div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="structhal_1_1core__strings_1_1_case_insensitive_char_traits.html#a0a2d016644e01f43d60895e8e04246e0">  107</a></span>&#160;            <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="structhal_1_1core__strings_1_1_case_insensitive_char_traits.html#a0a2d016644e01f43d60895e8e04246e0">compare</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* s1, <span class="keyword">const</span> <span class="keywordtype">char</span>* s2, <span class="keywordtype">size_t</span> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>)</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;            {</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                <span class="keywordflow">while</span> (n-- != 0)</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                <span class="keywordflow">while</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>-- != 0)</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                {</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                    <span class="keywordflow">if</span> (toupper(*s1) &lt; toupper(*s2))</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                        <span class="keywordflow">return</span> -1;</div>
@@ -163,9 +163,9 @@ $(document).ready(function(){initNavTree('special__strings_8h_source.html',''); 
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;            }</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
-<div class="line"><a name="l00129"></a><span class="lineno"><a class="line" href="structhal_1_1core__strings_1_1_case_insensitive_char_traits.html#a81cc885f0a67aebc3364596e7cfea162">  129</a></span>&#160;            <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structhal_1_1core__strings_1_1_case_insensitive_char_traits.html#a81cc885f0a67aebc3364596e7cfea162">find</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* s, <span class="keywordtype">int</span> n, <span class="keywordtype">char</span> a)</div>
+<div class="line"><a name="l00129"></a><span class="lineno"><a class="line" href="structhal_1_1core__strings_1_1_case_insensitive_char_traits.html#a81cc885f0a67aebc3364596e7cfea162">  129</a></span>&#160;            <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structhal_1_1core__strings_1_1_case_insensitive_char_traits.html#a81cc885f0a67aebc3364596e7cfea162">find</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* s, <span class="keywordtype">int</span> <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>, <span class="keywordtype">char</span> a)</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;            {</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;                <span class="keywordflow">while</span> (n-- &gt; 0)</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;                <span class="keywordflow">while</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>-- &gt; 0)</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;                {</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;                    <span class="keywordflow">if</span> (toupper(*s) == toupper(a))</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;                    {</div>
@@ -196,6 +196,7 @@ $(document).ready(function(){initNavTree('special__strings_8h_source.html',''); 
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespacehal_1_1core__strings_html_a939599c80f140610abb0390b66acf8a6"><div class="ttname"><a href="namespacehal_1_1core__strings.html#a939599c80f140610abb0390b66acf8a6">hal::core_strings::CaseInsensitiveString</a></div><div class="ttdeci">std::basic_string&lt; char, CaseInsensitiveCharTraits &gt; CaseInsensitiveString</div><div class="ttdef"><b>Definition:</b> <a href="special__strings_8h_source.html#l00143">special_strings.h:143</a></div></div>
+<div class="ttc" id="anamespacetest_html_a20eb10bb18ee6ccd51fa4518f9fd6090"><div class="ttname"><a href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">test.n</a></div><div class="ttdeci">n</div><div class="ttdef"><b>Definition:</b> <a href="test_8py_source.html#l00008">test.py:8</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="anamespacecontrol_html_a42884b866cabdd971b4dbe8c3fcc3735"><div class="ttname"><a href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">control.str</a></div><div class="ttdeci">str</div><div class="ttdef"><b>Definition:</b> <a href="control_8py_source.html#l00014">control.py:14</a></div></div>
 <div class="ttc" id="astructhal_1_1core__strings_1_1_case_insensitive_char_traits_html_a3905370b5a052b45954e2b4c0743b961"><div class="ttname"><a href="structhal_1_1core__strings_1_1_case_insensitive_char_traits.html#a3905370b5a052b45954e2b4c0743b961">hal::core_strings::CaseInsensitiveCharTraits::ne</a></div><div class="ttdeci">static bool ne(char c1, char c2)</div><div class="ttdef"><b>Definition:</b> <a href="special__strings_8h_source.html#l00082">special_strings.h:82</a></div></div>
@@ -211,7 +212,7 @@ $(document).ready(function(){initNavTree('special__strings_8h_source.html',''); 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_8cff0e4740b4a22580dd05764b73d449.html">utilities</a></li><li class="navelem"><a class="el" href="special__strings_8h.html">special_strings.h</a></li>
-    <li class="footer">Generated on Sat Mar 25 2023 16:15:22 for HAL by
+    <li class="footer">Generated on Mon Mar 27 2023 21:07:09 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

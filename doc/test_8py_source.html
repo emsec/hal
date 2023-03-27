@@ -90,24 +90,30 @@ $(document).ready(function(){initNavTree('test_8py_source.html',''); initResizab
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
 <div class="line"><a name="l00003"></a><span class="lineno"><a class="line" href="namespacetest.html#aac9aefb9f09ac6868c274eca88a7b7c1">    3</a></span>&#160;pl = hal_py.plugin_manager.get_plugin_instance(<span class="stringliteral">&quot;boolean_influence&quot;</span>)</div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno"><a class="line" href="namespacetest.html#a795b8c55af8ab82f1840a6502cd7938f">    5</a></span>&#160;g = netlist.get_gate_by_id(4)</div>
-<div class="line"><a name="l00006"></a><span class="lineno"><a class="line" href="namespacetest.html#ade4b74e569e08d34aeb580d0380e44de">    6</a></span>&#160;inf = pl.get_boolean_influences_of_gate(g)</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">#g = netlist.get_gate_by_id(4)</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">#inf = pl.get_boolean_influences_of_gate(g)</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">#n = netlist.get_net_by_id(11)</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">#inf = pl.get_boolean_influences_of_subcircuit(netlist.get_gates(), n)</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">    8</a></span>&#160;n = netlist.get_net_by_id(98)</div>
+<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="namespacetest.html#ade4b74e569e08d34aeb580d0380e44de">    9</a></span>&#160;inf = pl.get_boolean_influences_of_subcircuit(netlist.get_gates(), n, 64000)</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keywordflow">for</span> net <span class="keywordflow">in</span> inf:</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    print(net.name, inf[net])</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">import</span> time</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;print(<span class="stringliteral">&quot;Finished at {}&quot;</span>.format(time.time()))</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;print(<span class="stringliteral">&quot;Probabilistic: &quot;</span>)</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keywordflow">for</span> net <span class="keywordflow">in</span> inf:</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    print(net.name, inf[net])</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;n = netlist.get_net_by_id(74)</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;inf = pl.get_boolean_influences_of_subcircuit_deterministic(netlist.get_gates(), n)</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;print(<span class="stringliteral">&quot;Deterministic: &quot;</span>)</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keywordflow">for</span> net <span class="keywordflow">in</span> inf:</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    print(net.name, inf[net])</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_e66abdd4ce1958cbb4df6935267b2aa1.html">boolean_influence</a></li><li class="navelem"><a class="el" href="test_8py.html">test.py</a></li>
-    <li class="footer">Generated on Sat Mar 25 2023 16:15:22 for HAL by
+    <li class="footer">Generated on Mon Mar 27 2023 21:07:09 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
