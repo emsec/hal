@@ -250,7 +250,16 @@ namespace hal
                     }
                     return bf_res;
                 }
-                // case Z3_OP_EXTRACT:
+                case Z3_OP_EXTRACT: {
+                    if (num_args != 1)
+                    {
+                        return ERR("operation 'SLICE' must have arity 1");
+                    }
+
+                    const u32 operand_size = args.at(0).size();
+
+                    return BooleanFunction::Slice(std::move(args.at(0)), BooleanFunction::Index(e.lo(), operand_size), BooleanFunction::Index(e.hi(), operand_size), size);
+                }
                 case Z3_OP_ZERO_EXT: {
                     if (num_args != 1)
                     {

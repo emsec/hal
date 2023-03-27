@@ -202,27 +202,21 @@ namespace hal
                 // EXPECT_EQ(bf_ite, bft_ite);
             }
         }
-        // {
-        //     auto ctx = z3::context();
-        //     auto a   = BooleanFunction::Var("A", 16);
-        //     auto i0  = BooleanFunction::Index(3, 16);
-        //     auto i1  = BooleanFunction::Index(6, 16);
+        {
+            auto ctx = z3::context();
+            auto a   = BooleanFunction::Var("A", 16);
+            auto i0  = BooleanFunction::Index(3, 16);
+            auto i1  = BooleanFunction::Index(6, 16);
 
-        //     auto bf_slice_res = BooleanFunction::Slice(a.clone(), i0.clone(), i1.clone(), 4);
-        //     ASSERT_TRUE(bf_slice_res.is_ok());
-        //     auto bf_slice      = bf_slice_res.get();
-        //     auto z3_slice      = z3_utils::from_bf(bf_slice, ctx);
-        //     auto bft_slice_res = z3_utils::to_bf(z3_slice);
-        //     ASSERT_TRUE(bft_slice_res.is_ok());
-        //     auto bft_slice = bft_slice_res.get();
-        //     EXPECT_EQ(bf_slice, bft_slice);
-        // }
-        // {
-        //     auto ctx = z3::context();
-        //     auto e   = ctx.bv_const("A", 16).extract(6, 3);
-
-        //     std::cout << e << std::endl;
-        // }
+            auto bf_slice_res = BooleanFunction::Slice(a.clone(), i0.clone(), i1.clone(), 4);
+            ASSERT_TRUE(bf_slice_res.is_ok());
+            auto bf_slice      = bf_slice_res.get();
+            auto z3_slice      = z3_utils::from_bf(bf_slice, ctx);
+            auto bft_slice_res = z3_utils::to_bf(z3_slice);
+            ASSERT_TRUE(bft_slice_res.is_ok());
+            auto bft_slice = bft_slice_res.get();
+            EXPECT_EQ(bf_slice, bft_slice);
+        }
         {
             auto ctx      = z3::context();
             auto a        = BooleanFunction::Var("A", 5);
