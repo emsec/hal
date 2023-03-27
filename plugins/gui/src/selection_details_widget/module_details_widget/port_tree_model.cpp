@@ -468,18 +468,6 @@ namespace hal
         }
     }
 
-    void ModulePinsTreeModel::removeItem(TreeItem* item)
-    {
-        beginRemoveRows(parent(getIndexFromItem(item)), item->getOwnRow(), item->getOwnRow());
-        item->getParent()->removeChild(item);
-        endRemoveRows();
-        //mNameToTreeItem.remove(item->getData(sNameColumn).toString());
-        //for now, only ids of pin-items (since these functions are only relevant for dnd)
-        getTypeOfItem(item) == itemType::pin ? mIdToPinItem.remove(getIdOfItem(item)) : mIdToGroupItem.remove(getIdOfItem(item));
-        //mIdToPinItem.remove(getIdOfItem(item));
-        //delete item;
-    }
-
     void ModulePinsTreeModel::dndGroupOnGroup(TreeItem *droppedGroup, TreeItem *onDroppedGroup)
     {
         // SPECIFY: 1) create completely new group, all pins in that, delete old 2 groups
@@ -509,11 +497,15 @@ namespace hal
         bool bottomEdge = row == mRootItem->getChildCount();
         auto desiredIdx = bottomEdge ? row-1 : row;
         if(ownRow < row && !bottomEdge) desiredIdx--;
-        // todo: reorderaction for pingroups
-        mModule->move_pin_group(mModule->get_pin_group_by_id(getIdOfItem(droppedGroup)), desiredIdx);
-        removeItem(droppedGroup);
-        insertItem(droppedGroup, mRootItem, desiredIdx);
-        //setModule(mModule);
+        //mModule->move_pin_group(mModule->get_pin_group_by_id(getIdOfItem(droppedGroup)), desiredIdx);
+        ActionReorderObject* reordObj = new ActionReorderObject(desiredIdx);
+        reordObj->setObject(UserActionObject(getIdOfItem(droppedGroup), UserActionObjectType::PinGroup));
+        reordObj->setParentObject(UserActionObject(mModule->get_id(), UserActionObjectType::Module));
+        auto ret = reordObj->exec();
+        if(ret){
+            removeItem(droppedGroup);
+            insertItem(droppedGroup, mRootItem, desiredIdx);
+        }
         mIgnoreEventsFlag = false;
     }
 
@@ -587,26 +579,29 @@ namespace hal
         removeAct->setObject(UserActionObject(pinGroup->get_id(), UserActionObjectType::PinGroup));
         removeAct->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
         bool ret = removeAct->exec();
-        // i must search for the created group (must secure way is to serve for a group that contains the pin id)
+        // must search for the created group (must secure way is to serve for a group that contains the pin id)
         // and then move that group (the source group cannot be empty after the pin was removed -> canDropMimeData)
         if(ret) // can fail if the pins name that one wants to remove has the same name as another group that already exists
         {
-//            auto newGroup = mModule->get_pin_by_id(getIdOfItem(droppedPin))->get_group().first;
-//            auto pinGroupName = QString::fromStdString(newGroup->get_name());
-//            auto pinGroupDirection = QString::fromStdString(enum_to_string((newGroup->get_direction())));
-//            auto pinGroupType = QString::fromStdString(enum_to_string(newGroup->get_type()));
-//            TreeItem* pinGroupItem = new TreeItem(QList<QVariant>() << pinGroupName << pinGroupDirection << pinGroupType << "");
-//            pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::group));
-//            pinGroupItem->setAdditionalData(keyId, newGroup->get_id());
-//            insertItem(pinGroupItem, mRootItem, mRootItem->getChildCount()-1);
-            // ??????
-            TreeItem* dummy = new TreeItem(QList<QVariant>() << "dummy" << "dummy" << "dummy" << "");
-            TreeItem* dummyc = new TreeItem(QList<QVariant>() << "dummyc" << "dummyc" << "dummyc" << "");
-            dummy->appendChild(dummyc);
-            dummy->setAdditionalData(keyType, QVariant::fromValue(itemType::group));
-            dummy->setAdditionalData(keyId, 60);
-            insertItem(dummy, mRootItem, 0);
-//            setModule(mModule);
+            auto newGroup = mModule->get_pin_by_id(getIdOfItem(droppedPin))->get_group().first;
+            auto pinGroupName = QString::fromStdString(newGroup->get_name());
+            auto pinGroupDirection = QString::fromStdString(enum_to_string((newGroup->get_direction())));
+            auto pinGroupType = QString::fromStdString(enum_to_string(newGroup->get_type()));
+
+            TreeItem* pinGroupItem = new TreeItem(QList<QVariant>() << pinGroupName << pinGroupDirection << pinGroupType << "");
+            pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::group));
+            pinGroupItem->setAdditionalData(keyId, newGroup->get_id());
+
+            int pos = mRootItem->getChildCount(); // or query current index
+            ActionReorderObject* reordObj = new ActionReorderObject(row);
+            reordObj->setObject(UserActionObject(newGroup->get_id(), UserActionObjectType::PinGroup));
+            reordObj->setParentObject(UserActionObject(mModule->get_id(), UserActionObjectType::Module));
+            if(reordObj->exec())
+                pos = row;
+
+            insertItem(pinGroupItem, mRootItem, pos);
+            removeItem(droppedPin);
+            insertItem(droppedPin, pinGroupItem, 0);
         }
         mIgnoreEventsFlag = false;
     }
@@ -620,5 +615,16 @@ namespace hal
         //mNameToTreeItem.insert(item->getData(sNameColumn).toString(), item);
         getTypeOfItem(item) == itemType::pin ? mIdToPinItem.insert(getIdOfItem(item), item) : mIdToGroupItem.insert(getIdOfItem(item), item);
         //mIdToPinItem.insert(getIdOfItem(item), item);
+    }
+    void ModulePinsTreeModel::removeItem(TreeItem* item)
+    {
+        beginRemoveRows(parent(getIndexFromItem(item)), item->getOwnRow(), item->getOwnRow());
+        item->getParent()->removeChild(item);
+        endRemoveRows();
+        //mNameToTreeItem.remove(item->getData(sNameColumn).toString());
+        //for now, only ids of pin-items (since these functions are only relevant for dnd)
+        getTypeOfItem(item) == itemType::pin ? mIdToPinItem.remove(getIdOfItem(item)) : mIdToGroupItem.remove(getIdOfItem(item));
+        //mIdToPinItem.remove(getIdOfItem(item));
+        //delete item;
     }
 }    // namespace hal
