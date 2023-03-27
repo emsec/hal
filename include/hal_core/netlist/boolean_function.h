@@ -837,8 +837,8 @@ namespace hal
          * @param[in] var2expr - Maps input variables to expression.
          * @returns Z3 representation of the Boolean function.
          */
-        [[deprecated("Will be removed in a future version. Use z3_utils::to_z3() in the z3_utils plugin instead.")]] z3::expr to_z3(z3::context& context,
-                                                                                                                                    const std::map<std::string, z3::expr>& var2expr = {}) const;
+        [[deprecated("Will be removed in a future version. Use z3_utils::from_bf() in the z3_utils plugin instead.")]] z3::expr to_z3(z3::context& context,
+                                                                                                                                      const std::map<std::string, z3::expr>& var2expr = {}) const;
 
     private:
         ////////////////////////////////////////////////////////////////////////
