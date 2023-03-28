@@ -47,7 +47,7 @@ namespace hal {
 
     QWizardPage *Wizard::createPage3()
     {
-        QWizardPage *page = new Page3;
+        QWizardPage *page = new Page3(m_parent);
         page->setTitle(tr("Step 3"));
         page->setSubTitle(tr("Engine settings"));
         return page;
@@ -267,14 +267,47 @@ namespace hal {
     }
 
 
-    Page3::Page3(QWidget *parent): QWizardPage(parent)
+    Page3::Page3(WaveformViewer *parent)
+        : QWizardPage(parent), m_parent(parent)
     {
-        label = new QLabel(tr("Engine:"));
-        lineEdit = new QLineEdit;
-        QVBoxLayout *layout = new QVBoxLayout;
-        layout->addWidget(label);
-        layout->addWidget(lineEdit);
-        setLayout(layout);
+        mLayout = new QVBoxLayout(this);
+
+        for (SimulationEngineFactory* sef : *SimulationEngineFactories::instance())
+        {
+            QRadioButton *radioButton = new QRadioButton(QString::fromStdString(sef->name()), this);
+            mLayout->addWidget(radioButton);
+
+            if (QString::fromStdString(sef->name()) == "verilator")
+            {
+                radioButton->setChecked(true);
+            }
+        }
+
+        setLayout(mLayout);
+    }
+
+
+    bool Page3::validatePage()
+    {
+
+        QString selectedEngineName;
+
+        for (int i = 0; i < mLayout->count(); ++i)
+        {
+            QRadioButton *radioButton = qobject_cast<QRadioButton *>(mLayout->itemAt(i)->widget());
+            if (radioButton && radioButton->isChecked())
+            {
+                selectedEngineName = radioButton->text();
+                break;
+            }
+        }
+
+        m_parent->mCurrentWaveWidget->createEngine(selectedEngineName);
+        std::cout << selectedEngineName.toStdString() << std::endl;
+
+
+        // wurde clock ausgewählt???
+        return true;
     }
 
     Page4::Page4(QWidget *parent): QWizardPage(parent)

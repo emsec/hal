@@ -108,9 +108,9 @@ namespace hal {
         virtual bool validatePage() override;
 
     private:
-        WaveformViewer *m_parent;
-
         QVBoxLayout *mLayout;
+        
+        WaveformViewer *m_parent;
     };
 
     class Page4 : public QWizardPage {
