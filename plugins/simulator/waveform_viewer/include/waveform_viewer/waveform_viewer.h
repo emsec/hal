@@ -85,6 +85,7 @@ namespace hal
          */
         virtual void setupToolbar(Toolbar* toolbar) override;
 
+        void setGates(std::vector<Gate*> gates);
         /**
          * Restore previous controller and waveform viewer from saved data files.
          */

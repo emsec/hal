@@ -185,20 +185,25 @@ namespace hal
     void WaveformViewer::currentStateChanged(NetlistSimulatorController::SimulationState state)
     {
         mOpenInputfileAction->setEnabled(true);
+        mRunSimulationAction->setEnabled(true);
         mOpenInputfileAction->setIcon(gui_utility::getStyledSvgIcon("all->#3192C5",":/icons/folder"));
         if (!mCurrentWaveWidget || state == NetlistSimulatorController::SimulationRun || mProgress->isVisible())
         {
             mSimulSettingsAction->setDisabled(true);
             mSaveWaveformsAction->setDisabled(true);
+
+            // TODO: das ganze muss anders gestartet werden sonst fehlen einpar ptr
             mRunSimulationAction->setDisabled(true);
             mAddResultWaveAction->setDisabled(true);
             mToggleMaxZoomAction->setDisabled(true);
         }
         else
+
         {
             mSimulSettingsAction->setEnabled(true);
             mSaveWaveformsAction->setEnabled(state != NetlistSimulatorController::NoGatesSelected);
-            mRunSimulationAction->setEnabled(state == NetlistSimulatorController::ParameterReady);
+
+            //mRunSimulationAction->setEnabled(state == NetlistSimulatorController::ParameterReady);
             mToggleMaxZoomAction->setEnabled(!mCurrentWaveWidget->isEmpty());
        }
         mSimulSettingsAction->setIcon(gui_utility::getStyledSvgIcon(mSimulSettingsAction->isEnabled() ? "all->#FFFFFF" : "all->#808080",":/icons/preferences"));
@@ -243,6 +248,7 @@ namespace hal
         toolbar->addAction(mAddResultWaveAction);
         toolbar->addAction(mToggleMaxZoomAction);
         toolbar->addAction(mUndoZoomShiftAction);
+        mRunSimulationAction->setEnabled(true);
     }
 
     void WaveformViewer::handleTabClosed(int inx)
@@ -555,6 +561,12 @@ namespace hal
         if (gsd.exec() != QDialog::Accepted) return;
 
         mCurrentWaveWidget->setGates(gsd.selectedGates());
+    }
+
+    void WaveformViewer::setGates(std::vector<Gate*> gates)
+    {
+        if (!mCurrentWaveWidget) return;
+        mCurrentWaveWidget->setGates(gates);
     }
 
     void WaveformViewer::handleSelectionChanged(void* sender)

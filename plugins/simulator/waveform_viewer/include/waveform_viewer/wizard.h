@@ -7,84 +7,107 @@
 #include <QLineEdit>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <vector>
+#include <QDialogButtonBox>
+#include <QTableView>
+#include <QDialogButtonBox>
+#include <QTableView>
+#include "hal_core/netlist/gate.h"
+#include "waveform_viewer.h"
 
-class Wizard : public QWizard {
-    Q_OBJECT
+namespace hal {
 
-public:
-    Wizard(QWidget *parent = 0);
+    class Wizard : public QWizard {
+        Q_OBJECT
 
-private:
-    QWizardPage *createIntroPage();
-    QWizardPage *createPage1();
-    QWizardPage *createPage2();
-    QWizardPage *createPage3();
-    QWizardPage *createPage4();
-    QWizardPage *createConclusionPage();
-};
+    public:
+        Wizard(WaveformViewer *parent);
 
-class IntroPage : public QWizardPage {
-    Q_OBJECT
+    private:
+        QWizardPage *createIntroPage();
+        QWizardPage *createPage1();
+        QWizardPage *createPage2();
+        QWizardPage *createPage3();
+        QWizardPage *createPage4();
+        QWizardPage *createConclusionPage();
 
-public:
-    IntroPage(QWidget *parent = 0);
+        WaveformViewer *m_parent;
+    };
 
-private:
-    QLabel *label;
-};
+    class IntroPage : public QWizardPage {
+        Q_OBJECT
 
-class Page1 : public QWizardPage {
-    Q_OBJECT
+    public:
+        IntroPage(QWidget *parent = 0);
 
-public:
-    Page1(QWidget *parent = 0);
+    private:
+        QLabel *label;
+    };
 
-private:
-    QLabel *label;
-    QLineEdit *lineEdit;
-};
+    class Page1 : public QWizardPage {
+        Q_OBJECT
 
-class Page2 : public QWizardPage {
-    Q_OBJECT
+    public:
+        Page1(WaveformViewer *parent);
 
-public:
-    Page2(QWidget *parent = 0);
+        virtual bool validatePage() override;
 
-private:
-    QLabel *label;
-    QLineEdit *lineEdit;
-};
+        std::vector<Gate*> selectedGates() const;
+    private:
+        QPushButton* mButAll;
+        QPushButton* mButSel;
+        QPushButton* mButNone;
+        QTableView* mTableView;
+        QDialogButtonBox* mButtonBox;
+        WaveformViewer *m_parent;
 
-class Page3 : public QWizardPage {
-    Q_OBJECT
+        void handleSelectAll();
+        void handleCurrentGuiSelection();
+        void handleClearSelection();
+    };
 
-public:
-    Page3(QWidget *parent = 0);
+    class Page2 : public QWizardPage {
+        Q_OBJECT
 
-private:
-    QLabel *label;
-    QLineEdit *lineEdit;
-};
+    public:
+        Page2(QWidget *parent = 0);
 
-class Page4 : public QWizardPage {
-    Q_OBJECT
+    private:
+        QLabel *label;
+        QLineEdit *lineEdit;
+    };
 
-public:
-    Page4(QWidget *parent = 0);
+    class Page3 : public QWizardPage {
+        Q_OBJECT
 
-private:
-    QLabel *label;
-    QLineEdit *lineEdit;
-};
+    public:
+        Page3(QWidget *parent = 0);
 
-class ConclusionPage : public QWizardPage {
-    Q_OBJECT
+    private:
+        QLabel *label;
+        QLineEdit *lineEdit;
+    };
 
-public:
-    ConclusionPage(QWidget *parent = 0);
+    class Page4 : public QWizardPage {
+        Q_OBJECT
 
-private:
-    QLabel *label;
-};
+    public:
+        Page4(QWidget *parent = 0);
 
+    private:
+        QLabel *label;
+        QLineEdit *lineEdit;
+    };
+
+    class ConclusionPage : public QWizardPage {
+        Q_OBJECT
+
+    public:
+        ConclusionPage(QWidget *parent = 0);
+
+    private:
+        QLabel *label;
+    };
+
+}
 #endif
