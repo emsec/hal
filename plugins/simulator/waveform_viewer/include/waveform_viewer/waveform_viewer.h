@@ -90,6 +90,8 @@ namespace hal
          * Restore previous controller and waveform viewer from saved data files.
          */
         void restoreFromProject() override;
+
+        WaveWidget* mCurrentWaveWidget;
     private Q_SLOTS:
         void handleCreateControl();
         void handleSimulSettings();
@@ -137,7 +139,7 @@ namespace hal
         QTabWidget* mTabWidget;
         QStatusBar* mStatusBar;
         QProgressBar* mProgress;
-        WaveWidget* mCurrentWaveWidget;
+
 
         void takeControllerOwnership(std::unique_ptr<NetlistSimulatorController>& ctrlRef, bool create);
         void showCloseButton();

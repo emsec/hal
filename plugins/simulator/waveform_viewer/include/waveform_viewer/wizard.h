@@ -8,10 +8,13 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <vector>
+#include <map>
 #include <QDialogButtonBox>
 #include <QTableView>
 #include <QDialogButtonBox>
-#include <QTableView>
+#include <QSpinBox>
+#include <QComboBox>
+#include <QCheckBox>
 #include "hal_core/netlist/gate.h"
 #include "waveform_viewer.h"
 
@@ -59,6 +62,7 @@ namespace hal {
         QPushButton* mButNone;
         QTableView* mTableView;
         QDialogButtonBox* mButtonBox;
+
         WaveformViewer *m_parent;
 
         void handleSelectAll();
@@ -70,11 +74,28 @@ namespace hal {
         Q_OBJECT
 
     public:
-        Page2(QWidget *parent = 0);
+        Page2(WaveformViewer *parent);
+
+        virtual bool validatePage() override;
+
+    private Q_SLOTS:
+        void dontUseClockChanged(bool state);
 
     private:
-        QLabel *label;
-        QLineEdit *lineEdit;
+        QComboBox* mComboNet;
+        QSpinBox* mSpinPeriod;
+        QSpinBox* mSpinStartValue;
+        QSpinBox* mSpinDuration;
+        QCheckBox* mDontUseClock;
+        QList<const Net*> mInputs;
+
+        WaveformViewer *m_parent;
+
+        int netIndex() const { return mComboNet->currentIndex(); }
+        int period() const { return mSpinPeriod->value(); }
+        int startValue() const { return mSpinStartValue->value(); }
+        int duration() const { return mSpinDuration->value(); }
+        bool dontUseClock() const { return mDontUseClock->isChecked(); }
     };
 
     class Page3 : public QWizardPage {
