@@ -18,6 +18,7 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 
+#include <valgrind/callgrind.h>
 #include <QDebug>
 #include <QApplication>
 #include <QElapsedTimer>
@@ -253,7 +254,10 @@ namespace hal
         createBoxes();
         if (mOptimizeNetLayout)
         {
+            CALLGRIND_START_INSTRUMENTATION;
             alternateLayout();
+            CALLGRIND_STOP_INSTRUMENTATION;
+            CALLGRIND_DUMP_STATS;
             qDebug() << "elapsed time (experimental new) layout [ms]" << timer.elapsed();
             return;
         }
