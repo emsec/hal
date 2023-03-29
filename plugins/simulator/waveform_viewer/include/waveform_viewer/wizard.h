@@ -26,6 +26,8 @@ namespace hal {
 
     public:
         Wizard(WaveformViewer *parent);
+        int mPage4Id;
+        int mPage5Id;
 
     private:
         QWizardPage *createIntroPage();
@@ -33,6 +35,7 @@ namespace hal {
         QWizardPage *createPage2();
         QWizardPage *createPage3();
         QWizardPage *createPage4();
+        QWizardPage *createPage5();
         QWizardPage *createConclusionPage();
 
         WaveformViewer *m_parent;
@@ -103,14 +106,17 @@ namespace hal {
         Q_OBJECT
 
     public:
-        Page3(WaveformViewer *parent);
+        Page3(WaveformViewer *parent, Wizard *wizard);
 
         virtual bool validatePage() override;
+        int nextId() const override;
 
     private:
-        WaveformViewer *m_parent;
-
         QVBoxLayout *mLayout;
+        bool mVerilator;
+
+        WaveformViewer *m_parent;
+        Wizard *m_wizard;
     };
 
     class Page4 : public QWizardPage {
@@ -118,6 +124,17 @@ namespace hal {
 
     public:
         Page4(QWidget *parent = 0);
+
+    private:
+        QLabel *label;
+        QLineEdit *lineEdit;
+    };
+
+    class Page5 : public QWizardPage {
+        Q_OBJECT
+
+    public:
+        Page5(QWidget *parent = 0);
 
     private:
         QLabel *label;

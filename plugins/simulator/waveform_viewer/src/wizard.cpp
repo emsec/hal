@@ -17,7 +17,8 @@ namespace hal {
         addPage(createPage1());
         addPage(createPage2());
         addPage(createPage3());
-        addPage(createPage4());
+        mPage4Id = addPage(createPage4());
+        mPage5Id = addPage(createPage5());
         addPage(createConclusionPage());
     }
 
@@ -47,7 +48,7 @@ namespace hal {
 
     QWizardPage *Wizard::createPage3()
     {
-        QWizardPage *page = new Page3(m_parent);
+        QWizardPage *page = new Page3(m_parent, this);
         page->setTitle(tr("Step 3"));
         page->setSubTitle(tr("Engine settings"));
         return page;
@@ -57,6 +58,14 @@ namespace hal {
     {
         QWizardPage *page = new Page4;
         page->setTitle(tr("Step 4"));
+        page->setSubTitle(tr("Engine properties"));
+        return page;
+    }
+
+    QWizardPage *Wizard::createPage5()
+    {
+        QWizardPage *page = new Page5;
+        page->setTitle(tr("Step 5"));
         page->setSubTitle(tr("Load input Data"));
         return page;
     }
@@ -267,8 +276,8 @@ namespace hal {
     }
 
 
-    Page3::Page3(WaveformViewer *parent)
-        : QWizardPage(parent), m_parent(parent)
+    Page3::Page3(WaveformViewer *parent, Wizard *wizard)
+        : QWizardPage(parent), m_parent(parent), m_wizard(wizard)
     {
         mLayout = new QVBoxLayout(this);
 
@@ -286,7 +295,6 @@ namespace hal {
         setLayout(mLayout);
     }
 
-
     bool Page3::validatePage()
     {
 
@@ -301,6 +309,14 @@ namespace hal {
                 break;
             }
         }
+        if (selectedEngineName.toStdString() == "verilator")
+        {
+            mVerilator = true;
+        }
+        else
+        {
+            mVerilator = false;
+        }
 
         m_parent->mCurrentWaveWidget->createEngine(selectedEngineName);
         std::cout << selectedEngineName.toStdString() << std::endl;
@@ -310,7 +326,31 @@ namespace hal {
         return true;
     }
 
+    int Page3::nextId() const
+    {
+        if (mVerilator)
+        {
+            return m_wizard->mPage4Id;
+        }
+        else
+        {
+            return m_wizard->mPage5Id;
+        }
+    }
+
+
+
     Page4::Page4(QWidget *parent): QWizardPage(parent)
+    {
+        label = new QLabel(tr("Engine Properties:"));
+        lineEdit = new QLineEdit;
+        QVBoxLayout *layout = new QVBoxLayout;
+        layout->addWidget(label);
+        layout->addWidget(lineEdit);
+        setLayout(layout);
+    }
+
+    Page5::Page5(QWidget *parent): QWizardPage(parent)
     {
         label = new QLabel(tr("Input Data:"));
         lineEdit = new QLineEdit;
