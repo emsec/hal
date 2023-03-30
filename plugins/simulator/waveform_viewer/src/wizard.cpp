@@ -1,8 +1,11 @@
 #include "waveform_viewer/wizard.h"
 #include "waveform_viewer/wave_widget.h")
 #include "gui/module_dialog/gate_select_model.h"
+#include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 
 #include <QHeaderView>
+#include <QFileDialog>
 
 #include "gui/gui_globals.h"
 
@@ -64,7 +67,7 @@ namespace hal {
 
     QWizardPage *Wizard::createPage5()
     {
-        QWizardPage *page = new Page5;
+        QWizardPage *page = new Page5(m_parent);
         page->setTitle(tr("Step 5"));
         page->setSubTitle(tr("Load input Data"));
         return page;
@@ -400,14 +403,33 @@ namespace hal {
     }
 
 
-    Page5::Page5(QWidget *parent): QWizardPage(parent)
+    Page5::Page5(WaveformViewer *parent)
+        : QWizardPage(parent), m_parent(parent)
     {
-        label = new QLabel(tr("Input Data:"));
-        lineEdit = new QLineEdit;
-        QVBoxLayout *layout = new QVBoxLayout;
-        layout->addWidget(label);
-        layout->addWidget(lineEdit);
-        setLayout(layout);
+        QString filter = QString("Saved data (%1)").arg(NetlistSimulatorController::sPersistFile);
+        if (m_parent->mCurrentWaveWidget)
+            filter += ";; VCD files (*.vcd);; CSV files (*.csv)";
+
+        QString filename =
+                QFileDialog::getOpenFileName(this, "Load input wave file", ".", filter);
+        if (filename.isEmpty()) return;
+        if (filename.endsWith(NetlistSimulatorController::sPersistFile))
+        {
+            NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
+            if (ctrlPlug)
+            {
+                std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->restore_simulator_controller(gNetlist,filename.toStdString());
+                //takeControllerOwnership(ctrlRef, true);
+            }
+        }
+        else if (m_parent->mCurrentWaveWidget && m_parent->mCurrentWaveWidget->controller()->can_import_data() && filename.toLower().endsWith(".vcd"))
+            m_parent->mCurrentWaveWidget->controller()->import_vcd(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
+        else if (m_parent->mCurrentWaveWidget && m_parent->mCurrentWaveWidget->controller()->can_import_data() && filename.toLower().endsWith(".csv"))
+            m_parent->mCurrentWaveWidget->controller()->import_csv(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
+        else if (m_parent->mCurrentWaveWidget)
+            log_warning(m_parent->mCurrentWaveWidget->controller()->get_name(), "Cannot parse file '{}' (unknown extension ore wrong state).", filename.toStdString());
+        else
+            log_warning("simulation_plugin", "Unable to restore saved data from file '{}'.", filename.toStdString());
     }
 
     ConclusionPage::ConclusionPage(QWidget *parent): QWizardPage(parent)

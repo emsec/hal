@@ -143,11 +143,10 @@ namespace hal {
         Q_OBJECT
 
     public:
-        Page5(QWidget *parent = 0);
+        Page5(WaveformViewer *parent);
 
     private:
-        QLabel *label;
-        QLineEdit *lineEdit;
+        WaveformViewer *m_parent;
     };
 
     class ConclusionPage : public QWizardPage {
