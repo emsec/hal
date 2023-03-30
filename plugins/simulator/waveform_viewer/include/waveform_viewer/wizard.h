@@ -13,11 +13,13 @@
 #include <QTableView>
 #include <QDialogButtonBox>
 #include <QSpinBox>
+#include <QTableWidget>
 #include <QComboBox>
 #include <QRadioButton>
 #include <QCheckBox>
 #include "hal_core/netlist/gate.h"
 #include "waveform_viewer.h"
+#include "netlist_simulator_controller/simulation_settings.h"
 
 namespace hal {
 
@@ -25,7 +27,7 @@ namespace hal {
         Q_OBJECT
 
     public:
-        Wizard(WaveformViewer *parent);
+        Wizard(SimulationSettings *settings, WaveformViewer *parent);
         int mPage4Id;
         int mPage5Id;
 
@@ -39,6 +41,7 @@ namespace hal {
         QWizardPage *createConclusionPage();
 
         WaveformViewer *m_parent;
+        SimulationSettings *mSettings;
     };
 
     class IntroPage : public QWizardPage {
@@ -122,12 +125,18 @@ namespace hal {
     class Page4 : public QWizardPage {
         Q_OBJECT
 
-    public:
-        Page4(QWidget *parent = 0);
+    private Q_SLOTS:
+        void handleCellChanged(int irow, int icolumn);
 
+    public:
+        Page4(SimulationSettings *settings, WaveformViewer *parent);
+
+        virtual bool validatePage() override;
     private:
-        QLabel *label;
-        QLineEdit *lineEdit;
+        QTableWidget *mTableWidget;
+
+        WaveformViewer *m_parent;
+        SimulationSettings *mSettings;
     };
 
     class Page5 : public QWizardPage {

@@ -504,7 +504,7 @@ namespace hal
 
     void WaveformViewer::handleRunSimulation()
     {
-        Wizard wizard(this);
+        Wizard wizard(NetlistSimulatorControllerPlugin::sSimulationSettings, this);
         wizard.exec();
         //if (!mCurrentWaveWidget) return;
         //connect(mCurrentWaveWidget->controller(),&NetlistSimulatorController::engineFinished,mCurrentWaveWidget,&WaveWidget::handleEngineFinished);

@@ -8,8 +8,8 @@
 
 namespace hal {
 
-    Wizard::Wizard(WaveformViewer *parent)
-        : QWizard(parent), m_parent(parent)
+    Wizard::Wizard(SimulationSettings *settings, WaveformViewer *parent)
+        : QWizard(parent), mSettings(settings), m_parent(parent)
     {
         setWindowTitle(tr("Empty Wizard"));
 
@@ -56,7 +56,7 @@ namespace hal {
 
     QWizardPage *Wizard::createPage4()
     {
-        QWizardPage *page = new Page4;
+        QWizardPage *page = new Page4(mSettings, m_parent);
         page->setTitle(tr("Step 4"));
         page->setSubTitle(tr("Engine properties"));
         return page;
@@ -340,15 +340,65 @@ namespace hal {
 
 
 
-    Page4::Page4(QWidget *parent): QWizardPage(parent)
+    Page4::Page4(SimulationSettings *settings, WaveformViewer *parent)
+        : QWizardPage(parent), mSettings(settings), m_parent(parent)
     {
-        label = new QLabel(tr("Engine Properties:"));
-        lineEdit = new QLineEdit;
+        mTableWidget = new QTableWidget(this);
+
+        QMap<QString,QString> engProp = settings->engineProperties();
+        mTableWidget->setColumnCount(2);
+        mTableWidget->setColumnWidth(0,250);
+        mTableWidget->setColumnWidth(1,350);
+        mTableWidget->setRowCount(engProp.size()+3);
+        mTableWidget->setHorizontalHeaderLabels(QStringList() << "Property" << "Value");
+
+        int irow = 0;
+        for (auto it = engProp.constBegin(); it != engProp.constEnd(); ++it)
+        {
+            QTableWidgetItem wi(it.key());
+            mTableWidget->setItem(irow, 0, new QTableWidgetItem(it.key()));
+            mTableWidget->setItem(irow, 1, new QTableWidgetItem(it.value()));
+            ++irow;
+        }
+        mTableWidget->horizontalHeader()->setStretchLastSection(true);
+
+        mTableWidget->horizontalHeader()->setStretchLastSection(true);
+        connect(mTableWidget, &QTableWidget::cellChanged, this, &Page4::handleCellChanged);
+
+
         QVBoxLayout *layout = new QVBoxLayout;
-        layout->addWidget(label);
-        layout->addWidget(lineEdit);
+        layout->addWidget(mTableWidget);
         setLayout(layout);
+
     }
+
+    void Page4::handleCellChanged(int irow, int icolumn)
+    {
+        if ((icolumn == 1 && irow >= mTableWidget->rowCount()-2) ||
+            (icolumn == 0 && irow >= mTableWidget->rowCount()-1))
+            mTableWidget->setRowCount(mTableWidget->rowCount()+1);
+    }
+
+    bool Page4::validatePage()
+    {
+
+        QMap<QString,QString> engProp;
+        for (int irow=0; irow < mTableWidget->rowCount(); ++irow)
+        {
+            const QTableWidgetItem* wi = mTableWidget->item(irow,0);
+            if (!wi) continue;
+            QString key = wi->text().trimmed();
+            if (key.isEmpty()) continue;
+            wi = mTableWidget->item(irow,1);
+            QString value = wi ? wi->text().trimmed() : QString();
+            engProp[key] = value;
+        }
+        mSettings->setEngineProperties(engProp);
+        mSettings->sync();
+
+        return true;
+    }
+
 
     Page5::Page5(QWidget *parent): QWizardPage(parent)
     {
