@@ -46,5 +46,6 @@ namespace hal
         std::string get_value() const { return m_value; }
         ParameterType get_type() const { return m_type; }
         void set_value(const std::string& v)  { m_value = v; }
+        void set_tagname(const std::string& tg) { m_tagname = tg; }
     };
 }

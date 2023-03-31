@@ -49,6 +49,7 @@ namespace hal
     class WelcomeScreen;
     class SettingsItemKeybind;
     class SettingsItemDropdown;
+    class GuiPluginManager;
 
     /**
      * @ingroup gui
@@ -77,6 +78,8 @@ namespace hal
         Q_PROPERTY(QString saveAsIconStyle READ saveAsIconStyle WRITE setSaveAsIconStyle)
         Q_PROPERTY(QString settingsIconPath READ settingsIconPath WRITE setSettingsIconPath)
         Q_PROPERTY(QString settingsIconStyle READ settingsIconStyle WRITE setSettingsIconStyle)
+        Q_PROPERTY(QString pluginsIconPath READ pluginsIconPath WRITE setPluginsIconPath)
+        Q_PROPERTY(QString pluginsIconStyle READ pluginsIconStyle WRITE setPluginsIconStyle)
         Q_PROPERTY(QString undoIconPath READ undoIconPath WRITE setUndoIconPath)
         Q_PROPERTY(QString undoIconStyle READ undoIconStyle WRITE setUndoIconStyle)
         Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
@@ -190,6 +193,19 @@ namespace hal
          * @returns the 'Settings'-icon style
          */
         QString settingsIconStyle() const;
+
+        /**
+         * Q_PROPERTY READ function for the 'plugins'-icon path.
+         *
+         * @returns the 'plugins'-icon path
+         */
+        QString pluginsIconPath() const;
+        /**
+         * Q_PROPERTY READ function for the 'plugins'-icon style.
+         *
+         * @returns the 'plugins'-icon style
+         */
+        QString pluginsIconStyle() const;
 
         QString undoIconPath() const;
         QString undoIconStyle() const;
@@ -325,6 +341,19 @@ namespace hal
          */
         void setSettingsIconStyle(const QString& style);
 
+        /**
+         * Q_PROPERTY WRITE function for the 'Plugins'-icon path.
+         *
+         * @param path - The new path
+         */
+        void setPluginsIconPath(const QString& path);
+        /**
+         * Q_PROPERTY WRITE function for the 'Plugins'-icon style.
+         *
+         * @param style - The new style
+         */
+        void setPluginsIconStyle(const QString& style);
+
         void setUndoIconPath(const QString& path);
         void setUndoIconStyle(const QString& style);
         void setDisabledIconStyle(const QString &style);
@@ -364,12 +393,22 @@ namespace hal
         /**
          * Q_SLOT to open (toggle to the) settings menu.
          */
-        void toggleSettings();
+        void openSettings();
 
         /**
          * Q_SLOT to close the settings menu.
          */
         void closeSettings();
+
+        /**
+         * Q_SLOT to open (toggle to the) PluginManager menu.
+         */
+        void openPluginManager();
+
+        /**
+         * Q_SLOT to close the PluginManager menu.
+         */
+        void closePluginManager(const QString& invokeGui);
 
         /**
          * Q_SLOT to create a new empty netlist. Asks the user for the gate_library.
@@ -471,8 +510,6 @@ namespace hal
 
         void handleImportProjectTriggered();
 
-        void setPluginParameter();
-
     private:
         /**
          * Overwritten Qt function to handle the close event.
@@ -504,13 +541,12 @@ namespace hal
          */
         void saveState();
 
-        void pluginMenu();
-
         QVBoxLayout* mLayout;
         QMenuBar* mMenuBar;
         QStackedWidget* mStackedWidget;
 
         MainSettingsWidget* mSettings;
+        GuiPluginManager* mPluginManager;
         WelcomeScreen* mWelcomeScreen;
         QHBoxLayout* mToolBarLayout;
         QToolBar* mLeftToolBar;
@@ -532,12 +568,12 @@ namespace hal
         Action* mActionImportProject;
 
         Action* mActionSettings;
+        Action* mActionPlugins;
         Action* mActionClose;
 
         QMenu* mMenuFile;
         QMenu* mMenuEdit;
         QMenu* mMenuMacro;
-        QMenu* mMenuPlugin;
         QMenu* mMenuHelp;
 
         QString mHalIconStyle;
@@ -561,6 +597,9 @@ namespace hal
         QString mSettingsIconPath;
         QString mSettingsIconStyle;
 		
+        QString mPluginsIconPath;
+        QString mPluginsIconStyle;
+
    		QString mUndoIconPath;
         QString mUndoIconStyle;
 

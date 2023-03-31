@@ -98,7 +98,6 @@ namespace hal
             get_partial_netlist(const Netlist* nl, const std::vector<const Gate*>& subgraph_gates);
 
         /**
-         * TODO test
          * Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors will be returned. 
          * Higher number of depth causes as many steps of recursive calls. 
          * If depth is set to 0 there is no limitation and the loop continues until no more predecessors/succesors are found.
@@ -114,7 +113,6 @@ namespace hal
         CORE_API std::vector<Gate*> get_next_gates(const Gate* gate, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
-         * TODO test
          * Find predecessors or successors of a net. If depth is set to 1 only direct predecessors/successors will be returned. 
          * Higher number of depth causes as many steps of recursive calls. 
          * If depth is set to 0  there is no limitation and the loop continues until no more predecessors/succesors are found.
@@ -234,7 +232,6 @@ namespace hal
         CORE_API std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties);
 
         /**
-         * TODO test
          * Get the nets that are connected to a subset of pins of the specified gate.
          * 
          * @param[in] gate - The gate.
@@ -276,7 +273,7 @@ namespace hal
         CORE_API std::vector<Net*> get_common_inputs(const std::vector<Gate*>& gates, u32 threshold = 0);
 
         /**
-         * TODO test
+         * \deprecated
          * Replace the given gate with a gate of the specified gate type.
          * A map from old to new pins must be provided in order to correctly connect the gates inputs and outputs.
          * A pin can be omitted if no connection at that pin is desired.
@@ -286,7 +283,8 @@ namespace hal
          * @param[in] pin_map - A map from old to new pins.
          * @returns Ok on success, an error otherwise.
          */
-        CORE_API Result<std::monostate> replace_gate(Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map);
+        [[deprecated("Will be removed in a future version, use NetlistModificationDecorator::replace_gate instead.")]] CORE_API Result<std::monostate>
+            replace_gate(Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map);
 
         /**
          * TODO test
@@ -319,7 +317,6 @@ namespace hal
                                                            const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
-         * TODO test
          * Find a sequence of gates (of the specified sequence of gate types) that are connected via the specified input and output pins.
          * The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
          * However, the start gate must be of the first gate type within the repeating sequence.
@@ -340,7 +337,6 @@ namespace hal
                                                                    const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
-         * TODO test
          * Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with the end gate. 
          * The gate where the search started from will be the first in the result vector, the end gate will be the last. 
          * If there is no such path an empty vector is returned. If there is more than one path with the same length only the first one is returned.

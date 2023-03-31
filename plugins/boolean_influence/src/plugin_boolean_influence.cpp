@@ -3,7 +3,7 @@
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist_utils.h"
-#include "z3_utils/include/plugin_z3_utils.h"
+#include "z3_utils/include/z3_utils.h"
 
 #include <filesystem>
 #include <fstream>
@@ -419,7 +419,11 @@ int main(int argc, char *argv[]) {
     Result<std::unordered_map<std::string, double>> BooleanInfluencePlugin::get_boolean_influence(const BooleanFunction& bf, const u32 num_evaluations, const std::string& unique_identifier)
     {
         auto ctx         = z3::context();
+<<<<<<< HEAD
         const auto z3_bf = z3_utils::to_z3(bf, ctx);
+=======
+        const auto z3_bf = z3_utils::from_bf(bf, ctx);
+>>>>>>> master
 
         return get_boolean_influence(z3_bf, num_evaluations, unique_identifier);
     }
@@ -432,7 +436,11 @@ int main(int argc, char *argv[]) {
     Result<std::unordered_map<std::string, double>> BooleanInfluencePlugin::get_boolean_influence_deterministic(const BooleanFunction& bf, const std::string& unique_identifier)
     {
         auto ctx         = z3::context();
+<<<<<<< HEAD
         const auto z3_bf = z3_utils::to_z3(bf, ctx);
+=======
+        const auto z3_bf = z3_utils::from_bf(bf, ctx);
+>>>>>>> master
 
         return get_boolean_influence_deterministic(z3_bf, unique_identifier);
     }

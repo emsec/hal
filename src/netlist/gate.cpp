@@ -178,6 +178,31 @@ namespace hal
         return m_module;
     }
 
+    std::vector<Module*> Gate::get_modules(const std::function<bool(Module*)>& filter, bool recursive) const
+    {
+        std::vector<Module*> res;
+
+        if (!filter)
+        {
+            res.push_back(m_module);
+        }
+        else
+        {
+            if (filter(m_module))
+            {
+                res.push_back(m_module);
+            }
+        }
+
+        if (recursive)
+        {
+            std::vector<Module*> more = m_module->get_parent_modules(filter, true);
+            res.reserve(res.size() + more.size());
+            res.insert(res.end(), more.begin(), more.end());
+        }
+        return res;
+    }
+
     Grouping* Gate::get_grouping() const
     {
         return m_grouping;

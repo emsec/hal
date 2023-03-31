@@ -1,5 +1,6 @@
 #include "hal_core/netlist/netlist_utils.h"
 
+#include "hal_core/netlist/decorators/netlist_modification_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
@@ -68,8 +69,7 @@ namespace hal
                 return ERR("could not get subgraph function: net is a 'nullptr'");
             }
 
-            const auto subgraph_dec = SubgraphNetlistDecorator(*net->get_netlist());
-            if (auto res = subgraph_dec.get_subgraph_function(subgraph_gates, net, cache); res.is_ok())
+            if (auto res = SubgraphNetlistDecorator(*net->get_netlist()).get_subgraph_function(subgraph_gates, net, cache); res.is_ok())
             {
                 return res;
             }
@@ -152,8 +152,7 @@ namespace hal
 
         std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<const Gate*>& subgraph_gates)
         {
-            const auto subgraph_dec = SubgraphNetlistDecorator(*nl);
-            if (auto res = subgraph_dec.copy_subgraph_netlist(subgraph_gates); res.is_ok())
+            if (auto res = SubgraphNetlistDecorator(*nl).copy_subgraph_netlist(subgraph_gates); res.is_ok())
             {
                 return res.get();
             }
@@ -682,7 +681,7 @@ namespace hal
             Net* gnd_net = gnd_gates.front()->get_fan_out_nets().front();
 
             // iterate all LUT gates
-            for (const auto& gate : netlist->get_gates([](Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_lut); }))
+            for (const auto& gate : netlist->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_lut); }))
             {
                 std::vector<Endpoint*> fan_in                              = gate->get_fan_in_endpoints();
                 std::unordered_map<std::string, BooleanFunction> functions = gate->get_boolean_functions();
@@ -768,93 +767,14 @@ namespace hal
 
         Result<std::monostate> replace_gate(Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map)
         {
-            if (gate == nullptr)
+            if (auto res = NetlistModificationDecorator(*(gate->get_netlist())).replace_gate(gate, target_type, pin_map); res.is_ok())
             {
-                return ERR("could not replace gate: gate is a 'nullptr'");
+                return OK({});
             }
-            if (target_type == nullptr)
+            else
             {
-                return ERR("could not replace gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": target gate type is a 'nullptr'");
+                return ERR(res.get_error());
             }
-
-            Netlist* netlist                  = gate->get_netlist();
-            u32 gate_id                       = gate->get_id();
-            std::string gate_name             = gate->get_name();
-            std::pair<i32, i32> gate_location = gate->get_location();
-            std::vector<Endpoint*> fan_in     = gate->get_fan_in_endpoints();
-            std::vector<Endpoint*> fan_out    = gate->get_fan_out_endpoints();
-            Module* gate_module               = gate->get_module();
-            Grouping* gate_grouping           = gate->get_grouping();
-            auto gate_data                    = gate->get_data_map();
-
-            std::map<GatePin*, Net*> in_nets;
-            std::map<GatePin*, Net*> out_nets;
-
-            // map new input pins to nets
-            for (Endpoint* in_ep : fan_in)
-            {
-                if (const auto it = pin_map.find(in_ep->get_pin()); it != pin_map.end())
-                {
-                    in_nets[it->second] = in_ep->get_net();
-                }
-            }
-
-            for (Endpoint* out_ep : fan_out)
-            {
-                if (const auto it = pin_map.find(out_ep->get_pin()); it != pin_map.end())
-                {
-                    out_nets[it->second] = out_ep->get_net();
-                }
-            }
-
-            // remove old gate
-            if (netlist->delete_gate(gate) == false)
-            {
-                return ERR("could not replace gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to delete old gate of type '" + gate->get_type()->get_name()
-                           + "'");
-            }
-            // create new gate
-            Gate* new_gate = netlist->create_gate(gate_id, target_type, gate_name, gate_location.first, gate_location.second);
-            if (new_gate == nullptr)
-            {
-                return ERR("could not replace gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to create replacement gate of type '" + target_type->get_name()
-                           + "'");
-            }
-
-            // reconnect nets
-            for (auto [in_pin, in_net] : in_nets)
-            {
-                if (!in_net->add_destination(new_gate, in_pin))
-                {
-                    return ERR("could not replace gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to reconnect input net '" + in_net->get_name() + "' with ID "
-                               + std::to_string(in_net->get_id()) + " to pin '" + in_pin->get_name() + "' of the replacement gate");
-                }
-            }
-
-            for (const auto& [out_pin, out_net] : out_nets)
-            {
-                if (!out_net->add_source(new_gate, out_pin))
-                {
-                    return ERR("could not replace gate '" + gate->get_name() + "' with ID " + std::to_string(gate->get_id()) + ": failed to reconnect output net '" + out_net->get_name() + "' with ID "
-                               + std::to_string(out_net->get_id()) + " to pin '" + out_pin->get_name() + "' of the replacement gate");
-                }
-            }
-
-            // restore data, module, and grouping
-            if (!gate_module->is_top_module())
-            {
-                gate_module->assign_gate(new_gate);
-            }
-            if (gate_grouping != nullptr)
-            {
-                gate_grouping->assign_gate(new_gate);
-            }
-            if (!gate_data.empty())
-            {
-                new_gate->set_data_map(gate_data);
-            }
-
-            return OK({});
         }
 
         Result<std::monostate> merge_nets(Netlist* netlist, Net* net_in, Net* net_out, const bool in_survives)

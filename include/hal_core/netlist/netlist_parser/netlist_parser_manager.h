@@ -104,5 +104,11 @@ namespace hal
          * @return true if parser could be found.
          */
         bool can_parse(const std::filesystem::path& file_name);
+
+        /**
+         * Returns parser map
+         * @return Vector of extensions for each parser plugin
+         */
+        std::unordered_map<std::string, std::vector<std::string>> get_parser_to_extensions();
     }    // namespace netlist_parser_manager
 }    // namespace hal

@@ -15,7 +15,7 @@ namespace hal
         return std::make_unique<PluginPythonShell>();
     }
 
-    ProgramOptions PluginPythonShell::get_cli_options() const
+    ProgramOptions CliExtensionPythonShell::get_cli_options() const
     {
         ProgramOptions description;
 

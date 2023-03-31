@@ -13,6 +13,8 @@
 #include "gui/settings/settings_items/settings_item_spinbox.h"
 #include "gui/file_manager/import_netlist_dialog.h"
 #include "gui/file_manager/new_project_dialog.h"
+#include "gui/plugin_relay/gui_plugin_manager.h"
+#include "gui/file_manager/project_json.h"
 
 #include <QDateTime>
 #include <QFile>
@@ -91,7 +93,7 @@ namespace hal
         ProjectManager* pm = ProjectManager::instance();
         if (pm->get_project_status() != ProjectManager::ProjectStatus::NONE && mAutosaveEnabled)
         {
-            if (gPythonContext->currentThread())
+            if (gPythonContext->pythonThread())
             {
                 log_info("gui", "Autosave deferred while python script is running...");
                 return;
@@ -459,6 +461,12 @@ namespace hal
             }
         }
 
+        ProjectJson projFile(QDir(projPath).absoluteFilePath(".project.json"));
+        QString glExtension = QFileInfo(projFile.gateLibraryFilename()).suffix();
+        if (!glExtension.isEmpty() && gPluginRelay->mGuiPluginTable)
+            gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,"." +glExtension);
+
+
         if (!pm->open_project())
         {
             QString errorMsg = QString("Error opening project <%1>").arg(projPath);
@@ -505,7 +513,8 @@ namespace hal
             return false;
         }
 
-        if (filename.endsWith(".hal"))
+        QFileInfo nlInfo(filename);
+        if (nlInfo.suffix()=="hal")
         {
             // event_controls::enable_all(false); won't get events until callbacks are registered
             auto netlist = netlist_factory::load_netlist(filename.toStdString());
@@ -526,10 +535,19 @@ namespace hal
                 return false;
             }
         }
+        else
+        {
+            if (gPluginRelay->mGuiPluginTable)
+                gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacNetlistParser,"."+nlInfo.suffix());
+        }
 
         if (!gatelibraryPath.isEmpty())
-        {
+        {   
             log_info("gui", "Trying to use gate library {}.", gatelibraryPath.toStdString());
+            QFileInfo glInfo(gatelibraryPath);
+            if (gPluginRelay->mGuiPluginTable)
+                gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,"."+glInfo.suffix());
+
             auto netlist = netlist_factory::load_netlist(filename.toStdString(), gatelibraryPath.toStdString());
 
             if (netlist)
@@ -552,6 +570,8 @@ namespace hal
         if (QFileInfo::exists(lib_file_name) && QFileInfo(lib_file_name).isFile())
         {
             log_info("gui", "Trying to use gate library {}.", lib_file_name.toStdString());
+            if (gPluginRelay->mGuiPluginTable)
+                gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,".lib");
 
             // event_controls::enable_all(false);
             auto netlist = netlist_factory::load_netlist(filename.toStdString(), lib_file_name.toStdString());
@@ -572,6 +592,8 @@ namespace hal
         }
 
         log_info("gui", "Searching for (other) compatible netlists.");
+        if (gPluginRelay->mGuiPluginTable)
+            gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser);
 
         // event_controls::enable_all(false);
         std::vector<std::unique_ptr<Netlist>> netlists = netlist_factory::load_netlists(filename.toStdString());

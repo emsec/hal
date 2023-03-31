@@ -26,12 +26,22 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/plugin_system/fac_extension_interface.h"
 
 namespace hal
 {
-    class PLUGIN_API LibertyParserPlugin : public BasePluginInterface
+    class LibertyParserExtension : public FacExtensionInterface
     {
     public:
+        LibertyParserExtension();
+    };
+
+    class PLUGIN_API LibertyParserPlugin : public BasePluginInterface
+    {
+        LibertyParserExtension* m_extension;
+    public:
+        LibertyParserPlugin();
+
         std::string get_name() const override;
         std::string get_version() const override;
 

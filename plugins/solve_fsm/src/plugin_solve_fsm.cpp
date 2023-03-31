@@ -393,7 +393,7 @@ namespace hal
                     // a constant (numeral) successor state
                     if (suc.is_constant())
                     {
-                        suc_num = suc.get_constant_value().get();
+                        suc_num = suc.get_constant_value_u64().get();
                     }
                     // a successor state that includes boolean functions (for example in form of input variables)
                     else

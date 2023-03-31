@@ -1,13 +1,9 @@
-#include "plugin_z3_utils.h"
-
-#include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
+#include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/net.h"
-#include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
-#include "z3++.h"
+#include "z3_utils/include/z3_utils.h"
 
 #include <queue>
 
@@ -15,9 +11,13 @@ namespace hal
 {
     namespace z3_utils
     {
-        namespace 
+        namespace
         {
-            Result<z3::expr> get_function_of_net(const std::vector<Gate*>& subgraph_gates, const Net* net, z3::context& ctx, std::map<u32, z3::expr>& net_cache, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache)
+            Result<z3::expr> get_function_of_net(const std::vector<Gate*>& subgraph_gates,
+                                                 const Net* net,
+                                                 z3::context& ctx,
+                                                 std::map<u32, z3::expr>& net_cache,
+                                                 std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache)
             {
                 if (const auto it = net_cache.find(net->get_id()); it != net_cache.end())
                 {
@@ -63,7 +63,8 @@ namespace hal
                     const auto bf_res = src->get_resolved_boolean_function(src_ep->get_pin());
                     if (bf_res.is_error())
                     {
-                        return ERR_APPEND(bf_res.get_error(), "cannot get Boolean z3 function of net " + net->get_name() + " with ID " + std::to_string(net->get_id()) + ": failed to get function of gate.");
+                        return ERR_APPEND(bf_res.get_error(),
+                                          "cannot get Boolean z3 function of net " + net->get_name() + " with ID " + std::to_string(net->get_id()) + ": failed to get function of gate.");
                     }
                     bf = bf_res.get();
 
@@ -81,7 +82,9 @@ namespace hal
                     const auto in_net_res = BooleanFunctionNetDecorator::get_net_from(src->get_netlist(), in_net_str);
                     if (in_net_res.is_error())
                     {
-                        return ERR_APPEND(in_net_res.get_error(), "cannot get Boolean z3 function of net " + net->get_name() + " with ID " + std::to_string(net->get_id()) + ": failed to reconstruct input net from variable " + in_net_str + ".");
+                        return ERR_APPEND(in_net_res.get_error(),
+                                          "cannot get Boolean z3 function of net " + net->get_name() + " with ID " + std::to_string(net->get_id()) + ": failed to reconstruct input net from variable "
+                                              + in_net_str + ".");
                     }
                     const auto in_net = in_net_res.get();
 
@@ -96,13 +99,17 @@ namespace hal
                     input_to_expr.insert({in_net_str, in_bf});
                 }
 
-                z3::expr ret = z3_utils::to_z3(bf, ctx, input_to_expr).simplify();
+                z3::expr ret = z3_utils::from_bf(bf, ctx, input_to_expr).simplify();
                 net_cache.insert({net->get_id(), ret});
 
                 return OK(ret);
             }
-        
-            Result<z3::expr> get_subgraph_z3_function_internal(const std::vector<Gate*>& subgraph_gates, const Net* net, z3::context& ctx, std::map<u32, z3::expr>& net_cache, std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache) 
+
+            Result<z3::expr> get_subgraph_z3_function_internal(const std::vector<Gate*>& subgraph_gates,
+                                                               const Net* net,
+                                                               z3::context& ctx,
+                                                               std::map<u32, z3::expr>& net_cache,
+                                                               std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache)
             {
                 // check validity of subgraph_gates
                 if (subgraph_gates.empty())
@@ -133,9 +140,9 @@ namespace hal
 
                 return get_function_of_net(subgraph_gates, net, ctx, net_cache, gate_cache);
             }
-        
-        }  // namespace
-        
+
+        }    // namespace
+
         Result<z3::expr> get_subgraph_z3_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output, z3::context& ctx)
         {
             std::map<u32, z3::expr> net_cache;
@@ -156,7 +163,8 @@ namespace hal
                 const auto res = get_subgraph_z3_function_internal(subgraph_gates, net, ctx, net_cache, gate_cache);
                 if (res.is_error())
                 {
-                    return ERR_APPEND(res.get_error(), "unable to generate subgraph functions: failed to generate function for net " + net->get_name() + " with ID " + std::to_string(net->get_id()) + ".");
+                    return ERR_APPEND(res.get_error(),
+                                      "unable to generate subgraph functions: failed to generate function for net " + net->get_name() + " with ID " + std::to_string(net->get_id()) + ".");
                 }
 
                 results.push_back(res.get());

@@ -43,13 +43,6 @@ namespace hal
         virtual ~UIPluginInterface() = default;
 
         /**
-         * Returns command line interface options
-         *
-         * @returns The program options description.
-         */
-        virtual ProgramOptions get_cli_options() const = 0;
-
-        /**
          * Generic call to run the interactive UI.
          *
          * @param[in] args - Program options for HAL.

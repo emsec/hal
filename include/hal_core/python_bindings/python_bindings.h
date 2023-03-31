@@ -34,6 +34,7 @@
 #include "hal_core/netlist/decorators/boolean_function_decorator.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
+#include "hal_core/netlist/decorators/netlist_modification_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/enums/async_set_reset_behavior.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
@@ -54,7 +55,6 @@
 #include "hal_core/netlist/pins/module_pin.h"
 #include "hal_core/netlist/pins/pin_group.h"
 #include "hal_core/netlist/project_manager.h"
-#include "hal_core/plugin_system/plugin_interface_gui.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
@@ -201,6 +201,13 @@ namespace hal
     void gate_pin_init(py::module& m);
 
     /**
+     * Initializes Python bindings for the HAL gate pin groups in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void gate_pin_group_init(py::module& m);
+
+    /**
      * Initializes Python bindings for the HAL module pins in a python module.
      *
      * @param[in] m - the python module
@@ -208,11 +215,11 @@ namespace hal
     void module_pin_init(py::module& m);
 
     /**
-     * Initializes Python bindings for the HAL pin groups in a python module.
+     * Initializes Python bindings for the HAL module pin groups in a python module.
      *
      * @param[in] m - the python module
      */
-    void pin_group_init(py::module& m);
+    void module_pin_group_init(py::module& m);
 
     /**
      * Initializes Python bindings for the HAL gate in a python module.
@@ -304,6 +311,13 @@ namespace hal
      * @param[in] m - the python module
      */
     void boolean_function_decorator_init(py::module& m);
+
+    /**
+     * Initializes Python bindings for the HAL netlist modification decorator in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void netlist_modification_decorator_init(py::module& m);
 
     /**
      * @}
