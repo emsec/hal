@@ -18,7 +18,6 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 
-#include <valgrind/callgrind.h>
 #include <QDebug>
 #include <QApplication>
 #include <QElapsedTimer>
@@ -254,10 +253,7 @@ namespace hal
         createBoxes();
         if (mOptimizeNetLayout)
         {
-            CALLGRIND_START_INSTRUMENTATION;
             alternateLayout();
-            CALLGRIND_STOP_INSTRUMENTATION;
-            CALLGRIND_DUMP_STATS;
             qDebug() << "elapsed time (experimental new) layout [ms]" << timer.elapsed();
             return;
         }
@@ -1412,7 +1408,7 @@ namespace hal
             drawNetsJunction(lines, id);
             drawNetsEndpoint(lines, id);
 
-            lines.mergeLines();
+            lines.mergeLines(mScene);
 
             GraphicsNet* graphicsNet = nullptr;
             switch (epl.netType())
@@ -2348,7 +2344,7 @@ namespace hal
                 }
             }
 
-            lines.mergeLines();
+            lines.mergeLines(mScene);
             if (lines.nLines() > 0)
             {
                 StandardGraphicsNet* GraphicsNet = new StandardGraphicsNet(n, lines);

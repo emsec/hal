@@ -8,6 +8,9 @@
 #include <QStyleOptionGraphicsItem>
 #include <assert.h>
 #include <limits>
+#include <QThread>
+#include <QDebug>
+#include <QGraphicsScene>
 
 namespace hal
 {
@@ -205,8 +208,9 @@ namespace hal
         mVLines.append(VLine{x, mSmallY, mBigY});
     }
 
-    void StandardGraphicsNet::Lines::mergeLines()
+    void StandardGraphicsNet::Lines::mergeLines(QGraphicsScene *sc)
     {
+        qDebug() << "optimal number threads" << QThread::idealThreadCount();
         QVector<HLine> merged_h_lines;
         QVector<VLine> merged_v_lines;
 
@@ -220,6 +224,11 @@ namespace hal
                     if (h.mBigX < merged_h_lines.at(i).mSmallX || merged_h_lines.at(i).mBigX < h.mSmallX)
                         continue;
 
+                    qreal x0 = merged_h_lines.at(i).mSmallX > h.mSmallX ?  merged_h_lines.at(i).mSmallX : h.mSmallX;
+                    qreal x1 = merged_h_lines.at(i).mBigX   < h.mBigX   ?  merged_h_lines.at(i).mBigX   : h.mBigX;
+
+                    qDebug() << "h-ov" << h.y << x0 << x1;
+//                    sc->addLine(x0,h.y,x1,h.y,QPen(Qt::yellow));
                     overlaps.append(i);
                 }
 
@@ -257,6 +266,11 @@ namespace hal
                     if (v.mBigY < merged_v_lines.at(i).mSmallY || merged_v_lines.at(i).mBigY < v.mSmallY)
                         continue;
 
+                    qreal y0 = merged_v_lines.at(i).mSmallY > v.mSmallY ?  merged_v_lines.at(i).mSmallY : v.mSmallY;
+                    qreal y1 = merged_v_lines.at(i).mBigY   < v.mBigY   ?  merged_v_lines.at(i).mBigY   : v.mBigY;
+
+                    qDebug() << "v-ov" << v.x << y0 << y1;
+//                    sc->addLine(v.x,y0,v.x,y1,QPen(Qt::red));
                     overlaps.append(i);
                 }
 

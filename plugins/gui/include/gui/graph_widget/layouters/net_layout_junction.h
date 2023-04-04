@@ -122,7 +122,7 @@ namespace hal {
         void setPattern(u32 pat) { mPattern = pat; }
         bool isPlaced() const { return mPlaced; }
         void setPlaced() { mPlaced = true; }        
-        void addWire(const NetLayoutJunctionWire& wire) { mWires.append(wire); }
+        void addWire(const NetLayoutJunctionWire& wire);
         NetLayoutJunctionWireIntersection junctionPoint() const { return mJunction; }
         void setJunctionPoint(const NetLayoutJunctionWireIntersection& jp,
                               NetLayoutJunctionWireIntersection::PlacementType placement

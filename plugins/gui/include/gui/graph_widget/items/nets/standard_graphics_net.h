@@ -96,7 +96,7 @@ namespace hal
             /**
              * Merges all horizontal and vertical lines so that overlapping lines are replaced by only a single line.
              */
-            void mergeLines();
+            void mergeLines(QGraphicsScene* sc);
 
             /**
              * Gets the total amount of lines (includes horizontal AND vertical lines).

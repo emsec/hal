@@ -808,6 +808,18 @@ namespace hal {
         return mFirst;
     }
 
+    void NetLayoutJunctionNet::addWire(const NetLayoutJunctionWire& wire)
+    {
+        for (const NetLayoutJunctionWire& w : mWires)
+            if (w.mHorizontal == wire.mHorizontal &&
+                    w.mRoad == wire.mRoad &&
+                    (w.mLast < wire.mFirst || w.mFirst > wire.mLast ))
+            {
+                    qDebug() << "junction" << w.mHorizontal << w.mRoad << w.mFirst << w.mLast << wire.mFirst << wire.mLast;
+            }
+        mWires.append(wire);
+    }
+
     bool NetLayoutJunctionWire::isEntry() const
     {
         return mFirst == NetLayoutJunctionRange::sMinInf
