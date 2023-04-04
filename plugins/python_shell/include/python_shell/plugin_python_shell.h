@@ -26,15 +26,30 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_ui.h"
+#include "hal_core/plugin_system/cli_extension_interface.h"
 
 namespace hal
 {
+    class CliExtensionPythonShell : public CliExtensionInterface
+    {
+    public:
+        CliExtensionPythonShell() = default;
+        ~CliExtensionPythonShell() = default;
+
+        /**
+         * Returns command line interface options
+         *
+         * @returns The program options description.
+         */
+        ProgramOptions get_cli_options() const override;
+
+        virtual bool handle_cli_call(Netlist*, ProgramArguments&) override {return false; }
+    };
+
     class PluginPythonShell : virtual public UIPluginInterface
     {
     public:
-        PluginPythonShell() = default;
-
-        ~PluginPythonShell() = default;
+        PluginPythonShell() { m_extensions.push_back(new CliExtensionPythonShell); }
 
         /*
          *      interface implementations
@@ -53,13 +68,6 @@ namespace hal
          * @returns Plugin version.
          */
         std::string get_version() const override;
-
-        /**
-         * Returns command line interface options
-         *
-         * @returns The program options description.
-         */
-        ProgramOptions get_cli_options() const override;
 
         /**
          * Excutes the plugin with given command line parameters.

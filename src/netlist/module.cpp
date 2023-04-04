@@ -885,7 +885,7 @@ namespace hal
         if (!filter)
         {
             res.reserve(m_pins.size());
-            for (const auto& group : m_pin_groups)
+            for (const auto& group : m_pin_groups_ordered)
             {
                 std::vector<ModulePin*> pins = group->get_pins();
                 for (const auto pin : group->get_pins())
@@ -1091,6 +1091,29 @@ namespace hal
         return true;
     }
 
+    bool Module::set_pin_type(ModulePin* pin, PinType new_type)
+    {
+        if (pin == nullptr)
+        {
+            log_warning("module", "could not set type for pin of module '{}' with ID {}: pin is a 'nullptr'", m_name, m_id);
+            return false;
+        }
+
+        if (const auto it = m_pins_map.find(pin->get_id()); it == m_pins_map.end() || it->second != pin)
+        {
+            log_warning("module", "could not set type for pin '{}' with ID {} of module '{}' with ID {}: pin does not belong to module", pin->get_name(), pin->get_id(), m_name, m_id);
+            return false;
+        }
+
+        if (pin->get_type() != new_type)
+        {
+            pin->set_type(new_type);
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        }
+
+        return true;
+    }
+
     bool Module::set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name)
     {
         if (pin_group == nullptr)
@@ -1130,29 +1153,6 @@ namespace hal
             m_pin_group_names_map.erase(old_name);
             pin_group->set_name(new_name);
             m_pin_group_names_map[new_name] = pin_group;
-            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
-        }
-
-        return true;
-    }
-
-    bool Module::set_pin_type(ModulePin* pin, PinType new_type)
-    {
-        if (pin == nullptr)
-        {
-            log_warning("module", "could not set type for pin of module '{}' with ID {}: pin is a 'nullptr'", m_name, m_id);
-            return false;
-        }
-
-        if (const auto it = m_pins_map.find(pin->get_id()); it == m_pins_map.end() || it->second != pin)
-        {
-            log_warning("module", "could not set type for pin '{}' with ID {} of module '{}' with ID {}: pin does not belong to module", pin->get_name(), pin->get_id(), m_name, m_id);
-            return false;
-        }
-
-        if (pin->get_type() != new_type)
-        {
-            pin->set_type(new_type);
             m_event_handler->notify(ModuleEvent::event::pin_changed, this);
         }
 

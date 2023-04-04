@@ -55,7 +55,7 @@ namespace hal
             const InitComponent* init_component = gate_type->get_component_as<InitComponent>([](const GateTypeComponent* c) { return InitComponent::is_class_of(c); });
             if (init_component == nullptr)
             {
-                log_error("netlist_simulator", "cannot find initialization data for flip-flop '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
+                log_error("hal_simulator", "cannot find initialization data for flip-flop '{}' with ID {} of type '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
                 return;
             }
             const std::string& init_str = std::get<1>(m_gate->get_data(init_component->get_init_category(), init_component->get_init_identifiers().front()));
@@ -74,7 +74,7 @@ namespace hal
                 }
                 else
                 {
-                    log_error("netlist_simulator", "init value of flip-flop '{}' with ID {} of type '{}' is neither '1' or '0'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
+                    log_error("hal_simulator", "init value of flip-flop '{}' with ID {} of type '{}' is neither '1' or '0'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name());
                 }
 
                 inv_value = simulation_utils::toggle(value);

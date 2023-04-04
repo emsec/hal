@@ -41,9 +41,11 @@ namespace hal
 
         gate_pin_init(m);
 
+        gate_pin_group_init(m);
+
         module_pin_init(m);
 
-        pin_group_init(m);
+        module_pin_group_init(m);
 
         gate_init(m);
 
@@ -70,6 +72,8 @@ namespace hal
         subgraph_netlist_decorator_init(m);
 
         boolean_function_decorator_init(m);
+
+        netlist_modification_decorator_init(m);
 
 #ifndef PYBIND11_MODULE
         return m.ptr();

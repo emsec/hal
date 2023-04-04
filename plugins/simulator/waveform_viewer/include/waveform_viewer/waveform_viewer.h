@@ -59,17 +59,17 @@ namespace hal
     class Toolbar;
     class SimulationInput;
 
-    class NETLIST_API VcdViewerFactory : public ContentFactory
+    class NETLIST_API WaveformViewerFactory : public ContentFactory
     {
     public:
-        VcdViewerFactory() : ContentFactory("VcdViewerFactory") {;}
-        ContentWidget* contentFactory() const;
+        WaveformViewerFactory(const QString& name) : ContentFactory(name) {;}
+        ExternalContentWidget* contentFactory() const;
     };
 
     /**
      * @ingroup netlist_writer
      */
-    class NETLIST_API WaveformViewer : public ContentWidget
+    class NETLIST_API WaveformViewer : public ExternalContentWidget
     {
         Q_OBJECT
 

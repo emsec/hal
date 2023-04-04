@@ -10,6 +10,20 @@ namespace hal
         return std::make_unique<GexfWriterPlugin>();
     }
 
+    GexfWriterExtension::GexfWriterExtension()
+        : FacExtensionInterface(FacExtensionInterface::FacNetlistWriter)
+    {
+        m_description = "Default GEXF Writer";
+        m_supported_file_extensions.push_back(".gexf");
+        FacFactoryProvider<NetlistWriter>* fac = new FacFactoryProvider<NetlistWriter>;
+        fac->m_factory = []() { return std::make_unique<GexfWriter>(); };
+        factory_provider = fac;
+    }
+
+    GexfWriterPlugin::GexfWriterPlugin()
+        : m_extension(nullptr)
+    {;}
+
     std::string GexfWriterPlugin::get_name() const
     {
         return std::string("gexf_writer");
@@ -22,11 +36,12 @@ namespace hal
 
     void GexfWriterPlugin::on_load()
     {
-        netlist_writer_manager::register_writer("Default GEXF Writer", []() { return std::make_unique<GexfWriter>(); }, {".gexf"});
+        m_extension = new GexfWriterExtension;
+        m_extensions.push_back(m_extension);
     }
 
     void GexfWriterPlugin::on_unload()
     {
-        netlist_writer_manager::unregister_writer("Default GEXF Writer");
+        delete_extension(m_extension);
     }
 }    // namespace hal

@@ -682,12 +682,12 @@ namespace hal
 
     Result<std::string> BooleanFunction::get_variable_name() const
     {
-        if (!this->is_variable())
+        if (this->is_empty())
         {
-            return ERR("Boolean function is not a variable");
+            return ERR("Boolean function is empty");
         }
 
-        return OK(this->m_nodes[0].variable);
+        return this->get_top_level_node().get_variable_name();
     }
 
     bool BooleanFunction::is_constant() const
@@ -695,36 +695,34 @@ namespace hal
         return (this->is_empty()) ? false : this->get_top_level_node().is_constant();
     }
 
+    bool BooleanFunction::has_constant_value(const std::vector<Value>& value) const
+    {
+        return (this->is_empty()) ? false : this->get_top_level_node().has_constant_value(value);
+    }
+
     bool BooleanFunction::has_constant_value(u64 value) const
     {
         return (this->is_empty()) ? false : this->get_top_level_node().has_constant_value(value);
     }
 
-    Result<u64> BooleanFunction::get_constant_value() const
+    Result<std::vector<BooleanFunction::Value>> BooleanFunction::get_constant_value() const
     {
-        if (!this->is_constant())
+        if (this->is_empty())
         {
-            return ERR("Boolean function is not a constant");
+            return ERR("Boolean function is empty");
         }
 
-        if (this->size() > 64)
+        return this->get_top_level_node().get_constant_value();
+    }
+
+    Result<u64> BooleanFunction::get_constant_value_u64() const
+    {
+        if (this->is_empty())
         {
-            return ERR("Boolean function constant has size > 64");
+            return ERR("Boolean function is empty");
         }
 
-        if (std::any_of(this->m_nodes[0].constant.begin(), this->m_nodes[0].constant.end(), [](auto v) { return v != BooleanFunction::Value::ONE && v != BooleanFunction::Value::ZERO; }))
-        {
-            return ERR("Boolean function constant is undefined or high-impedance");
-        }
-
-        u64 val = 0;
-        for (auto it = this->m_nodes[0].constant.rbegin(); it != this->m_nodes[0].constant.rend(); it++)
-        {
-            val <<= 1;
-            val |= *it;
-        }
-
-        return OK(val);
+        return this->get_top_level_node().get_constant_value_u64();
     }
 
     bool BooleanFunction::is_index() const
@@ -739,12 +737,12 @@ namespace hal
 
     Result<u16> BooleanFunction::get_index_value() const
     {
-        if (!this->is_index())
+        if (this->is_empty())
         {
-            return ERR("Boolean function is not an index");
+            return ERR("Boolean function is empty");
         }
 
-        return OK(this->m_nodes[0].index);
+        return this->get_top_level_node().get_index_value();
     }
 
     const BooleanFunction::Node& BooleanFunction::get_top_level_node() const
@@ -1025,6 +1023,23 @@ namespace hal
             default:
                 return ERR("could not replace variable '" + name + "' with Boolean function '" + replacement.to_string() + "': validation failed, the operations may be imbalanced");
         }
+    }
+
+    BooleanFunction BooleanFunction::substitute(const std::map<std::string, std::string>& substitutions) const
+    {
+        auto function = this->clone();
+        for (auto i = 0u; i < this->m_nodes.size(); i++)
+        {
+            if (const auto var_name_res = this->m_nodes[i].get_variable_name(); var_name_res.is_ok())
+            {
+                if (const auto it = substitutions.find(var_name_res.get()); it != substitutions.end())
+                {
+                    function.m_nodes[i] = Node::Variable(it->second, this->m_nodes[i].size);
+                }
+            }
+        }
+
+        return function;
     }
 
     Result<BooleanFunction> BooleanFunction::substitute(const std::map<std::string, BooleanFunction>& substitutions) const
@@ -1615,6 +1630,11 @@ namespace hal
         return this->is(BooleanFunction::NodeType::Constant);
     }
 
+    bool BooleanFunction::Node::has_constant_value(const std::vector<Value>& value) const
+    {
+        return this->is_constant() && (this->constant == value);
+    }
+
     bool BooleanFunction::Node::has_constant_value(u64 value) const
     {
         if (!this->is_constant())
@@ -1631,6 +1651,43 @@ namespace hal
         return this->constant == bv_value;
     }
 
+    Result<std::vector<BooleanFunction::Value>> BooleanFunction::Node::get_constant_value() const
+    {
+        if (!this->is_constant())
+        {
+            return ERR("Node is not a constant");
+        }
+
+        return OK(this->constant);
+    }
+
+    Result<u64> BooleanFunction::Node::get_constant_value_u64() const
+    {
+        if (!this->is_constant())
+        {
+            return ERR("Node is not a constant");
+        }
+
+        if (this->size > 64)
+        {
+            return ERR("Node constant has size > 64");
+        }
+
+        if (std::any_of(this->constant.begin(), this->constant.end(), [](auto v) { return v != BooleanFunction::Value::ONE && v != BooleanFunction::Value::ZERO; }))
+        {
+            return ERR("Node constant is undefined or high-impedance");
+        }
+
+        u64 val = 0;
+        for (auto it = this->constant.rbegin(); it != this->constant.rend(); it++)
+        {
+            val <<= 1;
+            val |= *it;
+        }
+
+        return OK(val);
+    }
+
     bool BooleanFunction::Node::is_index() const
     {
         return this->is(BooleanFunction::NodeType::Index);
@@ -1641,6 +1698,16 @@ namespace hal
         return this->is_index() && (this->index == value);
     }
 
+    Result<u16> BooleanFunction::Node::get_index_value() const
+    {
+        if (!this->is_index())
+        {
+            return ERR("Node is not an index");
+        }
+
+        return OK(this->index);
+    }
+
     bool BooleanFunction::Node::is_variable() const
     {
         return this->is(BooleanFunction::NodeType::Variable);
@@ -1649,6 +1716,16 @@ namespace hal
     bool BooleanFunction::Node::has_variable_name(const std::string& value) const
     {
         return this->is_variable() && (this->variable == value);
+    }
+
+    Result<std::string> BooleanFunction::Node::get_variable_name() const
+    {
+        if (!this->is_variable())
+        {
+            return ERR("Node is not a variable");
+        }
+
+        return OK(this->variable);
     }
 
     bool BooleanFunction::Node::is_operation() const

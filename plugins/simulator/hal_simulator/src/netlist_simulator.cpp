@@ -28,7 +28,7 @@ namespace hal
     {
         if (net == nullptr)
         {
-            log_error("netlist_simulator", "net is a nullptr.");
+            log_error("hal_simulator", "net is a nullptr.");
             return;
         }
 
@@ -55,7 +55,7 @@ namespace hal
         }
         else
         {
-            log_error("netlist_simulator", "cannot initialize sequential gates after the simulation was started.");
+            log_error("hal_simulator", "cannot initialize sequential gates after the simulation was started.");
             return;
         }
     }
@@ -68,7 +68,7 @@ namespace hal
         }
         else
         {
-            log_error("netlist_simulator", "cannot initialize sequential gates after the simulation was started.");
+            log_error("hal_simulator", "cannot initialize sequential gates after the simulation was started.");
             return;
         }
     }
@@ -150,7 +150,7 @@ namespace hal
                     }
                     else
                     {
-                        log_error("netlist_simulator", "init value of sequential gate '{}' (type '{}') is neither '1' or '0'.", gate->get_name(), gate_type->get_name());
+                        log_error("hal_simulator", "init value of sequential gate '{}' (type '{}') is neither '1' or '0'.", gate->get_name(), gate_type->get_name());
                     }
 
                     BooleanFunction::Value inv_value = simulation_utils::toggle(value);
@@ -300,7 +300,7 @@ namespace hal
             }
             else
             {
-                log_error("netlist_simulator", "no support for gate type {} of gate {}.", gate->get_type()->get_name(), gate->get_name());
+                log_error("hal_simulator", "no support for gate type {} of gate {}.", gate->get_type()->get_name(), gate->get_name());
                 m_successors.clear();
                 m_sim_gates.clear();
                 return;
@@ -515,7 +515,7 @@ namespace hal
             total_iterations_for_one_timeslot += processed;
             if (m_timeout_iterations > 0 && total_iterations_for_one_timeslot > m_timeout_iterations)
             {
-                log_error("netlist_simulator", "reached iteration timeout of {} without advancing in time, aborting simulation. Please check for a combinational loop.", m_timeout_iterations);
+                log_error("hal_simulator", "reached iteration timeout of {} without advancing in time, aborting simulation. Please check for a combinational loop.", m_timeout_iterations);
                 return;
             }
 
@@ -561,7 +561,7 @@ namespace hal
         {
             return simulation_utils::toggle(previous_output);
         }
-        log_error("netlist_simulator", "unsupported set/reset behavior {}.", enum_to_string(behavior));
+        log_error("hal_simulator", "unsupported set/reset behavior {}.", enum_to_string(behavior));
         return BooleanFunction::Value::X;
     }
 
@@ -569,19 +569,19 @@ namespace hal
     {
         if (mSimulationInput->get_gates().empty())
         {
-            log_error("netlist_simulator", "no gates have been added to the simulator.");
+            log_error("hal_simulator", "no gates have been added to the simulator.");
             return false;
         }
 
         if (m_simulation.get_events().empty())
         {
-            log_error("netlist_simulator", "nothing has been simulated, cannot generate VCD.");
+            log_error("hal_simulator", "nothing has been simulated, cannot generate VCD.");
             return false;
         }
 
         if (end_time > m_current_time)
         {
-            log_error("netlist_simulator", "cannot generate VCD for {} ps, only {} ps have been simulated thus far.", end_time, m_current_time);
+            log_error("hal_simulator", "cannot generate VCD for {} ps, only {} ps have been simulated thus far.", end_time, m_current_time);
             return false;
         }
 
@@ -669,12 +669,12 @@ namespace hal
                 }
                 else if (value == BooleanFunction::Value::Z)
                 {
-                    log_error("netlist_simulator", "signal value of 'Z' for net with ID {} at {} ps is currently not supported.", net->get_id(), event_time);
+                    log_error("hal_simulator", "signal value of 'Z' for net with ID {} at {} ps is currently not supported.", net->get_id(), event_time);
                     return false;
                 }
                 else
                 {
-                    log_error("netlist_simulator", "signal value for net with ID {} at {} ps is unknown.", net->get_id(), event_time);
+                    log_error("hal_simulator", "signal value for net with ID {} at {} ps is unknown.", net->get_id(), event_time);
                     return false;
                 }
             }
@@ -684,7 +684,7 @@ namespace hal
         std::ofstream ofs(path);
         if (!ofs.is_open())
         {
-            log_error("netlist_simulator", "could not open file '{}' for writing.", path.string());
+            log_error("hal_simulator", "could not open file '{}' for writing.", path.string());
             return false;
         }
 

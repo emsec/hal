@@ -172,6 +172,14 @@ namespace hal
         bool remove_source(Endpoint* ep);
 
         /**
+         * Check whether a gate is a source of the net independent of the pin.
+         *
+         * @param[in] gate - The gate.
+         * @returns `true` if the gate is a source of the net, `false` otherwise.
+         */
+        bool is_a_source(const Gate* gate) const;
+
+        /**
          * Check whether an endpoint is a source of the net.
          * The endpoint is specified by a tuple of a gate and the name of an output pin of that gate.
          *
@@ -270,6 +278,14 @@ namespace hal
          * @returns `true` on success, `false` otherwise.
          */
         bool remove_destination(Endpoint* ep);
+
+        /**
+         * Check whether a gate is a destination of the net independent of the pin.
+         *
+         * @param[in] gate - The gate.
+         * @returns `true` if the gate is a destination of the net, `false` otherwise.
+         */
+        bool is_a_destination(const Gate* gate) const;
 
         /**
          * Check whether an endpoint is a destination of the net.

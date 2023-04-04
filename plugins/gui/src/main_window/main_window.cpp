@@ -15,6 +15,7 @@
 #include "gui/logger/logger_widget.h"
 #include "gui/main_window/about_dialog.h"
 #include "gui/main_window/plugin_parameter_dialog.h"
+#include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/python/python_editor.h"
 #include "gui/settings/settings_items/settings_item_checkbox.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
@@ -35,6 +36,7 @@
 #include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/project_directory.h"
 #include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
 
 #include <QApplication>
 #include <QCloseEvent>
@@ -97,6 +99,10 @@ namespace hal
         mSettings = new MainSettingsWidget;
         mStackedWidget->addWidget(mSettings);
 
+        mPluginManager = new GuiPluginManager(this);
+        connect(mPluginManager,&GuiPluginManager::backToNetlist,this,&MainWindow::closePluginManager);
+        mStackedWidget->addWidget(mPluginManager);
+
         mLayoutArea = new ContentLayoutArea();
         mStackedWidget->addWidget(mLayoutArea);
 
@@ -142,6 +148,7 @@ namespace hal
         mActionUndo               = new Action(this);
 
         mActionSettings           = new Action(this);
+        mActionPlugins            = new Action(this);
         mActionClose              = new Action(this);
 
         //    //mOpenIconStyle = "all->#fcfcb0";
@@ -178,17 +185,16 @@ namespace hal
         mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
         mActionUndo->setIcon(gui_utility::getStyledSvgIcon(mUndoIconStyle, mUndoIconPath));
         mActionSettings->setIcon(gui_utility::getStyledSvgIcon(mSettingsIconStyle, mSettingsIconPath));
+        mActionPlugins->setIcon(gui_utility::getStyledSvgIcon(mPluginsIconStyle, mPluginsIconPath));
 
         mMenuFile  = new QMenu(mMenuBar);
         mMenuEdit  = new QMenu(mMenuBar);
         mMenuMacro = new QMenu(mMenuBar);
-        mMenuPlugin = new QMenu(mMenuBar);
         mMenuHelp  = new QMenu(mMenuBar);
 
         mMenuBar->addAction(mMenuFile->menuAction());
         mMenuBar->addAction(mMenuEdit->menuAction());
         mMenuBar->addAction(mMenuMacro->menuAction());
-        mMenuBar->addAction(mMenuPlugin->menuAction());
         mMenuBar->addAction(mMenuHelp->menuAction());
         mMenuFile->addAction(mActionNew);
         mMenuFile->addAction(mActionOpenProject);
@@ -249,11 +255,14 @@ namespace hal
         mMenuMacro->addSeparator();
         mMenuMacro->addAction(mActionPlayMacro);
         mMenuHelp->addAction(mActionAbout);
+        mMenuHelp->addSeparator();
+        mMenuHelp->addAction(mActionPlugins);
         mLeftToolBar->addAction(mActionNew);
         mLeftToolBar->addAction(mActionOpenProject);
         mLeftToolBar->addAction(mActionSave);
         mLeftToolBar->addAction(mActionSaveAs);
         mLeftToolBar->addAction(mActionUndo);
+        mRightToolBar->addAction(mActionPlugins);
         mRightToolBar->addAction(mActionSettings);
 
         mActionStartRecording->setText("Start recording");
@@ -264,7 +273,6 @@ namespace hal
         mActionStopRecording->setEnabled(false);
         mActionPlayMacro->setEnabled(true);
 
-        pluginMenu();
         setWindowTitle("HAL");
         mActionNew->setText("New Netlist");
         mActionOpenProject->setText("Open Project");
@@ -277,11 +285,11 @@ namespace hal
         mActionUndo->setText("Undo");
         mActionAbout->setText("About");
         mActionSettings->setText("Settings");
+        mActionPlugins->setText("Plugin Manager");
         mActionClose->setText("Close Document");
         mMenuFile->setTitle("File");
         mMenuEdit->setTitle("Edit");
         mMenuMacro->setTitle("Macro");
-        mMenuPlugin->setTitle("Plugins");
         mMenuHelp->setTitle("Help");
 
         gPythonContext = new PythonContext(this);
@@ -318,7 +326,8 @@ namespace hal
         connect(mActionOpenProject, &Action::triggered, this, &MainWindow::handleActionOpenProject);
         connect(mActionImportNetlist, &Action::triggered, this, &MainWindow::handleActionImportNetlist);
         connect(mActionAbout, &Action::triggered, this, &MainWindow::handleActionAbout);
-        connect(mActionSettings, &Action::triggered, this, &MainWindow::toggleSettings);
+        connect(mActionSettings, &Action::triggered, this, &MainWindow::openSettings);
+        connect(mActionPlugins, &Action::triggered, this, &MainWindow::openPluginManager);
         connect(mSettings, &MainSettingsWidget::close, this, &MainWindow::closeSettings);
         connect(mActionSave, &Action::triggered, this, &MainWindow::handleSaveTriggered);
         connect(mActionSaveAs, &Action::triggered, this, &MainWindow::handleSaveAsTriggered);
@@ -337,10 +346,6 @@ namespace hal
         enableUndo(false);
 
         restoreState();
-
-        //    PluginManagerWidget* widget = new PluginManagerWidget(nullptr);
-        //    widget->setPluginModel(mPluginModel);
-        //    widget->show();
     }
 
     void MainWindow::reloadStylsheet(int istyle)
@@ -433,6 +438,16 @@ namespace hal
         return mSettingsIconStyle;
     }
 
+    QString MainWindow::pluginsIconPath() const
+    {
+        return mPluginsIconPath;
+    }
+
+    QString MainWindow::pluginsIconStyle() const
+    {
+        return mPluginsIconStyle;
+    }
+
     QString MainWindow::undoIconPath() const
     {
         return mUndoIconPath;
@@ -513,6 +528,16 @@ namespace hal
         mSettingsIconStyle = style;
     }
 
+    void MainWindow::setPluginsIconPath(const QString& path)
+    {
+        mPluginsIconPath = path;
+    }
+
+    void MainWindow::setPluginsIconStyle(const QString& style)
+    {
+        mPluginsIconStyle = style;
+    }
+
     void MainWindow::setUndoIconPath(const QString& path)
     {
         mUndoIconPath = path;
@@ -561,17 +586,13 @@ namespace hal
         //mLayoutArea->removeContent();
     }
 
-    void MainWindow::toggleSettings()
+    void MainWindow::openSettings()
     {
         if (mStackedWidget->currentWidget() == mSettings)
-        {
-            closeSettings();
-        }
-        else
-        {
-            mSettings->activate();
-            mStackedWidget->setCurrentWidget(mSettings);
-        }
+            return; //nothing todo, already open
+
+        mSettings->activate();
+        mStackedWidget->setCurrentWidget(mSettings);
     }
 
     void MainWindow::closeSettings()
@@ -584,38 +605,31 @@ namespace hal
             mStackedWidget->setCurrentWidget(mWelcomeScreen);
     }
 
-    void MainWindow::setPluginParameter()
+    void MainWindow::openPluginManager()
     {
-        QAction* act = static_cast<QAction*>(sender());
-        if (!act) return;
-        BasePluginInterface* bpif = static_cast<BasePluginInterface*>(act->data().value<void*>());
-        if (!bpif) return;
-        PluginParameterDialog ppd(bpif,this);
-        ppd.exec();
+        if (mStackedWidget->currentWidget() == mPluginManager)
+            return; //nothing todo, already open
+
+        if (mStackedWidget->currentWidget() == mSettings)
+        {
+            if (!mSettings->handleAboutToClose())
+                return;
+        }
+        mStackedWidget->setCurrentWidget(mPluginManager);
     }
 
-    void MainWindow::pluginMenu()
+    void MainWindow::closePluginManager(const QString &invokeGui)
     {
-        QMap<QString,void*> plugins[2];   // 0 = configurable  1 = only listed
-        for (const std::string& pluginName : plugin_manager::get_plugin_names())
-        {
-            BasePluginInterface* bpif = plugin_manager::get_plugin_instance(pluginName);
-            if (!bpif) continue;
-            plugins[bpif->get_parameter().empty()?1:0].insert(QString::fromStdString(pluginName),bpif);
-        }
-
-        for (auto it = plugins[0].constBegin(); it != plugins[0].constEnd(); ++it)
-        {
-            QAction* act = mMenuPlugin->addAction(it.key());
-            act->setData(QVariant::fromValue<void*>(it.value()));
-            connect(act,&QAction::triggered,this,&MainWindow::setPluginParameter);
-        }
-        mMenuPlugin->addSeparator();
-        for (auto it = plugins[1].constBegin(); it != plugins[1].constEnd(); ++it)
-        {
-            QAction* act = mMenuPlugin->addAction(it.key());
-            act->setDisabled(true);
-        }
+        bool isFileOpen = FileManager::get_instance()->fileOpen();
+        if (isFileOpen)
+            mStackedWidget->setCurrentWidget(mLayoutArea);
+        else
+            mStackedWidget->setCurrentWidget(mWelcomeScreen);
+        if (invokeGui.isEmpty() || !isFileOpen) return;
+        GuiExtensionInterface* geif = GuiPluginManager::getGuiExtensions().value(invokeGui);
+        if (!geif) return;
+        PluginParameterDialog ppd(invokeGui,geif,this);
+        ppd.exec();
     }
 
     void MainWindow::handleActionNew()
@@ -960,6 +974,11 @@ namespace hal
             if (msgBox.clickedButton() == cancelButton)
                 return false;
         }
+
+        // going to close
+
+        for (GuiExtensionInterface* geif : GuiPluginManager::getGuiExtensions().values())
+            geif->netlist_about_to_close(gNetlist);
 
         mActionExportProject->setDisabled(true);
         mActionImportProject->setEnabled(true);

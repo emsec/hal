@@ -181,6 +181,17 @@ namespace hal
         Module* get_module() const;
 
         /**
+         * Get all modules that contain this gate, either directly or as parent of another module.
+         * If `recursive` is set to true, indirect parent modules are also included. Otherwise, only the module containing the gate directly is returned.<br>
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         *
+         * @param[in] filter - An optional filter.
+         * @param[in] recursive - Set `true` to include indirect parents as well, `false` otherwise.
+         * @returns A vector of modules.
+         */
+        std::vector<Module*> get_modules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = true) const;
+
+        /**
          * Gets the grouping in which this gate is contained.<br>
          * If no grouping contains this gate, a nullptr is returned.
          *

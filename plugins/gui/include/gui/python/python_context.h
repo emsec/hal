@@ -189,7 +189,7 @@ namespace hal
          */
         void updateNetlist();
 
-        PythonThread* currentThread() const;
+        PythonThread* pythonThread() const;
 
         static void initializeContext(py::dict* context);
         static void initializeScript(py::dict* context);

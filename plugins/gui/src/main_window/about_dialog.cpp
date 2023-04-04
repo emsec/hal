@@ -21,6 +21,7 @@ namespace hal
         mLayout->addWidget(new QLabel(QString("Compiled with Qt Version %1")
                                       .arg(QT_VERSION_STR)
                                       ,this));
+        mLayout->addWidget(new QLabel(QString("Last build configured at %1 %2").arg(hal_version::build_timestamp.c_str())));
         mLayout->addWidget(new QLabel(QString("Open Source licenses:"),this));
         mTextedit = new QPlainTextEdit(QString::fromStdString(utils::get_open_source_licenses()),this);
         mTextedit->setReadOnly(true);

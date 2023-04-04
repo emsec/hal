@@ -126,12 +126,12 @@ namespace hal
         )");
 
         py_module.def("get_parent_modules", &Module::get_parent_modules, py::arg("filter") = nullptr, py::arg("recursive") = true, R"(
-            Get all direct parent of this module.
+            Get all parents of this module.
             If recursive is set to True, all indirect parents are also included.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
             :param lambda filter: An optional filter.
-            :param bool recursive: True to include indirect parents as well, False otherwise.
+            :param bool recursive: Set True to include indirect parents as well, False otherwise.
             :returns: A list of parent modules.
             :rtype: list[hal_py.Module]
         )");
@@ -149,7 +149,7 @@ namespace hal
             Check if the module is a parent of the specified module.
          
             :param hal_py.Module module: The module.
-            :param bool recursive: True to check recursively, False otherwise.
+            :param bool recursive: Set True to check recursively, False otherwise.
             :returns: True if the module is a parent of the specified module, False otherwise.
             :rtype: bool
         )");
@@ -167,7 +167,7 @@ namespace hal
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
             :param lambda filter: An optional filter.
-            :param bool recursive: True to include indirect submodules as well, False otherwise.
+            :param bool recursive: Set True to include indirect submodules as well, False otherwise.
             :returns: A list of submodules.
             :rtype: list[hal_py.Module]
         )");
@@ -176,7 +176,7 @@ namespace hal
             Check if the module is a submodule of the specified module.
 
             :param hal_py.Module module: The module.
-            :param bool recursive: True to check recursively, False otherwise.
+            :param bool recursive: Set True to check recursively, False otherwise.
             :returns: True if the module is a submodule of the specified module, False otherwise.
         )");
 
@@ -184,10 +184,8 @@ namespace hal
             Checks whether another module is a submodule of this module.
             If recursive is set to true, all indirect submodules are also included.
 
-            :param other: Other module to check for.
-            :param recursive: True to include indirect submodules as well.
-            :type other: hal_py.Module
-            :type recursive: bool
+            :param hal_py.Module other: Other module to check for.
+            :param bool recursive: Set True to include indirect submodules as well, False otherwise.
             :returns: True if the other module is a submodule, False otherwise.
             :rtype: bool
         )");

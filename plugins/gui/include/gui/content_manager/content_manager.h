@@ -28,8 +28,10 @@
 #include <QGraphicsScene>
 #include <QObject>
 #include <QStringList>
+#include <QMap>
 
 #include "gui/gui_utils/special_log_content_manager.h"
+#include "gui/content_widget/content_widget.h"
 #include "hal_config.h"
 
 namespace hal
@@ -49,13 +51,15 @@ namespace hal
     class SettingsItemKeybind;
     class GraphContextSerializer;
 
+    class ExternalContentWidget;
+
     class ContentFactory
     {
-        QString mName;
+        QString mPluginName;
     public:
-        ContentFactory(const QString& nam=QString()) : mName(nam) {;}
-        QString name() const {return mName; }
-        virtual ContentWidget* contentFactory() const = 0;
+        ContentFactory(const QString& nam=QString()) : mPluginName(nam) {;}
+        QString name() const {return mPluginName; }
+        virtual ExternalContentWidget* contentFactory() const = 0;
     };
 
     class ExternalContent : public QList<ContentFactory*>
@@ -64,8 +68,18 @@ namespace hal
         ExternalContent() {;}
     public:
         static ExternalContent* instance();
+        QMap<QString,ExternalContentWidget*> openWidgets;
     };
 
+    class ExternalContentWidget : public ContentWidget
+    {
+        Q_OBJECT
+        QString mPluginName;
+    public:
+        ExternalContentWidget(const QString& pluginName, const QString& windowName, QWidget* parent=nullptr);
+        virtual ~ExternalContentWidget();
+        QString pluginName() const { return mPluginName; }
+    };
 
     /**
      * @ingroup gui
@@ -154,9 +168,11 @@ namespace hal
 
     public:
         static SettingsItemKeybind* sSettingSearch;
+        void addExternalWidget(ContentFactory* factory);
 
     private:
         MainWindow* mMainWindow;
+        int mExternalIndex;
         QString mWindowTitle;
 
         QList<ContentWidget*> mContent;

@@ -2,7 +2,40 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-
+* GUI plugin manager
+  * **WARNING:** modified plugin core API - reduced number of base classes and instead added extension components
+  * added overview of loaded plugins and their features
+  * added interactive buttons to load and unload plugins
+  * added feature to load plugin automatically if needed for file parsing
+  * prevent unload of plugin if needed as dependency
+  * changed plugin load policy to have only mandatory or user required plugins loaded at startup
+* Boolean functions
+  * added `BooleanFunction::substitute(const std::map<std::string, std::string>&)` to substitute multiple variable names at once
+  * changed `BooleanFunction::get_constant_value` to return `std::vector<BooleanFunction::Value>`, thereby removing the 64-bit limit
+  * added `BooleanFunction::Node::get_constant_value`, `BooleanFunction::Node::get_index_value`, and `BooleanFunction::Node::get_variable_name`
+  * added `BooleanFunction::get_constant_value_u64` and `BooleanFunction::Node::get_constant_value_u64` to retrieve the constant value as `u64` if it comprises less than 64-bit
+  * added `BooleanFunction::has_constant_value(const std::vector<BooleanFunction::Value>&)` and `BooleanFunction::Node::has_constant_value(const std::vector<BooleanFunction::Value>&)` 
+* plugins
+  * `boolean_influence`
+    * added deterministic variants of all Boolean influence functions that shall be used for Boolean functions with only few input variables
+    * added additional parameters for more control to the subcircuit and gate variants of `get_boolean_influence`
+  * `z3_utils`
+    * removed class `z3Wrapper`
+    * renamed `to_z3` to `from_bf` and added support for missing node types
+    * renamed `to_hal` to `to_bf` and added support for missing node types
+    * changed `to_cpp` to output only the C++ code implementing the Boolean function and nothing more
+* decorators
+  * added `NetlistModificationDecorator`
+    * added `delete_modules` to delete all (or a filtered subset of) the modules in a netlist
+    * moved `replace_gate` from `netlist_utils`, now returns pointer to replacement gate
+    * added `connect_gates` to connect two gates at the specified pins via a new or already existing net
+    * added `connect_nets` to merge two nets into one, thereby connecting them
+* miscellaneous
+  * added `Gate::get_modules` to recursively get all modules that contain the gate by traversing the module hierarchy
+  * added `Net::is_a_source(const Gate*)` and `Net::is_a_destination(const Gate*)` that check whether a gate is a source/destination independent of the gate pin
+  * added `PinGroup<T>::contains_pin` to check whether a pin is part of the respective gate or module pin group
+* bugfixes
+  * fixed missing Python bindings for `GatePinGroup`
 
 ## [4.1.0] - 2023-03-08 16:57:06+01:00 (urgency: medium)
 * selection details

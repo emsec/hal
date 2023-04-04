@@ -27,6 +27,7 @@
 
 #include <QDialog>
 #include "hal_core/plugin_system/plugin_parameter.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
 #include <QMap>
 #include <QList>
 
@@ -58,7 +59,8 @@ namespace hal {
     {
         Q_OBJECT
 
-        BasePluginInterface* mPluginInterface;
+        QString mPluginName;
+        GuiExtensionInterface* mGuiExtensionInterface;
         QList<PluginParameter> mParameterList;
         QMap<QString,QWidget*> mWidgetMap;
 
@@ -76,6 +78,6 @@ namespace hal {
         void accept() override;
 
     public:
-        PluginParameterDialog(BasePluginInterface* bpif, QWidget* parent = nullptr);
+        PluginParameterDialog(const QString& pname, GuiExtensionInterface* geif, QWidget* parent = nullptr);
     };
 }
