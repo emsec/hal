@@ -479,10 +479,17 @@ namespace hal
         auto group = mModule->get_pin_group_by_id(getIdOfItem(droppedGroup));
         for(const auto &pin : group->get_pins())
             pins.insert(pin->get_id());
+
+        UserActionCompound* compAct = new UserActionCompound;
+        ActionReorderObject* reorderActHack = new ActionReorderObject(droppedGroup->getOwnRow());
+        reorderActHack->setObject(UserActionObject(group->get_id(), UserActionObjectType::PinGroup));
+        reorderActHack->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
         ActionAddItemsToObject* addAct = new ActionAddItemsToObject(e,e,e, pins);
         addAct->setObject(UserActionObject(getIdOfItem(onDroppedGroup), UserActionObjectType::PinGroup));
         addAct->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
-        addAct->exec();
+        compAct->addAction(reorderActHack);
+        compAct->addAction(addAct);
+        compAct->exec();
         // too keep the order, ActionAddItemsToObject cannot be executed with all pins, but a ComAction must be created
         // with many ActionAddItemsToObject that contain a single pin each -> set destroys order of pins in source pingroup
         setModule(mModule);
@@ -547,12 +554,16 @@ namespace hal
         {
             // reorder action from source group is still needed (for undo action)!
             UserActionCompound* compAct = new UserActionCompound;
+            ActionReorderObject* reorderActHack = new ActionReorderObject(droppedPin->getOwnRow());
+            reorderActHack->setObject(UserActionObject(getIdOfItem(droppedPin), UserActionObjectType::Pin));
+            reorderActHack->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
             ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), QSet<u32>() << getIdOfItem(droppedPin));
             addAct->setObject(UserActionObject(getIdOfItem(onDroppedParent), UserActionObjectType::PinGroup));
             addAct->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
             ActionReorderObject* reorderAct = new ActionReorderObject(row);
             reorderAct->setObject(UserActionObject(getIdOfItem(droppedPin), UserActionObjectType::Pin));
             reorderAct->setParentObject(UserActionObject(mModule->get_id(), UserActionObjectType::Module));
+            compAct->addAction(reorderActHack);
             compAct->addAction(addAct);
             compAct->addAction(reorderAct);
             compAct->exec();
