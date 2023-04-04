@@ -1,5 +1,6 @@
 #include "gui/main_window/plugin_parameter_dialog.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
 #include "gui/main_window/color_selection.h"
 #include "gui/main_window/key_value_table.h"
 #include "gui/gui_utils/graphics.h"
@@ -18,14 +19,14 @@
 #include <QTableWidget>
 
 namespace hal {
-    PluginParameterDialog::PluginParameterDialog(BasePluginInterface* bpif, QWidget* parent)
-        : QDialog(parent), mPluginInterface(bpif)
+    PluginParameterDialog::PluginParameterDialog(const QString &pname, GuiExtensionInterface *geif, QWidget* parent)
+        : QDialog(parent), mPluginName(pname), mGuiExtensionInterface(geif)
     {
         setupHash();
 
         QDialogButtonBox* bbox = setupButtonBox();
 
-        setWindowTitle("Settings for " + QString::fromStdString(mPluginInterface->get_name()) + " plugin");
+        setWindowTitle("Settings for " + mPluginName + " plugin");
 
         if (mTabNames.isEmpty())
         {
@@ -54,9 +55,9 @@ namespace hal {
         QDialogButtonBox* retval = new QDialogButtonBox(QDialogButtonBox::Cancel,this);
         for (const PluginParameter& par : mParameterList)
         {
-            if (par.get_type() != PluginParameter::PushButton) continue;
+            if (par.get_type() != PluginParameter::PushButton || par.get_tagname().find('/') != std::string::npos) continue;
             QPushButton* but = static_cast<QPushButton*>(mWidgetMap.value(QString::fromStdString(par.get_tagname())));
-            if (!but) continue;
+            Q_ASSERT(but);
             connect(but,&QPushButton::clicked,this,&PluginParameterDialog::handlePushbuttonClicked);
             retval->addButton(but,QDialogButtonBox::ActionRole);
         }
@@ -67,7 +68,8 @@ namespace hal {
 
     void PluginParameterDialog::setupHash()
     {
-        for (PluginParameter par : mPluginInterface->get_parameter())
+        if (!mGuiExtensionInterface) return;
+        for (PluginParameter par : mGuiExtensionInterface->get_parameter())
         {
             if (par.get_type() == PluginParameter::Absent) continue;
             QString parTagname = QString::fromStdString(par.get_tagname());
@@ -155,8 +157,15 @@ namespace hal {
 
             switch (par.get_type())
             {
-            // not in form nor tab
+            // push button not in tab are located in button box
             case PluginParameter::PushButton:
+                if (par.get_tagname().find('/')!=std::string::npos)
+                {
+                    QPushButton* but = static_cast<QPushButton*>(widget);
+                    Q_ASSERT(but);
+                    connect(but,&QPushButton::clicked,this,&PluginParameterDialog::handlePushbuttonClicked);
+                    form->addRow(but);
+                }
                 break;
             // without label
             case PluginParameter::Boolean:
@@ -174,7 +183,9 @@ namespace hal {
 
     void PluginParameterDialog::accept()
     {
+        if (!mGuiExtensionInterface) return;
         std::vector<PluginParameter> settings;
+        std::string buttonClicked;
         for (PluginParameter par : mParameterList)
         {
             const QWidget* w = mWidgetMap.value(QString::fromStdString(par.get_tagname()));
@@ -183,7 +194,10 @@ namespace hal {
             switch (par.get_type())
             {
             case PluginParameter::PushButton:
-                qDebug() << "Push" << par.get_tagname().c_str() << par.get_value().c_str();
+                if (par.get_value() == "clicked")
+                {
+                    buttonClicked = par.get_tagname();
+                }
                 break;
             case PluginParameter::Dictionary:
             {
@@ -235,7 +249,14 @@ namespace hal {
             settings.push_back(par);
         }
         QDialog::accept();
-        mPluginInterface->set_parameter(gNetlist, settings);
+        mGuiExtensionInterface->set_parameter(settings);
+
+        if (!buttonClicked.empty())
+        {
+            mGuiExtensionInterface->execute_function(buttonClicked,gNetlist,gSelectionRelay->selectedModulesVector(),gSelectionRelay->selectedGatesVector(),gSelectionRelay->selectedNetsVector());
+            if (gPythonContext->pythonThread())
+                gPythonContext->pythonThread()->unlock();
+        }
     }
 
     void PluginParameterDialog::handlePushbuttonClicked()

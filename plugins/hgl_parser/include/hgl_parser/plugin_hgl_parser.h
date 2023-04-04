@@ -26,12 +26,23 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hgl_parser.h"
+#include "hal_core/plugin_system/fac_extension_interface.h"
 
 namespace hal
 {
-    class PLUGIN_API HGLParserPlugin : public BasePluginInterface
+    class HGLParserExtension : public FacExtensionInterface
     {
     public:
+        HGLParserExtension();
+    };
+
+    class PLUGIN_API HGLParserPlugin : public BasePluginInterface
+    {
+        HGLParserExtension* m_extension;
+    public:
+        HGLParserPlugin();
+
         std::string get_name() const override;
         std::string get_version() const override;
 

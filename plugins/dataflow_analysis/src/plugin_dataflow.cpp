@@ -44,12 +44,24 @@ namespace hal
         return std::string("dataflow");
     }
 
+    std::string plugin_dataflow::get_description() const
+    {
+        return "Dataflow analysis for gate-level netlist reverse engineering";
+    }
+
     std::string plugin_dataflow::get_version() const
     {
         return std::string("0.1");
     }
 
-    ProgramOptions plugin_dataflow::get_cli_options() const
+
+    plugin_dataflow::plugin_dataflow()
+    {
+        m_extensions.push_back(new CliExtensionDataflow(this));
+        m_extensions.push_back(new GuiExtensionDataflow(this));
+    }
+
+    ProgramOptions CliExtensionDataflow::get_cli_options() const
     {
         ProgramOptions description;
 
@@ -64,7 +76,9 @@ namespace hal
         return description;
     }
 
-    bool plugin_dataflow::handle_cli_call(Netlist* nl, ProgramArguments& args)
+
+
+    bool CliExtensionDataflow::handle_cli_call(Netlist* nl, ProgramArguments& args)
     {
         UNUSED(args);
         std::string path;
@@ -103,7 +117,7 @@ namespace hal
             }
         }
 
-        if (execute(nl, path, sizes, false, false, false, {{}}).empty(), bad_group_size)
+        if (m_parent->execute(nl, path, sizes, false, false, false, {{}}).empty(), bad_group_size)
         {
             return false;
         }
@@ -111,7 +125,7 @@ namespace hal
         return true;
     }
 
-    std::vector<PluginParameter> plugin_dataflow::get_parameter() const
+    std::vector<PluginParameter> GuiExtensionDataflow::get_parameter() const
     {
         std::vector<PluginParameter> retval;
         retval.push_back(PluginParameter(PluginParameter::String, "sizes", "Expected register size (optional)", "8,16,32"));
@@ -125,21 +139,8 @@ namespace hal
         return retval;
     }
 
-    void plugin_dataflow::set_parameter(Netlist* nl, const std::vector<PluginParameter>& params)
+    void GuiExtensionDataflow::set_parameter(const std::vector<PluginParameter>& params)
     {
-        if (!nl)
-        {
-            log_warning("dataflow", "Error setting paramater: no netlist loaded.");
-            return;
-        }
-        bool isExecPushed = false;
-
-        std::vector<u32> sizes;
-        std::string output_path            = "/tmp";
-        int bad_groups                     = 7;
-        bool draw_graph                    = false;
-        bool create_modules                = false;
-        bool register_stage_identification = false;
 
         for (const PluginParameter& par : params)
         {
@@ -149,39 +150,47 @@ namespace hal
                 std::string s;
                 while (std::getline(f, s, ','))
                 {
-                    sizes.emplace_back(std::stoi(s));
+                    m_sizes.emplace_back(std::stoi(s));
                 }
             }
             else if (par.get_tagname() == "bad_groups")
             {
-                bad_groups = atoi(par.get_value().c_str());
+                m_bad_groups = atoi(par.get_value().c_str());
             }
             else if (par.get_tagname() == "draw")
             {
-                draw_graph = (par.get_value() == "true");
+                m_draw_graph = (par.get_value() == "true");
             }
             else if (par.get_tagname() == "output")
             {
-                output_path = par.get_value();
+                m_output_path = par.get_value();
             }
             else if (par.get_tagname() == "create_modules")
             {
-                create_modules = (par.get_value() == "true");
+                m_create_modules = (par.get_value() == "true");
             }
             else if (par.get_tagname() == "register_stage_identification")
             {
-                register_stage_identification = (par.get_value() == "true");
+                m_register_stage_identification = (par.get_value() == "true");
             }
             else if (par.get_tagname() == "exec")
             {
-                isExecPushed = (par.get_value() == "clicked");
+                m_button_clicked = (par.get_value() == "clicked");
             }
         }
 
-        if (isExecPushed)
+    }
+
+    void GuiExtensionDataflow::execute_function(std::string tag, Netlist *nl, const std::vector<u32>&, const std::vector<u32>&, const std::vector<u32>&)
+    {
+        if (!m_button_clicked) return;
+        if (!nl)
         {
-            execute(nl, output_path, sizes, draw_graph, create_modules, register_stage_identification, {}, bad_groups);
+            log_warning("dataflow", "Error setting paramater: no netlist loaded.");
+            return;
         }
+
+        m_parent->execute(nl, m_output_path, m_sizes, m_draw_graph, m_create_modules, m_register_stage_identification, {}, m_bad_groups);
     }
 
     std::vector<std::vector<Gate*>> plugin_dataflow::execute(Netlist* nl,
@@ -199,8 +208,8 @@ namespace hal
             return std::vector<std::vector<Gate*>>();
         }
 
-        if (s_progress_indicator_function)
-            s_progress_indicator_function(0, "dataflow analysis running ...");
+        if (GuiExtensionDataflow::s_progress_indicator_function)
+            GuiExtensionDataflow::s_progress_indicator_function(0, "dataflow analysis running ...");
 
         dataflow::GuiLayoutLocker gll;
 
@@ -346,15 +355,15 @@ namespace hal
 
         log("dataflow processing finished in {:3.2f}s", total_time);
 
-        if (s_progress_indicator_function)
-            s_progress_indicator_function(100, "dataflow analysis finished");
+        if (GuiExtensionDataflow::s_progress_indicator_function)
+            GuiExtensionDataflow::s_progress_indicator_function(100, "dataflow analysis finished");
 
         return dataflow::state_to_module::create_sets(nl, final_grouping);
     }
 
-    std::function<void(int, const std::string&)> plugin_dataflow::s_progress_indicator_function = nullptr;
+    std::function<void(int, const std::string&)> GuiExtensionDataflow::s_progress_indicator_function = nullptr;
 
-    void plugin_dataflow::register_progress_indicator(std::function<void(int, const std::string&)> pif)
+    void GuiExtensionDataflow::register_progress_indicator(std::function<void(int, const std::string&)> pif)
     {
         s_progress_indicator_function = pif;
     }

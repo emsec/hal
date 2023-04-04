@@ -42,8 +42,6 @@ namespace hal
                 :returns: Plugin version.
                 :rtype: str
                 )")
-            // .def("get_cli_options", &plugin_dataflow::get_cli_options)
-            // .def("handle_cli_call", &plugin_dataflow::handle_cli_call)
             .def("execute",
                  &plugin_dataflow::execute,
                  py::arg("netlist"),

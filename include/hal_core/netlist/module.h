@@ -147,12 +147,12 @@ namespace hal
         Module* get_parent_module() const;
 
         /**
-         * Get all direct parent of this module.<br>
+         * Get all parents of this module.<br>
          * If `recursive` is set to true, all indirect parents are also included.<br>
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
          * @param[in] filter - An optional filter.
-         * @param[in] recursive - True to include indirect parents as well, false otherwise.
+         * @param[in] recursive - Set `true` to include indirect parents as well, `false` otherwise.
          * @returns A vector of parent modules.
          */
         std::vector<Module*> get_parent_modules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = true) const;
@@ -162,7 +162,7 @@ namespace hal
          * If the new parent is a submodule of this module, the new parent is added as a direct submodule to the old parent first.
          *
          * @param[in] new_parent - The new parent module.
-         * @returns True if the parent was changed, false otherwise.
+         * @returns `true` if the parent was changed, `false` otherwise.
          */
         bool set_parent_module(Module* new_parent);
 
@@ -170,8 +170,8 @@ namespace hal
          * Check if the module is a parent of the specified module.
          * 
          * @param[in] module - The module.
-         * @param[in] recursive - True to check recursively, false otherwise.
-         * @returns True if the module is a parent of the specified module, false otherwise.
+         * @param[in] recursive - Set `true` to check recursively, `false` otherwise.
+         * @returns `true` if the module is a parent of the specified module, `false` otherwise.
          */
         bool is_parent_module_of(const Module* module, bool recursive = false) const;
 
@@ -181,7 +181,7 @@ namespace hal
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
          * @param[in] filter - An optional filter.
-         * @param[in] recursive - True to include indirect submodules as well, false otherwise.
+         * @param[in] recursive - Set `true` to include indirect submodules as well, `false` otherwise.
          * @returns A vector of submodules.
          */
         std::vector<Module*> get_submodules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = false) const;
@@ -190,8 +190,8 @@ namespace hal
          * Check if the module is a submodule of the specified module.
          * 
          * @param[in] module - The module.
-         * @param[in] recursive - True to check recursively, false otherwise.
-         * @returns True if the module is a submodule of the specified module, false otherwise.
+         * @param[in] recursive - Set `true` to check recursively, `false` otherwise.
+         * @returns `true` if the module is a submodule of the specified module, `false` otherwise.
          */
         bool is_submodule_of(const Module* module, bool recursive = false) const;
 
@@ -200,15 +200,15 @@ namespace hal
          * If \p recursive is set to true, all indirect submodules are also included.
          *
          * @param[in] other - Other module to check for.
-         * @param[in] recursive - True to include indirect submodules as well.
-         * @returns True if the other module is a submodule, false otherwise.
+         * @param[in] recursive - Set `true` to include indirect submodules as well, `false` otherwise.
+         * @returns `true` if the other module is a submodule, `false` otherwise.
          */
         bool contains_module(const Module* other, bool recursive = false) const;
 
         /**
          * Returns true only if the module is the top module of the netlist.
          * 
-         * @returns True if the module is the top module, false otherwise.
+         * @returns `true` if the module is the top module, `false` otherwise.
          */
         bool is_top_module() const;
 
@@ -457,15 +457,6 @@ namespace hal
         bool set_pin_name(ModulePin* pin, const std::string& new_name);
 
         /**
-         * Set the name of the given pin group.
-         * 
-         * @param[in] pin_group - The pin group.
-         * @param[in] new_name - The name to be assigned to the pin group.
-         * @returns `true` on success, `false` otherwise.
-         */
-        bool set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name);
-
-        /**
          * Set the type of the given pin.
          * 
          * @param[in] pin - The pin.
@@ -473,24 +464,6 @@ namespace hal
          * @returns `true` on success, `false` otherwise.
          */
         bool set_pin_type(ModulePin* pin, PinType new_type);
-
-        /**
-         * Set the type of the given pin group.
-         * 
-         * @param[in] pin_group - The pin group.
-         * @param[in] new_type - The type to be assigned to the pin group.
-         * @returns `true` on success, `false` otherwise.
-         */
-        bool set_pin_group_type(PinGroup<ModulePin>* pin_group, PinType new_type);
-
-        /**
-         * Set the direction of the given pin group.
-         * 
-         * @param[in] pin_group - The pin group.
-         * @param[in] new_direction - The direction to be assigned to the pin group.
-         * @returns `true` on success, `false` otherwise.
-         */
-        bool set_pin_group_direction(PinGroup<ModulePin>* pin_group, PinDirection new_direction);
 
         /**
          * Create a new pin group with the given name.
@@ -552,6 +525,33 @@ namespace hal
          * @returns Ok on success, an error message otherwise.
          */
         Result<std::monostate> move_pin_group(PinGroup<ModulePin>* pin_group, u32 new_index);
+
+        /**
+         * Set the name of the given pin group.
+         * 
+         * @param[in] pin_group - The pin group.
+         * @param[in] new_name - The name to be assigned to the pin group.
+         * @returns `true` on success, `false` otherwise.
+         */
+        bool set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name);
+
+        /**
+         * Set the type of the given pin group.
+         * 
+         * @param[in] pin_group - The pin group.
+         * @param[in] new_type - The type to be assigned to the pin group.
+         * @returns `true` on success, `false` otherwise.
+         */
+        bool set_pin_group_type(PinGroup<ModulePin>* pin_group, PinType new_type);
+
+        /**
+         * Set the direction of the given pin group.
+         * 
+         * @param[in] pin_group - The pin group.
+         * @param[in] new_direction - The direction to be assigned to the pin group.
+         * @returns `true` on success, `false` otherwise.
+         */
+        bool set_pin_group_direction(PinGroup<ModulePin>* pin_group, PinDirection new_direction);
 
         /**
          * Assign a pin to a pin group.

@@ -19,6 +19,7 @@
 #include "gui/gui_utils/netlist.h"
 #include "gui/module_widget/module_widget.h"
 #include "gui/overlay/widget_overlay.h"
+#include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/settings/settings_items/settings_item_spinbox.h"
 #include "gui/spinner_widget/spinner_widget.h"
 #include "gui/toolbar/toolbar.h"
@@ -30,6 +31,7 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/utils.h"
 #include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -84,13 +86,8 @@ namespace hal
             mView->centerOn(0, 0);
         }
         sInstance = this;
-        for (const std::string& pluginName : plugin_manager::get_plugin_names())
-        {
-            BasePluginInterface* bpif = plugin_manager::get_plugin_instance(pluginName);
-            if (!bpif) continue;
-            bpif->register_progress_indicator(&GraphWidget::pluginProgressIndicator);
-        }
-
+        for (GuiExtensionInterface* geif : GuiPluginManager::getGuiExtensions().values())
+            geif->register_progress_indicator(&GraphWidget::pluginProgressIndicator);
     }
 
     GraphWidget::~GraphWidget()
@@ -999,7 +996,7 @@ namespace hal
     void GraphWidget::pluginProgressIndicator(int percent, const std::string& msg)
     {
         // qDebug() << "progress" << hex << (quintptr) QThread::currentThread() << (quintptr) gPythonContext->currentThread() << (quintptr) dynamic_cast<PythonThread*>(QThread::currentThread());
-        if (!sInstance || gPythonContext->currentThread()) return;
+        if (!sInstance || gPythonContext->pythonThread()) return;
         if (percent==100)
             sInstance->handleSceneAvailable();
         else

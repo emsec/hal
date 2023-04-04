@@ -1,6 +1,6 @@
 #include "hgl_parser/plugin_hgl_parser.h"
 
-#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
+#include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser.h"
 #include "hgl_parser/hgl_parser.h"
 
 namespace hal
@@ -9,6 +9,20 @@ namespace hal
     {
         return std::make_unique<HGLParserPlugin>();
     }
+
+    HGLParserExtension::HGLParserExtension()
+        : FacExtensionInterface(FacExtensionInterface::FacGatelibParser)
+    {
+        m_description = "Default HGL Parser";
+        m_supported_file_extensions.push_back(".hgl");
+        FacFactoryProvider<GateLibraryParser>* fac = new FacFactoryProvider<GateLibraryParser>;
+        fac->m_factory = []() { return std::make_unique<HGLParser>(); };
+        factory_provider = fac;
+    }
+
+    HGLParserPlugin::HGLParserPlugin()
+        : m_extension(nullptr)
+    {;}
 
     std::string HGLParserPlugin::get_name() const
     {
@@ -22,11 +36,12 @@ namespace hal
 
     void HGLParserPlugin::on_load()
     {
-        gate_library_parser_manager::register_parser("Default HGL Parser", []() { return std::make_unique<HGLParser>(); }, {".hgl"});
+        m_extension = new HGLParserExtension;
+        m_extensions.push_back(m_extension);
     }
 
     void HGLParserPlugin::on_unload()
     {
-        gate_library_parser_manager::unregister_parser("Default HGL Parser");
+        delete_extension(m_extension);
     }
 }    // namespace hal

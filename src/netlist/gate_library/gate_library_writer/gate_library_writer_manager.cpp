@@ -3,6 +3,7 @@
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_library_writer/gate_library_writer.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/plugin_system/plugin_manager.h"
 
 #include <chrono>
 #include <fstream>

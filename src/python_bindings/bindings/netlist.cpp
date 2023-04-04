@@ -221,7 +221,7 @@ namespace hal
             :rtype: list[hal_py.Gate]
         )");
 
-        py_netlist.def("get_gates", static_cast<std::vector<Gate*> (Netlist::*)(const std::function<bool(Gate*)>&) const>(&Netlist::get_gates), py::arg("filter"), R"(
+        py_netlist.def("get_gates", static_cast<std::vector<Gate*> (Netlist::*)(const std::function<bool(const Gate*)>&) const>(&Netlist::get_gates), py::arg("filter"), R"(
             Get all gates contained within the netlist.
             The filter is evaluated on every gate such that the result only contains gates matching the specified condition.
 
@@ -369,7 +369,7 @@ namespace hal
             :rtype: list[hal_py.Net]
         )");
 
-        py_netlist.def("get_nets", static_cast<std::vector<Net*> (Netlist::*)(const std::function<bool(Net*)>&) const>(&Netlist::get_nets), py::arg("filter"), R"(
+        py_netlist.def("get_nets", static_cast<std::vector<Net*> (Netlist::*)(const std::function<bool(const Net*)>&) const>(&Netlist::get_nets), py::arg("filter"), R"(
             Get all nets contained within the netlist.<br>
             The filter is evaluated on every net such that the result only contains nets matching the specified condition.
 
@@ -539,7 +539,7 @@ namespace hal
             :rtype: list[hal_py.Module]
         )");
 
-        py_netlist.def("get_modules", static_cast<std::vector<Module*> (Netlist::*)(const std::function<bool(Module*)>&) const>(&Netlist::get_modules), py::arg("filter"), R"(
+        py_netlist.def("get_modules", static_cast<std::vector<Module*> (Netlist::*)(const std::function<bool(const Module*)>&) const>(&Netlist::get_modules), py::arg("filter"), R"(
             Get all modules contained within the netlist, including the top module.
             The filter is evaluated on every module such that the result only contains modules matching the specified condition.
 
@@ -618,18 +618,24 @@ namespace hal
             :rtype: hal_py.Grouping
         )");
 
-        py_netlist.def_property_readonly(
-            "groupings", [](Netlist* n) { return n->get_groupings(); }, R"(
+        py_netlist.def_property_readonly("groupings", static_cast<const std::vector<Grouping*>& (Netlist::*)() const>(&Netlist::get_groupings), R"(
             All groupings contained within the netlist.
 
+            :type: list[hal_py.Grouping]
+        )");
+
+        py_netlist.def("get_groupings", static_cast<const std::vector<Grouping*>& (Netlist::*)() const>(&Netlist::get_groupings), R"(
+            Get all groupings contained within the netlist.
+
+            :returns: A list of groupings.
             :rtype: list[hal_py.Grouping]
         )");
 
-        py_netlist.def("get_groupings", &Netlist::get_groupings, py::arg("filter") = nullptr, R"(
+        py_netlist.def("get_groupings", static_cast<std::vector<Grouping*> (Netlist::*)(const std::function<bool(const Grouping*)>&) const>(&Netlist::get_groupings), py::arg("filter"), R"(
             Get all groupings contained within the netlist.
-            A filter can be applied to the result to only get groupings matching the specified condition.
+            The filter is evaluated on every grouping such that the result only contains groupings matching the specified condition.
 
-            :param lambda filter: Filter to be applied to the groupings.
+            :param lambda filter: Filter function to be evaluated on each grouping.
             :returns: A list of groupings.
             :rtype: list[hal_py.Grouping]
         )");

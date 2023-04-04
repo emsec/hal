@@ -300,7 +300,6 @@ namespace hal
 
             u32 index = m_next_index++;
             m_pins.push_back(pin);
-            m_pin_id_map[pin->get_id()] = pin;
             pin->m_group                = std::make_pair(this, index);
             return OK({});
         }
@@ -374,7 +373,6 @@ namespace hal
             pin->m_group = std::make_pair(nullptr, 0);
             auto it      = std::next(m_pins.begin(), index - m_start_index);
             it           = m_pins.erase(it);
-            m_pin_id_map.erase(pin->get_id());
             for (; it != m_pins.end(); it++)
             {
                 std::get<1>((*it)->m_group)--;
@@ -384,13 +382,33 @@ namespace hal
             return OK({});
         }
 
+        /**
+         * Check whether the pin group contains the given pin.
+         * 
+         * @param[in] pin - The pin to check.
+         * @returns `true` if the pin group contains the pin, `false` otherwise.
+         */
+        bool contains_pin(T* pin)
+        {
+            if (pin == nullptr)
+            {
+                return false;
+            }
+
+            if (pin->m_group.first != this)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
     private:
         u32 m_id;
         std::string m_name;
         PinDirection m_direction;
         PinType m_type;
         std::list<T*> m_pins;
-        std::unordered_map<u32, T*> m_pin_id_map;
         bool m_ascending;
         u32 m_start_index;
         u32 m_next_index;

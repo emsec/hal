@@ -19,6 +19,7 @@
 #include "hal_core/netlist/net.h"
 
 #include <QDebug>
+#include <QApplication>
 #include <QElapsedTimer>
 #include <qmath.h>
 
@@ -213,20 +214,20 @@ namespace hal
 
     void GraphLayouter::alternateLayout()
     {
-        mParentContext->layoutProgress(0);
+        mParentContext->layoutProgress(1);
         getWireHash();
 
-        mParentContext->layoutProgress(1);
-        findMaxBoxDimensions();
         mParentContext->layoutProgress(2);
-        alternateMaxChannelLanes();
+        findMaxBoxDimensions();
         mParentContext->layoutProgress(3);
-        calculateJunctionMinDistance();
+        alternateMaxChannelLanes();
         mParentContext->layoutProgress(4);
-        alternateGateOffsets();
+        calculateJunctionMinDistance();
         mParentContext->layoutProgress(5);
-        alternatePlaceGates();
+        alternateGateOffsets();
         mParentContext->layoutProgress(6);
+        alternatePlaceGates();
+        mParentContext->layoutProgress(7);
         mDone = true;
         alternateDrawNets();
         drawComments();
@@ -245,6 +246,7 @@ namespace hal
     {
         QElapsedTimer timer;
         timer.start();
+        mParentContext->layoutProgress(0);
         mScene->deleteAllItems();
         clearLayoutData();
 
@@ -435,16 +437,18 @@ namespace hal
         return false;
     }
 
-    void GraphLayouter::handleCommentAboutToDeleted(CommentEntry *entry)
+    void GraphLayouter::handleCommentAboutToDeleted(CommentEntry* entry)
     {
+        Q_UNUSED(entry)
         // if this becomes too slow, go through the bubble list and only update
         // the corresponding gate/module
         clearComments();
         drawComments();
     }
 
-    void GraphLayouter::handleCommentAdded(CommentEntry *entry)
+    void GraphLayouter::handleCommentAdded(CommentEntry* entry)
     {
+        Q_UNUSED(entry)
         // if this becomes too slow, go through the bubble list and only update
         // the corresponding gate/module
         clearComments();
@@ -455,6 +459,7 @@ namespace hal
     {
         for (const u32 id : mParentContext->nets())
         {
+            qApp->processEvents(QEventLoop::AllEvents, 100);
             Net* n = gNetlist->get_net_by_id(id);
             if (!n)
                 continue;
@@ -1322,10 +1327,10 @@ namespace hal
             if (percentCount)
             {
                 if (doneCount % percentCount == 0)
-                    mParentContext->layoutProgress(6 + doneCount / percentCount);
+                    mParentContext->layoutProgress(7 + doneCount / percentCount);
             }
             else
-                mParentContext->layoutProgress(6 + (int)floor(93. * doneCount / netCount));
+                mParentContext->layoutProgress(7 + (int)floor(92. * doneCount / netCount));
 
             Net* n = gNetlist->get_net_by_id(id);
             if (!n)
