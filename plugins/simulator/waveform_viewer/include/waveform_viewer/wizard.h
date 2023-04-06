@@ -66,6 +66,7 @@ namespace hal {
         PageClock(NetlistSimulatorController *controller, QWidget *parent=nullptr);
 
         virtual bool validatePage() override;
+        virtual void initializePage() override;
 
     private Q_SLOTS:
         void dontUseClockChanged(bool state);
@@ -76,7 +77,6 @@ namespace hal {
         QSpinBox* mSpinStartValue;
         QSpinBox* mSpinDuration;
         QCheckBox* mDontUseClock;
-        QList<const Net*> mInputs;
 
         NetlistSimulatorController *mController;
 

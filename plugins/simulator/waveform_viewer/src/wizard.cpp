@@ -141,27 +141,11 @@ namespace hal {
         setTitle(tr("Step 2"));
         setSubTitle(tr("Clock settings"));
 
-        for (const Net* n : mController->get_input_nets())
-            mInputs.append(n);
-
         // was wenn inputs leer?
 
         QGridLayout* layout = new QGridLayout(this);
         mComboNet = new QComboBox(this);
-        int j = 0;
-        int iclk = -1;
 
-        for (const Net* n : mInputs)
-        {
-            QString netName = QString::fromStdString(n->get_name());
-            QString upcase = netName.toUpper();
-            if (upcase == "CLK" || upcase == "CLOCK")
-                iclk = j;
-            else if ((upcase.contains("CLK") || upcase.contains("CLOCK")) && j<0 )
-                iclk = j;
-            mComboNet->insertItem(j++,QString("%1[%2]").arg(netName).arg(n->get_id()));
-        }
-        if (iclk >= 0) mComboNet->setCurrentIndex(iclk);
         layout->addWidget(new QLabel("Select clock net:",this),0,0);
         layout->addWidget(mComboNet,0,1);
 
@@ -196,6 +180,24 @@ namespace hal {
         //layout->addWidget(mButtonBox,5,1);
     }
 
+    void PageClock::initializePage()
+    {
+        int j = 0;
+        int iclk = -1;
+
+        for (const Net* n : mController->get_input_nets())
+        {
+            QString netName = QString::fromStdString(n->get_name());
+            QString upcase = netName.toUpper();
+            if (upcase == "CLK" || upcase == "CLOCK")
+                iclk = j;
+            else if ((upcase.contains("CLK") || upcase.contains("CLOCK")) && j<0 )
+                iclk = j;
+            mComboNet->insertItem(j++,QString("%1[%2]").arg(netName).arg(n->get_id()));
+        }
+        if (iclk >= 0) mComboNet->setCurrentIndex(iclk);
+    }
+
     void PageClock::dontUseClockChanged(bool state)
     {
         mComboNet->setDisabled(state);
@@ -216,10 +218,19 @@ namespace hal {
             int period = mSpinPeriod->value();
             if (period <= 0) return false;
 
-            const Net* clk = mInputs.at(mComboNet->currentIndex());
-            mController->add_clock_period(
-                clk, period, mSpinStartValue->value()==0, mSpinDuration->value()
-            );
+            std::string clkNetName = mComboNet->currentText().toStdString();
+
+            for (const Net* n : mController->get_input_nets())
+            {
+                if (clkNetName == n->get_name())
+                {
+                    const Net* clk = n;
+                    mController->add_clock_period(
+                        clk, period, mSpinStartValue->value()==0, mSpinDuration->value());
+                    qDebug() << "clock net selected" << clk->get_name().c_str();
+                    break;
+                }
+            }
         }
 
         // wurde clock ausgewählt???
