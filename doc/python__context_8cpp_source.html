@@ -252,456 +252,461 @@ $(document).ready(function(){initNavTree('python__context_8cpp_source.html','');
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        py::exec(<a class="code" href="namespacecontrol.html#afd9eb2b1b752938d8b63684f7d1fecde">command</a>, *context, *context);</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        (*context)[<span class="stringliteral">&quot;netlist&quot;</span>] = <a class="code" href="namespacehal.html#ae9eb93dc7dd8514d3afb4c935a09a9a0">gNetlistOwner</a>;    <span class="comment">// assign the shared_ptr here, not the raw ptr</span></div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    }</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="keywordtype">void</span> PythonContext::initPython()</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    {</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <span class="comment">// GIL must be held</span></div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#ada0064833138221168460e2dafafac6f">gGuiApi</a>)</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        {</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;            (*context)[<span class="stringliteral">&quot;gui&quot;</span>] = <a class="code" href="namespacehal.html#ada0064833138221168460e2dafafac6f">gGuiApi</a>;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        }</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    }</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        <span class="comment">//    using namespace py::literals;</span></div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        <span class="keyword">new</span> py::dict();</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        mContext = <span class="keyword">new</span> py::dict(**py::globals());</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    <span class="keywordtype">void</span> PythonContext::initPython()</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    {</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <span class="comment">// GIL must be held</span></div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        initializeContext(mContext);</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        (*mContext)[<span class="stringliteral">&quot;console&quot;</span>] = <a class="code" href="_apache_01_license_8txt.html#a7b048ab2f6ed167157c1be2096d6cfd0">py::module::import</a>(<span class="stringliteral">&quot;hal_gui.console&quot;</span>);</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        (*mContext)[<span class="stringliteral">&quot;hal_gui&quot;</span>] = <a class="code" href="_apache_01_license_8txt.html#a7b048ab2f6ed167157c1be2096d6cfd0">py::module::import</a>(<span class="stringliteral">&quot;hal_gui&quot;</span>);</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    }</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="comment">//    using namespace py::literals;</span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160; </div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="keyword">new</span> py::dict();</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        mContext = <span class="keyword">new</span> py::dict(**py::globals());</div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    <span class="keywordtype">void</span> PythonContext::closePython()</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    {</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <span class="comment">// GIL must be held</span></div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        <span class="keyword">delete</span> mContext;</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        mContext = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;    }</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    <span class="keywordtype">void</span> PythonContext::interpretBackground(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* caller, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; input, <span class="keywordtype">bool</span> multiple_expressions)</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    {</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.isEmpty())</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        {</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        }</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        <span class="keywordflow">if</span> (input == <span class="stringliteral">&quot;quit()&quot;</span>)</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        initializeContext(mContext);</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        (*mContext)[<span class="stringliteral">&quot;console&quot;</span>] = <a class="code" href="_apache_01_license_8txt.html#a7b048ab2f6ed167157c1be2096d6cfd0">py::module::import</a>(<span class="stringliteral">&quot;hal_gui.console&quot;</span>);</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        (*mContext)[<span class="stringliteral">&quot;hal_gui&quot;</span>] = <a class="code" href="_apache_01_license_8txt.html#a7b048ab2f6ed167157c1be2096d6cfd0">py::module::import</a>(<span class="stringliteral">&quot;hal_gui&quot;</span>);</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    }</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;    <span class="keywordtype">void</span> PythonContext::closePython()</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    {</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <span class="comment">// GIL must be held</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        <span class="keyword">delete</span> mContext;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        mContext = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    }</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160; </div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    <span class="keywordtype">void</span> PythonContext::interpretBackground(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* caller, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; input, <span class="keywordtype">bool</span> multiple_expressions)</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    {</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.isEmpty())</div>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        {</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            forwardError(<span class="stringliteral">&quot;quit() cannot be used in this interpreter. Use console.reset() to restart it.\n&quot;</span>);</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        }</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160; </div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        <span class="keywordflow">if</span> (input == <span class="stringliteral">&quot;help()&quot;</span>)</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        {</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;            forwardError(<span class="stringliteral">&quot;help() cannot be used in this interpreter.\n&quot;</span>);</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        }</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <span class="keywordflow">if</span> (input == <span class="stringliteral">&quot;license()&quot;</span>)</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        {</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;            forwardError(<span class="stringliteral">&quot;license() cannot be used in this interpreter.\n&quot;</span>);</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        }</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        </div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        <span class="keywordflow">if</span> (mThread)</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        {</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;            forwardError(<span class="stringliteral">&quot;python thread already running. Please retry after other thread finished.\n&quot;</span>);</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        }</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;python&quot;</span>, <span class="stringliteral">&quot;Python console execute: \&quot;{}\&quot;.&quot;</span>, <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.toStdString());</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        mInterpreterCaller = caller;</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        startThread(input,!multiple_expressions);</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    }</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160; </div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <span class="keywordtype">void</span> PythonContext::startThread(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; input, <span class="keywordtype">bool</span> singleStatement)</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    {</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        mThread = <span class="keyword">new</span> PythonThread(input,singleStatement,<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        connect(mThread,&amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qthread.html#finished">QThread::finished</a>,<span class="keyword">this</span>,&amp;PythonContext::handleThreadFinished);</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        connect(mThread,&amp;<a class="code" href="classhal_1_1_python_thread.html#ab0085c92c89fe36c83d4a40d718a6d1c">PythonThread::stdOutput</a>,<span class="keyword">this</span>,&amp;PythonContext::handleScriptOutput);</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        connect(mThread,&amp;<a class="code" href="classhal_1_1_python_thread.html#a0be99bef713b0bfa0a9a77a32b16a4de">PythonThread::stdError</a>,<span class="keyword">this</span>,&amp;PythonContext::handleScriptError);</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        connect(mThread,&amp;<a class="code" href="classhal_1_1_python_thread.html#ac01eadc0c157da2027993b6f76ac928b">PythonThread::requireInput</a>,<span class="keyword">this</span>,&amp;PythonContext::handleInputRequired);</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        <span class="keywordflow">if</span> (mConsole) mConsole-&gt;setReadOnly(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        mLayoutLocker = <span class="keyword">new</span> LayoutLocker;</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        mThread-&gt;start();</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    }</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    <span class="keywordtype">void</span> PythonContext::interpretForeground(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;input)</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    {</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.isEmpty())</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        {</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        }</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160; </div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;python&quot;</span>, <span class="stringliteral">&quot;Python console execute: \&quot;{}\&quot;.&quot;</span>, <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.toStdString());</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="comment">// since we&#39;ve released the GIL in the constructor, re-acquire it here before</span></div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        <span class="comment">// running some Python code on the main thread</span></div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        PyGILState_STATE <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a> = PyGILState_Ensure();</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        <span class="comment">//PyEval_RestoreThread(mMainThreadState);</span></div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        }</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        <span class="keywordflow">if</span> (input == <span class="stringliteral">&quot;quit()&quot;</span>)</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        {</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            forwardError(<span class="stringliteral">&quot;quit() cannot be used in this interpreter. Use console.reset() to restart it.\n&quot;</span>);</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        }</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        <span class="keywordflow">if</span> (input == <span class="stringliteral">&quot;help()&quot;</span>)</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        {</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;            forwardError(<span class="stringliteral">&quot;help() cannot be used in this interpreter.\n&quot;</span>);</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        }</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160; </div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        <span class="keywordflow">if</span> (input == <span class="stringliteral">&quot;license()&quot;</span>)</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        {</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;            forwardError(<span class="stringliteral">&quot;license() cannot be used in this interpreter.\n&quot;</span>);</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        }</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        </div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <span class="keywordflow">if</span> (mThread)</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        {</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;            forwardError(<span class="stringliteral">&quot;python thread already running. Please retry after other thread finished.\n&quot;</span>);</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        }</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;python&quot;</span>, <span class="stringliteral">&quot;Python console execute: \&quot;{}\&quot;.&quot;</span>, <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.toStdString());</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        mInterpreterCaller = caller;</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        startThread(input,!multiple_expressions);</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    }</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160; </div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    <span class="keywordtype">void</span> PythonContext::startThread(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; input, <span class="keywordtype">bool</span> singleStatement)</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;    {</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        mThread = <span class="keyword">new</span> PythonThread(input,singleStatement,<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        connect(mThread,&amp;<a class="codeRef" href="https://doc.qt.io/qt-5/qthread.html#finished">QThread::finished</a>,<span class="keyword">this</span>,&amp;PythonContext::handleThreadFinished);</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        connect(mThread,&amp;<a class="code" href="classhal_1_1_python_thread.html#ab0085c92c89fe36c83d4a40d718a6d1c">PythonThread::stdOutput</a>,<span class="keyword">this</span>,&amp;PythonContext::handleScriptOutput);</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        connect(mThread,&amp;<a class="code" href="classhal_1_1_python_thread.html#a0be99bef713b0bfa0a9a77a32b16a4de">PythonThread::stdError</a>,<span class="keyword">this</span>,&amp;PythonContext::handleScriptError);</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        connect(mThread,&amp;<a class="code" href="classhal_1_1_python_thread.html#ac01eadc0c157da2027993b6f76ac928b">PythonThread::requireInput</a>,<span class="keyword">this</span>,&amp;PythonContext::handleInputRequired);</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        <span class="keywordflow">if</span> (mConsole) mConsole-&gt;setReadOnly(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        mLayoutLocker = <span class="keyword">new</span> LayoutLocker;</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        mThread-&gt;start();</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    }</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160; </div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <span class="keywordtype">void</span> PythonContext::interpretForeground(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;input)</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    {</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.isEmpty())</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        {</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        }</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160; </div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;python&quot;</span>, <span class="stringliteral">&quot;Python console execute: \&quot;{}\&quot;.&quot;</span>, <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.toStdString());</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160; </div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        <span class="comment">// TODO should the console also be moved to threads? Maybe actually catch Ctrl+C there</span></div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        <span class="comment">// as a method to interrupt? Currently you can hang the GUI by running an endless loop</span></div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        <span class="comment">// from the console.</span></div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160; </div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        <span class="keywordflow">try</span></div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        {</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;            pybind11::object rc;</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            rc = py::eval&lt;py::eval_single_statement&gt;(<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.toStdString(), *mContext, *mContext);</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            <span class="keywordflow">if</span> (!rc.is_none())</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;            {</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;                forwardStdout(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(<a class="code" href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">py::str</a>(rc).cast&lt;std::string&gt;()));</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;            }</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;            handleReset();</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        }</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="keywordflow">catch</span> (py::error_already_set&amp; e)</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        {</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;            qDebug() &lt;&lt; <span class="stringliteral">&quot;interpret error set&quot;</span>;</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;            forwardError(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(std::string(e.what())));</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            e.restore();</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;            PyErr_Clear();</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        }</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keywordflow">catch</span> (std::exception&amp; e)</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        {</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;            qDebug() &lt;&lt; <span class="stringliteral">&quot;interpret exception&quot;</span>;</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;            forwardError(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(std::string(e.what())));</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        <span class="comment">// since we&#39;ve released the GIL in the constructor, re-acquire it here before</span></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        <span class="comment">// running some Python code on the main thread</span></div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        PyGILState_STATE <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a> = PyGILState_Ensure();</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        <span class="comment">//PyEval_RestoreThread(mMainThreadState);</span></div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        <span class="comment">// TODO should the console also be moved to threads? Maybe actually catch Ctrl+C there</span></div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        <span class="comment">// as a method to interrupt? Currently you can hang the GUI by running an endless loop</span></div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        <span class="comment">// from the console.</span></div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160; </div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        <span class="keywordflow">try</span></div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        {</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;            pybind11::object rc;</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;            rc = py::eval&lt;py::eval_single_statement&gt;(<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.toStdString(), *mContext, *mContext);</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;            <span class="keywordflow">if</span> (!rc.is_none())</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;            {</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;                forwardStdout(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(<a class="code" href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">py::str</a>(rc).cast&lt;std::string&gt;()));</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;            }</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;            handleReset();</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        }</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        <span class="keywordflow">catch</span> (py::error_already_set&amp; e)</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        {</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;            qDebug() &lt;&lt; <span class="stringliteral">&quot;interpret error set&quot;</span>;</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;            forwardError(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(std::string(e.what())));</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;            e.restore();</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;            PyErr_Clear();</div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        }</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        <span class="comment">// make sure we release the GIL, otherwise we interfere with threading</span></div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        PyGILState_Release(state);</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        <span class="comment">//mMainThreadState = PyEval_SaveThread();</span></div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160; </div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    }</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160; </div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    <span class="keywordtype">void</span> PythonContext::interpretScript(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* caller, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; input)</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    {</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        <span class="keywordflow">if</span> (mThread)</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        {</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;            <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;python&quot;</span>, <span class="stringliteral">&quot;Not executed, python script already running&quot;</span>);</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        }</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160; </div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        <span class="comment">//log_info(&quot;python&quot;, &quot;Python editor execute script:\n{}\n&quot;, input.toStdString());</span></div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;<span class="preprocessor">#ifdef HAL_STUDY</span></div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;        <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;UserStudy&quot;</span>, <span class="stringliteral">&quot;Python editor execute script:\n{}\n&quot;</span>, <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.toStdString());</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        forwardStdout(<span class="stringliteral">&quot;\n&quot;</span>);</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        forwardStdout(<span class="stringliteral">&quot;&lt;Execute Python Editor content&gt;&quot;</span>);</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        forwardStdout(<span class="stringliteral">&quot;\n&quot;</span>);</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160; </div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        mInterpreterCaller = caller;</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        startThread(input,<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    }</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160; </div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    <span class="keywordtype">void</span> PythonContext::handleScriptOutput(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; txt)</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    {</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        <span class="keywordflow">if</span> (!txt.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;            forwardStdout(txt);</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    }</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160; </div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    <span class="keywordtype">void</span> PythonContext::handleScriptError(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; txt)</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    {</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <span class="keywordflow">if</span> (!txt.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;            forwardError(txt);</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    }</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160; </div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <span class="keywordtype">void</span> PythonContext::handleInputRequired(<span class="keywordtype">int</span> <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; prompt, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> &amp;defaultValue)</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    {</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        <span class="keywordtype">bool</span> confirm;</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <span class="keywordflow">if</span> (mThread &amp;&amp; !mThread-&gt;stdoutBuffer().isEmpty())</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;            mConsole-&gt;handleStdout(mThread-&gt;flushStdout());</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160; </div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <span class="keywordflow">switch</span> (<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>) {</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8ca8b8de531d28e21a26df3018f0df69cec">PythonThread::ConsoleInput</a>:</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;            mConsole-&gt;handleStdout(prompt + <span class="stringliteral">&quot;\n&quot;</span>);</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;            mConsole-&gt;setInputMode(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;            mConsole-&gt;displayPrompt();</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;            mConsole-&gt;setReadOnly(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8caa9955c760424ddd007536576b1441d00">PythonThread::StringInput</a>:</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        {</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> userInput = <a class="codeRef" href="https://doc.qt.io/qt-5/qinputdialog.html#getText">QInputDialog::getText</a>(qApp-&gt;activeWindow(), <span class="stringliteral">&quot;Python Script Input&quot;</span>, prompt, <a class="codeRef" href="https://doc.qt.io/qt-5/qlineedit.html#EchoMode-enum">QLineEdit::Normal</a>, defaultValue.<a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">toString</a>(), &amp;confirm);</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;            <span class="keywordflow">if</span> (!confirm) userInput.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#clear">clear</a>();</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;            <span class="keywordflow">if</span> (mThread) mThread-&gt;setInput(userInput);</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        }</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8caa9ec369b88e5d843010f1e9f6078bbe9">PythonThread::NumberInput</a>:</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        {</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;            <span class="keywordtype">int</span> userInput = <a class="codeRef" href="https://doc.qt.io/qt-5/qinputdialog.html#getInt">QInputDialog::getInt</a>(qApp-&gt;activeWindow(), <span class="stringliteral">&quot;Python Script Input&quot;</span>, prompt, defaultValue.<a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html#toInt">toInt</a>());</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;            <span class="keywordflow">if</span> (mThread) mThread-&gt;setInput(userInput);</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        }</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8caae93f8e0b2de62f1fcd588ee5a5559c2">PythonThread::GateInput</a>:</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        {</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> gats;</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> Gate* <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a> : <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#a0d6c2c4b712ac8964253627e7adf3266">get_gates</a>()) gats.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>-&gt;get_id());</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>-&gt;<a class="code" href="classhal_1_1_selection_relay.html#a024cc6d548be6648ae580e6ee8b35855">numberSelectedGates</a>()) <a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>-&gt;<a class="code" href="classhal_1_1_selection_relay.html#ad238a0686d6dadff11939b07c96ffd2c">clearAndUpdate</a>();</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;            PythonGateSelectionReceiver* pgs = <span class="keyword">new</span> PythonGateSelectionReceiver(mThread,<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;            GateDialog gd(gats, prompt, pgs, qApp-&gt;activeWindow());</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;            <a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16">Gate</a>* gatSelect = (gd.exec() == <a class="codeRef" href="https://doc.qt.io/qt-5/qdialog.html#DialogCode-enum">QDialog::Accepted</a>)</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;                    ? <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">get_gate_by_id</a>(gd.selectedId())</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;                    : <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;            <span class="keywordflow">if</span> (!gd.pickerModeActivated() &amp;&amp; mThread) mThread-&gt;setInput(QVariant::fromValue&lt;void*&gt;(gatSelect));</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        }</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8ca8df061da5c0df9cce3f8faddb9f07507">PythonThread::ModuleInput</a>:</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        {</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mods;</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>-&gt;<a class="code" href="classhal_1_1_selection_relay.html#a65c2b23407886157ec56bc5df518a5f3">numberSelectedModules</a>()) <a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>-&gt;<a class="code" href="classhal_1_1_selection_relay.html#ad238a0686d6dadff11939b07c96ffd2c">clearAndUpdate</a>();</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;            PythonModuleSelectionReceiver* pms = <span class="keyword">new</span> PythonModuleSelectionReceiver(mThread,<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;            ModuleDialog md({}, prompt, pms, qApp-&gt;activeWindow());</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;            <a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ae55f75a29310d7b60f7ac1d390c8ae42">Module</a>* modSelect = (md.exec() == <a class="codeRef" href="https://doc.qt.io/qt-5/qdialog.html#DialogCode-enum">QDialog::Accepted</a>)</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;                    ? <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">get_module_by_id</a>(md.selectedId())</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;                    : <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;            <span class="keywordflow">if</span> (!md.pickerModeActivated() &amp;&amp; mThread) mThread-&gt;setInput(QVariant::fromValue&lt;void*&gt;(modSelect));</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;        }</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8ca0acb552f524268a4d595d987b042c37a">PythonThread::FilenameInput</a>:</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;        {</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> userInput = <a class="codeRef" href="https://doc.qt.io/qt-5/qfiledialog.html#getOpenFileName">QFileDialog::getOpenFileName</a>(qApp-&gt;activeWindow(),prompt,<span class="stringliteral">&quot;.&quot;</span>,defaultValue.<a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">toString</a>());</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;            <span class="keywordflow">if</span> (mThread) mThread-&gt;setInput(userInput);</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;        }</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;        <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;        }</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    }</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160; </div>
-<div class="line"><a name="l00380"></a><span class="lineno"><a class="line" href="classhal_1_1_python_gate_selection_receiver.html#a5b2971d2cef1b5f5a7010ccbc4a1bafe">  380</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_gate_selection_receiver.html#a5b2971d2cef1b5f5a7010ccbc4a1bafe">PythonGateSelectionReceiver::handleGatesPicked</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; gats)</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    {</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        <a class="code" href="classhal_1_1_gate.html">Gate</a>* gatSelect = gats.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">isEmpty</a>()</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;                ? nullptr</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;                : <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">get_gate_by_id</a>(*gats.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#constBegin">constBegin</a>());</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;        <span class="keywordflow">if</span> (mThread) mThread-&gt;<a class="code" href="classhal_1_1_python_thread.html#a44a079f3177d54e73c4d7fb7613ff512">setInput</a>(QVariant::fromValue&lt;void*&gt;(gatSelect));</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;        this-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#deleteLater">deleteLater</a>();</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    }</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160; </div>
-<div class="line"><a name="l00389"></a><span class="lineno"><a class="line" href="classhal_1_1_python_module_selection_receiver.html#ac28943f3f6e64f280c270b54ce7eca2e">  389</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_module_selection_receiver.html#ac28943f3f6e64f280c270b54ce7eca2e">PythonModuleSelectionReceiver::handleModulesPicked</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; mods)</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    {</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;        <a class="code" href="classhal_1_1_module.html">Module</a>* modSelect = mods.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">isEmpty</a>()</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;                ? nullptr</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;                : <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">get_module_by_id</a>(*mods.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#constBegin">constBegin</a>());</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;        <span class="keywordflow">if</span> (mThread) mThread-&gt;<a class="code" href="classhal_1_1_python_thread.html#a44a079f3177d54e73c4d7fb7613ff512">setInput</a>(QVariant::fromValue&lt;void*&gt;(modSelect));</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;        this-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#deleteLater">deleteLater</a>();</div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;    }</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160; </div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    <span class="keywordtype">void</span> PythonContext::handleConsoleInputReceived(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; input)</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    {</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        mConsole-&gt;setInputMode(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        mConsole-&gt;setReadOnly(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        mThread-&gt;setInput(input);</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;    }</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160; </div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    <span class="keywordtype">void</span> PythonContext::handleThreadFinished()</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;    {</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;        <span class="keywordflow">if</span> (mConsole) mConsole-&gt;setReadOnly(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        PythonEditor* calledFromEditor = <span class="keyword">dynamic_cast&lt;</span>PythonEditor*<span class="keyword">&gt;</span>(mInterpreterCaller);</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> errmsg;</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;        <span class="keywordflow">if</span> (!mThread)</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;        {</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;            mThreadAborted = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;        }</div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;        <span class="keywordflow">if</span> (!mThreadAborted)</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="keywordflow">catch</span> (std::exception&amp; e)</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        {</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;            qDebug() &lt;&lt; <span class="stringliteral">&quot;interpret exception&quot;</span>;</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;            forwardError(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(std::string(e.what())));</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        }</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        <span class="comment">// make sure we release the GIL, otherwise we interfere with threading</span></div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        PyGILState_Release(state);</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        <span class="comment">//mMainThreadState = PyEval_SaveThread();</span></div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160; </div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    }</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    <span class="keywordtype">void</span> PythonContext::interpretScript(<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a>* caller, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; input)</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    {</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        <span class="keywordflow">if</span> (mThread)</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        {</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;            <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;python&quot;</span>, <span class="stringliteral">&quot;Not executed, python script already running&quot;</span>);</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        }</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <span class="comment">//log_info(&quot;python&quot;, &quot;Python editor execute script:\n{}\n&quot;, input.toStdString());</span></div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="preprocessor">#ifdef HAL_STUDY</span></div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;UserStudy&quot;</span>, <span class="stringliteral">&quot;Python editor execute script:\n{}\n&quot;</span>, <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">input</a>.toStdString());</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        forwardStdout(<span class="stringliteral">&quot;\n&quot;</span>);</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        forwardStdout(<span class="stringliteral">&quot;&lt;Execute Python Editor content&gt;&quot;</span>);</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        forwardStdout(<span class="stringliteral">&quot;\n&quot;</span>);</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160; </div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        mInterpreterCaller = caller;</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        startThread(input,<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;    }</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160; </div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    <span class="keywordtype">void</span> PythonContext::handleScriptOutput(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; txt)</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    {</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        <span class="keywordflow">if</span> (!txt.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;            forwardStdout(txt);</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    }</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160; </div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    <span class="keywordtype">void</span> PythonContext::handleScriptError(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; txt)</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    {</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="keywordflow">if</span> (!txt.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;            forwardError(txt);</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    }</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160; </div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    <span class="keywordtype">void</span> PythonContext::handleInputRequired(<span class="keywordtype">int</span> <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; prompt, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> &amp;defaultValue)</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    {</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="keywordtype">bool</span> confirm;</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        <span class="keywordflow">if</span> (mThread &amp;&amp; !mThread-&gt;stdoutBuffer().isEmpty())</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;            mConsole-&gt;handleStdout(mThread-&gt;flushStdout());</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        <span class="keywordflow">switch</span> (<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>) {</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8ca8b8de531d28e21a26df3018f0df69cec">PythonThread::ConsoleInput</a>:</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;            mConsole-&gt;handleStdout(prompt + <span class="stringliteral">&quot;\n&quot;</span>);</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;            mConsole-&gt;setInputMode(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;            mConsole-&gt;displayPrompt();</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;            mConsole-&gt;setReadOnly(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8caa9955c760424ddd007536576b1441d00">PythonThread::StringInput</a>:</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        {</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> userInput = <a class="codeRef" href="https://doc.qt.io/qt-5/qinputdialog.html#getText">QInputDialog::getText</a>(qApp-&gt;activeWindow(), <span class="stringliteral">&quot;Python Script Input&quot;</span>, prompt, <a class="codeRef" href="https://doc.qt.io/qt-5/qlineedit.html#EchoMode-enum">QLineEdit::Normal</a>, defaultValue.<a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">toString</a>(), &amp;confirm);</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;            <span class="keywordflow">if</span> (!confirm) userInput.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#clear">clear</a>();</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;            <span class="keywordflow">if</span> (mThread) mThread-&gt;setInput(userInput);</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        }</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8caa9ec369b88e5d843010f1e9f6078bbe9">PythonThread::NumberInput</a>:</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        {</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;            <span class="keywordtype">int</span> userInput = <a class="codeRef" href="https://doc.qt.io/qt-5/qinputdialog.html#getInt">QInputDialog::getInt</a>(qApp-&gt;activeWindow(), <span class="stringliteral">&quot;Python Script Input&quot;</span>, prompt, defaultValue.<a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html#toInt">toInt</a>());</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;            <span class="keywordflow">if</span> (mThread) mThread-&gt;setInput(userInput);</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        }</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8caae93f8e0b2de62f1fcd588ee5a5559c2">PythonThread::GateInput</a>:</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;        {</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> gats;</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> Gate* <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a> : <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#a0d6c2c4b712ac8964253627e7adf3266">get_gates</a>()) gats.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>-&gt;get_id());</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>-&gt;<a class="code" href="classhal_1_1_selection_relay.html#a024cc6d548be6648ae580e6ee8b35855">numberSelectedGates</a>()) <a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>-&gt;<a class="code" href="classhal_1_1_selection_relay.html#ad238a0686d6dadff11939b07c96ffd2c">clearAndUpdate</a>();</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;            PythonGateSelectionReceiver* pgs = <span class="keyword">new</span> PythonGateSelectionReceiver(mThread,<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;            GateDialog gd(gats, prompt, pgs, qApp-&gt;activeWindow());</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;            <a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16">Gate</a>* gatSelect = (gd.exec() == <a class="codeRef" href="https://doc.qt.io/qt-5/qdialog.html#DialogCode-enum">QDialog::Accepted</a>)</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;                    ? <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">get_gate_by_id</a>(gd.selectedId())</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;                    : <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;            <span class="keywordflow">if</span> (!gd.pickerModeActivated() &amp;&amp; mThread) mThread-&gt;setInput(QVariant::fromValue&lt;void*&gt;(gatSelect));</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;        }</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8ca8df061da5c0df9cce3f8faddb9f07507">PythonThread::ModuleInput</a>:</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;        {</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mods;</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>-&gt;<a class="code" href="classhal_1_1_selection_relay.html#a65c2b23407886157ec56bc5df518a5f3">numberSelectedModules</a>()) <a class="code" href="namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112">gSelectionRelay</a>-&gt;<a class="code" href="classhal_1_1_selection_relay.html#ad238a0686d6dadff11939b07c96ffd2c">clearAndUpdate</a>();</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;            PythonModuleSelectionReceiver* pms = <span class="keyword">new</span> PythonModuleSelectionReceiver(mThread,<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;            ModuleDialog md({}, prompt, pms, qApp-&gt;activeWindow());</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;            <a class="code" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ae55f75a29310d7b60f7ac1d390c8ae42">Module</a>* modSelect = (md.exec() == <a class="codeRef" href="https://doc.qt.io/qt-5/qdialog.html#DialogCode-enum">QDialog::Accepted</a>)</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;                    ? <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">get_module_by_id</a>(md.selectedId())</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;                    : <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;            <span class="keywordflow">if</span> (!md.pickerModeActivated() &amp;&amp; mThread) mThread-&gt;setInput(QVariant::fromValue&lt;void*&gt;(modSelect));</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;        }</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8ca0acb552f524268a4d595d987b042c37a">PythonThread::FilenameInput</a>:</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;        {</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> userInput = <a class="codeRef" href="https://doc.qt.io/qt-5/qfiledialog.html#getOpenFileName">QFileDialog::getOpenFileName</a>(qApp-&gt;activeWindow(),prompt,<span class="stringliteral">&quot;.&quot;</span>,defaultValue.<a class="codeRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">toString</a>());</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;            <span class="keywordflow">if</span> (mThread) mThread-&gt;setInput(userInput);</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;        }</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;        <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        }</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;    }</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160; </div>
+<div class="line"><a name="l00385"></a><span class="lineno"><a class="line" href="classhal_1_1_python_gate_selection_receiver.html#a5b2971d2cef1b5f5a7010ccbc4a1bafe">  385</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_gate_selection_receiver.html#a5b2971d2cef1b5f5a7010ccbc4a1bafe">PythonGateSelectionReceiver::handleGatesPicked</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; gats)</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    {</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;        <a class="code" href="classhal_1_1_gate.html">Gate</a>* gatSelect = gats.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">isEmpty</a>()</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;                ? nullptr</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;                : <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">get_gate_by_id</a>(*gats.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#constBegin">constBegin</a>());</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;        <span class="keywordflow">if</span> (mThread) mThread-&gt;<a class="code" href="classhal_1_1_python_thread.html#a44a079f3177d54e73c4d7fb7613ff512">setInput</a>(QVariant::fromValue&lt;void*&gt;(gatSelect));</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;        this-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#deleteLater">deleteLater</a>();</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    }</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160; </div>
+<div class="line"><a name="l00394"></a><span class="lineno"><a class="line" href="classhal_1_1_python_module_selection_receiver.html#ac28943f3f6e64f280c270b54ce7eca2e">  394</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_python_module_selection_receiver.html#ac28943f3f6e64f280c270b54ce7eca2e">PythonModuleSelectionReceiver::handleModulesPicked</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; mods)</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    {</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;        <a class="code" href="classhal_1_1_module.html">Module</a>* modSelect = mods.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">isEmpty</a>()</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;                ? nullptr</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;                : <a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">get_module_by_id</a>(*mods.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#constBegin">constBegin</a>());</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;        <span class="keywordflow">if</span> (mThread) mThread-&gt;<a class="code" href="classhal_1_1_python_thread.html#a44a079f3177d54e73c4d7fb7613ff512">setInput</a>(QVariant::fromValue&lt;void*&gt;(modSelect));</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        this-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#deleteLater">deleteLater</a>();</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;    }</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160; </div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;    <span class="keywordtype">void</span> PythonContext::handleConsoleInputReceived(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; input)</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;    {</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        mConsole-&gt;setInputMode(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;        mConsole-&gt;setReadOnly(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;        mThread-&gt;setInput(input);</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    }</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160; </div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;    <span class="keywordtype">void</span> PythonContext::handleThreadFinished()</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    {</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;        <span class="keywordflow">if</span> (mConsole) mConsole-&gt;setReadOnly(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;        PythonEditor* calledFromEditor = <span class="keyword">dynamic_cast&lt;</span>PythonEditor*<span class="keyword">&gt;</span>(mInterpreterCaller);</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> errmsg;</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;        <span class="keywordflow">if</span> (!mThread)</div>
 <div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;        {</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;            errmsg = mThread-&gt;errorMessage();</div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;            <span class="keywordflow">if</span> (!mThread-&gt;stdoutBuffer().isEmpty())</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;                forwardStdout(mThread-&gt;stdoutBuffer());</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;            <span class="keywordflow">if</span> (!calledFromEditor &amp;&amp; !mThread-&gt;result().isEmpty() &amp;&amp; errmsg.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;                forwardStdout(mThread-&gt;result());</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;        }</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;        {</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;            forwardError(<span class="stringliteral">&quot;\nPython thread aborted\n&quot;</span>);</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;            mThreadAborted = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;            mThreadAborted = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;        }</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;        <span class="keywordflow">if</span> (!mThreadAborted)</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;        {</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;            errmsg = mThread-&gt;errorMessage();</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;            <span class="keywordflow">if</span> (!mThread-&gt;stdoutBuffer().isEmpty())</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;                forwardStdout(mThread-&gt;stdoutBuffer());</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;            <span class="keywordflow">if</span> (!calledFromEditor &amp;&amp; !mThread-&gt;result().isEmpty() &amp;&amp; errmsg.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;                forwardStdout(mThread-&gt;result());</div>
 <div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;        }</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160; </div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;        mThread-&gt;deleteLater();</div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;        mThread = 0;</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;        <span class="keyword">delete</span> mLayoutLocker;</div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160; </div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;        <span class="keywordflow">if</span> (!errmsg.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;            forwardError(errmsg);</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160; </div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;        <span class="keywordflow">if</span> (calledFromEditor)</div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;        {</div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;            calledFromEditor-&gt;handleThreadFinished();</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;            <span class="keywordflow">if</span> (mTriggerReset)</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;            {</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;                forwardError(<span class="stringliteral">&quot;\nreset() can only be used in the Python console!\n&quot;</span>);</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;                mTriggerReset = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;            }</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;            <span class="keywordflow">if</span> (mTriggerClear)</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;        {</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;            forwardError(<span class="stringliteral">&quot;\nPython thread aborted\n&quot;</span>);</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;            mThreadAborted = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;        }</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160; </div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;        mThread-&gt;deleteLater();</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;        mThread = 0;</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;        <span class="keyword">delete</span> mLayoutLocker;</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160; </div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;        <span class="keywordflow">if</span> (!errmsg.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;            forwardError(errmsg);</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160; </div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;        <span class="keywordflow">if</span> (calledFromEditor)</div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;        {</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;            calledFromEditor-&gt;handleThreadFinished();</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;            <span class="keywordflow">if</span> (mTriggerReset)</div>
 <div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;            {</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;                forwardError(<span class="stringliteral">&quot;\nclear() can only be used in the Python console!\n&quot;</span>);</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;                mTriggerClear = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;                forwardError(<span class="stringliteral">&quot;\nreset() can only be used in the Python console!\n&quot;</span>);</div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;                mTriggerReset = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;            }</div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;        }</div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (mConsole)</div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;        {</div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;            handleReset();</div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;            handleClear();</div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;            mConsole-&gt;handleThreadFinished();</div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;        }</div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160; </div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;        <span class="keywordflow">if</span> (mConsole)</div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;        {</div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;            mConsole-&gt;setInputMode(<a class="code" href="classhal_1_1_python_console.html#a1be3d0cb9bd3ba23f2902c85844c0b31af019d3bd9f4cf17f42c0d198849dc2cf">PythonConsole::Standard</a>);</div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;            mConsole-&gt;displayPrompt();</div>
-<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;        }</div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;    }</div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160; </div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;    <span class="keywordtype">void</span> PythonContext::forwardStdout(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; output)</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;    {</div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;        <span class="keywordflow">if</span> (output != <span class="stringliteral">&quot;\n&quot;</span>)</div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;        {</div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;            <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;python&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, <a class="code" href="namespacehal_1_1utils.html#a49847bd2008decfefbfeb8edc1c9d0c0">utils::rtrim</a>(<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>.toStdString(), <span class="stringliteral">&quot;\r\n&quot;</span>));</div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;        }</div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;        <span class="keywordflow">if</span> (mConsole)</div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;        {</div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;            mConsole-&gt;handleStdout(output);</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;        }</div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;    }</div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160; </div>
-<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;    <span class="keywordtype">void</span> PythonContext::forwardError(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; output)</div>
-<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;    {</div>
-<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;        <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>.toStdString());</div>
-<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;        <span class="keywordflow">if</span> (mConsole)</div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;        {</div>
-<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;            mConsole-&gt;handleError(output);</div>
-<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;        }</div>
-<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;    }</div>
-<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160; </div>
-<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;    std::vector&lt;std::tuple&lt;std::string, std::string&gt;&gt; PythonContext::complete(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; text, <span class="keywordtype">bool</span> use_console_context)</div>
-<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;    {</div>
-<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;        PyGILState_STATE <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a> = PyGILState_Ensure();</div>
-<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160; </div>
-<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;        std::vector&lt;std::tuple&lt;std::string, std::string&gt;&gt; ret_val;</div>
-<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;        <span class="keywordflow">try</span></div>
-<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;        {</div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;            <span class="keyword">auto</span> namespaces = py::list();</div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;            <span class="keywordflow">if</span> (use_console_context)</div>
-<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;            {</div>
-<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;                namespaces.append(*mContext);</div>
-<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;                namespaces.append(*mContext);</div>
-<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;            }</div>
-<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;            <span class="keywordflow">if</span> (mTriggerClear)</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;            {</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;                forwardError(<span class="stringliteral">&quot;\nclear() can only be used in the Python console!\n&quot;</span>);</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;                mTriggerClear = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;            }</div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;        }</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (mConsole)</div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;        {</div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;            handleReset();</div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;            handleClear();</div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;            mConsole-&gt;handleThreadFinished();</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;        }</div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160; </div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;        <span class="keywordflow">if</span> (mConsole)</div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;        {</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;            mConsole-&gt;setInputMode(<a class="code" href="classhal_1_1_python_console.html#a1be3d0cb9bd3ba23f2902c85844c0b31af019d3bd9f4cf17f42c0d198849dc2cf">PythonConsole::Standard</a>);</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;            mConsole-&gt;displayPrompt();</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;        }</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;    }</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160; </div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;    <span class="keywordtype">void</span> PythonContext::forwardStdout(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; output)</div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;    {</div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;        <span class="keywordflow">if</span> (output != <span class="stringliteral">&quot;\n&quot;</span>)</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        {</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;            <a class="code" href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a>(<span class="stringliteral">&quot;python&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, <a class="code" href="namespacehal_1_1utils.html#a49847bd2008decfefbfeb8edc1c9d0c0">utils::rtrim</a>(<a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>.toStdString(), <span class="stringliteral">&quot;\r\n&quot;</span>));</div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;        }</div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;        <span class="keywordflow">if</span> (mConsole)</div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;        {</div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;            mConsole-&gt;handleStdout(output);</div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;        }</div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;    }</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160; </div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;    <span class="keywordtype">void</span> PythonContext::forwardError(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; output)</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;    {</div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;        <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;python&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">output</a>.toStdString());</div>
+<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;        <span class="keywordflow">if</span> (mConsole)</div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;        {</div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;            mConsole-&gt;handleError(output);</div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;        }</div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;    }</div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160; </div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;    std::vector&lt;std::tuple&lt;std::string, std::string&gt;&gt; PythonContext::complete(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; text, <span class="keywordtype">bool</span> use_console_context)</div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;    {</div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;        PyGILState_STATE <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a> = PyGILState_Ensure();</div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160; </div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;        std::vector&lt;std::tuple&lt;std::string, std::string&gt;&gt; ret_val;</div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;        <span class="keywordflow">try</span></div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;        {</div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;            <span class="keyword">auto</span> namespaces = py::list();</div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;            <span class="keywordflow">if</span> (use_console_context)</div>
 <div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;            {</div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;                py::dict tmp_context = py::globals();</div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;                initializeContext(&amp;tmp_context);</div>
-<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;                namespaces.append(tmp_context);</div>
-<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;                namespaces.append(tmp_context);</div>
-<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;            }</div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;            <span class="keyword">auto</span> jedi   = <a class="code" href="_apache_01_license_8txt.html#a7b048ab2f6ed167157c1be2096d6cfd0">py::module::import</a>(<span class="stringliteral">&quot;jedi&quot;</span>);</div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;            py::object script = jedi.attr(<span class="stringliteral">&quot;Interpreter&quot;</span>)(text.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">toStdString</a>(), namespaces);</div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;            py::object list;</div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;            <span class="keywordflow">if</span> (py::hasattr(script,<span class="stringliteral">&quot;complete&quot;</span>))</div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;                list = script.attr(<span class="stringliteral">&quot;complete&quot;</span>)();</div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (py::hasattr(script,<span class="stringliteral">&quot;completions&quot;</span>))</div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;                list   = script.attr(<span class="stringliteral">&quot;completions&quot;</span>)();</div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;                <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;python&quot;</span>, <span class="stringliteral">&quot;Jedi autocompletion failed, neither complete() nor completions() found.&quot;</span>);</div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160; </div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; entry : list)</div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;            {</div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;                <span class="keyword">auto</span> a = entry.attr(<span class="stringliteral">&quot;name_with_symbols&quot;</span>).cast&lt;std::string&gt;();</div>
-<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;                <span class="keyword">auto</span> <a class="code" href="namespacehal_1_1gui__utility.html#a6f7dc31d2638295f8b4e0abcf35a53a4">b</a> = entry.attr(<span class="stringliteral">&quot;complete&quot;</span>).cast&lt;std::string&gt;();</div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;                ret_val.emplace_back(a, <a class="code" href="namespacehal_1_1gui__utility.html#a6f7dc31d2638295f8b4e0abcf35a53a4">b</a>);</div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;            }</div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;        }</div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;        <span class="keywordflow">catch</span> (py::error_already_set&amp; e)</div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;        {</div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;            forwardError(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(std::string(e.what()) + <span class="stringliteral">&quot;\n&quot;</span>));</div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;            e.restore();</div>
-<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;            PyErr_Clear();</div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;        }</div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160; </div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;        PyGILState_Release(state);</div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160; </div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;        <span class="keywordflow">return</span> ret_val;</div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;    }</div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;                namespaces.append(*mContext);</div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;                namespaces.append(*mContext);</div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;            }</div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;            {</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;                py::dict tmp_context = py::globals();</div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;                initializeContext(&amp;tmp_context);</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;                namespaces.append(tmp_context);</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;                namespaces.append(tmp_context);</div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;            }</div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;            <span class="keyword">auto</span> jedi   = <a class="code" href="_apache_01_license_8txt.html#a7b048ab2f6ed167157c1be2096d6cfd0">py::module::import</a>(<span class="stringliteral">&quot;jedi&quot;</span>);</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;            py::object script = jedi.attr(<span class="stringliteral">&quot;Interpreter&quot;</span>)(text.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">toStdString</a>(), namespaces);</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;            py::object list;</div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;            <span class="keywordflow">if</span> (py::hasattr(script,<span class="stringliteral">&quot;complete&quot;</span>))</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;                list = script.attr(<span class="stringliteral">&quot;complete&quot;</span>)();</div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (py::hasattr(script,<span class="stringliteral">&quot;completions&quot;</span>))</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;                list   = script.attr(<span class="stringliteral">&quot;completions&quot;</span>)();</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;                <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;python&quot;</span>, <span class="stringliteral">&quot;Jedi autocompletion failed, neither complete() nor completions() found.&quot;</span>);</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160; </div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; entry : list)</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;            {</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;                <span class="keyword">auto</span> a = entry.attr(<span class="stringliteral">&quot;name_with_symbols&quot;</span>).cast&lt;std::string&gt;();</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;                <span class="keyword">auto</span> <a class="code" href="namespacehal_1_1gui__utility.html#a6f7dc31d2638295f8b4e0abcf35a53a4">b</a> = entry.attr(<span class="stringliteral">&quot;complete&quot;</span>).cast&lt;std::string&gt;();</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;                ret_val.emplace_back(a, <a class="code" href="namespacehal_1_1gui__utility.html#a6f7dc31d2638295f8b4e0abcf35a53a4">b</a>);</div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;            }</div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;        }</div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;        <span class="keywordflow">catch</span> (py::error_already_set&amp; e)</div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;        {</div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;            forwardError(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(std::string(e.what()) + <span class="stringliteral">&quot;\n&quot;</span>));</div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;            e.restore();</div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;            PyErr_Clear();</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;        }</div>
 <div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160; </div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;    <span class="keywordtype">int</span> PythonContext::checkCompleteStatement(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; text)</div>
-<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;    {</div>
-<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160; </div>
-<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;        PyGILState_STATE <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a> = PyGILState_Ensure();</div>
-<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;        </div>
-<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;<span class="preprocessor">        #if PY_VERSION_HEX &lt; 0x030900a0 // Python 3.9.0</span></div>
-<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;        <span class="comment">// PEG not yet available, use PyParser</span></div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;        PyGILState_Release(state);</div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160; </div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;        <span class="keywordflow">return</span> ret_val;</div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;    }</div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160; </div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;    <span class="keywordtype">int</span> PythonContext::checkCompleteStatement(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; text)</div>
+<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;    {</div>
 <div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160; </div>
-<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;        node* <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>;</div>
-<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;        perrdetail e;</div>
-<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160; </div>
-<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;        <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> = PyParser_ParseString(text.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">toStdString</a>().c_str(), &amp;<a class="code" href="python__context_8cpp.html#a16c326d0baf4bc62c564559c42b65c28">_PyParser_Grammar</a>, Py_file_input, &amp;e);</div>
-<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> == NULL)</div>
-<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;        {</div>
-<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;            <span class="keywordflow">if</span> (e.error == E_EOF)</div>
-<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;            {</div>
-<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;                PyGILState_Release(state);</div>
-<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;                <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;            }</div>
-<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;            PyGILState_Release(state);</div>
-<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;            <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;        }</div>
-<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160; </div>
-<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;        PyNode_Free(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>);</div>
-<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;        PyGILState_Release(state);</div>
-<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;        <span class="keywordflow">return</span> 1;</div>
-<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160; </div>
-<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;<span class="preprocessor">        #else</span></div>
-<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160; </div>
-<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;        <span class="comment">// attempt to parse Python expression into AST using PEG</span></div>
-<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;        PyCompilerFlags flags {PyCF_ONLY_AST, PY_MINOR_VERSION};</div>
-<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;        PyObject* o = Py_CompileStringExFlags(text.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">toStdString</a>().c_str(), <span class="stringliteral">&quot;stdin&quot;</span>, Py_file_input, &amp;flags, 0);</div>
-<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;        <span class="comment">// if parsing failed (-&gt; not a complete statement), nullptr is returned</span></div>
-<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;        <span class="comment">// (apparently no need to PyObject_Free(o) here)</span></div>
-<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;        PyGILState_Release(state);</div>
-<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;        <span class="keywordflow">return</span> o != <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160; </div>
-<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;<span class="preprocessor">        #endif</span></div>
-<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;    }</div>
-<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160; </div>
-<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;    <span class="keywordtype">void</span> PythonContext::handleReset()</div>
-<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;    {</div>
-<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;        <span class="keywordflow">if</span> (mTriggerReset)</div>
-<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;        {</div>
-<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;            PyGILState_STATE <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a> = PyGILState_Ensure();</div>
-<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;            closePython();</div>
-<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;            initPython();</div>
-<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;            PyGILState_Release(state);</div>
-<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;            scheduleClear();</div>
-<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;            mTriggerReset = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;        }</div>
-<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;    }</div>
-<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160; </div>
-<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;    <span class="keywordtype">void</span> PythonContext::handleClear()</div>
-<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;    {</div>
-<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;        <span class="keywordflow">if</span> (mTriggerClear)</div>
-<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;        {</div>
-<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;            <span class="keywordflow">if</span> (mConsole)</div>
-<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;            {</div>
-<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;                mConsole-&gt;clear();</div>
-<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;            }</div>
-<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;            mTriggerClear = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;        }</div>
-<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;    }</div>
-<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160; </div>
-<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;    <span class="keywordtype">void</span> PythonContext::scheduleReset()</div>
-<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;    {</div>
-<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;        mTriggerReset = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;        PyGILState_STATE <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a> = PyGILState_Ensure();</div>
+<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;        </div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;<span class="preprocessor">        #if PY_VERSION_HEX &lt; 0x030900a0 // Python 3.9.0</span></div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;        <span class="comment">// PEG not yet available, use PyParser</span></div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160; </div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;        node* <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>;</div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;        perrdetail e;</div>
+<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160; </div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;        <a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> = PyParser_ParseString(text.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">toStdString</a>().c_str(), &amp;<a class="code" href="python__context_8cpp.html#a16c326d0baf4bc62c564559c42b65c28">_PyParser_Grammar</a>, Py_file_input, &amp;e);</div>
+<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a> == NULL)</div>
+<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;        {</div>
+<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;            <span class="keywordflow">if</span> (e.error == E_EOF)</div>
+<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;            {</div>
+<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;                PyGILState_Release(state);</div>
+<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;                <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;            }</div>
+<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;            PyGILState_Release(state);</div>
+<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;            <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;        }</div>
+<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160; </div>
+<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;        PyNode_Free(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>);</div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;        PyGILState_Release(state);</div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;        <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160; </div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;<span class="preprocessor">        #else</span></div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160; </div>
+<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;        <span class="comment">// attempt to parse Python expression into AST using PEG</span></div>
+<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;        PyCompilerFlags flags {PyCF_ONLY_AST, PY_MINOR_VERSION};</div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;        PyObject* o = Py_CompileStringExFlags(text.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">toStdString</a>().c_str(), <span class="stringliteral">&quot;stdin&quot;</span>, Py_file_input, &amp;flags, 0);</div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;        <span class="comment">// if parsing failed (-&gt; not a complete statement), nullptr is returned</span></div>
+<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;        <span class="comment">// (apparently no need to PyObject_Free(o) here)</span></div>
+<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;        PyGILState_Release(state);</div>
+<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;        <span class="keywordflow">return</span> o != <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160; </div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;<span class="preprocessor">        #endif</span></div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;    }</div>
+<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160; </div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;    <span class="keywordtype">void</span> PythonContext::handleReset()</div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;    {</div>
+<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;        <span class="keywordflow">if</span> (mTriggerReset)</div>
+<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;        {</div>
+<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;            PyGILState_STATE <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a> = PyGILState_Ensure();</div>
+<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;            closePython();</div>
+<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;            initPython();</div>
+<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;            PyGILState_Release(state);</div>
+<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;            scheduleClear();</div>
+<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;            mTriggerReset = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;        }</div>
+<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;    }</div>
+<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160; </div>
+<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;    <span class="keywordtype">void</span> PythonContext::handleClear()</div>
+<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;    {</div>
+<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;        <span class="keywordflow">if</span> (mTriggerClear)</div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;        {</div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;            <span class="keywordflow">if</span> (mConsole)</div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;            {</div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;                mConsole-&gt;clear();</div>
+<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;            }</div>
+<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;            mTriggerClear = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;        }</div>
 <div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;    }</div>
 <div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160; </div>
-<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;    <span class="keywordtype">void</span> PythonContext::scheduleClear()</div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;    <span class="keywordtype">void</span> PythonContext::scheduleReset()</div>
 <div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;    {</div>
-<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;        mTriggerClear = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;        mTriggerReset = <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;    }</div>
 <div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160; </div>
-<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;    <span class="keywordtype">void</span> PythonContext::updateNetlist()</div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;    <span class="keywordtype">void</span> PythonContext::scheduleClear()</div>
 <div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;    {</div>
-<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160;        PyGILState_STATE <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a> = PyGILState_Ensure();</div>
-<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;        (*mContext)[<span class="stringliteral">&quot;netlist&quot;</span>] = <a class="code" href="namespacehal.html#ae9eb93dc7dd8514d3afb4c935a09a9a0">gNetlistOwner</a>;    <span class="comment">// assign the shared_ptr here, not the raw ptr</span></div>
-<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;        PyGILState_Release(state);</div>
-<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;    }</div>
-<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160; </div>
-<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160;        mTriggerClear = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;    }</div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160; </div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;    <span class="keywordtype">void</span> PythonContext::updateNetlist()</div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;    {</div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;        PyGILState_STATE <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">state</a> = PyGILState_Ensure();</div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;        (*mContext)[<span class="stringliteral">&quot;netlist&quot;</span>] = <a class="code" href="namespacehal.html#ae9eb93dc7dd8514d3afb4c935a09a9a0">gNetlistOwner</a>;    <span class="comment">// assign the shared_ptr here, not the raw ptr</span></div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;        PyGILState_Release(state);</div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;    }</div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160; </div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqinputdialog_html_getInt"><div class="ttname"><a href="https://doc.qt.io/qt-5/qinputdialog.html#getInt">QInputDialog::getInt</a></div><div class="ttdeci">int getInt(QWidget *parent, const QString &amp;title, const QString &amp;label, int value, int min, int max, int step, bool *ok, Qt::WindowFlags flags)</div></div>
@@ -711,7 +716,7 @@ $(document).ready(function(){initNavTree('python__context_8cpp_source.html','');
 <div class="ttc" id="aqset_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html">QSet&lt; u32 &gt;</a></div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_aa84f04771420e5c67784826253d48901"><div class="ttname"><a href="namespacehal_1_1utils.html#aa84f04771420e5c67784826253d48901">hal::utils::get_plugin_directories</a></div><div class="ttdeci">std::vector&lt; std::filesystem::path &gt; get_plugin_directories()</div><div class="ttdef"><b>Definition:</b> <a href="utils_8cpp_source.html#l00184">utils.cpp:184</a></div></div>
 <div class="ttc" id="aclasshal_1_1_module_html"><div class="ttname"><a href="classhal_1_1_module.html">hal::Module</a></div><div class="ttdef"><b>Definition:</b> <a href="module_8h_source.html#l00064">module.h:64</a></div></div>
-<div class="ttc" id="aclasshal_1_1_python_module_selection_receiver_html_ac28943f3f6e64f280c270b54ce7eca2e"><div class="ttname"><a href="classhal_1_1_python_module_selection_receiver.html#ac28943f3f6e64f280c270b54ce7eca2e">hal::PythonModuleSelectionReceiver::handleModulesPicked</a></div><div class="ttdeci">void handleModulesPicked(const QSet&lt; u32 &gt; &amp;gats) override</div><div class="ttdef"><b>Definition:</b> <a href="python__context_8cpp_source.html#l00389">python_context.cpp:389</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_module_selection_receiver_html_ac28943f3f6e64f280c270b54ce7eca2e"><div class="ttname"><a href="classhal_1_1_python_module_selection_receiver.html#ac28943f3f6e64f280c270b54ce7eca2e">hal::PythonModuleSelectionReceiver::handleModulesPicked</a></div><div class="ttdeci">void handleModulesPicked(const QSet&lt; u32 &gt; &amp;gats) override</div><div class="ttdef"><b>Definition:</b> <a href="python__context_8cpp_source.html#l00394">python_context.cpp:394</a></div></div>
 <div class="ttc" id="aclasshal_1_1_python_thread_html_ae153632cff534a9bcb961ffc35718c8caa9955c760424ddd007536576b1441d00"><div class="ttname"><a href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8caa9955c760424ddd007536576b1441d00">hal::PythonThread::StringInput</a></div><div class="ttdeci">@ StringInput</div><div class="ttdef"><b>Definition:</b> <a href="python__thread_8h_source.html#l00041">python_thread.h:41</a></div></div>
 <div class="ttc" id="aclasshal_1_1_python_thread_html_ae153632cff534a9bcb961ffc35718c8ca8b8de531d28e21a26df3018f0df69cec"><div class="ttname"><a href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8ca8b8de531d28e21a26df3018f0df69cec">hal::PythonThread::ConsoleInput</a></div><div class="ttdeci">@ ConsoleInput</div><div class="ttdef"><b>Definition:</b> <a href="python__thread_8h_source.html#l00041">python_thread.h:41</a></div></div>
 <div class="ttc" id="anamespacetest__plugin_html_abd3083aec6bd8d3b9851214d6d355740"><div class="ttname"><a href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">test_plugin.g</a></div><div class="ttdeci">g</div><div class="ttdef"><b>Definition:</b> <a href="test__plugin_8py_source.html#l00032">test_plugin.py:32</a></div></div>
@@ -732,7 +737,7 @@ $(document).ready(function(){initNavTree('python__context_8cpp_source.html','');
 <div class="ttc" id="agroup__utilities_html_ga522d6d0c8a408128993be37c86656280"><div class="ttname"><a href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a></div><div class="ttdeci">#define log_error(channel,...)</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00078">log.h:78</a></div></div>
 <div class="ttc" id="anamespacecontrol_html_a42884b866cabdd971b4dbe8c3fcc3735"><div class="ttname"><a href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">control.str</a></div><div class="ttdeci">str</div><div class="ttdef"><b>Definition:</b> <a href="control_8py_source.html#l00014">control.py:14</a></div></div>
 <div class="ttc" id="aqlineedit_html_EchoMode-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlineedit.html#EchoMode-enum">QLineEdit::Normal</a></div><div class="ttdeci">Normal</div></div>
-<div class="ttc" id="aclasshal_1_1_python_gate_selection_receiver_html_a5b2971d2cef1b5f5a7010ccbc4a1bafe"><div class="ttname"><a href="classhal_1_1_python_gate_selection_receiver.html#a5b2971d2cef1b5f5a7010ccbc4a1bafe">hal::PythonGateSelectionReceiver::handleGatesPicked</a></div><div class="ttdeci">void handleGatesPicked(const QSet&lt; u32 &gt; &amp;gats) override</div><div class="ttdef"><b>Definition:</b> <a href="python__context_8cpp_source.html#l00380">python_context.cpp:380</a></div></div>
+<div class="ttc" id="aclasshal_1_1_python_gate_selection_receiver_html_a5b2971d2cef1b5f5a7010ccbc4a1bafe"><div class="ttname"><a href="classhal_1_1_python_gate_selection_receiver.html#a5b2971d2cef1b5f5a7010ccbc4a1bafe">hal::PythonGateSelectionReceiver::handleGatesPicked</a></div><div class="ttdeci">void handleGatesPicked(const QSet&lt; u32 &gt; &amp;gats) override</div><div class="ttdef"><b>Definition:</b> <a href="python__context_8cpp_source.html#l00385">python_context.cpp:385</a></div></div>
 <div class="ttc" id="aclasshal_1_1_python_thread_html_ae153632cff534a9bcb961ffc35718c8ca8df061da5c0df9cce3f8faddb9f07507"><div class="ttname"><a href="classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8ca8df061da5c0df9cce3f8faddb9f07507">hal::PythonThread::ModuleInput</a></div><div class="ttdeci">@ ModuleInput</div><div class="ttdef"><b>Definition:</b> <a href="python__thread_8h_source.html#l00041">python_thread.h:41</a></div></div>
 <div class="ttc" id="aqobject_html_deleteLater"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#deleteLater">QObject::deleteLater</a></div><div class="ttdeci">void deleteLater()</div></div>
 <div class="ttc" id="anamespacehal_1_1utils_html_a7de316388e4d4baf69a170c67a6efd57"><div class="ttname"><a href="namespacehal_1_1utils.html#a7de316388e4d4baf69a170c67a6efd57">hal::utils::get_library_directory</a></div><div class="ttdeci">std::filesystem::path get_library_directory()</div><div class="ttdef"><b>Definition:</b> <a href="utils_8cpp_source.html#l00118">utils.cpp:118</a></div></div>
@@ -785,7 +790,7 @@ $(document).ready(function(){initNavTree('python__context_8cpp_source.html','');
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_609dd161604b7aa86c7b630207f12412.html">python</a></li><li class="navelem"><a class="el" href="python__context_8cpp.html">python_context.cpp</a></li>
-    <li class="footer">Generated on Mon Mar 27 2023 21:07:11 for HAL by
+    <li class="footer">Generated on Thu Apr 6 2023 11:00:29 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
