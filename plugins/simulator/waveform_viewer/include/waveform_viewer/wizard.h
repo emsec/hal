@@ -27,20 +27,20 @@ namespace hal {
         Q_OBJECT
 
     public:
-        Wizard(SimulationSettings *settings, WaveformViewer *parent);
-        int mPage4Id;
-        int mPage5Id;
+        Wizard(SimulationSettings *settings, NetlistSimulatorController *controller, WaveformViewer *parent);
+        int mPageEnginePropertiesId;
+        int mPageInputDataId;
 
     private:
         QWizardPage *createIntroPage();
-        QWizardPage *createPage1();
-        QWizardPage *createPage2();
-        QWizardPage *createPage3();
-        QWizardPage *createPage4();
-        QWizardPage *createPage5();
+        QWizardPage *createPageSelectGates();
+        QWizardPage *createPageClock();
+        QWizardPage *createPageEngine();
+        QWizardPage *createPageEngineProperties();
+        QWizardPage *createPageInputData();
         QWizardPage *createConclusionPage();
 
-        WaveformViewer *m_parent;
+        NetlistSimulatorController *mController;
         SimulationSettings *mSettings;
     };
 
@@ -54,11 +54,11 @@ namespace hal {
         QLabel *label;
     };
 
-    class Page1 : public QWizardPage {
+    class PageSelectGates : public QWizardPage {
         Q_OBJECT
 
     public:
-        Page1(WaveformViewer *parent);
+        PageSelectGates(Wizard *parent, NetlistSimulatorController *controller);
 
         virtual bool validatePage() override;
 
@@ -70,18 +70,18 @@ namespace hal {
         QTableView* mTableView;
         QDialogButtonBox* mButtonBox;
 
-        WaveformViewer *m_parent;
+        NetlistSimulatorController *mController;
 
         void handleSelectAll();
         void handleCurrentGuiSelection();
         void handleClearSelection();
     };
 
-    class Page2 : public QWizardPage {
+    class PageClock : public QWizardPage {
         Q_OBJECT
 
     public:
-        Page2(WaveformViewer *parent);
+        PageClock(Wizard *parent, NetlistSimulatorController *controller);
 
         virtual bool validatePage() override;
 
@@ -96,7 +96,7 @@ namespace hal {
         QCheckBox* mDontUseClock;
         QList<const Net*> mInputs;
 
-        WaveformViewer *m_parent;
+        NetlistSimulatorController *mController;
 
         int netIndex() const { return mComboNet->currentIndex(); }
         int period() const { return mSpinPeriod->value(); }
@@ -105,11 +105,11 @@ namespace hal {
         bool dontUseClock() const { return mDontUseClock->isChecked(); }
     };
 
-    class Page3 : public QWizardPage {
+    class PageEngine : public QWizardPage {
         Q_OBJECT
 
     public:
-        Page3(WaveformViewer *parent, Wizard *wizard);
+        PageEngine(Wizard *parent, NetlistSimulatorController *controller);
 
         virtual bool validatePage() override;
         int nextId() const override;
@@ -118,35 +118,35 @@ namespace hal {
         QVBoxLayout *mLayout;
         bool mVerilator;
 
-        WaveformViewer *m_parent;
+        NetlistSimulatorController *mController;
         Wizard *m_wizard;
     };
 
-    class Page4 : public QWizardPage {
+    class PageEngineProperties : public QWizardPage {
         Q_OBJECT
 
     private Q_SLOTS:
         void handleCellChanged(int irow, int icolumn);
 
     public:
-        Page4(SimulationSettings *settings, WaveformViewer *parent);
+        PageEngineProperties(Wizard *parent, SimulationSettings *settings, NetlistSimulatorController *controller);
 
         virtual bool validatePage() override;
     private:
         QTableWidget *mTableWidget;
 
-        WaveformViewer *m_parent;
+        NetlistSimulatorController *mController;
         SimulationSettings *mSettings;
     };
 
-    class Page5 : public QWizardPage {
+    class PageInputData : public QWizardPage {
         Q_OBJECT
 
     public:
-        Page5(WaveformViewer *parent);
+        PageInputData(Wizard *parent, NetlistSimulatorController *controller);
 
     private:
-        WaveformViewer *m_parent;
+        NetlistSimulatorController *mController;
     };
 
     class ConclusionPage : public QWizardPage {

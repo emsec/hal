@@ -11,17 +11,17 @@
 
 namespace hal {
 
-    Wizard::Wizard(SimulationSettings *settings, WaveformViewer *parent)
-        : QWizard(parent), mSettings(settings), m_parent(parent)
+    Wizard::Wizard(SimulationSettings *settings, NetlistSimulatorController *controller, WaveformViewer *parent)
+        : QWizard(parent), mSettings(settings), mController(controller)
     {
         setWindowTitle(tr("Empty Wizard"));
 
         addPage(createIntroPage());
-        addPage(createPage1());
-        addPage(createPage2());
-        addPage(createPage3());
-        mPage4Id = addPage(createPage4());
-        mPage5Id = addPage(createPage5());
+        addPage(createPageSelectGates());
+        addPage(createPageClock());
+        addPage(createPageEngine());
+        mPageEnginePropertiesId = addPage(createPageEngineProperties());
+        mPageInputDataId = addPage(createPageInputData());
         addPage(createConclusionPage());
     }
 
@@ -33,41 +33,41 @@ namespace hal {
         return page;
     }
 
-    QWizardPage *Wizard::createPage1()
+    QWizardPage *Wizard::createPageSelectGates()
     {
-        QWizardPage *page = new Page1(m_parent);
+        QWizardPage *page = new PageSelectGates(this, mController);
         page->setTitle(tr("Step 1"));
         page->setSubTitle(tr("Select Gates"));
         return page;
     }
 
-    QWizardPage *Wizard::createPage2()
+    QWizardPage *Wizard::createPageClock()
     {
-        QWizardPage *page = new Page2(m_parent);
+        QWizardPage *page = new PageClock(this, mController);
         page->setTitle(tr("Step 2"));
         page->setSubTitle(tr("Clock settings"));
         return page;
     }
 
-    QWizardPage *Wizard::createPage3()
+    QWizardPage *Wizard::createPageEngine()
     {
-        QWizardPage *page = new Page3(m_parent, this);
+        QWizardPage *page = new PageEngine(this, mController);
         page->setTitle(tr("Step 3"));
         page->setSubTitle(tr("Engine settings"));
         return page;
     }
 
-    QWizardPage *Wizard::createPage4()
+    QWizardPage *Wizard::createPageEngineProperties()
     {
-        QWizardPage *page = new Page4(mSettings, m_parent);
+        QWizardPage *page = new PageEngineProperties(this, mSettings, mController);
         page->setTitle(tr("Step 4"));
         page->setSubTitle(tr("Engine properties"));
         return page;
     }
 
-    QWizardPage *Wizard::createPage5()
+    QWizardPage *Wizard::createPageInputData()
     {
-        QWizardPage *page = new Page5(m_parent);
+        QWizardPage *page = new PageInputData(this, mController);
         page->setTitle(tr("Step 5"));
         page->setSubTitle(tr("Load input Data"));
         return page;
@@ -89,18 +89,18 @@ namespace hal {
         setLayout(layout);
     }
 
-    Page1::Page1(WaveformViewer *parent)
-      : QWizardPage(parent), m_parent(parent)
+    PageSelectGates::PageSelectGates(Wizard *parent, NetlistSimulatorController *controller)
+      : QWizardPage(parent), mController(controller)
     {
         QGridLayout* layout = new QGridLayout(this);
         mButAll = new QPushButton("All gates", this);
-        connect(mButAll,&QPushButton::clicked,this,&Page1::handleSelectAll);
+        connect(mButAll,&QPushButton::clicked,this,&PageSelectGates::handleSelectAll);
         layout->addWidget(mButAll,0,0);
         mButSel = new QPushButton("Current GUI selection", this);
-        connect(mButSel,&QPushButton::clicked,this,&Page1::handleCurrentGuiSelection);
+        connect(mButSel,&QPushButton::clicked,this,&PageSelectGates::handleCurrentGuiSelection);
         layout->addWidget(mButSel,0,1);
         mButNone = new QPushButton("Clear selection", this);
-        connect(mButNone,&QPushButton::clicked,this,&Page1::handleClearSelection);
+        connect(mButNone,&QPushButton::clicked,this,&PageSelectGates::handleClearSelection);
         layout->addWidget(mButNone,0,2);
         mTableView = new QTableView(this);
 
@@ -129,12 +129,12 @@ namespace hal {
         // vllt hinzufügen dass Next Button disabled ist wenn noch nix ausgewählt ist
     }
 
-    void Page1::handleSelectAll()
+    void PageSelectGates::handleSelectAll()
     {
         mTableView->selectAll();
     }
 
-    void Page1::handleCurrentGuiSelection()
+    void PageSelectGates::handleCurrentGuiSelection()
     {
         QSet<u32> guiGateSel = gSelectionRelay->selectedGates();
 
@@ -153,12 +153,12 @@ namespace hal {
         }
     }
 
-    void Page1::handleClearSelection()
+    void PageSelectGates::handleClearSelection()
     {
         mTableView->clearSelection();
     }
 
-    std::vector<hal::Gate*> Page1::selectedGates() const
+    std::vector<hal::Gate*> PageSelectGates::selectedGates() const
     {
         std::vector<Gate*> retval;
         QItemSelectionModel *sm = mTableView->selectionModel();
@@ -180,20 +180,28 @@ namespace hal {
         return retval;
     }
 
-    bool Page1::validatePage()
+    bool PageSelectGates::validatePage()
     {
-        m_parent->setGates(selectedGates());
+        //m_parent->setGates(selectedGates());
+        //if (!mController || mController->get_state() != NetlistSimulatorController::NoGatesSelected) return false;
+        mController->reset();
+        mController->add_gates(selectedGates());
+        for (const Net* inpNet : mController->get_input_nets())
+            mController->get_waveform_by_net(inpNet);
+        if (mController->get_gates().empty())
+            return false;
+
 
         // wurde gate ausgewählt???
         return true;
     }
 
 
-    Page2::Page2(WaveformViewer *parent)
-        : QWizardPage(parent), m_parent(parent)
+    PageClock::PageClock(Wizard *parent, NetlistSimulatorController *controller)
+        : QWizardPage(parent), mController(controller)
     {
 
-        for (const Net* n : m_parent->mCurrentWaveWidget->controller()->get_input_nets())
+        for (const Net* n : mController->get_input_nets())
             mInputs.append(n);
 
         // was wenn inputs leer?
@@ -239,7 +247,7 @@ namespace hal {
 
         mDontUseClock = new QCheckBox("Do not use clock in simulation",this);
         mDontUseClock->setCheckState(Qt::Unchecked);
-        connect(mDontUseClock,&QCheckBox::stateChanged,this,&Page2::dontUseClockChanged);
+        connect(mDontUseClock,&QCheckBox::stateChanged,this,&PageClock::dontUseClockChanged);
         layout->addWidget(mDontUseClock,4,0,1,2);
 
         //mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
@@ -248,7 +256,7 @@ namespace hal {
         //layout->addWidget(mButtonBox,5,1);
     }
 
-    void Page2::dontUseClockChanged(bool state)
+    void PageClock::dontUseClockChanged(bool state)
     {
         mComboNet->setDisabled(state);
         mSpinPeriod->setDisabled(state);
@@ -256,12 +264,12 @@ namespace hal {
         mSpinDuration->setDisabled(state);
     }
 
-    bool Page2::validatePage()
+    bool PageClock::validatePage()
     {
 
         if (mDontUseClock->isChecked())
         {
-            m_parent->mCurrentWaveWidget->controller()->set_no_clock_used();
+            mController->set_no_clock_used();
         }
         else
         {
@@ -269,7 +277,7 @@ namespace hal {
             if (period <= 0) return false;
 
             const Net* clk = mInputs.at(mComboNet->currentIndex());
-            m_parent->mCurrentWaveWidget->controller()->add_clock_period(
+            mController->add_clock_period(
                 clk, period, mSpinStartValue->value()==0, mSpinDuration->value()
             );
         }
@@ -279,8 +287,8 @@ namespace hal {
     }
 
 
-    Page3::Page3(WaveformViewer *parent, Wizard *wizard)
-        : QWizardPage(parent), m_parent(parent), m_wizard(wizard)
+    PageEngine::PageEngine(Wizard *parent, NetlistSimulatorController *controller)
+        : QWizardPage(parent), mController(controller), m_wizard(parent)
     {
         mLayout = new QVBoxLayout(this);
 
@@ -298,7 +306,7 @@ namespace hal {
         setLayout(mLayout);
     }
 
-    bool Page3::validatePage()
+    bool PageEngine::validatePage()
     {
 
         QString selectedEngineName;
@@ -321,7 +329,8 @@ namespace hal {
             mVerilator = false;
         }
 
-        m_parent->mCurrentWaveWidget->createEngine(selectedEngineName);
+
+        mController->create_simulation_engine(selectedEngineName.toStdString());
         std::cout << selectedEngineName.toStdString() << std::endl;
 
 
@@ -329,22 +338,22 @@ namespace hal {
         return true;
     }
 
-    int Page3::nextId() const
+    int PageEngine::nextId() const
     {
         if (mVerilator)
         {
-            return m_wizard->mPage4Id;
+            return m_wizard->mPageEnginePropertiesId;
         }
         else
         {
-            return m_wizard->mPage5Id;
+            return m_wizard->mPageInputDataId;
         }
     }
 
 
 
-    Page4::Page4(SimulationSettings *settings, WaveformViewer *parent)
-        : QWizardPage(parent), mSettings(settings), m_parent(parent)
+    PageEngineProperties::PageEngineProperties(Wizard *parent, SimulationSettings *settings, NetlistSimulatorController *controller)
+        : QWizardPage(parent), mSettings(settings), mController(controller)
     {
         mTableWidget = new QTableWidget(this);
 
@@ -366,7 +375,7 @@ namespace hal {
         mTableWidget->horizontalHeader()->setStretchLastSection(true);
 
         mTableWidget->horizontalHeader()->setStretchLastSection(true);
-        connect(mTableWidget, &QTableWidget::cellChanged, this, &Page4::handleCellChanged);
+        connect(mTableWidget, &QTableWidget::cellChanged, this, &PageEngineProperties::handleCellChanged);
 
 
         QVBoxLayout *layout = new QVBoxLayout;
@@ -375,14 +384,14 @@ namespace hal {
 
     }
 
-    void Page4::handleCellChanged(int irow, int icolumn)
+    void PageEngineProperties::handleCellChanged(int irow, int icolumn)
     {
         if ((icolumn == 1 && irow >= mTableWidget->rowCount()-2) ||
             (icolumn == 0 && irow >= mTableWidget->rowCount()-1))
             mTableWidget->setRowCount(mTableWidget->rowCount()+1);
     }
 
-    bool Page4::validatePage()
+    bool PageEngineProperties::validatePage()
     {
 
         QMap<QString,QString> engProp;
@@ -403,12 +412,11 @@ namespace hal {
     }
 
 
-    Page5::Page5(WaveformViewer *parent)
-        : QWizardPage(parent), m_parent(parent)
+    PageInputData::PageInputData(Wizard *parent, NetlistSimulatorController *controller)
+        : QWizardPage(parent), mController(controller)
     {
         QString filter = QString("Saved data (%1)").arg(NetlistSimulatorController::sPersistFile);
-        if (m_parent->mCurrentWaveWidget)
-            filter += ";; VCD files (*.vcd);; CSV files (*.csv)";
+        filter += ";; VCD files (*.vcd);; CSV files (*.csv)";
 
         QString filename =
                 QFileDialog::getOpenFileName(this, "Load input wave file", ".", filter);
@@ -422,14 +430,12 @@ namespace hal {
                 //takeControllerOwnership(ctrlRef, true);
             }
         }
-        else if (m_parent->mCurrentWaveWidget && m_parent->mCurrentWaveWidget->controller()->can_import_data() && filename.toLower().endsWith(".vcd"))
-            m_parent->mCurrentWaveWidget->controller()->import_vcd(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
-        else if (m_parent->mCurrentWaveWidget && m_parent->mCurrentWaveWidget->controller()->can_import_data() && filename.toLower().endsWith(".csv"))
-            m_parent->mCurrentWaveWidget->controller()->import_csv(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
-        else if (m_parent->mCurrentWaveWidget)
-            log_warning(m_parent->mCurrentWaveWidget->controller()->get_name(), "Cannot parse file '{}' (unknown extension ore wrong state).", filename.toStdString());
+        else if (mController->can_import_data() && filename.toLower().endsWith(".vcd"))
+            mController->import_vcd(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
+        else if (mController->can_import_data() && filename.toLower().endsWith(".csv"))
+            mController->import_csv(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
         else
-            log_warning("simulation_plugin", "Unable to restore saved data from file '{}'.", filename.toStdString());
+            log_warning(mController->get_name(), "Cannot parse file '{}' (unknown extension ore wrong state).", filename.toStdString());
     }
 
     ConclusionPage::ConclusionPage(QWidget *parent): QWizardPage(parent)
