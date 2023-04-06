@@ -32,33 +32,15 @@ namespace hal {
         int mPageInputDataId;
 
     private:
-        QWizardPage *createIntroPage();
-        QWizardPage *createPageSelectGates();
-        QWizardPage *createPageClock();
-        QWizardPage *createPageEngine();
-        QWizardPage *createPageEngineProperties();
-        QWizardPage *createPageInputData();
-        QWizardPage *createConclusionPage();
-
         NetlistSimulatorController *mController;
         SimulationSettings *mSettings;
-    };
-
-    class IntroPage : public QWizardPage {
-        Q_OBJECT
-
-    public:
-        IntroPage(QWidget *parent = 0);
-
-    private:
-        QLabel *label;
     };
 
     class PageSelectGates : public QWizardPage {
         Q_OBJECT
 
     public:
-        PageSelectGates(Wizard *parent, NetlistSimulatorController *controller);
+        PageSelectGates(NetlistSimulatorController *controller, QWidget *parent=nullptr);
 
         virtual bool validatePage() override;
 
@@ -81,7 +63,7 @@ namespace hal {
         Q_OBJECT
 
     public:
-        PageClock(Wizard *parent, NetlistSimulatorController *controller);
+        PageClock(NetlistSimulatorController *controller, QWidget *parent=nullptr);
 
         virtual bool validatePage() override;
 
@@ -109,7 +91,7 @@ namespace hal {
         Q_OBJECT
 
     public:
-        PageEngine(Wizard *parent, NetlistSimulatorController *controller);
+        PageEngine(NetlistSimulatorController *controller, Wizard* parent=nullptr);
 
         virtual bool validatePage() override;
         int nextId() const override;
@@ -119,7 +101,7 @@ namespace hal {
         bool mVerilator;
 
         NetlistSimulatorController *mController;
-        Wizard *m_wizard;
+        Wizard* m_wizard;
     };
 
     class PageEngineProperties : public QWizardPage {
@@ -129,7 +111,7 @@ namespace hal {
         void handleCellChanged(int irow, int icolumn);
 
     public:
-        PageEngineProperties(Wizard *parent, SimulationSettings *settings, NetlistSimulatorController *controller);
+        PageEngineProperties(SimulationSettings *settings, NetlistSimulatorController *controller, QWidget* parent=nullptr);
 
         virtual bool validatePage() override;
     private:
@@ -143,10 +125,13 @@ namespace hal {
         Q_OBJECT
 
     public:
-        PageInputData(Wizard *parent, NetlistSimulatorController *controller);
+        PageInputData(NetlistSimulatorController *controller, QWidget *parent=nullptr);
+    private Q_SLOTS:
+        void openFileBrowser();
 
     private:
         NetlistSimulatorController *mController;
+        QLineEdit *mEditFilename;
     };
 
     class ConclusionPage : public QWizardPage {

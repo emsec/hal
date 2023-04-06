@@ -1,5 +1,5 @@
 #include "waveform_viewer/wizard.h"
-#include "waveform_viewer/wave_widget.h")
+#include "waveform_viewer/wave_widget.h"
 #include "gui/module_dialog/gate_select_model.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "hal_core/plugin_system/plugin_manager.h"
@@ -12,86 +12,24 @@
 namespace hal {
 
     Wizard::Wizard(SimulationSettings *settings, NetlistSimulatorController *controller, WaveformViewer *parent)
-        : QWizard(parent), mSettings(settings), mController(controller)
+        : QWizard(parent),  mController(controller), mSettings(settings)
     {
         setWindowTitle(tr("Empty Wizard"));
 
-        addPage(createIntroPage());
-        addPage(createPageSelectGates());
-        addPage(createPageClock());
-        addPage(createPageEngine());
-        mPageEnginePropertiesId = addPage(createPageEngineProperties());
-        mPageInputDataId = addPage(createPageInputData());
-        addPage(createConclusionPage());
+        addPage(new PageSelectGates(mController, this));
+        addPage(new PageClock(mController, this));
+        addPage(new PageEngine(mController, this));
+        mPageEnginePropertiesId = addPage(new PageEngineProperties(mSettings,mController,this));
+        mPageInputDataId = addPage(new PageInputData(mController,this));
+        addPage(new ConclusionPage(this));
     }
 
-    QWizardPage *Wizard::createIntroPage()
-    {
-        QWizardPage *page = new IntroPage;
-        page->setTitle(tr("Introduction"));
-        page->setSubTitle(tr("Introduction about Wizard"));
-        return page;
-    }
-
-    QWizardPage *Wizard::createPageSelectGates()
-    {
-        QWizardPage *page = new PageSelectGates(this, mController);
-        page->setTitle(tr("Step 1"));
-        page->setSubTitle(tr("Select Gates"));
-        return page;
-    }
-
-    QWizardPage *Wizard::createPageClock()
-    {
-        QWizardPage *page = new PageClock(this, mController);
-        page->setTitle(tr("Step 2"));
-        page->setSubTitle(tr("Clock settings"));
-        return page;
-    }
-
-    QWizardPage *Wizard::createPageEngine()
-    {
-        QWizardPage *page = new PageEngine(this, mController);
-        page->setTitle(tr("Step 3"));
-        page->setSubTitle(tr("Engine settings"));
-        return page;
-    }
-
-    QWizardPage *Wizard::createPageEngineProperties()
-    {
-        QWizardPage *page = new PageEngineProperties(this, mSettings, mController);
-        page->setTitle(tr("Step 4"));
-        page->setSubTitle(tr("Engine properties"));
-        return page;
-    }
-
-    QWizardPage *Wizard::createPageInputData()
-    {
-        QWizardPage *page = new PageInputData(this, mController);
-        page->setTitle(tr("Step 5"));
-        page->setSubTitle(tr("Load input Data"));
-        return page;
-    }
-
-    QWizardPage *Wizard::createConclusionPage()
-    {
-        QWizardPage *page = new ConclusionPage;
-        page->setTitle(tr("End"));
-        page->setSubTitle(tr("Run Simulation"));
-        return page;
-    }
-
-    IntroPage::IntroPage(QWidget *parent) : QWizardPage(parent)
-    {
-        label = new QLabel(tr("What is the Waveform Simulation"));
-        QVBoxLayout *layout = new QVBoxLayout;
-        layout->addWidget(label);
-        setLayout(layout);
-    }
-
-    PageSelectGates::PageSelectGates(Wizard *parent, NetlistSimulatorController *controller)
+    PageSelectGates::PageSelectGates(NetlistSimulatorController *controller, QWidget *parent)
       : QWizardPage(parent), mController(controller)
     {
+        setTitle(tr("Step 1"));
+        setSubTitle(tr("Select Gates"));
+
         QGridLayout* layout = new QGridLayout(this);
         mButAll = new QPushButton("All gates", this);
         connect(mButAll,&QPushButton::clicked,this,&PageSelectGates::handleSelectAll);
@@ -197,9 +135,11 @@ namespace hal {
     }
 
 
-    PageClock::PageClock(Wizard *parent, NetlistSimulatorController *controller)
+    PageClock::PageClock(NetlistSimulatorController *controller, QWidget* parent)
         : QWizardPage(parent), mController(controller)
     {
+        setTitle(tr("Step 2"));
+        setSubTitle(tr("Clock settings"));
 
         for (const Net* n : mController->get_input_nets())
             mInputs.append(n);
@@ -287,9 +227,12 @@ namespace hal {
     }
 
 
-    PageEngine::PageEngine(Wizard *parent, NetlistSimulatorController *controller)
+    PageEngine::PageEngine(NetlistSimulatorController *controller, Wizard *parent)
         : QWizardPage(parent), mController(controller), m_wizard(parent)
     {
+        setTitle(tr("Step 3"));
+        setSubTitle(tr("Engine settings"));
+
         mLayout = new QVBoxLayout(this);
 
         for (SimulationEngineFactory* sef : *SimulationEngineFactories::instance())
@@ -340,6 +283,7 @@ namespace hal {
 
     int PageEngine::nextId() const
     {
+        if (!m_wizard) return QWizardPage::nextId();
         if (mVerilator)
         {
             return m_wizard->mPageEnginePropertiesId;
@@ -352,9 +296,12 @@ namespace hal {
 
 
 
-    PageEngineProperties::PageEngineProperties(Wizard *parent, SimulationSettings *settings, NetlistSimulatorController *controller)
-        : QWizardPage(parent), mSettings(settings), mController(controller)
+    PageEngineProperties::PageEngineProperties(SimulationSettings *settings, NetlistSimulatorController *controller, QWidget *parent)
+        : QWizardPage(parent), mController(controller), mSettings(settings)
     {
+        setTitle(tr("Step 4"));
+        setSubTitle(tr("Engine properties"));
+
         mTableWidget = new QTableWidget(this);
 
         QMap<QString,QString> engProp = settings->engineProperties();
@@ -411,16 +358,18 @@ namespace hal {
         return true;
     }
 
-
-    PageInputData::PageInputData(Wizard *parent, NetlistSimulatorController *controller)
-        : QWizardPage(parent), mController(controller)
+    void PageInputData::openFileBrowser()
     {
         QString filter = QString("Saved data (%1)").arg(NetlistSimulatorController::sPersistFile);
         filter += ";; VCD files (*.vcd);; CSV files (*.csv)";
 
         QString filename =
                 QFileDialog::getOpenFileName(this, "Load input wave file", ".", filter);
+
         if (filename.isEmpty()) return;
+
+        mEditFilename->setText(filename);
+
         if (filename.endsWith(NetlistSimulatorController::sPersistFile))
         {
             NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
@@ -436,10 +385,28 @@ namespace hal {
             mController->import_csv(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
         else
             log_warning(mController->get_name(), "Cannot parse file '{}' (unknown extension ore wrong state).", filename.toStdString());
+
+    }
+
+    PageInputData::PageInputData(NetlistSimulatorController *controller, QWidget* parent)
+        : QWizardPage(parent), mController(controller)
+    {
+        setTitle(tr("Step 5"));
+        setSubTitle(tr("Load input Data"));
+        QGridLayout* layout = new QGridLayout(this);
+
+        mEditFilename = new QLineEdit(this);
+        layout->addWidget(mEditFilename,0,0);
+        QPushButton* but = new QPushButton("v",this);
+        connect(but,&QPushButton::clicked,this,&PageInputData::openFileBrowser);
+        layout->addWidget(but,0,1);
     }
 
     ConclusionPage::ConclusionPage(QWidget *parent): QWizardPage(parent)
     {
+        setTitle(tr("End"));
+        setSubTitle(tr("Run Simulation"));
+
         label = new QLabel(tr("Run Simulation"));
         QVBoxLayout *layout = new QVBoxLayout;
         layout->addWidget(label);
