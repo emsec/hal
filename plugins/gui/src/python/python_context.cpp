@@ -164,6 +164,11 @@ namespace hal
         py::exec(command, *context, *context);
 
         (*context)["netlist"] = gNetlistOwner;    // assign the shared_ptr here, not the raw ptr
+
+        if (gGuiApi)
+        {
+            (*context)["gui"] = gGuiApi;
+        }
     }
 
 
