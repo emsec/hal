@@ -109,7 +109,7 @@ namespace hal
         }
         if (name != m_name)
         {
-            log_info("net", "changed name for net with ID {} from '{}' to '{}' in netlist with ID {}.", m_id, m_name, name, m_internal_manager->m_netlist->get_id());
+            // log_info("net", "changed name for net with ID {} from '{}' to '{}' in netlist with ID {}.", m_id, m_name, name, m_internal_manager->m_netlist->get_id());
 
             m_name = name;
 

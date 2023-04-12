@@ -116,7 +116,7 @@ namespace hal
         }
         if (name != m_name)
         {
-            log_info("net", "changed name for gate with ID {} from '{}' to '{}' in netlist with ID {}.", m_id, m_name, name, m_internal_manager->m_netlist->get_id());
+            // log_info("gate", "changed name for gate with ID {} from '{}' to '{}' in netlist with ID {}.", m_id, m_name, name, m_internal_manager->m_netlist->get_id());
 
             m_name = name;
 
