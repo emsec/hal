@@ -725,13 +725,13 @@ namespace hal
 
         Result<Net*> build_gate_tree_from_boolean_function(Netlist* nl, const BooleanFunction& bf, const std::map<std::string, Net*>& var_name_to_net, const Gate* org_gate = nullptr)
         {
-            const auto create_gate_name = [](const Gate* new_gate, const Gate* org_gate) -> std::string {
-                const std::string new_name = (org_gate == nullptr) ? "new_gate" : org_gate->get_name() + "_decomposed_";
+            const auto create_gate_name = [](const Gate* new_gate, const Gate* original_gate) -> std::string {
+                const std::string new_name = (original_gate == nullptr) ? "new_gate" : original_gate->get_name() + "_decomposed_";
                 return new_name + std::to_string(new_gate->get_id());
             };
 
-            const auto create_net_name = [](const Net* new_net, const Gate* org_gate) -> std::string {
-                const std::string new_name = (org_gate == nullptr) ? "new_net" : org_gate->get_name() + "_decomposed_";
+            const auto create_net_name = [](const Net* new_net, const Gate* original_gate) -> std::string {
+                const std::string new_name = (original_gate == nullptr) ? "new_net" : original_gate->get_name() + "_decomposed_";
                 return new_name + std::to_string(new_net->get_id());
             };
 
@@ -852,6 +852,10 @@ namespace hal
             }
 
             new_gate->set_name(create_gate_name(new_gate, org_gate));
+
+            if (org_gate != nullptr && !org_gate->get_module()->is_top_module()) {
+                org_gate->get_module()->assign_gate(new_gate);
+            }
 
             return OK(output_net);
         }

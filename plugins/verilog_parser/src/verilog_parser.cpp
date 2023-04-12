@@ -1231,6 +1231,7 @@ namespace hal
 
         // merge nets without gates in between them
         std::unordered_map<std::string, std::string> merged_nets;
+        std::unordered_map<std::string, std::vector<std::string>> master_to_slaves;
 
         for (auto& [master, slave] : m_nets_to_merge)
         {
@@ -1346,6 +1347,44 @@ namespace hal
             m_netlist->delete_net(slave_net);
             m_net_by_name.erase(slave);
             merged_nets[slave] = master;
+            master_to_slaves[master].push_back(slave);
+        }
+
+        // annotate all surviving master nets with the net names that where merged into them
+        for (auto& master_net : m_netlist->get_nets())
+        {
+            const auto master_name = master_net->get_name();
+            
+            if (const auto m2s_it = master_to_slaves.find(master_name); m2s_it != master_to_slaves.end()){
+                std::vector<std::vector<std::string>> merged_slaves;
+                auto current_slaves = m2s_it->second;
+
+                while (!current_slaves.empty())
+                {
+                    std::vector<std::string> next_slaves;
+                    for (const auto& s : current_slaves)
+                    {
+                        if (const auto m2s_it = master_to_slaves.find(s); m2s_it != master_to_slaves.end()){
+                            next_slaves.insert(next_slaves.end(), m2s_it->second.begin(),m2s_it->second.end());
+                        }
+                    }
+
+                    merged_slaves.push_back(current_slaves);
+                    current_slaves = next_slaves;
+                    next_slaves.clear();
+                }
+                
+                std::string merged_str = "";
+                for (const auto& vec : merged_slaves)
+                {
+                    const auto s = utils::join(", ", vec);
+                    merged_str += "[" + s + "], ";
+                }
+
+                merged_str = merged_str.substr(0, merged_str.size()-2);
+
+                master_net->set_data("parser_annotation", "merged_nets", "list[list[str]]", "[" + merged_str + "]");
+            }
         }
 
         // add global GND gate if required by any instance
