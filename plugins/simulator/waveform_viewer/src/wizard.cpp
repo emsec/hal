@@ -8,6 +8,7 @@
 #include <QFileDialog>
 
 #include "gui/gui_globals.h"
+#include "gui/gui_utils/graphics.h"
 
 namespace hal {
 
@@ -257,6 +258,8 @@ namespace hal {
             }
         }
 
+        QLabel *label = new QLabel("Not the engine you are looking for? You might want to check whether appropriate plugin is loaded.", this);
+        mLayout->addWidget(label);
         setLayout(mLayout);
     }
 
@@ -408,8 +411,15 @@ namespace hal {
 
         mEditFilename = new QLineEdit(this);
         layout->addWidget(mEditFilename,0,0);
-        QPushButton* but = new QPushButton("v",this);
-        connect(but,&QPushButton::clicked,this,&PageInputData::openFileBrowser);
+
+        QPushButton* but = new QPushButton(this);
+        but->setIcon(gui_utility::getStyledSvgIcon("all->#3192C5", ":/icons/folder"));
+        but->setIconSize(QSize(17, 17));
+        connect(but, &QPushButton::clicked, this, &PageInputData::openFileBrowser);
+
+
+
+
         layout->addWidget(but,0,1);
     }
 
