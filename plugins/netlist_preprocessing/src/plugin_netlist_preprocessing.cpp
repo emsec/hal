@@ -11,12 +11,33 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_utils.h"
 #include "hal_core/utilities/result.h"
+#include "rapidjson/document.h"
+
+// stupid stuff that is needed to print document as a string for debugging purposes if you see this i forgot to delete it... why are we using this again?
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/writer.h"
 
 #include <fstream>
 #include <queue>
+#include <regex>
 
 namespace hal
 {
+    extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
+    {
+        return std::make_unique<NetlistPreprocessingPlugin>();
+    }
+
+    std::string NetlistPreprocessingPlugin::get_name() const
+    {
+        return std::string("netlist_preprocessing");
+    }
+
+    std::string NetlistPreprocessingPlugin::get_version() const
+    {
+        return std::string("0.1");
+    }
+
     namespace
     {
         std::string generate_hex_truth_table_string(const std::vector<BooleanFunction::Value>& tt)
@@ -46,21 +67,6 @@ namespace hal
             return tt_str;
         }
     }    // namespace
-
-    extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
-    {
-        return std::make_unique<NetlistPreprocessingPlugin>();
-    }
-
-    std::string NetlistPreprocessingPlugin::get_name() const
-    {
-        return std::string("netlist_preprocessing");
-    }
-
-    std::string NetlistPreprocessingPlugin::get_version() const
-    {
-        return std::string("0.1");
-    }
 
     Result<u32> NetlistPreprocessingPlugin::simplify_lut_inits(Netlist* nl)
     {
@@ -113,7 +119,7 @@ namespace hal
 
             g->set_init_data({new_init_string}).get();
 
-            const auto bf_test = g->get_boolean_function(out_ep->get_pin());
+            // const auto bf_test = g->get_boolean_function(out_ep->get_pin());
 
             // std::cout << "Org: " << bf_org << std::endl;
             // std::cout << "Rep: " << bf_replaced << std::endl;
@@ -760,7 +766,7 @@ namespace hal
 
                 if (bf.has_constant_value(1))
                 {
-                    static Net* one  = nl->get_nets([](const Net* n) { return n->is_vcc_net(); }).front();
+                    static Net* one = nl->get_nets([](const Net* n) { return n->is_vcc_net(); }).front();
                     return OK(one);
                 }
             }
@@ -788,7 +794,7 @@ namespace hal
             static const auto inv_type_res = find_gate_type(nl->get_gate_library(), {GateTypeProperty::combinational, GateTypeProperty::c_inverter}, 1, 1);
             static const auto and_type_res = find_gate_type(nl->get_gate_library(), {GateTypeProperty::combinational, GateTypeProperty::c_and}, 2, 1);
             static const auto or_type_res  = find_gate_type(nl->get_gate_library(), {GateTypeProperty::combinational, GateTypeProperty::c_or}, 2, 1);
-            static const auto xor_type_res  = find_gate_type(nl->get_gate_library(), {GateTypeProperty::combinational, GateTypeProperty::c_xor}, 2, 1);
+            static const auto xor_type_res = find_gate_type(nl->get_gate_library(), {GateTypeProperty::combinational, GateTypeProperty::c_xor}, 2, 1);
 
             if (inv_type_res.is_error())
             {
@@ -831,7 +837,7 @@ namespace hal
             {
                 case BooleanFunction::NodeType::Not:
                 case BooleanFunction::NodeType::And:
-                case BooleanFunction::NodeType::Or: 
+                case BooleanFunction::NodeType::Or:
                 case BooleanFunction::NodeType::Xor: {
                     auto [gt, in_pins, out_pins] = node_type_to_gate_type.at(operation);
                     new_gate                     = nl->create_gate(gt, "__TEMP_GATE_NAME__DECOMPOSED__");
@@ -853,7 +859,8 @@ namespace hal
 
             new_gate->set_name(create_gate_name(new_gate, org_gate));
 
-            if (org_gate != nullptr && !org_gate->get_module()->is_top_module()) {
+            if (org_gate != nullptr && !org_gate->get_module()->is_top_module())
+            {
                 org_gate->get_module()->assign_gate(new_gate);
             }
 
@@ -1051,5 +1058,152 @@ namespace hal
             return;
         }
     }    // namespace
+
+    namespace
+    {
+        // Extracts an index from a string by taking the last integer enclosed by parentheses
+        std::optional<std::pair<std::string, u32>> extract_index(const std::string name)
+        {
+            const std::regex r{"\\([0-9]+\\)"};
+            std::smatch m;
+
+            std::regex_search(name, m, r);
+
+            std::cout << "Matches for " << name << ": " << std::endl;
+            for (const auto& x : m)
+            {
+                std::cout << x << std::endl;
+            }
+
+            if (m.empty())
+            {
+                return std::nullopt;
+            }
+
+            const auto matched_index = m[m.size() - 1].str();
+            const auto index         = std::stoi(matched_index.substr(1, matched_index.size() - 1));
+
+            const auto indexed_name = name.substr(0, name.find_last_of(matched_index) - matched_index.size() + 1);
+
+            return std::optional<std::pair<std::string, u32>>{{indexed_name, index}};
+        }
+
+        // annotate an indexed multi-bit identifier to a gate
+        bool annotate_identifier_indexed(auto gate, const auto identifier, const auto index)
+        {
+            const auto l_res = gate->set_data("preprocess_information", "multi_bit_identifier", "str", identifier);
+            const auto i_res = gate->set_data("preprocess_information", "multi_bit_index", "str", std::to_string(index));
+
+            return l_res & i_res;
+        }
+
+        // search for a net that connects to the gate at a pin of a specific type and tries to reconstruct an indexed identifier from its name or form a name of its merged wires
+        bool check_net_at_pin(const PinType pin_type, Gate* gate)
+        {
+            const auto typed_pins = gate->get_type()->get_pins([pin_type](const auto p) { return p->get_type() == pin_type; });
+            if (typed_pins.size() > 1)
+            {
+                log_warning("netlist_preprocessing",
+                            "Found multiple state pins for flip flop {} with ID {}. We only consider the first state pin, which might lead to unwanted behaviour!",
+                            gate->get_name(),
+                            gate->get_id());
+            }
+            const auto typed_net = (typed_pins.front()->get_direction() == PinDirection::output) ? gate->get_fan_out_net(typed_pins.front()) : gate->get_fan_in_net(typed_pins.front());
+
+            // 1) search the net name itself
+            const auto net_name_index = extract_index(typed_net->get_name());
+            if (net_name_index.has_value())
+            {
+                const auto [name, index] = net_name_index.value();
+                annotate_identifier_indexed(gate, name, index);
+
+                return true;
+            }
+
+            // 2) search all the names of the wires that where merged into this net
+            const auto all_merged_wires_str = std::get<1>(typed_net->get_data("parser_annotation", "merged_wires"));
+
+            if (all_merged_wires_str.empty())
+            {
+                return false;
+            }
+
+            rapidjson::Document doc;
+
+            // TODO remove debug print
+            // doc.Parse(all_merged_wires_str.c_str());
+
+            // rapidjson::StringBuffer strbuf;
+            // strbuf.Clear();
+
+            // rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+            // doc.Accept(writer);
+
+            // std::cout << "Data: " << all_merged_wires_str << std::endl;
+            // std::cout << "JSON: " << strbuf.GetString() << std::endl;
+
+            for (u32 i = 0; i < doc.GetArray().Size(); i++)
+            {
+                const auto list = doc[i].GetArray();
+                for (u32 j = 0; j < list.Size(); j++)
+                {
+                    const auto merged_wire_name = list[j].GetString();
+
+                    const auto merged_wire_name_index = extract_index(merged_wire_name);
+                    if (merged_wire_name_index.has_value())
+                    {
+                        const auto [name, index] = merged_wire_name_index.value();
+                        annotate_identifier_indexed(gate, name, index);
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }    // namespace
+
+    Result<u32> NetlistPreprocessingPlugin::reconstruct_indexed_ff_identifier(Netlist* nl)
+    {
+        u32 counter = 0;
+        for (auto& ff : nl->get_gates([](const auto g) { return g->get_type()->has_property(GateTypeProperty::ff); }))
+        {
+            // 1) Check whether the ff gate already has an index annotated in its gate name
+            const auto gate_name_index = extract_index(ff->get_name());
+
+            if (gate_name_index.has_value())
+            {
+                const auto [name, index] = gate_name_index.value();
+                annotate_identifier_indexed(ff, name, index);
+
+                counter += 1;
+                continue;
+            }
+
+            // 2) Check whether the fan out net at the state pin has an indexed name
+            if (check_net_at_pin(PinType::state, ff))
+            {
+                counter += 1;
+                continue;
+            }
+
+            // 3) Check whether the fan out net at the neg state pin has an indexed name
+            if (check_net_at_pin(PinType::neg_state, ff))
+            {
+                counter += 1;
+                continue;
+            }
+
+            // 4) Check whether the fan in net at the data pin has an indexed name
+            if (check_net_at_pin(PinType::data, ff))
+            {
+                counter += 1;
+                continue;
+            }
+        }
+
+        return OK(counter);
+    }
 
 }    // namespace hal

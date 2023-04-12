@@ -253,6 +253,33 @@ namespace hal
             :rtype: int or None
         )");
 
+        py_netlist_preprocessing.def_static(
+            "reconstruct_indexed_ff_identifier",
+            [](Netlist* nl) -> std::optional<u32> {
+                auto res = NetlistPreprocessingPlugin::reconstruct_indexed_ff_identifier(nl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            R"(
+            Tries to reconstruct a name and index for each flip flop that was part of a multibit wire in the verilog code.
+            This is NOT a general netlist reverse engineering algorithm and ONLY works on synthesized netlists with names annotated by the synthesizer.
+            This function mainly focuses netlists synthesized with yosys since yosys names the output wires of the flip flops but not the gate it self.
+            We try to reconstruct name and index for each flip flop based on the name of its output nets.
+
+            :param hal_py.Netlist nl: The netlist to operate on. 
+
+            :returns: The number of reconstructed names on success, an error otherwise.
+            :rtype: int or None
+        )");
+
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE

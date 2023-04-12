@@ -121,8 +121,19 @@ namespace hal
          * 
          * @param[in] nl - The netlist to operate on. 
          * @param[in] gate_types - The gate types that should be decomposed.
-         * @return Ok on success, an error otherwise.
+         * @return Ok and the number of decomposed gates on success, an error otherwise.
          */
         static Result<u32> decompose_gates_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types);
+
+        /**
+         * Tries to reconstruct a name and index for each flip flop that was part of a multibit wire in the verilog code.
+         * This is NOT a general netlist reverse engineering algorithm and ONLY works on synthesized netlists with names annotated by the synthesizer.
+         * This function mainly focuses netlists synthesized with yosys since yosys names the output wires of the flip flops but not the gate it self.
+         * We try to reconstruct name and index for each flip flop based on the name of its output nets.
+         * 
+         * @param[in] nl - The netlist to operate on.
+         * return OK and the number of reconstructed names on success, an error otherwise.
+        */
+        static Result<u32> reconstruct_indexed_ff_identifier(Netlist* nl);
     };
 }    // namespace hal

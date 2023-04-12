@@ -1374,16 +1374,16 @@ namespace hal
                     next_slaves.clear();
                 }
                 
+                // annotate all merged slave wire names as a JSON formatted list of list of strings
+                // each net can span a tree of "consumed" slave wire names where the nth list represents all wire names that where merged at depth n
                 std::string merged_str = "";
                 for (const auto& vec : merged_slaves)
                 {
-                    const auto s = utils::join(", ", vec);
+                    const auto s = utils::join(", ", vec, [](const auto e){ return '"' + e + '"';});
                     merged_str += "[" + s + "], ";
                 }
-
                 merged_str = merged_str.substr(0, merged_str.size()-2);
-
-                master_net->set_data("parser_annotation", "merged_nets", "list[list[str]]", "[" + merged_str + "]");
+                master_net->set_data("parser_annotation", "merged_wires", "list[list[str]]", "[" + merged_str + "]");
             }
         }
 
