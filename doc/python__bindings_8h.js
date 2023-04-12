@@ -31,6 +31,7 @@ var python__bindings_8h =
     [ "plugin_interfaces_init", "python__bindings_8h.html#gae288c84ff5c0b70e6f9571669aa29eb7", null ],
     [ "plugin_manager_init", "python__bindings_8h.html#ga9e03e20ad125cd9eb1f4e601ac556777", null ],
     [ "project_manager_init", "python__bindings_8h.html#gac072de2b8e9f09d8320090e5873be90d", null ],
+    [ "set_log_level_of_channel", "python__bindings_8h.html#a46744f1329497998fd1b3107bfe10633", null ],
     [ "smt_init", "python__bindings_8h.html#ga6f399ac0514c1e1adff48f88ee349380", null ],
     [ "subgraph_netlist_decorator_init", "python__bindings_8h.html#gac5492afb41ef2e8dd6c49f56ddb7e73c", null ]
 ];
