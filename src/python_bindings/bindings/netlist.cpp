@@ -131,7 +131,7 @@ namespace hal
                 auto res = nl->copy();
                 if (res.is_ok())
                 {
-                    return std::shared_ptr<Netlist>();
+                    return std::shared_ptr<Netlist>(res.get());
                 }
                 else
                 {
