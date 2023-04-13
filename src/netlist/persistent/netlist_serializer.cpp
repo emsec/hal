@@ -948,6 +948,74 @@ namespace hal
             // event_controls::enable_all(true);
             return netlist;
         }
+
+        NETLIST_API std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file, const std::filesystem::path& gate_library_file)
+        {
+            auto begin_time = std::chrono::high_resolution_clock::now();
+
+            // event_controls::enable_all(false);
+
+            FILE* pFile = fopen(hal_file.string().c_str(), "rb");
+            if (pFile == NULL)
+            {
+                log_error("netlist_persistent", "unable to open '{}'.", hal_file.string());
+                return nullptr;
+            }
+
+            char buffer[65536];
+            rapidjson::FileReadStream is(pFile, buffer, sizeof(buffer));
+            rapidjson::Document document;
+            document.ParseStream<0, rapidjson::UTF8<>, rapidjson::FileReadStream>(is);
+            fclose(pFile);
+
+            if (document.HasParseError())
+            {
+                log_error("netlist_persistent", "invalid json string for deserialization");
+                return nullptr;
+            }
+
+            if (document.HasMember("serialization_format_version"))
+            {
+                u32 encoded_version = document["serialization_format_version"].GetUint();
+                if (encoded_version < SERIALIZATION_FORMAT_VERSION)
+                {
+                    log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
+                }
+                else if (encoded_version > SERIALIZATION_FORMAT_VERSION)
+                {
+                    log_warning("netlist_persistent", "the netlist was serialized with a newer version of the serializer, deserialization may contain errors.");
+                }
+            }
+            else
+            {
+                log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
+            }
+
+            // adjust gate lib path (hacky and ugly fix)
+            rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+            if (!document.HasMember("netlist"))
+            {
+                log_error("netlist_persistent", "could not deserialize netlist: file has no 'netlist' node");
+                return nullptr;
+            }
+            auto root = document["netlist"].GetObject();
+            if (!root.HasMember("gate_library"))
+            {
+                log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'gate_library'");
+                return nullptr;
+            }
+            root["gate_library"].SetString(gate_library_file.string(), allocator);
+
+            auto netlist = deserialize(document);
+
+            if (netlist)
+            {
+                log_info("netlist_persistent", "deserialized '{}' in {:2.2f} seconds", hal_file.string(), DURATION(begin_time));
+            }
+
+            // event_controls::enable_all(true);
+            return netlist;
+        }
     }    // namespace netlist_serializer
 }    // namespace hal
 

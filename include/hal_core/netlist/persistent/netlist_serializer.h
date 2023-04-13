@@ -58,5 +58,14 @@ namespace hal
          * @returns The deserialized netlist.
          */
         NETLIST_API std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file);
+
+        /**
+         * Deserializes a netlist from a .hal file with the chosen gate library.
+         *
+         * @param[in] hal_file - The source .hal file.
+         * @param[in] gate_library_file - The gate library file.
+         * @returns The deserialized netlist.
+         */
+        NETLIST_API std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file, const std::filesystem::path& gate_library_file);
     }    // namespace netlist_serializer
 }    // namespace hal
