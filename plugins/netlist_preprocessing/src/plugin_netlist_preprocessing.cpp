@@ -1101,9 +1101,24 @@ namespace hal
         //     return l_res & i_res;
         // }
 
-        bool annotate_indexed_identifiers(auto gate, const std::vector<indexed_identifier>& identifiers)
+        bool annotate_indexed_identifiers(Gate* gate, const std::vector<indexed_identifier>& identifiers)
         {
-            std::string json_identifier_str = "[" + utils::join(" ", identifiers, [](const auto& i) { return "(" + '"' + i.identifier + '"' + ", " + std::to_string(i.index) + ")"; }) + "]";
+            // std::string json_identifier_str = "[" + utils::join(" ", identifiers, [](const auto& i) { return "(" + '"' + i.identifier + '"' + ", " + std::to_string(i.index) + ")"; }) + "]";
+
+            std::string json_identifier_str = "";
+            bool first                      = true;
+            for (const auto& i : identifiers)
+            {
+                if (!first)
+                {
+                    json_identifier_str += ", ";
+                }
+                first = false;
+
+                json_identifier_str += (std::string("(") + '"' + i.identifier + '"' + ", " + std::to_string(i.index) + ")");
+            }
+
+            json_identifier_str = "[" + json_identifier_str + "]";
 
             return gate->set_data("preprocessing_information", "multi_bit_indexed_identifiers", "list[(str, int)]", json_identifier_str);
         }
