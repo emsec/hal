@@ -2,6 +2,13 @@
 
 namespace hal
 {
+    void set_log_level_of_channel(std::string channel_name, std::string level)
+    {
+        LogManager* lm = LogManager::get_instance();
+        log_info(channel_name, "Set log level of channel '{}' to '{}'.", channel_name, level);
+        if (lm) lm->set_level_of_channel(channel_name,level);
+    }
+
 #ifdef PYBIND11_MODULE
     PYBIND11_MODULE(hal_py, m)
     {
@@ -14,6 +21,13 @@ namespace hal
 
         m.def(
             "log_info", [](std::string& message) { log_info("python_context", message); }, R"( some documentation info)");
+
+        m.def("set_log_level_of_channel", set_log_level_of_channel, py::arg("channel_name"), py::arg("level"), R"(
+              Set log level for channel.
+
+              :param str channel_name: Name of channel.
+              :param str level: Selected level, one out of [trace, debug, info, warn, err, critical, off].
+              )");
 
         data_container_init(m);
 

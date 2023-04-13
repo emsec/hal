@@ -78,6 +78,13 @@
 
 namespace hal
 {
+    /**
+     * Wrapper for LogManager::set_level_of_channel()
+     * @param channel_name - Name of log channel
+     * @param level - One of trace, debug, info, warn, err, critical, off
+     */
+    void set_log_level_of_channel(std::string channel_name, std::string level);
+
     namespace py = pybind11;
 
     /**
