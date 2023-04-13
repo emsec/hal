@@ -1101,8 +1101,6 @@ namespace hal
 
             const auto identifier_name = name.substr(0, name.find_last_of(last_match.value()) - last_match.value().size() + 1);
 
-            std::cout << "Matched: " << name << ": " << identifier_name << " - " << last_index.value() << std::endl;
-
             return std::optional<indexed_identifier>{{identifier_name, last_index.value(), origin}};
         }
 
@@ -1111,21 +1109,6 @@ namespace hal
         {
             std::string json_identifier_str =
                 "[" + utils::join(" ", identifiers, [](const auto& i) { return std::string("(") + '"' + i.identifier + '"' + ", " + std::to_string(i.index) + ", " + i.origin + ")"; }) + "]";
-
-            // std::string json_identifier_str = "";
-            // bool first                      = true;
-            // for (const auto& i : identifiers)
-            // {
-            //     if (!first)
-            //     {
-            //         json_identifier_str += ", ";
-            //     }
-            //     first = false;
-
-            //     json_identifier_str += (std::string("(") + '"' + i.identifier + '"' + ", " + std::to_string(i.index) + ")");
-            // }
-
-            json_identifier_str = "[" + json_identifier_str + "]";
 
             return gate->set_data("preprocessing_information", "multi_bit_indexed_identifiers", "list[(str, int)]", json_identifier_str);
         }
