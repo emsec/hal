@@ -1063,60 +1063,67 @@ namespace hal
     {
         struct indexed_identifier
         {
-            indexed_identifier(const std::string& p_identifier, const u32 p_index) : identifier{p_identifier}, index{p_index}
+            indexed_identifier(const std::string& p_identifier, const u32 p_index, const std::string& p_origin) : identifier{p_identifier}, index{p_index}, origin{p_origin}
             {
             }
 
             std::string identifier;
             u32 index;
+            std::string origin;
         };
 
+        const std::string net_index_pattern  = "\\((\\d+)\\)";
+        const std::string gate_index_pattern = "\\[(\\d+)\\]";
+
         // Extracts an index from a string by taking the last integer enclosed by parentheses
-        std::optional<indexed_identifier> extract_index(const std::string name)
+        std::optional<indexed_identifier> extract_index(const std::string& name, const std::string& index_pattern, const std::string& origin)
         {
-            const std::regex r{"\\([0-9]+\\)"};
-            std::smatch m;
+            std::regex re(index_pattern);
 
-            std::regex_search(name, m, r);
+            std::string input = name;
+            std::optional<std::string> last_match;
+            std::optional<u32> last_index;
 
-            if (m.empty())
+            // Search for last match within string
+            std::smatch match;
+            while (std::regex_search(input, match, re))
+            {
+                // Capture integer and update input string to search from after the match
+                last_index = std::stoi(match[1]);
+                last_match = match.str();
+                input      = match.suffix().str();
+            }
+
+            if (!last_index.has_value())
             {
                 return std::nullopt;
             }
 
-            const auto matched_index = m[m.size() - 1].str();
-            const auto index         = std::stoi(matched_index.substr(1, matched_index.size() - 1));
+            const auto identifier_name = name.substr(0, name.find_last_of(last_match.value()) - last_match.value().size() + 1);
 
-            const auto indexed_name = name.substr(0, name.find_last_of(matched_index) - matched_index.size() + 1);
+            std::cout << "Matched: " << name << ": " << identifier_name << " - " << last_index.value() << std::endl;
 
-            return std::optional<indexed_identifier>{{indexed_name, index}};
+            return std::optional<indexed_identifier>{{identifier_name, last_index.value(), origin}};
         }
 
-        // annotate an indexed multi-bit identifier to a gate
-        // bool annotate_identifier_indexed(auto gate, const auto identifier, const auto index)
-        // {
-        //     const auto l_res = gate->set_data("preprocess_information", "multi_bit_identifier", "str", identifier);
-        //     const auto i_res = gate->set_data("preprocess_information", "multi_bit_index", "str", std::to_string(index));
-
-        //     return l_res & i_res;
-        // }
-
+        // annotate all found identifiers to a gate
         bool annotate_indexed_identifiers(Gate* gate, const std::vector<indexed_identifier>& identifiers)
         {
-            // std::string json_identifier_str = "[" + utils::join(" ", identifiers, [](const auto& i) { return "(" + '"' + i.identifier + '"' + ", " + std::to_string(i.index) + ")"; }) + "]";
+            std::string json_identifier_str =
+                "[" + utils::join(" ", identifiers, [](const auto& i) { return std::string("(") + '"' + i.identifier + '"' + ", " + std::to_string(i.index) + ", " + i.origin + ")"; }) + "]";
 
-            std::string json_identifier_str = "";
-            bool first                      = true;
-            for (const auto& i : identifiers)
-            {
-                if (!first)
-                {
-                    json_identifier_str += ", ";
-                }
-                first = false;
+            // std::string json_identifier_str = "";
+            // bool first                      = true;
+            // for (const auto& i : identifiers)
+            // {
+            //     if (!first)
+            //     {
+            //         json_identifier_str += ", ";
+            //     }
+            //     first = false;
 
-                json_identifier_str += (std::string("(") + '"' + i.identifier + '"' + ", " + std::to_string(i.index) + ")");
-            }
+            //     json_identifier_str += (std::string("(") + '"' + i.identifier + '"' + ", " + std::to_string(i.index) + ")");
+            // }
 
             json_identifier_str = "[" + json_identifier_str + "]";
 
@@ -1145,7 +1152,7 @@ namespace hal
                 const auto typed_net = (typed_pins.front()->get_direction() == PinDirection::output) ? gate->get_fan_out_net(typed_pins.front()) : gate->get_fan_in_net(typed_pins.front());
 
                 // 1) search the net name itself
-                const auto net_name_index = extract_index(typed_net->get_name());
+                const auto net_name_index = extract_index(typed_net->get_name(), net_index_pattern, "net_name");
                 if (net_name_index.has_value())
                 {
                     found_identfiers.push_back(net_name_index.value());
@@ -1180,7 +1187,7 @@ namespace hal
                     {
                         const auto merged_wire_name = list[j].GetString();
 
-                        const auto merged_wire_name_index = extract_index(merged_wire_name);
+                        const auto merged_wire_name_index = extract_index(merged_wire_name, net_index_pattern, "net_name");
                         if (merged_wire_name_index.has_value())
                         {
                             found_identfiers.push_back(merged_wire_name_index.value());
@@ -1201,7 +1208,7 @@ namespace hal
             std::vector<indexed_identifier> all_identifiers;
 
             // 1) Check whether the ff gate already has an index annotated in its gate name
-            const auto gate_name_index = extract_index(ff->get_name());
+            const auto gate_name_index = extract_index(ff->get_name(), gate_index_pattern, "gate_name");
 
             if (gate_name_index.has_value())
             {
