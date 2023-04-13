@@ -95,7 +95,8 @@ namespace hal
                     }
                     if (net->get_sources().empty())
                     {
-                        log_warning("z3_utils", "No source found for net {}. Cannot replace net and will continue with id!", net_id);
+                        // TODO this is not a good solution, since this will break for global input that do not share an id.
+                        log_debug("z3_utils", "No source found for net {}. Cannot replace net and will continue with id!", net_id);
                         continue;
                     }
 
@@ -128,7 +129,8 @@ namespace hal
                     }
                     if (net->get_sources().empty())
                     {
-                        log_warning("z3_utils", "No source found for net {}. Cannot replace net and will continue with id!", net_id);
+                        // TODO this is not a good solution, since this will break for global input that do not share an id.
+                        log_debug("z3_utils", "No source found for net {}. Cannot replace net and will continue with id!", net_id);
                         continue;
                     }
 

@@ -1079,11 +1079,6 @@ namespace hal
 
             std::regex_search(name, m, r);
 
-            for (const auto& x : m)
-            {
-                std::cout << x << std::endl;
-            }
-
             if (m.empty())
             {
                 return std::nullopt;
