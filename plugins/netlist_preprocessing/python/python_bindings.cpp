@@ -222,7 +222,6 @@ namespace hal
             :rtype: bool
         )");
 
-
         py_netlist_preprocessing.def_static(
             "decompose_gates_of_type",
             [](Netlist* nl, const std::vector<const GateType*>& gate_types) -> std::optional<u32> {
@@ -254,9 +253,9 @@ namespace hal
         )");
 
         py_netlist_preprocessing.def_static(
-            "reconstruct_indexed_ff_identifier",
+            "reconstruct_indexed_ff_identifiers",
             [](Netlist* nl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::reconstruct_indexed_ff_identifier(nl);
+                auto res = NetlistPreprocessingPlugin::reconstruct_indexed_ff_identifiers(nl);
                 if (res.is_ok())
                 {
                     return res.get();

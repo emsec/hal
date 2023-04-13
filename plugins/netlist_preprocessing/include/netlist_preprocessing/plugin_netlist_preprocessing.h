@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/utilities/result.h"
 
 namespace hal
@@ -131,9 +131,11 @@ namespace hal
          * This function mainly focuses netlists synthesized with yosys since yosys names the output wires of the flip flops but not the gate it self.
          * We try to reconstruct name and index for each flip flop based on the name of its output nets.
          * 
+         * The reconstructed indexed identifiers get annoated to the flip flop in the gate data container.
+         * 
          * @param[in] nl - The netlist to operate on.
          * return OK and the number of reconstructed names on success, an error otherwise.
         */
-        static Result<u32> reconstruct_indexed_ff_identifier(Netlist* nl);
+        static Result<u32> reconstruct_indexed_ff_identifiers(Netlist* nl);
     };
 }    // namespace hal

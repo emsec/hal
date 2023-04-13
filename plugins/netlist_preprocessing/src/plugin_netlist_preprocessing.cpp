@@ -1061,15 +1061,24 @@ namespace hal
 
     namespace
     {
+        struct indexed_identifier
+        {
+            indexed_identifier(const std::string& p_identifier, const u32 p_index) : identifier{p_identifier}, index{p_index}
+            {
+            }
+
+            std::string identifier;
+            u32 index;
+        };
+
         // Extracts an index from a string by taking the last integer enclosed by parentheses
-        std::optional<std::pair<std::string, u32>> extract_index(const std::string name)
+        std::optional<indexed_identifier> extract_index(const std::string name)
         {
             const std::regex r{"\\([0-9]+\\)"};
             std::smatch m;
 
             std::regex_search(name, m, r);
 
-            std::cout << "Matches for " << name << ": " << std::endl;
             for (const auto& x : m)
             {
                 std::cout << x << std::endl;
@@ -1085,122 +1094,126 @@ namespace hal
 
             const auto indexed_name = name.substr(0, name.find_last_of(matched_index) - matched_index.size() + 1);
 
-            return std::optional<std::pair<std::string, u32>>{{indexed_name, index}};
+            return std::optional<indexed_identifier>{{indexed_name, index}};
         }
 
         // annotate an indexed multi-bit identifier to a gate
-        bool annotate_identifier_indexed(auto gate, const auto identifier, const auto index)
-        {
-            const auto l_res = gate->set_data("preprocess_information", "multi_bit_identifier", "str", identifier);
-            const auto i_res = gate->set_data("preprocess_information", "multi_bit_index", "str", std::to_string(index));
+        // bool annotate_identifier_indexed(auto gate, const auto identifier, const auto index)
+        // {
+        //     const auto l_res = gate->set_data("preprocess_information", "multi_bit_identifier", "str", identifier);
+        //     const auto i_res = gate->set_data("preprocess_information", "multi_bit_index", "str", std::to_string(index));
 
-            return l_res & i_res;
+        //     return l_res & i_res;
+        // }
+
+        bool annotate_indexed_identifiers(auto gate, const std::vector<indexed_identifier>& identifiers)
+        {
+            std::string json_identifier_str = "[" + utils::join(" ", identifiers, [](const auto& i) { return "(" + '"' + i.identifier + '"' + ", " + std::to_string(i.index) + ")"; }) + "]";
+
+            return gate->set_data("preprocessing_information", "multi_bit_indexed_identifiers", "list[(str, int)]", json_identifier_str);
         }
 
         // search for a net that connects to the gate at a pin of a specific type and tries to reconstruct an indexed identifier from its name or form a name of its merged wires
-        bool check_net_at_pin(const PinType pin_type, Gate* gate)
+        std::vector<indexed_identifier> check_net_at_pin(const PinType pin_type, Gate* gate)
         {
             const auto typed_pins = gate->get_type()->get_pins([pin_type](const auto p) { return p->get_type() == pin_type; });
-            if (typed_pins.size() > 1)
+
+            // Not sure if multiple pins of a given type a problem
+            // if (typed_pins.size() > 1)
+            // {
+            //     log_warning("netlist_preprocessing",
+            //                 "Found multiple pins of type {} for flip flop {} with ID {}. This might lead to unexpected behaviour!",
+            //                 pin_type.name,
+            //                 gate->get_name(),
+            //                 gate->get_id());
+            // }
+
+            std::vector<indexed_identifier> found_identfiers;
+
+            for (const auto& pin : typed_pins)
             {
-                log_warning("netlist_preprocessing",
-                            "Found multiple state pins for flip flop {} with ID {}. We only consider the first state pin, which might lead to unwanted behaviour!",
-                            gate->get_name(),
-                            gate->get_id());
-            }
-            const auto typed_net = (typed_pins.front()->get_direction() == PinDirection::output) ? gate->get_fan_out_net(typed_pins.front()) : gate->get_fan_in_net(typed_pins.front());
+                const auto typed_net = (typed_pins.front()->get_direction() == PinDirection::output) ? gate->get_fan_out_net(typed_pins.front()) : gate->get_fan_in_net(typed_pins.front());
 
-            // 1) search the net name itself
-            const auto net_name_index = extract_index(typed_net->get_name());
-            if (net_name_index.has_value())
-            {
-                const auto [name, index] = net_name_index.value();
-                annotate_identifier_indexed(gate, name, index);
-
-                return true;
-            }
-
-            // 2) search all the names of the wires that where merged into this net
-            const auto all_merged_wires_str = std::get<1>(typed_net->get_data("parser_annotation", "merged_wires"));
-
-            if (all_merged_wires_str.empty())
-            {
-                return false;
-            }
-
-            rapidjson::Document doc;
-
-            // TODO remove debug print
-            // doc.Parse(all_merged_wires_str.c_str());
-
-            // rapidjson::StringBuffer strbuf;
-            // strbuf.Clear();
-
-            // rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-            // doc.Accept(writer);
-
-            // std::cout << "Data: " << all_merged_wires_str << std::endl;
-            // std::cout << "JSON: " << strbuf.GetString() << std::endl;
-
-            for (u32 i = 0; i < doc.GetArray().Size(); i++)
-            {
-                const auto list = doc[i].GetArray();
-                for (u32 j = 0; j < list.Size(); j++)
+                // 1) search the net name itself
+                const auto net_name_index = extract_index(typed_net->get_name());
+                if (net_name_index.has_value())
                 {
-                    const auto merged_wire_name = list[j].GetString();
+                    found_identfiers.push_back(net_name_index.value());
+                }
 
-                    const auto merged_wire_name_index = extract_index(merged_wire_name);
-                    if (merged_wire_name_index.has_value())
+                // 2) search all the names of the wires that where merged into this net
+                const auto all_merged_wires_str = std::get<1>(typed_net->get_data("parser_annotation", "merged_wires"));
+
+                if (all_merged_wires_str.empty())
+                {
+                    return found_identfiers;
+                }
+
+                rapidjson::Document doc;
+
+                doc.Parse(all_merged_wires_str.c_str());
+
+                // TODO remove debug print
+                // rapidjson::StringBuffer strbuf;
+                // strbuf.Clear();
+
+                // rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+                // doc.Accept(writer);
+
+                // std::cout << "Data: " << all_merged_wires_str << std::endl;
+                // std::cout << "JSON: " << strbuf.GetString() << std::endl;
+
+                for (u32 i = 0; i < doc.GetArray().Size(); i++)
+                {
+                    const auto list = doc[i].GetArray();
+                    for (u32 j = 0; j < list.Size(); j++)
                     {
-                        const auto [name, index] = merged_wire_name_index.value();
-                        annotate_identifier_indexed(gate, name, index);
+                        const auto merged_wire_name = list[j].GetString();
 
-                        return true;
+                        const auto merged_wire_name_index = extract_index(merged_wire_name);
+                        if (merged_wire_name_index.has_value())
+                        {
+                            found_identfiers.push_back(merged_wire_name_index.value());
+                        }
                     }
                 }
             }
 
-            return false;
+            return found_identfiers;
         }
     }    // namespace
 
-    Result<u32> NetlistPreprocessingPlugin::reconstruct_indexed_ff_identifier(Netlist* nl)
+    Result<u32> NetlistPreprocessingPlugin::reconstruct_indexed_ff_identifiers(Netlist* nl)
     {
         u32 counter = 0;
         for (auto& ff : nl->get_gates([](const auto g) { return g->get_type()->has_property(GateTypeProperty::ff); }))
         {
+            std::vector<indexed_identifier> all_identifiers;
+
             // 1) Check whether the ff gate already has an index annotated in its gate name
             const auto gate_name_index = extract_index(ff->get_name());
 
             if (gate_name_index.has_value())
             {
-                const auto [name, index] = gate_name_index.value();
-                annotate_identifier_indexed(ff, name, index);
-
-                counter += 1;
-                continue;
+                all_identifiers.push_back(gate_name_index.value());
             }
 
-            // 2) Check whether the fan out net at the state pin has an indexed name
-            if (check_net_at_pin(PinType::state, ff))
+            std::vector<PinType> relevant_pin_types = {PinType::state, PinType::neg_state, PinType::data};
+
+            // 2) Check all relevant pin_types
+
+            for (const auto& pt : relevant_pin_types)
             {
-                counter += 1;
-                continue;
+                const auto found_identifiers = check_net_at_pin(pt, ff);
+                all_identifiers.insert(all_identifiers.end(), found_identifiers.begin(), found_identifiers.end());
             }
 
-            // 3) Check whether the fan out net at the neg state pin has an indexed name
-            if (check_net_at_pin(PinType::neg_state, ff))
+            if (!all_identifiers.empty())
             {
-                counter += 1;
-                continue;
+                counter++;
             }
 
-            // 4) Check whether the fan in net at the data pin has an indexed name
-            if (check_net_at_pin(PinType::data, ff))
-            {
-                counter += 1;
-                continue;
-            }
+            annotate_indexed_identifiers(ff, all_identifiers);
         }
 
         return OK(counter);
