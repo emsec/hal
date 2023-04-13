@@ -643,7 +643,7 @@ namespace hal
                 document.AddMember("netlist", root, document.GetAllocator());
             }
 
-            std::unique_ptr<Netlist> deserialize(const rapidjson::Document& document)
+            std::unique_ptr<Netlist> deserialize(const rapidjson::Document& document, const std::string& gate_library_file = "")
             {
                 if (!document.HasMember("netlist"))
                 {
@@ -651,13 +651,22 @@ namespace hal
                     return nullptr;
                 }
                 auto root = document["netlist"].GetObject();
-                if (!root.HasMember("gate_library"))
-                {
-                    log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'gate_library'");
-                    return nullptr;
-                }
 
-                std::filesystem::path glib_path(root["gate_library"].GetString());
+                std::filesystem::path glib_path;
+                if (gate_library_file.empty())
+                {
+                    if (!root.HasMember("gate_library"))
+                    {
+                        log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'gate_library'");
+                        return nullptr;
+                    }
+
+                    glib_path = std::filesystem::path(root["gate_library"].GetString());
+                }
+                else
+                {
+                    glib_path = std::filesystem::path(gate_library_file);
+                }
 
                 GateLibrary* glib = gate_library_manager::get_gate_library(glib_path.string());
 
@@ -991,22 +1000,7 @@ namespace hal
                 log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
             }
 
-            // adjust gate lib path (hacky and ugly fix)
-            rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
-            if (!document.HasMember("netlist"))
-            {
-                log_error("netlist_persistent", "could not deserialize netlist: file has no 'netlist' node");
-                return nullptr;
-            }
-            auto root = document["netlist"].GetObject();
-            if (!root.HasMember("gate_library"))
-            {
-                log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'gate_library'");
-                return nullptr;
-            }
-            root["gate_library"].SetString(gate_library_file.string(), allocator);
-
-            auto netlist = deserialize(document);
+            auto netlist = deserialize(document, gate_library_file.string());
 
             if (netlist)
             {
