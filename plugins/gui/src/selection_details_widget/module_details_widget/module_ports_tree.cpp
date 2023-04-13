@@ -100,7 +100,7 @@ namespace hal
         int itemId                                  = mPortModel->getIdOfItem(clickedItem);
         QMenu menu;
 
-        //shared plaintext entries: NAME, DIRECTION, TYPE (shared with pins and groups
+        //shared plaintext entries: NAME, DIRECTION, TYPE (shared with pins and groups)
         menu.addAction("Name to clipboard", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sNameColumn).toString()); });
         menu.addAction("Direction to clipboard", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sDirectionColumn).toString()); });
         menu.addAction("Type to clipboard", [clickedItem]() { QApplication::clipboard()->setText(clickedItem->getData(ModulePinsTreeModel::sTypeColumn).toString()); });
@@ -108,19 +108,19 @@ namespace hal
         menu.addSection("Misc");
 
         //shared context menu entry to add to existing groups
-        bool addToExistingActionPossible = false;
-        for (auto pingroup : mod->get_pin_groups())
-        {
-            if (pingroup->size() > 1)    //at least one pingroup should have at least 2 items
-            {
-                addToExistingActionPossible = true;
-                break;
-            }
-        }
+        bool addToExistingActionPossible = true;
+//        for (auto pingroup : mod->get_pin_groups())
+//        {
+//            if (pingroup->size() > 1)    //at least one pingroup should have at least 2 items
+//            {
+//                addToExistingActionPossible = true;
+//                break;
+//            }
+//        }
         if (addToExistingActionPossible)
         {
             menu.addAction("Add selection to existing pin group", [this, selectedPins, mod]() {
-                PingroupSelectorDialog psd("Pingroup selector", "Select pingroup", mod);
+                PingroupSelectorDialog psd("Pingroup selector", "Select pingroup", mod, false);
                 if (psd.exec() == QDialog::Accepted)
                 {
                     QSet<u32> pinSet;
@@ -142,7 +142,7 @@ namespace hal
             });
         }
 
-        if (type == ModulePinsTreeModel::itemType::portMultiBit)    //group specific context, own helper function?
+        if (type == ModulePinsTreeModel::itemType::group)    //group specific context, own helper function? (returns at the end)
         {
             menu.addAction("Change name", [name, modId, itemId]() {
                 InputDialog ipd("Change pin group name", "New group name", name);
@@ -250,7 +250,10 @@ namespace hal
             appendMultiSelectionEntries(menu, modId);
 
         menu.addSection("Python");
-        menu.addAction(QIcon(":/icons/python"), "Get pin", [modId, itemId]() { QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinById(modId, itemId)); });
+        if(type == ModulePinsTreeModel::itemType::pin)
+            menu.addAction(QIcon(":/icons/python"), "Get pin", [modId, itemId]() { QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinById(modId, itemId)); });
+        else
+            menu.addAction(QIcon(":/icons/python"), "Get group", [modId, itemId]() { QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinGroup(modId, itemId)); });
 
         menu.move(mapToGlobal(pos));
         menu.exec();
