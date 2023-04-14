@@ -1,6 +1,5 @@
 var NAVTREEINDEX28 =
 {
-"namespacehal_1_1netlist__parser__manager.html":[5,0,2,12],
 "namespacehal_1_1netlist__serializer.html":[5,0,2,13],
 "namespacehal_1_1netlist__utils.html":[5,0,2,14],
 "namespacehal_1_1netlist__writer__manager.html":[5,0,2,15],
@@ -9,10 +8,10 @@ var NAVTREEINDEX28 =
 "namespacehal_1_1result__constructor__type.html":[5,0,2,17],
 "namespacehal_1_1result__constructor__type.html":[6,0,0,5],
 "namespacehal_1_1style.html":[5,0,2,21],
-"namespacehal_1_1utils.html":[6,0,0,7],
 "namespacehal_1_1utils.html":[5,0,2,22],
-"namespacemembers.html":[5,1,0,0],
+"namespacehal_1_1utils.html":[6,0,0,7],
 "namespacemembers.html":[5,1,0],
+"namespacemembers.html":[5,1,0,0],
 "namespacemembers_b.html":[5,1,0,1],
 "namespacemembers_c.html":[5,1,0,2],
 "namespacemembers_d.html":[5,1,0,3],
@@ -67,8 +66,8 @@ var NAVTREEINDEX28 =
 "namespacemembers_z.html":[5,1,0,24],
 "namespacenetlist__factory.html":[5,0,3],
 "namespacenetlist__serializer.html":[5,0,4],
-"namespacenlohmann.html":[5,0,5],
 "namespacenlohmann.html":[6,0,1],
+"namespacenlohmann.html":[5,0,5],
 "namespacenlohmann_1_1detail.html":[5,0,5,0],
 "namespacenlohmann_1_1detail.html":[6,0,1,0],
 "namespacenlohmann_1_1detail_1_1dtoa__impl.html":[5,0,5,0,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX28 =
 "netlist__parser__manager_8cpp.html#a72dbc0b71389a49406b62b83ca90ff79":[7,0,2,0,4,0,0],
 "netlist__parser__manager_8cpp.html#a8a4ff1e425ebe75804844cf22c96dca7":[7,0,2,0,4,0,6],
 "netlist__parser__manager_8cpp.html#a9ff28049722e4a8532867f675aad614e":[7,0,2,0,4,0,4],
-"netlist__parser__manager_8cpp.html#af1c82137bddfd220906ff6e8a2366b2d":[7,0,2,0,4,0,5]
+"netlist__parser__manager_8cpp.html#af1c82137bddfd220906ff6e8a2366b2d":[7,0,2,0,4,0,5],
+"netlist__parser__manager_8cpp.html#af9b49cc8225fbc08027cb661bd07ac38":[7,0,2,0,4,0,3]
 };

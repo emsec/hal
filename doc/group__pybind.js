@@ -18,6 +18,7 @@ var group__pybind =
     [ "gate_type_lut_init", "group__pybind.html#gaab97b444976a9d5305e3efc20b8bfad6", null ],
     [ "gate_type_sequential_init", "group__pybind.html#ga23445061a41678f413471f3459e241d4", null ],
     [ "grouping_init", "group__pybind.html#ga0b8291fb8af058d824b23bcd16a86821", null ],
+    [ "log_init", "group__pybind.html#gac711bd76ed6d19d0ae42c56d8f190cfa", null ],
     [ "module_init", "group__pybind.html#gaa664b51c68ac4d2b40e58e0c17aaec22", null ],
     [ "module_pin_group_init", "group__pybind.html#ga99c6b86dabda84a9ccb3b6612557f10f", null ],
     [ "module_pin_init", "group__pybind.html#ga246f05eb11a611390bc2cb4daec5fef4", null ],

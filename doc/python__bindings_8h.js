@@ -18,6 +18,7 @@ var python__bindings_8h =
     [ "gate_type_lut_init", "python__bindings_8h.html#gaab97b444976a9d5305e3efc20b8bfad6", null ],
     [ "gate_type_sequential_init", "python__bindings_8h.html#ga23445061a41678f413471f3459e241d4", null ],
     [ "grouping_init", "python__bindings_8h.html#ga0b8291fb8af058d824b23bcd16a86821", null ],
+    [ "log_init", "python__bindings_8h.html#gac711bd76ed6d19d0ae42c56d8f190cfa", null ],
     [ "module_init", "python__bindings_8h.html#gaa664b51c68ac4d2b40e58e0c17aaec22", null ],
     [ "module_pin_group_init", "python__bindings_8h.html#ga99c6b86dabda84a9ccb3b6612557f10f", null ],
     [ "module_pin_init", "python__bindings_8h.html#ga246f05eb11a611390bc2cb4daec5fef4", null ],
@@ -31,7 +32,6 @@ var python__bindings_8h =
     [ "plugin_interfaces_init", "python__bindings_8h.html#gae288c84ff5c0b70e6f9571669aa29eb7", null ],
     [ "plugin_manager_init", "python__bindings_8h.html#ga9e03e20ad125cd9eb1f4e601ac556777", null ],
     [ "project_manager_init", "python__bindings_8h.html#gac072de2b8e9f09d8320090e5873be90d", null ],
-    [ "set_log_level_of_channel", "python__bindings_8h.html#a46744f1329497998fd1b3107bfe10633", null ],
     [ "smt_init", "python__bindings_8h.html#ga6f399ac0514c1e1adff48f88ee349380", null ],
     [ "subgraph_netlist_decorator_init", "python__bindings_8h.html#gac5492afb41ef2e8dd6c49f56ddb7e73c", null ]
 ];

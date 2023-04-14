@@ -1,5 +1,6 @@
 var NAVTREEINDEX27 =
 {
+"json_8hpp.html#af488159969a8b7154820cffe04bb4917":[7,0,1,1,0,0,2,1,165],
 "json_8hpp.html#af52d6d2521c386998ae940d118182ebc":[7,0,1,1,0,0,2,1,254],
 "json_8hpp.html#af5c84b7d1a43361bdc14cc6941078000":[7,0,1,1,0,0,2,1,211],
 "json_8hpp.html#af846b6cf2f926009ff3a7a61495ca383":[7,0,1,1,0,0,2,1,279],
@@ -58,8 +59,6 @@ var NAVTREEINDEX27 =
 "line__number__area_8cpp_source.html":[7,0,1,3,2,3,4],
 "line__number__area_8h.html":[7,0,1,3,0,0,3,4],
 "line__number__area_8h_source.html":[7,0,1,3,0,0,3,4],
-"log_8cpp.html":[7,0,2,3,1],
-"log_8cpp_source.html":[7,0,2,3,1],
 "log_8h.html":[7,0,0,0,4,4],
 "log_8h.html#a27b3249db8d77bd236109bda307bc263":[7,0,0,0,4,4,3],
 "log_8h.html#a6df1d22fb5f09eccc23b9f399670cfd7":[7,0,0,0,4,4,11],
@@ -162,9 +161,9 @@ var NAVTREEINDEX27 =
 "module__model_8h_source.html":[7,0,1,3,0,0,33,1],
 "module__pin_8h.html":[7,0,0,0,1,7,2],
 "module__pin_8h_source.html":[7,0,0,0,1,7,2],
-"module__pin__group_8cpp.html":[7,0,2,2,0,17],
-"module__pin__group_8cpp.html#ga99c6b86dabda84a9ccb3b6612557f10f":[7,0,2,2,0,17,0],
-"module__pin__group_8cpp_source.html":[7,0,2,2,0,17],
+"module__pin__group_8cpp.html":[7,0,2,2,0,18],
+"module__pin__group_8cpp.html#ga99c6b86dabda84a9ccb3b6612557f10f":[7,0,2,2,0,18,0],
+"module__pin__group_8cpp_source.html":[7,0,2,2,0,18],
 "module__ports__tree_8cpp.html":[7,0,1,3,2,38,1,2],
 "module__ports__tree_8cpp_source.html":[7,0,1,3,2,38,1,2],
 "module__ports__tree_8h.html":[7,0,1,3,0,0,40,1,2],
@@ -211,14 +210,14 @@ var NAVTREEINDEX27 =
 "namespacehal_1_1_s_m_t_1_1_bitwuzla.html":[5,0,2,20,0],
 "namespacehal_1_1_s_m_t_1_1_boolector.html":[5,0,2,20,1],
 "namespacehal_1_1_s_m_t_1_1_constant_propagation.html":[5,0,2,20,2],
-"namespacehal_1_1_s_m_t_1_1_model_parser.html":[5,0,2,20,3],
 "namespacehal_1_1_s_m_t_1_1_model_parser.html":[6,0,0,6,0],
+"namespacehal_1_1_s_m_t_1_1_model_parser.html":[5,0,2,20,3],
 "namespacehal_1_1_s_m_t_1_1_translator.html":[5,0,2,20,4],
 "namespacehal_1_1_s_m_t_1_1_z3.html":[5,0,2,20,5],
 "namespacehal_1_1_shortest_path.html":[5,0,2,18],
 "namespacehal_1_1_simplification.html":[5,0,2,19],
-"namespacehal_1_1core__strings.html":[6,0,0,1],
 "namespacehal_1_1core__strings.html":[5,0,2,1],
+"namespacehal_1_1core__strings.html":[6,0,0,1],
 "namespacehal_1_1dataflow.html":[6,0,0,2],
 "namespacehal_1_1dataflow.html":[5,0,2,2],
 "namespacehal_1_1dataflow_1_1dot__graph.html":[5,0,2,2,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX27 =
 "namespacehal_1_1graph__widget__constants.html":[5,0,2,7],
 "namespacehal_1_1gui__utility.html":[5,0,2,9],
 "namespacehal_1_1gui__utility.html":[6,0,0,3],
-"namespacehal_1_1netlist__factory.html":[5,0,2,11]
+"namespacehal_1_1netlist__factory.html":[5,0,2,11],
+"namespacehal_1_1netlist__parser__manager.html":[5,0,2,12]
 };

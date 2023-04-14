@@ -15,6 +15,7 @@ var dir_ded422ec9f163017e5e46b66204ec4a3 =
     [ "gate_type.cpp", "python__bindings_2bindings_2gate__type_8cpp.html", "python__bindings_2bindings_2gate__type_8cpp" ],
     [ "gate_type_components.cpp", "gate__type__components_8cpp.html", "gate__type__components_8cpp" ],
     [ "grouping.cpp", "src_2python__bindings_2bindings_2grouping_8cpp.html", "src_2python__bindings_2bindings_2grouping_8cpp" ],
+    [ "log.cpp", "python__bindings_2bindings_2log_8cpp.html", "python__bindings_2bindings_2log_8cpp" ],
     [ "module.cpp", "python__bindings_2bindings_2module_8cpp.html", "python__bindings_2bindings_2module_8cpp" ],
     [ "module_pin.cpp", "python__bindings_2bindings_2module__pin_8cpp.html", "python__bindings_2bindings_2module__pin_8cpp" ],
     [ "module_pin_group.cpp", "module__pin__group_8cpp.html", "module__pin__group_8cpp" ],

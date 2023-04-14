@@ -16,7 +16,7 @@ var searchData=
   ['license_2etxt_20711',['License.txt',['../_license_8txt.html',1,'']]],
   ['line_5fnumber_5farea_2ecpp_20712',['line_number_area.cpp',['../line__number__area_8cpp.html',1,'']]],
   ['line_5fnumber_5farea_2eh_20713',['line_number_area.h',['../line__number__area_8h.html',1,'']]],
-  ['log_2ecpp_20714',['log.cpp',['../log_8cpp.html',1,'']]],
+  ['log_2ecpp_20714',['log.cpp',['../python__bindings_2bindings_2log_8cpp.html',1,'(Global Namespace)'],['../utilities_2log_8cpp.html',1,'(Global Namespace)']]],
   ['log_2eh_20715',['log.h',['../log_8h.html',1,'']]],
   ['logger_5fmarshall_2ecpp_20716',['logger_marshall.cpp',['../logger__marshall_8cpp.html',1,'']]],
   ['logger_5fmarshall_2eh_20717',['logger_marshall.h',['../logger__marshall_8h.html',1,'']]],
