@@ -127,7 +127,7 @@ namespace hal {
         mController->add_gates(selectedGates());
         for (const Net* inpNet : mController->get_input_nets())
             mController->get_waveform_by_net(inpNet);
-        if (mController->get_gates().empty())
+        if (mController->get_gates().empty() || mController->get_input_nets().empty())
             return false;
 
 
@@ -222,13 +222,17 @@ namespace hal {
             std::string clkNetName = mComboNet->currentText().toStdString();
 
             for (const Net* n : mController->get_input_nets())
-            {
+                {
+                size_t pos = clkNetName.find("[");
+                if (pos != std::string::npos)
+                    clkNetName = clkNetName.substr(0, pos);
+
                 if (clkNetName == n->get_name())
                 {
                     const Net* clk = n;
                     mController->add_clock_period(
                         clk, period, mSpinStartValue->value()==0, mSpinDuration->value());
-                    qDebug() << "clock net selected" << clk->get_name().c_str();
+                    //std::cout << "clock net selected" << clk->get_name().c_str() << std::endl;
                     break;
                 }
             }
