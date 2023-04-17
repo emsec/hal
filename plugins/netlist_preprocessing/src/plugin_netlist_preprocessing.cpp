@@ -1072,6 +1072,41 @@ namespace hal
             std::string origin;
         };
 
+        const std::string hal_instance_index_pattern         = "__\\[(\\d+)\\]__";
+        const std::string hal_instance_index_pattern_reverse = "<HAL>(\\d+)<HAL>";
+
+        std::string replace_hal_instance_index(const std::string& name)
+        {
+            std::regex re(hal_instance_index_pattern);
+
+            std::string input = name;
+            std::string index;
+            std::smatch match;
+            while (std::regex_search(input, match, re))
+            {
+                index = match[1];
+                input = utils::replace(input, match.str(), "<HAL>" + index + "<HAL>");
+            }
+
+            return input;
+        }
+
+        std::string reconstruct_hal_instance_index(const std::string& name)
+        {
+            std::regex re(hal_instance_index_pattern_reverse);
+
+            std::string input = name;
+            std::string index;
+            std::smatch match;
+            while (std::regex_search(input, match, re))
+            {
+                index = match[1];
+                input = utils::replace(input, match.str(), "__[" + index + "]__");
+            }
+
+            return input;
+        }
+
         const std::string net_index_pattern  = "\\((\\d+)\\)";
         const std::string gate_index_pattern = "\\[(\\d+)\\]";
 
@@ -1099,7 +1134,9 @@ namespace hal
                 return std::nullopt;
             }
 
-            const auto identifier_name = name.substr(0, name.find_last_of(last_match.value()) - last_match.value().size() + 1);
+            const auto found_match = last_match.value();
+            auto identifier_name   = name;
+            identifier_name        = identifier_name.replace(name.rfind(found_match), found_match.size(), "");
 
             return std::optional<indexed_identifier>{{identifier_name, last_index.value(), origin}};
         }
@@ -1111,23 +1148,13 @@ namespace hal
                 "[" + utils::join(", ", identifiers, [](const auto& i) { return std::string("[") + '"' + i.identifier + '"' + ", " + std::to_string(i.index) + ", " + '"' + i.origin + '"' + "]"; })
                 + "]";
 
-            return gate->set_data("preprocessing_information", "multi_bit_indexed_identifiers", "list[(str, int)]", json_identifier_str);
+            return gate->set_data("preprocessing_information", "multi_bit_indexed_identifiers", "list[(str, int, str)]", json_identifier_str);
         }
 
         // search for a net that connects to the gate at a pin of a specific type and tries to reconstruct an indexed identifier from its name or form a name of its merged wires
         std::vector<indexed_identifier> check_net_at_pin(const PinType pin_type, Gate* gate)
         {
             const auto typed_pins = gate->get_type()->get_pins([pin_type](const auto p) { return p->get_type() == pin_type; });
-
-            // Not sure if multiple pins of a given type a problem
-            // if (typed_pins.size() > 1)
-            // {
-            //     log_warning("netlist_preprocessing",
-            //                 "Found multiple pins of type {} for flip flop {} with ID {}. This might lead to unexpected behaviour!",
-            //                 pin_type.name,
-            //                 gate->get_name(),
-            //                 gate->get_id());
-            // }
 
             std::vector<indexed_identifier> found_identfiers;
 
@@ -1192,11 +1219,14 @@ namespace hal
             std::vector<indexed_identifier> all_identifiers;
 
             // 1) Check whether the ff gate already has an index annotated in its gate name
-            const auto gate_name_index = extract_index(ff->get_name(), gate_index_pattern, "gate_name");
+            const auto cleaned_gate_name = replace_hal_instance_index(ff->get_name());
+            const auto gate_name_index   = extract_index(cleaned_gate_name, gate_index_pattern, "gate_name");
 
             if (gate_name_index.has_value())
             {
-                all_identifiers.push_back(gate_name_index.value());
+                auto found_identifier       = gate_name_index.value();
+                found_identifier.identifier = reconstruct_hal_instance_index(found_identifier.identifier);
+                all_identifiers.push_back(found_identifier);
             }
 
             std::vector<PinType> relevant_pin_types = {PinType::state, PinType::neg_state, PinType::data};
