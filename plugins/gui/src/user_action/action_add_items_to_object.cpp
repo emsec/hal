@@ -212,6 +212,7 @@ namespace hal
                         auto* group = mod->get_pin_group_by_id(it.key());
                         if (group == nullptr)
                         {
+                            delete undo;
                             return false;
                         }
                         if (group->empty())
@@ -232,6 +233,10 @@ namespace hal
                             {
                                 if (mod->delete_pin_group(group).is_error())
                                 {
+                                    delete undo;
+                                    delete act;
+                                    delete crtAct;
+                                    delete addAction;
                                     return false;
                                 }
                             }
