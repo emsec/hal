@@ -19,7 +19,7 @@
          $<$<BOOL:${IGRAPH_WARNINGS_AS_ERRORS}>:-Werror>
 -        -Wall -Wextra -pedantic
 -        -Wno-unused-function -Wno-unused-parameter -Wno-sign-compare
-+        -Wall -Wextra
++        -Wall -Wextra -Wno-unused-but-set-variable
 +        -Wno-unused-function -Wno-unused-parameter -Wno-sign-compare -Wno-deprecated
        >
        $<$<BOOL:${COMPILER_SUPPORTS_NO_VARARGS_FLAG}>:-Wno-varargs>
