@@ -47,6 +47,7 @@ var classhal_1_1_module =
     [ "is_parent_module_of", "classhal_1_1_module.html#a1dcc0697c42ed194d8c43beaefd45d60", null ],
     [ "is_submodule_of", "classhal_1_1_module.html#af5b242dab0018751c42ad7788e3e8249", null ],
     [ "is_top_module", "classhal_1_1_module.html#a5ed13732e904b8bf1b3bc670f637acc2", null ],
+    [ "move_pin_group", "classhal_1_1_module.html#a7618d38b658bd61f1a9f1ca7e747dd4a", null ],
     [ "move_pin_within_group", "classhal_1_1_module.html#a8c8b2088ac9d8a8b1aa77f3128598e3c", null ],
     [ "operator!=", "classhal_1_1_module.html#aa96eb4aef5b526115bcfbd77d3f87bb3", null ],
     [ "operator==", "classhal_1_1_module.html#a3357e372a3b5193f519e951af42e0713", null ],

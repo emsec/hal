@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Module &mdash; hal_py v4.1.0-24-g10ff20654 documentation</title>
+  <title>Module &mdash; hal_py v4.1.0-25-g36e62c5ae documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-24-g10ff20654
+                v4.1.0-25-g36e62c5ae
               </div>
             
           
@@ -1247,6 +1247,31 @@ The value of 0 is reserved and represents an invalid ID.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the module is the top module, False otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.Module.move_pin_group">
+<code class="descname">move_pin_group</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin_group: hal_py.ModulePinGroup</em>, <em>new_index: int</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.move_pin_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move a pin group to another index within the module.
+The indices of some other pin groups will be incremented or decremented to make room for the moved pin group to be inserted at the desired position.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pin_group</strong> (<a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a>) – The pin group to be moved.</li>
+<li><strong>new_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The index to which the pin group is moved.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
 </tr>
 </tbody>
 </table>

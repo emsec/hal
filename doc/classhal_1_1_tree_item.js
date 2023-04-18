@@ -2,6 +2,7 @@ var classhal_1_1_tree_item =
 [
     [ "TreeItem", "classhal_1_1_tree_item.html#a78b873979502baaf7076200d55da8008", null ],
     [ "TreeItem", "classhal_1_1_tree_item.html#a81b99d6f2b82cec1633f54a9fddee24f", null ],
+    [ "TreeItem", "classhal_1_1_tree_item.html#a16285bc4fc8414fd57844297b84b874d", null ],
     [ "~TreeItem", "classhal_1_1_tree_item.html#a5e1d31a582ce784c0621e942a3baf4d1", null ],
     [ "appendChild", "classhal_1_1_tree_item.html#a50a9051c320801209001f2fb4b3523b5", null ],
     [ "appendData", "classhal_1_1_tree_item.html#af1b2ccbdbf1b61479c8ef045194b1104", null ],

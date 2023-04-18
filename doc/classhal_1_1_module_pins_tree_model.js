@@ -3,10 +3,12 @@ var classhal_1_1_module_pins_tree_model =
     [ "itemType", "classhal_1_1_module_pins_tree_model.html#aeb9b704fe7676b43414647093612f730", [
       [ "portSingleBit", "classhal_1_1_module_pins_tree_model.html#aeb9b704fe7676b43414647093612f730acc831fa4dd32e0ac8f85122cb4db5eef", null ],
       [ "portMultiBit", "classhal_1_1_module_pins_tree_model.html#aeb9b704fe7676b43414647093612f730a2f322e1780c524f6b23ceb811ab1e6bb", null ],
-      [ "pin", "classhal_1_1_module_pins_tree_model.html#aeb9b704fe7676b43414647093612f730a8a6f503814aa4a7cd863e68c7778fbdb", null ]
+      [ "pin", "classhal_1_1_module_pins_tree_model.html#aeb9b704fe7676b43414647093612f730a8a6f503814aa4a7cd863e68c7778fbdb", null ],
+      [ "group", "classhal_1_1_module_pins_tree_model.html#aeb9b704fe7676b43414647093612f730adb0f6f37ebeb6ea09489124345af2a45", null ]
     ] ],
     [ "ModulePinsTreeModel", "classhal_1_1_module_pins_tree_model.html#a249a63fb6d2f540c2defe7f45ac92780", null ],
     [ "~ModulePinsTreeModel", "classhal_1_1_module_pins_tree_model.html#a887953f0bfb918da4d1c01b1a281be2a", null ],
+    [ "canDropMimeData", "classhal_1_1_module_pins_tree_model.html#a1926fe37012467213ea62034955632d3", null ],
     [ "clear", "classhal_1_1_module_pins_tree_model.html#a68a8c7a8d0efb778590a0032ab12698e", null ],
     [ "dropMimeData", "classhal_1_1_module_pins_tree_model.html#af9aae3a42ec1f6efa1c4ab0ce2f62419", null ],
     [ "flags", "classhal_1_1_module_pins_tree_model.html#a95a545a07f1ae68ee0ec0c33d090862c", null ],
