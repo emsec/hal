@@ -13,11 +13,13 @@
  target_compile_definitions(
 --- igraph/download/etc/cmake/compilers.cmake	2023-02-02 21:15:06.216428366 +0100
 +++ igraph/download/etc/cmake/compilers.cmake	2023-02-02 21:16:02.696814096 +0100
-@@ -33,7 +33,7 @@
+@@ -32,8 +32,8 @@
+       # GCC-style compilers:
        $<$<C_COMPILER_ID:GCC,Clang,AppleClang,Intel>:
          $<$<BOOL:${IGRAPH_WARNINGS_AS_ERRORS}>:-Werror>
-         -Wall -Wextra -pedantic
+-        -Wall -Wextra -pedantic
 -        -Wno-unused-function -Wno-unused-parameter -Wno-sign-compare
++        -Wall -Wextra
 +        -Wno-unused-function -Wno-unused-parameter -Wno-sign-compare -Wno-deprecated
        >
        $<$<BOOL:${COMPILER_SUPPORTS_NO_VARARGS_FLAG}>:-Wno-varargs>
