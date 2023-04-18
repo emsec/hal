@@ -877,6 +877,7 @@ namespace hal
     void NetlistSimulatorController::reset()
     {
         mWaveDataList->clearAll();
+        mState = NoGatesSelected;
     }
 
     void NetlistSimulatorController::simulate(u64 picoseconds)
