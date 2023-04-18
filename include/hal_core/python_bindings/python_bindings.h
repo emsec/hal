@@ -78,13 +78,6 @@
 
 namespace hal
 {
-    /**
-     * Wrapper for LogManager::set_level_of_channel()
-     * @param channel_name - Name of log channel
-     * @param level - One of trace, debug, info, warn, err, critical, off
-     */
-    void set_log_level_of_channel(std::string channel_name, std::string level);
-
     namespace py = pybind11;
 
     /**
@@ -326,6 +319,12 @@ namespace hal
      */
     void netlist_modification_decorator_init(py::module& m);
 
+    /**
+     * Initializes Python bindings for the HAL LogManager in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void log_init(py::module& m);
     /**
      * @}
      */
