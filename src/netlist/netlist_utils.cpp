@@ -359,6 +359,12 @@ namespace hal
             std::vector<Gate*>
                 get_path_internal(const Net* start_net, bool forward, std::set<GateTypeProperty> stop_types, std::unordered_set<u32>& seen, std::unordered_map<u32, std::vector<Gate*>>& cache)
             {
+                if (!start_net)
+                {
+                    log_error("netlist_utils", "nullptr given as net");
+                    return {};
+                }
+
                 if (auto it = cache.find(start_net->get_id()); it != cache.end())
                 {
                     return it->second;
@@ -373,9 +379,9 @@ namespace hal
 
                 std::vector<Gate*> found_combinational;
 
-                for (auto endpoint : forward ? start_net->get_destinations() : start_net->get_sources())
+                for (const auto* endpoint : forward ? start_net->get_destinations() : start_net->get_sources())
                 {
-                    auto next_gate = endpoint->get_gate();
+                    auto* next_gate = endpoint->get_gate();
 
                     bool stop = false;
                     for (GateTypeProperty property : next_gate->get_type()->get_properties())
@@ -390,7 +396,7 @@ namespace hal
                     {
                         found_combinational.push_back(next_gate);
 
-                        for (auto n : forward ? next_gate->get_fan_out_nets() : next_gate->get_fan_in_nets())
+                        for (const auto* n : forward ? next_gate->get_fan_out_nets() : next_gate->get_fan_in_nets())
                         {
                             auto next_gates = get_path_internal(n, forward, stop_types, seen, cache);
                             found_combinational.insert(found_combinational.end(), next_gates.begin(), next_gates.end());
@@ -408,8 +414,14 @@ namespace hal
 
         std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties, std::unordered_map<u32, std::vector<Gate*>>& cache)
         {
+            if (!gate)
+            {
+                log_error("netlist_utils", "nullptr given as gate");
+                return {};
+            }
+
             std::vector<Gate*> found_combinational;
-            for (const auto& n : get_successors ? gate->get_fan_out_nets() : gate->get_fan_in_nets())
+            for (const auto* n : get_successors ? gate->get_fan_out_nets() : gate->get_fan_in_nets())
             {
                 auto suc = get_path(n, get_successors, stop_properties, cache);
                 found_combinational.insert(found_combinational.end(), suc.begin(), suc.end());
@@ -443,7 +455,7 @@ namespace hal
         {
             std::vector<Net*> nets;
 
-            for (const auto& pin : pins)
+            for (const auto* pin : pins)
             {
                 if (pin == nullptr)
                 {
