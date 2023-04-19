@@ -154,7 +154,84 @@ namespace hal
             const Net* output_net        = test_nl->get_net_by_id(MIN_NET_ID + 78);
             
             auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-            ASSERT_TRUE(res.is_error());
+            EXPECT_TRUE(res.is_error());
+        }
+        TEST_END
+    }
+
+    /**
+     * Testing the get_path
+     *
+     * Functions: get_path
+     */
+    TEST_F(NetlistUtilsTest, check_get_path)
+    {
+        TEST_START
+        {
+            std::unique_ptr<Netlist> netlist = test_utils::create_empty_netlist();
+            Gate* g0 = netlist->create_gate(netlist->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
+            Gate* g1 = netlist->create_gate(netlist->get_gate_library()->get_gate_type_by_name("BUF"), "gate_1");
+
+            Net* n0 = test_utils::connect(netlist.get(), g0, "O", g1, "I");
+            Net* n1 = test_utils::connect_global_out(netlist.get(), g1, "O");
+
+            ASSERT_EQ(netlist->get_gates(), std::vector<Gate*>({g0, g1}));
+
+            const std::vector<Gate*> path = netlist_utils::get_path(n1, false, std::set<GateTypeProperty>({GateTypeProperty::ff}));
+            EXPECT_TRUE( utils::vectors_have_same_content(path, std::vector<Gate*>({g0, g1})));
+        }
+        {
+            std::unique_ptr<Netlist> netlist = test_utils::create_empty_netlist();
+            Gate* g0 = netlist->create_gate(netlist->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
+            Gate* g1 = netlist->create_gate(netlist->get_gate_library()->get_gate_type_by_name("BUF"), "gate_1");
+            Gate* g2 = netlist->create_gate(netlist->get_gate_library()->get_gate_type_by_name("BUF"), "gate_2");
+
+            Net* n0 = test_utils::connect(netlist.get(), g0, "O", g1, "I");
+            Net* n1 = test_utils::connect(netlist.get(), g1, "O", g2, "I");
+
+            ASSERT_EQ(netlist->get_gates(), std::vector<Gate*>({g0, g1, g2}));
+
+            const std::vector<Gate*> path = netlist_utils::get_path(g2, false, std::set<GateTypeProperty>({GateTypeProperty::ff}));
+            EXPECT_TRUE( utils::vectors_have_same_content(path, std::vector<Gate*>({g0, g1})));
+        }
+        {
+            std::unique_ptr<Netlist> netlist = test_utils::create_empty_netlist();
+            Gate* g0 = netlist->create_gate(netlist->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
+            Gate* g1 = netlist->create_gate(netlist->get_gate_library()->get_gate_type_by_name("BUF"), "gate_1");
+
+            Net* n0 = test_utils::connect(netlist.get(), g0, "O", g1, "I");
+            Net* n1 = netlist->create_net("net_1");
+            n1->add_destination(g0, "I");
+            Net* n2 = test_utils::connect_global_out(netlist.get(), g1, "O");
+
+            ASSERT_EQ(netlist->get_gates(), std::vector<Gate*>({g0, g1}));
+
+            const std::vector<Gate*> path = netlist_utils::get_path(n2, false, std::set<GateTypeProperty>({GateTypeProperty::ff}));
+            EXPECT_TRUE( utils::vectors_have_same_content(path, std::vector<Gate*>({g0, g1})));
+        }
+        {
+            std::unique_ptr<Netlist> netlist = test_utils::create_empty_netlist();
+            Gate* g0 = netlist->create_gate(netlist->get_gate_library()->get_gate_type_by_name("BUF"), "gate_0");
+            Gate* g1 = netlist->create_gate(netlist->get_gate_library()->get_gate_type_by_name("BUF"), "gate_1");
+            Gate* g2 = netlist->create_gate(netlist->get_gate_library()->get_gate_type_by_name("BUF"), "gate_2");
+
+            Net* n0 = test_utils::connect(netlist.get(), g0, "O", g1, "I");
+            Net* n1 = test_utils::connect(netlist.get(), g1, "O", g2, "I");
+            Net* n2 = netlist->create_net("net_2");
+            n2->add_destination(g0, "I");
+
+            ASSERT_EQ(netlist->get_gates(), std::vector<Gate*>({g0, g1, g2}));
+
+            const std::vector<Gate*> path = netlist_utils::get_path(g2, false, std::set<GateTypeProperty>({GateTypeProperty::ff}));
+            EXPECT_TRUE( utils::vectors_have_same_content(path, std::vector<Gate*>({g0, g1})));
+        }
+        {
+            const std::vector<Gate*> path = netlist_utils::get_path((Net*)nullptr, false, std::set<GateTypeProperty>({GateTypeProperty::ff}));
+            EXPECT_EQ(path, std::vector<Gate*>());
+        }
+        {
+            const std::vector<Gate*> path = netlist_utils::get_path((Gate*)nullptr, false, std::set<GateTypeProperty>({GateTypeProperty::ff}));
+            EXPECT_EQ(path, std::vector<Gate*>());
         }
         TEST_END
     }
