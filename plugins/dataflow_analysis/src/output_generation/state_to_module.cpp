@@ -13,7 +13,7 @@ namespace hal
 {
     namespace dataflow
     {
-        bool state_to_module::create_modules(Netlist* nl, const std::shared_ptr<const Grouping>& state)
+        bool state_to_module::create_modules(Netlist* nl, const std::shared_ptr<const Grouping>& state, const std::unordered_set<u32>& ids)
         {
             // delete all modules that start with DANA
             for (auto const& mod : nl->get_modules())
@@ -26,14 +26,19 @@ namespace hal
             log_info("dataflow", "succesufully deleted old DANA modules");
 
             // create new modules and try to keep hierachy if possible
-            for (const auto& [id, group] : state->gates_of_group)
+            for (const auto& [group_id, group] : state->gates_of_group)
             {
+                if (group_ids.find(group_id) == ids.end())
+                {
+                    continue;
+                }
+
                 bool gate_hierachy_matches_for_all = true;
                 bool first_run                     = true;
                 hal::Module* reference_module      = nl->get_top_module();
 
                 std::vector<Gate*> gates;
-                for (const auto& gate_id : group)
+                for (const auto gate_id : group)
                 {
                     gates.push_back(nl->get_gate_by_id(gate_id));
 
@@ -56,10 +61,11 @@ namespace hal
                 {
                     reference_module = nl->get_top_module();
                 }
-                nl->create_module("DANA_register_" + std::to_string(id), reference_module, gates);
+                nl->create_module("DANA_register_" + std::to_string(group_id), reference_module, gates);
             }
             return true;
         }
+
         std::vector<std::vector<Gate*>> state_to_module::create_sets(Netlist* nl, const std::shared_ptr<const Grouping>& state)
         {
             std::vector<std::vector<Gate*>> registers;

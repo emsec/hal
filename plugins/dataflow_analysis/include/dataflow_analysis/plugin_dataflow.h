@@ -25,9 +25,9 @@
 
 #pragma once
 
-#include "hal_core/plugin_system/plugin_interface_base.h"
-#include "hal_core/plugin_system/gui_extension_interface.h"
 #include "hal_core/plugin_system/cli_extension_interface.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
 
 #include <vector>
 
@@ -42,10 +42,11 @@ namespace hal
     class CliExtensionDataflow : public CliExtensionInterface
     {
         plugin_dataflow* m_parent;
+
     public:
-        CliExtensionDataflow(plugin_dataflow* p)
-            : m_parent(p)
-        {;}
+        CliExtensionDataflow(plugin_dataflow* p) : m_parent(p)
+        {
+        }
         virtual ProgramOptions get_cli_options() const override;
         virtual bool handle_cli_call(Netlist* netlist, ProgramArguments& args) override;
     };
@@ -63,9 +64,9 @@ namespace hal
 
     public:
         GuiExtensionDataflow(plugin_dataflow* p)
-            : m_parent(p), m_output_path("/tmp"),
-              m_bad_groups(7), m_draw_graph(false), m_create_modules(false),
-              m_register_stage_identification(false), m_button_clicked(false) {;}
+            : m_parent(p), m_output_path("/tmp"), m_bad_groups(7), m_draw_graph(false), m_create_modules(false), m_register_stage_identification(false), m_button_clicked(false)
+        {
+        }
 
         /**
          * Get list of configurable parameter
@@ -80,7 +81,7 @@ namespace hal
          */
         void set_parameter(const std::vector<PluginParameter>& params) override;
 
-        void execute_function(std::string tag, Netlist *nl, const std::vector<u32> &mods, const std::vector<u32> &gats, const std::vector<u32> &nets) override;
+        void execute_function(std::string tag, Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets) override;
 
         /**
          * Register function to indicate work progress when busy
@@ -93,7 +94,6 @@ namespace hal
 
     class PLUGIN_API plugin_dataflow : public BasePluginInterface
     {
-
     public:
         /*
          *      interface implementations
@@ -132,6 +132,15 @@ namespace hal
                                                 std::vector<std::vector<u32>> known_groups = {},
                                                 u32 bad_group_size                         = 7);
 
+        std::shared_ptr<dataflow::Grouping> analyze(Netlist* nl,
+                                                    const std::filesystem::path& out_path,
+                                                    const std::vector<u32>& sizes                     = {},
+                                                    bool register_stage_identification                = false,
+                                                    const std::vector<std::vector<u32>>& known_groups = {},
+                                                    const u32 bad_group_size                          = 7);
 
-    };
-}    // namespace hal
+        bool write_dot_graph(const std::shared_ptr<Grouping> state, const std::filesystem::path& out_path, const std::unordered_set<u32>& ids = {});
+
+        bool create_modules(const std::shared_ptr<Grouping> state, const std::unordered_set<u32>& ids = {});
+
+    }    // namespace hal

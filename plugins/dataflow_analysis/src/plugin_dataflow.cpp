@@ -54,7 +54,6 @@ namespace hal
         return std::string("0.1");
     }
 
-
     plugin_dataflow::plugin_dataflow()
     {
         m_extensions.push_back(new CliExtensionDataflow(this));
@@ -75,8 +74,6 @@ namespace hal
 
         return description;
     }
-
-
 
     bool CliExtensionDataflow::handle_cli_call(Netlist* nl, ProgramArguments& args)
     {
@@ -141,7 +138,6 @@ namespace hal
 
     void GuiExtensionDataflow::set_parameter(const std::vector<PluginParameter>& params)
     {
-
         for (const PluginParameter& par : params)
         {
             if (par.get_tagname() == "sizes")
@@ -178,12 +174,12 @@ namespace hal
                 m_button_clicked = (par.get_value() == "clicked");
             }
         }
-
     }
 
-    void GuiExtensionDataflow::execute_function(std::string tag, Netlist *nl, const std::vector<u32>&, const std::vector<u32>&, const std::vector<u32>&)
+    void GuiExtensionDataflow::execute_function(std::string tag, Netlist* nl, const std::vector<u32>&, const std::vector<u32>&, const std::vector<u32>&)
     {
-        if (!m_button_clicked) return;
+        if (!m_button_clicked)
+            return;
         if (!nl)
         {
             log_warning("dataflow", "Error setting paramater: no netlist loaded.");
@@ -345,12 +341,12 @@ namespace hal
 
         if (draw_graph)
         {
-            dataflow::dot_graph::create_graph(final_grouping, output_path + "result_", {"pdf"});
+            write_dot_graph(final_grouping, output_path);
         }
 
         if (create_modules)
         {
-            dataflow::state_to_module::create_modules(nl, final_grouping);
+            create_modules(final_grouping, nl);
         }
 
         log("dataflow processing finished in {:3.2f}s", total_time);
@@ -359,6 +355,26 @@ namespace hal
             GuiExtensionDataflow::s_progress_indicator_function(100, "dataflow analysis finished");
 
         return dataflow::state_to_module::create_sets(nl, final_grouping);
+    }
+
+    std::shared_ptr<dataflow::Grouping> analyze(Netlist* nl,
+                                                const std::filesystem::path& out_path,
+                                                const std::vector<u32>& sizes,
+                                                bool register_stage_identification,
+                                                const std::vector<std::vector<u32>>& known_groups,
+                                                const u32 bad_group_size)
+    {
+        // TODO
+    }
+
+    bool write_dot_graph(const std::shared_ptr<Grouping> state, const std::filesystem::path& out_path, const std::unordered_set<u32>& ids)
+    {
+        dataflow::dot_graph::create_graph(state, out_path + "result_", {"pdf"}, ids);
+    }
+
+    bool create_modules(const std::shared_ptr<Grouping> state, Netlist* nl, const std::unordered_set<u32>& ids)
+    {
+        dataflow::state_to_module::create_modules(nl, state, ids);
     }
 
     std::function<void(int, const std::string&)> GuiExtensionDataflow::s_progress_indicator_function = nullptr;

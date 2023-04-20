@@ -18,7 +18,7 @@ namespace hal
         {
             namespace
             {
-                std::string generate_dot_graph(const std::shared_ptr<Grouping>& state)
+                std::string generate_dot_graph(const std::shared_ptr<Grouping>& state, const std::unordered_set<u32>& ids)
                 {
                     auto netlist_abstr = state->netlist_abstr;
 
@@ -28,30 +28,45 @@ namespace hal
                     // print node
                     for (const auto& [group_id, gates] : state->gates_of_group)
                     {
+                        if (ids.find(group_id) == ids.end())
+                        {
+                            continue;
+                        }
+
                         auto size = gates.size() * 0.1;
                         if (size < 1500)
                         {
                             size = size * 0.02;
                         }
+
                         dot_graph << group_id << " [width=" << 0.05 * gates.size() << " label=\"" << gates.size() << " bit (id " << group_id << ")\"];\n";
-                        //dot_graph << group_id << " [width=" << size << " label=\"" << gates.size() << " bit \"];\n";
                     }
+
                     // print edges
                     for (const auto& [group_id, gates] : state->gates_of_group)
                     {
-                        for (auto suc : state->get_successor_groups_of_group(group_id))
+                        if (ids.find(group_id) == ids.end())
                         {
-                            dot_graph << group_id << " -> " << suc << ";\n";
+                            continue;
+                        }
+
+                        for (auto suc_id : state->get_successor_groups_of_group(group_id))
+                        {
+                            if (ids.find(suc_id) == ids.end())
+                            {
+                                continue;
+                            }
+                            dot_graph << group_id << " -> " << suc_id << ";\n";
                         }
                     }
-                    dot_graph << "}";
-                    return dot_graph.str();
 
-                    return std::string();
+                    dot_graph << "}";
+
+                    return dot_graph.str();
                 }
             }    // namespace
 
-            bool create_graph(const std::shared_ptr<Grouping>& state, const std::string path, const std::vector<std::string>& file_types)
+            bool create_graph(const std::shared_ptr<Grouping>& state, const std::string path, const std::vector<std::string>& file_types, const std::unordered_set<u32>& ids)
             {
                 if (file_types.empty())
                 {
@@ -62,7 +77,7 @@ namespace hal
 
                 // create dot file
                 {
-                    std::string dot_graph = generate_dot_graph(state);
+                    std::string dot_graph = generate_dot_graph(state, ids);
                     log_info("dataflow", "creating dot file...");
                     std::ofstream dot_file(path_dot_file, std::ofstream::out);
                     dot_file << dot_graph;
