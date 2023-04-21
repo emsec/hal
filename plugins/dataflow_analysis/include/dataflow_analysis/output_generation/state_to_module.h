@@ -28,6 +28,7 @@
 #include "hal_core/defines.h"
 
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 namespace hal

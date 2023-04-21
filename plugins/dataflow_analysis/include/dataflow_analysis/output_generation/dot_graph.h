@@ -28,6 +28,7 @@
 #include "hal_core/defines.h"
 
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 namespace hal
@@ -38,7 +39,7 @@ namespace hal
 
         namespace dot_graph
         {
-            bool create_graph(const std::shared_ptr<Grouping>& state, const std::string m_path, const std::vector<std::string>& file_types, const std::unordered_set<u32>& ids = {});
+            bool create_graph(const std::shared_ptr<Grouping>& state, const std::filesystem::path& m_path, const std::vector<std::string>& file_types = {}, const std::unordered_set<u32>& ids = {});
         }    // namespace dot_graph
     }        // namespace dataflow
-}
+}    // namespace hal

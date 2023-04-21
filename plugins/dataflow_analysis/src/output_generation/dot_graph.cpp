@@ -66,14 +66,9 @@ namespace hal
                 }
             }    // namespace
 
-            bool create_graph(const std::shared_ptr<Grouping>& state, const std::string path, const std::vector<std::string>& file_types, const std::unordered_set<u32>& ids)
+            bool create_graph(const std::shared_ptr<Grouping>& state, const std::filesystem::path& path, const std::vector<std::string>& file_types, const std::unordered_set<u32>& ids)
             {
-                if (file_types.empty())
-                {
-                    return true;
-                }
-
-                std::string path_dot_file = path + "dot_graph.dot";
+                std::filesystem::path path_dot_file = path / "dot_graph.dot";
 
                 // create dot file
                 {
@@ -90,16 +85,16 @@ namespace hal
                     log_info("dataflow", "generating " + file_type + "...");
                     measure_block_time(file_type + " generation");
 
-                    std::string path_graph_file = path + "dot_graph." + file_type;
+                    std::filesystem::path path_graph_file = path / ("dot_graph." + file_type);
 
-                    std::string command = "dot -T" + file_type + " " + path_dot_file + " > " + path_graph_file;
+                    std::string command = "dot -T" + file_type + " " + path_dot_file.string() + " > " + path_graph_file.string();
                     int status          = std::system(command.c_str());
                     if (status != 0)
                     {
                         log_error("dataflow", "graph couldn't be generated, did you install graphviz?; return code: {}", status);
                         return false;
                     }
-                    log_info("dataflow", "finished: {}", path_graph_file);
+                    log_info("dataflow", "finished: {}", path_graph_file.string());
                 }
 
                 return true;

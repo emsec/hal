@@ -28,7 +28,7 @@ namespace hal
             // create new modules and try to keep hierachy if possible
             for (const auto& [group_id, group] : state->gates_of_group)
             {
-                if (group_ids.find(group_id) == ids.end())
+                if (ids.find(group_id) == ids.end())
                 {
                     continue;
                 }
