@@ -339,7 +339,7 @@ var searchData=
   ['fonttable_3889',['fontTable',['https://doc.qt.io/qt-5/qrawfont.html#fontTable',1,'QRawFont']]],
   ['fontunderline_3890',['FontUnderline',['https://doc.qt.io/qt-5/qtextformat.html#Property-enum',1,'QTextFormat::FontUnderline()'],['https://doc.qt.io/qt-5/qtextcharformat.html#fontUnderline',1,'QTextCharFormat::fontUnderline()'],['https://doc.qt.io/qt-5/qtextedit.html#fontUnderline',1,'QTextEdit::fontUnderline()']]],
   ['fontweight_3891',['FontWeight',['https://doc.qt.io/qt-5/qtextformat.html#Property-enum',1,'QTextFormat::FontWeight()'],['https://doc.qt.io/qt-5/qtextcharformat.html#fontWeight',1,'QTextCharFormat::fontWeight()'],['https://doc.qt.io/qt-5/qtextedit.html#fontWeight',1,'QTextEdit::fontWeight()']]],
-  ['fontwordspacing_3892',['FontWordSpacing',['https://doc.qt.io/qt-5/qtextformat.html#Property-enum',1,'QTextFormat::FontWordSpacing()'],['https://doc.qt.io/qt-5/qtextcharformat.html#fontWordSpacing',1,'QTextCharFormat::fontWordSpacing()']]],
+  ['fontwordspacing_3892',['fontWordSpacing',['https://doc.qt.io/qt-5/qtextcharformat.html#fontWordSpacing',1,'QTextCharFormat::fontWordSpacing()'],['https://doc.qt.io/qt-5/qtextformat.html#Property-enum',1,'QTextFormat::FontWordSpacing()']]],
   ['footer_3893',['Footer',['https://doc.qt.io/qt-5/qaccessible.html#Role-enum',1,'QAccessible']]],
   ['forbiddencursor_3894',['ForbiddenCursor',['https://doc.qt.io/qt-5/qt.html#CursorShape-enum',1,'Qt']]],
   ['forceintegermetrics_3895',['ForceIntegerMetrics',['https://doc.qt.io/qt-5/qfont.html#StyleStrategy-enum',1,'QFont']]],
