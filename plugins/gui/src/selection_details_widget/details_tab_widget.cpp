@@ -23,10 +23,10 @@ namespace hal
 
         QVBoxLayout* containerlLayout = new QVBoxLayout(container);
         containerlLayout->setContentsMargins(0, 0, 0, 0);
+        containerlLayout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
         containerlLayout->setSpacing(5);
         containerlLayout->setSizeConstraint(QLayout::SetNoConstraint);
 
-        container->setLayout(containerlLayout);
         scrollArea->setWidget(container);
 
         for(DetailsFrameWidget* frame : frames)
@@ -36,11 +36,24 @@ namespace hal
         return QTabWidget::addTab(scrollArea, label);
     }
 
-    int DetailsTabWidget::addTab(const QString& label, DetailsFrameWidget* frame)
+    int DetailsTabWidget::addTab(const QString& label, DetailsFrameWidget* frame, bool useScrollArea)
     {
-        QList<DetailsFrameWidget*> frames;
-        frames.append(frame);
-        return addTab(label,frames);
+        if (useScrollArea)
+        {
+            QList<DetailsFrameWidget*> frames;
+            frames.append(frame);
+            return addTab(label,frames);
+        }
+        QWidget* container = new QWidget(this);
+        container->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+        QVBoxLayout* containerlLayout = new QVBoxLayout(container);
+        containerlLayout->setContentsMargins(0, 0, 0, 0);
+        containerlLayout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+        containerlLayout->setSpacing(5);
+
+        containerlLayout->addWidget(frame);
+        return QTabWidget::addTab(container, label);
     }
 
     void DetailsTabWidget::setIcon(SelectionDetailsIconProvider::IconCategory catg, u32 itemId)

@@ -34,7 +34,7 @@ namespace hal
         mGroupingsOfItemTable = new GroupingsOfItemWidget;
         mGroupingsFrame = new DetailsFrameWidget(mGroupingsOfItemTable, "Groupings", this);
         connect(mGroupingsOfItemTable,  &GroupingsOfItemWidget::updateText, mGroupingsFrame, &DetailsFrameWidget::setText);
-        addTab("Groupings", mGroupingsFrame);
+        addTab("Groupings", mGroupingsFrame, false);
 
         //sources / destinations tab
 
@@ -54,7 +54,7 @@ namespace hal
         mDataTable = new DataTableWidget(this);
         mDataFrame = new DetailsFrameWidget(mDataTable, "Data", this);
 
-        addTab("Data", mDataFrame);
+        addTab("Data", mDataFrame, false);
 
         //connect widgets with frames for refreshing the headers when necessary
         connect(mNetModuleTable, &NetModuleTable::updateText, mModulesFrame, &DetailsFrameWidget::setText);

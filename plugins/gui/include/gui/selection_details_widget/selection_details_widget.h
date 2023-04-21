@@ -340,7 +340,6 @@ namespace hal
 
         QSplitter*           mSplitter;
         SelectionTreeView*   mSelectionTreeView;
-        QWidget*             mSelectionDetails;
         unsigned int         mNumberSelectedItems;
 
         QStackedWidget* mStackedWidget;
