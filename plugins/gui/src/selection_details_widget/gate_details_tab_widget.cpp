@@ -34,20 +34,20 @@ namespace hal
         //general tab
         mGateInfoTable        = new GateInfoTable(this);
         mGateInformationFrame = new DetailsFrameWidget(mGateInfoTable, "Gate Information", this);
-        addTab("General", mGateInformationFrame);
+        addTab("General", mGateInformationFrame, true);
 
         //groupings tab
         mGroupingsOfItemTable = new GroupingsOfItemWidget;
         mGroupingsFrame       = new DetailsFrameWidget(mGroupingsOfItemTable, "Groupings", this);    //replace QWidget
         connect(mGroupingsOfItemTable, &GroupingsOfItemWidget::updateText, mGroupingsFrame, &DetailsFrameWidget::setText);
-        addTab("Groupings", mGroupingsFrame);
+        addTab("Groupings", mGroupingsFrame, false);
 
         //pins tab
         mPinsTree  = new GatePinTree(this);
         mPinsFrame = new DetailsFrameWidget(mPinsTree, "Pins", this);
         connect(mPinsTree, &GatePinTree::updateText, mPinsFrame, &DetailsFrameWidget::setText);
 
-        addTab("Pins", mPinsFrame);
+        addTab("Pins", mPinsFrame, false);
 
         //(ff / latch / lut) tab - would love to use seperate tabs, but it's a hassle to hide multiple individual tabs witouth setTabVisible() from qt 5.15
         mFfFunctionTable    = new BooleanFunctionTable(this);
@@ -79,14 +79,14 @@ namespace hal
         mFullFunctionTable->setContextMenuPythonPlainDescr(true);
         mBooleanFunctionsFrame = new DetailsFrameWidget(mFullFunctionTable, "Boolean Functions", this);
 
-        addTab("Boolean Functions", mBooleanFunctionsFrame);
+        addTab("Boolean Functions", mBooleanFunctionsFrame, false);
         connect(gNetlistRelay, &NetlistRelay::gateBooleanFunctionChanged, this, &GateDetailsTabWidget::handleGateBooleanFunctionChanged);
 
         //data tab
         mDataTable = new DataTableWidget(this);
         mDataFrame = new DetailsFrameWidget(mDataTable, "Data", this);
 
-        addTab("Data", mDataFrame);
+        addTab("Data", mDataFrame, false);
 
         //comments tab, no frame is used here
         mCommentWidget = new CommentWidget(this);
