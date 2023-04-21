@@ -517,6 +517,16 @@ namespace hal
         Result<std::monostate> delete_pin_group(PinGroup<ModulePin>* pin_group);
 
         /**
+         * Move a pin group to another index within the module.
+         * The indices of some other pin groups will be incremented or decremented to make room for the moved pin group to be inserted at the desired position.
+         * 
+         * @param[in] pin_group - The pin group to be moved.
+         * @param[in] new_index - The index to which the pin group is moved.
+         * @returns Ok on success, an error message otherwise.
+         */
+        Result<std::monostate> move_pin_group(PinGroup<ModulePin>* pin_group, u32 new_index);
+
+        /**
          * Set the name of the given pin group.
          * 
          * @param[in] pin_group - The pin group.
