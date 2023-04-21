@@ -91,7 +91,7 @@ namespace hal
         connect(mSimulSettingsAction, &QAction::triggered, this, &WaveformViewer::handleSimulSettings);
         connect(mOpenInputfileAction, &QAction::triggered, this, &WaveformViewer::handleOpenInputFile);
         connect(mSaveWaveformsAction, &QAction::triggered, this, &WaveformViewer::handleSaveWaveforms);
-        connect(mRunSimulationAction, &QAction::triggered, this, &WaveformViewer::handleRunSimulation);
+        connect(mRunSimulationAction, &QAction::triggered, this, &WaveformViewer::handleInvokeWizzard);
         connect(mAddResultWaveAction, &QAction::triggered, this, &WaveformViewer::handleAddResultWave);
         connect(mToggleMaxZoomAction, &QAction::triggered, this, &WaveformViewer::handleToggleMaxZoom);
         connect(mUndoZoomShiftAction, &QAction::triggered, this, &WaveformViewer::handleUndoZoomShift);
@@ -502,13 +502,11 @@ namespace hal
         mCurrentWaveWidget->controller()->generate_vcd(filename.toStdString());
     }
 
-    void WaveformViewer::handleRunSimulation()
+    void WaveformViewer::handleInvokeWizzard()
     {
+        if (!mCurrentWaveWidget) return;
         Wizard wizard(NetlistSimulatorControllerPlugin::sSimulationSettings, mCurrentWaveWidget->controller(), this);
         wizard.exec();
-        //if (!mCurrentWaveWidget) return;
-        //connect(mCurrentWaveWidget->controller(),&NetlistSimulatorController::engineFinished,mCurrentWaveWidget,&WaveWidget::handleEngineFinished);
-        //mCurrentWaveWidget->controller()->run_simulation();
     }
 
     void WaveformViewer::handleToggleMaxZoom()

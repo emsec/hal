@@ -298,13 +298,6 @@ namespace hal {
         setSizes({320,w});
     }
 
-    void WaveWidget::handleEngineFinished(bool success)
-    {
-        if (!success) return;
-        if (!mController->get_results())
-            log_warning(mControllerName, "Cannot get simulation results");
-    }
-
     void WaveWidget::visualizeCurrentNetState(double tCursor, int xpos)
     {
         QSet<Net*> netState[3]; // x, 0, 1

@@ -97,7 +97,7 @@ namespace hal
         void handleSimulSettings();
         void handleOpenInputFile();
         void handleSaveWaveforms();
-        void handleRunSimulation();
+        void handleInvokeWizzard();
         void handleAddResultWave();
         void handleToggleMaxZoom();
         void handleUndoZoomShift();

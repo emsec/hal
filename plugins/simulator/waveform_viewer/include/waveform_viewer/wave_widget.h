@@ -71,9 +71,6 @@ namespace hal {
         bool isEmpty() const;
         WaveGraphicsCanvas* graphicCanvas() { return mGraphicsCanvas; }
 
-    public Q_SLOTS:
-        void handleEngineFinished(bool success);
-
     private Q_SLOTS:
 
         void handleSelectionHighlight(const QVector<const hal::SelectionTreeItem*>& highlight);

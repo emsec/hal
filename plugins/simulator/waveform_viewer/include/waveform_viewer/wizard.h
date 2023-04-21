@@ -17,6 +17,8 @@
 #include <QComboBox>
 #include <QRadioButton>
 #include <QCheckBox>
+#include <QTextEdit>
+#include <QFile>
 #include "hal_core/netlist/gate.h"
 #include "waveform_viewer.h"
 #include "netlist_simulator_controller/simulation_settings.h"
@@ -134,14 +136,36 @@ namespace hal {
         QLineEdit *mEditFilename;
     };
 
-    class ConclusionPage : public QWizardPage {
+    class PageRunSimulation : public QWizardPage {
         Q_OBJECT
 
     public:
-        ConclusionPage(QWidget *parent = 0);
+        PageRunSimulation(NetlistSimulatorController *controller, QWidget* parent=nullptr);
+        virtual bool validatePage() override;
+    private Q_SLOTS:
+        void handleStartClicked();
+        void handleLogfileRead();
+        void handleStateChanged(hal::NetlistSimulatorController::SimulationState state);
+    public Q_SLOTS:
+        void handleEngineFinished(bool success);
 
     private:
-        QLabel *label;
+        NetlistSimulatorController *mController;
+        QTextEdit* mProcessOutput;
+        QPushButton* mStart;
+        QLabel* mState;
+        QFile mLogfile;
+        QByteArray mLogText;
+    };
+
+    class PageLoadResults : public QWizardPage {
+        Q_OBJECT
+
+    public:
+        PageLoadResults(NetlistSimulatorController *controller, QWidget* parent=nullptr);
+
+    private:
+        NetlistSimulatorController *mController;
     };
 
 }
