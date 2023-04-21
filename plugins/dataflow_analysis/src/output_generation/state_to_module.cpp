@@ -13,8 +13,14 @@ namespace hal
 {
     namespace dataflow
     {
-        bool state_to_module::create_modules(Netlist* nl, const std::shared_ptr<const Grouping>& state, const std::unordered_set<u32>& ids)
+        bool state_to_module::create_modules(Netlist* nl, const std::shared_ptr<Grouping> state, const std::unordered_set<u32>& ids)
         {
+            if (state == nullptr)
+            {
+                log_error("dataflow", "nullptr given as grouping");
+                return "";
+            }
+
             // delete all modules that start with DANA
             for (auto const& mod : nl->get_modules())
             {
@@ -28,7 +34,7 @@ namespace hal
             // create new modules and try to keep hierachy if possible
             for (const auto& [group_id, group] : state->gates_of_group)
             {
-                if (ids.find(group_id) == ids.end())
+                if (!ids.empty() && ids.find(group_id) == ids.end())
                 {
                     continue;
                 }
@@ -66,7 +72,7 @@ namespace hal
             return true;
         }
 
-        std::vector<std::vector<Gate*>> state_to_module::create_sets(Netlist* nl, const std::shared_ptr<const Grouping>& state)
+        std::vector<std::vector<Gate*>> state_to_module::create_sets(Netlist* nl, const std::shared_ptr<Grouping> state)
         {
             std::vector<std::vector<Gate*>> registers;
             for (const auto& [_, group] : state->gates_of_group)

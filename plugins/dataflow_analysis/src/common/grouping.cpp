@@ -9,8 +9,64 @@ namespace hal
 {
     namespace dataflow
     {
-        Grouping::Grouping(const NetlistAbstraction& na) : netlist_abstr(na)
+        Grouping::Grouping(std::shared_ptr<NetlistAbstraction> na) : netlist_abstr(na)
         {
+        }
+
+        Grouping::Grouping(std::shared_ptr<NetlistAbstraction> na, const std::vector<std::vector<u32>>& groups) : Grouping(na)
+        {
+            /* initialize state */
+            u32 new_id_counter = -1;
+            bool group_is_known;
+
+            for (const auto& gate : this->netlist_abstr->all_sequential_gates)
+            {
+                group_is_known = false;
+                for (const auto& gates : groups)
+                {
+                    for (const auto& gate_id : gates)
+                    {
+                        if (gate->get_id() == gate_id)
+                        {
+                            group_is_known = true;
+                            break;
+                        }
+                    }
+                    if (group_is_known)
+                        break;
+                }
+                if (!group_is_known)
+                {
+                    u32 new_group_id = ++new_id_counter;
+
+                    this->group_control_fingerprint_map[new_group_id] = this->netlist_abstr->gate_to_fingerprint.at(gate->get_id());
+
+                    this->gates_of_group[new_group_id].insert(gate->get_id());
+                    this->parent_group_of_gate[gate->get_id()] = new_group_id;
+
+                    this->operations_on_group_allowed[new_group_id] = true;
+                }
+            }
+
+            /* merge groups known before execution */
+            for (const auto& gates : groups)
+            {
+                if (gates.empty())
+                {
+                    continue;
+                }
+
+                u32 new_group_id = ++new_id_counter;
+
+                this->operations_on_group_allowed[new_group_id]   = false;
+                this->group_control_fingerprint_map[new_group_id] = this->netlist_abstr->gate_to_fingerprint.at(*gates.begin());
+                this->gates_of_group[new_group_id].insert(gates.begin(), gates.end());
+
+                for (const auto& gate_id : gates)
+                {
+                    this->parent_group_of_gate[gate_id] = new_group_id;
+                }
+            }
         }
 
         Grouping::Grouping(const Grouping& other) : Grouping(other.netlist_abstr)
@@ -49,22 +105,22 @@ namespace hal
 
         std::unordered_set<u32> Grouping::get_clock_signals_of_group(u32 id)
         {
-            return get_signals_of_group(id, netlist_abstr.gate_to_clock_signals);
+            return get_signals_of_group(id, netlist_abstr->gate_to_clock_signals);
         }
 
         std::unordered_set<u32> Grouping::get_control_signals_of_group(u32 id)
         {
-            return get_signals_of_group(id, netlist_abstr.gate_to_enable_signals);
+            return get_signals_of_group(id, netlist_abstr->gate_to_enable_signals);
         }
 
         std::unordered_set<u32> Grouping::get_reset_signals_of_group(u32 id)
         {
-            return get_signals_of_group(id, netlist_abstr.gate_to_reset_signals);
+            return get_signals_of_group(id, netlist_abstr->gate_to_reset_signals);
         }
 
         std::unordered_set<u32> Grouping::get_set_signals_of_group(u32 id)
         {
-            return get_signals_of_group(id, netlist_abstr.gate_to_set_signals);
+            return get_signals_of_group(id, netlist_abstr->gate_to_set_signals);
         }
 
         std::unordered_set<u32> Grouping::get_signals_of_group(u32 id, const std::unordered_map<u32, std::unordered_set<u32>>& signals)
@@ -88,8 +144,8 @@ namespace hal
             for (auto gate : this->gates_of_group.at(id))
             {
                 // check if gate has register_stages
-                auto it = netlist_abstr.gate_to_register_stages.find(gate);
-                if (it != netlist_abstr.gate_to_register_stages.end())
+                auto it = netlist_abstr->gate_to_register_stages.find(gate);
+                if (it != netlist_abstr->gate_to_register_stages.end())
                 {
                     auto gate_rs = std::set<u32>(it->second.begin(), it->second.end());
                     if (intersect.empty())
@@ -136,7 +192,7 @@ namespace hal
             std::unordered_set<u32> successors;
             for (auto gate : gates_of_group.at(id))
             {
-                for (auto gate_id : netlist_abstr.gate_to_successors.at(gate))
+                for (auto gate_id : netlist_abstr->gate_to_successors.at(gate))
                 {
                     successors.insert(parent_group_of_gate.at(gate_id));
                 }
@@ -167,7 +223,7 @@ namespace hal
             std::unordered_set<u32> predecessors;
             for (auto gate : gates_of_group.at(id))
             {
-                for (auto gate_id : netlist_abstr.gate_to_predecessors.at(gate))
+                for (auto gate_id : netlist_abstr->gate_to_predecessors.at(gate))
                 {
                     predecessors.insert(parent_group_of_gate.at(gate_id));
                 }
@@ -185,7 +241,7 @@ namespace hal
                 return false;
             }
             /* without type check
-    if (netlist_abstr.nl->get_gate_by_id(*gates_of_group.at(group_1_id).begin())->get_type() != netlist_abstr.nl->get_gate_by_id(*gates_of_group.at(group_2_id).begin())->get_type())
+    if (netlist_abstr->nl->get_gate_by_id(*gates_of_group.at(group_1_id).begin())->get_type() != netlist_abstr->nl->get_gate_by_id(*gates_of_group.at(group_2_id).begin())->get_type())
     {
         return false;
     }

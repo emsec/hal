@@ -27,10 +27,10 @@
 
 #include "hal_core/defines.h"
 
+#include <set>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <set>
 
 namespace hal
 {
@@ -45,8 +45,6 @@ namespace hal
         struct NetlistAbstraction
         {
             NetlistAbstraction(Netlist* nl_arg);
-
-            std::shared_ptr<Grouping> create_initial_grouping(std::vector<std::vector<u32>> known_groups) const;
 
             // netlist
             Netlist* nl;

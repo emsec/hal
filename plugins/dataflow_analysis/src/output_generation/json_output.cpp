@@ -18,7 +18,7 @@ namespace hal
         namespace json_output
         {
             void save_state_to_json(u32 iteration,
-                                    const NetlistAbstraction& netlist_abstr,
+                                    std::shared_ptr<NetlistAbstraction> netlist_abstr,
                                     const processing::Result& processing_result,
                                     const evaluation::Result& eval_result,
                                     bool with_gates,
@@ -45,9 +45,9 @@ namespace hal
                             std::vector<std::string> gate_names;
                             gate_names.reserve(it.second.size());
                             std::transform(
-                                it.second.begin(), it.second.end(), std::back_inserter(gate_names), [&](auto gate_id) { return state->netlist_abstr.nl->get_gate_by_id(gate_id)->get_name(); });
+                                it.second.begin(), it.second.end(), std::back_inserter(gate_names), [&](auto gate_id) { return state->netlist_abstr->nl->get_gate_by_id(gate_id)->get_name(); });
 
-                            j[netlist_abstr.nl->get_design_name()][round_id][state_id][group_name] = (gate_names);
+                            j[netlist_abstr->nl->get_design_name()][round_id][state_id][group_name] = (gate_names);
                         }
                     }
                 }
@@ -64,9 +64,9 @@ namespace hal
 
                         std::vector<std::string> gate_names;
                         gate_names.reserve(it.second.size());
-                        std::transform(it.second.begin(), it.second.end(), std::back_inserter(gate_names), [&](auto gate_id) { return state->netlist_abstr.nl->get_gate_by_id(gate_id)->get_name(); });
+                        std::transform(it.second.begin(), it.second.end(), std::back_inserter(gate_names), [&](auto gate_id) { return state->netlist_abstr->nl->get_gate_by_id(gate_id)->get_name(); });
 
-                        j[netlist_abstr.nl->get_design_name()][round_id][state_id][group_name] = (gate_names);
+                        j[netlist_abstr->nl->get_design_name()][round_id][state_id][group_name] = (gate_names);
                     }
                 }
 

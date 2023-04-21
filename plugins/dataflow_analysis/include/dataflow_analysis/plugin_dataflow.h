@@ -25,12 +25,10 @@
 
 #pragma once
 
-#include "dataflow_analysis/common/grouping.h"
 #include "hal_core/plugin_system/cli_extension_interface.h"
 #include "hal_core/plugin_system/gui_extension_interface.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
 
-#include <unordered_set>
 #include <vector>
 
 namespace hal
@@ -133,24 +131,5 @@ namespace hal
                                                 bool register_stage_identification         = false,
                                                 std::vector<std::vector<u32>> known_groups = {},
                                                 u32 bad_group_size                         = 7);
-
-        std::shared_ptr<dataflow::Grouping> analyze(Netlist* nl,
-                                                    std::filesystem::path out_path,
-                                                    const std::vector<u32>& sizes                     = {},
-                                                    bool register_stage_identification                = false,
-                                                    const std::vector<std::vector<u32>>& known_groups = {},
-                                                    const u32 bad_group_size                          = 7);
-
-        /**
-         * Write the dataflow graph as a DOT graph to the specified location.
-         * 
-         * @param[in] state - The result of the dataflow analysis.
-         * @param[in] out_path - The output path.
-         * @param[in] ids - The grouping IDs to include in the DOT graph. If no IDs are provided, the entire graph is written. Defaults to an empty set.
-         * @returns `true` on success, `false` otherwise.
-         */
-        bool write_dot_graph(const std::shared_ptr<dataflow::Grouping> state, const std::filesystem::path& out_path, const std::unordered_set<u32>& ids = {});
-
-        bool create_grouping_modules(const std::shared_ptr<dataflow::Grouping> state, Netlist* nl, const std::unordered_set<u32>& ids = {});
     };
 }    // namespace hal

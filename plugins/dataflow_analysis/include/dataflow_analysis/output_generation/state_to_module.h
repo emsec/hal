@@ -42,8 +42,8 @@ namespace hal
 
         namespace state_to_module
         {
-            bool create_modules(Netlist* nl, const std::shared_ptr<const Grouping>& state, const std::unordered_set<u32>& ids = {});
-            std::vector<std::vector<Gate*>> create_sets(Netlist* nl, const std::shared_ptr<const Grouping>& state);
+            bool create_modules(Netlist* nl, const std::shared_ptr<Grouping> state, const std::unordered_set<u32>& ids = {});
+            std::vector<std::vector<Gate*>> create_sets(Netlist* nl, const std::shared_ptr<Grouping> state);
 
         }    // namespace state_to_module
     }        // namespace dataflow

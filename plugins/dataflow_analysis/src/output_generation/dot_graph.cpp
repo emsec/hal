@@ -18,8 +18,14 @@ namespace hal
         {
             namespace
             {
-                std::string generate_dot_graph(const std::shared_ptr<Grouping>& state, const std::unordered_set<u32>& ids)
+                std::string generate_dot_graph(const std::shared_ptr<Grouping> state, const std::unordered_set<u32>& ids)
                 {
+                    if (state == nullptr)
+                    {
+                        log_error("dataflow", "nullptr given as grouping");
+                        return "";
+                    }
+
                     auto netlist_abstr = state->netlist_abstr;
 
                     std::stringstream dot_graph;
@@ -28,7 +34,7 @@ namespace hal
                     // print node
                     for (const auto& [group_id, gates] : state->gates_of_group)
                     {
-                        if (ids.find(group_id) == ids.end())
+                        if (!ids.empty() && ids.find(group_id) == ids.end())
                         {
                             continue;
                         }
@@ -45,14 +51,14 @@ namespace hal
                     // print edges
                     for (const auto& [group_id, gates] : state->gates_of_group)
                     {
-                        if (ids.find(group_id) == ids.end())
+                        if (!ids.empty() && ids.find(group_id) == ids.end())
                         {
                             continue;
                         }
 
                         for (auto suc_id : state->get_successor_groups_of_group(group_id))
                         {
-                            if (ids.find(suc_id) == ids.end())
+                            if (!ids.empty() && ids.find(suc_id) == ids.end())
                             {
                                 continue;
                             }
@@ -66,18 +72,21 @@ namespace hal
                 }
             }    // namespace
 
-            bool create_graph(const std::shared_ptr<Grouping>& state, const std::filesystem::path& path, const std::vector<std::string>& file_types, const std::unordered_set<u32>& ids)
+            bool create_graph(const std::shared_ptr<Grouping> state, const std::filesystem::path& path, const std::vector<std::string>& file_types, const std::unordered_set<u32>& ids)
             {
                 std::filesystem::path path_dot_file = path / "dot_graph.dot";
 
                 // create dot file
+                log_info("dataflow", "creating dot file...");
+                std::string dot_graph = generate_dot_graph(state, ids);
+                if (dot_graph.empty())
                 {
-                    std::string dot_graph = generate_dot_graph(state, ids);
-                    log_info("dataflow", "creating dot file...");
-                    std::ofstream dot_file(path_dot_file, std::ofstream::out);
-                    dot_file << dot_graph;
-                    dot_file.close();
+                    return false;
                 }
+
+                std::ofstream dot_file(path_dot_file, std::ofstream::out);
+                dot_file << dot_graph;
+                dot_file.close();
 
                 // generate output files
                 for (const auto& file_type : file_types)

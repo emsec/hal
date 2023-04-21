@@ -20,7 +20,7 @@ namespace hal
             {
                 nlohmann::json output_json;
 
-                auto netlist_name = state->netlist_abstr.nl->get_design_name();
+                auto netlist_name = state->netlist_abstr->nl->get_design_name();
 
                 output_json["creator"]                                    = "HAL";
                 output_json["modules"][netlist_name]["attributes"]["top"] = 1;
