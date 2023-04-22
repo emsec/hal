@@ -194,6 +194,8 @@ namespace hal
         void addSuccessorToView(int maxLevel, bool succ);
         void addCommonSuccessorToView(int maxLevel, bool succ);
 
+        QSet<u32> getSelectableGates();
+
         struct LayouterPoint
         {
             int mIndex;

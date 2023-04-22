@@ -866,6 +866,10 @@ namespace hal
             QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddModuleToView);
 
             action = context_menu.addAction("Add gate to view");
+
+            if (getSelectableGates().empty())
+                 action->setDisabled(true);
+
             QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddGateToView);
         }
 
@@ -1076,7 +1080,7 @@ namespace hal
     }
 
 
-    void GraphGraphicsView::handleAddGateToView()
+    QSet<u32> GraphGraphicsView::getSelectableGates()
     {
         GraphContext* context = mGraphWidget->getContext();
 
@@ -1099,6 +1103,15 @@ namespace hal
                 selectable_gates.insert(gate->get_id());
             }
         }
+
+        return selectable_gates;
+    }
+
+    void GraphGraphicsView::handleAddGateToView()
+    {
+        QSet<u32> selectable_gates = getSelectableGates();
+
+        GraphContext* context = mGraphWidget->getContext();
 
         GateDialog gate_dialog(selectable_gates, "Add gate to view", nullptr, this);
         if (gate_dialog.exec() == QDialog::Accepted)
