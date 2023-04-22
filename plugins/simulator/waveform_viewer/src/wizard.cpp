@@ -322,6 +322,7 @@ namespace hal {
 
         mTableWidget = new QTableWidget(this);
 
+
         QMap<QString,QString> engProp = settings->engineProperties();
         mTableWidget->setColumnCount(2);
         mTableWidget->setColumnWidth(0,250);
@@ -329,23 +330,36 @@ namespace hal {
         mTableWidget->setRowCount(engProp.size()+3);
         mTableWidget->setHorizontalHeaderLabels(QStringList() << "Property" << "Value");
 
+        for (int irow = 0; irow < mTableWidget->rowCount(); ++irow)
+        {
+            QComboBox *comboBox = new QComboBox(this);
+            comboBox->addItems(QStringList() << "provided_models" << "num_of_threads" << "compiler");
+            mTableWidget->setCellWidget(irow, 0, comboBox);
+        }
+
         int irow = 0;
         for (auto it = engProp.constBegin(); it != engProp.constEnd(); ++it)
         {
-            QTableWidgetItem wi(it.key());
-            mTableWidget->setItem(irow, 0, new QTableWidgetItem(it.key()));
-            mTableWidget->setItem(irow, 1, new QTableWidgetItem(it.value()));
-            ++irow;
-        }
-        mTableWidget->horizontalHeader()->setStretchLastSection(true);
+            QComboBox *comboBox = qobject_cast<QComboBox *>(mTableWidget->cellWidget(irow, 0));
+            if (comboBox)
+            {
+                int index = comboBox->findText(it.key());
+                if (index != -1)
+                {
+                     comboBox->setCurrentIndex(index);
+                 }
+             }
+             mTableWidget->setItem(irow, 1, new QTableWidgetItem(it.value()));
+             ++irow;
+         }
+         mTableWidget->horizontalHeader()->setStretchLastSection(true);
 
-        mTableWidget->horizontalHeader()->setStretchLastSection(true);
-        connect(mTableWidget, &QTableWidget::cellChanged, this, &PageEngineProperties::handleCellChanged);
+         mTableWidget->horizontalHeader()->setStretchLastSection(true);
+         connect(mTableWidget, &QTableWidget::cellChanged, this, &PageEngineProperties::handleCellChanged);
 
-
-        QVBoxLayout *layout = new QVBoxLayout;
-        layout->addWidget(mTableWidget);
-        setLayout(layout);
+         QVBoxLayout *layout = new QVBoxLayout;
+         layout->addWidget(mTableWidget);
+         setLayout(layout);
 
     }
 
@@ -359,15 +373,19 @@ namespace hal {
     bool PageEngineProperties::validatePage()
     {
 
-        QMap<QString,QString> engProp;
-        for (int irow=0; irow < mTableWidget->rowCount(); ++irow)
+        QMap<QString, QString> engProp;
+        for (int irow = 0; irow < mTableWidget->rowCount(); ++irow)
         {
-            const QTableWidgetItem* wi = mTableWidget->item(irow,0);
-            if (!wi) continue;
-            QString key = wi->text().trimmed();
+            QComboBox *comboBox = qobject_cast<QComboBox *>(mTableWidget->cellWidget(irow, 0));
+            if (!comboBox) continue;
+            QString key = comboBox->currentText().trimmed();
             if (key.isEmpty()) continue;
-            wi = mTableWidget->item(irow,1);
+
+            const QTableWidgetItem *wi = mTableWidget->item(irow, 1);
             QString value = wi ? wi->text().trimmed() : QString();
+            if (value.isEmpty()) continue;
+
+            // weißt man dem selben key zwei verschiedene values zu wird die erste überschrieben.
             engProp[key] = value;
         }
         mSettings->setEngineProperties(engProp);
