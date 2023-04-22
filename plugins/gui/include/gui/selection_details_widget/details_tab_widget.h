@@ -60,8 +60,9 @@ namespace hal
          *
          * @param label - Label text in the tab bar.
          * @param frame - Single Frame which build the content of the tab.
+         * @param useScrollArea - Place entire content in scroll area.
          */
-        int addTab(const QString& label, DetailsFrameWidget* frame);
+        int addTab(const QString& label, DetailsFrameWidget* frame, bool useScrollArea);
 
         /**
          *  Set the top right corner icon of the tab details widget.

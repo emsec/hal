@@ -1,7 +1,10 @@
 #include "waveform_viewer/wizard.h"
 #include "waveform_viewer/wave_widget.h"
+#include "netlist_simulator_controller/simulation_process.h"
 #include "gui/module_dialog/gate_select_model.h"
+#include "gui/plugin_relay/gui_plugin_manager.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
+#include "netlist_simulator_controller/simulation_process.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 
 #include <QHeaderView>
@@ -22,7 +25,8 @@ namespace hal {
         addPage(new PageEngine(mController, this));
         mPageEnginePropertiesId = addPage(new PageEngineProperties(mSettings,mController,this));
         mPageInputDataId = addPage(new PageInputData(mController,this));
-        addPage(new ConclusionPage(this));
+        addPage(new PageRunSimulation(mController,this));
+        addPage(new PageLoadResults(mController,this));
     }
 
     PageSelectGates::PageSelectGates(NetlistSimulatorController *controller, QWidget *parent)
@@ -361,6 +365,9 @@ namespace hal {
          layout->addWidget(mTableWidget);
          setLayout(layout);
 
+        /// verilator will need verilog netlist writer plugin, go and get it unless already loaded
+        if (gPluginRelay->mGuiPluginTable)
+            gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacNetlistWriter,".v");
     }
 
     void PageEngineProperties::handleCellChanged(int irow, int icolumn)
@@ -439,21 +446,78 @@ namespace hal {
         but->setIconSize(QSize(17, 17));
         connect(but, &QPushButton::clicked, this, &PageInputData::openFileBrowser);
 
-
-
-
         layout->addWidget(but,0,1);
     }
 
-    ConclusionPage::ConclusionPage(QWidget *parent): QWizardPage(parent)
+    PageRunSimulation::PageRunSimulation(NetlistSimulatorController *controller, QWidget *parent)
+        : QWizardPage(parent), mController(controller)
     {
-        setTitle(tr("End"));
-        setSubTitle(tr("Run Simulation"));
+        setTitle(tr("Step 6: Run Simulation"));
+        setSubTitle(tr("Start simulation based on controller settings from previous steps"));
 
-        label = new QLabel(tr("Run Simulation"));
-        QVBoxLayout *layout = new QVBoxLayout;
-        layout->addWidget(label);
+        QVBoxLayout* layout = new QVBoxLayout(this);
+        mProcessOutput = new QTextEdit(this);
+        layout->addWidget(mProcessOutput);
+        mStart = new QPushButton("Run Simulation",this);
+        connect(mStart,&QPushButton::clicked,this,&PageRunSimulation::handleStartClicked);
+        layout->addWidget(mStart);
+        mState = new QLabel("Ready to start simulation",this);
+        layout->addWidget(mState);
         setLayout(layout);
     }
 
+    void PageRunSimulation::handleStartClicked()
+    {
+        mStart->setDisabled(true);
+        connect(mController,&NetlistSimulatorController::stateChanged,this,&PageRunSimulation::handleStateChanged);
+        connect(mController,&NetlistSimulatorController::engineFinished,this,&PageRunSimulation::handleEngineFinished);
+        mController->run_simulation();
+        log_info(mController->get_name(),"Simulation started ...");
+        QString fname = QDir(QString::fromStdString(mController->get_working_directory())).absoluteFilePath(SimulationProcessLog::sLogFilename);
+        mLogfile.setFileName(fname);
+        if (mLogfile.open(QIODevice::ReadOnly))
+        {
+            connect(&mLogfile,&QIODevice::readyRead,this,&PageRunSimulation::handleLogfileRead);
+        }
+    }
+
+    void PageRunSimulation::handleStateChanged(hal::NetlistSimulatorController::SimulationState state)
+    {
+        switch (state) {
+        case NetlistSimulatorController::NoGatesSelected: mState->setText("Controller state: NoGatesSelected");            break;
+        case NetlistSimulatorController::ParameterSetup:  mState->setText("Controller state: ParameterSetup");             break;
+        case NetlistSimulatorController::ParameterReady:  mState->setText("Ready to start simulation");                    break;
+        case NetlistSimulatorController::SimulationRun:   mState->setText("Simulation engine running, please wait ...");   break;
+        case NetlistSimulatorController::ShowResults:     mState->setText("Simulation successful");                        break;
+        case NetlistSimulatorController::EngineFailed:    mState->setText("Simulation engine failed");                     break;
+        }
+    }
+
+    void PageRunSimulation::handleLogfileRead()
+    {
+        mLogText += mLogfile.readAll();
+        mProcessOutput->setHtml(QString::fromUtf8(mLogText));
+    }
+
+    void PageRunSimulation::handleEngineFinished(bool success)
+    {
+        if (!success) return;
+        if (!mController->get_results())
+            log_warning(mController->get_name(), "Cannot get simulation results");
+        handleLogfileRead();
+        handleStateChanged(mController->get_state());
+    }
+
+    bool PageRunSimulation::validatePage()
+    {
+        return (mController->get_state()==NetlistSimulatorController::ShowResults ||
+                mController->get_state()==NetlistSimulatorController::EngineFailed);
+    }
+
+    PageLoadResults::PageLoadResults(NetlistSimulatorController *controller, QWidget *parent)
+        : QWizardPage(parent), mController(controller)
+    {
+         setTitle(tr("Final page: Load Simulation Results"));
+         setSubTitle("Select simulated waveform to be loaded into viewer. If selection from graphical netlist is preferred please exit wizard, select nets and invoke load results from toolbar");
+    }
 }

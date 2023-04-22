@@ -75,6 +75,8 @@ namespace hal
 
         netlist_modification_decorator_init(m);
 
+        log_init(m);
+
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE

@@ -320,6 +320,12 @@ namespace hal
     void netlist_modification_decorator_init(py::module& m);
 
     /**
+     * Initializes Python bindings for the HAL LogManager in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void log_init(py::module& m);
+    /**
      * @}
      */
 }    // namespace hal

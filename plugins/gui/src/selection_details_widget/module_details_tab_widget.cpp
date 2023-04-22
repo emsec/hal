@@ -17,32 +17,32 @@ namespace hal
         //general tab
         mModuleInfoTable = new ModuleInfoTable(this);
         mModuleInformationFrame = new DetailsFrameWidget(mModuleInfoTable, "Module Information", this);
-        addTab("General", mModuleInformationFrame);
+        addTab("General", mModuleInformationFrame, true);
 
         //groupings tab
         mGroupingsOfItemTable = new GroupingsOfItemWidget;
         mGroupingsFrame = new DetailsFrameWidget(mGroupingsOfItemTable, "Groupings", this);
         connect(mGroupingsOfItemTable,  &GroupingsOfItemWidget::updateText, mGroupingsFrame, &DetailsFrameWidget::setText);
-        addTab("Groupings", mGroupingsFrame);
+        addTab("Groupings", mGroupingsFrame, false);
 
         //ports tab
         mPinsTree = new ModulePinsTree(this);
         mPinsFrame = new DetailsFrameWidget(mPinsTree, "Pins", this);
         connect(mPinsTree, &ModulePinsTree::updateText, mPinsFrame, &DetailsFrameWidget::setText);
 
-        addTab("Pins", mPinsFrame);
+        addTab("Pins", mPinsFrame, false);
 
         //elements tab
         mElementsTree = new ModuleElementsTree(this);
         mElementsFrame = new DetailsFrameWidget(mElementsTree, "Elements", this);
 
-        addTab("Elements", mElementsFrame);
+        addTab("Elements", mElementsFrame, false);
 
         //data tab
         mDataTable = new DataTableWidget(this);
         mDataFrame = new DetailsFrameWidget(mDataTable, "Data", this);
 
-        addTab("Data", mDataFrame);
+        addTab("Data", mDataFrame, false);
 
         //comment tab
         mCommentWidget = new CommentWidget(this);
