@@ -44,10 +44,10 @@ namespace hal
 
         struct NetlistAbstraction
         {
-            NetlistAbstraction(Netlist* nl_arg);
+            NetlistAbstraction(const Netlist* nl_arg);
 
             // netlist
-            Netlist* nl;
+            const Netlist* nl;
 
             // utils
             bool yosys;

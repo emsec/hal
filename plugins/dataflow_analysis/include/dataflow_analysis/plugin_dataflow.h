@@ -41,10 +41,8 @@ namespace hal
 
     class CliExtensionDataflow : public CliExtensionInterface
     {
-        plugin_dataflow* m_parent;
-
     public:
-        CliExtensionDataflow(plugin_dataflow* p) : m_parent(p)
+        CliExtensionDataflow()
         {
         }
         virtual ProgramOptions get_cli_options() const override;
@@ -53,7 +51,6 @@ namespace hal
 
     class GuiExtensionDataflow : public GuiExtensionInterface
     {
-        plugin_dataflow* m_parent;
         std::vector<u32> m_sizes;
         std::string m_output_path;
         int m_bad_groups;
@@ -63,8 +60,7 @@ namespace hal
         bool m_button_clicked;
 
     public:
-        GuiExtensionDataflow(plugin_dataflow* p)
-            : m_parent(p), m_output_path("/tmp"), m_bad_groups(7), m_draw_graph(false), m_create_modules(false), m_register_stage_identification(false), m_button_clicked(false)
+        GuiExtensionDataflow() : m_output_path("/tmp"), m_bad_groups(7), m_draw_graph(false), m_create_modules(false), m_register_stage_identification(false), m_button_clicked(false)
         {
         }
 

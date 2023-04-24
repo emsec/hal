@@ -28,11 +28,11 @@ namespace hal
                         u32 val;
                         if (successors)
                         {
-                            val = state->netlist_abstr->gate_to_successors.at(g).size();
+                            val = state->netlist_abstr.gate_to_successors.at(g).size();
                         }
                         else
                         {
-                            val = state->netlist_abstr->gate_to_predecessors.at(g).size();
+                            val = state->netlist_abstr.gate_to_predecessors.at(g).size();
                         }
 
                         if (first)
@@ -90,7 +90,7 @@ namespace hal
                     for (const auto& old_group : groups_to_merge)
                     {
                         auto gates                                             = state->gates_of_group.at(old_group);
-                        new_state->group_control_fingerprint_map[new_group_id] = new_state->netlist_abstr->gate_to_fingerprint.at(*gates.begin());
+                        new_state->group_control_fingerprint_map[new_group_id] = new_state->netlist_abstr.gate_to_fingerprint.at(*gates.begin());
                         new_state->operations_on_group_allowed[new_group_id]   = state->operations_on_group_allowed.at(old_group);
                         ;
                         new_state->gates_of_group[new_group_id].insert(gates.begin(), gates.end());

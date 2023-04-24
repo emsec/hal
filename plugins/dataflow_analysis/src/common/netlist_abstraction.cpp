@@ -10,7 +10,7 @@ namespace hal
 {
     namespace dataflow
     {
-        NetlistAbstraction::NetlistAbstraction(Netlist* nl_arg) : nl(nl_arg)
+        NetlistAbstraction::NetlistAbstraction(const Netlist* nl_arg) : nl(nl_arg)
         {
         }
     }    // namespace dataflow

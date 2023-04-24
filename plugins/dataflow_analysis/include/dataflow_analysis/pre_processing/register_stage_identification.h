@@ -36,7 +36,7 @@ namespace hal
 
         namespace pre_processing
         {
-            void identify_register_stages(std::shared_ptr<NetlistAbstraction> netlist_abstr);
+            void identify_register_stages(NetlistAbstraction& netlist_abstr);
         }    // namespace pre_processing
     }        // namespace dataflow
 }

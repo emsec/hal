@@ -236,7 +236,7 @@ namespace hal
                 std::shared_ptr<Grouping> generate_output(const Configuration& config, const std::shared_ptr<Grouping>& initial_grouping, scoring& scores)
                 {
                     measure_block_time("majority voting");
-                    auto netlist_abstr = initial_grouping->netlist_abstr;
+                    const auto& netlist_abstr = initial_grouping->netlist_abstr;
 
                     const u32 bad_group_size = config.bad_group_size;
 
@@ -248,8 +248,8 @@ namespace hal
 
                     // mark all sequential gates as unassigned gates
                     std::vector<u32> unassigned_gates;
-                    unassigned_gates.reserve(netlist_abstr->all_sequential_gates.size());
-                    std::transform(netlist_abstr->all_sequential_gates.begin(), netlist_abstr->all_sequential_gates.end(), std::back_inserter(unassigned_gates), [](auto& g) { return g->get_id(); });
+                    unassigned_gates.reserve(netlist_abstr.all_sequential_gates.size());
+                    std::transform(netlist_abstr.all_sequential_gates.begin(), netlist_abstr.all_sequential_gates.end(), std::back_inserter(unassigned_gates), [](auto& g) { return g->get_id(); });
 
                     // sort unassignes gates to be able to use std::algorithms
                     std::sort(unassigned_gates.begin(), unassigned_gates.end());
@@ -265,7 +265,7 @@ namespace hal
                         {
                             u32 new_group_id = ++id_counter;
 
-                            output->group_control_fingerprint_map[new_group_id] = initial_grouping->netlist_abstr->gate_to_fingerprint.at(*gates.begin());
+                            output->group_control_fingerprint_map[new_group_id] = initial_grouping->netlist_abstr.gate_to_fingerprint.at(*gates.begin());
                             output->operations_on_group_allowed[new_group_id]   = false;
 
                             output->gates_of_group[new_group_id].insert(gates.begin(), gates.end());
@@ -428,7 +428,7 @@ namespace hal
                         {
                             u32 new_group_id = ++id_counter;
 
-                            output->group_control_fingerprint_map[new_group_id] = netlist_abstr->gate_to_fingerprint.at(*best_group.begin());
+                            output->group_control_fingerprint_map[new_group_id] = netlist_abstr.gate_to_fingerprint.at(*best_group.begin());
                             output->operations_on_group_allowed[new_group_id]   = true;
 
                             output->gates_of_group[new_group_id].insert(best_group.begin(), best_group.end());
@@ -457,7 +457,7 @@ namespace hal
                     {
                         u32 new_group_id = ++id_counter;
 
-                        output->group_control_fingerprint_map[new_group_id] = netlist_abstr->gate_to_fingerprint.at(g);
+                        output->group_control_fingerprint_map[new_group_id] = netlist_abstr.gate_to_fingerprint.at(g);
                         output->operations_on_group_allowed[new_group_id]   = true;
 
                         output->gates_of_group[new_group_id].insert(g);

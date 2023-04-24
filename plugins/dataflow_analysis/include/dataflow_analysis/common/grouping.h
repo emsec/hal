@@ -41,11 +41,11 @@ namespace hal
     {
         struct Grouping
         {
-            Grouping(std::shared_ptr<NetlistAbstraction> na);
-            Grouping(std::shared_ptr<NetlistAbstraction> na, const std::vector<std::vector<u32>>& groups);
+            Grouping(const NetlistAbstraction& na);
+            Grouping(const NetlistAbstraction& na, const std::vector<std::vector<u32>>& groups);
             Grouping(const Grouping& other);
 
-            std::shared_ptr<NetlistAbstraction> netlist_abstr;
+            const NetlistAbstraction& netlist_abstr;
 
             std::unordered_map<u32, std::vector<u32>> group_control_fingerprint_map;
 
@@ -56,18 +56,18 @@ namespace hal
             bool operator==(const Grouping& other) const;
             bool operator!=(const Grouping& other) const;
 
-            std::unordered_set<u32> get_clock_signals_of_group(u32 group_id);
-            std::unordered_set<u32> get_control_signals_of_group(u32 group_id);
-            std::unordered_set<u32> get_reset_signals_of_group(u32 group_id);
-            std::unordered_set<u32> get_set_signals_of_group(u32 group_id);
+            std::unordered_set<u32> get_clock_signals_of_group(u32 group_id) const;
+            std::unordered_set<u32> get_control_signals_of_group(u32 group_id) const;
+            std::unordered_set<u32> get_reset_signals_of_group(u32 group_id) const;
+            std::unordered_set<u32> get_set_signals_of_group(u32 group_id) const;
 
-            std::unordered_set<u32> get_successor_groups_of_group(u32 group_id);
-            std::unordered_set<u32> get_predecessor_groups_of_group(u32 group_id);
+            std::unordered_set<u32> get_successor_groups_of_group(u32 group_id) const;
+            std::unordered_set<u32> get_predecessor_groups_of_group(u32 group_id) const;
 
-            std::set<u32> get_register_stage_intersect_of_group(u32 group_id);
+            std::set<u32> get_register_stage_intersect_of_group(u32 group_id) const;
 
-            bool are_groups_allowed_to_merge(u32 group_1_id, u32 group_2_id);
-            bool is_group_allowed_to_split(u32 group_id);
+            bool are_groups_allowed_to_merge(u32 group_1_id, u32 group_2_id) const;
+            bool is_group_allowed_to_split(u32 group_id) const;
 
         private:
             /* caches */
@@ -81,7 +81,7 @@ namespace hal
 
             const std::set<std::set<u32>>& get_comparison_data() const;
 
-            std::unordered_set<u32> get_signals_of_group(u32 group_id, const std::unordered_map<u32, std::unordered_set<u32>>& signals);
+            std::unordered_set<u32> get_signals_of_group(u32 group_id, const std::unordered_map<u32, std::unordered_set<u32>>& signals) const;
         };
     }    // namespace dataflow
 }    // namespace hal

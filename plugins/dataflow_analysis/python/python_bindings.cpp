@@ -1,6 +1,7 @@
 #include "hal_core/python_bindings/python_bindings.h"
 
 #include "dataflow_analysis/dataflow.h"
+#include "dataflow_analysis/output_generation/result.h"
 #include "dataflow_analysis/plugin_dataflow.h"
 #include "hal_core/netlist/netlist.h"
 #include "pybind11/operators.h"
@@ -68,49 +69,270 @@ namespace hal
                 )");
 
         auto py_dataflow = m.def_submodule("Dataflow");
-        py_dataflow.def("analyze",
-                        &dataflow::analyze,
-                        py::arg("nl"),
-                        py::arg("out_path"),
-                        py::arg("sizes")                         = std::vector<u32>(),
-                        py::arg("register_stage_identification") = false,
-                        py::arg("known_groups")                  = std::vector<std::vector<u32>>(),
-                        py::arg("bad_group_size")                = 7,
-                        R"(
-                            Analyze the datapath to identify word-level registers in the given netlist.
-                            The registers are returned as a grouping and the results are written to a JSON file.
+        py_dataflow.def(
+            "analyze",
+            [](Netlist* nl,
+               std::filesystem::path out_path,
+               const std::vector<u32>& sizes                     = {},
+               bool register_stage_identification                = false,
+               const std::vector<std::vector<u32>>& known_groups = {},
+               const u32 bad_group_size                          = 7) -> std::optional<dataflow::Result> {
+                auto res = dataflow::analyze(nl, out_path, sizes, register_stage_identification, known_groups, bad_group_size);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while analyzing dataflow:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            py::arg("out_path"),
+            py::arg("sizes")                         = std::vector<u32>(),
+            py::arg("register_stage_identification") = false,
+            py::arg("known_groups")                  = std::vector<std::vector<u32>>(),
+            py::arg("bad_group_size")                = 7,
+            R"(
+                Analyze the datapath to identify word-level registers in the given netlist.
 
-                            :param hal_py.Netlist nl: The netlist.
-                            :param pathlib.Path out_path: The output path to which the results are written.
-                            :param list[int] sizes: Register sizes that are expected to be found in the netlist. These sizes will be prioritized over others during analysis. Defaults to an empty list.
-                            :param bool register_stage_identification: Set ``True``to enable register stage identification during analysis, ``False`` otherwise. Defaults to ``False``.
-                            :param list[list[int]] known_groups: Registers that have been identified prior to dataflow analysis. Must be provided as a list of registers with each register being represented as a list of gate IDs. Defaults to an empty list.
-                            :param int bad_group_size: Minimum expected register size. Smaller registers will not be considered during analysis. Defults to ``7``.
-                            :returns: The grouping containing the registers.
-                            :rtype: hal_py.Dataflow.Grouping
-                        )");
+                :param hal_py.Netlist nl: The netlist.
+                :param pathlib.Path out_path: The output path to which the results are written.
+                :param list[int] sizes: Register sizes that are expected to be found in the netlist. These sizes will be prioritized over others during analysis. Defaults to an empty list.
+                :param bool register_stage_identification: Set ``True``to enable register stage identification during analysis, ``False`` otherwise. Defaults to ``False``.
+                :param list[list[int]] known_groups: Registers that have been identified prior to dataflow analysis. Must be provided as a list of registers with each register being represented as a list of gate IDs. Defaults to an empty list.
+                :param int bad_group_size: Minimum expected register size. Smaller registers will not be considered during analysis. Defults to ``7``.
+                :returns: The dataflow analysis result on success, ``None`` otherwise.
+                :rtype: hal_py.Dataflow.Result or None
+            )");
 
-        py_dataflow.def("write_dot_graph", &dataflow::write_dot_graph, py::arg("grouping"), py::arg("out_path"), py::arg("ids") = std::unordered_set<u32>(), R"(
+        py_dataflow.def(
+            "write_dot",
+            [](const dataflow::Result& result, const std::filesystem::path& out_path, const std::unordered_set<u32>& group_ids = {}) -> bool {
+                auto res = dataflow::write_dot(result, out_path, group_ids);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while writing DOT graph:\n{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("result"),
+            py::arg("out_path"),
+            py::arg("group_ids") = std::unordered_set<u32>(),
+            R"(
                 Write the dataflow graph as a DOT graph to the specified location.
 
-                :param hal_py.Dataflow.Grouping grouping: The grouping containing the registers.
+                :param hal_py.Dataflow.Result result: The dataflow analysis result.
                 :param pathlib.Path out_path: The output path.
-                :param set[int] ids: The grouping IDs to include in the DOT graph. If no IDs are provided, the entire graph is written. Defaults to an empty set.
+                :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
                 :returns: ``True`` on success, ``False`` otherwise.
                 :rtype: bool
             )");
 
-        py_dataflow.def("create_grouping_modules", &dataflow::create_grouping_modules, py::arg("grouping"), py::arg("nl"), py::arg("ids") = std::unordered_set<u32>(), R"(
-                Create modules for the groupings output by dataflow analysis.
+        py_dataflow.def(
+            "write_txt",
+            [](const dataflow::Result& result, const std::filesystem::path& out_path, const std::unordered_set<u32>& group_ids = {}) -> bool {
+                auto res = dataflow::write_txt(result, out_path, group_ids);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while writing DOT graph:\n{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("result"),
+            py::arg("out_path"),
+            py::arg("group_ids") = std::unordered_set<u32>(),
+            R"(
+                Write the groups resulting from dataflow analysis to a `.txt` file.
 
-                :param hal_py.Dataflow.Grouping grouping: The grouping containing the registers.
-                :param hal_py.Netlist nl: The netlist.
-                :param set[int] ids: The grouping IDs to create modules for. If no IDs are provided, all modules will be created. Defaults to an empty set.
+                :param hal_py.Dataflow.Result result: The dataflow analysis result.
+                :param pathlib.Path out_path: The output path.
+                :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
                 :returns: ``True`` on success, ``False`` otherwise.
                 :rtype: bool
             )");
 
-        py::class_<dataflow::Grouping, std::shared_ptr<dataflow::Grouping>> py_dataflow_grouping(py_dataflow, "Grouping");
+        py_dataflow.def(
+            "create_modules",
+            [](const dataflow::Result& result, const std::unordered_set<u32>& group_ids = {}) -> std::optional<std::unordered_map<u32, Module*>> {
+                auto res = dataflow::create_modules(result, group_ids);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while creating modules:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("result"),
+            py::arg("group_ids") = std::unordered_set<u32>(),
+            R"(
+                Create modules for the dataflow analysis result.
+
+                :param hal_py.Dataflow.Result result: The dataflow analysis result.
+                :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+                :returns: A map from group IDs to Modules on success, ``None`` otherwise.
+                :rtype: bool
+            )");
+
+        py_dataflow.def("get_group_list",
+                        &dataflow::get_group_list,
+                        py::arg("result"),
+                        py::arg("group_ids") = std::unordered_set<u32>(),
+                        R"(
+                            Get the groups of the dataflow analysis result as a list.
+
+                            :param hal_py.Dataflow.Result result: The dataflow analysis result.
+                            :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+                            :returns: A list of groups with each group being a list of gates.
+                            :rtype: list[list[hal_py.Gate]]
+                        )");
+
+        py::class_<dataflow::Result, RawPtrWrapper<dataflow::Result>> py_dataflow_result(py_dataflow, "Result", R"(
+            The result of a dataflow analysis run containing the identified groups of sequential gates and their interconnections.
+        )");
+
+        py_dataflow_result.def("get_netlist", &dataflow::Result::get_netlist, R"(
+            Get the netlist on which dataflow analysis has been performed.
+
+            :returns: The netlist.
+            :rtype: hal_py.Netlist
+        )");
+
+        py_dataflow_result.def("get_groups", &dataflow::Result::get_groups, R"(
+            Get the groups of sequential gates resulting from dataflow analysis. 
+        
+            :returns: A dict from group ID to a set of gates belonging to the respective group.
+            :rtype: dict[int,set[hal_py.Gate]]
+        )");
+
+        py_dataflow_result.def(
+            "get_gates_of_group",
+            [](const dataflow::Result& self, const u32 group_id) -> std::optional<std::unordered_set<Gate*>> {
+                auto res = self.get_gates_of_group(group_id);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting gates of group:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("group_id"),
+            R"(
+            Get the gates of the specified group of sequential gates.
+
+            :param int group_id: The ID of the group.
+            :returns: The gates of the group as a set on success, ``None`` otherwise.
+            :rtype: set[hal_py.Gate] or None
+        )");
+
+        py_dataflow_result.def(
+            "get_group_id_of_gate",
+            [](const dataflow::Result& self, const Gate* gate) -> std::optional<u32> {
+                auto res = self.get_group_id_of_gate(gate);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting group ID of gate:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("gate"),
+            R"(
+            Get the group ID of the group that contains the given gate. 
+
+            :param hal_py.Gate gate: The gate.
+            :returns: The group ID on success, ``None`` otherwise.
+            :rtype: int or None
+        )");
+
+        py_dataflow_result.def(
+            "get_control_nets_of_group",
+            [](const dataflow::Result& self, const u32 group_id, const PinType type) -> std::optional<std::unordered_set<Net*>> {
+                auto res = self.get_control_nets_of_group(group_id, type);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting control nets of group:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("group_id"),
+            py::arg("type"),
+            R"(
+            Get the control nets of the group with the given group ID that are connected to a pin of the specified type.
+
+            :param int group_id: The group ID.
+            :param hal_py.PinType type: The pin type.
+            :returns: A set of control nets of the group on success, ``None`` otherwise.
+            :rtype: set[hal_py.Net] or None
+        )");
+
+        py_dataflow_result.def(
+            "get_group_successors",
+            [](const dataflow::Result& self, const u32 group_id) -> std::optional<std::unordered_set<u32>> {
+                auto res = self.get_group_successors(group_id);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting successor groups:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("group_id"),
+            R"(
+            Get the successor groups of the group with the given ID.
+
+            :param int group_id: The group ID.
+            :returns: The successors of the group as a set of group IDs on success, ``None`` otherwise.
+            :rtype: set[int] or None
+        )");
+
+        py_dataflow_result.def(
+            "get_group_predecessors",
+            [](const dataflow::Result& self, const u32 group_id) -> std::optional<std::unordered_set<u32>> {
+                auto res = self.get_group_predecessors(group_id);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting predecessor groups:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("group_id"),
+            R"(
+            Get the predecessor groups of the group with the given ID.
+
+            :param int group_id: The ID of the group.
+            :returns: The predecessors of the group as a set of group IDs on success, ``None`` otherwise.
+            :rtype: set[int] or None
+        )");
 
 #ifndef PYBIND11_MODULE
         return m.ptr();

@@ -35,7 +35,7 @@ namespace hal
     {
         namespace pre_processing
         {
-            std::shared_ptr<NetlistAbstraction> run(Netlist* netlist, bool register_stage_identification);
+            NetlistAbstraction run(Netlist* netlist, bool register_stage_identification);
         }    // namespace pre_processing
     }        // namespace dataflow
 }    // namespace hal

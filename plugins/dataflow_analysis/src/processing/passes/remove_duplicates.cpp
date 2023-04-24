@@ -48,7 +48,7 @@ namespace hal
                             {
                                 u32 new_group_id = ++id_counter;
 
-                                new_state->group_control_fingerprint_map[new_group_id] = new_state->netlist_abstr->gate_to_fingerprint.at(*new_group.begin());
+                                new_state->group_control_fingerprint_map[new_group_id] = new_state->netlist_abstr.gate_to_fingerprint.at(*new_group.begin());
                                 new_state->operations_on_group_allowed[new_group_id]   = state->operations_on_group_allowed.at(group_id);
                                 new_state->gates_of_group[new_group_id].insert(new_group.begin(), new_group.end());
                                 for (const auto& sg : new_group)
@@ -88,7 +88,7 @@ namespace hal
                             {
                                 u32 new_group_id = ++id_counter;
 
-                                new_state->group_control_fingerprint_map[new_group_id] = new_state->netlist_abstr->gate_to_fingerprint.at(*new_group.begin());
+                                new_state->group_control_fingerprint_map[new_group_id] = new_state->netlist_abstr.gate_to_fingerprint.at(*new_group.begin());
                                 new_state->operations_on_group_allowed[new_group_id]   = state->operations_on_group_allowed[group_id];
 
                                 new_state->gates_of_group[new_group_id].insert(new_group.begin(), new_group.end());
@@ -101,14 +101,14 @@ namespace hal
                     }
 
                     /* insert missing gates */
-                    for (auto gate : state->netlist_abstr->all_sequential_gates)
+                    for (auto gate : state->netlist_abstr.all_sequential_gates)
                     {
                         u32 gate_id = gate->get_id();
                         if (merged_gates.find(gate_id) == merged_gates.end())
                         {
                             u32 new_group_id = ++id_counter;
 
-                            new_state->group_control_fingerprint_map[new_group_id] = new_state->netlist_abstr->gate_to_fingerprint.at(gate_id);
+                            new_state->group_control_fingerprint_map[new_group_id] = new_state->netlist_abstr.gate_to_fingerprint.at(gate_id);
                             new_state->operations_on_group_allowed[new_group_id]   = state->operations_on_group_allowed[state->parent_group_of_gate[gate_id]];
 
                             new_state->gates_of_group[new_group_id].insert(gate_id);

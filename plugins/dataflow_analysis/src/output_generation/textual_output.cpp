@@ -45,11 +45,11 @@ namespace hal
 
                     for (const auto& single_ff : gates)
                     {
-                        auto name          = state->netlist_abstr->nl->get_gate_by_id(single_ff)->get_name() + ", ";
-                        auto type          = "type: " + state->netlist_abstr->nl->get_gate_by_id(single_ff)->get_type()->get_name() + ", ";
-                        auto id            = "id: " + std::to_string(state->netlist_abstr->nl->get_gate_by_id(single_ff)->get_id()) + ", ";
+                        auto name          = state->netlist_abstr.nl->get_gate_by_id(single_ff)->get_name() + ", ";
+                        auto type          = "type: " + state->netlist_abstr.nl->get_gate_by_id(single_ff)->get_type()->get_name() + ", ";
+                        auto id            = "id: " + std::to_string(state->netlist_abstr.nl->get_gate_by_id(single_ff)->get_id()) + ", ";
                         std::string stages = "RS: ";
-                        if (auto it = state->netlist_abstr->gate_to_register_stages.find(single_ff); it != state->netlist_abstr->gate_to_register_stages.end())
+                        if (auto it = state->netlist_abstr.gate_to_register_stages.find(single_ff); it != state->netlist_abstr.gate_to_register_stages.end())
                         {
                             stages += "{" + utils::join(", ", std::set<u32>(it->second.begin(), it->second.end())) + "}";
                         }

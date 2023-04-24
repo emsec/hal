@@ -21,7 +21,7 @@ namespace hal
     {
         namespace pre_processing
         {
-            void identify_register_stages(std::shared_ptr<NetlistAbstraction> netlist_abstr)
+            void identify_register_stages(NetlistAbstraction& netlist_abstr)
             {
                 measure_block_time("pre_processing_pass 'identify_register_stages'");
 
@@ -32,14 +32,14 @@ namespace hal
                     std::vector<std::vector<u32>> stages;
                 };
 
-                std::vector<stage_context> directional_stages = {{"forward", netlist_abstr->gate_to_successors, {}}, {"backward", netlist_abstr->gate_to_predecessors, {}}};
+                std::vector<stage_context> directional_stages = {{"forward", netlist_abstr.gate_to_successors, {}}, {"backward", netlist_abstr.gate_to_predecessors, {}}};
 
                 for (auto& ctx : directional_stages)
                 {
                     log_info("dataflow", "directional register stages: {}", ctx.name);
 
                     std::unordered_set<u32> unassigned_gates;
-                    for (const auto& g : netlist_abstr->all_sequential_gates)
+                    for (const auto& g : netlist_abstr.all_sequential_gates)
                     {
                         unassigned_gates.insert(g->get_id());
                     }
@@ -50,10 +50,10 @@ namespace hal
                         float cnt = 0;
                         std::unordered_map<u32, u32> stage_index_of_gate;
 
-                        for (const auto& sequential_gate : netlist_abstr->all_sequential_gates)
+                        for (const auto& sequential_gate : netlist_abstr.all_sequential_gates)
                         {
                             cnt++;
-                            progress_bar.print_progress(cnt / netlist_abstr->all_sequential_gates.size());
+                            progress_bar.print_progress(cnt / netlist_abstr.all_sequential_gates.size());
 
                             auto current = sequential_gate->get_id();
 
@@ -274,12 +274,12 @@ namespace hal
                         final_stages.insert(final_stages.end(), directional_stages[i].stages.begin(), directional_stages[i].stages.end());
                     }
 
-                    netlist_abstr->gate_to_register_stages.clear();
+                    netlist_abstr.gate_to_register_stages.clear();
                     for (u32 s = 0; s < final_stages.size(); ++s)
                     {
                         for (auto g : final_stages[s])
                         {
-                            netlist_abstr->gate_to_register_stages[g].insert(s);
+                            netlist_abstr.gate_to_register_stages[g].insert(s);
                         }
                     }
                 }
@@ -294,9 +294,9 @@ namespace hal
                     float cnt = 0;
                     std::vector<std::unordered_set<u32>> spread_stages;
                     std::set<std::vector<u32>> seen;
-                    for (auto& [g, stages] : netlist_abstr->gate_to_register_stages)
+                    for (auto& [g, stages] : netlist_abstr.gate_to_register_stages)
                     {
-                        progress_bar.print_progress(++cnt / netlist_abstr->gate_to_register_stages.size());
+                        progress_bar.print_progress(++cnt / netlist_abstr.gate_to_register_stages.size());
 
                         if (stages.size() > 1)
                         {
@@ -336,13 +336,13 @@ namespace hal
                     cnt = 0;
                     for (const auto& combine : spread_stages)
                     {
-                        progress_bar.print_progress(++cnt / netlist_abstr->gate_to_register_stages.size());
+                        progress_bar.print_progress(++cnt / netlist_abstr.gate_to_register_stages.size());
 
                         for (auto stage_id : combine)
                         {
                             for (auto gate_id : final_stages[stage_id])
                             {
-                                netlist_abstr->gate_to_register_stages[gate_id] = combine;
+                                netlist_abstr.gate_to_register_stages[gate_id] = combine;
                             }
                         }
                     }

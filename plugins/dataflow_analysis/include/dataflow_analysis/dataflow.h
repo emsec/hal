@@ -26,16 +26,20 @@
 #pragma once
 
 #include "dataflow_analysis/common/grouping.h"
+#include "dataflow_analysis/output_generation/result.h"
+#include "hal_core/utilities/result.h"
 
 #include <unordered_set>
 
 namespace hal
 {
+    class Gate;
+    class Module;
+
     namespace dataflow
     {
         /**
          * Analyze the datapath to identify word-level registers in the given netlist.
-         * The registers are returned as a grouping and the results are written to a JSON file.
          * 
          * @param[in] nl - The netlist.
          * @param[in] out_path - The output path to which the results are written.
@@ -43,33 +47,51 @@ namespace hal
          * @param[in] register_stage_identification - Set `true`to enable register stage identification during analysis, `false` otherwise. Defaults to `false`.
          * @param[in] known_groups - Registers that have been identified prior to dataflow analysis. Must be provided as a vector of registers with each register being represented as a vector of gate IDs. Defaults to an empty vector.
          * @param[in] bad_group_size - Minimum expected register size. Smaller registers will not be considered during analysis. Defults to `7`.
-         * @returns The grouping containing the registers.
+         * @returns Ok() and the dataflow analysis result on success, an error otherwise.
          */
-        std::shared_ptr<dataflow::Grouping> analyze(Netlist* nl,
-                                                    std::filesystem::path out_path,
-                                                    const std::vector<u32>& sizes                     = {},
-                                                    bool register_stage_identification                = false,
-                                                    const std::vector<std::vector<u32>>& known_groups = {},
-                                                    const u32 bad_group_size                          = 7);
+        hal::Result<dataflow::Result> analyze(Netlist* nl,
+                                              std::filesystem::path out_path,
+                                              const std::vector<u32>& sizes                     = {},
+                                              bool register_stage_identification                = false,
+                                              const std::vector<std::vector<u32>>& known_groups = {},
+                                              const u32 bad_group_size                          = 7);
 
         /**
          * Write the dataflow graph as a DOT graph to the specified location.
          * 
-         * @param[in] grouping - The grouping containing the registers.
+         * @param[in] result - The dataflow analysis result.
          * @param[in] out_path - The output path.
-         * @param[in] ids - The grouping IDs to include in the DOT graph. If no IDs are provided, the entire graph is written. Defaults to an empty set.
-         * @returns `true` on success, `false` otherwise.
+         * @param[in] group_ids - The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+         * @returns Ok() on success, an error otherwise.
          */
-        bool write_dot_graph(const std::shared_ptr<dataflow::Grouping> grouping, const std::filesystem::path& out_path, const std::unordered_set<u32>& ids = {});
+        hal::Result<std::monostate> write_dot(const dataflow::Result& result, const std::filesystem::path& out_path, const std::unordered_set<u32>& group_ids = {});
 
         /**
-         * Create modules for the groupings output by dataflow analysis.
+         * Write the groups resulting from dataflow analysis to a `.txt` file.
          * 
-         * @param[in] grouping - The grouping containing the registers.
-         * @param[in] nl - The netlist.
-         * @param[in] ids - The grouping IDs to create modules for. If no IDs are provided, all modules will be created. Defaults to an empty set.
-         * @returns `true` on success, `false` otherwise.
+         * @param[in] result - The dataflow analysis result.
+         * @param[in] out_path - The output path.
+         * @param[in] group_ids - The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+         * @returns Ok() on success, an error otherwise.
          */
-        bool create_grouping_modules(const std::shared_ptr<dataflow::Grouping> grouping, Netlist* nl, const std::unordered_set<u32>& ids = {});
+        hal::Result<std::monostate> write_txt(const dataflow::Result& result, const std::filesystem::path& out_path, const std::unordered_set<u32>& group_ids = {});
+
+        /**
+         * Create modules for the dataflow analysis result.
+         * 
+         * @param[in] result - The dataflow analysis result.
+         * @param[in] group_ids - The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+         * @returns Ok() and a map from group IDs to Modules on success, an error otherwise.
+         */
+        hal::Result<std::unordered_map<u32, Module*>> create_modules(const dataflow::Result& result, const std::unordered_set<u32>& group_ids = {});
+
+        /**
+         * Get the groups of the dataflow analysis result as a list.
+         * 
+         * @param[in] result - The dataflow analysis result.
+         * @param[in] group_ids - The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+         * @returns A vector of groups with each group being a vector of gates.
+         */
+        std::vector<std::vector<Gate*>> get_group_list(const dataflow::Result& result, const std::unordered_set<u32>& group_ids = {});
     }    // namespace dataflow
 }    // namespace hal
