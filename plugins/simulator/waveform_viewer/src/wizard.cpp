@@ -341,7 +341,7 @@ namespace hal {
         for (int irow = 0; irow < mTableWidget->rowCount(); ++irow)
         {
             QComboBox *comboBox = new QComboBox(this);
-            comboBox->addItems(QStringList() << "provided_models" << "num_of_threads" << "compiler" << "ssh_server");
+            comboBox->addItems(QStringList() << "" << "provided_models" << "num_of_threads" << "compiler" << "ssh_server");
             mTableWidget->setCellWidget(irow, 0, comboBox);
         }
 
@@ -390,7 +390,7 @@ namespace hal {
             QComboBox *comboBox = qobject_cast<QComboBox *>(mTableWidget->cellWidget(irow, 0));
             if (!comboBox) continue;
             QString key = comboBox->currentText().trimmed();
-            if (key.isEmpty()) continue;
+            if (key.isEmpty() || key == "") continue;
 
             const QTableWidgetItem *wi = mTableWidget->item(irow, 1);
             QString value = wi ? wi->text().trimmed() : QString();
