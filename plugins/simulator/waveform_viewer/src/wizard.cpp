@@ -469,6 +469,7 @@ namespace hal {
         else if (mController->can_import_data() && fileName.toLower().endsWith(".csv"))
             mController->import_csv(fileName.toStdString(), NetlistSimulatorController::GlobalInputs);
         else
+            QMessageBox::warning(this, "Error", "Please select a vile ending with .vcd or .csv.");
             log_warning(mController->get_name(), "Cannot parse file '{}' (unknown extension or wrong state).", fileName.toStdString());
 
         return true;
