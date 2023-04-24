@@ -343,7 +343,7 @@ namespace hal {
         for (int irow = 0; irow < mTableWidget->rowCount(); ++irow)
         {
             QComboBox *comboBox = new QComboBox(this);
-            comboBox->addItems(QStringList() << "provided_models" << "num_of_threads" << "compiler");
+            comboBox->addItems(QStringList() << "provided_models" << "num_of_threads" << "compiler" << "ssh_server");
             mTableWidget->setCellWidget(irow, 0, comboBox);
         }
 
