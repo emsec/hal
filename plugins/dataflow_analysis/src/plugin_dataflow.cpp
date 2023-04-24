@@ -1,34 +1,13 @@
 #include "dataflow_analysis/plugin_dataflow.h"
 
 #include "dataflow_analysis/common/grouping.h"
-#include "dataflow_analysis/common/netlist_abstraction.h"
 #include "dataflow_analysis/dataflow.h"
-#include "dataflow_analysis/evaluation/configuration.h"
-#include "dataflow_analysis/evaluation/context.h"
-#include "dataflow_analysis/evaluation/evaluation.h"
-#include "dataflow_analysis/output_generation/json.hpp"
-#include "dataflow_analysis/output_generation/json_output.h"
-#include "dataflow_analysis/output_generation/svg_output.h"
-#include "dataflow_analysis/output_generation/textual_output.h"
-#include "dataflow_analysis/pre_processing/pre_processing.h"
-#include "dataflow_analysis/processing/passes/group_by_control_signals.h"
-#include "dataflow_analysis/processing/processing.h"
 #include "dataflow_analysis/utils/gui_layout_locker.h"
 #include "dataflow_analysis/utils/timing_utils.h"
-#include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/module.h"
-#include "hal_core/netlist/netlist.h"
-#include "hal_core/netlist/netlist_utils.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 
 #include <chrono>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <sstream>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <thread>
 
 namespace hal
@@ -113,7 +92,7 @@ namespace hal
             }
         }
 
-        auto grouping_res = dataflow::analyze(nl, path, sizes, false, {}, bad_group_size);
+        auto grouping_res = dataflow::analyze(nl, sizes, false, {}, bad_group_size);
         if (grouping_res.is_error())
         {
             log_error("dataflow", "dataflow analysis failed:\n{}", grouping_res.get_error().get());
@@ -196,7 +175,7 @@ namespace hal
 
         dataflow::GuiLayoutLocker gll;
 
-        auto grouping_res = dataflow::analyze(nl, m_output_path, m_sizes, m_register_stage_identification, {}, m_bad_groups);
+        auto grouping_res = dataflow::analyze(nl, m_sizes, m_register_stage_identification, {}, m_bad_groups);
         if (grouping_res.is_error())
         {
             log_error("dataflow", "dataflow analysis failed:\n{}", grouping_res.get_error().get());
@@ -235,7 +214,7 @@ namespace hal
                                                              std::vector<std::vector<u32>> known_groups,
                                                              u32 bad_group_size)
     {
-        const auto grouping_res = dataflow::analyze(nl, output_path, sizes, register_stage_identification, known_groups, bad_group_size);
+        const auto grouping_res = dataflow::analyze(nl, sizes, register_stage_identification, known_groups, bad_group_size);
         if (grouping_res.is_error())
         {
             log_error("dataflow", "dataflow analysis failed:\n{}", grouping_res.get_error().get());

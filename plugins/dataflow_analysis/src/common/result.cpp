@@ -1,4 +1,4 @@
-#include "dataflow_analysis/output_generation/result.h"
+#include "dataflow_analysis/common/result.h"
 
 #include "hal_core/netlist/netlist.h"
 

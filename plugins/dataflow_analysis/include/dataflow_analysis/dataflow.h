@@ -26,7 +26,7 @@
 #pragma once
 
 #include "dataflow_analysis/common/grouping.h"
-#include "dataflow_analysis/output_generation/result.h"
+#include "dataflow_analysis/common/result.h"
 #include "hal_core/utilities/result.h"
 
 #include <unordered_set>
@@ -42,19 +42,14 @@ namespace hal
          * Analyze the datapath to identify word-level registers in the given netlist.
          * 
          * @param[in] nl - The netlist.
-         * @param[in] out_path - The output path to which the results are written.
          * @param[in] sizes - Register sizes that are expected to be found in the netlist. These sizes will be prioritized over others during analysis. Defaults to an empty vector.
          * @param[in] register_stage_identification - Set `true`to enable register stage identification during analysis, `false` otherwise. Defaults to `false`.
          * @param[in] known_groups - Registers that have been identified prior to dataflow analysis. Must be provided as a vector of registers with each register being represented as a vector of gate IDs. Defaults to an empty vector.
          * @param[in] bad_group_size - Minimum expected register size. Smaller registers will not be considered during analysis. Defults to `7`.
          * @returns Ok() and the dataflow analysis result on success, an error otherwise.
          */
-        hal::Result<dataflow::Result> analyze(Netlist* nl,
-                                              std::filesystem::path out_path,
-                                              const std::vector<u32>& sizes                     = {},
-                                              bool register_stage_identification                = false,
-                                              const std::vector<std::vector<u32>>& known_groups = {},
-                                              const u32 bad_group_size                          = 7);
+        hal::Result<dataflow::Result>
+            analyze(Netlist* nl, const std::vector<u32>& sizes = {}, bool register_stage_identification = false, const std::vector<std::vector<u32>>& known_groups = {}, const u32 bad_group_size = 7);
 
         /**
          * Write the dataflow graph as a DOT graph to the specified location.

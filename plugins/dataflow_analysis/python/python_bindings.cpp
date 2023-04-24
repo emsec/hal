@@ -1,9 +1,8 @@
 #include "hal_core/python_bindings/python_bindings.h"
 
+#include "dataflow_analysis/common/result.h"
 #include "dataflow_analysis/dataflow.h"
-#include "dataflow_analysis/output_generation/result.h"
 #include "dataflow_analysis/plugin_dataflow.h"
-#include "hal_core/netlist/netlist.h"
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
@@ -71,13 +70,9 @@ namespace hal
         auto py_dataflow = m.def_submodule("Dataflow");
         py_dataflow.def(
             "analyze",
-            [](Netlist* nl,
-               std::filesystem::path out_path,
-               const std::vector<u32>& sizes                     = {},
-               bool register_stage_identification                = false,
-               const std::vector<std::vector<u32>>& known_groups = {},
-               const u32 bad_group_size                          = 7) -> std::optional<dataflow::Result> {
-                auto res = dataflow::analyze(nl, out_path, sizes, register_stage_identification, known_groups, bad_group_size);
+            [](Netlist* nl, const std::vector<u32>& sizes = {}, bool register_stage_identification = false, const std::vector<std::vector<u32>>& known_groups = {}, const u32 bad_group_size = 7)
+                -> std::optional<dataflow::Result> {
+                auto res = dataflow::analyze(nl, sizes, register_stage_identification, known_groups, bad_group_size);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -89,7 +84,6 @@ namespace hal
                 }
             },
             py::arg("nl"),
-            py::arg("out_path"),
             py::arg("sizes")                         = std::vector<u32>(),
             py::arg("register_stage_identification") = false,
             py::arg("known_groups")                  = std::vector<std::vector<u32>>(),
