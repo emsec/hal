@@ -135,6 +135,9 @@ namespace hal {
          */
         void add_gates(const std::vector<Gate*>& gates);
 
+        /**
+         * Clear all internal container (gate set, input nets ...)
+         */
         void clear();
 
         /**

@@ -56,6 +56,7 @@ namespace hal {
 
         NetlistSimulatorController *mController;
 
+        void setSubtitleInternal(bool emptySelection);
         void handleSelectAll();
         void handleCurrentGuiSelection();
         void handleClearSelection();
@@ -144,6 +145,7 @@ namespace hal {
     public:
         PageRunSimulation(NetlistSimulatorController *controller, QWidget* parent=nullptr);
         virtual bool validatePage() override;
+        virtual int nextId() const override;
     private Q_SLOTS:
         void handleStartClicked();
         void handleLogfileRead();

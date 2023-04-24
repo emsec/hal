@@ -35,7 +35,7 @@ namespace hal {
       : QWizardPage(parent), mController(controller)
     {
         setTitle(tr("Step 1 | Select Gates"));
-        setSubTitle(tr("Select the gates to be used for simulation"));
+        setSubtitleInternal(true);
 
         QGridLayout* layout = new QGridLayout(this);
         mButAll = new QPushButton("All gates", this);
@@ -73,6 +73,16 @@ namespace hal {
 
         // vllt hinzufügen dass Next Button disabled ist wenn noch nix ausgewählt ist
     }
+
+    void PageSelectGates::setSubtitleInternal(bool emptySelection)
+    {
+        QString txt("Select the gates to be used for simulation. ");
+
+        if (emptySelection)
+            txt += "No gates selected so far ...";
+        setSubTitle(txt);
+    }
+
 
     void PageSelectGates::handleSelectAll()
     {
@@ -135,10 +145,12 @@ namespace hal {
             mController->get_waveform_by_net(inpNet);
         if (mController->get_gates().empty() || mController->get_input_nets().empty())
         {
-            QMessageBox::warning(this, "Error", "No valid gates selected.");
+            // QMessageBox::warning(this, "Error", "No valid gates selected.");
+            setSubtitleInternal(true);
             return false;
         }
 
+        setSubtitleInternal(false);
         return true;
     }
 
@@ -537,6 +549,12 @@ namespace hal {
     {
         return (mController->get_state()==NetlistSimulatorController::ShowResults ||
                 mController->get_state()==NetlistSimulatorController::EngineFailed);
+    }
+
+    int PageRunSimulation::nextId() const
+    {
+        if (mController->get_state()==NetlistSimulatorController::EngineFailed) return -1;
+        return QWizardPage::nextId();
     }
 
     PageLoadResults::PageLoadResults(NetlistSimulatorController *controller, QWidget *parent)
