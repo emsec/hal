@@ -19,11 +19,17 @@ All notable changes to this project will be documented in this file.
   * `boolean_influence`
     * added deterministic variants of all Boolean influence functions that shall be used for Boolean functions with only few input variables
     * added additional parameters for more control to the subcircuit and gate variants of `get_boolean_influence`
+  * `netlist_preprocessing`
+    * added `decompose_gates_of_type` and `decompose_gate` that decompose combinational logic into basic gate types.
+  * `verilog_parser`
+    * the parser now annotates all the net names that where merged into one net using the data container
+    * changed the behavior of the parser when flattening a netlist and generating new unique names (instead of appending an index we add a prefix containing the names of parent modules)
   * `z3_utils`
     * removed class `z3Wrapper`
     * renamed `to_z3` to `from_bf` and added support for missing node types
     * renamed `to_hal` to `to_bf` and added support for missing node types
     * changed `to_cpp` to output only the C++ code implementing the Boolean function and nothing more
+    * added `compare_netlists` function that functionally compares two netlists that only differ in their combinational logic
 * decorators
   * added `NetlistModificationDecorator`
     * added `delete_modules` to delete all (or a filtered subset of) the modules in a netlist
