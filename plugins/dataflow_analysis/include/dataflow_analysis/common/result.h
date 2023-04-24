@@ -33,6 +33,7 @@ namespace hal
 {
     class Gate;
     class Net;
+    class Module;
 
     namespace dataflow
     {
@@ -97,6 +98,40 @@ namespace hal
              * @returns Ok() and the predecessors of the group as a set of group IDs on success, an error otherwise.
              */
             hal::Result<std::unordered_set<u32>> get_group_predecessors(const u32 group_id) const;
+
+            /**
+             * Write the dataflow graph as a DOT graph to the specified location.
+             * 
+             * @param[in] out_path - The output path.
+             * @param[in] group_ids - The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+             * @returns Ok() on success, an error otherwise.
+             */
+            hal::Result<std::monostate> write_dot(const std::filesystem::path& out_path, const std::unordered_set<u32>& group_ids = {}) const;
+
+            /**
+             * Write the groups resulting from dataflow analysis to a `.txt` file.
+             * 
+             * @param[in] out_path - The output path.
+             * @param[in] group_ids - The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+             * @returns Ok() on success, an error otherwise.
+             */
+            hal::Result<std::monostate> write_txt(const std::filesystem::path& out_path, const std::unordered_set<u32>& group_ids = {}) const;
+
+            /**
+             * Create modules for the dataflow analysis result.
+             * 
+             * @param[in] group_ids - The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+             * @returns Ok() and a map from group IDs to Modules on success, an error otherwise.
+             */
+            hal::Result<std::unordered_map<u32, Module*>> create_modules(const std::unordered_set<u32>& group_ids = {}) const;
+
+            /**
+             * Get the groups of the dataflow analysis result as a list.
+             * 
+             * @param[in] group_ids - The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+             * @returns A vector of groups with each group being a vector of gates.
+             */
+            std::vector<std::vector<Gate*>> get_groups_as_list(const std::unordered_set<u32>& group_ids = {}) const;
 
         private:
             Netlist* m_netlist;

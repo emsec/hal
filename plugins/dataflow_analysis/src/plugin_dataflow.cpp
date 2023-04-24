@@ -185,7 +185,7 @@ namespace hal
 
         if (m_draw_graph)
         {
-            if (const auto res = dataflow::write_dot(grouping, m_output_path); res.is_error())
+            if (const auto res = grouping.write_dot(m_output_path); res.is_error())
             {
                 log_error("dataflow", "could not write DOT graph to file:\n{}", res.get_error().get());
             }
@@ -193,7 +193,7 @@ namespace hal
 
         if (m_create_modules)
         {
-            if (const auto res = dataflow::create_modules(grouping); res.is_error())
+            if (const auto res = grouping.create_modules(); res.is_error())
             {
                 log_error("dataflow", "could not create modules:\n{}", res.get_error().get());
             }
@@ -224,7 +224,7 @@ namespace hal
 
         if (draw_graph)
         {
-            if (const auto res = dataflow::write_dot(grouping, output_path); res.is_error())
+            if (const auto res = grouping.write_dot(output_path); res.is_error())
             {
                 log_error("dataflow", "could not write DOT graph to file:\n{}", res.get_error().get());
             }
@@ -232,13 +232,13 @@ namespace hal
 
         if (create_modules)
         {
-            if (const auto res = dataflow::create_modules(grouping); res.is_error())
+            if (const auto res = grouping.create_modules(); res.is_error())
             {
                 log_error("dataflow", "could not create modules:\n{}", res.get_error().get());
             }
         }
 
-        return dataflow::get_group_list(grouping);
+        return grouping.get_groups_as_list();
     }
 
     std::function<void(int, const std::string&)> GuiExtensionDataflow::s_progress_indicator_function = nullptr;

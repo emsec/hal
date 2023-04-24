@@ -50,43 +50,5 @@ namespace hal
          */
         hal::Result<dataflow::Result>
             analyze(Netlist* nl, const std::vector<u32>& sizes = {}, bool register_stage_identification = false, const std::vector<std::vector<u32>>& known_groups = {}, const u32 bad_group_size = 7);
-
-        /**
-         * Write the dataflow graph as a DOT graph to the specified location.
-         * 
-         * @param[in] result - The dataflow analysis result.
-         * @param[in] out_path - The output path.
-         * @param[in] group_ids - The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
-         * @returns Ok() on success, an error otherwise.
-         */
-        hal::Result<std::monostate> write_dot(const dataflow::Result& result, const std::filesystem::path& out_path, const std::unordered_set<u32>& group_ids = {});
-
-        /**
-         * Write the groups resulting from dataflow analysis to a `.txt` file.
-         * 
-         * @param[in] result - The dataflow analysis result.
-         * @param[in] out_path - The output path.
-         * @param[in] group_ids - The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
-         * @returns Ok() on success, an error otherwise.
-         */
-        hal::Result<std::monostate> write_txt(const dataflow::Result& result, const std::filesystem::path& out_path, const std::unordered_set<u32>& group_ids = {});
-
-        /**
-         * Create modules for the dataflow analysis result.
-         * 
-         * @param[in] result - The dataflow analysis result.
-         * @param[in] group_ids - The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
-         * @returns Ok() and a map from group IDs to Modules on success, an error otherwise.
-         */
-        hal::Result<std::unordered_map<u32, Module*>> create_modules(const dataflow::Result& result, const std::unordered_set<u32>& group_ids = {});
-
-        /**
-         * Get the groups of the dataflow analysis result as a list.
-         * 
-         * @param[in] result - The dataflow analysis result.
-         * @param[in] group_ids - The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
-         * @returns A vector of groups with each group being a vector of gates.
-         */
-        std::vector<std::vector<Gate*>> get_group_list(const dataflow::Result& result, const std::unordered_set<u32>& group_ids = {});
     }    // namespace dataflow
 }    // namespace hal

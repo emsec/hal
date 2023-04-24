@@ -101,98 +101,6 @@ namespace hal
                 :rtype: hal_py.Dataflow.Result or None
             )");
 
-        py_dataflow.def(
-            "write_dot",
-            [](const dataflow::Result& result, const std::filesystem::path& out_path, const std::unordered_set<u32>& group_ids = {}) -> bool {
-                auto res = dataflow::write_dot(result, out_path, group_ids);
-                if (res.is_ok())
-                {
-                    return true;
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while writing DOT graph:\n{}", res.get_error().get());
-                    return false;
-                }
-            },
-            py::arg("result"),
-            py::arg("out_path"),
-            py::arg("group_ids") = std::unordered_set<u32>(),
-            R"(
-                Write the dataflow graph as a DOT graph to the specified location.
-
-                :param hal_py.Dataflow.Result result: The dataflow analysis result.
-                :param pathlib.Path out_path: The output path.
-                :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
-                :returns: ``True`` on success, ``False`` otherwise.
-                :rtype: bool
-            )");
-
-        py_dataflow.def(
-            "write_txt",
-            [](const dataflow::Result& result, const std::filesystem::path& out_path, const std::unordered_set<u32>& group_ids = {}) -> bool {
-                auto res = dataflow::write_txt(result, out_path, group_ids);
-                if (res.is_ok())
-                {
-                    return true;
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while writing DOT graph:\n{}", res.get_error().get());
-                    return false;
-                }
-            },
-            py::arg("result"),
-            py::arg("out_path"),
-            py::arg("group_ids") = std::unordered_set<u32>(),
-            R"(
-                Write the groups resulting from dataflow analysis to a `.txt` file.
-
-                :param hal_py.Dataflow.Result result: The dataflow analysis result.
-                :param pathlib.Path out_path: The output path.
-                :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
-                :returns: ``True`` on success, ``False`` otherwise.
-                :rtype: bool
-            )");
-
-        py_dataflow.def(
-            "create_modules",
-            [](const dataflow::Result& result, const std::unordered_set<u32>& group_ids = {}) -> std::optional<std::unordered_map<u32, Module*>> {
-                auto res = dataflow::create_modules(result, group_ids);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while creating modules:\n{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            },
-            py::arg("result"),
-            py::arg("group_ids") = std::unordered_set<u32>(),
-            R"(
-                Create modules for the dataflow analysis result.
-
-                :param hal_py.Dataflow.Result result: The dataflow analysis result.
-                :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
-                :returns: A map from group IDs to Modules on success, ``None`` otherwise.
-                :rtype: bool
-            )");
-
-        py_dataflow.def("get_group_list",
-                        &dataflow::get_group_list,
-                        py::arg("result"),
-                        py::arg("group_ids") = std::unordered_set<u32>(),
-                        R"(
-                            Get the groups of the dataflow analysis result as a list.
-
-                            :param hal_py.Dataflow.Result result: The dataflow analysis result.
-                            :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
-                            :returns: A list of groups with each group being a list of gates.
-                            :rtype: list[list[hal_py.Gate]]
-                        )");
-
         py::class_<dataflow::Result, RawPtrWrapper<dataflow::Result>> py_dataflow_result(py_dataflow, "Result", R"(
             The result of a dataflow analysis run containing the identified groups of sequential gates and their interconnections.
         )");
@@ -327,6 +235,90 @@ namespace hal
             :returns: The predecessors of the group as a set of group IDs on success, ``None`` otherwise.
             :rtype: set[int] or None
         )");
+
+        py_dataflow_result.def(
+            "write_dot",
+            [](const dataflow::Result& self, const std::filesystem::path& out_path, const std::unordered_set<u32>& group_ids = {}) -> bool {
+                auto res = self.write_dot(out_path, group_ids);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while writing DOT graph:\n{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("out_path"),
+            py::arg("group_ids") = std::unordered_set<u32>(),
+            R"(
+                Write the dataflow graph as a DOT graph to the specified location.
+
+                :param pathlib.Path out_path: The output path.
+                :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+                :returns: ``True`` on success, ``False`` otherwise.
+                :rtype: bool
+            )");
+
+        py_dataflow_result.def(
+            "write_txt",
+            [](const dataflow::Result& self, const std::filesystem::path& out_path, const std::unordered_set<u32>& group_ids = {}) -> bool {
+                auto res = self.write_txt(out_path, group_ids);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while writing DOT graph:\n{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("out_path"),
+            py::arg("group_ids") = std::unordered_set<u32>(),
+            R"(
+                Write the groups resulting from dataflow analysis to a `.txt` file.
+
+                :param pathlib.Path out_path: The output path.
+                :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+                :returns: ``True`` on success, ``False`` otherwise.
+                :rtype: bool
+            )");
+
+        py_dataflow_result.def(
+            "create_modules",
+            [](const dataflow::Result& self, const std::unordered_set<u32>& group_ids = {}) -> std::optional<std::unordered_map<u32, Module*>> {
+                auto res = self.create_modules(group_ids);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while creating modules:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("group_ids") = std::unordered_set<u32>(),
+            R"(
+                Create modules for the dataflow analysis result.
+
+                :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+                :returns: A map from group IDs to Modules on success, ``None`` otherwise.
+                :rtype: bool
+            )");
+
+        py_dataflow_result.def("get_group_list",
+                               &dataflow::Result::get_groups_as_list,
+                               py::arg("group_ids") = std::unordered_set<u32>(),
+                               R"(
+                            Get the groups of the dataflow analysis result as a list.
+
+                            :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+                            :returns: A list of groups with each group being a list of gates.
+                            :rtype: list[list[hal_py.Gate]]
+                        )");
 
 #ifndef PYBIND11_MODULE
         return m.ptr();
