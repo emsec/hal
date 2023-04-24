@@ -134,10 +134,11 @@ namespace hal {
         for (const Net* inpNet : mController->get_input_nets())
             mController->get_waveform_by_net(inpNet);
         if (mController->get_gates().empty() || mController->get_input_nets().empty())
+        {
+            QMessageBox::warning(this, "Error", "No valid gates selected.");
             return false;
+        }
 
-
-        // wurde gate ausgewählt???
         return true;
     }
 
@@ -147,8 +148,6 @@ namespace hal {
     {
         setTitle(tr("Step 2 | Clock settings"));
         setSubTitle(tr("Configure the clock for the simulation"));
-
-        // was wenn inputs leer?
 
         QGridLayout* layout = new QGridLayout(this);
         mComboNet = new QComboBox(this);
@@ -226,6 +225,7 @@ namespace hal {
             if (period <= 0)
             {
                 return false;
+                QMessageBox::warning(this, "Error", "Invalid period specified.");
             }
 
 
