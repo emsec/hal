@@ -272,8 +272,6 @@ namespace hal {
             }
         }
 
-        QLabel *label = new QLabel("Not the engine you are looking for? You might want to check whether appropriate plugin is loaded.", this);
-        mLayout->addWidget(label);
         setLayout(mLayout);
     }
 
