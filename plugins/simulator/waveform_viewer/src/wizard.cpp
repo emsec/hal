@@ -9,9 +9,11 @@
 
 #include <QHeaderView>
 #include <QFileDialog>
+#include <QMessageBox>
 
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
+
 
 namespace hal {
 
@@ -32,8 +34,8 @@ namespace hal {
     PageSelectGates::PageSelectGates(NetlistSimulatorController *controller, QWidget *parent)
       : QWizardPage(parent), mController(controller)
     {
-        setTitle(tr("Step 1"));
-        setSubTitle(tr("Select Gates"));
+        setTitle(tr("Step 1 | Select Gates"));
+        setSubTitle(tr("Select the gates to be used for simulation"));
 
         QGridLayout* layout = new QGridLayout(this);
         mButAll = new QPushButton("All gates", this);
@@ -143,8 +145,8 @@ namespace hal {
     PageClock::PageClock(NetlistSimulatorController *controller, QWidget* parent)
         : QWizardPage(parent), mController(controller)
     {
-        setTitle(tr("Step 2"));
-        setSubTitle(tr("Clock settings"));
+        setTitle(tr("Step 2 | Clock settings"));
+        setSubTitle(tr("Configure the clock for the simulation"));
 
         // was wenn inputs leer?
 
@@ -221,7 +223,11 @@ namespace hal {
         else
         {
             int period = mSpinPeriod->value();
-            if (period <= 0) return false;
+            if (period <= 0)
+            {
+                return false;
+            }
+
 
             std::string clkNetName = mComboNet->currentText().toStdString();
 
@@ -250,8 +256,8 @@ namespace hal {
     PageEngine::PageEngine(NetlistSimulatorController *controller, Wizard *parent)
         : QWizardPage(parent), mController(controller), m_wizard(parent)
     {
-        setTitle(tr("Step 3"));
-        setSubTitle(tr("Engine settings"));
+        setTitle(tr("Step 3 | Engine settings"));
+        setSubTitle(tr("Select the engine for the simulation\nIf the desired engine is not listed, check whether the respective plugin is loaded"));
 
         mLayout = new QVBoxLayout(this);
 
@@ -321,8 +327,8 @@ namespace hal {
     PageEngineProperties::PageEngineProperties(SimulationSettings *settings, NetlistSimulatorController *controller, QWidget *parent)
         : QWizardPage(parent), mController(controller), mSettings(settings)
     {
-        setTitle(tr("Step 4"));
-        setSubTitle(tr("Engine properties"));
+        setTitle(tr("Step 3.1 | Engine properties"));
+        setSubTitle(tr("Select and pass the engine properties for the verilator"));
 
         mTableWidget = new QTableWidget(this);
 
@@ -413,29 +419,13 @@ namespace hal {
 
         mEditFilename->setText(filename);
 
-        if (filename.endsWith(NetlistSimulatorController::sPersistFile))
-        {
-            NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
-            if (ctrlPlug)
-            {
-                std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->restore_simulator_controller(gNetlist,filename.toStdString());
-                //takeControllerOwnership(ctrlRef, true);
-            }
-        }
-        else if (mController->can_import_data() && filename.toLower().endsWith(".vcd"))
-            mController->import_vcd(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
-        else if (mController->can_import_data() && filename.toLower().endsWith(".csv"))
-            mController->import_csv(filename.toStdString(),NetlistSimulatorController::GlobalInputs);
-        else
-            log_warning(mController->get_name(), "Cannot parse file '{}' (unknown extension ore wrong state).", filename.toStdString());
-
     }
 
     PageInputData::PageInputData(NetlistSimulatorController *controller, QWidget* parent)
         : QWizardPage(parent), mController(controller)
     {
-        setTitle(tr("Step 5"));
-        setSubTitle(tr("Load input Data"));
+        setTitle(tr("Step 4 | Load input Data"));
+        setSubTitle(tr("Load the input data for the simulation"));
         QGridLayout* layout = new QGridLayout(this);
 
         mEditFilename = new QLineEdit(this);
@@ -449,10 +439,46 @@ namespace hal {
         layout->addWidget(but,0,1);
     }
 
+    bool PageInputData::validatePage()
+    {
+        QString fileName = mEditFilename->text();
+        if (fileName.isEmpty())
+        {
+            QMessageBox::warning(this, "Error", "Please select a file to load.");
+            return false;
+        }
+
+        QFileInfo fileInfo(fileName);
+        if (!fileInfo.exists() || !fileInfo.isFile())
+        {
+            QMessageBox::warning(this, "Error", "Please select a valid file to load.");
+            return false;
+        }
+
+        if (fileName.endsWith(NetlistSimulatorController::sPersistFile))
+        {
+            NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
+            if (ctrlPlug)
+            {
+                std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->restore_simulator_controller(gNetlist, fileName.toStdString());
+                //mController->takeControllerOwnership(ctrlRef.get(), true); // save controller
+            }
+        }
+        else if (mController->can_import_data() && fileName.toLower().endsWith(".vcd"))
+            mController->import_vcd(fileName.toStdString(), NetlistSimulatorController::GlobalInputs);
+        else if (mController->can_import_data() && fileName.toLower().endsWith(".csv"))
+            mController->import_csv(fileName.toStdString(), NetlistSimulatorController::GlobalInputs);
+        else
+            log_warning(mController->get_name(), "Cannot parse file '{}' (unknown extension or wrong state).", fileName.toStdString());
+
+        return true;
+    }
+
+
     PageRunSimulation::PageRunSimulation(NetlistSimulatorController *controller, QWidget *parent)
         : QWizardPage(parent), mController(controller)
     {
-        setTitle(tr("Step 6: Run Simulation"));
+        setTitle(tr("Step 5 | Run Simulation"));
         setSubTitle(tr("Start simulation based on controller settings from previous steps"));
 
         QVBoxLayout* layout = new QVBoxLayout(this);

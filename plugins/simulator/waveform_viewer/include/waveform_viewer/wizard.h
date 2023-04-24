@@ -128,6 +128,8 @@ namespace hal {
 
     public:
         PageInputData(NetlistSimulatorController *controller, QWidget *parent=nullptr);
+
+        virtual bool validatePage() override;
     private Q_SLOTS:
         void openFileBrowser();
 
