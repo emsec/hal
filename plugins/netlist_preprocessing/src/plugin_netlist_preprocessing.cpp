@@ -3,6 +3,7 @@
 #include "hal_core/netlist/boolean_function/solver.h"
 #include "hal_core/netlist/decorators/boolean_function_decorator.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
+#include "hal_core/netlist/decorators/netlist_modification_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
@@ -254,7 +255,8 @@ namespace hal
                     Net* in_net = in_endpoint->get_net();
                     if (in_endpoint->get_pin()->get_name() == func.get_variable_name().get())
                     {
-                        const auto merge_res = netlist_utils::merge_nets(nl, in_net, out_net, true);
+                        // const auto merge_res = netlist_utils::merge_nets(nl, in_net, out_net, true);
+                        const auto merge_res = NetlistModificationDecorator(*nl).connect_nets(out_net, in_net);
                         if (merge_res.is_error())
                         {
                             log_warning("netlist_preprocessing", "{}", merge_res.get_error().get());
@@ -907,8 +909,12 @@ namespace hal
                                   "unable to decompose gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": failed to build gate tree for output net at pin " + pin_name);
             }
 
-            auto new_output_net  = tree_res.get();
-            const auto merge_res = netlist_utils::merge_nets(nl, new_output_net, output_net, new_output_net->is_global_input_net());
+            auto new_output_net = tree_res.get();
+
+            const auto slave_net  = new_output_net->is_global_input_net() ? output_net : new_output_net;
+            const auto master_net = new_output_net->is_global_input_net() ? new_output_net : output_net;
+            const auto merge_res  = NetlistModificationDecorator(*nl).connect_nets(master_net, slave_net);
+            // const auto merge_res = netlist_utils::merge_nets(nl, new_output_net, output_net, new_output_net->is_global_input_net());
             if (merge_res.is_error())
             {
                 return ERR_APPEND(merge_res.get_error(),
@@ -1148,7 +1154,7 @@ namespace hal
                 "[" + utils::join(", ", identifiers, [](const auto& i) { return std::string("[") + '"' + i.identifier + '"' + ", " + std::to_string(i.index) + ", " + '"' + i.origin + '"' + "]"; })
                 + "]";
 
-            return gate->set_data("preprocessing_information", "multi_bit_indexed_identifiers", "list[(str, int, str)]", json_identifier_str);
+            return gate->set_data("preprocessing_information", "multi_bit_indexed_identifiers", "string", json_identifier_str);
         }
 
         // search for a net that connects to the gate at a pin of a specific type and tries to reconstruct an indexed identifier from its name or form a name of its merged wires
@@ -1170,26 +1176,21 @@ namespace hal
                 }
 
                 // 2) search all the names of the wires that where merged into this net
-                const auto all_merged_wires_str = std::get<1>(typed_net->get_data("parser_annotation", "merged_wires"));
-
-                if (all_merged_wires_str.empty())
+                if (!typed_net->has_data("parser_annotation", "merged_nets"))
                 {
-                    return found_identfiers;
+                    continue;
                 }
 
+                const auto all_merged_nets_str = std::get<1>(typed_net->get_data("parser_annotation", "merged_nets"));
+
+                if (all_merged_nets_str.empty())
+                {
+                    continue;
+                }
+
+                // parse json list of merged net names
                 rapidjson::Document doc;
-
-                doc.Parse(all_merged_wires_str.c_str());
-
-                // TODO remove debug print
-                // rapidjson::StringBuffer strbuf;
-                // strbuf.Clear();
-
-                // rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-                // doc.Accept(writer);
-
-                // std::cout << "Data: " << all_merged_wires_str << std::endl;
-                // std::cout << "JSON: " << strbuf.GetString() << std::endl;
+                doc.Parse(all_merged_nets_str.c_str());
 
                 for (u32 i = 0; i < doc.GetArray().Size(); i++)
                 {
@@ -1232,7 +1233,6 @@ namespace hal
             std::vector<PinType> relevant_pin_types = {PinType::state, PinType::neg_state, PinType::data};
 
             // 2) Check all relevant pin_types
-
             for (const auto& pt : relevant_pin_types)
             {
                 const auto found_identifiers = check_net_at_pin(pt, ff);

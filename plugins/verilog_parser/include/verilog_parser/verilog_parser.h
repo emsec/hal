@@ -184,8 +184,9 @@ namespace hal
         std::unordered_map<Module*, std::vector<std::tuple<std::string, Net*>>> m_module_ports;
 
         // unique aliases
-        std::unordered_map<std::string, u32> m_signal_name_occurrences;
-        std::unordered_map<std::string, u32> m_instance_name_occurrences;
+        std::unordered_map<std::string, u32> m_module_instantiation_count;
+        std::unordered_map<std::string, u32> m_instance_name_occurences;
+        std::unordered_map<std::string, u32> m_net_name_occurences;
 
         // nets
         Net* m_zero_net;
@@ -214,7 +215,9 @@ namespace hal
             instantiate_module(const std::string& instance_name, VerilogModule* verilog_module, Module* parent, const std::unordered_map<std::string, std::string>& parent_module_assignments);
 
         // helper functions
-        std::string get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const;
+        // std::string get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const;
+        std::string get_unique_alias(Module* parent, const std::string& name) const;
+        std::string get_unique_net_alias(Module* parent, const std::string& name) const;
         std::vector<u32> parse_range(TokenStream<std::string>& stream) const;
         void expand_ranges_recursively(std::vector<std::string>& expanded_names, const std::string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const;
         std::vector<std::string> expand_ranges(const std::string& name, const std::vector<std::vector<u32>>& ranges) const;
