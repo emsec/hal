@@ -108,10 +108,10 @@ namespace hal
         retval.push_back(PluginParameter(PluginParameter::String, "sizes", "Expected register size (optional)", "8,16,32"));
         retval.push_back(PluginParameter(PluginParameter::Integer, "bad_groups", "Bad group size (default: 7)", "7"));
         retval.push_back(PluginParameter(PluginParameter::ExistingDir, "output", "Directory for results (required)"));
-        retval.push_back(
-            PluginParameter(PluginParameter::Boolean, "register_stage_identification", "Register Stage Identification (default: off, this rule can sometimes be too restrictive)", "false"));
-        retval.push_back(PluginParameter(PluginParameter::Boolean, "create_modules", "Let DANA create HAL modules (default: on)", "true"));
-        retval.push_back(PluginParameter(PluginParameter::Boolean, "draw", "Draw dot graph (not recommended for large netlist)", "false"));
+        retval.push_back(PluginParameter(PluginParameter::Boolean, "register_stage_identification", "Enable register stage identification (default: off)", "false"));
+        retval.push_back(PluginParameter(PluginParameter::Boolean, "write_txt", "Write a .txt file containing analysis results (default: on)", "true"));
+        retval.push_back(PluginParameter(PluginParameter::Boolean, "create_modules", "Create modules for all registers (default: on)", "true"));
+        retval.push_back(PluginParameter(PluginParameter::Boolean, "write_dot", "Write a .dot file describing the dataflow graph (not recommended for large netlist; default: off)", "false"));
         retval.push_back(PluginParameter(PluginParameter::PushButton, "exec", "Execute dataflow analysis"));
         return retval;
     }
@@ -133,9 +133,13 @@ namespace hal
             {
                 m_bad_groups = atoi(par.get_value().c_str());
             }
-            else if (par.get_tagname() == "draw")
+            else if (par.get_tagname() == "write_txt")
             {
-                m_draw_graph = (par.get_value() == "true");
+                m_write_txt = (par.get_value() == "true");
+            }
+            else if (par.get_tagname() == "write_dot")
+            {
+                m_write_dot = (par.get_value() == "true");
             }
             else if (par.get_tagname() == "output")
             {
@@ -183,11 +187,19 @@ namespace hal
         }
         auto grouping = grouping_res.get();
 
-        if (m_draw_graph)
+        if (m_write_dot)
         {
             if (const auto res = grouping.write_dot(m_output_path); res.is_error())
             {
-                log_error("dataflow", "could not write DOT graph to file:\n{}", res.get_error().get());
+                log_error("dataflow", "could not write .dot file:\n{}", res.get_error().get());
+            }
+        }
+
+        if (m_write_txt)
+        {
+            if (const auto res = grouping.write_txt(m_output_path); res.is_error())
+            {
+                log_error("dataflow", "could not write .txt file:\n{}", res.get_error().get());
             }
         }
 

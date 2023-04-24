@@ -54,13 +54,15 @@ namespace hal
         std::vector<u32> m_sizes;
         std::string m_output_path;
         int m_bad_groups;
-        bool m_draw_graph;
+        bool m_write_dot;
+        bool m_write_txt;
         bool m_create_modules;
         bool m_register_stage_identification;
         bool m_button_clicked;
 
     public:
-        GuiExtensionDataflow() : m_output_path("/tmp"), m_bad_groups(7), m_draw_graph(false), m_create_modules(false), m_register_stage_identification(false), m_button_clicked(false)
+        GuiExtensionDataflow()
+            : m_output_path("/tmp"), m_bad_groups(7), m_write_dot(false), m_write_txt(false), m_create_modules(false), m_register_stage_identification(false), m_button_clicked(false)
         {
         }
 
