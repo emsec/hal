@@ -20,7 +20,8 @@ All notable changes to this project will be documented in this file.
     * added deterministic variants of all Boolean influence functions that shall be used for Boolean functions with only few input variables
     * added additional parameters for more control to the subcircuit and gate variants of `get_boolean_influence`
   * `netlist_preprocessing`
-    * added `decompose_gates_of_type` and `decompose_gate` that decompose combinational logic into basic gate types.
+    * added `decompose_gates_of_type` and `decompose_gate` that decompose combinational logic into basic gate types
+    * added `parse_def_file` to parse a Design Exchange Format file that contains placement information and which gets annotated to the gates
   * `verilog_parser`
     * the parser now annotates all the net names that where merged into one net using the data container
     * changed the behavior of the parser when flattening a netlist and generating new unique names (instead of appending an index we add a prefix containing the names of parent modules)
@@ -40,6 +41,8 @@ All notable changes to this project will be documented in this file.
   * added `Gate::get_modules` to recursively get all modules that contain the gate by traversing the module hierarchy
   * added `Net::is_a_source(const Gate*)` and `Net::is_a_destination(const Gate*)` that check whether a gate is a source/destination independent of the gate pin
   * added `PinGroup<T>::contains_pin` to check whether a pin is part of the respective gate or module pin group
+  * added overloaded version of `deserialize_netlist`that allows to pass a gate library that overrides the absolute gate lib path in the .hal file
+  * added `utils::wrapped_stoull` and `utils::wrapped_stoul` that wrap the standard string to integer conversion and use `hal::Result<>` for error handlung instead of exceptions
 * bugfixes
   * fixed missing Python bindings for `GatePinGroup`
 

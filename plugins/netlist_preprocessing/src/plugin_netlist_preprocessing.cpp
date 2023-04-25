@@ -12,11 +12,9 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_utils.h"
 #include "hal_core/utilities/result.h"
-#include "rapidjson/document.h"
+#include "hal_core/utilities/token_stream.h"
 
-// stupid stuff that is needed to print document as a string for debugging purposes if you see this i forgot to delete it... why are we using this again?
-#include "rapidjson/stringbuffer.h"
-#include "rapidjson/writer.h"
+#include "rapidjson/document.h"
 
 #include <fstream>
 #include <queue>
@@ -731,15 +729,16 @@ namespace hal
             return OK({valid_gate_type, get_valid_input_pins(valid_gate_type), get_valid_output_pins(valid_gate_type)});
         }
 
+        // TODO change this to return a netlist. This would allow saving the decomposition of a specifc gate type
         Result<Net*> build_gate_tree_from_boolean_function(Netlist* nl, const BooleanFunction& bf, const std::map<std::string, Net*>& var_name_to_net, const Gate* org_gate = nullptr)
         {
             const auto create_gate_name = [](const Gate* new_gate, const Gate* original_gate) -> std::string {
-                const std::string new_name = (original_gate == nullptr) ? "new_gate" : original_gate->get_name() + "_decomposed_";
+                const std::string new_name = (original_gate == nullptr) ? "new_gate_" : original_gate->get_name() + "_decomposed_";
                 return new_name + std::to_string(new_gate->get_id());
             };
 
             const auto create_net_name = [](const Net* new_net, const Gate* original_gate) -> std::string {
-                const std::string new_name = (original_gate == nullptr) ? "new_net" : original_gate->get_name() + "_decomposed_";
+                const std::string new_name = (original_gate == nullptr) ? "new_net_" : original_gate->get_name() + "_decomposed_";
                 return new_name + std::to_string(new_net->get_id());
             };
 
@@ -793,6 +792,7 @@ namespace hal
             const auto operation  = bf.get_top_level_node().type;
             const auto parameters = bf.get_parameters();
 
+            // TODO put this into a function that only searches for the gate types when they are actually needed
             static const auto inv_type_res = find_gate_type(nl->get_gate_library(), {GateTypeProperty::combinational, GateTypeProperty::c_inverter}, 1, 1);
             static const auto and_type_res = find_gate_type(nl->get_gate_library(), {GateTypeProperty::combinational, GateTypeProperty::c_and}, 2, 1);
             static const auto or_type_res  = find_gate_type(nl->get_gate_library(), {GateTypeProperty::combinational, GateTypeProperty::c_or}, 2, 1);
@@ -811,6 +811,11 @@ namespace hal
             if (or_type_res.is_error())
             {
                 return ERR("Cannot build gate tree for Boolean function: failed to find valid or gate type");
+            }
+
+            if (xor_type_res.is_error())
+            {
+                return ERR("Cannot build gate tree for Boolean function: failed to find valid xor gate type");
             }
 
             const std::map<u16, std::tuple<GateType*, std::vector<GatePin*>, std::vector<GatePin*>>> node_type_to_gate_type = {
@@ -965,6 +970,8 @@ namespace hal
 
     namespace
     {
+        // TODO add resynthesis with ABC (passing a gate level netlist and passing only the boolean functions)
+        /*
         std::string build_combinational_verilog_module_from(const std::unordered_map<std::string, BooleanFunction>& bfs)
         {
             std::unordered_set<std::string> input_variable_names;
@@ -1033,20 +1040,20 @@ namespace hal
 
             gate_library_manager::save(gate_library_path, gl);
 
-            /*
-            const std::string command_corpus =  R"#(
-                read_verilog {}; 
-                read_library {}; 
-                cleanup; 
-                sweep; 
-                strash; 
-                dc2; 
-                logic; 
-                map -a;
-                write_verilog {};
-            )#";
-            const std::string command = std::format(command_corpus, functional_netlist_path, gate_library_path, resythesized_netlist_path);
-            */
+            
+            // const std::string command_corpus =  R"#(
+            //     read_verilog {}; 
+            //     read_library {}; 
+            //     cleanup; 
+            //     sweep; 
+            //     strash; 
+            //     dc2; 
+            //     logic; 
+            //     map -a;
+            //     write_verilog {};
+            // )#";
+            // const std::string command = std::format(command_corpus, functional_netlist_path, gate_library_path, resythesized_netlist_path);
+            
 
             const std::string command = "read_verilog " + functional_netlist_path.string() + "; read_library " + gate_library_path.string() + "; cleanup; sweep; strash; dc2; logic; map"
                                         + (optimize_area ? "" : " -a") + "; write_verilog " + resynthesized_netlist_path.string() + ";";
@@ -1063,6 +1070,7 @@ namespace hal
         {
             return;
         }
+        */
     }    // namespace
 
     namespace
@@ -1078,6 +1086,7 @@ namespace hal
             std::string origin;
         };
 
+        // TODO when the verilog parser changes are merged into the master this will no longer be needed
         const std::string hal_instance_index_pattern         = "__\\[(\\d+)\\]__";
         const std::string hal_instance_index_pattern_reverse = "<HAL>(\\d+)<HAL>";
 
@@ -1230,7 +1239,7 @@ namespace hal
                 all_identifiers.push_back(found_identifier);
             }
 
-            std::vector<PinType> relevant_pin_types = {PinType::state, PinType::neg_state, PinType::data};
+            static const std::vector<PinType> relevant_pin_types = {PinType::state, PinType::neg_state, PinType::data};
 
             // 2) Check all relevant pin_types
             for (const auto& pt : relevant_pin_types)
@@ -1248,6 +1257,200 @@ namespace hal
         }
 
         return OK(counter);
+    }
+
+    namespace {
+        struct ComponentData {
+            std::string name;
+            std::string type;
+            double x;
+            double y;
+        };
+
+        TokenStream<std::string> tokenize(std::stringstream& ss)
+        {
+            const std::string delimiters = " ;-";
+            std::string current_token;
+            u32 line_number = 0;
+
+            std::string line;
+            char prev_char  = 0;
+            bool escaped    = false;
+
+            std::vector<Token<std::string>> parsed_tokens;
+            while (std::getline(ss, line))
+            {
+                line_number++;
+
+                for (char c : line)
+                {
+                    // deal with escaping and strings
+                    if (c == '\\')
+                    {
+                        escaped = true;
+                        continue;
+                    }
+                    else if (escaped && std::isspace(c))
+                    {
+                        escaped = false;
+                        continue;
+                    }
+
+                    if (((!std::isspace(c) && delimiters.find(c) == std::string::npos) || escaped))
+                    {
+                        current_token += c;
+                    }
+                    else
+                    {
+                        if (!current_token.empty())
+                        {
+                            parsed_tokens.emplace_back(line_number, current_token);
+                            current_token.clear();
+                        }
+
+                        if (!std::isspace(c))
+                        {
+                            parsed_tokens.emplace_back(line_number, std::string(1, c));
+                        }
+                    }
+                }
+
+                if (!current_token.empty())
+                {
+                    parsed_tokens.emplace_back(line_number, current_token);
+                    current_token.clear();
+                }
+            }
+
+            return TokenStream(parsed_tokens, {}, {});
+        }
+    
+        Result<std::unordered_map<std::string, ComponentData>> parse_tokens(TokenStream<std::string>& ts)
+        {
+            ts.consume_until("COMPONENTS");
+            ts.consume("COMPONENTS");
+            const auto component_count_str = ts.consume().string;
+            ts.consume(";");
+
+            u32 component_count;
+            if (const auto res = utils::wrapped_stoul(component_count_str); res.is_ok())
+            {   
+                component_count = res.get();
+            }
+            else
+            {
+                return ERR_APPEND(res.get_error(), "could not parse tokens: failed to read component count from token" + component_count_str);
+            }
+
+            std::cout << "Component count: " << component_count << std::endl;
+
+            std::unordered_map<std::string, ComponentData> component_data;
+            for (u32 c_idx = 0; c_idx < component_count; c_idx++)
+            {
+                // parse a line
+                ComponentData new_data_entry;
+                ts.consume("-");
+                new_data_entry.name = ts.consume().string;
+                new_data_entry.type = ts.consume().string;
+                ts.consume("+");
+                ts.consume("SOURCE");
+                ts.consume("DIST");
+                ts.consume("TIMING");
+                ts.consume("+");
+                ts.consume("PLACED");
+                ts.consume("FIXED");
+                ts.consume("(");
+                
+                if (const auto res = utils::wrapped_stoull(ts.consume().string); res.is_ok())
+                {
+                    new_data_entry.x = res.get();
+                }
+                else
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse tokens: failed to read x coordinate from token");
+                }
+
+                if (const auto res = utils::wrapped_stoull(ts.consume().string); res.is_ok())
+                {
+                    new_data_entry.y = res.get();
+                }
+                else
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse tokens: failed to read y coordinate from token");
+                }
+
+                ts.consume(")");
+
+                ts.consume_current_line();
+
+                component_data.insert({new_data_entry.name, new_data_entry});
+            }
+
+            return OK(component_data);
+        }
+    }
+
+    Result<std::monostate> NetlistPreprocessingPlugin::parse_def_file(Netlist* nl, const std::filesystem::path& def_file)
+    {
+        std::stringstream ss;
+        std::ifstream ifs;
+        ifs.open(def_file.string(), std::ifstream::in);
+        if (!ifs.is_open())
+        {
+            return ERR("could not parse DEF (Design Exchange Format) file '" + def_file.string() + "' : unable to open file");
+        }
+        ss << ifs.rdbuf();
+        ifs.close();
+
+        auto ts = tokenize(ss);
+
+        std::unordered_map<std::string, ComponentData> component_data;
+        // parse tokens
+        try
+        {
+            if (auto res = parse_tokens(ts); res.is_error())
+            {
+                return ERR_APPEND(res.get_error(), "could not parse Design Exchange Format file '" + def_file.string() + "': unable to parse tokens");
+            }
+            else
+            {
+                component_data = res.get();
+            }
+        }
+        catch (TokenStream<std::string>::TokenStreamException& e)
+        {
+            if (e.line_number != (u32)-1)
+            {
+                return ERR("could not parse Design Exchange Format file '" + def_file.string() + "': " + e.message + " (line " + std::to_string(e.line_number) + ")");
+            }
+            else
+            {
+                return ERR("could not parse Design Exchange Format file '" + def_file.string() + "': " + e.message);
+            }
+        }
+
+        std::unordered_map<std::string, Gate*> name_to_gate;
+        for (auto g : nl->get_gates())
+        {
+            name_to_gate.insert({g->get_name(), g});
+        }
+
+        u32 counter = 0;
+        for (const auto& [gate_name, data] : component_data)
+        {
+            if (const auto& g_it = name_to_gate.find(gate_name); g_it != name_to_gate.end())
+            {
+                // TODO figure out whereever we are saving coordinates now...
+                g_it->second->set_location_x(data.x);
+                g_it->second->set_location_y(data.y);
+
+                counter++;
+            }
+        }
+
+        log_info("netlist_preprocessing", "reconstructed coordinates for {} / {} ({:.2}) gates", counter, nl->get_gates().size(), (double)counter / (double)nl->get_gates().size());
+
+        return OK({});
     }
 
 }    // namespace hal

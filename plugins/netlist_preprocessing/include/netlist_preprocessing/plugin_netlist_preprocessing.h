@@ -137,5 +137,15 @@ namespace hal
          * return OK and the number of reconstructed names on success, an error otherwise.
         */
         static Result<u32> reconstruct_indexed_ff_identifiers(Netlist* nl);
+
+        /**
+         * Parses a design exchange format file and extracts the coordinated of a placed design for each component/gate.
+         * The extracted coordinates get annotated to the gates.
+         * 
+         * @param[in] nl - The netlist to operate on.
+         * @param[in] def_file - Path to the def file.
+         * return OK on success, an error otherwise.
+        */
+        static Result<std::monostate> parse_def_file(Netlist* nl, const std::filesystem::path& def_file);
     };
 }    // namespace hal

@@ -1973,7 +1973,7 @@ namespace hal {
             // Check that the gate names are correct
             std::vector<std::string> nl_gate_names;
             for(Gate* g : nl_gates) nl_gate_names.push_back(g->get_name());
-            std::vector<std::string> expected_gate_names = {"mod_b_0/shared_gate_name", "mod_b_0/gate_b", "shared_gate_name", "gate_a", "mod_b_1/shared_gate_name", "mod_b_1/gate_b", "gate_top"};
+            std::vector<std::string> expected_gate_names = {"mod_b_0/shared_gate_name", "mod_b_0/gate_b", "mod_a_0/shared_gate_name", "gate_a", "mod_b_1/shared_gate_name", "mod_b_1/gate_b", "gate_top"};
             EXPECT_EQ(nl_gate_names, expected_gate_names);
 
             // Check that the net names are correct

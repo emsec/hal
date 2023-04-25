@@ -279,6 +279,33 @@ namespace hal
             :rtype: int or None
         )");
 
+        py_netlist_preprocessing.def_static(
+            "parse_def_file",
+            [](Netlist* nl, const std::filesystem::path& def_file) -> std::optional<bool> {
+                auto res = NetlistPreprocessingPlugin::parse_def_file(nl, def_file);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            py::arg("def_file"),
+            R"(
+            Parses a design exchange format file and extracts the coordinated of a placed design for each component/gate.
+            The extracted coordinates get annotated to the gates.
+
+            :param hal_py.Netlist nl: The netlist to operate on. 
+            :param hal_py.Netlist def_file: The path to the def file
+
+            :returns: True on success, an error otherwise.
+            :rtype: bool or None
+        )");
+
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE
