@@ -119,13 +119,16 @@ namespace hal
          */
         std::string get_version() const override;
 
-        std::vector<std::vector<Gate*>> execute(Netlist* nl,
-                                                std::string out_path,
-                                                const std::vector<u32> sizes,
-                                                bool draw_graph,
-                                                bool create_modules                        = false,
-                                                bool register_stage_identification         = false,
-                                                std::vector<std::vector<u32>> known_groups = {},
-                                                u32 min_group_size                         = 8);
+        /**
+         * \deprecated
+         */
+        [[deprecated("Will be removed in a future version, use dataflow::analyze instead.")]] std::vector<std::vector<Gate*>> execute(Netlist* nl,
+                                                                                                                                      std::string out_path,
+                                                                                                                                      const std::vector<u32> sizes,
+                                                                                                                                      bool draw_graph,
+                                                                                                                                      bool create_modules                        = false,
+                                                                                                                                      bool register_stage_identification         = false,
+                                                                                                                                      std::vector<std::vector<u32>> known_groups = {},
+                                                                                                                                      u32 min_group_size                         = 8);
     };
 }    // namespace hal
