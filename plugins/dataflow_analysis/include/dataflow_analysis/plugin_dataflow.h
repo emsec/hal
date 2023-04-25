@@ -25,9 +25,10 @@
 
 #pragma once
 
-#include "hal_core/plugin_system/plugin_interface_base.h"
-#include "hal_core/plugin_system/gui_extension_interface.h"
+#include "dataflow_analysis/dataflow.h"
 #include "hal_core/plugin_system/cli_extension_interface.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
 
 #include <vector>
 
@@ -41,31 +42,27 @@ namespace hal
 
     class CliExtensionDataflow : public CliExtensionInterface
     {
-        plugin_dataflow* m_parent;
     public:
-        CliExtensionDataflow(plugin_dataflow* p)
-            : m_parent(p)
-        {;}
+        CliExtensionDataflow()
+        {
+        }
         virtual ProgramOptions get_cli_options() const override;
         virtual bool handle_cli_call(Netlist* netlist, ProgramArguments& args) override;
     };
 
     class GuiExtensionDataflow : public GuiExtensionInterface
     {
-        plugin_dataflow* m_parent;
-        std::vector<u32> m_sizes;
+        dataflow::Configuration m_config;
         std::string m_output_path;
-        int m_bad_groups;
-        bool m_draw_graph;
+        bool m_write_dot;
+        bool m_write_txt;
         bool m_create_modules;
-        bool m_register_stage_identification;
         bool m_button_clicked;
 
     public:
-        GuiExtensionDataflow(plugin_dataflow* p)
-            : m_parent(p), m_output_path("/tmp"),
-              m_bad_groups(7), m_draw_graph(false), m_create_modules(false),
-              m_register_stage_identification(false), m_button_clicked(false) {;}
+        GuiExtensionDataflow() : m_output_path("/tmp"), m_write_dot(false), m_write_txt(false), m_create_modules(false), m_button_clicked(false)
+        {
+        }
 
         /**
          * Get list of configurable parameter
@@ -80,7 +77,7 @@ namespace hal
          */
         void set_parameter(const std::vector<PluginParameter>& params) override;
 
-        void execute_function(std::string tag, Netlist *nl, const std::vector<u32> &mods, const std::vector<u32> &gats, const std::vector<u32> &nets) override;
+        void execute_function(std::string tag, Netlist* nl, const std::vector<u32>& mods, const std::vector<u32>& gats, const std::vector<u32>& nets) override;
 
         /**
          * Register function to indicate work progress when busy
@@ -93,7 +90,6 @@ namespace hal
 
     class PLUGIN_API plugin_dataflow : public BasePluginInterface
     {
-
     public:
         /*
          *      interface implementations
@@ -123,15 +119,16 @@ namespace hal
          */
         std::string get_version() const override;
 
-        std::vector<std::vector<Gate*>> execute(Netlist* nl,
-                                                std::string path,
-                                                const std::vector<u32> sizes,
-                                                bool draw_graph,
-                                                bool create_modules                        = false,
-                                                bool register_stage_identification         = false,
-                                                std::vector<std::vector<u32>> known_groups = {},
-                                                u32 bad_group_size                         = 7);
-
-
+        /**
+         * \deprecated
+         */
+        [[deprecated("Will be removed in a future version, use dataflow::analyze instead.")]] std::vector<std::vector<Gate*>> execute(Netlist* nl,
+                                                                                                                                      std::string out_path,
+                                                                                                                                      const std::vector<u32> sizes,
+                                                                                                                                      bool draw_graph,
+                                                                                                                                      bool create_modules                        = false,
+                                                                                                                                      bool register_stage_identification         = false,
+                                                                                                                                      std::vector<std::vector<u32>> known_groups = {},
+                                                                                                                                      u32 min_group_size                         = 8);
     };
 }    // namespace hal

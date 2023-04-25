@@ -24,6 +24,10 @@ All notable changes to this project will be documented in this file.
     * renamed `to_z3` to `from_bf` and added support for missing node types
     * renamed `to_hal` to `to_bf` and added support for missing node types
     * changed `to_cpp` to output only the C++ code implementing the Boolean function and nothing more
+  * `dataflow_analysis`
+    * added API to interact with dataflow analysis results from C++ and Python
+    * deprecated `plugin_dataflow::execute` as its functionality is now split between `dataflow::analyze` and the members of `dataflow::Result`
+    * removed file writes if not explicitly called by user
 * decorators
   * added `NetlistModificationDecorator`
     * added `delete_modules` to delete all (or a filtered subset of) the modules in a netlist
