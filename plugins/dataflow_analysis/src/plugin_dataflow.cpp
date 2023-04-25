@@ -56,9 +56,9 @@ namespace hal
     bool CliExtensionDataflow::handle_cli_call(Netlist* nl, ProgramArguments& args)
     {
         UNUSED(args);
+
+        dataflow::Configuration config;
         std::string path;
-        std::vector<u32> sizes;
-        u32 bad_group_size = 7;
 
         if (args.is_option_set("--path"))
         {
@@ -78,7 +78,7 @@ namespace hal
             std::string s;
             while (std::getline(f, s, ','))
             {
-                sizes.emplace_back(std::stoi(s));
+                config.expected_sizes.push_back(std::stoi(s));
             }
         }
 
@@ -88,11 +88,11 @@ namespace hal
             std::string s;
             while (std::getline(f, s, ','))
             {
-                bad_group_size = std::stoi(s);
+                config.min_group_size = std::stoi(s);
             }
         }
 
-        auto grouping_res = dataflow::analyze(nl, sizes, false, {}, bad_group_size);
+        auto grouping_res = dataflow::analyze(nl, config);
         if (grouping_res.is_error())
         {
             log_error("dataflow", "dataflow analysis failed:\n{}", grouping_res.get_error().get());
@@ -106,7 +106,7 @@ namespace hal
     {
         std::vector<PluginParameter> retval;
         retval.push_back(PluginParameter(PluginParameter::String, "sizes", "Expected register size (optional)", "8,16,32"));
-        retval.push_back(PluginParameter(PluginParameter::Integer, "bad_groups", "Bad group size (default: 7)", "7"));
+        retval.push_back(PluginParameter(PluginParameter::Integer, "min_group_size", "Minimum size of a group, smaller groups will be penalized (default: 8)", "8"));
         retval.push_back(PluginParameter(PluginParameter::ExistingDir, "output", "Directory for results (required)"));
         retval.push_back(PluginParameter(PluginParameter::Boolean, "register_stage_identification", "Enable register stage identification (default: off)", "false"));
         retval.push_back(PluginParameter(PluginParameter::Boolean, "write_txt", "Write a .txt file containing analysis results (default: on)", "true"));
@@ -126,12 +126,12 @@ namespace hal
                 std::string s;
                 while (std::getline(f, s, ','))
                 {
-                    m_sizes.emplace_back(std::stoi(s));
+                    m_config.expected_sizes.emplace_back(std::stoi(s));
                 }
             }
-            else if (par.get_tagname() == "bad_groups")
+            else if (par.get_tagname() == "min_group_size")
             {
-                m_bad_groups = atoi(par.get_value().c_str());
+                m_config.min_group_size = atoi(par.get_value().c_str());
             }
             else if (par.get_tagname() == "write_txt")
             {
@@ -151,7 +151,7 @@ namespace hal
             }
             else if (par.get_tagname() == "register_stage_identification")
             {
-                m_register_stage_identification = (par.get_value() == "true");
+                m_config.enable_register_stages = (par.get_value() == "true");
             }
             else if (par.get_tagname() == "exec")
             {
@@ -179,7 +179,7 @@ namespace hal
 
         dataflow::GuiLayoutLocker gll;
 
-        auto grouping_res = dataflow::analyze(nl, m_sizes, m_register_stage_identification, {}, m_bad_groups);
+        auto grouping_res = dataflow::analyze(nl, m_config);
         if (grouping_res.is_error())
         {
             log_error("dataflow", "dataflow analysis failed:\n{}", grouping_res.get_error().get());
@@ -224,9 +224,12 @@ namespace hal
                                                              bool create_modules,
                                                              bool register_stage_identification,
                                                              std::vector<std::vector<u32>> known_groups,
-                                                             u32 bad_group_size)
+                                                             u32 min_group_size)
     {
-        const auto grouping_res = dataflow::analyze(nl, sizes, register_stage_identification, known_groups, bad_group_size);
+        auto config =
+            dataflow::Configuration().with_min_group_size(min_group_size).with_expected_sizes(sizes).with_known_groups(known_groups).with_register_stage_identification(register_stage_identification);
+
+        const auto grouping_res = dataflow::analyze(nl, config);
         if (grouping_res.is_error())
         {
             log_error("dataflow", "dataflow analysis failed:\n{}", grouping_res.get_error().get());

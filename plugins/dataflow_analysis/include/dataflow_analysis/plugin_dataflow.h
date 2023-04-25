@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "dataflow_analysis/dataflow.h"
 #include "hal_core/plugin_system/cli_extension_interface.h"
 #include "hal_core/plugin_system/gui_extension_interface.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
@@ -51,18 +52,15 @@ namespace hal
 
     class GuiExtensionDataflow : public GuiExtensionInterface
     {
-        std::vector<u32> m_sizes;
+        dataflow::Configuration m_config;
         std::string m_output_path;
-        int m_bad_groups;
         bool m_write_dot;
         bool m_write_txt;
         bool m_create_modules;
-        bool m_register_stage_identification;
         bool m_button_clicked;
 
     public:
-        GuiExtensionDataflow()
-            : m_output_path("/tmp"), m_bad_groups(7), m_write_dot(false), m_write_txt(false), m_create_modules(false), m_register_stage_identification(false), m_button_clicked(false)
+        GuiExtensionDataflow() : m_output_path("/tmp"), m_write_dot(false), m_write_txt(false), m_create_modules(false), m_button_clicked(false)
         {
         }
 
@@ -128,6 +126,6 @@ namespace hal
                                                 bool create_modules                        = false,
                                                 bool register_stage_identification         = false,
                                                 std::vector<std::vector<u32>> known_groups = {},
-                                                u32 bad_group_size                         = 7);
+                                                u32 min_group_size                         = 8);
     };
 }    // namespace hal

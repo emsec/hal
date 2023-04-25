@@ -52,7 +52,7 @@ namespace hal
                  py::arg("create_modules")                = false,
                  py::arg("register_stage_identification") = false,
                  py::arg("known_groups")                  = std::vector<std::vector<u32>>(),
-                 py::arg("bad_group_sizes")               = 7,
+                 py::arg("min_group_size")                = 8,
                  R"(
                 Executes the dataflow analysis plugin (DANA). Starting from the netlist DANA tries to identify high-level registers.
 
@@ -68,11 +68,99 @@ namespace hal
                 )");
 
         auto py_dataflow = m.def_submodule("Dataflow");
+
+        py::class_<dataflow::Configuration, RawPtrWrapper<dataflow::Configuration>> py_dataflow_configuration(py_dataflow, "Configuration", R"(
+            Holds the configuration of a dataflow analysis run.
+        )");
+
+        py_dataflow_configuration.def(py::init<>(), R"(
+            Constructs a new dataflow analysis configuration.
+        )");
+
+        py_dataflow_configuration.def_readwrite("min_group_size", &dataflow::Configuration::min_group_size, R"(
+            Minimum size of a group. Smaller groups will be penalized during analysis. Defaults to 8.
+
+            :type: int
+        )");
+
+        py_dataflow_configuration.def_readwrite("expected_sizes", &dataflow::Configuration::expected_sizes, R"(
+            Expected group sizes. Groups of these sizes will be prioritized. Defaults to an empty list.
+
+            :type: list[int]
+        )");
+
+        py_dataflow_configuration.def_readwrite("known_groups", &dataflow::Configuration::known_groups, R"(
+            Already identified groups of sequential gates as a list of groups with each group being a list of gate IDs. Defaults to an empty list.
+
+            :type: list[list[int]]
+        )");
+
+        py_dataflow_configuration.def_readwrite("enable_register_stages", &dataflow::Configuration::enable_register_stages, R"(
+            Enable register stage identification as part of dataflow analysis. Defaults to ``False``.
+
+            :type: bool
+        )");
+
+        py_dataflow_configuration.def("with_min_group_size", &dataflow::Configuration::with_min_group_size, py::arg("size"), R"(
+            Set the minimum size of a group. Smaller groups will be penalized during analysis.
+
+            :param int size: The minimum group size.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
+        py_dataflow_configuration.def("with_expected_sizes", &dataflow::Configuration::with_expected_sizes, py::arg("sizes"), R"(
+            Set the expected group sizes. Groups of these sizes will be prioritized.
+
+            :param list[int] sizes: The expected group sizes.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
+        py_dataflow_configuration.def("with_known_groups", py::overload_cast<const std::vector<Module*>&>(&dataflow::Configuration::with_known_groups), py::arg("groups"), R"(
+            Set already identified groups of sequential gates as a list of groups with each group being a module.
+
+            :param list[hal_py.Module] groups: A list of groups.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
+        py_dataflow_configuration.def("with_known_groups", py::overload_cast<const std::vector<Grouping*>&>(&dataflow::Configuration::with_known_groups), py::arg("groups"), R"(
+            Set already identified groups of sequential gates as a vector of groups with each group being a grouping.
+
+            :param list[hal_py.Grouping] groups: A list of groups.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
+        py_dataflow_configuration.def("with_known_groups", py::overload_cast<const std::vector<std::vector<Gate*>>&>(&dataflow::Configuration::with_known_groups), py::arg("groups"), R"(
+            Set already identified groups of sequential gates as a list of groups with each group being a list of gates.
+
+            :param list[list[hal_py.Gate]] groups: A list of groups.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
+        py_dataflow_configuration.def("with_known_groups", py::overload_cast<const std::vector<std::vector<u32>>&>(&dataflow::Configuration::with_known_groups), py::arg("groups"), R"(
+            Set already identified groups of sequential gates as a list of groups with each group being a list of gate IDs.
+
+            :param list[list[int]] groups: A list of groups.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
+        py_dataflow_configuration.def("with_register_stage_identification", &dataflow::Configuration::with_register_stage_identification, py::arg("enable") = true, R"(
+            Enable register stage identification as part of dataflow analysis.
+
+            :param bool enable: Set ``True`` to enable register stage identification, ``False`` otherwise. Defaults to ``True``.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
         py_dataflow.def(
             "analyze",
-            [](Netlist* nl, const std::vector<u32>& sizes = {}, bool register_stage_identification = false, const std::vector<std::vector<u32>>& known_groups = {}, const u32 bad_group_size = 7)
-                -> std::optional<dataflow::Result> {
-                auto res = dataflow::analyze(nl, sizes, register_stage_identification, known_groups, bad_group_size);
+            [](Netlist* nl, const dataflow::Configuration& config = dataflow::Configuration()) -> std::optional<dataflow::Result> {
+                auto res = dataflow::analyze(nl, config);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -84,21 +172,14 @@ namespace hal
                 }
             },
             py::arg("nl"),
-            py::arg("sizes")                         = std::vector<u32>(),
-            py::arg("register_stage_identification") = false,
-            py::arg("known_groups")                  = std::vector<std::vector<u32>>(),
-            py::arg("bad_group_size")                = 7,
+            py::arg("config") = dataflow::Configuration(),
             R"(
                 Analyze the datapath to identify word-level registers in the given netlist.
 
                 :param hal_py.Netlist nl: The netlist.
-                :param pathlib.Path out_path: The output path to which the results are written.
-                :param list[int] sizes: Register sizes that are expected to be found in the netlist. These sizes will be prioritized over others during analysis. Defaults to an empty list.
-                :param bool register_stage_identification: Set ``True``to enable register stage identification during analysis, ``False`` otherwise. Defaults to ``False``.
-                :param list[list[int]] known_groups: Registers that have been identified prior to dataflow analysis. Must be provided as a list of registers with each register being represented as a list of gate IDs. Defaults to an empty list.
-                :param int bad_group_size: Minimum expected register size. Smaller registers will not be considered during analysis. Defults to ``7``.
+                :param dataflow.Dataflow.Configuration config: The dataflow analysis configuration.
                 :returns: The dataflow analysis result on success, ``None`` otherwise.
-                :rtype: hal_py.Dataflow.Result or None
+                :rtype: dataflow.Dataflow.Result or None
             )");
 
         py::class_<dataflow::Result, RawPtrWrapper<dataflow::Result>> py_dataflow_result(py_dataflow, "Result", R"(

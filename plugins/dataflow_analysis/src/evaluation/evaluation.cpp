@@ -44,7 +44,7 @@ namespace hal
                     measure_block_time("majority voting");
                     const auto& netlist_abstr = initial_grouping->netlist_abstr;
 
-                    const u32 bad_group_size = config.bad_group_size;
+                    const u32 min_group_size = config.min_group_size;
 
                     struct candidate
                     {
@@ -106,8 +106,8 @@ namespace hal
                             return false;
                         }
 
-                        auto a_is_bad = a.group->size() <= bad_group_size;
-                        auto b_is_bad = b.group->size() <= bad_group_size;
+                        auto a_is_bad = a.group->size() < min_group_size;
+                        auto b_is_bad = b.group->size() < min_group_size;
 
                         if (!a_is_bad && b_is_bad)
                         {
@@ -155,7 +155,7 @@ namespace hal
 
                         // counts sequential gates that would end up in bad groups for each scanned candidate
                         // find the current scan range
-                        bool first_is_bad       = sorted_results.front().group->size() <= bad_group_size;
+                        bool first_is_bad       = sorted_results.front().group->size() < min_group_size;
                         bool first_is_preferred = std::find(config.prioritized_sizes.begin(), config.prioritized_sizes.end(), sorted_results.front().group->size()) != config.prioritized_sizes.end();
                         float lower_score_bound = sorted_results.front().score * (1.f - percent_scan);
 
@@ -169,7 +169,7 @@ namespace hal
 
                             auto scanned_group_size = sorted_results[num_scanned_groups].group->size();
 
-                            if (!first_is_bad && scanned_group_size <= bad_group_size)
+                            if (!first_is_bad && scanned_group_size < min_group_size)
                             {
                                 break;
                             }
@@ -213,7 +213,7 @@ namespace hal
                             // get the maximum size of the groups of each unaffected gate
                             for (auto g : unaffected_gates)
                             {
-                                if (max_group_size_of_gate.at(g) <= bad_group_size)
+                                if (max_group_size_of_gate.at(g) < min_group_size)
                                 {
                                     score += 1.0f;
                                 }
