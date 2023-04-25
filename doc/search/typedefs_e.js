@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['object_5fcomparator_5ft_38249',['object_comparator_t',['../classnlohmann_1_1basic__json.html#abed9e77c5fcfc925fcdd489911069c3b',1,'nlohmann::basic_json']]],
-  ['object_5ft_38250',['object_t',['../structnlohmann_1_1detail_1_1is__compatible__object__type__impl_3_01_basic_json_type_00_01_compatfbe9a153c4ecce445c98bbdd2d65f605.html#a551e9ee372c1b24b632e6b668c231a62',1,'nlohmann::detail::is_compatible_object_type_impl&lt; BasicJsonType, CompatibleObjectType, enable_if_t&lt; is_detected&lt; mapped_type_t, CompatibleObjectType &gt;::value and is_detected&lt; key_type_t, CompatibleObjectType &gt;::value &gt; &gt;::object_t()'],['../structnlohmann_1_1detail_1_1is__constructible__object__type__impl_3_01_basic_json_type_00_01_con6e3270de8050717120afcafe87648413.html#a6f458a63276ef62d60f4b93de03aa020',1,'nlohmann::detail::is_constructible_object_type_impl&lt; BasicJsonType, ConstructibleObjectType, enable_if_t&lt; is_detected&lt; mapped_type_t, ConstructibleObjectType &gt;::value and is_detected&lt; key_type_t, ConstructibleObjectType &gt;::value &gt; &gt;::object_t()'],['../classnlohmann_1_1basic__json.html#a5e48a7893520e1314bf0c9723e26ea2a',1,'nlohmann::basic_json::object_t()']]],
-  ['other_5ferror_38251',['other_error',['../classnlohmann_1_1basic__json.html#a3333a5a8714912adda33a35b369f7b3d',1,'nlohmann::basic_json']]],
-  ['out_5fof_5frange_38252',['out_of_range',['../classnlohmann_1_1basic__json.html#a28f7c2f087274a0012eb7a2333ee1580',1,'nlohmann::basic_json']]],
-  ['output_5fadapter_5ft_38253',['output_adapter_t',['../namespacenlohmann_1_1detail.html#a9b680ddfb58f27eb53a67229447fc556',1,'nlohmann::detail']]]
+  ['vec_5fint_5ft_37437',['Vec_Int_t',['../simplification__abc_8cpp.html#a9fe131f9c71796d00b65dca56d476e0c',1,'simplification_abc.cpp']]],
+  ['vec_5fptr_5ft_37438',['Vec_Ptr_t',['../simplification__abc_8cpp.html#a0c2049997674b09ac4738c7090b9f6ad',1,'simplification_abc.cpp']]],
+  ['vec_5fvec_5ft_37439',['Vec_Vec_t',['../simplification__abc_8cpp.html#ac336659290b09a3f2eba38a159961da2',1,'simplification_abc.cpp']]],
+  ['vec_5fwec_5ft_37440',['Vec_Wec_t',['../simplification__abc_8cpp.html#ac30be02621e33b96de221a6b3a7a6503',1,'simplification_abc.cpp']]]
 ];

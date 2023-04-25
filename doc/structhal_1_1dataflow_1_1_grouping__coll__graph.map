@@ -1,5 +1,5 @@
 <map id="hal::dataflow::Grouping" name="hal::dataflow::Grouping">
-<area shape="rect" id="node1" title=" " alt="" coords="5,447,241,700"/>
-<area shape="rect" id="node2" href="$structhal_1_1dataflow_1_1_netlist_abstraction.html" title=" " alt="" coords="8,219,239,384"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,432,241,671"/>
+<area shape="rect" id="node2" href="$structhal_1_1dataflow_1_1_netlist_abstraction.html" title=" " alt="" coords="8,219,239,369"/>
 <area shape="rect" id="node3" href="$classhal_1_1_netlist.html" title=" " alt="" coords="61,5,185,156"/>
 </map>

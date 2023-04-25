@@ -89,7 +89,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="textblock"><p><a href="https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml"><object type="image/svg+xml" data="https://github.com/emsec/hal/actions/workflows/ubuntu20.04.yml/badge.svg" style="pointer-events: none;">Ubuntu 20.04</object></a> <a href="https://github.com/emsec/hal/actions/workflows/ubuntu22.04.yml"><object type="image/svg+xml" data="https://github.com/emsec/hal/actions/workflows/ubuntu22.04.yml/badge.svg" style="pointer-events: none;">Ubuntu 22.04</object></a> <a href="https://github.com/emsec/hal/actions/workflows/macOS.yml"><object type="image/svg+xml" data="https://github.com/emsec/hal/actions/workflows/macOS.yml/badge.svg" style="pointer-events: none;">macOS</object></a> <a href="https://github.com/emsec/hal/actions/workflows/releaseDoc.yml"><object type="image/svg+xml" data="https://github.com/emsec/hal/actions/workflows/releaseDoc.yml/badge.svg" style="pointer-events: none;">Deploy Documentation</object></a> <a href="https://emsec.github.io/hal/doc/"><img src="https://img.shields.io/badge/doc-c%2B%2B-orange" alt="Doc: C++" class="inline"/></a> <a href="https://emsec.github.io/hal/pydoc/"><img src="https://img.shields.io/badge/doc-python-red" alt="Doc: Python" class="inline"/></a></p>
 <p>HAL [/hel/] is a comprehensive netlist reverse engineering and manipulation framework.</p>
 <p><img src="https://raw.githubusercontent.com/emsec/hal/master/hal_screenshot.png" alt="HAL Screenshot" title="HAL Screenshot" class="inline"/></p>
-<h1><a class="anchor" id="autotoc_md52"></a>
+<h1><a class="anchor" id="autotoc_md27"></a>
 Navigation</h1>
 <ol type="1">
 <li><a href="#introduction">Introduction</a></li>
@@ -97,7 +97,9 @@ Navigation</h1>
 <li><a href="#quickstart">Quickstart Guide</a></li>
 <li><a href="#academic-context">Academic Context</a></li>
 </ol>
-<h2><a class="anchor" id="autotoc_md53"></a>
+<h1><a class="anchor" id="autotoc_md28"></a>
+Introduction</h1>
+<h2><a class="anchor" id="autotoc_md29"></a>
 What the hell is HAL?</h2>
 <p>Virtually all available research on netlist analysis operates on a graph-based representation of the netlist under inspection. At its core, HAL provides exactly that: A framework to parse netlists of arbitrary sources, e.g., FPGAs or ASICs, into a graph-based netlist representation and to provide the necessary built-in tools for traversal and analysis of the included gates and nets.</p>
 <p>Our vision is that HAL becomes the hardware-reverse-engineering-equivalent of tools like IDA or Ghidra. We want HAL to enable a common baseline for researchers and analysts to improve reproducibility of research results and abstract away recurring basic tasks such as netlist parsing etc.</p><ul>
@@ -108,7 +110,7 @@ What the hell is HAL?</h2>
 </ul>
 <p>HAL is actively developed by the Embedded Security group of the <a href="https://www.mpi-sp.org">Max Planck Institute for Security and Privacy</a>. Apart from multiple research projects, it is also used in our university lecture <a href="https://www.ei.ruhr-uni-bochum.de/studium/lehrveranstaltungen/832/">Introduction to Hardware Reverse Engineering</a>.</p>
 <p>Note that we also have a set of <b>modern</b> state-of-the-art benchmark circuits for the evaluation of netlist reverse engineering techniques available in a seperate <a href="https://github.com/emsec/hal-benchmarks">repository</a>.</p>
-<h2><a class="anchor" id="autotoc_md54"></a>
+<h2><a class="anchor" id="autotoc_md30"></a>
 Shipped Plugins</h2>
 <p>This repository contains a selection of curated plugins:</p><ul>
 <li><b>GUI:</b> A feature-rich GUI allowing for visual netlist inspection and interactive analysis<ul>
@@ -127,18 +129,18 @@ Shipped Plugins</h2>
 <li><b>VHDL &amp; Verilog Writers:</b> Adds support for serializing a (modified) netlist to synthesizable VHDL or Verilog files</li>
 <li><b>Gate Libraries:</b> Adds support for the XILINX Unisim and Simprim gate libraries</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md55"></a>
+<h2><a class="anchor" id="autotoc_md31"></a>
 Documentation</h2>
 <p>A comprehensive documentation of HAL's features from a user perspective is available in our <a href="https://github.com/emsec/hal/wiki">Wiki</a>. In addition, we provide a full <a href="https://emsec.github.io/hal/doc/">C++ API</a> and <a href="https://emsec.github.io/hal/pydoc/">Python API</a> documentation.</p>
-<h2><a class="anchor" id="autotoc_md56"></a>
+<h2><a class="anchor" id="autotoc_md32"></a>
 Slack, Contact and Support</h2>
 <p>For all kinds of inquiries, please contact us using our dedicated e-mail address: <a href="#" onclick="location.href='mai'+'lto:'+'hal'+'@c'+'sp.'+'mp'+'g.d'+'e'; return false;">hal@csp.mpg.de</a>. To receive an invite to our dedicated hal-support Slack workspace, please write us an e-mail as well.</p>
 <p><a class="anchor" id="build-instructions"></a> </p>
-<h1><a class="anchor" id="autotoc_md57"></a>
+<h1><a class="anchor" id="autotoc_md33"></a>
 Build Instructions</h1>
 <p>For instructions on how to build HAL, please refer to the dedicated page in our <a href="https://github.com/emsec/hal/wiki/Building-HAL">Wiki</a>.</p>
 <p><a class="anchor" id="quickstart"></a> </p>
-<h1><a class="anchor" id="autotoc_md58"></a>
+<h1><a class="anchor" id="autotoc_md34"></a>
 Quickstart Guide</h1>
 <p>Install HAL or build HAL and start the GUI via <code>hal -g</code>. You can list all available options via <code>hal [--help|-h]</code>. We included some example netlists in <code>examples</code> together with the implementation of the respective example gate library in <code>plugins/example_gate_library</code>. For instructions to create your own gate library and other useful tutorials, take a look at the <a href="https://github.com/emsec/hal/wiki">wiki</a>.</p>
 <p>Load a library from the <code>examples</code> directory and start exploring the graphical representation. Use the integrated Python shell or the Python script window to interact. Both feature (limited) autocomplete functionality.</p>
@@ -173,19 +175,19 @@ Quickstart Guide</h1>
 <div class="line">OUTPUT_BUF_1_inst_i_1_inst (id 20, type LUT2)</div>
 <div class="line">  2-to-1 LUT</div>
 <div class="line">  O: (I0 &amp; !I1) | (!I0 &amp; I1)</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md59"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md35"></a>
 Contributing</h1>
 <p>You are welcome to contribute to the development of HAL. Feel free to submit a new pull request via github. Please consider running the static checks + <code>clang format</code> before that. You can also install these checks as git hooks before any commit.</p>
-<h2><a class="anchor" id="autotoc_md60"></a>
+<h2><a class="anchor" id="autotoc_md36"></a>
 Run static checks and clang format locally</h2>
 <p>To install clang-format hook install <a href="https://github.com/icefox/git-hooks">git-hooks</a> and run:</p>
 <p><code>git hooks --install</code></p>
 <p>Start Docker build via: <code>docker-compose run --rm hal-build</code></p>
-<h2><a class="anchor" id="autotoc_md61"></a>
+<h2><a class="anchor" id="autotoc_md37"></a>
 Generate Changelog</h2>
 <p><code>git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%s" --no-merges</code></p>
 <p><a class="anchor" id="academic-context"></a> </p>
-<h1><a class="anchor" id="autotoc_md62"></a>
+<h1><a class="anchor" id="autotoc_md38"></a>
 Academic Context</h1>
 <p>If you use HAL in an academic context, please cite the framework using the reference below: </p><div class="fragment"><div class="line">@misc{hal,</div>
 <div class="line">    author = {{Embedded Security Group}},</div>
@@ -203,10 +205,10 @@ Academic Context</h1>
 <div class="line">    howpublished = {\url{https://github.com/emsec/hal}}</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>To get an overview on the challenges we set out to solve with HAL, feel free to watch our <a href="https://media.ccc.de/v/36c3-10879-hal_-_the_open-source_hardware_analyzer">talk</a> at 36C3.</p>
-<h1><a class="anchor" id="autotoc_md63"></a>
+<h1><a class="anchor" id="autotoc_md39"></a>
 Licensing</h1>
 <p>HAL is licensed under MIT License to encourage collaboration with other research groups and contributions from the industry. Please refer to the license file for further information.</p>
-<h1><a class="anchor" id="autotoc_md64"></a>
+<h1><a class="anchor" id="autotoc_md40"></a>
 Disclaimer</h1>
 <p>HAL is at most alpha-quality software. Use at your own risk. We do not encourage any malicious use of our toolkit. </p>
 </div></div><!-- PageDoc -->
@@ -215,7 +217,7 @@ Disclaimer</h1>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Apr 25 2023 18:01:08 for HAL by
+    <li class="footer">Generated on Tue Apr 25 2023 19:24:18 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

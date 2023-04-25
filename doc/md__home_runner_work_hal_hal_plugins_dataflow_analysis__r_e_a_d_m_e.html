@@ -88,20 +88,20 @@ $(document).ready(function(){initNavTree('md__home_runner_work_hal_hal_plugins_d
 <div class="contents">
 <div class="textblock"><p>This plugin is our implementation of our technique DANA, published in TCHES'20 (<a href="https://eprint.iacr.org/2020/751">https://eprint.iacr.org/2020/751</a>) </p><div class="fragment"><div class="line">DANA - Universal Dataflow Analysis for Gate-Level Netlist Reverse Engineering</div>
 <div class="line">Nils Albartus, Max Hoffmann, Sebastian Temme, Leonid Azriel and Christof Paar</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md44"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md19"></a>
 Running the plugin</h1>
 <p>You have to set the following options, when executing the plugin: </p><div class="fragment"><div class="line">--dataflow                     executes the plugin dataflow</div>
 <div class="line">--path arg                     provide path where the result should be stored</div>
 <div class="line">--sizes arg                    (optional) sizes of registers, which are prioritized in the majority voting</div>
 </div><!-- fragment --><p>An exemplary call looks as follows:</p>
 <div class="fragment"><div class="line">hal -i hal-benchmarks/crypto/rsa/rsa_lsi_10k_synopsys.v --dataflow --sizes &quot;512,514&quot; --path /home/user/dataflow_out --gate-library lsi_10k.lib</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md45"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md20"></a>
 Recreating the paper results</h1>
 <p>All designs that were used as benchmarks are available in the hal-benchmarks git (<a href="https://github.com/emsec/hal-benchmarks">https://github.com/emsec/hal-benchmarks</a>). Clone the repository, adjust the paths at the top of <code><a class="el" href="configuration_8py.html">configuration.py</a></code>, and run <code><a class="el" href="control_8py.html">control.py</a></code> to start the analysis.</p>
-<h1><a class="anchor" id="autotoc_md46"></a>
+<h1><a class="anchor" id="autotoc_md21"></a>
 Want to create your own pass?</h1>
 <p>Todo</p>
-<h1><a class="anchor" id="autotoc_md47"></a>
+<h1><a class="anchor" id="autotoc_md22"></a>
 Future Plans</h1>
 <p>In the long run we plan on integrating the dataflow plugin in a more sophisticated way, especially with the GUI.</p>
 <ul>
@@ -112,10 +112,10 @@ Future Plans</h1>
 </li>
 <li>Gather necessary information from the gate lib directly instead of creating the utils first. (done -&gt; integrated with net gate library system)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md48"></a>
+<h1><a class="anchor" id="autotoc_md23"></a>
 Get in touch</h1>
 <p>If you have any questions or are looking to cooperate with us, get in touch: <a href="#" onclick="location.href='mai'+'lto:'+'hal'+'@c'+'sp.'+'mp'+'g.d'+'e'; return false;">hal@c<span style="display: none;">.nosp@m.</span>sp.m<span style="display: none;">.nosp@m.</span>pg.de</a></p>
-<h1><a class="anchor" id="autotoc_md49"></a>
+<h1><a class="anchor" id="autotoc_md24"></a>
 Directory Overview</h1>
 <div class="fragment"><div class="line">hal/plugins/dataflow</div>
 <div class="line">├── CMakeLists.txt</div>
@@ -205,7 +205,7 @@ Directory Overview</h1>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Apr 25 2023 18:01:03 for HAL by
+    <li class="footer">Generated on Tue Apr 25 2023 19:24:13 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,7 +1,6 @@
 var annotated_dup =
 [
     [ "hal", "namespacehal.html", "namespacehal" ],
-    [ "nlohmann", "namespacenlohmann.html", "namespacenlohmann" ],
     [ "std", "namespacestd.html", "namespacestd" ],
     [ "Abc_Frame_t_", "struct_abc___frame__t__.html", "struct_abc___frame__t__" ],
     [ "Abc_Ntk_t_", "struct_abc___ntk__t__.html", "struct_abc___ntk__t__" ],

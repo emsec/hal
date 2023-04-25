@@ -1,10 +1,10 @@
 <map id="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/common/netlist_abstraction.h" name="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/common/netlist_abstraction.h">
-<area shape="rect" id="node1" title=" " alt="" coords="421,5,616,91"/>
+<area shape="rect" id="node1" title=" " alt="" coords="345,5,540,91"/>
 <area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,139,289,165"/>
-<area shape="rect" id="node7" title=" " alt="" coords="313,139,437,165"/>
-<area shape="rect" id="node8" title=" " alt="" coords="461,139,576,165"/>
-<area shape="rect" id="node9" title=" " alt="" coords="601,139,663,165"/>
-<area shape="rect" id="node10" title=" " alt="" coords="688,139,731,165"/>
+<area shape="rect" id="node7" title=" " alt="" coords="313,139,356,165"/>
+<area shape="rect" id="node8" title=" " alt="" coords="381,139,505,165"/>
+<area shape="rect" id="node9" title=" " alt="" coords="529,139,644,165"/>
+<area shape="rect" id="node10" title=" " alt="" coords="669,139,731,165"/>
 <area shape="rect" id="node3" title=" " alt="" coords="5,213,96,240"/>
 <area shape="rect" id="node4" title=" " alt="" coords="121,213,207,240"/>
 <area shape="rect" id="node5" title=" " alt="" coords="231,213,318,240"/>

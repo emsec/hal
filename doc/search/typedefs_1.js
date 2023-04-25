@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['base_5fiterator_38187',['base_iterator',['../classnlohmann_1_1detail_1_1json__reverse__iterator.html#a6b2ef1d632fe49bfcc22fbd1abd62395',1,'nlohmann::detail::json_reverse_iterator']]],
-  ['boolean_5ffunction_5ft_38188',['boolean_function_t',['../namespacenlohmann_1_1detail.html#a45ec87326503b8884b664a9ef23a6c99',1,'nlohmann::detail']]],
-  ['boolean_5ft_38189',['boolean_t',['../classnlohmann_1_1basic__json.html#a4c919102a9b4fe0d588af64801436082',1,'nlohmann::basic_json']]]
+  ['caseinsensitivestring_37410',['CaseInsensitiveString',['../namespacehal_1_1core__strings.html#a939599c80f140610abb0390b66acf8a6',1,'hal::core_strings']]]
 ];

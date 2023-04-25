@@ -608,8 +608,8 @@ $(document).ready(function(){initNavTree('python__context_8cpp_source.html','');
 <div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; entry : list)</div>
 <div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;            {</div>
 <div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;                <span class="keyword">auto</span> a = entry.attr(<span class="stringliteral">&quot;name_with_symbols&quot;</span>).cast&lt;std::string&gt;();</div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;                <span class="keyword">auto</span> <a class="code" href="namespacehal_1_1gui__utility.html#a6f7dc31d2638295f8b4e0abcf35a53a4">b</a> = entry.attr(<span class="stringliteral">&quot;complete&quot;</span>).cast&lt;std::string&gt;();</div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;                ret_val.emplace_back(a, <a class="code" href="namespacehal_1_1gui__utility.html#a6f7dc31d2638295f8b4e0abcf35a53a4">b</a>);</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;                <span class="keyword">auto</span> b = entry.attr(<span class="stringliteral">&quot;complete&quot;</span>).cast&lt;std::string&gt;();</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;                ret_val.emplace_back(a, b);</div>
 <div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;            }</div>
 <div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;        }</div>
 <div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;        <span class="keywordflow">catch</span> (py::error_already_set&amp; e)</div>
@@ -785,12 +785,11 @@ $(document).ready(function(){initNavTree('python__context_8cpp_source.html','');
 <div class="ttc" id="alayout__locker_8h_html"><div class="ttname"><a href="layout__locker_8h.html">layout_locker.h</a></div></div>
 <div class="ttc" id="anamespacehal_html_ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e"><div class="ttname"><a href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::PinType::state</a></div><div class="ttdeci">@ state</div></div>
 <div class="ttc" id="aqvariant_html_toString"><div class="ttname"><a href="https://doc.qt.io/qt-5/qvariant.html#toString">QVariant::toString</a></div><div class="ttdeci">QString toString() const const</div></div>
-<div class="ttc" id="anamespacehal_1_1gui__utility_html_a6f7dc31d2638295f8b4e0abcf35a53a4"><div class="ttname"><a href="namespacehal_1_1gui__utility.html#a6f7dc31d2638295f8b4e0abcf35a53a4">hal::gui_utility::b</a></div><div class="ttdeci">const QString &amp; b</div><div class="ttdef"><b>Definition:</b> <a href="sort_8h_source.html#l00075">sort.h:75</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_609dd161604b7aa86c7b630207f12412.html">python</a></li><li class="navelem"><a class="el" href="python__context_8cpp.html">python_context.cpp</a></li>
-    <li class="footer">Generated on Tue Apr 25 2023 18:01:01 for HAL by
+    <li class="footer">Generated on Tue Apr 25 2023 19:24:12 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

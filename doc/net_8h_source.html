@@ -174,7 +174,7 @@ $(document).ready(function(){initNavTree('net_8h_source.html',''); initResizable
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        <span class="keywordtype">bool</span> is_a_source(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> std::string&amp; pin_name) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        <span class="keywordtype">bool</span> is_a_source(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin_name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        <span class="keywordtype">bool</span> is_a_source(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        <span class="keywordtype">bool</span> is_a_source(<span class="keyword">const</span> <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160; </div>
@@ -200,7 +200,7 @@ $(document).ready(function(){initNavTree('net_8h_source.html',''); initResizable
 <div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160; </div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <span class="keywordtype">bool</span> is_a_destination(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> std::string&amp; pin_name) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160; </div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="keywordtype">bool</span> is_a_destination(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin_name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="keywordtype">bool</span> is_a_destination(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160; </div>
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <span class="keywordtype">bool</span> is_a_destination(<span class="keyword">const</span> <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160; </div>
@@ -230,10 +230,10 @@ $(document).ready(function(){initNavTree('net_8h_source.html',''); initResizable
 <div class="line"><a name="l00399"></a><span class="lineno"><a class="line" href="classhal_1_1_net.html#a71851ef81c1a491be6395f4c883218de">  399</a></span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a>;</div>
 <div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_net.html">Net</a>(<a class="code" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a>* internal_manager, <a class="code" href="classhal_1_1_event_handler.html">EventHandler</a>* event_handler, <span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>, <span class="keyword">const</span> std::string&amp; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a> = <span class="stringliteral">&quot;&quot;</span>);</div>
 <div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160; </div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>(<a class="code" href="classhal_1_1_net.html">Net</a>&amp;&amp;)      = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>&amp;)            = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>(<a class="code" href="classhal_1_1_net.html">Net</a>&amp;&amp;)                 = <span class="keyword">delete</span>;</div>
 <div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>&amp; operator=(<a class="code" href="classhal_1_1_net.html">Net</a>&amp;&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>&amp; operator=(<a class="code" href="classhal_1_1_net.html">Net</a>&amp;&amp;)      = <span class="keyword">delete</span>;</div>
 <div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160; </div>
 <div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;        <a class="code" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a>* m_internal_manager;</div>
 <div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160; </div>
@@ -281,7 +281,7 @@ $(document).ready(function(){initNavTree('net_8h_source.html',''); initResizable
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="net_8h.html">net.h</a></li>
-    <li class="footer">Generated on Tue Apr 25 2023 18:00:59 for HAL by
+    <li class="footer">Generated on Tue Apr 25 2023 19:24:10 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

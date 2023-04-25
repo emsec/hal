@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['module_39901',['Module',['../classhal_1_1_netlist_internal_manager.html#a21f639900c480510650969df9c74d17d',1,'hal::NetlistInternalManager']]]
+  ['projectmanager_39007',['ProjectManager',['../classhal_1_1_project_directory.html#aa860c957116c15c1b786357fbcd19fc7',1,'hal::ProjectDirectory']]]
 ];

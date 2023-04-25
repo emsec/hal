@@ -5,7 +5,6 @@ var namespaces_dup =
     [ "hal", "namespacehal.html", "namespacehal" ],
     [ "netlist_factory", "namespacenetlist__factory.html", null ],
     [ "netlist_serializer", "namespacenetlist__serializer.html", null ],
-    [ "nlohmann", "namespacenlohmann.html", "namespacenlohmann" ],
     [ "std", "namespacestd.html", null ],
     [ "test", "namespacetest.html", null ],
     [ "test_multiple", "namespacetest__multiple.html", null ],

@@ -87,22 +87,22 @@ $(document).ready(function(){initNavTree('project__directory_8h_source.html','')
 </div><!--header-->
 <div class="contents">
 <a href="project__directory_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix (&quot;ORIGINAL AUTHORS&quot;). All Rights reserved.</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// in the Software without restriction, including without limitation the rights</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// copies of the Software, and to permit persons to whom the Software is</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// The above copyright notice and this permission notice shall be included in all</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// copies or substantial portions of the Software.</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
@@ -115,57 +115,57 @@ $(document).ready(function(){initNavTree('project__directory_8h_source.html','')
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;filesystem&gt;</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;filesystem&gt;</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a> {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
 <div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classhal_1_1_project_directory.html">   37</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_project_directory.html">ProjectDirectory</a> : <span class="keyword">public</span> std::filesystem::path</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    {</div>
 <div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classhal_1_1_project_directory.html#aa860c957116c15c1b786357fbcd19fc7">   39</a></span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classhal_1_1_project_manager.html">ProjectManager</a>;</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <a class="code" href="classhal_1_1_project_directory.html#afc56b51c951555d2c408fee932d762c0">ProjectDirectory</a>(<span class="keyword">const</span> std::string&amp; path_ = std::string());</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <a class="code" href="classhal_1_1_project_directory.html#a6eedb87774801b9838792d12720ad181">ProjectDirectory</a>(<span class="keyword">const</span> std::string&amp; path = std::string());</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        std::filesystem::path <a class="code" href="classhal_1_1_project_directory.html#adc4b09f2b9e56e57813bc00e447fc004">get_default_filename</a>(<span class="keyword">const</span> std::string&amp; extension = std::string()) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        std::filesystem::path <a class="code" href="classhal_1_1_project_directory.html#a05266d178bc1bb73cea16768ae75d269">get_filename</a>(<span class="keyword">const</span> std::string&amp; relative_filename) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        std::filesystem::path <a class="code" href="classhal_1_1_project_directory.html#ac9cbda73428844614b413450ba1685ff">get_shadow_filename</a>(<span class="keyword">const</span> std::string&amp; extension = std::string()) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        std::filesystem::path <a class="code" href="classhal_1_1_project_directory.html#af3601b7a6040a9c94cf07fadacce232b">get_shadow_dir</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        std::filesystem::path <a class="code" href="classhal_1_1_project_directory.html#a2ce61d5bf709b4e75b00dce4e5ffa392">get_canonical_path</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        std::filesystem::path <a class="code" href="classhal_1_1_project_directory.html#a21fb3c3899dab62d526717562c13bd7d">get_relative_file_path</a>(<span class="keyword">const</span> std::string&amp; filename) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keyword">static</span> <a class="code" href="classhal_1_1_project_directory.html">ProjectDirectory</a> <a class="code" href="classhal_1_1_project_directory.html#a66c2e74a77bef4d0eab40bbc221c9897">generate_random</a>();</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="classhal_1_1_project_directory.html#a59f7d3aed28585c1722faa89c12b3679">  104</a></span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> std::string <a class="code" href="classhal_1_1_project_directory.html#a59f7d3aed28585c1722faa89c12b3679">s_shadow_dir</a>;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    };</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;}</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        std::filesystem::path <a class="code" href="classhal_1_1_project_directory.html#adc4b09f2b9e56e57813bc00e447fc004">get_default_filename</a>(<span class="keyword">const</span> std::string&amp; extension = std::string()) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        std::filesystem::path <a class="code" href="classhal_1_1_project_directory.html#a05266d178bc1bb73cea16768ae75d269">get_filename</a>(<span class="keyword">const</span> std::string&amp; relative_filename) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        std::filesystem::path <a class="code" href="classhal_1_1_project_directory.html#ac9cbda73428844614b413450ba1685ff">get_shadow_filename</a>(<span class="keyword">const</span> std::string&amp; extension = std::string()) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        std::filesystem::path <a class="code" href="classhal_1_1_project_directory.html#af3601b7a6040a9c94cf07fadacce232b">get_shadow_dir</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        std::filesystem::path <a class="code" href="classhal_1_1_project_directory.html#a2ce61d5bf709b4e75b00dce4e5ffa392">get_canonical_path</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        std::filesystem::path <a class="code" href="classhal_1_1_project_directory.html#a21fb3c3899dab62d526717562c13bd7d">get_relative_file_path</a>(<span class="keyword">const</span> std::string&amp; filename) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keyword">static</span> <a class="code" href="classhal_1_1_project_directory.html">ProjectDirectory</a> <a class="code" href="classhal_1_1_project_directory.html#a66c2e74a77bef4d0eab40bbc221c9897">generate_random</a>();</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno"><a class="line" href="classhal_1_1_project_directory.html#a59f7d3aed28585c1722faa89c12b3679">  111</a></span>&#160;        <span class="keyword">static</span> <span class="keyword">const</span> std::string <a class="code" href="classhal_1_1_project_directory.html#a59f7d3aed28585c1722faa89c12b3679">s_shadow_dir</a>;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    };</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_project_directory_html_a05266d178bc1bb73cea16768ae75d269"><div class="ttname"><a href="classhal_1_1_project_directory.html#a05266d178bc1bb73cea16768ae75d269">hal::ProjectDirectory::get_filename</a></div><div class="ttdeci">std::filesystem::path get_filename(const std::string &amp;relative_filename) const</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8cpp_source.html#l00047">project_directory.cpp:47</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_directory_html_af3601b7a6040a9c94cf07fadacce232b"><div class="ttname"><a href="classhal_1_1_project_directory.html#af3601b7a6040a9c94cf07fadacce232b">hal::ProjectDirectory::get_shadow_dir</a></div><div class="ttdeci">std::filesystem::path get_shadow_dir() const</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8cpp_source.html#l00067">project_directory.cpp:67</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_directory_html_ac9cbda73428844614b413450ba1685ff"><div class="ttname"><a href="classhal_1_1_project_directory.html#ac9cbda73428844614b413450ba1685ff">hal::ProjectDirectory::get_shadow_filename</a></div><div class="ttdeci">std::filesystem::path get_shadow_filename(const std::string &amp;extension=std::string()) const</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8cpp_source.html#l00058">project_directory.cpp:58</a></div></div>
+<div class="ttc" id="aclasshal_1_1_project_directory_html_a6eedb87774801b9838792d12720ad181"><div class="ttname"><a href="classhal_1_1_project_directory.html#a6eedb87774801b9838792d12720ad181">hal::ProjectDirectory::ProjectDirectory</a></div><div class="ttdeci">ProjectDirectory(const std::string &amp;path=std::string())</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8cpp_source.html#l00009">project_directory.cpp:9</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_directory_html"><div class="ttname"><a href="classhal_1_1_project_directory.html">hal::ProjectDirectory</a></div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8h_source.html#l00037">project_directory.h:37</a></div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_directory_html_a21fb3c3899dab62d526717562c13bd7d"><div class="ttname"><a href="classhal_1_1_project_directory.html#a21fb3c3899dab62d526717562c13bd7d">hal::ProjectDirectory::get_relative_file_path</a></div><div class="ttdeci">std::filesystem::path get_relative_file_path(const std::string &amp;filename) const</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8cpp_source.html#l00074">project_directory.cpp:74</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_directory_html_a2ce61d5bf709b4e75b00dce4e5ffa392"><div class="ttname"><a href="classhal_1_1_project_directory.html#a2ce61d5bf709b4e75b00dce4e5ffa392">hal::ProjectDirectory::get_canonical_path</a></div><div class="ttdeci">std::filesystem::path get_canonical_path() const</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8cpp_source.html#l00031">project_directory.cpp:31</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_directory_html_adc4b09f2b9e56e57813bc00e447fc004"><div class="ttname"><a href="classhal_1_1_project_directory.html#adc4b09f2b9e56e57813bc00e447fc004">hal::ProjectDirectory::get_default_filename</a></div><div class="ttdeci">std::filesystem::path get_default_filename(const std::string &amp;extension=std::string()) const</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8cpp_source.html#l00038">project_directory.cpp:38</a></div></div>
-<div class="ttc" id="aclasshal_1_1_project_directory_html_afc56b51c951555d2c408fee932d762c0"><div class="ttname"><a href="classhal_1_1_project_directory.html#afc56b51c951555d2c408fee932d762c0">hal::ProjectDirectory::ProjectDirectory</a></div><div class="ttdeci">ProjectDirectory(const std::string &amp;path_=std::string())</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8cpp_source.html#l00009">project_directory.cpp:9</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_manager_html"><div class="ttname"><a href="classhal_1_1_project_manager.html">hal::ProjectManager</a></div><div class="ttdef"><b>Definition:</b> <a href="project__manager_8h_source.html#l00047">project_manager.h:47</a></div></div>
 <div class="ttc" id="aclasshal_1_1_project_directory_html_a66c2e74a77bef4d0eab40bbc221c9897"><div class="ttname"><a href="classhal_1_1_project_directory.html#a66c2e74a77bef4d0eab40bbc221c9897">hal::ProjectDirectory::generate_random</a></div><div class="ttdeci">static ProjectDirectory generate_random()</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8cpp_source.html#l00015">project_directory.cpp:15</a></div></div>
-<div class="ttc" id="aclasshal_1_1_project_directory_html_a59f7d3aed28585c1722faa89c12b3679"><div class="ttname"><a href="classhal_1_1_project_directory.html#a59f7d3aed28585c1722faa89c12b3679">hal::ProjectDirectory::s_shadow_dir</a></div><div class="ttdeci">static const std::string s_shadow_dir</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8h_source.html#l00104">project_directory.h:104</a></div></div>
+<div class="ttc" id="aclasshal_1_1_project_directory_html_a59f7d3aed28585c1722faa89c12b3679"><div class="ttname"><a href="classhal_1_1_project_directory.html#a59f7d3aed28585c1722faa89c12b3679">hal::ProjectDirectory::s_shadow_dir</a></div><div class="ttdeci">static const std::string s_shadow_dir</div><div class="ttdef"><b>Definition:</b> <a href="project__directory_8h_source.html#l00111">project_directory.h:111</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_8cff0e4740b4a22580dd05764b73d449.html">utilities</a></li><li class="navelem"><a class="el" href="project__directory_8h.html">project_directory.h</a></li>
-    <li class="footer">Generated on Tue Apr 25 2023 18:00:59 for HAL by
+    <li class="footer">Generated on Tue Apr 25 2023 19:24:10 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,14 +1,14 @@
 <map id="/home/runner/work/hal/hal/plugins/dataflow_analysis/src/processing/passes/group_by_input_output_size.cpp" name="/home/runner/work/hal/hal/plugins/dataflow_analysis/src/processing/passes/group_by_input_output_size.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="547,5,771,91"/>
+<area shape="rect" id="node1" title=" " alt="" coords="572,5,796,91"/>
 <area shape="rect" id="node2" href="$group__by__input__output__size_8h.html" title=" " alt="" coords="5,139,275,180"/>
-<area shape="rect" id="node4" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title=" " alt="" coords="433,139,633,180"/>
-<area shape="rect" id="node5" href="$netlist__abstraction_8h.html" title=" " alt="" coords="245,228,445,269"/>
-<area shape="rect" id="node9" title=" " alt="" coords="583,317,625,344"/>
-<area shape="rect" id="node11" title=" " alt="" coords="760,235,811,262"/>
-<area shape="rect" id="node12" title=" " alt="" coords="885,146,928,173"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="43,317,183,344"/>
-<area shape="rect" id="node6" title=" " alt="" coords="207,317,331,344"/>
-<area shape="rect" id="node7" title=" " alt="" coords="356,317,471,344"/>
-<area shape="rect" id="node8" title=" " alt="" coords="495,317,558,344"/>
-<area shape="rect" id="node10" title=" " alt="" coords="621,235,736,262"/>
+<area shape="rect" id="node4" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title=" " alt="" coords="503,139,703,180"/>
+<area shape="rect" id="node5" href="$netlist__abstraction_8h.html" title=" " alt="" coords="227,228,427,269"/>
+<area shape="rect" id="node6" title=" " alt="" coords="683,317,725,344"/>
+<area shape="rect" id="node10" title=" " alt="" coords="741,235,792,262"/>
+<area shape="rect" id="node12" title=" " alt="" coords="867,146,909,173"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="69,317,209,344"/>
+<area shape="rect" id="node7" title=" " alt="" coords="521,317,645,344"/>
+<area shape="rect" id="node8" title=" " alt="" coords="252,317,367,344"/>
+<area shape="rect" id="node9" title=" " alt="" coords="406,317,469,344"/>
+<area shape="rect" id="node11" title=" " alt="" coords="451,235,565,262"/>
 </map>

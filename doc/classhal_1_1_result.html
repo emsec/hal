@@ -338,10 +338,16 @@ template&lt;typename U  = T, typename std::enable_if_t&lt;!std::is_same_v&lt; U,
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get the value of the result. It is up to the user to check whether the result is valid using <code><a class="el" href="classhal_1_1_result.html#a68290cd7561c3442b675d4999a709f00">Result::is_ok()</a></code> beforehand.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">U</td><td>- The type of the result value. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The result value. </dd></dl>
 
-<p></p>
-
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00168">168</a> of file <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html">result.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00172">172</a> of file <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html">result.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
@@ -412,10 +418,10 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get the error of the result. It is up to the user to check whether the result is an error using <code><a class="el" href="classhal_1_1_result.html#afb19e4c31d56ce9e48b78bceac9b7724">Result::is_error()</a></code> beforehand.</p>
+<dl class="section return"><dt>Returns</dt><dd>The error. </dd></dl>
 
-<p></p>
-
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00187">187</a> of file <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html">result.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00194">194</a> of file <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html">result.h</a>.</p>
 
 </div>
 </div>
@@ -446,7 +452,7 @@ template&lt;typename T &gt; </div>
 <p>Get the error of the result. It is up to the user to check whether the result is an error using <code><a class="el" href="classhal_1_1_result.html#afb19e4c31d56ce9e48b78bceac9b7724">Result::is_error()</a></code> beforehand.</p>
 <dl class="section return"><dt>Returns</dt><dd>The error. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00179">179</a> of file <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html">result.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00183">183</a> of file <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html">result.h</a>.</p>
 
 </div>
 </div>
@@ -554,9 +560,9 @@ template&lt;typename U , typename std::enable_if_t&lt;!std::is_same_v&lt; U, voi
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The result mapped to the target data type. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00200">200</a> of file <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html">result.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00207">207</a> of file <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html">result.h</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="json_8hpp_source.html#l03412">nlohmann::detail::get()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>.</p>
 
 </div>
 </div>
@@ -602,9 +608,9 @@ template&lt;typename U , typename std::enable_if_t&lt;!std::is_same_v&lt; U, voi
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The result mapped to the target data type. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00220">220</a> of file <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html">result.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00227">227</a> of file <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html">result.h</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="json_8hpp_source.html#l03412">nlohmann::detail::get()</a>.</p>
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>.</p>
 
 </div>
 </div>
@@ -779,7 +785,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_result.html">Result</a></li>
-    <li class="footer">Generated on Tue Apr 25 2023 18:01:06 for HAL by
+    <li class="footer">Generated on Tue Apr 25 2023 19:24:17 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

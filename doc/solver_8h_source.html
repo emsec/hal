@@ -134,33 +134,33 @@ $(document).ready(function(){initNavTree('solver_8h_source.html',''); initResiza
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html">Solver</a>&amp; <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a7af33c85681754a3c2b9bd79aa3076b5">with_constraints</a>(<span class="keyword">const</span> std::vector&lt;Constraint&gt;&amp; constraints);</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a57ae56afb290b41fa360779c268d379e">has_local_solver_for</a>(<a class="code" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4a">SolverType</a> <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>, <a class="code" href="namespacehal_1_1_s_m_t.html#a27de5a7424d277b60f19547c5e78feb6">SolverCall</a> call);</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <a class="code" href="classhal_1_1_result.html">Result&lt;SolverResult&gt;</a> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#ad363f134d1d24a32dbe84d0c7bb58225">query</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config = <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>()) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            <a class="code" href="classhal_1_1_result.html">Result&lt;SolverResult&gt;</a> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a46b0be21b0b728ce4d9192eff3433744">query_local</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            <a class="code" href="classhal_1_1_result.html">Result&lt;SolverResult&gt;</a> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#abe6e7dfb1915e0e1648c083f86081b90">query_remote</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            <a class="code" href="classhal_1_1_result.html">Result&lt;std::string&gt;</a> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a4f86f860fdc5ba3ae7155fecef1f0ea3">to_smt2</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;            <span class="comment">// Member</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;            std::vector&lt;Constraint&gt; m_constraints;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            <span class="keyword">static</span> std::map&lt;std::pair&lt;SolverType, SolverCall&gt;, std::function&lt;Result&lt;std::tuple&lt;bool, std::string&gt;&gt;(std::string&amp;, <span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp;)&gt;&gt; spec2query;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;            <span class="keyword">static</span> std::map&lt;SolverType, std::function&lt;Result&lt;std::string&gt;()&gt;&gt; type2query_binary;</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            <span class="keyword">static</span> std::map&lt;SolverType, bool&gt; type2link_status;</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;            <span class="comment">// Interface</span></div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;            <span class="keyword">static</span> <a class="code" href="classhal_1_1_result.html">Result&lt;std::string&gt;</a> translate_to_smt2(<span class="keyword">const</span> std::vector&lt;Constraint&gt;&amp; constraints, <span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config);</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;            <span class="keyword">static</span> <a class="code" href="classhal_1_1_result.html">Result&lt;SolverResult&gt;</a> translate_from_smt2(<span class="keywordtype">bool</span> was_killed, std::string stdout, <span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config);</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        };</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    }    <span class="comment">// namespace SMT</span></div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a57ae56afb290b41fa360779c268d379e">has_local_solver_for</a>(<a class="code" href="namespacehal_1_1_s_m_t.html#a2b79ea414d0f1bf34d2686e2d38c2c4a">SolverType</a> <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>, <a class="code" href="namespacehal_1_1_s_m_t.html#a27de5a7424d277b60f19547c5e78feb6">SolverCall</a> call);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <a class="code" href="classhal_1_1_result.html">Result&lt;SolverResult&gt;</a> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#ad363f134d1d24a32dbe84d0c7bb58225">query</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config = <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>()) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            <a class="code" href="classhal_1_1_result.html">Result&lt;SolverResult&gt;</a> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a46b0be21b0b728ce4d9192eff3433744">query_local</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            <a class="code" href="classhal_1_1_result.html">Result&lt;SolverResult&gt;</a> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#abe6e7dfb1915e0e1648c083f86081b90">query_remote</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;            <a class="code" href="classhal_1_1_result.html">Result&lt;std::string&gt;</a> <a class="code" href="classhal_1_1_s_m_t_1_1_solver.html#a4f86f860fdc5ba3ae7155fecef1f0ea3">to_smt2</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;            <span class="comment">// Member</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;            std::vector&lt;Constraint&gt; m_constraints;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;            <span class="keyword">static</span> std::map&lt;std::pair&lt;SolverType, SolverCall&gt;, std::function&lt;Result&lt;std::tuple&lt;bool, std::string&gt;&gt;(std::string&amp;, <span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp;)&gt;&gt; spec2query;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            <span class="keyword">static</span> std::map&lt;SolverType, std::function&lt;Result&lt;std::string&gt;()&gt;&gt; type2query_binary;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            <span class="keyword">static</span> std::map&lt;SolverType, bool&gt; type2link_status;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;            <span class="comment">// Interface</span></div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;            <span class="keyword">static</span> <a class="code" href="classhal_1_1_result.html">Result&lt;std::string&gt;</a> translate_to_smt2(<span class="keyword">const</span> std::vector&lt;Constraint&gt;&amp; constraints, <span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config);</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;            <span class="keyword">static</span> <a class="code" href="classhal_1_1_result.html">Result&lt;SolverResult&gt;</a> translate_from_smt2(<span class="keywordtype">bool</span> was_killed, std::string stdout, <span class="keyword">const</span> <a class="code" href="structhal_1_1_s_m_t_1_1_query_config.html">QueryConfig</a>&amp; config);</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        };</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    }    <span class="comment">// namespace SMT</span></div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_s_m_t_1_1_solver_html"><div class="ttname"><a href="classhal_1_1_s_m_t_1_1_solver.html">hal::SMT::Solver</a></div><div class="ttdef"><b>Definition:</b> <a href="solver_8h_source.html#l00040">solver.h:40</a></div></div>
@@ -185,7 +185,7 @@ $(document).ready(function(){initNavTree('solver_8h_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="dir_eae2d6668cd0aabfd48a71937eff4c1c.html">boolean_function</a></li><li class="navelem"><a class="el" href="solver_8h.html">solver.h</a></li>
-    <li class="footer">Generated on Tue Apr 25 2023 18:00:59 for HAL by
+    <li class="footer">Generated on Tue Apr 25 2023 19:24:10 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

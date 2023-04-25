@@ -1,5 +1,0 @@
-var structnlohmann_1_1detail_1_1is__compatible__integer__type__impl_3_01_real_integer_type_00_01_com5aa74bcf254245a639da00509f4d2655 =
-[
-    [ "CompatibleLimits", "structnlohmann_1_1detail_1_1is__compatible__integer__type__impl_3_01_real_integer_type_00_01_com5aa74bcf254245a639da00509f4d2655.html#a002983b5c7c0f72b89d2151a6b39627d", null ],
-    [ "RealLimits", "structnlohmann_1_1detail_1_1is__compatible__integer__type__impl_3_01_real_integer_type_00_01_com5aa74bcf254245a639da00509f4d2655.html#a0e9f2586c4de25750563770c9388ab9f", null ]
-];

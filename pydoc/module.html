@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Module &mdash; hal_py v4.1.0-27-g4a8329445 documentation</title>
+  <title>Module &mdash; hal_py v4.1.0-28-gf77c92819 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-27-g4a8329445
+                v4.1.0-28-gf77c92819
               </div>
             
           
@@ -207,7 +207,7 @@ The gate is removed from its previous module in the process.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to assign.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success, False otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
 </tr>
@@ -226,7 +226,7 @@ The gates are removed from their previous module in the process.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The gates to assign.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success, False otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
 </tr>
@@ -264,18 +264,18 @@ Only pins with matching direction and type can be assigned to an existing pin gr
 <dt id="hal_py.Module.contains_gate">
 <code class="descname">contains_gate</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>gate: hal_py.Gate</em>, <em>recursive: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.contains_gate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether a gate is contained in the module.
-If recursive is True, gates in submodules are considered as well.</p>
+If <code class="docutils literal notranslate"><span class="pre">recursive</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, gates in submodules are considered as well.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to check for.</li>
-<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to also consider gates in submodules, False otherwise.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> to also consider gates in submodules, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if the gate is contained in the module, False otherwise.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the gate is contained in the module, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
@@ -289,18 +289,18 @@ If recursive is True, gates in submodules are considered as well.</p>
 <dt id="hal_py.Module.contains_module">
 <code class="descname">contains_module</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>other: hal_py.Module</em>, <em>recusive: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.contains_module" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks whether another module is a submodule of this module.
-If recursive is set to true, all indirect submodules are also included.</p>
+If recursive is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, all indirect submodules are also included.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>other</strong> (<a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a>) – Other module to check for.</li>
-<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to include indirect submodules as well, False otherwise.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to include indirect submodules as well, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if the other module is a submodule, False otherwise.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the other module is a submodule, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
@@ -314,18 +314,18 @@ If recursive is set to true, all indirect submodules are also included.</p>
 <dt id="hal_py.Module.contains_net">
 <code class="descname">contains_net</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>net: hal_py.Net</em>, <em>recursive: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.contains_net" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether a net is contained in the module.
-If recursive is set to true, nets in submodules are considered as well.</p>
+If <code class="docutils literal notranslate"><span class="pre">recursive</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, nets in submodules are considered as well.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net to check for.</li>
-<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to also consider nets in submodules, False otherwise.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> to also consider nets in submodules, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if the net is contained in the module, False otherwise.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the net is contained in the module, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
@@ -510,14 +510,14 @@ All pins to be added to the pin group must have the same direction and type.</p>
 <dt id="hal_py.Module.get_gate_by_id">
 <code class="descname">get_gate_by_id</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>id: int</em>, <em>recursive: bool = False</em><span class="sig-paren">)</span> &#x2192; hal_py.Gate<a class="headerlink" href="#hal_py.Module.get_gate_by_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a gate specified by the given ID.
-If recursive is True, gates in submodules are considered as well.</p>
+If <code class="docutils literal notranslate"><span class="pre">recursive</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, gates in submodules are considered as well.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The unique ID of the gate.</li>
-<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to also consider gates in submodules, False otherwise.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – <code class="docutils literal notranslate"><span class="pre">True</span></code> to also consider gates in submodules, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</li>
 </ul>
 </td>
 </tr>
@@ -533,28 +533,48 @@ If recursive is True, gates in submodules are considered as well.</p>
 
 <dl class="method">
 <dt id="hal_py.Module.get_gates">
-<code class="descname">get_gates</code><span class="sig-paren">(</span><em>self: hal_py.Module, filter: Callable[[hal_py.Gate], bool] = None, recursive: bool = False</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Gate]<a class="headerlink" href="#hal_py.Module.get_gates" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all gates contained within the module.
-The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
-If recursive is True, gates in submodules are considered as well.</p>
+<code class="descname">get_gates</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Module.get_gates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_gates(self: hal_py.Module) -&gt; List[hal_py.Gate]</p>
+<blockquote>
+<div><p>Get all gates contained within the module.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filter</strong> (<em>lambda</em>) – An optional filter.</li>
-<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to also consider gates in submodules, False otherwise.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">A list of gates.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of gates.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
-</td>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Gate]</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">get_gates(self: hal_py.Module, filter: Callable[[hal_py.Gate], bool], recursive: bool = False) -&gt; List[hal_py.Gate]</p>
+<blockquote>
+<div><p>Get all gates contained within the module.
+The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+If <code class="docutils literal notranslate"><span class="pre">recursive</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, gates in submodules are considered as well.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param lambda filter:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Filter function to be evaluated on each gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool recursive:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> to also consider gates in submodules, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">A list of gates.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Gate]</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
@@ -687,28 +707,48 @@ If recursive is True, gates in submodules are considered as well.</p>
 
 <dl class="method">
 <dt id="hal_py.Module.get_nets">
-<code class="descname">get_nets</code><span class="sig-paren">(</span><em>self: hal_py.Module, filter: Callable[[hal_py.Net], bool] = None, recursive: bool = False</em><span class="sig-paren">)</span> &#x2192; Set[hal_py.Net]<a class="headerlink" href="#hal_py.Module.get_nets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all nets that have at least one source or one destination within the module.
-The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
-If recursive is True, nets in submodules are considered as well.</p>
+<code class="descname">get_nets</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Module.get_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_nets(self: hal_py.Module) -&gt; Set[hal_py.Net]</p>
+<blockquote>
+<div><p>Get all nets that have at least one source or one destination within the module.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filter</strong> (<em>lambda</em>) – An optional filter.</li>
-<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to also consider nets in submodules, False otherwise.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">An unordered set of nets.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of nets.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</p>
-</td>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">set[hal_py.Net]</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">get_nets(self: hal_py.Module, filter: Callable[[hal_py.Net], bool], recursive: bool = False) -&gt; Set[hal_py.Net]</p>
+<blockquote>
+<div><p>Get all nets that have at least one source or one destination within the module.
+The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+If <code class="docutils literal notranslate"><span class="pre">recursive</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, nets in submodules are considered as well.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param lambda filter:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Filter function to be evaluated on each net.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool recursive:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> to also consider nets in submodules, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">An unordered set of nets.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">set[hal_py.Net]</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
@@ -780,7 +820,7 @@ For the top module, None is returned.</p>
 <dt id="hal_py.Module.get_parent_modules">
 <code class="descname">get_parent_modules</code><span class="sig-paren">(</span><em>self: hal_py.Module, filter: Callable[[hal_py.Module], bool] = None, recursive: bool = True</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Module]<a class="headerlink" href="#hal_py.Module.get_parent_modules" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all parents of this module.
-If recursive is set to True, all indirect parents are also included.
+If <code class="docutils literal notranslate"><span class="pre">recursive</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, all indirect parents are also included.
 The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -788,7 +828,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>filter</strong> (<em>lambda</em>) – An optional filter.</li>
-<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to include indirect parents as well, False otherwise.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to include indirect parents as well, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</li>
 </ul>
 </td>
 </tr>
@@ -971,7 +1011,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <dt id="hal_py.Module.get_submodules">
 <code class="descname">get_submodules</code><span class="sig-paren">(</span><em>self: hal_py.Module, filter: Callable[[hal_py.Module], bool] = None, recursive: bool = False</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Module]<a class="headerlink" href="#hal_py.Module.get_submodules" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all direct submodules of this module.
-If recursive is set to True, all indirect submodules are also included.
+If <code class="docutils literal notranslate"><span class="pre">recursive</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, all indirect submodules are also included.
 The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -979,7 +1019,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>filter</strong> (<em>lambda</em>) – An optional filter.</li>
-<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to include indirect submodules as well, False otherwise.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to include indirect submodules as well, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</li>
 </ul>
 </td>
 </tr>
@@ -1147,7 +1187,7 @@ The value of 0 is reserved and represents an invalid ID.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the net is an input net, False otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the net is an input net, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
 </tr>
@@ -1165,7 +1205,7 @@ The value of 0 is reserved and represents an invalid ID.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the net is an internal net, False otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the net is an internal net, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
 </tr>
@@ -1183,7 +1223,7 @@ The value of 0 is reserved and represents an invalid ID.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the net is an output net, False otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the net is an output net, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
 </tr>
@@ -1201,11 +1241,11 @@ The value of 0 is reserved and represents an invalid ID.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>module</strong> (<a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a>) – The module.</li>
-<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to check recursively, False otherwise.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to check recursively, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if the module is a parent of the specified module, False otherwise.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the module is a parent of the specified module, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
@@ -1225,11 +1265,11 @@ The value of 0 is reserved and represents an invalid ID.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>module</strong> (<a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a>) – The module.</li>
-<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to check recursively, False otherwise.</li>
+<li><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to check recursively, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if the module is a submodule of the specified module, False otherwise.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the module is a submodule of the specified module, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </td>
 </tr>
 </tbody>
@@ -1244,7 +1284,7 @@ The value of 0 is reserved and represents an invalid ID.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the module is the top module, False otherwise.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the module is the top module, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
 </tr>
@@ -1334,12 +1374,12 @@ The indices of some other pins within the group will be incremented or decrement
 <dl class="attribute">
 <dt id="hal_py.Module.nets">
 <code class="descname">nets</code><a class="headerlink" href="#hal_py.Module.nets" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list of all nets that have at least one source or one destination within the module.</p>
+<dd><p>An unordered set of all nets that have at least one source or one destination within the module.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -1469,7 +1509,7 @@ Automatically moves the gate to the top module of the netlist.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to remove.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success, False otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
 </tr>
@@ -1488,7 +1528,7 @@ Automatically moves the gates to the top module of the netlist.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The gates to remove.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success, False otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
 </tr>
@@ -1575,7 +1615,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>new_parent</strong> (<a class="reference internal" href="#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a>) – The new parent module.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the parent was changed, False otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the parent was changed, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
 </tr>
@@ -1783,7 +1823,7 @@ Has no effect on module pins.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True on success, False otherwise.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
 </tr>

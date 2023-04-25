@@ -159,7 +159,7 @@ $(document).ready(function(){initNavTree('comment__manager_8cpp_source.html','')
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html">QJsonObject</a>&amp; json = jsonDoc.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsondocument.html#object">object</a>();</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordflow">if</span> (json.contains(<span class="stringliteral">&quot;comments&quot;</span>) &amp;&amp; json[<span class="stringliteral">&quot;comments&quot;</span>].isArray())</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordflow">if</span> (json.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonobject.html#contains">contains</a>(<span class="stringliteral">&quot;comments&quot;</span>) &amp;&amp; json[<span class="stringliteral">&quot;comments&quot;</span>].isArray())</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        {</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html">QJsonArray</a> comArr = json[<span class="stringliteral">&quot;comments&quot;</span>].toArray();</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            <span class="keywordtype">int</span> nCom          = comArr.<a class="codeRef" href="https://doc.qt.io/qt-5/qjsonarray.html#size">size</a>();</div>
@@ -252,6 +252,7 @@ $(document).ready(function(){initNavTree('comment__manager_8cpp_source.html','')
 <div class="ttc" id="aclasshal_1_1_comment_manager_html_a8baf740f65a2857f9917821b2b62430f"><div class="ttname"><a href="classhal_1_1_comment_manager.html#a8baf740f65a2857f9917821b2b62430f">hal::CommentManager::entryAboutToBeDeleted</a></div><div class="ttdeci">void entryAboutToBeDeleted(CommentEntry *entry)</div></div>
 <div class="ttc" id="aqlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html">QList</a></div></div>
 <div class="ttc" id="aclasshal_1_1_comment_manager_html_a4ef9d652b20dc7357d25ab7f2f0a0df7"><div class="ttname"><a href="classhal_1_1_comment_manager.html#a4ef9d652b20dc7357d25ab7f2f0a0df7">hal::CommentManager::CommentManager</a></div><div class="ttdeci">CommentManager(QObject *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="comment__manager_8cpp_source.html#l00011">comment_manager.cpp:11</a></div></div>
+<div class="ttc" id="aqjsonobject_html_contains"><div class="ttname"><a href="https://doc.qt.io/qt-5/qjsonobject.html#contains">QJsonObject::contains</a></div><div class="ttdeci">bool contains(const QString &amp;key) const const</div></div>
 <div class="ttc" id="aclasshal_1_1_comment_entry_html_a0d32c73661199bffef805763582df4bf"><div class="ttname"><a href="classhal_1_1_comment_entry.html#a0d32c73661199bffef805763582df4bf">hal::CommentEntry::isInvalid</a></div><div class="ttdeci">bool isInvalid() const</div><div class="ttdef"><b>Definition:</b> <a href="comment__entry_8cpp_source.html#l00090">comment_entry.cpp:90</a></div></div>
 <div class="ttc" id="aqjsonparseerror_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qjsonparseerror.html">QJsonParseError</a></div></div>
 <div class="ttc" id="anamespacetest__multiple_html_aca3deff7ab8749c592308be75680f1e1"><div class="ttname"><a href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">test_multiple.netlist</a></div><div class="ttdeci">netlist</div><div class="ttdef"><b>Definition:</b> <a href="test__multiple_8py_source.html#l00029">test_multiple.py:29</a></div></div>
@@ -294,7 +295,7 @@ $(document).ready(function(){initNavTree('comment__manager_8cpp_source.html','')
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_7ba3acdd1ecebd43dd3c77911577a6fa.html">comment_system</a></li><li class="navelem"><a class="el" href="comment__manager_8cpp.html">comment_manager.cpp</a></li>
-    <li class="footer">Generated on Tue Apr 25 2023 18:01:01 for HAL by
+    <li class="footer">Generated on Tue Apr 25 2023 19:24:11 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

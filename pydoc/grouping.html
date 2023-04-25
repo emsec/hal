@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Grouping &mdash; hal_py v4.1.0-27-g4a8329445 documentation</title>
+  <title>Grouping &mdash; hal_py v4.1.0-28-gf77c92819 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-27-g4a8329445
+                v4.1.0-28-gf77c92819
               </div>
             
           
@@ -493,12 +493,12 @@ If force is set and the net is contained in another grouping, it is removed from
 <dt id="hal_py.Grouping.get_gate_ids">
 <code class="descname">get_gate_ids</code><span class="sig-paren">(</span><em>self: hal_py.Grouping, filter: Callable[[hal_py.Gate], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[int]<a class="headerlink" href="#hal_py.Grouping.get_gate_ids" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the IDs of all gates contained within the grouping.
-A filter can be applied to the result to only get gate IDs for gates matching the specified condition.</p>
+The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – Filter to be applied to the gates.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – Filter function to be evaluated on each gate.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of gate IDs.</td>
 </tr>
@@ -510,21 +510,44 @@ A filter can be applied to the result to only get gate IDs for gates matching th
 
 <dl class="method">
 <dt id="hal_py.Grouping.get_gates">
-<code class="descname">get_gates</code><span class="sig-paren">(</span><em>self: hal_py.Grouping, filter: Callable[[hal_py.Gate], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Gate]<a class="headerlink" href="#hal_py.Grouping.get_gates" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all gates contained within the grouping.
-A filter can be applied to the result to only get gates matching the specified condition.</p>
+<code class="descname">get_gates</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Grouping.get_gates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_gates(self: hal_py.Grouping) -&gt; List[hal_py.Gate]</p>
+<blockquote>
+<div><p>Get all gates contained within the grouping.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – Filter to be applied to the gates.</td>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">A list of gates.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of gates.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</td>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Gate]</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">get_gates(self: hal_py.Grouping, filter: Callable[[hal_py.Gate], bool]) -&gt; List[hal_py.Gate]</p>
+<blockquote>
+<div><p>Get all gates contained within the grouping.
+The filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param lambda filter:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Filter function to be evaluated on each gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">A list of gates.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Gate]</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
@@ -547,12 +570,12 @@ A filter can be applied to the result to only get gates matching the specified c
 <dt id="hal_py.Grouping.get_module_ids">
 <code class="descname">get_module_ids</code><span class="sig-paren">(</span><em>self: hal_py.Grouping, filter: Callable[[hal_py.Module], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[int]<a class="headerlink" href="#hal_py.Grouping.get_module_ids" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the IDs of all modules contained within the grouping.
-A filter can be applied to the result to only get module IDs for modules matching the specified condition.</p>
+The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – Filter to be applied to the modules.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – Filter function to be evaluated on each module.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of module IDs.</td>
 </tr>
@@ -564,21 +587,44 @@ A filter can be applied to the result to only get module IDs for modules matchin
 
 <dl class="method">
 <dt id="hal_py.Grouping.get_modules">
-<code class="descname">get_modules</code><span class="sig-paren">(</span><em>self: hal_py.Grouping, filter: Callable[[hal_py.Module], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Module]<a class="headerlink" href="#hal_py.Grouping.get_modules" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all modules contained within the grouping.
-A filter can be applied to the result to only get modules matching the specified condition.</p>
+<code class="descname">get_modules</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Grouping.get_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_modules(self: hal_py.Grouping) -&gt; List[hal_py.Module]</p>
+<blockquote>
+<div><p>Get all modules contained within the grouping.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – Filter to be applied to the modules.</td>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">A list of modules.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of modules.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module">hal_py.Module</a>]</td>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Module]</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">get_modules(self: hal_py.Grouping, filter: Callable[[hal_py.Module], bool]) -&gt; List[hal_py.Module]</p>
+<blockquote>
+<div><p>Get all modules contained within the grouping.
+The filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param lambda filter:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Filter function to be evaluated on each module.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">A list of modules.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Module]</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
@@ -601,12 +647,12 @@ A filter can be applied to the result to only get modules matching the specified
 <dt id="hal_py.Grouping.get_net_ids">
 <code class="descname">get_net_ids</code><span class="sig-paren">(</span><em>self: hal_py.Grouping, filter: Callable[[hal_py.Net], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[int]<a class="headerlink" href="#hal_py.Grouping.get_net_ids" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the IDs of all nets contained within the grouping.
-A filter can be applied to the result to only get net IDs for nets matching the specified condition.</p>
+The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – Filter to be applied to the nets.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – Filter function to be evaluated on each net.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of net IDs.</td>
 </tr>
@@ -634,21 +680,44 @@ A filter can be applied to the result to only get net IDs for nets matching the 
 
 <dl class="method">
 <dt id="hal_py.Grouping.get_nets">
-<code class="descname">get_nets</code><span class="sig-paren">(</span><em>self: hal_py.Grouping, filter: Callable[[hal_py.Net], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Net]<a class="headerlink" href="#hal_py.Grouping.get_nets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all nets contained within the grouping.
-A filter can be applied to the result to only get nets matching the specified condition.</p>
+<code class="descname">get_nets</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Grouping.get_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_nets(self: hal_py.Grouping) -&gt; List[hal_py.Net]</p>
+<blockquote>
+<div><p>Get all nets contained within the grouping.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – Filter to be applied to the nets.</td>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">A list of nets.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of nets.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Net]</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">get_nets(self: hal_py.Grouping, filter: Callable[[hal_py.Net], bool]) -&gt; List[hal_py.Net]</p>
+<blockquote>
+<div><p>Get all nets contained within the grouping.
+The filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param lambda filter:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Filter function to be evaluated on each net.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">A list of nets.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Net]</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="attribute">

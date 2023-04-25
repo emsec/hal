@@ -139,7 +139,7 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00044">44</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00046">46</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac6042d15d4bb356c31327e77b9437382"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac6042d15d4bb356c31327e77b9437382">&#9670;&nbsp;</a></span>GuiExtensionInterface()</h2>
@@ -164,7 +164,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00047">47</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00049">49</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
 
 </div>
 </div>
@@ -191,7 +191,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00048">48</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__extension__interface_8h_source.html#l00053">53</a> of file <a class="el" href="gui__extension__interface_8h_source.html">gui_extension_interface.h</a>.</p>
 
 </div>
 </div>
@@ -247,13 +247,14 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Call from GUI to execute function. This function gets called when user selected a plugin contribution (see get_context_contribution) in context menu of GUI graphical netlist view or when user clicked a push button in contributed plugin menu </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Call from GUI to execute function. This function gets called when user selected a plugin contribution (see get_context_contribution) in context menu of GUI graphical netlist view or when user clicked a push button in contributed plugin menu</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">tag</td><td>The function tagname (unique identifier) </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>The current netlist in GUI </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mods</td><td>List of selected modules </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">gats</td><td>List of selected gates </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nets</td><td>List of selected nets </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">tag</td><td>- The function tagname (unique identifier) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>- The current netlist in GUI </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mods</td><td>- List of selected modules </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">gats</td><td>- List of selected gates </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nets</td><td>- List of selected nets </td></tr>
   </table>
   </dd>
 </dl>
@@ -311,12 +312,13 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Contribution to context menu. This function gets called when a context menu in GUI graphical netlist view pops up. Plugins that want to add their own entries in context menu will return one <a class="el" href="structhal_1_1_context_menu_contribution.html">ContextMenuContribution</a> record per entry line. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Contribution to context menu. This function gets called when a context menu in GUI graphical netlist view pops up. Plugins that want to add their own entries in context menu will return one <a class="el" href="structhal_1_1_context_menu_contribution.html">ContextMenuContribution</a> record per entry line.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>The current netlist in GUI </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mods</td><td>List of selected modules </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">gats</td><td>List of selected gates </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nets</td><td>List of selected nets </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>- The current netlist in GUI </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mods</td><td>- List of selected modules </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">gats</td><td>- List of selected gates </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nets</td><td>- List of selected nets </td></tr>
   </table>
   </dd>
 </dl>
@@ -348,7 +350,8 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get list of configurable parameter </p><dl class="section return"><dt>Returns</dt><dd>List of configurable parameter </dd></dl>
+<p>Get list of configurable parameter</p>
+<dl class="section return"><dt>Returns</dt><dd>List of configurable parameter </dd></dl>
 
 <p>Reimplemented in <a class="el" href="classhal_1_1_gui_extension_dataflow.html#ac91f739c93f0e340c729a0c40eaeaead">hal::GuiExtensionDataflow</a>.</p>
 
@@ -379,9 +382,9 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p><a class="el" href="classhal_1_1_netlist.html">Netlist</a> about to close in GUI </p><dl class="params"><dt>Parameters</dt><dd>
+<p><a class="el" href="classhal_1_1_netlist.html">Netlist</a> about to close in GUI. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td></td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>- The netlist. </td></tr>
   </table>
   </dd>
 </dl>
@@ -413,9 +416,10 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p><a class="el" href="classhal_1_1_netlist.html">Netlist</a> loaded in GUI </p><dl class="params"><dt>Parameters</dt><dd>
+<p><a class="el" href="classhal_1_1_netlist.html">Netlist</a> loaded in GUI.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td></td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>- The netlist. </td></tr>
   </table>
   </dd>
 </dl>
@@ -447,9 +451,10 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Register function to indicate work progress when busy </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Register function to indicate work progress when busy</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pif</td><td>Progress Indicator Function to register </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pif</td><td>- Progress Indicator Function to register </td></tr>
   </table>
   </dd>
 </dl>
@@ -483,10 +488,10 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Set values for configurable parameter </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Set values for configurable parameter</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>The current netlist </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">params</td><td>List of configurable parameter with values </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">params</td><td>- List of configurable parameter with values </td></tr>
   </table>
   </dd>
 </dl>
@@ -509,7 +514,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_gui_extension_interface.html">GuiExtensionInterface</a></li>
-    <li class="footer">Generated on Tue Apr 25 2023 18:01:05 for HAL by
+    <li class="footer">Generated on Tue Apr 25 2023 19:24:15 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

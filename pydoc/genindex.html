@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; hal_py v4.1.0-27-g4a8329445 documentation</title>
+  <title>Index &mdash; hal_py v4.1.0-28-gf77c92819 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v4.1.0-27-g4a8329445
+                v4.1.0-28-gf77c92819
               </div>
             
           
@@ -162,6 +162,7 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
@@ -245,9 +246,11 @@
         <li><a href="smt.html#hal_py.SMT.SolverResult.__init__">(hal_py.SMT.SolverResult attribute)</a>
 </li>
       </ul></li>
-      <li><a href="boolean_function.html#hal_py.BooleanFunction.__init__">__init__() (hal_py.BooleanFunction method)</a>
+      <li><a href="dataflow.html#dataflow.Dataflow.Configuration.__init__">__init__() (dataflow.Dataflow.Configuration method)</a>
 
       <ul>
+        <li><a href="boolean_function.html#hal_py.BooleanFunction.__init__">(hal_py.BooleanFunction method)</a>
+</li>
         <li><a href="boolean_function.html#hal_py.BooleanFunction.Value.__init__">(hal_py.BooleanFunction.Value method)</a>
 </li>
         <li><a href="boolean_function_decorator.html#hal_py.BooleanFunctionDecorator.__init__">(hal_py.BooleanFunctionDecorator method)</a>
@@ -437,6 +440,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="dataflow.html#dataflow.Dataflow.analyze">analyze() (in module dataflow.Dataflow)</a>
+</li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.NodeType.And">And (hal_py.BooleanFunction.NodeType attribute)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.And">And() (hal_py.BooleanFunction static method)</a>
@@ -551,6 +556,8 @@
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Concat">Concat() (hal_py.BooleanFunction static method)</a>
 </li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Configuration">Configuration (class in dataflow.Dataflow)</a>
+</li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Const">Const() (hal_py.BooleanFunction static method)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Node.constant">constant (hal_py.BooleanFunction.Node attribute)</a>
@@ -613,6 +620,8 @@
 </li>
       <li><a href="netlist.html#hal_py.Netlist.create_module">create_module() (hal_py.Netlist method)</a>
 </li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result.create_modules">create_modules() (dataflow.Dataflow.Result method)</a>
+</li>
       <li><a href="netlist.html#hal_py.Netlist.create_net">create_net() (hal_py.Netlist method)</a>
 </li>
       <li><a href="netlist_factory.html#hal_py.NetlistFactory.create_netlist">create_netlist() (in module hal_py.NetlistFactory)</a>
@@ -656,6 +665,8 @@
       <li><a href="gate_type_component.html#hal_py.LatchComponent.data_in_function">data_in_function (hal_py.LatchComponent attribute)</a>
 </li>
       <li><a href="data_container.html#hal_py.DataContainer">DataContainer (class in hal_py)</a>
+</li>
+      <li><a href="dataflow.html#module-dataflow.Dataflow">dataflow.Dataflow (module)</a>
 </li>
       <li><a href="dataflow.html#dataflow.DataflowPlugin">DataflowPlugin (class in dataflow)</a>
 </li>
@@ -731,6 +742,8 @@
         <li><a href="gate_type_component.html#hal_py.RAMPortComponent.enable_function">(hal_py.RAMPortComponent attribute)</a>
 </li>
       </ul></li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Configuration.enable_register_stages">enable_register_stages (dataflow.Dataflow.Configuration attribute)</a>
+</li>
       <li><a href="endpoint.html#hal_py.Endpoint">Endpoint (class in hal_py)</a>
 </li>
   </ul></td>
@@ -748,6 +761,8 @@
 </li>
       </ul></li>
       <li><a href="dataflow.html#dataflow.DataflowPlugin.execute">execute() (dataflow.DataflowPlugin method)</a>
+</li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Configuration.expected_sizes">expected_sizes (dataflow.Dataflow.Configuration attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -927,6 +942,8 @@
       </ul></li>
       <li><a href="smt.html#hal_py.SMT.Solver.get_constraints">get_constraints() (hal_py.SMT.Solver method)</a>
 </li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result.get_control_nets_of_group">get_control_nets_of_group() (dataflow.Dataflow.Result method)</a>
+</li>
       <li><a href="data_container.html#hal_py.DataContainer.get_data">get_data() (hal_py.DataContainer method)</a>
 
       <ul>
@@ -1059,6 +1076,8 @@
         <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorController.get_gates">(netlist_simulator_controller.NetlistSimulatorController method)</a>
 </li>
       </ul></li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result.get_gates_of_group">get_gates_of_group() (dataflow.Dataflow.Result method)</a>
+</li>
       <li><a href="netlist.html#hal_py.Netlist.get_global_input_nets">get_global_input_nets() (hal_py.Netlist method)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.get_global_output_nets">get_global_output_nets() (hal_py.Netlist method)</a>
@@ -1075,6 +1094,14 @@
         <li><a href="module_pin.html#hal_py.ModulePin.get_group">(hal_py.ModulePin method)</a>
 </li>
       </ul></li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result.get_group_id_of_gate">get_group_id_of_gate() (dataflow.Dataflow.Result method)</a>
+</li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result.get_group_list">get_group_list() (dataflow.Dataflow.Result method)</a>
+</li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result.get_group_predecessors">get_group_predecessors() (dataflow.Dataflow.Result method)</a>
+</li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result.get_group_successors">get_group_successors() (dataflow.Dataflow.Result method)</a>
+</li>
       <li><a href="gate.html#hal_py.Gate.get_grouping">get_grouping() (hal_py.Gate method)</a>
 
       <ul>
@@ -1086,6 +1113,8 @@
       <li><a href="netlist.html#hal_py.Netlist.get_grouping_by_id">get_grouping_by_id() (hal_py.Netlist method)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.get_groupings">get_groupings() (hal_py.Netlist method)</a>
+</li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result.get_groups">get_groups() (dataflow.Dataflow.Result method)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.get_id">get_id() (hal_py.Gate method)</a>
 
@@ -1179,6 +1208,8 @@
         <li><a href="netlist.html#hal_py.Netlist.get_modules">(hal_py.Netlist method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bitorder_propagation.html#bitorder_propagation.BitorderPropagationPlugin.get_name">get_name() (bitorder_propagation.BitorderPropagationPlugin method)</a>
 
       <ul>
@@ -1225,8 +1256,6 @@
         <li><a href="verilator.html#verilator.VerilatorSimulatorPlugin.get_name">(verilator.VerilatorSimulatorPlugin method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_type_component.html#hal_py.StateComponent.get_neg_state_identifier">get_neg_state_identifier() (hal_py.StateComponent method)</a>
 </li>
       <li><a href="endpoint.html#hal_py.Endpoint.get_net">get_net() (hal_py.Endpoint method)</a>
@@ -1243,9 +1272,11 @@
 </li>
       <li><a href="netlist_simulator.html#netlist_simulator.Simulation.get_net_value">get_net_value() (netlist_simulator.Simulation method)</a>
 </li>
-      <li><a href="gate.html#hal_py.Gate.get_netlist">get_netlist() (hal_py.Gate method)</a>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result.get_netlist">get_netlist() (dataflow.Dataflow.Result method)</a>
 
       <ul>
+        <li><a href="gate.html#hal_py.Gate.get_netlist">(hal_py.Gate method)</a>
+</li>
         <li><a href="grouping.html#hal_py.Grouping.get_netlist">(hal_py.Grouping method)</a>
 </li>
         <li><a href="module.html#hal_py.Module.get_netlist">(hal_py.Module method)</a>
@@ -1860,6 +1891,14 @@
   </ul></td>
 </tr></table>
 
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="dataflow.html#dataflow.Dataflow.Configuration.known_groups">known_groups (dataflow.Dataflow.Configuration attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1934,6 +1973,8 @@
 </li>
       </ul></li>
       <li><a href="gate_library.html#hal_py.GateLibrary.mark_vcc_gate_type">mark_vcc_gate_type() (hal_py.GateLibrary method)</a>
+</li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Configuration.min_group_size">min_group_size (dataflow.Dataflow.Configuration attribute)</a>
 </li>
       <li><a href="smt.html#hal_py.SMT.Model">Model (class in hal_py.SMT)</a>
 </li>
@@ -2266,6 +2307,8 @@
 </li>
       </ul></li>
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorControllerPlugin.restore_simulator_controller">restore_simulator_controller() (netlist_simulator_controller.NetlistSimulatorControllerPlugin method)</a>
+</li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result">Result (class in dataflow.Dataflow)</a>
 </li>
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorController.run_simulation">run_simulation() (netlist_simulator_controller.NetlistSimulatorController method)</a>
 </li>
@@ -2739,11 +2782,19 @@
 </li>
       <li><a href="smt.html#hal_py.SMT.Solver.with_constraints">with_constraints() (hal_py.SMT.Solver method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="dataflow.html#dataflow.Dataflow.Configuration.with_expected_sizes">with_expected_sizes() (dataflow.Dataflow.Configuration method)</a>
+</li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Configuration.with_known_groups">with_known_groups() (dataflow.Dataflow.Configuration method)</a>
+</li>
       <li><a href="smt.html#hal_py.SMT.QueryConfig.with_local_solver">with_local_solver() (hal_py.SMT.QueryConfig method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="dataflow.html#dataflow.Dataflow.Configuration.with_min_group_size">with_min_group_size() (dataflow.Dataflow.Configuration method)</a>
+</li>
       <li><a href="smt.html#hal_py.SMT.QueryConfig.with_model_generation">with_model_generation() (hal_py.SMT.QueryConfig method)</a>
+</li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Configuration.with_register_stage_identification">with_register_stage_identification() (dataflow.Dataflow.Configuration method)</a>
 </li>
       <li><a href="smt.html#hal_py.SMT.QueryConfig.with_remote_solver">with_remote_solver() (hal_py.SMT.QueryConfig method)</a>
 </li>
@@ -2755,7 +2806,11 @@
 </li>
       <li><a href="netlist_writer_manager.html#hal_py.NetlistWriterManager.write">write() (in module hal_py.NetlistWriterManager)</a>
 </li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result.write_dot">write_dot() (dataflow.Dataflow.Result method)</a>
+</li>
       <li><a href="gate_type_component.html#hal_py.RAMPortComponent.write_port">write_port (hal_py.RAMPortComponent attribute)</a>
+</li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result.write_txt">write_txt() (dataflow.Dataflow.Result method)</a>
 </li>
   </ul></td>
 </tr></table>

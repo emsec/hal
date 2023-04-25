@@ -131,7 +131,7 @@ $(document).ready(function(){initNavTree('enums_8h_source.html',''); initResizab
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    {</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keywordflow">if</span> (<span class="keyword">auto</span> it = <a class="code" href="structhal_1_1_enum_strings.html">EnumStrings&lt;T&gt;::data</a>.find(e); it == <a class="code" href="structhal_1_1_enum_strings.html">EnumStrings&lt;T&gt;::data</a>.end())</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        {</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;no string for enum with value &#39;&quot;</span> + <a class="code" href="namespacenlohmann.html#ad675d1c22f5240b2b3065c241b204477">std::to_string</a>(<span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(e)) + <span class="stringliteral">&quot;&#39;.&quot;</span>);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;no string for enum with value &#39;&quot;</span> + std::to_string(<span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(e)) + <span class="stringliteral">&quot;&#39;.&quot;</span>);</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        }</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        {</div>
@@ -178,7 +178,6 @@ $(document).ready(function(){initNavTree('enums_8h_source.html',''); initResizab
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a05e5f99d786b527ca4a260c21170c5e7"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a></div><div class="ttdeci">PinType type</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">netlist_serializer.cpp:57</a></div></div>
 <div class="ttc" id="anamespacecontrol_html_a42884b866cabdd971b4dbe8c3fcc3735"><div class="ttname"><a href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">control.str</a></div><div class="ttdeci">str</div><div class="ttdef"><b>Definition:</b> <a href="control_8py_source.html#l00014">control.py:14</a></div></div>
-<div class="ttc" id="anamespacenlohmann_html_ad675d1c22f5240b2b3065c241b204477"><div class="ttname"><a href="namespacenlohmann.html#ad675d1c22f5240b2b3065c241b204477">nlohmann::to_string</a></div><div class="ttdeci">std::string to_string(const basic_json&lt; ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer &gt; &amp;j)</div><div class="ttdoc">user-defined to_string function for JSON values</div><div class="ttdef"><b>Definition:</b> <a href="json_8hpp_source.html#l22620">json.hpp:22620</a></div></div>
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="astructhal_1_1_enum_strings_html"><div class="ttname"><a href="structhal_1_1_enum_strings.html">hal::EnumStrings</a></div><div class="ttdef"><b>Definition:</b> <a href="enums_8h_source.html#l00040">enums.h:40</a></div></div>
 <div class="ttc" id="astructhal_1_1_enum_strings_html_aa7ca6d7993594a0052aea34d32d39e00"><div class="ttname"><a href="structhal_1_1_enum_strings.html#aa7ca6d7993594a0052aea34d32d39e00">hal::EnumStrings::data</a></div><div class="ttdeci">static std::map&lt; T, std::string &gt; data</div><div class="ttdef"><b>Definition:</b> <a href="enums_8h_source.html#l00042">enums.h:42</a></div></div>
@@ -190,7 +189,7 @@ $(document).ready(function(){initNavTree('enums_8h_source.html',''); initResizab
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_8cff0e4740b4a22580dd05764b73d449.html">utilities</a></li><li class="navelem"><a class="el" href="enums_8h.html">enums.h</a></li>
-    <li class="footer">Generated on Tue Apr 25 2023 18:00:59 for HAL by
+    <li class="footer">Generated on Tue Apr 25 2023 19:24:10 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
