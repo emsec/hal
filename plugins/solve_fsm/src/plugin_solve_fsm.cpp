@@ -96,7 +96,15 @@ namespace hal
                     bf = res.get();
                 }
 
-                BooleanFunctionDecorator(bf).substitute_power_ground_nets(nl);
+                if (auto res = BooleanFunctionDecorator(bf).substitute_power_ground_nets(nl); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "failed to generate boolean functions of state: could not substitute power and ground nets in boolean funtion of net " + std::to_string(input_net->get_id()));
+                }
+                else
+                {
+                    bf = res.get();
+                }
 
                 bf.simplify();
 
