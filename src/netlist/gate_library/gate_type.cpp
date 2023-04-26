@@ -83,7 +83,7 @@ namespace hal
                 other_properties.push_back(gtp);
         }
         if (!other_properties.empty())
-            ctype_properties.insert(ctype_properties.end(),other_properties.begin(),other_properties.end());
+            ctype_properties.insert(ctype_properties.end(), other_properties.begin(), other_properties.end());
         return ctype_properties;
     }
 
@@ -102,9 +102,9 @@ namespace hal
         return m_name;
     }
 
-    std::ostream& operator<<(std::ostream& os, const GateType& gt)
+    std::ostream& operator<<(std::ostream& os, const GateType& gate_type)
     {
-        return os << gt.to_string();
+        return os << gate_type.to_string();
     }
 
     bool GateType::operator==(const GateType& other) const
