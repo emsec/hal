@@ -643,7 +643,7 @@ namespace hal
                 document.AddMember("netlist", root, document.GetAllocator());
             }
 
-            std::unique_ptr<Netlist> deserialize(const rapidjson::Document& document)
+            std::unique_ptr<Netlist> deserialize(const rapidjson::Document& document, GateLibrary* gatelib)
             {
                 if (!document.HasMember("netlist"))
                 {
@@ -651,46 +651,52 @@ namespace hal
                     return nullptr;
                 }
                 auto root = document["netlist"].GetObject();
-                if (!root.HasMember("gate_library"))
+
+                if (!gatelib)
                 {
-                    log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'gate_library'");
-                    return nullptr;
-                }
-
-                std::filesystem::path glib_path(root["gate_library"].GetString());
-
-                if (glib_path.is_relative())
-                {
-                    ProjectManager* pm = ProjectManager::instance();
-                    if (pm)
-                        glib_path = pm->get_project_directory() / glib_path;
-                }
-                GateLibrary* glib = gate_library_manager::get_gate_library(glib_path.string());
-
-                if (glib == nullptr)
-                {
-                    if (glib_path.extension() == ".hgl")
+                    // no preferred gate library explicitly given
+                    if (!root.HasMember("gate_library"))
                     {
-                        glib_path.replace_extension(".lib");
-                    }
-                    else
-                    {
-                        glib_path.replace_extension(".hgl");
-                    }
-
-                    glib = gate_library_manager::get_gate_library(glib_path.string());
-                    if (glib == nullptr)
-                    {
-                        log_critical("netlist_persistent", "could not deserialize netlist: failed to load gate library '" + std::string(root["gate_library"].GetString()) + "'");
+                        log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'gate_library'");
                         return nullptr;
                     }
-                    else
+
+                    std::filesystem::path glib_path(root["gate_library"].GetString());
+
+                    if (glib_path.is_relative())
                     {
-                        log_info("netlist_persistent", "gate library '{}' required but using '{}' instead.", root["gate_library"].GetString(), glib_path.string());
+                        ProjectManager* pm = ProjectManager::instance();
+                        if (pm)
+                            glib_path = pm->get_project_directory() / glib_path;
+                    }
+                    gatelib = gate_library_manager::get_gate_library(glib_path.string());
+
+                    if (gatelib == nullptr)
+                    {
+                        // not found : try the other possible gate library extension
+                        if (glib_path.extension() == ".hgl")
+                        {
+                            glib_path.replace_extension(".lib");
+                        }
+                        else
+                        {
+                            glib_path.replace_extension(".hgl");
+                        }
+
+                        gatelib = gate_library_manager::get_gate_library(glib_path.string());
+                        if (gatelib == nullptr)
+                        {
+                            log_critical("netlist_persistent", "could not deserialize netlist: failed to load gate library '" + std::string(root["gate_library"].GetString()) + "'");
+                            return nullptr;
+                        }
+                        else
+                        {
+                            log_info("netlist_persistent", "gate library '{}' required but using '{}' instead.", root["gate_library"].GetString(), glib_path.string());
+                        }
                     }
                 }
 
-                auto nl = std::make_unique<Netlist>(glib);
+                auto nl = std::make_unique<Netlist>(gatelib);
 
                 // disable automatically checking module nets
                 nl->enable_automatic_net_checks(false);
@@ -902,7 +908,7 @@ namespace hal
             return true;
         }
 
-        std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file)
+        std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file, GateLibrary* gatelib)
         {
             auto begin_time = std::chrono::high_resolution_clock::now();
 
@@ -944,7 +950,7 @@ namespace hal
                 log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
             }
 
-            auto netlist = deserialize(document);
+            auto netlist = deserialize(document, gatelib);
 
             if (netlist)
             {

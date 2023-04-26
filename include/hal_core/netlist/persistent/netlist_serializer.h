@@ -32,6 +32,8 @@ namespace hal
     /* forward declaration */
     class Netlist;
 
+    class GateLibrary;
+
     /**
      * @file
      *
@@ -57,6 +59,6 @@ namespace hal
          * @param[in] hal_file - The source .hal file.
          * @returns The deserialized netlist.
          */
-        NETLIST_API std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file);
+        NETLIST_API std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file, GateLibrary* gatelib=nullptr);
     }    // namespace netlist_serializer
 }    // namespace hal
