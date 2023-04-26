@@ -34,8 +34,9 @@ namespace hal
         // serializing functions
         namespace
         {
-            const int SERIALIZATION_FORMAT_VERSION = 11;
+            const int SERIALIZATION_FORMAT_VERSION = 12;
 
+            // Ver 12 : location of gates
 #define JSON_STR_HELPER(x) rapidjson::Value{}.SetString(x.c_str(), x.length(), allocator)
 
 #define assert_availablility(MEMBER)                                                               \
@@ -183,6 +184,11 @@ namespace hal
                 val.AddMember("id", gate->get_id(), allocator);
                 val.AddMember("name", gate->get_name(), allocator);
                 val.AddMember("type", gate->get_type()->get_name(), allocator);
+                if (gate->has_location())
+                {
+                    val.AddMember("location_x", gate->get_location_x(), allocator);
+                    val.AddMember("location_y", gate->get_location_y(), allocator);
+                }
                 auto data = serialize(gate->get_data_map(), allocator);
                 if (!data.Empty())
                 {
@@ -208,9 +214,16 @@ namespace hal
                 const u32 gate_id           = val["id"].GetUint();
                 const std::string gate_name = val["name"].GetString();
                 const std::string gate_type = val["type"].GetString();
+                i32 lx = -1;
+                i32 ly = -1;
+                if (val.HasMember("location_x") && val.HasMember("location_y"))
+                {
+                    lx = val["location_x"].GetInt();
+                    ly = val["location_y"].GetInt();
+                }
                 if (auto it = gate_types.find(gate_type); it != gate_types.end())
                 {
-                    auto gate = nl->create_gate(gate_id, it->second, gate_name);
+                    auto gate = nl->create_gate(gate_id, it->second, gate_name, lx, ly);
                     if (gate == nullptr)
                     {
                         log_error("netlist_persistent", "could not deserialize gate '" + gate_name + "' with ID " + std::to_string(gate_id) + ": failed to create gate");
