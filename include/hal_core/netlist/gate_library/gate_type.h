@@ -215,6 +215,7 @@ namespace hal
          * @param[in] name - The name of the pin.
          * @param[in] direction - The direction of the pin.
          * @param[in] type - The type of the pin. Defaults to `PinType::none`.
+         * @param[in] create_group - Set `true` to create a pin group for the pin, `false` otherwise. Defaulrs to `false`. 
          * @returns The gate pin on success, an error message otherwise.
          */
         Result<GatePin*> create_pin(const std::string& name, PinDirection direction, PinType type = PinType::none, bool create_group = true);

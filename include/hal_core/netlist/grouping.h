@@ -128,19 +128,26 @@ namespace hal
         bool assign_gate_by_id(const u32 gate_id, bool force = false);
 
         /**
-         * Get all gates contained within the grouping. <br>
-         * A filter can be applied to the result to only get gates matching the specified condition.
+         * Get all gates contained within the grouping.
          *
-         * @param[in] filter - Filter to be applied to the gates.
          * @returns A vector of gates.
          */
-        std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr) const;
+        const std::vector<Gate*>& get_gates() const;
 
         /**
-         * Get the IDs of all gates contained within the grouping. <br>
-         * A filter can be applied to the result to only get gate IDs for gates matching the specified condition.
+         * Get all gates contained within the grouping.
+         * The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
-         * @param[in] filter - Filter to be applied to the gates.
+         * @param[in] filter - Filter function to be evaluated on each gate.
+         * @returns A vector of gates.
+         */
+        std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter) const;
+
+        /**
+         * Get the IDs of all gates contained within the grouping.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         *
+         * @param[in] filter - Filter function to be evaluated on each gate.
          * @returns A vector of gate IDs.
          */
         std::vector<u32> get_gate_ids(const std::function<bool(Gate*)>& filter = nullptr) const;
@@ -208,19 +215,26 @@ namespace hal
         bool assign_net_by_id(const u32 net_id, bool force = false);
 
         /**
-         * Get all nets contained within the grouping. <br>
-         * A filter can be applied to the result to only get nets matching the specified condition.
+         * Get all nets contained within the grouping.
          *
-         * @param[in] filter - Filter to be applied to the nets.
          * @returns A vector of nets.
          */
-        std::vector<Net*> get_nets(const std::function<bool(Net*)>& filter = nullptr) const;
+        const std::vector<Net*>& get_nets() const;
 
         /**
-         * Get the IDs of all nets contained within the grouping. <br>
-         * A filter can be applied to the result to only get net IDs for nets matching the specified condition.
+         * Get all nets contained within the grouping.
+         * The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
-         * @param[in] filter - Filter to be applied to the nets.
+         * @param[in] filter - Filter function to be evaluated on each net.
+         * @returns A vector of nets.
+         */
+        std::vector<Net*> get_nets(const std::function<bool(Net*)>& filter) const;
+
+        /**
+         * Get the IDs of all nets contained within the grouping.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         *
+         * @param[in] filter - Filter function to be evaluated on each net.
          * @returns A vector of net IDs.
          */
         std::vector<u32> get_net_ids(const std::function<bool(Net*)>& filter = nullptr) const;
@@ -288,19 +302,26 @@ namespace hal
         bool assign_module_by_id(const u32 module_id, bool force = false);
 
         /**
-         * Get all modules contained within the grouping. <br>
-         * A filter can be applied to the result to only get modules matching the specified condition.
+         * Get all modules contained within the grouping.
          *
-         * @param[in] filter - Filter to be applied to the modules.
          * @returns A vector of modules.
          */
-        std::vector<Module*> get_modules(const std::function<bool(Module*)>& filter = nullptr) const;
+        const std::vector<Module*>& get_modules() const;
 
         /**
-         * Get the IDs of all modules contained within the grouping. <br>
-         * A filter can be applied to the result to only get module IDs for modules matching the specified condition.
+         * Get all modules contained within the grouping.
+         * The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
-         * @param[in] filter - Filter to be applied to the modules.
+         * @param[in] filter - Filter function to be evaluated on each module.
+         * @returns A vector of modules.
+         */
+        std::vector<Module*> get_modules(const std::function<bool(Module*)>& filter) const;
+
+        /**
+         * Get the IDs of all modules contained within the grouping.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         *
+         * @param[in] filter - Filter function to be evaluated on each module.
          * @returns A vector of module IDs.
          */
         std::vector<u32> get_module_ids(const std::function<bool(Module*)>& filter = nullptr) const;
