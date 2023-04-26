@@ -193,9 +193,31 @@ namespace hal
         {
             modItem->addChild(new SelectionTreeItemGate(g->get_id()));
         }
-        for (Net* n : mod->get_internal_nets() )
+        std::unordered_set internNets = mod->get_internal_nets();
+        std::unordered_set outputNets = mod->get_output_nets();
+        std::unordered_set inputNets  = mod->get_input_nets();
+        for (Net* n : mod->get_nets() )
         {
-            modItem->addChild(new SelectionTreeItemNet(n->get_id()));
+            bool netIsChild = false;
+            if (internNets.find(n) != internNets.end())
+            {
+                netIsChild = true;
+            }
+            else if (outputNets.find(n) != outputNets.end())
+            {
+                if (!n->is_global_output_net() && n->get_destinations().empty())
+                    netIsChild = true;
+            }
+            else if (inputNets.find(n) != inputNets.end())
+            {
+                if (!n->is_global_input_net() && n->get_sources().empty())
+                    netIsChild = true;
+            }
+            else
+                netIsChild = true;
+
+            if (netIsChild)
+                modItem->addChild(new SelectionTreeItemNet(n->get_id()));
         }
     }
 

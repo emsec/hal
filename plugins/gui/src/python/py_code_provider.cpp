@@ -46,28 +46,33 @@ namespace hal
         return buildPyCode(gateCodePrefix, suffix, gateId);
     }
 
-    QString PyCodeProvider::pyCodeGateTypePinDirection(u32 gateID, QString pin)
+    QString PyCodeProvider::pyCodeGateTypePinByName(u32 gateId, QString pin)
     {
-        return pyCodeGateType(gateID) + QString(".get_pin_direction(\"%1\")").arg(pin);
+        return pyCodeGateType(gateId) + QString(".get_pin_by_name(\"%1\")").arg(pin);
     }
 
-    QString PyCodeProvider::pyCodeGateTypePinType(u32 gateID, QString pin)
+    QString PyCodeProvider::pyCodeGateTypePinDirection(u32 gateId, QString pin)
     {
-        return pyCodeGateType(gateID) + QString(".get_pin_type(\"%1\")").arg(pin);
+         return pyCodeGateTypePinByName(gateId, pin) + QString(".get_direction()");
     }
 
-    QString PyCodeProvider::pyCodeGateInputPins(u32 gateID)
+    QString PyCodeProvider::pyCodeGateTypePinType(u32 gateId, QString pin)
+    {
+        return pyCodeGateTypePinByName(gateId, pin) + QString(".get_type()");
+    }
+
+    QString PyCodeProvider::pyCodeGateInputPins(u32 gateId)
     {
         const QString suffix = ".get_input_pins()";
 
-        return pyCodeGateType(gateID) + suffix;
+        return pyCodeGateType(gateId) + suffix;
     }
 
-    QString PyCodeProvider::pyCodeGateOutputPins(u32 gateID)
+    QString PyCodeProvider::pyCodeGateOutputPins(u32 gateId)
     {
         const QString suffix = ".get_output_pins()";
 
-        return pyCodeGateType(gateID) + suffix;
+        return pyCodeGateType(gateId) + suffix;
     }
 
     QString PyCodeProvider::pyCodeGateBooleanFunction(u32 gateId, QString booleanFunctionName)

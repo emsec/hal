@@ -43,8 +43,9 @@ namespace hal
         Q_OBJECT
     public:
 
-        //metatype declaration at the end of file
-        enum class itemType{portSingleBit = 0, portMultiBit = 1, pin = 2};
+        //metatype declaration at the end of file (portSingleBit and portMultiBit are deprecated)
+        //important now are pins and groups
+        enum class itemType{portSingleBit = 0, portMultiBit = 1, pin = 2, group = 3};
 
         /**
          * The constructor.
@@ -63,6 +64,7 @@ namespace hal
         QStringList mimeTypes() const override;
         QMimeData* mimeData(const QModelIndexList &indexes) const override;
         bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
+        bool canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const override;
 
 
         /**
@@ -138,7 +140,8 @@ namespace hal
         void numberOfPortsChanged(const int newNumber);
 
     private:        
-        int mModuleId;
+        int mModuleId; // perhaps remove?
+        Module* mModule;
         //name is (hopefully) enough to identify
         QMap<QString, TreeItem*> mNameToTreeItem;
         QMap<int, TreeItem*> mIdToPinItem;
@@ -147,6 +150,13 @@ namespace hal
 
         void insertItem(TreeItem* item, TreeItem* parent, int index);
         void removeItem(TreeItem* item);
+
+        // helper functions for dnd for more clarity
+        void dndGroupOnGroup(TreeItem* droppedGroup, TreeItem* onDroppedGroup);
+        void dndGroupBetweenGroup(TreeItem* droppedGroup, int row);
+        void dndPinOnGroup(TreeItem* droppedPin, TreeItem* onDroppedGroup);
+        void dndPinBetweenPin(TreeItem* droppedPin, TreeItem* onDroppedParent, int row);
+        void dndPinBetweenGroup(TreeItem* droppedPin, int row);
     };
 }
 

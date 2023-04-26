@@ -57,6 +57,13 @@ namespace hal
         TreeItem(QList<QVariant> columnData);
 
         /**
+         * Copy constructor. Copies the item's data, not the parent/children.
+         *
+         * @param item - The item to copy.
+         */
+        TreeItem(const TreeItem &item);
+
+        /**
           * The destructor.
           */
         ~TreeItem();
