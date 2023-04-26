@@ -110,7 +110,7 @@ namespace hal
          * @param[in] value - The value.
          * @returns A reference to output stream.
          */
-        friend std::ostream& operator<<(std::ostream& os, Value value);
+        friend std::ostream& operator<<(std::ostream& os, Value v);
 
         ////////////////////////////////////////////////////////////////////////
         // Constructors / Factories, Destructors, Operators

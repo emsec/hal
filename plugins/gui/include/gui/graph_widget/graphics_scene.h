@@ -1,20 +1,20 @@
 // MIT License
-// 
+//
 // Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
 // Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
 // Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 // Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,15 +25,13 @@
 
 #pragma once
 
+#include "gui/graph_widget/items/utility_items/node_drag_shadow.h"
+#include "gui/graph_widget/shaders/graph_shader.h"
+#include "gui/gui_globals.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
 #include "hal_core/defines.h"
-
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
-
-#include "gui/gui_globals.h"
-#include "gui/graph_widget/shaders/graph_shader.h"
-#include "gui/graph_widget/items/utility_items/node_drag_shadow.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
 
 #include <QGraphicsScene>
 #include <QPair>
@@ -60,9 +58,14 @@ namespace hal
         Q_OBJECT
 
     public:
-        enum GridType {None, Dots, Lines};
-        Q_ENUM(GridType)
-		
+        enum GridType
+        {
+            None,
+            Dots,
+            Lines
+        };
+        Q_ENUM(GridType);
+
         /**
          * Sets the Level of Detail (LOD) of the scene. If the LOD falls below a certain threshold, the grid in the
          * background won't be drawn anymore.
@@ -251,11 +254,11 @@ namespace hal
          */
         void setMousePressed(bool isPressed);
 
-        #ifdef GUI_DEBUG_GRID
+#ifdef GUI_DEBUG_GRID
         void debugSetLayouterGrid(const QVector<qreal>& debug_x_lines, const QVector<qreal>& debug_y_lines, qreal debug_default_height, qreal debug_default_width);
         void setDebugGridEnabled(bool enabled);
         bool debugGridEnabled();
-        #endif
+#endif
 
     public Q_SLOTS:
         /**
@@ -349,8 +352,8 @@ namespace hal
         static QColor sGridBaseDotColor;
         static QColor sGridClusterDotColor;
 
- //       using QGraphicsScene::addItem;
- //       using QGraphicsScene::removeItem;
+        //       using QGraphicsScene::addItem;
+        //       using QGraphicsScene::removeItem;
         using QGraphicsScene::clear;
 
         void drawBackground(QPainter* painter, const QRectF& rect) override;
@@ -361,14 +364,20 @@ namespace hal
         QVector<GraphicsGate*> mGateItems;
         QVector<GraphicsNet*> mNetItems;
 
-        #ifdef GUI_DEBUG_GRID
+#ifdef GUI_DEBUG_GRID
         void debugDrawLayouterGrid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to);
         QVector<qreal> mDebugXLines;
         QVector<qreal> mDebugYLines;
         qreal mDebugDefaultWidth;
         qreal mDebugDefaultHeight;
         bool mDebugGridEnable;
-        enum RubberBandSelectionStatus { NotPressed, BeginPressed, SelectionChanged, EndPressed } mSelectionStatus;
-        #endif
+        enum RubberBandSelectionStatus
+        {
+            NotPressed,
+            BeginPressed,
+            SelectionChanged,
+            EndPressed
+        } mSelectionStatus;
+#endif
     };
-}
+}    // namespace hal
