@@ -17,7 +17,7 @@ var searchData=
   ['base_5fpin_5finit_20931',['base_pin_init',['../group__pybind.html#ga7b89c9d47d0533ec4c234d5ecaebcc2c',1,'hal']]],
   ['basename_20932',['baseName',['https://doc.qt.io/qt-5/qfileinfo.html#baseName',1,'QFileInfo']]],
   ['basepin_20933',['BasePin',['../classhal_1_1_base_pin.html#a0d95f3f52c40fd8ac9594794397c0ab3',1,'hal::BasePin']]],
-  ['baseplugininterface_20934',['BasePluginInterface',['../classhal_1_1_base_plugin_interface.html#aa3073c4db5adf48669670792bb15fa41',1,'hal::BasePluginInterface']]],
+  ['baseplugininterface_20934',['BasePluginInterface',['../classhal_1_1_base_plugin_interface.html#ad650a0e81cc8fdcf9e59dc64d80d5ba4',1,'hal::BasePluginInterface']]],
   ['basesize_20935',['baseSize',['https://doc.qt.io/qt-5/qwindow.html#baseSize',1,'QWindow::baseSize()'],['https://doc.qt.io/qt-5/qwidget.html#baseSize-prop',1,'QWidget::baseSize()']]],
   ['basestyle_20936',['baseStyle',['https://doc.qt.io/qt-5/qproxystyle.html#baseStyle',1,'QProxyStyle']]],
   ['basetreemodel_20937',['BaseTreeModel',['../classhal_1_1_base_tree_model.html#a5ebb5626566e69f5aef46e0576113087',1,'hal::BaseTreeModel']]],

@@ -1,10 +1,10 @@
 var classhal_1_1_base_plugin_interface =
 [
-    [ "BasePluginInterface", "classhal_1_1_base_plugin_interface.html#aa3073c4db5adf48669670792bb15fa41", null ],
+    [ "BasePluginInterface", "classhal_1_1_base_plugin_interface.html#ad650a0e81cc8fdcf9e59dc64d80d5ba4", null ],
     [ "~BasePluginInterface", "classhal_1_1_base_plugin_interface.html#a4bedf0ae630ab17c244b2bbc9a345914", null ],
     [ "delete_extension", "classhal_1_1_base_plugin_interface.html#a2dc79d5a3ef50879122293dc434b0acb", null ],
     [ "get_dependencies", "classhal_1_1_base_plugin_interface.html#a17ecf8929723bb20a2b154420e4e6560", null ],
-    [ "get_description", "classhal_1_1_base_plugin_interface.html#af25dc872373babc1090fa288cf7c5291", null ],
+    [ "get_description", "classhal_1_1_base_plugin_interface.html#a62b8952ddf1eed557797fddbef818bfb", null ],
     [ "get_extensions", "classhal_1_1_base_plugin_interface.html#ab695a8f41837c6b4f68081b6b5f6c095", null ],
     [ "get_first_extension", "classhal_1_1_base_plugin_interface.html#ac271e37224ec958068b963e2a763cc96", null ],
     [ "get_name", "classhal_1_1_base_plugin_interface.html#a3818f63c15ebe39ad595abddbb471e4a", null ],

@@ -207,11 +207,13 @@ var NAVTREEINDEX14 =
 "classhal_1_1_project_serializer.html#a81e3f3b9bef7f115924e1b22fffd7ab0":[6,0,0,325,3],
 "classhal_1_1_project_serializer.html#aa4d120f4d6bf0e5576faba87632dc174":[6,0,0,325,2],
 "classhal_1_1_project_serializer.html#ae89d4f762270f68bb1aa6aaaa55463e6":[6,0,0,325,1],
-"classhal_1_1_py_code_provider.html":[6,0,0,326],
-"classhal_1_1_pyi__base.html":[6,0,0,327],
-"classhal_1_1_pyi__base.html#a78ed1bb3e292d29c266791fb48b585e4":[6,0,0,327,1],
-"classhal_1_1_pyi__base.html#aa3073c4db5adf48669670792bb15fa41":[6,0,0,327,0],
-"classhal_1_1_pyi__base.html#ab71228d46acd8658fdd07540dadce6fb":[6,0,0,327,2],
+"classhal_1_1_py_base_plugin_interface.html":[6,0,0,326],
+"classhal_1_1_py_base_plugin_interface.html#a5d45e52d5534f9e7b653ed2d240a9661":[6,0,0,326,1],
+"classhal_1_1_py_base_plugin_interface.html#a74c4a52027912d1260e24fb65d2ac6e0":[6,0,0,326,3],
+"classhal_1_1_py_base_plugin_interface.html#ab64cabfa9603e1070f936c9570b1552f":[6,0,0,326,2],
+"classhal_1_1_py_base_plugin_interface.html#ac12c47cf50b2604250dcc63b487c61a0":[6,0,0,326,4],
+"classhal_1_1_py_base_plugin_interface.html#ad650a0e81cc8fdcf9e59dc64d80d5ba4":[6,0,0,326,0],
+"classhal_1_1_py_code_provider.html":[6,0,0,327],
 "classhal_1_1_python_code_editor.html":[4,0,1,0,5],
 "classhal_1_1_python_code_editor.html#a2183a58e5e69ac139698e3ea19d53e1d":[4,0,1,0,5,4],
 "classhal_1_1_python_code_editor.html#a38dd1a817fdbb2251cf7a0908940d624":[4,0,1,0,5,7],
@@ -247,7 +249,5 @@ var NAVTREEINDEX14 =
 "classhal_1_1_python_console.html#aafa0ebd289894f69cf062cf3a8855e5d":[4,0,1,1,0,15],
 "classhal_1_1_python_console.html#abe50448d66cb1cc18bd1b7eb0b2c072a":[4,0,1,1,0,9],
 "classhal_1_1_python_console.html#ac2c922dfa813947910ac8a420aff64e6":[4,0,1,1,0,4],
-"classhal_1_1_python_console_abort_thread.html":[6,0,0,330],
-"classhal_1_1_python_console_abort_thread.html#a359fec8171f6e605bda6764779266f82":[6,0,0,330,0],
-"classhal_1_1_python_console_abort_thread.html#ada3673b2b2db81146e8024ff79cf45ea":[6,0,0,330,2]
+"classhal_1_1_python_console_abort_thread.html":[6,0,0,330]
 };

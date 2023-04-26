@@ -413,7 +413,7 @@ var searchData=
   ['containspoint_21499',['containsPoint',['https://doc.qt.io/qt-5/qpolygon.html#containsPoint',1,'QPolygon::containsPoint()'],['https://doc.qt.io/qt-5/qpolygonf.html#containsPoint',1,'QPolygonF::containsPoint()']]],
   ['content_21500',['content',['../classhal_1_1_content_frame.html#af253a9801b46b09a25a866be832f42ef',1,'hal::ContentFrame']]],
   ['contentchanged_21501',['contentChanged',['../classhal_1_1_splitter_anchor.html#a76454846d21a56a45891a3389a7b64a4',1,'hal::SplitterAnchor']]],
-  ['contentfactory_21502',['ContentFactory',['../classhal_1_1_content_factory.html#af666e254b657c66fdfc1074295301503',1,'hal::ContentFactory::ContentFactory(const QString &amp;nam=QString())'],['../classhal_1_1_content_factory.html#a5e1173d2908fce0a99603ce4eda19d04',1,'hal::ContentFactory::contentFactory() const =0']]],
+  ['contentfactory_21502',['contentFactory',['../classhal_1_1_content_factory.html#a5e1173d2908fce0a99603ce4eda19d04',1,'hal::ContentFactory::contentFactory() const =0'],['../classhal_1_1_content_factory.html#af666e254b657c66fdfc1074295301503',1,'hal::ContentFactory::ContentFactory(const QString &amp;nam=QString())']]],
   ['contentframe_21503',['ContentFrame',['../classhal_1_1_content_frame.html#acec9c0993ffb1fd6a9d79aefb7739486',1,'hal::ContentFrame']]],
   ['contentlayoutarea_21504',['ContentLayoutArea',['../classhal_1_1_content_layout_area.html#a50fe3e390dcf3c061f6ad53e6afd0bcc',1,'hal::ContentLayoutArea']]],
   ['contentmanager_21505',['ContentManager',['../classhal_1_1_content_manager.html#a7aed870ceb7c7227ce86dceb6ed7227e',1,'hal::ContentManager']]],

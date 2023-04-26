@@ -171,7 +171,7 @@ $(document).ready(function(){initNavTree('netlist_2gate__library_2gate__type_8cp
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                other_properties.push_back(gtp);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        }</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordflow">if</span> (!other_properties.empty())</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            ctype_properties.insert(ctype_properties.end(),other_properties.begin(),other_properties.end());</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            ctype_properties.insert(ctype_properties.end(), other_properties.begin(), other_properties.end());</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keywordflow">return</span> ctype_properties;</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    }</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
@@ -190,9 +190,9 @@ $(document).ready(function(){initNavTree('netlist_2gate__library_2gate__type_8cp
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordflow">return</span> m_name;</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    }</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="namespacehal.html#ad1c6648030f8b55e519fb07e3a8750f9">  105</a></span>&#160;    std::ostream&amp; <a class="code" href="namespacehal.html#a90756e09e3a11b7dd4e7362ae3101ce9">operator&lt;&lt;</a>(std::ostream&amp; os, <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_type.html">GateType</a>&amp; gt)</div>
+<div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="namespacehal.html#a6f1cdc5d31d2fbd4c40fed4a2f1ca569">  105</a></span>&#160;    std::ostream&amp; <a class="code" href="namespacehal.html#a90756e09e3a11b7dd4e7362ae3101ce9">operator&lt;&lt;</a>(std::ostream&amp; os, <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_type.html">GateType</a>&amp; gate_type)</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    {</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordflow">return</span> os &lt;&lt; gt.<a class="code" href="classhal_1_1_gate_type.html#a915e963632c94eec513e895da5ecef4a">to_string</a>();</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordflow">return</span> os &lt;&lt; gate_type.<a class="code" href="classhal_1_1_gate_type.html#a915e963632c94eec513e895da5ecef4a">to_string</a>();</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    }</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
 <div class="line"><a name="l00110"></a><span class="lineno"><a class="line" href="classhal_1_1_gate_type.html#a5b64a93c37b450a4ab84a64ad83610e3">  110</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_gate_type.html#a5b64a93c37b450a4ab84a64ad83610e3">GateType::operator==</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_type.html">GateType</a>&amp; other)<span class="keyword"> const</span></div>
@@ -682,7 +682,7 @@ $(document).ready(function(){initNavTree('netlist_2gate__library_2gate__type_8cp
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="dir_ff3bf91c1fe6286d1ab9e3da0ed2d8ad.html">gate_library</a></li><li class="navelem"><a class="el" href="netlist_2gate__library_2gate__type_8cpp.html">gate_type.cpp</a></li>
-    <li class="footer">Generated on Tue Apr 25 2023 19:24:13 for HAL by
+    <li class="footer">Generated on Wed Apr 26 2023 15:06:19 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

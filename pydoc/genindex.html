@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; hal_py v4.1.0-28-gf77c92819 documentation</title>
+  <title>Index &mdash; hal_py v4.1.0-31-gdb8f579dc documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v4.1.0-28-gf77c92819
+                v4.1.0-31-gdb8f579dc
               </div>
             
           
@@ -262,6 +262,8 @@
         <li><a href="gate_library.html#hal_py.GateLibrary.__init__">(hal_py.GateLibrary method)</a>
 </li>
         <li><a href="gate_type.html#hal_py.GateType.__init__">(hal_py.GateType method)</a>
+</li>
+        <li><a href="netlist_modification_decorator.html#hal_py.NetlistModificationDecorator.__init__">(hal_py.NetlistModificationDecorator method)</a>
 </li>
         <li><a href="smt.html#hal_py.SMT.Constraint.__init__">(hal_py.SMT.Constraint method)</a>
 </li>
@@ -558,6 +560,10 @@
 </li>
       <li><a href="dataflow.html#dataflow.Dataflow.Configuration">Configuration (class in dataflow.Dataflow)</a>
 </li>
+      <li><a href="netlist_modification_decorator.html#hal_py.NetlistModificationDecorator.connect_gates">connect_gates() (hal_py.NetlistModificationDecorator method)</a>
+</li>
+      <li><a href="netlist_modification_decorator.html#hal_py.NetlistModificationDecorator.connect_nets">connect_nets() (hal_py.NetlistModificationDecorator method)</a>
+</li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Const">Const() (hal_py.BooleanFunction static method)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Node.constant">constant (hal_py.BooleanFunction.Node attribute)</a>
@@ -582,10 +588,10 @@
 </li>
       <li><a href="gate_library.html#hal_py.GateLibrary.contains_gate_type">contains_gate_type() (hal_py.GateLibrary method)</a>
 </li>
-      <li><a href="gate_library.html#hal_py.GateLibrary.contains_gate_type_by_name">contains_gate_type_by_name() (hal_py.GateLibrary method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gate_library.html#hal_py.GateLibrary.contains_gate_type_by_name">contains_gate_type_by_name() (hal_py.GateLibrary method)</a>
+</li>
       <li><a href="grouping.html#hal_py.Grouping.contains_module">contains_module() (hal_py.Grouping method)</a>
 
       <ul>
@@ -686,11 +692,17 @@
 </li>
       <li><a href="netlist.html#hal_py.Netlist.delete_module">delete_module() (hal_py.Netlist method)</a>
 </li>
+      <li><a href="netlist_modification_decorator.html#hal_py.NetlistModificationDecorator.delete_modules">delete_modules() (hal_py.NetlistModificationDecorator method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist.html#hal_py.Netlist.delete_net">delete_net() (hal_py.Netlist method)</a>
 </li>
       <li><a href="module.html#hal_py.Module.delete_pin_group">delete_pin_group() (hal_py.Module method)</a>
+</li>
+      <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.dependencies">dependencies (hal_py.BasePluginInterface attribute)</a>
+</li>
+      <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.description">description (hal_py.BasePluginInterface attribute)</a>
 </li>
       <li><a href="gui.html#hal_gui.GuiApi.deselect">deselect() (hal_gui.GuiApi method)</a>
 </li>
@@ -970,6 +982,10 @@
       </ul></li>
       <li><a href="core_utils.html#hal_py.CoreUtils.get_default_log_directory">get_default_log_directory() (in module hal_py.CoreUtils)</a>
 </li>
+      <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.get_dependencies">get_dependencies() (hal_py.BasePluginInterface method)</a>
+</li>
+      <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.get_description">get_description() (hal_py.BasePluginInterface method)</a>
+</li>
       <li><a href="netlist.html#hal_py.Netlist.get_design_name">get_design_name() (hal_py.Netlist method)</a>
 </li>
       <li><a href="net.html#hal_py.Net.get_destinations">get_destinations() (hal_py.Net method)</a>
@@ -1200,6 +1216,8 @@
 </li>
       <li><a href="grouping.html#hal_py.Grouping.get_module_ids">get_module_ids() (hal_py.Grouping method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate.html#hal_py.Gate.get_modules">get_modules() (hal_py.Gate method)</a>
 
       <ul>
@@ -1208,8 +1226,6 @@
         <li><a href="netlist.html#hal_py.Netlist.get_modules">(hal_py.Netlist method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bitorder_propagation.html#bitorder_propagation.BitorderPropagationPlugin.get_name">get_name() (bitorder_propagation.BitorderPropagationPlugin method)</a>
 
       <ul>
@@ -2098,6 +2114,8 @@
         <li><a href="net.html#hal_py.Net.netlist">(hal_py.Net attribute)</a>
 </li>
       </ul></li>
+      <li><a href="netlist_modification_decorator.html#hal_py.NetlistModificationDecorator">NetlistModificationDecorator (class in hal_py)</a>
+</li>
       <li><a href="netlist_preprocessing.html#netlist_preprocessing.NetlistPreprocessingPlugin">NetlistPreprocessingPlugin (class in netlist_preprocessing)</a>
 </li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator">NetlistSimulator (class in netlist_simulator)</a>
@@ -2276,10 +2294,10 @@
 </li>
       <li><a href="project_manager.html#hal_py.ProjectManager.remove_project_directory">remove_project_directory() (hal_py.ProjectManager method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist_preprocessing.html#netlist_preprocessing.NetlistPreprocessingPlugin.remove_redundant_logic">remove_redundant_logic() (netlist_preprocessing.NetlistPreprocessingPlugin static method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="net.html#hal_py.Net.remove_source">remove_source() (hal_py.Net method)</a>
 </li>
       <li><a href="netlist_preprocessing.html#netlist_preprocessing.NetlistPreprocessingPlugin.remove_unconnected_gates">remove_unconnected_gates() (netlist_preprocessing.NetlistPreprocessingPlugin static method)</a>
@@ -2298,8 +2316,12 @@
 </li>
       <li><a href="bitorder_propagation.html#bitorder_propagation.BitorderPropagationPlugin.reorder_module_pin_groups">reorder_module_pin_groups() (bitorder_propagation.BitorderPropagationPlugin static method)</a>
 </li>
-      <li><a href="netlist_utils.html#hal_py.NetlistUtils.replace_gate">replace_gate() (in module hal_py.NetlistUtils)</a>
+      <li><a href="netlist_modification_decorator.html#hal_py.NetlistModificationDecorator.replace_gate">replace_gate() (hal_py.NetlistModificationDecorator method)</a>
+
+      <ul>
+        <li><a href="netlist_utils.html#hal_py.NetlistUtils.replace_gate">(in module hal_py.NetlistUtils)</a>
 </li>
+      </ul></li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.reset">reset() (netlist_simulator.NetlistSimulator method)</a>
 
       <ul>

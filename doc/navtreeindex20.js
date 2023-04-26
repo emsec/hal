@@ -1,5 +1,7 @@
 var NAVTREEINDEX20 =
 {
+"coordinate__from__data_8h_source.html":[7,0,1,3,0,0,20,2,0],
+"core__utils_8cpp.html":[7,0,2,2,0,4],
 "core__utils_8cpp.html#gae67f2029fac093c1e1990401edbcfd0a":[7,0,2,2,0,4,0],
 "core__utils_8cpp_source.html":[7,0,2,2,0,4],
 "data__container_8h.html":[7,0,0,0,1,9],
@@ -247,7 +249,5 @@ var NAVTREEINDEX20 =
 "dir_c6562a79639e0dd74f91fc1f72004742.html":[7,0,1,3,2,19,1,1,1],
 "dir_c663106332897b4ed23a078bb30ece89.html":[7,0,1,3,2,15],
 "dir_c6bf32624745ffac72f867818d67632a.html":[7,0,1,3,1,0,1],
-"dir_c7a46f546be90b83c8cc2c014bc3b59b.html":[7,0,1,7],
-"dir_c7f946f84d3aa9d21c98e837fde7f0ce.html":[7,0,1,5,1],
-"dir_cadd9f09fb9c66497c3623c33b6fa8ce.html":[7,0,1,3,0,0,9]
+"dir_c7a46f546be90b83c8cc2c014bc3b59b.html":[7,0,1,7]
 };

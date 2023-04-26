@@ -1,5 +1,7 @@
 var NAVTREEINDEX22 =
 {
+"gate__details__tab__widget_8h_source.html":[7,0,1,3,0,0,40,9],
+"gate__dialog_8cpp.html":[7,0,1,3,2,30,0],
 "gate__dialog_8cpp_source.html":[7,0,1,3,2,30,0],
 "gate__dialog_8h.html":[7,0,1,3,0,0,32,0],
 "gate__dialog_8h_source.html":[7,0,1,3,0,0,32,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX22 =
 "graphics__item_8cpp_source.html":[7,0,1,3,2,19,1,3],
 "graphics__item_8h.html":[7,0,1,3,0,0,20,1,3],
 "graphics__item_8h_source.html":[7,0,1,3,0,0,20,1,3],
-"graphics__module_8cpp.html":[7,0,1,3,2,19,1,1,1,0],
-"graphics__module_8cpp_source.html":[7,0,1,3,2,19,1,1,1,0],
-"graphics__module_8h.html":[7,0,1,3,0,0,20,1,1,1,0]
+"graphics__module_8cpp.html":[7,0,1,3,2,19,1,1,1,0]
 };

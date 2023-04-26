@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Bitorder Propagation &mdash; hal_py v4.1.0-28-gf77c92819 documentation</title>
+  <title>Bitorder Propagation &mdash; hal_py v4.1.0-31-gdb8f579dc documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-28-gf77c92819
+                v4.1.0-31-gdb8f579dc
               </div>
             
           
@@ -197,15 +197,15 @@ The valid bit orders are then annotated to the module pin groups.</p>
 <tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.netlist nl:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist.</td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param tuple src:</th></tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param tuple(int,str) src:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body">A pair of module id and pin group name representing the source.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param tuple dst:</th></tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param tuple(int,str) dst:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">A pair of module id and pin group name representing the destination.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">All wellformed bitorders</td>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">All wellformed bitorders on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">dict()</td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] or None</td>
 </tr>
 </tbody>
 </table>
@@ -223,15 +223,15 @@ The valid bit orders are then annotated to the module pin groups.</p>
 <tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.netlist nl:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist.</td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param tuple src:</th></tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param tuple(hal_py.Module,hal_py.ModulePinGroup) src:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body">A pair of module and pin group representing the source.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param tuple dst:</th></tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param tuple(hal_py.Module,hal_py.ModulePinGroup) dst:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">A pair of module and pin group representing the destination.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">All wellformed bitorders</td>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">All wellformed bitorders on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">dict()</td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] or None</td>
 </tr>
 </tbody>
 </table>
@@ -247,27 +247,17 @@ The valid bit orders are then annotated to the module pin groups.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.netlist nl:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">The netlist.</p>
-</td>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">param list src:</th><td class="field-body"><p class="first">A list of pairs of module id and pin group name representing the sources.</p>
-</td>
+<tr class="field-even field"><th class="field-name" colspan="2">param list[tuple(int,str)] src:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">A list of pairs of module id and pin group name representing the sources.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">param list dst:</th><td class="field-body"><p class="first">A list of pairs of module id and pin group name representing the destinations.</p>
-</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[tuple(int,str)] dst:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">A list of pairs of module id and pin group name representing the destinations.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body"><table class="first docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">All wellformed bitorders</td>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">All wellformed bitorders on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
 </tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body"><p class="first last">dict()</p>
-</td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] or None</td>
 </tr>
 </tbody>
 </table>
@@ -283,27 +273,17 @@ The valid bit orders are then annotated to the module pin groups.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.netlist nl:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">The netlist.</p>
-</td>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">param list src:</th><td class="field-body"><p class="first">A list of pairs of modules and pin groups representing the sources.</p>
-</td>
+<tr class="field-even field"><th class="field-name" colspan="2">param list[tuple(hal_py.Module,hal_py.ModulePinGroup)] src:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">A list of pairs of modules and pin groups representing the sources.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">param list dst:</th><td class="field-body"><p class="first">A list of pairs of modules and pin groups representing the destinations.</p>
-</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[tuple(hal_py.Module,hal_py.ModulePinGroup)] dst:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">A list of pairs of modules and pin groups representing the destinations.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body"><table class="first docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">All wellformed bitorders</td>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">All wellformed bitorders on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
 </tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body"><p class="first last">dict()</p>
-</td>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] or None</td>
 </tr>
 </tbody>
 </table>
@@ -321,14 +301,21 @@ Afterwards the algorithm tries to reconstruct valid bit orders from the propagat
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>known_bitorders</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – The known indices for the nets belonging to module pin groups.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>known_bitorders</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>(</em><a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a><em>,</em><a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a><em>)</em><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>]</em><em>]</em>) – The known indices for the nets belonging to module pin groups.</li>
+<li><strong>unknown_bitorders</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>(</em><a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a><em>,</em><a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a><em>)</em><em>]</em>) – The module pin groups with yet unknown bit order.</li>
+<li><strong>strict_consens_finding</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – When set to true this option only allows for complete and continous bitorders, while false would allow for bit orders to be formed that are either not complete or not continous.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A mapping of all the known bit orders consisting of the new and already known ones on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>(<a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module">hal_py.Module</a>,<a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup">hal_py.ModulePinGroup</a>),<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>]] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
+</td>
 </tr>
 </tbody>
 </table>
-<p>:param unknown_bitorders set : The module pin groups with yet unknown bit order.
-:param strict_consens_finding bool: When set to true this option only allows for complete and continous bitorders, while false would allow for bit orders to be formed that are either not complete or not continous.
-:returns: A mapping of all the known bit orders consisting of the new and already known.
-:rtype: dict()</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -339,9 +326,9 @@ Afterwards the algorithm tries to reconstruct valid bit orders from the propagat
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ordered_module_pin_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – A mapping from all the modules and pin groups with known bit order information to the knonw bit order information mapping every net to its corresponding index.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ordered_module_pin_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>(</em><a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a><em>,</em><a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a><em>)</em><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>]</em><em>]</em>) – A mapping from all the modules and pin groups with known bit order information to the knonw bit order information mapping every net to its corresponding index.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">true in case of sucess, false otherwise</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> on sucess, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
 </tr>

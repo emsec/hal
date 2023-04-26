@@ -58,7 +58,7 @@ var searchData=
   ['basepin_931',['BasePin',['../classhal_1_1_base_pin.html',1,'hal::BasePin&lt; T &gt;'],['../classhal_1_1_base_pin.html#a0d95f3f52c40fd8ac9594794397c0ab3',1,'hal::BasePin::BasePin()']]],
   ['basepin_3c_20gatepin_20_3e_932',['BasePin&lt; GatePin &gt;',['../classhal_1_1_base_pin.html',1,'hal']]],
   ['basepin_3c_20modulepin_20_3e_933',['BasePin&lt; ModulePin &gt;',['../classhal_1_1_base_pin.html',1,'hal']]],
-  ['baseplugininterface_934',['BasePluginInterface',['../classhal_1_1_base_plugin_interface.html',1,'hal::BasePluginInterface'],['../classhal_1_1_base_plugin_interface.html#aa3073c4db5adf48669670792bb15fa41',1,'hal::BasePluginInterface::BasePluginInterface()']]],
+  ['baseplugininterface_934',['BasePluginInterface',['../classhal_1_1_base_plugin_interface.html',1,'hal::BasePluginInterface'],['../classhal_1_1_base_plugin_interface.html#ad650a0e81cc8fdcf9e59dc64d80d5ba4',1,'hal::BasePluginInterface::BasePluginInterface()']]],
   ['basesize_935',['baseSize',['https://doc.qt.io/qt-5/qwidget.html#baseSize-prop',1,'QWidget::baseSize()'],['https://doc.qt.io/qt-5/qwindow.html#baseSize',1,'QWindow::baseSize()'],['https://doc.qt.io/qt-5/qwidget.html#baseSize-prop',1,'QWidget::baseSize()']]],
   ['basestyle_936',['baseStyle',['https://doc.qt.io/qt-5/qproxystyle.html#baseStyle',1,'QProxyStyle']]],
   ['basetreemodel_937',['BaseTreeModel',['../classhal_1_1_base_tree_model.html',1,'hal::BaseTreeModel'],['../classhal_1_1_base_tree_model.html#a5ebb5626566e69f5aef46e0576113087',1,'hal::BaseTreeModel::BaseTreeModel()']]],

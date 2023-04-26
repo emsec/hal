@@ -40,7 +40,7 @@ var hierarchy =
       [ "hal::HGLWriterPlugin", "classhal_1_1_h_g_l_writer_plugin.html", null ],
       [ "hal::LibertyParserPlugin", "classhal_1_1_liberty_parser_plugin.html", null ],
       [ "hal::plugin_dataflow", "classhal_1_1plugin__dataflow.html", null ],
-      [ "hal::Pyi_base", "classhal_1_1_pyi__base.html", null ],
+      [ "hal::PyBasePluginInterface", "classhal_1_1_py_base_plugin_interface.html", null ],
       [ "hal::SolveFsmPlugin", "classhal_1_1_solve_fsm_plugin.html", null ],
       [ "hal::UIPluginInterface", "classhal_1_1_u_i_plugin_interface.html", null ],
       [ "hal::VerilogParserPlugin", "classhal_1_1_verilog_parser_plugin.html", null ],
@@ -658,8 +658,8 @@ var hierarchy =
     [ "Vec_Int_t_", "struct_vec___int__t__.html", null ],
     [ "Vec_Ptr_t_", "struct_vec___ptr__t__.html", null ],
     [ "Vec_Vec_t_", "struct_vec___vec__t__.html", null ],
-    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
+    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
     [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ]
 ];

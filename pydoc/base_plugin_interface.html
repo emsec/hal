@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Base Plugin Interface &mdash; hal_py v4.1.0-28-gf77c92819 documentation</title>
+  <title>Base Plugin Interface &mdash; hal_py v4.1.0-31-gdb8f579dc documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-28-gf77c92819
+                v4.1.0-31-gdb8f579dc
               </div>
             
           
@@ -102,14 +102,13 @@
 <li class="toctree-l2"><a class="reference internal" href="gate_type_component.html">Gate Type Component</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_type_property.html">Gate Type Property</a></li>
 <li class="toctree-l2"><a class="reference internal" href="grouping.html">Grouping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gui_plugin_interface.html">GUI Plugin Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module.html">Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_pin.html">Module Pin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_pin_group.html">Module Pin Group</a></li>
 <li class="toctree-l2"><a class="reference internal" href="net.html">Net</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist.html">Netlist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_factory.html">Netlist Factory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="netlist_manipulation_decorator.html">Netlist Manipulation Decorator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netlist_modification_decorator.html">Netlist Modification Decorator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_utils.html">Netlist Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_serializer.html">Netlist Serializer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_writer_manager.html">Netlist Writer Manager</a></li>
@@ -193,7 +192,67 @@
 <dl class="class">
 <dt id="hal_py.BasePluginInterface">
 <em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">BasePluginInterface</code><a class="headerlink" href="#hal_py.BasePluginInterface" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><dl class="attribute">
+<dt id="hal_py.BasePluginInterface.dependencies">
+<code class="descname">dependencies</code><a class="headerlink" href="#hal_py.BasePluginInterface.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd><p>The plugins that this plugin depends on.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.BasePluginInterface.description">
+<code class="descname">description</code><a class="headerlink" href="#hal_py.BasePluginInterface.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>The description of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BasePluginInterface.get_dependencies">
+<code class="descname">get_dependencies</code><span class="sig-paren">(</span><em>self: hal_py.BasePluginInterface</em><span class="sig-paren">)</span> &#x2192; Set[str]<a class="headerlink" href="#hal_py.BasePluginInterface.get_dependencies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all dependencies of this plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The plugins that this plugin depends on.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.BasePluginInterface.get_description">
+<code class="descname">get_description</code><span class="sig-paren">(</span><em>self: hal_py.BasePluginInterface</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.BasePluginInterface.get_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the description of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The description of the plugin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="hal_py.BasePluginInterface.get_name">
 <code class="descname">get_name</code><span class="sig-paren">(</span><em>self: hal_py.BasePluginInterface</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#hal_py.BasePluginInterface.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the name of the plugin.</p>
@@ -201,7 +260,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Plugin name.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The name of the plugin.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
 </tr>
@@ -217,7 +276,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Plugin version.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The version of the plugin.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></td>
 </tr>

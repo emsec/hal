@@ -1,5 +1,7 @@
 var NAVTREEINDEX24 =
 {
+"index.html#autotoc_md27":[0,0],
+"index.html#autotoc_md28":[0,1],
 "index.html#autotoc_md29":[0,1,0],
 "index.html#autotoc_md30":[0,1,1],
 "index.html#autotoc_md31":[0,1,2],
@@ -204,12 +206,12 @@ var NAVTREEINDEX24 =
 "namespacecontrol.html":[5,0,1],
 "namespacehal.html":[5,0,2],
 "namespacehal.html":[6,0,0],
-"namespacehal_1_1_boolean_function_parser.html":[6,0,0,0],
 "namespacehal_1_1_boolean_function_parser.html":[5,0,2,0],
+"namespacehal_1_1_boolean_function_parser.html":[6,0,0,0],
 "namespacehal_1_1_graphics_factory.html":[5,0,2,8],
 "namespacehal_1_1_json_converter.html":[5,0,2,10],
-"namespacehal_1_1_s_m_t.html":[5,0,2,20],
 "namespacehal_1_1_s_m_t.html":[6,0,0,6],
+"namespacehal_1_1_s_m_t.html":[5,0,2,20],
 "namespacehal_1_1_s_m_t_1_1_bitwuzla.html":[5,0,2,20,0],
 "namespacehal_1_1_s_m_t_1_1_boolector.html":[5,0,2,20,1],
 "namespacehal_1_1_s_m_t_1_1_constant_propagation.html":[5,0,2,20,2],
@@ -221,8 +223,8 @@ var NAVTREEINDEX24 =
 "namespacehal_1_1_simplification.html":[5,0,2,19],
 "namespacehal_1_1core__strings.html":[5,0,2,1],
 "namespacehal_1_1core__strings.html":[6,0,0,1],
-"namespacehal_1_1dataflow.html":[5,0,2,2],
 "namespacehal_1_1dataflow.html":[6,0,0,2],
+"namespacehal_1_1dataflow.html":[5,0,2,2],
 "namespacehal_1_1dataflow_1_1evaluation.html":[5,0,2,2,0],
 "namespacehal_1_1dataflow_1_1evaluation.html":[6,0,0,2,0],
 "namespacehal_1_1dataflow_1_1group__by__control__signals.html":[5,0,2,2,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX24 =
 "namespacehal_1_1gui__utility.html":[5,0,2,9],
 "namespacehal_1_1gui__utility.html":[6,0,0,3],
 "namespacehal_1_1netlist__factory.html":[5,0,2,11],
-"namespacehal_1_1netlist__parser__manager.html":[5,0,2,12],
-"namespacehal_1_1netlist__serializer.html":[5,0,2,13],
-"namespacehal_1_1netlist__utils.html":[5,0,2,14]
+"namespacehal_1_1netlist__parser__manager.html":[5,0,2,12]
 };

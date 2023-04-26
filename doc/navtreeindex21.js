@@ -1,5 +1,7 @@
 var NAVTREEINDEX21 =
 {
+"dir_c7f946f84d3aa9d21c98e837fde7f0ce.html":[7,0,1,5,1],
+"dir_cadd9f09fb9c66497c3623c33b6fa8ce.html":[7,0,1,3,0,0,9],
 "dir_cb8cc93da11b1c841f0707f5b40c498b.html":[7,0,0,0,1,2],
 "dir_cd171c074355f6ffc4cdbd71688f27c3.html":[7,0,1,7,1],
 "dir_cd83eda374d2df33eb90d270980feb77.html":[7,0,1,1,0,0,3,0],
@@ -213,8 +215,8 @@ var NAVTREEINDEX21 =
 "functions_type.html":[6,3,3],
 "functions_u.html":[6,3,0,20],
 "functions_v.html":[6,3,0,21],
-"functions_vars.html":[6,3,2],
 "functions_vars.html":[6,3,2,0],
+"functions_vars.html":[6,3,2],
 "functions_vars_b.html":[6,3,2,1],
 "functions_vars_c.html":[6,3,2,2],
 "functions_vars_d.html":[6,3,2,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX21 =
 "gate_8h_source.html":[7,0,0,0,1,11],
 "gate__details__tab__widget_8cpp.html":[7,0,1,3,2,38,9],
 "gate__details__tab__widget_8cpp_source.html":[7,0,1,3,2,38,9],
-"gate__details__tab__widget_8h.html":[7,0,1,3,0,0,40,9],
-"gate__details__tab__widget_8h_source.html":[7,0,1,3,0,0,40,9],
-"gate__dialog_8cpp.html":[7,0,1,3,2,30,0]
+"gate__details__tab__widget_8h.html":[7,0,1,3,0,0,40,9]
 };
