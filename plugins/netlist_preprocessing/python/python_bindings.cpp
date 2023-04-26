@@ -300,9 +300,9 @@ namespace hal
             The extracted coordinates get annotated to the gates.
 
             :param hal_py.Netlist nl: The netlist to operate on. 
-            :param hal_py.Netlist def_file: The path to the def file
+            :param path def_file: The path to the def file
 
-            :returns: True on success, an error otherwise.
+            :returns: True on success, None otherwise.
             :rtype: bool or None
         )");
 

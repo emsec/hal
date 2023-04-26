@@ -1263,8 +1263,8 @@ namespace hal
         struct ComponentData {
             std::string name;
             std::string type;
-            double x;
-            double y;
+            u64 x;
+            u64 y;
         };
 
         TokenStream<std::string> tokenize(std::stringstream& ss)
