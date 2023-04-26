@@ -1,13 +1,12 @@
 #include "hal_core/utilities/log.h"
 
+#include <iostream>
 #include <spdlog/common.h>
 #include <spdlog/fmt/fmt.h>
 #include <spdlog/sinks/ansicolor_sink.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/null_sink.h>
 #include <spdlog/sinks/stdout_sinks.h>
-
-#include <iostream>
 
 namespace hal
 {
@@ -47,6 +46,8 @@ namespace hal
 
         //set_format_pattern("[%c %z] [%n] [%l] %v");
         set_format_pattern("[%n] [%l] %v");
+
+        m_default_sinks = {gui_sink, LogManager::create_stdout_sink(), LogManager::create_file_sink(m_file_path)};
     }
 
     LogManager::~LogManager()
@@ -57,9 +58,12 @@ namespace hal
         spdlog::drop_all();
     }
 
-    LogManager *LogManager::get_instance(const std::filesystem::path& file_name)
+    LogManager* LogManager::get_instance(const std::filesystem::path& file_name)
     {
-        if (!m_instance) m_instance = new LogManager(file_name);
+        if (!m_instance)
+        {
+            m_instance = new LogManager(file_name);
+        }
         return m_instance;
     }
 
@@ -73,9 +77,11 @@ namespace hal
         auto it = m_logger.find(channel);
         if (it == m_logger.end())
         {
-            if (channel != "stdout") // avoid infinite recursion
+            if (channel != "stdout")    // avoid infinite recursion
+            {
                 log_warning("stdout", "log channel '{}' was not registered so far, creating default channel.", channel);
-            return add_channel(channel, {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
+            }
+            return add_channel(channel, m_default_sinks, "info");
         }
 
         return it->second;
@@ -85,7 +91,9 @@ namespace hal
     {
         std::set<std::string> channels;
         for (const auto& it : m_logger)
+        {
             channels.insert(it.first);
+        }
         return channels;
     }
 
@@ -111,9 +119,13 @@ namespace hal
         m_logger_sinks[channel_name] = sinks;
 
         if (m_enforce_level.empty())
+        {
             this->set_level_of_channel(channel_name, level);
+        }
         else
+        {
             this->set_level_of_channel(channel_name, m_enforce_level);
+        }
 
         return channel;
     }
@@ -189,10 +201,23 @@ namespace hal
         }
     }
 
+    std::vector<std::shared_ptr<hal::LogManager::log_sink>> LogManager::get_default_sinks()
+    {
+        return m_default_sinks;
+    }
+
+    void LogManager::remove_sink_from_default(const std::string& sink_type)
+    {
+        m_default_sinks.erase(
+            std::remove_if(m_default_sinks.begin(), m_default_sinks.end(), [sink_type](const std::shared_ptr<hal::LogManager::log_sink> sink) { return sink->sink_type == sink_type; }),
+            m_default_sinks.end());
+    }
+
     std::shared_ptr<LogManager::log_sink> LogManager::create_stdout_sink(const bool colored)
     {
         auto sink          = std::make_shared<log_sink>();
         sink->is_file_sink = false;
+        sink->sink_type    = "stdout";
 
         if (!colored)
         {
@@ -223,14 +248,19 @@ namespace hal
     {
         std::filesystem::path path = file_name;
         if (file_name.empty())
+        {
             path = get_instance()->m_file_path;
+        }
 
         auto it = m_file_sinks.find(path.string());
         if (it != m_file_sinks.end())
+        {
             return it->second;
+        }
 
         auto sink          = std::make_shared<log_sink>();
         sink->is_file_sink = true;
+        sink->sink_type    = "file";
         sink->truncate     = truncate;
 
         sink->path        = path;
@@ -246,6 +276,7 @@ namespace hal
         auto sink          = std::make_shared<log_sink>();
         sink->spdlog_sink  = std::make_shared<log_gui_sink>();
         sink->is_file_sink = false;
+        sink->sink_type    = "gui";
         return sink;
     }
 
