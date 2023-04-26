@@ -15,6 +15,8 @@ HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation fr
 3. [Quickstart Guide](#quickstart)
 4. [Academic Context](#academic-context)
 
+# Introduction
+
 ## What the hell is HAL?
 Virtually all available research on netlist analysis operates on a graph-based representation of the netlist under inspection.
 At its core, HAL provides exactly that: A framework to parse netlists of arbitrary sources, e.g., FPGAs or ASICs, into a graph-based netlist representation and to provide the necessary built-in tools for traversal and analysis of the included gates and nets.

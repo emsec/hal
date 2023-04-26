@@ -31,6 +31,10 @@ All notable changes to this project will be documented in this file.
     * renamed `to_hal` to `to_bf` and added support for missing node types
     * changed `to_cpp` to output only the C++ code implementing the Boolean function and nothing more
     * added `compare_netlists` function that functionally compares two netlists that only differ in their combinational logic
+  * `dataflow_analysis`
+    * added API to interact with dataflow analysis results from C++ and Python
+    * deprecated `plugin_dataflow::execute` as its functionality is now split between `dataflow::analyze` and the members of `dataflow::Result`
+    * removed file writes if not explicitly called by user
 * decorators
   * added `NetlistModificationDecorator`
     * added `delete_modules` to delete all (or a filtered subset of) the modules in a netlist

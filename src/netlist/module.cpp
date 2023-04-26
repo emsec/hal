@@ -390,6 +390,11 @@ namespace hal
         return it->second;
     }
 
+    const std::vector<Gate*>& Module::get_gates() const
+    {
+        return m_gates;
+    }
+
     std::vector<Gate*> Module::get_gates(const std::function<bool(Gate*)>& filter, bool recursive) const
     {
         std::vector<Gate*> res;
@@ -495,6 +500,11 @@ namespace hal
             }
         }
         return success;
+    }
+
+    const std::unordered_set<Net*>& Module::get_nets() const
+    {
+        return m_nets;
     }
 
     std::unordered_set<Net*> Module::get_nets(const std::function<bool(Net*)>& filter, bool recursive) const

@@ -198,7 +198,7 @@ namespace hal
          * @param[in] pin - The output pin of the gate.
          * @returns `true` if the endpoint is a source of the net, `false` otherwise.
          */
-        bool is_a_source(const Gate* gate, const GatePin* pin_name) const;
+        bool is_a_source(const Gate* gate, const GatePin* pin) const;
 
         /**
          * Check whether an endpoint is a source of the net.
@@ -306,7 +306,7 @@ namespace hal
          * @param[in] pin - The input pin of the gate.
          * @returns `true` if the endpoint is a destination of the net, `false` otherwise.
          */
-        bool is_a_destination(const Gate* gate, const GatePin* pin_name) const;
+        bool is_a_destination(const Gate* gate, const GatePin* pin) const;
 
         /**
          * Check whether an endpoint is a destination of the net.
@@ -399,10 +399,10 @@ namespace hal
         friend class NetlistInternalManager;
         explicit Net(NetlistInternalManager* internal_manager, EventHandler* event_handler, const u32 id, const std::string& name = "");
 
-        Net(const Net&) = delete;
-        Net(Net&&)      = delete;
+        Net(const Net&)            = delete;
+        Net(Net&&)                 = delete;
         Net& operator=(const Net&) = delete;
-        Net& operator=(Net&&) = delete;
+        Net& operator=(Net&&)      = delete;
 
         NetlistInternalManager* m_internal_manager;
 

@@ -668,6 +668,12 @@ namespace hal
                     glib_path = std::filesystem::path(gate_library_file);
                 }
 
+                if (glib_path.is_relative())
+                {
+                    ProjectManager* pm = ProjectManager::instance();
+                    if (pm)
+                        glib_path = pm->get_project_directory() / glib_path;
+                }
                 GateLibrary* glib = gate_library_manager::get_gate_library(glib_path.string());
 
                 if (glib == nullptr)

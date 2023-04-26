@@ -82,6 +82,7 @@ namespace hal
 			 * Checks whether a SMT solver of the given type is available on the local machine.
 			 *
 			 * @param[in] type - The SMT solver type.
+			 * @param[in] call - The solver call.
 			 * @returns `true` if an SMT solver of the requested type is available, `false` otherwise.
 			 */
             static bool has_local_solver_for(SolverType type, SolverCall call);
