@@ -15,6 +15,13 @@ namespace hal
             return RawPtrWrapper<LogManager>(lm);
         }));
 
+        log_manager.def("set_file_name", &LogManager::set_file_name, py::arg("file_name") = "", R"(
+            Set the log file name.
+            If file_name is empty, the default log file will be used.
+
+            :param str file_name: The desired log file.
+            )");
+
         log_manager.def("set_level_of_channel", &LogManager::set_level_of_channel, py::arg("channel_name"), py::arg("level"), R"(
             Set a channel's severity level.
 
