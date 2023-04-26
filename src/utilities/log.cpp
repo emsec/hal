@@ -328,6 +328,15 @@ namespace hal
             add_channel(name, new_sinks, level);
         }
 
+        // update default sinks
+        for (u32 sink_idx = 0; sink_idx < m_default_sinks.size(); sink_idx++)
+        {
+            if (m_default_sinks.at(sink_idx)->is_file_sink && m_default_sinks.at(sink_idx)->path == m_file_path)
+            {
+                m_default_sinks.at(sink_idx) = create_file_sink(file_path, m_default_sinks.at(sink_idx)->truncate);
+            }
+        }
+
         // close all unused file sinks
         for (auto it = m_file_sinks.cbegin(); it != m_file_sinks.cend(); /* no increment */)
         {
