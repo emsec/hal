@@ -47,16 +47,17 @@ namespace hal
         /**
          * Construct a new gate pin from its name, direction and type.
          * 
+         * @param[in] id - The pin ID.
          * @param[in] name - The pin name.
          * @param[in] direction - The direction of the pin.
-         * @param[in] type - The type of the pin.
+         * @param[in] type - The type of the pin. Defaults to `PinType::none`.
          */
         GatePin(const u32 id, const std::string& name, PinDirection direction, PinType type = PinType::none);
 
     private:
-        GatePin(const GatePin&) = delete;
-        GatePin(GatePin&&)      = delete;
+        GatePin(const GatePin&)            = delete;
+        GatePin(GatePin&&)                 = delete;
         GatePin& operator=(const GatePin&) = delete;
-        GatePin& operator=(GatePin&&) = delete;
+        GatePin& operator=(GatePin&&)      = delete;
     };
 }    // namespace hal

@@ -162,7 +162,11 @@ namespace hal
         }
 
         /**
-         * @copydoc get()
+         * Get the value of the result.
+         * It is up to the user to check whether the result is valid using `Result::is_ok()` beforehand.
+         * 
+         * @tparam U - The type of the result value.
+         * @returns The result value.
          */
         template<typename U = T, typename std::enable_if_t<!std::is_same_v<U, void>, int> = 0>
         T&& get()
@@ -182,7 +186,10 @@ namespace hal
         }
 
         /**
-         * @copydoc get_error()
+         * Get the error of the result.
+         * It is up to the user to check whether the result is an error using `Result::is_error()` beforehand.
+         * 
+         * @returns The error.
          */
         Error&& get_error()
         {
