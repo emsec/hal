@@ -17,10 +17,10 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/log.h"
 
+#include <QApplication>
 #include <QColorDialog>
 #include <QDebug>
 #include <QInputDialog>
-#include <QApplication>
 #include <functional>
 
 namespace hal
@@ -40,7 +40,6 @@ namespace hal
     {
         if (!gNetlist)
             return;    // no netlist -> no registered callbacks
-        log_info("test", "unregister netlist callbacks");
         gNetlist->get_event_handler()->unregister_callback("gui_netlist_handler");
         gNetlist->get_event_handler()->unregister_callback("gui_module_handler");
         gNetlist->get_event_handler()->unregister_callback("gui_gate_handler");
@@ -50,7 +49,6 @@ namespace hal
 
     void NetlistRelay::registerNetlistCallbacks()
     {
-        log_info("test", "register netlist callbacks");
         gNetlist->get_event_handler()->register_callback(
             "gui_netlist_handler",
             std::function<void(NetlistEvent::event, Netlist*, u32)>(std::bind(&NetlistRelay::relayNetlistEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
@@ -198,7 +196,7 @@ namespace hal
 
         if (dynamic_cast<PythonThread*>(QThread::currentThread()))
         {
-            Q_EMIT signalThreadEvent(TetNetlist, (int) ev, object, associated_data);
+            Q_EMIT signalThreadEvent(TetNetlist, (int)ev, object, associated_data);
             qApp->processEvents();
             return;
         }
@@ -296,7 +294,7 @@ namespace hal
 
         if (dynamic_cast<PythonThread*>(QThread::currentThread()))
         {
-            Q_EMIT signalThreadEvent(TetGrouping, (int) ev, grp, associated_data);
+            Q_EMIT signalThreadEvent(TetGrouping, (int)ev, grp, associated_data);
             qApp->processEvents();
             return;
         }
@@ -348,7 +346,7 @@ namespace hal
 
         if (dynamic_cast<PythonThread*>(QThread::currentThread()))
         {
-            Q_EMIT signalThreadEvent(TetModule, (int) ev, mod, associated_data);
+            Q_EMIT signalThreadEvent(TetModule, (int)ev, mod, associated_data);
             qApp->processEvents();
             return;
         }
@@ -488,7 +486,7 @@ namespace hal
 
         if (dynamic_cast<PythonThread*>(QThread::currentThread()))
         {
-            Q_EMIT signalThreadEvent(TetGate, (int) ev, gat, associated_data);
+            Q_EMIT signalThreadEvent(TetGate, (int)ev, gat, associated_data);
             qApp->processEvents();
             return;
         }
@@ -548,7 +546,7 @@ namespace hal
 
         if (dynamic_cast<PythonThread*>(QThread::currentThread()))
         {
-            Q_EMIT signalThreadEvent(TetNet, (int) ev, net, associated_data);
+            Q_EMIT signalThreadEvent(TetNet, (int)ev, net, associated_data);
             qApp->processEvents();
             return;
         }
@@ -629,26 +627,26 @@ namespace hal
     {
         switch (type)
         {
-        case TetNetlist:
-//            qDebug() << "Evt nlst" << evt << associated_data;
-            relayNetlistEvent((NetlistEvent::event) evt, static_cast<Netlist*>(object), associated_data);
-            break;
-        case TetModule:
-//            qDebug() << "Evt modu" << evt << static_cast<Module*>(object)->get_id() << associated_data;
-            relayModuleEvent((ModuleEvent::event) evt, static_cast<Module*>(object), associated_data);
-            break;
-        case TetGate:
-//            qDebug() << "Evt gate" << evt << static_cast<Gate*>(object)->get_id() << associated_data;
-            relayGateEvent((GateEvent::event) evt, static_cast<Gate*>(object), associated_data);
-            break;
-        case TetNet:
-//            qDebug() << "Evt net_" << evt << static_cast<Net*>(object)->get_id() << associated_data;
-            relayNetEvent((NetEvent::event) evt, static_cast<Net*>(object), associated_data);
-            break;
-        case TetGrouping:
-//            qDebug() << "Evt grup" << evt << static_cast<Grouping*>(object)->get_id() << associated_data;
-            relayGroupingEvent((GroupingEvent::event) evt, static_cast<Grouping*>(object), associated_data);
-            break;
+            case TetNetlist:
+                //            qDebug() << "Evt nlst" << evt << associated_data;
+                relayNetlistEvent((NetlistEvent::event)evt, static_cast<Netlist*>(object), associated_data);
+                break;
+            case TetModule:
+                //            qDebug() << "Evt modu" << evt << static_cast<Module*>(object)->get_id() << associated_data;
+                relayModuleEvent((ModuleEvent::event)evt, static_cast<Module*>(object), associated_data);
+                break;
+            case TetGate:
+                //            qDebug() << "Evt gate" << evt << static_cast<Gate*>(object)->get_id() << associated_data;
+                relayGateEvent((GateEvent::event)evt, static_cast<Gate*>(object), associated_data);
+                break;
+            case TetNet:
+                //            qDebug() << "Evt net_" << evt << static_cast<Net*>(object)->get_id() << associated_data;
+                relayNetEvent((NetEvent::event)evt, static_cast<Net*>(object), associated_data);
+                break;
+            case TetGrouping:
+                //            qDebug() << "Evt grup" << evt << static_cast<Grouping*>(object)->get_id() << associated_data;
+                relayGroupingEvent((GroupingEvent::event)evt, static_cast<Grouping*>(object), associated_data);
+                break;
         }
     }
 
