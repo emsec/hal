@@ -81,7 +81,16 @@ namespace hal
              * @param[in] type - The pin type.
              * @returns Ok() and a set of control nets of the group on success, an error otherwise.
             */
-            hal::Result<std::unordered_set<Net*>> get_control_nets_of_group(const u32 group_id, const PinType type) const;
+            hal::Result<std::unordered_set<Net*>> get_group_control_nets(const u32 group_id, const PinType type) const;
+
+            /**
+             * Get the control nets of the given gate that are connected to a pin of the specified type.
+             * 
+             * @param[in] gate - The gate.
+             * @param[in] type - The pin type.
+             * @returns Ok() and a set of control nets of the gate on success, an error otherwise.
+            */
+            hal::Result<std::unordered_set<Net*>> get_gate_control_nets(const Gate* gate, const PinType type) const;
 
             /**
              * Get the successor groups of the group with the given ID.
@@ -92,12 +101,28 @@ namespace hal
             hal::Result<std::unordered_set<u32>> get_group_successors(const u32 group_id) const;
 
             /**
+             * Get the sequential successor gates of the given sequential gate.
+             * 
+             * @param[in] gate - The gate.
+             * @returns Ok() and the successors of the gate as a set of gates on success, an error otherwise.
+             */
+            hal::Result<std::unordered_set<Gate*>> get_gate_successors(const Gate* gate) const;
+
+            /**
              * Get the predecessor groups of the group with the given ID.
              * 
              * @param[in] group_id - The group ID.
              * @returns Ok() and the predecessors of the group as a set of group IDs on success, an error otherwise.
              */
             hal::Result<std::unordered_set<u32>> get_group_predecessors(const u32 group_id) const;
+
+            /**
+             * Get the sequential predecessor gates of the given sequential gate.
+             * 
+             * @param[in] gate - The gate.
+             * @returns Ok() and the predecessors of the gate as a set of gates on success, an error otherwise.
+             */
+            hal::Result<std::unordered_set<Gate*>> get_gate_predecessors(const Gate* gate) const;
 
             /**
              * Write the dataflow graph as a DOT graph to the specified location.
@@ -133,14 +158,41 @@ namespace hal
              */
             std::vector<std::vector<Gate*>> get_groups_as_list(const std::unordered_set<u32>& group_ids = {}) const;
 
+            /**
+             * Merge multiple groups specified by ID. 
+             * All specified groups are merged into the first group of the provided vector and are subsequently deleted.
+             * 
+             * @param[in] group_ids - The group IDs of the groups to merge.
+             * @returns The ID of the group that all over groups have been merged into on success, an error otherwise.
+             */
+            hal::Result<u32> merge_groups(const std::vector<u32>& group_ids);
+
+            /**
+             * Split a group into multiple smaller groups specified by sets of gates.
+             * All gates of the group to split must be contained in the sets exactly once and all gates in the sets must be contained in the group to split.
+             * The group that is being split is deleted in the process.
+             * 
+             * @param[in] group_id - The group ID of the group to split.
+             * @param[in] new_groups - A vector of groups specified as unordered sets of gates.
+             * @returns The group IDs of the newly created groups in the order of the provided sets.
+             */
+            hal::Result<std::vector<u32>> split_group(u32 group_id, const std::vector<std::unordered_set<Gate*>>& new_groups);
+
         private:
             Netlist* m_netlist;
+
+            u32 m_last_id = 0;
 
             std::unordered_map<u32, std::unordered_set<Gate*>> m_gates_of_group;
             std::unordered_map<const Gate*, u32> m_parent_group_of_gate;
 
-            std::unordered_map<u32, std::unordered_map<PinType, std::unordered_set<Net*>>> m_group_signals;
+            // gate information
+            std::unordered_map<const Gate*, std::unordered_map<PinType, std::unordered_set<Net*>>> m_gate_signals;
+            std::unordered_map<const Gate*, std::unordered_set<Gate*>> m_gate_successors;
+            std::unordered_map<const Gate*, std::unordered_set<Gate*>> m_gate_predecessors;
 
+            // group information
+            std::unordered_map<u32, std::unordered_map<PinType, std::unordered_set<Net*>>> m_group_signals;
             std::unordered_map<u32, std::unordered_set<u32>> m_group_successors;
             std::unordered_map<u32, std::unordered_set<u32>> m_group_predecessors;
         };

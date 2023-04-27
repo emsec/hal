@@ -1,7 +1,6 @@
 #include "dataflow_analysis/plugin_dataflow.h"
 
 #include "dataflow_analysis/common/grouping.h"
-#include "dataflow_analysis/dataflow.h"
 #include "dataflow_analysis/utils/gui_layout_locker.h"
 #include "dataflow_analysis/utils/timing_utils.h"
 #include "hal_core/plugin_system/plugin_manager.h"
