@@ -50,6 +50,7 @@ namespace hal
         Q_UNUSED(nets)
 
         CoordinateFromDataMap cfdMap(modules,gates);
+
         if (mPositionToNodeMap.isEmpty() &&
         	mParseLayout &&
                 !gFileStatusManager->modifiedFilesExisting() &&

@@ -15,6 +15,7 @@ HAL \[/hel/\] is a comprehensive netlist reverse engineering and manipulation fr
 3. [Quickstart Guide](#quickstart)
 4. [Academic Context](#academic-context)
 
+<a name="introduction"></a>
 # Introduction
 
 ## What the hell is HAL?

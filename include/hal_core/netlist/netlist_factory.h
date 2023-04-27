@@ -55,21 +55,14 @@ namespace hal
         NETLIST_API std::unique_ptr<Netlist> create_netlist(const GateLibrary* gate_library);
 
         /**
-         * Create a netlist from the given file using the specified gate library file.
+         * Create a netlist from the given file. Will either deserialize '.hal' file or call parser plugin for other formats.
+         * In the latter case the specified gate library file is mandatory.
          *
          * @param[in] netlist_file - Path to the netlist file.
-         * @param[in] gate_library_file - Path to the gate library file.
+         * @param[in] gate_library_file - Path to the gate library file. Optional argument for '.hal' file.
          * @returns The netlist on success, nullptr otherwise.
          */
-        NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file, const std::filesystem::path& gate_library_file);
-
-        /**
-         * Create a netlist from the given '.hal' file.
-         *
-         * @param[in] netlist_file - Path to the '.hal' file.
-         * @returns The netlist on success, nullptr otherwise.
-         */
-        NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file);
+        NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file, const std::filesystem::path& gate_library_file = std::filesystem::path());
 
         /**
          * Create a netlist from the given hal project.

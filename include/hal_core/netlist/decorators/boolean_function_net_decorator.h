@@ -59,7 +59,7 @@ namespace hal
          * Get the net represented by a unique Boolean variable.
          * 
          * @param[in] netlist - The netlist on which to operate.
-         * @param[in] var_name - The Boolean variable.
+         * @param[in] var - The Boolean variable.
          * @return The specified net on success, an error otherwise.
          */
         static Result<Net*> get_net_from(const Netlist* netlist, const BooleanFunction& var);
@@ -76,7 +76,7 @@ namespace hal
         /**
          * Get the net id represented by a unique Boolean variable.
          * 
-         * @param[in] var_name - The Boolean variable.
+         * @param[in] var - The Boolean variable.
          * @return The specified net id on success, an error otherwise.
          */
         static Result<u32> get_net_id_from(const BooleanFunction& var);

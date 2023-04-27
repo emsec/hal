@@ -13,6 +13,11 @@ namespace hal
         return new ActionSetSelectionFocus;
     }
 
+    ActionSetSelectionFocus::ActionSetSelectionFocus()
+    {
+        mProjectModified = false;
+    }
+
     QString ActionSetSelectionFocus::tagname() const
     {
         return ActionSetSelectionFocusFactory::sFactory->tagname();

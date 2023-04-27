@@ -19,28 +19,12 @@ namespace hal
 
         py_netlist_serializer.def(
             "deserialize_from_file",
-            [](const std::filesystem::path& hal_file) { return std::shared_ptr<Netlist>(netlist_serializer::deserialize_from_file(hal_file)); },
+            [](const std::filesystem::path& hal_file) { return std::shared_ptr<Netlist>(netlist_serializer::deserialize_from_file(hal_file, nullptr)); },
             py::arg("hal_file"),
             R"(
             Deserializes a netlist from a .hal file.
         
             :param pathlib.Path hal_file: The source .hal file.
-            :returns: The deserialized netlist.
-            :rtype: hal_py.Netlist
-        )");
-
-        py_netlist_serializer.def(
-            "deserialize_from_file",
-            [](const std::filesystem::path& hal_file, const std::filesystem::path& gate_library_file) {
-                return std::shared_ptr<Netlist>(netlist_serializer::deserialize_from_file(hal_file, gate_library_file));
-            },
-            py::arg("hal_file"),
-            py::arg("gate_library_file"),
-            R"(
-            Deserializes a netlist from a .hal file with a given gate library.
-        
-            :param pathlib.Path hal_file: The source .hal file.
-            :param pathlib.Path gate_library_file: The gate library file.
             :returns: The deserialized netlist.
             :rtype: hal_py.Netlist
         )");

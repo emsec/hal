@@ -530,9 +530,9 @@ namespace hal
         return OK(BooleanFunction(Node::Operation(NodeType::Ite, size), std::move(p0), std::move(p1), std::move(p2)));
     }
 
-    std::ostream& operator<<(std::ostream& os, const BooleanFunction& function)
+    std::ostream& operator<<(std::ostream& os, const BooleanFunction& f)
     {
-        return os << function.to_string();
+        return os << f.to_string();
     }
 
     BooleanFunction BooleanFunction::operator&(const BooleanFunction& other) const
@@ -1019,13 +1019,7 @@ namespace hal
 
     Result<BooleanFunction> BooleanFunction::substitute(const std::string& name, const BooleanFunction& replacement) const
     {
-        /// Helper function to substitute a variable with a Boolean function.
-        ///
-        /// @param[in] node - Node.
-        /// @param[in] operands - Operands of node.
-        /// @param[in] var_name - Variable name to check for replacement.
-        /// @param[in] repl - Replacement Boolean function.
-        /// @returns AST replacement.
+        // Helper function to substitute a variable with a Boolean function.
         auto substitute_variable = [](const auto& node, auto&& operands, auto var_name, auto repl) -> BooleanFunction {
             if (node.has_variable_name(var_name))
             {

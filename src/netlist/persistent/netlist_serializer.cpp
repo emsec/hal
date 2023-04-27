@@ -34,8 +34,9 @@ namespace hal
         // serializing functions
         namespace
         {
-            const int SERIALIZATION_FORMAT_VERSION = 11;
+            const int SERIALIZATION_FORMAT_VERSION = 12;
 
+            // Ver 12 : location of gates
 #define JSON_STR_HELPER(x) rapidjson::Value{}.SetString(x.c_str(), x.length(), allocator)
 
 #define assert_availablility(MEMBER)                                                               \
@@ -183,6 +184,11 @@ namespace hal
                 val.AddMember("id", gate->get_id(), allocator);
                 val.AddMember("name", gate->get_name(), allocator);
                 val.AddMember("type", gate->get_type()->get_name(), allocator);
+                if (gate->has_location())
+                {
+                    val.AddMember("location_x", gate->get_location_x(), allocator);
+                    val.AddMember("location_y", gate->get_location_y(), allocator);
+                }
                 auto data = serialize(gate->get_data_map(), allocator);
                 if (!data.Empty())
                 {
@@ -208,9 +214,16 @@ namespace hal
                 const u32 gate_id           = val["id"].GetUint();
                 const std::string gate_name = val["name"].GetString();
                 const std::string gate_type = val["type"].GetString();
+                i32 lx                      = -1;
+                i32 ly                      = -1;
+                if (val.HasMember("location_x") && val.HasMember("location_y"))
+                {
+                    lx = val["location_x"].GetInt();
+                    ly = val["location_y"].GetInt();
+                }
                 if (auto it = gate_types.find(gate_type); it != gate_types.end())
                 {
-                    auto gate = nl->create_gate(gate_id, it->second, gate_name);
+                    auto gate = nl->create_gate(gate_id, it->second, gate_name, lx, ly);
                     if (gate == nullptr)
                     {
                         log_error("netlist_persistent", "could not deserialize gate '" + gate_name + "' with ID " + std::to_string(gate_id) + ": failed to create gate");
@@ -643,7 +656,7 @@ namespace hal
                 document.AddMember("netlist", root, document.GetAllocator());
             }
 
-            std::unique_ptr<Netlist> deserialize(const rapidjson::Document& document, const std::string& gate_library_file = "")
+            std::unique_ptr<Netlist> deserialize(const rapidjson::Document& document, GateLibrary* gatelib)
             {
                 if (!document.HasMember("netlist"))
                 {
@@ -652,54 +665,51 @@ namespace hal
                 }
                 auto root = document["netlist"].GetObject();
 
-                std::filesystem::path glib_path;
-                if (gate_library_file.empty())
+                if (!gatelib)
                 {
+                    // no preferred gate library explicitly given
                     if (!root.HasMember("gate_library"))
                     {
                         log_error("netlist_persistent", "could not deserialize netlist: node 'netlist' has no node 'gate_library'");
                         return nullptr;
                     }
 
-                    glib_path = std::filesystem::path(root["gate_library"].GetString());
-                }
-                else
-                {
-                    glib_path = std::filesystem::path(gate_library_file);
-                }
+                    std::filesystem::path glib_path(root["gate_library"].GetString());
 
-                if (glib_path.is_relative())
-                {
-                    ProjectManager* pm = ProjectManager::instance();
-                    if (pm)
-                        glib_path = pm->get_project_directory() / glib_path;
-                }
-                GateLibrary* glib = gate_library_manager::get_gate_library(glib_path.string());
+                    if (glib_path.is_relative())
+                    {
+                        ProjectManager* pm = ProjectManager::instance();
+                        if (pm)
+                            glib_path = pm->get_project_directory() / glib_path;
+                    }
+                    gatelib = gate_library_manager::get_gate_library(glib_path.string());
 
-                if (glib == nullptr)
-                {
-                    if (glib_path.extension() == ".hgl")
+                    if (gatelib == nullptr)
                     {
-                        glib_path.replace_extension(".lib");
-                    }
-                    else
-                    {
-                        glib_path.replace_extension(".hgl");
-                    }
+                        // not found : try the other possible gate library extension
+                        if (glib_path.extension() == ".hgl")
+                        {
+                            glib_path.replace_extension(".lib");
+                        }
+                        else
+                        {
+                            glib_path.replace_extension(".hgl");
+                        }
 
-                    glib = gate_library_manager::get_gate_library(glib_path.string());
-                    if (glib == nullptr)
-                    {
-                        log_critical("netlist_persistent", "could not deserialize netlist: failed to load gate library '" + std::string(root["gate_library"].GetString()) + "'");
-                        return nullptr;
-                    }
-                    else
-                    {
-                        log_info("netlist_persistent", "gate library '{}' required but using '{}' instead.", root["gate_library"].GetString(), glib_path.string());
+                        gatelib = gate_library_manager::get_gate_library(glib_path.string());
+                        if (gatelib == nullptr)
+                        {
+                            log_critical("netlist_persistent", "could not deserialize netlist: failed to load gate library '" + std::string(root["gate_library"].GetString()) + "'");
+                            return nullptr;
+                        }
+                        else
+                        {
+                            log_info("netlist_persistent", "gate library '{}' required but using '{}' instead.", root["gate_library"].GetString(), glib_path.string());
+                        }
                     }
                 }
 
-                auto nl = std::make_unique<Netlist>(glib);
+                auto nl = std::make_unique<Netlist>(gatelib);
 
                 // disable automatically checking module nets
                 nl->enable_automatic_net_checks(false);
@@ -911,7 +921,7 @@ namespace hal
             return true;
         }
 
-        std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file)
+        std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file, GateLibrary* gatelib)
         {
             auto begin_time = std::chrono::high_resolution_clock::now();
 
@@ -953,60 +963,7 @@ namespace hal
                 log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
             }
 
-            auto netlist = deserialize(document);
-
-            if (netlist)
-            {
-                log_info("netlist_persistent", "deserialized '{}' in {:2.2f} seconds", hal_file.string(), DURATION(begin_time));
-            }
-
-            // event_controls::enable_all(true);
-            return netlist;
-        }
-
-        NETLIST_API std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file, const std::filesystem::path& gate_library_file)
-        {
-            auto begin_time = std::chrono::high_resolution_clock::now();
-
-            // event_controls::enable_all(false);
-
-            FILE* pFile = fopen(hal_file.string().c_str(), "rb");
-            if (pFile == NULL)
-            {
-                log_error("netlist_persistent", "unable to open '{}'.", hal_file.string());
-                return nullptr;
-            }
-
-            char buffer[65536];
-            rapidjson::FileReadStream is(pFile, buffer, sizeof(buffer));
-            rapidjson::Document document;
-            document.ParseStream<0, rapidjson::UTF8<>, rapidjson::FileReadStream>(is);
-            fclose(pFile);
-
-            if (document.HasParseError())
-            {
-                log_error("netlist_persistent", "invalid json string for deserialization");
-                return nullptr;
-            }
-
-            if (document.HasMember("serialization_format_version"))
-            {
-                u32 encoded_version = document["serialization_format_version"].GetUint();
-                if (encoded_version < SERIALIZATION_FORMAT_VERSION)
-                {
-                    log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
-                }
-                else if (encoded_version > SERIALIZATION_FORMAT_VERSION)
-                {
-                    log_warning("netlist_persistent", "the netlist was serialized with a newer version of the serializer, deserialization may contain errors.");
-                }
-            }
-            else
-            {
-                log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
-            }
-
-            auto netlist = deserialize(document, gate_library_file.string());
+            auto netlist = deserialize(document, gatelib);
 
             if (netlist)
             {

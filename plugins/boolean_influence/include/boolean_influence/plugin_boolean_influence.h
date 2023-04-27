@@ -25,9 +25,9 @@
 
 #pragma once
 
+#include "hal_core/netlist/boolean_function.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/utilities/result.h"
-#include "hal_core/netlist/boolean_function.h"
 
 namespace hal
 {
@@ -134,7 +134,7 @@ namespace hal
          * @returns A pair consisting of std::map<u32, Gate*>, which includes the mapping from the original gate
          *          IDs to the ones in the matrix, and a std::vector<std::vector<double>, which is the ff dependency matrix
          */
-        static Result<std::pair<std::map<u32, Gate*>, std::vector<std::vector<double>>>> get_ff_dependency_matrix(const Netlist* nl, bool with_boolean_influence);
+        static Result<std::pair<std::map<u32, Gate*>, std::vector<std::vector<double>>>> get_ff_dependency_matrix(const Netlist* netlist, bool with_boolean_influence);
 
     private:
         static const std::string probabilistic_function;
