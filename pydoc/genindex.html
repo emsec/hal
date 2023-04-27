@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; hal_py v4.1.0-36-g8550ee29e documentation</title>
+  <title>Index &mdash; hal_py v4.1.0-38-g026493c54 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v4.1.0-36-g8550ee29e
+                v4.1.0-38-g026493c54
               </div>
             
           
@@ -954,8 +954,6 @@
       </ul></li>
       <li><a href="smt.html#hal_py.SMT.Solver.get_constraints">get_constraints() (hal_py.SMT.Solver method)</a>
 </li>
-      <li><a href="dataflow.html#dataflow.Dataflow.Result.get_control_nets_of_group">get_control_nets_of_group() (dataflow.Dataflow.Result method)</a>
-</li>
       <li><a href="data_container.html#hal_py.DataContainer.get_data">get_data() (hal_py.DataContainer method)</a>
 
       <ul>
@@ -1060,6 +1058,8 @@
       </ul></li>
       <li><a href="netlist_utils.html#hal_py.NetlistUtils.get_gate_chain">get_gate_chain() (in module hal_py.NetlistUtils)</a>
 </li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result.get_gate_control_nets">get_gate_control_nets() (dataflow.Dataflow.Result method)</a>
+</li>
       <li><a href="grouping.html#hal_py.Grouping.get_gate_ids">get_gate_ids() (hal_py.Grouping method)</a>
 </li>
       <li><a href="gate_library_manager.html#hal_py.GateLibraryManager.get_gate_libraries">get_gate_libraries() (in module hal_py.GateLibraryManager)</a>
@@ -1077,6 +1077,10 @@
       <li><a href="core_utils.html#hal_py.CoreUtils.get_gate_library_directories">get_gate_library_directories() (in module hal_py.CoreUtils)</a>
 </li>
       <li><a href="gate_library.html#hal_py.GateLibrary.get_gate_location_data_category">get_gate_location_data_category() (hal_py.GateLibrary method)</a>
+</li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result.get_gate_predecessors">get_gate_predecessors() (dataflow.Dataflow.Result method)</a>
+</li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result.get_gate_successors">get_gate_successors() (dataflow.Dataflow.Result method)</a>
 </li>
       <li><a href="gate_library.html#hal_py.GateLibrary.get_gate_type_by_name">get_gate_type_by_name() (hal_py.GateLibrary method)</a>
 </li>
@@ -1110,6 +1114,8 @@
         <li><a href="module_pin.html#hal_py.ModulePin.get_group">(hal_py.ModulePin method)</a>
 </li>
       </ul></li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result.get_group_control_nets">get_group_control_nets() (dataflow.Dataflow.Result method)</a>
+</li>
       <li><a href="dataflow.html#dataflow.Dataflow.Result.get_group_id_of_gate">get_group_id_of_gate() (dataflow.Dataflow.Result method)</a>
 </li>
       <li><a href="dataflow.html#dataflow.Dataflow.Result.get_group_list">get_group_list() (dataflow.Dataflow.Result method)</a>
@@ -1214,10 +1220,10 @@
 </li>
       <li><a href="netlist.html#hal_py.Netlist.get_module_by_id">get_module_by_id() (hal_py.Netlist method)</a>
 </li>
-      <li><a href="grouping.html#hal_py.Grouping.get_module_ids">get_module_ids() (hal_py.Grouping method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="grouping.html#hal_py.Grouping.get_module_ids">get_module_ids() (hal_py.Grouping method)</a>
+</li>
       <li><a href="gate.html#hal_py.Gate.get_modules">get_modules() (hal_py.Gate method)</a>
 
       <ul>
@@ -1990,18 +1996,20 @@
       </ul></li>
       <li><a href="gate_library.html#hal_py.GateLibrary.mark_vcc_gate_type">mark_vcc_gate_type() (hal_py.GateLibrary method)</a>
 </li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result.merge_groups">merge_groups() (dataflow.Dataflow.Result method)</a>
+</li>
       <li><a href="dataflow.html#dataflow.Dataflow.Configuration.min_group_size">min_group_size (dataflow.Dataflow.Configuration attribute)</a>
 </li>
       <li><a href="smt.html#hal_py.SMT.Model">Model (class in hal_py.SMT)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="smt.html#hal_py.SMT.Model.model">model (hal_py.SMT.Model attribute)</a>
 
       <ul>
         <li><a href="smt.html#hal_py.SMT.SolverResult.model">(hal_py.SMT.SolverResult attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module.html#hal_py.Module">Module (class in hal_py)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.module">module (hal_py.Gate attribute)</a>
@@ -2484,10 +2492,10 @@
 </li>
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorController.set_no_clock_used">set_no_clock_used() (netlist_simulator_controller.NetlistSimulatorController method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module.html#hal_py.Module.set_parent_module">set_parent_module() (hal_py.Module method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module.html#hal_py.Module.set_pin_group_direction">set_pin_group_direction() (hal_py.Module method)</a>
 </li>
       <li><a href="module.html#hal_py.Module.set_pin_group_name">set_pin_group_name() (hal_py.Module method)</a>
@@ -2585,6 +2593,8 @@
       <li><a href="endpoint.html#hal_py.Endpoint.source_pin">source_pin (hal_py.Endpoint attribute)</a>
 </li>
       <li><a href="net.html#hal_py.Net.sources">sources (hal_py.Net attribute)</a>
+</li>
+      <li><a href="dataflow.html#dataflow.Dataflow.Result.split_group">split_group() (dataflow.Dataflow.Result method)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.NodeType.Srem">Srem (hal_py.BooleanFunction.NodeType attribute)</a>
 </li>

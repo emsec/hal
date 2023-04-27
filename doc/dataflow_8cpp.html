@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/dataflow_analysis/src/dataflow.cpp File Reference</title>
+<title>HAL: /home/runner/work/hal/hal/plugins/dataflow_analysis/src/api/dataflow.cpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -89,39 +89,36 @@ $(document).ready(function(){initNavTree('dataflow_8cpp.html',''); initResizable
 <div class="title">dataflow.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="dataflow_8h_source.html">dataflow_analysis/dataflow.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="dataflow_8h_source.html">dataflow_analysis/api/dataflow.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="evaluation_8h_source.html">dataflow_analysis/evaluation/evaluation.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="pre__processing_8h_source.html">dataflow_analysis/pre_processing/pre_processing.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="processing_8h_source.html">dataflow_analysis/processing/processing.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="gate_8h_source.html">hal_core/netlist/gate.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="include_2hal__core_2netlist_2grouping_8h_source.html">hal_core/netlist/grouping.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="module_8h_source.html">hal_core/netlist/module.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="log_8h_source.html">hal_core/utilities/log.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for dataflow.cpp:</div>
 <div class="dyncontent">
-<div class="center"><img src="dataflow_8cpp__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2dataflow_8cpp" alt=""/></div>
-<map name="_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2dataflow_8cpp" id="_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2dataflow_8cpp">
-<area shape="rect" title=" " alt="" coords="1248,5,1440,61"/>
-<area shape="rect" href="dataflow_8h.html" title=" " alt="" coords="126,117,336,143"/>
-<area shape="rect" href="evaluation_8h.html" title=" " alt="" coords="712,109,924,151"/>
-<area shape="rect" href="pre__processing_8h.html" title=" " alt="" coords="30,288,243,329"/>
-<area shape="rect" href="processing_8h.html" title=" " alt="" coords="1310,109,1523,151"/>
-<area shape="rect" href="gate_8h.html" title=" " alt="" coords="1620,385,1786,411"/>
-<area shape="rect" href="include_2hal__core_2netlist_2grouping_8h.html" title=" " alt="" coords="1648,117,1843,143"/>
-<area shape="rect" href="module_8h.html" title=" " alt="" coords="1214,206,1400,233"/>
-<area shape="rect" href="log_8h.html" title=" " alt="" coords="1678,288,1808,329"/>
-<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title=" " alt="" coords="375,288,575,329"/>
-<area shape="rect" title=" " alt="" coords="380,467,495,493"/>
-<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2result_8h.html" title=" " alt="" coords="131,199,331,240"/>
-<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="623,288,754,329"/>
-<area shape="rect" href="netlist__abstraction_8h.html" title=" " alt="" coords="270,377,470,419"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="1173,467,1313,493"/>
-<area shape="rect" href="evaluation_2configuration_8h.html" title=" " alt="" coords="994,377,1206,419"/>
-<area shape="rect" href="evaluation_2context_8h.html" title=" " alt="" coords="640,199,852,240"/>
-<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2evaluation_2result_8h.html" title=" " alt="" coords="354,199,566,240"/>
-<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2processing_2result_8h.html" title=" " alt="" coords="926,199,1139,240"/>
-<area shape="rect" href="processing_2configuration_8h.html" title=" " alt="" coords="1382,377,1595,419"/>
+<div class="center"><img src="dataflow_8cpp__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2api_2dataflow_8cpp" alt=""/></div>
+<map name="_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2api_2dataflow_8cpp" id="_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2api_2dataflow_8cpp">
+<area shape="rect" title=" " alt="" coords="929,5,1145,61"/>
+<area shape="rect" href="dataflow_8h.html" title=" " alt="" coords="204,109,367,151"/>
+<area shape="rect" href="evaluation_8h.html" title=" " alt="" coords="789,109,1001,151"/>
+<area shape="rect" href="pre__processing_8h.html" title=" " alt="" coords="1024,288,1237,329"/>
+<area shape="rect" href="processing_8h.html" title=" " alt="" coords="1219,109,1432,151"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="1660,288,1791,329"/>
+<area shape="rect" href="api_2configuration_8h.html" title=" " alt="" coords="5,377,168,419"/>
+<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2api_2result_8h.html" title=" " alt="" coords="144,199,307,240"/>
+<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title=" " alt="" coords="463,288,663,329"/>
+<area shape="rect" title=" " alt="" coords="505,467,620,493"/>
+<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="160,288,291,329"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="1131,467,1271,493"/>
+<area shape="rect" href="netlist__abstraction_8h.html" title=" " alt="" coords="811,377,1011,419"/>
+<area shape="rect" href="evaluation_2configuration_8h.html" title=" " alt="" coords="787,288,999,329"/>
+<area shape="rect" href="evaluation_2context_8h.html" title=" " alt="" coords="667,199,879,240"/>
+<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2evaluation_2result_8h.html" title=" " alt="" coords="431,199,643,240"/>
+<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2processing_2result_8h.html" title=" " alt="" coords="1075,199,1288,240"/>
+<area shape="rect" href="processing_2configuration_8h.html" title=" " alt="" coords="1341,377,1555,419"/>
+<area shape="rect" href="callback__hook_8h.html" title=" " alt="" coords="1824,377,1955,419"/>
+<area shape="rect" href="program__arguments_8h.html" title=" " alt="" coords="1579,377,1749,419"/>
 </map>
 </div>
 </div>
@@ -144,8 +141,8 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_383eef8607738589c737c0b430bde182.html">src</a></li><li class="navelem"><a class="el" href="dataflow_8cpp.html">dataflow.cpp</a></li>
-    <li class="footer">Generated on Thu Apr 27 2023 14:12:49 for HAL by
+    <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_383eef8607738589c737c0b430bde182.html">src</a></li><li class="navelem"><a class="el" href="dir_a5dae3dd54959ea009030bd29b6c9d80.html">api</a></li><li class="navelem"><a class="el" href="dataflow_8cpp.html">dataflow.cpp</a></li>
+    <li class="footer">Generated on Thu Apr 27 2023 16:48:56 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,5 +1,5 @@
-<map id="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/common/result.h" name="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/common/result.h">
-<area shape="rect" id="node1" title=" " alt="" coords="471,5,668,76"/>
+<map id="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/api/result.h" name="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/api/result.h">
+<area shape="rect" id="node1" title=" " alt="" coords="472,5,667,76"/>
 <area shape="rect" id="node2" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title=" " alt="" coords="724,124,924,165"/>
 <area shape="rect" id="node11" href="$pin__type_8h.html" title=" " alt="" coords="474,124,665,165"/>
 <area shape="rect" id="node13" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="165,124,296,165"/>

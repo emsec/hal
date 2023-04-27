@@ -90,7 +90,7 @@ $(document).ready(function(){initNavTree('structhal_1_1dataflow_1_1_result.html'
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2result_8h_source.html">result.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2api_2result_8h_source.html">result.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::dataflow::Result:</div>
 <div class="dyncontent">
@@ -112,12 +112,18 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1c89579d95b9645da1fac384dff2d886"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f16ef3bfef86ba4b24f965dd8effee9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_result.html#a6f16ef3bfef86ba4b24f965dd8effee9">get_group_id_of_gate</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate) const</td></tr>
 <tr class="separator:a6f16ef3bfef86ba4b24f965dd8effee9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f0effc4ebd45e0772518b67051d369c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; std::unordered_set&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_result.html#a1f0effc4ebd45e0772518b67051d369c">get_control_nets_of_group</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id, const <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>) const</td></tr>
-<tr class="separator:a1f0effc4ebd45e0772518b67051d369c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a689768f16bed8ec3aa688f902a33ed21"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; std::unordered_set&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_result.html#a689768f16bed8ec3aa688f902a33ed21">get_group_control_nets</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id, const <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>) const</td></tr>
+<tr class="separator:a689768f16bed8ec3aa688f902a33ed21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a96adfbbf2db4d4ff1676e634dccb80"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; std::unordered_set&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_result.html#a7a96adfbbf2db4d4ff1676e634dccb80">get_gate_control_nets</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate, const <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>) const</td></tr>
+<tr class="separator:a7a96adfbbf2db4d4ff1676e634dccb80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e4d8773dbb4f345b44c4983089542cd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_result.html#a8e4d8773dbb4f345b44c4983089542cd">get_group_successors</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id) const</td></tr>
 <tr class="separator:a8e4d8773dbb4f345b44c4983089542cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68a284076b673025d2397867d4738a37"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; std::unordered_set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_result.html#a68a284076b673025d2397867d4738a37">get_gate_successors</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate) const</td></tr>
+<tr class="separator:a68a284076b673025d2397867d4738a37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c9a121ecdf5ec9b5726af68bbff812e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_result.html#a1c9a121ecdf5ec9b5726af68bbff812e">get_group_predecessors</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id) const</td></tr>
 <tr class="separator:a1c9a121ecdf5ec9b5726af68bbff812e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99ba1c572d1ff38c08ce2aa75a04c871"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; std::unordered_set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_result.html#a99ba1c572d1ff38c08ce2aa75a04c871">get_gate_predecessors</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate) const</td></tr>
+<tr class="separator:a99ba1c572d1ff38c08ce2aa75a04c871"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab236d02389418d77f1f11d646404dc80"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_result.html#ab236d02389418d77f1f11d646404dc80">write_dot</a> (const std::filesystem::path &amp;out_path, const std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;group_ids={}) const</td></tr>
 <tr class="separator:ab236d02389418d77f1f11d646404dc80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a673304b1b81b995234c3321384df6e36"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_result.html#a673304b1b81b995234c3321384df6e36">write_txt</a> (const std::filesystem::path &amp;out_path, const std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;group_ids={}) const</td></tr>
@@ -126,11 +132,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5121ac9c18d84ad50095dac448e84131"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31e3d5b3024e9bb3edd1c17666bb6a06"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_result.html#a31e3d5b3024e9bb3edd1c17666bb6a06">get_groups_as_list</a> (const std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;group_ids={}) const</td></tr>
 <tr class="separator:a31e3d5b3024e9bb3edd1c17666bb6a06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03e7e57a2ef0bf8bc312c817d8057db0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_result.html#a03e7e57a2ef0bf8bc312c817d8057db0">merge_groups</a> (const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;group_ids)</td></tr>
+<tr class="separator:a03e7e57a2ef0bf8bc312c817d8057db0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f81cf8236ae5a637885ec44be0a0409"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_result.html#a2f81cf8236ae5a637885ec44be0a0409">split_group</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id, const std::vector&lt; std::unordered_set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&gt; &amp;new_groups)</td></tr>
+<tr class="separator:a2f81cf8236ae5a637885ec44be0a0409"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The result of a dataflow analysis run containing the identified groups of sequential gates and their interconnections. </p>
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2result_8h_source.html#l00043">43</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2result_8h_source.html">result.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2api_2result_8h_source.html#l00043">43</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2api_2result_8h_source.html">result.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a85d7a2ece2595f9fc5fd00a11ddf50c4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a85d7a2ece2595f9fc5fd00a11ddf50c4">&#9670;&nbsp;</a></span>Result()</h2>
@@ -160,7 +170,7 @@ Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00028">28</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3">hal::clock</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">hal::enable</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00052">hal::dataflow::Grouping::gates_of_group</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00106">hal::dataflow::Grouping::get_clock_signals_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00111">hal::dataflow::Grouping::get_control_signals_of_group()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00206">hal::dataflow::Grouping::get_predecessor_groups_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00116">hal::dataflow::Grouping::get_reset_signals_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00121">hal::dataflow::Grouping::get_set_signals_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00175">hal::dataflow::Grouping::get_successor_groups_of_group()</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba86266ee937d97f812a8e57d22b62ee29">hal::reset</a>, and <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">hal::set</a>.</p>
+<p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3">hal::clock</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">hal::enable</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00052">hal::dataflow::Grouping::gates_of_group</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00106">hal::dataflow::Grouping::get_clock_signals_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00111">hal::dataflow::Grouping::get_control_signals_of_group()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00353">hal::Netlist::get_net_by_id()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00206">hal::dataflow::Grouping::get_predecessor_groups_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00116">hal::dataflow::Grouping::get_reset_signals_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00121">hal::dataflow::Grouping::get_set_signals_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00175">hal::dataflow::Grouping::get_successor_groups_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00048">hal::dataflow::Grouping::netlist_abstr</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba86266ee937d97f812a8e57d22b62ee29">hal::reset</a>, and <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">hal::set</a>.</p>
 
 </div>
 </div>
@@ -189,23 +199,23 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and a map from group IDs to Modules on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00318">318</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00436">436</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
 </div>
 </div>
-<a id="a1f0effc4ebd45e0772518b67051d369c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f0effc4ebd45e0772518b67051d369c">&#9670;&nbsp;</a></span>get_control_nets_of_group()</h2>
+<a id="a7a96adfbbf2db4d4ff1676e634dccb80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a96adfbbf2db4d4ff1676e634dccb80">&#9670;&nbsp;</a></span>get_gate_control_nets()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; std::unordered_set&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; &gt; hal::dataflow::Result::get_control_nets_of_group </td>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; std::unordered_set&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; &gt; hal::dataflow::Result::get_gate_control_nets </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
-          <td class="paramname"><em>group_id</em>, </td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
+          <td class="paramname"><em>gate</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -220,19 +230,79 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the control nets of the group with the given group ID that are connected to a pin of the specified type.</p>
+<p>Get the control nets of the given gate that are connected to a pin of the specified type.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">group_id</td><td>- The group ID. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The gate. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td>- The pin type. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Ok() and a set of control nets of the group on success, an error otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Ok() and a set of control nets of the gate on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00107">107</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00189">189</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">type</a>.</p>
+
+</div>
+</div>
+<a id="a99ba1c572d1ff38c08ce2aa75a04c871"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99ba1c572d1ff38c08ce2aa75a04c871">&#9670;&nbsp;</a></span>get_gate_predecessors()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; std::unordered_set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt; hal::dataflow::Result::get_gate_predecessors </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
+          <td class="paramname"><em>gate</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the sequential predecessor gates of the given sequential gate.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The gate. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Ok() and the predecessors of the gate as a set of gates on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00253">253</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+
+</div>
+</div>
+<a id="a68a284076b673025d2397867d4738a37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68a284076b673025d2397867d4738a37">&#9670;&nbsp;</a></span>get_gate_successors()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; std::unordered_set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt; hal::dataflow::Result::get_gate_successors </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
+          <td class="paramname"><em>gate</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the sequential successor gates of the given sequential gate.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The gate. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Ok() and the successors of the gate as a set of gates on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00223">223</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
 </div>
 </div>
@@ -260,9 +330,50 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and the gates of the group as a set on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00078">78</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00141">141</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+
+</div>
+</div>
+<a id="a689768f16bed8ec3aa688f902a33ed21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a689768f16bed8ec3aa688f902a33ed21">&#9670;&nbsp;</a></span>get_group_control_nets()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; std::unordered_set&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; &gt; hal::dataflow::Result::get_group_control_nets </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>group_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>&#160;</td>
+          <td class="paramname"><em>type</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the control nets of the group with the given group ID that are connected to a pin of the specified type.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">group_id</td><td>- The group ID. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td>- The pin type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Ok() and a set of control nets of the group on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00170">170</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">type</a>.</p>
 
 </div>
 </div>
@@ -290,7 +401,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and the group ID on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00090">90</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00153">153</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
@@ -320,7 +431,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and the predecessors of the group as a set of group IDs on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00138">138</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00238">238</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
@@ -350,7 +461,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and the successors of the group as a set of group IDs on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00126">126</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00208">208</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
@@ -373,9 +484,9 @@ Public Member Functions</h2></td></tr>
 <p>Get the groups of sequential gates resulting from dataflow analysis.</p>
 <dl class="section return"><dt>Returns</dt><dd>A map from group ID to a set of gates belonging to the respective group. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00073">73</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00136">136</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00019">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -403,9 +514,9 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of groups with each group being a vector of gates. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00374">374</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00492">492</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00019">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -426,9 +537,80 @@ Public Member Functions</h2></td></tr>
 <p>Get the netlist on which dataflow analysis has been performed.</p>
 <dl class="section return"><dt>Returns</dt><dd>The netlist. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00068">68</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00131">131</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00019">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
+
+</div>
+</div>
+<a id="a03e7e57a2ef0bf8bc312c817d8057db0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03e7e57a2ef0bf8bc312c817d8057db0">&#9670;&nbsp;</a></span>merge_groups()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; hal::dataflow::Result::merge_groups </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>group_ids</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Merge multiple groups specified by ID. All specified groups are merged into the first group of the provided vector and are subsequently deleted.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">group_ids</td><td>- The group IDs of the groups to merge. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The ID of the group that all over groups have been merged into on success, an error otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00512">512</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+
+</div>
+</div>
+<a id="a2f81cf8236ae5a637885ec44be0a0409"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f81cf8236ae5a637885ec44be0a0409">&#9670;&nbsp;</a></span>split_group()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; hal::dataflow::Result::split_group </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>group_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; std::unordered_set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>new_groups</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Split a group into multiple smaller groups specified by sets of gates. All gates of the group to split must be contained in the sets exactly once and all gates in the sets must be contained in the group to split. The group that is being split is deleted in the process.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">group_id</td><td>- The group ID of the group to split. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">new_groups</td><td>- A vector of groups specified as unordered sets of gates. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The group IDs of the newly created groups in the order of the provided sets. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00585">585</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3">hal::clock</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">hal::enable</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba86266ee937d97f812a8e57d22b62ee29">hal::reset</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">hal::set</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">type</a>.</p>
 
 </div>
 </div>
@@ -467,7 +649,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00150">150</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00268">268</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
@@ -508,15 +690,15 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00222">222</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00340">340</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3">hal::clock</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">hal::data</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">hal::enable</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00055">id</a>, <a class="el" href="utils_8h_source.html#l00410">hal::utils::join()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">name</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba86266ee937d97f812a8e57d22b62ee29">hal::reset</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">hal::set</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">type</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/common/<a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2result_8h_source.html">result.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/dataflow_analysis/src/common/<a class="el" href="result_8cpp_source.html">result.cpp</a></li>
+<li>/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/api/<a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2api_2result_8h_source.html">result.h</a></li>
+<li>/home/runner/work/hal/hal/plugins/dataflow_analysis/src/api/<a class="el" href="result_8cpp_source.html">result.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -524,7 +706,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1dataflow.html">dataflow</a></li><li class="navelem"><a class="el" href="structhal_1_1dataflow_1_1_result.html">Result</a></li>
-    <li class="footer">Generated on Thu Apr 27 2023 14:12:53 for HAL by
+    <li class="footer">Generated on Thu Apr 27 2023 16:49:02 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

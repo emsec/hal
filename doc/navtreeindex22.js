@@ -1,5 +1,11 @@
 var NAVTREEINDEX22 =
 {
+"functions_~.html":[6,3,0,26],
+"gate_8h.html":[7,0,0,0,1,11],
+"gate_8h_source.html":[7,0,0,0,1,11],
+"gate__details__tab__widget_8cpp.html":[7,0,1,3,2,38,9],
+"gate__details__tab__widget_8cpp_source.html":[7,0,1,3,2,38,9],
+"gate__details__tab__widget_8h.html":[7,0,1,3,0,0,40,9],
 "gate__details__tab__widget_8h_source.html":[7,0,1,3,0,0,40,9],
 "gate__dialog_8cpp.html":[7,0,1,3,2,30,0],
 "gate__dialog_8cpp_source.html":[7,0,1,3,2,30,0],
@@ -136,8 +142,8 @@ var NAVTREEINDEX22 =
 "get__in__touch__widget_8cpp_source.html":[7,0,1,3,2,48,1],
 "get__in__touch__widget_8h.html":[7,0,1,3,0,0,51,1],
 "get__in__touch__widget_8h_source.html":[7,0,1,3,0,0,51,1],
-"globals.html":[7,1,0],
 "globals.html":[7,1,0,0],
+"globals.html":[7,1,0],
 "globals_a.html":[7,1,0,1],
 "globals_b.html":[7,1,0,2],
 "globals_c.html":[7,1,0,3],
@@ -243,11 +249,5 @@ var NAVTREEINDEX22 =
 "graphics__factory_8h_source.html":[7,0,1,3,0,0,20,10],
 "graphics__gate_8cpp.html":[7,0,1,3,2,19,1,1,0,0],
 "graphics__gate_8cpp_source.html":[7,0,1,3,2,19,1,1,0,0],
-"graphics__gate_8h.html":[7,0,1,3,0,0,20,1,1,0,0],
-"graphics__gate_8h_source.html":[7,0,1,3,0,0,20,1,1,0,0],
-"graphics__item_8cpp.html":[7,0,1,3,2,19,1,3],
-"graphics__item_8cpp_source.html":[7,0,1,3,2,19,1,3],
-"graphics__item_8h.html":[7,0,1,3,0,0,20,1,3],
-"graphics__item_8h_source.html":[7,0,1,3,0,0,20,1,3],
-"graphics__module_8cpp.html":[7,0,1,3,2,19,1,1,1,0]
+"graphics__gate_8h.html":[7,0,1,3,0,0,20,1,1,0,0]
 };

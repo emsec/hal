@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: /home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/dataflow.h File Reference</title>
+<title>HAL: /home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/api/dataflow.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -83,45 +83,36 @@ $(document).ready(function(){initNavTree('dataflow_8h.html',''); initResizable()
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">dataflow.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">dataflow_analysis/common/grouping.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2result_8h_source.html">dataflow_analysis/common/result.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="api_2configuration_8h_source.html">dataflow_analysis/api/configuration.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2api_2result_8h_source.html">dataflow_analysis/api/result.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">dataflow_analysis/common/grouping.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="include_2hal__core_2utilities_2result_8h_source.html">hal_core/utilities/result.h</a>&quot;</code><br />
 <code>#include &lt;unordered_set&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for dataflow.h:</div>
 <div class="dyncontent">
-<div class="center"><img src="dataflow_8h__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2include_2dataflow__analysis_2dataflow_8h" alt=""/></div>
-<map name="_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2include_2dataflow__analysis_2dataflow_8h" id="_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2include_2dataflow__analysis_2dataflow_8h">
-<area shape="rect" title=" " alt="" coords="288,5,483,76"/>
-<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title=" " alt="" coords="376,213,576,255"/>
-<area shape="rect" title=" " alt="" coords="680,392,795,419"/>
-<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2result_8h.html" title=" " alt="" coords="176,124,376,165"/>
+<div class="center"><img src="dataflow_8h__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2include_2dataflow__analysis_2api_2dataflow_8h" alt=""/></div>
+<map name="_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2include_2dataflow__analysis_2api_2dataflow_8h" id="_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2include_2dataflow__analysis_2api_2dataflow_8h">
+<area shape="rect" title=" " alt="" coords="345,5,540,76"/>
+<area shape="rect" href="api_2configuration_8h.html" title=" " alt="" coords="160,213,323,255"/>
+<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2api_2result_8h.html" title=" " alt="" coords="361,124,524,165"/>
+<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title=" " alt="" coords="563,213,763,255"/>
+<area shape="rect" title=" " alt="" coords="673,303,788,329"/>
 <area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="5,213,136,255"/>
-<area shape="rect" href="netlist__abstraction_8h.html" title=" " alt="" coords="399,303,599,344"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="27,392,167,419"/>
-<area shape="rect" title=" " alt="" coords="355,392,397,419"/>
-<area shape="rect" title=" " alt="" coords="438,392,562,419"/>
-<area shape="rect" title=" " alt="" coords="589,392,651,419"/>
-<area shape="rect" title=" " alt="" coords="135,310,185,337"/>
-<area shape="rect" title=" " alt="" coords="209,310,324,337"/>
-<area shape="rect" href="pin__type_8h.html" title=" " alt="" coords="161,213,351,255"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="171,303,311,329"/>
+<area shape="rect" title=" " alt="" coords="495,303,558,329"/>
+<area shape="rect" href="pin__type_8h.html" title=" " alt="" coords="347,213,538,255"/>
 </map>
 </div>
 </div>
 <p><a href="dataflow_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">hal::dataflow::Configuration</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacehal"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal.html">hal</a></td></tr>
@@ -139,8 +130,8 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_b01ccb8cd28d03239d93b53568c12834.html">include</a></li><li class="navelem"><a class="el" href="dir_a4d2a34eb48283e8d6db65abafeda3a7.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dataflow_8h.html">dataflow.h</a></li>
-    <li class="footer">Generated on Thu Apr 27 2023 14:12:49 for HAL by
+    <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_b01ccb8cd28d03239d93b53568c12834.html">include</a></li><li class="navelem"><a class="el" href="dir_a4d2a34eb48283e8d6db65abafeda3a7.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_302078487076c66625632028faf7c059.html">api</a></li><li class="navelem"><a class="el" href="dataflow_8h.html">dataflow.h</a></li>
+    <li class="footer">Generated on Thu Apr 27 2023 16:48:56 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
