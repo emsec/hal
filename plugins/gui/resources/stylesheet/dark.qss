@@ -1202,6 +1202,12 @@ hal--MainWindow
     qproperty-saveAsIconStyle: "all->#3192C5";
     qproperty-saveAsIconPath: ":/icons/save-as";
 
+    qproperty-closeIconStyle: "all->#AFB1B3";
+    qproperty-closeIconPath: ":/icons/cross";
+
+    qproperty-quitIconStyle: "all->#AFB1B3";
+    qproperty-quitIconPath: ":/icons/switch";
+
     qproperty-settingsIconStyle: "all->#AFB1B3";
     qproperty-settingsIconPath: ":/icons/settings";
 

@@ -29,6 +29,7 @@
 #include "gui/graph_widget/shaders/graph_shader.h"
 #include "gui/gui_globals.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
+#include "gui/graph_widget/graphics_qss_adapter.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
@@ -371,6 +372,7 @@ namespace hal
         qreal mDebugDefaultWidth;
         qreal mDebugDefaultHeight;
         bool mDebugGridEnable;
+        GraphicsQssAdapter mQssAdapter;
         enum RubberBandSelectionStatus
         {
             NotPressed,

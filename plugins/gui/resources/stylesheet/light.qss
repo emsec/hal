@@ -1207,6 +1207,12 @@ hal--MainWindow
     qproperty-saveAsIconStyle: "all->#FFFFFF";
     qproperty-saveAsIconPath: ":/icons/save-as";
 
+    qproperty-CloseIconStyle: "all->#FFFFFF";
+    qproperty-CloseIconPath: ":/icons/cross";
+
+    qproperty-QuitIconStyle: "all->#FFFFFF";
+    qproperty-QuitIconPath: ":/icons/switch";
+
     qproperty-settingsIconStyle: "all->#FFFFFF";
     qproperty-settingsIconPath: ":/icons/settings";
 
@@ -1217,6 +1223,11 @@ hal--MainWindow
     qproperty-undoIconPath: ":/icons/undo2";
 
     qproperty-disabledIconStyle: "all->#515050";
+}
+
+hal--MainWindow QMenu
+{
+    background-color: white;
 }
 
 hal--PythonQssAdapter

@@ -379,6 +379,7 @@ namespace hal
         mModuleItems.clear();
         mGateItems.clear();
         mNetItems.clear();
+        mQssAdapter.repolish();
     }
 
     void GraphicsScene::updateVisuals(const GraphShader::Shading &s)
