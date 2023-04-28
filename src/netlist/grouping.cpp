@@ -31,10 +31,10 @@ namespace hal
             log_error("grouping", "grouping name cannot be empty.");
             return;
         }
+
         if (name != m_name)
         {
             m_name = name;
-
             m_event_handler->notify(GroupingEvent::event::name_changed, this);
         }
     }
