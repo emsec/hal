@@ -45,20 +45,22 @@ namespace hal
     {
 
         /**
-         * Serializes a netlist into a .hal file.
+         * Serializes a netlist into a `.hal` file.
          *
          * @param[in] netlist - The netlist to serialize.
-         * @param[in] hal_file - The destination .hal file.
-         * @returns True on success, false otherwise.
+         * @param[in] hal_file - The path to the `.hal` file.
+         * @returns `true` on success, `false` otherwise.
          */
         NETLIST_API bool serialize_to_file(const Netlist* netlist, const std::filesystem::path& hal_file);
 
         /**
-         * Deserializes a netlist from a .hal file.
+         * Deserializes a netlist from a `.hal` file using the provided gate library.
+         * If no gate library is provided, a gate library path must be specified within the `.hal` file.
          *
-         * @param[in] hal_file - The source .hal file.
-         * @returns The deserialized netlist.
+         * @param[in] hal_file - The path to the `.hal` file.
+         * @param[in] gate_lib - The gate library. Defaults to a `nullptr`.
+         * @returns The deserialized netlist on success, a `nullptr` otherwise.
          */
-        NETLIST_API std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file, GateLibrary* gatelib = nullptr);
+        NETLIST_API std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file, GateLibrary* gate_lib = nullptr);
     }    // namespace netlist_serializer
 }    // namespace hal
