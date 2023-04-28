@@ -317,8 +317,11 @@ namespace hal
         SelectionTreeProxyModel* proxy = static_cast<SelectionTreeProxyModel*>(mSelectionTreeView->model());
         if (proxy->isGraphicsBusy()) return;
 
-        mSearchbar->clear();
-        updateSearchIcon();
+        if (!mSearchbar->getCurrentText().isEmpty())
+        {
+            mSearchbar->clear();
+            updateSearchIcon();
+        }
 
         mNumberSelectedItems = gSelectionRelay->numberSelectedItems();
         QVector<const SelectionTreeItem*> defaultHighlight;
@@ -373,6 +376,7 @@ namespace hal
             SelectionTreeItemNet sti(gSelectionRelay->selectedNetsList().at(0));
             singleSelectionInternal(&sti);
         }
+
         Q_EMIT triggerHighlight(defaultHighlight);
     }
 

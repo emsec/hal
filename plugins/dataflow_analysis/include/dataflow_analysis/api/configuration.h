@@ -25,11 +25,9 @@
 
 #pragma once
 
-#include "dataflow_analysis/common/grouping.h"
-#include "dataflow_analysis/common/result.h"
-#include "hal_core/utilities/result.h"
+#include "hal_core/defines.h"
 
-#include <unordered_set>
+#include <vector>
 
 namespace hal
 {
@@ -120,14 +118,5 @@ namespace hal
              */
             Configuration& with_register_stage_identification(bool enable = true);
         };
-
-        /**
-         * Analyze the datapath to identify word-level registers in the given netlist.
-         * 
-         * @param[in] nl - The netlist.
-         * @param[in] config - The dataflow analysis configuration.
-         * @returns Ok() and the dataflow analysis result on success, an error otherwise.
-         */
-        hal::Result<dataflow::Result> analyze(Netlist* nl, const Configuration& config = Configuration());
     }    // namespace dataflow
 }    // namespace hal

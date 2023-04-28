@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "dataflow_analysis/dataflow.h"
+#include "dataflow_analysis/api/dataflow.h"
 #include "hal_core/plugin_system/cli_extension_interface.h"
 #include "hal_core/plugin_system/gui_extension_interface.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
