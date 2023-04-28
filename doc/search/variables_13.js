@@ -971,7 +971,7 @@ var searchData=
   ['strictmode_36443',['StrictMode',['https://doc.qt.io/qt-5/qurl.html#ParsingMode-enum',1,'QUrl']]],
   ['strictnovember_36444',['StrictNovember',['https://doc.qt.io/qt-5/qgradient.html#Preset-enum',1,'QGradient']]],
   ['strikeout_36445',['StrikeOut',['https://doc.qt.io/qt-5/qglyphrun.html#GlyphRunFlag-enum',1,'QGlyphRun::StrikeOut()'],['https://doc.qt.io/qt-5/qtextitem.html#RenderFlag-enum',1,'QTextItem::StrikeOut()']]],
-  ['string_36446',['String',['https://doc.qt.io/qt-5/qcborstreamreader.html#Type-enum',1,'QCborStreamReader::String()'],['https://doc.qt.io/qt-5/qcborvalue.html#Type-enum',1,'QCborValue::String()'],['https://doc.qt.io/qt-5/qjsonvalue.html#Type-enum',1,'QJsonValue::String()'],['https://doc.qt.io/qt-5/qvariant-obsolete.html#Type-enum',1,'QVariant::String()'],['../structhal_1_1_token.html#a851dd465345e9aab0ed6b974170b7d0c',1,'hal::Token::string()']]],
+  ['string_36446',['string',['../structhal_1_1_token.html#a851dd465345e9aab0ed6b974170b7d0c',1,'hal::Token::string()'],['https://doc.qt.io/qt-5/qcborstreamreader.html#Type-enum',1,'QCborStreamReader::String()'],['https://doc.qt.io/qt-5/qcborvalue.html#Type-enum',1,'QCborValue::String()'],['https://doc.qt.io/qt-5/qjsonvalue.html#Type-enum',1,'QJsonValue::String()'],['https://doc.qt.io/qt-5/qvariant-obsolete.html#Type-enum',1,'QVariant::String()']]],
   ['stringlist_36447',['StringList',['https://doc.qt.io/qt-5/qvariant-obsolete.html#Type-enum',1,'QVariant']]],
   ['striptrailingslash_36448',['StripTrailingSlash',['https://doc.qt.io/qt-5/qurl.html#UrlFormattingOption-enum',1,'QUrl']]],
   ['strongbliss_36449',['StrongBliss',['https://doc.qt.io/qt-5/qgradient.html#Preset-enum',1,'QGradient']]],

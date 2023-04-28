@@ -77,7 +77,7 @@ var searchData=
   ['pane_9714',['Pane',['https://doc.qt.io/qt-5/qaccessible.html#Role-enum',1,'QAccessible']]],
   ['panel_9715',['panel',['https://doc.qt.io/qt-5/qgraphicsitem.html#panel',1,'QGraphicsItem::panel()'],['https://doc.qt.io/qt-5/qframe.html#Shape-enum',1,'QFrame::Panel()']]],
   ['panelmodal_9716',['PanelModal',['https://doc.qt.io/qt-5/qgraphicsitem.html#PanelModality-enum',1,'QGraphicsItem']]],
-  ['panelmodality_9717',['PanelModality',['https://doc.qt.io/qt-5/qgraphicsitem.html#PanelModality-enum',1,'QGraphicsItem::PanelModality()'],['https://doc.qt.io/qt-5/qgraphicsitem.html#panelModality',1,'QGraphicsItem::panelModality() const const']]],
+  ['panelmodality_9717',['panelModality',['https://doc.qt.io/qt-5/qgraphicsitem.html#panelModality',1,'QGraphicsItem::panelModality() const const'],['https://doc.qt.io/qt-5/qgraphicsitem.html#PanelModality-enum',1,'QGraphicsItem::PanelModality()']]],
   ['pangesture_9718',['PanGesture',['https://doc.qt.io/qt-5/qt.html#GestureType-enum',1,'Qt']]],
   ['panmodifier_9719',['panModifier',['../classhal_1_1_graph_graphics_view.html#a2bc64975cbb5fd2c68d83be32d2f04e9',1,'hal::GraphGraphicsView']]],
   ['pannativegesture_9720',['PanNativeGesture',['https://doc.qt.io/qt-5/qt.html#NativeGestureType-enum',1,'Qt']]],

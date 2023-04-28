@@ -5,6 +5,7 @@ var structhal_1_1dataflow_1_1_result =
     [ "get_gate_control_nets", "structhal_1_1dataflow_1_1_result.html#a7a96adfbbf2db4d4ff1676e634dccb80", null ],
     [ "get_gate_predecessors", "structhal_1_1dataflow_1_1_result.html#a99ba1c572d1ff38c08ce2aa75a04c871", null ],
     [ "get_gate_successors", "structhal_1_1dataflow_1_1_result.html#a68a284076b673025d2397867d4738a37", null ],
+    [ "get_gates", "structhal_1_1dataflow_1_1_result.html#aa3fc45355b037067af0f0b2a7349a72f", null ],
     [ "get_gates_of_group", "structhal_1_1dataflow_1_1_result.html#a1c89579d95b9645da1fac384dff2d886", null ],
     [ "get_group_control_nets", "structhal_1_1dataflow_1_1_result.html#a689768f16bed8ec3aa688f902a33ed21", null ],
     [ "get_group_id_of_gate", "structhal_1_1dataflow_1_1_result.html#a6f16ef3bfef86ba4b24f965dd8effee9", null ],

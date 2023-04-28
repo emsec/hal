@@ -96,7 +96,7 @@ Collaboration diagram for hal::dataflow::Result:</div>
 <div class="dyncontent">
 <div class="center"><img src="structhal_1_1dataflow_1_1_result__coll__graph.png" border="0" usemap="#hal_1_1dataflow_1_1_result_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1dataflow_1_1_result_coll__map" id="hal_1_1dataflow_1_1_result_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,192,156"/>
+<area shape="rect" title=" " alt="" coords="5,5,180,156"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -108,6 +108,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8de92d6b9e454ff1d0ce07c5f4b28615"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ef290f6bea4c746c28e155c07893483"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_result.html#a6ef290f6bea4c746c28e155c07893483">get_groups</a> () const</td></tr>
 <tr class="separator:a6ef290f6bea4c746c28e155c07893483"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3fc45355b037067af0f0b2a7349a72f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_result.html#aa3fc45355b037067af0f0b2a7349a72f">get_gates</a> () const</td></tr>
+<tr class="separator:aa3fc45355b037067af0f0b2a7349a72f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c89579d95b9645da1fac384dff2d886"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; std::unordered_set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_result.html#a1c89579d95b9645da1fac384dff2d886">get_gates_of_group</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id) const</td></tr>
 <tr class="separator:a1c89579d95b9645da1fac384dff2d886"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f16ef3bfef86ba4b24f965dd8effee9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_result.html#a6f16ef3bfef86ba4b24f965dd8effee9">get_group_id_of_gate</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *gate) const</td></tr>
@@ -199,7 +201,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and a map from group IDs to Modules on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00436">436</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00448">448</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
@@ -240,7 +242,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and a set of control nets of the gate on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00189">189</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00201">201</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">type</a>.</p>
 
@@ -270,7 +272,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and the predecessors of the gate as a set of gates on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00253">253</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00265">265</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
@@ -300,9 +302,32 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and the successors of the gate as a set of gates on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00223">223</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00235">235</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+
+</div>
+</div>
+<a id="aa3fc45355b037067af0f0b2a7349a72f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3fc45355b037067af0f0b2a7349a72f">&#9670;&nbsp;</a></span>get_gates()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; hal::dataflow::Result::get_gates </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get all gates contained in any of the groups groups.</p>
+<dl class="section return"><dt>Returns</dt><dd>A vector of gates. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00141">141</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -330,7 +355,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and the gates of the group as a set on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00141">141</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00153">153</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
@@ -371,7 +396,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and a set of control nets of the group on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00170">170</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00182">182</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">type</a>.</p>
 
@@ -401,7 +426,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and the group ID on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00153">153</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00165">165</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
@@ -431,7 +456,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and the predecessors of the group as a set of group IDs on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00238">238</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00250">250</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
@@ -461,7 +486,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() and the successors of the group as a set of group IDs on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00208">208</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00220">220</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
@@ -514,7 +539,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of groups with each group being a vector of gates. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00492">492</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00504">504</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -567,7 +592,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The ID of the group that all over groups have been merged into on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00512">512</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00524">524</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
@@ -608,7 +633,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The group IDs of the newly created groups in the order of the provided sets. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00585">585</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00597">597</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3">hal::clock</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">hal::enable</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba86266ee937d97f812a8e57d22b62ee29">hal::reset</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">hal::set</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">type</a>.</p>
 
@@ -649,7 +674,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00268">268</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00280">280</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
@@ -690,7 +715,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok() on success, an error otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00340">340</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="result_8cpp_source.html#l00352">352</a> of file <a class="el" href="result_8cpp_source.html">result.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3">hal::clock</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">hal::data</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">hal::enable</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00055">id</a>, <a class="el" href="utils_8h_source.html#l00410">hal::utils::join()</a>, <a class="el" href="log_8h_source.html#l00070">log_info</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">name</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba86266ee937d97f812a8e57d22b62ee29">hal::reset</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">hal::set</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">type</a>.</p>
 
@@ -706,7 +731,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1dataflow.html">dataflow</a></li><li class="navelem"><a class="el" href="structhal_1_1dataflow_1_1_result.html">Result</a></li>
-    <li class="footer">Generated on Thu Apr 27 2023 21:47:24 for HAL by
+    <li class="footer">Generated on Fri Apr 28 2023 08:30:18 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

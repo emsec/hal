@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Dataflow Analysis (DANA) &mdash; hal_py v4.1.0-40-gfc93da7fd documentation</title>
+  <title>Dataflow Analysis (DANA) &mdash; hal_py v4.1.0-42-gf4d2c5c1f documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-40-gfc93da7fd
+                v4.1.0-42-gf4d2c5c1f
               </div>
             
           
@@ -546,6 +546,22 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="dataflow.Dataflow.Result.get_gates">
+<code class="descname">get_gates</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Gate]<a class="headerlink" href="#dataflow.Dataflow.Result.get_gates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all gates contained in any of the groups groups.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of gates.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="dataflow.Dataflow.Result.get_gates_of_group">
 <code class="descname">get_gates_of_group</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result</em>, <em>group_id: int</em><span class="sig-paren">)</span> &#x2192; Optional[Set[hal_py.Gate]]<a class="headerlink" href="#dataflow.Dataflow.Result.get_gates_of_group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the gates of the specified group of sequential gates.</p>
@@ -788,7 +804,7 @@ The group that is being split is deleted in the process.</p>
 
 <span class="target" id="module-dataflow.Dataflow"></span><dl class="function">
 <dt id="dataflow.Dataflow.analyze">
-<code class="descclassname">dataflow.Dataflow.</code><code class="descname">analyze</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist</em>, <em>config: dataflow.Dataflow.Configuration = &lt;dataflow.Dataflow.Configuration object at 0x7f39c97f9b70&gt;</em><span class="sig-paren">)</span> &#x2192; Optional[hal::dataflow::Result]<a class="headerlink" href="#dataflow.Dataflow.analyze" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">dataflow.Dataflow.</code><code class="descname">analyze</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist</em>, <em>config: dataflow.Dataflow.Configuration = &lt;dataflow.Dataflow.Configuration object at 0x7facbc423e30&gt;</em><span class="sig-paren">)</span> &#x2192; Optional[hal::dataflow::Result]<a class="headerlink" href="#dataflow.Dataflow.analyze" title="Permalink to this definition">¶</a></dt>
 <dd><p>Analyze the datapath to identify word-level registers in the given netlist.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
