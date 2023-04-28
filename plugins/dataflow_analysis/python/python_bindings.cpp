@@ -198,6 +198,13 @@ namespace hal
             :rtype: dict[int,set[hal_py.Gate]]
         )");
 
+        py_dataflow_result.def("get_gates", &dataflow::Result::get_gates, R"(
+            Get all gates contained in any of the groups groups.
+        
+            :returns: A list of gates.
+            :rtype: list[hal_py.Gate]
+        )");
+
         py_dataflow_result.def(
             "get_gates_of_group",
             [](const dataflow::Result& self, const u32 group_id) -> std::optional<std::unordered_set<Gate*>> {

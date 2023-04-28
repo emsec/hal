@@ -138,6 +138,18 @@ namespace hal
             return this->m_gates_of_group;
         }
 
+        std::vector<Gate*> dataflow::Result::get_gates() const
+        {
+            std::vector<Gate*> gates;
+
+            for (auto& group_gates : m_gates_of_group)
+            {
+                std::transform(std::get<1>(group_gates).begin(), std::get<1>(group_gates).end(), std::back_inserter(gates), [](auto* gate) { return gate; });
+            }
+
+            return gates;
+        }
+
         hal::Result<std::unordered_set<Gate*>> dataflow::Result::get_gates_of_group(const u32 group_id) const
         {
             if (const auto it = this->m_gates_of_group.find(group_id); it != this->m_gates_of_group.end())

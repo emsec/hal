@@ -59,6 +59,13 @@ namespace hal
             const std::unordered_map<u32, std::unordered_set<Gate*>>& get_groups() const;
 
             /**
+             * Get all gates contained in any of the groups groups.
+             * 
+             * @returns A vector of gates.
+             */
+            std::vector<Gate*> get_gates() const;
+
+            /**
              * Get the gates of the specified group of sequential gates.
              * 
              * @param[in] group_id - The ID of the group.
