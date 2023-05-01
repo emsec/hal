@@ -111,6 +111,7 @@ namespace hal {
         Q_OBJECT
 
     private Q_SLOTS:
+        void updateComboBoxes(const QString &selectedText);
         void handleCellChanged(int irow, int icolumn);
 
     public:

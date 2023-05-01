@@ -342,7 +342,6 @@ namespace hal {
 
         mTableWidget = new QTableWidget(this);
 
-
         QMap<QString,QString> engProp = settings->engineProperties();
         mTableWidget->setColumnCount(2);
         mTableWidget->setColumnWidth(0,250);
@@ -355,6 +354,7 @@ namespace hal {
             QComboBox *comboBox = new QComboBox(this);
             comboBox->addItems(QStringList() << "" << "provided_models" << "num_of_threads" << "compiler" << "ssh_server");
             mTableWidget->setCellWidget(irow, 0, comboBox);
+            connect(comboBox, &QComboBox::currentTextChanged, this, &PageEngineProperties::updateComboBoxes);
         }
 
         int irow = 0;
@@ -384,6 +384,45 @@ namespace hal {
         /// verilator will need verilog netlist writer plugin, go and get it unless already loaded
         if (gPluginRelay->mGuiPluginTable)
             gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacNetlistWriter,".v");
+    }
+
+    void PageEngineProperties::updateComboBoxes(const QString &selectedText)
+    {
+        if (selectedText == "")
+            return;
+        QStringList selectedItems;
+        for (int irow = 0; irow < mTableWidget->rowCount(); ++irow)
+        {
+            QComboBox *comboBox = qobject_cast<QComboBox *>(mTableWidget->cellWidget(irow, 0));
+            if (comboBox)
+            {
+                selectedItems << comboBox->currentText();
+            }
+        }
+
+        for (int irow = 0; irow < mTableWidget->rowCount(); ++irow)
+        {
+            QComboBox *comboBox = qobject_cast<QComboBox *>(mTableWidget->cellWidget(irow, 0));
+            if (comboBox)
+            {
+                comboBox->blockSignals(true);
+
+                QString currentText = comboBox->currentText();
+                comboBox->clear();
+                comboBox->addItem("");
+                QStringList items({"provided_models", "num_of_threads", "compiler", "ssh_server"});
+                for (const QString &item : items)
+                {
+                    if (!selectedItems.contains(item) || item == currentText)
+                    {
+                        comboBox->addItem(item);
+                    }
+                }
+                comboBox->setCurrentText(currentText);
+
+                comboBox->blockSignals(false);
+            }
+        }
     }
 
     void PageEngineProperties::handleCellChanged(int irow, int icolumn)
