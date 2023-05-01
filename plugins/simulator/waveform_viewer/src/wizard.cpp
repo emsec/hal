@@ -355,6 +355,7 @@ namespace hal {
         {
             QComboBox *comboBox = new QComboBox(this);
             comboBox->addItems(mAllItems);
+            comboBox->setEditable(true);
             mTableWidget->setCellWidget(irow, 0, comboBox);
             connect(comboBox, &QComboBox::currentTextChanged, this, &PageEngineProperties::updateComboBoxes);
         }
@@ -369,7 +370,12 @@ namespace hal {
                 if (index != -1)
                 {
                      comboBox->setCurrentIndex(index);
-                 }
+                }
+                else
+                {
+                    comboBox->addItem(it.key());
+                    comboBox->setCurrentText(it.key());
+                }
              }
              mTableWidget->setItem(irow, 1, new QTableWidgetItem(it.value()));
              ++irow;
