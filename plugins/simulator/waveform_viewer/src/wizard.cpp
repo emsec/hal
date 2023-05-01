@@ -349,10 +349,12 @@ namespace hal {
         mTableWidget->setRowCount(engProp.size()+3);
         mTableWidget->setHorizontalHeaderLabels(QStringList() << "Property" << "Value");
 
+        mAllItems << "" << "provided_models" << "num_of_threads" << "compiler" << "ssh_server";
+
         for (int irow = 0; irow < mTableWidget->rowCount(); ++irow)
         {
             QComboBox *comboBox = new QComboBox(this);
-            comboBox->addItems(QStringList() << "" << "provided_models" << "num_of_threads" << "compiler" << "ssh_server");
+            comboBox->addItems(mAllItems);
             mTableWidget->setCellWidget(irow, 0, comboBox);
             connect(comboBox, &QComboBox::currentTextChanged, this, &PageEngineProperties::updateComboBoxes);
         }
@@ -405,15 +407,20 @@ namespace hal {
             QComboBox *comboBox = qobject_cast<QComboBox *>(mTableWidget->cellWidget(irow, 0));
             if (comboBox)
             {
+
                 comboBox->blockSignals(true);
+
+
+                for(int i = 0; i < comboBox->count(); i++) {
+                    std::cout << comboBox->itemText(i).toStdString() << std::endl;
+                }
 
                 QString currentText = comboBox->currentText();
                 comboBox->clear();
-                comboBox->addItem("");
-                QStringList items({"provided_models", "num_of_threads", "compiler", "ssh_server"});
-                for (const QString &item : items)
+
+                for (const QString &item : mAllItems)
                 {
-                    if (!selectedItems.contains(item) || item == currentText)
+                    if (!selectedItems.contains(item) || item == currentText || item == "")
                     {
                         comboBox->addItem(item);
                     }

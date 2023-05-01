@@ -123,6 +123,7 @@ namespace hal {
 
         NetlistSimulatorController *mController;
         SimulationSettings *mSettings;
+        QStringList mAllItems;
     };
 
     class PageInputData : public QWizardPage {
