@@ -1286,13 +1286,32 @@ namespace hal
 
             instantiation_count[entity->m_name]++;
 
+            // collect and count all net names in the netlist
+            for (const auto& s : entity->m_signals)
+            {
+                std::vector<ci_string> expanded_names;
+                expand_ranges_recursively(expanded_names, s->m_name, s->m_ranges, 0);
+                for (const auto& net_name : expanded_names)
+                {
+                    m_signal_name_occurrences[net_name]++;
+                }
+            }
+
             for (const auto& instance : entity->m_instances)
             {
+                m_instance_name_occurrences[instance->m_name]++;
+
+                // add type of instance to q if it is a module
                 if (const auto it = m_entities_by_name.find(instance->m_type); it != m_entities_by_name.end())
                 {
                     q.push(it->second);
                 }
             }
+        }
+
+        for (const auto& [n, c] : m_instance_name_occurrences)
+        {
+            std::cout << core_strings::to<std::string>(n) << " " << c << std::endl;
         }
 
         for (auto& [entity_name, vhdl_entity] : m_entities_by_name)
@@ -1419,7 +1438,7 @@ namespace hal
         {
             for (const auto& expanded_port_identifier : port->m_expanded_identifiers)
             {
-                const auto signal_name = get_unique_alias(m_signal_name_occurrences, expanded_port_identifier);
+                const auto signal_name = get_unique_alias(nullptr, expanded_port_identifier + "__GLOBAL_IO__", m_signal_name_occurrences);
 
                 Net* global_port_net = m_netlist->create_net(core_strings::to<std::string>(signal_name));
                 if (global_port_net == nullptr)
@@ -1430,7 +1449,7 @@ namespace hal
                 m_net_by_name[signal_name] = global_port_net;
 
                 // assign global port nets to ports of top module
-                top_assignments[signal_name] = signal_name;
+                top_assignments[expanded_port_identifier] = signal_name;
 
                 if (port->m_direction == PinDirection::input || port->m_direction == PinDirection::inout)
                 {
@@ -1455,11 +1474,19 @@ namespace hal
             return ERR_APPEND(res.get_error(), "could not construct netlist: unable to instantiate top module");
         }
 
+        for (const auto& n : m_netlist->get_nets())
+        {
+            std::cout << n->get_name() << " at " << n << std::endl;
+        }
+
         // merge nets without gates in between them
         std::unordered_map<ci_string, ci_string> merged_nets;
+        std::unordered_map<ci_string, std::vector<ci_string>> master_to_slaves;
 
         for (auto& [master, slave] : m_nets_to_merge)
         {
+            std::cout << "Starting merge for " << master.c_str() << " and " << slave.c_str() << std::endl;
+
             // check if master net has already been merged into other net
             while (true)
             {
@@ -1488,6 +1515,8 @@ namespace hal
 
             auto master_net = m_net_by_name.at(master);
             auto slave_net  = m_net_by_name.at(slave);
+
+            std::cout << "Merging " << master_net->get_name() << " at " << master_net << " and " << slave_net->get_name() << " at " << slave_net << std::endl;
 
             if (master_net == slave_net)
             {
@@ -1572,6 +1601,61 @@ namespace hal
             m_netlist->delete_net(slave_net);
             m_net_by_name.erase(slave);
             merged_nets[slave] = master;
+            master_to_slaves[master].push_back(slave);
+        }
+
+        // annotate all surviving master nets with the net names that where merged into them
+        for (auto& master_net : m_netlist->get_nets())
+        {
+            const auto master_name = master_net->get_name();
+
+            if (const auto m2s_it = master_to_slaves.find(core_strings::to<ci_string>(master_name)); m2s_it != master_to_slaves.end())
+            {
+                std::vector<std::vector<ci_string>> merged_slaves;
+                auto current_slaves = m2s_it->second;
+
+                while (!current_slaves.empty())
+                {
+                    std::vector<ci_string> next_slaves;
+                    for (const auto& s : current_slaves)
+                    {
+                        if (const auto m2s_it = master_to_slaves.find(s); m2s_it != master_to_slaves.end())
+                        {
+                            next_slaves.insert(next_slaves.end(), m2s_it->second.begin(), m2s_it->second.end());
+                        }
+                    }
+
+                    merged_slaves.push_back(current_slaves);
+                    current_slaves = next_slaves;
+                    next_slaves.clear();
+                }
+
+                // annotate all merged slave wire names as a JSON formatted list of list of strings
+                // each net can span a tree of "consumed" slave wire names where the nth list represents all wire names that where merged at depth n
+                ci_string merged_str = "";
+                bool has_merged_nets   = false;
+                for (const auto& vec : merged_slaves)
+                {
+                    if (!vec.empty())
+                    {
+                        has_merged_nets = true;
+                    }
+                    // const auto s = utils::join(", ", vec, [](const auto e) { return '"' + e + '"'; });
+                    ci_string s = vec.empty() ? "" : vec.front();
+                    for (u32 idx = 1; idx < vec.size(); idx++)
+                    {
+                        s += ci_string(", ") + vec.at(idx);
+                    }
+                    
+                    merged_str += "[" + s + "], ";
+                }
+                merged_str = merged_str.substr(0, merged_str.size() - 2);
+
+                if (has_merged_nets)
+                {
+                    master_net->set_data("parser_annotation", "merged_nets", "string", "[" + core_strings::to<std::string>(merged_str) + "]");
+                }
+            }
         }
 
         // update module nets, internal nets, input nets, and output nets
@@ -1585,6 +1669,8 @@ namespace hal
         {
             for (const auto& [port_name, port_net] : ports)
             {
+                std::cout << "(Not) Adding " << port_net->get_name() << " at " << port_net << " to " << port_name << std::endl;
+
                 // check if net is actually a port net
                 if (!module->is_input_net(port_net) && !module->is_output_net(port_net))
                 {
@@ -1638,7 +1724,7 @@ namespace hal
 
         // TODO check parent module assignments for port aliases
 
-        instance_alias[instance_identifier] = get_unique_alias(m_instance_name_occurrences, instance_identifier);
+        instance_alias[instance_identifier] = get_unique_alias(parent, instance_identifier, m_instance_name_occurrences);
 
         // create netlist module
         Module* module;
@@ -1694,7 +1780,7 @@ namespace hal
         {
             for (const auto& expanded_name : signal->m_expanded_names)
             {
-                signal_alias[expanded_name] = get_unique_alias(m_signal_name_occurrences, expanded_name);
+                signal_alias[expanded_name] = get_unique_alias(parent, expanded_name, m_signal_name_occurrences);
 
                 // create new net for the signal
                 Net* signal_net = m_netlist->create_net(core_strings::to<std::string>(signal_alias.at(expanded_name)));
@@ -1711,7 +1797,7 @@ namespace hal
                 {
                     if (!signal_net->set_data("attribute", attribute.m_name, attribute.m_type, attribute.m_value))
                     {
-                        log_warning("verilog_parser",
+                        log_warning("vhdl_parser",
                                     "could not set attribute ({} = {}) for net '{}' of instance '{}' of type '{}'.",
                                     attribute.m_name,
                                     attribute.m_value,
@@ -1768,7 +1854,8 @@ namespace hal
         {
             if (const auto alias_it = signal_alias.find(port_expression); alias_it != signal_alias.end())
             {
-                m_nets_to_merge.push_back(std::make_pair(net_name, alias_it->second));
+                const bool swap = net_name.find("__GLOBAL_IO__") == std::string::npos;
+                m_nets_to_merge.push_back(swap ? std::make_pair(net_name, alias_it->second) : std::make_pair(alias_it->second, net_name));
             }
             else
             {
@@ -1827,7 +1914,7 @@ namespace hal
             else if (const auto gate_type_it = m_gate_types.find(instance->m_type); gate_type_it != m_gate_types.end())
             {
                 // create the new gate
-                instance_alias[instance->m_name] = get_unique_alias(m_instance_name_occurrences, instance->m_name);
+                instance_alias[instance->m_name] = get_unique_alias(parent, instance->m_name, m_instance_name_occurrences);
 
                 Gate* new_gate = m_netlist->create_gate(gate_type_it->second, core_strings::to<std::string>(instance_alias.at(instance->m_name)));
                 if (new_gate == nullptr)
@@ -2027,24 +2114,21 @@ namespace hal
             {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
     }    // namespace
 
-    VHDLParser::ci_string VHDLParser::get_unique_alias(std::unordered_map<ci_string, u32>& name_occurrences, const ci_string& name) const
+    // generate a unique name for a gate/module instance
+    VHDLParser::ci_string VHDLParser::get_unique_alias(Module* module_container, const VHDLParser::ci_string& name, const std::unordered_map<VHDLParser::ci_string, u32>& name_occurences) const
     {
-        ci_string res_name;
+        VHDLParser::ci_string unique_alias = name;
 
-        if (name_occurrences[name] == 0)
+        if (module_container != nullptr)
         {
-            // if the name only appears once, we don't have to suffix it
-            res_name = name;
-        }
-        else
-        {
-            // otherwise, add a unique string to the name
-            res_name = name + "__[" + core_strings::to<ci_string>(std::to_string(name_occurrences[name])) + "]__";
+            // if there is no other instance with that name, we omit the name prefix
+            if (const auto instance_name_it = name_occurences.find(name); instance_name_it != name_occurences.end() && instance_name_it->second > 1)
+            {
+                unique_alias = VHDLParser::ci_string(module_container->get_name().c_str()) + VHDLParser::ci_string("/") + unique_alias;
+            }
         }
 
-        name_occurrences[name]++;
-
-        return res_name;
+        return unique_alias;
     }
 
     std::vector<u32> VHDLParser::parse_range(TokenStream<ci_string>& range_stream) const

@@ -1104,7 +1104,7 @@ namespace hal
             {
                 m_instance_name_occurences[instance->m_name]++;
 
-                // add type of instance to q if it is a module 
+                // add type of instance to q if it is a module
                 if (const auto it = m_modules_by_name.find(instance->m_type); it != m_modules_by_name.end())
                 {
                     q.push(it->second);
@@ -1206,7 +1206,7 @@ namespace hal
         {
             for (const auto& expanded_port_identifier : port->m_expanded_identifiers)
             {
-                const auto signal_name = get_unique_alias(nullptr, expanded_port_identifier + "__GLOBAL_IO__");
+                const auto signal_name = get_unique_alias(nullptr, expanded_port_identifier + "__GLOBAL_IO__", m_net_name_occurences);
 
                 Net* global_port_net = m_netlist->create_net(signal_name);
                 if (global_port_net == nullptr)
@@ -1392,7 +1392,7 @@ namespace hal
                 // annotate all merged slave wire names as a JSON formatted list of list of strings
                 // each net can span a tree of "consumed" slave wire names where the nth list represents all wire names that where merged at depth n
                 std::string merged_str = "";
-                bool has_merged_nets  = false;
+                bool has_merged_nets   = false;
                 for (const auto& vec : merged_slaves)
                 {
                     if (!vec.empty())
@@ -1505,7 +1505,7 @@ namespace hal
 
         // TODO check parent module assignments for port aliases
 
-        instance_alias[instance_identifier] = get_unique_alias(parent, instance_identifier);
+        instance_alias[instance_identifier] = get_unique_alias(parent, instance_identifier, m_instance_name_occurences);
 
         // create netlist module
         Module* module;
@@ -1560,7 +1560,7 @@ namespace hal
         {
             for (const auto& expanded_name : signal->m_expanded_names)
             {
-                signal_alias[expanded_name] = get_unique_net_alias(module, expanded_name);
+                signal_alias[expanded_name] = get_unique_alias(module, expanded_name, m_net_name_occurences);
 
                 // create new net for the signal
                 Net* signal_net = m_netlist->create_net(signal_alias.at(expanded_name));
@@ -1699,7 +1699,7 @@ namespace hal
             else if (const auto gate_type_it = m_gate_types.find(instance->m_type); gate_type_it != m_gate_types.end())
             {
                 // create the new gate
-                instance_alias[instance->m_name] = get_unique_alias(module, instance->m_name);
+                instance_alias[instance->m_name] = get_unique_alias(module, instance->m_name, m_instance_name_occurences);
 
                 Gate* new_gate = m_netlist->create_gate(gate_type_it->second, instance_alias.at(instance->m_name));
                 if (new_gate == nullptr)
@@ -1893,32 +1893,15 @@ namespace hal
 
     const std::string instance_name_seperator = "/";
 
-    // generate a unique name for a gate/module instance 
-    std::string VerilogParser::get_unique_alias(Module* module_container, const std::string& name) const
-    {        
+    // generate a unique name for a gate/module instance
+    std::string VerilogParser::get_unique_alias(Module* module_container, const std::string& name, const std::unordered_map<std::string, u32>& name_occurences) const
+    {
         std::string unique_alias = name;
 
         if (module_container != nullptr)
         {
-            // if there is no other instance with that name, we omit the name prefix 
-            if (const auto instance_name_it = m_instance_name_occurences.find(name); instance_name_it != m_instance_name_occurences.end() && instance_name_it->second > 1)
-            {
-                unique_alias = module_container->get_name() + instance_name_seperator + unique_alias;
-            }
-        }
-
-        return unique_alias;
-    }
-
-    // generate a unique name for a net
-    std::string VerilogParser::get_unique_net_alias(Module* module_container, const std::string& name) const
-    {        
-        std::string unique_alias = name;
-
-        if (module_container != nullptr)
-        {
-            // if there is no other net with that name, we omit the prefix
-            if (const auto net_name_it = m_net_name_occurences.find(name); net_name_it != m_net_name_occurences.end() && net_name_it->second > 1)
+            // if there is no other instance with that name, we omit the name prefix
+            if (const auto instance_name_it = name_occurences.find(name); instance_name_it != name_occurences.end() && instance_name_it->second > 1)
             {
                 unique_alias = module_container->get_name() + instance_name_seperator + unique_alias;
             }
