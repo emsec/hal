@@ -1309,11 +1309,6 @@ namespace hal
             }
         }
 
-        for (const auto& [n, c] : m_instance_name_occurrences)
-        {
-            std::cout << core_strings::to<std::string>(n) << " " << c << std::endl;
-        }
-
         for (auto& [entity_name, vhdl_entity] : m_entities_by_name)
         {
             // detect unused entities
@@ -1438,7 +1433,7 @@ namespace hal
         {
             for (const auto& expanded_port_identifier : port->m_expanded_identifiers)
             {
-                const auto signal_name = get_unique_alias(nullptr, expanded_port_identifier + "__GLOBAL_IO__", m_signal_name_occurrences);
+                const auto signal_name = get_unique_alias("", expanded_port_identifier + "__GLOBAL_IO__", m_signal_name_occurrences);
 
                 Net* global_port_net = m_netlist->create_net(core_strings::to<std::string>(signal_name));
                 if (global_port_net == nullptr)
@@ -1474,19 +1469,12 @@ namespace hal
             return ERR_APPEND(res.get_error(), "could not construct netlist: unable to instantiate top module");
         }
 
-        for (const auto& n : m_netlist->get_nets())
-        {
-            std::cout << n->get_name() << " at " << n << std::endl;
-        }
-
         // merge nets without gates in between them
         std::unordered_map<ci_string, ci_string> merged_nets;
         std::unordered_map<ci_string, std::vector<ci_string>> master_to_slaves;
 
         for (auto& [master, slave] : m_nets_to_merge)
         {
-            std::cout << "Starting merge for " << master.c_str() << " and " << slave.c_str() << std::endl;
-
             // check if master net has already been merged into other net
             while (true)
             {
@@ -1515,8 +1503,6 @@ namespace hal
 
             auto master_net = m_net_by_name.at(master);
             auto slave_net  = m_net_by_name.at(slave);
-
-            std::cout << "Merging " << master_net->get_name() << " at " << master_net << " and " << slave_net->get_name() << " at " << slave_net << std::endl;
 
             if (master_net == slave_net)
             {
@@ -1669,8 +1655,6 @@ namespace hal
         {
             for (const auto& [port_name, port_net] : ports)
             {
-                std::cout << "(Not) Adding " << port_net->get_name() << " at " << port_net << " to " << port_name << std::endl;
-
                 // check if net is actually a port net
                 if (!module->is_input_net(port_net) && !module->is_output_net(port_net))
                 {
@@ -1724,7 +1708,8 @@ namespace hal
 
         // TODO check parent module assignments for port aliases
 
-        instance_alias[instance_identifier] = get_unique_alias(parent, instance_identifier, m_instance_name_occurrences);
+        const std::string parent_name = parent == (nullptr) ? "" : parent->get_name();
+        instance_alias[instance_identifier] = get_unique_alias(core_strings::to<ci_string>(parent_name), instance_identifier, m_instance_name_occurrences);
 
         // create netlist module
         Module* module;
@@ -1780,7 +1765,7 @@ namespace hal
         {
             for (const auto& expanded_name : signal->m_expanded_names)
             {
-                signal_alias[expanded_name] = get_unique_alias(parent, expanded_name, m_signal_name_occurrences);
+                signal_alias[expanded_name] = get_unique_alias(instance_alias[instance_identifier], expanded_name, m_signal_name_occurrences);
 
                 // create new net for the signal
                 Net* signal_net = m_netlist->create_net(core_strings::to<std::string>(signal_alias.at(expanded_name)));
@@ -1914,7 +1899,7 @@ namespace hal
             else if (const auto gate_type_it = m_gate_types.find(instance->m_type); gate_type_it != m_gate_types.end())
             {
                 // create the new gate
-                instance_alias[instance->m_name] = get_unique_alias(parent, instance->m_name, m_instance_name_occurrences);
+                instance_alias[instance->m_name] = get_unique_alias(instance_alias[instance_identifier], instance->m_name, m_instance_name_occurrences);
 
                 Gate* new_gate = m_netlist->create_gate(gate_type_it->second, core_strings::to<std::string>(instance_alias.at(instance->m_name)));
                 if (new_gate == nullptr)
@@ -2115,16 +2100,16 @@ namespace hal
     }    // namespace
 
     // generate a unique name for a gate/module instance
-    VHDLParser::ci_string VHDLParser::get_unique_alias(Module* module_container, const VHDLParser::ci_string& name, const std::unordered_map<VHDLParser::ci_string, u32>& name_occurences) const
+    VHDLParser::ci_string VHDLParser::get_unique_alias(const ci_string& parent_name, const ci_string& name, const std::unordered_map<ci_string, u32>& name_occurences) const
     {
-        VHDLParser::ci_string unique_alias = name;
+        ci_string unique_alias = name;
 
-        if (module_container != nullptr)
+        if (!parent_name.empty())
         {
             // if there is no other instance with that name, we omit the name prefix
             if (const auto instance_name_it = name_occurences.find(name); instance_name_it != name_occurences.end() && instance_name_it->second > 1)
             {
-                unique_alias = VHDLParser::ci_string(module_container->get_name().c_str()) + VHDLParser::ci_string("/") + unique_alias;
+                unique_alias = parent_name + ci_string("/") + unique_alias;
             }
         }
 

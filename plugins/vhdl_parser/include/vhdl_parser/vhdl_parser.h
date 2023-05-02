@@ -232,7 +232,7 @@ namespace hal
         Result<Module*> instantiate_entity(const ci_string& instance_name, VhdlEntity* vhdl_entity, Module* parent, const std::unordered_map<ci_string, ci_string>& parent_module_assignments);
 
         // helper functions
-        ci_string get_unique_alias(Module* module_container, const ci_string& name, const std::unordered_map<ci_string, u32>& name_occurences) const;
+        ci_string get_unique_alias(const ci_string& parent_name, const ci_string& name, const std::unordered_map<ci_string, u32>& name_occurences) const;
         std::vector<u32> parse_range(TokenStream<ci_string>& range_stream) const;
         Result<std::vector<std::vector<u32>>> parse_signal_ranges(TokenStream<ci_string>& signal_stream) const;
         void expand_ranges_recursively(std::vector<ci_string>& expanded_names, const ci_string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const;

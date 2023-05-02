@@ -215,7 +215,7 @@ namespace hal
             instantiate_module(const std::string& instance_name, VerilogModule* verilog_module, Module* parent, const std::unordered_map<std::string, std::string>& parent_module_assignments);
 
         // helper functions
-        std::string get_unique_alias(Module* parent, const std::string& name, const std::unordered_map<std::string, u32>& name_occurences) const;
+        std::string get_unique_alias(const std::string& parent_name, const std::string& name, const std::unordered_map<std::string, u32>& name_occurences) const;
         std::vector<u32> parse_range(TokenStream<std::string>& stream) const;
         void expand_ranges_recursively(std::vector<std::string>& expanded_names, const std::string& current_name, const std::vector<std::vector<u32>>& ranges, u32 dimension) const;
         std::vector<std::string> expand_ranges(const std::string& name, const std::vector<std::vector<u32>>& ranges) const;
