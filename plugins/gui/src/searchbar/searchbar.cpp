@@ -170,7 +170,8 @@ namespace hal
 
     void Searchbar::showEvent(QShowEvent *)
     {
-        emitTextEdited();
+        if (!mLineEdit->text().isEmpty())
+            emitTextEdited();
     }
 
     QString Searchbar::getCurrentText()

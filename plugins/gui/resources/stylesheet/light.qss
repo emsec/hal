@@ -457,17 +457,21 @@ hal--SettingsWidget hal--keybind_edit[validated=false] QLineEdit
     background-color: rgba(255, 13, 13, 0.281);
 }
 
-
 hal--SettingsWidgetDropdown QComboBox
 {
-    background-color : white;
+    width : 150px;
+    color : rgb(23,26,26);
+    background-color : rgb(232,242,252);
+    border-radius: 2px;
     border: 1px solid black;
 }
 
 hal--SettingsWidgetDropdown QComboBox:hover
 {
+    color : black;
     background-color : white;
-    border: 1px solid black;
+    border-radius: 2px;
+    border: 1px solid blue;
 }
 
 hal--SettingsWidgetCheckbox QCheckBox
@@ -997,6 +1001,10 @@ hal--PythonEditor
     y2         : 1,
     stop       : 0 rgb(33, 40, 44),
     stop       : 1 rgb(23, 30, 34));
+
+    qproperty-searchActiveIconStyle: "all->#30ac4f";
+    qproperty-searchIconStyle: "all->#FFFFFF";
+    qproperty-searchIconPath: ":/icons/search";
 }
 
 hal--PythonEditor hal--CodeEditor
@@ -1112,6 +1120,10 @@ hal--GroupingManagerWidget
 
     qproperty-toSelectionIconStyle: "all->#FFFFFF";
     qproperty-toSelectionIconPath: ":/icons/to_selection";
+
+    qproperty-searchActiveIconStyle: "all->#30ac4f";
+    qproperty-searchIconStyle: "all->#FFFFFF";
+    qproperty-searchIconPath: ":/icons/search";
 }
 
 hal--ContextManagerWidget
@@ -1187,6 +1199,12 @@ hal--Toolbar QPushButton:checked:hover {
     background-color : rgb(66, 66, 66);
 }
 
+hal--ModuleWidget {
+    qproperty-searchActiveIconStyle: "all->#30ac4f";
+    qproperty-searchIconStyle: "all->#FFFFFF";
+    qproperty-searchIconPath: ":/icons/search";
+}
+
 hal--MainWindow
 {
     qproperty-halIconStyle: "";
@@ -1207,11 +1225,11 @@ hal--MainWindow
     qproperty-saveAsIconStyle: "all->#FFFFFF";
     qproperty-saveAsIconPath: ":/icons/save-as";
 
-    qproperty-CloseIconStyle: "all->#FFFFFF";
-    qproperty-CloseIconPath: ":/icons/cross";
+    qproperty-closeIconStyle: "all->#FFFFFF";
+    qproperty-closeIconPath: ":/icons/cross";
 
-    qproperty-QuitIconStyle: "all->#FFFFFF";
-    qproperty-QuitIconPath: ":/icons/switch";
+    qproperty-quitIconStyle: "all->#FFFFFF";
+    qproperty-quitIconPath: ":/icons/switch";
 
     qproperty-settingsIconStyle: "all->#FFFFFF";
     qproperty-settingsIconPath: ":/icons/settings";
@@ -1362,6 +1380,9 @@ hal--GraphicsQssAdapter
 
     qproperty-gridBaseDotColor: #EEEEEE;
     qproperty-gridClusterDotColor: #DDDDDD;
+
+    qproperty-nodeBackgroundColor: rgba(220, 221, 222, 200);
+    qproperty-nodeTextColor: rgb(20, 21, 22);
 }
 
 QToolBar QToolButton
@@ -1394,6 +1415,22 @@ hal--DetailsFrameWidget QPushButton:checked
 hal--DetailsFrameWidget QPushButton:hover
 {
     background-color : rgba(220, 220, 220, 1);
+}
+
+hal--GuiPluginManager
+{
+    qproperty-loadIconPath : ":/icons/insert-plugin";
+    qproperty-loadIconStyle: "all->#006030";
+    qproperty-unloadIconPath: ":/icons/cross";
+    qproperty-unloadIconStyle: "all->#480000";
+    qproperty-cliIconPath: ":/icons/cli-options";
+    qproperty-cliIconStyle: "all->#202022";
+    qproperty-guiIconPath: ":/icons/invoke-gui";
+    qproperty-guiIconStyle: "all->#2060C2";
+    qproperty-guiIconDisabledStyle: "all->#c0c0c0";
+    qproperty-defaultTextColor: rgb(64,64,64);
+    qproperty-hilightTextColor: rgb(0,0,20);
+    qproperty-hilightBackgroundColor: rgb(255,240,220);
 }
 
 hal--CommentWidget

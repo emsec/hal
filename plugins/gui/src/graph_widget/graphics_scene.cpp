@@ -33,12 +33,6 @@ namespace hal
     bool GraphicsScene::sGridClustersEnabled = true;
     GraphicsScene::GridType GraphicsScene::sGridType = GraphicsScene::GridType::Dots;
 
-    QColor GraphicsScene::sGridBaseLineColor = QColor(30, 30, 30);
-    QColor GraphicsScene::sGridClusterLineColor = QColor(15, 15, 15);
-
-    QColor GraphicsScene::sGridBaseDotColor = QColor(25, 25, 25);
-    QColor GraphicsScene::sGridClusterDotColor = QColor(170, 160, 125);
-
     void GraphicsScene::setLod(const qreal& lod)
     {
         sLod = lod;
@@ -47,21 +41,13 @@ namespace hal
         {
             const qreal alpha = (lod - sGridFadeStart) / (sGridFadeEnd - sGridFadeStart);
 
-            sGridBaseLineColor.setAlphaF(alpha);
-            sGridClusterLineColor.setAlphaF(alpha);
-
-            sGridBaseDotColor.setAlphaF(alpha);
-            sGridClusterDotColor.setAlphaF(alpha);
+            GraphicsQssAdapter::instance()->setGridAlphaF(alpha);
         }
         else
         {
             const int alpha = 255;
 
-            sGridBaseLineColor.setAlpha(alpha);
-            sGridClusterLineColor.setAlpha(alpha);
-
-            sGridBaseDotColor.setAlpha(alpha);
-            sGridClusterDotColor.setAlpha(alpha);
+            GraphicsQssAdapter::instance()->setGridAlpha(alpha);
         }
     }
 
@@ -78,26 +64,6 @@ namespace hal
     void GraphicsScene::setGridType(const GraphicsScene::GridType& gridType)
     {
         sGridType = gridType;
-    }
-
-    void GraphicsScene::setGridBaseLineColor(const QColor& color)
-    {
-        sGridBaseLineColor = color;
-    }
-
-    void GraphicsScene::setGridClusterLineColor(const QColor& color)
-    {
-        sGridClusterLineColor = color;
-    }
-
-    void GraphicsScene::setGridBaseDotColor(const QColor& color)
-    {
-        sGridBaseDotColor = color;
-    }
-
-    void GraphicsScene::setGridClusterDotColor(const QColor& color)
-    {
-        sGridClusterDotColor = color;
     }
 
     QPointF GraphicsScene::snapToGrid(const QPointF& pos)
@@ -379,7 +345,7 @@ namespace hal
         mModuleItems.clear();
         mGateItems.clear();
         mNetItems.clear();
-        mQssAdapter.repolish();
+        GraphicsQssAdapter::instance()->repolish();
     }
 
     void GraphicsScene::updateVisuals(const GraphShader::Shading &s)
@@ -678,14 +644,14 @@ namespace hal
                     cluster_lines.append(line);
             }
 
-            pen.setColor(sGridBaseLineColor);
+            pen.setColor(GraphicsQssAdapter::instance()->gridBaseLineColor());
             painter->setPen(pen);
 
             painter->drawLines(base_lines.data(), base_lines.size());
 
             if (sGridClustersEnabled)
             {
-                pen.setColor(sGridClusterLineColor);
+                pen.setColor(GraphicsQssAdapter::instance()->gridClusterLineColor());
                 painter->setPen(pen);
             }
 
@@ -707,14 +673,14 @@ namespace hal
                         cluster_points.append(QPoint(x,y));
                 }
 
-            pen.setColor(sGridBaseDotColor);
+            pen.setColor(GraphicsQssAdapter::instance()->gridBaseDotColor());
             painter->setPen(pen);
 
             painter->drawPoints(base_points.data(), base_points.size());
 
             if (sGridClustersEnabled)
             {
-                pen.setColor(sGridClusterDotColor);
+                pen.setColor(GraphicsQssAdapter::instance()->gridClusterDotColor());
                 painter->setPen(pen);
             }
 

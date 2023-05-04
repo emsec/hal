@@ -656,6 +656,7 @@ namespace hal
 
     void MainWindow::openPluginManager()
     {
+        mPluginManager->repolish();
         if (mStackedWidget->currentWidget() == mPluginManager)
             return; //nothing todo, already open
 
