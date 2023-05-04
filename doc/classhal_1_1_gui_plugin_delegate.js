@@ -6,5 +6,6 @@ var classhal_1_1_gui_plugin_delegate =
     [ "editorEvent", "classhal_1_1_gui_plugin_delegate.html#a8e0e4739aa0858208846d3c9f3acf042", null ],
     [ "paint", "classhal_1_1_gui_plugin_delegate.html#ac907993095deee94213c0b5eff799dcf", null ],
     [ "sizeHint", "classhal_1_1_gui_plugin_delegate.html#a1dfaca4550464a4ee77c9220efb14348", null ],
+    [ "updateQss", "classhal_1_1_gui_plugin_delegate.html#aae997ef2c0bc111111ace31302768e4e", null ],
     [ "GuiPluginManager", "classhal_1_1_gui_plugin_delegate.html#a0de770239a7ebe00cf4e39a3ed2a0fc8", null ]
 ];

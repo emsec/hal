@@ -1,8 +1,9 @@
 <map id="hal::StandardGraphicsGate" name="hal::StandardGraphicsGate">
-<area shape="rect" id="node1" title="The standard gate to visualize netlist gates." alt="" coords="295,837,505,1032"/>
-<area shape="rect" id="node2" href="$classhal_1_1_graphics_gate.html" title="Abstract base class for gates." alt="" coords="331,711,469,788"/>
+<area shape="rect" id="node1" title="The standard gate to visualize netlist gates." alt="" coords="373,1085,582,1280"/>
+<area shape="rect" id="node2" href="$classhal_1_1_graphics_gate.html" title="Abstract base class for gates." alt="" coords="331,828,469,905"/>
 <area shape="rect" id="node3" href="$classhal_1_1_graphics_node.html" title="Abstract base class for nodes (e.g. gates, modules)" alt="" coords="136,424,339,589"/>
 <area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qstring.html" title=" " alt="" coords="5,5,144,317"/>
 <area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qvector.html" title=" " alt="" coords="363,380,546,633"/>
 <area shape="rect" id="node6" href="$classhal_1_1_gate.html" title=" " alt="" coords="570,431,694,582"/>
+<area shape="rect" id="node7" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qcolor.html" title=" " alt="" coords="493,711,619,1023"/>
 </map>

@@ -1,9 +1,9 @@
 <map id="hal::PhysicalGraphLayouter" name="hal::PhysicalGraphLayouter">
-<area shape="rect" id="node1" title="A specific implementation of a layouter." alt="" coords="309,1015,509,1151"/>
-<area shape="rect" id="node2" href="$classhal_1_1_graph_layouter.html" title="Base class for all specific layouters." alt="" coords="331,815,486,965"/>
+<area shape="rect" id="node1" title="A specific implementation of a layouter." alt="" coords="309,1000,509,1136"/>
+<area shape="rect" id="node2" href="$classhal_1_1_graph_layouter.html" title="Base class for all specific layouters." alt="" coords="331,800,486,951"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="5,5,172,347"/>
-<area shape="rect" id="node5" href="$classhal_1_1_graph_context.html" title="Logical container for modules, gates, and nets." alt="" coords="111,484,259,649"/>
-<area shape="rect" id="node4" href="$classhal_1_1_graphics_scene.html" title="Container for a GraphGraphicsView containing gates, nets, and modules." alt="" coords="283,396,534,737"/>
-<area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qmap.html" title=" " alt="" coords="558,447,758,686"/>
-<area shape="rect" id="node7" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qmap.html" title=" " alt="" coords="782,455,985,679"/>
+<area shape="rect" id="node5" href="$classhal_1_1_graph_context.html" title="Logical container for modules, gates, and nets." alt="" coords="111,477,259,642"/>
+<area shape="rect" id="node4" href="$classhal_1_1_graphics_scene.html" title="Container for a GraphGraphicsView containing gates, nets, and modules." alt="" coords="283,396,534,723"/>
+<area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qmap.html" title=" " alt="" coords="558,440,758,679"/>
+<area shape="rect" id="node7" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qmap.html" title=" " alt="" coords="782,447,985,671"/>
 </map>

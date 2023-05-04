@@ -1,6 +1,7 @@
 <map id="hal::StandardGraphicsModule" name="hal::StandardGraphicsModule">
-<area shape="rect" id="node1" title="The standard module to visualize netlist modules." alt="" coords="117,477,331,672"/>
-<area shape="rect" id="node2" href="$classhal_1_1_graphics_module.html" title="Abstract base class for modules." alt="" coords="147,351,301,428"/>
+<area shape="rect" id="node1" title="The standard module to visualize netlist modules." alt="" coords="240,725,453,920"/>
+<area shape="rect" id="node2" href="$classhal_1_1_graphics_module.html" title="Abstract base class for modules." alt="" coords="147,468,301,545"/>
 <area shape="rect" id="node3" href="$classhal_1_1_graphics_node.html" title="Abstract base class for nodes (e.g. gates, modules)" alt="" coords="5,57,208,222"/>
 <area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qvector.html" title=" " alt="" coords="232,5,453,273"/>
+<area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qcolor.html" title=" " alt="" coords="325,351,451,663"/>
 </map>

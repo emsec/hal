@@ -438,33 +438,40 @@ $(document).ready(function(){initNavTree('main__settings__widget_8cpp_source.htm
 <div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160; </div>
 <div class="line"><a name="l00351"></a><span class="lineno"><a class="line" href="classhal_1_1_main_settings_widget.html#a1e897055ae0591dfe20fa9038e7ff3f8">  351</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a1e897055ae0591dfe20fa9038e7ff3f8">MainSettingsWidget::searchSettings</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; needle)</div>
 <div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    {</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_expanding_list_button.html">ExpandingListButton</a>* but : mSectionNames.keys())</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;            but-&gt;setSelected(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_settings_widget.html">SettingsWidget</a>* widget : mSettingsList)</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;            <span class="keywordflow">if</span> (widget-&gt;matchLabel(needle))</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;                widget-&gt;show();</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;                widget-&gt;hide();</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    }</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160; </div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    <span class="keywordtype">bool</span> MainSettingsWidget::saveSettings()</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    {</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        <span class="keywordtype">bool</span> changed = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_settings_widget.html">SettingsWidget</a>* widget : mSettingsList)</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;        {</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;            <span class="keywordflow">if</span> (widget-&gt;dirty())</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;            {</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;                changed = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;                widget-&gt;acceptValue();</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;            }</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;        }</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;        <span class="keywordflow">if</span> (changed)</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;        {</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;            <a class="code" href="classhal_1_1_settings_manager.html#abf3cc1d3dafbd723414b8072be710448">SettingsManager::instance</a>()-&gt;<a class="code" href="classhal_1_1_settings_manager.html#aa4c336da25420a7509d971a3772b12c0">persistUserSettings</a>();</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        }</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    }</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;}</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        mActiveSection.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#clear">clear</a>();</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        <span class="keywordflow">if</span> (mExpandingListWidget)</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;            mExpandingListWidget-&gt;<a class="code" href="classhal_1_1_expanding_list_widget.html#a9da0bb9caec34003448a48332cae64fe">clearSelected</a>();</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_expanding_list_button.html">ExpandingListButton</a>* but : mSectionNames.keys())</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;            but-&gt;setSelected(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_settings_widget.html">SettingsWidget</a>* widget : mSettingsList)</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;            <span class="keywordflow">if</span> (widget-&gt;matchLabel(needle))</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;            {</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;                <span class="keywordflow">if</span> (mActiveSection.<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">isEmpty</a>())</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;                    mActiveSection = widget-&gt;settingsItem()-&gt;label();</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;                widget-&gt;show();</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;            }</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;                widget-&gt;hide();</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;    }</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160; </div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    <span class="keywordtype">bool</span> MainSettingsWidget::saveSettings()</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    {</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;        <span class="keywordtype">bool</span> changed = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;        <span class="keywordflow">for</span> (<a class="code" href="classhal_1_1_settings_widget.html">SettingsWidget</a>* widget : mSettingsList)</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;        {</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;            <span class="keywordflow">if</span> (widget-&gt;dirty())</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;            {</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;                changed = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;                widget-&gt;acceptValue();</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;            }</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;        }</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;        <span class="keywordflow">if</span> (changed)</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        {</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;            <a class="code" href="classhal_1_1_settings_manager.html#abf3cc1d3dafbd723414b8072be710448">SettingsManager::instance</a>()-&gt;<a class="code" href="classhal_1_1_settings_manager.html#aa4c336da25420a7509d971a3772b12c0">persistUserSettings</a>();</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;        }</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    }</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_settings_widget_html_ac0a4249b1ca054eacb3a710854f627ff"><div class="ttname"><a href="classhal_1_1_settings_widget.html#ac0a4249b1ca054eacb3a710854f627ff">hal::SettingsWidget::triggerRemoveWidget</a></div><div class="ttdeci">void triggerRemoveWidget(SettingsWidget *widget)</div></div>
@@ -481,18 +488,19 @@ $(document).ready(function(){initNavTree('main__settings__widget_8cpp_source.htm
 <div class="ttc" id="aqobject_html_Q_EMIT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT</a></div><div class="ttdeci">Q_EMITQ_EMIT</div></div>
 <div class="ttc" id="anamespacetest_html_a20eb10bb18ee6ccd51fa4518f9fd6090"><div class="ttname"><a href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">test.n</a></div><div class="ttdeci">n</div><div class="ttdef"><b>Definition:</b> <a href="test_8py_source.html#l00008">test.py:8</a></div></div>
 <div class="ttc" id="aqlist_html_removeAll"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#removeAll">QList&lt; SettingsWidget * &gt;::removeAll</a></div><div class="ttdeci">int removeAll(const T &amp;value)</div></div>
-<div class="ttc" id="aclasshal_1_1_expanding_list_widget_html_ab6016e7b350ba219267132208d75c25d"><div class="ttname"><a href="classhal_1_1_expanding_list_widget.html#ab6016e7b350ba219267132208d75c25d">hal::ExpandingListWidget::hasGroup</a></div><div class="ttdeci">bool hasGroup(const QString &amp;groupName) const</div><div class="ttdef"><b>Definition:</b> <a href="expanding__list__widget_8cpp_source.html#l00115">expanding_list_widget.cpp:115</a></div></div>
+<div class="ttc" id="aclasshal_1_1_expanding_list_widget_html_ab6016e7b350ba219267132208d75c25d"><div class="ttname"><a href="classhal_1_1_expanding_list_widget.html#ab6016e7b350ba219267132208d75c25d">hal::ExpandingListWidget::hasGroup</a></div><div class="ttdeci">bool hasGroup(const QString &amp;groupName) const</div><div class="ttdef"><b>Definition:</b> <a href="expanding__list__widget_8cpp_source.html#l00116">expanding_list_widget.cpp:116</a></div></div>
 <div class="ttc" id="aqtextedit_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtextedit.html">QTextEdit</a></div></div>
 <div class="ttc" id="aqt_html_WindowModality-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qt.html#WindowModality-enum">Qt::ApplicationModal</a></div><div class="ttdeci">ApplicationModal</div></div>
 <div class="ttc" id="asettings__widget_8h_html"><div class="ttname"><a href="settings__widget_8h.html">settings_widget.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_settings_list_html_a75b5cb8e094b32e87fe5e3dd2e77467b"><div class="ttname"><a href="classhal_1_1_main_settings_list.html#a75b5cb8e094b32e87fe5e3dd2e77467b">hal::MainSettingsList::clearAll</a></div><div class="ttdeci">void clearAll()</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8cpp_source.html#l00040">main_settings_widget.cpp:40</a></div></div>
-<div class="ttc" id="aclasshal_1_1_expanding_list_widget_html_ac30791b31691c6449f6c9d213ea875d2"><div class="ttname"><a href="classhal_1_1_expanding_list_widget.html#ac30791b31691c6449f6c9d213ea875d2">hal::ExpandingListWidget::repolish</a></div><div class="ttdeci">void repolish()</div><div class="ttdef"><b>Definition:</b> <a href="expanding__list__widget_8cpp_source.html#l00089">expanding_list_widget.cpp:89</a></div></div>
+<div class="ttc" id="aqstring_html_clear"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html#clear">QString::clear</a></div><div class="ttdeci">void clear()</div></div>
+<div class="ttc" id="aclasshal_1_1_expanding_list_widget_html_ac30791b31691c6449f6c9d213ea875d2"><div class="ttname"><a href="classhal_1_1_expanding_list_widget.html#ac30791b31691c6449f6c9d213ea875d2">hal::ExpandingListWidget::repolish</a></div><div class="ttdeci">void repolish()</div><div class="ttdef"><b>Definition:</b> <a href="expanding__list__widget_8cpp_source.html#l00090">expanding_list_widget.cpp:90</a></div></div>
 <div class="ttc" id="aqabstractbutton_html_clicked"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractbutton.html#clicked">QAbstractButton::clicked</a></div><div class="ttdeci">void clicked(bool checked)</div></div>
 <div class="ttc" id="aclasshal_1_1_expanding_list_widget_html_a77e5989c800d1f115e999ca5ec439ae5"><div class="ttname"><a href="classhal_1_1_expanding_list_widget.html#a77e5989c800d1f115e999ca5ec439ae5">hal::ExpandingListWidget::appendItem</a></div><div class="ttdeci">void appendItem(ExpandingListButton *button, const QString &amp;groupName=QString())</div><div class="ttdef"><b>Definition:</b> <a href="expanding__list__widget_8cpp_source.html#l00031">expanding_list_widget.cpp:31</a></div></div>
 <div class="ttc" id="asettings__item__keybind_8h_html"><div class="ttname"><a href="settings__item__keybind_8h.html">settings_item_keybind.h</a></div></div>
 <div class="ttc" id="aqwidget_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_settings_list_html_abc7924b7ef507b3660ef0e0b734a8c0f"><div class="ttname"><a href="classhal_1_1_main_settings_list.html#abc7924b7ef507b3660ef0e0b734a8c0f">hal::MainSettingsList::getItems</a></div><div class="ttdeci">QList&lt; const SettingsItem * &gt; getItems() const</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8cpp_source.html#l00046">main_settings_widget.cpp:46</a></div></div>
-<div class="ttc" id="aclasshal_1_1_expanding_list_widget_html_a28059e36175e8e2ef639740a67519814"><div class="ttname"><a href="classhal_1_1_expanding_list_widget.html#a28059e36175e8e2ef639740a67519814">hal::ExpandingListWidget::selectFirstItem</a></div><div class="ttdeci">void selectFirstItem()</div><div class="ttdef"><b>Definition:</b> <a href="expanding__list__widget_8cpp_source.html#l00074">expanding_list_widget.cpp:74</a></div></div>
+<div class="ttc" id="aclasshal_1_1_expanding_list_widget_html_a28059e36175e8e2ef639740a67519814"><div class="ttname"><a href="classhal_1_1_expanding_list_widget.html#a28059e36175e8e2ef639740a67519814">hal::ExpandingListWidget::selectFirstItem</a></div><div class="ttdeci">void selectFirstItem()</div><div class="ttdef"><b>Definition:</b> <a href="expanding__list__widget_8cpp_source.html#l00075">expanding_list_widget.cpp:75</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="aqset_html_fromList"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#fromList">QSet::fromList</a></div><div class="ttdeci">QSet&lt; T &gt; fromList(const QList&lt; T &gt; &amp;list)</div></div>
 <div class="ttc" id="aqframe_html_setFrameStyle"><div class="ttname"><a href="https://doc.qt.io/qt-5/qframe.html#setFrameStyle">QFrame::setFrameStyle</a></div><div class="ttdeci">void setFrameStyle(int style)</div></div>
@@ -500,6 +508,7 @@ $(document).ready(function(){initNavTree('main__settings__widget_8cpp_source.htm
 <div class="ttc" id="aqwidget_html_close"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html#close">QWidget::close</a></div><div class="ttdeci">bool close()</div></div>
 <div class="ttc" id="aqmessagebox_html_StandardButton-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::StandardButton</a></div><div class="ttdeci">StandardButton</div></div>
 <div class="ttc" id="aqlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html">QList</a></div></div>
+<div class="ttc" id="aclasshal_1_1_expanding_list_widget_html_a9da0bb9caec34003448a48332cae64fe"><div class="ttname"><a href="classhal_1_1_expanding_list_widget.html#a9da0bb9caec34003448a48332cae64fe">hal::ExpandingListWidget::clearSelected</a></div><div class="ttdeci">void clearSelected()</div><div class="ttdef"><b>Definition:</b> <a href="expanding__list__widget_8cpp_source.html#l00046">expanding_list_widget.cpp:46</a></div></div>
 <div class="ttc" id="aqobject_html_connect"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect</a></div><div class="ttdeci">QMetaObject::Connection connect(const QObject *sender, const char *signal, const QObject *receiver, const char *method, Qt::ConnectionType type)</div></div>
 <div class="ttc" id="aexpanding__list__widget_8h_html"><div class="ttname"><a href="expanding__list__widget_8h.html">expanding_list_widget.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_settings_widget_html_a96a54ed1c3f8e0ef3332b08f1e2c5ebb"><div class="ttname"><a href="classhal_1_1_main_settings_widget.html#a96a54ed1c3f8e0ef3332b08f1e2c5ebb">hal::MainSettingsWidget::handleWidgetRemove</a></div><div class="ttdeci">void handleWidgetRemove(SettingsWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8cpp_source.html#l00239">main_settings_widget.cpp:239</a></div></div>
@@ -575,7 +584,7 @@ $(document).ready(function(){initNavTree('main__settings__widget_8cpp_source.htm
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="main__settings__widget_8cpp.html">main_settings_widget.cpp</a></li>
-    <li class="footer">Generated on Fri Apr 28 2023 08:30:13 for HAL by
+    <li class="footer">Generated on Thu May 4 2023 12:17:21 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

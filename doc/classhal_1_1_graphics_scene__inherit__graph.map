@@ -1,5 +1,5 @@
 <map id="hal::GraphicsScene" name="hal::GraphicsScene">
-<area shape="rect" id="node1" title="Container for a GraphGraphicsView containing gates, nets, and modules." alt="" coords="5,857,256,1199"/>
+<area shape="rect" id="node1" title="Container for a GraphGraphicsView containing gates, nets, and modules." alt="" coords="5,857,256,1184"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicsscene.html" title=" " alt="" coords="46,395,215,809"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="47,5,214,347"/>
 </map>

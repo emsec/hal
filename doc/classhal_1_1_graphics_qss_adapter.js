@@ -1,6 +1,5 @@
 var classhal_1_1_graphics_qss_adapter =
 [
-    [ "GraphicsQssAdapter", "classhal_1_1_graphics_qss_adapter.html#a2c0b89cf00a0cbcdc21efac86f5b99ce", null ],
     [ "gateBaseColor", "classhal_1_1_graphics_qss_adapter.html#af23f242182033964e9a2f76a9674cc39", null ],
     [ "gateNameFont", "classhal_1_1_graphics_qss_adapter.html#ae1f9e1156f2df96141eb02690279fa2e", null ],
     [ "gatePinFont", "classhal_1_1_graphics_qss_adapter.html#a7da6ae5f136c602258eec37192eabaae", null ],
@@ -13,12 +12,16 @@ var classhal_1_1_graphics_qss_adapter =
     [ "netBaseColor", "classhal_1_1_graphics_qss_adapter.html#ac46967ceb5a3e7f089b988f54d3de7f1", null ],
     [ "netFont", "classhal_1_1_graphics_qss_adapter.html#a840696762827a0bd6289cd19f74aea38", null ],
     [ "netSelectionColor", "classhal_1_1_graphics_qss_adapter.html#a0b6c95c14edf4cb2b20ddb5d010f15b7", null ],
+    [ "nodeBackgroundColor", "classhal_1_1_graphics_qss_adapter.html#a4a9278e87a484f9776df19a922c0c170", null ],
+    [ "nodeTextColor", "classhal_1_1_graphics_qss_adapter.html#a968a977d147bc5732156d59c31a699bb", null ],
     [ "repolish", "classhal_1_1_graphics_qss_adapter.html#a9fc79f709722e2ecf79aea2eaf79b3a5", null ],
     [ "setGateBaseColor", "classhal_1_1_graphics_qss_adapter.html#a63698dd9ed2d26b3b03d576a9f822484", null ],
     [ "setGateNameFont", "classhal_1_1_graphics_qss_adapter.html#a30ddabcd745ff7427df012e054088fe9", null ],
     [ "setGatePinFont", "classhal_1_1_graphics_qss_adapter.html#aff64bb5551e9b5e87d0ba8a07a7dd6b0", null ],
     [ "setGateSelectionColor", "classhal_1_1_graphics_qss_adapter.html#a34502eab889f353ec6fd0239c513d6a7", null ],
     [ "setGateTypeFont", "classhal_1_1_graphics_qss_adapter.html#af30957ee9b344006c35ac5cbe5962d5e", null ],
+    [ "setGridAlpha", "classhal_1_1_graphics_qss_adapter.html#a5f2746a0f1eb696ce328d5e99174fe9f", null ],
+    [ "setGridAlphaF", "classhal_1_1_graphics_qss_adapter.html#afd9ed0f08f1459ee30ff826ccecf7d2b", null ],
     [ "setGridBaseDotColor", "classhal_1_1_graphics_qss_adapter.html#afdb3bdfd4069eec4f89edbbcdb173d9c", null ],
     [ "setGridBaseLineColor", "classhal_1_1_graphics_qss_adapter.html#af282b7a56ebce29e981d608e2fd4015e", null ],
     [ "setGridClusterDotColor", "classhal_1_1_graphics_qss_adapter.html#a985d8b975fa2f7ffe211fb20a79491c7", null ],
@@ -26,6 +29,8 @@ var classhal_1_1_graphics_qss_adapter =
     [ "setNetBaseColor", "classhal_1_1_graphics_qss_adapter.html#a1734bffac18cf28db5bbfc55b632fbfb", null ],
     [ "setNetFont", "classhal_1_1_graphics_qss_adapter.html#a389ae6a8b275e8c38502fcd8324f455a", null ],
     [ "setNetSelectionColor", "classhal_1_1_graphics_qss_adapter.html#a3f99f5c0357302eccc361324447c8fb7", null ],
+    [ "setNodeBackgroundColor", "classhal_1_1_graphics_qss_adapter.html#a254724494d4a8805b6a2c100c4fcb751", null ],
+    [ "setNodeTextColor", "classhal_1_1_graphics_qss_adapter.html#ad5aa7aca391858ecb84ec57ee1d4e6ef", null ],
     [ "gateBaseColor", "classhal_1_1_graphics_qss_adapter.html#a06ae39054b47c0a44a7e69e0245d5265", null ],
     [ "gateNameFont", "classhal_1_1_graphics_qss_adapter.html#aa0870b481502c8f744944b0f848d36e4", null ],
     [ "gatePinFont", "classhal_1_1_graphics_qss_adapter.html#ade8e16418e0c0cb14366b7f6c7040511", null ],
@@ -37,5 +42,7 @@ var classhal_1_1_graphics_qss_adapter =
     [ "gridClusterLineColor", "classhal_1_1_graphics_qss_adapter.html#a93a3f1267b9ea82cf117bf5f9b493b54", null ],
     [ "netBaseColor", "classhal_1_1_graphics_qss_adapter.html#a0f7dd9ccd5b2c42ed368dc08ed9df62d", null ],
     [ "netFont", "classhal_1_1_graphics_qss_adapter.html#a4f6fbcf00413fa5a65bab7d382e5570d", null ],
-    [ "netSelectionColor", "classhal_1_1_graphics_qss_adapter.html#ad6915173753e91896d2e3a09036faba1", null ]
+    [ "netSelectionColor", "classhal_1_1_graphics_qss_adapter.html#ad6915173753e91896d2e3a09036faba1", null ],
+    [ "nodeBackgroundColor", "classhal_1_1_graphics_qss_adapter.html#a0e6fc9980c06fd6a728fe85c3b04e66e", null ],
+    [ "nodeTextColor", "classhal_1_1_graphics_qss_adapter.html#a72a5de94bdbe01b7560b6b3f4760ea28", null ]
 ];
