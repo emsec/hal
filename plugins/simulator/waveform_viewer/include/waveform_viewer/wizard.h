@@ -60,7 +60,6 @@ namespace hal {
 
         NetlistSimulatorController *mController;
 
-        void setSubtitleInternal(bool emptySelection);
         void handleSelectAll();
         void handleCurrentGuiSelection();
         void handleClearSelection();

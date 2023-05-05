@@ -35,7 +35,7 @@ namespace hal {
       : QWizardPage(parent), mController(controller)
     {
         setTitle(tr("Step 1 | Select Gates"));
-        setSubtitleInternal(true);
+        setSubTitle("Select the gates to be used for simulation. 0 gates selected.");
 
         QGridLayout* layout = new QGridLayout(this);
         mButAll = new QPushButton("All gates", this);
@@ -66,16 +66,6 @@ namespace hal {
         mTableView->verticalHeader()->hide();
         layout->addWidget(mTableView,1,0,1,3);
     }
-
-    void PageSelectGates::setSubtitleInternal(bool emptySelection)
-    {
-        QString txt("Select the gates to be used for simulation. ");
-
-        if (emptySelection)
-            txt += "No gates selected so far ...";
-        setSubTitle(txt);
-    }
-
 
     void PageSelectGates::handleSelectAll()
     {
@@ -130,25 +120,22 @@ namespace hal {
 
     void PageSelectGates::onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
     {
-        setSubtitleInternal(mTableView->selectionModel()->selectedRows().isEmpty());
+        int numSelectedGates = mTableView->selectionModel()->selectedRows().count();
+        QString txt("Select the gates to be used for simulation. ");
+
+        txt += QString::number(numSelectedGates) + " gates selected.";
+
+        setSubTitle(txt);
     }
 
     bool PageSelectGates::validatePage()
     {
-        //m_parent->setGates(selectedGates());
-        //if (!mController || mController->get_state() != NetlistSimulatorController::NoGatesSelected) return false;
         mController->reset();
         mController->add_gates(selectedGates());
         for (const Net* inpNet : mController->get_input_nets())
             mController->get_waveform_by_net(inpNet);
         if (mController->get_gates().empty() || mController->get_input_nets().empty())
-        {
-            // QMessageBox::warning(this, "Error", "No valid gates selected.");
-        //    setSubtitleInternal(true);
             return false;
-        }
-
-        //setSubtitleInternal(false);
         return true;
     }
 
