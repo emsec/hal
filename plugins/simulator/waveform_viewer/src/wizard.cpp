@@ -53,25 +53,18 @@ namespace hal {
         mTableView->setSelectionMode(QAbstractItemView::MultiSelection);
 
         GateSelectProxy* prox = new GateSelectProxy(this);
-        // connect(sbar, &Searchbar::textEdited, prox, &GateSelectProxy::searchTextChanged);
 
         GateSelectModel* modl = new GateSelectModel(false,QSet<u32>(),mTableView);
         prox->setSourceModel(modl);
         mTableView->setModel(prox);
+        connect(mTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &PageSelectGates::onSelectionChanged);
 
-        // connect(selectionModel(), &QItemSelectionModel::currentChanged, this, &GateSelectView::handleCurrentChanged);
         mTableView->setSortingEnabled(true);
         mTableView->sortByColumn(2, Qt::AscendingOrder);
         mTableView->resizeColumnsToContents();
         mTableView->horizontalHeader()->setStretchLastSection(true);
         mTableView->verticalHeader()->hide();
         layout->addWidget(mTableView,1,0,1,3);
-        //mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
-        //connect(mButtonBox, &QDialogButtonBox::accepted, static_cast<QDialog*>(this), &QDialog::accept);
-        //connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-        //layout->addWidget(mButtonBox,2,1,1,2);
-
-        // vllt hinzufügen dass Next Button disabled ist wenn noch nix ausgewählt ist
     }
 
     void PageSelectGates::setSubtitleInternal(bool emptySelection)
@@ -135,6 +128,11 @@ namespace hal {
         return retval;
     }
 
+    void PageSelectGates::onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+    {
+        setSubtitleInternal(mTableView->selectionModel()->selectedRows().isEmpty());
+    }
+
     bool PageSelectGates::validatePage()
     {
         //m_parent->setGates(selectedGates());
@@ -146,11 +144,11 @@ namespace hal {
         if (mController->get_gates().empty() || mController->get_input_nets().empty())
         {
             // QMessageBox::warning(this, "Error", "No valid gates selected.");
-            setSubtitleInternal(true);
+        //    setSubtitleInternal(true);
             return false;
         }
 
-        setSubtitleInternal(false);
+        //setSubtitleInternal(false);
         return true;
     }
 

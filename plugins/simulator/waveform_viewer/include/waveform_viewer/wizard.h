@@ -47,6 +47,10 @@ namespace hal {
         virtual bool validatePage() override;
 
         std::vector<Gate*> selectedGates() const;
+
+    public Q_SLOTS:
+        void onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+
     private:
         QPushButton* mButAll;
         QPushButton* mButSel;
