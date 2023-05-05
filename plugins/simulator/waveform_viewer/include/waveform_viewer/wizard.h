@@ -136,8 +136,10 @@ namespace hal {
         PageInputData(NetlistSimulatorController *controller, QWidget *parent=nullptr);
 
         virtual bool validatePage() override;
+
     private Q_SLOTS:
         void openFileBrowser();
+        void updateSubtitle();
 
     private:
         NetlistSimulatorController *mController;
@@ -151,10 +153,12 @@ namespace hal {
         PageRunSimulation(NetlistSimulatorController *controller, QWidget* parent=nullptr);
         virtual bool validatePage() override;
         virtual int nextId() const override;
+
     private Q_SLOTS:
         void handleStartClicked();
         void handleLogfileRead();
         void handleStateChanged(hal::NetlistSimulatorController::SimulationState state);
+
     public Q_SLOTS:
         void handleEngineFinished(bool success);
 

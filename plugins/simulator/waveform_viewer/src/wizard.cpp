@@ -454,6 +454,27 @@ namespace hal {
         return true;
     }
 
+
+    PageInputData::PageInputData(NetlistSimulatorController *controller, QWidget* parent)
+        : QWizardPage(parent), mController(controller)
+    {
+        setTitle(tr("Step 4 | Load input Data"));
+        setSubTitle(tr("Load the input data for the simulation"));
+        QGridLayout* layout = new QGridLayout(this);
+
+        mEditFilename = new QLineEdit(this);
+        connect(mEditFilename, &QLineEdit::textChanged, this, &PageInputData::updateSubtitle);
+
+        layout->addWidget(mEditFilename,0,0);
+
+        QPushButton* but = new QPushButton(this);
+        but->setIcon(gui_utility::getStyledSvgIcon("all->#3192C5", ":/icons/folder"));
+        but->setIconSize(QSize(17, 17));
+        connect(but, &QPushButton::clicked, this, &PageInputData::openFileBrowser);
+
+        layout->addWidget(but,0,1);
+    }
+
     void PageInputData::openFileBrowser()
     {
         QString filter = QString("Saved data (%1)").arg(NetlistSimulatorController::sPersistFile);
@@ -465,25 +486,36 @@ namespace hal {
         if (filename.isEmpty()) return;
 
         mEditFilename->setText(filename);
-
+        updateSubtitle();
     }
 
-    PageInputData::PageInputData(NetlistSimulatorController *controller, QWidget* parent)
-        : QWizardPage(parent), mController(controller)
+    void PageInputData::updateSubtitle()
     {
-        setTitle(tr("Step 4 | Load input Data"));
-        setSubTitle(tr("Load the input data for the simulation"));
-        QGridLayout* layout = new QGridLayout(this);
+        QString fileName = mEditFilename->text();
+        QString subtitle;
 
-        mEditFilename = new QLineEdit(this);
-        layout->addWidget(mEditFilename,0,0);
+        if (fileName.isEmpty())
+        {
+            subtitle = "No input data file selected so far";
+        }
+        else
+        {
+            QFileInfo fileInfo(fileName);
 
-        QPushButton* but = new QPushButton(this);
-        but->setIcon(gui_utility::getStyledSvgIcon("all->#3192C5", ":/icons/folder"));
-        but->setIconSize(QSize(17, 17));
-        connect(but, &QPushButton::clicked, this, &PageInputData::openFileBrowser);
-
-        layout->addWidget(but,0,1);
+            if (!fileInfo.isFile() || !fileInfo.isReadable())
+            {
+                subtitle = "File '" + fileName + "' is not readable";
+            }
+            else if (!fileName.toLower().endsWith(".vcd") && !fileName.toLower().endsWith(".csv"))
+            {
+                subtitle = "Parsing input files with extension '." + fileInfo.suffix() + "' is not supported";
+            }
+            else
+            {
+                subtitle = "Run simulation with data file '" + fileName + "'";
+            }
+        }
+        setSubTitle(subtitle);
     }
 
     bool PageInputData::validatePage()
