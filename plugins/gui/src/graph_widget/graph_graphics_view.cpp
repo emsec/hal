@@ -1572,6 +1572,38 @@ namespace hal
         }
     }
 
+    void GraphGraphicsView::selectedNodeToItem()
+    {
+        if (gSelectionRelay->numberSelectedItems() != 1) return;
+        NodeBox* box = nullptr;
+        if (gSelectionRelay->numberSelectedGates() == 1)
+        {
+            u32 gatId = gSelectionRelay->selectedGatesList().at(0);
+            box = mGraphWidget->getContext()->getLayouter()->boxes().boxForNode(Node(gatId,Node::Gate));
+        }
+        else if (gSelectionRelay->numberSelectedModules() == 1)
+        {
+            u32 modId = gSelectionRelay->selectedModulesList().at(0);
+            box = mGraphWidget->getContext()->getLayouter()->boxes().boxForNode(Node(modId,Node::Module));
+        }
+        if (!box) return;
+        mItem = box->item();
+    }
+
+    void GraphGraphicsView::handleFoldModuleShortcut()
+    {
+        selectedNodeToItem();
+        if (!mItem) return;
+        handleFoldParentSingle();
+    }
+
+    void GraphGraphicsView::handleUnfoldModuleShortcut()
+    {
+        selectedNodeToItem();
+        if (!mItem || mItem->itemType() != ItemType::Module) return;
+        handleUnfoldSingleAction();
+    }
+
     void GraphGraphicsView::handleFoldParentSingle()
     {
         const Module* parentModule = nullptr;

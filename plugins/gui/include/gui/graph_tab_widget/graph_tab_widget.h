@@ -211,6 +211,13 @@ namespace hal
          */
         void handleCloseAllTabs();
 
+    private Q_SLOTS:
+        void handleZoomInShortcut();
+        void handleZoomOutShortcut();
+        void handleFoldModuleShortcut();
+        void handleUnfoldModuleShortcut();
+        void handleRemoveNodeShortcut();
+
     private:
         QTabWidget* mTabWidget;
         QVBoxLayout* mLayout;
@@ -223,15 +230,15 @@ namespace hal
 
         void addGraphWidgetTab(GraphContext* context);
 
-        void zoomInShortcut();
-        void zoomOutShortcut();
-
         static SettingsItemDropdown* sSettingGridType;
         static SettingsItemDropdown* sSettingDragModifier;
         static SettingsItemDropdown* sSettingPanModifier;
 
         static SettingsItemKeybind* sSettingZoomIn;
         static SettingsItemKeybind* sSettingZoomOut;
+        static SettingsItemKeybind* sSettingFoldModule;
+        static SettingsItemKeybind* sSettingUnfoldModule;
+        static SettingsItemKeybind* sSettingRemoveNode;
 
         static bool sSettingsInitialized;
 
