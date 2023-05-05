@@ -1,5 +1,5 @@
 <map id="hal::GraphGraphicsView" name="hal::GraphGraphicsView">
-<area shape="rect" id="node1" title="A view to display the rendered graph (needs a GraphicsScene)." alt="" coords="28,813,213,1067"/>
+<area shape="rect" id="node1" title="A view to display the rendered graph (needs a GraphicsScene)." alt="" coords="15,813,226,1081"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicsview.html" title=" " alt="" coords="36,365,205,765"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qabstractscrollarea.html" title=" " alt="" coords="5,5,236,317"/>
 </map>

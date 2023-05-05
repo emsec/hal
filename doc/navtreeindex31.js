@@ -1,5 +1,8 @@
 var NAVTREEINDEX31 =
 {
+"structhal_1_1_graphics_module_1_1_module_pin.html#a7d48bfe8c1ccb6d8a2c375f1b937f350":[4,0,0,0,1,0,0,0],
+"structhal_1_1_graphics_module_1_1_module_pin.html#aa14bcbee588796d58b6c94548870ec45":[4,0,0,0,1,0,0,2],
+"structhal_1_1_graphics_net_1_1_visuals.html":[4,0,0,0,2,2,0],
 "structhal_1_1_graphics_net_1_1_visuals.html#a5cb8d2b85d025e86dbc9461b6e567d80":[4,0,0,0,2,2,0,3],
 "structhal_1_1_graphics_net_1_1_visuals.html#a83629443c9bbd8958635b47667a8f5c5":[4,0,0,0,2,2,0,0],
 "structhal_1_1_graphics_net_1_1_visuals.html#a88fddff17f3f4a332411e65ccc61a1ef":[4,0,0,0,2,2,0,1],
@@ -246,8 +249,5 @@ var NAVTREEINDEX31 =
 "tab__widget_8cpp.html":[7,0,1,3,2,10,5],
 "tab__widget_8cpp_source.html":[7,0,1,3,2,10,5],
 "tab__widget_8h.html":[7,0,1,3,0,0,11,5],
-"tab__widget_8h_source.html":[7,0,1,3,0,0,11,5],
-"test_2hgl__parser_8cpp.html":[7,0,1,4,2,0],
-"test_2hgl__parser_8cpp.html#aadbafa6a6f015693c4a1b47d750798f6":[7,0,1,4,2,0,1],
-"test_2hgl__parser_8cpp_source.html":[7,0,1,4,2,0]
+"tab__widget_8h_source.html":[7,0,1,3,0,0,11,5]
 };

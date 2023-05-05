@@ -1,5 +1,8 @@
 var NAVTREEINDEX32 =
 {
+"test_2hgl__parser_8cpp.html":[7,0,1,4,2,0],
+"test_2hgl__parser_8cpp.html#aadbafa6a6f015693c4a1b47d750798f6":[7,0,1,4,2,0,1],
+"test_2hgl__parser_8cpp_source.html":[7,0,1,4,2,0],
 "test_2hgl__writer_8cpp.html":[7,0,1,5,2,0],
 "test_2hgl__writer_8cpp.html#ab58f4b532beeb5266918ab2f1026ab03":[7,0,1,5,2,0,1],
 "test_2hgl__writer_8cpp_source.html":[7,0,1,5,2,0],
@@ -246,8 +249,5 @@ var NAVTREEINDEX32 =
 "welcome__screen_8h_source.html":[7,0,1,3,0,0,51,5],
 "widget_8cpp.html":[7,0,1,3,2,49,0],
 "widget_8cpp_source.html":[7,0,1,3,2,49,0],
-"widget_8h.html":[7,0,1,3,0,0,52,0],
-"widget_8h_source.html":[7,0,1,3,0,0,52,0],
-"widget__overlay_8cpp.html":[7,0,1,3,2,34,1],
-"widget__overlay_8cpp_source.html":[7,0,1,3,2,34,1]
+"widget_8h.html":[7,0,1,3,0,0,52,0]
 };

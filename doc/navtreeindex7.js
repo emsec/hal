@@ -1,5 +1,8 @@
 var NAVTREEINDEX7 =
 {
+"classhal_1_1_graph_shader.html#a8edc447a180d18bd35ed60ee170078f9":[4,0,0,0,8,4],
+"classhal_1_1_graph_tab_widget.html":[4,0,0,5],
+"classhal_1_1_graph_tab_widget.html#a030e27ff45c4904d8345652a51cd008c":[4,0,0,5,13],
 "classhal_1_1_graph_tab_widget.html#a08124b835c3b1422248924f54dc5fb47":[4,0,0,5,17],
 "classhal_1_1_graph_tab_widget.html#a12b63972aee6ffe0fa5fc088a936aea9":[4,0,0,5,6],
 "classhal_1_1_graph_tab_widget.html#a18f0607d7e65a39ebd00d58921168924":[4,0,0,5,12],
@@ -246,8 +249,5 @@ var NAVTREEINDEX7 =
 "classhal_1_1_grouping_event.html#ad0d01ce67e65c0bab6e13308f15666c8ae2fa538867c3830a859a5b17ab24644b":[6,0,0,178,0,0],
 "classhal_1_1_grouping_manager_widget.html":[4,0,7,2,2],
 "classhal_1_1_grouping_manager_widget.html#a0a559b52e1c62e3a35d6750a77ed132e":[4,0,7,2,2,45],
-"classhal_1_1_grouping_manager_widget.html#a0d5660007c226ca40eb5497b1833306d":[4,0,7,2,2,12],
-"classhal_1_1_grouping_manager_widget.html#a0e20df5aac159e54eaabc20fd102e404":[4,0,7,2,2,62],
-"classhal_1_1_grouping_manager_widget.html#a135d3ebbb814acac65fe2bcf3d7783db":[4,0,7,2,2,49],
-"classhal_1_1_grouping_manager_widget.html#a1660a3d7ce3b6d8e93bd0ee7adc3e181":[4,0,7,2,2,56]
+"classhal_1_1_grouping_manager_widget.html#a0d5660007c226ca40eb5497b1833306d":[4,0,7,2,2,12]
 };
