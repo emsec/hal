@@ -3358,7 +3358,7 @@ $(document).ready(function(){initNavTree('test_2verilog__parser_8cpp_source.html
 <div class="line"><a name="l03363"></a><span class="lineno"> 3363</span>&#160;                <span class="keyword">auto</span> verilog_file = test_utils::create_sandbox_file(<span class="stringliteral">&quot;netlist.v&quot;</span>, netlist_input);</div>
 <div class="line"><a name="l03364"></a><span class="lineno"> 3364</span>&#160;                <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a> verilog_parser;</div>
 <div class="line"><a name="l03365"></a><span class="lineno"> 3365</span>&#160;                <span class="keyword">auto</span> nl_res = verilog_parser.<a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(verilog_file, gate_lib);</div>
-<div class="line"><a name="l03366"></a><span class="lineno"> 3366</span>&#160;                EXPECT_TRUE(nl_res.is_error());</div>
+<div class="line"><a name="l03366"></a><span class="lineno"> 3366</span>&#160;                EXPECT_TRUE(nl_res.is_ok());</div>
 <div class="line"><a name="l03367"></a><span class="lineno"> 3367</span>&#160;            }</div>
 <div class="line"><a name="l03368"></a><span class="lineno"> 3368</span>&#160;        TEST_END</div>
 <div class="line"><a name="l03369"></a><span class="lineno"> 3369</span>&#160;    }</div>
@@ -3419,7 +3419,7 @@ $(document).ready(function(){initNavTree('test_2verilog__parser_8cpp_source.html
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_d7fcdf7474b2628967f84c9d1dc1db2a.html">verilog_parser</a></li><li class="navelem"><a class="el" href="dir_da341e1d90abfb35857ca25139700c01.html">test</a></li><li class="navelem"><a class="el" href="test_2verilog__parser_8cpp.html">verilog_parser.cpp</a></li>
-    <li class="footer">Generated on Fri May 5 2023 10:32:22 for HAL by
+    <li class="footer">Generated on Mon May 8 2023 13:24:02 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
