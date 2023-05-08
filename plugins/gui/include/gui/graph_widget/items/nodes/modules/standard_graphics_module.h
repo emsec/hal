@@ -117,8 +117,6 @@ namespace hal
 
         static QPen sPen;
 
-        static QColor sTextColor;
-
         static QFont sTextFont[3];
         static QFont sPinFont;
 
@@ -152,5 +150,7 @@ namespace hal
 
         static QPixmap* sIconInstance;
         static const QPixmap& iconPixmap();
+    public:
+        static QColor sTextColor;
     };
 }    // namespace hal

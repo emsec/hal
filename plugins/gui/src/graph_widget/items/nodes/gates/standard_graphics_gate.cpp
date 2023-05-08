@@ -4,6 +4,7 @@
 
 #include "gui/content_manager/content_manager.h"
 #include "gui/graph_widget/graph_widget_constants.h"
+#include "gui/graph_widget/graphics_qss_adapter.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/settings/settings_items/settings_item_checkbox.h"
@@ -70,7 +71,7 @@ void StandardGraphicsGate::loadSettings()
     sPen.setCosmetic(true);
     sPen.setJoinStyle(Qt::MiterJoin);
 
-    sTextColor = QColor(160, 160, 160);
+    sTextColor = GraphicsQssAdapter::instance()->nodeTextColor();
 
     QFont font = QFont("Iosevka");
     font.setPixelSize(graph_widget_constants::sFontSize);
@@ -121,7 +122,7 @@ void StandardGraphicsGate::paint(QPainter* painter, const QStyleOptionGraphicsIt
         QList<u32> outNets = outputNets();
 
         painter->fillRect(QRectF(0, 0, mWidth, sColorBarHeight), mColor);
-        painter->fillRect(QRectF(0, sColorBarHeight, mWidth, mHeight - sColorBarHeight), QColor(0, 0, 0, 200));
+        painter->fillRect(QRectF(0, sColorBarHeight, mWidth, mHeight - sColorBarHeight), GraphicsQssAdapter::instance()->nodeBackgroundColor());
 //        QRectF iconRect(sIconPadding,sIconPadding,sIconSize.width(),sIconSize.height());
 //        painter->fillRect(iconRect,Qt::black);
 //        painter->drawPixmap(QPoint(sIconPadding,sIconPadding), iconPixmap());

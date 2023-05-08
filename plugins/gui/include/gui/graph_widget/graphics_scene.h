@@ -29,6 +29,7 @@
 #include "gui/graph_widget/shaders/graph_shader.h"
 #include "gui/gui_globals.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
+#include "gui/graph_widget/graphics_qss_adapter.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
@@ -95,38 +96,6 @@ namespace hal
          * @param gridType - enumerated grid type
          */
         static void setGridType(const GridType& gridType);
-
-        /**
-         * Sets the color of the grid base lines (not the clusters). <br>
-         * It does not affect the dot grid color.
-         *
-         * @param color - The color of the grid base lines
-         */
-        static void setGridBaseLineColor(const QColor& color);
-
-        /**
-         * Sets the color of the grid cluster lines. The grid cluster lines are the darker lines in the grid that
-         * indicate 8 steps in the main grid. <br>
-         * It does not affect the dot cluster grid color.
-         *
-         * @param color - The color of the grid cluster lines
-         */
-        static void setGridClusterLineColor(const QColor& color);
-
-        /**
-         * Sets the color of the grid base dotted lines (only shown if grid_type::Dots are activated). <br>
-         *
-         * @param color - The color of the grid base dotted lines
-         */
-        static void setGridBaseDotColor(const QColor& color);
-
-        /**
-         * Sets the color of the grid dotted cluster lines (only shown if grid_type::Dots are activated).
-         * The grid cluster lines are the darker dots in the grid that indicate 8 steps in the main grid.
-         *
-         * @param color - The color of the grid dotted cluster lines
-         */
-        static void setGridClusterDotColor(const QColor& color);
 
         /**
          * Given any position, this function returns a position on the grid that is next to it.
@@ -345,12 +314,6 @@ namespace hal
         static bool sGridEnabled;
         static bool sGridClustersEnabled;
         static GraphicsScene::GridType sGridType;
-
-        static QColor sGridBaseLineColor;
-        static QColor sGridClusterLineColor;
-
-        static QColor sGridBaseDotColor;
-        static QColor sGridClusterDotColor;
 
         //       using QGraphicsScene::addItem;
         //       using QGraphicsScene::removeItem;

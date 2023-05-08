@@ -54,6 +54,8 @@
 
 namespace hal
 {
+    const char* MSG_PROJECT_ALREADY_OPEN = "You are already working on a HAL project. Close current project first.";
+
     SettingsItemDropdown* MainWindow::sSettingStyle = nullptr;
 
     MainWindow::MainWindow(QWidget* parent) : QWidget(parent)
@@ -150,6 +152,7 @@ namespace hal
         mActionSettings           = new Action(this);
         mActionPlugins            = new Action(this);
         mActionClose              = new Action(this);
+        mActionQuit               = new Action(this);
 
         //    //mOpenIconStyle = "all->#fcfcb0";
         //    //mOpenIconStyle = "all->#f2e4a4";
@@ -182,6 +185,8 @@ namespace hal
         mActionImportProject->setIcon(gui_utility::getStyledSvgIcon(mOpenProjIconStyle, mOpenProjIconPath));
         mActionSave->setIcon(gui_utility::getStyledSvgIcon(mSaveIconStyle, mSaveIconPath));
         mActionSaveAs->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
+        mActionClose->setIcon(gui_utility::getStyledSvgIcon(mCloseIconStyle, mCloseIconPath));
+        mActionQuit->setIcon(gui_utility::getStyledSvgIcon(mQuitIconStyle, mQuitIconPath));
         mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
         mActionUndo->setIcon(gui_utility::getStyledSvgIcon(mUndoIconStyle, mUndoIconPath));
         mActionSettings->setIcon(gui_utility::getStyledSvgIcon(mSettingsIconStyle, mSettingsIconPath));
@@ -236,6 +241,8 @@ namespace hal
 
         mMenuFile->addMenu(menuImport);
         mMenuFile->addMenu(menuExport);
+        mMenuFile->addSeparator();
+        mMenuFile->addAction(mActionQuit);
 
         SettingsItemCheckbox* evlogSetting =  new SettingsItemCheckbox(
                     "Netlist event log",
@@ -274,7 +281,7 @@ namespace hal
         mActionPlayMacro->setEnabled(true);
 
         setWindowTitle("HAL");
-        mActionNew->setText("New Netlist");
+        mActionNew->setText("New Project");
         mActionOpenProject->setText("Open Project");
         mActionSave->setText("Save");
         mActionSaveAs->setText("Save As");
@@ -286,7 +293,8 @@ namespace hal
         mActionAbout->setText("About");
         mActionSettings->setText("Settings");
         mActionPlugins->setText("Plugin Manager");
-        mActionClose->setText("Close Document");
+        mActionClose->setText("Close Project");
+        mActionQuit->setText("Quit");
         mMenuFile->setTitle("File");
         mMenuEdit->setTitle("Edit");
         mMenuMacro->setTitle("Macro");
@@ -335,6 +343,7 @@ namespace hal
         connect(mActionImportProject, &Action::triggered, this, &MainWindow::handleImportProjectTriggered);
         connect(mActionGateLibraryManager, &Action::triggered, this, &MainWindow::handleActionGatelibraryManager);
         connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionCloseFile);
+        connect(mActionQuit, &Action::triggered, this, &MainWindow::onActionQuitTriggered);
 
         connect(mActionStartRecording, &Action::triggered, this, &MainWindow::handleActionStartRecording);
         connect(mActionStopRecording, &Action::triggered, this, &MainWindow::handleActionStopRecording);
@@ -428,6 +437,26 @@ namespace hal
         return mSaveAsIconStyle;
     }
 
+    QString MainWindow::closeIconPath() const
+    {
+        return mCloseIconPath;
+    }
+
+    QString MainWindow::closeIconStyle() const
+    {
+        return mCloseIconStyle;
+    }
+
+    QString MainWindow::quitIconPath() const
+    {
+        return mQuitIconPath;
+    }
+
+    QString MainWindow::quitIconStyle() const
+    {
+        return mQuitIconStyle;
+    }
+
     QString MainWindow::settingsIconPath() const
     {
         return mSettingsIconPath;
@@ -516,6 +545,26 @@ namespace hal
     void MainWindow::setSaveAsIconStyle(const QString& style)
     {
         mSaveAsIconStyle = style;
+    }
+
+    void MainWindow::setCloseIconPath(const QString& path)
+    {
+        mCloseIconPath = path;
+    }
+
+    void MainWindow::setCloseIconStyle(const QString& style)
+    {
+        mCloseIconStyle = style;
+    }
+
+    void MainWindow::setQuitIconPath(const QString& path)
+    {
+        mQuitIconPath = path;
+    }
+
+    void MainWindow::setQuitIconStyle(const QString& style)
+    {
+        mQuitIconStyle = style;
     }
 
     void MainWindow::setSettingsIconPath(const QString& path)
@@ -607,6 +656,7 @@ namespace hal
 
     void MainWindow::openPluginManager()
     {
+        mPluginManager->repolish();
         if (mStackedWidget->currentWidget() == mPluginManager)
             return; //nothing todo, already open
 
@@ -637,8 +687,8 @@ namespace hal
         if (gNetlist != nullptr)
         {
             QMessageBox msgBox;
-            msgBox.setText("Error");
-            msgBox.setInformativeText("You are already working on a file. Restart HAL to switch to a different file.");
+            msgBox.setText("Error: New Project");
+            msgBox.setInformativeText(MSG_PROJECT_ALREADY_OPEN);
             msgBox.setStyleSheet("QLabel{min-width: 600px;}");
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setDefaultButton(QMessageBox::Ok);
@@ -655,8 +705,8 @@ namespace hal
         if (gNetlist != nullptr)
         {
             QMessageBox msgBox;
-            msgBox.setText("Error");
-            msgBox.setInformativeText("You are already working on a file. Restart HAL to switch to a different file.");
+            msgBox.setText("Error: Open Project");
+            msgBox.setInformativeText(MSG_PROJECT_ALREADY_OPEN);
             msgBox.setStyleSheet("QLabel{min-width: 600px;}");
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setDefaultButton(QMessageBox::Ok);
@@ -686,8 +736,8 @@ namespace hal
         if (gNetlist != nullptr)
         {
             QMessageBox msgBox;
-            msgBox.setText("Error");
-            msgBox.setInformativeText("You are already working on a file. Restart HAL to switch to a different file.");
+            msgBox.setText("Error: Import Netlist");
+            msgBox.setInformativeText(MSG_PROJECT_ALREADY_OPEN);
             msgBox.setStyleSheet("QLabel{min-width: 600px;}");
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setDefaultButton(QMessageBox::Ok);

@@ -700,7 +700,7 @@ namespace hal
                 verilog_module->m_ports_by_expression[port_expression] = port.get();
                 verilog_module->m_ports.push_back(std::move(port));
 
-                // every port is an implicit wire, so create signal if not alreaedy declared explicitly
+                // every port implicitly creates a wire, so create signal if not already declared explicitly
                 if (verilog_module->m_signals_by_name.find(port_expression) == verilog_module->m_signals_by_name.end())
                 {
                     auto signal    = std::make_unique<VerilogSignal>();
@@ -761,7 +761,7 @@ namespace hal
                 port->m_ranges = ranges;
             }
 
-            // every port is an implicit wire, so create signal if not alreaedy declared explicitly
+            // every port implicitly creates a wire, so create signal if not already declared explicitly
             if (const auto signal_it = verilog_module->m_signals_by_name.find(port_expression); signal_it == verilog_module->m_signals_by_name.end())
             {
                 auto signal    = std::make_unique<VerilogSignal>();
@@ -874,6 +874,33 @@ namespace hal
         else
         {
             assignment.m_assignment = res.get();
+        }
+
+        // every assignment implicitly creates a wire, so create signal if not already declared explicitly
+        for (const auto& var : assignment.m_variable)
+        {
+            if (const auto* identifier = std::get_if<identifier_t>(&var); identifier != nullptr)
+            {
+                if (verilog_module->m_signals_by_name.find(*identifier) == verilog_module->m_signals_by_name.end())
+                {
+                    auto signal                                    = std::make_unique<VerilogSignal>();
+                    signal->m_name                                 = *identifier;
+                    verilog_module->m_signals_by_name[*identifier] = signal.get();
+                    verilog_module->m_signals.push_back(std::move(signal));
+                }
+            }
+            else if (const auto* ranged_identifier = std::get_if<ranged_identifier_t>(&var); ranged_identifier != nullptr)
+            {
+                const auto& signal_name = std::get<0>(*ranged_identifier);
+                if (verilog_module->m_signals_by_name.find(signal_name) == verilog_module->m_signals_by_name.end())
+                {
+                    auto signal                                    = std::make_unique<VerilogSignal>();
+                    signal->m_name                                 = signal_name;
+                    signal->m_ranges                               = std::get<1>(*ranged_identifier);
+                    verilog_module->m_signals_by_name[signal_name] = signal.get();
+                    verilog_module->m_signals.push_back(std::move(signal));
+                }
+            }
         }
         m_token_stream.consume(";", true);
 

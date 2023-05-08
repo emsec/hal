@@ -1175,8 +1175,7 @@ hal--Toolbar QPushButton:checked:hover {
     background-color : rgb(66, 66, 66);
 }
 
-hal--ModuleWidget
-{
+hal--ModuleWidget {
     qproperty-searchActiveIconStyle: "all->#30ac4f";
     qproperty-searchIconStyle: "all->#e8e8e8";
     qproperty-searchIconPath: ":/icons/search";
@@ -1201,6 +1200,12 @@ hal--MainWindow
 
     qproperty-saveAsIconStyle: "all->#3192C5";
     qproperty-saveAsIconPath: ":/icons/save-as";
+
+    qproperty-closeIconStyle: "all->#AFB1B3";
+    qproperty-closeIconPath: ":/icons/cross";
+
+    qproperty-quitIconStyle: "all->#AFB1B3";
+    qproperty-quitIconPath: ":/icons/switch";
 
     qproperty-settingsIconStyle: "all->#AFB1B3";
     qproperty-settingsIconPath: ":/icons/settings";
@@ -1287,6 +1292,9 @@ hal--GraphicsQssAdapter
 
     qproperty-gridBaseDotColor: rgb(25, 25, 25);
     qproperty-gridClusterDotColor: rgb(170, 160, 125);
+
+    qproperty-nodeBackgroundColor: rgba(0, 0, 0, 200);
+    qproperty-nodeTextColor: rgb(160, 160, 160);
 }
 
 QTreeView
@@ -1395,6 +1403,22 @@ hal--GatelibraryManagementDialog QTableView
 hal--GatelibraryManagementDialog QHeaderView::section
 {
 background: rgb(35, 35, 35);
+}
+
+hal--GuiPluginManager
+{
+    qproperty-loadIconPath : ":/icons/insert-plugin";
+    qproperty-loadIconStyle: "all->#30ffc0";
+    qproperty-unloadIconPath: ":/icons/cross";
+    qproperty-unloadIconStyle: "all->#ff4040";
+    qproperty-cliIconPath: ":/icons/cli-options";
+    qproperty-cliIconStyle: "all->#c0c0c0";
+    qproperty-guiIconPath: ":/icons/invoke-gui";
+    qproperty-guiIconStyle: "all->#40A0FF";
+    qproperty-guiIconDisabledStyle: "all->#C0C0C0";
+    qproperty-defaultTextColor: rgb(192,192,192);
+    qproperty-hilightTextColor: rgb(255,255,20);
+    qproperty-hilightBackgroundColor: rgb(0,10,30);
 }
 
 hal--CommentWidget

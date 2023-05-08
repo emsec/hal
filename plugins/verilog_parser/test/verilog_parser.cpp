@@ -3362,7 +3362,7 @@ namespace hal {
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
                 auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
-                EXPECT_TRUE(nl_res.is_error());
+                EXPECT_TRUE(nl_res.is_ok());
             }
         TEST_END
     }
