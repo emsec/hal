@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
   * added overview of loaded plugins and their features
   * added interactive buttons to load and unload plugins
   * added feature to load plugin automatically if needed for file parsing
-  * prevent unload of plugin if needed as dependency
+  * prevent unloading of plugin if it is needed as a dependency of another plugin
   * changed plugin load policy to have only mandatory or user required plugins loaded at startup
 * Boolean functions
   * added `BooleanFunction::substitute(const std::map<std::string, std::string>&)` to substitute multiple variable names at once
@@ -18,11 +18,19 @@ All notable changes to this project will be documented in this file.
   * added `BooleanFunction::Node::get_constant_value`, `BooleanFunction::Node::get_index_value`, and `BooleanFunction::Node::get_variable_name`
   * added `BooleanFunction::get_constant_value_u64` and `BooleanFunction::Node::get_constant_value_u64` to retrieve the constant value as `u64` if it comprises less than 64-bit
   * added `BooleanFunction::has_constant_value(const std::vector<BooleanFunction::Value>&)` and `BooleanFunction::Node::has_constant_value(const std::vector<BooleanFunction::Value>&)` 
+  * added `BooleanFunction::algebraic_printer` as an alternative printer for `BooleanFunction::to_string` to print a Boolean function in algebraic form
 * plugins
   * `boolean_influence`
     * added deterministic variants of all Boolean influence functions that shall be used for Boolean functions with only few input variables
     * added additional parameters for more control to the subcircuit and gate variants of `get_boolean_influence`
+  * `netlist_preprocessing`
+    * added `decompose_gates_of_type` and `decompose_gate` that decompose combinational logic gates into basic gate types
+    * added `parse_def_file` to parse a Design Exchange Format file that contains placement information
+  * `verilog_parser`
+    * added annotation of all net names that where merged during parsing in the data container
+    * changed the behavior of the parser when flattening a netlist and generating new unique names (instead of appending an index we now add a prefix containing the names of parent modules)
   * `z3_utils`
+    * added `compare_netlists` function that functionally compares two netlists that only differ in their combinational logic
     * removed class `z3Wrapper`
     * renamed `to_z3` to `from_bf` and added support for missing node types
     * renamed `to_hal` to `to_bf` and added support for missing node types
@@ -41,8 +49,12 @@ All notable changes to this project will be documented in this file.
   * added `Gate::get_modules` to recursively get all modules that contain the gate by traversing the module hierarchy
   * added `Net::is_a_source(const Gate*)` and `Net::is_a_destination(const Gate*)` that check whether a gate is a source/destination independent of the gate pin
   * added `PinGroup<T>::contains_pin` to check whether a pin is part of the respective gate or module pin group
+  * added overloaded version of `deserialize_netlist` that takes a gate library, thereby overruling the gate library path in the .hal file
+  * added `utils::wrapped_stoull` and `utils::wrapped_stoul` that wrap the standard string to integer conversion and use `hal::Result<>` for error handlung instead of exceptions
+  * added utility function `is_valid_enum` to check whether the string representation of an enum value is valid.
 * bugfixes
   * fixed missing Python bindings for `GatePinGroup`
+  * fixed `SolveFsmPlugin` not properly replacing power and ground nets in Boolean functions
 
 ## [4.1.0] - 2023-03-08 16:57:06+01:00 (urgency: medium)
 * selection details

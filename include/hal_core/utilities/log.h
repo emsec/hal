@@ -107,6 +107,7 @@ namespace hal
         struct log_sink
         {
             std::shared_ptr<spdlog::sinks::sink> spdlog_sink;
+            std::string sink_type;
             bool is_file_sink;
             bool truncate;
             std::filesystem::path path;
@@ -241,6 +242,20 @@ namespace hal
         void handle_options(ProgramArguments& args);
 
         /**
+         * Get the vector of default sinks that are added to each newly created logger by default.
+         * 
+         * @returns The default sinks.
+         */
+        std::vector<std::shared_ptr<hal::LogManager::log_sink>> get_default_sinks();
+
+        /**
+         * Remove the specified sink type from the vector of default sinks if present.
+         * 
+         * @param[in] sink_type -  The type of sink to remove from default sinks.
+         */
+        void remove_sink_from_default(const std::string& sink_type);
+
+        /**
          * Create a new logging sink which prints to stdout.
          *
          * @param[in] colored - If true, the output will be colored depending on the severity.
@@ -294,6 +309,8 @@ namespace hal
         ProgramOptions m_descriptions;
 
         std::string m_enforce_level;
+
+        std::vector<std::shared_ptr<hal::LogManager::log_sink>> m_default_sinks;
 
         static LogManager* m_instance;
     };

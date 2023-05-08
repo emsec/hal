@@ -248,8 +248,9 @@ namespace hal
         m_gate_types.clear();
         m_gnd_gate_types.clear();
         m_vcc_gate_types.clear();
-        m_instance_name_occurrences.clear();
-        m_signal_name_occurrences.clear();
+        m_module_instantiation_count.clear();
+        m_instance_name_occurences.clear();
+        m_net_name_occurences.clear();
         m_net_by_name.clear();
         m_nets_to_merge.clear();
         m_module_ports.clear();
@@ -1104,8 +1105,6 @@ namespace hal
         m_netlist->set_design_name(top_module->m_name);
         m_netlist->enable_automatic_net_checks(false);
 
-        std::unordered_map<std::string, u32> instantiation_count;
-
         // preparations for alias: count the occurences of all names
         std::queue<VerilogModule*> q;
         q.push(top_module);
@@ -1115,10 +1114,24 @@ namespace hal
             VerilogModule* module = q.front();
             q.pop();
 
-            instantiation_count[module->m_name]++;
+            m_module_instantiation_count[module->m_name]++;
+
+            // collect and count all net names in the netlist
+            for (const auto& s : module->m_signals)
+            {
+                std::vector<std::string> expanded_names;
+                expand_ranges_recursively(expanded_names, s->m_name, s->m_ranges, 0);
+                for (const auto& net_name : expanded_names)
+                {
+                    m_net_name_occurences[net_name]++;
+                }
+            }
 
             for (const auto& instance : module->m_instances)
             {
+                m_instance_name_occurences[instance->m_name]++;
+
+                // add type of instance to q if it is a module
                 if (const auto it = m_modules_by_name.find(instance->m_type); it != m_modules_by_name.end())
                 {
                     q.push(it->second);
@@ -1129,7 +1142,7 @@ namespace hal
         for (auto& [module_name, verilog_module] : m_modules_by_name)
         {
             // detect unused modules
-            if (instantiation_count[module_name] == 0)
+            if (m_module_instantiation_count[module_name] == 0)
             {
                 log_warning("verilog_parser", "module '{}' has been defined in the netlist but is not instantiated.", module_name);
                 continue;
@@ -1220,7 +1233,7 @@ namespace hal
         {
             for (const auto& expanded_port_identifier : port->m_expanded_identifiers)
             {
-                const auto signal_name = get_unique_alias(m_signal_name_occurrences, expanded_port_identifier);
+                const auto signal_name = get_unique_alias("", expanded_port_identifier + "__GLOBAL_IO__", m_net_name_occurences);
 
                 Net* global_port_net = m_netlist->create_net(signal_name);
                 if (global_port_net == nullptr)
@@ -1231,7 +1244,7 @@ namespace hal
                 m_net_by_name[signal_name] = global_port_net;
 
                 // assign global port nets to ports of top module
-                top_assignments[signal_name] = signal_name;
+                top_assignments[expanded_port_identifier] = signal_name;
 
                 if (port->m_direction == PinDirection::input || port->m_direction == PinDirection::inout)
                 {
@@ -1258,6 +1271,7 @@ namespace hal
 
         // merge nets without gates in between them
         std::unordered_map<std::string, std::string> merged_nets;
+        std::unordered_map<std::string, std::vector<std::string>> master_to_slaves;
 
         for (auto& [master, slave] : m_nets_to_merge)
         {
@@ -1373,6 +1387,55 @@ namespace hal
             m_netlist->delete_net(slave_net);
             m_net_by_name.erase(slave);
             merged_nets[slave] = master;
+            master_to_slaves[master].push_back(slave);
+        }
+
+        // annotate all surviving master nets with the net names that where merged into them
+        for (auto& master_net : m_netlist->get_nets())
+        {
+            const auto master_name = master_net->get_name();
+
+            if (const auto m2s_it = master_to_slaves.find(master_name); m2s_it != master_to_slaves.end())
+            {
+                std::vector<std::vector<std::string>> merged_slaves;
+                auto current_slaves = m2s_it->second;
+
+                while (!current_slaves.empty())
+                {
+                    std::vector<std::string> next_slaves;
+                    for (const auto& s : current_slaves)
+                    {
+                        if (const auto m2s_it = master_to_slaves.find(s); m2s_it != master_to_slaves.end())
+                        {
+                            next_slaves.insert(next_slaves.end(), m2s_it->second.begin(), m2s_it->second.end());
+                        }
+                    }
+
+                    merged_slaves.push_back(current_slaves);
+                    current_slaves = next_slaves;
+                    next_slaves.clear();
+                }
+
+                // annotate all merged slave wire names as a JSON formatted list of list of strings
+                // each net can span a tree of "consumed" slave wire names where the nth list represents all wire names that where merged at depth n
+                std::string merged_str = "";
+                bool has_merged_nets   = false;
+                for (const auto& vec : merged_slaves)
+                {
+                    if (!vec.empty())
+                    {
+                        has_merged_nets = true;
+                    }
+                    const auto s = utils::join(", ", vec, [](const auto e) { return '"' + e + '"'; });
+                    merged_str += "[" + s + "], ";
+                }
+                merged_str = merged_str.substr(0, merged_str.size() - 2);
+
+                if (has_merged_nets)
+                {
+                    master_net->set_data("parser_annotation", "merged_nets", "string", "[" + merged_str + "]");
+                }
+            }
         }
 
         // add global GND gate if required by any instance
@@ -1469,7 +1532,8 @@ namespace hal
 
         // TODO check parent module assignments for port aliases
 
-        instance_alias[instance_identifier] = get_unique_alias(m_instance_name_occurrences, instance_identifier);
+        const std::string parent_name = (parent == nullptr) ? "" : parent->get_name();
+        instance_alias[instance_identifier] = get_unique_alias(parent_name, instance_identifier, m_instance_name_occurences);
 
         // create netlist module
         Module* module;
@@ -1524,7 +1588,7 @@ namespace hal
         {
             for (const auto& expanded_name : signal->m_expanded_names)
             {
-                signal_alias[expanded_name] = get_unique_alias(m_signal_name_occurrences, expanded_name);
+                signal_alias[expanded_name] = get_unique_alias(module->get_name(), expanded_name, m_net_name_occurences);
 
                 // create new net for the signal
                 Net* signal_net = m_netlist->create_net(signal_alias.at(expanded_name));
@@ -1606,7 +1670,8 @@ namespace hal
             // TODO handle identifier != expression
             if (const auto alias_it = signal_alias.find(signal_name); alias_it != signal_alias.end())
             {
-                m_nets_to_merge.push_back(std::make_pair(net_name, alias_it->second));
+                const bool swap = net_name.find("__GLOBAL_IO__") == std::string::npos;
+                m_nets_to_merge.push_back(swap ? std::make_pair(net_name, alias_it->second) : std::make_pair(alias_it->second, net_name));
             }
             else
             {
@@ -1662,7 +1727,7 @@ namespace hal
             else if (const auto gate_type_it = m_gate_types.find(instance->m_type); gate_type_it != m_gate_types.end())
             {
                 // create the new gate
-                instance_alias[instance->m_name] = get_unique_alias(m_instance_name_occurrences, instance->m_name);
+                instance_alias[instance->m_name] = get_unique_alias(module->get_name(), instance->m_name, m_instance_name_occurences);
 
                 Gate* new_gate = m_netlist->create_gate(gate_type_it->second, instance_alias.at(instance->m_name));
                 if (new_gate == nullptr)
@@ -1854,24 +1919,23 @@ namespace hal
             {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
     }    // namespace
 
-    std::string VerilogParser::get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const
+    const std::string instance_name_seperator = "/";
+
+    // generate a unique name for a gate/module instance
+    std::string VerilogParser::get_unique_alias(const std::string& parent_name, const std::string& name, const std::unordered_map<std::string, u32>& name_occurences) const
     {
-        std::string res_name;
+        std::string unique_alias = name;
 
-        if (name_occurrences[name] == 0)
+        if (!parent_name.empty())
         {
-            // if the name only appears once, we don't have to suffix it
-            res_name = name;
+            // if there is no other instance with that name, we omit the name prefix
+            if (const auto instance_name_it = name_occurences.find(name); instance_name_it != name_occurences.end() && instance_name_it->second > 1)
+            {
+                unique_alias = parent_name + instance_name_seperator + unique_alias;
+            }
         }
-        else
-        {
-            // otherwise, add a unique string to the name
-            res_name = name + "__[" + std::to_string(name_occurrences[name]) + "]__";
-        }
-
-        name_occurrences[name]++;
-
-        return res_name;
+    
+        return unique_alias;
     }
 
     std::vector<u32> VerilogParser::parse_range(TokenStream<std::string>& stream) const

@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/netlist/netlist.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/utilities/result.h"
 
 namespace hal
@@ -97,5 +97,55 @@ namespace hal
          * @return The number of simplified INIT strings on success, an error otherwise.
          */
         static Result<u32> simplify_lut_inits(Netlist* nl);
+
+        /**
+         * Builds the Boolean function of each output pin of the gate and constructs a gate tree implementing it.
+         * Afterwards the original output net is connected to the built gate tree and the gate is deleted if the 'delete_gate' flag is set.
+         * 
+         * For the decomposition we currently only support the base operands AND, OR, INVERT, XOR.
+         * The function searches in the gate library for a fitting two input gate and uses a standard HAL gate type if none is found.
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @param[in] gate - The gate to decompose.
+         * @param[in] delete_gate - Determines whether the original gate gets deleted by the function, defaults to true,
+         * @return Ok on success, an error otherwise.
+         */
+        static Result<std::monostate> decompose_gate(Netlist* nl, Gate* g, const bool delete_gate = true);
+
+        /**
+         * Decomposes each gate of the specified type by building the Boolean function for each output pin of the gate and contructing a gate tree implementing it.
+         * Afterwards the original gate is deleted and the output net is connected to the built gate tree.
+         * 
+         * For the decomposition we currently only support the base operands AND, OR, INVERT, XOR.
+         * The function searches in the gate library for a fitting two input gate and uses a standard HAL gate type if none is found.
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @param[in] gate_types - The gate types that should be decomposed.
+         * @return Ok and the number of decomposed gates on success, an error otherwise.
+         */
+        static Result<u32> decompose_gates_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types);
+
+        /**
+         * Tries to reconstruct a name and index for each flip flop that was part of a multibit wire in the verilog code.
+         * This is NOT a general netlist reverse engineering algorithm and ONLY works on synthesized netlists with names annotated by the synthesizer.
+         * This function mainly focuses netlists synthesized with yosys since yosys names the output wires of the flip flops but not the gate it self.
+         * We try to reconstruct name and index for each flip flop based on the name of its output nets.
+         * 
+         * The reconstructed indexed identifiers get annoated to the flip flop in the gate data container.
+         * 
+         * @param[in] nl - The netlist to operate on.
+         * return OK and the number of reconstructed names on success, an error otherwise.
+        */
+        static Result<u32> reconstruct_indexed_ff_identifiers(Netlist* nl);
+
+        /**
+         * Parses a design exchange format file and extracts the coordinated of a placed design for each component/gate.
+         * The extracted coordinates get annotated to the gates.
+         * 
+         * @param[in] nl - The netlist to operate on.
+         * @param[in] def_file - Path to the def file.
+         * return OK on success, an error otherwise.
+        */
+        static Result<std::monostate> parse_def_file(Netlist* nl, const std::filesystem::path& def_file);
     };
 }    // namespace hal

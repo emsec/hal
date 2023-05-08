@@ -214,8 +214,8 @@ namespace hal
                 const u32 gate_id           = val["id"].GetUint();
                 const std::string gate_name = val["name"].GetString();
                 const std::string gate_type = val["type"].GetString();
-                i32 lx = -1;
-                i32 ly = -1;
+                i32 lx                      = -1;
+                i32 ly                      = -1;
                 if (val.HasMember("location_x") && val.HasMember("location_y"))
                 {
                     lx = val["location_x"].GetInt();
