@@ -80,12 +80,6 @@ namespace hal {
             std::filesystem::path vhdl_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
             VHDLParser vhdl_parser;
             auto nl_res = vhdl_parser.parse_and_instantiate(vhdl_file, gate_lib);
-
-            if (nl_res.is_error())
-            {
-                std::cout << nl_res.get_error().get() << std::endl;
-            }
-
             ASSERT_TRUE(nl_res.is_ok());
             std::unique_ptr<Netlist> nl = nl_res.get();
             ASSERT_NE(nl, nullptr);

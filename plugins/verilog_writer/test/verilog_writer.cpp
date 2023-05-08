@@ -95,11 +95,6 @@ namespace hal
 
                 VerilogParser verilog_parser;
                 auto parsed_nl_res = verilog_parser.parse_and_instantiate(path_netlist, m_gl);
-                if (parsed_nl_res.is_error())
-                {
-                    std::cout << parsed_nl_res.get_error().get() << std::endl;
-                }
-
                 ASSERT_TRUE(parsed_nl_res.is_ok());
                 std::unique_ptr<Netlist> parsed_nl = parsed_nl_res.get();
                 ASSERT_NE(parsed_nl, nullptr);
