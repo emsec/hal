@@ -87,22 +87,22 @@ $(document).ready(function(){initNavTree('enums_8h_source.html',''); initResizab
 </div><!--header-->
 <div class="contents">
 <a href="enums_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// MIT License</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann (&quot;ORIGINAL AUTHORS&quot;). All rights reserved.</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix (&quot;ORIGINAL AUTHORS&quot;). All Rights reserved.</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// in the Software without restriction, including without limitation the rights</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// copies of the Software, and to permit persons to whom the Software is</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// furnished to do so, subject to the following conditions:</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// The above copyright notice and this permission notice shall be included in all</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// copies or substantial portions of the Software.</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
@@ -167,12 +167,26 @@ $(document).ready(function(){initNavTree('enums_8h_source.html',''); initResizab
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keywordflow">return</span> default_val;</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    }</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    template&lt;typename T, typename = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">::type</a>&gt;</div>
-<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="namespacehal.html#abfc41a824ec2e2d67ef693316ffca725">  115</a></span>&#160;    std::ostream&amp; <a class="code" href="namespacehal.html#a90756e09e3a11b7dd4e7362ae3101ce9">operator&lt;&lt;</a>(std::ostream&amp; os, T e)</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    {</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keywordflow">return</span> os &lt;&lt; <a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(e);</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    }</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    template&lt;typename T, typename = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">::type</a>&gt;</div>
+<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="namespacehal.html#a57c1617107f5fccaba2a1f90aa97a6a2">  114</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="namespacehal.html#a57c1617107f5fccaba2a1f90aa97a6a2">is_valid_enum</a>(<span class="keyword">const</span> std::string&amp; <a class="code" href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">str</a>) noexcept</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    {</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [e, s] : <a class="code" href="structhal_1_1_enum_strings.html">EnumStrings&lt;T&gt;::data</a>)</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        {</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            <span class="keywordflow">if</span> (s == <a class="code" href="namespacecontrol.html#a42884b866cabdd971b4dbe8c3fcc3735">str</a>)</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;            {</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            }</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        }</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    }</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    template&lt;typename T, typename = typename std::enable_if&lt;std::is_enum&lt;T&gt;::value, T&gt;<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">::type</a>&gt;</div>
+<div class="line"><a name="l00135"></a><span class="lineno"><a class="line" href="namespacehal.html#abfc41a824ec2e2d67ef693316ffca725">  135</a></span>&#160;    std::ostream&amp; <a class="code" href="namespacehal.html#a90756e09e3a11b7dd4e7362ae3101ce9">operator&lt;&lt;</a>(std::ostream&amp; os, T e)</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    {</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <span class="keywordflow">return</span> os &lt;&lt; <a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(e);</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    }</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
@@ -181,6 +195,7 @@ $(document).ready(function(){initNavTree('enums_8h_source.html',''); initResizab
 <div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
 <div class="ttc" id="astructhal_1_1_enum_strings_html"><div class="ttname"><a href="structhal_1_1_enum_strings.html">hal::EnumStrings</a></div><div class="ttdef"><b>Definition:</b> <a href="enums_8h_source.html#l00040">enums.h:40</a></div></div>
 <div class="ttc" id="astructhal_1_1_enum_strings_html_aa7ca6d7993594a0052aea34d32d39e00"><div class="ttname"><a href="structhal_1_1_enum_strings.html#aa7ca6d7993594a0052aea34d32d39e00">hal::EnumStrings::data</a></div><div class="ttdeci">static std::map&lt; T, std::string &gt; data</div><div class="ttdef"><b>Definition:</b> <a href="enums_8h_source.html#l00042">enums.h:42</a></div></div>
+<div class="ttc" id="anamespacehal_html_a57c1617107f5fccaba2a1f90aa97a6a2"><div class="ttname"><a href="namespacehal.html#a57c1617107f5fccaba2a1f90aa97a6a2">hal::is_valid_enum</a></div><div class="ttdeci">bool is_valid_enum(const std::string &amp;str) noexcept</div><div class="ttdef"><b>Definition:</b> <a href="enums_8h_source.html#l00114">enums.h:114</a></div></div>
 <div class="ttc" id="anamespacehal_html_a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3"><div class="ttname"><a href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::AsyncSetResetBehavior::T</a></div><div class="ttdeci">@ T</div></div>
 <div class="ttc" id="anamespacehal_html_a2319a036cfb2272af66101db753b7b5c"><div class="ttname"><a href="namespacehal.html#a2319a036cfb2272af66101db753b7b5c">hal::enum_from_string</a></div><div class="ttdeci">T enum_from_string(const std::string &amp;str)</div><div class="ttdef"><b>Definition:</b> <a href="enums_8h_source.html#l00072">enums.h:72</a></div></div>
 <div class="ttc" id="anamespacehal_html_afe11c53f9f94ae23527944574e1f5df3"><div class="ttname"><a href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">hal::enum_to_string</a></div><div class="ttdeci">std::string enum_to_string(T e)</div><div class="ttdef"><b>Definition:</b> <a href="enums_8h_source.html#l00052">enums.h:52</a></div></div>
@@ -189,7 +204,7 @@ $(document).ready(function(){initNavTree('enums_8h_source.html',''); initResizab
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_8cff0e4740b4a22580dd05764b73d449.html">utilities</a></li><li class="navelem"><a class="el" href="enums_8h.html">enums.h</a></li>
-    <li class="footer">Generated on Mon May 8 2023 13:27:41 for HAL by
+    <li class="footer">Generated on Mon May 8 2023 15:19:10 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

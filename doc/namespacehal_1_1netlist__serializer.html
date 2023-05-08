@@ -113,7 +113,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classhal_1_1_gate_library.html">GateLibrary</a> *&#160;</td>
-          <td class="paramname"><em>gatelib</em> = <code>nullptr</code>&#160;</td>
+          <td class="paramname"><em>gate_lib</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -122,14 +122,15 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Deserializes a netlist from a .hal file.</p>
+<p>Deserializes a netlist from a <code>.hal</code> file using the provided gate library. If no gate library is provided, a gate library path must be specified within the <code>.hal</code> file.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">hal_file</td><td>- The source .hal file. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hal_file</td><td>- The path to the <code>.hal</code> file. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">gate_lib</td><td>- The gate library. Defaults to a <code>nullptr</code>. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The deserialized netlist. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The deserialized netlist on success, a <code>nullptr</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00924">924</a> of file <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html">netlist_serializer.cpp</a>.</p>
 
@@ -164,15 +165,15 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Serializes a netlist into a .hal file.</p>
+<p>Serializes a netlist into a <code>.hal</code> file.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">netlist</td><td>- The netlist to serialize. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">hal_file</td><td>- The destination .hal file. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hal_file</td><td>- The path to the <code>.hal</code> file. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True on success, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> on success, <code>false</code> otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00865">865</a> of file <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html">netlist_serializer.cpp</a>.</p>
 
@@ -188,7 +189,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1netlist__serializer.html">netlist_serializer</a></li>
-    <li class="footer">Generated on Mon May 8 2023 13:27:49 for HAL by
+    <li class="footer">Generated on Mon May 8 2023 15:19:17 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

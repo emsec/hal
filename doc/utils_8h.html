@@ -91,6 +91,7 @@ $(document).ready(function(){initNavTree('utils_8h.html',''); initResizable(); }
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="defines_8h_source.html">hal_core/defines.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="include_2hal__core_2utilities_2result_8h_source.html">hal_core/utilities/result.h</a>&quot;</code><br />
 <code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;set&gt;</code><br />
 <code>#include &lt;sstream&gt;</code><br />
@@ -102,18 +103,22 @@ Include dependency graph for utils.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="utils_8h__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2include_2hal__core_2utilities_2utils_8h" alt=""/></div>
 <map name="_2home_2runner_2work_2hal_2hal_2include_2hal__core_2utilities_2utils_8h" id="_2home_2runner_2work_2hal_2hal_2include_2hal__core_2utilities_2utils_8h">
-<area shape="rect" title=" " alt="" coords="443,5,613,61"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="149,109,289,136"/>
-<area shape="rect" title=" " alt="" coords="313,109,399,136"/>
-<area shape="rect" title=" " alt="" coords="424,109,467,136"/>
-<area shape="rect" title=" " alt="" coords="491,109,565,136"/>
-<area shape="rect" title=" " alt="" coords="589,109,648,136"/>
-<area shape="rect" title=" " alt="" coords="672,109,787,136"/>
-<area shape="rect" title=" " alt="" coords="811,109,874,136"/>
-<area shape="rect" title=" " alt="" coords="5,184,96,211"/>
-<area shape="rect" title=" " alt="" coords="121,184,207,211"/>
-<area shape="rect" title=" " alt="" coords="231,184,318,211"/>
-<area shape="rect" title=" " alt="" coords="342,184,413,211"/>
+<area shape="rect" title=" " alt="" coords="575,5,745,61"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="149,288,289,315"/>
+<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="392,109,523,151"/>
+<area shape="rect" title=" " alt="" coords="619,206,706,233"/>
+<area shape="rect" title=" " alt="" coords="597,117,640,143"/>
+<area shape="rect" title=" " alt="" coords="664,117,739,143"/>
+<area shape="rect" title=" " alt="" coords="763,117,821,143"/>
+<area shape="rect" title=" " alt="" coords="845,117,960,143"/>
+<area shape="rect" title=" " alt="" coords="985,117,1047,143"/>
+<area shape="rect" title=" " alt="" coords="5,363,96,389"/>
+<area shape="rect" title=" " alt="" coords="121,363,207,389"/>
+<area shape="rect" title=" " alt="" coords="231,363,318,389"/>
+<area shape="rect" title=" " alt="" coords="342,363,413,389"/>
+<area shape="rect" href="error_8h.html" title=" " alt="" coords="256,199,387,240"/>
+<area shape="rect" title=" " alt="" coords="411,206,503,233"/>
+<area shape="rect" title=" " alt="" coords="527,206,595,233"/>
 </map>
 </div>
 </div>
@@ -234,6 +239,10 @@ Functions</h2></td></tr>
 <tr class="separator:afbfe0cd7b2ec80643d4c16e4ffb7a7d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b4623be57665e39318991c7344de89d"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a7b4623be57665e39318991c7344de89d">hal::utils::get_open_source_licenses</a> ()</td></tr>
 <tr class="separator:a7b4623be57665e39318991c7344de89d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9335da615de06a7a371e86cb8ca10a0"><td class="memItemLeft" align="right" valign="top">Result&lt; <a class="el" href="defines_8h.html#a1af9f95651e921615e75917a6dd1b574">u64</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#aa9335da615de06a7a371e86cb8ca10a0">hal::utils::wrapped_stoull</a> (const std::string &amp;s)</td></tr>
+<tr class="separator:aa9335da615de06a7a371e86cb8ca10a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91c042ba653895c25f31a95e8050cb5b"><td class="memItemLeft" align="right" valign="top">Result&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1utils.html#a91c042ba653895c25f31a95e8050cb5b">hal::utils::wrapped_stoul</a> (const std::string &amp;s)</td></tr>
+<tr class="separator:a91c042ba653895c25f31a95e8050cb5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -241,7 +250,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_8cff0e4740b4a22580dd05764b73d449.html">utilities</a></li><li class="navelem"><a class="el" href="utils_8h.html">utils.h</a></li>
-    <li class="footer">Generated on Mon May 8 2023 13:27:44 for HAL by
+    <li class="footer">Generated on Mon May 8 2023 15:19:13 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

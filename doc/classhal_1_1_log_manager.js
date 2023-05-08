@@ -9,11 +9,13 @@ var classhal_1_1_log_manager =
     [ "get_available_log_levels", "classhal_1_1_log_manager.html#af45a31acd9c308ffe832035b7cb9fc7f", null ],
     [ "get_channel", "classhal_1_1_log_manager.html#ab0f66a23f31c9f40fd17d31d45cfd881", null ],
     [ "get_channels", "classhal_1_1_log_manager.html#a91c934b15fe7853ae434fe96029130fa", null ],
+    [ "get_default_sinks", "classhal_1_1_log_manager.html#a90a74a0d0885652cd83817dd45aeeb2e", null ],
     [ "get_gui_callback", "classhal_1_1_log_manager.html#ad7f16741dd004b289a2d353b9d2e56f8", null ],
     [ "get_level_of_channel", "classhal_1_1_log_manager.html#a6fa67a9cca35728d04ac03d974d56958", null ],
     [ "get_option_descriptions", "classhal_1_1_log_manager.html#a6a016672969496755f2f19148f9b30d4", null ],
     [ "handle_options", "classhal_1_1_log_manager.html#ad3e0a37bb3366fc8b538251694a23b8c", null ],
     [ "remove_channel", "classhal_1_1_log_manager.html#a320be7b76170b47f9806b3891d74748c", null ],
+    [ "remove_sink_from_default", "classhal_1_1_log_manager.html#ac7dad63d99c3d3e6bfff4476c33bdee7", null ],
     [ "set_file_name", "classhal_1_1_log_manager.html#af9498836b0dc786c6e38c9c0a76bcb7e", null ],
     [ "set_format_pattern", "classhal_1_1_log_manager.html#aa132cf5f8634a2dbe37735f7d98ab714", null ],
     [ "set_level_of_channel", "classhal_1_1_log_manager.html#a05ee503b0a3d64ad5ee6e067361eee67", null ]

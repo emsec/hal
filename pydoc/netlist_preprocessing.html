@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Preprocessing &mdash; hal_py v4.1.0-46-g71a1f5cfe documentation</title>
+  <title>Netlist Preprocessing &mdash; hal_py v4.1.0-48-gac4a4c942 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-46-g71a1f5cfe
+                v4.1.0-48-gac4a4c942
               </div>
             
           
@@ -170,7 +170,62 @@
 <dl class="class">
 <dt id="netlist_preprocessing.NetlistPreprocessingPlugin">
 <em class="property">class </em><code class="descclassname">netlist_preprocessing.</code><code class="descname">NetlistPreprocessingPlugin</code><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><dl class="staticmethod">
+<dt id="netlist_preprocessing.NetlistPreprocessingPlugin.decompose_gate">
+<em class="property">static </em><code class="descname">decompose_gate</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist</em>, <em>g: hal_py.Gate</em>, <em>delete_gate: bool = True</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.decompose_gate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds the Boolean function of each output pin of the gate and constructs a gate tree implementing it.
+Afterwards the original output net is connected to the built gate tree and the gate is deleted if the ‘delete_gate’ flag is set.</p>
+<p>For the decomposition we currently only support the base operands AND, OR, INVERT.
+The function searches in the gate library for a fitting two input gate and uses a standard HAL gate type if none is found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</li>
+<li><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate to decompose.</li>
+<li><strong>delete_gate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Determines whether the original gate gets deleted by the function, defaults to <cite>True</cite>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><cite>True</cite> on success, <cite>False</cite> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="netlist_preprocessing.NetlistPreprocessingPlugin.decompose_gates_of_type">
+<em class="property">static </em><code class="descname">decompose_gates_of_type</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist, gate_types: List[hal_py.GateType]</em><span class="sig-paren">)</span> &#x2192; Optional[int]<a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.decompose_gates_of_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decomposes each gate of the specified type by building the Boolean function for each output pin of the gate and contructing a gate tree implementing it.
+Afterwards the original gate is deleted and the output net is connected to the built gate tree.</p>
+<p>For the decomposition we currently only support the base operands AND, OR, INVERT.
+The function searches in the gate library for a fitting two input gate and uses a standard HAL gate type if none is found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</li>
+<li><strong>gate_types</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a><em>]</em>) – The gate types that should be decomposed.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The number of decomposed gates on success, <cite>None</cite> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="netlist_preprocessing.NetlistPreprocessingPlugin.get_name">
 <code class="descname">get_name</code><span class="sig-paren">(</span><em>self: netlist_preprocessing.NetlistPreprocessingPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the name of the plugin.</p>
@@ -217,6 +272,52 @@
 </dd></dl>
 
 <dl class="staticmethod">
+<dt id="netlist_preprocessing.NetlistPreprocessingPlugin.parse_def_file">
+<em class="property">static </em><code class="descname">parse_def_file</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist</em>, <em>def_file: os.PathLike</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.parse_def_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses a design exchange format file and extracts the coordinated of a placed design for each component/gate.
+The extracted coordinates get annotated to the gates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</li>
+<li><strong>def_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – The path to the def file</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><cite>True</cite> on success, <cite>False</cite> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="netlist_preprocessing.NetlistPreprocessingPlugin.reconstruct_indexed_ff_identifiers">
+<em class="property">static </em><code class="descname">reconstruct_indexed_ff_identifiers</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; Optional[int]<a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.reconstruct_indexed_ff_identifiers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tries to reconstruct a name and index for each flip flop that was part of a multibit wire in the verilog code.
+This is NOT a general netlist reverse engineering algorithm and ONLY works on synthesized netlists with names annotated by the synthesizer.
+This function mainly focuses netlists synthesized with yosys since yosys names the output wires of the flip flops but not the gate it self.
+We try to reconstruct name and index for each flip flop based on the name of its output nets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The number of reconstructed names on success, <cite>None</cite> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
 <dt id="netlist_preprocessing.NetlistPreprocessingPlugin.remove_buffers">
 <em class="property">static </em><code class="descname">remove_buffers</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; Optional[int]<a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.remove_buffers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes buffer gates from the netlist and connect their fan-in to their fan-out nets.
@@ -228,7 +329,7 @@ For example, a 2-input AND gate with one input being connected to constant ‘1�
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The number of removed buffers on success, None otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The number of removed buffers on success, <cite>None</cite> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
 </tr>
@@ -246,7 +347,7 @@ For example, a 2-input AND gate with one input being connected to constant ‘1�
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The number of removed gates on success, None otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The number of removed gates on success, <cite>None</cite> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
 </tr>
@@ -264,7 +365,7 @@ For example, a 2-input AND gate with one input being connected to constant ‘1�
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The number of removed gates on success, None otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The number of removed gates on success, <cite>None</cite> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
 </tr>
@@ -282,7 +383,7 @@ For example, a 2-input AND gate with one input being connected to constant ‘1�
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The number of removed nets on success, None otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The number of removed nets on success, <cite>None</cite> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
 </tr>
@@ -300,7 +401,7 @@ For example, a 2-input AND gate with one input being connected to constant ‘1�
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The number of removed LUT endpoints on success, None otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The number of removed LUT endpoints on success, <cite>None</cite> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
 </tr>
@@ -318,7 +419,7 @@ For example, a 2-input AND gate with one input being connected to constant ‘1�
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The number of simplified INIT strings on success, an error otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The number of simplified INIT strings on success, <cite>None</cite> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
 </tr>

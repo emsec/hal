@@ -1,13 +1,13 @@
 <map id="/home/runner/work/hal/hal/src/utilities/log.cpp" name="/home/runner/work/hal/hal/src/utilities/log.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="977,5,1151,47"/>
+<area shape="rect" id="node1" title=" " alt="" coords="905,5,1079,47"/>
 <area shape="rect" id="node2" href="$log_8h.html" title=" " alt="" coords="419,95,549,136"/>
-<area shape="rect" id="node14" title=" " alt="" coords="573,102,712,129"/>
-<area shape="rect" id="node15" title=" " alt="" coords="736,102,867,129"/>
-<area shape="rect" id="node16" title=" " alt="" coords="891,95,1058,136"/>
-<area shape="rect" id="node17" title=" " alt="" coords="1083,95,1224,136"/>
-<area shape="rect" id="node18" title=" " alt="" coords="1249,102,1426,129"/>
-<area shape="rect" id="node19" title=" " alt="" coords="1450,95,1598,136"/>
-<area shape="rect" id="node20" title=" " alt="" coords="1623,102,1703,129"/>
+<area shape="rect" id="node14" title=" " alt="" coords="573,102,653,129"/>
+<area shape="rect" id="node15" title=" " alt="" coords="677,102,816,129"/>
+<area shape="rect" id="node16" title=" " alt="" coords="840,102,971,129"/>
+<area shape="rect" id="node17" title=" " alt="" coords="995,95,1162,136"/>
+<area shape="rect" id="node18" title=" " alt="" coords="1187,95,1328,136"/>
+<area shape="rect" id="node19" title=" " alt="" coords="1353,102,1530,129"/>
+<area shape="rect" id="node20" title=" " alt="" coords="1554,95,1702,136"/>
 <area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="198,273,338,300"/>
 <area shape="rect" id="node4" href="$callback__hook_8h.html" title=" " alt="" coords="244,184,375,225"/>
 <area shape="rect" id="node5" title=" " alt="" coords="61,273,147,300"/>

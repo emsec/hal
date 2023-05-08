@@ -1,14 +1,18 @@
 <map id="/home/runner/work/hal/hal/include/hal_core/utilities/utils.h" name="/home/runner/work/hal/hal/include/hal_core/utilities/utils.h">
-<area shape="rect" id="node1" title=" " alt="" coords="443,5,613,61"/>
-<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,109,289,136"/>
-<area shape="rect" id="node7" title=" " alt="" coords="313,109,399,136"/>
-<area shape="rect" id="node8" title=" " alt="" coords="424,109,467,136"/>
-<area shape="rect" id="node9" title=" " alt="" coords="491,109,565,136"/>
-<area shape="rect" id="node10" title=" " alt="" coords="589,109,648,136"/>
-<area shape="rect" id="node11" title=" " alt="" coords="672,109,787,136"/>
-<area shape="rect" id="node12" title=" " alt="" coords="811,109,874,136"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,184,96,211"/>
-<area shape="rect" id="node4" title=" " alt="" coords="121,184,207,211"/>
-<area shape="rect" id="node5" title=" " alt="" coords="231,184,318,211"/>
-<area shape="rect" id="node6" title=" " alt="" coords="342,184,413,211"/>
+<area shape="rect" id="node1" title=" " alt="" coords="575,5,745,61"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,288,289,315"/>
+<area shape="rect" id="node7" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="392,109,523,151"/>
+<area shape="rect" id="node9" title=" " alt="" coords="619,206,706,233"/>
+<area shape="rect" id="node12" title=" " alt="" coords="597,117,640,143"/>
+<area shape="rect" id="node13" title=" " alt="" coords="664,117,739,143"/>
+<area shape="rect" id="node14" title=" " alt="" coords="763,117,821,143"/>
+<area shape="rect" id="node15" title=" " alt="" coords="845,117,960,143"/>
+<area shape="rect" id="node16" title=" " alt="" coords="985,117,1047,143"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,363,96,389"/>
+<area shape="rect" id="node4" title=" " alt="" coords="121,363,207,389"/>
+<area shape="rect" id="node5" title=" " alt="" coords="231,363,318,389"/>
+<area shape="rect" id="node6" title=" " alt="" coords="342,363,413,389"/>
+<area shape="rect" id="node8" href="$error_8h.html" title=" " alt="" coords="256,199,387,240"/>
+<area shape="rect" id="node10" title=" " alt="" coords="411,206,503,233"/>
+<area shape="rect" id="node11" title=" " alt="" coords="527,206,595,233"/>
 </map>

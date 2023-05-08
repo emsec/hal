@@ -415,10 +415,11 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Generates an directed graph, based on the current netlist. Each gate is transformed to a node, while each net is transformed to an edge. The function returns the mapping from igraph node ids to HAL gates. Note that for each global input and output dummy nodes are generated in the igraph representation.</p>
+<p>Generates an directed graph based on the current netlist. Each gate is transformed to a node while each net is transformed to an edge. The function returns the mapping from igraph node ids to HAL gates. Note that for each global input and output dummy nodes are generated in the igraph representation.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">netlist</td><td>- The netlist to operate on. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">igraph</td><td>- igraph object </td></tr>
   </table>
   </dd>
 </dl>
@@ -528,15 +529,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get a map of community IDs to communities running the multilevel clustering algorithm from igraph. Each community is represented by a set of gates.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">netlist</td><td>- The netlist to operate on. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A map from community IDs to communities.</dd></dl>
-<p>std::map&lt;int, std::set&lt;Gate*&gt;&gt; get_communities_multilevel(Netlist* netlist); other graph algorithm Get a vector of strongly connected components (SCC) with each SSC being represented by a vector of gates.</p>
+<p>Get a vector of strongly connected components (SCC) with each SSC being represented by a vector of gates.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">netlist</td><td>- The netlist to operate on. </td></tr>
@@ -602,7 +595,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_graph_algorithm_plugin.html">GraphAlgorithmPlugin</a></li>
-    <li class="footer">Generated on Mon May 8 2023 13:27:46 for HAL by
+    <li class="footer">Generated on Mon May 8 2023 15:19:15 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

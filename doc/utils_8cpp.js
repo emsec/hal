@@ -15,5 +15,7 @@ var utils_8cpp =
     [ "get_share_directory", "utils_8cpp.html#a56092ec04728c373dc56e7b6dd9f162a", null ],
     [ "get_user_config_directory", "utils_8cpp.html#a90b1bccb0d75d10c94b959cdebf2ce36", null ],
     [ "get_user_share_directory", "utils_8cpp.html#a38383c74e49cb831f05ce87992e69c9d", null ],
-    [ "which", "utils_8cpp.html#abe865cd13e526c5228f269a9c7b2629b", null ]
+    [ "which", "utils_8cpp.html#abe865cd13e526c5228f269a9c7b2629b", null ],
+    [ "wrapped_stoul", "utils_8cpp.html#a91c042ba653895c25f31a95e8050cb5b", null ],
+    [ "wrapped_stoull", "utils_8cpp.html#aa9335da615de06a7a371e86cb8ca10a0", null ]
 ];
