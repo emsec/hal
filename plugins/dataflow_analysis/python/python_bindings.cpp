@@ -1,7 +1,5 @@
 #include "hal_core/python_bindings/python_bindings.h"
 
-#include "dataflow_analysis/common/result.h"
-#include "dataflow_analysis/dataflow.h"
 #include "dataflow_analysis/plugin_dataflow.h"
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
@@ -200,6 +198,13 @@ namespace hal
             :rtype: dict[int,set[hal_py.Gate]]
         )");
 
+        py_dataflow_result.def("get_gates", &dataflow::Result::get_gates, R"(
+            Get all gates contained in any of the groups groups.
+        
+            :returns: A list of gates.
+            :rtype: list[hal_py.Gate]
+        )");
+
         py_dataflow_result.def(
             "get_gates_of_group",
             [](const dataflow::Result& self, const u32 group_id) -> std::optional<std::unordered_set<Gate*>> {
@@ -247,16 +252,16 @@ namespace hal
         )");
 
         py_dataflow_result.def(
-            "get_control_nets_of_group",
+            "get_group_control_nets",
             [](const dataflow::Result& self, const u32 group_id, const PinType type) -> std::optional<std::unordered_set<Net*>> {
-                auto res = self.get_control_nets_of_group(group_id, type);
+                auto res = self.get_group_control_nets(group_id, type);
                 if (res.is_ok())
                 {
                     return res.get();
                 }
                 else
                 {
-                    log_error("python_context", "error encountered while getting control nets of group:\n{}", res.get_error().get());
+                    log_error("python_context", "error encountered while getting group control nets:\n{}", res.get_error().get());
                     return std::nullopt;
                 }
             },
@@ -268,6 +273,31 @@ namespace hal
             :param int group_id: The group ID.
             :param hal_py.PinType type: The pin type.
             :returns: A set of control nets of the group on success, ``None`` otherwise.
+            :rtype: set[hal_py.Net] or None
+        )");
+
+        py_dataflow_result.def(
+            "get_gate_control_nets",
+            [](const dataflow::Result& self, const Gate* gate, const PinType type) -> std::optional<std::unordered_set<Net*>> {
+                auto res = self.get_gate_control_nets(gate, type);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting gate control nets:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("gate"),
+            py::arg("type"),
+            R"(
+            Get the control nets of the given gate that are connected to a pin of the specified type.
+
+            :param hal_py.Gate gate: The gate.
+            :param hal_py.PinType type: The pin type.
+            :returns: A set of control nets of the gate on success, ``None`` otherwise.
             :rtype: set[hal_py.Net] or None
         )");
 
@@ -295,6 +325,29 @@ namespace hal
         )");
 
         py_dataflow_result.def(
+            "get_gate_successors",
+            [](const dataflow::Result& self, const Gate* gate) -> std::optional<std::unordered_set<Gate*>> {
+                auto res = self.get_gate_successors(gate);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting successor gates:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("gate"),
+            R"(
+            Get the sequential successor gates of the given sequential gate.
+
+            :param hal_py.Gate gate: The gate.
+            :returns: The successors of the gate as a set of gates on success, ``None`` otherwise.
+            :rtype: set[hal_py.Gate] or None
+        )");
+
+        py_dataflow_result.def(
             "get_group_predecessors",
             [](const dataflow::Result& self, const u32 group_id) -> std::optional<std::unordered_set<u32>> {
                 auto res = self.get_group_predecessors(group_id);
@@ -315,6 +368,29 @@ namespace hal
             :param int group_id: The ID of the group.
             :returns: The predecessors of the group as a set of group IDs on success, ``None`` otherwise.
             :rtype: set[int] or None
+        )");
+
+        py_dataflow_result.def(
+            "get_gate_predecessors",
+            [](const dataflow::Result& self, const Gate* gate) -> std::optional<std::unordered_set<Gate*>> {
+                auto res = self.get_gate_predecessors(gate);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting predecessor gates:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("gate"),
+            R"(
+            Get the sequential predecessor gates of the given sequential gate.
+
+            :param hal_py.Gate gate: The gate.
+            :returns: The predecessors of the gate as a set of gates on success, ``None`` otherwise.
+            :rtype: set[hal_py.Gate] or None
         )");
 
         py_dataflow_result.def(
@@ -387,7 +463,7 @@ namespace hal
 
                 :param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
                 :returns: A map from group IDs to Modules on success, ``None`` otherwise.
-                :rtype: bool
+                :rtype: dict[int,hal_py.Module] or None
             )");
 
         py_dataflow_result.def("get_group_list",
@@ -400,6 +476,57 @@ namespace hal
                             :returns: A list of groups with each group being a list of gates.
                             :rtype: list[list[hal_py.Gate]]
                         )");
+
+        py_dataflow_result.def(
+            "merge_groups",
+            [](dataflow::Result& self, const std::vector<u32>& group_ids) -> std::optional<u32> {
+                auto res = self.merge_groups(group_ids);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while merging groups:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("group_ids"),
+            R"(
+                Merge multiple groups specified by ID. 
+                All specified groups are merged into the first group of the provided vector and are subsequently deleted.
+
+                :param set[int] group_ids: The group IDs of the groups to merge.
+                :returns: The ID of the group that all over groups have been merged into on success, ``None`` otherwise.
+                :rtype: int or None
+            )");
+
+        py_dataflow_result.def(
+            "split_group",
+            [](dataflow::Result& self, u32 group_id, const std::vector<std::unordered_set<Gate*>>& new_groups) -> std::optional<std::vector<u32>> {
+                auto res = self.split_group(group_id, new_groups);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while splitting group:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("group_id"),
+            py::arg("new_groups"),
+            R"(
+                Split a group into multiple smaller groups specified by sets of gates.
+                All gates of the group to split must be contained in the sets exactly once and all gates in the sets must be contained in the group to split.
+                The group that is being split is deleted in the process.
+
+                :param int group_id: The group ID of the group to split.
+                :param list[set[hal_py.Gate]] new_groups: A list of groups specified as unordered sets of gates.
+                :returns: The group IDs of the newly created groups in the order of the provided sets.
+                :rtype: list[int]
+            )");
 
 #ifndef PYBIND11_MODULE
         return m.ptr();

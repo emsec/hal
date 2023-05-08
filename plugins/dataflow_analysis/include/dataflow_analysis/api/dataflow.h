@@ -25,42 +25,26 @@
 
 #pragma once
 
-#include "hal_core/defines.h"
+#include "dataflow_analysis/api/configuration.h"
+#include "dataflow_analysis/api/result.h"
+#include "dataflow_analysis/common/grouping.h"
+#include "hal_core/utilities/result.h"
+
+#include <unordered_set>
 
 namespace hal
 {
-    /* forward declaration */
     class Netlist;
 
-    class GateLibrary;
-
-    /**
-     * @file
-     *
-     * \namespace netlist_serializer
-     * @ingroup persistent
-     */
-
-    namespace netlist_serializer
+    namespace dataflow
     {
-
         /**
-         * Serializes a netlist into a `.hal` file.
-         *
-         * @param[in] netlist - The netlist to serialize.
-         * @param[in] hal_file - The path to the `.hal` file.
-         * @returns `true` on success, `false` otherwise.
+         * Analyze the datapath to identify word-level registers in the given netlist.
+         * 
+         * @param[in] nl - The netlist.
+         * @param[in] config - The dataflow analysis configuration.
+         * @returns Ok() and the dataflow analysis result on success, an error otherwise.
          */
-        NETLIST_API bool serialize_to_file(const Netlist* netlist, const std::filesystem::path& hal_file);
-
-        /**
-         * Deserializes a netlist from a `.hal` file using the provided gate library.
-         * If no gate library is provided, a gate library path must be specified within the `.hal` file.
-         *
-         * @param[in] hal_file - The path to the `.hal` file.
-         * @param[in] gate_lib - The gate library. Defaults to a `nullptr`.
-         * @returns The deserialized netlist on success, a `nullptr` otherwise.
-         */
-        NETLIST_API std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file, GateLibrary* gate_lib = nullptr);
-    }    // namespace netlist_serializer
+        hal::Result<dataflow::Result> analyze(Netlist* nl, const Configuration& config = Configuration());
+    }    // namespace dataflow
 }    // namespace hal
