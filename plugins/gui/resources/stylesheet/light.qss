@@ -739,12 +739,12 @@ hal--LabeledFrame #label
 
 #recent-files-frame #label
 {
-    qproperty-text : "RECENT FILES";
+    qproperty-text : "RECENT PROJECTS";
 }
 
 #open-file-frame #label
 {
-    qproperty-text : "OPEN FILE";
+    qproperty-text : "OPEN PROJECT";
 }
 
 #get-in-touch-frame #label
