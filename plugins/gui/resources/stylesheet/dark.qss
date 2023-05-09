@@ -713,12 +713,12 @@ hal--LabeledFrame #label
 
 #recent-files-frame #label
 {
-    qproperty-text : "RECENT <font color='#A9B7C6'>FILES</font>";
+    qproperty-text : "RECENT <font color='#A9B7C6'>PROJECTS</font>";
 }
 
 #open-file-frame #label
 {
-    qproperty-text : "OPEN <font color='#A9B7C6'>FILE</font>";
+    qproperty-text : "OPEN <font color='#A9B7C6'>PROJECT</font>";
 }
 
 #get-in-touch-frame #label
