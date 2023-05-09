@@ -1,5 +1,5 @@
 <map id="hal::SelectionTreeView" name="hal::SelectionTreeView">
-<area shape="rect" id="node1" title="Displays the current selection." alt="" coords="6,813,214,993"/>
+<area shape="rect" id="node1" title="Displays the current selection." alt="" coords="6,813,214,1008"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtreeview.html" title=" " alt="" coords="15,453,205,765"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qabstractitemview.html" title=" " alt="" coords="5,5,215,405"/>
 </map>
