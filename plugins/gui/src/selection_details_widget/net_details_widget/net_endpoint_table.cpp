@@ -3,6 +3,7 @@
 #include "gui/gui_globals.h"
 #include "gui/python/py_code_provider.h"
 #include "gui/selection_details_widget/net_details_widget/endpoint_table_model.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
 #include "hal_core/netlist/gate.h"
 
 #include <QApplication>
@@ -67,7 +68,7 @@ namespace hal
             return;
 
         u32 gateID = mEndpointModel->getGateIDFromIndex(idx);
-        auto gate = gNetlist->get_gate_by_id(gateID);
+        Gate* gate = gNetlist->get_gate_by_id(gateID);
         QString pin = mEndpointModel->getPinNameFromIndex(idx);
         QString desc = mEndpointModel->typeString().toLower();
         QString netIDStr = QString::number(mEndpointModel->getCurrentNetID());
@@ -91,9 +92,13 @@ namespace hal
             QApplication::clipboard()->setText(pin);
         });
 
+        menu.addSeparator();
+        menu.addAction("Isolate gate in new view", [gateID](){
+           Node nd(gateID,Node::Gate);
+           SelectionTreeView::isolateInNewViewAction(nd);
+        });
         if (!gSelectionRelay->selectedGates().contains(gateID))
         {
-            menu.addSeparator();
             menu.addAction("Add gate to selection", [gateID,this](){
                 gSelectionRelay->addGate(gateID);
                 gSelectionRelay->relaySelectionChanged(this);

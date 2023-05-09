@@ -124,20 +124,37 @@ namespace hal
 
     void SelectionTreeView::handleIsolationViewAction(const SelectionTreeItem* sti)
     {
-        u32 id       = sti->id();
-        QString name = "";
-        QSet<u32> gateId;
-        QSet<u32> moduleId;
-
+        Node nd;
         if (sti->itemType() == SelectionTreeItem::TreeItemType::GateItem)
         {
-            name = "Isolated Gate(ID: " + QString::number(id) + ")";
-            gateId.insert(id);
+            nd = Node(sti->id(),Node::Gate);
         }
         else if (sti->itemType() == SelectionTreeItem::TreeItemType::ModuleItem)
         {
-            name = "Isolated Module(ID: " + QString::number(id) + ")";
-            moduleId.insert(id);
+            nd = Node(sti->id(),Node::Module);
+        }
+        else
+        {
+            return;
+        }
+        isolateInNewViewAction(nd);
+    }
+
+    void SelectionTreeView::isolateInNewViewAction(Node nd)
+    {
+        QSet<u32> gateId;
+        QSet<u32> moduleId;
+        QString name;
+
+        if (nd.type() == Node::Gate)
+        {
+            name = "Isolated Gate(ID: " + QString::number(nd.id()) + ")";
+            gateId.insert(nd.id());
+        }
+        else if (nd.type() == Node::Module)
+        {
+            name = "Isolated Module(ID: " + QString::number(nd.id()) + ")";
+            moduleId.insert(nd.id());
         }
         else
         {

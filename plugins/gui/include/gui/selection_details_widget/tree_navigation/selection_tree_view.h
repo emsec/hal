@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "gui/gui_def.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_proxy.h"
@@ -134,6 +135,11 @@ namespace hal
          */
         SelectionTreeProxyModel* proxyModel();
 
+        /**
+         * Isolate given node in new view or open existing exclusive module view.
+         * @param nd The node.
+         */
+        static void isolateInNewViewAction(Node nd);
     private Q_SLOTS:
         void handleCustomContextMenuRequested(const QPoint& point);
         void handleIsolationViewAction(const SelectionTreeItem* sti);
