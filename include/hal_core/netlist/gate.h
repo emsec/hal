@@ -292,7 +292,16 @@ namespace hal
          *
          * @returns A vector of all fan-in nets.
          */
-        std::vector<Net*> get_fan_in_nets() const;
+        const std::vector<Net*>& get_fan_in_nets() const;
+
+        /**
+         * Get a vector of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.
+         * The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         *
+         * @param[in] filter - Filter function to be evaluated on each net.
+         * @returns A vector of all fan-in nets.
+         */
+        std::vector<Net*> get_fan_in_nets(const std::function<bool(Net*)>& filter) const;
 
         /**
          * Get the fan-in net corresponding to the input pin specified by name.
@@ -323,7 +332,16 @@ namespace hal
          *
          * @returns A vector of all fan-in endpoints.
          */
-        std::vector<Endpoint*> get_fan_in_endpoints() const;
+        const std::vector<Endpoint*>& get_fan_in_endpoints() const;
+
+        /**
+         * Get a vector of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.
+         * The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         *
+         * @param[in] filter - Filter function to be evaluated on each endpoint.
+         * @returns A vector of all fan-in endpoints.
+         */
+        std::vector<Endpoint*> get_fan_in_endpoints(const std::function<bool(Endpoint*)>& filter) const;
 
         /**
          * Get the fan-in endpoint corresponding to the input pin specified by name.
@@ -354,7 +372,16 @@ namespace hal
          *
          * @returns A vector of all fan-out nets.
          */
-        std::vector<Net*> get_fan_out_nets() const;
+        const std::vector<Net*>& get_fan_out_nets() const;
+
+        /**
+         * Get a vector of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.
+         * The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         *
+         * @param[in] filter - Filter function to be evaluated on each net.
+         * @returns A vector of all fan-out nets.
+         */
+        std::vector<Net*> get_fan_out_nets(const std::function<bool(Net*)>& filter) const;
 
         /**
          * Get the fan-out net corresponding to the output pin specified by name.
@@ -385,7 +412,16 @@ namespace hal
          *
          * @returns A vector of all fan-out endpoints.
          */
-        std::vector<Endpoint*> get_fan_out_endpoints() const;
+        const std::vector<Endpoint*>& get_fan_out_endpoints() const;
+
+        /**
+         * Get a vector of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.
+         * The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         *
+         * @param[in] filter - Filter function to be evaluated on each endpoint.
+         * @returns A vector of all fan-out endpoints.
+         */
+        std::vector<Endpoint*> get_fan_out_endpoints(const std::function<bool(Endpoint*)>& filter) const;
 
         /**
          * Get the fan-out endpoint corresponding to the output pin specified by name.

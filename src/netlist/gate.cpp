@@ -573,9 +573,30 @@ namespace hal
         return m_internal_manager->m_netlist->is_gnd_gate(this);
     }
 
-    std::vector<Net*> Gate::get_fan_in_nets() const
+    const std::vector<Net*>& Gate::get_fan_in_nets() const
     {
         return m_in_nets;
+    }
+
+    std::vector<Net*> Gate::get_fan_in_nets(const std::function<bool(Net*)>& filter) const
+    {
+        std::vector<Net*> res;
+        if (!filter)
+        {
+            res = m_in_nets;
+        }
+        else
+        {
+            for (auto n : m_in_nets)
+            {
+                if (!filter(n))
+                {
+                    continue;
+                }
+                res.push_back(n);
+            }
+        }
+        return res;
     }
 
     Net* Gate::get_fan_in_net(const std::string& pin_name) const
@@ -614,9 +635,30 @@ namespace hal
         return false;
     }
 
-    std::vector<Endpoint*> Gate::get_fan_in_endpoints() const
+    const std::vector<Endpoint*>& Gate::get_fan_in_endpoints() const
     {
         return m_in_endpoints;
+    }
+
+    std::vector<Endpoint*> Gate::get_fan_in_endpoints(const std::function<bool(Endpoint*)>& filter) const
+    {
+        std::vector<Endpoint*> res;
+        if (!filter)
+        {
+            res = m_in_endpoints;
+        }
+        else
+        {
+            for (auto ep : m_in_endpoints)
+            {
+                if (!filter(ep))
+                {
+                    continue;
+                }
+                res.push_back(ep);
+            }
+        }
+        return res;
     }
 
     Endpoint* Gate::get_fan_in_endpoint(const std::string& pin_name) const
@@ -675,9 +717,30 @@ namespace hal
         return *it;
     }
 
-    std::vector<Net*> Gate::get_fan_out_nets() const
+    const std::vector<Net*>& Gate::get_fan_out_nets() const
     {
         return m_out_nets;
+    }
+
+    std::vector<Net*> Gate::get_fan_out_nets(const std::function<bool(Net*)>& filter) const
+    {
+        std::vector<Net*> res;
+        if (!filter)
+        {
+            res = m_out_nets;
+        }
+        else
+        {
+            for (auto n : m_out_nets)
+            {
+                if (!filter(n))
+                {
+                    continue;
+                }
+                res.push_back(n);
+            }
+        }
+        return res;
     }
 
     Net* Gate::get_fan_out_net(const std::string& pin_name) const
@@ -716,9 +779,30 @@ namespace hal
         return false;
     }
 
-    std::vector<Endpoint*> Gate::get_fan_out_endpoints() const
+    const std::vector<Endpoint*>& Gate::get_fan_out_endpoints() const
     {
         return m_out_endpoints;
+    }
+
+    std::vector<Endpoint*> Gate::get_fan_out_endpoints(const std::function<bool(Endpoint*)>& filter) const
+    {
+        std::vector<Endpoint*> res;
+        if (!filter)
+        {
+            res = m_out_endpoints;
+        }
+        else
+        {
+            for (auto ep : m_out_endpoints)
+            {
+                if (!filter(ep))
+                {
+                    continue;
+                }
+                res.push_back(ep);
+            }
+        }
+        return res;
     }
 
     Endpoint* Gate::get_fan_out_endpoint(const std::string& pin_name) const
