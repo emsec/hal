@@ -202,103 +202,111 @@ $(document).ready(function(){initNavTree('gate_8h_source.html',''); initResizabl
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="comment">         *      pin specific functions</span></div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;<span class="comment">         */</span></div>
 <div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160; </div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        std::vector&lt;Net*&gt; get_fan_in_nets() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        <span class="keyword">const</span> std::vector&lt;Net*&gt;&amp; get_fan_in_nets() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160; </div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* get_fan_in_net(<span class="keyword">const</span> std::string&amp; pin_name) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160; </div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* get_fan_in_net(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160; </div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="keywordtype">bool</span> is_fan_in_net(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160; </div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        std::vector&lt;Endpoint*&gt; get_fan_in_endpoints() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160; </div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_fan_in_endpoint(<span class="keyword">const</span> std::string&amp; pin_name) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160; </div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_fan_in_endpoint(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160; </div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_fan_in_endpoint(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160; </div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        std::vector&lt;Net*&gt; get_fan_out_nets() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160; </div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* get_fan_out_net(<span class="keyword">const</span> std::string&amp; pin_name) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160; </div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* get_fan_out_net(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160; </div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        <span class="keywordtype">bool</span> is_fan_out_net(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160; </div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;        std::vector&lt;Endpoint*&gt; get_fan_out_endpoints() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160; </div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_fan_out_endpoint(<span class="keyword">const</span> std::string&amp; pin_name) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160; </div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_fan_out_endpoint(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160; </div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_fan_out_endpoint(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160; </div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;        std::vector&lt;Gate*&gt; get_unique_predecessors(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin, <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160; </div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;        std::vector&lt;Endpoint*&gt; get_predecessors(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin, <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160; </div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_predecessor(<span class="keyword">const</span> std::string&amp; pin_name) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160; </div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_predecessor(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        std::vector&lt;Net*&gt; get_fan_in_nets(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<a class="code" href="classhal_1_1_net.html">Net</a>*)&gt;&amp; filter) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160; </div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* get_fan_in_net(<span class="keyword">const</span> std::string&amp; pin_name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160; </div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* get_fan_in_net(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160; </div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        <span class="keywordtype">bool</span> is_fan_in_net(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160; </div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        <span class="keyword">const</span> std::vector&lt;Endpoint*&gt;&amp; get_fan_in_endpoints() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160; </div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        std::vector&lt;Endpoint*&gt; get_fan_in_endpoints(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>*)&gt;&amp; filter) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160; </div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_fan_in_endpoint(<span class="keyword">const</span> std::string&amp; pin_name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160; </div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_fan_in_endpoint(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160; </div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_fan_in_endpoint(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160; </div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;        <span class="keyword">const</span> std::vector&lt;Net*&gt;&amp; get_fan_out_nets() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160; </div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;        std::vector&lt;Net*&gt; get_fan_out_nets(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<a class="code" href="classhal_1_1_net.html">Net</a>*)&gt;&amp; filter) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160; </div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* get_fan_out_net(<span class="keyword">const</span> std::string&amp; pin_name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160; </div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* get_fan_out_net(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160; </div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        <span class="keywordtype">bool</span> is_fan_out_net(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160; </div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;        <span class="keyword">const</span> std::vector&lt;Endpoint*&gt;&amp; get_fan_out_endpoints() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160; </div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;        std::vector&lt;Endpoint*&gt; get_fan_out_endpoints(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>*)&gt;&amp; filter) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160; </div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_fan_out_endpoint(<span class="keyword">const</span> std::string&amp; pin_name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160; </div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_fan_out_endpoint(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160; </div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_fan_out_endpoint(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160; </div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;        std::vector&lt;Gate*&gt; get_unique_successors(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin, <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;        std::vector&lt;Gate*&gt; get_unique_predecessors(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin, <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160; </div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;        std::vector&lt;Endpoint*&gt; get_successors(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin, <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;        std::vector&lt;Endpoint*&gt; get_predecessors(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin, <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160; </div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_successor(<span class="keyword">const</span> std::string&amp; pin_name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_predecessor(<span class="keyword">const</span> std::string&amp; pin_name) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160; </div>
-<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_successor(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_predecessor(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160; </div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::vector&lt;std::string&gt;</a>&gt; get_init_data() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160; </div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> set_init_data(<span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; init_data);</div>
-<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160; </div>
-<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00504"></a><span class="lineno"><a class="line" href="classhal_1_1_gate.html#a71851ef81c1a491be6395f4c883218de">  504</a></span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a>;</div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;        <a class="code" href="classhal_1_1_gate.html">Gate</a>(<a class="code" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a>* mgr, <a class="code" href="classhal_1_1_event_handler.html">EventHandler</a>* event_handler, <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>, <a class="code" href="classhal_1_1_gate_type.html">GateType</a>* gt, <span class="keyword">const</span> std::string&amp; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, <a class="code" href="defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a> x, <a class="code" href="defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a> y);</div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160; </div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;        <a class="code" href="classhal_1_1_gate.html">Gate</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate.html">Gate</a>&amp;)            = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;        <a class="code" href="classhal_1_1_gate.html">Gate</a>(<a class="code" href="classhal_1_1_gate.html">Gate</a>&amp;&amp;)                 = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;        <a class="code" href="classhal_1_1_gate.html">Gate</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate.html">Gate</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;        <a class="code" href="classhal_1_1_gate.html">Gate</a>&amp; operator=(<a class="code" href="classhal_1_1_gate.html">Gate</a>&amp;&amp;)      = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160; </div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;        <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a> get_lut_function(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160; </div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;        <span class="comment">/* pointer to corresponding netlist parent */</span></div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;        <a class="code" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a>* m_internal_manager;</div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160; </div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;        <span class="comment">/* id of the gate */</span></div>
-<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> m_id;</div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160; </div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;        <span class="comment">/* name of the gate */</span></div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;        std::string m_name;</div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160; </div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;        <span class="comment">/* type of the gate */</span></div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;        <a class="code" href="classhal_1_1_gate_type.html">GateType</a>* m_type;</div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160; </div>
-<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;        <span class="comment">/* location */</span></div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;        <a class="code" href="defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a> m_x = -1;</div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;        <a class="code" href="defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a> m_y = -1;</div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;        std::vector&lt;Gate*&gt; get_unique_successors(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin, <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160; </div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;        std::vector&lt;Endpoint*&gt; get_successors(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin, <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep)&gt;&amp; filter = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160; </div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_successor(<span class="keyword">const</span> std::string&amp; pin_name) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160; </div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;        <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* get_successor(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160; </div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::vector&lt;std::string&gt;</a>&gt; get_init_data() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160; </div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;        <span class="comment">/* owning module */</span></div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;        <a class="code" href="classhal_1_1_module.html">Module</a>* m_module;</div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160; </div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;        <span class="comment">/* grouping */</span></div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;        <a class="code" href="classhal_1_1_grouping.html">Grouping</a>* m_grouping = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160; </div>
-<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;        <span class="comment">/* connected nets */</span></div>
-<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;        std::vector&lt;Endpoint*&gt; m_in_endpoints;</div>
-<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;        std::vector&lt;Endpoint*&gt; m_out_endpoints;</div>
-<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;        std::vector&lt;Net*&gt; m_in_nets;</div>
-<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;        std::vector&lt;Net*&gt; m_out_nets;</div>
-<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160; </div>
-<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;        <span class="comment">/* dedicated functions */</span></div>
-<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;        std::unordered_map&lt;std::string, BooleanFunction&gt; m_functions;</div>
-<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160; </div>
-<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;        <a class="code" href="classhal_1_1_event_handler.html">EventHandler</a>* m_event_handler;</div>
-<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;    };</div>
-<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> set_init_data(<span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; init_data);</div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160; </div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00540"></a><span class="lineno"><a class="line" href="classhal_1_1_gate.html#a71851ef81c1a491be6395f4c883218de">  540</a></span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a>;</div>
+<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;        <a class="code" href="classhal_1_1_gate.html">Gate</a>(<a class="code" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a>* mgr, <a class="code" href="classhal_1_1_event_handler.html">EventHandler</a>* event_handler, <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>, <a class="code" href="classhal_1_1_gate_type.html">GateType</a>* gt, <span class="keyword">const</span> std::string&amp; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>, <a class="code" href="defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a> x, <a class="code" href="defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a> y);</div>
+<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160; </div>
+<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;        <a class="code" href="classhal_1_1_gate.html">Gate</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate.html">Gate</a>&amp;)            = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;        <a class="code" href="classhal_1_1_gate.html">Gate</a>(<a class="code" href="classhal_1_1_gate.html">Gate</a>&amp;&amp;)                 = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;        <a class="code" href="classhal_1_1_gate.html">Gate</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate.html">Gate</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;        <a class="code" href="classhal_1_1_gate.html">Gate</a>&amp; operator=(<a class="code" href="classhal_1_1_gate.html">Gate</a>&amp;&amp;)      = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160; </div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;        <a class="code" href="classhal_1_1_boolean_function.html">BooleanFunction</a> get_lut_function(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* pin) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160; </div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;        <span class="comment">/* pointer to corresponding netlist parent */</span></div>
+<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;        <a class="code" href="classhal_1_1_netlist_internal_manager.html">NetlistInternalManager</a>* m_internal_manager;</div>
+<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160; </div>
+<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;        <span class="comment">/* id of the gate */</span></div>
+<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> m_id;</div>
+<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160; </div>
+<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;        <span class="comment">/* name of the gate */</span></div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;        std::string m_name;</div>
+<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160; </div>
+<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;        <span class="comment">/* type of the gate */</span></div>
+<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;        <a class="code" href="classhal_1_1_gate_type.html">GateType</a>* m_type;</div>
+<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160; </div>
+<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;        <span class="comment">/* location */</span></div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;        <a class="code" href="defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a> m_x = -1;</div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;        <a class="code" href="defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a> m_y = -1;</div>
+<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160; </div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;        <span class="comment">/* owning module */</span></div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;        <a class="code" href="classhal_1_1_module.html">Module</a>* m_module;</div>
+<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160; </div>
+<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;        <span class="comment">/* grouping */</span></div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;        <a class="code" href="classhal_1_1_grouping.html">Grouping</a>* m_grouping = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160; </div>
+<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;        <span class="comment">/* connected nets */</span></div>
+<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;        std::vector&lt;Endpoint*&gt; m_in_endpoints;</div>
+<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;        std::vector&lt;Endpoint*&gt; m_out_endpoints;</div>
+<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;        std::vector&lt;Net*&gt; m_in_nets;</div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;        std::vector&lt;Net*&gt; m_out_nets;</div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160; </div>
+<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;        <span class="comment">/* dedicated functions */</span></div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;        std::unordered_map&lt;std::string, BooleanFunction&gt; m_functions;</div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160; </div>
+<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;        <a class="code" href="classhal_1_1_event_handler.html">EventHandler</a>* m_event_handler;</div>
+<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;    };</div>
+<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_module_html"><div class="ttname"><a href="classhal_1_1_module.html">hal::Module</a></div><div class="ttdef"><b>Definition:</b> <a href="module_8h_source.html#l00064">module.h:64</a></div></div>
@@ -332,7 +340,7 @@ $(document).ready(function(){initNavTree('gate_8h_source.html',''); initResizabl
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="gate_8h.html">gate.h</a></li>
-    <li class="footer">Generated on Thu May 11 2023 16:20:16 for HAL by
+    <li class="footer">Generated on Fri May 12 2023 07:03:41 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

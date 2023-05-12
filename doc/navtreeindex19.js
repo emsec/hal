@@ -1,5 +1,9 @@
 var NAVTREEINDEX19 =
 {
+"classhal_1_1_user_action.html#ad3e183ca84db2229ea52015ecf81b502":[4,0,5,26,23],
+"classhal_1_1_user_action.html#ad4976d95d07011dd9be187ddbcf75fde":[4,0,5,26,10],
+"classhal_1_1_user_action.html#ad7a49a6a643395eb9b8ab136c6ac36a9":[4,0,5,26,22],
+"classhal_1_1_user_action.html#ad867eaa35212e5066de06e57fdb62b21":[4,0,5,26,19],
 "classhal_1_1_user_action.html#adc01cc6722e67078be24a01ee991cf4b":[4,0,5,26,7],
 "classhal_1_1_user_action.html#adfc0974e4c818064dd724ae9c8e43b23":[4,0,5,26,21],
 "classhal_1_1_user_action.html#ae06ecbc33b153b3e8563f198bd0424f5":[4,0,5,26,14],
@@ -245,9 +249,5 @@ var NAVTREEINDEX19 =
 "communities__spinglass_8cpp_source.html":[7,0,1,2,2,0,2],
 "community__detection_8cpp.html":[7,0,1,2,2,0,3],
 "community__detection_8cpp_source.html":[7,0,1,2,2,0,3],
-"configuration_8cpp.html":[7,0,1,1,3,0,0],
-"configuration_8cpp_source.html":[7,0,1,1,3,0,0],
-"configuration_8py.html":[7,0,1,1,1,0],
-"configuration_8py.html#a0b70cb37f9be75fa209ff3098e577a06":[7,0,1,1,1,0,1],
-"configuration_8py.html#a33bda6c339428a78619a091574f9c7c7":[7,0,1,1,1,0,9]
+"configuration_8cpp.html":[7,0,1,1,3,0,0]
 };
