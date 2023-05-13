@@ -584,217 +584,289 @@ $(document).ready(function(){initNavTree('result_8cpp_source.html',''); initResi
 <div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;                {</div>
 <div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;                    reference_module = nl-&gt;get_top_module();</div>
 <div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;                }</div>
-<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;                group_to_module[group_id] = nl-&gt;create_module(<span class="stringliteral">&quot;DANA_register_&quot;</span> + std::to_string(group_id), reference_module, gates);</div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;            }</div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(group_to_module);</div>
-<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;        }</div>
-<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160; </div>
-<div class="line"><a name="l00504"></a><span class="lineno"><a class="line" href="structhal_1_1dataflow_1_1_result.html#a31e3d5b3024e9bb3edd1c17666bb6a06">  504</a></span>&#160;        std::vector&lt;std::vector&lt;Gate*&gt;&gt; <a class="code" href="structhal_1_1dataflow_1_1_result.html#a31e3d5b3024e9bb3edd1c17666bb6a06">dataflow::Result::get_groups_as_list</a>(<span class="keyword">const</span> std::unordered_set&lt;u32&gt;&amp; group_ids)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;            std::vector&lt;std::vector&lt;Gate*&gt;&gt; groups;</div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [group_id, group] : this-&gt;get_groups())</div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;            {</div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;                <span class="keywordflow">if</span> (!group_ids.empty() &amp;&amp; group_ids.find(group_id) == group_ids.end())</div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;                {</div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;                    <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;                }</div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160; </div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;                std::vector&lt;Gate*&gt; group_vector;</div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; gate : group)</div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;                {</div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;                    group_vector.push_back(gate);</div>
-<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;                }</div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;                groups.push_back(group_vector);</div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;            }</div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;            <span class="keywordflow">return</span> groups;</div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;        }</div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160; </div>
-<div class="line"><a name="l00524"></a><span class="lineno"><a class="line" href="structhal_1_1dataflow_1_1_result.html#a03e7e57a2ef0bf8bc312c817d8057db0">  524</a></span>&#160;        <a class="code" href="classhal_1_1_result.html">hal::Result&lt;u32&gt;</a> <a class="code" href="structhal_1_1dataflow_1_1_result.html#a03e7e57a2ef0bf8bc312c817d8057db0">dataflow::Result::merge_groups</a>(<span class="keyword">const</span> std::vector&lt;u32&gt;&amp; group_ids)</div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;        {</div>
-<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;            <span class="keywordflow">if</span> (group_ids.empty())</div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;            {</div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;no group IDs provided.&quot;</span>);</div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;            }</div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160; </div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;            <span class="keywordflow">if</span> (group_ids.size() &lt; 2)</div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;            {</div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;at least two groups are required for merging.&quot;</span>);</div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;            }</div>
-<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160; </div>
-<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = std::find_if(group_ids.begin(), group_ids.end(), [<span class="keyword">this</span>](<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>) { return this-&gt;m_gates_of_group.find(id) == this-&gt;m_gates_of_group.end(); }); it != group_ids.end())</div>
-<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;            {</div>
-<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;a group with ID &quot;</span> + std::to_string(*it) + <span class="stringliteral">&quot; does not exist.&quot;</span>);</div>
-<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;            }</div>
-<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160; </div>
-<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;            <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> target_group_id = ++(this-&gt;m_last_id);</div>
-<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160; </div>
-<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;            <span class="comment">// iterate set to make sure that every ID is contained only once</span></div>
-<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;            std::unordered_set&lt;u32&gt; group_ids_set(group_ids.begin(), group_ids.end());</div>
-<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> group_id : group_ids_set)</div>
-<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;            {</div>
-<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;                <span class="comment">// new group</span></div>
-<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;                <span class="keyword">auto</span>&amp; gates_at_i = this-&gt;m_gates_of_group.at(group_id);</div>
-<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;                this-&gt;m_gates_of_group[target_group_id].insert(gates_at_i.begin(), gates_at_i.end());</div>
-<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;                this-&gt;m_gates_of_group.erase(group_id);</div>
-<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160; </div>
-<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;                std::for_each(gates_at_i.begin(), gates_at_i.end(), [<span class="keyword">this</span>, target_group_id](<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate.html">Gate</a>* <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>) { this-&gt;m_parent_group_of_gate.at(g) = target_group_id; });</div>
-<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160; </div>
-<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;                <span class="comment">// signals</span></div>
-<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> signals_it = this-&gt;m_group_signals.find(group_id); signals_it != this-&gt;m_group_signals.end())</div>
-<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;                {</div>
-<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;                    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; signals_of_type : std::get&lt;1&gt;(*signals_it))</div>
-<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;                    {</div>
-<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;                        <span class="keyword">auto</span>&amp; signals = std::get&lt;1&gt;(signals_of_type);</div>
-<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;                        this-&gt;m_group_signals[target_group_id][signals_of_type.first].insert(signals.begin(), signals.end());</div>
-<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;                    }</div>
-<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;                    this-&gt;m_group_signals.erase(signals_it);</div>
-<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;                }</div>
-<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160; </div>
-<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;                <span class="comment">// successors / predecessors</span></div>
-<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> suc_it = this-&gt;m_group_successors.find(group_id); suc_it != this-&gt;m_group_successors.end())</div>
-<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;                {</div>
-<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;                    <span class="keyword">auto</span>&amp; target_suc_ids = this-&gt;m_group_successors[target_group_id];</div>
-<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;                    <span class="keywordflow">for</span> (<span class="keyword">auto</span> suc_id : std::get&lt;1&gt;(*suc_it))</div>
-<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;                    {</div>
-<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;                        <span class="keyword">auto</span>&amp; pred_ids = this-&gt;m_group_predecessors.at(suc_id);</div>
-<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;                        pred_ids.insert(target_group_id);</div>
-<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;                        target_suc_ids.insert(suc_id);</div>
-<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;                        pred_ids.erase(group_id);</div>
-<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;                    }</div>
-<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;                }</div>
-<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160; </div>
-<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> pred_it = this-&gt;m_group_predecessors.find(group_id); pred_it != this-&gt;m_group_predecessors.end())</div>
-<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;                {</div>
-<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;                    <span class="keyword">auto</span>&amp; target_pred_ids = this-&gt;m_group_predecessors[target_group_id];</div>
-<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;                    <span class="keywordflow">for</span> (<span class="keyword">auto</span> pred_id : std::get&lt;1&gt;(*pred_it))</div>
-<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;                    {</div>
-<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;                        <span class="keyword">auto</span>&amp; suc_ids = this-&gt;m_group_successors.at(pred_id);</div>
-<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;                        suc_ids.insert(target_group_id);</div>
-<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;                        target_pred_ids.insert(pred_id);</div>
-<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;                        suc_ids.erase(group_id);</div>
-<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;                    }</div>
-<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;                }</div>
-<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160; </div>
-<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;                this-&gt;m_group_successors.erase(group_id);</div>
-<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;                this-&gt;m_group_predecessors.erase(group_id);</div>
-<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;            }</div>
-<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160; </div>
-<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(target_group_id);</div>
-<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;        }</div>
-<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160; </div>
-<div class="line"><a name="l00597"></a><span class="lineno"><a class="line" href="structhal_1_1dataflow_1_1_result.html#a2f81cf8236ae5a637885ec44be0a0409">  597</a></span>&#160;        <a class="code" href="classhal_1_1_result.html">hal::Result&lt;std::vector&lt;u32&gt;</a>&gt; <a class="code" href="structhal_1_1dataflow_1_1_result.html#a2f81cf8236ae5a637885ec44be0a0409">dataflow::Result::split_group</a>(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id, <span class="keyword">const</span> std::vector&lt;std::unordered_set&lt;Gate*&gt;&gt;&amp; new_groups)</div>
-<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;        {</div>
-<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;            <span class="keywordflow">if</span> (new_groups.empty())</div>
-<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;            {</div>
-<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;no gates provided to define splits.&quot;</span>);</div>
-<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;            }</div>
-<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160; </div>
-<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> group_it = this-&gt;m_gates_of_group.find(group_id);</div>
-<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;            <span class="keywordflow">if</span> (group_it == this-&gt;m_gates_of_group.end())</div>
-<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;            {</div>
-<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;a group with ID &quot;</span> + std::to_string(group_id) + <span class="stringliteral">&quot; does not exist.&quot;</span>);</div>
-<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;            }</div>
-<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160; </div>
-<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span>&amp; group_gates = std::get&lt;1&gt;(*group_it);</div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160; </div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;                <span class="keyword">auto</span>* new_mod             = nl-&gt;create_module(<span class="stringliteral">&quot;DANA_register_&quot;</span> + std::to_string(group_id), reference_module, gates);</div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;                group_to_module[group_id] = new_mod;</div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160; </div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;                <a class="code" href="classhal_1_1_pin_group.html">PinGroup&lt;ModulePin&gt;</a>* data_in_group  = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;                <a class="code" href="classhal_1_1_pin_group.html">PinGroup&lt;ModulePin&gt;</a>* data_out_group = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160; </div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">auto</span>* pin : new_mod-&gt;get_pins())</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;                {</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;                    <span class="keywordflow">if</span> (pin-&gt;get_direction() == <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">PinDirection::input</a>)</div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;                    {</div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;                        <span class="keyword">const</span> <span class="keyword">auto</span> destinations = pin-&gt;get_net()-&gt;get_destinations([new_mod](<span class="keyword">const</span> <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep) { <span class="keywordflow">return</span> ep-&gt;<a class="code" href="classhal_1_1_endpoint.html#aa5d98029f04ec9dc36da48b3fece7bd6">get_gate</a>()-&gt;get_module() == new_mod; });</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;                        <span class="keywordflow">if</span> (destinations.size() == 1 &amp;&amp; destinations.at(0)-&gt;get_pin()-&gt;get_type() == <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">PinType::data</a>)</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;                        {</div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;                            <span class="keywordflow">if</span> (data_in_group == <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;                            {</div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;                                data_in_group = pin-&gt;get_group().first;</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;                                new_mod-&gt;set_pin_group_name(data_in_group, <span class="stringliteral">&quot;DI&quot;</span>);</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;                                new_mod-&gt;set_pin_group_type(data_in_group, <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">PinType::data</a>);</div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;                            }</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;                            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;                            {</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;                                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = new_mod-&gt;assign_pin_to_group(data_in_group, pin); res.is_error())</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;                                {</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;                                    <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;dataflow&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;                                }</div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;                            }</div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160; </div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;                            new_mod-&gt;set_pin_name(pin, <span class="stringliteral">&quot;DI(&quot;</span> + std::to_string(pin-&gt;get_group().second) + <span class="stringliteral">&quot;)&quot;</span>);</div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;                            new_mod-&gt;set_pin_type(pin, <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">PinType::data</a>);</div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;                        }</div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;                        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;                        {</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;                            std::map&lt;PinType, std::string&gt; pin_types = {{<a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3">PinType::clock</a>, <span class="stringliteral">&quot;CLK&quot;</span>}, {<a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">PinType::enable</a>, <span class="stringliteral">&quot;EN&quot;</span>}, {<a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba86266ee937d97f812a8e57d22b62ee29">PinType::reset</a>, <span class="stringliteral">&quot;RST&quot;</span>}, {<a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">PinType::set</a>, <span class="stringliteral">&quot;SET&quot;</span>}};</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;                            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a> : pin_types)</div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;                            {</div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;                                <span class="keywordflow">if</span> (std::all_of(destinations.begin(), destinations.end(), [<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>](<span class="keyword">const</span> <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep) { return ep-&gt;get_pin()-&gt;get_type() == std::get&lt;0&gt;(type); }))</div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;                                {</div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;                                    <span class="keyword">auto</span>* pin_group = pin-&gt;get_group().first;</div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;                                    new_mod-&gt;set_pin_name(pin, std::get&lt;1&gt;(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>));</div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;                                    new_mod-&gt;set_pin_type(pin, std::get&lt;0&gt;(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>));</div>
+<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;                                    new_mod-&gt;set_pin_group_name(pin_group, std::get&lt;1&gt;(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>));</div>
+<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;                                    new_mod-&gt;set_pin_group_type(pin_group, std::get&lt;0&gt;(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>));</div>
+<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;                                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;                                }</div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;                            }</div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;                        }</div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;                    }</div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (pin-&gt;get_direction() == <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">PinDirection::output</a>)</div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;                    {</div>
+<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;                        <span class="keyword">const</span> <span class="keyword">auto</span> sources = pin-&gt;get_net()-&gt;get_sources([new_mod](<span class="keyword">const</span> <a class="code" href="classhal_1_1_endpoint.html">Endpoint</a>* ep) { <span class="keywordflow">return</span> ep-&gt;<a class="code" href="classhal_1_1_endpoint.html#aa5d98029f04ec9dc36da48b3fece7bd6">get_gate</a>()-&gt;get_module() == new_mod; });</div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;                        <span class="keywordflow">if</span> (sources.size() == 1 &amp;&amp; sources.at(0)-&gt;get_pin()-&gt;get_type() == <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">PinType::state</a>)</div>
+<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;                        {</div>
+<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;                            <span class="keywordflow">if</span> (data_out_group == <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;                            {</div>
+<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;                                data_out_group = pin-&gt;get_group().first;</div>
+<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;                                new_mod-&gt;set_pin_group_name(data_out_group, <span class="stringliteral">&quot;DO&quot;</span>);</div>
+<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;                                new_mod-&gt;set_pin_group_type(data_out_group, <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">PinType::data</a>);</div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;                            }</div>
+<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;                            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;                            {</div>
+<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;                                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = new_mod-&gt;assign_pin_to_group(data_out_group, pin); res.is_error())</div>
+<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;                                {</div>
+<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;                                    <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;dataflow&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;                                }</div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;                            }</div>
+<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160; </div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;                            new_mod-&gt;set_pin_name(pin, <span class="stringliteral">&quot;DO(&quot;</span> + std::to_string(pin-&gt;get_group().second) + <span class="stringliteral">&quot;)&quot;</span>);</div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;                            new_mod-&gt;set_pin_type(pin, <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">PinType::data</a>);</div>
+<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;                        }</div>
+<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;                    }</div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;                }</div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;            }</div>
+<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(group_to_module);</div>
+<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;        }</div>
+<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160; </div>
+<div class="line"><a name="l00575"></a><span class="lineno"><a class="line" href="structhal_1_1dataflow_1_1_result.html#a31e3d5b3024e9bb3edd1c17666bb6a06">  575</a></span>&#160;        std::vector&lt;std::vector&lt;Gate*&gt;&gt; <a class="code" href="structhal_1_1dataflow_1_1_result.html#a31e3d5b3024e9bb3edd1c17666bb6a06">dataflow::Result::get_groups_as_list</a>(<span class="keyword">const</span> std::unordered_set&lt;u32&gt;&amp; group_ids)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;            std::vector&lt;std::vector&lt;Gate*&gt;&gt; groups;</div>
+<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; [group_id, group] : this-&gt;get_groups())</div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;            {</div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;                <span class="keywordflow">if</span> (!group_ids.empty() &amp;&amp; group_ids.find(group_id) == group_ids.end())</div>
+<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;                {</div>
+<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;                    <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;                }</div>
+<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160; </div>
+<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;                std::vector&lt;Gate*&gt; group_vector;</div>
+<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; gate : group)</div>
+<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;                {</div>
+<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;                    group_vector.push_back(gate);</div>
+<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;                }</div>
+<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;                groups.push_back(group_vector);</div>
+<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;            }</div>
+<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;            <span class="keywordflow">return</span> groups;</div>
+<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;        }</div>
+<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160; </div>
+<div class="line"><a name="l00595"></a><span class="lineno"><a class="line" href="structhal_1_1dataflow_1_1_result.html#a03e7e57a2ef0bf8bc312c817d8057db0">  595</a></span>&#160;        <a class="code" href="classhal_1_1_result.html">hal::Result&lt;u32&gt;</a> <a class="code" href="structhal_1_1dataflow_1_1_result.html#a03e7e57a2ef0bf8bc312c817d8057db0">dataflow::Result::merge_groups</a>(<span class="keyword">const</span> std::vector&lt;u32&gt;&amp; group_ids)</div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;        {</div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;            <span class="keywordflow">if</span> (group_ids.empty())</div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;            {</div>
+<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;no group IDs provided.&quot;</span>);</div>
+<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;            }</div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160; </div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;            <span class="keywordflow">if</span> (group_ids.size() &lt; 2)</div>
+<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;            {</div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;at least two groups are required for merging.&quot;</span>);</div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;            }</div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160; </div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;            <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = std::find_if(group_ids.begin(), group_ids.end(), [<span class="keyword">this</span>](<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>) { return this-&gt;m_gates_of_group.find(id) == this-&gt;m_gates_of_group.end(); }); it != group_ids.end())</div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;            {</div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;a group with ID &quot;</span> + std::to_string(*it) + <span class="stringliteral">&quot; does not exist.&quot;</span>);</div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;            }</div>
 <div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160; </div>
-<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;            std::unordered_set&lt;const Gate*&gt; seen;</div>
-<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; gates : new_groups)</div>
-<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;            {</div>
-<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">auto</span>* <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a> : gates)</div>
-<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;                {</div>
-<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;                    <span class="keywordflow">if</span> (!<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>)</div>
-<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;                    {</div>
-<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;gate is a nullptr.&quot;</span>);</div>
-<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;                    }</div>
-<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160; </div>
-<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;                    <span class="keywordflow">if</span> (group_gates.find(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>) == group_gates.end())</div>
-<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;                    {</div>
-<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;gate &#39;&quot;</span> + <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>-&gt;get_name() + <span class="stringliteral">&quot;&#39; with ID &quot;</span> + std::to_string(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>-&gt;get_id()) + <span class="stringliteral">&quot; does not belong to group with ID &quot;</span> + std::to_string(group_id) + <span class="stringliteral">&quot;.&quot;</span>);</div>
-<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;                    }</div>
-<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160; </div>
-<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;                    <span class="keywordflow">if</span> (seen.find(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>) != seen.end())</div>
-<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;                    {</div>
-<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;gate &#39;&quot;</span> + <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>-&gt;get_name() + <span class="stringliteral">&quot;&#39; with ID &quot;</span> + std::to_string(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>-&gt;get_id()) + <span class="stringliteral">&quot; cannot be assigned to two groups after splitting.&quot;</span>);</div>
-<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;                    }</div>
-<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;                    seen.insert(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>);</div>
-<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;                }</div>
-<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;            }</div>
-<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160; </div>
-<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;            <span class="keywordflow">if</span> (seen.size() != group_gates.size())</div>
-<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;            {</div>
-<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;size of the target group does not match combined size of the split groups.&quot;</span>);</div>
-<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;            }</div>
-<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160; </div>
-<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;            this-&gt;m_gates_of_group.erase(group_id);</div>
-<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;            this-&gt;m_group_successors.erase(group_id);</div>
-<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;            this-&gt;m_group_predecessors.erase(group_id);</div>
-<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;            this-&gt;m_group_signals.erase(group_id);</div>
-<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160; </div>
-<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;            std::vector&lt;u32&gt; new_group_ids;</div>
-<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; gates : new_groups)</div>
-<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;            {</div>
-<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;                <span class="keyword">auto</span> current_id = ++(this-&gt;m_last_id);</div>
-<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160; </div>
-<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;                <span class="comment">// new group</span></div>
-<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;                this-&gt;m_gates_of_group[current_id] = gates;</div>
-<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160; </div>
-<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>* <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a> : gates)</div>
-<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;                {</div>
-<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;                    this-&gt;m_parent_group_of_gate.at(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>) = current_id;</div>
-<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160; </div>
-<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;                    <span class="comment">// signals</span></div>
-<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;                    <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> signals_it = this-&gt;m_gate_signals.find(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>); signals_it != this-&gt;m_gate_signals.end())</div>
-<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;                    {</div>
-<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;                        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; signals = std::get&lt;1&gt;(*signals_it);</div>
-<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160; </div>
-<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;                        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a> : std::vector&lt;PinType&gt;({<a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3">PinType::clock</a>, <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">PinType::enable</a>, <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba86266ee937d97f812a8e57d22b62ee29">PinType::reset</a>, <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">PinType::set</a>}))</div>
-<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;                        {</div>
-<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;                            <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> nets_it = signals.find(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>); nets_it != signals.end())</div>
-<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;                            {</div>
-<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;                                <span class="keyword">const</span> <span class="keyword">auto</span>&amp; nets = std::get&lt;1&gt;(*nets_it);</div>
-<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;                                this-&gt;m_group_signals[current_id][<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>].insert(nets.begin(), nets.end());</div>
-<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;                            }</div>
-<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;                        }</div>
-<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;                    }</div>
-<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;                }</div>
-<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160; </div>
-<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;                new_group_ids.push_back(current_id);</div>
-<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;            }</div>
-<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160; </div>
-<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;            <span class="comment">// successors / predecessors (can only be inferred once all new groups have been created)</span></div>
-<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> current_id : new_group_ids)</div>
-<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;            {</div>
-<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>* <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a> : this-&gt;m_gates_of_group.at(current_id))</div>
-<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;                {</div>
-<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;                    <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> suc_it = this-&gt;m_gate_successors.find(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>); suc_it != this-&gt;m_gate_successors.end())</div>
-<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;                    {</div>
-<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;                        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>* suc_g : std::get&lt;1&gt;(*suc_it))</div>
-<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;                        {</div>
-<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;                            this-&gt;m_group_successors[current_id].insert(this-&gt;m_parent_group_of_gate.at(suc_g));</div>
-<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;                        }</div>
-<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;                    }</div>
-<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160; </div>
-<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;                    <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> pred_it = this-&gt;m_gate_predecessors.find(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>); pred_it != this-&gt;m_gate_predecessors.end())</div>
-<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;                    {</div>
-<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;                        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>* pred_g : std::get&lt;1&gt;(*pred_it))</div>
-<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;                        {</div>
-<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;                            this-&gt;m_group_predecessors[current_id].insert(this-&gt;m_parent_group_of_gate.at(pred_g));</div>
-<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;                        }</div>
-<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;                    }</div>
-<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;                }</div>
-<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;            }</div>
-<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160; </div>
-<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(new_group_ids);</div>
-<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;        }</div>
-<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;    }    <span class="comment">// namespace dataflow</span></div>
-<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;            <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> target_group_id = ++(this-&gt;m_last_id);</div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160; </div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;            <span class="comment">// iterate set to make sure that every ID is contained only once</span></div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;            std::unordered_set&lt;u32&gt; group_ids_set(group_ids.begin(), group_ids.end());</div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> group_id : group_ids_set)</div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;            {</div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;                <span class="comment">// new group</span></div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;                <span class="keyword">auto</span>&amp; gates_at_i = this-&gt;m_gates_of_group.at(group_id);</div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;                this-&gt;m_gates_of_group[target_group_id].insert(gates_at_i.begin(), gates_at_i.end());</div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;                this-&gt;m_gates_of_group.erase(group_id);</div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160; </div>
+<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;                std::for_each(gates_at_i.begin(), gates_at_i.end(), [<span class="keyword">this</span>, target_group_id](<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate.html">Gate</a>* <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>) { this-&gt;m_parent_group_of_gate.at(g) = target_group_id; });</div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160; </div>
+<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;                <span class="comment">// signals</span></div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> signals_it = this-&gt;m_group_signals.find(group_id); signals_it != this-&gt;m_group_signals.end())</div>
+<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;                {</div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;                    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; signals_of_type : std::get&lt;1&gt;(*signals_it))</div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;                    {</div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;                        <span class="keyword">auto</span>&amp; signals = std::get&lt;1&gt;(signals_of_type);</div>
+<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;                        this-&gt;m_group_signals[target_group_id][signals_of_type.first].insert(signals.begin(), signals.end());</div>
+<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;                    }</div>
+<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;                    this-&gt;m_group_signals.erase(signals_it);</div>
+<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;                }</div>
+<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160; </div>
+<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;                <span class="comment">// successors / predecessors</span></div>
+<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> suc_it = this-&gt;m_group_successors.find(group_id); suc_it != this-&gt;m_group_successors.end())</div>
+<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;                {</div>
+<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;                    <span class="keyword">auto</span>&amp; target_suc_ids = this-&gt;m_group_successors[target_group_id];</div>
+<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;                    <span class="keywordflow">for</span> (<span class="keyword">auto</span> suc_id : std::get&lt;1&gt;(*suc_it))</div>
+<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;                    {</div>
+<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;                        <span class="keyword">auto</span>&amp; pred_ids = this-&gt;m_group_predecessors.at(suc_id);</div>
+<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;                        pred_ids.insert(target_group_id);</div>
+<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;                        target_suc_ids.insert(suc_id);</div>
+<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;                        pred_ids.erase(group_id);</div>
+<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;                    }</div>
+<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;                }</div>
+<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160; </div>
+<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> pred_it = this-&gt;m_group_predecessors.find(group_id); pred_it != this-&gt;m_group_predecessors.end())</div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;                {</div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;                    <span class="keyword">auto</span>&amp; target_pred_ids = this-&gt;m_group_predecessors[target_group_id];</div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;                    <span class="keywordflow">for</span> (<span class="keyword">auto</span> pred_id : std::get&lt;1&gt;(*pred_it))</div>
+<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;                    {</div>
+<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;                        <span class="keyword">auto</span>&amp; suc_ids = this-&gt;m_group_successors.at(pred_id);</div>
+<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;                        suc_ids.insert(target_group_id);</div>
+<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;                        target_pred_ids.insert(pred_id);</div>
+<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;                        suc_ids.erase(group_id);</div>
+<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;                    }</div>
+<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;                }</div>
+<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160; </div>
+<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;                this-&gt;m_group_successors.erase(group_id);</div>
+<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;                this-&gt;m_group_predecessors.erase(group_id);</div>
+<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;            }</div>
+<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160; </div>
+<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(target_group_id);</div>
+<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;        }</div>
+<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160; </div>
+<div class="line"><a name="l00668"></a><span class="lineno"><a class="line" href="structhal_1_1dataflow_1_1_result.html#a2f81cf8236ae5a637885ec44be0a0409">  668</a></span>&#160;        <a class="code" href="classhal_1_1_result.html">hal::Result&lt;std::vector&lt;u32&gt;</a>&gt; <a class="code" href="structhal_1_1dataflow_1_1_result.html#a2f81cf8236ae5a637885ec44be0a0409">dataflow::Result::split_group</a>(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id, <span class="keyword">const</span> std::vector&lt;std::unordered_set&lt;Gate*&gt;&gt;&amp; new_groups)</div>
+<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;        {</div>
+<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;            <span class="keywordflow">if</span> (new_groups.empty())</div>
+<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;            {</div>
+<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;no gates provided to define splits.&quot;</span>);</div>
+<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;            }</div>
+<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160; </div>
+<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> group_it = this-&gt;m_gates_of_group.find(group_id);</div>
+<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;            <span class="keywordflow">if</span> (group_it == this-&gt;m_gates_of_group.end())</div>
+<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;            {</div>
+<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;a group with ID &quot;</span> + std::to_string(group_id) + <span class="stringliteral">&quot; does not exist.&quot;</span>);</div>
+<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;            }</div>
+<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160; </div>
+<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span>&amp; group_gates = std::get&lt;1&gt;(*group_it);</div>
+<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160; </div>
+<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;            std::unordered_set&lt;const Gate*&gt; seen;</div>
+<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; gates : new_groups)</div>
+<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;            {</div>
+<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">auto</span>* <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a> : gates)</div>
+<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;                {</div>
+<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;                    <span class="keywordflow">if</span> (!<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>)</div>
+<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;                    {</div>
+<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;gate is a nullptr.&quot;</span>);</div>
+<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;                    }</div>
+<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160; </div>
+<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;                    <span class="keywordflow">if</span> (group_gates.find(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>) == group_gates.end())</div>
+<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;                    {</div>
+<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;gate &#39;&quot;</span> + <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>-&gt;get_name() + <span class="stringliteral">&quot;&#39; with ID &quot;</span> + std::to_string(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>-&gt;get_id()) + <span class="stringliteral">&quot; does not belong to group with ID &quot;</span> + std::to_string(group_id) + <span class="stringliteral">&quot;.&quot;</span>);</div>
+<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;                    }</div>
+<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160; </div>
+<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;                    <span class="keywordflow">if</span> (seen.find(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>) != seen.end())</div>
+<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;                    {</div>
+<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;                        <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;gate &#39;&quot;</span> + <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>-&gt;get_name() + <span class="stringliteral">&quot;&#39; with ID &quot;</span> + std::to_string(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>-&gt;get_id()) + <span class="stringliteral">&quot; cannot be assigned to two groups after splitting.&quot;</span>);</div>
+<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;                    }</div>
+<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;                    seen.insert(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>);</div>
+<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;                }</div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;            }</div>
+<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160; </div>
+<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;            <span class="keywordflow">if</span> (seen.size() != group_gates.size())</div>
+<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;            {</div>
+<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a1c3e89a5c947d0af52de06b706adcf09">ERR</a>(<span class="stringliteral">&quot;size of the target group does not match combined size of the split groups.&quot;</span>);</div>
+<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;            }</div>
+<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160; </div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;            this-&gt;m_gates_of_group.erase(group_id);</div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;            this-&gt;m_group_successors.erase(group_id);</div>
+<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;            this-&gt;m_group_predecessors.erase(group_id);</div>
+<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;            this-&gt;m_group_signals.erase(group_id);</div>
+<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160; </div>
+<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;            std::vector&lt;u32&gt; new_group_ids;</div>
+<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; gates : new_groups)</div>
+<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;            {</div>
+<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;                <span class="keyword">auto</span> current_id = ++(this-&gt;m_last_id);</div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160; </div>
+<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;                <span class="comment">// new group</span></div>
+<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;                this-&gt;m_gates_of_group[current_id] = gates;</div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160; </div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>* <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a> : gates)</div>
+<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;                {</div>
+<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;                    this-&gt;m_parent_group_of_gate.at(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>) = current_id;</div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160; </div>
+<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;                    <span class="comment">// signals</span></div>
+<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;                    <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> signals_it = this-&gt;m_gate_signals.find(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>); signals_it != this-&gt;m_gate_signals.end())</div>
+<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;                    {</div>
+<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;                        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; signals = std::get&lt;1&gt;(*signals_it);</div>
+<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160; </div>
+<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;                        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a> : std::vector&lt;PinType&gt;({<a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3">PinType::clock</a>, <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">PinType::enable</a>, <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba86266ee937d97f812a8e57d22b62ee29">PinType::reset</a>, <a class="code" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">PinType::set</a>}))</div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;                        {</div>
+<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;                            <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> nets_it = signals.find(<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>); nets_it != signals.end())</div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;                            {</div>
+<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;                                <span class="keyword">const</span> <span class="keyword">auto</span>&amp; nets = std::get&lt;1&gt;(*nets_it);</div>
+<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;                                this-&gt;m_group_signals[current_id][<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>].insert(nets.begin(), nets.end());</div>
+<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;                            }</div>
+<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;                        }</div>
+<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;                    }</div>
+<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;                }</div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160; </div>
+<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;                new_group_ids.push_back(current_id);</div>
+<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;            }</div>
+<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160; </div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;            <span class="comment">// successors / predecessors (can only be inferred once all new groups have been created)</span></div>
+<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> current_id : new_group_ids)</div>
+<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;            {</div>
+<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>* <a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a> : this-&gt;m_gates_of_group.at(current_id))</div>
+<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;                {</div>
+<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;                    <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> suc_it = this-&gt;m_gate_successors.find(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>); suc_it != this-&gt;m_gate_successors.end())</div>
+<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;                    {</div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;                        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>* suc_g : std::get&lt;1&gt;(*suc_it))</div>
+<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;                        {</div>
+<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;                            this-&gt;m_group_successors[current_id].insert(this-&gt;m_parent_group_of_gate.at(suc_g));</div>
+<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;                        }</div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;                    }</div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160; </div>
+<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;                    <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> pred_it = this-&gt;m_gate_predecessors.find(<a class="code" href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">g</a>); pred_it != this-&gt;m_gate_predecessors.end())</div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;                    {</div>
+<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;                        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>* pred_g : std::get&lt;1&gt;(*pred_it))</div>
+<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;                        {</div>
+<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;                            this-&gt;m_group_predecessors[current_id].insert(this-&gt;m_parent_group_of_gate.at(pred_g));</div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;                        }</div>
+<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;                    }</div>
+<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;                }</div>
+<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;            }</div>
+<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160; </div>
+<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(new_group_ids);</div>
+<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;        }</div>
+<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;    }    <span class="comment">// namespace dataflow</span></div>
+<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_a8de92d6b9e454ff1d0ce07c5f4b28615"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#a8de92d6b9e454ff1d0ce07c5f4b28615">hal::dataflow::Result::get_netlist</a></div><div class="ttdeci">Netlist * get_netlist() const</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00131">result.cpp:131</a></div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_a8e4d8773dbb4f345b44c4983089542cd"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#a8e4d8773dbb4f345b44c4983089542cd">hal::dataflow::Result::get_group_successors</a></div><div class="ttdeci">hal::Result&lt; std::unordered_set&lt; u32 &gt; &gt; get_group_successors(const u32 group_id) const</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00220">result.cpp:220</a></div></div>
-<div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_a03e7e57a2ef0bf8bc312c817d8057db0"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#a03e7e57a2ef0bf8bc312c817d8057db0">hal::dataflow::Result::merge_groups</a></div><div class="ttdeci">hal::Result&lt; u32 &gt; merge_groups(const std::vector&lt; u32 &gt; &amp;group_ids)</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00524">result.cpp:524</a></div></div>
+<div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_a03e7e57a2ef0bf8bc312c817d8057db0"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#a03e7e57a2ef0bf8bc312c817d8057db0">hal::dataflow::Result::merge_groups</a></div><div class="ttdeci">hal::Result&lt; u32 &gt; merge_groups(const std::vector&lt; u32 &gt; &amp;group_ids)</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00595">result.cpp:595</a></div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_a1c89579d95b9645da1fac384dff2d886"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#a1c89579d95b9645da1fac384dff2d886">hal::dataflow::Result::get_gates_of_group</a></div><div class="ttdeci">hal::Result&lt; std::unordered_set&lt; Gate * &gt; &gt; get_gates_of_group(const u32 group_id) const</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00153">result.cpp:153</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a9b45b3e13bd9167aab02e17e08916231"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a></div><div class="ttdeci">std::string name</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">netlist_serializer.cpp:57</a></div></div>
+<div class="ttc" id="aclasshal_1_1_endpoint_html_aa5d98029f04ec9dc36da48b3fece7bd6"><div class="ttname"><a href="classhal_1_1_endpoint.html#aa5d98029f04ec9dc36da48b3fece7bd6">hal::Endpoint::get_gate</a></div><div class="ttdeci">Gate * get_gate() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2endpoint_8cpp_source.html#l00023">endpoint.cpp:23</a></div></div>
 <div class="ttc" id="anamespacehal_html_ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc"><div class="ttname"><a href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">hal::PinType::data</a></div><div class="ttdeci">@ data</div></div>
 <div class="ttc" id="anamespacetest__plugin_html_abd3083aec6bd8d3b9851214d6d355740"><div class="ttname"><a href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">test_plugin.g</a></div><div class="ttdeci">g</div><div class="ttdef"><b>Definition:</b> <a href="test__plugin_8py_source.html#l00032">test_plugin.py:32</a></div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_grouping_html_aad2fd5d1bf6f35dc0e5a25aa88be321d"><div class="ttname"><a href="structhal_1_1dataflow_1_1_grouping.html#aad2fd5d1bf6f35dc0e5a25aa88be321d">hal::dataflow::Grouping::get_clock_signals_of_group</a></div><div class="ttdeci">std::unordered_set&lt; u32 &gt; get_clock_signals_of_group(u32 group_id) const</div><div class="ttdef"><b>Definition:</b> <a href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00106">grouping.cpp:106</a></div></div>
@@ -820,21 +892,26 @@ $(document).ready(function(){initNavTree('result_8cpp_source.html',''); initResi
 <div class="ttc" id="agroup__utilities_html_ga5a10e8bbe0ebf932e114b116b32d7ed2"><div class="ttname"><a href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a></div><div class="ttdeci">#define log_info(channel,...)</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00070">log.h:70</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_a504c73ff1a68c50e5435dece66bc2772"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a></div><div class="ttdeci">Net * net</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">netlist_serializer.cpp:56</a></div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_a673304b1b81b995234c3321384df6e36"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#a673304b1b81b995234c3321384df6e36">hal::dataflow::Result::write_txt</a></div><div class="ttdeci">hal::Result&lt; std::monostate &gt; write_txt(const std::filesystem::path &amp;out_path, const std::unordered_set&lt; u32 &gt; &amp;group_ids={}) const</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00352">result.cpp:352</a></div></div>
+<div class="ttc" id="agroup__utilities_html_gaccc921ec8323d53efb57a21a8d4be735"><div class="ttname"><a href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a></div><div class="ttdeci">#define log_warning(channel,...)</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00076">log.h:76</a></div></div>
 <div class="ttc" id="anamespacehal_html_ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e"><div class="ttname"><a href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">hal::PinType::set</a></div><div class="ttdeci">@ set</div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_a7a96adfbbf2db4d4ff1676e634dccb80"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#a7a96adfbbf2db4d4ff1676e634dccb80">hal::dataflow::Result::get_gate_control_nets</a></div><div class="ttdeci">hal::Result&lt; std::unordered_set&lt; Net * &gt; &gt; get_gate_control_nets(const Gate *gate, const PinType type) const</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00201">result.cpp:201</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html_ab5e29819702448bdd0315d3282e2eaae"><div class="ttname"><a href="classhal_1_1_netlist.html#ab5e29819702448bdd0315d3282e2eaae">hal::Netlist::get_net_by_id</a></div><div class="ttdeci">Net * get_net_by_id(u32 net_id) const</div><div class="ttdef"><b>Definition:</b> <a href="src_2netlist_2netlist_8cpp_source.html#l00353">netlist.cpp:353</a></div></div>
+<div class="ttc" id="aclasshal_1_1_pin_group_html"><div class="ttname"><a href="classhal_1_1_pin_group.html">hal::PinGroup</a></div><div class="ttdef"><b>Definition:</b> <a href="pin__group_8h_source.html#l00047">pin_group.h:47</a></div></div>
+<div class="ttc" id="aclasshal_1_1_endpoint_html"><div class="ttname"><a href="classhal_1_1_endpoint.html">hal::Endpoint</a></div><div class="ttdef"><b>Definition:</b> <a href="endpoint_8h_source.html#l00042">endpoint.h:42</a></div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_a6f16ef3bfef86ba4b24f965dd8effee9"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#a6f16ef3bfef86ba4b24f965dd8effee9">hal::dataflow::Result::get_group_id_of_gate</a></div><div class="ttdeci">hal::Result&lt; u32 &gt; get_group_id_of_gate(const Gate *gate) const</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00165">result.cpp:165</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_ab236d02389418d77f1f11d646404dc80"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#ab236d02389418d77f1f11d646404dc80">hal::dataflow::Result::write_dot</a></div><div class="ttdeci">hal::Result&lt; std::monostate &gt; write_dot(const std::filesystem::path &amp;out_path, const std::unordered_set&lt; u32 &gt; &amp;group_ids={}) const</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00280">result.cpp:280</a></div></div>
+<div class="ttc" id="anamespacehal_html_a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967"><div class="ttname"><a href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::PinDirection::input</a></div><div class="ttdeci">@ input</div></div>
 <div class="ttc" id="anet__layout__point_8h_html_aa7fe0c70576e86ca2c5f641bb47ccc9d"><div class="ttname"><a href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a></div><div class="ttdeci">quint32 u32</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00040">net_layout_point.h:40</a></div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_grouping_html_a7872e908f16318a7e5199fe02baf2b3a"><div class="ttname"><a href="structhal_1_1dataflow_1_1_grouping.html#a7872e908f16318a7e5199fe02baf2b3a">hal::dataflow::Grouping::get_predecessor_groups_of_group</a></div><div class="ttdeci">std::unordered_set&lt; u32 &gt; get_predecessor_groups_of_group(u32 group_id) const</div><div class="ttdef"><b>Definition:</b> <a href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00206">grouping.cpp:206</a></div></div>
-<div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_a2f81cf8236ae5a637885ec44be0a0409"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#a2f81cf8236ae5a637885ec44be0a0409">hal::dataflow::Result::split_group</a></div><div class="ttdeci">hal::Result&lt; std::vector&lt; u32 &gt; &gt; split_group(u32 group_id, const std::vector&lt; std::unordered_set&lt; Gate * &gt;&gt; &amp;new_groups)</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00597">result.cpp:597</a></div></div>
+<div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_a2f81cf8236ae5a637885ec44be0a0409"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#a2f81cf8236ae5a637885ec44be0a0409">hal::dataflow::Result::split_group</a></div><div class="ttdeci">hal::Result&lt; std::vector&lt; u32 &gt; &gt; split_group(u32 group_id, const std::vector&lt; std::unordered_set&lt; Gate * &gt;&gt; &amp;new_groups)</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00668">result.cpp:668</a></div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_grouping_html_ab51c9dd5358c657fecfa4ece4b7c7b4b"><div class="ttname"><a href="structhal_1_1dataflow_1_1_grouping.html#ab51c9dd5358c657fecfa4ece4b7c7b4b">hal::dataflow::Grouping::get_successor_groups_of_group</a></div><div class="ttdeci">std::unordered_set&lt; u32 &gt; get_successor_groups_of_group(u32 group_id) const</div><div class="ttdef"><b>Definition:</b> <a href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00175">grouping.cpp:175</a></div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_a99ba1c572d1ff38c08ce2aa75a04c871"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#a99ba1c572d1ff38c08ce2aa75a04c871">hal::dataflow::Result::get_gate_predecessors</a></div><div class="ttdeci">hal::Result&lt; std::unordered_set&lt; Gate * &gt; &gt; get_gate_predecessors(const Gate *gate) const</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00265">result.cpp:265</a></div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_a1c9a121ecdf5ec9b5726af68bbff812e"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#a1c9a121ecdf5ec9b5726af68bbff812e">hal::dataflow::Result::get_group_predecessors</a></div><div class="ttdeci">hal::Result&lt; std::unordered_set&lt; u32 &gt; &gt; get_group_predecessors(const u32 group_id) const</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00250">result.cpp:250</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html_a26d0f67be01c66f22422f40938e29237"><div class="ttname"><a href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">hal::Netlist::get_gate_by_id</a></div><div class="ttdeci">Gate * get_gate_by_id(const u32 gate_id) const</div><div class="ttdef"><b>Definition:</b> <a href="src_2netlist_2netlist_8cpp_source.html#l00193">netlist.cpp:193</a></div></div>
 <div class="ttc" id="anetlist_2persistent_2netlist__serializer_8cpp_html_ab832d8349a6c8a3927b85c5ada524cb2"><div class="ttname"><a href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a></div><div class="ttdeci">i32 id</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00055">netlist_serializer.cpp:55</a></div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_aa3fc45355b037067af0f0b2a7349a72f"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#aa3fc45355b037067af0f0b2a7349a72f">hal::dataflow::Result::get_gates</a></div><div class="ttdeci">std::vector&lt; Gate * &gt; get_gates() const</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00141">result.cpp:141</a></div></div>
+<div class="ttc" id="anamespacehal_html_a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d"><div class="ttname"><a href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::PinDirection::output</a></div><div class="ttdeci">@ output</div></div>
 <div class="ttc" id="anamespacehal_html_ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4"><div class="ttname"><a href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">hal::PinType::enable</a></div><div class="ttdeci">@ enable</div></div>
 <div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_a5ad667153a89697b109f5b8e64da7fe7"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a></div><div class="ttdeci">#define OK(...)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00049">result.h:49</a></div></div>
 <div class="ttc" id="anamespacehal_html_ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3"><div class="ttname"><a href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3">hal::PinType::clock</a></div><div class="ttdeci">@ clock</div></div>
@@ -842,14 +919,15 @@ $(document).ready(function(){initNavTree('result_8cpp_source.html',''); initResi
 <div class="ttc" id="anamespacehal_html_ae062cd9848a7ac51bd0bb4d76f1fb94b"><div class="ttname"><a href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">hal::PinType</a></div><div class="ttdeci">PinType</div><div class="ttdef"><b>Definition:</b> <a href="pin__type_8h_source.html#l00035">pin_type.h:35</a></div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_grouping_html_a0368b1c1eae265d96f53b509a0446848"><div class="ttname"><a href="structhal_1_1dataflow_1_1_grouping.html#a0368b1c1eae265d96f53b509a0446848">hal::dataflow::Grouping::get_control_signals_of_group</a></div><div class="ttdeci">std::unordered_set&lt; u32 &gt; get_control_signals_of_group(u32 group_id) const</div><div class="ttdef"><b>Definition:</b> <a href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00111">grouping.cpp:111</a></div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_grouping_html_adf01d576ef085c71fa07b0757dc6f501"><div class="ttname"><a href="structhal_1_1dataflow_1_1_grouping.html#adf01d576ef085c71fa07b0757dc6f501">hal::dataflow::Grouping::get_set_signals_of_group</a></div><div class="ttdeci">std::unordered_set&lt; u32 &gt; get_set_signals_of_group(u32 group_id) const</div><div class="ttdef"><b>Definition:</b> <a href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00121">grouping.cpp:121</a></div></div>
-<div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_a31e3d5b3024e9bb3edd1c17666bb6a06"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#a31e3d5b3024e9bb3edd1c17666bb6a06">hal::dataflow::Result::get_groups_as_list</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; Gate * &gt; &gt; get_groups_as_list(const std::unordered_set&lt; u32 &gt; &amp;group_ids={}) const</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00504">result.cpp:504</a></div></div>
+<div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_a31e3d5b3024e9bb3edd1c17666bb6a06"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#a31e3d5b3024e9bb3edd1c17666bb6a06">hal::dataflow::Result::get_groups_as_list</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; Gate * &gt; &gt; get_groups_as_list(const std::unordered_set&lt; u32 &gt; &amp;group_ids={}) const</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00575">result.cpp:575</a></div></div>
+<div class="ttc" id="anamespacehal_html_ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e"><div class="ttname"><a href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::PinType::state</a></div><div class="ttdeci">@ state</div></div>
 <div class="ttc" id="agate_8h_html"><div class="ttname"><a href="gate_8h.html">gate.h</a></div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_a68a284076b673025d2397867d4738a37"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#a68a284076b673025d2397867d4738a37">hal::dataflow::Result::get_gate_successors</a></div><div class="ttdeci">hal::Result&lt; std::unordered_set&lt; Gate * &gt; &gt; get_gate_successors(const Gate *gate) const</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00235">result.cpp:235</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_383eef8607738589c737c0b430bde182.html">src</a></li><li class="navelem"><a class="el" href="dir_a5dae3dd54959ea009030bd29b6c9d80.html">api</a></li><li class="navelem"><a class="el" href="result_8cpp.html">result.cpp</a></li>
-    <li class="footer">Generated on Fri May 12 2023 13:15:16 for HAL by
+    <li class="footer">Generated on Sat May 13 2023 14:43:02 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
