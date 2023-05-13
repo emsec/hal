@@ -26,6 +26,7 @@
 #pragma once
 #include <QObject>
 #include <QMap>
+#include <QLabel>
 #include <QIcon>
 #include <QStringList>
 #include <QDateTime>
@@ -176,6 +177,7 @@ namespace hal {
         QColor mDefaultTextColor;
         QColor mHilightTextColor;
         QColor mHilightBackgroundColor;
+        QLabel* mIconLegend[4];
     Q_SIGNALS:
         void backToNetlist(QString invokeGui);
     private Q_SLOTS:

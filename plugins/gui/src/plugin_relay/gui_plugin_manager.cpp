@@ -20,7 +20,6 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QHeaderView>
 #include <QMessageBox>
 
@@ -57,11 +56,6 @@ namespace hal {
         QLabel* legendHeader = new QLabel("Buttons used in table above:", this);
         legendHeader->setFixedHeight(48);
         layout->addWidget(legendHeader,Qt::AlignLeft);
-        QPixmap* picon[4] = {
-            new QPixmap(":/icons/insert_plugin", "PNG"),
-            new QPixmap(":/icons/x_delete",      "PNG"),
-            new QPixmap(":/icons/cli_options",   "PNG"),
-            new QPixmap(":/icons/invoke_gui",    "PNG")};
         QLabel* ltext[4] = {
             new QLabel("Load HAL plugin and dependencies (if any)", this),
             new QLabel("Unload HAL plugin unless needed as dependency by other plugin", this),
@@ -71,11 +65,10 @@ namespace hal {
         for (int i=0; i<4; i++)
         {
             QHBoxLayout* legend = new QHBoxLayout;
-            QLabel* licon = new QLabel(this);
-            licon->setPixmap(picon[i]->scaled(32,32));
-            licon->setAlignment(Qt::AlignCenter);
-            licon->setFixedSize(52,52);
-            legend->addWidget(licon);
+            mIconLegend[i] = new QLabel(this);
+            mIconLegend[i]->setAlignment(Qt::AlignCenter);
+            mIconLegend[i]->setFixedSize(52,52);
+            legend->addWidget(mIconLegend[i]);
             ltext[i]->setIndent(8);
             legend->addWidget(ltext[i]);
             layout->addLayout(legend);
@@ -99,6 +92,18 @@ namespace hal {
         s->unpolish(this);
         s->polish(this);
         mGuiPluginDelegate->updateQss(this);
+        QIcon tmpIcon;
+        for (int i=0; i<4; i++)
+        {
+            switch (i)
+            {
+            case 0: tmpIcon = gui_utility::getStyledSvgIcon(loadIconStyle(),loadIconPath());     break;
+            case 1: tmpIcon = gui_utility::getStyledSvgIcon(unloadIconStyle(),unloadIconPath()); break;
+            case 2: tmpIcon = gui_utility::getStyledSvgIcon(cliIconStyle(),cliIconPath());       break;
+            case 3: tmpIcon = gui_utility::getStyledSvgIcon(guiIconStyle(),guiIconPath());       break;
+            }
+            mIconLegend[i]->setPixmap(tmpIcon.pixmap(32,32));
+        }
     }
 
     void GuiPluginManager::handleButtonCancel()

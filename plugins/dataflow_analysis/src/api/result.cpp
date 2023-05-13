@@ -496,7 +496,78 @@ namespace hal
                 {
                     reference_module = nl->get_top_module();
                 }
-                group_to_module[group_id] = nl->create_module("DANA_register_" + std::to_string(group_id), reference_module, gates);
+
+                auto* new_mod             = nl->create_module("DANA_register_" + std::to_string(group_id), reference_module, gates);
+                group_to_module[group_id] = new_mod;
+
+                PinGroup<ModulePin>* data_in_group  = nullptr;
+                PinGroup<ModulePin>* data_out_group = nullptr;
+
+                for (auto* pin : new_mod->get_pins())
+                {
+                    if (pin->get_direction() == PinDirection::input)
+                    {
+                        const auto destinations = pin->get_net()->get_destinations([new_mod](const Endpoint* ep) { return ep->get_gate()->get_module() == new_mod; });
+                        if (destinations.size() == 1 && destinations.at(0)->get_pin()->get_type() == PinType::data)
+                        {
+                            if (data_in_group == nullptr)
+                            {
+                                data_in_group = pin->get_group().first;
+                                new_mod->set_pin_group_name(data_in_group, "DI");
+                                new_mod->set_pin_group_type(data_in_group, PinType::data);
+                            }
+                            else
+                            {
+                                if (const auto res = new_mod->assign_pin_to_group(data_in_group, pin); res.is_error())
+                                {
+                                    log_warning("dataflow", "{}", res.get_error().get());
+                                }
+                            }
+
+                            new_mod->set_pin_name(pin, "DI(" + std::to_string(pin->get_group().second) + ")");
+                            new_mod->set_pin_type(pin, PinType::data);
+                        }
+                        else
+                        {
+                            std::map<PinType, std::string> pin_types = {{PinType::clock, "CLK"}, {PinType::enable, "EN"}, {PinType::reset, "RST"}, {PinType::set, "SET"}};
+                            for (const auto& type : pin_types)
+                            {
+                                if (std::all_of(destinations.begin(), destinations.end(), [type](const Endpoint* ep) { return ep->get_pin()->get_type() == std::get<0>(type); }))
+                                {
+                                    auto* pin_group = pin->get_group().first;
+                                    new_mod->set_pin_name(pin, std::get<1>(type));
+                                    new_mod->set_pin_type(pin, std::get<0>(type));
+                                    new_mod->set_pin_group_name(pin_group, std::get<1>(type));
+                                    new_mod->set_pin_group_type(pin_group, std::get<0>(type));
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else if (pin->get_direction() == PinDirection::output)
+                    {
+                        const auto sources = pin->get_net()->get_sources([new_mod](const Endpoint* ep) { return ep->get_gate()->get_module() == new_mod; });
+                        if (sources.size() == 1 && sources.at(0)->get_pin()->get_type() == PinType::state)
+                        {
+                            if (data_out_group == nullptr)
+                            {
+                                data_out_group = pin->get_group().first;
+                                new_mod->set_pin_group_name(data_out_group, "DO");
+                                new_mod->set_pin_group_type(data_out_group, PinType::data);
+                            }
+                            else
+                            {
+                                if (const auto res = new_mod->assign_pin_to_group(data_out_group, pin); res.is_error())
+                                {
+                                    log_warning("dataflow", "{}", res.get_error().get());
+                                }
+                            }
+
+                            new_mod->set_pin_name(pin, "DO(" + std::to_string(pin->get_group().second) + ")");
+                            new_mod->set_pin_type(pin, PinType::data);
+                        }
+                    }
+                }
             }
             return OK(group_to_module);
         }
