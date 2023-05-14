@@ -36,6 +36,8 @@ namespace hal {
     {
         setTitle(tr("Step 1 | Select Gates"));
         setSubTitle("Select the gates to be used for simulation. 0 gates selected.");
+        QIcon pageIcon = gui_utility::getStyledSvgIcon("all->#3192C5", ":/icons/folder");
+        setPixmap(QWizard::LogoPixmap, pageIcon.pixmap(30, 30));
 
         QGridLayout* layout = new QGridLayout(this);
         mButAll = new QPushButton("All gates", this);
@@ -239,7 +241,6 @@ namespace hal {
                     const Net* clk = n;
                     mController->add_clock_period(
                         clk, period, mSpinStartValue->value()==0, mSpinDuration->value());
-                    //std::cout << "clock net selected" << clk->get_name().c_str() << std::endl;
                     break;
                 }
             }
@@ -297,10 +298,6 @@ namespace hal {
 
 
         mController->create_simulation_engine(selectedEngineName.toStdString());
-        std::cout << selectedEngineName.toStdString() << std::endl;
-
-
-        // wurde clock ausgewählt???
         return true;
     }
 
@@ -400,12 +397,6 @@ namespace hal {
             {
 
                 comboBox->blockSignals(true);
-
-
-                for(int i = 0; i < comboBox->count(); i++) {
-                    std::cout << comboBox->itemText(i).toStdString() << std::endl;
-                }
-
                 QString currentText = comboBox->currentText();
                 comboBox->clear();
 
@@ -459,7 +450,11 @@ namespace hal {
         : QWizardPage(parent), mController(controller)
     {
         setTitle(tr("Step 4 | Load input Data"));
-        setSubTitle(tr("Load the input data for the simulation"));
+        setSubTitle(tr("No input data file selected so far"));
+
+        QIcon pageIcon = gui_utility::getStyledSvgIcon("all->#3192C5", ":/icons/folder");
+        setPixmap(QWizard::LogoPixmap, pageIcon.pixmap(48, 48));
+
         QGridLayout* layout = new QGridLayout(this);
 
         mEditFilename = new QLineEdit(this);

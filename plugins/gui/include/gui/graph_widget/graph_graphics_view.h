@@ -194,7 +194,10 @@ namespace hal
         void addSuccessorToView(int maxLevel, bool succ);
         void addCommonSuccessorToView(int maxLevel, bool succ);
 
+        GraphWidget* mGraphWidget;
+
         QSet<u32> getSelectableGates();
+        QSet<u32> getNotSelectableModules();
 
         struct LayouterPoint
         {
@@ -211,7 +214,7 @@ namespace hal
         bool mDebugGridposEnable = true;
         #endif
 
-        GraphWidget* mGraphWidget;
+
 
         GraphicsItem* mItem;
         QVector<ContextMenuContribution> mPluginContribution;

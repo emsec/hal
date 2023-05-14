@@ -863,6 +863,22 @@ namespace hal
             context_menu.addAction("This view:")->setEnabled(false);
 
             action = context_menu.addAction("Add module to view");
+
+            int selectable_modules_count = 0;
+            QSet<u32> not_selectable_modules = getNotSelectableModules();
+
+            for (Module* m : gNetlist->get_modules())
+            {
+                if (!not_selectable_modules.contains(m->get_id()))
+                {
+                    selectable_modules_count++;
+                }
+            }
+
+            if (selectable_modules_count == 0) {
+                action->setDisabled(true);
+            }
+
             QObject::connect(action, &QAction::triggered, this, &GraphGraphicsView::handleAddModuleToView);
 
             action = context_menu.addAction("Add gate to view");
@@ -1001,6 +1017,89 @@ namespace hal
     {
         GraphContext* context = mGraphWidget->getContext();
 
+//        QSet<u32> not_selectable_modules;
+//        QSet<u32> modules_in_context = context->modules();
+//        QSet<u32> gates_in_context = context->gates();
+
+//        for (Module* module : gNetlist->get_modules())
+//        {
+//            bool module_in_context = false;
+//            for (Module* submodule: module->get_submodules(nullptr, true))
+//            {
+//                if (modules_in_context.contains(submodule->get_id()))
+//                {
+//                    module_in_context = true;
+//                    break;
+//                }
+//            }
+//            for (Gate* subgate : module->get_gates(nullptr, true))
+//            {
+//                if (gates_in_context.contains(subgate->get_id()))
+//                {
+//                    module_in_context = true;
+//                    break;
+//                }
+//            }
+//            if (module_in_context)
+//            {
+//                not_selectable_modules.insert(module->get_id());
+//            }
+//        }
+
+//        not_selectable_modules += modules_in_context;
+
+//        QSet<u32> direct_par_modules;
+//        for (u32 id : modules_in_context)
+//        {
+//            Module* cur_module = gNetlist->get_module_by_id(id);
+//            for (Module* module : cur_module->get_submodules(nullptr, true))
+//            {
+//                not_selectable_modules.insert(module->get_id());
+//            }
+
+//            if (!cur_module->is_top_module())
+//            {
+//                direct_par_modules.insert(cur_module->get_parent_module()->get_id());
+//            }
+//        }
+
+//        if (!gates_in_context.empty())
+//        {
+//            for (u32 id : gates_in_context)
+//            {
+//                direct_par_modules.insert(gNetlist->get_gate_by_id(id)->get_module()->get_id());
+//            }
+//        }
+
+//        for (u32 id : direct_par_modules)
+//        {
+//            not_selectable_modules.insert(id);
+
+//            Module* tmp_module = gNetlist->get_module_by_id(id);
+//            while (!tmp_module->is_top_module())
+//            {
+//                Module* par_module = tmp_module->get_parent_module();
+//                tmp_module = par_module;
+//                not_selectable_modules.insert(par_module->get_id());
+//            }
+//        }
+
+        ModuleDialog module_dialog(getNotSelectableModules(),"Add module to view", nullptr, this);
+        if (module_dialog.exec() == QDialog::Accepted)
+        {
+            QSet<u32> module_to_add;
+            module_to_add.insert(module_dialog.selectedId());
+            ActionAddItemsToObject* act = new ActionAddItemsToObject(module_to_add, {});
+            act->setObject(UserActionObject(context->id(), UserActionObjectType::Context));
+            act->exec();
+        }
+    }
+
+
+    QSet<u32> GraphGraphicsView::getNotSelectableModules()
+    {
+        GraphContext* context = mGraphWidget->getContext();
+
         QSet<u32> not_selectable_modules;
         QSet<u32> modules_in_context = context->modules();
         QSet<u32> gates_in_context = context->gates();
@@ -1068,17 +1167,8 @@ namespace hal
             }
         }
 
-        ModuleDialog module_dialog(not_selectable_modules,"Add module to view", nullptr, this);
-        if (module_dialog.exec() == QDialog::Accepted)
-        {
-            QSet<u32> module_to_add;
-            module_to_add.insert(module_dialog.selectedId());
-            ActionAddItemsToObject* act = new ActionAddItemsToObject(module_to_add, {});
-            act->setObject(UserActionObject(context->id(), UserActionObjectType::Context));
-            act->exec();
-        }
+        return not_selectable_modules;
     }
-
 
     QSet<u32> GraphGraphicsView::getSelectableGates()
     {
