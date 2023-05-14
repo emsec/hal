@@ -608,9 +608,11 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_log_manager.html#ad7f16741dd004b289a2d353b9d2e56f8">hal::LogManager</a>
 </li>
 <li>get_hash()
-: <a class="el" href="classhal_1_1_gate.html#a99c1b9a0cad7b9f5e04d48d636b36ee6">hal::Gate</a>
+: <a class="el" href="classhal_1_1_base_pin.html#a676a4202fb782ad4c07d029b9264dfc0">hal::BasePin&lt; T &gt;</a>
+, <a class="el" href="classhal_1_1_gate.html#a99c1b9a0cad7b9f5e04d48d636b36ee6">hal::Gate</a>
 , <a class="el" href="classhal_1_1_module.html#af095c826fa1e507107519455f0cba13a">hal::Module</a>
 , <a class="el" href="classhal_1_1_net.html#aa02ab8f0bac9d569c43f6bf67cd3ab9c">hal::Net</a>
+, <a class="el" href="classhal_1_1_pin_group.html#af4645792ae3cf511eb777d5ea34229cf">hal::PinGroup&lt; T &gt;</a>
 </li>
 <li>get_id()
 : <a class="el" href="classhal_1_1_base_pin.html#a2c923fe5745e6588c4247d7967744d09">hal::BasePin&lt; T &gt;</a>
@@ -862,7 +864,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 , <a class="el" href="classhal_1_1_pin_group.html#a3dc360efb49afc0a66597fc1f9845456">hal::PinGroup&lt; T &gt;</a>
 </li>
 <li>get_predecessor()
-: <a class="el" href="classhal_1_1_gate.html#a629e2777724153ea0819e11b2a71d970">hal::Gate</a>
+: <a class="el" href="classhal_1_1_gate.html#ad1e7415916bb54dfde18b30fbb547f77">hal::Gate</a>
 </li>
 <li>get_predecessor_groups_of_group()
 : <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a7872e908f16318a7e5199fe02baf2b3a">hal::dataflow::Grouping</a>
@@ -919,7 +921,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#a8f5e1e5548d6bcca304ae9943f582e61">hal::GraphAlgorithmPlugin</a>
 </li>
 <li>get_subgraph_function()
-: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a76765575526ecebfd05f18129578a7ed">hal::SubgraphNetlistDecorator</a>
+: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a2b39747caa8d3f4680b32af151d03639">hal::SubgraphNetlistDecorator</a>
 </li>
 <li>get_subgraph_function_inputs()
 : <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a602fe3be3c5979579024b42b8c4439eb">hal::SubgraphNetlistDecorator</a>
@@ -1507,17 +1509,17 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_graph_graphics_view.html#a883185841d7deb422d7400dafea4e113">hal::GraphGraphicsView</a>
 , <a class="el" href="classhal_1_1_graph_widget.html#a0421e8059b062ba06f1bb84ea141fdc8">hal::GraphWidget</a>
 </li>
-<li>greenColor()
-: <a class="el" href="classhal_1_1_comment_dialog.html#a1707766aab8cdc1b481b7423ac9ebd94">hal::CommentDialog</a>
+<li>greenColor
+: <a class="el" href="classhal_1_1_comment_dialog.html#a1070c10067626f942ae4ce7dbb99c578">hal::CommentDialog</a>
 </li>
 <li>gridBaseDotColor()
 : <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a34f564cd583502946e37e851e1f25862">hal::GraphicsQssAdapter</a>
 </li>
-<li>gridBaseLineColor()
-: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a0d2a008588e0a6f3ddacb0a3963577bc">hal::GraphicsQssAdapter</a>
+<li>gridBaseLineColor
+: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#afff6b69c76ff8bae52a0cc09252c1925">hal::GraphicsQssAdapter</a>
 </li>
-<li>gridClusterDotColor
-: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a31b8d28575ff766a99f59a7ff88f0efe">hal::GraphicsQssAdapter</a>
+<li>gridClusterDotColor()
+: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#af9aef20d9706f52511bb341144bb4800">hal::GraphicsQssAdapter</a>
 </li>
 <li>gridClusterLineColor
 : <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a93a3f1267b9ea82cf117bf5f9b493b54">hal::GraphicsQssAdapter</a>
@@ -1530,10 +1532,12 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 </li>
 <li>gridPosition()
 : <a class="el" href="classhal_1_1_node_box.html#ac6c6fde7e4fe21bec776050f6debd747">hal::NodeBox</a>
-, <a class="el" href="classhal_1_1_placement_hint.html#addeee89e239e71feffce0f710595207d">hal::PlacementHint</a>
 </li>
 <li>GridPosition
 : <a class="el" href="classhal_1_1_placement_hint.html#ad09aba494db43e08dc70e4c26b83b8e0a30472caec088342be6e3c336a35fcfbc">hal::PlacementHint</a>
+</li>
+<li>gridPosition()
+: <a class="el" href="classhal_1_1_placement_hint.html#addeee89e239e71feffce0f710595207d">hal::PlacementHint</a>
 </li>
 <li>gridType()
 : <a class="el" href="classhal_1_1_graph_graphics_view.html#a97baf9d89b508f4168006103e2b1c0ba">hal::GraphGraphicsView</a>
@@ -1554,7 +1558,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_grouping_dialog.html#a31b2b5118bf361433c6b0566258d2d39">hal::GroupingDialog</a>
 </li>
 <li>Grouping()
-: <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a6e5a0f3bd4de3837bfea9b28b0bbc879">hal::dataflow::Grouping</a>
+: <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a9a7e5b1cd6762b9699e58fa660e4d68e">hal::dataflow::Grouping</a>
 </li>
 <li>grouping()
 : <a class="el" href="classhal_1_1_grouping_table_entry.html#a1eddd594c0671c4b62a71119cd547402">hal::GroupingTableEntry</a>
@@ -1669,8 +1673,8 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>guiIconPath()
 : <a class="el" href="classhal_1_1_gui_plugin_manager.html#ac1e74d9f31a8d65e321af080e851417a">hal::GuiPluginManager</a>
 </li>
-<li>guiIconStyle
-: <a class="el" href="classhal_1_1_gui_plugin_manager.html#a491b5a4c1fa9cd70ac645618e6aec972">hal::GuiPluginManager</a>
+<li>guiIconStyle()
+: <a class="el" href="classhal_1_1_gui_plugin_manager.html#aa3ed6137525a8d6263c8c07f53bcef22">hal::GuiPluginManager</a>
 </li>
 <li>GuiLayoutLocker()
 : <a class="el" href="classhal_1_1dataflow_1_1_gui_layout_locker.html#a52e1b48a294df2d55fafbb43680a1dba">hal::dataflow::GuiLayoutLocker</a>
@@ -1679,7 +1683,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_gui_plugin_delegate.html#a22251255840777bfc1791d024c52cfaf">hal::GuiPluginDelegate</a>
 </li>
 <li>GuiPluginEntry()
-: <a class="el" href="classhal_1_1_gui_plugin_entry.html#a0246b0353cd844fa9dc0812879d3c38e">hal::GuiPluginEntry</a>
+: <a class="el" href="classhal_1_1_gui_plugin_entry.html#a18a9537f4dede9ecf839babcf562c730">hal::GuiPluginEntry</a>
 </li>
 <li>GuiPluginManager
 : <a class="el" href="classhal_1_1_gui_plugin_delegate.html#a0de770239a7ebe00cf4e39a3ed2a0fc8">hal::GuiPluginDelegate</a>
@@ -1698,7 +1702,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Sun May 14 2023 11:10:26 for HAL by
+    <li class="footer">Generated on Sun May 14 2023 14:54:59 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

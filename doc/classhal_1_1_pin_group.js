@@ -6,6 +6,7 @@ var classhal_1_1_pin_group =
     [ "contains_pin", "classhal_1_1_pin_group.html#a479771519511c2aa3643cd4e12fa2558", null ],
     [ "empty", "classhal_1_1_pin_group.html#af6dcfc8a11f2e2099066a2a84da0cfec", null ],
     [ "get_direction", "classhal_1_1_pin_group.html#ac9b30b31956f5c9670d61f1163f737b7", null ],
+    [ "get_hash", "classhal_1_1_pin_group.html#af4645792ae3cf511eb777d5ea34229cf", null ],
     [ "get_id", "classhal_1_1_pin_group.html#a6a4bef72226eb6232a603ebd17ac52f7", null ],
     [ "get_index", "classhal_1_1_pin_group.html#a6270fefeb4736c5ca613b3ad0c017b51", null ],
     [ "get_name", "classhal_1_1_pin_group.html#a8154ea02b2ba2a6b571a98a3b762b754", null ],

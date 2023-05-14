@@ -1,5 +1,7 @@
 var NAVTREEINDEX24 =
 {
+"groupings__of__item__widget_8cpp_source.html":[7,0,1,3,2,38,12],
+"groupings__of__item__widget_8h.html":[7,0,1,3,0,0,40,12],
 "groupings__of__item__widget_8h_source.html":[7,0,1,3,0,0,40,12],
 "gui__api_8cpp.html":[7,0,1,3,2,23,0],
 "gui__api_8cpp_source.html":[7,0,1,3,2,23,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX24 =
 "module__ports__tree_8cpp.html":[7,0,1,3,2,38,1,2],
 "module__ports__tree_8cpp_source.html":[7,0,1,3,2,38,1,2],
 "module__ports__tree_8h.html":[7,0,1,3,0,0,40,1,2],
-"module__ports__tree_8h_source.html":[7,0,1,3,0,0,40,1,2],
-"module__proxy__model_8cpp.html":[7,0,1,3,2,31,2],
-"module__proxy__model_8cpp_source.html":[7,0,1,3,2,31,2]
+"module__ports__tree_8h_source.html":[7,0,1,3,0,0,40,1,2]
 };

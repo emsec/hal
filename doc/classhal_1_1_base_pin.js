@@ -4,6 +4,7 @@ var classhal_1_1_base_pin =
     [ "BasePin", "classhal_1_1_base_pin.html#a0d95f3f52c40fd8ac9594794397c0ab3", null ],
     [ "get_direction", "classhal_1_1_base_pin.html#a8027dbd47c6dcb221f5333f3ee269dc3", null ],
     [ "get_group", "classhal_1_1_base_pin.html#a4dbfb3431aacf0cfcb8ebcc747514286", null ],
+    [ "get_hash", "classhal_1_1_base_pin.html#a676a4202fb782ad4c07d029b9264dfc0", null ],
     [ "get_id", "classhal_1_1_base_pin.html#a2c923fe5745e6588c4247d7967744d09", null ],
     [ "get_name", "classhal_1_1_base_pin.html#a16eadf80d27bfe48d2d667f2180ae960", null ],
     [ "get_type", "classhal_1_1_base_pin.html#a304f8de55fe4ace50d1e1593e6f482dc", null ],
