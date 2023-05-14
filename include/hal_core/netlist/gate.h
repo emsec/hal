@@ -76,9 +76,9 @@ namespace hal
         bool operator!=(const Gate& other) const;
 
         /**
-         * Hash function for python binding
+         * Hash function for python binding.
          *
-         * @return Pybind11 compatible hash
+         * @return Pybind11 compatible hash.
          */
         ssize_t get_hash() const;
 
