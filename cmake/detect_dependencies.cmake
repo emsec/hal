@@ -149,7 +149,7 @@ message(STATUS "using spdlog from deps")
 set(spdlog_VERSION 1.9.2)
 add_library(spdlog::spdlog INTERFACE IMPORTED)
 set_target_properties(spdlog::spdlog PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog-1.9.2/include"
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog-${spdlog_VERSION}/include"
 )
 
 # ###############################
@@ -220,9 +220,10 @@ else()
     message(STATUS "Will build abc ourselves, check README.md to see how to speed up the process...")
 
     add_subdirectory(deps/abc)
-    add_library(abc::libabc-pic INTERFACE IMPORTED)
-    set_target_properties(abc::libabc-pic PROPERTIES INTERFACE_LINK_LIBRARIES libabc-pic)
     set(ABC_LIBRARY abc::libabc-pic)
+    add_library(${ABC_LIBRARY} INTERFACE IMPORTED)
+    set_target_properties(${ABC_LIBRARY} PROPERTIES INTERFACE_LINK_LIBRARIES libabc-pic)
+    install(TARGETS libabc-pic LIBRARY DESTINATION ${LIBRARY_INSTALL_DIRECTORY})
 endif()
 
 # ###############################

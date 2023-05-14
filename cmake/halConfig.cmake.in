@@ -47,7 +47,7 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/pybind11 ${CMAKE_BINARY_DIR}/deps/pyb
 set(spdlog_VERSION 1.9.2)
         add_library(spdlog::spdlog INTERFACE IMPORTED)
         set_target_properties(spdlog::spdlog PROPERTIES
-                            INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_LIST_DIR}/spdlog-1.9.2/include"
+                            INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_LIST_DIR}/spdlog-${spdlog_VERSION}/include"
                             )
 set_and_check(${PN}_GENVERSION_PATH "${CMAKE_CURRENT_LIST_DIR}")
 if(NOT (CMAKE_VERSION VERSION_LESS 3.0))
