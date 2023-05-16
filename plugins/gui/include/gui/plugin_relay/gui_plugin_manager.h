@@ -26,6 +26,7 @@
 #pragma once
 #include <QObject>
 #include <QMap>
+#include <QLabel>
 #include <QIcon>
 #include <QStringList>
 #include <QDateTime>
@@ -73,6 +74,8 @@ namespace hal {
         void updateFromLoaded(const BasePluginInterface* bpif, bool isUser, const QDateTime& modified = QDateTime());
     };
 
+    class GuiPluginManager;
+
     class GuiPluginDelegate : public QItemDelegate
     {
         Q_OBJECT
@@ -94,6 +97,7 @@ namespace hal {
         void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
         bool editorEvent(QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index) override;
         QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+        void updateQss(GuiPluginManager* gpm);
     };
 
     class GuiPluginTable : public QAbstractTableModel
@@ -104,6 +108,7 @@ namespace hal {
         QMap<QString,int> mLookup;
         QSettings* mSettings;
         bool mWaitForRefresh;
+        GuiPluginManager* mPluginMgr;
 
         void changeState(const QString& pluginName, GuiPluginEntry::State state);
         void populateTable(bool refresh);
@@ -117,7 +122,7 @@ namespace hal {
         void handlePluginUnloaded(const QString& pluginName, const QString& path);
         void handleRefresh();
     public:
-        GuiPluginTable(QObject* parent = nullptr);
+        GuiPluginTable(GuiPluginManager* parent = nullptr);
         ~GuiPluginTable();
 
         int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -132,7 +137,7 @@ namespace hal {
         bool hasCliExtension(const QModelIndex& index) const;
         bool isHalGui(const QModelIndex& index) const;
         void loadFeature(FacExtensionInterface::Feature ft, const QString& extension=QString());
-    };
+   };
 
     class GuiPluginView : public QTableView
     {
@@ -144,8 +149,35 @@ namespace hal {
     class GuiPluginManager : public QWidget
     {
         Q_OBJECT
+        Q_PROPERTY(QString loadIconPath READ loadIconPath WRITE setLoadIconPath)
+        Q_PROPERTY(QString loadIconStyle READ loadIconStyle WRITE setLoadIconStyle)
+        Q_PROPERTY(QString unloadIconPath READ unloadIconPath WRITE setUnloadIconPath)
+        Q_PROPERTY(QString unloadIconStyle READ unloadIconStyle WRITE setUnloadIconStyle)
+        Q_PROPERTY(QString cliIconPath READ cliIconPath WRITE setCliIconPath)
+        Q_PROPERTY(QString cliIconStyle READ cliIconStyle WRITE setCliIconStyle)
+        Q_PROPERTY(QString guiIconPath READ guiIconPath WRITE setGuiIconPath)
+        Q_PROPERTY(QString guiIconStyle READ guiIconStyle WRITE setGuiIconStyle)
+        Q_PROPERTY(QString guiIconDisabledStyle READ guiIconDisabledStyle WRITE setGuiIconDisabledStyle)
+        Q_PROPERTY(QColor defaultTextColor READ defaultTextColor WRITE setDefaultTextColor)
+        Q_PROPERTY(QColor hilightTextColor READ hilightTextColor WRITE setHilightTextColor)
+        Q_PROPERTY(QColor hilightBackgroundColor READ hilightBackgroundColor WRITE setHilightBackgroundColor)
+
         GuiPluginView* mGuiPluginView;
         GuiPluginTable* mGuiPluginTable;
+        GuiPluginDelegate* mGuiPluginDelegate;
+        QString mLoadIconPath;
+        QString mLoadIconStyle;
+        QString mUnloadIconPath;
+        QString mUnloadIconStyle;
+        QString mCliIconPath;
+        QString mCliIconStyle;
+        QString mGuiIconPath;
+        QString mGuiIconStyle;
+        QString mGuiIconDisabledStyle;
+        QColor mDefaultTextColor;
+        QColor mHilightTextColor;
+        QColor mHilightBackgroundColor;
+        QLabel* mIconLegend[4];
     Q_SIGNALS:
         void backToNetlist(QString invokeGui);
     private Q_SLOTS:
@@ -155,5 +187,32 @@ namespace hal {
     public:
         GuiPluginManager(QWidget* parent = nullptr);
         static QMap<QString,GuiExtensionInterface*> getGuiExtensions();
+        void repolish();
+
+        QString loadIconPath() const;
+        QString loadIconStyle() const;
+        QString unloadIconPath() const;
+        QString unloadIconStyle() const;
+        QString cliIconPath() const;
+        QString cliIconStyle() const;
+        QString guiIconPath() const;
+        QString guiIconStyle() const;
+        QString guiIconDisabledStyle() const;
+        QColor defaultTextColor() const;
+        QColor hilightTextColor() const;
+        QColor hilightBackgroundColor() const;
+
+        void setLoadIconPath(const QString& s);
+        void setLoadIconStyle(const QString& s);
+        void setUnloadIconPath(const QString& s);
+        void setUnloadIconStyle(const QString& s);
+        void setCliIconPath(const QString& s);
+        void setCliIconStyle(const QString& s);
+        void setGuiIconPath(const QString& s);
+        void setGuiIconStyle(const QString& s);
+        void setGuiIconDisabledStyle(const QString& s);
+        void setDefaultTextColor(QColor& c);
+        void setHilightTextColor(QColor& c);
+        void setHilightBackgroundColor(QColor& c);
     };
 }

@@ -26,8 +26,8 @@
 #pragma once
 
 #include "hal_core/defines.h"
-#include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/plugin_system/fac_extension_interface.h"
+#include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/utilities/callback_hook.h"
 #include "hal_core/utilities/program_options.h"
 
@@ -105,7 +105,7 @@ namespace hal
          * @param[in] file_path - The path to the plugin file.
          * @returns True on success, false otherwise.
          */
-        bool load(const std::string& plugin_name, const std::filesystem::path& file_path_or_empty = std::filesystem::path());
+        bool load(const std::string& plugin_name, const std::filesystem::path& file_path = std::filesystem::path());
 
         /**
          * Releases all plugins and their associated resources.
@@ -160,7 +160,8 @@ namespace hal
         T* get_first_extension(const std::string& plugin_name, bool initialize = true)
         {
             BasePluginInterface* bpif = get_plugin_instance(plugin_name, initialize);
-            if (!bpif) return nullptr;
+            if (!bpif)
+                return nullptr;
             return bpif->get_first_extension<T>();
         }
 

@@ -9,20 +9,27 @@ namespace hal
         )");
 
         py_netlist_serializer.def("serialize_to_file", netlist_serializer::serialize_to_file, py::arg("netlist"), py::arg("hal_file"), R"(
-            Serializes a netlist into a .hal file.
+            Serializes a netlist into a ``.hal`` file.
         
             :param hal_py.Netlist netlist: The netlist to serialize.
-            :param pathlib.Path hal_file: The destination .hal file.
-            :returns: True on success, false otherwise.
+            :param pathlib.Path hal_file: The path to the ``.hal`` file.
+            :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
-        py_netlist_serializer.def("deserialize_from_file", netlist_serializer::deserialize_from_file, py::arg("hal_file"), R"(
-            Deserializes a netlist from a .hal file.
-        
-            :param pathlib.Path hal_file: The source .hal file.
-            :returns: The deserialized netlist.
-            :rtype: hal_py.Netlist
-        )");
+        py_netlist_serializer.def(
+            "deserialize_from_file",
+            [](const std::filesystem::path& hal_file, GateLibrary* gate_lib = nullptr) { return std::shared_ptr<Netlist>(netlist_serializer::deserialize_from_file(hal_file, gate_lib)); },
+            py::arg("hal_file"),
+            py::arg("gate_lib") = nullptr,
+            R"(
+                Deserializes a netlist from a ``.hal`` file using the provided gate library.
+                If no gate library is provided, a gate library path must be specified within the ``.hal`` file.
+            
+                :param pathlib.Path hal_file: The path to the ``.hal`` file.
+                :param hal_py.GateLibrary gate_lib: The gate library. Defaults to ``None``.
+                :returns: The deserialized netlist on success, ``None`` otherwise.
+                :rtype: hal_py.Netlist or None
+            )");
     }
 }    // namespace hal

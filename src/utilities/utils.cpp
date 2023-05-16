@@ -658,5 +658,42 @@ apply, that proxy's public statement of acceptance of any version is
 permanent authorization for you to choose that version for the Library.
 )";
         }
+
+        Result<u64> wrapped_stoull(const std::string& s)
+        {
+            try
+            {
+                return OK(std::stoull(s));
+            }
+            catch (const std::invalid_argument& e)
+            {
+                return ERR("could not get u64 from string '" + s + "': " + e.what());
+            }
+            catch (const std::out_of_range& e)
+            {
+                return ERR("could not get u64 from string '" + s + "': " + e.what());
+            }
+
+            return ERR("encountered unknown error");
+        }
+
+        Result<u32> wrapped_stoul(const std::string& s)
+        {
+            try
+            {
+                return OK((u32)std::stoul(s));
+            }
+            catch (const std::invalid_argument& e)
+            {
+                return ERR("could not get u32 from string '" + s + "': " + e.what());
+            }
+            catch (const std::out_of_range& e)
+            {
+                return ERR("could not get u32 from string '" + s + "': " + e.what());
+            }
+
+            return ERR("encountered unknown error");
+        }
+
     }    // namespace core_utils
 }    // namespace hal

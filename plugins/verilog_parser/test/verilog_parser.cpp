@@ -1407,6 +1407,7 @@ namespace hal {
                 std::unique_ptr<Netlist> nl = nl_res.get();
                 ASSERT_NE(nl, nullptr);
 
+                ASSERT_TRUE(!nl->get_gnd_gates().empty());
                 EXPECT_EQ(nl->get_gnd_gates().front()->get_successors().size(), 8);
                 for (Gate* gate : nl->get_gates([](const Gate* gate) { return !gate->is_gnd_gate(); })) 
                 {
@@ -1744,9 +1745,9 @@ namespace hal {
             Gate* gate_child_two_1 = *one_child_0->get_gates().begin();
             Gate* gate_child_two_2 = *one_child_1->get_gates().begin();
 
-            EXPECT_TRUE(utils::starts_with(gate_child_two_0->get_name(), "gate_child_two" + gate_suffix));
-            EXPECT_TRUE(utils::starts_with(gate_child_two_1->get_name(), "gate_child_two" + gate_suffix));
-            EXPECT_TRUE(utils::starts_with(gate_child_two_2->get_name(), "gate_child_two" + gate_suffix));
+            EXPECT_TRUE(utils::starts_with(gate_child_two_0->get_name(), "child_two_mod/gate_child_two" + gate_suffix));
+            EXPECT_TRUE(utils::starts_with(gate_child_two_1->get_name(), "gate_0_ent_two/gate_child_two" + gate_suffix));
+            EXPECT_TRUE(utils::starts_with(gate_child_two_2->get_name(), "gate_1_ent_two/gate_child_two" + gate_suffix));
             // All 3 names should be unique
             EXPECT_EQ(std::set<std::string>({gate_child_two_0->get_name(), gate_child_two_1->get_name(),
                                                 gate_child_two_2->get_name()}).size(), 3);
@@ -1972,15 +1973,13 @@ namespace hal {
             // Check that the gate names are correct
             std::vector<std::string> nl_gate_names;
             for(Gate* g : nl_gates) nl_gate_names.push_back(g->get_name());
-            std::vector<std::string> expected_gate_names = {"shared_gate_name", "gate_b",
-                    "shared_gate_name__[1]__", "gate_a", "shared_gate_name__[2]__", "gate_b__[1]__", "gate_top"};
+            std::vector<std::string> expected_gate_names = {"mod_b_0/shared_gate_name", "mod_b_0/gate_b", "mod_a_0/shared_gate_name", "gate_a", "mod_b_1/shared_gate_name", "mod_b_1/gate_b", "gate_top"};
             EXPECT_EQ(nl_gate_names, expected_gate_names);
 
             // Check that the net names are correct
             std::vector<std::string> nl_net_names;
             for(Net* n : nl_nets) nl_net_names.push_back(n->get_name());
-            std::vector<std::string> expected_net_names = {"net_global_in", "shared_net_name", "net_b", "net_0", "shared_net_name__[1]__", "net_a",
-                        "net_1", "shared_net_name__[2]__", "net_b__[1]__", "net_2", "net_global_out"};
+            std::vector<std::string> expected_net_names = {"net_global_in", "mod_b_0/shared_net_name", "mod_b_0/net_b", "net_0", "mod_a_0/shared_net_name", "net_a", "net_1", "mod_b_1/shared_net_name", "mod_b_1/net_b", "net_2", "net_global_out"};
             EXPECT_EQ(nl_net_names, expected_net_names);
 
         }
@@ -3363,7 +3362,7 @@ namespace hal {
                 auto verilog_file = test_utils::create_sandbox_file("netlist.v", netlist_input);
                 VerilogParser verilog_parser;
                 auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
-                EXPECT_TRUE(nl_res.is_error());
+                EXPECT_TRUE(nl_res.is_ok());
             }
         TEST_END
     }

@@ -5,6 +5,9 @@
 #include "gui/graph_widget/graph_graphics_view.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
 #include "gui/settings/settings_items/settings_item_keybind.h"
+#include "gui/user_action/action_fold_module.h"
+#include "gui/user_action/action_unfold_module.h"
+#include "gui/user_action/action_remove_items_from_object.h"
 
 #include "gui/gui_globals.h"
 
@@ -23,6 +26,9 @@ namespace hal
 
     SettingsItemKeybind* GraphTabWidget::sSettingZoomIn;
     SettingsItemKeybind* GraphTabWidget::sSettingZoomOut;
+    SettingsItemKeybind* GraphTabWidget::sSettingFoldModule;
+    SettingsItemKeybind* GraphTabWidget::sSettingUnfoldModule;
+    SettingsItemKeybind* GraphTabWidget::sSettingRemoveNode;
 
     bool GraphTabWidget::sSettingsInitialized = initSettings();
 
@@ -71,6 +77,30 @@ namespace hal
             "Keybind for zooming out in the Graph View."
         );
 
+        sSettingFoldModule = new SettingsItemKeybind(
+            "Fold Parent Module",
+            "keybinds/fold_module",
+            QKeySequence("Ctrl+9"),
+            "Keybindings:Graph",
+            "Keybind to fold the parent module of selected node in current view."
+        );
+
+        sSettingUnfoldModule = new SettingsItemKeybind(
+            "Unfold Module",
+            "keybinds/unfold_module",
+            QKeySequence("Ctrl+8"),
+            "Keybindings:Graph",
+            "Keybind to unfold the selected module."
+        );
+
+        sSettingRemoveNode = new SettingsItemKeybind(
+            "Remove Node from View",
+            "keybinds/remove_node",
+            QKeySequence("Ctrl+Del"),
+            "Keybindings:Graph",
+            "Keybind to remove the selected node from view."
+        );
+
         return true;
     }
 
@@ -103,16 +133,28 @@ namespace hal
     {
         QShortcut* zoomInShortcut = new QShortcut(sSettingZoomIn->value().toString(), this);
         QShortcut* zoomOutShortcut = new QShortcut(sSettingZoomOut->value().toString(), this);
+        QShortcut* foldModuleShortcut = new QShortcut(sSettingFoldModule->value().toString(), this);
+        QShortcut* unfoldModuleShortcut = new QShortcut(sSettingUnfoldModule->value().toString(), this);
+        QShortcut* removeNodeShortcut = new QShortcut(sSettingRemoveNode->value().toString(), this);
 
-        connect(zoomInShortcut, &QShortcut::activated, this, &GraphTabWidget::zoomInShortcut);
-        connect(zoomOutShortcut, &QShortcut::activated, this, &GraphTabWidget::zoomOutShortcut);
+        connect(zoomInShortcut, &QShortcut::activated, this, &GraphTabWidget::handleZoomInShortcut);
+        connect(zoomOutShortcut, &QShortcut::activated, this, &GraphTabWidget::handleZoomOutShortcut);
+        connect(foldModuleShortcut, &QShortcut::activated, this, &GraphTabWidget::handleFoldModuleShortcut);
+        connect(unfoldModuleShortcut, &QShortcut::activated, this, &GraphTabWidget::handleUnfoldModuleShortcut);
+        connect(removeNodeShortcut, &QShortcut::activated, this, &GraphTabWidget::handleRemoveNodeShortcut);
 
         connect(sSettingZoomIn, &SettingsItemKeybind::keySequenceChanged, zoomInShortcut, &QShortcut::setKey);
         connect(sSettingZoomOut, &SettingsItemKeybind::keySequenceChanged, zoomOutShortcut, &QShortcut::setKey);
+        connect(sSettingFoldModule, &SettingsItemKeybind::keySequenceChanged, foldModuleShortcut, &QShortcut::setKey);
+        connect(sSettingUnfoldModule, &SettingsItemKeybind::keySequenceChanged, unfoldModuleShortcut, &QShortcut::setKey);
+        connect(sSettingRemoveNode, &SettingsItemKeybind::keySequenceChanged, removeNodeShortcut, &QShortcut::setKey);
 
         QList<QShortcut*> list;
         list.append(zoomInShortcut);
         list.append(zoomOutShortcut);
+        list.append(foldModuleShortcut);
+        list.append(unfoldModuleShortcut);
+        list.append(removeNodeShortcut);
 
         return list;
     }
@@ -227,19 +269,40 @@ namespace hal
         context->scheduleSceneUpdate();
     }
 
-    void GraphTabWidget::zoomInShortcut()
+    void GraphTabWidget::handleZoomInShortcut()
     {
         GraphWidget* w = dynamic_cast<GraphWidget*>(mTabWidget->currentWidget());
         if(w)
             w->view()->viewportCenterZoom(mZoomFactor);
     }
 
-    void GraphTabWidget::zoomOutShortcut()
+    void GraphTabWidget::handleZoomOutShortcut()
     {
         GraphWidget* w = dynamic_cast<GraphWidget*>(mTabWidget->currentWidget());
         if(w)
             w->view()->viewportCenterZoom(1.0 / mZoomFactor);
 
+    }
+
+    void GraphTabWidget::handleFoldModuleShortcut()
+    {
+        GraphWidget* currentGraphWidget = dynamic_cast<GraphWidget*>(mTabWidget->currentWidget());
+        if (!currentGraphWidget) return;
+        currentGraphWidget->view()->handleFoldModuleShortcut();
+    }
+
+    void GraphTabWidget::handleUnfoldModuleShortcut()
+    {
+        GraphWidget* currentGraphWidget = dynamic_cast<GraphWidget*>(mTabWidget->currentWidget());
+        if (!currentGraphWidget) return;
+        currentGraphWidget->view()->handleUnfoldModuleShortcut();
+    }
+
+    void GraphTabWidget::handleRemoveNodeShortcut()
+    {
+        GraphWidget* currentGraphWidget = dynamic_cast<GraphWidget*>(mTabWidget->currentWidget());
+        if (!currentGraphWidget) return;
+        currentGraphWidget->view()->handleRemoveFromView();
     }
 
     int GraphTabWidget::visibleStatus(const GraphContext *ctx) const

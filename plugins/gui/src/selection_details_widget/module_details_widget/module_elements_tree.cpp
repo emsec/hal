@@ -1,6 +1,8 @@
 #include "gui/selection_details_widget/module_details_widget/module_elements_tree.h"
 #include "gui/selection_details_widget/module_details_widget/netlist_elements_tree_model.h"
 #include "gui/selection_details_widget/module_details_widget/module_tree_model.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/python/py_code_provider.h"
 #include "gui/gui_globals.h"
 #include <QMenu>
@@ -16,7 +18,8 @@ namespace hal
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        setSelectionMode(QAbstractItemView::NoSelection);
+        setSelectionMode(QAbstractItemView::SingleSelection);
+        setSelectionBehavior(QAbstractItemView::SelectRows);
         setFocusPolicy(Qt::NoFocus);
         header()->setStretchLastSection(true);
         //setModel(mNetlistElementsModel);
@@ -111,6 +114,30 @@ namespace hal
             }
             gSelectionRelay->relaySelectionChanged(this);
            }
+        );
+
+        menu.addAction("Isolate in new view",
+            [id, type]()
+            {
+                Node nd;
+                switch(type)
+                {
+                    case ModuleTreeModel::itemType::module: nd = Node(id, Node::Module); break;
+                    case ModuleTreeModel::itemType::gate:   nd = Node(id, Node::Gate); break;
+                }
+                SelectionTreeView::isolateInNewViewAction(nd);
+            }
+        );
+
+        menu.addAction("Focus item in Graph View",
+            [id, type]()
+            {
+                switch(type)
+                {
+                    case ModuleTreeModel::itemType::module: gContentManager->getGraphTabWidget()->handleModuleFocus(id); break;
+                    case ModuleTreeModel::itemType::gate:   gContentManager->getGraphTabWidget()->handleGateFocus(id);   break;
+                }
+            }
         );
 
         menu.addSection("Python Code");

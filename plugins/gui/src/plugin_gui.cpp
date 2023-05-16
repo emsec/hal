@@ -41,6 +41,33 @@
 
 namespace hal
 {
+    void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+    {
+        QByteArray localMsg = msg.toLocal8Bit();
+        const char *file = context.file ? context.file : "";
+        const char *function = context.function ? context.function : "";
+        switch (type) {
+        case QtDebugMsg:
+            fprintf(stderr, "Debug: %s (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+            break;
+        case QtInfoMsg:
+            fprintf(stderr, "Info: %s (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+            break;
+        case QtWarningMsg:
+            fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+            break;
+        case QtCriticalMsg:
+            fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+            break;
+        case QtFatalMsg:
+            fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+            break;
+        }
+
+        if (localMsg.startsWith("QFSFileEngine::open"))
+            fprintf(stderr, "***break***\n");
+    }
+
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
         return std::make_unique<PluginGui>();
@@ -142,6 +169,9 @@ namespace hal
         int argc;
         const char** argv;
         args.get_original_arguments(&argc, &argv);
+
+        qInstallMessageHandler(myMessageOutput);
+
         QApplication a(argc, const_cast<char**>(argv));
         //FocusLogger focusLogger(&a);
 

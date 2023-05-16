@@ -307,16 +307,25 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate.def_property_readonly("fan_in_nets", &Gate::get_fan_in_nets, R"(
+        py_gate.def_property_readonly("fan_in_nets", py::overload_cast<>(&Gate::get_fan_in_nets, py::const_), R"(
             A list of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.
 
             :type: list[hal_py.Net]
         )");
 
-        py_gate.def("get_fan_in_nets", &Gate::get_fan_in_nets, R"(
+        py_gate.def("get_fan_in_nets", py::overload_cast<>(&Gate::get_fan_in_nets, py::const_), R"(
             Get a list of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.
 
-            :returns: A list of all fan-in endpoints.
+            :returns: A list of all fan-in nets.
+            :rtype: list[hal_py.Net]
+        )");
+
+        py_gate.def("get_fan_in_nets", py::overload_cast<const std::function<bool(Net*)>&>(&Gate::get_fan_in_nets, py::const_), py::arg("filter"), R"(
+            Get a list of all fan-in nets of the gate, i.e., all nets that are connected to one of the input pins.
+            The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+
+            :param lambda filter: Filter function to be evaluated on each net.
+            :returns: A list of all fan-in nets.
             :rtype: list[hal_py.Net]
         )");
 
@@ -344,15 +353,24 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate.def_property_readonly("fan_in_endpoints", &Gate::get_fan_in_endpoints, R"(
+        py_gate.def_property_readonly("fan_in_endpoints", py::overload_cast<>(&Gate::get_fan_in_endpoints, py::const_), R"(
             A list of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.
 
             :type: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_fan_in_endpoints", &Gate::get_fan_in_endpoints, R"(
+        py_gate.def("get_fan_in_endpoints", py::overload_cast<>(&Gate::get_fan_in_endpoints, py::const_), R"(
             Get a list of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.
 
+            :returns: A list of all fan-in endpoints.
+            :rtype: list[hal_py.Endpoint]
+        )");
+
+        py_gate.def("get_fan_in_endpoints", py::overload_cast<const std::function<bool(Endpoint*)>&>(&Gate::get_fan_in_endpoints, py::const_), py::arg("filter"), R"(
+            Get a list of all fan-in endpoints of the gate, i.e., all endpoints associated with an input pin of the gate.
+            The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+
+            :param lambda filter: Filter function to be evaluated on each endpoint.
             :returns: A list of all fan-in endpoints.
             :rtype: list[hal_py.Endpoint]
         )");
@@ -381,16 +399,25 @@ namespace hal
             :rtype: hal_py.Endpoint or None
         )");
 
-        py_gate.def_property_readonly("fan_out_nets", &Gate::get_fan_out_nets, R"(
+        py_gate.def_property_readonly("fan_out_nets", py::overload_cast<>(&Gate::get_fan_out_nets, py::const_), R"(
             A list of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.
 
             :type: list[hal_py.Net]
         )");
 
-        py_gate.def("get_fan_out_nets", &Gate::get_fan_out_nets, R"(
+        py_gate.def("get_fan_out_nets", py::overload_cast<>(&Gate::get_fan_out_nets, py::const_), R"(
             Get a list of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.
 
-            :returns: A list of all fan-out endpoints.
+            :returns: A list of all fan-out nets.
+            :rtype: list[hal_py.Net]
+        )");
+
+        py_gate.def("get_fan_out_nets", py::overload_cast<const std::function<bool(Net*)>&>(&Gate::get_fan_out_nets, py::const_), py::arg("filter"), R"(
+            Get a list of all fan-out nets of the gate, i.e., all nets that are connected to one of the output pins.
+            The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+
+            :param lambda filter: Filter function to be evaluated on each net.
+            :returns: A list of all fan-out nets.
             :rtype: list[hal_py.Net]
         )");
 
@@ -418,15 +445,24 @@ namespace hal
             :rtype: bool
         )");
 
-        py_gate.def_property_readonly("fan_out_endpoints", &Gate::get_fan_out_endpoints, R"(
+        py_gate.def_property_readonly("fan_out_endpoints", py::overload_cast<>(&Gate::get_fan_out_endpoints, py::const_), R"(
             A list of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.
 
             :type: list[hal_py.Endpoint]
         )");
 
-        py_gate.def("get_fan_out_endpoints", &Gate::get_fan_out_endpoints, R"(
+        py_gate.def("get_fan_out_endpoints", py::overload_cast<>(&Gate::get_fan_out_endpoints, py::const_), R"(
             Get a list of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.
 
+            :returns: A list of all fan-out endpoints.
+            :rtype: list[hal_py.Endpoint]
+        )");
+
+        py_gate.def("get_fan_out_endpoints", py::overload_cast<const std::function<bool(Endpoint*)>&>(&Gate::get_fan_out_endpoints, py::const_), py::arg("filter"), R"(
+            Get a list of all fan-out endpoints of the gate, i.e., all endpoints associated with an output pin of the gate.
+            The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+
+            :param lambda filter: Filter function to be evaluated on each endpoint.
             :returns: A list of all fan-out endpoints.
             :rtype: list[hal_py.Endpoint]
         )");

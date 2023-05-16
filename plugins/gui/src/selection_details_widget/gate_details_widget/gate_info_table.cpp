@@ -131,11 +131,12 @@ namespace hal
     {
         QString location = "N/A";
 
-        i32 locationX = mGate->get_location_x();
-        i32 locationY = mGate->get_location_y();
-
-        if(locationX > 0 && locationY > 0)
-            location = "X:" + QString::number(locationX) + " Y:" + QString::number(locationY);
+        if (mGate->has_location())
+        {
+            location =
+                    "X:"  + QString::number(mGate->get_location_x()) +
+                    " Y:" + QString::number(mGate->get_location_y());
+        }
 
         return location;
     }

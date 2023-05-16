@@ -1,20 +1,20 @@
 // MIT License
-// 
+//
 // Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
 // Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
 // Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 // Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,15 +25,16 @@
 
 #pragma once
 
-#include "hal_core/defines.h"
-#include "hal_config.h"
 #include "gui/gui_def.h"
-#include <vector>
+#include "hal_config.h"
+#include "hal_core/defines.h"
+
+#include <QList>
 #include <QObject>
 #include <QPair>
-#include <QVector>
 #include <QSet>
-#include <QList>
+#include <QVector>
+#include <vector>
 
 namespace hal
 {
@@ -220,30 +221,37 @@ namespace hal
          * @param gatIds - A list of suppressed gate ids
          * @param netIds - A list of suppressed net ids
          */
-        void suppressedByFilter(const QList<u32>& modIds = QList<u32>(),
-                                const QList<u32>& gatIds = QList<u32>(),
-                                const QList<u32>& netIds = QList<u32>());
+        void suppressedByFilter(const QList<u32>& modIds = QList<u32>(), const QList<u32>& gatIds = QList<u32>(), const QList<u32>& netIds = QList<u32>());
 
         /**
          * Gets a list of ids of all selected gates.
          *
          * @returns the list of gate ids
          */
-        QList<u32> selectedGatesList()   const { return mSelectedGates.toList(); }
+        QList<u32> selectedGatesList() const
+        {
+            return mSelectedGates.values();
+        }
 
         /**
          * Gets a list of ids of all selected nets.
          *
          * @returns the list of net ids
          */
-        QList<u32> selectedNetsList()    const { return mSelectedNets.toList(); }
+        QList<u32> selectedNetsList() const
+        {
+            return mSelectedNets.values();
+        }
 
         /**
          * Gets a list of ids of all selected modules.
          *
          * @returns the list of module ids
          */
-        QList<u32> selectedModulesList() const { return mSelectedModules.toList(); }
+        QList<u32> selectedModulesList() const
+        {
+            return mSelectedModules.values();
+        }
 
         /**
          * Get a list of all selected modules and gates as nodes
@@ -257,77 +265,110 @@ namespace hal
          *
          * @returns the vector of gate ids
          */
-        std::vector<u32> selectedGatesVector()   const { return std::vector<u32>(mSelectedGates.begin(), mSelectedGates.end()); }
+        std::vector<u32> selectedGatesVector() const
+        {
+            return std::vector<u32>(mSelectedGates.begin(), mSelectedGates.end());
+        }
 
         /**
          * Gets a list of ids of all selected nets as an std::vector.
          *
          * @returns the vector of net ids
          */
-        std::vector<u32> selectedNetsVector()    const { return std::vector<u32>(mSelectedNets.begin(), mSelectedNets.end()); }
+        std::vector<u32> selectedNetsVector() const
+        {
+            return std::vector<u32>(mSelectedNets.begin(), mSelectedNets.end());
+        }
 
         /**
          * Gets a list of ids of all selected modules as an std::vector.
          *
          * @returns the vector of module ids
          */
-        std::vector<u32> selectedModulesVector() const { return std::vector<u32>(mSelectedModules.begin(), mSelectedModules.end()); }
+        std::vector<u32> selectedModulesVector() const
+        {
+            return std::vector<u32>(mSelectedModules.begin(), mSelectedModules.end());
+        }
 
         /**
          * Gets a set of ids of all selected gates.
          *
          * @returns the set of gate ids
          */
-        const QSet<u32>& selectedGates()   const { return mSelectedGates; }
+        const QSet<u32>& selectedGates() const
+        {
+            return mSelectedGates;
+        }
 
         /**
          * Gets a set of ids of all selected nets.
          *
          * @returns the set of net ids
          */
-        const QSet<u32>& selectedNets()    const { return mSelectedNets; }
+        const QSet<u32>& selectedNets() const
+        {
+            return mSelectedNets;
+        }
 
         /**
          * Gets a set of ids of all selected modules.
          *
          * @returns the set of module ids
          */
-        const QSet<u32>& selectedModules() const { return mSelectedModules; }
+        const QSet<u32>& selectedModules() const
+        {
+            return mSelectedModules;
+        }
 
         /**
          * Gets the amount of currently selected gates.
          *
          * @returns the amount of selected gates
          */
-        int numberSelectedGates()   const { return mSelectedGates.size(); }
+        int numberSelectedGates() const
+        {
+            return mSelectedGates.size();
+        }
 
         /**
          * Gets the amount of currently selected nets.
          *
          * @returns the amount of selected nets
          */
-        int numberSelectedNets()    const { return mSelectedNets.size(); }
+        int numberSelectedNets() const
+        {
+            return mSelectedNets.size();
+        }
 
         /**
          * Gets the amount of currently selected modules.
          *
          * @returns the amount of selected modules
          */
-        int numberSelectedModules() const { return mSelectedModules.size(); }
+        int numberSelectedModules() const
+        {
+            return mSelectedModules.size();
+        }
 
         /**
          * Gets the amount of currently selected nodes. Nodes are both gates and modules.
          *
          * @returns the amount of selected nodes
          */
-        int numberSelectedNodes()   const { return mSelectedGates.size() + mSelectedModules.size(); }
+        int numberSelectedNodes() const
+        {
+            return mSelectedGates.size() + mSelectedModules.size();
+        }
 
         /**
          * Gets the amount of all currently selected items. Items are gates nets or modules.
          *
          * @returns the amount of selected items
          */
-        int numberSelectedItems()   const { return mSelectedGates.size() + mSelectedModules.size() + mSelectedNets.size(); }
+        int numberSelectedItems() const
+        {
+            return mSelectedGates.size() + mSelectedModules.size() + mSelectedNets.size();
+        }
 
         /**
          * Return true iff the gate with the specified id is contained in the current selection.
@@ -335,7 +376,10 @@ namespace hal
          * @param id - The id of the gate to look for
          * @returns true iff the gate is selected
          */
-        bool containsGate(u32 id) const   { return mSelectedGates.contains(id); }
+        bool containsGate(u32 id) const
+        {
+            return mSelectedGates.contains(id);
+        }
 
         /**
          * Return true iff the net with the specified id is contained in the current selection.
@@ -343,7 +387,10 @@ namespace hal
          * @param id - The id of the net to look for
          * @returns true iff the net is selected
          */
-        bool containsNet(u32 id) const    { return mSelectedNets.contains(id); }
+        bool containsNet(u32 id) const
+        {
+            return mSelectedNets.contains(id);
+        }
 
         /**
          * Return true iff the module with the specified id is contained in the current selection.
@@ -351,7 +398,10 @@ namespace hal
          * @param id - The id of the module to look for
          * @returns true iff the module is selected
          */
-        bool containsModule(u32 id) const { return mSelectedModules.contains(id); }
+        bool containsModule(u32 id) const
+        {
+            return mSelectedModules.contains(id);
+        }
 
         /**
          * Adds the gate with the specified id to the current selection.
@@ -465,28 +515,40 @@ namespace hal
          *
          * @returns the ItemType of the current item in focus.
          */
-        ItemType focusType() const { return mFocusType; }
+        ItemType focusType() const
+        {
+            return mFocusType;
+        }
 
         /**
          * Gets the id of the item in the current focus.
          *
          * @returns the focus item's id.
          */
-        u32 focusId()        const { return mFocusId; }
+        u32 focusId() const
+        {
+            return mFocusId;
+        }
 
         /**
          * Gets the current Subfocus. Returns Subfocus::None if there is no Subfocus.
          *
          * @returns the current subfocus.
          */
-        Subfocus subfocus()  const { return mSubfocus; }
+        Subfocus subfocus() const
+        {
+            return mSubfocus;
+        }
 
         /**
          * Return the index of the current subfocus (i.e. the index of the pin in Subfocus).
          *
          * @returns the Subfocus index.
          */
-        u32 subfocusIndex()  const { return mSubfocusIndex; }
+        u32 subfocusIndex() const
+        {
+            return mSubfocusIndex;
+        }
 
         /**
          * Changes the focus and subfocus to a new value. They are applied after relaySelectionChanged or
@@ -573,7 +635,6 @@ namespace hal
         void subfocusLeft();
         void subfocusRight();
 
-
         //    bool try_subfocus_left();
         //    bool try_subfocus_right();
         //    bool try_subfocus_up();
@@ -581,4 +642,4 @@ namespace hal
 
         QVector<QPair<void*, QString>> mSenderRegister;
     };
-}
+}    // namespace hal

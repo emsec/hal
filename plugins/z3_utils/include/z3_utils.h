@@ -139,9 +139,9 @@ namespace hal
         z3::expr get_expr_in_ctx(const z3::expr& e, z3::context& ctx);
 
         /**
-         * Compare two nets from two different netlist. This is done on a functional level and 
-         * compares the combinational gates infront of the nets until hitting a sequential gate.
-         * In order for this two work the sequential gates of both netlists must be identical and only the combinational gates my differ.
+         * Compare two nets from two different netlist. 
+         * This is done on a functional level by buidling the subgraph function of each net considering all combinational gates of the netlist.
+         * In order for this two work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
          * If replace_net_ids is set the function subtitutes the input nets of the functions with their source gate and pin.
          * This allows to also change the output nets of the sequential gates.
          * 
@@ -150,8 +150,20 @@ namespace hal
          * @param[in] net_a - First net, from netlist_a.
          * @param[in] net_b - Second net, from netlist_b.
          * @param[in] replace_net_ids - If set, the input_net_ids are substituted by their source gate and pin.
-         * 
+         * @returns Ok and a Boolean indicating whether the two nets are functionally equivalent, an error otherwise.
          */
-        bool compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const Net* net_a, const Net* net_b, bool replace_net_ids = true);
+        Result<bool> compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const Net* net_a, const Net* net_b, bool replace_net_ids = true);
+
+        /**
+         * Compares two netlist by finding a corresponding partner for each sequential gate in the netlist and checking whether they are identical.
+         * This is done on a functional level by buidling the subgraph function of all their input nets considering all combinational gates of the netlist.
+         * In order for this two work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
+         * 
+         * @param[in] netlist_a - The first netlist.
+         * @param[in] netlist_b - The second netlist.
+         * 
+         * @returns Ok and a Boolean indicating whether the two netlists are functionally equivalent, an error otherwise.
+         */
+        Result<bool> compare_netlists(const Netlist* netlist_a, const Netlist* netlist_b);
     }    // namespace z3_utils
 }    // namespace hal

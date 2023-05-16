@@ -133,7 +133,6 @@ namespace hal
                 The program is compiled and executed exactly once for every possible input mapping to accuratley determine the boolean influence of each variable.
 
                 :param hal_py.BooleanFunction bf: The Boolean function.
-                :param bool deterministic: Specifies whether the function is executed with random values or each possible input mapping is tested deterministically.
                 :param str unique_identifier: A unique identifier that is applied to file names to prevent collisions during multi-threading.
                 :returns: A dict from the variables that appear in the function to their Boolean influence on said function on success, None otherwise.
                 :rtype: dict[str,float] or None

@@ -89,7 +89,7 @@ namespace hal
             /**
              * Sets the solver type to the desired SMT solver.
              *
-             * @param[in] solver - The solver type identifier.
+             * @param[in] call - The solver call.
              * @returns The updated SMT query configuration.
              */
             QueryConfig& with_call(SolverCall call);

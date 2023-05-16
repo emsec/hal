@@ -2,7 +2,7 @@
 
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/gui_globals.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
+#include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/user_action_compound.h"
@@ -124,41 +124,70 @@ namespace hal
 
     void SelectionTreeView::handleIsolationViewAction(const SelectionTreeItem* sti)
     {
-        u32 id       = sti->id();
-        QString name = "";
-        QSet<u32> gateId;
-        QSet<u32> moduleId;
-
+        Node nd;
         if (sti->itemType() == SelectionTreeItem::TreeItemType::GateItem)
         {
-            name = "Isolated Gate(ID: " + QString::number(id) + ")";
-            gateId.insert(id);
+            nd = Node(sti->id(),Node::Gate);
         }
         else if (sti->itemType() == SelectionTreeItem::TreeItemType::ModuleItem)
         {
-            name = "Isolated Module(ID: " + QString::number(id) + ")";
-            moduleId.insert(id);
+            nd = Node(sti->id(),Node::Module);
+        }
+        else
+        {
+            return;
+        }
+        isolateInNewViewAction(nd);
+    }
+
+    void SelectionTreeView::isolateInNewViewAction(Node nd)
+    {
+        QSet<u32> gateId;
+        QSet<u32> moduleId;
+        QString name;
+
+        if (nd.type() == Node::Gate)
+        {
+            u32 cnt = 0;
+            for (;;)
+            {
+                ++cnt;
+                name = "Isolated View " + QString::number(cnt);
+                if (!gGraphContextManager->contextWithNameExists(name))
+                    break;
+            }
+            gateId.insert(nd.id());
+        }
+        else if (nd.type() == Node::Module)
+        {
+            GraphContext* moduleContext =
+                    gGraphContextManager->getContextByExclusiveModuleId(nd.id());
+            if (moduleContext)
+            {
+                // open existing view
+                gContentManager->getContextManagerWidget()->selectViewContext(moduleContext);
+                gContentManager->getContextManagerWidget()->handleOpenContextClicked();
+                return;
+            }
+
+            name = QString::fromStdString(gNetlist->get_module_by_id(nd.id())->get_name()) + " (ID: " + QString::number(nd.id()) + ")";
+            moduleId.insert(nd.id());
         }
         else
         {
             return;
         }
 
-        u32 cnt = 0;
-        while (true)
+        UserActionCompound* act = new UserActionCompound;
+        act->setUseCreatedObject();
+        act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+        act->addAction(new ActionAddItemsToObject(moduleId, gateId));
+        act->exec();
+        if (nd.type() == Node::Module)
         {
-            ++cnt;
-            QString contextName = name + " " + QString::number(cnt);
-            if (!gGraphContextManager->contextWithNameExists(contextName))
-            {
-                UserActionCompound* act = new UserActionCompound;
-                act->setUseCreatedObject();
-                act->addAction(new ActionCreateObject(UserActionObjectType::Context,
-                                                      contextName));
-                act->addAction(new ActionAddItemsToObject(moduleId, gateId));
-                act->exec();
-                return;
-            }
+            GraphContext* moduleContext = gGraphContextManager->getContextById(act->object().id());
+            moduleContext->setDirty(false);
+            moduleContext->setExclusiveModuleId(nd.id());
         }
     }
 

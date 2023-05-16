@@ -109,6 +109,16 @@ namespace hal
         }
 
         /**
+         * Hash function for python binding.
+         *
+         * @return Pybind11 compatible hash.
+         */
+        ssize_t get_hash() const
+        {
+            return (uintptr_t)this;
+        }
+
+        /**
          * Get the ID of the pin group. The ID is unique within an entity, e.g., a module or a gate type.
          * 
          * @return The ID of the pin group.
@@ -300,7 +310,7 @@ namespace hal
 
             u32 index = m_next_index++;
             m_pins.push_back(pin);
-            pin->m_group                = std::make_pair(this, index);
+            pin->m_group = std::make_pair(this, index);
             return OK({});
         }
 

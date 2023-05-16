@@ -1,5 +1,6 @@
 #include "gui/plugin_relay/gui_plugin_manager.h"
 #include "gui/gui_globals.h"
+#include "gui/gui_utils/graphics.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/plugin_system/gui_extension_interface.h"
 #include "hal_core/plugin_system/cli_extension_interface.h"
@@ -19,7 +20,6 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QHeaderView>
 #include <QMessageBox>
 
@@ -27,7 +27,10 @@ namespace hal {
 
 
     GuiPluginManager::GuiPluginManager(QWidget *parent)
-        : QWidget(parent)
+        : QWidget(parent),
+          mDefaultTextColor(Qt::lightGray),
+          mHilightTextColor(Qt::yellow),
+          mHilightBackgroundColor(Qt::black)
     {
         QVBoxLayout* layout = new QVBoxLayout(this);
 
@@ -40,11 +43,11 @@ namespace hal {
         gPluginRelay->mGuiPluginTable = mGuiPluginTable;
         mGuiPluginView->setModel(mGuiPluginTable);
 
-        GuiPluginDelegate* delegate = new GuiPluginDelegate(this);
-        connect(delegate,&GuiPluginDelegate::buttonPressed,mGuiPluginTable,&GuiPluginTable::handleButtonPressed);
-        mGuiPluginView->setItemDelegateForColumn(10,delegate);
-        mGuiPluginView->setItemDelegateForColumn(8,delegate);
-        mGuiPluginView->setItemDelegateForColumn(7,delegate);
+        mGuiPluginDelegate = new GuiPluginDelegate(this);
+        connect(mGuiPluginDelegate,&GuiPluginDelegate::buttonPressed,mGuiPluginTable,&GuiPluginTable::handleButtonPressed);
+        mGuiPluginView->setItemDelegateForColumn(10,mGuiPluginDelegate);
+        mGuiPluginView->setItemDelegateForColumn(8,mGuiPluginDelegate);
+        mGuiPluginView->setItemDelegateForColumn(7,mGuiPluginDelegate);
         mGuiPluginView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
         mGuiPluginView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
         mGuiPluginView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -53,11 +56,6 @@ namespace hal {
         QLabel* legendHeader = new QLabel("Buttons used in table above:", this);
         legendHeader->setFixedHeight(48);
         layout->addWidget(legendHeader,Qt::AlignLeft);
-        QPixmap* picon[4] = {
-            new QPixmap(":/icons/insert_plugin", "PNG"),
-            new QPixmap(":/icons/x_delete",      "PNG"),
-            new QPixmap(":/icons/cli_options",   "PNG"),
-            new QPixmap(":/icons/invoke_gui",    "PNG")};
         QLabel* ltext[4] = {
             new QLabel("Load HAL plugin and dependencies (if any)", this),
             new QLabel("Unload HAL plugin unless needed as dependency by other plugin", this),
@@ -67,11 +65,10 @@ namespace hal {
         for (int i=0; i<4; i++)
         {
             QHBoxLayout* legend = new QHBoxLayout;
-            QLabel* licon = new QLabel(this);
-            licon->setPixmap(picon[i]->scaled(32,32));
-            licon->setAlignment(Qt::AlignCenter);
-            licon->setFixedSize(52,52);
-            legend->addWidget(licon);
+            mIconLegend[i] = new QLabel(this);
+            mIconLegend[i]->setAlignment(Qt::AlignCenter);
+            mIconLegend[i]->setFixedSize(52,52);
+            legend->addWidget(mIconLegend[i]);
             ltext[i]->setIndent(8);
             legend->addWidget(ltext[i]);
             layout->addLayout(legend);
@@ -79,13 +76,34 @@ namespace hal {
 
         QHBoxLayout* buttonLayout = new QHBoxLayout;
         buttonLayout->setAlignment(Qt::AlignRight);
-        QPushButton* butCancel  = new QPushButton("Cancel", this);
+        QPushButton* butCancel  = new QPushButton("Back to netlist", this);
         connect(butCancel,&QPushButton::clicked,this,&GuiPluginManager::handleButtonCancel);
         buttonLayout->addWidget(butCancel);
         QPushButton* butRefresh = new QPushButton("Refresh", this);
         connect(butRefresh,&QPushButton::clicked,mGuiPluginTable,&GuiPluginTable::handleRefresh);
         buttonLayout->addWidget(butRefresh);
         layout->addLayout(buttonLayout);
+    }
+
+    void GuiPluginManager::repolish()
+    {
+        QStyle* s = style();
+
+        s->unpolish(this);
+        s->polish(this);
+        mGuiPluginDelegate->updateQss(this);
+        QIcon tmpIcon;
+        for (int i=0; i<4; i++)
+        {
+            switch (i)
+            {
+            case 0: tmpIcon = gui_utility::getStyledSvgIcon(loadIconStyle(),loadIconPath());     break;
+            case 1: tmpIcon = gui_utility::getStyledSvgIcon(unloadIconStyle(),unloadIconPath()); break;
+            case 2: tmpIcon = gui_utility::getStyledSvgIcon(cliIconStyle(),cliIconPath());       break;
+            case 3: tmpIcon = gui_utility::getStyledSvgIcon(guiIconStyle(),guiIconPath());       break;
+            }
+            mIconLegend[i]->setPixmap(tmpIcon.pixmap(32,32));
+        }
     }
 
     void GuiPluginManager::handleButtonCancel()
@@ -105,6 +123,126 @@ namespace hal {
         msg->exec();
     }
 
+    QString GuiPluginManager::loadIconPath() const
+    {
+        return mLoadIconPath;
+    }
+
+    QString GuiPluginManager::loadIconStyle() const
+    {
+        return mLoadIconStyle;
+    }
+
+    QString GuiPluginManager::unloadIconPath() const
+    {
+        return mUnloadIconPath;
+    }
+
+    QString GuiPluginManager::unloadIconStyle() const
+    {
+        return mUnloadIconStyle;
+    }
+
+    QString GuiPluginManager::cliIconPath() const
+    {
+        return mCliIconPath;
+    }
+
+    QString GuiPluginManager::cliIconStyle() const
+    {
+        return mCliIconStyle;
+    }
+
+    QString GuiPluginManager::guiIconPath() const
+    {
+        return mGuiIconPath;
+    }
+
+    QString GuiPluginManager::guiIconStyle() const
+    {
+        return mGuiIconStyle;
+    }
+
+    QString GuiPluginManager::guiIconDisabledStyle() const
+    {
+        return mGuiIconDisabledStyle;
+    }
+
+    QColor GuiPluginManager::defaultTextColor() const
+    {
+        return mDefaultTextColor;
+    }
+
+    QColor GuiPluginManager::hilightTextColor() const
+    {
+        return mHilightTextColor;
+    }
+
+    QColor GuiPluginManager::hilightBackgroundColor() const
+    {
+        return mHilightBackgroundColor;
+    }
+
+    void GuiPluginManager::setLoadIconPath(const QString& s)
+    {
+        mLoadIconPath = s;
+    }
+
+    void GuiPluginManager::setLoadIconStyle(const QString& s)
+    {
+        mLoadIconStyle = s;
+    }
+
+    void GuiPluginManager::setUnloadIconPath(const QString& s)
+    {
+        mUnloadIconPath = s;
+    }
+
+    void GuiPluginManager::setUnloadIconStyle(const QString& s)
+    {
+        mUnloadIconStyle = s;
+    }
+
+    void GuiPluginManager::setCliIconPath(const QString& s)
+    {
+        mCliIconPath = s;
+    }
+
+    void GuiPluginManager::setCliIconStyle(const QString& s)
+    {
+        mCliIconStyle = s;
+    }
+
+    void GuiPluginManager::setGuiIconPath(const QString& s)
+    {
+        mGuiIconPath = s;
+    }
+
+    void GuiPluginManager::setGuiIconStyle(const QString& s)
+    {
+        mGuiIconStyle = s;
+    }
+
+    void GuiPluginManager::setGuiIconDisabledStyle(const QString& s)
+    {
+        mGuiIconDisabledStyle = s;
+    }
+
+    void GuiPluginManager::setDefaultTextColor(QColor& c)
+    {
+        mDefaultTextColor = c;
+    }
+
+    void GuiPluginManager::setHilightTextColor(QColor& c)
+    {
+        mHilightTextColor = c;
+    }
+
+    void GuiPluginManager::setHilightBackgroundColor(QColor& c)
+    {
+        mHilightBackgroundColor = c;
+    }
+
     //_________________VIEW_______________________________
     GuiPluginView::GuiPluginView(QWidget* parent)
         : QTableView(parent)
@@ -113,8 +251,8 @@ namespace hal {
     }
 
     //_________________TABLE______________________________
-    GuiPluginTable::GuiPluginTable(QObject* parent)
-        : QAbstractTableModel(parent)
+    GuiPluginTable::GuiPluginTable(GuiPluginManager *parent)
+        : QAbstractTableModel(parent), mPluginMgr(parent)
     {
         mWaitForRefresh = true;
         populateTable(false);
@@ -464,9 +602,22 @@ namespace hal {
 
     QVariant GuiPluginTable::data(const QModelIndex &index, int role) const
     {
-        if (role == Qt::ForegroundRole)
-            return QBrush(mEntries.at(index.row())->isLoaded() ? Qt::yellow : Qt::lightGray);
-        if (role != Qt::DisplayRole) return QVariant();
+        switch (role)
+        {
+        case Qt::ForegroundRole:
+            if (mEntries.at(index.row())->isLoaded())
+                return mPluginMgr->hilightTextColor();
+            return mPluginMgr->defaultTextColor();
+        case Qt::BackgroundRole:
+            if (mEntries.at(index.row())->isLoaded())
+                return mPluginMgr->hilightBackgroundColor();
+            return QBrush();
+        case Qt::DisplayRole:
+            break; // handle below
+        default:
+            return QVariant();
+        }
+
         QVariant v = mEntries.at(index.row())->data(index.column());
         if (index.column() >= 7 && index.column() <= 8)
             return (v.toBool() ? "X" : " ");
@@ -622,19 +773,24 @@ namespace hal {
 
     //------------------------------------------------
     GuiPluginDelegate::GuiPluginDelegate(QObject *parent)
-        : QItemDelegate(parent),
-          mIconLoad(":/icons/insert_plugin"),
-          mIconUnload(":/icons/x_delete"),
-          mIconInvokeGui(":/icons/invoke_gui"),
-          mIconDisabledGui(":/icons/disabled_gui"),
-          mIconCliOptions(":/icons/cli_options")
+        : QItemDelegate(parent)
     {
-        int bgBright[3] = {26, 46, 80};
+ //       int bgBright[3] = {26, 46, 80};
         for (int i=0; i<3; i++)
         {
             mTemplateButton[i] = new QPushButton;
-            mTemplateButton[i]->setStyleSheet(QString("background-color : rgb(%1,%1,%1)").arg(bgBright[i]));
+//            mTemplateButton[i]->setStyleSheet(QString("background-color : rgb(%1,%1,%1)").arg(bgBright[i]));
         }
+
+    }
+
+    void GuiPluginDelegate::updateQss(GuiPluginManager *gpm)
+    {
+        mIconLoad = gui_utility::getStyledSvgIcon(gpm->loadIconStyle(),gpm->loadIconPath());
+        mIconUnload = gui_utility::getStyledSvgIcon(gpm->unloadIconStyle(), gpm->unloadIconPath());
+        mIconCliOptions = gui_utility::getStyledSvgIcon(gpm->cliIconStyle(), gpm->cliIconPath());
+        mIconInvokeGui = gui_utility::getStyledSvgIcon(gpm->guiIconStyle(), gpm->guiIconPath());
+        mIconDisabledGui = gui_utility::getStyledSvgIcon(gpm->guiIconDisabledStyle(), gpm->guiIconPath());
     }
 
     GuiPluginDelegate::~GuiPluginDelegate()
@@ -649,43 +805,59 @@ namespace hal {
         const GuiPluginTable* plt = dynamic_cast<const GuiPluginTable*>(index.model());
         if (!plt) return;
         QStyleOptionButton button;
+        bool drawIcon = true;
         switch (index.column())
         {
         case 7:
             button.iconSize = QSize(w-4,w-4);
             if (plt->hasGuiExtension(index))
                 button.icon = (plt->isLoaded(index) && gNetlist) ? mIconInvokeGui : mIconDisabledGui;
-            else return;
+            else
+                drawIcon = false;
             break;
         case 8:
             button.iconSize = QSize(w-4,w-4);
             if (plt->hasCliExtension(index))
                 button.icon = mIconCliOptions;
-            else return;
+            else
+                drawIcon = false;
             break;
         case 10:
-            if (plt->isHalGui(index)) return;
-            if (plt->isLoaded(index))
-                button.icon = mIconUnload;
+            if (plt->isHalGui(index))
+                drawIcon = false;
             else
-                button.icon = mIconLoad;
-            button.iconSize = QSize(w-12,w-12);
+            {
+                if (plt->isLoaded(index))
+                    button.icon = mIconUnload;
+                else
+                    button.icon = mIconLoad;
+                button.iconSize = QSize(w-12,w-12);
+            }
             break;
         default:
-            return;
+            drawIcon = false;
+            break;
+        }
+
+        State stat = Normal;
+        QColor bgColor = plt->data(index,Qt::BackgroundRole).value<QColor>();
+        if (mMouseIndex.isValid() && mMouseIndex == index)
+        {
+            stat = Pressed;
+            bgColor = Qt::red;
         }
 
         QRect r = option.rect;
         int x = r.left() + r.width() - w;
         int y = r.top();
         int h = w;
-        State stat = Normal;
-        QColor bgcol[3] = { Qt::black, Qt::gray, Qt::red};
-        if (mMouseIndex.isValid() && mMouseIndex == index) stat = Pressed;
         button.rect = QRect(x,y,w,h);
         button.state = (stat!=Pressed) ? QStyle::State_Enabled | QStyle::State_Raised : QStyle::State_Enabled | QStyle::State_Sunken | QStyle::State_MouseOver;
-        painter->fillRect(r,QBrush(bgcol[stat]));
-        QApplication::style()->drawControl( QStyle::CE_PushButton, &button, painter, mTemplateButton[stat]);
+
+        if (bgColor.isValid())
+            painter->fillRect(r,QBrush(bgColor));
+        if (drawIcon)
+            QApplication::style()->drawControl( QStyle::CE_PushButton, &button, painter, mTemplateButton[stat]);
     }
 
     QSize GuiPluginDelegate::sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const

@@ -25,25 +25,26 @@
 
 #pragma once
 
-#include "hal_core/defines.h"
+#include "dataflow_analysis/api/configuration.h"
+#include "dataflow_analysis/api/result.h"
+#include "dataflow_analysis/common/grouping.h"
+#include "hal_core/utilities/result.h"
 
-#include <vector>
-#include <string>
+#include <unordered_set>
 
 namespace hal
 {
     class Netlist;
-    class Gate;
 
     namespace dataflow
     {
-        struct Grouping;
-
-        namespace state_to_module
-        {
-            bool create_modules(Netlist* nl, const std::shared_ptr<const Grouping>& state);
-            std::vector<std::vector<Gate*>> create_sets(Netlist* nl, const std::shared_ptr<const Grouping>& state);
-
-        }    // namespace state_to_module
-    }        // namespace dataflow
+        /**
+         * Analyze the datapath to identify word-level registers in the given netlist.
+         * 
+         * @param[in] nl - The netlist.
+         * @param[in] config - The dataflow analysis configuration.
+         * @returns Ok() and the dataflow analysis result on success, an error otherwise.
+         */
+        hal::Result<dataflow::Result> analyze(Netlist* nl, const Configuration& config = Configuration());
+    }    // namespace dataflow
 }    // namespace hal
