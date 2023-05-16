@@ -1,6 +1,5 @@
 var NAVTREEINDEX16 =
 {
-"classhal_1_1_python_qss_adapter.html#af951a02eac0b0fd9ff26656360539c28":[4,0,1,2,0],
 "classhal_1_1_python_qss_adapter.html#afb83edd66f419becf57fb490214ff692":[4,0,1,2,28],
 "classhal_1_1_python_serializer.html":[6,0,0,340],
 "classhal_1_1_python_serializer.html#a0520bb421746f97ae1a47ddf4644ce32":[6,0,0,340,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX16 =
 "classhal_1_1_selection_relay.html#a49b7f0313782c3d022059d07c5daa9fa":[4,0,41,34],
 "classhal_1_1_selection_relay.html#a4d63d678058a1a8e18570aecc1bba819":[4,0,41,46],
 "classhal_1_1_selection_relay.html#a4d6a07a842974b3526afc6055620cc1a":[4,0,41,31],
-"classhal_1_1_selection_relay.html#a5024fcd32bdf07e0b8fced9b915b559a":[4,0,41,4]
+"classhal_1_1_selection_relay.html#a5024fcd32bdf07e0b8fced9b915b559a":[4,0,41,4],
+"classhal_1_1_selection_relay.html#a5040a3c88a222ef3a487021f5916d220":[4,0,41,41]
 };

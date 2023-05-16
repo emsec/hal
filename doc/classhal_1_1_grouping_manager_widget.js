@@ -11,7 +11,6 @@ var classhal_1_1_grouping_manager_widget =
     [ "getModel", "classhal_1_1_grouping_manager_widget.html#a49dd1b299cfac83466bc42c2390a3a89", null ],
     [ "getProxyModel", "classhal_1_1_grouping_manager_widget.html#a85d39ec7dc82b0f3ce1beaa67f8919a5", null ],
     [ "handleCurrentChanged", "classhal_1_1_grouping_manager_widget.html#a7d582c72de6099cb85e03f71d5efec6b", null ],
-    [ "handleGraphSelectionChanged", "classhal_1_1_grouping_manager_widget.html#a4d60c2d0600edff342fb17abb6ffe38e", null ],
     [ "handleLastEntryDeleted", "classhal_1_1_grouping_manager_widget.html#a0d5660007c226ca40eb5497b1833306d", null ],
     [ "handleNewEntryAdded", "classhal_1_1_grouping_manager_widget.html#a8637e623b66fdf456236841cb00055f3", null ],
     [ "handleToolboxPredecessor", "classhal_1_1_grouping_manager_widget.html#af07b20178f33bddf3265659dd4543983", null ],

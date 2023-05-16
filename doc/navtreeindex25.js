@@ -1,7 +1,5 @@
 var NAVTREEINDEX25 =
 {
-"module__proxy__model_8cpp.html":[7,0,1,3,2,31,2],
-"module__proxy__model_8cpp_source.html":[7,0,1,3,2,31,2],
 "module__proxy__model_8h.html":[7,0,1,3,0,0,33,2],
 "module__proxy__model_8h_source.html":[7,0,1,3,0,0,33,2],
 "module__select__model_8cpp.html":[7,0,1,3,2,30,3],
@@ -48,12 +46,12 @@ var NAVTREEINDEX25 =
 "namespacehal_1_1_s_m_t_1_1_z3.html":[5,0,2,20,5],
 "namespacehal_1_1_shortest_path.html":[5,0,2,18],
 "namespacehal_1_1_simplification.html":[5,0,2,19],
-"namespacehal_1_1core__strings.html":[5,0,2,1],
 "namespacehal_1_1core__strings.html":[6,0,0,1],
-"namespacehal_1_1dataflow.html":[6,0,0,2],
+"namespacehal_1_1core__strings.html":[5,0,2,1],
 "namespacehal_1_1dataflow.html":[5,0,2,2],
-"namespacehal_1_1dataflow_1_1evaluation.html":[6,0,0,2,0],
+"namespacehal_1_1dataflow.html":[6,0,0,2],
 "namespacehal_1_1dataflow_1_1evaluation.html":[5,0,2,2,0],
+"namespacehal_1_1dataflow_1_1evaluation.html":[6,0,0,2,0],
 "namespacehal_1_1dataflow_1_1group__by__control__signals.html":[5,0,2,2,1],
 "namespacehal_1_1dataflow_1_1group__by__input__output__size.html":[5,0,2,2,2],
 "namespacehal_1_1dataflow_1_1group__by__successors__predecessors.html":[5,0,2,2,3],
@@ -73,8 +71,8 @@ var NAVTREEINDEX25 =
 "namespacehal_1_1gate__library__parser__manager.html":[5,0,2,5],
 "namespacehal_1_1gate__library__writer__manager.html":[5,0,2,6],
 "namespacehal_1_1graph__widget__constants.html":[5,0,2,7],
-"namespacehal_1_1gui__utility.html":[6,0,0,3],
 "namespacehal_1_1gui__utility.html":[5,0,2,9],
+"namespacehal_1_1gui__utility.html":[6,0,0,3],
 "namespacehal_1_1netlist__factory.html":[5,0,2,11],
 "namespacehal_1_1netlist__parser__manager.html":[5,0,2,12],
 "namespacehal_1_1netlist__serializer.html":[5,0,2,13],
@@ -249,5 +247,7 @@ var NAVTREEINDEX25 =
 "netlist_2netlist__utils_8cpp.html#ad7253a1f33ed519527e3e41da39b32ee":[7,0,2,0,18,7],
 "netlist_2netlist__utils_8cpp.html#ae10e4d2360be0f2493d267fa63d6a350":[7,0,2,0,18,9],
 "netlist_2netlist__utils_8cpp.html#aed730c36a6fe7e185bf8b936ad7e0d6d":[7,0,2,0,18,17],
-"netlist_2netlist__utils_8cpp.html#af2c5370e1cfb407c98dd5c855e1e9022":[7,0,2,0,18,3]
+"netlist_2netlist__utils_8cpp.html#af2c5370e1cfb407c98dd5c855e1e9022":[7,0,2,0,18,3],
+"netlist_2netlist__utils_8cpp.html#af2f10749460ef2bf67a20b9705a8c062":[7,0,2,0,18,11],
+"netlist_2netlist__utils_8cpp.html#af985cd5c5eb7aa39f151f9fc890e6005":[7,0,2,0,18,20]
 };
