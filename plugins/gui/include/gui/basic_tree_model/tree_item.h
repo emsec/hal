@@ -43,6 +43,15 @@ namespace hal
     {
     // maybe add enum type for all possible scenarios? or use additional data with key to access type
     // and handle type handling in model...e.g.: item->getAddData("type")(structure, more generalization,...)
+
+    private:
+        /**
+         * Copy constructor. Copies the item's data, not the parent/children.
+         *
+         * @param item - The item to copy.
+         */
+        TreeItem(const TreeItem &item);
+
     public:
         /**
          * The constructor.
@@ -55,13 +64,6 @@ namespace hal
          * @param columnData - The item's data.
          */
         TreeItem(QList<QVariant> columnData);
-
-        /**
-         * Copy constructor. Copies the item's data, not the parent/children.
-         *
-         * @param item - The item to copy.
-         */
-        TreeItem(const TreeItem &item);
 
         /**
           * The destructor.
