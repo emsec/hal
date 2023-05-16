@@ -329,7 +329,8 @@ namespace hal
                         continue;
                     }
 
-                    for (auto suc_id : this->get_group_successors(group_id).get())
+                    auto sucs = this->get_group_successors(group_id).get();
+                    for (auto suc_id : sucs)
                     {
                         if (!group_ids.empty() && group_ids.find(suc_id) == group_ids.end())
                         {
@@ -457,7 +458,7 @@ namespace hal
                     nl->delete_module(mod);
                 }
             }
-            log_info("dataflow", "succesufully deleted old DANA modules");
+            log_info("dataflow", "successfully deleted old DANA modules");
 
             // create new modules and try to keep hierachy if possible
             std::unordered_map<u32, Module*> group_to_module;
