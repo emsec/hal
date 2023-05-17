@@ -34,9 +34,14 @@ namespace hal
         /* forward declaration */
         struct Grouping;
 
+        namespace processing
+        {
+            struct Configuration;
+        }
+
         namespace split_by_successors_predecessors
         {
-            std::shared_ptr<Grouping> process(const std::shared_ptr<Grouping>& state, bool successors);
+            std::shared_ptr<Grouping> process(const processing::Configuration& config, const std::shared_ptr<Grouping>& state, bool successors);
 
         }    // namespace split_by_successors_predecessors
     }        // namespace dataflow

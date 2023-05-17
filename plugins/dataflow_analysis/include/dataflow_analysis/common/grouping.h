@@ -66,7 +66,7 @@ namespace hal
 
             std::set<u32> get_register_stage_intersect_of_group(u32 group_id) const;
 
-            bool are_groups_allowed_to_merge(u32 group_1_id, u32 group_2_id) const;
+            bool are_groups_allowed_to_merge(u32 group_1_id, u32 group_2_id, bool enforce_type_consistency) const;
             bool is_group_allowed_to_split(u32 group_id) const;
 
         private:

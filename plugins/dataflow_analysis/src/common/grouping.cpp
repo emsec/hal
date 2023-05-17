@@ -234,18 +234,18 @@ namespace hal
             return predecessors;
         }
 
-        bool Grouping::are_groups_allowed_to_merge(u32 group_1_id, u32 group_2_id) const
+        bool Grouping::are_groups_allowed_to_merge(u32 group_1_id, u32 group_2_id, bool enforce_type_consistency) const
         {
             if (this->group_control_fingerprint_map.at(group_1_id) != this->group_control_fingerprint_map.at(group_2_id))
             {
                 return false;
             }
-            /* without type check
-    if (this->netlist_ab.nl->get_gate_by_id(*gates_of_group.at(group_1_id).begin())->get_type() != this->netlist_ab.nl->get_gate_by_id(*gates_of_group.at(group_2_id).begin())->get_type())
-    {
-        return false;
-    }
-     */
+            if (enforce_type_consistency
+                && (this->netlist_abstr.nl->get_gate_by_id(*gates_of_group.at(group_1_id).begin())->get_type()
+                    != this->netlist_abstr.nl->get_gate_by_id(*gates_of_group.at(group_2_id).begin())->get_type()))
+            {
+                return false;
+            }
             if (!(this->operations_on_group_allowed.at(group_1_id) && this->operations_on_group_allowed.at(group_2_id)))
             {
                 return false;

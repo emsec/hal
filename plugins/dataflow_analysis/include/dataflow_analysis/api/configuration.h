@@ -63,6 +63,11 @@ namespace hal
             bool enable_register_stages = false;
 
             /**
+             * Enforce type consistency inside of a group. Defaults to `false`.
+             */
+            bool enforce_type_consistency = false;
+
+            /**
              * Set the minimum size of a group. Smaller groups will be penalized during analysis.
              * 
              * @param[in] size - The minimum group size.
@@ -117,6 +122,14 @@ namespace hal
              * @returns The updated dataflow analysis configuration.
              */
             Configuration& with_register_stage_identification(bool enable = true);
+
+            /**
+             * Enable type consistency as part of dataflow analysis when deciding whether two gates are allowed to merge into the same group.
+             * 
+             * @param[in] enable - Set `true` to enable type consistency inside of a group, `false` otherwise. Defaults to `true`.
+             * @returns The updated dataflow analysis configuration.
+             */
+            Configuration& with_type_consistency(bool enable = true);
         };
     }    // namespace dataflow
 }    // namespace hal
