@@ -48,11 +48,14 @@ namespace hal
                 pass_id id;
             };
 
+            /* Forward declaration */
+            struct Configuration;
+
             namespace pass_collection
             {
-                std::vector<PassConfiguration> get_passes(const std::vector<std::vector<pass_id>>& previous_passes);
+                std::vector<PassConfiguration> get_passes(const Configuration& config, const std::vector<std::vector<pass_id>>& previous_passes);
             }    // namespace pass_collection
 
-        }    // namespace processing
-    }        // namespace dataflow
-}
+        }        // namespace processing
+    }            // namespace dataflow
+}    // namespace hal

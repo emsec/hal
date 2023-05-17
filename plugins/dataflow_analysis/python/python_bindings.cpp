@@ -155,6 +155,14 @@ namespace hal
             :rtype: dataflow.Dataflow.Configuration
         )");
 
+        py_dataflow_configuration.def("with_type_consistency", &dataflow::Configuration::with_type_consistency, py::arg("enable") = true, R"(
+            Enable type consistency as part of dataflow analysis when deciding whether two gates are allowed to merge into the same group.
+
+            :param bool enable: Set ``True`` to enable type consistency inside of a group, ``False`` otherwise. Defaults to ``True``.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
         py_dataflow.def(
             "analyze",
             [](Netlist* nl, const dataflow::Configuration& config = dataflow::Configuration()) -> std::optional<dataflow::Result> {

@@ -66,5 +66,11 @@ namespace hal
             this->enable_register_stages = enable;
             return *this;
         }
+
+        Configuration& Configuration::with_type_consistency(bool enable)
+        {
+            this->enforce_type_consistency = enable;
+            return *this;
+        }
     }    // namespace dataflow
 }    // namespace hal

@@ -464,6 +464,86 @@ namespace hal
         return OK(BooleanFunction(Node::Operation(NodeType::Sext, size), std::move(p0), std::move(p1)));
     }
 
+    Result<BooleanFunction> BooleanFunction::Shl(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != size || p1.size() != size)
+        {
+            return ERR("could not apply SHL operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        if (!p1.is_index())
+        {
+            return ERR("could not apply SHL operation: p1 is not an index.");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Shl, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Lshr(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != size || p1.size() != size)
+        {
+            return ERR("could not apply LSHR operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        if (!p1.is_index())
+        {
+            return ERR("could not apply LSHR operation: p1 is not an index.");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Lshr, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Ashr(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != size || p1.size() != size)
+        {
+            return ERR("could not apply ASHR operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        if (!p1.is_index())
+        {
+            return ERR("could not apply ASHR operation: p1 is not an index.");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Ashr, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Rol(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != size || p1.size() != size)
+        {
+            return ERR("could not apply ROL operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        if (!p1.is_index())
+        {
+            return ERR("could not apply ROL operation: p1 is not an index.");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Rol, size), std::move(p0), std::move(p1)));
+    }
+
+    Result<BooleanFunction> BooleanFunction::Ror(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
+    {
+        if (p0.size() != size || p1.size() != size)
+        {
+            return ERR("could not apply ROR operation: function input width does not match (p0 = " + std::to_string(p0.size()) + "-bit, p1 = " + std::to_string(p1.size())
+                       + "-bit, size = " + std::to_string(size) + ").");
+        }
+
+        if (!p1.is_index())
+        {
+            return ERR("could not apply ROR operation: p1 is not an index.");
+        }
+
+        return OK(BooleanFunction(Node::Operation(NodeType::Ror, size), std::move(p0), std::move(p1)));
+    }
+
     Result<BooleanFunction> BooleanFunction::Eq(BooleanFunction&& p0, BooleanFunction&& p1, u16 size)
     {
         if (p0.size() != p1.size() || size != 1)
@@ -859,6 +939,17 @@ namespace hal
                 return OK("Zext(" + operands[0] + ", " + operands[1] + ")");
             case BooleanFunction::NodeType::Sext:
                 return OK("Sext(" + operands[0] + ", " + operands[1] + ")");
+
+            case BooleanFunction::NodeType::Shl:
+                return OK("(" + operands[0] + " << " + operands[1] + ")");
+            case BooleanFunction::NodeType::Lshr:
+                return OK("(" + operands[0] + " >> " + operands[1] + ")");
+            case BooleanFunction::NodeType::Ashr:
+                return OK("(" + operands[0] + " >>a " + operands[1] + ")");
+            case BooleanFunction::NodeType::Rol:
+                return OK("(" + operands[0] + " <<r " + operands[1] + ")");
+            case BooleanFunction::NodeType::Ror:
+                return OK("(" + operands[0] + " >>r " + operands[1] + ")");
 
             case BooleanFunction::NodeType::Eq:
                 return OK("(" + operands[0] + " == " + operands[1] + ")");
@@ -1605,6 +1696,17 @@ namespace hal
             case NodeType::Sext:
                 return "Sext";
 
+            case NodeType::Shl:
+                return "<<";
+            case NodeType::Lshr:
+                return ">>";
+            case NodeType::Ashr:
+                return ">>a";
+            case NodeType::Rol:
+                return "<<r";
+            case NodeType::Ror:
+                return ">>r";
+
             case NodeType::Eq:
                 return "==";
             case NodeType::Sle:
@@ -1631,12 +1733,14 @@ namespace hal
     u16 BooleanFunction::Node::get_arity_of_type(u16 type)
     {
         static const std::map<u16, u16> type2arity = {
-            {BooleanFunction::NodeType::And, 2},   {BooleanFunction::NodeType::Or, 2},       {BooleanFunction::NodeType::Not, 1},   {BooleanFunction::NodeType::Xor, 2},
-            {BooleanFunction::NodeType::Add, 2},   {BooleanFunction::NodeType::Sub, 2},      {BooleanFunction::NodeType::Mul, 2},   {BooleanFunction::NodeType::Sdiv, 2},
-            {BooleanFunction::NodeType::Udiv, 2},  {BooleanFunction::NodeType::Srem, 2},     {BooleanFunction::NodeType::Urem, 2},  {BooleanFunction::NodeType::Concat, 2},
-            {BooleanFunction::NodeType::Slice, 3}, {BooleanFunction::NodeType::Zext, 2},     {BooleanFunction::NodeType::Sext, 2},  {BooleanFunction::NodeType::Eq, 2},
-            {BooleanFunction::NodeType::Sle, 2},   {BooleanFunction::NodeType::Slt, 2},      {BooleanFunction::NodeType::Ule, 2},   {BooleanFunction::NodeType::Ult, 2},
-            {BooleanFunction::NodeType::Ite, 3},   {BooleanFunction::NodeType::Constant, 0}, {BooleanFunction::NodeType::Index, 0}, {BooleanFunction::NodeType::Variable, 0},
+            {BooleanFunction::NodeType::And, 2},      {BooleanFunction::NodeType::Or, 2},   {BooleanFunction::NodeType::Not, 1},      {BooleanFunction::NodeType::Xor, 2},
+            {BooleanFunction::NodeType::Add, 2},      {BooleanFunction::NodeType::Sub, 2},  {BooleanFunction::NodeType::Mul, 2},      {BooleanFunction::NodeType::Sdiv, 2},
+            {BooleanFunction::NodeType::Udiv, 2},     {BooleanFunction::NodeType::Srem, 2}, {BooleanFunction::NodeType::Urem, 2},     {BooleanFunction::NodeType::Concat, 2},
+            {BooleanFunction::NodeType::Slice, 3},    {BooleanFunction::NodeType::Zext, 2}, {BooleanFunction::NodeType::Sext, 2},     {BooleanFunction::NodeType::Shl, 2},
+            {BooleanFunction::NodeType::Lshr, 2},     {BooleanFunction::NodeType::Ashr, 2}, {BooleanFunction::NodeType::Rol, 2},      {BooleanFunction::NodeType::Ror, 2},
+            {BooleanFunction::NodeType::Eq, 2},       {BooleanFunction::NodeType::Sle, 2},  {BooleanFunction::NodeType::Slt, 2},      {BooleanFunction::NodeType::Ule, 2},
+            {BooleanFunction::NodeType::Ult, 2},      {BooleanFunction::NodeType::Ite, 3},  {BooleanFunction::NodeType::Constant, 0}, {BooleanFunction::NodeType::Index, 0},
+            {BooleanFunction::NodeType::Variable, 0},
         };
 
         return type2arity.at(type);

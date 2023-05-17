@@ -31,7 +31,7 @@ namespace hal
             Substitute all Boolean function variables fed by power or ground gates by constant '1' and '0'. 
 
             :param hal_py.Netlist nl: The netlist to operate on.
-            :returns: The resulting Boolean function on success, None otherwise.
+            :returns: The resulting Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -56,35 +56,7 @@ namespace hal
 
             :param hal_py.Netlist nl: The netlist to operate on.
             :param hal_py.Gate: The gate which is connected to the pins and belongs to the boolean function under inspection.
-            :returns: The resulting Boolean function on success, None otherwise.
-            :rtype: hal_py.BooleanFunction or None
-        )");
-
-        py_boolean_function_decorator.def_static(
-            "get_boolean_function_from",
-            [](const std::vector<Net*>& nets, u32 extend_to_size = 0, bool sign_extend = false) -> std::optional<BooleanFunction> {
-                auto res = BooleanFunctionDecorator::get_boolean_function_from(nets, extend_to_size, sign_extend);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while getting Boolean function from net vector:\n{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            },
-            py::arg("nets"),
-            py::arg("extend_to_size") = 0,
-            py::arg("sign_extend")    = false,
-            R"(
-            Get the Boolean function that is the concatenation of variable names corresponding to nets of a netlist.
-            The Boolean function can optionally be extended to any desired size greater the size of the given net vector.
-
-            :param list[hal_py.Net] nets: The nets to concatenate. 
-            :param int extend_to_size: The size to which to extend the Boolean function. Set to 0 to prevent extension. Defaults to 0.
-            :param bool sign_extend: Set True to sign extend, False to zero extend. Defaults to False.
-            :returns: The resulting Boolean function on success, None otherwise.
+            :returns: The resulting Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
 
@@ -110,9 +82,65 @@ namespace hal
             The Boolean function can optionally be extended to any desired size greater the size of the given net vector.
 
             :param list[hal_py.BooleanFunction] functions: The Boolean functions to concatenate. 
-            :param int extend_to_size: The size to which to extend the Boolean function. Set to 0 to prevent extension. Defaults to 0.
-            :param bool sign_extend: Set True to sign extend, False to zero extend. Defaults to False.
-            :returns: The resulting Boolean function on success, None otherwise.
+            :param int extend_to_size: The size to which to extend the Boolean function. Set to ``0`` to prevent extension. Defaults to ``0``.
+            :param bool sign_extend: Set ``True`` to sign extend, ``False`` to zero extend. Defaults to ``False``.
+            :returns: The resulting Boolean function on success, ``None`` otherwise.
+            :rtype: hal_py.BooleanFunction or None
+        )");
+
+        py_boolean_function_decorator.def_static(
+            "get_boolean_function_from",
+            [](const std::vector<Net*>& nets, u32 extend_to_size = 0, bool sign_extend = false) -> std::optional<BooleanFunction> {
+                auto res = BooleanFunctionDecorator::get_boolean_function_from(nets, extend_to_size, sign_extend);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting Boolean function from net vector:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nets"),
+            py::arg("extend_to_size") = 0,
+            py::arg("sign_extend")    = false,
+            R"(
+            Get the Boolean function that is the concatenation of variable names corresponding to nets of a netlist.
+            The Boolean function can optionally be extended to any desired size greater the size of the given net vector.
+
+            :param list[hal_py.Net] nets: The nets to concatenate. 
+            :param int extend_to_size: The size to which to extend the Boolean function. Set to ``0`` to prevent extension. Defaults to ``0``.
+            :param bool sign_extend: Set ``True`` to sign extend, ``False`` to zero extend. Defaults to ``False``.
+            :returns: The resulting Boolean function on success, ``None`` otherwise.
+            :rtype: hal_py.BooleanFunction or None
+        )");
+
+        py_boolean_function_decorator.def_static(
+            "get_boolean_function_from",
+            [](const PinGroup<ModulePin>* pin_group, u32 extend_to_size = 0, bool sign_extend = false) -> std::optional<BooleanFunction> {
+                auto res = BooleanFunctionDecorator::get_boolean_function_from(pin_group, extend_to_size, sign_extend);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting Boolean function from net vector:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("pin_group"),
+            py::arg("extend_to_size") = 0,
+            py::arg("sign_extend")    = false,
+            R"(
+            Get the Boolean function that is the concatenation of variable names corresponding to the nets connected to the pins of the given pin group.
+            The Boolean function can optionally be extended to any desired size greater the size of the given net vector.
+
+            :param hal_py.ModulePinGroup pin_group: The module pin group.
+            :param int extend_to_size: The size to which to extend the Boolean function. Set to ``0`` to prevent extension. Defaults to ``0``.
+            :param bool sign_extend: Set ``True`` to sign extend, ``False`` to zero extend. Defaults to ``False``.
+            :returns: The resulting Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
     }

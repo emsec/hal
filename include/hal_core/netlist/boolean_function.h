@@ -343,6 +343,56 @@ namespace hal
         static Result<BooleanFunction> Sext(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
 
         /**
+         * Shifts a Boolean function to the left by the specified number of bits.
+         * 
+         * @param[in] p0 - Boolean function to shift.
+         * @param[in] p1 - Boolean function of type `Index` encoding the number of bits to shift.
+         * @param[in] size - Bit-size of the shifted Boolean function.
+         * @returns Ok() and the shifted Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Shl(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Logically shifts a Boolean function to the right by the specified number of bits.
+         * 
+         * @param[in] p0 - Boolean function to shift.
+         * @param[in] p1 - Boolean function of type `Index` encoding the number of bits to shift.
+         * @param[in] size - Bit-size of the shifted Boolean function.
+         * @returns Ok() and the shifted Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Lshr(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Arithmetically shifts a Boolean function to the right by the specified number of bits.
+         * 
+         * @param[in] p0 - Boolean function to shift.
+         * @param[in] p1 - Boolean function of type `Index` encoding the number of bits to shift.
+         * @param[in] size - Bit-size of the shifted Boolean function.
+         * @returns Ok() and the shifted Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Ashr(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Rotates a Boolean function to the left by the specified number of bits.
+         * 
+         * @param[in] p0 - Boolean function to rotate.
+         * @param[in] p1 - Boolean function of type `Index` encoding the number of bits to rotate.
+         * @param[in] size - Bit-size of the rotated Boolean function.
+         * @returns Ok() and the rotated Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Rol(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
+         * Rotates a Boolean function to the right by the specified number of bits.
+         * 
+         * @param[in] p0 - Boolean function to rotate.
+         * @param[in] p1 - Boolean function of type `Index` encoding the number of bits to rotate.
+         * @param[in] size - Bit-size of the rotated Boolean function.
+         * @returns Ok() and the rotated Boolean function on success, an error otherwise.
+         */
+        static Result<BooleanFunction> Ror(BooleanFunction&& p0, BooleanFunction&& p1, u16 size);
+
+        /**
          * Joins two Boolean functions by an equality check that produces a single-bit result.
          * 
          * @param[in] p0 - First Boolean function.
@@ -1188,6 +1238,12 @@ namespace hal
         static constexpr u16 Slice  = 0x0101;
         static constexpr u16 Zext   = 0x0102;
         static constexpr u16 Sext   = 0x0103;
+
+        static constexpr u16 Shl  = 0x0200;
+        static constexpr u16 Lshr = 0x0201;
+        static constexpr u16 Ashr = 0x0202;
+        static constexpr u16 Rol  = 0x0203;
+        static constexpr u16 Ror  = 0x0204;
 
         static constexpr u16 Eq  = 0x0400;
         static constexpr u16 Sle = 0x0401;

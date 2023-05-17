@@ -2,6 +2,7 @@
 
 #include "dataflow_analysis/common/grouping.h"
 #include "dataflow_analysis/common/netlist_abstraction.h"
+#include "dataflow_analysis/processing/configuration.h"
 
 #include <list>
 #include <map>
@@ -13,7 +14,7 @@ namespace hal
     {
         namespace group_by_successors_predecessors
         {
-            std::shared_ptr<Grouping> process(const std::shared_ptr<Grouping>& state, bool successors)
+            std::shared_ptr<Grouping> process(const processing::Configuration& config, const std::shared_ptr<Grouping>& state, bool successors)
             {
                 auto new_state = std::make_shared<Grouping>(state->netlist_abstr);
 
@@ -54,7 +55,7 @@ namespace hal
                         {
                             auto test_group_id = *it;
 
-                            if (!state->are_groups_allowed_to_merge(group_id, test_group_id))
+                            if (!state->are_groups_allowed_to_merge(group_id, test_group_id, config.enforce_type_consistency))
                             {
                                 ++it;
                                 continue;

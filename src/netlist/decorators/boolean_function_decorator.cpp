@@ -97,6 +97,62 @@ namespace hal
         return OK(tmp_bf);
     }
 
+    Result<BooleanFunction> BooleanFunctionDecorator::get_boolean_function_from(const std::vector<BooleanFunction>& functions, u32 extend_to_size, bool sign_extend)
+    {
+        if (functions.empty())
+        {
+            return ERR("could not concatenate functions: no functions provided.");
+        }
+
+        auto var = functions.front().clone();
+        u32 size = var.size();
+
+        for (u32 i = 1; i < functions.size(); i++)
+        {
+            size += functions.at(i).size();
+            if (auto res = BooleanFunction::Concat(var.clone(), functions.at(i).clone(), size); res.is_ok())
+            {
+                var = res.get();
+            }
+            else
+            {
+                return ERR_APPEND(res.get_error(),
+                                  "could not concatenate nets: unable to concatenate Boolean function '" + functions.at(i).to_string() + " at position " + std::to_string(i)
+                                      + " of the provided functions to function.");
+            }
+        }
+
+        if (extend_to_size > 0)
+        {
+            if (sign_extend == false)
+            {
+                if (auto res = BooleanFunction::Zext(var.clone(), BooleanFunction::Index(extend_to_size, extend_to_size), extend_to_size); res.is_ok())
+                {
+                    var = res.get();
+                }
+                else
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not concatenate nets: unable to zero extend function of size " + std::to_string(var.size()) + " to size " + std::to_string(extend_to_size) + ".");
+                }
+            }
+            else
+            {
+                if (auto res = BooleanFunction::Sext(var.clone(), BooleanFunction::Index(extend_to_size, extend_to_size), extend_to_size); res.is_ok())
+                {
+                    var = res.get();
+                }
+                else
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not concatenate nets: unable to sign extend function of size " + std::to_string(var.size()) + " to size " + std::to_string(extend_to_size) + ".");
+                }
+            }
+        }
+
+        return OK(var);
+    }
+
     Result<BooleanFunction> BooleanFunctionDecorator::get_boolean_function_from(const std::vector<Net*>& nets, u32 extend_to_size, bool sign_extend)
     {
         if (nets.empty())
@@ -160,59 +216,14 @@ namespace hal
         return OK(var);
     }
 
-    Result<BooleanFunction> BooleanFunctionDecorator::get_boolean_function_from(const std::vector<BooleanFunction>& functions, u32 extend_to_size, bool sign_extend)
+    Result<BooleanFunction> BooleanFunctionDecorator::get_boolean_function_from(const PinGroup<ModulePin>* pin_group, u32 extend_to_size, bool sign_extend)
     {
-        if (functions.empty())
-        {
-            return ERR("could not concatenate functions: no functions provided.");
-        }
+        const auto pins = pin_group->get_pins();
+        std::vector<BooleanFunction> functions;
+        std::transform(pins.rbegin(), pins.rend(), std::back_inserter(functions), [](const ModulePin* pin) {
+            return BooleanFunction::Var(BooleanFunctionNetDecorator(*(pin->get_net())).get_boolean_variable_name(), 1);
+        });
 
-        auto var = functions.front().clone();
-        u32 size = var.size();
-
-        for (u32 i = 1; i < functions.size(); i++)
-        {
-            size += functions.at(i).size();
-            if (auto res = BooleanFunction::Concat(var.clone(), functions.at(i).clone(), size); res.is_ok())
-            {
-                var = res.get();
-            }
-            else
-            {
-                return ERR_APPEND(res.get_error(),
-                                  "could not concatenate nets: unable to concatenate Boolean function '" + functions.at(i).to_string() + " at position " + std::to_string(i)
-                                      + " of the provided functions to function.");
-            }
-        }
-
-        if (extend_to_size > 0)
-        {
-            if (sign_extend == false)
-            {
-                if (auto res = BooleanFunction::Zext(var.clone(), BooleanFunction::Index(extend_to_size, extend_to_size), extend_to_size); res.is_ok())
-                {
-                    var = res.get();
-                }
-                else
-                {
-                    return ERR_APPEND(res.get_error(),
-                                      "could not concatenate nets: unable to zero extend function of size " + std::to_string(var.size()) + " to size " + std::to_string(extend_to_size) + ".");
-                }
-            }
-            else
-            {
-                if (auto res = BooleanFunction::Sext(var.clone(), BooleanFunction::Index(extend_to_size, extend_to_size), extend_to_size); res.is_ok())
-                {
-                    var = res.get();
-                }
-                else
-                {
-                    return ERR_APPEND(res.get_error(),
-                                      "could not concatenate nets: unable to sign extend function of size " + std::to_string(var.size()) + " to size " + std::to_string(extend_to_size) + ".");
-                }
-            }
-        }
-
-        return OK(var);
+        return get_boolean_function_from(functions, extend_to_size, sign_extend);
     }
 }    // namespace hal
