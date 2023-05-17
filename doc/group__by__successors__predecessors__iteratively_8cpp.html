@@ -91,24 +91,26 @@ $(document).ready(function(){initNavTree('group__by__successors__predecessors__i
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="group__by__successors__predecessors__iteratively_8h_source.html">dataflow_analysis/processing/passes/group_by_successors_predecessors_iteratively.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">dataflow_analysis/common/grouping.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="processing_2configuration_8h_source.html">dataflow_analysis/processing/configuration.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="group__by__successors__predecessors_8h_source.html">dataflow_analysis/processing/passes/group_by_successors_predecessors.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for group_by_successors_predecessors_iteratively.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="group__by__successors__predecessors__iteratively_8cpp__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2processing_2passes_2group__by__successors__predecessors__iteratively_8cpp" alt=""/></div>
 <map name="_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2processing_2passes_2group__by__successors__predecessors__iteratively_8cpp" id="_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2processing_2passes_2group__by__successors__predecessors__iteratively_8cpp">
-<area shape="rect" title=" " alt="" coords="242,5,457,91"/>
-<area shape="rect" href="group__by__successors__predecessors__iteratively_8h.html" title=" " alt="" coords="243,139,456,195"/>
-<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title=" " alt="" coords="480,146,680,187"/>
-<area shape="rect" href="group__by__successors__predecessors_8h.html" title=" " alt="" coords="5,139,219,195"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="194,332,334,359"/>
-<area shape="rect" href="netlist__abstraction_8h.html" title=" " alt="" coords="591,243,791,284"/>
-<area shape="rect" title=" " alt="" coords="665,332,708,359"/>
-<area shape="rect" title=" " alt="" coords="733,332,857,359"/>
-<area shape="rect" title=" " alt="" coords="881,332,996,359"/>
-<area shape="rect" title=" " alt="" coords="549,332,611,359"/>
-<area shape="rect" title=" " alt="" coords="327,250,377,277"/>
-<area shape="rect" title=" " alt="" coords="401,250,516,277"/>
+<area shape="rect" title=" " alt="" coords="267,5,482,91"/>
+<area shape="rect" href="group__by__successors__predecessors__iteratively_8h.html" title=" " alt="" coords="5,243,219,299"/>
+<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title=" " alt="" coords="624,146,824,187"/>
+<area shape="rect" href="processing_2configuration_8h.html" title=" " alt="" coords="149,146,363,187"/>
+<area shape="rect" href="group__by__successors__predecessors_8h.html" title=" " alt="" coords="387,139,600,195"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="237,347,377,373"/>
+<area shape="rect" href="netlist__abstraction_8h.html" title=" " alt="" coords="445,250,645,291"/>
+<area shape="rect" title=" " alt="" coords="517,347,560,373"/>
+<area shape="rect" title=" " alt="" coords="585,347,709,373"/>
+<area shape="rect" title=" " alt="" coords="733,347,848,373"/>
+<area shape="rect" title=" " alt="" coords="419,347,482,373"/>
+<area shape="rect" title=" " alt="" coords="821,257,872,284"/>
+<area shape="rect" title=" " alt="" coords="896,257,1011,284"/>
 </map>
 </div>
 </div>
@@ -125,8 +127,8 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a7ae7bf55d86a49386bbab5317964606b"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; Grouping &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1dataflow_1_1group__by__successors__predecessors__iteratively.html#a7ae7bf55d86a49386bbab5317964606b">hal::dataflow::group_by_successors_predecessors_iteratively::process</a> (const std::shared_ptr&lt; Grouping &gt; &amp;state, bool successors)</td></tr>
-<tr class="separator:a7ae7bf55d86a49386bbab5317964606b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbdebd2cd88ca1fd78558577a197856a"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; Grouping &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1dataflow_1_1group__by__successors__predecessors__iteratively.html#abbdebd2cd88ca1fd78558577a197856a">hal::dataflow::group_by_successors_predecessors_iteratively::process</a> (const processing::Configuration &amp;config, const std::shared_ptr&lt; Grouping &gt; &amp;state, bool successors)</td></tr>
+<tr class="separator:abbdebd2cd88ca1fd78558577a197856a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -134,7 +136,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_383eef8607738589c737c0b430bde182.html">src</a></li><li class="navelem"><a class="el" href="dir_27b66f703f923c992ad19006fb7d81a2.html">processing</a></li><li class="navelem"><a class="el" href="dir_48aa5910fdaf6ebf7e0f2983fa64fd1f.html">passes</a></li><li class="navelem"><a class="el" href="group__by__successors__predecessors__iteratively_8cpp.html">group_by_successors_predecessors_iteratively.cpp</a></li>
-    <li class="footer">Generated on Tue May 16 2023 13:47:52 for HAL by
+    <li class="footer">Generated on Wed May 17 2023 08:43:35 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

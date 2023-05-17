@@ -1,14 +1,15 @@
 <map id="/home/runner/work/hal/hal/plugins/dataflow_analysis/src/processing/passes/group_by_successors_predecessors_iteratively.cpp" name="/home/runner/work/hal/hal/plugins/dataflow_analysis/src/processing/passes/group_by_successors_predecessors_iteratively.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="242,5,457,91"/>
-<area shape="rect" id="node2" href="$group__by__successors__predecessors__iteratively_8h.html" title=" " alt="" coords="243,139,456,195"/>
-<area shape="rect" id="node4" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title=" " alt="" coords="480,146,680,187"/>
-<area shape="rect" id="node12" href="$group__by__successors__predecessors_8h.html" title=" " alt="" coords="5,139,219,195"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="194,332,334,359"/>
-<area shape="rect" id="node5" href="$netlist__abstraction_8h.html" title=" " alt="" coords="591,243,791,284"/>
-<area shape="rect" id="node6" title=" " alt="" coords="665,332,708,359"/>
-<area shape="rect" id="node7" title=" " alt="" coords="733,332,857,359"/>
-<area shape="rect" id="node8" title=" " alt="" coords="881,332,996,359"/>
-<area shape="rect" id="node9" title=" " alt="" coords="549,332,611,359"/>
-<area shape="rect" id="node10" title=" " alt="" coords="327,250,377,277"/>
-<area shape="rect" id="node11" title=" " alt="" coords="401,250,516,277"/>
+<area shape="rect" id="node1" title=" " alt="" coords="267,5,482,91"/>
+<area shape="rect" id="node2" href="$group__by__successors__predecessors__iteratively_8h.html" title=" " alt="" coords="5,243,219,299"/>
+<area shape="rect" id="node4" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title=" " alt="" coords="624,146,824,187"/>
+<area shape="rect" id="node12" href="$processing_2configuration_8h.html" title=" " alt="" coords="149,146,363,187"/>
+<area shape="rect" id="node13" href="$group__by__successors__predecessors_8h.html" title=" " alt="" coords="387,139,600,195"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="237,347,377,373"/>
+<area shape="rect" id="node5" href="$netlist__abstraction_8h.html" title=" " alt="" coords="445,250,645,291"/>
+<area shape="rect" id="node6" title=" " alt="" coords="517,347,560,373"/>
+<area shape="rect" id="node7" title=" " alt="" coords="585,347,709,373"/>
+<area shape="rect" id="node8" title=" " alt="" coords="733,347,848,373"/>
+<area shape="rect" id="node9" title=" " alt="" coords="419,347,482,373"/>
+<area shape="rect" id="node10" title=" " alt="" coords="821,257,872,284"/>
+<area shape="rect" id="node11" title=" " alt="" coords="896,257,1011,284"/>
 </map>

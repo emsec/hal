@@ -97,7 +97,7 @@ Collaboration diagram for hal::dataflow::Configuration:</div>
 <div class="dyncontent">
 <div class="center"><img src="structhal_1_1dataflow_1_1_configuration__coll__graph.png" border="0" usemap="#hal_1_1dataflow_1_1_configuration_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1dataflow_1_1_configuration_coll__map" id="hal_1_1dataflow_1_1_configuration_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,205,229"/>
+<area shape="rect" title=" " alt="" coords="5,5,212,215"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -117,6 +117,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a92a65f07b6067c99344ccd8d55671d39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23decf5d189b2ebfe9f0b54b4779eb9f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a23decf5d189b2ebfe9f0b54b4779eb9f">with_register_stage_identification</a> (bool enable=true)</td></tr>
 <tr class="separator:a23decf5d189b2ebfe9f0b54b4779eb9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ca6cecdb7810944b1eb54487d145039"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a3ca6cecdb7810944b1eb54487d145039">with_type_consistency</a> (bool enable=true)</td></tr>
+<tr class="separator:a3ca6cecdb7810944b1eb54487d145039"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -128,6 +130,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a647fdd85e7274ef7cb7d7cbde0e3213c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a810bcff44bdce5e358278977416721b0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a810bcff44bdce5e358278977416721b0">enable_register_stages</a> = false</td></tr>
 <tr class="separator:a810bcff44bdce5e358278977416721b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa68e649ceb526265d7c7c444fc0d75b2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#aa68e649ceb526265d7c7c444fc0d75b2">enforce_type_consistency</a> = false</td></tr>
+<tr class="separator:aa68e649ceb526265d7c7c444fc0d75b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Holds the configuration of a dataflow analysis run. </p>
@@ -352,6 +356,38 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a3ca6cecdb7810944b1eb54487d145039"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ca6cecdb7810944b1eb54487d145039">&#9670;&nbsp;</a></span>with_type_consistency()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp; hal::dataflow::Configuration::with_type_consistency </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enable</em> = <code>true</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Enable type consistency as part of dataflow analysis when deciding whether two gates are allowed to merge into the same group.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td>- Set <code>true</code> to enable type consistency inside of a group, <code>false</code> otherwise. Defaults to <code>true</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00070">70</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00068">enforce_type_consistency</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a810bcff44bdce5e358278977416721b0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a810bcff44bdce5e358278977416721b0">&#9670;&nbsp;</a></span>enable_register_stages</h2>
@@ -369,6 +405,25 @@ Public Attributes</h2></td></tr>
 <p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00063">63</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00118">hal::GuiExtensionDataflow::set_parameter()</a>, and <a class="el" href="configuration_8cpp_source.html#l00064">with_register_stage_identification()</a>.</p>
+
+</div>
+</div>
+<a id="aa68e649ceb526265d7c7c444fc0d75b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa68e649ceb526265d7c7c444fc0d75b2">&#9670;&nbsp;</a></span>enforce_type_consistency</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::dataflow::Configuration::enforce_type_consistency = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Enforce type consistency inside of a group. Defaults to <code>false</code>. </p>
+
+<p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00068">68</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, and <a class="el" href="configuration_8cpp_source.html#l00070">with_type_consistency()</a>.</p>
 
 </div>
 </div>
@@ -439,7 +494,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1dataflow.html">dataflow</a></li><li class="navelem"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a></li>
-    <li class="footer">Generated on Tue May 16 2023 13:47:56 for HAL by
+    <li class="footer">Generated on Wed May 17 2023 08:43:40 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

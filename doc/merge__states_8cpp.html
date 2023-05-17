@@ -92,24 +92,26 @@ $(document).ready(function(){initNavTree('merge__states_8cpp.html',''); initResi
 <div class="textblock"><code>#include &quot;<a class="el" href="merge__states_8h_source.html">dataflow_analysis/processing/passes/merge_states.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">dataflow_analysis/common/grouping.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="netlist__abstraction_8h_source.html">dataflow_analysis/common/netlist_abstraction.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="processing_2configuration_8h_source.html">dataflow_analysis/processing/configuration.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="remove__duplicates_8h_source.html">dataflow_analysis/processing/passes/remove_duplicates.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for merge_states.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="merge__states_8cpp__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2processing_2passes_2merge__states_8cpp" alt=""/></div>
 <map name="_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2processing_2passes_2merge__states_8cpp" id="_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2src_2processing_2passes_2merge__states_8cpp">
-<area shape="rect" title=" " alt="" coords="326,5,517,76"/>
-<area shape="rect" href="merge__states_8h.html" title=" " alt="" coords="243,124,456,165"/>
-<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title=" " alt="" coords="531,124,731,165"/>
-<area shape="rect" href="netlist__abstraction_8h.html" title=" " alt="" coords="393,213,593,255"/>
-<area shape="rect" href="remove__duplicates_8h.html" title=" " alt="" coords="5,124,219,165"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="195,303,335,329"/>
-<area shape="rect" title=" " alt="" coords="367,303,409,329"/>
-<area shape="rect" title=" " alt="" coords="438,303,562,329"/>
-<area shape="rect" title=" " alt="" coords="615,303,729,329"/>
-<area shape="rect" title=" " alt="" coords="767,303,830,329"/>
-<area shape="rect" title=" " alt="" coords="668,221,719,247"/>
-<area shape="rect" title=" " alt="" coords="844,221,959,247"/>
+<area shape="rect" title=" " alt="" coords="385,5,575,76"/>
+<area shape="rect" href="merge__states_8h.html" title=" " alt="" coords="5,213,219,255"/>
+<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title=" " alt="" coords="611,124,811,165"/>
+<area shape="rect" href="netlist__abstraction_8h.html" title=" " alt="" coords="748,213,948,255"/>
+<area shape="rect" href="processing_2configuration_8h.html" title=" " alt="" coords="136,124,349,165"/>
+<area shape="rect" href="remove__duplicates_8h.html" title=" " alt="" coords="373,124,587,165"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="275,303,415,329"/>
+<area shape="rect" title=" " alt="" coords="728,303,771,329"/>
+<area shape="rect" title=" " alt="" coords="797,303,921,329"/>
+<area shape="rect" title=" " alt="" coords="967,303,1081,329"/>
+<area shape="rect" title=" " alt="" coords="634,303,697,329"/>
+<area shape="rect" title=" " alt="" coords="433,221,484,247"/>
+<area shape="rect" title=" " alt="" coords="508,221,623,247"/>
 </map>
 </div>
 </div>
@@ -126,8 +128,8 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a13433a53aaa891d709235f32e43a6f15"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; Grouping &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1dataflow_1_1merge__states.html#a13433a53aaa891d709235f32e43a6f15">hal::dataflow::merge_states::process</a> (const std::shared_ptr&lt; const Grouping &gt; &amp;state1, const std::shared_ptr&lt; const Grouping &gt; &amp;state2, bool delete_from_smaller)</td></tr>
-<tr class="separator:a13433a53aaa891d709235f32e43a6f15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7f51985f8463b1e2c5c45ac47c4c37a"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; Grouping &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1dataflow_1_1merge__states.html#ae7f51985f8463b1e2c5c45ac47c4c37a">hal::dataflow::merge_states::process</a> (const processing::Configuration &amp;config, const std::shared_ptr&lt; const Grouping &gt; &amp;state1, const std::shared_ptr&lt; const Grouping &gt; &amp;state2, bool delete_from_smaller)</td></tr>
+<tr class="separator:ae7f51985f8463b1e2c5c45ac47c4c37a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -135,7 +137,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_383eef8607738589c737c0b430bde182.html">src</a></li><li class="navelem"><a class="el" href="dir_27b66f703f923c992ad19006fb7d81a2.html">processing</a></li><li class="navelem"><a class="el" href="dir_48aa5910fdaf6ebf7e0f2983fa64fd1f.html">passes</a></li><li class="navelem"><a class="el" href="merge__states_8cpp.html">merge_states.cpp</a></li>
-    <li class="footer">Generated on Tue May 16 2023 13:47:52 for HAL by
+    <li class="footer">Generated on Wed May 17 2023 08:43:35 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

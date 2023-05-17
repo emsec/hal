@@ -3,7 +3,7 @@ var structhal_1_1dataflow_1_1_grouping =
     [ "Grouping", "structhal_1_1dataflow_1_1_grouping.html#a9a7e5b1cd6762b9699e58fa660e4d68e", null ],
     [ "Grouping", "structhal_1_1dataflow_1_1_grouping.html#a6e5a0f3bd4de3837bfea9b28b0bbc879", null ],
     [ "Grouping", "structhal_1_1dataflow_1_1_grouping.html#a3368041577b46e6bdc8309d59e9709d3", null ],
-    [ "are_groups_allowed_to_merge", "structhal_1_1dataflow_1_1_grouping.html#a812124b566d27eaaa207d934388b9ff5", null ],
+    [ "are_groups_allowed_to_merge", "structhal_1_1dataflow_1_1_grouping.html#a9c4d6c3796f53a45c7fe61dd20f30c94", null ],
     [ "get_clock_signals_of_group", "structhal_1_1dataflow_1_1_grouping.html#aad2fd5d1bf6f35dc0e5a25aa88be321d", null ],
     [ "get_control_signals_of_group", "structhal_1_1dataflow_1_1_grouping.html#a0368b1c1eae265d96f53b509a0446848", null ],
     [ "get_predecessor_groups_of_group", "structhal_1_1dataflow_1_1_grouping.html#a7872e908f16318a7e5199fe02baf2b3a", null ],
