@@ -1257,9 +1257,7 @@ namespace hal {
                    _1 = BooleanFunction::Const(1, 1);
 
         auto formulas = std::vector<std::vector<SMT::Constraint>>({
-            {
-                SMT::Constraint(a.clone() & b.clone(), _1.clone())
-            },
+            {SMT::Constraint(a.clone() & b.clone(), _1.clone())},
             {
                 SMT::Constraint(a.clone() | b.clone(), _1.clone()),
                 SMT::Constraint(a.clone(), _1.clone()),
@@ -1291,7 +1289,7 @@ namespace hal {
                 SMT::Constraint(c.clone(), BooleanFunction::Const(4, 4)),
             },
             {
-                SMT::Constraint(BooleanFunction::Sdiv(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(14, 4)), // 14 = -2
+                SMT::Constraint(BooleanFunction::Sdiv(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(14, 4)),    // 14 = -2
                 SMT::Constraint(c.clone(), BooleanFunction::Const(4, 4)),
             },
             {
@@ -1303,12 +1301,21 @@ namespace hal {
                 SMT::Constraint(c.clone(), BooleanFunction::Const(7, 4)),
             },
             {
-                SMT::Constraint(BooleanFunction::Srem(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(13, 4)), // 13 = -3
-                SMT::Constraint(c.clone(), BooleanFunction::Const(9, 4)), // 9 = -7
+                SMT::Constraint(BooleanFunction::Srem(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(13, 4)),    // 13 = -3
+                SMT::Constraint(c.clone(), BooleanFunction::Const(9, 4)),                                                // 9 = -7
             },
             {
                 SMT::Constraint(BooleanFunction::Urem(c.clone(), d.clone(), 4).get(), BooleanFunction::Const(3, 4)),
                 SMT::Constraint(c.clone(), BooleanFunction::Const(7, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Shl(c.clone(), BooleanFunction::Index(1, 4), 4).get(), BooleanFunction::Const(4, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Lshr(c.clone(), BooleanFunction::Index(1, 4), 4).get(), BooleanFunction::Const(2, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Ashr(c.clone(), BooleanFunction::Index(1, 4), 4).get(), BooleanFunction::Const(0xC, 4)),
             },
         });
 
@@ -1433,6 +1440,15 @@ namespace hal {
                 SMT::Constraint(BooleanFunction::Eq(c.clone(), d.clone(), 1).get()),
                 SMT::Constraint(c.clone(), BooleanFunction::Const(1, 4)),
                 SMT::Constraint(d.clone(), BooleanFunction::Const(0, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Shl(c.clone(), BooleanFunction::Index(1, 4), 4).get(), BooleanFunction::Const(1, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Lshr(c.clone(), BooleanFunction::Index(1, 4), 4).get(), BooleanFunction::Const(8, 4)),
+            },
+            {
+                SMT::Constraint(BooleanFunction::Ashr(c.clone(), BooleanFunction::Index(1, 4), 4).get(), BooleanFunction::Const(4, 4)),
             }
         });
 

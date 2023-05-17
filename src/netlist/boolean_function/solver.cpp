@@ -173,7 +173,7 @@ namespace hal
                 boolector.kill();
                 return OK({false, output});
             }
-        
+
             /**
 			 * Queries Boolector with an SMT-LIB input and a query configuration.
 			 *
