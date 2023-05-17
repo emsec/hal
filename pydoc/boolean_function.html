@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Function &mdash; hal_py v4.1.0-67-g120becae7 documentation</title>
+  <title>Boolean Function &mdash; hal_py v4.1.0-70-gb0cbd4710 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-67-g120becae7
+                v4.1.0-70-gb0cbd4710
               </div>
             
           
@@ -246,6 +246,31 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 </dd></dl>
 
 <dl class="staticmethod">
+<dt id="hal_py.BooleanFunction.Ashr">
+<em class="property">static </em><code class="descname">Ashr</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Ashr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Arithmetically shifts a Boolean function to the right by the specified number of bits.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>p0</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function to shift.</li>
+<li><strong>p1</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function of type <code class="docutils literal notranslate"><span class="pre">Index</span></code> encoding the number of bits to shift.</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Bit-size of the shifted Boolean function.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The shifted Boolean function on success, None otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
 <dt id="hal_py.BooleanFunction.Concat">
 <em class="property">static </em><code class="descname">Concat</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Concat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Concatenates two Boolean functions of bit-sizes <code class="docutils literal notranslate"><span class="pre">n</span></code> and <code class="docutils literal notranslate"><span class="pre">m</span></code> to form a single Boolean function of bit-size <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">+</span> <span class="pre">m</span></code>.</p>
@@ -402,6 +427,31 @@ Produces a new Boolean function of the specified bit-size that must be equal to 
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The joined Boolean function on success, None otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="hal_py.BooleanFunction.Lshr">
+<em class="property">static </em><code class="descname">Lshr</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Lshr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logically shifts a Boolean function to the right by the specified number of bits.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>p0</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function to shift.</li>
+<li><strong>p1</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function of type <code class="docutils literal notranslate"><span class="pre">Index</span></code> encoding the number of bits to shift.</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Bit-size of the shifted Boolean function.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The shifted Boolean function on success, None otherwise.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
@@ -1018,6 +1068,11 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="hal_py.BooleanFunction.NodeType.Ashr">
+<code class="descname">Ashr</code><em class="property"> = 514</em><a class="headerlink" href="#hal_py.BooleanFunction.NodeType.Ashr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="hal_py.BooleanFunction.NodeType.Concat">
 <code class="descname">Concat</code><em class="property"> = 256</em><a class="headerlink" href="#hal_py.BooleanFunction.NodeType.Concat" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1043,6 +1098,11 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="hal_py.BooleanFunction.NodeType.Lshr">
+<code class="descname">Lshr</code><em class="property"> = 513</em><a class="headerlink" href="#hal_py.BooleanFunction.NodeType.Lshr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="hal_py.BooleanFunction.NodeType.Mul">
 <code class="descname">Mul</code><em class="property"> = 18</em><a class="headerlink" href="#hal_py.BooleanFunction.NodeType.Mul" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1058,6 +1118,16 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="hal_py.BooleanFunction.NodeType.Rol">
+<code class="descname">Rol</code><em class="property"> = 515</em><a class="headerlink" href="#hal_py.BooleanFunction.NodeType.Rol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.BooleanFunction.NodeType.Ror">
+<code class="descname">Ror</code><em class="property"> = 516</em><a class="headerlink" href="#hal_py.BooleanFunction.NodeType.Ror" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="hal_py.BooleanFunction.NodeType.Sdiv">
 <code class="descname">Sdiv</code><em class="property"> = 19</em><a class="headerlink" href="#hal_py.BooleanFunction.NodeType.Sdiv" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1065,6 +1135,11 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 <dl class="attribute">
 <dt id="hal_py.BooleanFunction.NodeType.Sext">
 <code class="descname">Sext</code><em class="property"> = 259</em><a class="headerlink" href="#hal_py.BooleanFunction.NodeType.Sext" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.BooleanFunction.NodeType.Shl">
+<code class="descname">Shl</code><em class="property"> = 512</em><a class="headerlink" href="#hal_py.BooleanFunction.NodeType.Shl" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1197,6 +1272,56 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 </dd></dl>
 
 <dl class="staticmethod">
+<dt id="hal_py.BooleanFunction.Rol">
+<em class="property">static </em><code class="descname">Rol</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Rol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotates a Boolean function to the left by the specified number of bits.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>p0</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function to rotate.</li>
+<li><strong>p1</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function of type <code class="docutils literal notranslate"><span class="pre">Index</span></code> encoding the number of bits to rotate.</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Bit-size of the rotated Boolean function.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The rotated Boolean function on success, None otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="hal_py.BooleanFunction.Ror">
+<em class="property">static </em><code class="descname">Ror</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Ror" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotates a Boolean function to the right by the specified number of bits.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>p0</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function to rotate.</li>
+<li><strong>p1</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function of type <code class="docutils literal notranslate"><span class="pre">Index</span></code> encoding the number of bits to rotate.</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Bit-size of the rotated Boolean function.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The rotated Boolean function on success, None otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
 <dt id="hal_py.BooleanFunction.Sdiv">
 <em class="property">static </em><code class="descname">Sdiv</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Sdiv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Joins two Boolean functions by applying an SDIV operation. 
@@ -1238,6 +1363,31 @@ Requires both Boolean functions to be of the specified bit-size and produces a n
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The sign-extended Boolean function on success, None otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="hal_py.BooleanFunction.Shl">
+<em class="property">static </em><code class="descname">Shl</code><span class="sig-paren">(</span><em>p0: hal_py.BooleanFunction</em>, <em>p1: hal_py.BooleanFunction</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunction.Shl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shifts a Boolean function to the left by the specified number of bits.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>p0</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function to shift.</li>
+<li><strong>p1</strong> (<a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – Boolean function of type <code class="docutils literal notranslate"><span class="pre">Index</span></code> encoding the number of bits to shift.</li>
+<li><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Bit-size of the shifted Boolean function.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The shifted Boolean function on success, None otherwise.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
