@@ -214,13 +214,6 @@ namespace hal
         void handleCurrentChanged(const QModelIndex& current = QModelIndex(), const QModelIndex& previous = QModelIndex());
 
         /**
-         * Q_SLOT to handle the change of the graph selection.
-         *
-         * @param sender - The sender that emitted the change.
-         */
-        void handleGraphSelectionChanged(void* sender);
-
-        /**
          * Adds predecessors of the currently selected gate or module to a new grouping.
          *
          */
@@ -338,7 +331,6 @@ namespace hal
         QString mNewGroupingIconPath;
         QString mNewGroupingIconStyle;
 
-        QAction* mToolboxAction;
         QString mToolboxIconPath;
         QString mToolboxIconStyle;
 
