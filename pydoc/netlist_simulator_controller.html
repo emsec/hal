@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Simulator Controller &mdash; hal_py v4.1.0-71-ge8d4fcf82 documentation</title>
+  <title>Netlist Simulator Controller &mdash; hal_py v4.1.0-73-gc707f2a53 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-71-ge8d4fcf82
+                v4.1.0-73-gc707f2a53
               </div>
             
           
@@ -422,26 +422,68 @@ Only elements in the simulation set are considered during simulation.</p>
 
 <dl class="method">
 <dt id="netlist_simulator_controller.NetlistSimulatorController.add_waveform_group">
-<code class="descname">add_waveform_group</code><span class="sig-paren">(</span><em>self: netlist_simulator_controller.NetlistSimulatorController, name: str, nets: List[hal_py.Net]</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#netlist_simulator_controller.NetlistSimulatorController.add_waveform_group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add waveform group. Netlist must not be empty. First net in list is considered the lowest significant bit.</p>
+<code class="descname">add_waveform_group</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#netlist_simulator_controller.NetlistSimulatorController.add_waveform_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">add_waveform_group(self: netlist_simulator_controller.NetlistSimulatorController, name: str, nets: List[hal_py.Net]) -&gt; int</p>
+<blockquote>
+<div><p>Add waveform group. Netlist must not be empty. First net in list is considered the lowest significant bit.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The waveform group name.</li>
-<li><strong>nets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a><em>]</em>) – List of nets for group.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">param str name:</th><td class="field-body">The waveform group name.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ID of new waveform group.</p>
-</td>
+<tr class="field-even field"><th class="field-name" colspan="2">param List[hal_py.Net] nets:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">List of nets for the group.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
-</td>
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">ID of the new waveform group.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">int</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">add_waveform_group(self: netlist_simulator_controller.NetlistSimulatorController, pin_group: hal_py.ModulePinGroup) -&gt; int</p>
+<blockquote>
+<div><p>Create a waveform group from the nets of a given module pin group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.ModulePinGroup pin_group:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The pin_group to create waveform group from.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">return:</th><td class="field-body">ID of the new waveform group.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">add_waveform_group(self: netlist_simulator_controller.NetlistSimulatorController, name: str, pin_group: hal_py.ModulePinGroup) -&gt; int</p>
+<blockquote>
+<div><p>Create a waveform group from the nets of a given module pin group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param str name:</th><td class="field-body">The name of the newly created waveform group.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param hal_py.ModulePinGroup pin_group:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The pin_group to create waveform group from.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">ID of the new waveform group.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
@@ -847,20 +889,111 @@ Does not remove gates/nets from the simulation set.</p>
 
 <dl class="method">
 <dt id="netlist_simulator_controller.NetlistSimulatorController.set_input">
-<code class="descname">set_input</code><span class="sig-paren">(</span><em>self: netlist_simulator_controller.NetlistSimulatorController</em>, <em>net: hal_py.Net</em>, <em>value: hal_py.BooleanFunction.Value</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#netlist_simulator_controller.NetlistSimulatorController.set_input" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the signal for a specific wire to control input signals between simulation cycles.</p>
+<code class="descname">set_input</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#netlist_simulator_controller.NetlistSimulatorController.set_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">set_input(self: netlist_simulator_controller.NetlistSimulatorController, net: hal_py.Net, value: hal_py.BooleanFunction.Value) -&gt; None</p>
+<blockquote>
+<div><p>Set the signal for a specific wire to control input signals between simulation cycles.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net to set a signal value for.</li>
-<li><strong>value</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction.Value" title="hal_py.BooleanFunction.Value"><em>hal_py.BooleanFunction.Value</em></a>) – The value to set.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Net net:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The net to set a signal value for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param hal_py.BooleanFunction.Value value:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The value to set.</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">set_input(self: netlist_simulator_controller.NetlistSimulatorController, wd: hal::WaveData, value: hal_py.BooleanFunction.Value) -&gt; None</p>
+<blockquote>
+<div><p>Set the signal for a specific wire to control input signals between simulation cycles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.WaveData wd:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">WaveData object of the signal.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param hal_py.BooleanFunction.Value value:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The value to set.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">set_input(self: netlist_simulator_controller.NetlistSimulatorController, nets: List[hal_py.Net], values: List[hal_py.BooleanFunction.Value]) -&gt; None</p>
+<blockquote>
+<div><p>Set the signal for a group of nets to control input signals between simulation cycles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param List[hal_py.Net] nets:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The vector of nets.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param List[hal_py.BooleanFunction.Value] values:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The values to set.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">set_input(self: netlist_simulator_controller.NetlistSimulatorController, wdg: hal::WaveDataGroup, values: List[hal_py.BooleanFunction.Value]) -&gt; None</p>
+<blockquote>
+<div><p>Set the signal for a specific WaveDataGroup to control input signals between simulation cycles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.WaveDataGroup wdg:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The WaveDataGroup.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param List[hal_py.BooleanFunction.Value] values:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The values to set.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">set_input(self: netlist_simulator_controller.NetlistSimulatorController, id: int, values: List[hal_py.BooleanFunction.Value]) -&gt; None</p>
+<blockquote>
+<div><p>Set the signal for a specific WaveDataGroup to control input signals between simulation cycles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param int id:</th><td class="field-body">ID of the WaveDataGroup.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param List[hal_py.BooleanFunction.Value] values:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The values to set.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">set_input(self: netlist_simulator_controller.NetlistSimulatorController, pin_group: hal_py.ModulePinGroup, values: List[hal_py.BooleanFunction.Value]) -&gt; None</p>
+<blockquote>
+<div><p>Set the signals for a specific module pin group to control input signals between simulation cycles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.PinGroup[hal_py.ModulePin] pin_group:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The module pin group.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param List[hal_py.BooleanFunction.Value] values:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The values to set.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
