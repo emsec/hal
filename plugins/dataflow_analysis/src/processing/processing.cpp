@@ -115,14 +115,14 @@ namespace hal
                     }
                 }
 
-                std::vector<std::pair<std::shared_ptr<Grouping>, PassConfiguration>> generate_pass_combinations(Context& ctx, const std::shared_ptr<Grouping>& initial_grouping)
+                std::vector<std::pair<std::shared_ptr<Grouping>, PassConfiguration>> generate_pass_combinations(Context& ctx, const Configuration& config, const std::shared_ptr<Grouping>& initial_grouping)
                 {
                     // create current layer of pass combinations;
                     std::vector<std::pair<std::shared_ptr<Grouping>, PassConfiguration>> output;
 
                     if (initial_grouping != nullptr)
                     {
-                        for (const auto& pass : pass_collection::get_passes(ctx.result.pass_combinations_leading_to_grouping[initial_grouping]))
+                        for (const auto& pass : pass_collection::get_passes(config, ctx.result.pass_combinations_leading_to_grouping[initial_grouping]))
                         {
                             output.emplace_back(initial_grouping, pass);
                         }
@@ -131,7 +131,7 @@ namespace hal
                     {
                         for (const auto& state : ctx.result.unique_groupings)
                         {
-                            for (const auto& pass : pass_collection::get_passes(ctx.result.pass_combinations_leading_to_grouping[state]))
+                            for (const auto& pass : pass_collection::get_passes(config, ctx.result.pass_combinations_leading_to_grouping[state]))
                             {
                                 output.emplace_back(state, pass);
                             }
@@ -158,7 +158,7 @@ namespace hal
                     auto begin_time = std::chrono::high_resolution_clock::now();
 
                     // get all pass combinations of layer
-                    ctx.current_passes = generate_pass_combinations(ctx, (layer == 0) ? initial_grouping : nullptr);
+                    ctx.current_passes = generate_pass_combinations(ctx, config, (layer == 0) ? initial_grouping : nullptr);
 
                     // preparations
                     ctx.done            = false;

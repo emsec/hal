@@ -21,8 +21,9 @@ namespace hal
             auto begin_time   = std::chrono::high_resolution_clock::now();
 
             dataflow::processing::Configuration proc_config;
-            proc_config.pass_layers = 2;
-            proc_config.num_threads = std::thread::hardware_concurrency();
+            proc_config.pass_layers              = 2;
+            proc_config.num_threads              = std::thread::hardware_concurrency();
+            proc_config.enforce_type_consistency = config.enforce_type_consistency;
 
             dataflow::evaluation::Context eval_ctx;
 

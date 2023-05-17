@@ -2,6 +2,7 @@
 
 #include "dataflow_analysis/common/grouping.h"
 #include "dataflow_analysis/common/netlist_abstraction.h"
+#include "dataflow_analysis/processing/configuration.h"
 #include "hal_core/utilities/log.h"
 
 #include <list>
@@ -12,7 +13,7 @@ namespace hal
     {
         namespace group_by_control_signals
         {
-            std::shared_ptr<Grouping> process(const std::shared_ptr<Grouping>& state, bool clock, bool clock_enable, bool reset, bool set)
+            std::shared_ptr<Grouping> process(const processing::Configuration& config, const std::shared_ptr<Grouping>& state, bool clock, bool clock_enable, bool reset, bool set)
             {
                 auto new_state = std::make_shared<Grouping>(state->netlist_abstr);
 
@@ -62,7 +63,7 @@ namespace hal
                         {
                             auto test_group_id = *it;
 
-                            if (!state->are_groups_allowed_to_merge(group_id, test_group_id))
+                            if (!state->are_groups_allowed_to_merge(group_id, test_group_id, config.enforce_type_consistency))
                             {
                                 ++it;
                                 continue;
@@ -97,7 +98,7 @@ namespace hal
                 return new_state;
             }
 
-            std::shared_ptr<Grouping> pure_control_signals_process(const std::shared_ptr<Grouping>& state, bool clock, bool clock_enable, bool reset, bool set)
+            std::shared_ptr<Grouping> pure_control_signals_process(const processing::Configuration& config, const std::shared_ptr<Grouping>& state, bool clock, bool clock_enable, bool reset, bool set)
             {
                 auto new_state = std::make_shared<Grouping>(state->netlist_abstr);
 
@@ -155,4 +156,4 @@ namespace hal
 
         }    // namespace group_by_control_signals
     }        // namespace dataflow
-}
+}    // namespace hal
