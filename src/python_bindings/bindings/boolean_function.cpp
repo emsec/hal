@@ -540,6 +540,7 @@ namespace hal
             :rtype: hal_py.BooleanFunction or None
         )");
 
+        /*
         py_boolean_function.def_static(
             "Shl",
             [](BooleanFunction p0, BooleanFunction p1, u16 size) -> std::optional<BooleanFunction> {
@@ -674,7 +675,7 @@ namespace hal
             :returns: The rotated Boolean function on success, None otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
-
+*/
         py_boolean_function.def_static(
             "Eq",
             [](BooleanFunction p0, BooleanFunction p1, u16 size) -> std::optional<BooleanFunction> {
