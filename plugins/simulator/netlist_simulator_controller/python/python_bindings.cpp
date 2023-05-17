@@ -140,12 +140,29 @@ namespace hal
                 :rtype: list[hal_py.Net]
             )")
 
-            .def("add_waveform_group", &NetlistSimulatorController::add_waveform_group, py::arg("name"), py::arg("nets"), R"(
+            .def("add_waveform_group", py::overload_cast<const std::string&, const std::vector<Net*>&>(&NetlistSimulatorController::add_waveform_group), py::arg("name"), py::arg("nets"), R"(
                 Add waveform group. Netlist must not be empty. First net in list is considered the lowest significant bit.
 
                 :param str name: The waveform group name.
-                :param list[hal_py.Net] nets: List of nets for group.
-                :returns: ID of new waveform group.
+                :param List[hal_py.Net] nets: List of nets for the group.
+                :return: ID of the new waveform group.
+                :rtype: int
+            )")
+
+            .def("add_waveform_group", py::overload_cast<const PinGroup<ModulePin>*>(&NetlistSimulatorController::add_waveform_group), py::arg("pin_group"), R"(
+                Create a waveform group from the nets of a given module pin group.
+
+                :param hal_py.ModulePinGroup pin_group: The pin_group to create waveform group from.
+                :return: ID of the new waveform group.
+                :rtype: int
+            )")
+
+            .def("add_waveform_group", py::overload_cast<const std::string&, const PinGroup<ModulePin>*>(&NetlistSimulatorController::add_waveform_group), py::arg("name"), py::arg("pin_group"), R"(
+                Create a waveform group from the nets of a given module pin group.
+
+                :param str name: The name of the newly created waveform group.
+                :param hal_py.ModulePinGroup pin_group: The pin_group to create waveform group from.
+                :return: ID of the new waveform group.
                 :rtype: int
             )")
 
@@ -166,7 +183,6 @@ namespace hal
                 :rtype: int
             )")
 
-
             .def("add_trigger_time", &NetlistSimulatorController::add_trigger_time, py::arg("trigger_waves"), py::arg("trigger_on_values"), R"(
                 Add trigger time vector based on wave transitions.
 
@@ -182,11 +198,50 @@ namespace hal
                 :param int group_id: The ID of waveform group to be removed.
             )")
 
-            .def("set_input", &NetlistSimulatorController::set_input, py::arg("net"), py::arg("value"), R"(
+            .def("set_input", py::overload_cast<const Net*, BooleanFunction::Value>(&NetlistSimulatorController::set_input), py::arg("net"), py::arg("value"), R"(
                 Set the signal for a specific wire to control input signals between simulation cycles.
 
                 :param hal_py.Net net: The net to set a signal value for.
                 :param hal_py.BooleanFunction.Value value: The value to set.
+            )")
+
+            .def("set_input", py::overload_cast<WaveData*, BooleanFunction::Value>(&NetlistSimulatorController::set_input), py::arg("wd"), py::arg("value"), R"(
+                Set the signal for a specific wire to control input signals between simulation cycles.
+
+                :param hal_py.WaveData wd: WaveData object of the signal.
+                :param hal_py.BooleanFunction.Value value: The value to set.
+            )")
+
+            .def("set_input", py::overload_cast<const std::vector<Net*>&, const std::vector<BooleanFunction::Value>&>(&NetlistSimulatorController::set_input), py::arg("nets"), py::arg("values"), R"(
+                Set the signal for a group of nets to control input signals between simulation cycles.
+
+                :param List[hal_py.Net] nets: The vector of nets.
+                :param List[hal_py.BooleanFunction.Value] values: The values to set.
+            )")
+
+            .def("set_input", py::overload_cast<const WaveDataGroup*, const std::vector<BooleanFunction::Value>&>(&NetlistSimulatorController::set_input), py::arg("wdg"), py::arg("values"), R"(
+                Set the signal for a specific WaveDataGroup to control input signals between simulation cycles.
+
+                :param hal_py.WaveDataGroup wdg: The WaveDataGroup.
+                :param List[hal_py.BooleanFunction.Value] values: The values to set.
+            )")
+
+            .def("set_input", py::overload_cast<const u32, const std::vector<BooleanFunction::Value>&>(&NetlistSimulatorController::set_input), py::arg("id"), py::arg("values"), R"(
+                Set the signal for a specific WaveDataGroup to control input signals between simulation cycles.
+
+                :param int id: ID of the WaveDataGroup.
+                :param List[hal_py.BooleanFunction.Value] values: The values to set.
+            )")
+
+            .def("set_input",
+                 py::overload_cast<const PinGroup<ModulePin>*, const std::vector<BooleanFunction::Value>&>(&NetlistSimulatorController::set_input),
+                 py::arg("pin_group"),
+                 py::arg("values"),
+                 R"(
+                Set the signals for a specific module pin group to control input signals between simulation cycles.
+
+                :param hal_py.PinGroup[hal_py.ModulePin] pin_group: The module pin group.
+                :param List[hal_py.BooleanFunction.Value] values: The values to set.
             )")
 
             .def("set_timeframe", &NetlistSimulatorController::set_timeframe, py::arg("tmin") = 0, py::arg("tmax") = 0, R"(
@@ -450,7 +505,7 @@ namespace hal
                 :rtype: int
         )");
 
-        py_wave_data.def("get_events", &WaveData::get_events, py::arg("t0")=0, R"(
+        py_wave_data.def("get_events", &WaveData::get_events, py::arg("t0") = 0, R"(
                 Get up to maximum loadable waveform events.
 
                 :param int t0: Optional start time, only events t>=t0 will be returned.
@@ -458,7 +513,7 @@ namespace hal
                 :rtype: list[tuple(int,int)]
         )");
 
-        py_wave_data.def("get_triggered_events", &WaveData::get_triggered_events, py::arg("trigger"), py::arg("t0")=0, R"(
+        py_wave_data.def("get_triggered_events", &WaveData::get_triggered_events, py::arg("trigger"), py::arg("t0") = 0, R"(
                 Get waveform events for trigger time set.
 
                 :param hal_py.WaveDataTrigger trigger: Trigger time set.
