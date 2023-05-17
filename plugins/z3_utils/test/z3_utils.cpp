@@ -240,6 +240,56 @@ namespace hal
             auto bft_sext = bft_sext_res.get();
             EXPECT_EQ(bf_sext, bft_sext);
         }
+        {
+            auto ctx      = z3::context();
+            auto a        = BooleanFunction::Var("A", 16);
+            auto num_bits = BooleanFunction::Index(5, 16);
+
+            auto bf_shl_res = BooleanFunction::Shl(a.clone(), num_bits.clone(), 16);
+            ASSERT_TRUE(bf_shl_res.is_ok());
+            auto bf_shl      = bf_shl_res.get();
+            auto z3_shl      = z3_utils::from_bf(bf_shl, ctx);
+            auto bft_shl_res = z3_utils::to_bf(z3_shl);
+            ASSERT_TRUE(bft_shl_res.is_ok());
+            auto bft_shl = bft_shl_res.get();
+            EXPECT_EQ(bf_shl, bft_shl);
+
+            auto bf_lshr_res = BooleanFunction::Lshr(a.clone(), num_bits.clone(), 16);
+            ASSERT_TRUE(bf_lshr_res.is_ok());
+            auto bf_lshr      = bf_lshr_res.get();
+            auto z3_lshr      = z3_utils::from_bf(bf_lshr, ctx);
+            auto bft_lshr_res = z3_utils::to_bf(z3_lshr);
+            ASSERT_TRUE(bft_lshr_res.is_ok());
+            auto bft_lshr = bft_lshr_res.get();
+            EXPECT_EQ(bf_lshr, bft_lshr);
+
+            auto bf_ashr_res = BooleanFunction::Ashr(a.clone(), num_bits.clone(), 16);
+            ASSERT_TRUE(bf_ashr_res.is_ok());
+            auto bf_ashr      = bf_ashr_res.get();
+            auto z3_ashr      = z3_utils::from_bf(bf_ashr, ctx);
+            auto bft_ashr_res = z3_utils::to_bf(z3_ashr);
+            ASSERT_TRUE(bft_ashr_res.is_ok());
+            auto bft_ashr = bft_ashr_res.get();
+            EXPECT_EQ(bf_ashr, bft_ashr);
+
+            auto bf_rol_res = BooleanFunction::Rol(a.clone(), num_bits.clone(), 16);
+            ASSERT_TRUE(bf_rol_res.is_ok());
+            auto bf_rol      = bf_rol_res.get();
+            auto z3_rol      = z3_utils::from_bf(bf_rol, ctx);
+            auto bft_rol_res = z3_utils::to_bf(z3_rol);
+            ASSERT_TRUE(bft_rol_res.is_ok());
+            auto bft_rol = bft_rol_res.get();
+            EXPECT_EQ(bf_rol, bft_rol);
+
+            auto bf_ror_res = BooleanFunction::Ror(a.clone(), num_bits.clone(), 16);
+            ASSERT_TRUE(bf_ror_res.is_ok());
+            auto bf_ror      = bf_ror_res.get();
+            auto z3_ror      = z3_utils::from_bf(bf_ror, ctx);
+            auto bft_ror_res = z3_utils::to_bf(z3_ror);
+            ASSERT_TRUE(bft_ror_res.is_ok());
+            auto bft_ror = bft_ror_res.get();
+            EXPECT_EQ(bf_ror, bft_ror);
+        }
 
         TEST_END
     }
