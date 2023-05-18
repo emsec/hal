@@ -69,6 +69,7 @@ All notable changes to this project will be documented in this file.
   * added keyboard shortcuts for fold, unfold, and remove from view
   * added `filter` parameter to `get_fan_[in/out]_[nets/endpoints]`
   * added pyBinds for the `LogManager` class
+  * added pyBinds for the `ProjectDirectory` class
   * added `Module::move_pin_group` to change the order of pin groups of a module
   * changed abort being more responsive when aborting layouting of large views
   * changed and improved color scheme for light style
