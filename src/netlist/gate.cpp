@@ -493,7 +493,8 @@ namespace hal
                 auto output_pins = m_type->get_output_pins();
                 if (!output_pins.empty() && name == output_pins.front()->get_name())
                 {
-                    auto tt = func.compute_truth_table(m_type->get_input_pin_names());
+                    auto input_pin_names = m_type->get_input_pin_names();
+                    auto tt              = func.compute_truth_table(input_pin_names);
                     if (tt.is_error())
                     {
                         log_error("netlist", "Boolean function '{} = {}' cannot be added to LUT gate '{}' wiht ID {}.", name, func.to_string(), m_name, m_id);
@@ -532,7 +533,8 @@ namespace hal
                     const std::string& key      = init_component->get_init_identifiers().front();
 
                     std::stringstream stream;
-                    stream << std::hex << config_value;
+                    u32 init_len = 1 << (input_pin_names.size() - 2);
+                    stream << std::hex << std::setfill('0') << std::setw(init_len) << config_value;
                     set_data(category, key, "bit_vector", stream.str());
                 }
             }
