@@ -116,7 +116,6 @@ namespace hal
             :rtype: hal_py.BooleanFunction or None
         )");
 
-        /*
         py_boolean_function_decorator.def_static(
             "get_boolean_function_from",
             [](const PinGroup<ModulePin>* pin_group, u32 extend_to_size = 0, bool sign_extend = false) -> std::optional<BooleanFunction> {
@@ -144,6 +143,5 @@ namespace hal
             :returns: The resulting Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");
-        */
     }
 }    // namespace hal
