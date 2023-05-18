@@ -16,11 +16,11 @@ namespace hal
 
         py_subgraph_netlist_decorator.def(
             "copy_subgraph_netlist",
-            [](SubgraphNetlistDecorator& self, const std::vector<const Gate*>& subgraph_gates) -> std::unique_ptr<Netlist> {
+            [](SubgraphNetlistDecorator& self, const std::vector<const Gate*>& subgraph_gates) -> std::shared_ptr<Netlist> {
                 auto res = self.copy_subgraph_netlist(subgraph_gates);
                 if (res.is_ok())
                 {
-                    return res.get();
+                    return std::shared_ptr<Netlist>(res.get());
                 }
                 else
                 {
@@ -39,11 +39,11 @@ namespace hal
 
         py_subgraph_netlist_decorator.def(
             "copy_subgraph_netlist",
-            [](SubgraphNetlistDecorator& self, const Module* subgraph_module) -> std::unique_ptr<Netlist> {
+            [](SubgraphNetlistDecorator& self, const Module* subgraph_module) -> std::shared_ptr<Netlist> {
                 auto res = self.copy_subgraph_netlist(subgraph_module);
                 if (res.is_ok())
                 {
-                    return res.get();
+                    return std::shared_ptr<Netlist>(res.get());
                 }
                 else
                 {

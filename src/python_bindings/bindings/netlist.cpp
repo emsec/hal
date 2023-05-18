@@ -127,7 +127,7 @@ namespace hal
 
         py_netlist.def(
             "copy",
-            [](Netlist* nl) -> std::optional<std::shared_ptr<Netlist>> {
+            [](Netlist* nl) -> std::shared_ptr<Netlist> {
                 auto res = nl->copy();
                 if (res.is_ok())
                 {
@@ -136,7 +136,7 @@ namespace hal
                 else
                 {
                     log_error("python_context", "{}", res.get_error().get());
-                    return std::nullopt;
+                    return nullptr;
                 }
             },
             R"(
