@@ -570,7 +570,7 @@ namespace hal
         py_boolean_function.def_static(
             "Lshr",
             [](BooleanFunction p0, BooleanFunction p1, u16 size) -> std::optional<BooleanFunction> {
-                auto res = BooleanFunction::Shl(std::move(p0), std::move(p1), size);
+                auto res = BooleanFunction::Lshr(std::move(p0), std::move(p1), size);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -597,7 +597,7 @@ namespace hal
         py_boolean_function.def_static(
             "Ashr",
             [](BooleanFunction p0, BooleanFunction p1, u16 size) -> std::optional<BooleanFunction> {
-                auto res = BooleanFunction::Shl(std::move(p0), std::move(p1), size);
+                auto res = BooleanFunction::Ashr(std::move(p0), std::move(p1), size);
                 if (res.is_ok())
                 {
                     return res.get();
