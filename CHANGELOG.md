@@ -3,8 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 * Graphics
-  * added keyboard shortcuts for fold, unfold, and remove from view
-  * improved color scheme for light style
+
 * GUI plugin manager
   * **WARNING:** modified plugin core API - reduced number of base classes and instead added extension components
   * added overview of loaded plugins and their features
@@ -19,6 +18,7 @@ All notable changes to this project will be documented in this file.
   * added `BooleanFunction::get_constant_value_u64` and `BooleanFunction::Node::get_constant_value_u64` to retrieve the constant value as `u64` if it comprises less than 64-bit
   * added `BooleanFunction::has_constant_value(const std::vector<BooleanFunction::Value>&)` and `BooleanFunction::Node::has_constant_value(const std::vector<BooleanFunction::Value>&)`
   * added `BooleanFunction::algebraic_printer` as an alternative printer for `BooleanFunction::to_string` to print a Boolean function in algebraic form
+  * added shift and rotate operators `Shl`, `Lshr`, `Ashr`, `Rol`, and `Ror`
 * plugins
   * `boolean_influence`
     * added deterministic variants of all Boolean influence functions that shall be used for Boolean functions with only few input variables
@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
     * added `parse_def_file` to parse a Design Exchange Format file that contains placement information
   * `verilog_parser`
     * added annotation of all net names that where merged during parsing in the data container
+    * added implicit wire declarations for assign statements
     * changed the behavior of the parser when flattening a netlist and generating new unique names (instead of appending an index we now add a prefix containing the names of parent modules)
   * `z3_utils`
     * added `compare_netlists` function that functionally compares two netlists that only differ in their combinational logic
@@ -37,18 +38,26 @@ All notable changes to this project will be documented in this file.
     * changed `to_cpp` to output only the C++ code implementing the Boolean function and nothing more
   * `dataflow_analysis`
     * added API to interact with dataflow analysis results from C++ and Python
+    * added automatic creation of pin groups for data and control pins of register modules
+    * added parameter to only write or retrieve information on certain register groups
     * deprecated `plugin_dataflow::execute` as its functionality is now split between `dataflow::analyze` and the members of `dataflow::Result`
     * removed file writes if not explicitly called by user
+  * `netlist_simulation_controller`
+    * added versions of `add_waveform_group` taking a module pin group as input
+    * added versions of `set_input` taking a `WaveData` object, vectors of nets and values, a `WaveDataGroup` and a vector of values, and a module pin group and a vector of values as input
 * decorators
   * added `NetlistModificationDecorator`
     * added `delete_modules` to delete all (or a filtered subset of) the modules in a netlist
     * moved `replace_gate` from `netlist_utils`, now returns pointer to replacement gate
     * added `connect_gates` to connect two gates at the specified pins via a new or already existing net
     * added `connect_nets` to merge two nets into one, thereby connecting them
+  * `BooleanFunctionDecorator`
+    * added a version of `get_boolean_function_from` that takes a module pin group as input
 * selection details widget
-  * added 'focus on item' to several context menus
-  * added 'isolate in new view' to gate/module related context menus
-  * changed 'isolate in new view' policy for modules : open exclusive module view if such a view exists
+  * added `Focus item in graph view` to several context menus
+  * added `Isolate in new view` to gate/module related context menus
+  * changed `Isolate in new view` policy for modules: open exclusive module view if such a view already exists
+  * improved drag&drop functionality to move module pins and merge module pin groups
 * miscellaneous
   * added `Gate::get_modules` to recursively get all modules that contain the gate by traversing the module hierarchy
   * added `Net::is_a_source(const Gate*)` and `Net::is_a_destination(const Gate*)` that check whether a gate is a source/destination independent of the gate pin
@@ -56,13 +65,27 @@ All notable changes to this project will be documented in this file.
   * added overloaded version of `deserialize_netlist` that takes a gate library, thereby overruling the gate library path in the .hal file
   * added `utils::wrapped_stoull` and `utils::wrapped_stoul` that wrap the standard string to integer conversion and use `hal::Result<>` for error handlung instead of exceptions
   * added utility function `is_valid_enum` to check whether the string representation of an enum value is valid.
-  * added physical net position (non-negative integer) to JSON file when serializing gates and restore that information upon re-open.
-  * changed policy of search bar handler - no time consumtive search attempts are made when content empty.
+  * added serialization of physical gate positions (non-negative integer)
+  * added keyboard shortcuts for fold, unfold, and remove from view
+  * added `filter` parameter to `get_fan_[in/out]_[nets/endpoints]`
+  * added pyBinds for the `LogManager` class
+  * added `Module::move_pin_group` to change the order of pin groups of a module
+  * changed abort being more responsive when aborting layouting of large views
+  * changed and improved color scheme for light style
+  * changed labels on HAL startup screen to better resemble the new project structure
+  * removed toolbox from groupings widget
 * bugfixes
   * fixed build from tarball
   * fixed minor navigation bugs on settings page
   * fixed missing Python bindings for `GatePinGroup`
   * fixed `SolveFsmPlugin` not properly replacing power and ground nets in Boolean functions
+  * fixed searchbar attempting time consuming search when there is no content to search
+  * fixed some documentations of core functions
+  * fixed igraph not building anymore by relaxing irgaph compiler options
+  * fixed Python GUI API being unavailable at runtime
+  * fixed nets without source or destination not being shown when unfolding the module they belong to in the selection details widget
+  * fixed cmake failing to parse HAL version number from file
+  * fixed pins and pin groups not being hashable in Python
 
 ## [4.1.0] - 2023-03-08 16:57:06+01:00 (urgency: medium)
 * selection details widget

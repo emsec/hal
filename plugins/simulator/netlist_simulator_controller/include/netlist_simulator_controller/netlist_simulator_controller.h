@@ -27,6 +27,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer.h"
 
@@ -125,7 +126,25 @@ public:
      * @param nets List of nets for group
      * @return ID of new waveform group
      */
-    u32 add_waveform_group(const std::string& name, const std::vector<Net*> nets);
+    u32 add_waveform_group(const std::string& name, const std::vector<Net*>& nets);
+
+    /**
+     * Create a waveform group from the nets of a given module pin group.
+     * 
+     * @param pin_group The pin_group to create waveform group from.
+     * @return ID of new waveform group
+     */
+    u32 add_waveform_group(const PinGroup<ModulePin>* pin_group);
+
+
+    /**
+     * Create a waveform group from the nets of a given module pin group.
+     * 
+     * @param pin_group The pin_group to create waveform group from.
+     * @param name The name of the newly created waveform group from.
+     * @return ID of new waveform group
+     */
+    u32 add_waveform_group(const std::string& name, const PinGroup<ModulePin>* pin_group);
 
     /**
      * Add waveform based on boolean expression.
@@ -171,6 +190,46 @@ public:
      * @param[in] value - The value to set.
      */
     void set_input(const Net* net, BooleanFunction::Value value);
+
+    /**
+     * Set the signal for a specific wire to control input signals between simulation cycles.
+     *
+     * @param[in] wd - WaveData object of the signal.
+     * @param[in] value - The value to set.
+     */
+    void set_input(WaveData* wd, BooleanFunction::Value value);
+
+    /**
+     * Set the signal for a group of nets to control input signals between simulation cycles.
+     *
+     * @param[in] nets - The vector of nets. 
+     * @param[in] values - The values to set.
+     */
+    void set_input(const std::vector<Net*>& nets, const std::vector<BooleanFunction::Value>& values);
+
+    /**
+     * Set the signals for a specific WaveDataGroup to control input signals between simulation cycles.
+     *
+     * @param[in] wdg - The WaveDataGroup.
+     * @param[in] values - The values to set.
+     */
+    void set_input(const WaveDataGroup* wdg, const std::vector<BooleanFunction::Value>& values);
+
+    /**
+     * Set the signals for a specific WaveDataGroup to control input signals between simulation cycles.
+     *
+     * @param[in] id - ID of the WaveDataGroup.
+     * @param[in] values - The values to set.
+     */
+    void set_input(const u32 id, const std::vector<BooleanFunction::Value>& values);
+
+    /**
+     * Set the signals for a specific module pin group to control input signals between simulation cycles.
+     *
+     * @param[in] pin_group - The module pin group.
+     * @param[in] values - The values to set.
+     */
+    void set_input(const PinGroup<ModulePin>* pin_group, const std::vector<BooleanFunction::Value>& values);
 
     /**
      * Initialize the simulation.
