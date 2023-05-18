@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Function Decorator &mdash; hal_py v4.1.0-74-g045f45d19 documentation</title>
+  <title>Boolean Function Decorator &mdash; hal_py v4.1.0-75-g88c2a58bd documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.1.0-74-g045f45d19
+                v4.1.0-75-g88c2a58bd
               </div>
             
           
@@ -246,6 +246,31 @@ The Boolean function can optionally be extended to any desired size greater the 
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Net] nets:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">The nets to concatenate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param int extend_to_size:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The size to which to extend the Boolean function. Set to <code class="docutils literal notranslate"><span class="pre">0</span></code> to prevent extension. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool sign_extend:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to sign extend, <code class="docutils literal notranslate"><span class="pre">False</span></code> to zero extend. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The resulting Boolean function on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.BooleanFunction or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">get_boolean_function_from(pin_group: hal_py.ModulePinGroup, extend_to_size: int = 0, sign_extend: bool = False) -&gt; Optional[hal_py.BooleanFunction]</p>
+<blockquote>
+<div><p>Get the Boolean function that is the concatenation of variable names corresponding to the nets connected to the pins of the given pin group.
+The Boolean function can optionally be extended to any desired size greater the size of the given net vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.ModulePinGroup pin_group:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The module pin group.</td>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">param int extend_to_size:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body">The size to which to extend the Boolean function. Set to <code class="docutils literal notranslate"><span class="pre">0</span></code> to prevent extension. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</td>
