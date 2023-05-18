@@ -8,6 +8,9 @@
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/state_component.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
@@ -45,23 +48,23 @@ namespace hal
     namespace
     {
         // generates a list of state flip flop output nets and the corresponding boolean function at their data input
-        Result<std::vector<std::pair<Net*, BooleanFunction>>> generate_state_bfs(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic)
+        Result<std::vector<std::pair<Net*, BooleanFunction>>> generate_state_bfs(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const bool consider_control_inputs)
         {
             std::map<Net*, Net*> output_net_to_input_net;
 
             for (const auto& ff : state_reg)
             {
-                const std::vector<GatePin*> d_ports = ff->get_type()->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::data; });
-                if (d_ports.size() != 1)
+                const std::vector<GatePin*> d_pins = ff->get_type()->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::data; });
+                if (d_pins.size() != 1)
                 {
-                    return ERR("failed to create input - output mapping: currently not supporting flip-flops with multiple or no data inputs, but found " + std::to_string(d_ports.size())
+                    return ERR("failed to create input - output mapping: currently not supporting flip-flops with multiple or no data inputs, but found " + std::to_string(d_pins.size())
                                + " for gate type " + ff->get_type()->get_name() + ".");
                 }
 
                 hal::Net* input_net;
-                if (auto res = ff->get_fan_in_net(d_ports.front()); res == nullptr)
+                if (auto res = ff->get_fan_in_net(d_pins.front()); res == nullptr)
                 {
-                    return ERR("failed to create input - output mapping: could not get fan-in net at pin " + d_ports.front()->get_name() + " of gate " + std::to_string(ff->get_id()) + ".");
+                    return ERR("failed to create input - output mapping: could not get fan-in net at pin " + d_pins.front()->get_name() + " of gate " + std::to_string(ff->get_id()) + ".");
                 }
                 else
                 {
@@ -81,29 +84,123 @@ namespace hal
 
             for (const auto& ff : state_reg)
             {
-                const std::vector<GatePin*> d_ports = ff->get_type()->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::data; });
+                const std::vector<GatePin*> d_pins = ff->get_type()->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::data; });
+                const GatePin* d_pin = d_pins.front();
 
-                hal::Net* input_net = ff->get_fan_in_net(d_ports.front());
+                const std::vector<GatePin*> state_pins = ff->get_type()->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::state; });
+                const std::vector<GatePin*> neg_state_pins = ff->get_type()->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::neg_state; });
+
+                Net* data_net = ff->get_fan_in_net(d_pin);
 
                 BooleanFunction bf;
-                if (auto res = nl_dec.get_subgraph_function(subgraph_gates, input_net); res.is_error())
+                if (consider_control_inputs)
                 {
-                    return ERR_APPEND(res.get_error(),
-                                      "failed to generate boolean functions of state: could not generate subgraph function for state net " + std::to_string(input_net->get_id()) + ".");
-                }
-                else
-                {
-                    bf = res.get();
-                }
+                    BooleanFunction complete_bf;
+                    std::string internal_state_identifier;
+                    std::string internal_negated_state_identifier;
 
-                if (auto res = BooleanFunctionDecorator(bf).substitute_power_ground_nets(nl); res.is_error())
-                {
-                    return ERR_APPEND(res.get_error(),
-                                      "failed to generate boolean functions of state: could not substitute power and ground nets in boolean funtion of net " + std::to_string(input_net->get_id()));
+                    if (ff->get_type()->has_property(GateTypeProperty::ff))
+                    {
+                        const FFComponent* ff_component = ff->get_type()->get_component_as<FFComponent>([](const GateTypeComponent* c) { return FFComponent::is_class_of(c); });
+                        const StateComponent* state_componenet = ff->get_type()->get_component_as<StateComponent>([](const GateTypeComponent* c) { return StateComponent::is_class_of(c); });
+                    
+                        complete_bf = ff_component->get_next_state_function();
+                        internal_state_identifier = state_componenet->get_state_identifier();
+                        internal_negated_state_identifier = state_componenet->get_neg_state_identifier();
+                    }
+                    else 
+                    {
+                        return ERR("failed to generate boolean functions of state: gate " + ff->get_name() + " with ID " + std::to_string(ff->get_id()) + " of state register has an unhandeled type " + ff->get_type()->get_name());
+                    }
+
+                    std::cout << complete_bf << std::endl;
+
+                    for (const auto pin_var : complete_bf.get_variable_names())
+                    {
+                        // The complete Boolean function of a flip flop will contain the internal state and negated internal state.
+                        // We substitute them with the outgoing state / negated state nets.
+                        if (pin_var == internal_state_identifier)
+                        {
+                            if (state_pins.size() != 1)
+                            {
+                                return ERR("failed to generate boolean functions of state: found " + std::to_string(state_pins.size()) + " state pins at gate " + ff->get_name() + " with ID " + std::to_string(ff->get_id()) + ", but we expect exactly 1.");
+                            }
+
+                            complete_bf = complete_bf.substitute(internal_state_identifier, BooleanFunctionNetDecorator(*(ff->get_fan_out_net(state_pins.front()))).get_boolean_variable_name());
+
+                            continue;
+                        }
+
+                        if (pin_var == internal_negated_state_identifier)
+                        {
+                            if (neg_state_pins.size() != 1)
+                            {
+                                return ERR("failed to generate boolean functions of state: found " + std::to_string(neg_state_pins.size()) + " neg state pins at gate " + ff->get_name() + " with ID " + std::to_string(ff->get_id()) + ", but we expect exactly 1.");
+                            }
+
+                            complete_bf = complete_bf.substitute(internal_state_identifier, BooleanFunctionNetDecorator(*(ff->get_fan_out_net(neg_state_pins.front()))).get_boolean_variable_name());
+
+                            continue;
+                        }
+
+                        const auto pin_net = ff->get_fan_in_net(pin_var);
+                        BooleanFunction pin_bf;
+                        if (auto res = nl_dec.get_subgraph_function(subgraph_gates, pin_net); res.is_error())
+                        {
+                            return ERR_APPEND(res.get_error(),
+                                            "failed to generate boolean functions of state: could not generate subgraph function for state net " + std::to_string(pin_net->get_id()) + ".");
+                        }
+                        else
+                        {
+                            pin_bf = res.get();
+                        }
+
+                        if (auto res = BooleanFunctionDecorator(pin_bf).substitute_power_ground_nets(nl); res.is_error())
+                        {
+                            return ERR_APPEND(res.get_error(),
+                                            "failed to generate boolean functions of state: could not substitute power and ground nets in boolean funtion of net " + std::to_string(pin_net->get_id()));
+                        }
+                        else
+                        {
+                            pin_bf = res.get();
+                        }
+
+                        if (auto res = complete_bf.substitute(pin_var, pin_bf); res.is_error())
+                        {
+                            return ERR_APPEND(res.get_error(),
+                                            "failed to generate boolean functions of state: could not substitute variable " + pin_var + " in boolean funtion of net " + std::to_string(pin_net->get_id()));
+                        }
+                        else
+                        {
+                            complete_bf = res.get();
+                        }
+                    }
+
+                    std::cout << complete_bf << std::endl;
+
+                    bf = complete_bf;
                 }
                 else
                 {
-                    bf = res.get();
+                    if (auto res = nl_dec.get_subgraph_function(subgraph_gates, data_net); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(),
+                                        "failed to generate boolean functions of state: could not generate subgraph function for state net " + std::to_string(data_net->get_id()) + ".");
+                    }
+                    else
+                    {
+                        bf = res.get();
+                    }
+
+                    if (auto res = BooleanFunctionDecorator(bf).substitute_power_ground_nets(nl); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(),
+                                        "failed to generate boolean functions of state: could not substitute power and ground nets in boolean funtion of net " + std::to_string(data_net->get_id()));
+                    }
+                    else
+                    {
+                        bf = res.get();
+                    }
                 }
 
                 bf.simplify();
@@ -144,7 +241,7 @@ namespace hal
                     bf = res.get();
                 }
 
-                state_bfs.push_back({input_net, bf});
+                state_bfs.push_back({data_net, bf});
             }
 
             return OK(state_bfs);
@@ -212,7 +309,7 @@ namespace hal
         }
 
         // extract Boolean functions for each state flip-flop
-        const auto state_bfs_res = generate_state_bfs(nl, state_reg, transition_logic);
+        const auto state_bfs_res = generate_state_bfs(nl, state_reg, transition_logic, true);
         if (state_bfs_res.is_error())
         {
             return ERR_APPEND(state_bfs_res.get_error(), "failed to solve fsm: unable to generate Boolean functions for state.");
@@ -313,7 +410,7 @@ namespace hal
         }
 
         // extract Boolean functions for each state flip-flop
-        const auto state_bfs_res = generate_state_bfs(nl, state_reg, transition_logic);
+        const auto state_bfs_res = generate_state_bfs(nl, state_reg, transition_logic, true);
         if (state_bfs_res.is_error())
         {
             return ERR_APPEND(state_bfs_res.get_error(), "failed to solve fsm: unable to generate Boolean functions for state.");
@@ -472,7 +569,8 @@ namespace hal
 
         std::string graph_str = "digraph {\n";
 
-        graph_str += generate_legend(state_reg);
+        // TODO save this information somewhere else maybe in a results.txt similar to the dataflow
+        // graph_str += generate_legend(state_reg);
 
         for (const auto& [org, successors] : transitions)
         {
