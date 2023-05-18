@@ -21,7 +21,6 @@ namespace hal
             u32 line_number = 0;
 
             std::string line;
-            char prev_char = 0;
             bool escaped   = false;
 
             std::vector<Token<std::string>> parsed_tokens;
@@ -226,39 +225,39 @@ namespace hal
         }
    
         // This might depend on the exact xilinx device (family) we are dealing with
-        Result<std::pair<u32, u32>> reconstruct_coordinates(const CellData& cell_data)
-        {
-            // For the xilinx 7series boards we define that each Slice has 4 colums and 8 rows
-            static std::map<BELType, std::pair<u32, u32>> bel_to_offset = {
-                {BELType::A6LUT, {0, 0}},
-                {BELType::B6LUT, {0, 2}},
-                {BELType::C6LUT, {0, 4}},
-                {BELType::D6LUT, {0, 6}},
-                {BELType::A5LUT, {0, 1}},
-                {BELType::B5LUT, {0, 3}},
-                {BELType::C5LUT, {0, 5}},
-                {BELType::D5LUT, {0, 7}},
+        // Result<std::pair<u32, u32>> reconstruct_coordinates(const CellData& cell_data)
+        // {
+        //     // For the xilinx 7series boards we define that each Slice has 4 colums and 8 rows
+        //     static std::map<BELType, std::pair<u32, u32>> bel_to_offset = {
+        //         {BELType::A6LUT, {0, 0}},
+        //         {BELType::B6LUT, {0, 2}},
+        //         {BELType::C6LUT, {0, 4}},
+        //         {BELType::D6LUT, {0, 6}},
+        //         {BELType::A5LUT, {0, 1}},
+        //         {BELType::B5LUT, {0, 3}},
+        //         {BELType::C5LUT, {0, 5}},
+        //         {BELType::D5LUT, {0, 7}},
 
-                {BELType::F7AMUX, {1, 0}},
-                {BELType::F7BMUX, {1, 2}},
-                {BELType::F8MUX, {1, 1}},
+        //         {BELType::F7AMUX, {1, 0}},
+        //         {BELType::F7BMUX, {1, 2}},
+        //         {BELType::F8MUX, {1, 1}},
 
-                {BELType::CARRY4, {2, 0}},
+        //         {BELType::CARRY4, {2, 0}},
 
-                {BELType::AFF, {3, 0}},
-                {BELType::BFF, {3, 2}},
-                {BELType::CFF, {3, 4}},
-                {BELType::DFF, {3, 6}},
-                {BELType::A5FF, {3, 1}},
-                {BELType::B5FF, {3, 3}},
-                {BELType::C5FF, {3, 5}},
-                {BELType::D5FF, {3, 7}},
+        //         {BELType::AFF, {3, 0}},
+        //         {BELType::BFF, {3, 2}},
+        //         {BELType::CFF, {3, 4}},
+        //         {BELType::DFF, {3, 6}},
+        //         {BELType::A5FF, {3, 1}},
+        //         {BELType::B5FF, {3, 3}},
+        //         {BELType::C5FF, {3, 5}},
+        //         {BELType::D5FF, {3, 7}},
 
-                {BELType::BUFG, {0, 0}},
-                {BELType::INBUF_EN, {0, 0}},
-                {BELType::OUTBUF, {1, 0}},
-            };
-        }
+        //         {BELType::BUFG, {0, 0}},
+        //         {BELType::INBUF_EN, {0, 0}},
+        //         {BELType::OUTBUF, {1, 0}},
+        //     };
+        // }
     }    // namespace xilinx_toolbox
 
     Result<std::monostate> XilinxToolboxPlugin::parse_xdc_file(Netlist* nl, const std::filesystem::path& xdc_file)

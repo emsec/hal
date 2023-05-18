@@ -115,7 +115,7 @@ namespace hal
 
                     std::cout << complete_bf << std::endl;
 
-                    for (const auto pin_var : complete_bf.get_variable_names())
+                    for (const auto& pin_var : complete_bf.get_variable_names())
                     {
                         // The complete Boolean function of a flip flop will contain the internal state and negated internal state.
                         // We substitute them with the outgoing state / negated state nets.
@@ -554,18 +554,18 @@ namespace hal
                                                            const u32 max_condition_length,
                                                            const u32 base)
     {
-        auto generate_legend = [](const std::vector<Gate*>& reg) -> std::string {
-            std::string name_str = "";
-            for (const auto& ff : reg)
-            {
-                name_str = name_str + ff->get_name();
-                name_str += ", ";
-            }
+        // auto generate_legend = [](const std::vector<Gate*>& reg) -> std::string {
+        //     std::string name_str = "";
+        //     for (const auto& ff : reg)
+        //     {
+        //         name_str = name_str + ff->get_name();
+        //         name_str += ", ";
+        //     }
 
-            name_str = name_str.substr(0, name_str.size() - 2);
+        //     name_str = name_str.substr(0, name_str.size() - 2);
 
-            return "legend[label=\"" + name_str + +"\", shape=box]" + "\n";
-        };
+        //     return "legend[label=\"" + name_str + +"\", shape=box]" + "\n";
+        // };
 
         std::string graph_str = "digraph {\n";
 

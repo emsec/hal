@@ -1290,7 +1290,6 @@ namespace hal
             u32 line_number = 0;
 
             std::string line;
-            char prev_char  = 0;
             bool escaped    = false;
 
             std::vector<Token<std::string>> parsed_tokens;
