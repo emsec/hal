@@ -112,38 +112,16 @@ namespace hal
         // create module pins for top module
         for (Net* c_input_net : c_top_module->get_input_nets())
         {
-            // either use existing name of pin or generate new one
-            if (auto pin = top_module->get_pin_by_net(m_netlist.get_net_by_id(c_input_net->get_id())); pin != nullptr)
+            if (auto res = c_top_module->create_pin(c_input_net->get_name(), c_input_net); res.is_error())
             {
-                if (auto res = c_top_module->create_pin(pin->get_name(), c_input_net, pin->get_type()); res.is_error())
-                {
-                    return ERR_APPEND(res.get_error(), "could not copy subgraph netlist: unable to create pin with name '" + pin->get_name() + "'");
-                }
-            }
-            else
-            {
-                if (auto res = c_top_module->create_pin(c_input_net->get_name(), c_input_net); res.is_error())
-                {
-                    return ERR_APPEND(res.get_error(), "could not copy subgraph netlist: unable to create pin '" + c_input_net->get_name() + "'");
-                }
+                return ERR_APPEND(res.get_error(), "could not copy subgraph netlist: unable to create pin '" + c_input_net->get_name() + "'");
             }
         }
         for (Net* c_output_net : c_top_module->get_output_nets())
         {
-            // either use existing name of pin or generate new one
-            if (auto pin = top_module->get_pin_by_net(m_netlist.get_net_by_id(c_output_net->get_id())); pin != nullptr)
+            if (auto res = c_top_module->create_pin(c_output_net->get_name(), c_output_net); res.is_error())
             {
-                if (auto res = c_top_module->create_pin(pin->get_name(), c_output_net, pin->get_type()); res.is_error())
-                {
-                    return ERR_APPEND(res.get_error(), "could not copy subgraph netlist: unable to create pin '" + pin->get_name() + "'");
-                }
-            }
-            else
-            {
-                if (auto res = c_top_module->create_pin(c_output_net->get_name(), c_output_net); res.is_error())
-                {
-                    return ERR_APPEND(res.get_error(), "could not copy subgraph netlist: unable to create pin '" + c_output_net->get_name() + "'");
-                }
+                return ERR_APPEND(res.get_error(), "could not copy subgraph netlist: unable to create pin '" + c_output_net->get_name() + "'");
             }
         }
 
