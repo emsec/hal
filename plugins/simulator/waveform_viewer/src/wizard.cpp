@@ -10,6 +10,7 @@
 #include <QHeaderView>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QPixmap>
 
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
@@ -34,10 +35,8 @@ namespace hal {
     PageSelectGates::PageSelectGates(NetlistSimulatorController *controller, QWidget *parent)
       : QWizardPage(parent), mController(controller)
     {
-        setTitle(tr("Step 1 | Select Gates"));
-        setSubTitle("Select the gates to be used for simulation. 0 gates selected.");
-        QIcon pageIcon = gui_utility::getStyledSvgIcon("all->#3192C5", ":/icons/folder");
-        setPixmap(QWizard::LogoPixmap, pageIcon.pixmap(30, 30));
+        setTitle(tr("Step 1 : Select Gates"));
+        setPixmap(QWizard::LogoPixmap, QPixmap(":/icons/sw_select_gates","PNG").scaled(128,128));
 
         QGridLayout* layout = new QGridLayout(this);
         mButAll = new QPushButton("All gates", this);
@@ -67,6 +66,7 @@ namespace hal {
         mTableView->horizontalHeader()->setStretchLastSection(true);
         mTableView->verticalHeader()->hide();
         layout->addWidget(mTableView,1,0,1,3);
+        onSelectionChanged(QItemSelection(),QItemSelection());
     }
 
     void PageSelectGates::handleSelectAll()
@@ -122,11 +122,11 @@ namespace hal {
 
     void PageSelectGates::onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
     {
+        Q_UNUSED(selected);
+        Q_UNUSED(deselected);
         int numSelectedGates = mTableView->selectionModel()->selectedRows().count();
-        QString txt("Select the gates to be used for simulation. ");
-
+        QString txt("\nSelect the gates to be used for simulation.\n");
         txt += QString::number(numSelectedGates) + " gates selected.";
-
         setSubTitle(txt);
     }
 
@@ -145,8 +145,9 @@ namespace hal {
     PageClock::PageClock(NetlistSimulatorController *controller, QWidget* parent)
         : QWizardPage(parent), mController(controller)
     {
-        setTitle(tr("Step 2 | Clock settings"));
-        setSubTitle(tr("Configure the clock for the simulation"));
+        setTitle(tr("Step 2 : Clock settings"));
+        setSubTitle(tr("\nSelect and generate the clock input\nor indicate that no clock generator is used\n(e.g. when clock signal provided in input data)"));
+        setPixmap(QWizard::LogoPixmap, QPixmap(":/icons/sw_select_clock","PNG").scaled(128,128));
 
         QGridLayout* layout = new QGridLayout(this);
         mComboNet = new QComboBox(this);
@@ -174,7 +175,7 @@ namespace hal {
         mSpinDuration->setValue(2000);
         layout->addWidget(mSpinDuration,3,1);
 
-        mDontUseClock = new QCheckBox("Do not use clock in simulation",this);
+        mDontUseClock = new QCheckBox("Do not use clock generator in simulation",this);
         mDontUseClock->setCheckState(Qt::Unchecked);
         connect(mDontUseClock,&QCheckBox::stateChanged,this,&PageClock::dontUseClockChanged);
         layout->addWidget(mDontUseClock,4,0,1,2);
@@ -254,8 +255,9 @@ namespace hal {
     PageEngine::PageEngine(NetlistSimulatorController *controller, Wizard *parent)
         : QWizardPage(parent), mController(controller), m_wizard(parent)
     {
-        setTitle(tr("Step 3 | Engine settings"));
-        setSubTitle(tr("Select the engine for the simulation\nIf the desired engine is not listed, check whether the respective plugin is loaded"));
+        setTitle(tr("Step 3 : Engine settings"));
+        setSubTitle(tr("\nSelect the engine for the simulation\nIf the engine you are looking for is not listed,\nyou might have to load the plugin first"));
+        setPixmap(QWizard::LogoPixmap, QPixmap(":/icons/sw_select_engine","PNG").scaled(128,128));
 
         mLayout = new QVBoxLayout(this);
 
@@ -319,8 +321,9 @@ namespace hal {
     PageEngineProperties::PageEngineProperties(SimulationSettings *settings, NetlistSimulatorController *controller, QWidget *parent)
         : QWizardPage(parent), mController(controller), mSettings(settings)
     {
-        setTitle(tr("Step 3.1 | Engine properties"));
-        setSubTitle(tr("Select and pass the engine properties for the verilator"));
+        setTitle(tr("Step 3.1 : Engine properties"));
+        setSubTitle(tr("\nEnter engine properties for the verilator"));
+        setPixmap(QWizard::LogoPixmap, QPixmap(":/icons/sw_engine_par","PNG").scaled(128,128));
 
         mTableWidget = new QTableWidget(this);
 
@@ -449,11 +452,9 @@ namespace hal {
     PageInputData::PageInputData(NetlistSimulatorController *controller, QWidget* parent)
         : QWizardPage(parent), mController(controller)
     {
-        setTitle(tr("Step 4 | Load input Data"));
-        setSubTitle(tr("No input data file selected so far"));
-
-        QIcon pageIcon = gui_utility::getStyledSvgIcon("all->#3192C5", ":/icons/folder");
-        setPixmap(QWizard::LogoPixmap, pageIcon.pixmap(48, 48));
+        setTitle(tr("Step 4 : Simulation Input Data"));
+        setSubTitle(tr("\nNo input data file selected so far"));
+        setPixmap(QWizard::LogoPixmap, QPixmap(":/icons/sw_select_input","PNG").scaled(128,128));
 
         QGridLayout* layout = new QGridLayout(this);
 
@@ -553,8 +554,9 @@ namespace hal {
     PageRunSimulation::PageRunSimulation(NetlistSimulatorController *controller, QWidget *parent)
         : QWizardPage(parent), mController(controller)
     {
-        setTitle(tr("Step 5 | Run Simulation"));
-        setSubTitle(tr("Start simulation based on controller settings from previous steps"));
+        setTitle(tr("Step 5 : Run Simulation"));
+        setSubTitle(tr("\nStart simulation based on controller settings from previous steps"));
+        setPixmap(QWizard::LogoPixmap, QPixmap(":/icons/sw_run_simulation","PNG").scaled(128,128));
 
         QVBoxLayout* layout = new QVBoxLayout(this);
         mProcessOutput = new QTextEdit(this);
@@ -624,7 +626,8 @@ namespace hal {
     PageLoadResults::PageLoadResults(NetlistSimulatorController *controller, QWidget *parent)
         : QWizardPage(parent), mController(controller)
     {
-         setTitle(tr("Final page: Load Simulation Results"));
-         setSubTitle("Select simulated waveform to be loaded into viewer. If selection from graphical netlist is preferred please exit wizard, select nets and invoke load results from toolbar");
+         setTitle(tr("Simulation Done : Load Simulation Results"));
+         setSubTitle("\nThis page is not ready yet.\nPlease invoke load results from toolbar.");
+      //   setSubTitle("\nSelect simulated waveform to be loaded into viewer. If selection from graphical netlist is preferred please exit wizard, select nets and invoke load results from toolbar");
     }
 }

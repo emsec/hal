@@ -131,7 +131,7 @@ namespace hal
         QAction* mSimulSettingsAction;
         QAction* mOpenInputfileAction;
         QAction* mSaveWaveformsAction;
-        QAction* mRunSimulationAction;
+        QAction* mInvokeSWizardAction;
         QAction* mAddResultWaveAction;
         QAction* mToggleMaxZoomAction;
         QAction* mUndoZoomShiftAction;

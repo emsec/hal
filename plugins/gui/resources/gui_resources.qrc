@@ -100,6 +100,12 @@
         <file alias="insert-plugin">icons/0501-insert-plugin.svg</file>
         <file alias="cli-options">icons/0502-cli-options.svg</file>
         <file alias="invoke-gui">icons/0503-invoke-gui.svg</file>
+        <file alias="sw_select_gates">icons/simulation_wizard/select_gates.png</file>
+        <file alias="sw_select_clock">icons/simulation_wizard/select_clock.png</file>
+        <file alias="sw_select_engine">icons/simulation_wizard/select_engine.png</file>
+        <file alias="sw_engine_par">icons/simulation_wizard/engine_par.png</file>
+        <file alias="sw_select_input">icons/simulation_wizard/select_input.png</file>
+        <file alias="sw_run_simulation">icons/simulation_wizard/run_simulation.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="spinner">images/oval.svg</file>

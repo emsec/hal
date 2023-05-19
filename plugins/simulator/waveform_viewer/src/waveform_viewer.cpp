@@ -68,7 +68,7 @@ namespace hal
         mSimulSettingsAction = new QAction(this);
         mOpenInputfileAction = new QAction(this);
         mSaveWaveformsAction = new QAction(this);
-        mRunSimulationAction = new QAction(this);
+        mInvokeSWizardAction = new QAction(this);
         mAddResultWaveAction = new QAction(this);
         mToggleMaxZoomAction = new QAction(this);
         mUndoZoomShiftAction = new QAction(this);
@@ -82,7 +82,7 @@ namespace hal
         mSimulSettingsAction->setToolTip("Simulation settings");
         mOpenInputfileAction->setToolTip("Open input file");
         mSaveWaveformsAction->setToolTip("Save waveform data to file");
-        mRunSimulationAction->setToolTip("Run simulation");
+        mInvokeSWizardAction->setToolTip("Invoke simulation wizard");
         mAddResultWaveAction->setToolTip("Add waveform net");
         mToggleMaxZoomAction->setToolTip("Toggle max/min zoom");
         mUndoZoomShiftAction->setToolTip("Undo last zoom or horizontal scroll");
@@ -91,7 +91,7 @@ namespace hal
         connect(mSimulSettingsAction, &QAction::triggered, this, &WaveformViewer::handleSimulSettings);
         connect(mOpenInputfileAction, &QAction::triggered, this, &WaveformViewer::handleOpenInputFile);
         connect(mSaveWaveformsAction, &QAction::triggered, this, &WaveformViewer::handleSaveWaveforms);
-        connect(mRunSimulationAction, &QAction::triggered, this, &WaveformViewer::handleInvokeWizzard);
+        connect(mInvokeSWizardAction, &QAction::triggered, this, &WaveformViewer::handleInvokeWizzard);
         connect(mAddResultWaveAction, &QAction::triggered, this, &WaveformViewer::handleAddResultWave);
         connect(mToggleMaxZoomAction, &QAction::triggered, this, &WaveformViewer::handleToggleMaxZoom);
         connect(mUndoZoomShiftAction, &QAction::triggered, this, &WaveformViewer::handleUndoZoomShift);
@@ -185,7 +185,7 @@ namespace hal
     void WaveformViewer::currentStateChanged(NetlistSimulatorController::SimulationState state)
     {
         mOpenInputfileAction->setEnabled(true);
-        mRunSimulationAction->setEnabled(true);
+        mInvokeSWizardAction->setEnabled(true);
         mOpenInputfileAction->setIcon(gui_utility::getStyledSvgIcon("all->#3192C5",":/icons/folder"));
         if (!mCurrentWaveWidget || state == NetlistSimulatorController::SimulationRun || mProgress->isVisible())
         {
@@ -193,7 +193,7 @@ namespace hal
             mSaveWaveformsAction->setDisabled(true);
 
             // TODO: das ganze muss anders gestartet werden sonst fehlen einpar ptr
-            mRunSimulationAction->setDisabled(true);
+            mInvokeSWizardAction->setDisabled(true);
             mAddResultWaveAction->setDisabled(true);
             mToggleMaxZoomAction->setDisabled(true);
         }
@@ -203,13 +203,13 @@ namespace hal
             mSimulSettingsAction->setEnabled(true);
             mSaveWaveformsAction->setEnabled(state != NetlistSimulatorController::NoGatesSelected);
 
-            //mRunSimulationAction->setEnabled(state == NetlistSimulatorController::ParameterReady);
+            //mInvokeSWizardAction->setEnabled(state == NetlistSimulatorController::ParameterReady);
             mToggleMaxZoomAction->setEnabled(!mCurrentWaveWidget->isEmpty());
        }
         mSimulSettingsAction->setIcon(gui_utility::getStyledSvgIcon(mSimulSettingsAction->isEnabled() ? "all->#FFFFFF" : "all->#808080",":/icons/preferences"));
 
         mSaveWaveformsAction->setIcon(gui_utility::getStyledSvgIcon(mSaveWaveformsAction->isEnabled() ? "all->#3192C5" : "all->#808080",":/icons/save"));
-        mRunSimulationAction->setIcon(gui_utility::getStyledSvgIcon(mRunSimulationAction->isEnabled() ? "all->#20FF80" : "all->#808080",":/icons/run"));
+        mInvokeSWizardAction->setIcon(gui_utility::getStyledSvgIcon(mInvokeSWizardAction->isEnabled() ? "all->#20FF80" : "all->#808080",":/icons/run"));
         testUndoEnable();
 
         if (!mCurrentWaveWidget)
@@ -241,14 +241,13 @@ namespace hal
     void WaveformViewer::setupToolbar(Toolbar* toolbar)
     {
         toolbar->addAction(mCreateControlAction);
+        toolbar->addAction(mInvokeSWizardAction);
         toolbar->addAction(mSimulSettingsAction);
         toolbar->addAction(mOpenInputfileAction);
         toolbar->addAction(mSaveWaveformsAction);
-        toolbar->addAction(mRunSimulationAction);
         toolbar->addAction(mAddResultWaveAction);
         toolbar->addAction(mToggleMaxZoomAction);
         toolbar->addAction(mUndoZoomShiftAction);
-        mRunSimulationAction->setEnabled(true);
     }
 
     void WaveformViewer::handleTabClosed(int inx)
