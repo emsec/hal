@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Solve FSM &mdash; hal_py v4.1.0-92-g14371bce3 documentation</title>
+  <title>Solve FSM &mdash; hal_py v4.1.0-94-ga4fadd33c documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v4.1.0-92-g14371bce3
+                v4.1.0-94-ga4fadd33c
               </div>
             
           
@@ -178,8 +178,8 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>state_reg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><em>halPy.Gate</em><em>]</em>) – Vector contianing the state registers.</li>
-<li><strong>dict{int</strong><strong>, </strong><strong>halPy.BooleanFunction}} transitions</strong> (<em>dict{int</em><em>,</em>) – Transitions of the fsm given as a map from origin state to all possible successor states and the corresponding condition.</li>
+<li><strong>state_reg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – Vector contianing the state registers.</li>
+<li><strong>dict</strong><strong>[</strong><strong>int</strong><strong>, </strong><strong>hal_py.BooleanFunction</strong><strong>]</strong><strong>] </strong><strong>transitions</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>,</em>) – Transitions of the fsm given as a map from origin state to all possible successor states and the corresponding condition.</li>
 <li><strong>graph_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Path to the location where the state graph is saved in dot format.</li>
 <li><strong>max_condition_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The maximum character length that is printed for boolean functions representing the conditions.</li>
 <li><strong>base</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The base with that the states are formatted and printed.</li>
@@ -208,7 +208,7 @@
 
 <dl class="staticmethod">
 <dt id="solve_fsm.SolveFsmPlugin.solve_fsm">
-<em class="property">static </em><code class="descname">solve_fsm</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist, state_reg: List[hal_py.Gate], transition_logic: List[hal_py.Gate], intial_state: Dict[hal_py.Gate, bool], graph_path: str, timeout: int</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[int, Dict[int, hal_py.BooleanFunction]]]<a class="headerlink" href="#solve_fsm.SolveFsmPlugin.solve_fsm" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">solve_fsm</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist, state_reg: List[hal_py.Gate], transition_logic: List[hal_py.Gate], intial_state: Dict[hal_py.Gate, bool] = {}, graph_path: str = '', timeout: int = 600000</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[int, Dict[int, hal_py.BooleanFunction]]]<a class="headerlink" href="#solve_fsm.SolveFsmPlugin.solve_fsm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates the state graph of a finite state machine and returns a mapping from each state to a all its possible transitions.
 The transitions are another mapping from all the possible successor states to the corresponding condition under which the transition is taken.
 This function uses an SMT solver to find all possible successors and afterwards computes the necessary conditions.</p>
@@ -217,16 +217,19 @@ This function uses an SMT solver to find all possible successors and afterwards 
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>nl</strong> (<em>halPy.Netlist</em>) – The netlist.</li>
-<li><strong>state_reg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><em>halPy.Gate</em><em>]</em>) – A list containing all the gates of the fsm representing the state register.</li>
-<li><strong>transition_logic</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><em>halPy.Gate</em><em>]</em>) – A list containing all the gates of the fsm representing the transition_logic.</li>
-<li><strong>bool} initial_state</strong> (<em>dict{halPy.Gate</em><em>,</em>) – A mapping from the state registers to their initial value. If omitted the intial state will be set to 0.</li>
+<li><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist.</li>
+<li><strong>state_reg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – A list containing all the gates of the fsm representing the state register.</li>
+<li><strong>transition_logic</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – A list containing all the gates of the fsm representing the transition_logic.</li>
+<li><strong>initial_state</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>]</em>) – A mapping from the state registers to their initial value. If omitted the intial state will be set to 0.</li>
 <li><strong>graph_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Path to the location where the state graph is saved in dot format.</li>
 <li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Timeout value for the sat solver in seconds.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A mapping from each state to all its possible transitions.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A mapping from each state to all its possible transitions.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>,<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>]]</p>
 </td>
 </tr>
 </tbody>
@@ -244,9 +247,9 @@ This function uses a brute force approach to find all possible successors and af
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>nl</strong> (<em>halPy.Netlist</em>) – The netlist.</li>
-<li><strong>state_reg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><em>halPy.Gate</em><em>]</em>) – A list containing all the gates of the fsm representing the state register.</li>
-<li><strong>transition_logic</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><em>halPy.Gate</em><em>]</em>) – A list containing all the gates of the fsm representing the transition_logic.</li>
+<li><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist.</li>
+<li><strong>state_reg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – A list containing all the gates of the fsm representing the state register.</li>
+<li><strong>transition_logic</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – A list containing all the gates of the fsm representing the transition_logic.</li>
 <li><strong>graph_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Path to the location where the state graph is saved in dot format.</li>
 </ul>
 </td>
@@ -254,7 +257,7 @@ This function uses a brute force approach to find all possible successors and af
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A mapping from each state to all its possible transitions.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>()</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>,<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>]]</p>
 </td>
 </tr>
 </tbody>
