@@ -533,7 +533,7 @@ $(document).ready(function(){initNavTree('python__editor_8cpp_source.html',''); 
 <div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (!currentEditor-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#extraSelections">extraSelections</a>().isEmpty())</div>
 <div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;            currentEditor-&gt;<a class="code" href="classhal_1_1_code_editor.html#a89f9bc1c41bb9e2f51d54ee1491a5ab8">search</a>(<span class="stringliteral">&quot;&quot;</span>);</div>
 <div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160; </div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;        <span class="keywordflow">if</span> (currentEditor-&gt;<a class="code" href="classhal_1_1_python_code_editor.html#a2183a58e5e69ac139698e3ea19d53e1d">isBaseFileModified</a>())</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;        <span class="keywordflow">if</span> (currentEditor-&gt;<a class="code" href="classhal_1_1_python_code_editor.html#a2183a58e5e69ac139698e3ea19d53e1d">isBaseFileModified</a>() || (<a class="code" href="namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a">gPythonContext</a>-&gt;pythonThread()))</div>
 <div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;            mFileModifiedBar-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">false</span>);</div>
 <div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;        <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;            mFileModifiedBar-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html#setHidden">setHidden</a>(<span class="keyword">true</span>);</div>
@@ -2116,7 +2116,7 @@ $(document).ready(function(){initNavTree('python__editor_8cpp_source.html',''); 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_609dd161604b7aa86c7b630207f12412.html">python</a></li><li class="navelem"><a class="el" href="python__editor_8cpp.html">python_editor.cpp</a></li>
-    <li class="footer">Generated on Fri May 19 2023 16:34:40 for HAL by
+    <li class="footer">Generated on Fri May 19 2023 20:33:31 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
