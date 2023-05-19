@@ -11,6 +11,8 @@
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_set_object_color.h"
 #include "gui/user_action/action_set_object_type.h"
+#include "gui/user_action/user_action_compound.h"
+#include "gui/graph_widget/contexts/graph_context.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -174,9 +176,24 @@ namespace hal
 
     void NetlistRelay::deleteModule(const u32 id)
     {
-        ActionDeleteObject* act = new ActionDeleteObject;
-        act->setObject(UserActionObject(id, UserActionObjectType::Module));
-        act->exec();
+        ActionDeleteObject* delMod = new ActionDeleteObject;
+        delMod->setObject(UserActionObject(id, UserActionObjectType::Module));
+
+        GraphContext* ctx = gGraphContextManager->getContextByExclusiveModuleId(id);
+        if (ctx)
+        {
+            // module exclusively connected to context, so delete context too
+            UserActionCompound* compnd = new UserActionCompound;
+            ActionDeleteObject* delCtx = new ActionDeleteObject;
+            delCtx->setObject(UserActionObject(ctx->id(), UserActionObjectType::Context));
+            compnd->addAction(delCtx);
+            compnd->addAction(delMod);
+            compnd->exec();
+        }
+        else
+        {
+            delMod->exec();
+        }
     }
 
     void NetlistRelay::reset()
