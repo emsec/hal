@@ -73,6 +73,21 @@ namespace hal
 
         for (auto g : nl->get_gates([](const auto& g) { return g->get_type()->has_property(GateTypeProperty::c_lut); }))
         {
+            auto res = g->get_init_data();
+            if (res.is_error())
+            {
+                return ERR_APPEND(res.get_error(), "unable to simplify lut init string for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": failed to get original INIT string");
+            }
+
+            const auto original_inits = res.get();
+
+            if (original_inits.size() != 1)
+            {
+                return ERR("unable to simplify lut init string for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": found " + std::to_string(original_inits.size()) + " init data strings but expected exactly 1."); 
+            }
+
+            const auto original_init = original_inits.front();
+
             // skip if the gate type has more than one fan out endpoints
             if (g->get_type()->get_output_pins().size() != 1)
             {
@@ -117,6 +132,7 @@ namespace hal
             // std::cout << "New Init: " << new_init_string << std::endl;
 
             g->set_init_data({new_init_string}).get();
+            g->set_data("preprocessing_information", "original_init", "string", original_init);
 
             // const auto bf_test = g->get_boolean_function(out_ep->get_pin());
 
@@ -1274,7 +1290,6 @@ namespace hal
             u32 line_number = 0;
 
             std::string line;
-            char prev_char  = 0;
             bool escaped    = false;
 
             std::vector<Token<std::string>> parsed_tokens;

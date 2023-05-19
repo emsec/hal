@@ -34,6 +34,8 @@
 !verilog_writer/**/*
 !vhdl_parser*
 !vhdl_parser/**/*
+!xilinx_toolbox*
+!xilinx_toolbox/**/*
 !z3_utils*
 !z3_utils/**/*
 !CMakeLists.txt

@@ -292,8 +292,8 @@ namespace hal
                   :rtype: netlist_simulator_controller.SimulationEngine or None
               )")
 
-            .def("run_simulation", &NetlistSimulatorController::run_simulation, R"("
-                  Run the simulation
+            .def("run_simulation", &NetlistSimulatorController::run_simulation, R"(
+                  Run the simulation.
 
                   :returns: True if all simulation steps could be processed successfully, False otherwise
                   :rtype: bool
