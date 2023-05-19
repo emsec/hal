@@ -445,7 +445,7 @@ namespace hal
         else if (!currentEditor->extraSelections().isEmpty())
             currentEditor->search("");
 
-        if (currentEditor->isBaseFileModified())
+        if (currentEditor->isBaseFileModified() || (gPythonContext->pythonThread()))
             mFileModifiedBar->setHidden(false);
         else
             mFileModifiedBar->setHidden(true);
