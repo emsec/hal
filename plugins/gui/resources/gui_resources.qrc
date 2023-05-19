@@ -106,6 +106,7 @@
         <file alias="sw_engine_par">icons/simulation_wizard/engine_par.png</file>
         <file alias="sw_select_input">icons/simulation_wizard/select_input.png</file>
         <file alias="sw_run_simulation">icons/simulation_wizard/run_simulation.png</file>
+        <file alias="sw_select_results">icons/simulation_wizard/select_results.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="spinner">images/oval.svg</file>

@@ -629,5 +629,6 @@ namespace hal {
          setTitle(tr("Simulation Done : Load Simulation Results"));
          setSubTitle("\nThis page is not ready yet.\nPlease invoke load results from toolbar.");
       //   setSubTitle("\nSelect simulated waveform to be loaded into viewer. If selection from graphical netlist is preferred please exit wizard, select nets and invoke load results from toolbar");
+         setPixmap(QWizard::LogoPixmap, QPixmap(":/icons/sw_select_results","PNG").scaled(128,128));
     }
 }
