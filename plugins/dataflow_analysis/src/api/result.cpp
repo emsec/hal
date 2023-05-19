@@ -509,7 +509,7 @@ namespace hal
                     if (pin->get_direction() == PinDirection::input)
                     {
                         const auto destinations = pin->get_net()->get_destinations([new_mod](const Endpoint* ep) { return ep->get_gate()->get_module() == new_mod; });
-                        if (destinations.size() == 1 && destinations.at(0)->get_pin()->get_type() == PinType::data)
+                        if (std::all_of(destinations.begin(), destinations.end(), [](const Endpoint* ep) { return ep->get_pin()->get_type() == PinType::data; }))
                         {
                             if (data_in_group == nullptr)
                             {
@@ -527,22 +527,6 @@ namespace hal
 
                             new_mod->set_pin_name(pin, "DI(" + std::to_string(pin->get_group().second) + ")");
                             new_mod->set_pin_type(pin, PinType::data);
-                        }
-                        else
-                        {
-                            std::map<PinType, std::string> pin_types = {{PinType::clock, "CLK"}, {PinType::enable, "EN"}, {PinType::reset, "RST"}, {PinType::set, "SET"}};
-                            for (const auto& type : pin_types)
-                            {
-                                if (std::all_of(destinations.begin(), destinations.end(), [type](const Endpoint* ep) { return ep->get_pin()->get_type() == std::get<0>(type); }))
-                                {
-                                    auto* pin_group = pin->get_group().first;
-                                    new_mod->set_pin_name(pin, std::get<1>(type));
-                                    new_mod->set_pin_type(pin, std::get<0>(type));
-                                    new_mod->set_pin_group_name(pin_group, std::get<1>(type));
-                                    new_mod->set_pin_group_type(pin_group, std::get<0>(type));
-                                    break;
-                                }
-                            }
                         }
                     }
                     else if (pin->get_direction() == PinDirection::output)
@@ -567,6 +551,65 @@ namespace hal
                             new_mod->set_pin_name(pin, "DO(" + std::to_string(pin->get_group().second) + ")");
                             new_mod->set_pin_type(pin, PinType::data);
                         }
+                    }
+                }
+
+                for (const auto& [pin_type, nets] : m_group_signals.at(group_id))
+                {
+                    std::string prefix;
+                    switch (pin_type)
+                    {
+                        case PinType::clock:
+                            prefix = "CLK";
+                            break;
+                        case PinType::enable:
+                            prefix = "EN";
+                            break;
+                        case PinType::reset:
+                            prefix = "RST";
+                            break;
+                        case PinType::set:
+                            prefix = "SET";
+                            break;
+                        default:
+                            continue;
+                    }
+
+                    PinGroup<ModulePin>* pin_group = nullptr;
+                    for (auto* net : nets)
+                    {
+                        auto* pin = new_mod->get_pin_by_net(net);
+
+                        if (pin_group == nullptr)
+                        {
+                            pin_group = pin->get_group().first;
+                            new_mod->set_pin_group_name(pin_group, prefix);
+                            new_mod->set_pin_group_type(pin_group, pin_type);
+                        }
+                        else
+                        {
+                            if (const auto res = new_mod->assign_pin_to_group(pin_group, pin); res.is_error())
+                            {
+                                log_warning("dataflow", "{}", res.get_error().get());
+                            }
+                        }
+
+                        if (nets.size() == 1)
+                        {
+                            new_mod->set_pin_name(pin, prefix);
+                        }
+                        else
+                        {
+                            if (const auto res = pin_group->get_index(pin); res.is_error())
+                            {
+                                log_warning("dataflow", "{}", res.get_error().get());
+                            }
+                            else
+                            {
+                                new_mod->set_pin_name(pin, prefix + "(" + std::to_string(res.get()) + ")");
+                            }
+                        }
+                        new_mod->set_pin_type(pin, pin_type);
                     }
                 }
             }
