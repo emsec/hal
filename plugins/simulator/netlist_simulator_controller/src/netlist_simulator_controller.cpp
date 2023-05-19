@@ -209,6 +209,12 @@ namespace hal
         return true;
     }
 
+    u64 NetlistSimulatorController::get_max_simulated_time() const
+    {
+        if (!mWaveDataList) return 0;
+        return mWaveDataList->timeFrame().simulateMaxTime();
+    }
+
     std::filesystem::path NetlistSimulatorController::get_saleae_directory_filename() const
     {
         return std::filesystem::path(mWaveDataList->saleaeDirectory().get_filename());

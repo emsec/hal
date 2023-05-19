@@ -133,6 +133,11 @@ namespace hal
                 :rtype: list[hal_py.Net]
             )")
 
+            .def("get_max_simulated_time", &NetlistSimulatorController::get_max_simulated_time, R"(
+                Get the last time covered by simulation. This is the last transition found in waveforms.
+                :returns: Maximum of simulated time.
+            )")
+
             .def("get_partial_netlist_nets", &NetlistSimulatorController::get_partial_netlist_nets, R"(
                 Get all nets for partial netlist.
 
@@ -287,8 +292,8 @@ namespace hal
                   :rtype: netlist_simulator_controller.SimulationEngine or None
               )")
 
-            .def("run_simulation", &NetlistSimulatorController::run_simulation, R"("
-                  Run the simulation
+            .def("run_simulation", &NetlistSimulatorController::run_simulation, R"(
+                  Run the simulation.
 
                   :returns: True if all simulation steps could be processed successfully, False otherwise
                   :rtype: bool

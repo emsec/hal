@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
   * `netlist_preprocessing`
     * added `decompose_gates_of_type` and `decompose_gate` that decompose combinational logic gates into basic gate types
     * added `parse_def_file` to parse a Design Exchange Format file that contains placement information
+    * `simplify_lut_inits` now annotates the original init string into the data container
   * `verilog_parser`
     * added annotation of all net names that where merged during parsing in the data container
     * added implicit wire declarations for assign statements
@@ -45,6 +46,10 @@ All notable changes to this project will be documented in this file.
   * `netlist_simulation_controller`
     * added versions of `add_waveform_group` taking a module pin group as input
     * added versions of `set_input` taking a `WaveData` object, vectors of nets and values, a `WaveDataGroup` and a vector of values, and a module pin group and a vector of values as input
+  * `solve_fsm`
+    * changed both versions of fsm_solving to now not only consider data inputs of the state register, but also synchronous control signals.
+  * `xilinx_toolbox`
+    * added the first version of the xilinx_toolbox plugin that provides functionality especially fitted to xilinx fpga netlists
 * decorators
   * added `NetlistModificationDecorator`
     * added `delete_modules` to delete all (or a filtered subset of) the modules in a netlist
@@ -69,6 +74,7 @@ All notable changes to this project will be documented in this file.
   * added keyboard shortcuts for fold, unfold, and remove from view
   * added `filter` parameter to `get_fan_[in/out]_[nets/endpoints]`
   * added pyBinds for the `LogManager` class
+  * added pyBinds for the `ProjectDirectory` class
   * added `Module::move_pin_group` to change the order of pin groups of a module
   * changed abort being more responsive when aborting layouting of large views
   * changed and improved color scheme for light style
