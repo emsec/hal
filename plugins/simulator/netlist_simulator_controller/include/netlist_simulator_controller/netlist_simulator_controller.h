@@ -305,6 +305,12 @@ public:
     bool get_results();
 
     /**
+     * Convenience method to get the last time covered by simulation. This is the last transition found in waveforms.
+     * @return Maximum of simulated time
+     */
+    u64 get_max_simulated_time() const;
+
+    /**
      * run simulation
      * @return true on success, false otherwise
      */
