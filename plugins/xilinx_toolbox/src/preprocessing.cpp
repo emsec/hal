@@ -25,11 +25,6 @@ namespace hal
                 auto* o6       = g->get_fan_out_net("O6");
                 const auto* i5 = g->get_fan_in_net("I5");
 
-                if (i5 == nullptr || o5 == nullptr)
-                {
-                    continue;
-                }
-
                 const auto init_get_res = g->get_init_data();
                 if (init_get_res.is_error())
                 {
@@ -47,6 +42,7 @@ namespace hal
                 {
                     // create LUT5
                     auto* lut5 = nl->create_gate(lut5_type, g->get_name() + "_split_O5");
+                    lut5->set_data("xilinx_preprocessing_information", "original_init", "string", init);
 
                     auto init_O5 = init.substr(8, 8);
                     if (lut5->set_init_data({init_O5}).is_error())
@@ -72,6 +68,7 @@ namespace hal
                 {
                     // create LUT6
                     auto* lut6 = nl->create_gate(lut6_type, g->get_name() + "_split_O6");
+                    lut6->set_data("xilinx_preprocessing_information", "original_init", "string", init);
 
                     if (lut6->set_init_data({init}).is_error())
                     {

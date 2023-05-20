@@ -327,6 +327,7 @@ namespace hal
         auto containedModules = mModules + mAddedModules - mRemovedModules;
 
         Module* m = gNetlist->get_module_by_id(id);
+        if (!m) return;
 
         for (const Gate* g : m->get_gates())
         {

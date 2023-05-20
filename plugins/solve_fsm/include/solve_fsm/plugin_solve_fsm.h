@@ -25,9 +25,9 @@
 
 #pragma once
 
+#include "hal_core/netlist/boolean_function.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/utilities/result.h"
-#include "hal_core/netlist/boolean_function.h"
 
 #include <map>
 #include <set>
@@ -60,11 +60,11 @@ namespace hal
          * @returns A mapping from each state to all its possible transitions.
          */
         static Result<std::map<u64, std::map<u64, BooleanFunction>>> solve_fsm(Netlist* nl,
-                                                                               const std::vector<Gate*> state_reg,
-                                                                               const std::vector<Gate*> transition_logic,
-                                                                               const std::map<Gate*, bool> initial_state = {},
-                                                                               const std::string graph_path              = "",
-                                                                               const u32 timeout                         = 600000);
+                                                                               const std::vector<Gate*>& state_reg,
+                                                                               const std::vector<Gate*>& transition_logic,
+                                                                               const std::map<Gate*, bool>& initial_state = {},
+                                                                               const std::string& graph_path              = "",
+                                                                               const u32 timeout                          = 600000);
 
         /**
          * Generates the state graph of a finite state machine and returns a mapping from each state to a all its possible transitions.
@@ -78,7 +78,7 @@ namespace hal
          * @returns A mapping from each state to all its possible transitions.
          */
         static Result<std::map<u64, std::map<u64, BooleanFunction>>>
-            solve_fsm_brute_force(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const std::string graph_path = "");
+            solve_fsm_brute_force(Netlist* nl, const std::vector<Gate*>& state_reg, const std::vector<Gate*>& transition_logic, const std::string& graph_path = "");
 
         /**
          * Generates the state graph of a finite state machine from the transitions of that fsm.

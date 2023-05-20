@@ -48,7 +48,8 @@ namespace hal
     namespace
     {
         // generates a list of state flip flop output nets and the corresponding boolean function at their data input
-        Result<std::vector<std::pair<Net*, BooleanFunction>>> generate_state_bfs(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const bool consider_control_inputs)
+        Result<std::vector<std::pair<Net*, BooleanFunction>>>
+            generate_state_bfs(Netlist* nl, const std::vector<Gate*>& state_reg, const std::vector<Gate*>& transition_logic, const bool consider_control_inputs)
         {
             std::map<Net*, Net*> output_net_to_input_net;
 
@@ -85,9 +86,9 @@ namespace hal
             for (const auto& ff : state_reg)
             {
                 const std::vector<GatePin*> d_pins = ff->get_type()->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::data; });
-                const GatePin* d_pin = d_pins.front();
+                const GatePin* d_pin               = d_pins.front();
 
-                const std::vector<GatePin*> state_pins = ff->get_type()->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::state; });
+                const std::vector<GatePin*> state_pins     = ff->get_type()->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::state; });
                 const std::vector<GatePin*> neg_state_pins = ff->get_type()->get_pins([](const GatePin* pin) { return pin->get_type() == PinType::neg_state; });
 
                 Net* data_net = ff->get_fan_in_net(d_pin);
@@ -101,16 +102,17 @@ namespace hal
 
                     if (ff->get_type()->has_property(GateTypeProperty::ff))
                     {
-                        const FFComponent* ff_component = ff->get_type()->get_component_as<FFComponent>([](const GateTypeComponent* c) { return FFComponent::is_class_of(c); });
+                        const FFComponent* ff_component        = ff->get_type()->get_component_as<FFComponent>([](const GateTypeComponent* c) { return FFComponent::is_class_of(c); });
                         const StateComponent* state_componenet = ff->get_type()->get_component_as<StateComponent>([](const GateTypeComponent* c) { return StateComponent::is_class_of(c); });
-                    
-                        complete_bf = ff_component->get_next_state_function();
-                        internal_state_identifier = state_componenet->get_state_identifier();
+
+                        complete_bf                       = ff_component->get_next_state_function();
+                        internal_state_identifier         = state_componenet->get_state_identifier();
                         internal_negated_state_identifier = state_componenet->get_neg_state_identifier();
                     }
-                    else 
+                    else
                     {
-                        return ERR("failed to generate boolean functions of state: gate " + ff->get_name() + " with ID " + std::to_string(ff->get_id()) + " of state register has an unhandeled type " + ff->get_type()->get_name());
+                        return ERR("failed to generate boolean functions of state: gate " + ff->get_name() + " with ID " + std::to_string(ff->get_id()) + " of state register has an unhandeled type "
+                                   + ff->get_type()->get_name());
                     }
 
                     std::cout << complete_bf << std::endl;
@@ -123,7 +125,8 @@ namespace hal
                         {
                             if (state_pins.size() != 1)
                             {
-                                return ERR("failed to generate boolean functions of state: found " + std::to_string(state_pins.size()) + " state pins at gate " + ff->get_name() + " with ID " + std::to_string(ff->get_id()) + ", but we expect exactly 1.");
+                                return ERR("failed to generate boolean functions of state: found " + std::to_string(state_pins.size()) + " state pins at gate " + ff->get_name() + " with ID "
+                                           + std::to_string(ff->get_id()) + ", but we expect exactly 1.");
                             }
 
                             complete_bf = complete_bf.substitute(internal_state_identifier, BooleanFunctionNetDecorator(*(ff->get_fan_out_net(state_pins.front()))).get_boolean_variable_name());
@@ -135,7 +138,8 @@ namespace hal
                         {
                             if (neg_state_pins.size() != 1)
                             {
-                                return ERR("failed to generate boolean functions of state: found " + std::to_string(neg_state_pins.size()) + " neg state pins at gate " + ff->get_name() + " with ID " + std::to_string(ff->get_id()) + ", but we expect exactly 1.");
+                                return ERR("failed to generate boolean functions of state: found " + std::to_string(neg_state_pins.size()) + " neg state pins at gate " + ff->get_name() + " with ID "
+                                           + std::to_string(ff->get_id()) + ", but we expect exactly 1.");
                             }
 
                             complete_bf = complete_bf.substitute(internal_state_identifier, BooleanFunctionNetDecorator(*(ff->get_fan_out_net(neg_state_pins.front()))).get_boolean_variable_name());
@@ -148,7 +152,7 @@ namespace hal
                         if (auto res = nl_dec.get_subgraph_function(subgraph_gates, pin_net); res.is_error())
                         {
                             return ERR_APPEND(res.get_error(),
-                                            "failed to generate boolean functions of state: could not generate subgraph function for state net " + std::to_string(pin_net->get_id()) + ".");
+                                              "failed to generate boolean functions of state: could not generate subgraph function for state net " + std::to_string(pin_net->get_id()) + ".");
                         }
                         else
                         {
@@ -158,7 +162,8 @@ namespace hal
                         if (auto res = BooleanFunctionDecorator(pin_bf).substitute_power_ground_nets(nl); res.is_error())
                         {
                             return ERR_APPEND(res.get_error(),
-                                            "failed to generate boolean functions of state: could not substitute power and ground nets in boolean funtion of net " + std::to_string(pin_net->get_id()));
+                                              "failed to generate boolean functions of state: could not substitute power and ground nets in boolean funtion of net "
+                                                  + std::to_string(pin_net->get_id()));
                         }
                         else
                         {
@@ -168,7 +173,8 @@ namespace hal
                         if (auto res = complete_bf.substitute(pin_var, pin_bf); res.is_error())
                         {
                             return ERR_APPEND(res.get_error(),
-                                            "failed to generate boolean functions of state: could not substitute variable " + pin_var + " in boolean funtion of net " + std::to_string(pin_net->get_id()));
+                                              "failed to generate boolean functions of state: could not substitute variable " + pin_var + " in boolean funtion of net "
+                                                  + std::to_string(pin_net->get_id()));
                         }
                         else
                         {
@@ -185,7 +191,7 @@ namespace hal
                     if (auto res = nl_dec.get_subgraph_function(subgraph_gates, data_net); res.is_error())
                     {
                         return ERR_APPEND(res.get_error(),
-                                        "failed to generate boolean functions of state: could not generate subgraph function for state net " + std::to_string(data_net->get_id()) + ".");
+                                          "failed to generate boolean functions of state: could not generate subgraph function for state net " + std::to_string(data_net->get_id()) + ".");
                     }
                     else
                     {
@@ -195,7 +201,7 @@ namespace hal
                     if (auto res = BooleanFunctionDecorator(bf).substitute_power_ground_nets(nl); res.is_error())
                     {
                         return ERR_APPEND(res.get_error(),
-                                        "failed to generate boolean functions of state: could not substitute power and ground nets in boolean funtion of net " + std::to_string(data_net->get_id()));
+                                          "failed to generate boolean functions of state: could not substitute power and ground nets in boolean funtion of net " + std::to_string(data_net->get_id()));
                     }
                     else
                     {
@@ -300,7 +306,7 @@ namespace hal
     }    // namespace
 
     Result<std::map<u64, std::map<u64, BooleanFunction>>>
-        SolveFsmPlugin::solve_fsm_brute_force(Netlist* nl, const std::vector<Gate*> state_reg, const std::vector<Gate*> transition_logic, const std::string graph_path)
+        SolveFsmPlugin::solve_fsm_brute_force(Netlist* nl, const std::vector<Gate*>& state_reg, const std::vector<Gate*>& transition_logic, const std::string& graph_path)
     {
         const u32 state_size = state_reg.size();
         if (state_size > 64)
@@ -397,10 +403,10 @@ namespace hal
     }
 
     Result<std::map<u64, std::map<u64, BooleanFunction>>> SolveFsmPlugin::solve_fsm(Netlist* nl,
-                                                                                    const std::vector<Gate*> state_reg,
-                                                                                    const std::vector<Gate*> transition_logic,
-                                                                                    const std::map<Gate*, bool> initial_state,
-                                                                                    const std::string graph_path,
+                                                                                    const std::vector<Gate*>& state_reg,
+                                                                                    const std::vector<Gate*>& transition_logic,
+                                                                                    const std::map<Gate*, bool>& initial_state,
+                                                                                    const std::string& graph_path,
                                                                                     const u32 timeout)
     {
         const u32 state_size = state_reg.size();
