@@ -77,6 +77,15 @@ namespace hal {
     void PageSelectGates::handleCurrentGuiSelection()
     {
         QSet<u32> guiGateSel = gSelectionRelay->selectedGates();
+        for (u32 modId : gSelectionRelay->selectedModules())
+        {
+            Module* m = gNetlist->get_module_by_id(modId);
+            if (!m) continue;
+            for (Gate* g : m->get_gates(nullptr,true))
+            {
+                guiGateSel.insert(g->get_id());
+            }
+        }
 
         const QAbstractItemModel* modl = mTableView->model(); // proxy model
         int nrows = modl->rowCount();
@@ -558,10 +567,16 @@ namespace hal {
         setSubTitle(tr("\nStart simulation based on controller settings from previous steps"));
         setPixmap(QWizard::LogoPixmap, QPixmap(":/icons/sw_run_simulation","PNG").scaled(128,128));
 
+        QIcon runIconEnabled  = gui_utility::getStyledSvgIcon("all->#20FF80", ":/icons/run");
+        QIcon runIconDisabled = gui_utility::getStyledSvgIcon("all->#808080", ":/icons/run");
+        QIcon runIcon;
+        runIcon.addPixmap(runIconEnabled.pixmap(32),QIcon::Normal);
+        runIcon.addPixmap(runIconDisabled.pixmap(32),QIcon::Disabled);
         QVBoxLayout* layout = new QVBoxLayout(this);
         mProcessOutput = new QTextEdit(this);
         layout->addWidget(mProcessOutput);
         mStart = new QPushButton("Run Simulation",this);
+        mStart->setIcon(runIcon);
         connect(mStart,&QPushButton::clicked,this,&PageRunSimulation::handleStartClicked);
         layout->addWidget(mStart);
         mState = new QLabel("Ready to start simulation",this);
