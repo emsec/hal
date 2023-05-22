@@ -17,6 +17,7 @@
 #include "gui/user_action/action_set_object_color.h"
 #include "gui/user_action/user_action_compound.h"
 #include "hal_core/utilities/log.h"
+#include "gui/selection_details_widget/selection_details_widget.h"
 
 #include <QAction>
 #include <QColorDialog>
@@ -435,31 +436,63 @@ namespace hal
 
     void GroupingManagerWidget::handleRenameGroupingClicked()
     {
+//        QModelIndex currentIndex = mProxyModel->mapToSource(mGroupingTableView->currentIndex());
+//        if (!currentIndex.isValid())
+//            return;
+
+//        InputDialog ipd;
+//        ipd.setWindowTitle("Rename Grouping");
+//        ipd.setInfoText("Please select a new unique name for the grouping.");
+//        int irow        = currentIndex.row();
+//        QString oldName = mGroupingTableModel->data(mGroupingTableModel->index(irow, 0), Qt::DisplayRole).toString();
+//        mGroupingTableModel->setAboutToRename(oldName);
+//        ipd.setInputText(oldName);
+//        ipd.addValidator(mGroupingTableModel);
+
+//        if (ipd.exec() == QDialog::Accepted)
+//        {
+//            QString newName = ipd.textValue();
+//            if (newName != oldName)
+//            {
+//                ActionRenameObject* act = new ActionRenameObject(newName);
+//                u32 grpId               = mGroupingTableModel->data(mGroupingTableModel->index(irow, 1), Qt::DisplayRole).toInt();
+//                act->setObject(UserActionObject(grpId, UserActionObjectType::Grouping));
+//                act->exec();
+//            }
+//        }
+//        mGroupingTableModel->setAboutToRename(QString());
+
         QModelIndex currentIndex = mProxyModel->mapToSource(mGroupingTableView->currentIndex());
         if (!currentIndex.isValid())
             return;
 
-        InputDialog ipd;
-        ipd.setWindowTitle("Rename Grouping");
-        ipd.setInfoText("Please select a new unique name for the grouping.");
-        int irow        = currentIndex.row();
+        int irow = currentIndex.row();
         QString oldName = mGroupingTableModel->data(mGroupingTableModel->index(irow, 0), Qt::DisplayRole).toString();
-        mGroupingTableModel->setAboutToRename(oldName);
-        ipd.setInputText(oldName);
-        ipd.addValidator(mGroupingTableModel);
+        u32 grpId = mGroupingTableModel->data(mGroupingTableModel->index(irow, 1), Qt::DisplayRole).toInt();
 
-        if (ipd.exec() == QDialog::Accepted)
-        {
-            QString newName = ipd.textValue();
-            if (newName != oldName)
-            {
-                ActionRenameObject* act = new ActionRenameObject(newName);
-                u32 grpId               = mGroupingTableModel->data(mGroupingTableModel->index(irow, 1), Qt::DisplayRole).toInt();
-                act->setObject(UserActionObject(grpId, UserActionObjectType::Grouping));
-                act->exec();
-            }
-        }
-        mGroupingTableModel->setAboutToRename(QString());
+        QDialog dialog;
+        dialog.setWindowTitle(QString("Content of %1 (ID: %2)").arg(oldName).arg(grpId));
+
+        // Create color rectangle
+        QLabel* colorRectangle = new QLabel();
+        colorRectangle->setStyleSheet("background-color: #your_color_here");  // Replace with actual color
+        colorRectangle->setAlignment(Qt::AlignRight);
+        colorRectangle->setMaximumHeight(50);
+        colorRectangle->setMaximumWidth(50);
+
+        // Replace InputDialog with SelectionTreeView
+        SelectionDetailsWidget* selectionWidget = new SelectionDetailsWidget(&dialog);
+
+        QPushButton* closeButton = new QPushButton("Close", &dialog);
+        connect(closeButton, &QPushButton::clicked, [&dialog](){ dialog.close(); });
+
+        QVBoxLayout* layout = new QVBoxLayout();
+        layout->addWidget(colorRectangle);
+        layout->addWidget(selectionWidget);
+        layout->addWidget(closeButton);
+        dialog.setLayout(layout);
+
+        dialog.exec();
     }
 
     void GroupingManagerWidget::handleDeleteGroupingClicked()
