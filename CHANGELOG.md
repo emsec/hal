@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## [4.2.0] - 2023-05-24 10:02:04-07:00 (urgency: medium)
+## [4.2.0](v4.2.0) - 2023-05-24 10:02:04-07:00 (urgency: medium)
 * GUI plugin manager
   * **WARNING:** modified plugin core API - reduced number of base classes and instead added extension components
   * added overview of loaded plugins and their features
@@ -97,7 +97,7 @@ All notable changes to this project will be documented in this file.
   * fixed not loading all plugins if the GUI is not in control
   * fixed Verilog writer not being a dependency of Verilator plugin
 
-## [4.1.0] - 2023-03-08 16:57:06+01:00 (urgency: medium)
+## [4.1.0](v4.1.0) - 2023-03-08 16:57:06+01:00 (urgency: medium)
 * selection details widget
   * module icons reflect module color
   * gate icons shape according to gate type
@@ -158,7 +158,7 @@ All notable changes to this project will be documented in this file.
   * fixed netlist parser bug related to unconnected module pins that are being directly assigned to another wire/signal in the module/entity body
   * fixed `get_pins` returning pins in wrong order if no filter is specified
 
-## [4.0.1] - 2022-10-24 15:33:15+02:00 (urgency: medium)
+## [4.0.1](v4.0.1) - 2022-10-24 15:33:15+02:00 (urgency: medium)
 * **WARNING:** this release breaks multiple APIs, please make sure to adjust your code accordingly.
 * project manager
   * added keeping all data belonging to a netlist in a single project directory
@@ -217,7 +217,7 @@ All notable changes to this project will be documented in this file.
   * fixed parsing of Liberty gate library attribute `clock`
   * fixed description of flip-flops and latches in all FPGA gate libraries
 
-## [3.3.0] - 2021-10-13 16:20:00+02:00 (urgency: medium)
+## [3.3.0](v3.3.0)- 2021-10-13 16:20:00+02:00 (urgency: medium)
 * Serialize to and deserialize from hal project directory
   * Layouts from all views are saved and restored
   * Grouping names and colors are saved and restored
