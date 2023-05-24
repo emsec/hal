@@ -418,13 +418,35 @@ namespace hal
         QMap<QString, QString> engPropMap = NetlistSimulatorControllerPlugin::sSimulationSettings->engineProperties();
 
         if (!engPropMap.isEmpty())
-            for (auto it = engPropMap.constBegin(); it != engPropMap.constEnd(); ++it)
+        {
+            bool engPropMapModified = false;
+            for (auto it = engPropMap.begin(); it != engPropMap.end(); ++it)
             {
                 std::string prop = it.key().toStdString();
                 std::string valu = it.value().toStdString();
-                log_info(get_name(), "Engine property '{}' set to '{}'.", prop, valu);
-                mSimulationEngine->set_engine_property(prop, valu);
+
+                std::string userAssignedValue = mSimulationEngine->get_engine_property(prop);
+                if (userAssignedValue.empty())
+                {
+                    log_info(get_name(), "Engine property '{}' set to '{}'.", prop, valu);
+                    mSimulationEngine->set_engine_property(prop, valu);
+                }
+                else
+                {
+                    if (userAssignedValue != valu)
+                    {
+                        log_info(get_name(), "Default value for engine property '{}' changed from '{}' to '{}'.", prop, valu, userAssignedValue);
+                        it.value() = QString::fromStdString(userAssignedValue);
+                        engPropMapModified = true;
+                    }
+                }
             }
+            if (engPropMapModified)
+            {
+                NetlistSimulatorControllerPlugin::sSimulationSettings->setEngineProperties(engPropMap);
+                NetlistSimulatorControllerPlugin::sSimulationSettings->sync();
+            }
+        }
 
         if (mState != ParameterReady)
         {
