@@ -118,7 +118,7 @@ namespace hal
          *
          * @param mVisible - The bool to determine the described behaviour.
          */
-        void populate(bool mVisible);
+        void populate(bool mVisible, u32 groupingId=-1);
 
         /**
          * Converts a given modelIntex to the item it represents.

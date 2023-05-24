@@ -191,13 +191,13 @@ namespace hal
         }
     }
 
-    void SelectionTreeView::populate(bool mVisible)
+    void SelectionTreeView::populate(bool mVisible, u32 groupingId)
     {
         if (mSelectionTreeProxyModel->isGraphicsBusy())
             return;
         setSelectionMode(QAbstractItemView::NoSelection);
         selectionModel()->clear();
-        mSelectionTreeModel->fetchSelection(mVisible);
+        mSelectionTreeModel->fetchSelection(mVisible, groupingId);
         if (mVisible)
         {
             show();

@@ -17,7 +17,7 @@
 #include "gui/user_action/action_set_object_color.h"
 #include "gui/user_action/user_action_compound.h"
 #include "hal_core/utilities/log.h"
-#include "gui/selection_details_widget/selection_details_widget.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
 
 #include <QAction>
 #include <QColorDialog>
@@ -481,14 +481,15 @@ namespace hal
         colorRectangle->setMaximumWidth(50);
 
         // Replace InputDialog with SelectionTreeView
-        SelectionDetailsWidget* selectionWidget = new SelectionDetailsWidget(&dialog);
+        SelectionTreeView* selectionTreeView = new SelectionTreeView(&dialog);
+        selectionTreeView->populate(true, grpId);
 
         QPushButton* closeButton = new QPushButton("Close", &dialog);
         connect(closeButton, &QPushButton::clicked, [&dialog](){ dialog.close(); });
 
         QVBoxLayout* layout = new QVBoxLayout();
         layout->addWidget(colorRectangle);
-        layout->addWidget(selectionWidget);
+        layout->addWidget(selectionTreeView);
         layout->addWidget(closeButton);
         dialog.setLayout(layout);
 
