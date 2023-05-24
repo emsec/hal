@@ -2,8 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-* Graphics
 
+## [4.2.0] - 2023-05-24 10:02:04-07:00 (urgency: medium)
 * GUI plugin manager
   * **WARNING:** modified plugin core API - reduced number of base classes and instead added extension components
   * added overview of loaded plugins and their features
@@ -92,6 +92,10 @@ All notable changes to this project will be documented in this file.
   * fixed nets without source or destination not being shown when unfolding the module they belong to in the selection details widget
   * fixed cmake failing to parse HAL version number from file
   * fixed pins and pin groups not being hashable in Python
+  * fixed Python script execution abort button disappearing when switching tabs
+  * fixed segfault when deleting a module for which an exclusive view exists
+  * fixed not loading all plugins if the GUI is not in control
+  * fixed Verilog writer not being a dependency of Verilator plugin
 
 ## [4.1.0] - 2023-03-08 16:57:06+01:00 (urgency: medium)
 * selection details widget
