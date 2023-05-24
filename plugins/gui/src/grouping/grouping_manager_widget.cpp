@@ -473,12 +473,19 @@ namespace hal
         QDialog dialog;
         dialog.setWindowTitle(QString("Content of %1 (ID: %2)").arg(oldName).arg(grpId));
 
+
         // Create color rectangle
-        QLabel* colorRectangle = new QLabel();
-        colorRectangle->setStyleSheet("background-color: #your_color_here");  // Replace with actual color
-        colorRectangle->setAlignment(Qt::AlignRight);
-        colorRectangle->setMaximumHeight(50);
-        colorRectangle->setMaximumWidth(50);
+        Grouping* grouping = gNetlist->get_grouping_by_id(grpId);
+        utils::Color color = grouping->get_color();
+        QColor qColor;
+        qColor.setHsv(color.h, color.s, color.v);
+
+        QLabel* colorTriangle = new QLabel();
+        colorTriangle->setText("");  // Unicode-Zeichen für ein nach oben zeigendes Dreieck
+        colorTriangle->setStyleSheet("background-color: " + qColor.name());
+        colorTriangle->setFixedSize(20, 20);  // Größe des Dreiecks anpassen
+        colorTriangle->setAutoFillBackground(true);
+        colorTriangle->show();
 
         // Replace InputDialog with SelectionTreeView
         SelectionTreeView* selectionTreeView = new SelectionTreeView(&dialog);
@@ -488,7 +495,7 @@ namespace hal
         connect(closeButton, &QPushButton::clicked, [&dialog](){ dialog.close(); });
 
         QVBoxLayout* layout = new QVBoxLayout();
-        layout->addWidget(colorRectangle);
+        layout->addWidget(colorTriangle);
         layout->addWidget(selectionTreeView);
         layout->addWidget(closeButton);
         dialog.setLayout(layout);

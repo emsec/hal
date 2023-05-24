@@ -169,7 +169,6 @@ namespace hal
         }
         else
         {
-            std::cout << "fetchselection for grouping" << std::endl;
             Grouping* grouping = gNetlist->get_grouping_by_id(groupingId);
             if (grouping)
             {
