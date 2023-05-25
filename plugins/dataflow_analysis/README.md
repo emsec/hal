@@ -1,4 +1,6 @@
-# Dataflow Analysis (DANA)(OUTDATED)
+# Dataflow Analysis (DANA)
+
+THIS README NEEDS TO BE UPDATED!
 
 This plugin is our implementation of our technique DANA, published in TCHES'20 (https://eprint.iacr.org/2020/751)
 ```
