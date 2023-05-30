@@ -93,17 +93,19 @@ namespace hal
         return true;
     }
 
-    bool SimulationEngineEventDriven::run(NetlistSimulatorController* controller)
+    bool SimulationEngineEventDriven::run(NetlistSimulatorController* controller, SimulationLogReceiver *logReceiver)
     {
+        Q_UNUSED(logReceiver);
         SimulationThread* thread = new SimulationThread(controller, mSimulationInput, this);
         mState                   = Running;
         thread->start();
         return true;
     }
 
-    bool SimulationEngineScripted::run(NetlistSimulatorController* controller)
+    bool SimulationEngineScripted::run(NetlistSimulatorController* controller, SimulationLogReceiver *logReceiver)
     {
         SimulationProcess* proc = new SimulationProcess(controller, this);
+        proc->log()->setLogReceiver(logReceiver);
         mState                  = Running;
         proc->start();
         return true;

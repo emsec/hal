@@ -36,17 +36,32 @@ namespace hal {
 
     class NetlistSimulatorController;
 
-    class SimulationProcessLog
+    class SimulationLogReceiver : public QObject
     {
+        Q_OBJECT
+    public Q_SLOTS:
+        virtual void handleLog(const QString& txt) = 0;
+    public:
+        SimulationLogReceiver(QObject* parent = nullptr);
+        virtual ~SimulationLogReceiver() {;}
+    };
+
+
+    class SimulationProcessLog : public QObject
+    {
+        Q_OBJECT
+
         QFile mFile;
         QTextStream *mStream;
-        SimulationProcessLog(const QString& filename);
-        SimulationProcessLog(bool toStdErr);
+    Q_SIGNALS:
+        void processOutput(QString txt);
+
     public:
-        ~SimulationProcessLog();
+        SimulationProcessLog(const QString& filename);
+        virtual ~SimulationProcessLog();
         bool good() const { return mFile.isOpen(); }
-        QTextStream* log() const { return mStream; }
-        static SimulationProcessLog* logFactory(const std::string& workdirName);
+        void setLogReceiver(SimulationLogReceiver* logReceiver);
+        SimulationProcessLog& operator<< (const QString& txt);
         static QString sLogFilename;
     };
 
@@ -60,6 +75,7 @@ namespace hal {
         std::string mSaleaeDirectoryFilename;
         SimulationProcessLog* mProcessLog;
 
+        QProcess* mProcess;
         void abortOnError();
         void openHtmlLog();
         bool runProcess(const QString& prog, const QStringList& args);
@@ -67,9 +83,15 @@ namespace hal {
     Q_SIGNALS:
         void processFinished(bool success);
 
+    private Q_SLOTS:
+        void handleReadyReadStandardError();
+        void handleReadyReadStandardOutput();
+        void handleFinished(int exitCode, QProcess::ExitStatus exitStatus);
+
     public:
         SimulationProcess(NetlistSimulatorController* controller, SimulationEngineScripted* engine);
-
+        virtual ~SimulationProcess();
+        SimulationProcessLog* log() const { return mProcessLog; }
         void run();
     private:
         QByteArray toHtml(const QByteArray& txt);

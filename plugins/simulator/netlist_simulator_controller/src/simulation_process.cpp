@@ -24,11 +24,6 @@ namespace hal
             mStream = new QTextStream(&mFile);
     }
 
-    SimulationProcessLog::SimulationProcessLog(bool toStdErr)
-    {
-        mStream = new QTextStream(toStdErr ? stderr : stdout, QIODevice::WriteOnly);
-    }
-
     SimulationProcessLog::~SimulationProcessLog()
     {
         if (mStream)
@@ -40,6 +35,7 @@ namespace hal
             mFile.close();
     }
 
+    /*
     SimulationProcessLog* SimulationProcessLog::logFactory(const std::string& workdirName)
     {
         QDir workDir(QString::fromStdString(workdirName));
@@ -51,11 +47,33 @@ namespace hal
         delete retval;
         return new SimulationProcessLog(true);
     }
+*/
+
+    void SimulationProcessLog::setLogReceiver(SimulationLogReceiver *logReceiver)
+    {
+        if (!logReceiver) return;
+        connect(this,&SimulationProcessLog::processOutput,logReceiver,&SimulationLogReceiver::handleLog);
+    }
+
+
+    SimulationProcessLog& SimulationProcessLog::operator<< (const QString& txt)
+    {
+        if (mStream)
+            (*mStream) << txt;
+        Q_EMIT processOutput(txt);
+        return *this;
+    }
 
     SimulationProcess::SimulationProcess(NetlistSimulatorController* controller, SimulationEngineScripted* engine)
         : mEngine(engine), mLineIndex(0), mNumberLines(0), mSaleaeDirectoryFilename(controller->get_saleae_directory_filename()), mProcessLog(nullptr)
     {
         connect(this, &SimulationProcess::processFinished, controller, &NetlistSimulatorController::handleRunFinished);
+        mProcessLog = new SimulationProcessLog(QString::fromStdString(mEngine->get_working_directory()));
+    }
+
+    SimulationProcess::~SimulationProcess()
+    {
+        delete mProcessLog;
     }
 
     void SimulationProcess::abortOnError()
@@ -70,13 +88,10 @@ namespace hal
 
     void SimulationProcess::run()
     {
-        mProcessLog = SimulationProcessLog::logFactory(mEngine->get_working_directory());
         if (mEngine->get_engine_property("ssh_server").empty())
             runLocal();
         else
             runRemote();
-        if (mProcessLog)
-            delete mProcessLog;
     }
 
     void SimulationProcess::runRemote()
@@ -200,17 +215,22 @@ namespace hal
 
     bool SimulationProcess::runProcess(const QString& prog, const QStringList& args)
     {
-        (*mProcessLog->log()) << "<html><body bgcolor=\"#000000\">\n";
-
-        (*mProcessLog->log()) << "<h1><font color=\"#ffffff\">" << prog;
+        QString logCommand = "<html><body bgcolor=\"#000000\">\n<h1><font color=\"#ffffff\">" + prog;
         for (const QString& arg : args)
-            (*mProcessLog->log()) << " " << arg;
-        (*mProcessLog->log()) << "</font></h1>\n";
-        QProcess* process = new QProcess;
-        process->setWorkingDirectory(QString::fromStdString(mEngine->get_working_directory()));
-        process->start(prog, args);
+            logCommand +=  " " + arg;
+        logCommand += "</font></h1>\n";
+        mProcess = new QProcess(this);
+        mProcess->setWorkingDirectory(QString::fromStdString(mEngine->get_working_directory()));
+        connect(mProcess,&QProcess::readyReadStandardError,this,&SimulationProcess::handleReadyReadStandardError);
+        connect(mProcess,&QProcess::readyReadStandardOutput,this,&SimulationProcess::handleReadyReadStandardOutput);
+        connect(mProcess,QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+                [this](int exitCode, QProcess::ExitStatus exitStatus){ this->handleFinished(exitCode,exitStatus); });
 
-        if (!process->waitForStarted())
+        (*mProcessLog) << logCommand;
+
+        mProcess->start(prog, args);
+
+        if (!mProcess->waitForStarted())
         {
             log_warning("simulation_plugin", "Cannot start process '{}' with args '{}'",
                         prog.toStdString(), args.join(' ').toStdString());
@@ -219,32 +239,51 @@ namespace hal
             return false;
         }
 
-        bool success = process->waitForFinished(-1);
-
-        for (const QByteArray& line : process->readAllStandardError().split('\n'))
-        {
-            if (line.startsWith("%Error"))
-                (*mProcessLog->log()) << "<p><font color=\"#ff4040\">";
-            else if (line.startsWith("%Warning"))
-                (*mProcessLog->log()) << "<p><font color=\"#ffe050\">";
-            else
-                (*mProcessLog->log()) << "<p><font color=\"#ffffff\">";
-            (*mProcessLog->log()) << toHtml(line) << "</font></p>\n";
-        }
-
-        for (const QByteArray& line : process->readAllStandardOutput().split('\n'))
-        {
-            (*mProcessLog->log()) << "<p><font color=\"#e0e0e0\">" << toHtml(line) << "</font></p>\n";
-        }
-
-        (*mProcessLog->log()) << "</body></html>\n";
-        if (!success)
-            return false;
-
-        if (process->exitStatus() != QProcess::NormalExit || process->exitCode() != 0)
+        if (exec())  // event loop ended with non-zero value
             return false;
 
         return true;
     }
 
+    void SimulationProcess::handleReadyReadStandardError()
+    {
+        QString errTxt;
+        for (const QByteArray& line : mProcess->readAllStandardError().split('\n'))
+        {
+            if (line.startsWith("%Error"))
+                errTxt += "<p><font color=\"#ff4040\">";
+            else if (line.startsWith("%Warning"))
+                errTxt += "<p><font color=\"#ffe050\">";
+            else
+                errTxt += "<p><font color=\"#ffffff\">";
+
+            errTxt += QString::fromUtf8(toHtml(line)) + "</font></p>\n";
+        }
+
+        (*mProcessLog) << errTxt;
+    }
+
+    void SimulationProcess::handleReadyReadStandardOutput()
+    {
+        QString outTxt;
+
+        for (const QByteArray& line : mProcess->readAllStandardOutput().split('\n'))
+        {
+             outTxt += "<p><font color=\"#e0e0e0\">" + QString::fromUtf8(toHtml(line)) + "</font></p>\n";
+        }
+
+        (*mProcessLog) << outTxt;
+    }
+
+    void SimulationProcess::handleFinished(int exitCode, QProcess::ExitStatus exitStatus)
+    {
+        QString endTxt = QString("<p>exit code %1</p></body></html>\n").arg(exitCode);
+        (*mProcessLog) << endTxt;
+
+        if (exitCode != 0) exit(exitCode);
+
+        if (exitStatus != QProcess::NormalExit) exit(-99);
+
+        exit(0);
+    }
 }    // namespace hal

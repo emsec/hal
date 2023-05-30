@@ -80,6 +80,11 @@ namespace hal
             std::set<std::string> get_provided_models(const std::filesystem::path model_path, const std::filesystem::path gate_definition_path)
             {
                 std::set<std::string> supported_gate_types;
+                if (!std::filesystem::exists(model_path))
+                {
+                    log_warning("verilator", "provided_models path '{}' does not exist", model_path.string());
+                    return supported_gate_types;
+                }
                 for (const auto& entry : std::filesystem::directory_iterator(model_path))
                 {
                     std::string file = entry.path().filename();

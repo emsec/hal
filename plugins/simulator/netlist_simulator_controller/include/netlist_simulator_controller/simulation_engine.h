@@ -37,6 +37,7 @@
 namespace hal
 {
     class NetlistSimulatorController;
+    class SimulationLogReceiver;
 
     class SimulationEngine
     {
@@ -166,7 +167,7 @@ namespace hal
          *
          * @return true if successful, false on error
          */
-        virtual bool run(NetlistSimulatorController* controller) = 0;
+        virtual bool run(NetlistSimulatorController* controller, SimulationLogReceiver* logReceiver=nullptr) = 0;
 
         /**
          * Can be overwritten by derived class
@@ -220,7 +221,7 @@ namespace hal
 
     class SimulationEngineEventDriven : public SimulationEngine
     {
-        bool run(NetlistSimulatorController* controller) override;
+        bool run(NetlistSimulatorController* controller, SimulationLogReceiver* logReceiver=nullptr) override;
         bool setSimulationInput(SimulationInput* simInput) override;
 
     public:
@@ -246,7 +247,7 @@ namespace hal
 
     class SimulationEngineScripted : public SimulationEngine
     {
-        virtual bool run(NetlistSimulatorController* controller) override;
+        virtual bool run(NetlistSimulatorController* controller, SimulationLogReceiver *logReceiver=nullptr) override;
 
     public:
         SimulationEngineScripted(const std::string& nam) : SimulationEngine(nam)
