@@ -559,6 +559,24 @@ namespace hal {
         return true;
     }
 
+    SimulationProcessOutput::SimulationProcessOutput(QWidget* parent, QLayout *layout)
+        : SimulationLogReceiver(parent)
+    {
+        mTextEdit = new QTextEdit(parent);
+        layout->addWidget(mTextEdit);
+    }
+
+    void SimulationProcessOutput::handleLog(const QString &txt)
+    {
+        mTextEdit->moveCursor(QTextCursor::End);
+        mTextEdit->insertHtml(txt);
+        mTextEdit->moveCursor(QTextCursor::End);
+    }
+
+    void SimulationProcessOutput::readFile(QFile &ff)
+    {
+        mTextEdit->setHtml(QString::fromUtf8(ff.readAll()));
+    }
 
     PageRunSimulation::PageRunSimulation(NetlistSimulatorController *controller, QWidget *parent)
         : QWizardPage(parent), mController(controller)
@@ -573,8 +591,7 @@ namespace hal {
         runIcon.addPixmap(runIconEnabled.pixmap(32),QIcon::Normal);
         runIcon.addPixmap(runIconDisabled.pixmap(32),QIcon::Disabled);
         QVBoxLayout* layout = new QVBoxLayout(this);
-        mProcessOutput = new QTextEdit(this);
-        layout->addWidget(mProcessOutput);
+        mProcessOutput = new SimulationProcessOutput(this,layout);
         mStart = new QPushButton("Run Simulation",this);
         mStart->setIcon(runIcon);
         connect(mStart,&QPushButton::clicked,this,&PageRunSimulation::handleStartClicked);
@@ -589,6 +606,7 @@ namespace hal {
         mStart->setDisabled(true);
         connect(mController,&NetlistSimulatorController::stateChanged,this,&PageRunSimulation::handleStateChanged);
         connect(mController,&NetlistSimulatorController::engineFinished,this,&PageRunSimulation::handleEngineFinished);
+        mController->setLogReceiver(mProcessOutput);
         mController->run_simulation();
         log_info(mController->get_name(),"Simulation started ...");
         QString fname = QDir(QString::fromStdString(mController->get_working_directory())).absoluteFilePath(SimulationProcessLog::sLogFilename);
@@ -613,8 +631,7 @@ namespace hal {
 
     void PageRunSimulation::handleLogfileRead()
     {
-        mLogText += mLogfile.readAll();
-        mProcessOutput->setHtml(QString::fromUtf8(mLogText));
+        mProcessOutput->readFile(mLogfile);
     }
 
     void PageRunSimulation::handleEngineFinished(bool success)

@@ -17,8 +17,14 @@ namespace hal
 
     QString SimulationProcessLog::sLogFilename = "engine_log.html";
 
-    SimulationProcessLog::SimulationProcessLog(const QString& filename) : mStream(nullptr)
+    SimulationLogReceiver::SimulationLogReceiver(QObject* parent)
+        : QObject(parent)
+    {;}
+
+    SimulationProcessLog::SimulationProcessLog(const QString& workdir, QObject* parent)
+        : QObject(parent), mStream(nullptr)
     {
+        QString filename(QDir(workdir).absoluteFilePath(sLogFilename));
         mFile.setFileName(filename);
         if (mFile.open(QIODevice::WriteOnly))
             mStream = new QTextStream(&mFile);
@@ -35,33 +41,23 @@ namespace hal
             mFile.close();
     }
 
-    /*
-    SimulationProcessLog* SimulationProcessLog::logFactory(const std::string& workdirName)
-    {
-        QDir workDir(QString::fromStdString(workdirName));
-        QString filename(workDir.absoluteFilePath(sLogFilename));
-
-        SimulationProcessLog* retval = new SimulationProcessLog(filename);
-        if (retval->good())
-            return retval;
-        delete retval;
-        return new SimulationProcessLog(true);
-    }
-*/
-
     void SimulationProcessLog::setLogReceiver(SimulationLogReceiver *logReceiver)
     {
         if (!logReceiver) return;
-        connect(this,&SimulationProcessLog::processOutput,logReceiver,&SimulationLogReceiver::handleLog);
+        connect(this,&SimulationProcessLog::processOutput,logReceiver,&SimulationLogReceiver::handleLog,Qt::QueuedConnection);
     }
 
+    void SimulationProcessLog::flush()
+    {
+        if (mStream)
+            mStream->flush();
+    }
 
-    SimulationProcessLog& SimulationProcessLog::operator<< (const QString& txt)
+    void SimulationProcessLog::operator<< (const QString& txt)
     {
         if (mStream)
             (*mStream) << txt;
         Q_EMIT processOutput(txt);
-        return *this;
     }
 
     SimulationProcess::SimulationProcess(NetlistSimulatorController* controller, SimulationEngineScripted* engine)
@@ -73,7 +69,7 @@ namespace hal
 
     SimulationProcess::~SimulationProcess()
     {
-        delete mProcessLog;
+        mProcessLog->deleteLater();
     }
 
     void SimulationProcess::abortOnError()
@@ -279,6 +275,7 @@ namespace hal
     {
         QString endTxt = QString("<p>exit code %1</p></body></html>\n").arg(exitCode);
         (*mProcessLog) << endTxt;
+        mProcessLog->flush();
 
         if (exitCode != 0) exit(exitCode);
 

@@ -22,6 +22,7 @@
 #include "hal_core/netlist/gate.h"
 #include "waveform_viewer.h"
 #include "netlist_simulator_controller/simulation_settings.h"
+#include "netlist_simulator_controller/simulation_process.h"
 
 namespace hal {
 
@@ -146,6 +147,18 @@ namespace hal {
         QLineEdit *mEditFilename;
     };
 
+    class SimulationProcessOutput : public SimulationLogReceiver
+    {
+        Q_OBJECT
+    public Q_SLOTS:
+        void handleLog(const QString &txt) override;
+    public:
+        SimulationProcessOutput(QWidget* parent, QLayout* layout);
+        void readFile(QFile& ff);
+    private:
+        QTextEdit* mTextEdit;
+    };
+
     class PageRunSimulation : public QWizardPage {
         Q_OBJECT
 
@@ -164,7 +177,7 @@ namespace hal {
 
     private:
         NetlistSimulatorController *mController;
-        QTextEdit* mProcessOutput;
+        SimulationProcessOutput* mProcessOutput;
         QPushButton* mStart;
         QLabel* mState;
         QFile mLogfile;

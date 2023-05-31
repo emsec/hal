@@ -30,7 +30,7 @@ namespace hal
 
     NetlistSimulatorController::NetlistSimulatorController(u32 id, const std::string nam, const std::string& workdir, QObject* parent)
         : QObject(parent), mId(id), mName(QString::fromStdString(nam)), mState(NoGatesSelected), mSimulationEngine(nullptr), mTempDir(nullptr), mWaveDataList(nullptr),
-          mSimulationInput(new SimulationInput)
+          mSimulationInput(new SimulationInput), mLogReceiver(nullptr)
     {
         if (mName.isEmpty())
             mName = QString("sim_controller%1").arg(mId);
@@ -63,7 +63,8 @@ namespace hal
     }
 
     NetlistSimulatorController::NetlistSimulatorController(u32 id, Netlist* nl, const std::string& filename, QObject* parent)
-        : QObject(parent), mId(id), mState(NoGatesSelected), mSimulationEngine(nullptr), mTempDir(nullptr), mWaveDataList(nullptr), mSimulationInput(new SimulationInput)
+        : QObject(parent), mId(id), mState(NoGatesSelected), mSimulationEngine(nullptr), mTempDir(nullptr), mWaveDataList(nullptr),
+          mSimulationInput(new SimulationInput), mLogReceiver(nullptr)
     {
         FILE* ff = fopen(filename.c_str(), "rb");
         if (!ff)
@@ -164,6 +165,11 @@ namespace hal
             mWaveDataList->deleteLater();
         delete mSimulationInput;
         //  delete mTempDir;
+    }
+
+    void NetlistSimulatorController::setLogReceiver(SimulationLogReceiver *logrec)
+    {
+        mLogReceiver = logrec;
     }
 
     void NetlistSimulatorController::setState(SimulationState stat)
@@ -349,7 +355,7 @@ namespace hal
     {
         if (filename.isEmpty())
             return;
-        VcdSerializer reader(mWorkDir, this);
+        VcdSerializer reader(mWorkDir, false, this);
         QList<const Net*> onlyNets;
         for (const Net* n : mSimulationInput->get_input_nets())
             onlyNets.append(n);
@@ -479,7 +485,7 @@ namespace hal
         }
 
         // start simulation process (might be external process)
-        if (!mSimulationEngine->run(this))
+        if (!mSimulationEngine->run(this,mLogReceiver))
         {
             log_warning(get_name(), "simulation engine error during startup.");
             setState(EngineFailed);
@@ -559,7 +565,7 @@ namespace hal
 
     bool NetlistSimulatorController::import_vcd(const std::string& filename, FilterInputFlag filter)
     {
-        VcdSerializer reader(mWorkDir, this);
+        VcdSerializer reader(mWorkDir, false, this);
 
         QList<const Net*> inputNets;
         if (filter != NoFilter)
@@ -582,7 +588,7 @@ namespace hal
 
     void NetlistSimulatorController::import_csv(const std::string& filename, FilterInputFlag filter, u64 timescale)
     {
-        VcdSerializer reader(mWorkDir, this);
+        VcdSerializer reader(mWorkDir, false, this);
 
         QList<const Net*> inputNets;
         if (filter != NoFilter)
@@ -599,7 +605,7 @@ namespace hal
 
     void NetlistSimulatorController::import_saleae(const std::string& dirname, std::unordered_map<Net*, int> lookupTable, u64 timescale)
     {
-        VcdSerializer reader(mWorkDir, this);
+        VcdSerializer reader(mWorkDir, false, this);
         if (reader.importSaleae(QString::fromStdString(dirname), lookupTable, mWorkDir, timescale))
         {
             mWaveDataList->updateFromSaleae();
@@ -644,7 +650,7 @@ namespace hal
                     continue;
                 lookupTable.insert(std::make_pair((Net*)n, inx));
             }
-            VcdSerializer reader(mWorkDir, this);
+            VcdSerializer reader(mWorkDir, false, this);
             if (reader.importSaleae(QString::fromStdString(dirname), lookupTable, mWorkDir, timescale))
             {
                 mWaveDataList->updateFromSaleae();
@@ -756,16 +762,18 @@ namespace hal
         }
 
         Q_EMIT engineFinished(success);
+
+        QObject* simulThread = sender();
+        if (simulThread) simulThread->deleteLater();
         /*
-       for (Net* n : gNetlist->get_nets())
+        for (Net* n : gNetlist->get_nets())
         {
             WaveData* wd = WaveData::simulationResultFactory(n, mSimulator.get());
             if (wd) mResultMap.insert(wd->id(),wd);
         }
 
         mSimulator->generate_vcd("result.vcd",0,t);
-
-*/
+        */
     }
 
     bool NetlistSimulatorController::get_results()
@@ -796,7 +804,7 @@ namespace hal
             std::filesystem::path resultFile = mSimulationEngine->get_result_filename();
             if (resultFile.is_relative())
                 resultFile = get_working_directory() / resultFile;
-            VcdSerializer reader(mWorkDir, this);
+            VcdSerializer reader(mWorkDir, false, this);
             QFileInfo info(QString::fromStdString(resultFile.string()));
             if (!info.exists() || !info.isReadable())
                 return false;

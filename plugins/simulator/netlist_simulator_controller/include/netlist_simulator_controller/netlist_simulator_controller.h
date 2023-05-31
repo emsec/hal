@@ -454,6 +454,12 @@ public:
      */
     bool persist() const;
 
+    /**
+     * Set log receiver instance which gets called whenever new engine output is available
+     * @param logrec Log receiver instance derived from abstract base class SimulationLogReceiver
+     */
+    void setLogReceiver(SimulationLogReceiver* logrec);
+
     static const char* sPersistFile;
 
 public Q_SLOTS:
@@ -492,6 +498,7 @@ private:
     SimulationInput* mSimulationInput;
 
     QHash<u32,int> mBadAssignInputWarnings;
+    SimulationLogReceiver* mLogReceiver;
 };
 
 class NetlistSimulatorControllerMap : public QObject {

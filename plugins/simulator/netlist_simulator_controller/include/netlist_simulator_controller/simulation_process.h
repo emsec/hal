@@ -40,7 +40,7 @@ namespace hal {
     {
         Q_OBJECT
     public Q_SLOTS:
-        virtual void handleLog(const QString& txt) = 0;
+        virtual void handleLog(const QString& txt) {;}
     public:
         SimulationLogReceiver(QObject* parent = nullptr);
         virtual ~SimulationLogReceiver() {;}
@@ -57,11 +57,12 @@ namespace hal {
         void processOutput(QString txt);
 
     public:
-        SimulationProcessLog(const QString& filename);
+        SimulationProcessLog(const QString& workdir, QObject* parent = nullptr);
         virtual ~SimulationProcessLog();
         bool good() const { return mFile.isOpen(); }
         void setLogReceiver(SimulationLogReceiver* logReceiver);
-        SimulationProcessLog& operator<< (const QString& txt);
+        void operator<< (const QString& txt);
+        void flush();
         static QString sLogFilename;
     };
 
