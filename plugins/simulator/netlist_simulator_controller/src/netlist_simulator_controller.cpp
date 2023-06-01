@@ -763,8 +763,8 @@ namespace hal
 
         Q_EMIT engineFinished(success);
 
-        QObject* simulThread = sender();
-        if (simulThread) simulThread->deleteLater();
+//        QObject* simulThread = sender();
+//        if (simulThread) simulThread->deleteLater();
         /*
         for (Net* n : gNetlist->get_nets())
         {

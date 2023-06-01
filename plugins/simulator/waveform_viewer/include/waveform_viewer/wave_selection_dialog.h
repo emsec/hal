@@ -55,15 +55,16 @@ namespace hal {
     class WaveSelectionTable : public QAbstractTableModel
     {
         Q_OBJECT
-        QList<WaveSelectionEntry> mWaveSelectionEntry;
+        QMap<WaveSelectionEntry,int> mWaveSelectionEntryMap;
     public:
-        WaveSelectionTable(const QList<WaveSelectionEntry>& wseList, QObject* parent = nullptr);
+        WaveSelectionTable(QObject* parent = nullptr);
         int rowCount(const QModelIndex &parent = QModelIndex()) const override;
         int columnCount(const QModelIndex &parent = QModelIndex()) const override;
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
         QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
         Qt::ItemFlags flags(const QModelIndex &index) const override;
-        const WaveSelectionEntry& waveSelectionEntry(int irow) const { return mWaveSelectionEntry.at(irow); }
+        void setEntryMap(const QMap<WaveSelectionEntry,int>& entries);
+        QMap<WaveSelectionEntry,int> entryMap(const QList<QModelIndex>& indexes) const;
     };
 
 
@@ -73,15 +74,12 @@ namespace hal {
         WaveSelectionTable* mWaveModel;
         QSortFilterProxyModel* mProxyModel;
         QTableView* mTableView;
-        QMap<WaveSelectionEntry,int> mWaveSelectionMap;
         QPushButton* mButAll;
         QPushButton* mButNone;
         QPushButton* mButSel;
 
     private Q_SLOTS:
-        void handleSelectAll();
         void handleCurrentGuiSelection();
-        void handleClearSelection();
 
     public:
         WaveSelectionDialog(const QMap<WaveSelectionEntry,int>& wseMap, QWidget* parent = nullptr);

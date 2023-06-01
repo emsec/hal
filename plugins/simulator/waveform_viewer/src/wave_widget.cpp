@@ -211,15 +211,14 @@ namespace hal {
         }
     }
 
-    void WaveWidget::addResults()
+    QMap<WaveSelectionEntry,int> WaveWidget::addableEntries() const
     {
-        if (!canImportWires()) return;
         QSet<int> alreadyShownInx = mTreeModel->waveDataIndexSet();
         QSet<QString> alreadyShownNames;
 
         // Which wavedata container entries are not shown yet
         int n = mWaveDataList->size();
-        QMap<WaveSelectionEntry,int> wseMap;
+        QMap<WaveSelectionEntry,int> retval;
         for (int i=0; i<n; i++)
         {
             if (alreadyShownInx.contains(i))
@@ -227,7 +226,7 @@ namespace hal {
             else
             {
                 WaveData* wd = mWaveDataList->at(i);
-                wseMap.insert(WaveSelectionEntry(wd->id(),wd->name(),wd->fileSize()),i);
+                retval.insert(WaveSelectionEntry(wd->id(),wd->name(),wd->fileSize()),i);
             }
         }
 
@@ -240,10 +239,21 @@ namespace hal {
                 QString netName = QString::fromStdString(sdle.name);
                 if (alreadyShownNames.contains(netName)) continue; // already shown
                 if (mWaveDataList->waveIndexByNetId(sdle.id)>=0) continue; // already added to selection list by previous loop
-                wseMap.insert(WaveSelectionEntry(sdle.id,netName,sdle.size),-1);
+                retval.insert(WaveSelectionEntry(sdle.id,netName,sdle.size),-1);
             }
         }
+        delete sd;
+        qDebug() << "Addable entries :" << retval.size();
+        return retval;
+    }
 
+    void WaveWidget::addResults()
+    {
+        if (!canImportWires()) return;
+
+        QMap<WaveSelectionEntry,int> wseMap = addableEntries();
+
+        SaleaeDirectory* sd = mController ? new SaleaeDirectory(mController->get_saleae_directory_filename()) : nullptr;
         WaveSelectionDialog wsd(wseMap,this);
         if (wsd.exec() == QDialog::Accepted)
         {

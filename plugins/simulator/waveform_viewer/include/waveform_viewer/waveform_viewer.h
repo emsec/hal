@@ -102,9 +102,6 @@ namespace hal
         void handleToggleMaxZoom();
         void handleUndoZoomShift();
 
-        void handleSelectGates();
-        void handleClockSet();
-        void handleEngineSelected(bool checked);
         void handleOpenSettingsDialog();
         void handleShowEngineOutput();
 

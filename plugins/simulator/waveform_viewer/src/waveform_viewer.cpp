@@ -61,7 +61,7 @@ namespace hal
 
     WaveformViewer::WaveformViewer(QWidget *parent)
         : ExternalContentWidget("waveform_viewer","WaveformViewer",parent),
-          mVisualizeNetState(false), mCurrentWaveWidget(nullptr)
+          mCurrentWaveWidget(nullptr), mVisualizeNetState(false)
     {
         LogManager::get_instance()->add_channel(std::string("waveform_viewer"), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
         mCreateControlAction = new QAction(this);
@@ -274,30 +274,6 @@ namespace hal
     {
          QMenu* settingMenu = new QMenu(this);
          QAction* act;
-         act = new QAction("Select gates for simulation", settingMenu);
-         if (!mCurrentWaveWidget || mCurrentWaveWidget->state() != NetlistSimulatorController::NoGatesSelected)
-             act->setDisabled(true);
-         else
-            connect(act, &QAction::triggered, this, &WaveformViewer::handleSelectGates);
-         settingMenu->addAction(act);
-
-         act = new QAction("Select clock net", settingMenu);
-         connect(act, &QAction::triggered, this, &WaveformViewer::handleClockSet);
-         // TODO : enable/disable according to state of current WaveWidget/Controller
-         settingMenu->addAction(act);
-
-         settingMenu->addSeparator();
-         QMenu* engineMenu = settingMenu->addMenu("Select engine ...");
-         QActionGroup* engineGroup = new QActionGroup(this);
-         engineGroup->setExclusive(true);
-         for (SimulationEngineFactory* sef : *SimulationEngineFactories::instance())
-         {
-             act = new QAction(QString::fromStdString(sef->name()), engineMenu);
-             act->setCheckable(true);
-             connect(act,&QAction::triggered,this,&WaveformViewer::handleEngineSelected);
-             engineMenu->addAction(act);
-             engineGroup->addAction(act);
-         }
 
          act = new QAction("Show output of engine");
          connect(act, &QAction::triggered, this, &WaveformViewer::handleShowEngineOutput);
@@ -340,26 +316,6 @@ namespace hal
         browser->setGeometry(scrSize.width()/10,scrSize.height()/10,scrSize.width()*4/5,scrSize.height()*4/5);
         browser->setWindowTitle("Simulation engine log <" + fname + ">");
         browser->show();
-    }
-
-    void WaveformViewer::handleEngineSelected(bool checked)
-    {
-        if (!checked || !mCurrentWaveWidget) return;
-        const QAction* act = static_cast<const QAction*>(sender());
-        if (!act) return;
-
-        // check if verilator is installed
-        if (act->text().toStdString() == "verilator")
-        {
-            std::string cmd = "which verilator";
-            if (std::system(cmd.c_str()) != 0)
-            {
-                log_warning("simulation_plugin", "Verilator is not installed");
-            }
-        }
-
-
-        mCurrentWaveWidget->createEngine(act->text());
     }
 
     void WaveformViewer::handleRefreshNetNames()
@@ -504,7 +460,7 @@ namespace hal
     void WaveformViewer::handleInvokeWizzard()
     {
         if (!mCurrentWaveWidget) return;
-        Wizard wizard(NetlistSimulatorControllerPlugin::sSimulationSettings, mCurrentWaveWidget->controller(), this);
+        Wizard wizard(NetlistSimulatorControllerPlugin::sSimulationSettings, mCurrentWaveWidget->controller(), mCurrentWaveWidget);
         wizard.exec();
     }
 
@@ -525,39 +481,6 @@ namespace hal
         if (!mCurrentWaveWidget) return;
         mCurrentWaveWidget->addResults();
         mAddResultWaveAction->setEnabled(mCurrentWaveWidget->canImportWires());
-    }
-
-    void WaveformViewer::handleClockSet()
-    {
-        if (!mCurrentWaveWidget) return;
-
-        QList<const Net*> inputNets;
-        for (const Net* n : mCurrentWaveWidget->controller()->get_input_nets())
-            inputNets.append(n);
-        if (inputNets.isEmpty()) return;
-
-        ClockSetDialog csd(inputNets, this);
-        if (csd.exec() != QDialog::Accepted) return;
-
-        if (csd.dontUseClock())
-            mCurrentWaveWidget->controller()->set_no_clock_used();
-        else
-        {
-            int period = csd.period();
-            if (period <= 0) return;
-
-            const Net* clk = inputNets.at(csd.netIndex());
-            mCurrentWaveWidget->controller()->add_clock_period(clk,period,csd.startValue()==0,csd.duration());
-        }
-    }
-
-    void WaveformViewer::handleSelectGates()
-    {
-        if (!mCurrentWaveWidget) return;
-        GateSelectionDialog gsd(this);
-        if (gsd.exec() != QDialog::Accepted) return;
-
-        mCurrentWaveWidget->setGates(gsd.selectedGates());
     }
 
     void WaveformViewer::setGates(std::vector<Gate*> gates)

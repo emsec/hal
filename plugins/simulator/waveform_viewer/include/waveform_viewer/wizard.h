@@ -16,11 +16,12 @@
 #include <QTableWidget>
 #include <QComboBox>
 #include <QRadioButton>
+#include <QSortFilterProxyModel>
 #include <QCheckBox>
 #include <QTextEdit>
 #include <QFile>
 #include "hal_core/netlist/gate.h"
-#include "waveform_viewer.h"
+#include "wave_widget.h"
 #include "netlist_simulator_controller/simulation_settings.h"
 #include "netlist_simulator_controller/simulation_process.h"
 
@@ -30,7 +31,7 @@ namespace hal {
         Q_OBJECT
 
     public:
-        Wizard(SimulationSettings *settings, NetlistSimulatorController *controller, WaveformViewer *parent);
+        Wizard(SimulationSettings *settings, NetlistSimulatorController *controller, WaveWidget *parent);
         int mPageEnginePropertiesId;
         int mPageInputDataId;
 
@@ -61,9 +62,8 @@ namespace hal {
 
         NetlistSimulatorController *mController;
 
-        void handleSelectAll();
+    private Q_SLOTS:
         void handleCurrentGuiSelection();
-        void handleClearSelection();
     };
 
     class PageClock : public QWizardPage {
@@ -188,10 +188,17 @@ namespace hal {
         Q_OBJECT
 
     public:
-        PageLoadResults(NetlistSimulatorController *controller, QWidget* parent=nullptr);
+        PageLoadResults(NetlistSimulatorController *controller, WaveWidget* ww, QWidget* parent=nullptr);
+        void initializePage() override;
 
     private:
         NetlistSimulatorController *mController;
+        WaveWidget* mWaveWidget;
+        WaveSelectionTable* mWaveModel;
+        QSortFilterProxyModel* mProxyModel;
+        QPushButton* mButAll;
+        QPushButton* mButNone;
+        QTableView* mTableView;
     };
 
 }

@@ -35,6 +35,7 @@
 
 #include <hal_core/defines.h>
 #include "waveform_viewer/wave_item.h"
+#include "waveform_viewer/wave_selection_dialog.h"
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
 
 namespace hal {
@@ -70,6 +71,7 @@ namespace hal {
         bool canImportWires() const;
         bool isEmpty() const;
         WaveGraphicsCanvas* graphicCanvas() { return mGraphicsCanvas; }
+        QMap<WaveSelectionEntry,int> addableEntries() const;
 
     private Q_SLOTS:
 

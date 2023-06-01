@@ -18,7 +18,7 @@
 
 namespace hal {
 
-    Wizard::Wizard(SimulationSettings *settings, NetlistSimulatorController *controller, WaveformViewer *parent)
+    Wizard::Wizard(SimulationSettings *settings, NetlistSimulatorController *controller, WaveWidget *parent)
         : QWizard(parent),  mController(controller), mSettings(settings)
     {
         setWindowTitle(tr("Empty Wizard"));
@@ -29,7 +29,7 @@ namespace hal {
         mPageEnginePropertiesId = addPage(new PageEngineProperties(mSettings,mController,this));
         mPageInputDataId = addPage(new PageInputData(mController,this));
         addPage(new PageRunSimulation(mController,this));
-        addPage(new PageLoadResults(mController,this));
+        addPage(new PageLoadResults(mController,parent,this));
     }
 
     PageSelectGates::PageSelectGates(NetlistSimulatorController *controller, QWidget *parent)
@@ -40,13 +40,11 @@ namespace hal {
 
         QGridLayout* layout = new QGridLayout(this);
         mButAll = new QPushButton("All gates", this);
-        connect(mButAll,&QPushButton::clicked,this,&PageSelectGates::handleSelectAll);
         layout->addWidget(mButAll,0,0);
         mButSel = new QPushButton("Current GUI selection", this);
         connect(mButSel,&QPushButton::clicked,this,&PageSelectGates::handleCurrentGuiSelection);
         layout->addWidget(mButSel,0,1);
         mButNone = new QPushButton("Clear selection", this);
-        connect(mButNone,&QPushButton::clicked,this,&PageSelectGates::handleClearSelection);
         layout->addWidget(mButNone,0,2);
         mTableView = new QTableView(this);
 
@@ -66,12 +64,9 @@ namespace hal {
         mTableView->horizontalHeader()->setStretchLastSection(true);
         mTableView->verticalHeader()->hide();
         layout->addWidget(mTableView,1,0,1,3);
+        connect(mButAll,&QPushButton::clicked,mTableView,&QTableView::selectAll);
+        connect(mButNone,&QPushButton::clicked,mTableView,&QTableView::clearSelection);
         onSelectionChanged(QItemSelection(),QItemSelection());
-    }
-
-    void PageSelectGates::handleSelectAll()
-    {
-        mTableView->selectAll();
     }
 
     void PageSelectGates::handleCurrentGuiSelection()
@@ -100,11 +95,6 @@ namespace hal {
             if (guiGateSel.contains(gid))
                 mTableView->selectRow(irow);
         }
-    }
-
-    void PageSelectGates::handleClearSelection()
-    {
-        mTableView->clearSelection();
     }
 
     std::vector<hal::Gate*> PageSelectGates::selectedGates() const
@@ -324,8 +314,6 @@ namespace hal {
             return m_wizard->mPageInputDataId;
         }
     }
-
-
 
     PageEngineProperties::PageEngineProperties(SimulationSettings *settings, NetlistSimulatorController *controller, QWidget *parent)
         : QWizardPage(parent), mController(controller), mSettings(settings)
@@ -576,6 +564,7 @@ namespace hal {
     void SimulationProcessOutput::readFile(QFile &ff)
     {
         mTextEdit->setHtml(QString::fromUtf8(ff.readAll()));
+        mTextEdit->moveCursor(QTextCursor::End);
     }
 
     PageRunSimulation::PageRunSimulation(NetlistSimulatorController *controller, QWidget *parent)
@@ -655,12 +644,44 @@ namespace hal {
         return QWizardPage::nextId();
     }
 
-    PageLoadResults::PageLoadResults(NetlistSimulatorController *controller, QWidget *parent)
-        : QWizardPage(parent), mController(controller)
+    PageLoadResults::PageLoadResults(NetlistSimulatorController *controller, WaveWidget *ww, QWidget *parent)
+        : QWizardPage(parent), mController(controller), mWaveWidget(ww)
     {
          setTitle(tr("Simulation Done : Load Simulation Results"));
          setSubTitle("\nThis page is not ready yet.\nPlease invoke load results from toolbar.");
       //   setSubTitle("\nSelect simulated waveform to be loaded into viewer. If selection from graphical netlist is preferred please exit wizard, select nets and invoke load results from toolbar");
          setPixmap(QWizard::LogoPixmap, QPixmap(":/icons/sw_select_results","PNG").scaled(128,128));
+
+         QGridLayout* layout = new QGridLayout(this);
+
+         mButAll = new QPushButton("All gates", this);
+         layout->addWidget(mButAll,0,0);
+         mButNone = new QPushButton("Clear selection", this);
+         layout->addWidget(mButNone,0,2);
+
+         mTableView = new QTableView(this);
+         mProxyModel = new QSortFilterProxyModel(this);
+         mWaveModel = new WaveSelectionTable(mTableView);
+         mProxyModel->setSourceModel(mWaveModel);
+         mTableView->setModel(mProxyModel);
+         mTableView->setSortingEnabled(true);
+         mTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+         mTableView->setSelectionMode(QAbstractItemView::MultiSelection);
+         QHeaderView* hv = mTableView->horizontalHeader();
+         hv->setSectionResizeMode(0,QHeaderView::Interactive);
+         hv->setSectionResizeMode(1,QHeaderView::Stretch);
+         hv->setSectionResizeMode(2,QHeaderView::Interactive);
+         mTableView->setColumnWidth(0,36);
+         mTableView->setColumnWidth(1,256);
+         mTableView->setColumnWidth(2,36);
+         connect(mButAll,&QPushButton::clicked,mTableView,&QTableView::selectAll);
+         connect(mButNone,&QPushButton::clicked,mTableView,&QTableView::clearSelection);
+
+         layout->addWidget(mTableView,1,0,1,3);
+    }
+
+    void PageLoadResults::initializePage()
+    {
+        mWaveModel->setEntryMap(mWaveWidget->addableEntries());
     }
 }
