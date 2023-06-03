@@ -1284,8 +1284,8 @@ hal--LoggerQssAdapter
 hal--PythonConsoleQssAdapter
 {
     qproperty-standardColor: #000000;
-    qproperty-errorColor: #000000;
-    qproperty-promtColor: #000000;
+    qproperty-errorColor: #600000;
+    qproperty-promtColor: #002040;
 }
 
 hal--table_selector_widget

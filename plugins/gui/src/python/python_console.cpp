@@ -4,15 +4,15 @@
 #include "gui/gui_globals.h"
 
 #include <QKeyEvent>
-#include <QDebug>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
 #include <QTimer>
 
 #include "gui/python/python_console_history.h"
-
 #include "gui/python/python_console_qss_adapter.h"
+#include "gui/main_window/main_window.h"
+#include "gui/settings/settings_items/settings_item_dropdown.h"
 
 namespace hal
 {
@@ -27,19 +27,23 @@ namespace hal
         setUndoRedoEnabled(false);
         ensureCursorVisible();
 
-        mStandardColor = PythonConsoleQssAdapter::instance()->standardColor();
-        mErrorColor = PythonConsoleQssAdapter::instance()->errorColor();
-        mPromptColor = PythonConsoleQssAdapter::instance()->promtColor();
         gPythonContext->setConsole(this);
         gPythonContext->interpretForeground("print(\"Python \" + sys.version)");
         gPythonContext->interpretForeground("print(sys.executable + \" on \" + sys.platform)");
         displayPrompt();
         mAbortThreadWidget = new PythonConsoleAbortThread(this);
+        connect(MainWindow::sSettingStyle,&SettingsItemDropdown::intChanged,this,&PythonConsole::handleStyleChanged);
     }
 
     PythonConsole::~PythonConsole()
     {
         gPythonContext->setConsole(nullptr);
+    }
+
+    void PythonConsole::handleStyleChanged(int istyle)
+    {
+        Q_UNUSED(istyle);
+        setHtml(PythonConsoleQssAdapter::instance()->updateStyle(toHtml()));
     }
 
     void PythonConsole::keyPressEventInputMode(QKeyEvent *e)
@@ -222,7 +226,7 @@ namespace hal
 
     void PythonConsole::handleStdout(const QString& output)
     {
-        insertAtEnd(output, mStandardColor);
+        insertAtEnd(output, PythonConsoleQssAdapter::instance()->standardColor());
     }
 
     void PythonConsole::handleError(const QString& output)
@@ -230,7 +234,7 @@ namespace hal
         QString append_out = output;
         if (!append_out.endsWith("\n"))
             append_out += "\n";
-        insertAtEnd(append_out, mErrorColor);
+        insertAtEnd(append_out, PythonConsoleQssAdapter::instance()->errorColor());
     }
 
     void PythonConsole::clear()
@@ -253,7 +257,7 @@ namespace hal
         cursor.movePosition(QTextCursor::End);
         //DEBUG SAVE FORMATS AS MEMBERS
         QTextCharFormat format;
-        format.setForeground(mPromptColor);
+        format.setForeground(PythonConsoleQssAdapter::instance()->promtColor());
         cursor.setCharFormat(format);
         switch (mPromptType)
         {
@@ -319,7 +323,6 @@ namespace hal
             displayPrompt();
         }
         mHistory->updateFromFile();
-        //qDebug() << mCurrentCompoundInput;
     }
 
     QString PythonConsole::getCurrentCommand()
@@ -485,8 +488,8 @@ namespace hal
 
     void  PythonConsoleAbortThread::handleAbortButton()
     {
-        qDebug() << "abort";
         gPythonContext->abortThread();
+        log_info("gui", "Python console command execution aborted by user");
     }
 
 
