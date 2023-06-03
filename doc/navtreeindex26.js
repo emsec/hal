@@ -1,5 +1,6 @@
 var NAVTREEINDEX26 =
 {
+"netlist_2netlist__utils_8cpp.html#af985cd5c5eb7aa39f151f9fc890e6005":[7,0,2,0,18,20],
 "netlist_2netlist__utils_8cpp.html#afed43ba864b63d01b07464dfb114f847":[7,0,2,0,18,13],
 "netlist_2netlist__utils_8cpp_source.html":[7,0,2,0,18],
 "netlist_2netlist__writer_2netlist__writer__manager_8cpp.html":[7,0,2,0,5,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX26 =
 "plugin__dataflow_8h.html":[7,0,1,1,0,0,6],
 "plugin__dataflow_8h_source.html":[7,0,1,1,0,0,6],
 "plugin__graph__algorithm_8cpp.html":[7,0,1,2,2,3],
-"plugin__graph__algorithm_8cpp.html#aa8127688230d54c42984bdd3c2bb1f72":[7,0,1,2,2,3,0],
-"plugin__graph__algorithm_8cpp_source.html":[7,0,1,2,2,3]
+"plugin__graph__algorithm_8cpp.html#aa8127688230d54c42984bdd3c2bb1f72":[7,0,1,2,2,3,0]
 };

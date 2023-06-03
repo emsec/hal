@@ -81,14 +81,15 @@ var NAVTREEINDEX15 =
 "classhal_1_1_python_console_history.html#ad6c9a158ab9448a7b42725a4cf920cd3":[4,0,1,1,1,2],
 "classhal_1_1_python_console_history.html#add8d28f16071f60c44d2f91a70e27fbf":[4,0,1,1,1,0],
 "classhal_1_1_python_console_qss_adapter.html":[4,0,1,1,2],
-"classhal_1_1_python_console_qss_adapter.html#a3947472ea39d9abfa562e3f105efb925":[4,0,1,1,2,7],
+"classhal_1_1_python_console_qss_adapter.html#a3947472ea39d9abfa562e3f105efb925":[4,0,1,1,2,8],
 "classhal_1_1_python_console_qss_adapter.html#a56e5b311df11496f289a4e389912c3f6":[4,0,1,1,2,5],
+"classhal_1_1_python_console_qss_adapter.html#a752d83ac0d4f35fe04b94452d4e9d019":[4,0,1,1,2,6],
 "classhal_1_1_python_console_qss_adapter.html#a77c919ee9decdd65f129bbda8c1256d6":[4,0,1,1,2,2],
 "classhal_1_1_python_console_qss_adapter.html#a8fb136f3ad1cb4d5d93c0bf8aab7c1c0":[4,0,1,1,2,0],
 "classhal_1_1_python_console_qss_adapter.html#a9a1cd30905612ce7240e5ddc2704fc43":[4,0,1,1,2,3],
-"classhal_1_1_python_console_qss_adapter.html#abef5cc26e7b7862dd49f4d62fa462e1c":[4,0,1,1,2,8],
+"classhal_1_1_python_console_qss_adapter.html#abef5cc26e7b7862dd49f4d62fa462e1c":[4,0,1,1,2,9],
 "classhal_1_1_python_console_qss_adapter.html#ad2299c78a6ec9c39254ca9b7128fd269":[4,0,1,1,2,4],
-"classhal_1_1_python_console_qss_adapter.html#ae9ca08ffb6c70225544710950c601387":[4,0,1,1,2,6],
+"classhal_1_1_python_console_qss_adapter.html#ae9ca08ffb6c70225544710950c601387":[4,0,1,1,2,7],
 "classhal_1_1_python_console_qss_adapter.html#afbf5077e828cf04ced2e3ffd7027ddc0":[4,0,1,1,2,1],
 "classhal_1_1_python_console_widget.html":[4,0,1,1,3],
 "classhal_1_1_python_console_widget.html#a6f0e60836fbf9532f3d231aa966c20ce":[4,0,1,1,3,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX15 =
 "classhal_1_1_python_qss_adapter.html#ada915f05ee76b426170befa5667a5e83":[4,0,1,2,10],
 "classhal_1_1_python_qss_adapter.html#adce06b14c4df3ea04d32253a415b58f1":[4,0,1,2,35],
 "classhal_1_1_python_qss_adapter.html#af456bc67c5202547b935594d38c29866":[4,0,1,2,27],
-"classhal_1_1_python_qss_adapter.html#af6c44b2b5acfbecd98c7f4a9d7c5a388":[4,0,1,2,18],
-"classhal_1_1_python_qss_adapter.html#af951a02eac0b0fd9ff26656360539c28":[4,0,1,2,0]
+"classhal_1_1_python_qss_adapter.html#af6c44b2b5acfbecd98c7f4a9d7c5a388":[4,0,1,2,18]
 };
