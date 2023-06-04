@@ -35,7 +35,7 @@ namespace hal
 {
     GroupingManagerWidget::GroupingManagerWidget(QWidget* parent)
         : ContentWidget("Groupings", parent), mProxyModel(new GroupingProxyModel(this)), mSearchbar(new Searchbar(this)), mNewGroupingAction(new QAction(this)),
-          mRenameAction(new QAction(this)), mColorSelectAction(new QAction(this)), mDeleteAction(new QAction(this)), mToSelectionAction(new QAction(this))
+          mRenameAction(new QAction(this)), mColorSelectAction(new QAction(this)), mDeleteAction(new QAction(this)), mToSelectionAction(new QAction(this)), mTableAction(new QAction(this))
     {
         //needed to load the properties
         ensurePolished();
@@ -46,6 +46,7 @@ namespace hal
         mColorSelectAction->setIcon(gui_utility::getStyledSvgIcon(mColorSelectIconStyle, mColorSelectIconPath));
         mToSelectionAction->setIcon(gui_utility::getStyledSvgIcon(mToSelectionIconStyle, mToSelectionIconPath));
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+        mTableAction->setIcon(gui_utility::getStyledSvgIcon(mTableIconStyle, mTableIconPath));
 
         mNewGroupingAction->setToolTip("New");
         mRenameAction->setToolTip("Rename");
@@ -53,6 +54,7 @@ namespace hal
         mDeleteAction->setToolTip("Delete");
         mToSelectionAction->setToolTip("To selection");
         mSearchAction->setToolTip("Search");
+        mTableAction->setToolTip("Show content");
 
         mNewGroupingAction->setText("Create new grouping");
         mRenameAction->setText("Rename grouping");
@@ -60,6 +62,7 @@ namespace hal
         mDeleteAction->setText("Delete grouping");
         mToSelectionAction->setText("Add grouping to selection");
         mSearchAction->setText("Search");
+        mTableAction->setText("Show content");
 
         //mOpenAction->setEnabled(false);
         //mRenameAction->setEnabled(false);
@@ -103,6 +106,7 @@ namespace hal
         connect(mToSelectionAction, &QAction::triggered, this, &GroupingManagerWidget::handleToSelectionClicked);
         connect(mDeleteAction, &QAction::triggered, this, &GroupingManagerWidget::handleDeleteGroupingClicked);
         connect(mSearchAction, &QAction::triggered, this, &GroupingManagerWidget::toggleSearchbar);
+        connect(mTableAction, &QAction::triggered, this, &GroupingManagerWidget::handleShowContentClicked);
 
         connect(mGroupingTableView, &QTableView::customContextMenuRequested, this, &GroupingManagerWidget::handleContextMenuRequest);
         connect(mGroupingTableView->selectionModel(), &QItemSelectionModel::currentChanged, this, &GroupingManagerWidget::handleCurrentChanged);
@@ -188,7 +192,7 @@ namespace hal
     void GroupingManagerWidget::handleDoubleClicked(const QModelIndex& index)
     {
         if (index.column() == 0)
-            handleRenameGroupingClicked();
+            handleShowContentClicked();
         if (index.column() == 2)
             handleColorSelectClicked();
     }
@@ -436,32 +440,35 @@ namespace hal
 
     void GroupingManagerWidget::handleRenameGroupingClicked()
     {
-//        QModelIndex currentIndex = mProxyModel->mapToSource(mGroupingTableView->currentIndex());
-//        if (!currentIndex.isValid())
-//            return;
+        QModelIndex currentIndex = mProxyModel->mapToSource(mGroupingTableView->currentIndex());
+        if (!currentIndex.isValid())
+            return;
 
-//        InputDialog ipd;
-//        ipd.setWindowTitle("Rename Grouping");
-//        ipd.setInfoText("Please select a new unique name for the grouping.");
-//        int irow        = currentIndex.row();
-//        QString oldName = mGroupingTableModel->data(mGroupingTableModel->index(irow, 0), Qt::DisplayRole).toString();
-//        mGroupingTableModel->setAboutToRename(oldName);
-//        ipd.setInputText(oldName);
-//        ipd.addValidator(mGroupingTableModel);
+        InputDialog ipd;
+        ipd.setWindowTitle("Rename Grouping");
+        ipd.setInfoText("Please select a new unique name for the grouping.");
+        int irow        = currentIndex.row();
+        QString oldName = mGroupingTableModel->data(mGroupingTableModel->index(irow, 0), Qt::DisplayRole).toString();
+        mGroupingTableModel->setAboutToRename(oldName);
+        ipd.setInputText(oldName);
+        ipd.addValidator(mGroupingTableModel);
 
-//        if (ipd.exec() == QDialog::Accepted)
-//        {
-//            QString newName = ipd.textValue();
-//            if (newName != oldName)
-//            {
-//                ActionRenameObject* act = new ActionRenameObject(newName);
-//                u32 grpId               = mGroupingTableModel->data(mGroupingTableModel->index(irow, 1), Qt::DisplayRole).toInt();
-//                act->setObject(UserActionObject(grpId, UserActionObjectType::Grouping));
-//                act->exec();
-//            }
-//        }
-//        mGroupingTableModel->setAboutToRename(QString());
+        if (ipd.exec() == QDialog::Accepted)
+        {
+            QString newName = ipd.textValue();
+            if (newName != oldName)
+            {
+                ActionRenameObject* act = new ActionRenameObject(newName);
+                u32 grpId               = mGroupingTableModel->data(mGroupingTableModel->index(irow, 1), Qt::DisplayRole).toInt();
+                act->setObject(UserActionObject(grpId, UserActionObjectType::Grouping));
+                act->exec();
+            }
+        }
+        mGroupingTableModel->setAboutToRename(QString());
+    }
 
+    void GroupingManagerWidget::handleShowContentClicked()
+    {
         QModelIndex currentIndex = mProxyModel->mapToSource(mGroupingTableView->currentIndex());
         if (!currentIndex.isValid())
             return;
@@ -526,6 +533,7 @@ namespace hal
             context_menu.addAction(mColorSelectAction);
             context_menu.addAction(mToSelectionAction);
             context_menu.addAction(mDeleteAction);
+            context_menu.addAction(mTableAction);
         }
 
         context_menu.exec(mGroupingTableView->viewport()->mapToGlobal(point));
@@ -546,6 +554,7 @@ namespace hal
         toolbar->addAction(mToSelectionAction);
         toolbar->addAction(mDeleteAction);
         toolbar->addAction(mSearchAction);
+        toolbar->addAction(mTableAction);
         mSearchAction->setEnabled(mGroupingTableModel->rowCount() > 0);
     }
 

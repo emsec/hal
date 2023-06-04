@@ -76,6 +76,9 @@ namespace hal
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
         Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
 
+        Q_PROPERTY(QString tableIconPath READ tableIconPath WRITE setTableIconPath)
+        Q_PROPERTY(QString tableIconStyle READ tableIconPath WRITE setTableIconPath)
+
     public:
         /**
         * Constructor.
@@ -119,6 +122,9 @@ namespace hal
         QString searchIconPath() const;
         QString searchIconStyle() const;
         QString searchActiveIconStyle() const;
+
+        QString tableIconPath() const;
+        QString tableIconStyle() const;
         ///@}
 
         /** @name Q_PROPERTY WRITE Functions
@@ -142,6 +148,9 @@ namespace hal
         void setSearchIconPath(const QString& path);
         void setSearchIconStyle(const QString& style);
         void setSearchActiveIconStyle(const QString& style);
+
+        void setTableIconPath(const QString& path);
+        void setTableIconStyle(const QString& style);
         ///@}
 
         /**
@@ -266,6 +275,11 @@ namespace hal
         void handleRenameGroupingClicked();
 
         /**
+         * Q_SLOT to show the content of a grouping. Called when the 'Show content'-buttons was clicked.
+         */
+        void handleShowContentClicked();
+
+        /**
          * Q_SLOT to change the color of a grouping. Called when the color icon was clicked.
          */
         void handleColorSelectClicked();
@@ -353,6 +367,10 @@ namespace hal
         QString mSearchIconPath;
         QString mSearchIconStyle;
         QString mSearchActiveIconStyle;
+
+        QAction* mTableAction;
+        QString mTableIconPath;
+        QString mTableIconStyle;
 
         QString mDisabledIconStyle;
         GroupingColorSerializer mColorSerializer;
