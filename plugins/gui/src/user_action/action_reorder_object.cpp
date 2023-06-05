@@ -38,13 +38,16 @@ namespace hal
                     return false;
                 }
                 auto pinGroup = pin->get_group().first;
-                if (pinGroup && pinGroup->size() > 1)
+                if (pinGroup)
                 {
-                    oldIndex = pin->get_group().second;
-                    auto result   = mod->move_pin_within_group(pinGroup, pin, mNewIndex);
-                    if (result.is_error())
+                    if (pinGroup->size() > 1)
                     {
-                        return false;
+                        oldIndex = pin->get_group().second;
+                        auto result   = mod->move_pin_within_group(pinGroup, pin, mNewIndex);
+                        if (result.is_error())
+                        {
+                            return false;
+                        }
                     }
                 }
                 else

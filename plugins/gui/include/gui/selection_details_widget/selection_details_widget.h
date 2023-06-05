@@ -40,9 +40,6 @@ namespace hal
     class Grouping;
     class Searchbar;
     class SelectionTreeView;
-    class ModuleDetailsWidget;
-    class GateDetailsWidget;
-    class NetDetailsWidget;
     class UserAction;
     class UserActionObject;
     class SettingsItemCheckbox;
@@ -344,9 +341,6 @@ namespace hal
 
         QStackedWidget* mStackedWidget;
 
-        GateDetailsWidget* mGateDetails;
-        NetDetailsWidget* mNetDetails;
-        ModuleDetailsWidget* mModuleDetails;
         QLabel* mItemDeletedLabel;
         QLabel* mNoSelectionLabel;
 
