@@ -189,7 +189,8 @@ namespace hal {
 
     public:
         PageLoadResults(NetlistSimulatorController *controller, WaveWidget* ww, QWidget* parent=nullptr);
-        void initializePage() override;
+        virtual bool validatePage() override;
+        virtual void initializePage() override;
 
     private:
         NetlistSimulatorController *mController;

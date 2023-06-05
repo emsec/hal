@@ -247,42 +247,46 @@ namespace hal {
         return retval;
     }
 
+    void WaveWidget::addSelectedResults(const QMap<WaveSelectionEntry,int>& sel)
+    {
+        SaleaeDirectory* sd = mController ? new SaleaeDirectory(mController->get_saleae_directory_filename()) : nullptr;
+
+        QVector<WaveData*> wavesToAdd;
+        wavesToAdd.reserve(sel.size());
+
+        for (auto it = sel.constBegin(); it!=sel.constEnd(); ++it)
+        {
+            int iwave = it.value();
+            if (iwave<0 && sd)
+            {
+                iwave = mWaveDataList->size();
+                WaveData* wd = new WaveData(it.key().id(),it.key().name());
+                if (wd->loadSaleae(mWaveDataList->timeFrame()))
+                {
+                    mWaveDataList->add(wd,false);
+                    wavesToAdd.append(wd);
+                }
+            }
+            else if (iwave >= 0)
+                wavesToAdd.append(mWaveDataList->at(iwave));
+        }
+        mTreeModel->addWaves(wavesToAdd);
+        if (sd) delete sd;
+    }
+
     void WaveWidget::addResults()
     {
         if (!canImportWires()) return;
 
         QMap<WaveSelectionEntry,int> wseMap = addableEntries();
 
-        SaleaeDirectory* sd = mController ? new SaleaeDirectory(mController->get_saleae_directory_filename()) : nullptr;
         WaveSelectionDialog wsd(wseMap,this);
         if (wsd.exec() == QDialog::Accepted)
         {
             wseMap = wsd.selectedWaves();
             if (!wseMap.isEmpty())
-            {
-                QVector<WaveData*> wavesToAdd;
-                wavesToAdd.reserve(wseMap.size());
-
-                for (auto it = wseMap.constBegin(); it!=wseMap.constEnd(); ++it)
-                {
-                    int iwave = it.value();
-                    if (iwave<0 && sd)
-                    {
-                        iwave = mWaveDataList->size();
-                        WaveData* wd = new WaveData(it.key().id(),it.key().name());
-                        if (wd->loadSaleae(mWaveDataList->timeFrame()))
-                        {
-                            mWaveDataList->add(wd,false);
-                            wavesToAdd.append(wd);
-                        }
-                    }
-                    else if (iwave >= 0)
-                        wavesToAdd.append(mWaveDataList->at(iwave));
-                }
-                mTreeModel->addWaves(wavesToAdd);
-            }
+                addSelectedResults(wseMap);
         }
-        if (sd) delete sd;
     }
 
     void WaveWidget::setGates(const std::vector<Gate*>& gats)

@@ -88,7 +88,7 @@ namespace hal {
     int WaveSelectionTable::rowCount(const QModelIndex &parent) const
     {
         Q_UNUSED(parent);
-        return mWaveSelectionEntryMap.size();
+        return mWaveSelectionEntries.size();
     }
 
     int WaveSelectionTable::columnCount(const QModelIndex &parent) const
@@ -100,8 +100,8 @@ namespace hal {
     QVariant WaveSelectionTable::data(const QModelIndex &index, int role) const
     {
         if (role != Qt::DisplayRole) return QVariant();
-        if (index.row() >= mWaveSelectionEntryMap.size()) return QVariant();
-        const WaveSelectionEntry& wse =  mWaveSelectionEntryMap.keys().at(index.row());
+        if (index.row() >= mWaveSelectionEntries.size()) return QVariant();
+        const WaveSelectionEntry& wse =  mWaveSelectionEntries.at(index.row()).first;
         switch (index.column())
         {
         case 0: return wse.id();
@@ -135,9 +135,10 @@ namespace hal {
         QMap<WaveSelectionEntry,int> retval;
         for (const QModelIndex& inx : indexes)
         {
-            auto it = mWaveSelectionEntryMap.constBegin() + inx.row();
-            if (it != mWaveSelectionEntryMap.constEnd())
-                retval.insert(it.key(),it.value());
+            int irow = inx.row();
+            if (irow >= mWaveSelectionEntries.size()) continue;
+            const QPair<WaveSelectionEntry,int>& pair = mWaveSelectionEntries.at(irow);
+            retval.insert(pair.first,pair.second);
         }
         return retval;
     }
@@ -145,7 +146,9 @@ namespace hal {
     void WaveSelectionTable::setEntryMap(const QMap<WaveSelectionEntry,int>& entries)
     {
         beginResetModel();
-        mWaveSelectionEntryMap = entries;
+        mWaveSelectionEntries.clear();
+        for (auto it = entries.constBegin(); it != entries.constEnd(); ++it)
+            mWaveSelectionEntries.append(QPair(it.key(),it.value()));
         endResetModel();
     }
 

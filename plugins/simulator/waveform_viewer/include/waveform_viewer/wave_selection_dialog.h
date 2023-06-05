@@ -55,7 +55,7 @@ namespace hal {
     class WaveSelectionTable : public QAbstractTableModel
     {
         Q_OBJECT
-        QMap<WaveSelectionEntry,int> mWaveSelectionEntryMap;
+        QList<QPair<WaveSelectionEntry,int> > mWaveSelectionEntries;
     public:
         WaveSelectionTable(QObject* parent = nullptr);
         int rowCount(const QModelIndex &parent = QModelIndex()) const override;

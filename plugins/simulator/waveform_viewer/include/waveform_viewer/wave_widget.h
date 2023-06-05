@@ -63,6 +63,7 @@ namespace hal {
         bool triggerClose();
         void setGates(const std::vector<Gate*>& gats);
         void addResults();
+        void addSelectedResults(const QMap<WaveSelectionEntry,int>& sel);
         NetlistSimulatorController::SimulationState state() const;
         void createEngine(const QString& engineFactoryName);
         void refreshNetNames();

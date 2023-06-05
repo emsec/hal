@@ -680,6 +680,18 @@ namespace hal {
          layout->addWidget(mTableView,1,0,1,3);
     }
 
+    bool PageLoadResults::validatePage()
+    {
+        QList<QModelIndex> selIndexList;
+        for (QModelIndex proxyInx : mTableView->selectionModel()->selectedIndexes())
+        {
+            selIndexList.append(mProxyModel->mapToSource(proxyInx));
+        }
+        if (!selIndexList.isEmpty())
+            mWaveWidget->addSelectedResults(mWaveModel->entryMap(selIndexList));
+        return true;
+    }
+
     void PageLoadResults::initializePage()
     {
         mWaveModel->setEntryMap(mWaveWidget->addableEntries());
