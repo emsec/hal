@@ -394,13 +394,13 @@ namespace hal
             :rtype: list[hal_py.Gate]
         )");
 
-        py_module.def("get_gates", py::overload_cast<const std::function<bool(Gate*)>&, bool>(&Module::get_gates, py::const_), py::arg("filter"), py::arg("recursive") = false, R"(
+        py_module.def("get_gates", py::overload_cast<const std::function<bool(Gate*)>&, bool>(&Module::get_gates, py::const_), py::arg("filter") = nullptr, py::arg("recursive") = false, R"(
             Get all gates contained within the module.
             The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
             If ``recursive`` is ``True``, gates in submodules are considered as well.
 
             :param lambda filter: Filter function to be evaluated on each gate.
-            :param bool recursive: ``True`` to also consider gates in submodules, ``False`` otherwise.
+            :param bool recursive: ``True`` to also consider gates in submodules, ``False`` otherwise. Defaults to ``False``.
             :returns: A list of gates.
             :rtype: list[hal_py.Gate]
         )");
