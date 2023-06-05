@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Module &mdash; hal_py v4.2.0-4-g99e1256e5 documentation</title>
+  <title>Module &mdash; hal_py v4.2.0-5-g1843c726e documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-4-g99e1256e5
+                v4.2.0-5-g1843c726e
               </div>
             
           
@@ -550,7 +550,7 @@ If <code class="docutils literal notranslate"><span class="pre">recursive</span>
 </table>
 </div></blockquote>
 </li>
-<li><p class="first">get_gates(self: hal_py.Module, filter: Callable[[hal_py.Gate], bool], recursive: bool = False) -&gt; List[hal_py.Gate]</p>
+<li><p class="first">get_gates(self: hal_py.Module, filter: Callable[[hal_py.Gate], bool] = None, recursive: bool = False) -&gt; List[hal_py.Gate]</p>
 <blockquote>
 <div><p>Get all gates contained within the module.
 The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
@@ -563,7 +563,7 @@ If <code class="docutils literal notranslate"><span class="pre">recursive</span>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">Filter function to be evaluated on each gate.</td>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">param bool recursive:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> to also consider gates in submodules, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> to also consider gates in submodules, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">A list of gates.</td>
 </tr>
