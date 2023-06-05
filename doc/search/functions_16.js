@@ -21,7 +21,7 @@ var searchData=
   ['warninghighlight_30091',['warningHighlight',['../classhal_1_1_logger_qss_adapter.html#ab978b6db4aadfc454a2083ea2196dac2',1,'hal::LoggerQssAdapter']]],
   ['wascanceled_30092',['wasCanceled',['https://doc.qt.io/qt-5/qprogressdialog.html#wasCanceled-prop',1,'QProgressDialog']]],
   ['watchfile_30093',['watchFile',['../classhal_1_1_file_manager.html#a51911b152e62571cfa09fe845e247ca7',1,'hal::FileManager']]],
-  ['waypoints_30094',['wayPoints',['../classhal_1_1_net_layout_connection.html#a6c6126b1d6b6c205e97f6dda8b500f2f',1,'hal::NetLayoutConnection::wayPoints()'],['../classhal_1_1_common_successor_predecessor_gate_queue.html#afd37e98961d320d8d8dacc9639f4d7f2',1,'hal::CommonSuccessorPredecessorGateQueue::waypoints()']]],
+  ['waypoints_30094',['waypoints',['../classhal_1_1_common_successor_predecessor_gate_queue.html#afd37e98961d320d8d8dacc9639f4d7f2',1,'hal::CommonSuccessorPredecessorGateQueue::waypoints()'],['../classhal_1_1_net_layout_connection.html#a6c6126b1d6b6c205e97f6dda8b500f2f',1,'hal::NetLayoutConnection::wayPoints()']]],
   ['weekdayname_30095',['weekDayName',['https://doc.qt.io/qt-5/qcalendar.html#weekDayName',1,'QCalendar']]],
   ['weekdays_30096',['weekdays',['https://doc.qt.io/qt-5/qlocale.html#weekdays',1,'QLocale']]],
   ['weekdaytextformat_30097',['weekdayTextFormat',['https://doc.qt.io/qt-5/qcalendarwidget.html#weekdayTextFormat',1,'QCalendarWidget']]],
