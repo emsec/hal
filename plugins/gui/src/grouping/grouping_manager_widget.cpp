@@ -46,7 +46,7 @@ namespace hal
         mColorSelectAction->setIcon(gui_utility::getStyledSvgIcon(mColorSelectIconStyle, mColorSelectIconPath));
         mToSelectionAction->setIcon(gui_utility::getStyledSvgIcon(mToSelectionIconStyle, mToSelectionIconPath));
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
-        mTableAction->setIcon(gui_utility::getStyledSvgIcon(mTableIconStyle, mTableIconPath));
+        mTableAction->setIcon(gui_utility::getStyledSvgIcon("all->#FFFFFF", ":/icons/list"));
 
         mNewGroupingAction->setToolTip("New");
         mRenameAction->setToolTip("Rename");
@@ -564,6 +564,7 @@ namespace hal
         mColorSelectAction->setEnabled(enable);
         mToSelectionAction->setEnabled(enable);
         mDeleteAction->setEnabled(enable);
+        mTableAction->setEnabled(enable);
     }
 
     void GroupingManagerWidget::handleNewEntryAdded(const QModelIndex& modelIndexName)
