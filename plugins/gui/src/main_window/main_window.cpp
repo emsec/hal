@@ -1,5 +1,6 @@
 #include "gui/main_window/main_window.h"
 
+#include "gui/gui_api/gui_api.h"
 #include "gui/action/action.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/docking_system/dock_bar.h"
@@ -264,6 +265,7 @@ namespace hal
         mMenuHelp->addAction(mActionAbout);
         mMenuHelp->addSeparator();
         mMenuHelp->addAction(mActionPlugins);
+        mMenuHelp->addAction("Test developed function", [this](){this->testDemoAction();});
         mLeftToolBar->addAction(mActionNew);
         mLeftToolBar->addAction(mActionOpenProject);
         mLeftToolBar->addAction(mActionSave);
@@ -1069,5 +1071,11 @@ namespace hal
     void MainWindow::saveState()
     {
         SettingsManager::instance()->mainWindowSaveGeometry(pos(), size());
+    }
+
+    void MainWindow::testDemoAction()
+    {
+        GuiApi *api = new GuiApi();
+        api->demoAction();
     }
 }    // namespace hal

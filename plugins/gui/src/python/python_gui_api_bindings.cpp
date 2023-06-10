@@ -465,6 +465,9 @@ PYBIND11_PLUGIN(hal_gui)
     py_gui_api.def("deselectAllItems", py::overload_cast<>(&GuiApi::deselectAllItems), R"(
        Deselect all gates, nets and modules in the graph view of the GUI.
 )");
+    py_gui_api.def("demoAction", py::overload_cast<>(&GuiApi::demoAction), R"(
+       Call demoAction.
+)");
 
 #ifndef PYBIND11_MODULE
     return m.ptr();

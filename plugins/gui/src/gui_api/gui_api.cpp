@@ -428,4 +428,13 @@ namespace hal
     {
         gSelectionRelay->clearAndUpdate();
     }
+
+    void GuiApi::demoAction()
+    {
+        UserAction *demoAct = new UserActionCompound;
+        static_cast<UserActionCompound *>(demoAct)->setUseCreatedObject();
+        static_cast<UserActionCompound *>(demoAct)->addAction(new ActionCreateObject(UserActionObjectType::Context, "demo view"));
+        static_cast<UserActionCompound *>(demoAct)->addAction(new ActionAddItemsToObject({4}, {19, 20}));
+        static_cast<UserActionCompound *>(demoAct)->exec();
+    }
 }

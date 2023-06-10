@@ -566,6 +566,8 @@ namespace hal
 
         void handleImportProjectTriggered();
 
+        void testDemoAction();
+
     private:
         /**
          * Overwritten Qt function to handle the close event.
