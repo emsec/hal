@@ -1,6 +1,7 @@
 #include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
 
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/user_action/action_create_object.h"
@@ -27,6 +28,9 @@ namespace hal
 
         setContextMenuPolicy(Qt::CustomContextMenu);
         connect(this, &QTreeView::customContextMenuRequested, this, &SelectionTreeView::handleCustomContextMenuRequested);
+
+        connect(this, &SelectionTreeView::itemDoubleClicked, this, &SelectionTreeView::handleTreeViewItemFocusClicked);
+        connect(this, &SelectionTreeView::focusItemClicked, this, &SelectionTreeView::handleTreeViewItemFocusClicked);
     }
 
     void SelectionTreeView::setDefaultColumnWidth()
@@ -222,6 +226,25 @@ namespace hal
     SelectionTreeProxyModel* SelectionTreeView::proxyModel()
     {
         return mSelectionTreeProxyModel;
+    }
+
+    void SelectionTreeView::handleTreeViewItemFocusClicked(const SelectionTreeItem* sti)
+    {
+        u32 itemId = sti->id();
+
+        switch (sti->itemType())
+        {
+            case SelectionTreeItem::TreeItemType::GateItem:
+                gContentManager->getGraphTabWidget()->handleGateFocus(itemId);
+                break;
+            case SelectionTreeItem::TreeItemType::NetItem:
+                gContentManager->getGraphTabWidget()->handleNetFocus(itemId);
+                break;
+            case SelectionTreeItem::TreeItemType::ModuleItem:
+                gContentManager->getGraphTabWidget()->handleModuleFocus(itemId);
+                break;
+            default: break;
+        }
     }
 
 }    // namespace hal

@@ -144,6 +144,14 @@ namespace hal
         void handleCustomContextMenuRequested(const QPoint& point);
         void handleIsolationViewAction(const SelectionTreeItem* sti);
 
+        /**
+         * Emits either the focusGateClicked, focusNetClicked or focusModuleClicked signal based on the
+         * type of the clicked item.
+         *
+         * @param sti - The clicked item in the selection-treeview.
+         */
+        void handleTreeViewItemFocusClicked(const SelectionTreeItem* sti);
+
     private:
         SelectionTreeModel* mSelectionTreeModel;
         SelectionTreeProxyModel* mSelectionTreeProxyModel;
