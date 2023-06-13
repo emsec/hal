@@ -1191,7 +1191,7 @@ namespace hal
 
             for (const auto& pin : typed_pins)
             {
-                const auto typed_net = (typed_pins.front()->get_direction() == PinDirection::output) ? gate->get_fan_out_net(typed_pins.front()) : gate->get_fan_in_net(typed_pins.front());
+                const auto typed_net = (pin->get_direction() == PinDirection::output) ? gate->get_fan_out_net(pin) : gate->get_fan_in_net(pin);
 
                 // 1) search the net name itself
                 const auto net_name_index = extract_index(typed_net->get_name(), net_index_pattern, "net_name");
