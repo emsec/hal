@@ -595,11 +595,11 @@ namespace hal
         Q_UNUSED(previous);
 
         bool enable                 = mGroupingTableModel->rowCount() > 0 && current.isValid();
-        QAction* entryBasedAction[] = {mRenameAction, mColorSelectAction, mDeleteAction, mToSelectionAction, nullptr};
+        QAction* entryBasedAction[] = {mRenameAction, mColorSelectAction, mDeleteAction, mToSelectionAction, mTableAction, nullptr};
 
         QStringList iconPath, iconStyle;
-        iconPath << mRenameGroupingIconPath << mColorSelectIconPath << mDeleteIconPath << mToSelectionIconPath;
-        iconStyle << mRenameGroupingIconStyle << mColorSelectIconStyle << mDeleteIconStyle << mToSelectionIconStyle;
+        iconPath << mRenameGroupingIconPath << mColorSelectIconPath << mDeleteIconPath << mToSelectionIconPath << mTableIconPath;
+        iconStyle << mRenameGroupingIconStyle << mColorSelectIconStyle << mDeleteIconStyle << mToSelectionIconStyle << mTableIconStyle;
 
         for (int iacc = 0; entryBasedAction[iacc]; iacc++)
         {
