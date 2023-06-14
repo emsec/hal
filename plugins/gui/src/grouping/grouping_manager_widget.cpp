@@ -46,7 +46,7 @@ namespace hal
         mColorSelectAction->setIcon(gui_utility::getStyledSvgIcon(mColorSelectIconStyle, mColorSelectIconPath));
         mToSelectionAction->setIcon(gui_utility::getStyledSvgIcon(mToSelectionIconStyle, mToSelectionIconPath));
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
-        mTableAction->setIcon(gui_utility::getStyledSvgIcon("all->#FFFFFF", ":/icons/list"));
+        mTableAction->setIcon(gui_utility::getStyledSvgIcon(mTableIconStyle, mTableIconPath));
 
         mNewGroupingAction->setToolTip("New");
         mRenameAction->setToolTip("Rename");
@@ -802,6 +802,16 @@ namespace hal
         return mSearchActiveIconStyle;
     }
 
+    QString GroupingManagerWidget::tableIconPath() const
+    {
+        return mTableIconPath;
+    }
+
+    QString GroupingManagerWidget::tableIconStyle() const
+    {
+        return mTableIconStyle;
+    }
+
     void GroupingManagerWidget::setSearchIconPath(const QString& path)
     {
         mSearchIconPath = path;
@@ -815,5 +825,15 @@ namespace hal
     void GroupingManagerWidget::setSearchActiveIconStyle(const QString& style)
     {
         mSearchActiveIconStyle = style;
+    }
+
+    void GroupingManagerWidget::setTableIconPath(const QString& path)
+    {
+        mTableIconPath = path;
+    }
+
+    void GroupingManagerWidget::setTableIconStyle(const QString& style)
+    {
+        mTableIconStyle = style;
     }
 }    // namespace hal

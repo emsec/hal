@@ -77,7 +77,7 @@ namespace hal
         Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
 
         Q_PROPERTY(QString tableIconPath READ tableIconPath WRITE setTableIconPath)
-        Q_PROPERTY(QString tableIconStyle READ tableIconPath WRITE setTableIconPath)
+        Q_PROPERTY(QString tableIconStyle READ tableIconStyle WRITE setTableIconStyle)
 
     public:
         /**
