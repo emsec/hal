@@ -437,6 +437,16 @@ namespace hal
          */
         void updateNets();
 
+        /**
+         * Make sure these nodes gets removed from context
+         */
+        void setScheduleRemove(const QSet<u32>& mods, const QSet<u32>& gats);
+
+        /**
+         * Check whether node is scheduled for removal
+         */
+        bool isScheduledRemove(const Node& nd);
+
     Q_SIGNALS:
         void dataChanged();
         void exclusiveModuleLost(u32 old_id);
@@ -489,6 +499,9 @@ namespace hal
         QDateTime mTimestamp;
 
         bool mSpecialUpdate;
+
+        QSet<u32> mScheduleRemoveModules;
+        QSet<u32> mScheduleRemoveGates;
 
         u32 mExclusiveModuleId;
     };
