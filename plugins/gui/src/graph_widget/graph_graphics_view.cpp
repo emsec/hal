@@ -229,6 +229,7 @@ namespace hal
 
         GraphContext* context = mGraphWidget->getContext();
         context->setSpecialUpdate(true);
+        context->setScheduleRemove(gSelectionRelay->selectedModules(),gSelectionRelay->selectedGates());
 
         compound->exec();
         gSelectionRelay->clear();
