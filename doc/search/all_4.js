@@ -236,7 +236,7 @@ var searchData=
   ['depthstencilformat_2655',['depthStencilFormat',['https://doc.qt.io/qt-5/qvulkanwindow.html#depthStencilFormat',1,'QVulkanWindow']]],
   ['depthstencilimage_2656',['depthStencilImage',['https://doc.qt.io/qt-5/qvulkanwindow.html#depthStencilImage',1,'QVulkanWindow']]],
   ['depthstencilimageview_2657',['depthStencilImageView',['https://doc.qt.io/qt-5/qvulkanwindow.html#depthStencilImageView',1,'QVulkanWindow']]],
-  ['depthstencilmode_2658',['depthStencilMode',['https://doc.qt.io/qt-5/qopengltexture.html#depthStencilMode',1,'QOpenGLTexture::depthStencilMode() const const'],['https://doc.qt.io/qt-5/qopengltexture.html#DepthStencilMode-enum',1,'QOpenGLTexture::DepthStencilMode()']]],
+  ['depthstencilmode_2658',['DepthStencilMode',['https://doc.qt.io/qt-5/qopengltexture.html#DepthStencilMode-enum',1,'QOpenGLTexture::DepthStencilMode()'],['https://doc.qt.io/qt-5/qopengltexture.html#depthStencilMode',1,'QOpenGLTexture::depthStencilMode() const const']]],
   ['dequeue_2659',['dequeue',['https://doc.qt.io/qt-5/qqueue.html#dequeue',1,'QQueue']]],
   ['deref_2660',['deref',['https://doc.qt.io/qt-5/qatomicinteger.html#deref',1,'QAtomicInteger']]],
   ['descendingorder_2661',['DescendingOrder',['https://doc.qt.io/qt-5/qt.html#SortOrder-enum',1,'Qt']]],

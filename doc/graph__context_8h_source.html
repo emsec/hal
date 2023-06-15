@@ -248,68 +248,75 @@ $(document).ready(function(){initNavTree('graph__context_8h_source.html',''); in
 <div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160; </div>
 <div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_context.html#aaf23ce353b6c765a4bd012fc35985367">updateNets</a>();</div>
 <div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160; </div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SIGNALS">Q_SIGNALS</a>:</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_context.html#ac705654c3f51c4117dc30a8c9fbf69a9">dataChanged</a>();</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_context.html#a7ef2f80b1abe0488cab9d98f4cad6c03">exclusiveModuleLost</a>(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> old_id);</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160; </div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_context.html#aeeeccca33af0ed710fe70f8dffb19451">abortLayout</a>();</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160; </div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;    <span class="keyword">private</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;        <span class="keywordtype">void</span> handleLayouterFinished();</div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;        <span class="keywordtype">void</span> handleStyleChanged(<span class="keywordtype">int</span> istyle);</div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;        <span class="keywordtype">void</span> handleExclusiveModuleLost(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> old_id);</div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;        <span class="keywordtype">void</span> handleModuleNameChanged(<a class="code" href="classhal_1_1_module.html">Module</a>* m);</div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160; </div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;        <span class="keywordtype">void</span> evaluateChanges();</div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;        <span class="keywordtype">void</span> update();</div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;        <span class="keywordtype">void</span> applyChanges();</div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;        <span class="keywordtype">void</span> requireSceneUpdate();</div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;        <span class="keywordtype">void</span> startSceneUpdate();</div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;        <span class="keywordtype">bool</span> testIfAffectedInternal(<span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>, <span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>* moduleId, <span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>* gateId);</div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;        <span class="keywordtype">void</span> removeModuleContents(<span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> moduleId);</div>
-<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160; </div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> mId;</div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> mName;</div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;        <a class="code" href="classhal_1_1_graph_widget.html">GraphWidget</a>* mParentWidget;</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160; </div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;        <span class="keywordtype">bool</span> mDirty;</div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160; </div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;        <a class="code" href="classhal_1_1_graph_layouter.html">GraphLayouter</a>* mLayouter;</div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;        <a class="code" href="classhal_1_1_graph_shader.html">GraphShader</a>* mShader;</div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160; </div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mModules;</div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mGates;</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mNets;</div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160; </div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mAddedModules;</div>
-<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mAddedGates;</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_context.html#a841564959c72fba77346c516904d01f8">setScheduleRemove</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; mods, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a>&amp; gats);</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160; </div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_graph_context.html#a8d6c8ba76c1dcb72d667d4a98b2c497a">isScheduledRemove</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_node.html">Node</a>&amp; nd);</div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160; </div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SIGNALS">Q_SIGNALS</a>:</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_context.html#ac705654c3f51c4117dc30a8c9fbf69a9">dataChanged</a>();</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_context.html#a7ef2f80b1abe0488cab9d98f4cad6c03">exclusiveModuleLost</a>(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> old_id);</div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160; </div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_graph_context.html#aeeeccca33af0ed710fe70f8dffb19451">abortLayout</a>();</div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160; </div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;    <span class="keyword">private</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;        <span class="keywordtype">void</span> handleLayouterFinished();</div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;        <span class="keywordtype">void</span> handleStyleChanged(<span class="keywordtype">int</span> istyle);</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;        <span class="keywordtype">void</span> handleExclusiveModuleLost(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> old_id);</div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;        <span class="keywordtype">void</span> handleModuleNameChanged(<a class="code" href="classhal_1_1_module.html">Module</a>* m);</div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160; </div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;        <span class="keywordtype">void</span> evaluateChanges();</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;        <span class="keywordtype">void</span> update();</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;        <span class="keywordtype">void</span> applyChanges();</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;        <span class="keywordtype">void</span> requireSceneUpdate();</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;        <span class="keywordtype">void</span> startSceneUpdate();</div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;        <span class="keywordtype">bool</span> testIfAffectedInternal(<span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>, <span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>* moduleId, <span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>* gateId);</div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;        <span class="keywordtype">void</span> removeModuleContents(<span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> moduleId);</div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160; </div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> mId;</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> mName;</div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;        <a class="code" href="classhal_1_1_graph_widget.html">GraphWidget</a>* mParentWidget;</div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160; </div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;        <span class="keywordtype">bool</span> mDirty;</div>
 <div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160; </div>
-<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;PlacementEntry&gt;</a> mPlacementList[4];</div>
-<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160; </div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mRemovedModules;</div>
-<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mRemovedGates;</div>
-<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160; </div>
-<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> mUserUpdateCount;</div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;        <a class="code" href="classhal_1_1_graph_layouter.html">GraphLayouter</a>* mLayouter;</div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;        <a class="code" href="classhal_1_1_graph_shader.html">GraphShader</a>* mShader;</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160; </div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mModules;</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mGates;</div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mNets;</div>
 <div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160; </div>
-<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;        <span class="keywordtype">bool</span> mUnappliedChanges;</div>
-<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;        <span class="keywordtype">bool</span> mSceneUpdateRequired;</div>
-<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;        <span class="keywordtype">bool</span> mSceneUpdateInProgress;</div>
-<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160; </div>
-<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qdatetime.html">QDateTime</a> mTimestamp;</div>
-<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160; </div>
-<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;        <span class="keywordtype">bool</span> mSpecialUpdate;</div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mAddedModules;</div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mAddedGates;</div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160; </div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;PlacementEntry&gt;</a> mPlacementList[4];</div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160; </div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mRemovedModules;</div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mRemovedGates;</div>
 <div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160; </div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> mExclusiveModuleId;</div>
-<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;    };</div>
-<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> mUserUpdateCount;</div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160; </div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;        <span class="keywordtype">bool</span> mUnappliedChanges;</div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;        <span class="keywordtype">bool</span> mSceneUpdateRequired;</div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;        <span class="keywordtype">bool</span> mSceneUpdateInProgress;</div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160; </div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qdatetime.html">QDateTime</a> mTimestamp;</div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160; </div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;        <span class="keywordtype">bool</span> mSpecialUpdate;</div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160; </div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mScheduleRemoveModules;</div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mScheduleRemoveGates;</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160; </div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;        <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> mExclusiveModuleId;</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;    };</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_graph_context_html_a0d619c8a12ba665f0c16ac85246909af"><div class="ttname"><a href="classhal_1_1_graph_context.html#a0d619c8a12ba665f0c16ac85246909af">hal::GraphContext::unfoldModule</a></div><div class="ttdeci">void unfoldModule(const u32 id, const PlacementHint &amp;plc)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00184">graph_context.cpp:184</a></div></div>
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
 <div class="ttc" id="aqset_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html">QSet&lt; u32 &gt;</a></div></div>
-<div class="ttc" id="aclasshal_1_1_graph_context_html_a63ccc1d38d4a7b893efaa20c9ff0882b"><div class="ttname"><a href="classhal_1_1_graph_context.html#a63ccc1d38d4a7b893efaa20c9ff0882b">hal::GraphContext::setExclusiveModuleId</a></div><div class="ttdeci">void setExclusiveModuleId(u32 id, bool emitSignal=true)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00877">graph_context.cpp:877</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_context_html_a63ccc1d38d4a7b893efaa20c9ff0882b"><div class="ttname"><a href="classhal_1_1_graph_context.html#a63ccc1d38d4a7b893efaa20c9ff0882b">hal::GraphContext::setExclusiveModuleId</a></div><div class="ttdeci">void setExclusiveModuleId(u32 id, bool emitSignal=true)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00912">graph_context.cpp:912</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html"><div class="ttname"><a href="classhal_1_1_graph_context.html">hal::GraphContext</a></div><div class="ttdoc">Logical container for modules, gates, and nets.</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8h_source.html#l00053">graph_context.h:53</a></div></div>
 <div class="ttc" id="aclasshal_1_1_node_html"><div class="ttname"><a href="classhal_1_1_node.html">hal::Node</a></div><div class="ttdoc">The Node class object represents a module or a gate.</div><div class="ttdef"><b>Definition:</b> <a href="gui__def_8h_source.html#l00058">gui_def.h:58</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_ac705654c3f51c4117dc30a8c9fbf69a9"><div class="ttname"><a href="classhal_1_1_graph_context.html#ac705654c3f51c4117dc30a8c9fbf69a9">hal::GraphContext::dataChanged</a></div><div class="ttdeci">void dataChanged()</div></div>
@@ -321,11 +328,12 @@ $(document).ready(function(){initNavTree('graph__context_8h_source.html',''); in
 <div class="ttc" id="anamespacetest_html_a20eb10bb18ee6ccd51fa4518f9fd6090"><div class="ttname"><a href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">test.n</a></div><div class="ttdeci">n</div><div class="ttdef"><b>Definition:</b> <a href="test_8py_source.html#l00008">test.py:8</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_a666418e4708edff1a2e3af19b55ca184"><div class="ttname"><a href="classhal_1_1_graph_context.html#a666418e4708edff1a2e3af19b55ca184">hal::GraphContext::empty</a></div><div class="ttdeci">bool empty() const</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00234">graph_context.cpp:234</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_a246b2047c7dd7a7239779a383e2bb3f9"><div class="ttname"><a href="classhal_1_1_graph_context.html#a246b2047c7dd7a7239779a383e2bb3f9">hal::GraphContext::writeToFile</a></div><div class="ttdeci">void writeToFile(QJsonObject &amp;json)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00811">graph_context.cpp:811</a></div></div>
-<div class="ttc" id="aclasshal_1_1_graph_context_html_a06f09f6e50af4b7c47a15d427fe2d36b"><div class="ttname"><a href="classhal_1_1_graph_context.html#a06f09f6e50af4b7c47a15d427fe2d36b">hal::GraphContext::setSpecialUpdate</a></div><div class="ttdeci">void setSpecialUpdate(bool state)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00866">graph_context.cpp:866</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_context_html_a06f09f6e50af4b7c47a15d427fe2d36b"><div class="ttname"><a href="classhal_1_1_graph_context.html#a06f09f6e50af4b7c47a15d427fe2d36b">hal::GraphContext::setSpecialUpdate</a></div><div class="ttdeci">void setSpecialUpdate(bool state)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00901">graph_context.cpp:901</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_aecccd028104e704aca70dc383c386477"><div class="ttname"><a href="classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477">hal::GraphContext::id</a></div><div class="ttdeci">u32 id() const</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00441">graph_context.cpp:441</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_a7dcb0526cd46447fed703890a31ec9e7"><div class="ttname"><a href="classhal_1_1_graph_context.html#a7dcb0526cd46447fed703890a31ec9e7">hal::GraphContext::nodeForGate</a></div><div class="ttdeci">Node nodeForGate(const u32 id) const</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00474">graph_context.cpp:474</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_a9c8859333e6da84fabd0af90ab44b755"><div class="ttname"><a href="classhal_1_1_graph_context.html#a9c8859333e6da84fabd0af90ab44b755">hal::GraphContext::isDirty</a></div><div class="ttdeci">bool isDirty() const</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8h_source.html#l00380">graph_context.h:380</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_context_html_a841564959c72fba77346c516904d01f8"><div class="ttname"><a href="classhal_1_1_graph_context.html#a841564959c72fba77346c516904d01f8">hal::GraphContext::setScheduleRemove</a></div><div class="ttdeci">void setScheduleRemove(const QSet&lt; u32 &gt; &amp;mods, const QSet&lt; u32 &gt; &amp;gats)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00866">graph_context.cpp:866</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_a00ae714ff83079561b0d3987189754f4"><div class="ttname"><a href="classhal_1_1_graph_context.html#a00ae714ff83079561b0d3987189754f4">hal::GraphContext::isModuleUnfolded</a></div><div class="ttdeci">bool isModuleUnfolded(const u32 moduleId) const</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00165">graph_context.cpp:165</a></div></div>
 <div class="ttc" id="aqlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html">QList</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_a7ef2f80b1abe0488cab9d98f4cad6c03"><div class="ttname"><a href="classhal_1_1_graph_context.html#a7ef2f80b1abe0488cab9d98f4cad6c03">hal::GraphContext::exclusiveModuleLost</a></div><div class="ttdeci">void exclusiveModuleLost(u32 old_id)</div></div>
@@ -357,6 +365,7 @@ $(document).ready(function(){initNavTree('graph__context_8h_source.html',''); in
 <div class="ttc" id="aqobject_html_Q_SIGNALS"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_SIGNALS">QObject::Q_SIGNALS</a></div><div class="ttdeci">Q_SIGNALSQ_SIGNALS</div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_a1c1e9c1fb667e4eab9ff027e0fff96ba"><div class="ttname"><a href="classhal_1_1_graph_context.html#a1c1e9c1fb667e4eab9ff027e0fff96ba">hal::GraphContext::exclusiveModuleCheck</a></div><div class="ttdeci">void exclusiveModuleCheck()</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00703">graph_context.cpp:703</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_manager_html"><div class="ttname"><a href="classhal_1_1_graph_context_manager.html">hal::GraphContextManager</a></div><div class="ttdoc">User interface to manage all GraphContexts.</div><div class="ttdef"><b>Definition:</b> <a href="graph__context__manager_8h_source.html#l00057">graph_context_manager.h:57</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_context_html_a8d6c8ba76c1dcb72d667d4a98b2c497a"><div class="ttname"><a href="classhal_1_1_graph_context.html#a8d6c8ba76c1dcb72d667d4a98b2c497a">hal::GraphContext::isScheduledRemove</a></div><div class="ttdeci">bool isScheduledRemove(const Node &amp;nd)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00872">graph_context.cpp:872</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_afc3db090653def123d9a6180e9e4b1ad"><div class="ttname"><a href="classhal_1_1_graph_context.html#afc3db090653def123d9a6180e9e4b1ad">hal::GraphContext::isShowingNetDestination</a></div><div class="ttdeci">bool isShowingNetDestination(const u32 mNetId) const</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00382">graph_context.cpp:382</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_ac5d06178660e25f24c3a5d5e3943ab2e"><div class="ttname"><a href="classhal_1_1_graph_context.html#ac5d06178660e25f24c3a5d5e3943ab2e">hal::GraphContext::GraphContext</a></div><div class="ttdeci">GraphContext(u32 id_, const QString &amp;name, QObject *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00025">graph_context.cpp:25</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html_a5e22b0d97a34b99dfe402ee7691830a8"><div class="ttname"><a href="classhal_1_1_graph_context.html#a5e22b0d97a34b99dfe402ee7691830a8">hal::GraphContext::setDirty</a></div><div class="ttdeci">void setDirty(bool dty)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00859">graph_context.cpp:859</a></div></div>
@@ -387,12 +396,12 @@ $(document).ready(function(){initNavTree('graph__context_8h_source.html',''); in
 <div class="ttc" id="aqobject_html_parent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent</a></div><div class="ttdeci">QObject * parent() const const</div></div>
 <div class="ttc" id="aqpoint_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a></div></div>
 <div class="ttc" id="agraph__shader_8h_html"><div class="ttname"><a href="graph__shader_8h.html">graph_shader.h</a></div></div>
-<div class="ttc" id="aclasshal_1_1_graph_context_html_a1bc78b394375158c1212190231f1de1f"><div class="ttname"><a href="classhal_1_1_graph_context.html#a1bc78b394375158c1212190231f1de1f">hal::GraphContext::showComments</a></div><div class="ttdeci">void showComments(const Node &amp;nd)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00871">graph_context.cpp:871</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_context_html_a1bc78b394375158c1212190231f1de1f"><div class="ttname"><a href="classhal_1_1_graph_context.html#a1bc78b394375158c1212190231f1de1f">hal::GraphContext::showComments</a></div><div class="ttdeci">void showComments(const Node &amp;nd)</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8cpp_source.html#l00906">graph_context.cpp:906</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_e6f210bccc64e8ff5ef57a64ae71bbf6.html">graph_widget</a></li><li class="navelem"><a class="el" href="dir_ddd94d52bf54f9ecc737da5a4ae4acea.html">contexts</a></li><li class="navelem"><a class="el" href="graph__context_8h.html">graph_context.h</a></li>
-    <li class="footer">Generated on Tue Jun 13 2023 09:53:11 for HAL by
+    <li class="footer">Generated on Thu Jun 15 2023 13:44:56 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

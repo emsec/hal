@@ -1,5 +1,7 @@
 var NAVTREEINDEX22 =
 {
+"functions_func_e.html":[6,3,1,4],
+"functions_func_f.html":[6,3,1,5],
 "functions_func_g.html":[6,3,1,6],
 "functions_func_h.html":[6,3,1,7],
 "functions_func_i.html":[6,3,1,8],
@@ -247,7 +249,5 @@ var NAVTREEINDEX22 =
 "graph__context_8h.html":[7,0,1,3,0,0,20,0,0],
 "graph__context_8h_source.html":[7,0,1,3,0,0,20,0,0],
 "graph__context__manager_8cpp.html":[7,0,1,3,2,19,4],
-"graph__context__manager_8cpp_source.html":[7,0,1,3,2,19,4],
-"graph__context__manager_8h.html":[7,0,1,3,0,0,20,4],
-"graph__context__manager_8h_source.html":[7,0,1,3,0,0,20,4]
+"graph__context__manager_8cpp_source.html":[7,0,1,3,2,19,4]
 };
