@@ -29,6 +29,9 @@
 #include "hal_core/plugin_system/cli_extension_interface.h"
 #include <QList>
 #include <QObject>
+#include <QEvent>
+#include <QApplication>
+#include <QTextStream>
 
 Q_DECLARE_METATYPE(u32)
 
@@ -50,6 +53,16 @@ namespace hal
         ProgramOptions get_cli_options() const override;
 
         virtual bool handle_cli_call(Netlist*, ProgramArguments&) override {return false; }
+    };
+
+    class DebugApplication : public QApplication
+    {
+        QFile mFile;
+        QTextStream* mOut;
+    public:
+        DebugApplication(int& argc, char** argv);
+        virtual ~DebugApplication() { if (mOut) delete mOut; };
+        virtual bool notify(QObject *receiver, QEvent *e) override;
     };
 
     /**

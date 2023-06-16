@@ -433,6 +433,7 @@ namespace hal
         void clear();
 
         static SettingsItemDropdown* sSettingStyle;
+        static int timerTick;
 
     public Q_SLOTS:
         /**
@@ -565,6 +566,8 @@ namespace hal
         void handleExportProjectTriggered();
 
         void handleImportProjectTriggered();
+
+        void handleTimerTick();
 
     private:
         /**

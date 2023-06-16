@@ -164,6 +164,25 @@ namespace hal
         return;
     }
 
+    DebugApplication::DebugApplication(int &argc, char** argv)
+        : QApplication(argc,argv), mOut(nullptr)
+    {
+        mFile.setFileName("/tmp/hal_events.log");
+        if (mFile.open(QIODevice::WriteOnly))
+            mOut = new QTextStream(&mFile);
+    }
+
+    bool DebugApplication::notify(QObject *receiver, QEvent *e)
+    {
+        if (mOut)
+        {
+            if (e->type() != 1 || strcmp(receiver->metaObject()->className(),"QTimer")) // don't spam everything with timer events
+                (*mOut) << MainWindow::timerTick << " :" << receiver->objectName() << ": " << receiver->metaObject()->className() << " " << e->type() << "\n";
+            mOut->flush();
+         }
+        return QApplication::notify(receiver,e);
+    }
+
     bool PluginGui::exec(ProgramArguments& args)
     {
         int argc;
@@ -172,7 +191,7 @@ namespace hal
 
         qInstallMessageHandler(myMessageOutput);
 
-        QApplication a(argc, const_cast<char**>(argv));
+        DebugApplication a(argc, const_cast<char**>(argv));
         //FocusLogger focusLogger(&a);
 
         QObject::connect(&a, &QApplication::aboutToQuit, cleanup);

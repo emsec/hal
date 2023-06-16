@@ -57,6 +57,7 @@ namespace hal
     const char* MSG_PROJECT_ALREADY_OPEN = "You are already working on a HAL project. Close current project first.";
 
     SettingsItemDropdown* MainWindow::sSettingStyle = nullptr;
+    int MainWindow::timerTick = 0;
 
     MainWindow::MainWindow(QWidget* parent) : QWidget(parent)
     {
@@ -355,6 +356,14 @@ namespace hal
         enableUndo(false);
 
         restoreState();
+        QTimer* timer = new QTimer(this);
+        connect(timer,&QTimer::timeout,this,&MainWindow::handleTimerTick);
+        timer->start(10000);
+    }
+
+    void MainWindow::handleTimerTick()
+    {
+        log_info("gui", "I am alive message no {}", ++timerTick);
     }
 
     void MainWindow::reloadStylsheet(int istyle)
