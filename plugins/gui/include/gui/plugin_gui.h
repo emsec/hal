@@ -32,6 +32,7 @@
 #include <QEvent>
 #include <QApplication>
 #include <QTextStream>
+#include <QFile>
 
 Q_DECLARE_METATYPE(u32)
 

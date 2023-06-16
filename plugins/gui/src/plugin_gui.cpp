@@ -27,7 +27,6 @@
 
 #include <QDir>
 #include <QApplication>
-#include <QFile>
 #include <QFont>
 #include <QFontDatabase>
 #include <QMetaType>
@@ -172,12 +171,28 @@ namespace hal
             mOut = new QTextStream(&mFile);
     }
 
+    template<typename EnumType>
+    QString EventTypeString(const EnumType& enumValue)
+    {
+        const char* enumName = qt_getEnumName(enumValue);
+        const QMetaObject* metaObject = qt_getEnumMetaObject(enumValue);
+        if (metaObject)
+        {
+            const int enumIndex = metaObject->indexOfEnumerator(enumName);
+            return QString(metaObject->enumerator(enumIndex).valueToKey(enumValue));
+        }
+
+        return QString("%1::%2").arg(enumName).arg(static_cast<int>(enumValue));
+    }
+
     bool DebugApplication::notify(QObject *receiver, QEvent *e)
     {
         if (mOut)
         {
             if (e->type() != 1 || strcmp(receiver->metaObject()->className(),"QTimer")) // don't spam everything with timer events
-                (*mOut) << MainWindow::timerTick << " :" << receiver->objectName() << ": " << receiver->metaObject()->className() << " " << e->type() << "\n";
+            {
+                (*mOut) << MainWindow::timerTick << " :" << receiver->objectName() << ": " << receiver->metaObject()->className() << " [" << EventTypeString(e->type()) << "]\n";
+            }
             mOut->flush();
          }
         return QApplication::notify(receiver,e);
