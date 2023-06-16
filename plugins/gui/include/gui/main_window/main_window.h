@@ -25,13 +25,12 @@
 
 #pragma once
 
-#include "hal_core/utilities/program_options.h"
-
-#include "gui/content_layout_area/content_layout_area.h"
-#include "hal_core/utilities/program_options.h"
 #include "gui/action/action.h"
+#include "gui/content_layout_area/content_layout_area.h"
 #include "gui/settings/main_settings_widget.h"
 #include "gui/splitter/splitter.h"
+#include "hal_core/netlist/module.h"
+#include "hal_core/utilities/program_options.h"
 
 #include <QLayout>
 #include <QMenuBar>
@@ -565,6 +564,8 @@ namespace hal
         void handleExportProjectTriggered();
 
         void handleImportProjectTriggered();
+
+        int isolateInNewView(const std::vector<Module*>, const std::vector<Gate*>);
 
     private:
         /**

@@ -1,6 +1,10 @@
 #include "gui/gui_api/gui_api.h"
 
 #include "gui/gui_globals.h"
+#include "gui/user_action/user_action_compound.h"
+#include "gui/user_action/user_action_object.h"
+#include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_add_items_to_object.h"
 
 #include <algorithm>
 
@@ -427,5 +431,68 @@ namespace hal
     void GuiApi::deselectAllItems()
     {
         gSelectionRelay->clearAndUpdate();
+    }
+
+    int GuiApi::isolateInNewView(std::vector<Module*> modules, std::vector<Gate*> gates)
+    {
+        static QSet<u32> usedIds;
+        QString name;
+        //TODO: make sure that modules and gates are not empty
+        if(modules.empty() && gates.empty())
+            return 0;
+
+        //Check if view should be bound exclusively to module
+        if(modules.size() == 1 && gates.empty()){
+            name = QString::fromStdString(modules[0]->get_name()) + QString(" (ID: %1)").arg(modules[0]->get_id());
+
+            //If the view already exists then return 0
+            if(gGraphContextManager->contextWithNameExists(name)){
+                return 0;
+            }
+        }
+        else
+        {
+            //Get the number which has to be appended to name
+
+            u32 id = 1;
+            name   = QString("Isolated View %1").arg(id);
+
+            /* TODO free id "i" if context "i" is deleted and use this which is probably faster instead of the Placeholder code
+        while(usedIds.contains(id)){
+            id++;
+        }
+
+        usedIds.insert(id);
+        QString name = QString("Isolated View %1").arg(id);
+        */
+
+            //TODO: Placeholder code
+            while (gGraphContextManager->contextWithNameExists(name))
+            {
+                id++;
+                name = QString("Isolated View %1").arg(id);
+            }
+            usedIds.insert(id);
+        }
+
+
+        // Get ids from modules and gates
+        QSet<u32> moduleIds;
+        QSet<u32> gateIds;
+
+        for(Module* module : modules)
+            moduleIds.insert(module->get_id());
+        for(Gate* gate : gates)
+            gateIds.insert(gate->get_id());
+
+
+        UserActionCompound* act = new UserActionCompound;
+        act->setUseCreatedObject();
+        act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+        act->addAction(new ActionAddItemsToObject(moduleIds, gateIds));
+        act->exec();
+
+        //TODO: return actual context id
+        return 0;
     }
 }

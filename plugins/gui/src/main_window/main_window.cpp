@@ -3,8 +3,8 @@
 #include "gui/action/action.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/docking_system/dock_bar.h"
-#include "gui/export/export_registered_format.h"
 #include "gui/export/export_project_dialog.h"
+#include "gui/export/export_registered_format.h"
 #include "gui/export/import_project_dialog.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/file_manager/project_dir_dialog.h"
@@ -24,33 +24,34 @@
 #include "gui/user_action/action_open_netlist_file.h"
 #include "gui/welcome_screen/welcome_screen.h"
 #include "hal_core/defines.h"
+#include "hal_core/netlist/event_system/event_log.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
-#include "hal_core/utilities/log.h"
-#include "hal_core/netlist/event_system/event_log.h"
 #include "hal_core/netlist/project_manager.h"
-#include "hal_core/utilities/project_directory.h"
-#include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/plugin_system/gui_extension_interface.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/project_directory.h"
 
 #include <QApplication>
 #include <QCloseEvent>
 #include <QDesktopWidget>
+#include <QDir>
 #include <QFileDialog>
 #include <QFuture>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QShortcut>
-#include <QtConcurrent>
 #include <QRegExp>
+#include <QShortcut>
 #include <QStringList>
-#include <QDir>
+#include <QtConcurrent>
 
 namespace hal
 {
@@ -264,6 +265,11 @@ namespace hal
         mMenuHelp->addAction(mActionAbout);
         mMenuHelp->addSeparator();
         mMenuHelp->addAction(mActionPlugins);
+        mMenuHelp->addAction("Test developed function", [this] () {
+            std::vector<Module*> modules;
+            std::vector<Gate*> gates;
+            isolateInNewView(modules, gates);
+        });
         mLeftToolBar->addAction(mActionNew);
         mLeftToolBar->addAction(mActionOpenProject);
         mLeftToolBar->addAction(mActionSave);
@@ -1069,5 +1075,25 @@ namespace hal
     void MainWindow::saveState()
     {
         SettingsManager::instance()->mainWindowSaveGeometry(pos(), size());
+    }
+
+    int MainWindow::isolateInNewView(std::vector<Module*> modules, std::vector<Gate*> gates)
+    {
+
+        modules.push_back(gNetlist->get_module_by_id(4));
+        /*modules.push_back(gNetlist->get_module_by_id(2));
+        modules.push_back(gNetlist->get_module_by_id(1));
+
+        gates.push_back(gNetlist->get_gate_by_id(10));
+        gates.push_back(gNetlist->get_gate_by_id(2));
+        gates.push_back(gNetlist->get_gate_by_id(1));*/
+
+
+        qInfo() << "Test action isolateInNewView was called";
+        //Create a new view which contains the given Modules and Gates
+
+        return GuiApi().isolateInNewView(modules, gates);
+
+
     }
 }    // namespace hal
