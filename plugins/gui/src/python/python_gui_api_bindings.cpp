@@ -466,6 +466,12 @@ PYBIND11_PLUGIN(hal_gui)
        Deselect all gates, nets and modules in the graph view of the GUI.
 )");
 
+    py_gui_api.def("isolateNewView",py::overload_cast<const std::vector<Module*>, const std::vector<Gate*>>(&GuiApi::isolateInNewView), py::arg("modules"), py::arg("gates"),R"(
+    Creates a new Isolated View from the given modules and gates.
+    :param list[hal_py.module] modules: The modules to be shown.
+    :param list[hal_py.Gate] gates: The gates to be shown.
+)");
+
 #ifndef PYBIND11_MODULE
     return m.ptr();
 #endif    // PYBIND11_MODULE
