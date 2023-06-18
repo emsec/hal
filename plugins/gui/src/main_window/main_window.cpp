@@ -1093,7 +1093,8 @@ namespace hal
         qInfo() << "Test action isolateInNewView was called";
         //Create a new view which contains the given Modules and Gates
 
-        return GuiApi().isolateInNewView(modules, gates);
+        //return GuiApi().isolateInNewView(modules, gates);
+        return GuiApi::View::isolateInNewView(modules, gates);
 
 
     }

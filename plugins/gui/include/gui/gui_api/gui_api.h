@@ -533,6 +533,11 @@ namespace hal
 
         int isolateInNewView(const std::vector<Module*>, const std::vector<Gate*>);
 
+        class View{
+        public:
+            static int isolateInNewView(const std::vector<Module*>, const std::vector<Gate*>);
+        };
+
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted whenever the view should be moved to a new selection.

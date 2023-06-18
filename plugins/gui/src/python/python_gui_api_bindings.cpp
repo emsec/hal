@@ -78,6 +78,9 @@ PYBIND11_PLUGIN(hal_gui)
 
     py::class_<GuiApi> py_gui_api(m, "GuiApi", R"(GUI API)");
 
+    py::class_<GuiApi::View>(py_gui_api, "View")
+    .def_static("isolateInNewView", &GuiApi::View::isolateInNewView, py::arg("modules"), py::arg("gates"));
+
     py_gui_api.def("getSelectedGateIds", &GuiApi::getSelectedGateIds, R"(
         Get the gate ids of currently selected gates in the graph view of the GUI.
 
