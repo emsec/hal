@@ -116,6 +116,7 @@ namespace hal
                 else
                     return false;
                 break;
+                /* TODO PIN
             case UserActionObjectType::PinGroup: {
                 auto mod = gNetlist->get_module_by_id(mParentObject.id());
                 if (mod)
@@ -162,6 +163,7 @@ namespace hal
                 }
             }
             break;
+            */
             default:
                 return false;
         }

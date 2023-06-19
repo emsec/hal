@@ -23,6 +23,7 @@ namespace hal
 
     bool ActionReorderObject::exec()
     {
+        /* TODO PIN
         int oldIndex = -1;
         switch (mObject.type())
         {
@@ -86,6 +87,7 @@ namespace hal
             undo->setParentObject(mParentObject);
             mUndoAction = undo;
         }
+        */
         return UserAction::exec();
     }
 

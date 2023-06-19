@@ -63,6 +63,7 @@ namespace hal
         switch (mObject.type())
         {
 
+        /* TODO PIN
         case UserActionObjectType::PinGroup:
         {
             Module* parentModule = gNetlist->get_module_by_id(mParentObject.id());
@@ -77,6 +78,7 @@ namespace hal
             else
                 return false;
         }
+        */
             break;
 
         case UserActionObjectType::Module:

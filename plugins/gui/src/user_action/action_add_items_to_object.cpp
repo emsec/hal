@@ -173,6 +173,7 @@ namespace hal
                 else
                     return false;
                 break;
+                /* TODO PIN
             case UserActionObjectType::PinGroup: {
                 if (mPins.empty())
                     return true;
@@ -257,6 +258,7 @@ namespace hal
                 }
             }
             break;
+            */
             default:
                 return false;
         }

@@ -480,6 +480,7 @@ namespace hal
         for(const auto &pin : group->get_pins())
             pins.insert(pin->get_id());
 
+        /* TODO PIN
         UserActionCompound* compAct = new UserActionCompound;
         ActionReorderObject* reorderActHack = new ActionReorderObject(droppedGroup->getOwnRow());
         reorderActHack->setObject(UserActionObject(group->get_id(), UserActionObjectType::PinGroup));
@@ -490,6 +491,7 @@ namespace hal
         compAct->addAction(reorderActHack);
         compAct->addAction(addAct);
         compAct->exec();
+        */
         // too keep the order, ActionAddItemsToObject cannot be executed with all pins, but a ComAction must be created
         // with many ActionAddItemsToObject that contain a single pin each -> set destroys order of pins in source pingroup
         setModule(mModule);
@@ -505,10 +507,13 @@ namespace hal
         auto desiredIdx = bottomEdge ? row-1 : row;
         if(ownRow < row && !bottomEdge) desiredIdx--;
         //mModule->move_pin_group(mModule->get_pin_group_by_id(getIdOfItem(droppedGroup)), desiredIdx);
+        /* TODO PIN
         ActionReorderObject* reordObj = new ActionReorderObject(desiredIdx);
         reordObj->setObject(UserActionObject(getIdOfItem(droppedGroup), UserActionObjectType::PinGroup));
         reordObj->setParentObject(UserActionObject(mModule->get_id(), UserActionObjectType::Module));
         auto ret = reordObj->exec();
+        */
+        bool ret = true; // TEMP
         if(ret){
             removeItem(droppedGroup);
             insertItem(droppedGroup, mRootItem, desiredIdx);
@@ -520,10 +525,12 @@ namespace hal
     {
         mIgnoreEventsFlag = true;
         QSet<u32> e;
+        /* TODO PIN
         ActionAddItemsToObject* addAct = new ActionAddItemsToObject(e,e,e, QSet<u32>() << getIdOfItem(droppedPin));
         addAct->setObject(UserActionObject(getIdOfItem(onDroppedGroup), UserActionObjectType::PinGroup));
         addAct->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
         addAct->exec();
+        */
         auto oldParent = droppedPin->getParent();
         removeItem(droppedPin);
         insertItem(droppedPin, onDroppedGroup, onDroppedGroup->getChildCount());
@@ -545,14 +552,17 @@ namespace hal
             bool bottomEdge = row == onDroppedParent->getChildCount();
             desiredIdx = bottomEdge ? row-1 : row;
             if(ownRow < row && !bottomEdge) desiredIdx--; // insert item here
+            /* TODO PIN
             ActionReorderObject* reorderObj = new ActionReorderObject(desiredIdx);
             reorderObj->setObject(UserActionObject(getIdOfItem(droppedPin), UserActionObjectType::Pin));
             reorderObj->setParentObject(UserActionObject(mModule->get_id(), UserActionObjectType::Module));
             reorderObj->exec();
+            */
         }
         else // different groups
         {
             // reorder action from source group is still needed (for undo action)!
+            /* TODO PIN
             UserActionCompound* compAct = new UserActionCompound;
             ActionReorderObject* reorderActHack = new ActionReorderObject(droppedPin->getOwnRow());
             reorderActHack->setObject(UserActionObject(getIdOfItem(droppedPin), UserActionObjectType::Pin));
@@ -567,6 +577,7 @@ namespace hal
             compAct->addAction(addAct);
             compAct->addAction(reorderAct);
             compAct->exec();
+            */
         }
         auto oldParent = droppedPin->getParent();
         removeItem(droppedPin);
@@ -586,10 +597,13 @@ namespace hal
         mIgnoreEventsFlag = true;
         auto pinGroup = mModule->get_pin_group_by_id(getIdOfItem(droppedPin->getParent()));
         QSet<u32> e;
+        /* TODO PIN
         ActionRemoveItemsFromObject* removeAct = new ActionRemoveItemsFromObject(e,e,e, QSet<u32>() << getIdOfItem(droppedPin));
         removeAct->setObject(UserActionObject(pinGroup->get_id(), UserActionObjectType::PinGroup));
         removeAct->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
         bool ret = removeAct->exec();
+        */
+        bool ret = true; // TEMP
         // must search for the created group (must secure way is to serve for a group that contains the pin id)
         // and then move that group (the source group cannot be empty after the pin was removed -> canDropMimeData)
         if(ret) // can fail if the pins name that one wants to remove has the same name as another group that already exists
@@ -604,11 +618,14 @@ namespace hal
             pinGroupItem->setAdditionalData(keyId, newGroup->get_id());
 
             int pos = mRootItem->getChildCount(); // or query current index
+
+            /* TODO PIN
             ActionReorderObject* reordObj = new ActionReorderObject(row);
             reordObj->setObject(UserActionObject(newGroup->get_id(), UserActionObjectType::PinGroup));
             reordObj->setParentObject(UserActionObject(mModule->get_id(), UserActionObjectType::Module));
             if(reordObj->exec())
                 pos = row;
+            */
 
             insertItem(pinGroupItem, mRootItem, pos);
             removeItem(droppedPin);

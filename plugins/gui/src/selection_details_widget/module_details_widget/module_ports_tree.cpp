@@ -134,10 +134,12 @@ namespace hal
                             return;
                         pinSet.insert(pin->get_id());
                     }
+                    /* TODO PIN
                     ActionAddItemsToObject* act = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), pinSet);
                     act->setObject(UserActionObject(pinGroup->get_id(), UserActionObjectType::PinGroup));
                     act->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
                     act->exec();
+                    */
                 }
             });
         }
@@ -153,10 +155,12 @@ namespace hal
                     auto* group = gNetlist->get_module_by_id(modId)->get_pin_group_by_id(itemId);
                     if (group != nullptr)
                     {
+                        /* TODO PIN
                         ActionRenameObject* renameObj = new ActionRenameObject(ipd.textValue());
                         renameObj->setObject(UserActionObject(group->get_id(), UserActionObjectType::PinGroup));
                         renameObj->setParentObject(UserActionObject(modId, UserActionObjectType::Module));
                         renameObj->exec();
+                        */
                     }
                 }
             });
@@ -164,10 +168,12 @@ namespace hal
                 auto* pinGroup = mod->get_pin_group_by_id(itemId);
                 if (pinGroup != nullptr)
                 {
+                    /* TDOD PIN
                     ActionDeleteObject* delObj = new ActionDeleteObject;
                     delObj->setObject(UserActionObject(pinGroup->get_id(), UserActionObjectType::PinGroup));
                     delObj->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
                     delObj->exec();
+                    */
                 }
             });
 
@@ -193,10 +199,12 @@ namespace hal
                     auto* pin = mod->get_pin_by_id(itemId);
                     if (pin != nullptr)
                     {
+                        /* TODO PIN
                         ActionRenameObject* renameObj = new ActionRenameObject(ipd.textValue());
                         renameObj->setObject(UserActionObject(pin->get_id(), UserActionObjectType::Pin));
                         renameObj->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
                         renameObj->exec();
+                        */
                     }
                 }
             });
@@ -214,10 +222,12 @@ namespace hal
 
                 if (cbd.exec() == QDialog::Accepted)
                 {
+                    /* TODO PIN
                     ActionSetObjectType* act = new ActionSetObjectType(cbd.textValue());
                     act->setObject(UserActionObject(pin->get_id(), UserActionObjectType::Pin));
                     act->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
                     act->exec();
+                    */
                 }
             });
             menu.addAction("Add net to current selection", [this, n]() {
@@ -238,10 +248,12 @@ namespace hal
                 for (auto item : selectedPins)
                     pins.insert(mPortModel->getIdOfItem(item));
 
+                /* TODO PIN
                 ActionRemoveItemsFromObject* act = new ActionRemoveItemsFromObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), pins);
                 act->setObject(UserActionObject(mod->get_pin_group_by_id(sameGroup.second)->get_id(), UserActionObjectType::PinGroup));
                 act->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
                 act->exec();
+                */
             });
         }
 
@@ -285,6 +297,7 @@ namespace hal
                             return;
                         pins.insert(pin->get_id());
                     }
+                    /* TODO PIN
                     UserActionCompound* act = new UserActionCompound;
                     act->setUseCreatedObject();
                     ActionCreateObject* actCreate = new ActionCreateObject(UserActionObjectType::PinGroup, ipd.textValue());
@@ -294,6 +307,7 @@ namespace hal
                     act->addAction(actCreate);
                     act->addAction(actAdd);
                     act->exec();
+                    */
                 }
             });
         }
