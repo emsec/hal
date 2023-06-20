@@ -438,7 +438,6 @@ namespace hal
     //function called from GuiApi class
     int GuiApi::isolateInNewView(std::vector<Module*> modules, std::vector<Gate*> gates)
     {
-        static QSet<u32> usedIds;
         QString name;
         //TODO: make sure that modules and gates are not empty
         if(modules.empty() && gates.empty())
@@ -457,25 +456,9 @@ namespace hal
         {
             //Get the number which has to be appended to name
 
-            u32 id = 1;
-            name   = QString("Isolated View %1").arg(id);
+            name   = gGraphContextManager->nextViewName("Isolated View");
 
-            /* TODO free id "i" if context "i" is deleted and use this which is probably faster instead of the Placeholder code
-        while(usedIds.contains(id)){
-            id++;
-        }
-
-        usedIds.insert(id);
-        QString name = QString("Isolated View %1").arg(id);
-        */
-
-            //TODO: Placeholder code
-            while (gGraphContextManager->contextWithNameExists(name))
-            {
-                id++;
-                name = QString("Isolated View %1").arg(id);
-            }
-            usedIds.insert(id);
+             //TODO: Placeholder code
         }
 
 
@@ -495,14 +478,15 @@ namespace hal
         act->addAction(new ActionAddItemsToObject(moduleIds, gateIds));
         act->exec();
 
+        u32 contextId = act->object().id();
+
         //TODO: return actual context id
         return 0;
     }
 
-    //function called from inner class View of GuiApi class
-    int GuiApi::View::isolateInNewView(std::vector<Module*> modules, std::vector<Gate*> gates)
+    //function called from class View of GuiApiClasses class
+    int GuiApiClasses::View::isolateInNew(std::vector<Module*> modules, std::vector<Gate*> gates)
     {
-        static QSet<u32> usedIds;
         QString name;
         //TODO: make sure that modules and gates are not empty
         if(modules.empty() && gates.empty())
@@ -521,25 +505,9 @@ namespace hal
         {
             //Get the number which has to be appended to name
 
-            u32 id = 1;
-            name   = QString("Isolated View %1").arg(id);
-
-            /* TODO free id "i" if context "i" is deleted and use this which is probably faster instead of the Placeholder code
-        while(usedIds.contains(id)){
-            id++;
-        }
-
-        usedIds.insert(id);
-        QString name = QString("Isolated View %1").arg(id);
-        */
+            name   = gGraphContextManager->nextViewName("Isolated View");
 
             //TODO: Placeholder code
-            while (gGraphContextManager->contextWithNameExists(name))
-            {
-                id++;
-                name = QString("Isolated View %1").arg(id);
-            }
-            usedIds.insert(id);
         }
 
 
@@ -562,4 +530,41 @@ namespace hal
         //TODO: return actual context id
         return 0;
     }
+
+
+    bool GuiApiClasses::View::addTo(int id, const std::vector<Module*>, const std::vector<Gate*>)
+    {
+        return false; // TODO : implement
+    }
+
+    bool removeFrom(int id, const std::vector<Module*>, const std::vector<Gate*>)
+    {
+        return false; // TODO : implement
+    }
+
+    bool GuiApiClasses::View::setName(int id, const std::string& name)
+    {
+        return false; // TODO : implement
+    }
+
+    int GuiApiClasses::View::getId(const std::string& name)
+    {
+        return 0; // TODO : implement
+    }
+
+    std::string GuiApiClasses::View::getName(int id)
+    {
+        return std::string(); // TODO : implement
+    }
+
+    std::vector<Module*> GuiApiClasses::View::getModules(int id)
+    {
+        return std::vector<Module*>(); // TODO : implement
+    }
+
+    std::vector<Gate*> GuiApiClasses::View::getGates(int id)
+    {
+        return std::vector<Gate*>(); // TODO : implement
+    }
+
 }

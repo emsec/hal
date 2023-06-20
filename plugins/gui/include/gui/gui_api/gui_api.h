@@ -37,6 +37,22 @@
 
 namespace hal
 {
+    namespace GuiApiClasses {
+
+        class View{
+        public:
+            static int isolateInNew(const std::vector<Module*>, const std::vector<Gate*>);
+            static bool addTo(int id, const std::vector<Module*>, const std::vector<Gate*>);
+            static bool removeFrom(int id, const std::vector<Module*>, const std::vector<Gate*>);
+            static bool setName(int id, const std::string& name);
+            static int getId(const std::string& name);
+            static std::string getName(int id);
+            static std::vector<Module*> getModules(int id);
+            static std::vector<Gate*> getGates(int id);
+        };
+    }
+
+
     /**
      * @ingroup gui
      * @brief Interface to interact with the gui itself.
@@ -533,15 +549,10 @@ namespace hal
 
         int isolateInNewView(const std::vector<Module*>, const std::vector<Gate*>);
 
-        class View{
-        public:
-            static int isolateInNewView(const std::vector<Module*>, const std::vector<Gate*>);
-        };
-
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted whenever the view should be moved to a new selection.
          */
         void navigationRequested();
-    };
+    };    
 }

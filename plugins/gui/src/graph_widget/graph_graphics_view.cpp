@@ -154,25 +154,14 @@ namespace hal
             return;
         }
 
-        u32 cnt = 0;
-        while (true)
-        {
-            ++cnt;
-            QString name = "Isolated View " + QString::number(cnt);
-
-            if (!gGraphContextManager->contextWithNameExists(name))
-            {
-                UserActionCompound* act = new UserActionCompound;
-                act->setUseCreatedObject();
-                act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
-                act->addAction(new ActionAddItemsToObject(selected_modules, selected_gates));
-                act->exec();
-                GraphContext* context = gGraphContextManager->getContextById(act->object().id());
-                context->setDirty(false);
-
-                return;
-            }
-        }
+        QString name = gGraphContextManager->nextViewName("Isolated View");
+        UserActionCompound* act = new UserActionCompound;
+        act->setUseCreatedObject();
+        act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+        act->addAction(new ActionAddItemsToObject(selected_modules, selected_gates));
+        act->exec();
+        GraphContext* context = gGraphContextManager->getContextById(act->object().id());
+        context->setDirty(false);
     }
 
     void GraphGraphicsView::handleMoveAction(u32 moduleId)

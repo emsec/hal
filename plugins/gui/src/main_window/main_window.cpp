@@ -1094,7 +1094,7 @@ namespace hal
         //Create a new view which contains the given Modules and Gates
 
         //return GuiApi().isolateInNewView(modules, gates);
-        return GuiApi::View::isolateInNewView(modules, gates);
+        return GuiApiClasses::View::isolateInNew(modules, gates);
 
 
     }
