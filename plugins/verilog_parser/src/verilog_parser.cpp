@@ -488,8 +488,9 @@ namespace hal
             }
             else if (m_token_stream.peek() == "`")
             {
+                line_number = m_token_stream.peek().number;
                 m_token_stream.consume_current_line();
-                log_warning("verilog_parser", "could not parse compiler directives.");
+                log_warning("verilog_parser", "could not parse compiler directives (line {})", line_number);
             }
             else
             {
@@ -1532,7 +1533,7 @@ namespace hal
 
         // TODO check parent module assignments for port aliases
 
-        const std::string parent_name = (parent == nullptr) ? "" : parent->get_name();
+        const std::string parent_name       = (parent == nullptr) ? "" : parent->get_name();
         instance_alias[instance_identifier] = get_unique_alias(parent_name, instance_identifier, m_instance_name_occurences);
 
         // create netlist module
@@ -1934,7 +1935,7 @@ namespace hal
                 unique_alias = parent_name + instance_name_seperator + unique_alias;
             }
         }
-    
+
         return unique_alias;
     }
 

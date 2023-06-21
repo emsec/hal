@@ -13,7 +13,6 @@
 #include "hal_core/netlist/netlist_utils.h"
 #include "hal_core/utilities/result.h"
 #include "hal_core/utilities/token_stream.h"
-
 #include "rapidjson/document.h"
 
 #include <fstream>
@@ -83,7 +82,8 @@ namespace hal
 
             if (original_inits.size() != 1)
             {
-                return ERR("unable to simplify lut init string for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": found " + std::to_string(original_inits.size()) + " init data strings but expected exactly 1."); 
+                return ERR("unable to simplify lut init string for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": found " + std::to_string(original_inits.size())
+                           + " init data strings but expected exactly 1.");
             }
 
             const auto original_init = original_inits.front();
@@ -1093,12 +1093,14 @@ namespace hal
     {
         struct indexed_identifier
         {
-            indexed_identifier(const std::string& p_identifier, const u32 p_index, const std::string& p_origin) : identifier{p_identifier}, index{p_index}, origin{p_origin}
+            indexed_identifier(const std::string& p_identifier, const u32 p_index, const std::string& p_direction, const std::string& p_origin)
+                : identifier{p_identifier}, index{p_index}, direction{p_direction}, origin{p_origin}
             {
             }
 
             std::string identifier;
             u32 index;
+            std::string direction;
             std::string origin;
         };
 
@@ -1142,7 +1144,7 @@ namespace hal
         const std::string gate_index_pattern = "\\[(\\d+)\\]";
 
         // Extracts an index from a string by taking the last integer enclosed by parentheses
-        std::optional<indexed_identifier> extract_index(const std::string& name, const std::string& index_pattern, const std::string& origin)
+        std::optional<indexed_identifier> extract_index(const std::string& name, const std::string& index_pattern, const std::string& direction, const std::string& origin)
         {
             std::regex re(index_pattern);
 
@@ -1169,14 +1171,18 @@ namespace hal
             auto identifier_name   = name;
             identifier_name        = identifier_name.replace(name.rfind(found_match), found_match.size(), "");
 
-            return std::optional<indexed_identifier>{{identifier_name, last_index.value(), origin}};
+            return std::optional<indexed_identifier>{{identifier_name, last_index.value(), direction, origin}};
         }
 
         // annotate all found identifiers to a gate
         bool annotate_indexed_identifiers(Gate* gate, const std::vector<indexed_identifier>& identifiers)
         {
             std::string json_identifier_str =
-                "[" + utils::join(", ", identifiers, [](const auto& i) { return std::string("[") + '"' + i.identifier + '"' + ", " + std::to_string(i.index) + ", " + '"' + i.origin + '"' + "]"; })
+                "["
+                + utils::join(
+                    ", ",
+                    identifiers,
+                    [](const auto& i) { return std::string("[") + '"' + i.identifier + '"' + ", " + std::to_string(i.index) + ", " + '"' + i.direction + '"' + ", " + '"' + i.origin + '"' + "]"; })
                 + "]";
 
             return gate->set_data("preprocessing_information", "multi_bit_indexed_identifiers", "string", json_identifier_str);
@@ -1191,10 +1197,11 @@ namespace hal
 
             for (const auto& pin : typed_pins)
             {
-                const auto typed_net = (pin->get_direction() == PinDirection::output) ? gate->get_fan_out_net(pin) : gate->get_fan_in_net(pin);
+                const auto typed_net            = (pin->get_direction() == PinDirection::output) ? gate->get_fan_out_net(pin) : gate->get_fan_in_net(pin);
+                const std::string direction_str = (pin->get_direction() == PinDirection::output) ? "output" : "input";
 
                 // 1) search the net name itself
-                const auto net_name_index = extract_index(typed_net->get_name(), net_index_pattern, "net_name");
+                const auto net_name_index = extract_index(typed_net->get_name(), net_index_pattern, direction_str, "net_name");
                 if (net_name_index.has_value())
                 {
                     found_identfiers.push_back(net_name_index.value());
@@ -1224,7 +1231,7 @@ namespace hal
                     {
                         const auto merged_wire_name = list[j].GetString();
 
-                        const auto merged_wire_name_index = extract_index(merged_wire_name, net_index_pattern, "net_name");
+                        const auto merged_wire_name_index = extract_index(merged_wire_name, net_index_pattern, direction_str, "net_name");
                         if (merged_wire_name_index.has_value())
                         {
                             found_identfiers.push_back(merged_wire_name_index.value());
@@ -1246,7 +1253,7 @@ namespace hal
 
             // 1) Check whether the ff gate already has an index annotated in its gate name
             const auto cleaned_gate_name = replace_hal_instance_index(ff->get_name());
-            const auto gate_name_index   = extract_index(cleaned_gate_name, gate_index_pattern, "gate_name");
+            const auto gate_name_index   = extract_index(cleaned_gate_name, gate_index_pattern, "none", "gate_name");
 
             if (gate_name_index.has_value())
             {
@@ -1275,8 +1282,10 @@ namespace hal
         return OK(counter);
     }
 
-    namespace {
-        struct ComponentData {
+    namespace
+    {
+        struct ComponentData
+        {
             std::string name;
             std::string type;
             u64 x;
@@ -1290,7 +1299,7 @@ namespace hal
             u32 line_number = 0;
 
             std::string line;
-            bool escaped    = false;
+            bool escaped = false;
 
             std::vector<Token<std::string>> parsed_tokens;
             while (std::getline(ss, line))
@@ -1339,7 +1348,7 @@ namespace hal
 
             return TokenStream(parsed_tokens, {}, {});
         }
-    
+
         Result<std::unordered_map<std::string, ComponentData>> parse_tokens(TokenStream<std::string>& ts)
         {
             ts.consume_until("COMPONENTS");
@@ -1349,7 +1358,7 @@ namespace hal
 
             u32 component_count;
             if (const auto res = utils::wrapped_stoul(component_count_str); res.is_ok())
-            {   
+            {
                 component_count = res.get();
             }
             else
@@ -1375,7 +1384,7 @@ namespace hal
                 ts.consume("PLACED");
                 ts.consume("FIXED");
                 ts.consume("(");
-                
+
                 if (const auto res = utils::wrapped_stoull(ts.consume().string); res.is_ok())
                 {
                     new_data_entry.x = res.get();
@@ -1403,7 +1412,7 @@ namespace hal
 
             return OK(component_data);
         }
-    }
+    }    // namespace
 
     Result<std::monostate> NetlistPreprocessingPlugin::parse_def_file(Netlist* nl, const std::filesystem::path& def_file)
     {
