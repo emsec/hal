@@ -5,6 +5,7 @@
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/netlist/project_serializer.h"
+#include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/utilities/log.h"
 
 #include <filesystem>
@@ -230,23 +231,37 @@ namespace hal
         doc.ParseStream<0, rapidjson::UTF8<>, rapidjson::FileReadStream>(frs);
         fclose(fp);
 
-        if (doc.HasMember("netlist"))
+        if (doc.HasMember("gate_library"))
         {
-            m_netlist_file = doc["netlist"].GetString();
-            std::filesystem::path netlistPath(m_proj_dir);
-            netlistPath.append(m_netlist_file);
-            m_netlist_load = netlist_factory::load_netlist(netlistPath);
-            if (!m_netlist_load)
+            m_gatelib_path = doc["gate_library"].GetString();
+            std::filesystem::path gatelibPath(m_gatelib_path);
+            if (gatelibPath.is_relative())
+                gatelibPath = m_proj_dir / gatelibPath;
+
+            if (doc.HasMember("netlist"))
             {
-                log_error("project_manager", "cannot load netlist {}.", netlistPath.string());
+                m_netlist_file = doc["netlist"].GetString();
+                std::filesystem::path netlistPath(m_proj_dir);
+                netlistPath.append(m_netlist_file);
+                m_netlist_load = netlist_factory::load_netlist(netlistPath,gatelibPath);
+                if (!m_netlist_load)
+                {
+                    log_error("project_manager", "cannot load netlist {}.", netlistPath.string());
+                    return false;
+                }
+            }
+            else
+            {
+                log_error("project_manager", "no 'netlist' token found in project file {}.", projFilePath.string());
                 return false;
             }
         }
         else
         {
-            log_error("project_manager", "no 'netlist' token found in project file {}.", projFilePath.string());
+            log_error("netlist", "'gate_library' token not found in project file '{}'.", projFilePath.string());
             return false;
         }
+
 
         if (doc.HasMember("serializer"))
         {

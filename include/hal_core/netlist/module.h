@@ -234,24 +234,31 @@ namespace hal
 
         /**
          * Check whether a net is contained in the module.<br>
-         * If \p recursive is set to true, nets in submodules are considered as well.
+         * If `recursive` is set to `true`, nets in submodules are considered as well.
          *
          * @param[in] net - The net to check for.
          * @param[in] recursive - True to also consider nets in submodules, false otherwise.
-         * @returns True if the net is contained in the module, false otherwise.
+         * @returns `true` if the net is contained in the module, `false` otherwise.
          */
         bool contains_net(Net* net, bool recursive = false) const;
 
         /**
          * Get all nets that have at least one source or one destination within the module.
-         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
-         * If \p recursive is true, nets in submodules are considered as well.
          *
-         * @param[in] filter - An optional filter.
-         * @param[in] recursive - True to also consider nets in submodules, false otherwise.
          * @returns An unordered set of nets.
          */
-        std::unordered_set<Net*> get_nets(const std::function<bool(Net*)>& filter = nullptr, bool recursive = false) const;
+        const std::unordered_set<Net*>& get_nets() const;
+
+        /**
+         * Get all nets that have at least one source or one destination within the module.
+         * The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         * If `recursive` is `true`, nets in submodules are considered as well.
+         *
+         * @param[in] filter - Filter function to be evaluated on each net.
+         * @param[in] recursive - `true` to also consider nets in submodules, `false` otherwise.
+         * @returns An unordered set of nets.
+         */
+        std::unordered_set<Net*> get_nets(const std::function<bool(Net*)>& filter, bool recursive = false) const;
 
         /**
          * Get all nets that are either a global input to the netlist or have at least one source outside of the module.
@@ -278,7 +285,7 @@ namespace hal
          * Check whether the given net is an input of the module, i.e., whether the net is a global input to the netlist or has at least one source outside of the module.
          * 
          * @param[in] net - The net.
-         * @returns True if the net is an input net, false otherwise.
+         * @returns `true` if the net is an input net, `false` otherwise.
          */
         bool is_input_net(Net* net) const;
 
@@ -286,7 +293,7 @@ namespace hal
          * Check whether the given net is an output of the module, i.e., whether the net is a global output to the netlist or has at least one destination outside of the module.
          * 
          * @param[in] net - The net.
-         * @returns True if the net is an ouput net, false otherwise.
+         * @returns `true` if the net is an ouput net, `false` otherwise.
          */
         bool is_output_net(Net* net) const;
 
@@ -294,7 +301,7 @@ namespace hal
          * Check whether the given net is an internal net of the module, i.e. whether the net has at least one source and one destination within the module.
          * 
          * @param[in] net - The net.
-         * @returns True if the net is an internal net, false otherwise.
+         * @returns `true` if the net is an internal net, `false` otherwise.
          */
         bool is_internal_net(Net* net) const;
 
@@ -517,6 +524,16 @@ namespace hal
         Result<std::monostate> delete_pin_group(PinGroup<ModulePin>* pin_group);
 
         /**
+         * Move a pin group to another index within the module.
+         * The indices of some other pin groups will be incremented or decremented to make room for the moved pin group to be inserted at the desired position.
+         * 
+         * @param[in] pin_group - The pin group to be moved.
+         * @param[in] new_index - The index to which the pin group is moved.
+         * @returns Ok on success, an error message otherwise.
+         */
+        Result<std::monostate> move_pin_group(PinGroup<ModulePin>* pin_group, u32 new_index);
+
+        /**
          * Set the name of the given pin group.
          * 
          * @param[in] pin_group - The pin group.
@@ -640,14 +657,21 @@ namespace hal
 
         /**
          * Get all gates contained within the module.
-         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
-         * If `recursive` is `true`, gates in submodules are considered as well.
          *
-         * @param[in] filter - An optional filter.
-         * @param[in] recursive - Set to `true` to also consider gates in submodules, `false` otherwise.
          * @return A vector of gates.
          */
-        std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter = nullptr, bool recursive = false) const;
+        const std::vector<Gate*>& get_gates() const;
+
+        /**
+         * Get all gates contained within the module.
+         * The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+         * If `recursive` is `true`, gates in submodules are considered as well.
+         *
+         * @param[in] filter - Filter function to be evaluated on each gate.
+         * @param[in] recursive - Set to `true` to also consider gates in submodules, `false` otherwise. Defaults to `false`.
+         * @return A vector of gates.
+         */
+        std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter, bool recursive = false) const;
 
     private:
         friend class NetlistInternalManager;

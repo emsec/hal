@@ -80,18 +80,24 @@ namespace hal
             :rtype: bool
         )");
 
-        py_grouping.def_property_readonly(
-            "gates", [](Grouping* grouping) { return grouping->get_gates(); }, R"(
+        py_grouping.def_property_readonly("gates", py::overload_cast<>(&Grouping::get_gates, py::const_), R"(
             All gates contained within the grouping.
 
             :type: list[hal_py.Gate]
         )");
 
-        py_grouping.def("get_gates", &Grouping::get_gates, py::arg("filter") = nullptr, R"(
+        py_grouping.def("get_gates", py::overload_cast<>(&Grouping::get_gates, py::const_), R"(
             Get all gates contained within the grouping.
-            A filter can be applied to the result to only get gates matching the specified condition.
 
-            :param lambda filter: Filter to be applied to the gates.
+            :returns: A list of gates.
+            :rtype: list[hal_py.Gate]
+        )");
+
+        py_grouping.def("get_gates", py::overload_cast<const std::function<bool(Gate*)>&>(&Grouping::get_gates, py::const_), py::arg("filter"), R"(
+            Get all gates contained within the grouping.
+            The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+
+            :param lambda filter: Filter function to be evaluated on each gate.
             :returns: A list of gates.
             :rtype: list[hal_py.Gate]
         )");
@@ -105,9 +111,9 @@ namespace hal
 
         py_grouping.def("get_gate_ids", &Grouping::get_gate_ids, py::arg("filter") = nullptr, R"(
             Get the IDs of all gates contained within the grouping.
-            A filter can be applied to the result to only get gate IDs for gates matching the specified condition.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: Filter to be applied to the gates.
+            :param lambda filter: Filter function to be evaluated on each gate.
             :returns: A list of gate IDs.
             :rtype: list[int]
         )");
@@ -168,18 +174,24 @@ namespace hal
             :rtype: bool
         )");
 
-        py_grouping.def_property_readonly(
-            "nets", [](Grouping* grouping) { return grouping->get_nets(); }, R"(
+        py_grouping.def_property_readonly("nets", py::overload_cast<>(&Grouping::get_nets, py::const_), R"(
             All nets contained within the grouping.
 
             :type: list[hal_py.Net]
         )");
 
-        py_grouping.def("get_nets", &Grouping::get_nets, py::arg("filter") = nullptr, R"(
+        py_grouping.def("get_nets", py::overload_cast<>(&Grouping::get_nets, py::const_), R"(
             Get all nets contained within the grouping.
-            A filter can be applied to the result to only get nets matching the specified condition.
 
-            :param lambda filter: Filter to be applied to the nets.
+            :returns: A list of nets.
+            :rtype: list[hal_py.Net]
+        )");
+
+        py_grouping.def("get_nets", py::overload_cast<const std::function<bool(Net*)>&>(&Grouping::get_nets, py::const_), py::arg("filter"), R"(
+            Get all nets contained within the grouping.
+            The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+
+            :param lambda filter: Filter function to be evaluated on each net.
             :returns: A list of nets.
             :rtype: list[hal_py.Net]
         )");
@@ -193,9 +205,9 @@ namespace hal
 
         py_grouping.def("get_net_ids", &Grouping::get_net_ids, py::arg("filter") = nullptr, R"(
             Get the IDs of all nets contained within the grouping.
-            A filter can be applied to the result to only get net IDs for nets matching the specified condition.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: Filter to be applied to the nets.
+            :param lambda filter: Filter function to be evaluated on each net.
             :returns: A list of net IDs.
             :rtype: list[int]
         )");
@@ -256,18 +268,24 @@ namespace hal
             :rtype: bool
         )");
 
-        py_grouping.def_property_readonly(
-            "modules", [](Grouping* grouping) { return grouping->get_modules(); }, R"(
+        py_grouping.def_property_readonly("modules", py::overload_cast<>(&Grouping::get_modules, py::const_), R"(
             All modules contained within the grouping.
 
             :type: list[hal_py.Module]
         )");
 
-        py_grouping.def("get_modules", &Grouping::get_modules, py::arg("filter") = nullptr, R"(
+        py_grouping.def("get_modules", py::overload_cast<>(&Grouping::get_modules, py::const_), R"(
             Get all modules contained within the grouping.
-            A filter can be applied to the result to only get modules matching the specified condition.
 
-            :param lambda filter: Filter to be applied to the modules.
+            :returns: A list of modules.
+            :rtype: list[hal_py.Module]
+        )");
+
+        py_grouping.def("get_modules", py::overload_cast<const std::function<bool(Module*)>&>(&Grouping::get_modules, py::const_), py::arg("filter"), R"(
+            Get all modules contained within the grouping.
+            The filter is evaluated on every candidate such that the result only contains those matching the specified condition.
+
+            :param lambda filter: Filter function to be evaluated on each module.
             :returns: A list of modules.
             :rtype: list[hal_py.Module]
         )");
@@ -280,9 +298,9 @@ namespace hal
 
         py_grouping.def("get_module_ids", &Grouping::get_module_ids, py::arg("filter") = nullptr, R"(
             Get the IDs of all modules contained within the grouping.
-            A filter can be applied to the result to only get module IDs for modules matching the specified condition.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
-            :param lambda filter: Filter to be applied to the modules.
+            :param lambda filter: Filter function to be evaluated on each module.
             :returns: A list of module IDs.
             :rtype: list[int]
         )");

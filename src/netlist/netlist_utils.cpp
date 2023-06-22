@@ -803,7 +803,7 @@ namespace hal
             {
                 found_next_gate = false;
 
-                // check all eligable successors of current gate
+                // check all eligible successors of current gate
                 std::vector<Endpoint*> successors = current_gate->get_successors([input_pins, output_pins, target_type, filter](const GatePin* ep_pin, Endpoint* ep) {
                     if (ep->get_gate()->get_type() == target_type)
                     {

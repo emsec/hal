@@ -93,19 +93,6 @@ namespace hal
         std::map<int, std::set<Gate*>> get_communities_fast_greedy(Netlist* const netlist);
 
         /**
-         * Get a map of community IDs to communities running the multilevel clustering algorithm from igraph. Each community is represented by a set of gates.
-         *
-         * @param[in] netlist - The netlist to operate on.
-         * @returns A map from community IDs to communities.
-       
-        std::map<int, std::set<Gate*>> get_communities_multilevel(Netlist* netlist);
-          */
-
-        /**
-         *  other graph algorithm
-         */
-
-        /**
          * Get a vector of strongly connected components (SCC) with each SSC being represented by a vector of gates.
          *
          * @param[in] netlist - The netlist to operate on.
@@ -131,11 +118,12 @@ namespace hal
          */
 
         /**
-         * Generates an directed graph, based on the current netlist. Each gate is transformed to a node, while each
+         * Generates an directed graph based on the current netlist. Each gate is transformed to a node while each
          * net is transformed to an edge. The function returns the mapping from igraph node ids to HAL gates. Note
          * that for each global input and output dummy nodes are generated in the igraph representation.
          *
          * @param[in] netlist - The netlist to operate on.
+         * @param[in] igraph - igraph object
          * @returns map from igraph node id to HAL gate ID, to be able to match back any graph operations.
          */
         std::map<int, Gate*> get_igraph_directed(Netlist* const netlist, igraph_t* igraph);

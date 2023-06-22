@@ -2,6 +2,7 @@
 
 #include "dataflow_analysis/common/grouping.h"
 #include "dataflow_analysis/common/netlist_abstraction.h"
+#include "dataflow_analysis/processing/configuration.h"
 #include "hal_core/netlist/gate.h"
 
 #include <list>
@@ -13,8 +14,10 @@ namespace hal
     {
         namespace remove_duplicates
         {
-            std::shared_ptr<Grouping> process(const std::shared_ptr<Grouping>& state, bool delete_from_smaller)
+            std::shared_ptr<Grouping> process(const processing::Configuration& config, const std::shared_ptr<Grouping>& state, bool delete_from_smaller)
             {
+                UNUSED(config);
+
                 auto new_state = std::make_shared<Grouping>(state->netlist_abstr);
 
                 std::map<u32, std::unordered_set<u32>> size_group_map;
@@ -121,4 +124,4 @@ namespace hal
             }
         }    // namespace remove_duplicates
     }        // namespace dataflow
-}
+}    // namespace hal

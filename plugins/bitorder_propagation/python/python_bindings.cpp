@@ -49,15 +49,15 @@ namespace hal
                 py::arg("unknown_bitorders"),
                 py::arg("strict_consens_finding") = false,
                 R"(
-                Propagates known bit order information to module pin groups with unknown bit order.
-                Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.
-         
-                :param dict known_bitorders: The known indices for the nets belonging to module pin groups. 
-                :param unknown_bitorders set : The module pin groups with yet unknown bit order.
-                :param strict_consens_finding bool: When set to true this option only allows for complete and continous bitorders, while false would allow for bit orders to be formed that are either not complete or not continous.
-                :returns: A mapping of all the known bit orders consisting of the new and already known.
-                :rtype: dict()
-            )")
+                    Propagates known bit order information to module pin groups with unknown bit order.
+                    Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.
+            
+                    :param dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] known_bitorders: The known indices for the nets belonging to module pin groups. 
+                    :param set[tuple(hal_py.Module,hal_py.ModulePinGroup)] unknown_bitorders: The module pin groups with yet unknown bit order.
+                    :param bool strict_consens_finding: When set to true this option only allows for complete and continous bitorders, while false would allow for bit orders to be formed that are either not complete or not continous.
+                    :returns: A mapping of all the known bit orders consisting of the new and already known ones on success, ``None`` otherwise.
+                    :rtype: dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] or None
+                )")
             .def_static(
                 "reorder_module_pin_groups",
                 [](const std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>& ordered_module_pin_groups) -> bool {
@@ -76,8 +76,8 @@ namespace hal
                 R"(
                 This funtion tries to propagate the bit order of the src pin groups to the dst pin groups
 
-                :param dict ordered_module_pin_groups: A mapping from all the modules and pin groups with known bit order information to the knonw bit order information mapping every net to its corresponding index.
-                :returns:  true in case of sucess, false otherwise
+                :param dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] ordered_module_pin_groups: A mapping from all the modules and pin groups with known bit order information to the knonw bit order information mapping every net to its corresponding index.
+                :returns: ``True`` on sucess, ``False`` otherwise.
                 :rtype: bool
             )")
             .def_static(
@@ -105,10 +105,10 @@ namespace hal
                 The valid bit orders are then annotated to the module pin groups.
 
                 :param hal_py.netlist nl: The netlist.
-                :param tuple src: A pair of module id and pin group name representing the source.
-                :param tuple dst: A pair of module id and pin group name representing the destination.
-                :returns: All wellformed bitorders
-                :rtype: dict()
+                :param tuple(int,str) src: A pair of module id and pin group name representing the source.
+                :param tuple(int,str) dst: A pair of module id and pin group name representing the destination.
+                :returns: All wellformed bitorders on success, ``None`` otherwise.
+                :rtype: dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] or None
             )")
             .def_static(
                 "propagate_bitorder",
@@ -133,10 +133,10 @@ namespace hal
                 The valid bit orders are then annotated to the module pin groups.
 
                 :param hal_py.netlist nl: The netlist.
-                :param tuple src: A pair of module and pin group representing the source.
-                :param tuple dst: A pair of module and pin group representing the destination.
-                :returns: All wellformed bitorders
-                :rtype: dict()
+                :param tuple(hal_py.Module,hal_py.ModulePinGroup) src: A pair of module and pin group representing the source.
+                :param tuple(hal_py.Module,hal_py.ModulePinGroup) dst: A pair of module and pin group representing the destination.
+                :returns: All wellformed bitorders on success, ``None`` otherwise.
+                :rtype: dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] or None
             )")
             .def_static(
                 "propagate_bitorder",
@@ -163,10 +163,10 @@ namespace hal
                 The valid bit orders are then annotated to the module pin groups.
 
                 :param hal_py.netlist nl: The netlist.
-                :param list src: A list of pairs of module id and pin group name representing the sources.
-                :param list dst: A list of pairs of module id and pin group name representing the destinations.
-                :returns: :returns: All wellformed bitorders
-                :rtype: dict()
+                :param list[tuple(int,str)] src: A list of pairs of module id and pin group name representing the sources.
+                :param list[tuple(int,str)] dst: A list of pairs of module id and pin group name representing the destinations.
+                :returns: All wellformed bitorders on success, ``None`` otherwise.
+                :rtype: dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] or None
             )")
             .def_static(
                 "propagate_bitorder",
@@ -191,10 +191,10 @@ namespace hal
                 The valid bit orders are then annotated to the module pin groups.
 
                 :param hal_py.netlist nl: The netlist.
-                :param list src: A list of pairs of modules and pin groups representing the sources.
-                :param list dst: A list of pairs of modules and pin groups representing the destinations.
-                :returns: :returns: All wellformed bitorders
-                :rtype: dict()
+                :param list[tuple(hal_py.Module,hal_py.ModulePinGroup)] src: A list of pairs of modules and pin groups representing the sources.
+                :param list[tuple(hal_py.Module,hal_py.ModulePinGroup)] dst: A list of pairs of modules and pin groups representing the destinations.
+                :returns: All wellformed bitorders on success, ``None`` otherwise.
+                :rtype: dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] or None
             )");
 
 #ifndef PYBIND11_MODULE

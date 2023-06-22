@@ -33,14 +33,13 @@
 namespace hal
 {
     GroupingManagerWidget::GroupingManagerWidget(QWidget* parent)
-        : ContentWidget("Groupings", parent), mProxyModel(new GroupingProxyModel(this)), mSearchbar(new Searchbar(this)), mNewGroupingAction(new QAction(this)), mToolboxAction(new QAction(this)),
+        : ContentWidget("Groupings", parent), mProxyModel(new GroupingProxyModel(this)), mSearchbar(new Searchbar(this)), mNewGroupingAction(new QAction(this)),
           mRenameAction(new QAction(this)), mColorSelectAction(new QAction(this)), mDeleteAction(new QAction(this)), mToSelectionAction(new QAction(this))
     {
         //needed to load the properties
         ensurePolished();
 
         mNewGroupingAction->setIcon(gui_utility::getStyledSvgIcon(mNewGroupingIconStyle, mNewGroupingIconPath));
-        mToolboxAction->setIcon(toolboxIcon());
         mRenameAction->setIcon(gui_utility::getStyledSvgIcon(mRenameGroupingIconStyle, mRenameGroupingIconPath));
         mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
         mColorSelectAction->setIcon(gui_utility::getStyledSvgIcon(mColorSelectIconStyle, mColorSelectIconPath));
@@ -48,7 +47,6 @@ namespace hal
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
 
         mNewGroupingAction->setToolTip("New");
-        mToolboxAction->setToolTip("Toolbox");
         mRenameAction->setToolTip("Rename");
         mColorSelectAction->setToolTip("Color");
         mDeleteAction->setToolTip("Delete");
@@ -56,7 +54,6 @@ namespace hal
         mSearchAction->setToolTip("Search");
 
         mNewGroupingAction->setText("Create new grouping");
-        mToolboxAction->setText("Create grouping toolbox");
         mRenameAction->setText("Rename grouping");
         mColorSelectAction->setText("Select color for grouping");
         mDeleteAction->setText("Delete grouping");
@@ -100,7 +97,6 @@ namespace hal
         connect(mSearchbar, &Searchbar::textEdited, this, &GroupingManagerWidget::updateSearchIcon);
 
         connect(mNewGroupingAction, &QAction::triggered, this, &GroupingManagerWidget::handleCreateGroupingClicked);
-        connect(mToolboxAction, &QAction::triggered, this, &GroupingManagerWidget::handleToolboxClicked);
         connect(mRenameAction, &QAction::triggered, this, &GroupingManagerWidget::handleRenameGroupingClicked);
         connect(mColorSelectAction, &QAction::triggered, this, &GroupingManagerWidget::handleColorSelectClicked);
         connect(mToSelectionAction, &QAction::triggered, this, &GroupingManagerWidget::handleToSelectionClicked);
@@ -111,10 +107,8 @@ namespace hal
         connect(mGroupingTableView->selectionModel(), &QItemSelectionModel::currentChanged, this, &GroupingManagerWidget::handleCurrentChanged);
         connect(mGroupingTableModel, &GroupingTableModel::lastEntryDeleted, this, &GroupingManagerWidget::handleLastEntryDeleted);
         connect(mGroupingTableModel, &GroupingTableModel::newEntryAdded, this, &GroupingManagerWidget::handleNewEntryAdded);
-        connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &GroupingManagerWidget::handleGraphSelectionChanged);
         connect(mGroupingTableView, &QTableView::doubleClicked, this, &GroupingManagerWidget::handleDoubleClicked);
         handleCurrentChanged();
-        handleGraphSelectionChanged(this);
     }
 
     QList<QShortcut*> GroupingManagerWidget::createShortcuts()
@@ -477,13 +471,6 @@ namespace hal
         act->exec();
     }
 
-    void GroupingManagerWidget::handleGraphSelectionChanged(void* sender)
-    {
-        Q_UNUSED(sender);
-
-        mToolboxAction->setEnabled(gSelectionRelay->numberSelectedNodes() == 1);
-    }
-
     void GroupingManagerWidget::handleContextMenuRequest(const QPoint& point)
     {
         const QModelIndex clicked_index = mGroupingTableView->indexAt(point);
@@ -513,7 +500,6 @@ namespace hal
     void GroupingManagerWidget::setupToolbar(Toolbar* toolbar)
     {
         toolbar->addAction(mNewGroupingAction);
-        toolbar->addAction(mToolboxAction);
         toolbar->addAction(mRenameAction);
         toolbar->addAction(mColorSelectAction);
         toolbar->addAction(mToSelectionAction);

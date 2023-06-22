@@ -2,6 +2,7 @@
 
 #include "dataflow_analysis/common/grouping.h"
 #include "dataflow_analysis/common/netlist_abstraction.h"
+#include "dataflow_analysis/processing/configuration.h"
 
 #include <list>
 #include <map>
@@ -13,7 +14,7 @@ namespace hal
     {
         namespace group_by_input_output_size
         {
-            std::shared_ptr<Grouping> process(const std::shared_ptr<Grouping>& state, bool successors)
+            std::shared_ptr<Grouping> process(const processing::Configuration& config, const std::shared_ptr<Grouping>& state, bool successors)
             {
                 auto new_state = std::make_shared<Grouping>(state->netlist_abstr);
 
@@ -68,7 +69,7 @@ namespace hal
                         {
                             auto test_group_id = *it;
 
-                            if (!state->are_groups_allowed_to_merge(group_id, test_group_id))
+                            if (!state->are_groups_allowed_to_merge(group_id, test_group_id, config.enforce_type_consistency))
                             {
                                 ++it;
                                 continue;
@@ -91,7 +92,7 @@ namespace hal
                     {
                         auto gates                                             = state->gates_of_group.at(old_group);
                         new_state->group_control_fingerprint_map[new_group_id] = new_state->netlist_abstr.gate_to_fingerprint.at(*gates.begin());
-                        new_state->operations_on_group_allowed[new_group_id]   = state->operations_on_group_allowed.at(old_group);;
+                        new_state->operations_on_group_allowed[new_group_id]   = state->operations_on_group_allowed.at(old_group);
                         new_state->gates_of_group[new_group_id].insert(gates.begin(), gates.end());
                         for (const auto& sg : gates)
                         {
@@ -105,4 +106,4 @@ namespace hal
 
         }    // namespace group_by_input_output_size
     }        // namespace dataflow
-}
+}    // namespace hal

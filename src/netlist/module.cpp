@@ -27,7 +27,7 @@ namespace hal
     {
         if (m_id != other.get_id() || m_name != other.get_name() || m_type != other.get_type())
         {
-            log_info("module", "the modules with IDs {} and {} are not equal due to an unequal ID, name, or type.", m_id, other.get_id());
+            log_debug("module", "the modules with IDs {} and {} are not equal due to an unequal ID, name, or type.", m_id, other.get_id());
             return false;
         }
 
@@ -37,7 +37,7 @@ namespace hal
         {
             if (const auto it = m_submodules_map.find(other_module->get_id()); it == m_submodules_map.end() || *it->second != *other_module)
             {
-                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal submodules.", m_id, other.get_id());
+                log_debug("module", "the modules with IDs {} and {} are not equal due to an unequal submodules.", m_id, other.get_id());
                 return false;
             }
         }
@@ -46,7 +46,7 @@ namespace hal
         {
             if (const auto it = m_gates_map.find(other_gate->get_id()); it == m_gates_map.end() || *it->second != *other_gate)
             {
-                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal gates.", m_id, other.get_id());
+                log_debug("module", "the modules with IDs {} and {} are not equal due to an unequal gates.", m_id, other.get_id());
                 return false;
             }
         }
@@ -55,14 +55,14 @@ namespace hal
         {
             if (const auto other_pin_group_res = other.get_pin_group_by_id(pin_group->get_id()); other_pin_group_res == nullptr || *other_pin_group_res != *pin_group)
             {
-                log_info("module", "the modules with IDs {} and {} are not equal due to an unequal pin group.", m_id, other.get_id());
+                log_debug("module", "the modules with IDs {} and {} are not equal due to an unequal pin group.", m_id, other.get_id());
                 return false;
             }
         }
 
         if (!DataContainer::operator==(other))
         {
-            log_info("module", "the modules with IDs {} and {} are not equal due to unequal data.", m_id, other.get_id());
+            log_debug("module", "the modules with IDs {} and {} are not equal due to unequal data.", m_id, other.get_id());
             return false;
         }
 
@@ -99,7 +99,6 @@ namespace hal
         if (name != m_name)
         {
             m_name = name;
-
             m_event_handler->notify(ModuleEvent::event::name_changed, this);
         }
     }
@@ -114,7 +113,6 @@ namespace hal
         if (type != m_type)
         {
             m_type = type;
-
             m_event_handler->notify(ModuleEvent::event::type_changed, this);
         }
     }
@@ -390,6 +388,11 @@ namespace hal
         return it->second;
     }
 
+    const std::vector<Gate*>& Module::get_gates() const
+    {
+        return m_gates;
+    }
+
     std::vector<Gate*> Module::get_gates(const std::function<bool(Gate*)>& filter, bool recursive) const
     {
         std::vector<Gate*> res;
@@ -495,6 +498,11 @@ namespace hal
             }
         }
         return success;
+    }
+
+    const std::unordered_set<Net*>& Module::get_nets() const
+    {
+        return m_nets;
     }
 
     std::unordered_set<Net*> Module::get_nets(const std::function<bool(Net*)>& filter, bool recursive) const
@@ -1296,6 +1304,46 @@ namespace hal
         {
             m_event_handler->notify(ModuleEvent::event::pin_changed, this);
         }
+        return OK({});
+    }
+
+    Result<std::monostate> Module::move_pin_group(PinGroup<ModulePin>* pin_group, u32 new_index)
+    {
+        if (pin_group == nullptr)
+        {
+            return ERR("could not move pin group of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin group is a 'nullptr'");
+        }
+
+        if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
+        {
+            return ERR("could not move pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " within module '" + m_name + "' with ID " + std::to_string(m_id)
+                       + ": pin group does not belong to module");
+        }
+
+        if (new_index >= m_pin_groups_ordered.size())
+        {
+            return ERR("could not move pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id)
+                       + ": index " + std::to_string(new_index) + " is out of bounds");
+        }
+
+        auto src_it = std::find(m_pin_groups_ordered.begin(), m_pin_groups_ordered.end(), pin_group);
+        auto dst_it = m_pin_groups_ordered.begin();
+        std::advance(dst_it, new_index);
+        if (src_it == dst_it)
+        {
+            return OK({});
+        }
+        else if (std::distance(m_pin_groups_ordered.begin(), src_it) < std::distance(m_pin_groups_ordered.begin(), dst_it))
+        {
+            std::advance(dst_it, 1);
+            m_pin_groups_ordered.splice(dst_it, m_pin_groups_ordered, src_it);
+        }
+        else
+        {
+            m_pin_groups_ordered.splice(dst_it, m_pin_groups_ordered, src_it);
+        }
+
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
         return OK({});
     }
 

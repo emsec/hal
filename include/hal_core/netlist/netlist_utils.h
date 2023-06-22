@@ -104,10 +104,10 @@ namespace hal
          * If a filter function is given only gates matching the filter will be added to the result vector.
          * The result will not include the provided gate itself.
          *
-         * @param gate[in] - The initial gate.
-         * @param get_successors[in] - True to return successors, false for Predecessors.
-         * @param depth[in] - Depth of recursion.
-         * @param filter[in] - User-defined filter function.
+         * @param[in] gate - The initial gate.
+         * @param[in] get_successors - True to return successors, false for Predecessors.
+         * @param[in] depth - Depth of recursion.
+         * @param[in] filter - User-defined filter function.
          * @return Vector of predecessor/successor gates.
          */
         CORE_API std::vector<Gate*> get_next_gates(const Gate* gate, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
@@ -119,10 +119,10 @@ namespace hal
          * If a filter function is given, the recursion stops whenever the filter function evaluates to False. 
          * Only gates matching the filter will be added to the result vector.
          *
-         * @param net[in] - The initial net.
-         * @param get_successors[in] - True to return successors, false for Predecessors.
-         * @param depth[in] - Depth of recursion.
-         * @param filter[in] - User-defined filter function.
+         * @param[in] net - The initial net.
+         * @param[in] get_successors - True to return successors, false for Predecessors.
+         * @param[in] depth - Depth of recursion.
+         * @param[in] filter - User-defined filter function.
          * @return Vector of predecessor/successor gates.
          */
         CORE_API std::vector<Gate*> get_next_gates(const Net* net, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
@@ -214,7 +214,7 @@ namespace hal
          *
          * @param[in] net - The initial net.
          * @param[in] get_successors - If true, the successor path is returned, otherwise the predecessor path is returned.
-         * @param[in] stop_types - Stop recursion when reaching a gate of a type with one of the specified properties.
+         * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @param[inout] cache - The cache. 
          * @returns All gates on the predecessor or successor path of the net.
          */

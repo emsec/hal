@@ -1190,7 +1190,7 @@ namespace hal
             ASSERT_TRUE(get_init_res.is_ok());
             auto get_init_data = get_init_res.get();
             EXPECT_EQ(get_init_data.size(), 1);
-            EXPECT_EQ(get_init_data.front(), "1");
+            EXPECT_EQ(get_init_data.front(), "01");
         }
         // NEGATIVE
         {

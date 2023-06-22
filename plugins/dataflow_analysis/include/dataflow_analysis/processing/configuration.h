@@ -37,6 +37,8 @@ namespace hal
             {
                 u32 pass_layers;
                 u32 num_threads;
+
+                bool enforce_type_consistency;
             };
 
         }    // namespace processing

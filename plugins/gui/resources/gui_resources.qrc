@@ -84,6 +84,8 @@
         <file alias="ne_gate_nor">icons/netlist_elements/gate_nor.svg</file>
         <file alias="ne_gate_xor">icons/netlist_elements/gate_xor.svg</file>
         <file alias="ne_gate_xnor">icons/netlist_elements/gate_xnor.svg</file>
+        <file alias="ne_no_gate">icons/netlist_elements/no_gate.svg</file>
+        <file alias="ne_no_net">icons/netlist_elements/no_net.svg</file>
         <file alias="toolbox">icons/toolbox.png</file>
         <file alias="undo2">icons/0104-undo2.svg</file>
         <file alias="module_cursor">icons/module_cursor.png</file>
@@ -95,13 +97,12 @@
         <file alias="add_waveform">icons/add_waveform_net.png</file>
 	<file alias="zoom_waveform">icons/zoom_waveform.png</file>
         <file alias="x_delete">icons/x_delete.png</file>
-        <file alias="insert_plugin">icons/insert_plugin.png</file>
-        <file alias="invoke_gui">icons/invoke_gui.png</file>
-        <file alias="disabled_gui">icons/disabled_gui.png</file>
-        <file alias="cli_options">icons/cli_options.png</file>
         <file alias="check-mark">icons/check-mark.png</file>
         <file alias="attention">icons/attention.png</file> 
-   </qresource>
+        <file alias="insert-plugin">icons/0501-insert-plugin.svg</file>
+        <file alias="cli-options">icons/0502-cli-options.svg</file>
+        <file alias="invoke-gui">icons/0503-invoke-gui.svg</file>
+    </qresource>
     <qresource prefix="/images">
         <file alias="spinner">images/oval.svg</file>
     </qresource>

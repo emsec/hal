@@ -22,6 +22,13 @@ namespace hal
             :rtype: bool
         )");
 
+        py_gate_base_pin.def("__hash__", &BasePin<GatePin>::get_hash, R"(
+            Python requires hash for set and dict container.
+
+            :returns: The hash.
+            :rtype: Py_hash_t
+        )");
+
         py_gate_base_pin.def_property_readonly("id", &BasePin<GatePin>::get_id, R"(
             The ID of the gate pin. The ID is unique within a gate type.
 
@@ -103,6 +110,13 @@ namespace hal
 
             :returns: True if both pins are unequal, False otherwise.
             :rtype: bool
+        )");
+
+        py_module_base_pin.def("__hash__", &BasePin<ModulePin>::get_hash, R"(
+            Python requires hash for set and dict container.
+
+            :returns: The hash.
+            :rtype: Py_hash_t
         )");
 
         py_module_base_pin.def_property_readonly("id", &BasePin<ModulePin>::get_id, R"(

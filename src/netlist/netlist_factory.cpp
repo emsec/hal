@@ -35,25 +35,31 @@ namespace hal
                 return nullptr;
             }
 
-            GateLibrary* lib = gate_library_manager::load(gate_library_file);
-            if (!lib)
+            GateLibrary* lib = nullptr;
+
+            if (!gate_library_file.empty())
             {
-                log_critical("netlist", "could not read netlist without gate library.");
-                return nullptr;
+                lib = gate_library_manager::load(gate_library_file);
+                if (!lib)
+                {
+                    log_critical("netlist", "could not parse gate library '{}', will not read netlist.", gate_library_file.string());
+                    return nullptr;
+                }
             }
 
-            return netlist_parser_manager::parse(netlist_file, lib);
-        }
-
-        std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file)
-        {
-            if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
+            if (netlist_file.extension() == ".hal")
             {
-                log_critical("netlist", "could not access file '{}'.", netlist_file.string());
-                return nullptr;
+                return netlist_serializer::deserialize_from_file(netlist_file, lib);
             }
-
-            return netlist_serializer::deserialize_from_file(netlist_file);
+            else
+            {
+                if (!lib)
+                {
+                    log_critical("netlist", "could not read netlist '{}' without gate library.", netlist_file.string());
+                    return nullptr;
+                }
+                return netlist_parser_manager::parse(netlist_file, lib);
+            }
         }
 
         std::unique_ptr<Netlist> load_hal_project(const std::filesystem::path& project_dir)

@@ -1,9 +1,8 @@
 #include "hal_core/plugin_system/plugin_interface_base.h"
 
-#include "hal_core/plugin_system/plugin_interface_ui.h"
 #include "hal_core/plugin_system/abstract_extension_interface.h"
+#include "hal_core/plugin_system/plugin_interface_ui.h"
 #include "hal_core/utilities/log.h"
-
 
 namespace hal
 {
@@ -17,17 +16,22 @@ namespace hal
     {
     }
 
+    std::string BasePluginInterface::get_description() const
+    {
+        return std::string();
+    }
+
+    std::set<std::string> BasePluginInterface::get_dependencies() const
+    {
+        return {};
+    }
+
     void BasePluginInterface::on_load()
     {
     }
 
     void BasePluginInterface::on_unload()
     {
-    }
-
-    std::set<std::string> BasePluginInterface::get_dependencies() const
-    {
-        return {};
     }
 
     std::vector<AbstractExtensionInterface*> BasePluginInterface::get_extensions() const

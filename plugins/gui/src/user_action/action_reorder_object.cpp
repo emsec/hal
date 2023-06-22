@@ -23,6 +23,7 @@ namespace hal
 
     bool ActionReorderObject::exec()
     {
+        int oldIndex = -1;
         switch (mObject.type())
         {
             case UserActionObjectType::Pin: {
@@ -37,19 +38,17 @@ namespace hal
                     return false;
                 }
                 auto pinGroup = pin->get_group().first;
-                if (pinGroup && pinGroup->size() > 1)
+                if (pinGroup)
                 {
-                    auto oldIndex = pin->get_group().second;
-                    auto result   = mod->move_pin_within_group(pinGroup, pin, mNewIndex);
-                    if (result.is_error())
+                    if (pinGroup->size() > 1)
                     {
-                        return false;
+                        oldIndex = pin->get_group().second;
+                        auto result   = mod->move_pin_within_group(pinGroup, pin, mNewIndex);
+                        if (result.is_error())
+                        {
+                            return false;
+                        }
                     }
-
-                    ActionReorderObject* undo = new ActionReorderObject(oldIndex);
-                    undo->setObject(mObject);
-                    undo->setParentObject(mParentObject);
-                    mUndoAction = undo;
                 }
                 else
                 {
@@ -57,10 +56,36 @@ namespace hal
                 }
             }
             break;
+        case UserActionObjectType::PinGroup: {
+                auto mod = gNetlist->get_module_by_id(mParentObject.id());
+                if(!mod)
+                    return false;
+
+                auto pinGroup = mod->get_pin_group_by_id(mObject.id());
+                if(!pinGroup)
+                    return false;
+
+                // todo: perhaps provide aa function that returns the index of a group within the module? Similar to pin-index within group
+                auto groups = mod->get_pin_groups();
+                for(int i = 0; i < groups.size(); i++)
+                    if(pinGroup == groups.at(i))
+                        oldIndex = i;
+
+                auto result = mod->move_pin_group(pinGroup, mNewIndex);
+                if(result.is_error())
+                    return false;
+            }
+            break;
             default:
                 return false;
         }
-
+        if(oldIndex != -1)
+        {
+            ActionReorderObject* undo = new ActionReorderObject(oldIndex);
+            undo->setObject(mObject);
+            undo->setParentObject(mParentObject);
+            mUndoAction = undo;
+        }
         return UserAction::exec();
     }
 

@@ -20,14 +20,13 @@ HAL Core Documentation
    gate_type_component
    gate_type_property
    grouping
-   gui_plugin_interface
    module
    module_pin
    module_pin_group
    net
    netlist
    netlist_factory
-   netlist_manipulation_decorator
+   netlist_modification_decorator
    netlist_utils
    netlist_serializer
    netlist_writer_manager

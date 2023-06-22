@@ -4,6 +4,7 @@
 #include "converter/verilog_converter.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/utilities/log.h"
+#include "z3_api.h"
 
 #include <sstream>
 
@@ -78,6 +79,16 @@ namespace hal
                         return {true, z3::zext(p[0], p[1].get_numeral_uint() - p[0].get_sort().bv_size())};
                     case BooleanFunction::NodeType::Sext:
                         return {true, z3::sext(p[0], p[1].get_numeral_uint() - p[0].get_sort().bv_size())};
+                    case BooleanFunction::NodeType::Shl:
+                        return {true, z3::shl(p[0], p[1])};
+                    case BooleanFunction::NodeType::Lshr:
+                        return {true, z3::lshr(p[0], p[1])};
+                    case BooleanFunction::NodeType::Ashr:
+                        return {true, z3::ashr(p[0], p[1])};
+                    case BooleanFunction::NodeType::Rol:
+                        return {true, p[0].rotate_left(p[1].get_numeral_uint())};
+                    case BooleanFunction::NodeType::Ror:
+                        return {true, p[0].rotate_right(p[1].get_numeral_uint())};
                     case BooleanFunction::NodeType::Eq:
                         return {true, p[0] == p[1]};
                     case BooleanFunction::NodeType::Sle:
@@ -277,6 +288,36 @@ namespace hal
 
                     return BooleanFunction::Sext(std::move(args.at(0)), BooleanFunction::Index(size, size), size);
                 }
+                case Z3_OP_BSHL:
+                    if (num_args != 2)
+                    {
+                        return ERR("operation 'SHL' must have arity 2");
+                    }
+                    return BooleanFunction::Shl(std::move(args.at(0)), BooleanFunction::Index((u16)args.at(1).get_constant_value_u64().get(), size), size);
+                case Z3_OP_BLSHR:
+                    if (num_args != 2)
+                    {
+                        return ERR("operation 'LSHR' must have arity 2");
+                    }
+                    return BooleanFunction::Lshr(std::move(args.at(0)), BooleanFunction::Index((u16)args.at(1).get_constant_value_u64().get(), size), size);
+                case Z3_OP_BASHR:
+                    if (num_args != 2)
+                    {
+                        return ERR("operation 'ASHR' must have arity 2");
+                    }
+                    return BooleanFunction::Ashr(std::move(args.at(0)), BooleanFunction::Index((u16)args.at(1).get_constant_value_u64().get(), size), size);
+                case Z3_OP_ROTATE_LEFT:
+                    if (num_args != 1)
+                    {
+                        return ERR("operation 'ROL' must have arity 1");
+                    }
+                    return BooleanFunction::Rol(std::move(args.at(0)), BooleanFunction::Index((u16)Z3_get_decl_int_parameter(Z3_context(e.ctx()), Z3_func_decl(e.decl()), 0), size), size);
+                case Z3_OP_ROTATE_RIGHT:
+                    if (num_args != 1)
+                    {
+                        return ERR("operation 'ROR' must have arity 1");
+                    }
+                    return BooleanFunction::Ror(std::move(args.at(0)), BooleanFunction::Index((u16)Z3_get_decl_int_parameter(Z3_context(e.ctx()), Z3_func_decl(e.decl()), 0), size), size);
                 case Z3_OP_EQ:
                     if (num_args != 2)
                     {

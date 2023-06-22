@@ -76,6 +76,10 @@ namespace hal
         Q_PROPERTY(QString saveIconStyle READ saveIconStyle WRITE setSaveIconStyle)
         Q_PROPERTY(QString saveAsIconPath READ saveAsIconPath WRITE setSaveAsIconPath)
         Q_PROPERTY(QString saveAsIconStyle READ saveAsIconStyle WRITE setSaveAsIconStyle)
+        Q_PROPERTY(QString closeIconPath READ closeIconPath WRITE setCloseIconPath)
+        Q_PROPERTY(QString closeIconStyle READ closeIconStyle WRITE setCloseIconStyle)
+        Q_PROPERTY(QString quitIconPath READ quitIconPath WRITE setQuitIconPath)
+        Q_PROPERTY(QString quitIconStyle READ quitIconStyle WRITE setQuitIconStyle)
         Q_PROPERTY(QString settingsIconPath READ settingsIconPath WRITE setSettingsIconPath)
         Q_PROPERTY(QString settingsIconStyle READ settingsIconStyle WRITE setSettingsIconStyle)
         Q_PROPERTY(QString pluginsIconPath READ pluginsIconPath WRITE setPluginsIconPath)
@@ -180,6 +184,32 @@ namespace hal
          * @returns the 'SaveAs File'-icon style
          */
         QString saveAsIconStyle() const;
+
+        /**
+         * Q_PROPERTY READ function for the 'Close Project'-icon path.
+         *
+         * @returns the 'Close Project'-icon path
+         */
+        QString closeIconPath() const;
+        /**
+         * Q_PROPERTY READ function for the 'Close Project'-icon style.
+         *
+         * @returns the 'Close Project'-icon style
+         */
+        QString closeIconStyle() const;
+
+        /**
+         * Q_PROPERTY READ function for the 'Quit HAL session'-icon path.
+         *
+         * @returns the 'Quit HAL session'-icon path
+         */
+        QString quitIconPath() const;
+        /**
+         * Q_PROPERTY READ function for the 'Quit HAL session'-icon style.
+         *
+         * @returns the 'Quit HAL session'-icon style
+         */
+        QString quitIconStyle() const;
 
         /**
          * Q_PROPERTY READ function for the 'Settings'-icon path.
@@ -288,6 +318,32 @@ namespace hal
          * @param style - The new style
          */
         void setSaveAsIconStyle(const QString& style);
+
+        /**
+         * Q_PROPERTY WRITE function for the 'Close Project'-icon path.
+         *
+         * @param path - The new path
+         */
+        void setCloseIconPath(const QString& path);
+        /**
+         * Q_PROPERTY WRITE function for the 'Close Project'-icon style.
+         *
+         * @param style - The new style
+         */
+        void setCloseIconStyle(const QString& style);
+
+        /**
+         * Q_PROPERTY WRITE function for the 'Quit HAL session'-icon path.
+         *
+         * @param path - The new path
+         */
+        void setQuitIconPath(const QString& path);
+        /**
+         * Q_PROPERTY WRITE function for the 'Quit HAL session'-icon style.
+         *
+         * @param style - The new style
+         */
+        void setQuitIconStyle(const QString& style);
 
         /**
          * Q_PROPERTY WRITE function for the 'Schedule'-icon path.
@@ -570,6 +626,7 @@ namespace hal
         Action* mActionSettings;
         Action* mActionPlugins;
         Action* mActionClose;
+        Action* mActionQuit;
 
         QMenu* mMenuFile;
         QMenu* mMenuEdit;
@@ -593,6 +650,12 @@ namespace hal
 
         QString mSaveAsIconPath;
         QString mSaveAsIconStyle;
+
+        QString mCloseIconPath;
+        QString mCloseIconStyle;
+
+        QString mQuitIconPath;
+        QString mQuitIconStyle;
 
         QString mSettingsIconPath;
         QString mSettingsIconStyle;

@@ -52,7 +52,7 @@ namespace hal
         /**
          * Action constructor.
          */
-        ActionSetSelectionFocus() {;}
+        ActionSetSelectionFocus();
 
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;

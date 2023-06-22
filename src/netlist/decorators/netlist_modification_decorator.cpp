@@ -196,6 +196,17 @@ namespace hal
             return ERR("could connect master net to slave net: master net or slave net is a nullptr");
         }
 
+        // safe all module pin information from the slave net
+        std::map<Module*, std::tuple<std::string, std::string, u32, PinDirection, PinType>> module_pins;
+
+        for (const auto& m : m_netlist.get_modules())
+        {
+            if (const auto pin = m->get_pin_by_net(slave_net); pin != nullptr)
+            {
+                module_pins.insert({m, {pin->get_group().first->get_name(), pin->get_name(), pin->get_group().second, pin->get_direction(), pin->get_type()}});
+            }
+        }
+
         for (auto* src_ep : slave_net->get_sources())
         {
             auto* src_gate = src_ep->get_gate();
@@ -251,6 +262,7 @@ namespace hal
             }
         }
 
+        // NOTE i think this is detrimental, as this plainly overrides the master net datacontainer.
         if (const auto& data_map = slave_net->get_data_map(); !data_map.empty())
         {
             master_net->set_data_map(data_map);
@@ -260,6 +272,76 @@ namespace hal
         {
             return ERR("could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name() + "' with ID "
                        + std::to_string(slave_net->get_id()) + ": failed to delete slave net");
+        }
+
+        // transfer module information to master net
+        for (auto& [m, pin_info] : module_pins)
+        {
+            const std::string pingroup_name = std::get<0>(pin_info);
+            const std::string pin_name      = std::get<1>(pin_info);
+            const u32 pin_index             = std::get<2>(pin_info);
+            // const PinDirection pin_direction = std::get<3>(pin_info);
+            const PinType pin_type = std::get<4>(pin_info);
+
+            // get pin that was created automatically when connecting the net to a gate inside the module
+            if (auto pin = m->get_pin_by_net(master_net); pin != nullptr)
+            {
+                pin->set_name(pin_name);
+                pin->set_type(pin_type);
+
+                // remove pin from current pin group
+                auto current_pin_group = pin->get_group().first;
+                // This get is safe, since we make sure that the pin is a valid pointer and part of the group
+                current_pin_group->remove_pin(pin).get();
+
+                // delete old pin group incase it is now empty
+                if (current_pin_group->get_pins().empty())
+                {
+                    if (const auto res = m->delete_pin_group(current_pin_group); !res.is_ok())
+                    {
+                        return ERR_APPEND(res.get_error(),
+                                          "could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name()
+                                              + "' with ID " + std::to_string(slave_net->get_id()) + ": failed to delete pingroup " + current_pin_group->get_name() + "with ID "
+                                              + std::to_string(current_pin_group->get_id()) + " that is now empty.");
+                    }
+                }
+
+                // check for existing pingroup with correct name otherwise create it
+                auto pin_groups = m->get_pin_groups([pingroup_name](const auto& pg) { return pg->get_name() == pingroup_name; });
+                PinGroup<ModulePin>* pin_group;
+                if (pin_groups.empty())
+                {
+                    if (const auto res = m->create_pin_group(pingroup_name, {}, PinDirection::none, pin_type); res.is_error())
+                    {
+                        return ERR_APPEND(res.get_error(),
+                                          "could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name()
+                                              + "' with ID " + std::to_string(slave_net->get_id()) + ": failed to create pingroup " + pingroup_name);
+                    }
+                    else
+                    {
+                        pin_group = res.get();
+                    }
+                }
+                else
+                {
+                    pin_group = pin_groups.front();
+                }
+
+                pin_group->assign_pin(pin).get();
+                if (const auto res = pin_group->move_pin(pin, pin_index); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name()
+                                          + "' with ID " + std::to_string(slave_net->get_id()) + ": failed to move pin " + pin_name + " with ID " + std::to_string(pin_index)
+                                          + "created for master net to correct index " + std::to_string(pin_index) + " inside of pingroup " + pingroup_name + " at module " + m->get_name()
+                                          + " with ID " + std::to_string(m->get_id()));
+                }
+            }
+            else
+            {
+                return ERR("could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name() + "' with ID "
+                           + std::to_string(slave_net->get_id()) + ": failed to find new pin for master net at module " + m->get_name() + " with ID " + std::to_string(m->get_id()));
+            }
         }
 
         return OK(master_net);

@@ -22,6 +22,13 @@ namespace hal
             :rtype: bool
         )");
 
+        py_gate_pin_group.def("__hash__", &PinGroup<GatePin>::get_hash, R"(
+            Python requires hash for set and dict container.
+
+            :returns: The hash.
+            :rtype: Py_hash_t
+        )");
+
         py_gate_pin_group.def_property_readonly("id", &PinGroup<GatePin>::get_id, R"(
             The ID of the gate pin group. The ID is unique within a gate type.
 

@@ -2,43 +2,103 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [4.2.0](v4.2.0) - 2023-05-24 10:02:04-07:00 (urgency: medium)
 * GUI plugin manager
   * **WARNING:** modified plugin core API - reduced number of base classes and instead added extension components
   * added overview of loaded plugins and their features
   * added interactive buttons to load and unload plugins
   * added feature to load plugin automatically if needed for file parsing
-  * prevent unload of plugin if needed as dependency
+  * prevent unloading of plugin if it is needed as a dependency of another plugin
   * changed plugin load policy to have only mandatory or user required plugins loaded at startup
 * Boolean functions
   * added `BooleanFunction::substitute(const std::map<std::string, std::string>&)` to substitute multiple variable names at once
   * changed `BooleanFunction::get_constant_value` to return `std::vector<BooleanFunction::Value>`, thereby removing the 64-bit limit
   * added `BooleanFunction::Node::get_constant_value`, `BooleanFunction::Node::get_index_value`, and `BooleanFunction::Node::get_variable_name`
   * added `BooleanFunction::get_constant_value_u64` and `BooleanFunction::Node::get_constant_value_u64` to retrieve the constant value as `u64` if it comprises less than 64-bit
-  * added `BooleanFunction::has_constant_value(const std::vector<BooleanFunction::Value>&)` and `BooleanFunction::Node::has_constant_value(const std::vector<BooleanFunction::Value>&)` 
+  * added `BooleanFunction::has_constant_value(const std::vector<BooleanFunction::Value>&)` and `BooleanFunction::Node::has_constant_value(const std::vector<BooleanFunction::Value>&)`
+  * added `BooleanFunction::algebraic_printer` as an alternative printer for `BooleanFunction::to_string` to print a Boolean function in algebraic form
+  * added shift and rotate operators `Shl`, `Lshr`, `Ashr`, `Rol`, and `Ror`
 * plugins
   * `boolean_influence`
     * added deterministic variants of all Boolean influence functions that shall be used for Boolean functions with only few input variables
     * added additional parameters for more control to the subcircuit and gate variants of `get_boolean_influence`
+  * `netlist_preprocessing`
+    * added `decompose_gates_of_type` and `decompose_gate` that decompose combinational logic gates into basic gate types
+    * added `parse_def_file` to parse a Design Exchange Format file that contains placement information
+    * `simplify_lut_inits` now annotates the original init string into the data container
+  * `verilog_parser`
+    * added annotation of all net names that where merged during parsing in the data container
+    * added implicit wire declarations for assign statements
+    * changed the behavior of the parser when flattening a netlist and generating new unique names (instead of appending an index we now add a prefix containing the names of parent modules)
   * `z3_utils`
+    * added `compare_netlists` function that functionally compares two netlists that only differ in their combinational logic
     * removed class `z3Wrapper`
     * renamed `to_z3` to `from_bf` and added support for missing node types
     * renamed `to_hal` to `to_bf` and added support for missing node types
     * changed `to_cpp` to output only the C++ code implementing the Boolean function and nothing more
+  * `dataflow_analysis`
+    * added API to interact with dataflow analysis results from C++ and Python
+    * added automatic creation of pin groups for data and control pins of register modules
+    * added parameter to only write or retrieve information on certain register groups
+    * deprecated `plugin_dataflow::execute` as its functionality is now split between `dataflow::analyze` and the members of `dataflow::Result`
+    * removed file writes if not explicitly called by user
+  * `netlist_simulation_controller`
+    * added versions of `add_waveform_group` taking a module pin group as input
+    * added versions of `set_input` taking a `WaveData` object, vectors of nets and values, a `WaveDataGroup` and a vector of values, and a module pin group and a vector of values as input
+  * `solve_fsm`
+    * changed both versions of fsm_solving to now not only consider data inputs of the state register, but also synchronous control signals.
+  * `xilinx_toolbox`
+    * added the first version of the xilinx_toolbox plugin that provides functionality especially fitted to xilinx fpga netlists
 * decorators
   * added `NetlistModificationDecorator`
     * added `delete_modules` to delete all (or a filtered subset of) the modules in a netlist
     * moved `replace_gate` from `netlist_utils`, now returns pointer to replacement gate
     * added `connect_gates` to connect two gates at the specified pins via a new or already existing net
     * added `connect_nets` to merge two nets into one, thereby connecting them
+  * `BooleanFunctionDecorator`
+    * added a version of `get_boolean_function_from` that takes a module pin group as input
+* selection details widget
+  * added `Focus item in graph view` to several context menus
+  * added `Isolate in new view` to gate/module related context menus
+  * changed `Isolate in new view` policy for modules: open exclusive module view if such a view already exists
+  * improved drag&drop functionality to move module pins and merge module pin groups
 * miscellaneous
   * added `Gate::get_modules` to recursively get all modules that contain the gate by traversing the module hierarchy
   * added `Net::is_a_source(const Gate*)` and `Net::is_a_destination(const Gate*)` that check whether a gate is a source/destination independent of the gate pin
   * added `PinGroup<T>::contains_pin` to check whether a pin is part of the respective gate or module pin group
+  * added overloaded version of `deserialize_netlist` that takes a gate library, thereby overruling the gate library path in the .hal file
+  * added `utils::wrapped_stoull` and `utils::wrapped_stoul` that wrap the standard string to integer conversion and use `hal::Result<>` for error handlung instead of exceptions
+  * added utility function `is_valid_enum` to check whether the string representation of an enum value is valid.
+  * added serialization of physical gate positions (non-negative integer)
+  * added keyboard shortcuts for fold, unfold, and remove from view
+  * added `filter` parameter to `get_fan_[in/out]_[nets/endpoints]`
+  * added pyBinds for the `LogManager` class
+  * added pyBinds for the `ProjectDirectory` class
+  * added `Module::move_pin_group` to change the order of pin groups of a module
+  * changed abort being more responsive when aborting layouting of large views
+  * changed and improved color scheme for light style
+  * changed labels on HAL startup screen to better resemble the new project structure
+  * removed toolbox from groupings widget
 * bugfixes
+  * fixed build from tarball
+  * fixed minor navigation bugs on settings page
   * fixed missing Python bindings for `GatePinGroup`
+  * fixed `SolveFsmPlugin` not properly replacing power and ground nets in Boolean functions
+  * fixed searchbar attempting time consuming search when there is no content to search
+  * fixed some documentations of core functions
+  * fixed igraph not building anymore by relaxing irgaph compiler options
+  * fixed Python GUI API being unavailable at runtime
+  * fixed nets without source or destination not being shown when unfolding the module they belong to in the selection details widget
+  * fixed cmake failing to parse HAL version number from file
+  * fixed pins and pin groups not being hashable in Python
+  * fixed Python script execution abort button disappearing when switching tabs
+  * fixed segfault when deleting a module for which an exclusive view exists
+  * fixed not loading all plugins if the GUI is not in control
+  * fixed Verilog writer not being a dependency of Verilator plugin
 
-## [4.1.0] - 2023-03-08 16:57:06+01:00 (urgency: medium)
-* selection details
+## [4.1.0](v4.1.0) - 2023-03-08 16:57:06+01:00 (urgency: medium)
+* selection details widget
   * module icons reflect module color
   * gate icons shape according to gate type
   * user setting to adjust size of or omit icon in upper right corner
@@ -80,13 +140,13 @@ All notable changes to this project will be documented in this file.
   * added Python bindings for the HAL project manager
   * added new GUI dialog for creating an empty project (without providing a netlist)
   * changed all example netlists to be HAL projects
-  * API cleanup for plugin `solve_fsm` 
+  * API cleanup for plugin `solve_fsm`
 * bugfixes
   * fixed Verilog and VHDL parser ignoring pin order of modules
-  * fixed order of module pins in Verilog writer  
+  * fixed order of module pins in Verilog writer
   * fixed some errors in the Python documentation
   * fixed pin types of `power` and `ground` gate types in various gate libraries
-  * fixed spamming the log with messages related to module pins 
+  * fixed spamming the log with messages related to module pins
   * fixed segfault that sometimes occurred when deleting a module
   * fixed saving absolute paths for Python files and not copying them to the new project folder when using `Save as...`
   * fixed some project manager bugs related to inaccessible files
@@ -98,7 +158,7 @@ All notable changes to this project will be documented in this file.
   * fixed netlist parser bug related to unconnected module pins that are being directly assigned to another wire/signal in the module/entity body
   * fixed `get_pins` returning pins in wrong order if no filter is specified
 
-## [4.0.1] - 2022-10-24 15:33:15+02:00 (urgency: medium)
+## [4.0.1](v4.0.1) - 2022-10-24 15:33:15+02:00 (urgency: medium)
 * **WARNING:** this release breaks multiple APIs, please make sure to adjust your code accordingly.
 * project manager
   * added keeping all data belonging to a netlist in a single project directory
@@ -157,7 +217,7 @@ All notable changes to this project will be documented in this file.
   * fixed parsing of Liberty gate library attribute `clock`
   * fixed description of flip-flops and latches in all FPGA gate libraries
 
-## [3.3.0] - 2021-10-13 16:20:00+02:00 (urgency: medium)
+## [3.3.0](v3.3.0)- 2021-10-13 16:20:00+02:00 (urgency: medium)
 * Serialize to and deserialize from hal project directory
   * Layouts from all views are saved and restored
   * Grouping names and colors are saved and restored
@@ -200,7 +260,7 @@ All notable changes to this project will be documented in this file.
 * improved handling of properties for special gate types such as LUTs and FFs.
   * properties that only apply to special gate types have been moved out of the `GateType` class and into a designated `GateTypeComponent`
   * added functions to retrieve a gate type's components based on some filter condition
-  * added special components dealing with RAM properties 
+  * added special components dealing with RAM properties
 * improved netlist parsers
   * split VHDL and Verilog parsers into two independent plugins
   * netlist parsers now take the path to the netlist file as input instead of a `std::stringstream`
@@ -222,7 +282,7 @@ All notable changes to this project will be documented in this file.
 * `dataflow_analysis` plugin
   * can now take groups of flip-flops as input that should not be touched during analysis
   * this is meant to aid the dataflow analysis by passing control registeres identified beforehand, which prevents them from being merged into the datapath
-* new internal event system 
+* new internal event system
   * binds event handlers to a netlist instance
   * facilitates listening to the events of selected netlists only
 * improved search

@@ -63,5 +63,11 @@ namespace hal
          * Unregisters and delete instance
          */
         void on_unload() override;
+
+        /**
+         * Returns plugin dependencies. Verilator expects verilog input thus requiring verilog writer plugin.
+         * @return
+         */
+        std::set<std::string> get_dependencies() const override;
     };
 }    // namespace hal

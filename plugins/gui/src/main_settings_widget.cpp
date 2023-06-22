@@ -350,11 +350,18 @@ namespace hal
 
     void MainSettingsWidget::searchSettings(const QString& needle)
     {
+        mActiveSection.clear();
+        if (mExpandingListWidget)
+            mExpandingListWidget->clearSelected();
         for (ExpandingListButton* but : mSectionNames.keys())
             but->setSelected(false);
         for (SettingsWidget* widget : mSettingsList)
             if (widget->matchLabel(needle))
+            {
+                if (mActiveSection.isEmpty())
+                    mActiveSection = widget->settingsItem()->label();
                 widget->show();
+            }
             else
                 widget->hide();
     }

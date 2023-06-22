@@ -102,6 +102,9 @@ namespace hal
         Qt::KeyboardModifier panModifier();
         void setPanModifier(Qt::KeyboardModifier panModifier);
 
+        void handleFoldModuleShortcut();
+        void handleUnfoldModuleShortcut();
+
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted whenever the user double-clicks a module in the current view. <br>
@@ -125,10 +128,14 @@ namespace hal
          */
         void handleShortestPath(u32 idFrom, u32 idTo);
 
+        /**
+         * remove selected nodes from view
+         */
+        void handleRemoveFromView();
+
     private Q_SLOTS:
         void conditionalUpdate();
         void handleIsolationViewAction();
-        void handleRemoveFromView();
         void handleMoveAction(u32 moduleId);
         void handleMoveNewAction();
         void handleRenameAction();
@@ -164,6 +171,7 @@ namespace hal
         void handleModuleDialog();
         void handleCancelPickMode();
         void handlePluginContextContributionTriggered();
+        void selectedNodeToItem();
 
     protected:
         void paintEvent(QPaintEvent* event) override;
@@ -194,6 +202,11 @@ namespace hal
         void addSuccessorToView(int maxLevel, bool succ);
         void addCommonSuccessorToView(int maxLevel, bool succ);
 
+        GraphWidget* mGraphWidget;
+
+        QSet<u32> getSelectableGates();
+        QSet<u32> getNotSelectableModules();
+
         struct LayouterPoint
         {
             int mIndex;
@@ -209,7 +222,7 @@ namespace hal
         bool mDebugGridposEnable = true;
         #endif
 
-        GraphWidget* mGraphWidget;
+
 
         GraphicsItem* mItem;
         QVector<ContextMenuContribution> mPluginContribution;

@@ -30,6 +30,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/utilities/result.h"
 
 #include <functional>
 #include <set>
@@ -744,5 +745,23 @@ namespace hal
                 return "h=" + std::to_string(h) + " s=" + std::to_string(s) + " v=" + std::to_string(v);
             }
         };
+
+        /**
+         * A safe wrapper around the std::stoull function that provides a Result<> for error handling instead of exceptions.
+         * 
+         * @param[in] s - The string represntation of the number.
+         *
+         * @returns OK and an integer on success, an ERROR otherwise.
+         */
+        CORE_API Result<u64> wrapped_stoull(const std::string& s);
+
+        /**
+         * A safe wrapper around the std::stoul function that provides a Result<> for error handling instead of exceptions.
+         * 
+         * @param[in] s - The string represntation of the number.
+         *
+         * @returns OK and an integer on success, an ERROR otherwise.
+         */
+        CORE_API Result<u32> wrapped_stoul(const std::string& s);
     }    // namespace utils
 }    // namespace hal

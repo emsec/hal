@@ -87,38 +87,30 @@ namespace hal
         containerLayout->setSpacing(0);
         containerLayout->setContentsMargins(0,0,0,0);
 
+        mStackedWidget = new QStackedWidget(mSplitter);
 
-        mSelectionDetails = new QWidget(mSplitter);
-        QVBoxLayout* selDetailsLayout = new QVBoxLayout(mSelectionDetails);
-        selDetailsLayout->setContentsMargins(0,0,0,0);
-        selDetailsLayout->setSpacing(0);
-
-        mStackedWidget = new QStackedWidget(mSelectionDetails);
-
-        mGateDetailsTabs = new GateDetailsTabWidget(mSelectionDetails);
+        mGateDetailsTabs = new GateDetailsTabWidget(mStackedWidget);
         mStackedWidget->addWidget(mGateDetailsTabs);
 
-        mNetDetailsTabs = new NetDetailsTabWidget(mSelectionDetails);
+        mNetDetailsTabs = new NetDetailsTabWidget(mStackedWidget);
         mStackedWidget->addWidget(mNetDetailsTabs);
 
         mModuleDetailsTabs = new ModuleDetailsTabWidget();
         mStackedWidget->addWidget(mModuleDetailsTabs);
 
-        mItemDeletedLabel = new QLabel(mSelectionDetails);
+        mItemDeletedLabel = new QLabel(mStackedWidget);
         mItemDeletedLabel->setText("Currently selected item has been removed. Please consider relayouting the Graph.");
         mItemDeletedLabel->setWordWrap(true);
         mItemDeletedLabel->setAlignment(Qt::AlignmentFlag::AlignTop);
         mStackedWidget->addWidget(mItemDeletedLabel);
 
-        mNoSelectionLabel = new QLabel(mSelectionDetails);
+        mNoSelectionLabel = new QLabel(mStackedWidget);
         mNoSelectionLabel->setText("No Selection");
         mNoSelectionLabel->setWordWrap(true);
         mNoSelectionLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
         mStackedWidget->addWidget(mNoSelectionLabel);
 
         mStackedWidget->setCurrentWidget(mNoSelectionLabel);
-
-        selDetailsLayout->addWidget(mStackedWidget);
 
         mContentLayout->addWidget(mSplitter);
 
@@ -325,8 +317,11 @@ namespace hal
         SelectionTreeProxyModel* proxy = static_cast<SelectionTreeProxyModel*>(mSelectionTreeView->model());
         if (proxy->isGraphicsBusy()) return;
 
-        mSearchbar->clear();
-        updateSearchIcon();
+        if (!mSearchbar->getCurrentText().isEmpty())
+        {
+            mSearchbar->clear();
+            updateSearchIcon();
+        }
 
         mNumberSelectedItems = gSelectionRelay->numberSelectedItems();
         QVector<const SelectionTreeItem*> defaultHighlight;
@@ -381,6 +376,7 @@ namespace hal
             SelectionTreeItemNet sti(gSelectionRelay->selectedNetsList().at(0));
             singleSelectionInternal(&sti);
         }
+
         Q_EMIT triggerHighlight(defaultHighlight);
     }
 

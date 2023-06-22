@@ -327,6 +327,7 @@ namespace hal
         auto containedModules = mModules + mAddedModules - mRemovedModules;
 
         Module* m = gNetlist->get_module_by_id(id);
+        if (!m) return;
 
         for (const Gate* g : m->get_gates())
         {
@@ -860,6 +861,41 @@ namespace hal
         if (mDirty==dty) return;
         mDirty = dty;
         Q_EMIT(dataChanged());
+    }
+
+    void GraphContext::setScheduleRemove(const QSet<u32>& mods, const QSet<u32>& gats)
+    {
+        mScheduleRemoveModules = mods;
+        mScheduleRemoveGates = gats;
+    }
+
+    bool GraphContext::isScheduledRemove(const Node& nd)
+    {
+        switch (nd.type()) {
+        case Node::Module:
+        {
+            auto it = mScheduleRemoveModules.find(nd.id());
+            if (it != mScheduleRemoveModules.end())
+            {
+                mScheduleRemoveModules.erase(it);
+                return true;
+            }
+            break;
+        }
+        case Node::Gate:
+        {
+            auto it = mScheduleRemoveGates.find(nd.id());
+            if (it != mScheduleRemoveGates.end())
+            {
+                mScheduleRemoveGates.erase(it);
+                return true;
+            }
+            break;
+        }
+        default:
+            break;
+        }
+        return false;
     }
 
     void GraphContext::setSpecialUpdate(bool state)

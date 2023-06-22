@@ -17,7 +17,7 @@ namespace hal
         setAcceptDrops(true);
 
         mTextLabel->setObjectName("text-label");
-        mTextLabel->setText("Open a new file using the toolbar or simply drag & drop one here");
+        mTextLabel->setText("Open an existing project or create a new one by dropping a project folder or netlist file here.");
         mTextLabel->setWordWrap(true);
 
         mIconLabel->setObjectName("icon-label");
@@ -63,23 +63,23 @@ namespace hal
             //        if (url_list.size() > 1)
             //            return;
 
-            QString file = mime_data->urls().at(0).toLocalFile();
+            QString file                      = mime_data->urls().at(0).toLocalFile();
             FileManager::DirectoryStatus stat = FileManager::directoryStatus(file);
 
             switch (stat)
             {
-            case FileManager::ProjectDirectory:
-                FileManager::get_instance()->openProject(file);
-                break;
-            case FileManager::OtherDirectory:
-                log_warning("gui", "directory {} is not a hal project.", file.toStdString());
-                break;
-            case FileManager::IsFile:
-                FileManager::get_instance()->importFile(file);
-                break;
-            default:
-                log_warning("gui", "cannot open nor import {}.", file.toStdString());
-                break;
+                case FileManager::ProjectDirectory:
+                    FileManager::get_instance()->openProject(file);
+                    break;
+                case FileManager::OtherDirectory:
+                    log_warning("gui", "directory {} is not a hal project.", file.toStdString());
+                    break;
+                case FileManager::IsFile:
+                    FileManager::get_instance()->importFile(file);
+                    break;
+                default:
+                    log_warning("gui", "cannot open nor import {}.", file.toStdString());
+                    break;
             }
 
             //        for (int i = 0; i < url_list.size() && i < 32; ++i)
@@ -128,4 +128,4 @@ namespace hal
         if (!mIconPath.isEmpty())
             mIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mIconStyle, mIconPath).pixmap(QSize(120, 120)));
     }
-}
+}    // namespace hal

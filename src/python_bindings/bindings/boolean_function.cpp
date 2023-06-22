@@ -4,10 +4,11 @@ namespace hal
 {
     void boolean_function_init(py::module& m)
     {
-        py::class_<BooleanFunction> py_boolean_function(
-            m,
-            "BooleanFunction",
-            R"(A BooleanFunction represents a symbolic expression (e.g., ``A & B``) in order to abstract the (semantic) functionality of a single netlist gate (or even a complex subcircuit comprising multiple gates) in a formal manner. To this end, the ``BooleanFunction`` class is able to construct and display arbitrarily-nested expressions, enable symbolic simplification (e.g., simplify ``A & 0`` to ``0``), and translate Boolean functions to the SAT / SMT solver domain to use the solve constraint formulas.)");
+        py::class_<BooleanFunction> py_boolean_function(m,
+                                                        "BooleanFunction",
+                                                        R"(
+                                                            A BooleanFunction represents a symbolic expression (e.g., ``A & B``) in order to abstract the (semantic) functionality of a single netlist gate (or even a complex subcircuit comprising multiple gates) in a formal manner. To this end, the ``BooleanFunction`` class is able to construct and display arbitrarily-nested expressions, enable symbolic simplification (e.g., simplify ``A & 0`` to ``0``), and translate Boolean functions to the SAT / SMT solver domain to use the solve constraint formulas.
+                                                        )");
 
         py::enum_<BooleanFunction::Value> py_boolean_function_value(py_boolean_function, "Value", R"(
             Represents the logic value that a Boolean function operates on.
@@ -540,6 +541,141 @@ namespace hal
         )");
 
         py_boolean_function.def_static(
+            "Shl",
+            [](BooleanFunction p0, BooleanFunction p1, u16 size) -> std::optional<BooleanFunction> {
+                auto res = BooleanFunction::Shl(std::move(p0), std::move(p1), size);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("p0"),
+            py::arg("p1"),
+            py::arg("size"),
+            R"(
+            Shifts a Boolean function to the left by the specified number of bits.
+
+            :param hal_py.BooleanFunction p0: Boolean function to shift.
+            :param hal_py.BooleanFunction p1: Boolean function of type ``Index`` encoding the number of bits to shift.
+            :param int size: Bit-size of the shifted Boolean function.
+            :returns: The shifted Boolean function on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
+        )");
+
+        py_boolean_function.def_static(
+            "Lshr",
+            [](BooleanFunction p0, BooleanFunction p1, u16 size) -> std::optional<BooleanFunction> {
+                auto res = BooleanFunction::Lshr(std::move(p0), std::move(p1), size);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("p0"),
+            py::arg("p1"),
+            py::arg("size"),
+            R"(
+            Logically shifts a Boolean function to the right by the specified number of bits.
+
+            :param hal_py.BooleanFunction p0: Boolean function to shift.
+            :param hal_py.BooleanFunction p1: Boolean function of type ``Index`` encoding the number of bits to shift.
+            :param int size: Bit-size of the shifted Boolean function.
+            :returns: The shifted Boolean function on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
+        )");
+
+        py_boolean_function.def_static(
+            "Ashr",
+            [](BooleanFunction p0, BooleanFunction p1, u16 size) -> std::optional<BooleanFunction> {
+                auto res = BooleanFunction::Ashr(std::move(p0), std::move(p1), size);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("p0"),
+            py::arg("p1"),
+            py::arg("size"),
+            R"(
+            Arithmetically shifts a Boolean function to the right by the specified number of bits.
+
+            :param hal_py.BooleanFunction p0: Boolean function to shift.
+            :param hal_py.BooleanFunction p1: Boolean function of type ``Index`` encoding the number of bits to shift.
+            :param int size: Bit-size of the shifted Boolean function.
+            :returns: The shifted Boolean function on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
+        )");
+
+        py_boolean_function.def_static(
+            "Rol",
+            [](BooleanFunction p0, BooleanFunction p1, u16 size) -> std::optional<BooleanFunction> {
+                auto res = BooleanFunction::Rol(std::move(p0), std::move(p1), size);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("p0"),
+            py::arg("p1"),
+            py::arg("size"),
+            R"(
+            Rotates a Boolean function to the left by the specified number of bits.
+
+            :param hal_py.BooleanFunction p0: Boolean function to rotate.
+            :param hal_py.BooleanFunction p1: Boolean function of type ``Index`` encoding the number of bits to rotate.
+            :param int size: Bit-size of the rotated Boolean function.
+            :returns: The rotated Boolean function on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
+        )");
+
+        py_boolean_function.def_static(
+            "Ror",
+            [](BooleanFunction p0, BooleanFunction p1, u16 size) -> std::optional<BooleanFunction> {
+                auto res = BooleanFunction::Ror(std::move(p0), std::move(p1), size);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("p0"),
+            py::arg("p1"),
+            py::arg("size"),
+            R"(
+            Rotates a Boolean function to the right by the specified number of bits.
+
+            :param hal_py.BooleanFunction p0: Boolean function to rotate.
+            :param hal_py.BooleanFunction p1: Boolean function of type ``Index`` encoding the number of bits to rotate.
+            :param int size: Bit-size of the rotated Boolean function.
+            :returns: The rotated Boolean function on success, None otherwise.
+            :rtype: hal_py.BooleanFunction or None
+        )");
+
+        py_boolean_function.def_static(
             "Eq",
             [](BooleanFunction p0, BooleanFunction p1, u16 size) -> std::optional<BooleanFunction> {
                 auto res = BooleanFunction::Eq(std::move(p0), std::move(p1), size);
@@ -816,7 +952,7 @@ namespace hal
             Joins two Boolean functions by an MUL operation.
             Requires both Boolean functions to be of the same bit-size.
 
-            **Warning:** fails if the Boolean functions have different bit-sizes.
+            **Warning:*  fails if the Boolean functions have different bit-sizes.
 
             :returns: The joined Boolean Bunction.
             :rtype: hal_py.BooleanFunction
@@ -847,7 +983,7 @@ namespace hal
         )");
 
         py_boolean_function.def(py::self < py::self, R"(
-            Checks whether this Boolean function is 'smaller' than the `other` Boolean function.
+            Checks whether this Boolean function is 'smaller' than the ``other`` Boolean function.
 
             :returns: True if this Boolean function is 'smaller', False otherwise.
             :rtype: bool
@@ -889,7 +1025,7 @@ namespace hal
         )");
 
         py_boolean_function.def("is_variable", &BooleanFunction::is_variable, R"(
-            Checks whether the top-level node of the Boolean function is of type `Variable` and holds a specific variable name.
+            Checks whether the top-level node of the Boolean function is of type ``Variable`` and holds a specific variable name.
 
             :returns: True if the top-level node of the Boolean function is of type Variable, False otherwise.
             :rtype: bool
@@ -1391,7 +1527,7 @@ namespace hal
         )");
 
         py_boolean_function_node.def(py::self < py::self, R"(
-            Checks whether this Boolean function node is 'smaller' than the `other` Boolean function node.
+            Checks whether this Boolean function node is 'smaller' than the ``other`` Boolean function node.
 
             :returns: True if this Boolean function node is 'smaller', False otherwise.
             :rtype: bool
@@ -1477,7 +1613,7 @@ namespace hal
                 }
             },
             R"(
-            Get the constant value of the node of type `Constant` as a list of ``hal_py.BooleanFunction.Value``.
+            Get the constant value of the node of type ``Constant`` as a list of ``hal_py.BooleanFunction.Value``.
 
             :returns: The constant value on success, None otherwise. 
             :rtype: list[hal_py.BooleanFunction.Value] or None
@@ -1497,7 +1633,7 @@ namespace hal
                 }
             },
             R"(
-            Get the constant value of the node of type `Constant` as long as it has a size <= 64-bit.
+            Get the constant value of the node of type ``Constant`` as long as it has a size <= 64-bit.
 
             :returns: The constant value on success, None otherwise. 
             :rtype: int or None
@@ -1532,7 +1668,7 @@ namespace hal
                 }
             },
             R"(
-            Get the index value of node of type `Index`.
+            Get the index value of node of type ``Index``.
 
             :returns: The index value on success, None otherwise. 
             :rtype: int or None
@@ -1567,7 +1703,7 @@ namespace hal
                 }
             },
             R"(
-            Get the variable name of node of type `Variable`.
+            Get the variable name of node of type ``Variable``.
 
             :returns: The variable name on success, None otherwise. 
             :rtype: str or None
@@ -1615,6 +1751,12 @@ namespace hal
         py_boolean_function_node_type.def_readonly_static("Slice", &BooleanFunction::NodeType::Slice);
         py_boolean_function_node_type.def_readonly_static("Zext", &BooleanFunction::NodeType::Zext);
         py_boolean_function_node_type.def_readonly_static("Sext", &BooleanFunction::NodeType::Sext);
+
+        py_boolean_function_node_type.def_readonly_static("Shl", &BooleanFunction::NodeType::Shl);
+        py_boolean_function_node_type.def_readonly_static("Lshr", &BooleanFunction::NodeType::Lshr);
+        py_boolean_function_node_type.def_readonly_static("Ashr", &BooleanFunction::NodeType::Ashr);
+        py_boolean_function_node_type.def_readonly_static("Rol", &BooleanFunction::NodeType::Rol);
+        py_boolean_function_node_type.def_readonly_static("Ror", &BooleanFunction::NodeType::Ror);
 
         py_boolean_function_node_type.def_readonly_static("Eq", &BooleanFunction::NodeType::Eq);
         py_boolean_function_node_type.def_readonly_static("Sle", &BooleanFunction::NodeType::Sle);

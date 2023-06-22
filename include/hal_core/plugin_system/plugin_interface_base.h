@@ -59,7 +59,7 @@ namespace hal
         std::vector<AbstractExtensionInterface*> m_extensions;
 
     public:
-        BasePluginInterface() {;}
+        BasePluginInterface() = default;
         virtual ~BasePluginInterface();
 
         /**
@@ -84,11 +84,18 @@ namespace hal
         virtual std::string get_version() const = 0;
 
         /**
-         * Get short description about functionality
+         * Get the description of the plugin.
          *
-         * @return description should not have more than 40 characters
+         * @return The description of the plugin.
          */
-        virtual std::string get_description() const {return std::string(); };
+        virtual std::string get_description() const;
+
+        /**
+         * Get all dependencies of this plugin.
+         *
+         * @return The plugins that this plugin depends on.
+         */
+        virtual std::set<std::string> get_dependencies() const;
 
         /**
          * Shorthand for fast text logging.
@@ -100,13 +107,6 @@ namespace hal
         {
             log_info(get_name(), args...);
         }
-
-        /**
-         * Get all plugin dependencies of this plugin.
-         *
-         * @return A set of plugins that this plugin depends on.
-         */
-        virtual std::set<std::string> get_dependencies() const;
 
         /**
          * This function is automatically executed when the factory is loaded by the plugin manager
@@ -134,11 +134,14 @@ namespace hal
          * Get first extension of given type T.
          * @return pointer to first extension of type T or nullptr if no such extension exists.
          */
-        template<typename T> T* get_first_extension() const {
+        template<typename T>
+        T* get_first_extension() const
+        {
             for (AbstractExtensionInterface* aeif : get_extensions())
             {
                 T* retval = dynamic_cast<T*>(aeif);
-                if (retval) return retval;
+                if (retval)
+                    return retval;
             }
             return nullptr;
         }

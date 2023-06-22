@@ -20,21 +20,12 @@ namespace hal
                     return std::shared_ptr<Netlist>(netlist_factory::load_netlist(hdl_file, gate_library_file));
                 },
                 py::arg("hdl_file"),
-                py::arg("gate_library_file"),
+                py::arg("gate_library_file") = "",
                 R"(
                 Create a netlist from the given file using the specified gate library file.
 
                 :param pathlib.Path hdl_file: Path to the file.
                 :param pathlib.Path gate_library_file: Path to the gate library file.
-                :returns: The netlist on success, None otherwise.
-                :rtype: hal_py.Netlist
-            )")
-
-            .def(
-                "load_netlist", [](const std::filesystem::path& hal_file) { return std::shared_ptr<Netlist>(netlist_factory::load_netlist(hal_file)); }, py::arg("hal_file"), R"(
-                Create a netlist from the given .hal file.
-
-                :param pathlib.Path hal_file: Path to the '.hal' file.
                 :returns: The netlist on success, None otherwise.
                 :rtype: hal_py.Netlist
             )")
