@@ -1,10 +1,13 @@
 #include "gui/gui_api/gui_api.h"
 
+
 #include "gui/gui_globals.h"
 #include "gui/user_action/user_action_compound.h"
 #include "gui/user_action/user_action_object.h"
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_add_items_to_object.h"
+#include "gui/graph_widget/graph_context_manager.h"
+#include "gui/context_manager_widget/models/context_table_model.h"
 
 #include <algorithm>
 
@@ -434,61 +437,10 @@ namespace hal
     }
 
 
-    //TODO  check View class and pybindings
-    //function called from GuiApi class
-    int GuiApi::isolateInNewView(std::vector<Module*> modules, std::vector<Gate*> gates)
-    {
-        QString name;
-        //TODO: make sure that modules and gates are not empty
-        if(modules.empty() && gates.empty())
-            return 0;
-
-        //Check if view should be bound exclusively to module
-        if(modules.size() == 1 && gates.empty()){
-            name = QString::fromStdString(modules[0]->get_name()) + QString(" (ID: %1)").arg(modules[0]->get_id());
-
-            //If the view already exists then return 0
-            if(gGraphContextManager->contextWithNameExists(name)){
-                return 0;
-            }
-        }
-        else
-        {
-            //Get the number which has to be appended to name
-
-            name   = gGraphContextManager->nextViewName("Isolated View");
-
-             //TODO: Placeholder code
-        }
-
-
-        // Get ids from modules and gates
-        QSet<u32> moduleIds;
-        QSet<u32> gateIds;
-
-        for(Module* module : modules)
-            moduleIds.insert(module->get_id());
-        for(Gate* gate : gates)
-            gateIds.insert(gate->get_id());
-
-
-        UserActionCompound* act = new UserActionCompound;
-        act->setUseCreatedObject();
-        act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
-        act->addAction(new ActionAddItemsToObject(moduleIds, gateIds));
-        act->exec();
-
-        u32 contextId = act->object().id();
-
-        //TODO: return actual context id
-        return 0;
-    }
-
-    //function called from class View of GuiApiClasses class
     int GuiApiClasses::View::isolateInNew(std::vector<Module*> modules, std::vector<Gate*> gates)
     {
         QString name;
-        //TODO: make sure that modules and gates are not empty
+        //make sure that modules and gates are not empty
         if(modules.empty() && gates.empty())
             return 0;
 
@@ -496,18 +448,20 @@ namespace hal
         if(modules.size() == 1 && gates.empty()){
             name = QString::fromStdString(modules[0]->get_name()) + QString(" (ID: %1)").arg(modules[0]->get_id());
 
-            //If the view already exists then return 0
+            //If the view already exists then return existing id
             if(gGraphContextManager->contextWithNameExists(name)){
+                for(GraphContext* ctx : gGraphContextManager->getContexts()){
+                    if(ctx->name() == name){
+                        return ctx->id();
+                    }
+                }
                 return 0;
             }
         }
         else
         {
             //Get the number which has to be appended to name
-
             name   = gGraphContextManager->nextViewName("Isolated View");
-
-            //TODO: Placeholder code
         }
 
 
@@ -527,12 +481,12 @@ namespace hal
         act->addAction(new ActionAddItemsToObject(moduleIds, gateIds));
         act->exec();
 
-        //TODO: return actual context id
-        return 0;
+
+        return act->object().id();
     }
 
 
-    bool GuiApiClasses::View::addTo(int id, const std::vector<Module*>, const std::vector<Gate*>)
+    bool GuiApiClasses::View::addTo(int id, const std::vector<Module*> modules, const std::vector<Gate*> gates)
     {
         return false; // TODO : implement
     }
@@ -544,6 +498,17 @@ namespace hal
 
     bool GuiApiClasses::View::setName(int id, const std::string& name)
     {
+        //check if name is occupied
+        if(gGraphContextManager->contextWithNameExists(QString::fromStdString(name)))
+            return false;
+
+        //get context matching id and rename it
+        for(GraphContext* ctx : gGraphContextManager->getContexts()){
+            if(ctx->id() == id){
+                gGraphContextManager->renameGraphContextAction(ctx, QString::fromStdString(name));
+                return true;
+            }
+        }
         return false; // TODO : implement
     }
 

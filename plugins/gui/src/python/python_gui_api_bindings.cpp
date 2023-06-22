@@ -79,7 +79,9 @@ PYBIND11_PLUGIN(hal_gui)
     py::class_<GuiApi> py_gui_api(m, "GuiApi", R"(GUI API)");
 
     py::class_<GuiApiClasses::View>(py_gui_api, "View")
-    .def_static("isolateInNewView", &GuiApiClasses::View::isolateInNew, py::arg("modules"), py::arg("gates"));
+    .def_static("isolateInNew", &GuiApiClasses::View::isolateInNew, py::arg("modules"), py::arg("gates"))
+    .def_static("setName", &GuiApiClasses::View::setName, py::arg("id"), py::arg("name"))
+    .def_static("addTo", &GuiApiClasses::View::addTo, py::arg("id"), py::arg("modules"), py::arg("gates"));
 
     py_gui_api.def("getSelectedGateIds", &GuiApi::getSelectedGateIds, R"(
         Get the gate ids of currently selected gates in the graph view of the GUI.
@@ -469,11 +471,7 @@ PYBIND11_PLUGIN(hal_gui)
        Deselect all gates, nets and modules in the graph view of the GUI.
 )");
 
-    py_gui_api.def("isolateNewView",py::overload_cast<const std::vector<Module*>, const std::vector<Gate*>>(&GuiApi::isolateInNewView), py::arg("modules"), py::arg("gates"),R"(
-    Creates a new Isolated View from the given modules and gates.
-    :param list[hal_py.module] modules: The modules to be shown.
-    :param list[hal_py.Gate] gates: The gates to be shown.
-)");
+
 
 #ifndef PYBIND11_MODULE
     return m.ptr();
