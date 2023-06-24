@@ -79,9 +79,68 @@ PYBIND11_PLUGIN(hal_gui)
     py::class_<GuiApi> py_gui_api(m, "GuiApi", R"(GUI API)");
 
     py::class_<GuiApiClasses::View>(py_gui_api, "View")
-    .def_static("isolateInNew", &GuiApiClasses::View::isolateInNew, py::arg("modules"), py::arg("gates"))
-    .def_static("setName", &GuiApiClasses::View::setName, py::arg("id"), py::arg("name"))
-    .def_static("addTo", &GuiApiClasses::View::addTo, py::arg("id"), py::arg("modules"), py::arg("gates"));
+    .def_static("isolateInNew", &GuiApiClasses::View::isolateInNew, py::arg("modules"), py::arg("gates"),R"(
+        Isolates given modules and gates into a new view
+
+        :param list[hal_py.module] modules: List of modules to be added.
+        :param list[hal_py.Gate] gates: List of gates to be added.
+        :returns: ID of created view or the existing one if view is exclusively bound to a module.
+        :rtype: int
+)")
+    .def_static("renameView", &GuiApiClasses::View::setName, py::arg("id"), py::arg("name"),R"(
+        Renames the view specified by the given ID.
+
+        :param int id: ID of the view.
+        :param string name: New unique name.
+        :returns: True on success otherwise False.
+        :rtype: bool
+)")
+    .def_static("addTo", &GuiApiClasses::View::addTo, py::arg("id"), py::arg("modules"), py::arg("gates"),R"(
+        Adds the given modules and gates to the view specified by the ID.
+
+        :param list[hal.py.module] modules: Modules to be added.
+        :param list[hal.py.Gate] gates: Gates to be added.
+        :returns: True on success, otherwise False.
+        :rtype: bool
+)")
+    .def_static("removeFrom", &GuiApiClasses::View::removeFrom, py::arg("id"), py::arg("modules"), py::arg("gates"),R"(
+        Removes the given modules and gates from the view specified by the ID.
+
+        :param list[hal.py.module] modules: Modules to be removed.
+        :param list[hal.py.Gate] gates: Gates to be removed.
+        :returns: True on success, otherwise False.
+        :rtype: bool
+)")
+    .def_static("getId", &GuiApiClasses::View::getId, py::arg("name"),R"(
+        Returns the ID of the view with the given name if existing.
+
+        :param string name: Name of the view
+        :returns: ID of the specified view or 0 if none is found
+        :rtype: int
+)")
+    .def_static("getName", &GuiApiClasses::View::getName, py::arg("id"), R"(
+        Returns the name of the view with the given ID if existing.
+
+        :param int id: ID of the view.
+        :returns: Name of the view specified by the ID or empty string if none is found.
+        :rtype: string
+)")
+    .def_static("getModules", &GuiApiClasses::View::getModules, py::arg("id"), R"(
+        Returns all modules attached to the view
+
+        :param int id: ID of the view.
+        :returns: List of the attached modules
+        :rtype: list[hal.py.module]
+)")
+    .def_static("getGates", &GuiApiClasses::View::getGates, py::arg("id"),R"(
+        Returns all gates attached to the view
+
+        :param int id: ID of the view.
+        :returns: List of the attached gates
+        :rtype: list[hal.py.Gate]
+)");
+
+
 
     py_gui_api.def("getSelectedGateIds", &GuiApi::getSelectedGateIds, R"(
         Get the gate ids of currently selected gates in the graph view of the GUI.

@@ -488,18 +488,56 @@ namespace hal
 
     bool GuiApiClasses::View::addTo(int id, const std::vector<Module*> modules, const std::vector<Gate*> gates)
     {
-        return false; // TODO : implement
+        //TODO check why ctx->remove does clear the whole view and only apply after a restart
+        // Get ids from modules and gates
+        QSet<u32> moduleIds;
+        QSet<u32> gateIds;
+
+        for(Module* module : modules)
+            moduleIds.insert(module->get_id());
+        for(Gate* gate : gates)
+            gateIds.insert(gate->get_id());
+
+        GraphContext* ctx = gGraphContextManager->getContextById(id);
+        if(ctx != nullptr){
+            //ctx->beginChange();
+            ctx->add(moduleIds, gateIds);
+            //ctx->endChange();
+            return true;
+        }
+        return false;
     }
 
-    bool removeFrom(int id, const std::vector<Module*>, const std::vector<Gate*>)
+    bool GuiApiClasses::View::removeFrom(int id, const std::vector<Module*> modules, const std::vector<Gate*> gates)
     {
-        return false; // TODO : implement
+        //TODO check why ctx->remove does clear the whole view and only apply after a restart
+        // Get ids from modules and gates
+        QSet<u32> moduleIds;
+        QSet<u32> gateIds;
+
+        for(Module* module : modules)
+            moduleIds.insert(module->get_id());
+        for(Gate* gate : gates)
+            gateIds.insert(gate->get_id());
+
+        GraphContext* ctx = gGraphContextManager->getContextById(id);
+        if(ctx != nullptr){
+            //ctx->beginChange();
+            ctx->remove(moduleIds, gateIds);
+            //ctx->endChange();
+            return true;
+        }
+        return false;
     }
 
     bool GuiApiClasses::View::setName(int id, const std::string& name)
     {
         //check if name is occupied
         if(gGraphContextManager->contextWithNameExists(QString::fromStdString(name)))
+            return false;
+
+        //check if view is exclusively bound to module
+        if(gGraphContextManager->getContextById(id)->isShowingModuleExclusively())
             return false;
 
         //get context matching id and rename it
@@ -509,27 +547,53 @@ namespace hal
                 return true;
             }
         }
-        return false; // TODO : implement
+        return false;
     }
 
     int GuiApiClasses::View::getId(const std::string& name)
     {
-        return 0; // TODO : implement
+        //find View related to the name
+        for(GraphContext* ctx : gGraphContextManager->getContexts()){
+            if(ctx->name() == QString::fromStdString(name)){
+                return ctx->id();
+            }
+        }
+        return 0;
     }
 
     std::string GuiApiClasses::View::getName(int id)
     {
-        return std::string(); // TODO : implement
+        GraphContext* ctx = gGraphContextManager->getContextById(id);
+        if(ctx != nullptr){
+            return ctx->name().toStdString();
+        }
+        return std::string(); //
     }
 
     std::vector<Module*> GuiApiClasses::View::getModules(int id)
     {
-        return std::vector<Module*>(); // TODO : implement
+        GraphContext* ctx = gGraphContextManager->getContextById(id);
+        if(ctx != nullptr){
+            std::vector<Module*> modules;
+            for(u32 id : ctx->modules()){
+                modules.push_back(gNetlist->get_module_by_id(id));
+            }
+            return modules;
+        }
+        return std::vector<Module*>();
     }
 
     std::vector<Gate*> GuiApiClasses::View::getGates(int id)
     {
-        return std::vector<Gate*>(); // TODO : implement
+        GraphContext* ctx = gGraphContextManager->getContextById(id);
+        if(ctx != nullptr){
+            std::vector<Gate*> gates;
+            for(u32 id : ctx->gates()){
+                gates.push_back(gNetlist->get_gate_by_id(id));
+            }
+            return gates;
+        }
+        return std::vector<Gate*>();
     }
 
 }
