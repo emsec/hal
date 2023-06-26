@@ -1,6 +1,6 @@
 #include "gui/selection_details_widget/tree_navigation/selection_tree_proxy.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
+#include "gui/selection_details_widget/tree_navigation/selection_base_tree_item.h"
 
 #include "gui/gui_globals.h"
 

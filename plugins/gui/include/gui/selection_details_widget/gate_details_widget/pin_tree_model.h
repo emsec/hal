@@ -87,7 +87,7 @@ public:
      * @param item - The treeitem from which to get the connected nets.
      * @return A list of net ids.
      */
-    QList<int> getNetIDsOfTreeItem(TreeItem* item);
+    QList<int> getNetIDsOfTreeItem(BaseTreeItem* item);
 
     /**
      * Get the type (enum) of a given item.
@@ -95,7 +95,7 @@ public:
      * @param item - The item for which the type is requested.
      * @return The item's type.
      */
-    itemType getTypeOfItem(TreeItem* item);
+    itemType getTypeOfItem(BaseTreeItem* item);
 
     /**
      * Get the number of displayed pins (the number of pins of all types).
@@ -117,7 +117,7 @@ public:
 
 private:
     int mGateId;
-    QMap<std::string, TreeItem*> mPinGroupingToTreeItem;
+    QMap<std::string, BaseTreeItem*> mPinGroupingToTreeItem;
 
 };
 

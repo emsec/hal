@@ -87,7 +87,7 @@ namespace hal
          * @param item - The (port) item.
          * @return The net or nullptr.
          */
-        Net* getNetFromItem(TreeItem* item);
+        Net* getNetFromItem(BaseTreeItem* item);
 
         /**
          * Get the id of the module that is currently represented.
@@ -103,7 +103,7 @@ namespace hal
          * @param item - The item for which the type is requested.
          * @return The item's type.
          */
-        itemType getTypeOfItem(TreeItem* item) const;
+        itemType getTypeOfItem(BaseTreeItem* item) const;
 
         /**
          * Returns the pin-id if the item represents a pin or the pingroup-id
@@ -112,7 +112,7 @@ namespace hal
          * @param item - The item.
          * @return The pin- or pingroup-id.
          */
-        int getIdOfItem(TreeItem* item) const;
+        int getIdOfItem(BaseTreeItem* item) const;
 
         /** @name Event Handler Functions
          */
@@ -143,20 +143,20 @@ namespace hal
         int mModuleId; // perhaps remove?
         Module* mModule;
         //name is (hopefully) enough to identify
-        QMap<QString, TreeItem*> mNameToTreeItem;
-        QMap<int, TreeItem*> mIdToPinItem;
-        QMap<int, TreeItem*> mIdToGroupItem;
+        QMap<QString, BaseTreeItem*> mNameToTreeItem;
+        QMap<int, BaseTreeItem*> mIdToPinItem;
+        QMap<int, BaseTreeItem*> mIdToGroupItem;
         bool mIgnoreEventsFlag;
 
-        void insertItem(TreeItem* item, TreeItem* parent, int index);
-        void removeItem(TreeItem* item);
+        void insertItem(BaseTreeItem* item, BaseTreeItem* parent, int index);
+        void removeItem(BaseTreeItem* item);
 
         // helper functions for dnd for more clarity
-        void dndGroupOnGroup(TreeItem* droppedGroup, TreeItem* onDroppedGroup);
-        void dndGroupBetweenGroup(TreeItem* droppedGroup, int row);
-        void dndPinOnGroup(TreeItem* droppedPin, TreeItem* onDroppedGroup);
-        void dndPinBetweenPin(TreeItem* droppedPin, TreeItem* onDroppedParent, int row);
-        void dndPinBetweenGroup(TreeItem* droppedPin, int row);
+        void dndGroupOnGroup(BaseTreeItem* droppedGroup, BaseTreeItem* onDroppedGroup);
+        void dndGroupBetweenGroup(BaseTreeItem* droppedGroup, int row);
+        void dndPinOnGroup(BaseTreeItem* droppedPin, BaseTreeItem* onDroppedGroup);
+        void dndPinBetweenPin(BaseTreeItem* droppedPin, BaseTreeItem* onDroppedParent, int row);
+        void dndPinBetweenGroup(BaseTreeItem* droppedPin, int row);
     };
 }
 

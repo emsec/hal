@@ -45,7 +45,7 @@ namespace hal
         GateType* gateType = g->get_type();
         for (auto pin : gateType->get_pins())
         {
-            TreeItem* pinItem = new TreeItem();
+            BaseTreeItem* pinItem = new BaseTreeItem();
             //get all infos for that pin
             const std::string& grouping = pin->get_group().first->get_name();
             PinDirection direction      = pin->get_direction();
@@ -96,11 +96,11 @@ namespace hal
             pinItem->setAdditionalData(keyRepresentedNetsID, QVariant::fromValue(netIDs));
             if (!grouping.empty())
             {
-                TreeItem* groupingsItem = mPinGroupingToTreeItem.value(grouping, nullptr);    //since its a map, its okay
+                BaseTreeItem* groupingsItem = mPinGroupingToTreeItem.value(grouping, nullptr);    //since its a map, its okay
                 if (!groupingsItem)
                 {
                     //assume all items in the same grouping habe the same direction and type, so the grouping-item has also these types
-                    groupingsItem = new TreeItem(QList<QVariant>() << QString::fromStdString(grouping) << pinDirection << pinType << "");
+                    groupingsItem = new BaseTreeItem(QList<QVariant>() << QString::fromStdString(grouping) << pinDirection << pinType << "");
                     groupingsItem->setAdditionalData(keyType, QVariant::fromValue(itemType::grouping));
                     mRootItem->appendChild(groupingsItem);
                     mPinGroupingToTreeItem.insert(grouping, groupingsItem);
@@ -118,12 +118,12 @@ namespace hal
         return mGateId;
     }
 
-    QList<int> GatePinsTreeModel::getNetIDsOfTreeItem(TreeItem* item)
+    QList<int> GatePinsTreeModel::getNetIDsOfTreeItem(BaseTreeItem* item)
     {
         return item->getAdditionalData(keyRepresentedNetsID).value<QList<int>>();
     }
 
-    GatePinsTreeModel::itemType GatePinsTreeModel::getTypeOfItem(TreeItem* item)
+    GatePinsTreeModel::itemType GatePinsTreeModel::getTypeOfItem(BaseTreeItem* item)
     {
         return item->getAdditionalData(keyType).value<itemType>();
     }

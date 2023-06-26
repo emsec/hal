@@ -1,6 +1,6 @@
 #include "gui/selection_details_widget/module_details_widget/port_tree_model.h"
 
-#include "gui/basic_tree_model/tree_item.h"
+#include "gui/basic_tree_model/base_tree_item.h"
 #include "gui/gui_globals.h"
 #include "gui/input_dialog/input_dialog.h"
 #include "gui/user_action/action_add_items_to_object.h"
@@ -21,7 +21,7 @@ namespace hal
 {
     ModulePinsTreeModel::ModulePinsTreeModel(QObject* parent) : BaseTreeModel(parent), mIgnoreEventsFlag(false)
     {
-        setHeaderLabels(QList<QVariant>() << "Name"
+        setHeaderLabels(QStringList() << "Name"
                                           << "Direction"
                                           << "Type"
                                           << "Connected Net");
@@ -348,13 +348,13 @@ namespace hal
             auto pinGroupDirection = QString::fromStdString(enum_to_string((pinGroup->get_direction())));
             auto pinGroupType = QString::fromStdString(enum_to_string(pinGroup->get_type()));
 
-            TreeItem* pinGroupItem = new TreeItem(QList<QVariant>() << pinGroupName << pinGroupDirection << pinGroupType << "");
+            BaseTreeItem* pinGroupItem = new BaseTreeItem(QList<QVariant>() << pinGroupName << pinGroupDirection << pinGroupType << "");
             pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::group)); // port multi bit
             pinGroupItem->setAdditionalData(keyId, pinGroup->get_id());
             mIdToGroupItem.insert(pinGroup->get_id(), pinGroupItem);
             for(ModulePin* pin : pinGroup->get_pins())
             {
-                TreeItem* pinItem = new TreeItem(QList<QVariant>() << QString::fromStdString(pin->get_name())
+                BaseTreeItem* pinItem = new BaseTreeItem(QList<QVariant>() << QString::fromStdString(pin->get_name())
                                                  << QString::fromStdString(enum_to_string(pin->get_direction()))
                                                  << QString::fromStdString(enum_to_string(pin->get_type()))
                                                  << QString::fromStdString(pin->get_net()->get_name()));
@@ -422,7 +422,7 @@ namespace hal
         Q_EMIT numberOfPortsChanged(m->get_pins().size());
     }
 
-    Net* ModulePinsTreeModel::getNetFromItem(TreeItem* item)
+    Net* ModulePinsTreeModel::getNetFromItem(BaseTreeItem* item)
     {
         if (mModuleId == -1)    //no current module = no represented net
             return nullptr;
@@ -449,12 +449,12 @@ namespace hal
         return mModuleId;
     }
 
-    ModulePinsTreeModel::itemType ModulePinsTreeModel::getTypeOfItem(TreeItem* item) const
+    ModulePinsTreeModel::itemType ModulePinsTreeModel::getTypeOfItem(BaseTreeItem* item) const
     {
         return item->getAdditionalData(keyType).value<itemType>();
     }
 
-    int ModulePinsTreeModel::getIdOfItem(TreeItem* item) const
+    int ModulePinsTreeModel::getIdOfItem(BaseTreeItem* item) const
     {
         return item->getAdditionalData(keyId).toInt();
     }
@@ -468,7 +468,7 @@ namespace hal
         }
     }
 
-    void ModulePinsTreeModel::dndGroupOnGroup(TreeItem *droppedGroup, TreeItem *onDroppedGroup)
+    void ModulePinsTreeModel::dndGroupOnGroup(BaseTreeItem *droppedGroup, BaseTreeItem *onDroppedGroup)
     {
         // SPECIFY: 1) create completely new group, all pins in that, delete old 2 groups
         // 2) just add all pins from dropped group to "ondroppedgroup", then rename?
@@ -497,7 +497,7 @@ namespace hal
 
     }
 
-    void ModulePinsTreeModel::dndGroupBetweenGroup(TreeItem *droppedGroup, int row)
+    void ModulePinsTreeModel::dndGroupBetweenGroup(BaseTreeItem *droppedGroup, int row)
     {
         mIgnoreEventsFlag = true;
         int ownRow = droppedGroup->getOwnRow();
@@ -516,7 +516,7 @@ namespace hal
         mIgnoreEventsFlag = false;
     }
 
-    void ModulePinsTreeModel::dndPinOnGroup(TreeItem *droppedPin, TreeItem *onDroppedGroup)
+    void ModulePinsTreeModel::dndPinOnGroup(BaseTreeItem *droppedPin, BaseTreeItem *onDroppedGroup)
     {
         mIgnoreEventsFlag = true;
         QSet<u32> e;
@@ -535,7 +535,7 @@ namespace hal
         mIgnoreEventsFlag = false;
     }
 
-    void ModulePinsTreeModel::dndPinBetweenPin(TreeItem *droppedPin, TreeItem *onDroppedParent, int row)
+    void ModulePinsTreeModel::dndPinBetweenPin(BaseTreeItem *droppedPin, BaseTreeItem *onDroppedParent, int row)
     {
         mIgnoreEventsFlag = true;
         int desiredIdx = row;
@@ -579,7 +579,7 @@ namespace hal
         mIgnoreEventsFlag = false;
     }
 
-    void ModulePinsTreeModel::dndPinBetweenGroup(TreeItem *droppedPin, int row)
+    void ModulePinsTreeModel::dndPinBetweenGroup(BaseTreeItem *droppedPin, int row)
     {
         // row is needed for when groups can change its order within the module
         Q_UNUSED(row)
@@ -599,7 +599,7 @@ namespace hal
             auto pinGroupDirection = QString::fromStdString(enum_to_string((newGroup->get_direction())));
             auto pinGroupType = QString::fromStdString(enum_to_string(newGroup->get_type()));
 
-            TreeItem* pinGroupItem = new TreeItem(QList<QVariant>() << pinGroupName << pinGroupDirection << pinGroupType << "");
+            BaseTreeItem* pinGroupItem = new BaseTreeItem(QList<QVariant>() << pinGroupName << pinGroupDirection << pinGroupType << "");
             pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::group));
             pinGroupItem->setAdditionalData(keyId, newGroup->get_id());
 
@@ -617,7 +617,7 @@ namespace hal
         mIgnoreEventsFlag = false;
     }
 
-    void ModulePinsTreeModel::insertItem(TreeItem* item, TreeItem* parent, int index)
+    void ModulePinsTreeModel::insertItem(BaseTreeItem* item, BaseTreeItem* parent, int index)
     {
         // fun fact: if an item is inserted above an item that is expanded, the tree collapses all indeces
         beginInsertRows(getIndexFromItem(parent), index, index);
@@ -627,7 +627,7 @@ namespace hal
         getTypeOfItem(item) == itemType::pin ? mIdToPinItem.insert(getIdOfItem(item), item) : mIdToGroupItem.insert(getIdOfItem(item), item);
         //mIdToPinItem.insert(getIdOfItem(item), item);
     }
-    void ModulePinsTreeModel::removeItem(TreeItem* item)
+    void ModulePinsTreeModel::removeItem(BaseTreeItem* item)
     {
         beginRemoveRows(parent(getIndexFromItem(item)), item->getOwnRow(), item->getOwnRow());
         item->getParent()->removeChild(item);

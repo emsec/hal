@@ -27,7 +27,7 @@
 
 #include <QAbstractItemModel>
 #include <QIcon>
-//#include "gui/new_selection_details_widget/models/tree_item.h"
+//#include "gui/new_selection_details_widget/models/base_tree_item.h"
 #include "gui/basic_tree_model/base_tree_model.h"
 
 namespace hal
@@ -35,7 +35,24 @@ namespace hal
     class Module;
     class Gate;
     class Net;
-    class TreeItem;
+    class BaseTreeItem;
+
+    class NetlistElementsTreeitem : public BaseTreeItem
+    {
+        public:
+            enum class Type {module = 0, gate = 1, net = 2};
+        private:
+            QString mType;
+            int mId;
+            QString mName;
+        public:
+
+            NetlistElementsTreeitem(const QString& name, int id, QString tp);
+            QVariant getData(int column) const override;
+            void setData(QList<QVariant> data) override;
+            void setDataAtIndex(int index, QVariant& data) override;
+            int getColumnCount() const override;
+    };
 
     /**
      * @ingroup utility_widgets-selection_details
@@ -110,7 +127,7 @@ namespace hal
          * @param item - The item for which the type is requested.
          * @return The item's type.
          */
-        itemType getTypeOfItem(TreeItem* item) const;
+        itemType getTypeOfItem(NetlistElementsTreeitem* item) const;
 
         /**
          * Get the module/gate/net id that the given item represents.
@@ -119,7 +136,7 @@ namespace hal
          * @param item - The item from which to extract the id.
          * @return The corresponding module, gate, or net id.
          */
-        int getRepresentedIdOfItem(TreeItem* item) const;
+        int getRepresentedIdOfItem(NetlistElementsTreeitem* item) const;
 
         /** @name Event Handler Functions
          */
@@ -173,12 +190,12 @@ namespace hal
         //1) 1 map that maps "raw element pointer (gate,net,module)" to a list of treeitems
         //2) 3 maps with either id->treeitems or pointer->treeitems
         //QMultiMap<void*, TreeItem*> mElementToTreeitem;
-        QMultiMap<Module*, TreeItem*> mModuleToTreeitems;
-        QMultiMap<Gate*, TreeItem*> mGateToTreeitems;
-        QMultiMap<Net*, TreeItem*> mNetToTreeitems;
+        QMultiMap<Module*, NetlistElementsTreeitem*> mModuleToTreeitems;
+        QMultiMap<Gate*, NetlistElementsTreeitem*> mGateToTreeitems;
+        QMultiMap<Net*, NetlistElementsTreeitem*> mNetToTreeitems;
 
         //necessary because setModule uses beginResetModel (should not be called by each recursive iteration)
-        void moduleRecursive(Module* mod, TreeItem* modItem,  bool showGates = true, bool showNets = true);
+        void moduleRecursive(Module* mod, NetlistElementsTreeitem* modItem,  bool showGates = true, bool showNets = true);
 
         /**
          * Utility function to determine the displayed icon for a given item
@@ -186,7 +203,7 @@ namespace hal
          * @param item - The requested item.
          * @return A module, net, or gate icon depending on the item's type.
          */
-        QIcon getIconFromItem(TreeItem* item) const;
+        QIcon getIconFromItem(NetlistElementsTreeitem* item) const;
 
         /**
          * Utility function to remove all net items of the given module item and
@@ -195,7 +212,7 @@ namespace hal
          *
          * @param moduleItem - The module item to modify.
          */
-        void updateInternalNetsOfModule(TreeItem* moduleItem);
+        void updateInternalNetsOfModule(NetlistElementsTreeitem* moduleItem);
 
     };
 

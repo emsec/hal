@@ -33,7 +33,7 @@ namespace hal
     class Module;
     class Gate;
     class Net;
-    class TreeItem;
+    class BaseTreeItem;
 
     class ModuleTreeModel : public BaseTreeModel
     {
@@ -68,7 +68,7 @@ namespace hal
          * @param item - The item for which the type is requested.
          * @return The item's type.
          */
-        itemType getTypeOfItem(TreeItem* item) const;
+        itemType getTypeOfItem(BaseTreeItem* item) const;
 
         /**
          * Disconnects all events from the model. Can be called to increase performance when
@@ -108,11 +108,11 @@ namespace hal
         bool mEventsConnected = false;
 
         int mModId;
-        QMap<Module*, TreeItem*> mModuleToTreeitems;
-        QMap<Gate*, TreeItem*> mGateToTreeitems;
+        QMap<Module*, BaseTreeItem*> mModuleToTreeitems;
+        QMap<Gate*, BaseTreeItem*> mGateToTreeitems;
 
         //necessary because setModule uses beginResetModel (should not be called by each recursive iteration)
-        void moduleRecursive(Module* mod, TreeItem* modItem);
+        void moduleRecursive(Module* mod, BaseTreeItem* modItem);
 
         //perhaps more performance instead of setting the whole displayed module anew
         void updateGatesOfModule(Module* mod);
@@ -123,7 +123,7 @@ namespace hal
          * @param item - The requested item.
          * @return A module, net, or gate icon depending on the item's type.
          */
-        QIcon getIconFromItem(TreeItem* item) const;
+        QIcon getIconFromItem(BaseTreeItem* item) const;
 
         void clearOwnStructures();
 
