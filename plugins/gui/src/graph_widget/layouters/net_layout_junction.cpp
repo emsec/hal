@@ -586,9 +586,6 @@ namespace hal {
                 place(1,vcroad,rngVc);
                 place(0,iroadHoriz,rngHe);
                 place(1,iroadVertic,rngVe);
-                mOccupied[1][vcroad].append(rngVc);
-                mOccupied[0][iroadHoriz].append(rngHe);
-                mOccupied[1][iroadVertic].append(rngVe);
                 netIt->setPlaced();
                 break;
             }

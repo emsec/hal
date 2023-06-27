@@ -631,8 +631,8 @@ namespace hal
 
         for (auto it = mJunctionEntries.constBegin(); it != mJunctionEntries.constEnd(); ++it)
         {
-            //            it.value().dumpFile(it.key());
-            //            qDebug() << "Junction at" << it.key().x() << it.key().y();
+                        it.value().dumpFile(it.key());
+                        qDebug() << "Junction at" << it.key().x() << it.key().y();
             NetLayoutJunction* nlj = new NetLayoutJunction(it.value());
             if (nlj->lastError() != NetLayoutJunction::Ok)
                 qDebug() << "Junction route error" << nlj->lastError() << it.key();

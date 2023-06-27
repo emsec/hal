@@ -228,7 +228,7 @@ namespace hal
                     qreal x1 = merged_h_lines.at(i).mBigX   < h.mBigX   ?  merged_h_lines.at(i).mBigX   : h.mBigX;
 
                     qDebug() << "h-ov" << h.y << x0 << x1;
-//                    sc->addLine(x0,h.y,x1,h.y,QPen(Qt::yellow));
+                    sc->addLine(x0,h.y,x1,h.y,QPen(Qt::yellow));
                     overlaps.append(i);
                 }
 
@@ -270,7 +270,7 @@ namespace hal
                     qreal y1 = merged_v_lines.at(i).mBigY   < v.mBigY   ?  merged_v_lines.at(i).mBigY   : v.mBigY;
 
                     qDebug() << "v-ov" << v.x << y0 << y1;
-//                    sc->addLine(v.x,y0,v.x,y1,QPen(Qt::red));
+                    sc->addLine(v.x,y0,v.x,y1,QPen(Qt::red));
                     overlaps.append(i);
                 }
 
