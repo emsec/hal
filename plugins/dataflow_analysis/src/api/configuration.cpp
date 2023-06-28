@@ -1,13 +1,19 @@
 #include "dataflow_analysis/api/configuration.h"
 
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
+#include "hal_core/netlist/netlist.h"
 
 namespace hal
 {
     namespace dataflow
     {
+        Configuration::Configuration(Netlist* nl) : netlist(nl)
+        {
+        }
+
         Configuration& Configuration::with_min_group_size(u32 size)
         {
             this->min_group_size = size;
@@ -58,6 +64,53 @@ namespace hal
         Configuration& Configuration::with_known_groups(const std::vector<std::vector<u32>>& groups)
         {
             this->known_groups = groups;
+            return *this;
+        }
+
+        Configuration& Configuration::with_gate_types(const std::set<const GateType*>& types, bool overwrite)
+        {
+            if (overwrite)
+            {
+                this->gate_types = types;
+            }
+            else
+            {
+                this->gate_types.insert(types.begin(), types.end());
+            }
+
+            return *this;
+        }
+
+        Configuration& Configuration::with_gate_types(const std::set<GateTypeProperty>& gate_type_properties, bool overwrite)
+        {
+            auto gate_types_map = this->netlist->get_gate_library()->get_gate_types([gate_type_properties](const GateType* gt) {
+                for (GateTypeProperty p : gate_type_properties)
+                {
+                    if (gt->has_property(p))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            std::set<const GateType*> types;
+            std::transform(gate_types_map.begin(), gate_types_map.end(), std::inserter(types, types.begin()), [](const auto& gt) { return gt.second; });
+            this->with_gate_types(types, overwrite);
+
+            return *this;
+        }
+
+        Configuration& Configuration::with_control_pin_types(const std::set<PinType>& types, bool overwrite)
+        {
+            if (overwrite)
+            {
+                this->control_pin_types = types;
+            }
+            else
+            {
+                this->control_pin_types.insert(types.begin(), types.end());
+            }
+
             return *this;
         }
 

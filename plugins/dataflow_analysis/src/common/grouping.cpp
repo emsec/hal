@@ -103,33 +103,13 @@ namespace hal
             return !(*this == other);
         }
 
-        std::unordered_set<u32> Grouping::get_clock_signals_of_group(u32 id) const
+        std::map<PinType, std::unordered_set<u32>> Grouping::get_control_signals_of_group(u32 group_id) const
         {
-            return get_signals_of_group(id, this->netlist_abstr.gate_to_clock_signals);
-        }
+            std::map<PinType, std::unordered_set<u32>> res;
 
-        std::unordered_set<u32> Grouping::get_control_signals_of_group(u32 id) const
-        {
-            return get_signals_of_group(id, this->netlist_abstr.gate_to_enable_signals);
-        }
-
-        std::unordered_set<u32> Grouping::get_reset_signals_of_group(u32 id) const
-        {
-            return get_signals_of_group(id, this->netlist_abstr.gate_to_reset_signals);
-        }
-
-        std::unordered_set<u32> Grouping::get_set_signals_of_group(u32 id) const
-        {
-            return get_signals_of_group(id, this->netlist_abstr.gate_to_set_signals);
-        }
-
-        std::unordered_set<u32> Grouping::get_signals_of_group(u32 id, const std::unordered_map<u32, std::unordered_set<u32>>& signals) const
-        {
-            std::unordered_set<u32> res;
-
-            for (auto gate : gates_of_group.at(id))
+            for (auto gate : gates_of_group.at(group_id))
             {
-                if (auto it = signals.find(gate); it != signals.end())
+                if (auto it = this->netlist_abstr.gate_to_control_signals.find(gate); it != this->netlist_abstr.gate_to_control_signals.end())
                 {
                     res.insert(it->second.begin(), it->second.end());
                 }

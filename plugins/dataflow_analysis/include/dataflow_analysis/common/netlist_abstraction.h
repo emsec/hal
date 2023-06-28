@@ -26,6 +26,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 
 #include <set>
 #include <unordered_map>
@@ -57,10 +58,7 @@ namespace hal
 
             /* pre_processed_data */
             std::unordered_map<u32, std::vector<u32>> gate_to_fingerprint;
-            std::unordered_map<u32, std::unordered_set<u32>> gate_to_clock_signals;
-            std::unordered_map<u32, std::unordered_set<u32>> gate_to_enable_signals;
-            std::unordered_map<u32, std::unordered_set<u32>> gate_to_reset_signals;
-            std::unordered_map<u32, std::unordered_set<u32>> gate_to_set_signals;
+            std::unordered_map<u32, std::map<PinType, std::unordered_set<u32>>> gate_to_control_signals;
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_register_stages;
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_predecessors;
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_successors;

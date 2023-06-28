@@ -50,35 +50,14 @@ namespace hal
                     }
                 }
 
-                if (const auto it = na.gate_to_clock_signals.find(gate_id); it != na.gate_to_clock_signals.end())
+                if (const auto it = na.gate_to_control_signals.find(gate_id); it != na.gate_to_control_signals.end())
                 {
-                    for (auto clock_net_id : std::get<1>(*it))
+                    for (const auto& [type, signals] : std::get<1>(*it))
                     {
-                        this->m_gate_signals[gate][PinType::clock].insert(nl->get_net_by_id(clock_net_id));
-                    }
-                }
-
-                if (const auto it = na.gate_to_enable_signals.find(gate_id); it != na.gate_to_enable_signals.end())
-                {
-                    for (auto enable_net_id : std::get<1>(*it))
-                    {
-                        this->m_gate_signals[gate][PinType::enable].insert(nl->get_net_by_id(enable_net_id));
-                    }
-                }
-
-                if (const auto it = na.gate_to_reset_signals.find(gate_id); it != na.gate_to_reset_signals.end())
-                {
-                    for (auto reset_net_id : std::get<1>(*it))
-                    {
-                        this->m_gate_signals[gate][PinType::reset].insert(nl->get_net_by_id(reset_net_id));
-                    }
-                }
-
-                if (const auto it = na.gate_to_set_signals.find(gate_id); it != na.gate_to_set_signals.end())
-                {
-                    for (auto set_net_id : std::get<1>(*it))
-                    {
-                        this->m_gate_signals[gate][PinType::set].insert(nl->get_net_by_id(set_net_id));
+                        for (auto signal_net_id : signals)
+                        {
+                            this->m_gate_signals[gate][type].insert(nl->get_net_by_id(signal_net_id));
+                        }
                     }
                 }
             }
@@ -94,24 +73,12 @@ namespace hal
                 }
                 m_gates_of_group[group_id] = gates;
 
-                for (const auto net_id : grouping.get_clock_signals_of_group(group_id))
+                for (const auto& [type, signals] : grouping.get_control_signals_of_group(group_id))
                 {
-                    this->m_group_signals[group_id][PinType::clock].insert(m_netlist->get_net_by_id(net_id));
-                }
-
-                for (const auto net_id : grouping.get_control_signals_of_group(group_id))
-                {
-                    this->m_group_signals[group_id][PinType::enable].insert(m_netlist->get_net_by_id(net_id));
-                }
-
-                for (const auto net_id : grouping.get_reset_signals_of_group(group_id))
-                {
-                    this->m_group_signals[group_id][PinType::reset].insert(m_netlist->get_net_by_id(net_id));
-                }
-
-                for (const auto net_id : grouping.get_set_signals_of_group(group_id))
-                {
-                    this->m_group_signals[group_id][PinType::set].insert(m_netlist->get_net_by_id(net_id));
+                    for (auto signal_net_id : signals)
+                    {
+                        this->m_group_signals[group_id][type].insert(m_netlist->get_net_by_id(signal_net_id));
+                    }
                 }
 
                 if (auto suc_ids = grouping.get_successor_groups_of_group(group_id); !suc_ids.empty())

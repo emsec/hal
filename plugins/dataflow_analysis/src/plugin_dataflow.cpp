@@ -56,7 +56,7 @@ namespace hal
     {
         UNUSED(args);
 
-        dataflow::Configuration config;
+        dataflow::Configuration config(nl);
         std::string path;
 
         if (args.is_option_set("--path"))
@@ -91,7 +91,7 @@ namespace hal
             }
         }
 
-        auto grouping_res = dataflow::analyze(nl, config);
+        auto grouping_res = dataflow::analyze(config);
         if (grouping_res.is_error())
         {
             log_error("dataflow", "dataflow analysis failed:\n{}", grouping_res.get_error().get());
@@ -125,12 +125,12 @@ namespace hal
                 std::string s;
                 while (std::getline(f, s, ','))
                 {
-                    m_config.expected_sizes.emplace_back(std::stoi(s));
+                    m_expected_sizes.emplace_back(std::stoi(s));
                 }
             }
             else if (par.get_tagname() == "min_group_size")
             {
-                m_config.min_group_size = atoi(par.get_value().c_str());
+                m_min_group_size = atoi(par.get_value().c_str());
             }
             else if (par.get_tagname() == "write_txt")
             {
@@ -150,7 +150,7 @@ namespace hal
             }
             else if (par.get_tagname() == "register_stage_identification")
             {
-                m_config.enable_register_stages = (par.get_value() == "true");
+                m_enable_register_stages = (par.get_value() == "true");
             }
             else if (par.get_tagname() == "exec")
             {
@@ -178,7 +178,13 @@ namespace hal
 
         dataflow::GuiLayoutLocker gll;
 
-        auto grouping_res = dataflow::analyze(nl, m_config);
+        auto config = dataflow::Configuration(nl)
+                          .with_expected_sizes(m_expected_sizes)
+                          .with_min_group_size(m_min_group_size)
+                          .with_register_stage_identification(m_enable_register_stages)
+                          .with_control_pin_types({PinType::clock, PinType::enable, PinType::reset, PinType::set})
+                          .with_gate_types({GateTypeProperty::ff});
+        auto grouping_res = dataflow::analyze(config);
         if (grouping_res.is_error())
         {
             log_error("dataflow", "dataflow analysis failed:\n{}", grouping_res.get_error().get());
@@ -225,10 +231,15 @@ namespace hal
                                                              std::vector<std::vector<u32>> known_groups,
                                                              u32 min_group_size)
     {
-        auto config =
-            dataflow::Configuration().with_min_group_size(min_group_size).with_expected_sizes(sizes).with_known_groups(known_groups).with_register_stage_identification(register_stage_identification);
+        auto config = dataflow::Configuration(nl)
+                          .with_min_group_size(min_group_size)
+                          .with_expected_sizes(sizes)
+                          .with_known_groups(known_groups)
+                          .with_register_stage_identification(register_stage_identification)
+                          .with_control_pin_types({PinType::clock, PinType::enable, PinType::reset, PinType::set})
+                          .with_gate_types({GateTypeProperty::ff});
 
-        const auto grouping_res = dataflow::analyze(nl, config);
+        const auto grouping_res = dataflow::analyze(config);
         if (grouping_res.is_error())
         {
             log_error("dataflow", "dataflow analysis failed:\n{}", grouping_res.get_error().get());
