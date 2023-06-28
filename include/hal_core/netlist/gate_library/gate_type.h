@@ -394,6 +394,7 @@ namespace hal
         std::string m_name;
         std::set<GateTypeProperty> m_properties;
         std::unique_ptr<GateTypeComponent> m_component;
+        double m_area;
 
         // pins
         u32 m_next_pin_id;

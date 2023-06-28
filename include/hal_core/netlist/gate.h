@@ -231,7 +231,7 @@ namespace hal
           * @param[in] pin - The output pin.
           * @returns The Boolean function on success, an error otherwise.
           */
-        Result<BooleanFunction> get_resolved_boolean_function(const GatePin* pin) const;
+        Result<BooleanFunction> get_resolved_boolean_function(const GatePin* pin, const bool stop_at_input_pins = false) const;
 
         /**
          * Add a Boolean function with the given name to the gate.

@@ -27,6 +27,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/result.h"
 
