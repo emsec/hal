@@ -220,8 +220,8 @@ namespace hal
 
         py_gate.def(
             "get_resolved_boolean_function",
-            [](const Gate& self, const GatePin* pin) -> std::optional<BooleanFunction> {
-                auto res = self.get_resolved_boolean_function(pin);
+            [](const Gate& self, const GatePin* pin, const bool stop_at_input_pins = false) -> std::optional<BooleanFunction> {
+                auto res = self.get_resolved_boolean_function(pin, stop_at_input_pins);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -232,7 +232,8 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("pin") = nullptr,
+            py::arg("pin")                = nullptr,
+            py::arg("stop_at_input_pins") = false,
             R"(
             Get the resolved Boolean function corresponding to the given output pin, i.e., a Boolean function that is only dependent on input nets and no internal or output pins.
 

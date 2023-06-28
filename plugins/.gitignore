@@ -17,6 +17,8 @@
 !gui_extension_demo/**/*
 !liberty_parser*
 !liberty_parser/**/*
+!machine_learning*
+!machine_learning/**/*
 !netlist_preprocessing*
 !netlist_preprocessing/**/*
 !hgl_parser*

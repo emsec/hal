@@ -252,6 +252,50 @@ namespace hal
             )");
 
         py_netlist_preprocessing.def_static(
+            "resynthesize_gate",
+            [](Netlist* nl, Gate* g, GateLibrary* hgl_lib, const std::filesystem::path& genlib_path, const bool delete_gate) -> bool {
+                auto res = NetlistPreprocessingPlugin::resynthesize_gate(nl, g, hgl_lib, genlib_path, delete_gate);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("nl"),
+            py::arg("g"),
+            py::arg("hgl_lib"),
+            py::arg("genlib_path"),
+            py::arg("delete_gate") = true,
+            R"(
+               
+            )");
+
+        py_netlist_preprocessing.def_static(
+            "resynthesize_gates_of_type",
+            [](Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl) -> bool {
+                auto res = NetlistPreprocessingPlugin::resynthesize_gates_of_type(nl, gate_types, target_gl);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("nl"),
+            py::arg("gate_types"),
+            py::arg("target_gl"),
+            R"(
+               
+            )");
+
+        py_netlist_preprocessing.def_static(
             "reconstruct_indexed_ff_identifiers",
             [](Netlist* nl) -> std::optional<u32> {
                 auto res = NetlistPreprocessingPlugin::reconstruct_indexed_ff_identifiers(nl);

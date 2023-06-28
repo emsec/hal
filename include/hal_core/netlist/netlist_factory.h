@@ -65,6 +65,15 @@ namespace hal
         NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file, const std::filesystem::path& gate_library_file = std::filesystem::path());
 
         /**
+         * Create a netlist from the given file trying to parse it with the specified gate library.
+         *
+         * @param[in] netlist_file - Path to the netlist file.
+         * @param[in] gate_library - The gate library.
+         * @returns The netlist on success, nullptr otherwise.
+         */
+        NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file, GateLibrary* gate_library);
+
+        /**
          * Create a netlist from the given hal project.
          *
          * @param[in] project_dir - Path to the hal project directory.

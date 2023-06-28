@@ -4,9 +4,9 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
+#include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/program_arguments.h"
-#include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/project_directory.h"
 
 #include <fstream>
@@ -62,6 +62,30 @@ namespace hal
             }
         }
 
+        std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file, GateLibrary* gate_library)
+        {
+            if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
+            {
+                log_critical("netlist", "could not access file '{}'.", netlist_file.string());
+                return nullptr;
+            }
+
+            if (!gate_library)
+            {
+                log_critical("netlist", "gate library is null '{}', will not read netlist.");
+                return nullptr;
+            }
+
+            if (netlist_file.extension() == ".hal")
+            {
+                return netlist_serializer::deserialize_from_file(netlist_file, gate_library);
+            }
+            else
+            {
+                return netlist_parser_manager::parse(netlist_file, gate_library);
+            }
+        }
+
         std::unique_ptr<Netlist> load_hal_project(const std::filesystem::path& project_dir)
         {
             if (!std::filesystem::is_directory(project_dir))
@@ -83,9 +107,7 @@ namespace hal
 
         std::unique_ptr<Netlist> load_netlist(const ProjectDirectory& pdir, const ProgramArguments& args)
         {
-            std::filesystem::path netlist_file = args.is_option_set("--import-netlist")
-                    ? std::filesystem::path(args.get_parameter("--import-netlist"))
-                    : pdir.get_default_filename();
+            std::filesystem::path netlist_file = args.is_option_set("--import-netlist") ? std::filesystem::path(args.get_parameter("--import-netlist")) : pdir.get_default_filename();
 
             if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
             {

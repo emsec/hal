@@ -125,6 +125,11 @@ namespace hal
          */
         static Result<u32> decompose_gates_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types);
 
+        // TODO provide function interfaces that do not requiere the genlib path but instead write out the genlib path inside the function
+        static Result<std::monostate> resynthesize_gate(Netlist* nl, Gate* g, GateLibrary* hgl_lib, const std::filesystem::path& genlib_path, const bool delete_gate);
+
+        static Result<u32> resynthesize_gates_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl);
+
         /**
          * Tries to reconstruct a name and index for each flip flop that was part of a multibit wire in the verilog code.
          * This is NOT a general netlist reverse engineering algorithm and ONLY works on synthesized netlists with names annotated by the synthesizer.
