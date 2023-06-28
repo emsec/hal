@@ -87,7 +87,7 @@ PYBIND11_PLUGIN(hal_gui)
         :returns: ID of created view or the existing one if view is exclusively bound to a module.
         :rtype: int
 )")
-    .def_static("renameView", &GuiApiClasses::View::setName, py::arg("id"), py::arg("name"),R"(
+    .def_static("rename", &GuiApiClasses::View::setName, py::arg("id"), py::arg("name"),R"(
         Renames the view specified by the given ID.
 
         :param int id: ID of the view.
@@ -103,6 +103,14 @@ PYBIND11_PLUGIN(hal_gui)
         :returns: True on success, otherwise False.
         :rtype: bool
 )")
+       .def_static("deleteView", &GuiApiClasses::View::deleteView, py::arg("id"),R"(
+                Adds the given modules and gates to the view specified by the ID.
+
+                :param list[hal.py.module] modules: Modules to be added.
+                :param list[hal.py.Gate] gates: Gates to be added.
+                :returns: True on success, otherwise False.
+                :rtype: bool
+        )")
     .def_static("removeFrom", &GuiApiClasses::View::removeFrom, py::arg("id"), py::arg("modules"), py::arg("gates"),R"(
         Removes the given modules and gates from the view specified by the ID.
 

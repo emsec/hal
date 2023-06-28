@@ -42,6 +42,7 @@ namespace hal
         class View{
         public:
             static int isolateInNew(const std::vector<Module*>, const std::vector<Gate*>);
+            static bool deleteView(int id);
             static bool addTo(int id, const std::vector<Module*>, const std::vector<Gate*>);
             static bool removeFrom(int id, const std::vector<Module*>, const std::vector<Gate*>);
             static bool setName(int id, const std::string& name);

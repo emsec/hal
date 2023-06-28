@@ -5,6 +5,7 @@
 #include "gui/user_action/user_action_compound.h"
 #include "gui/user_action/user_action_object.h"
 #include "gui/user_action/action_create_object.h"
+#include "gui/user_action/action_delete_object.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/context_manager_widget/models/context_table_model.h"
@@ -444,10 +445,12 @@ namespace hal
         if(modules.empty() && gates.empty())
             return 0;
 
+        bool isModuleExclusive = false;
+
         //Check if view should be bound exclusively to module
         if(modules.size() == 1 && gates.empty()){
             name = QString::fromStdString(modules[0]->get_name()) + QString(" (ID: %1)").arg(modules[0]->get_id());
-
+            isModuleExclusive = true;
             //If the view already exists then return existing id
             if(gGraphContextManager->contextWithNameExists(name)){
                 for(GraphContext* ctx : gGraphContextManager->getContexts()){
@@ -481,14 +484,37 @@ namespace hal
         act->addAction(new ActionAddItemsToObject(moduleIds, gateIds));
         act->exec();
 
+        if (isModuleExclusive){
+            GraphContext* context = gGraphContextManager->getContextById(act->object().id());
+            context->setDirty(false);
+            context->setExclusiveModuleId(modules[0]->get_id());
+        }
+
 
         return act->object().id();
+    }
+
+    bool GuiApiClasses::View::deleteView(int id)
+    {
+        if(gGraphContextManager->getContextById(id)->empty())
+        {
+            return false;
+        }
+        ActionDeleteObject* del = new ActionDeleteObject();
+        del->setObject(UserActionObject(id, UserActionObjectType::Context));
+
+        UserActionCompound* act = new UserActionCompound;
+        act->setUseCreatedObject();
+        act->addAction(del);
+        act->addAction(new ActionDeleteObject);
+        act->exec();
+        return true;
     }
 
 
     bool GuiApiClasses::View::addTo(int id, const std::vector<Module*> modules, const std::vector<Gate*> gates)
     {
-        //TODO check why ctx->remove does clear the whole view and only apply after a restart
+        //TODO check why ctx->add does clear the whole view and only apply after a restart
         // Get ids from modules and gates
         QSet<u32> moduleIds;
         QSet<u32> gateIds;
