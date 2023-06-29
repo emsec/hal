@@ -1474,7 +1474,7 @@ namespace hal
                     }
                     auto unique_resynth_nl = resynth_res.get();
                     resynth_nl             = unique_resynth_nl.get();
-                    gt_to_resynth.insert({{gt, init_data}, std::move(unique_resynth_nl)});
+                    gt_to_resynth.insert({std::make_pair(gt, init_data), std::move(unique_resynth_nl)});
                 }
 
                 const auto replace_res = replace_gate_with_netlist(g, resynth_nl, nl, false);
