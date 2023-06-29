@@ -296,6 +296,27 @@ namespace hal
             )");
 
         py_netlist_preprocessing.def_static(
+            "resynthesize_subgraph_of_type",
+            [](Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl) -> bool {
+                auto res = NetlistPreprocessingPlugin::resynthesize_subgraph_of_type(nl, gate_types, target_gl);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("nl"),
+            py::arg("gate_types"),
+            py::arg("target_gl"),
+            R"(
+               
+            )");
+
+        py_netlist_preprocessing.def_static(
             "reconstruct_indexed_ff_identifiers",
             [](Netlist* nl) -> std::optional<u32> {
                 auto res = NetlistPreprocessingPlugin::reconstruct_indexed_ff_identifiers(nl);

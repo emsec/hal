@@ -12,9 +12,9 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/netlist_utils.h"
+#include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "hal_core/utilities/result.h"
 #include "hal_core/utilities/token_stream.h"
-
 #include "rapidjson/document.h"
 
 #include <fstream>
@@ -109,7 +109,8 @@ namespace hal
 
             if (original_inits.size() != 1)
             {
-                return ERR("unable to simplify lut init string for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": found " + std::to_string(original_inits.size()) + " init data strings but expected exactly 1."); 
+                return ERR("unable to simplify lut init string for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": found " + std::to_string(original_inits.size())
+                           + " init data strings but expected exactly 1.");
             }
 
             const auto original_init = original_inits.front();
@@ -1026,13 +1027,12 @@ namespace hal
 
         // NOTE there are about a hundred more checks that we could do here
         Result<std::monostate> replace_subgraph_with_netlist(const std::vector<Gate*>& subgraph,
-                                                             const std::unordered_map<std::string, std::string>& global_io_mapping,
+                                                             const std::unordered_map<Net*, Net*>& global_io_mapping,
                                                              const Netlist* src_nl,
                                                              Netlist* dst_nl,
-                                                             const bool delete_subgraph_gates = true)
+                                                             const bool delete_subgraph_gates)
         {
             std::unordered_map<std::string, Gate*> gate_name_to_gate;
-            std::unordered_map<std::string, Net*> net_name_to_net;
 
             const auto dst_gl = dst_nl->get_gate_library();
 
@@ -1053,18 +1053,6 @@ namespace hal
                 gate_name_to_gate.insert({src_g->get_name(), new_gate});
             }
 
-            // initialize net name to net mapping for all the global io mapping nets
-            for (const auto [src_name, dst_name] : global_io_mapping)
-            {
-                const auto dst_nets = dst_nl->get_nets([dst_name](const Net* n) { return n->get_name() == dst_name; });
-                if (dst_nets.size() != 1)
-                {
-                    return ERR("unable to replace subgraph with netlist: found " + std::to_string(dst_nets.size()) + " nets with the name " + dst_name
-                               + " when searching the global io mapping. Require exactly 1!");
-                }
-                net_name_to_net.insert({dst_name, dst_nets.front()});
-            }
-
             // connect all nets of the source netlist to the destination netlist
             for (const auto src_n : src_nl->get_nets())
             {
@@ -1073,8 +1061,15 @@ namespace hal
                 // edge case for global io
                 if (src_n->is_global_input_net() || src_n->is_global_output_net())
                 {
-                    const auto dst_n_name = global_io_mapping.at(src_n->get_name());
-                    new_net               = net_name_to_net.at(dst_n_name);
+                    if (const auto it = global_io_mapping.find(src_n); it != global_io_mapping.end())
+                    {
+                        new_net = global_io_mapping.at(src_n);
+                    }
+                    else
+                    {
+                        return ERR("unable to replace subgraph with netlist: failed to locate mapped net in destination netlist for global io net " + src_n->get_name() + " with ID "
+                                   + std::to_string(src_n->get_id()));
+                    }
                 }
 
                 // connect net to source
@@ -1136,18 +1131,18 @@ namespace hal
 
         Result<std::monostate> replace_gate_with_netlist(Gate* g, const Netlist* src_nl, Netlist* dst_nl, const bool delete_gate = true)
         {
-            std::unordered_map<std::string, std::string> global_io_mapping;
+            std::unordered_map<Net*, Net*> global_io_mapping;
 
             for (const auto& g_i : src_nl->get_global_input_nets())
             {
                 const auto& pin_name = g_i->get_name();
-                global_io_mapping.insert({pin_name, g->get_fan_in_net(pin_name)->get_name()});
+                global_io_mapping.insert({g_i, g->get_fan_in_net(pin_name)});
             }
 
             for (const auto& g_o : src_nl->get_global_output_nets())
             {
                 const auto& pin_name = g_o->get_name();
-                global_io_mapping.insert({pin_name, g->get_fan_out_net(pin_name)->get_name()});
+                global_io_mapping.insert({g_o, g->get_fan_out_net(pin_name)});
             }
 
             return replace_subgraph_with_netlist({g}, global_io_mapping, src_nl, dst_nl, delete_gate);
@@ -1202,17 +1197,17 @@ namespace hal
             return verilog_str;
         }
 
-        Result<std::unique_ptr<Netlist>> resynthesize_boolean_functions_with_abc(const std::unordered_map<std::string, BooleanFunction>& bfs,
-                                                                                 const std::filesystem::path& genlib_path,
-                                                                                 GateLibrary* hgl_lib,
-                                                                                 const bool optimize_area)
+        Result<std::unique_ptr<Netlist>> generate_resynth_netlist_for_boolean_functions(const std::unordered_map<std::string, BooleanFunction>& bfs,
+                                                                                        const std::filesystem::path& genlib_path,
+                                                                                        GateLibrary* hgl_lib,
+                                                                                        const bool optimize_area)
         {
             const auto verilog_module = build_functional_verilog_module_from(bfs);
 
+            // TODO make this more robust
             const std::filesystem::path base_path                  = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_abc";
             const std::filesystem::path functional_netlist_path    = base_path / "func_netlist.v";
             const std::filesystem::path resynthesized_netlist_path = base_path / "resynth_netlist.v";
-            //const std::filesystem::path gate_library_path          = base_path / "new_gate_library.genlib";
 
             std::filesystem::create_directory(base_path);
 
@@ -1243,17 +1238,131 @@ namespace hal
             return OK(std::move(resynth_nl));
         }
 
-        /*
-        std::unique_ptr<Netlist*> resynthesize_subgraph_with_abc(const Netlist* nl, const std::vector<Gate*> subgraph, const bool optimize_area)
+        Result<std::unique_ptr<Netlist>> generate_resynth_netlist_for_gate_level_subgraph(const Netlist* nl,
+                                                                                          const std::vector<Gate*>& subgraph,
+                                                                                          const std::filesystem::path& genlib_path,
+                                                                                          GateLibrary* hgl_lib,
+                                                                                          const bool optimize_area)
         {
-            return nullptr;
-        }
-        */
-    }    // namespace
+            // TODO sanity check wether all gates in the subgraph have types that are in the genlib/target library
 
-    namespace
-    {
-        Result<std::unique_ptr<Netlist>> generate_resynth_netlist(const Gate* g, GateLibrary* hgl_lib, const std::filesystem::path& genlib_path)
+            auto subgraph_nl_res = SubgraphNetlistDecorator(*nl).copy_subgraph_netlist(subgraph);
+            if (subgraph_nl_res.is_error())
+            {
+                return ERR_APPEND(subgraph_nl_res.get_error(), "unable to resynthesize gate level subgraph: failed to copy subgraph netlist");
+            }
+            const auto subgraph_nl = subgraph_nl_res.get();
+
+            // TODO make this more robust
+            const std::filesystem::path base_path                  = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_abc";
+            const std::filesystem::path org_netlist_path           = base_path / "org_netlist.v";
+            const std::filesystem::path resynthesized_netlist_path = base_path / "resynth_netlist.v";
+
+            std::filesystem::create_directory(base_path);
+
+            log_info("netlist_preprocessing", "Writing Verilog file to {} ...", org_netlist_path.string());
+
+            netlist_writer_manager::write(subgraph_nl.get(), org_netlist_path);
+
+            // NOTE this is a way to get rid of the stupid timescale annotation that is added by the verilog writer (for the simulator!?) but cannot be parsed by abc...
+            // Read the file into a vector of lines
+            std::vector<std::string> lines;
+            std::ifstream input_file(org_netlist_path);
+
+            std::string line;
+            while (std::getline(input_file, line))
+            {
+                lines.push_back(line);
+            }
+            input_file.close();
+
+            // Remove the first line from the vector
+            if (!lines.empty())
+            {
+                lines.erase(lines.begin());
+            }
+
+            // Write the modified lines back to the file
+            std::ofstream output_file(org_netlist_path);
+            for (const auto& line : lines)
+            {
+                output_file << line << std::endl;
+            }
+            output_file.close();
+
+            auto abc_query_res = abc::query_binary_path();
+            if (abc_query_res.is_error())
+            {
+                return ERR_APPEND(abc_query_res.get_error(), "Unable to resynthesize gate level netlist with abc: failed to find abc path");
+            }
+
+            const auto abc_path       = abc_query_res.get();
+            const std::string command = abc_path + " -c " + '"' + "read_library " + genlib_path.string() + "; " + "read_verilog -m " + org_netlist_path.string() + "; "
+                                        + "cleanup; sweep; strash; dc2; logic; " + "map" + (optimize_area ? "" : " -a") + "; " + "write_verilog " + resynthesized_netlist_path.string() + ";" + '"';
+
+            system(command.c_str());
+
+            auto resynth_nl = netlist_factory::load_netlist(resynthesized_netlist_path, hgl_lib);
+            if (resynth_nl == nullptr)
+            {
+                return ERR("Unable to resynthesize gate level netlist with abc: failed to load resynthesized netlist at " + resynthesized_netlist_path.string());
+            }
+
+            return OK(std::move(resynth_nl));
+        }
+
+        // TODO move to the netlist traversal decorator, currently existing in the machine learning branch
+        std::vector<Net*> get_outputs_of_subgraph(const std::vector<Gate*>& subgraph)
+        {
+            std::unordered_set<Gate*> subgraph_set = {subgraph.begin(), subgraph.end()};
+            std::unordered_set<Net*> outputs;
+
+            for (const auto g : subgraph)
+            {
+                for (const auto ep : g->get_successors())
+                {
+                    // check whether gate has a successor outside the subgraph
+                    if (subgraph_set.find(ep->get_gate()) == subgraph_set.end())
+                    {
+                        outputs.insert(ep->get_net());
+                    }
+                }
+            }
+
+            return {outputs.begin(), outputs.end()};
+        }
+
+        // TODO delete function and just build boolean functions in caller
+        Result<std::unique_ptr<Netlist>> generate_resynth_netlist_for_functional_subgraph(const Netlist* nl,
+                                                                                          const std::vector<Gate*>& subgraph,
+                                                                                          const std::filesystem::path& genlib_path,
+                                                                                          GateLibrary* hgl_lib,
+                                                                                          const bool optimize_area)
+        {
+            const auto outputs = get_outputs_of_subgraph(subgraph);
+            std::unordered_map<std::string, BooleanFunction> bfs;
+
+            log_info("netlist_preprocessing", "building boolean function for {} output nets ...", outputs.size());
+
+            for (const auto o_net : outputs)
+            {
+                const auto o_net_var_name = BooleanFunctionNetDecorator(*o_net).get_boolean_variable_name();
+
+                const auto bf_res = SubgraphNetlistDecorator(*nl).get_subgraph_function(subgraph, o_net);
+                if (bf_res.is_error())
+                {
+                    return ERR_APPEND(bf_res.get_error(),
+                                      "unable to resynth subgraph: failed to generate boolean function for output net " + o_net->get_name() + " with ID " + std::to_string(o_net->get_id()));
+                }
+                auto bf = bf_res.get();
+
+                bfs.insert({o_net_var_name, bf});
+            }
+
+            return generate_resynth_netlist_for_boolean_functions(bfs, genlib_path, hgl_lib, optimize_area);
+        }
+
+        Result<std::unique_ptr<Netlist>> generate_resynth_netlist_for_gate(const Gate* g, GateLibrary* hgl_lib, const std::filesystem::path& genlib_path)
         {
             // build Boolean function for each output pin of the gate type
             std::unordered_map<std::string, BooleanFunction> output_pin_name_to_bf;
@@ -1271,7 +1380,7 @@ namespace hal
                 output_pin_name_to_bf.insert({pin->get_name(), bf});
             }
 
-            auto resynth_res = resynthesize_boolean_functions_with_abc(output_pin_name_to_bf, genlib_path, hgl_lib, true);
+            auto resynth_res = generate_resynth_netlist_for_boolean_functions(output_pin_name_to_bf, genlib_path, hgl_lib, true);
             if (resynth_res.is_error())
             {
                 return ERR_APPEND(resynth_res.get_error(),
@@ -1285,7 +1394,7 @@ namespace hal
 
     Result<std::monostate> NetlistPreprocessingPlugin::resynthesize_gate(Netlist* nl, Gate* g, GateLibrary* hgl_lib, const std::filesystem::path& genlib_path, const bool delete_gate)
     {
-        auto resynth_res = generate_resynth_netlist(g, hgl_lib, genlib_path);
+        auto resynth_res = generate_resynth_netlist_for_gate(g, hgl_lib, genlib_path);
         if (resynth_res.is_error())
         {
             return ERR_APPEND(resynth_res.get_error(), "unable to resynthesize gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": failed to generate reynthesized netlist");
@@ -1316,7 +1425,7 @@ namespace hal
         std::filesystem::create_directory(base_path);
 
         log_info("netlist_preprocessing", "Writing gate library to file {} ...", genlib_path.string());
-        const auto gl_save_res = gate_library_manager::save(genlib_path, target_gl);
+        const auto gl_save_res = gate_library_manager::save(genlib_path, target_gl, true);
         if (!gl_save_res)
         {
             return ERR("unable to resynthesize gates of type: failed to save gate library " + target_gl->get_name() + " to location " + genlib_path.string());
@@ -1358,7 +1467,7 @@ namespace hal
                 }
                 else
                 {
-                    auto resynth_res = generate_resynth_netlist(g, target_gl, genlib_path);
+                    auto resynth_res = generate_resynth_netlist_for_gate(g, target_gl, genlib_path);
                     if (resynth_res.is_error())
                     {
                         return ERR_APPEND(resynth_res.get_error(), "unable to resynthesize gates of type: failed to resynthesize gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
@@ -1388,6 +1497,104 @@ namespace hal
         }
 
         return OK(counter);
+    }
+
+    // TODO add a parameter that is limiting the size of the boolean functions and/or find a way to generate the boolean functions and verilog file from z3 expressions
+    Result<u32> NetlistPreprocessingPlugin::resynthesize_subgraph_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl)
+    {
+        const std::filesystem::path base_path   = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_abc";
+        const std::filesystem::path genlib_path = base_path / "new_gate_library.genlib";
+        std::filesystem::create_directory(base_path);
+
+        log_info("netlist_preprocessing", "Writing gate library to file {} ...", genlib_path.string());
+        const auto gl_save_res = gate_library_manager::save(genlib_path, target_gl, true);
+        if (!gl_save_res)
+        {
+            return ERR("unable to resynthesize gates of type: failed to save gate library " + target_gl->get_name() + " to location " + genlib_path.string());
+        }
+
+        std::vector<Gate*> subgraph;
+        for (const auto& gt : gate_types)
+        {
+            for (const auto& g : nl->get_gates([gt](const Gate* g) { return g->get_type() == gt; }))
+            {
+                subgraph.push_back(g);
+            }
+        }
+
+        log_info("netlist_preprocessing", "Gathered subgraph with {} gates", subgraph.size());
+
+        // auto resynth_res = resynthesize_functional_subgraph_with_abc(nl, subgraph, genlib_path, target_gl, true);
+        auto resynth_res = generate_resynth_netlist_for_gate_level_subgraph(nl, subgraph, genlib_path, target_gl, true);
+        if (resynth_res.is_error())
+        {
+            return ERR_APPEND(resynth_res.get_error(), "unable to resynthesize subgraphs of type: failed to resynthesize subgraph to netlist");
+        }
+        const auto resynth_nl = resynth_res.get();
+
+        std::unordered_map<Net*, Net*> global_io_mapping;
+
+        // This is the way to do it for the functional resynthesis
+        /*
+        for (const auto& g_i : resynth_nl->get_global_input_nets())
+        {
+            auto net_res = BooleanFunctionNetDecorator::get_net_from(nl, g_i->get_name());
+            if (net_res.is_error())
+            {
+                return ERR_APPEND(net_res.get_error(),
+                                  "unable to resynthesize subgraphs of type: failed to reconstruct net in destination netlist from global input " + g_i->get_name() + " in resynthesized netlist");
+            }
+            global_io_mapping.insert({g_i, net_res.get()});
+        }
+        for (const auto& g_o : resynth_nl->get_global_output_nets())
+        {
+            auto net_res = BooleanFunctionNetDecorator::get_net_from(nl, g_o->get_name());
+            if (net_res.is_error())
+            {
+                return ERR_APPEND(net_res.get_error(),
+                                  "unable to resynthesize subgraphs of type: failed to reconstruct net in destination netlist from global output " + g_o->get_name() + " in resynthesized netlist");
+            }
+            global_io_mapping.insert({g_o, net_res.get()});
+        }
+        */
+
+        std::unordered_map<std::string, Net*> name_to_net;
+        for (const auto n : nl->get_nets())
+        {
+            name_to_net.insert({n->get_name(), n});
+        }
+
+        for (const auto& g_i : resynth_nl->get_global_input_nets())
+        {
+            auto net_it = name_to_net.find(g_i->get_name());
+            if (net_it == name_to_net.end())
+            {
+                return ERR("unable to resynthesize subgraphs of type: failed to locate net in destination netlist from global input " + g_i->get_name() + " in resynthesized netlist");
+            }
+            global_io_mapping.insert({g_i, net_it->second});
+        }
+        for (const auto& g_o : resynth_nl->get_global_output_nets())
+        {
+            auto net_it = name_to_net.find(g_o->get_name());
+            if (net_it == name_to_net.end())
+            {
+                return ERR("unable to resynthesize subgraphs of type: failed to locate net in destination netlist from global output " + g_o->get_name() + " in resynthesized netlist");
+            }
+            global_io_mapping.insert({g_o, net_it->second});
+        }
+
+        auto replace_res = replace_subgraph_with_netlist(subgraph, global_io_mapping, resynth_nl.get(), nl, false);
+        if (replace_res.is_error())
+        {
+            return ERR_APPEND(replace_res.get_error(), "unable to resynthesize subgraphs of type: failed to replace subgrap with resynthesized netlist");
+        }
+
+        for (const auto g : subgraph)
+        {
+            nl->delete_gate(g);
+        }
+
+        return OK(subgraph.size());
     }
 
     namespace
@@ -1576,8 +1783,10 @@ namespace hal
         return OK(counter);
     }
 
-    namespace {
-        struct ComponentData {
+    namespace
+    {
+        struct ComponentData
+        {
             std::string name;
             std::string type;
             u64 x;
@@ -1591,7 +1800,7 @@ namespace hal
             u32 line_number = 0;
 
             std::string line;
-            bool escaped    = false;
+            bool escaped = false;
 
             std::vector<Token<std::string>> parsed_tokens;
             while (std::getline(ss, line))
@@ -1640,7 +1849,7 @@ namespace hal
 
             return TokenStream(parsed_tokens, {}, {});
         }
-    
+
         Result<std::unordered_map<std::string, ComponentData>> parse_tokens(TokenStream<std::string>& ts)
         {
             ts.consume_until("COMPONENTS");
@@ -1650,7 +1859,7 @@ namespace hal
 
             u32 component_count;
             if (const auto res = utils::wrapped_stoul(component_count_str); res.is_ok())
-            {   
+            {
                 component_count = res.get();
             }
             else
@@ -1676,7 +1885,7 @@ namespace hal
                 ts.consume("PLACED");
                 ts.consume("FIXED");
                 ts.consume("(");
-                
+
                 if (const auto res = utils::wrapped_stoull(ts.consume().string); res.is_ok())
                 {
                     new_data_entry.x = res.get();
@@ -1704,7 +1913,7 @@ namespace hal
 
             return OK(component_data);
         }
-    }
+    }    // namespace
 
     Result<std::monostate> NetlistPreprocessingPlugin::parse_def_file(Netlist* nl, const std::filesystem::path& def_file)
     {

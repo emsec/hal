@@ -130,6 +130,8 @@ namespace hal
 
         static Result<u32> resynthesize_gates_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl);
 
+        static Result<u32> resynthesize_subgraph_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl);
+
         /**
          * Tries to reconstruct a name and index for each flip flop that was part of a multibit wire in the verilog code.
          * This is NOT a general netlist reverse engineering algorithm and ONLY works on synthesized netlists with names annotated by the synthesizer.
