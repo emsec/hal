@@ -104,7 +104,7 @@ namespace hal
                     }
 
                     /* insert missing gates */
-                    for (auto gate : state->netlist_abstr.all_sequential_gates)
+                    for (auto gate : state->netlist_abstr.target_gates)
                     {
                         u32 gate_id = gate->get_id();
                         if (merged_gates.find(gate_id) == merged_gates.end())

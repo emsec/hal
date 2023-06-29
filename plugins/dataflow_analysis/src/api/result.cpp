@@ -30,7 +30,7 @@ namespace hal
             m_netlist = nl;
 
             const auto& na = grouping.netlist_abstr;
-            for (const auto* gate : na.all_sequential_gates)
+            for (const auto* gate : na.target_gates)
             {
                 auto gate_id = gate->get_id();
 

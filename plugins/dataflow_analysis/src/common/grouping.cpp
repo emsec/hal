@@ -19,7 +19,7 @@ namespace hal
             u32 new_id_counter = -1;
             bool group_is_known;
 
-            for (const auto& gate : na.all_sequential_gates)
+            for (const auto& gate : na.target_gates)
             {
                 group_is_known = false;
                 for (const auto& gates : groups)

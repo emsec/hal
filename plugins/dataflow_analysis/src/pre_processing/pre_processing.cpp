@@ -6,6 +6,7 @@
 #include "dataflow_analysis/utils/parallel_for_each.h"
 #include "dataflow_analysis/utils/progress_printer.h"
 #include "dataflow_analysis/utils/timing_utils.h"
+#include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
@@ -25,21 +26,20 @@ namespace hal
         {
             namespace
             {
-                void identify_all_sequential_gates(NetlistAbstraction& netlist_abstr)
+                void identify_all_target_gates(const dataflow::Configuration& config, NetlistAbstraction& netlist_abstr)
                 {
-                    // TODO currently only accepts FFs
-                    log_info("dataflow", "identifying sequential gates");
-                    netlist_abstr.all_sequential_gates = netlist_abstr.nl->get_gates([&](auto g) { return g->get_type()->has_property(GateTypeProperty::ff); });
-                    std::sort(netlist_abstr.all_sequential_gates.begin(), netlist_abstr.all_sequential_gates.end(), [](const Gate* g1, const Gate* g2) { return g1->get_id() < g2->get_id(); });
+                    log_info("dataflow", "identifying target gates");
+                    netlist_abstr.target_gates = netlist_abstr.nl->get_gates([config](auto g) { return config.gate_types.find(g->get_type()) != config.gate_types.end(); });
+                    std::sort(netlist_abstr.target_gates.begin(), netlist_abstr.target_gates.end(), [](const Gate* g1, const Gate* g2) { return g1->get_id() < g2->get_id(); });
                     log_info("dataflow", "  #gates: {}", netlist_abstr.nl->get_gates().size());
-                    log_info("dataflow", "  #sequential gates: {}", netlist_abstr.all_sequential_gates.size());
+                    log_info("dataflow", "  #target gates: {}", netlist_abstr.target_gates.size());
                 }
 
                 void identify_all_control_signals(const dataflow::Configuration& config, NetlistAbstraction& netlist_abstr)
                 {
                     auto begin_time = std::chrono::high_resolution_clock::now();
                     log_info("dataflow", "identifying control signals");
-                    for (auto sg : netlist_abstr.all_sequential_gates)
+                    for (auto sg : netlist_abstr.target_gates)
                     {
                         std::vector<u32> fingerprint;
                         auto id = sg->get_id();
@@ -62,31 +62,38 @@ namespace hal
                 }
 
                 /* get all successor/predecessor FFs of all FFs */
-                void identify_all_succesors_predecessors_ffs_of_all_ffs(NetlistAbstraction& netlist_abstr)
+                void identify_all_succesors_predecessors_ffs_of_all_ffs(const dataflow::Configuration& config, NetlistAbstraction& netlist_abstr)
                 {
                     log_info("dataflow", "identifying successors and predecessors of sequential gates...");
                     measure_block_time("identifying successors and predecessors of sequential gates") ProgressPrinter progress_bar;
                     float cnt = 0;
 
-                    std::unordered_map<u32, std::vector<Gate*>> cache;
+                    NetlistTraversalDecorator nl_trav_dec(*netlist_abstr.nl);
+                    std::unordered_map<const Net*, std::unordered_set<Gate*>> cache;
 
-                    for (const auto& single_ff : netlist_abstr.all_sequential_gates)
+                    for (const auto& gate : netlist_abstr.target_gates)
                     {
                         cnt++;
-                        progress_bar.print_progress(cnt / netlist_abstr.all_sequential_gates.size());
+                        progress_bar.print_progress(cnt / netlist_abstr.target_gates.size());
                         // create sets even if there are no successors
-                        if (netlist_abstr.gate_to_successors.find(single_ff->get_id()) == netlist_abstr.gate_to_successors.end())
+                        if (netlist_abstr.gate_to_successors.find(gate->get_id()) == netlist_abstr.gate_to_successors.end())
                         {
-                            netlist_abstr.gate_to_successors[single_ff->get_id()] = std::unordered_set<u32>();
+                            netlist_abstr.gate_to_successors[gate->get_id()] = std::unordered_set<u32>();
                         }
-                        if (netlist_abstr.gate_to_predecessors.find(single_ff->get_id()) == netlist_abstr.gate_to_predecessors.end())
+                        if (netlist_abstr.gate_to_predecessors.find(gate->get_id()) == netlist_abstr.gate_to_predecessors.end())
                         {
-                            netlist_abstr.gate_to_predecessors[single_ff->get_id()] = std::unordered_set<u32>();
+                            netlist_abstr.gate_to_predecessors[gate->get_id()] = std::unordered_set<u32>();
                         }
-                        for (const auto& suc : netlist_utils::get_next_sequential_gates(single_ff, true, cache))
+
+                        const auto next_target_gates = nl_trav_dec
+                                                           .get_next_gates(
+                                                               gate, true, [config](const Gate* g) { return config.gate_types.find(g->get_type()) != config.gate_types.end(); }, cache)
+                                                           .get();
+
+                        for (const auto& suc : next_target_gates)
                         {
-                            netlist_abstr.gate_to_successors[single_ff->get_id()].insert(suc->get_id());
-                            netlist_abstr.gate_to_predecessors[suc->get_id()].insert(single_ff->get_id());
+                            netlist_abstr.gate_to_successors[gate->get_id()].insert(suc->get_id());
+                            netlist_abstr.gate_to_predecessors[suc->get_id()].insert(gate->get_id());
                         }
                     }
                     progress_bar.clear();
@@ -99,10 +106,10 @@ namespace hal
                 measure_block_time("pre-processing");
                 NetlistAbstraction netlist_abstr(config.netlist);
                 //remove_buffers(netlist_abstr);
-                identify_all_sequential_gates(netlist_abstr);
+                identify_all_target_gates(config, netlist_abstr);
                 //merge_duplicated_logic_cones(netlist_abstr);
                 identify_all_control_signals(config, netlist_abstr);
-                identify_all_succesors_predecessors_ffs_of_all_ffs(netlist_abstr);
+                identify_all_succesors_predecessors_ffs_of_all_ffs(config, netlist_abstr);
 
                 if (config.enable_register_stages)
                 {

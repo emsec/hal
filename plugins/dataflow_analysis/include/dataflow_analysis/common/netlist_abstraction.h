@@ -53,8 +53,8 @@ namespace hal
             // utils
             bool yosys;
 
-            // all ffs
-            std::vector<Gate*> all_sequential_gates;
+            // all target gates to group
+            std::vector<Gate*> target_gates;
 
             /* pre_processed_data */
             std::unordered_map<u32, std::vector<u32>> gate_to_fingerprint;
