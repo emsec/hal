@@ -4,7 +4,6 @@
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
-#include "hal_core/netlist/netlist.h"
 
 namespace hal
 {
