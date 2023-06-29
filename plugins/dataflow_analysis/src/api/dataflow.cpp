@@ -9,11 +9,21 @@ namespace hal
 {
     namespace dataflow
     {
-        hal::Result<dataflow::Result> analyze(Netlist* nl, const Configuration& config)
+        hal::Result<dataflow::Result> analyze(const Configuration& config)
         {
-            if (nl == nullptr)
+            if (config.netlist == nullptr)
             {
                 return ERR("netlist is a nullptr");
+            }
+
+            if (config.gate_types.empty())
+            {
+                return ERR("no gate types specified");
+            }
+
+            if (config.control_pin_types.empty())
+            {
+                return ERR("no control pin types specified");
             }
 
             // set up dataflow analysis
@@ -36,7 +46,7 @@ namespace hal
                 log_info("dataflow", "will prioritize sizes {}", utils::join(", ", config.expected_sizes));
             }
 
-            auto netlist_abstr    = dataflow::pre_processing::run(nl, config.enable_register_stages);
+            auto netlist_abstr    = dataflow::pre_processing::run(config);
             auto initial_grouping = std::make_shared<dataflow::Grouping>(netlist_abstr, config.known_groups);
             std::shared_ptr<dataflow::Grouping> final_grouping;
 
@@ -66,7 +76,7 @@ namespace hal
 
             log_info("dataflow", "dataflow processing finished in {:3.2f}s", total_time);
 
-            return OK(dataflow::Result(nl, *final_grouping));
+            return OK(dataflow::Result(config.netlist, *final_grouping));
         }
     }    // namespace dataflow
 }    // namespace hal

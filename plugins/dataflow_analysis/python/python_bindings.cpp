@@ -27,7 +27,18 @@ namespace hal
             .def("get_name", &plugin_dataflow::get_name, R"(
                 Get the name of the plugin.
 
-                :returns: Plugin name.
+                :returns: The name of the plugin.
+                :rtype: str
+                )")
+            .def_property_readonly("description", &plugin_dataflow::get_description, R"(
+                The description of the plugin.
+
+                :type: str
+                )")
+            .def("get_description", &plugin_dataflow::get_description, R"(
+                Get the description of the plugin.
+
+                :returns: The description of the plugin.
                 :rtype: str
                 )")
             .def_property_readonly("version", &plugin_dataflow::get_version, R"(
@@ -38,7 +49,7 @@ namespace hal
             .def("get_version", &plugin_dataflow::get_version, R"(
                 Get the version of the plugin.
 
-                :returns: Plugin version.
+                :returns: The version of the plugin.
                 :rtype: str
                 )")
             .def("execute",
@@ -71,8 +82,10 @@ namespace hal
             Holds the configuration of a dataflow analysis run.
         )");
 
-        py_dataflow_configuration.def(py::init<>(), R"(
-            Constructs a new dataflow analysis configuration.
+        py_dataflow_configuration.def(py::init<Netlist*>(), py::arg("nl"), R"(
+            Constructs a new dataflow analysis configuration for the given netlist.
+
+            :param hal_py.Netlist nl: The netlist.
         )");
 
         py_dataflow_configuration.def_readwrite("min_group_size", &dataflow::Configuration::min_group_size, R"(
@@ -93,8 +106,26 @@ namespace hal
             :type: list[list[int]]
         )");
 
+        py_dataflow_configuration.def_readwrite("gate_types", &dataflow::Configuration::gate_types, R"(
+            The gate types to be grouped by dataflow analysis. Defaults to an empty set.
+
+            :type: set[hal_py.GateType]
+        )");
+
+        py_dataflow_configuration.def_readwrite("control_pin_types", &dataflow::Configuration::control_pin_types, R"(
+            The pin types of the pins to be considered control pins. Defaults to an empty set.
+
+            :type: set[hal_py.PinType]
+        )");
+
         py_dataflow_configuration.def_readwrite("enable_register_stages", &dataflow::Configuration::enable_register_stages, R"(
             Enable register stage identification as part of dataflow analysis. Defaults to ``False``.
+
+            :type: bool
+        )");
+
+        py_dataflow_configuration.def_readwrite("enforce_type_consistency", &dataflow::Configuration::enforce_type_consistency, R"(
+            Enforce gate type consistency inside of a group. Defaults to ``False``.
 
             :type: bool
         )");
@@ -147,6 +178,37 @@ namespace hal
             :rtype: dataflow.Dataflow.Configuration
         )");
 
+        py_dataflow_configuration.def(
+            "with_gate_types", py::overload_cast<const std::set<const GateType*>&, bool>(&dataflow::Configuration::with_gate_types), py::arg("types"), py::arg("overwrite") = false, R"(
+            Add the gate types to the set of gate types to be grouped by dataflow analysis.
+            Overwrite the existing set of gate types be setting the optional ``overwrite`` flag to ``True``.
+
+            :param set[hal_py.GateType] types: A set of gate types.
+            :param bool overwrite: Set ``True`` to overwrite existing set of gate types, ``False`` otherwise. Defaults to ``False``.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
+        py_dataflow_configuration.def(
+            "with_gate_types", py::overload_cast<const std::set<GateTypeProperty>&, bool>(&dataflow::Configuration::with_gate_types), py::arg("type_properties"), py::arg("overwrite") = false, R"(
+            Add the gate types featuring the specified properties to the set of gate types to be grouped by dataflow analysis.
+            Overwrite the existing set of gate types be setting the optional ``overwrite`` flag to ``True``.
+
+            :param set[hal_py.GateTypeProperty] type_properties: A set of gate type properties.
+            :param bool overwrite: Set ``True`` to overwrite existing set of gate types, ``False`` otherwise. Defaults to ``False``.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
+        py_dataflow_configuration.def("with_control_pin_types", &dataflow::Configuration::with_control_pin_types, py::arg("types"), py::arg("overwrite") = false, R"(
+            Set the pin types of the pins to be considered control pins by dataflow analysis.
+
+            :param set[hal_py.PinType] types: A set of pin types.
+            :param bool enable: Set ``True`` to overwrite existing set of pin types, ``False`` otherwise. Defaults to ``False``.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
         py_dataflow_configuration.def("with_register_stage_identification", &dataflow::Configuration::with_register_stage_identification, py::arg("enable") = true, R"(
             Enable register stage identification as part of dataflow analysis.
 
@@ -165,8 +227,8 @@ namespace hal
 
         py_dataflow.def(
             "analyze",
-            [](Netlist* nl, const dataflow::Configuration& config = dataflow::Configuration()) -> std::optional<dataflow::Result> {
-                auto res = dataflow::analyze(nl, config);
+            [](const dataflow::Configuration& config) -> std::optional<dataflow::Result> {
+                auto res = dataflow::analyze(config);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -177,12 +239,10 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("nl"),
-            py::arg("config") = dataflow::Configuration(),
+            py::arg("config"),
             R"(
-                Analyze the datapath to identify word-level registers in the given netlist.
+                Analyze the datapath to identify word-level registers in the netlist specified in the configuration.
 
-                :param hal_py.Netlist nl: The netlist.
                 :param dataflow.Dataflow.Configuration config: The dataflow analysis configuration.
                 :returns: The dataflow analysis result on success, ``None`` otherwise.
                 :rtype: dataflow.Dataflow.Result or None

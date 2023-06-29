@@ -53,7 +53,7 @@ namespace hal
 
                         // start passes
 
-                        group_by_ctrl_sigs = m_all_passes.emplace_back(std::bind(&group_by_control_signals::process, config, _1, true, true, true, true));
+                        group_by_ctrl_sigs = m_all_passes.emplace_back(std::bind(&group_by_control_signals::process, config, _1));
 
                         group_by_output_size = m_all_passes.emplace_back(std::bind(&group_by_input_output_size::process, config, _1, false));
                         group_by_input_size  = m_all_passes.emplace_back(std::bind(&group_by_input_output_size::process, config, _1, true));

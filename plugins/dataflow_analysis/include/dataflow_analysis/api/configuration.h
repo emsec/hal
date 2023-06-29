@@ -26,7 +26,10 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/netlist/gate_library/enums/gate_type_property.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 
+#include <set>
 #include <vector>
 
 namespace hal
@@ -34,6 +37,8 @@ namespace hal
     class Gate;
     class Module;
     class Grouping;
+    class Netlist;
+    class GateType;
 
     namespace dataflow
     {
@@ -42,6 +47,18 @@ namespace hal
          */
         struct Configuration
         {
+            /**
+             * Constructs a new dataflow analysis configuration for the given netlist.
+             * 
+             * @param[in] nl - The netlist.
+             */
+            Configuration(Netlist* nl);
+
+            /**
+             * The netlist to be analyzed.
+             */
+            Netlist* netlist;
+
             /**
              * Minimum size of a group. Smaller groups will be penalized during analysis. Defaults to 8.
              */
@@ -58,12 +75,22 @@ namespace hal
             std::vector<std::vector<u32>> known_groups = {};
 
             /**
+             * The gate types to be grouped by dataflow analysis. Defaults to an empty set.
+             */
+            std::set<const GateType*> gate_types = {};
+
+            /**
+             * The pin types of the pins to be considered control pins. Defaults to an empty set.
+             */
+            std::set<PinType> control_pin_types = {};
+
+            /**
              * Enable register stage identification as part of dataflow analysis. Defaults to `false`.
              */
             bool enable_register_stages = false;
 
             /**
-             * Enforce type consistency inside of a group. Defaults to `false`.
+             * Enforce gate type consistency inside of a group. Defaults to `false`.
              */
             bool enforce_type_consistency = false;
 
@@ -114,6 +141,35 @@ namespace hal
              * @returns The updated dataflow analysis configuration.
              */
             Configuration& with_known_groups(const std::vector<std::vector<u32>>& groups);
+
+            /**
+             * Add the gate types to the set of gate types to be grouped by dataflow analysis.
+             * Overwrite the existing set of gate types be setting the optional `overwrite` flag to `true`.
+             * 
+             * @param[in] types - A set of gate types.
+             * @param[in] overwrite - Set `true` to overwrite existing set of gate types, `false` otherwise. Defaults to `false`.
+             * @returns The updated dataflow analysis configuration.
+             */
+            Configuration& with_gate_types(const std::set<const GateType*>& types, bool overwrite = false);
+
+            /**
+             * Add the gate types featuring the specified properties to the set of gate types to be grouped by dataflow analysis.
+             * Overwrite the existing set of gate types be setting the optional `overwrite` flag to `true`.
+             * 
+             * @param[in] type_properties - A set of gate type properties.
+             * @param[in] overwrite - Set `true` to overwrite existing set of gate types, `false` otherwise. Defaults to `false`.
+             * @returns The updated dataflow analysis configuration.
+             */
+            Configuration& with_gate_types(const std::set<GateTypeProperty>& type_properties, bool overwrite = false);
+
+            /**
+             * Set the pin types of the pins to be considered control pins by dataflow analysis.
+             * 
+             * @param[in] types - A set of pin types.
+             * @param[in] overwrite - Set `true` to overwrite existing set of pin types, `false` otherwise. Defaults to `false`.
+             * @returns The updated dataflow analysis configuration.
+             */
+            Configuration& with_control_pin_types(const std::set<PinType>& types, bool overwrite = false);
 
             /**
              * Enable register stage identification as part of dataflow analysis.
