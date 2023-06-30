@@ -16,7 +16,7 @@
 
 namespace hal
 {
-    SelectionTreeView::SelectionTreeView(QWidget* parent) : QTreeView(parent)
+    SelectionTreeView::SelectionTreeView(QWidget* parent, bool isGrouping) : QTreeView(parent)
     {
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         mSelectionTreeModel      = new SelectionTreeModel(this);
@@ -25,6 +25,8 @@ namespace hal
         setModel(mSelectionTreeProxyModel);
         setDefaultColumnWidth();
         header()->setDefaultAlignment(Qt::AlignHCenter | Qt::AlignCenter);
+
+        mIsGrouping = isGrouping;
 
         setContextMenuPolicy(Qt::CustomContextMenu);
         connect(this, &QTreeView::customContextMenuRequested, this, &SelectionTreeView::handleCustomContextMenuRequested);
@@ -97,6 +99,8 @@ namespace hal
                         });
 
                         menu.addAction("Isolate in new view", [this, item]() { Q_EMIT handleIsolationViewAction(item); });
+                        if (mIsGrouping)
+                            menu.addAction("Add to Selection", [this, item]() { Q_EMIT handleAddToSelection(item); });
 
                         break;
                     case SelectionTreeItem::TreeItemType::GateItem:
@@ -106,6 +110,8 @@ namespace hal
                         });
 
                         menu.addAction("Isolate in new view", [this, item]() { Q_EMIT handleIsolationViewAction(item); });
+                        if (mIsGrouping)
+                            menu.addAction("Add to Selection", [this, item]() { Q_EMIT handleAddToSelection(item); });
 
                         break;
                     case SelectionTreeItem::TreeItemType::NetItem:
@@ -113,6 +119,8 @@ namespace hal
                         menu.addAction(QIcon(":/icons/python"), "Extract Net as python code (copy to clipboard)", [item]() {
                             QApplication::clipboard()->setText("netlist.get_net_by_id(" + QString::number(item->id()) + ")");
                         });
+                        if (mIsGrouping)
+                            menu.addAction("Add to Selection", [this, item]() { Q_EMIT handleAddToSelection(item); });
 
                         break;
                     default:    // make compiler happy and handle irrelevant MaxItem, NullItem
@@ -143,6 +151,43 @@ namespace hal
         }
         isolateInNewViewAction(nd);
     }
+
+    void SelectionTreeView::handleAddToSelection(const SelectionTreeItem* sti)
+    {
+        // Abhängig vom Typ des TreeItems fügen wir unterschiedliche Elemente zur Auswahl hinzu.
+        switch (sti->itemType())
+        {
+            case SelectionTreeItem::ModuleItem:
+            {
+                // Downcast auf Modul und hinzufügen zur Auswahl.
+                const SelectionTreeItemModule* moduleItem = static_cast<const SelectionTreeItemModule*>(sti);
+                gSelectionRelay->addModule(moduleItem->id());
+                break;
+            }
+
+            case SelectionTreeItem::GateItem:
+            {
+                // Downcast auf Tor und hinzufügen zur Auswahl.
+                const SelectionTreeItemGate* gateItem = static_cast<const SelectionTreeItemGate*>(sti);
+                gSelectionRelay->addGate(gateItem->id());
+                break;
+            }
+
+            case SelectionTreeItem::NetItem:
+            {
+                // Downcast auf Netz und hinzufügen zur Auswahl.
+                const SelectionTreeItemNet* netItem = static_cast<const SelectionTreeItemNet*>(sti);
+                gSelectionRelay->addNet(netItem->id());
+                break;
+            }
+
+            default:
+                // Ungültiger oder unbekannter Auswahltyp.
+                return;
+        }
+        gSelectionRelay->relaySelectionChanged(this);
+    }
+
 
     void SelectionTreeView::isolateInNewViewAction(Node nd)
     {

@@ -495,7 +495,7 @@ namespace hal
         colorTriangle->show();
 
         // Replace InputDialog with SelectionTreeView
-        SelectionTreeView* selectionTreeView = new SelectionTreeView(&dialog);
+        SelectionTreeView* selectionTreeView = new SelectionTreeView(&dialog, true);
         selectionTreeView->populate(true, grpId);
 
         QPushButton* closeButton = new QPushButton("Close", &dialog);

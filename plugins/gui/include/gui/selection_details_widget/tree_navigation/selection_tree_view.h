@@ -104,7 +104,7 @@ namespace hal
          *
          * @param parent - The widget's parent.
          */
-        SelectionTreeView(QWidget* parent = nullptr);
+        SelectionTreeView(QWidget* parent = nullptr, bool isGrouping = false);
 
         /**
          * Sets the default width of each column.
@@ -143,6 +143,7 @@ namespace hal
     private Q_SLOTS:
         void handleCustomContextMenuRequested(const QPoint& point);
         void handleIsolationViewAction(const SelectionTreeItem* sti);
+        void handleAddToSelection(const SelectionTreeItem* sti);
 
         /**
          * Emits either the focusGateClicked, focusNetClicked or focusModuleClicked signal based on the
@@ -155,5 +156,7 @@ namespace hal
     private:
         SelectionTreeModel* mSelectionTreeModel;
         SelectionTreeProxyModel* mSelectionTreeProxyModel;
+
+        bool mIsGrouping;
     };
 }    // namespace hal
