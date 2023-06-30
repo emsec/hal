@@ -30,6 +30,7 @@
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
 
 #include <set>
+#include <unordered_set>
 #include <vector>
 
 namespace hal
@@ -137,10 +138,19 @@ namespace hal
             /**
              * Set already identified groups of sequential gates as a vector of groups with each group being a vector of gate IDs.
              * 
-             * @param[in] groups - A vector of group.
+             * @param[in] groups - A vector of groups.
              * @returns The updated dataflow analysis configuration.
              */
             Configuration& with_known_groups(const std::vector<std::vector<u32>>& groups);
+
+            /**
+             * Set already identified groups of sequential gates as a map from group IDs to groups with each group being a set of gates.
+             * The group IDs will be ignored during analysis and the same group may be assigned a new ID.
+             * 
+             * @param[in] groups - A map from group IDs to groups.
+             * @returns The updated dataflow analysis configuration.
+             */
+            Configuration& with_known_groups(const std::unordered_map<u32, std::unordered_set<Gate*>>& groups);
 
             /**
              * Add the gate types to the set of gate types to be grouped by dataflow analysis.

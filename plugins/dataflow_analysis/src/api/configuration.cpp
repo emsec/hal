@@ -67,6 +67,18 @@ namespace hal
             return *this;
         }
 
+        Configuration& Configuration::with_known_groups(const std::unordered_map<u32, std::unordered_set<Gate*>>& groups)
+        {
+            for (const auto& [_, gates] : groups)
+            {
+                std::vector<u32> group;
+                std::transform(gates.cbegin(), gates.cend(), std::back_inserter(group), [](const Gate* g) { return g->get_id(); });
+                this->known_groups.push_back(group);
+            }
+
+            return *this;
+        }
+
         Configuration& Configuration::with_gate_types(const std::set<const GateType*>& types, bool overwrite)
         {
             if (overwrite)

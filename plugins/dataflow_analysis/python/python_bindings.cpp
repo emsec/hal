@@ -179,6 +179,16 @@ namespace hal
         )");
 
         py_dataflow_configuration.def(
+            "with_known_groups", py::overload_cast<const std::unordered_map<u32, std::unordered_set<Gate*>>&>(&dataflow::Configuration::with_known_groups), py::arg("groups"), R"(
+            Set already identified groups of sequential gates as a map from group IDs to groups with each group being a set of gates.
+            The group IDs will be ignored during analysis and the same group may be assigned a new ID.
+
+            :param dict[int,set[hal_py.Gate]] groups: A map from group IDs to groups.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
+        py_dataflow_configuration.def(
             "with_gate_types", py::overload_cast<const std::set<const GateType*>&, bool>(&dataflow::Configuration::with_gate_types), py::arg("types"), py::arg("overwrite") = false, R"(
             Add the gate types to the set of gate types to be grouped by dataflow analysis.
             Overwrite the existing set of gate types be setting the optional ``overwrite`` flag to ``True``.
