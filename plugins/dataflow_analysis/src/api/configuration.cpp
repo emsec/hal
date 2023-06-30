@@ -26,43 +26,132 @@ namespace hal
             return *this;
         }
 
-        Configuration& Configuration::with_known_groups(const std::vector<const Module*>& groups, bool overwrite)
+        Configuration& Configuration::with_known_structures(const std::vector<Module*>& structures, bool overwrite)
         {
             if (overwrite)
             {
-                this->known_gate_groups.clear();
-                this->known_module_groups.clear();
+                this->known_net_groups.clear();
             }
 
-            for (const auto* mod : groups)
+            for (const auto* mod : structures)
             {
-                this->known_module_groups.push_back(std::make_pair(mod, std::vector<const PinGroup<ModulePin>*>({})));
+                for (const auto* pin_group : mod->get_pin_groups())
+                {
+                    std::vector<Net*> nets;
+                    for (const auto* pin : pin_group->get_pins())
+                    {
+                        nets.push_back(pin->get_net());
+                    }
+                    this->known_net_groups.push_back(nets);
+                }
             }
 
             return *this;
         }
 
-        Configuration& Configuration::with_known_groups(const std::vector<std::pair<const Module*, std::vector<const PinGroup<ModulePin>*>>>& groups, bool overwrite)
+        Configuration& Configuration::with_known_structures(const std::vector<std::pair<Module*, std::vector<PinGroup<ModulePin>*>>>& structures, bool overwrite)
         {
             if (overwrite)
             {
-                this->known_gate_groups.clear();
-                this->known_module_groups = groups;
+                this->known_net_groups.clear();
             }
-            else
+
+            for (const auto& [_, pin_groups] : structures)
             {
-                this->known_module_groups.insert(this->known_module_groups.end(), groups.begin(), groups.end());
+                for (const auto* pin_group : pin_groups)
+                {
+                    std::vector<Net*> nets;
+                    for (const auto* pin : pin_group->get_pins())
+                    {
+                        nets.push_back(pin->get_net());
+                    }
+                    this->known_net_groups.push_back(nets);
+                }
             }
 
             return *this;
         }
 
-        Configuration& Configuration::with_known_groups(const std::vector<std::vector<const Gate*>>& groups, bool overwrite)
+        Configuration& Configuration::with_known_structures(const std::vector<Gate*>& structures, bool overwrite)
+        {
+            if (overwrite)
+            {
+                this->known_net_groups.clear();
+            }
+
+            for (const auto* gate : structures)
+            {
+                for (const auto* pin_group : gate->get_type()->get_pin_groups())
+                {
+                    std::vector<Net*> nets;
+                    for (const auto* pin : pin_group->get_pins())
+                    {
+                        if (pin->get_direction() == PinDirection::input)
+                        {
+                            nets.push_back(gate->get_fan_in_net(pin));
+                        }
+                        else if (pin->get_direction() == PinDirection::output)
+                        {
+                            nets.push_back(gate->get_fan_out_net(pin));
+                        }
+                    }
+                    this->known_net_groups.push_back(nets);
+                }
+            }
+
+            return *this;
+        }
+
+        Configuration& Configuration::with_known_structures(const std::vector<std::pair<Gate*, std::vector<PinGroup<GatePin>*>>>& structures, bool overwrite)
+        {
+            if (overwrite)
+            {
+                this->known_net_groups.clear();
+            }
+
+            for (const auto& [gate, pin_groups] : structures)
+            {
+                for (const auto* pin_group : pin_groups)
+                {
+                    std::vector<Net*> nets;
+                    for (const auto* pin : pin_group->get_pins())
+                    {
+                        if (pin->get_direction() == PinDirection::input)
+                        {
+                            nets.push_back(gate->get_fan_in_net(pin));
+                        }
+                        else if (pin->get_direction() == PinDirection::output)
+                        {
+                            nets.push_back(gate->get_fan_out_net(pin));
+                        }
+                    }
+                    this->known_net_groups.push_back(nets);
+                }
+            }
+
+            return *this;
+        }
+
+        Configuration& Configuration::with_known_groups(const std::vector<Module*>& groups, bool overwrite)
+        {
+            if (overwrite)
+            {
+                this->known_gate_groups.clear();
+            }
+
+            for (auto* mod : groups)
+            {
+                this->known_gate_groups.push_back(mod->get_gates());
+            }
+
+            return *this;
+        }
+
+        Configuration& Configuration::with_known_groups(const std::vector<std::vector<Gate*>>& groups, bool overwrite)
         {
             if (overwrite)
             {
                 this->known_gate_groups = groups;
-                this->known_module_groups.clear();
             }
             else
             {
@@ -77,12 +166,11 @@ namespace hal
             if (overwrite)
             {
                 this->known_gate_groups.clear();
-                this->known_module_groups.clear();
             }
 
             for (const auto& gate_ids : groups)
             {
-                std::vector<const Gate*> gates;
+                std::vector<Gate*> gates;
                 std::transform(gate_ids.cbegin(), gate_ids.cend(), std::back_inserter(gates), [this](u32 gid) { return this->netlist->get_gate_by_id(gid); });
                 this->known_gate_groups.push_back(gates);
             }
@@ -95,12 +183,11 @@ namespace hal
             if (overwrite)
             {
                 this->known_gate_groups.clear();
-                this->known_module_groups.clear();
             }
 
             for (const auto& [_, gates] : groups)
             {
-                std::vector<const Gate*> group(gates.cbegin(), gates.cend());
+                std::vector<Gate*> group(gates.cbegin(), gates.cend());
                 this->known_gate_groups.push_back(group);
             }
 

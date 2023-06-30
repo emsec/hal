@@ -101,15 +101,15 @@ namespace hal
         )");
 
         py_dataflow_configuration.def_readwrite("known_gate_groups", &dataflow::Configuration::known_gate_groups, R"(
-            Groups of gates that have already been identified as word-level structures beforehand. Defaults to an empty list.
+            Groups of gates that have already been identified as word-level groups beforehand. All gates of a group must be of one of the target gate types. Defaults to an empty list.
 
-            :type: list[list[int]]
+            :type: list[list[hal_py.Gate]]
         )");
 
-        py_dataflow_configuration.def_readwrite("known_module_groups", &dataflow::Configuration::known_module_groups, R"(
-            Groups of modules that have already been identified as word-level structures beforehand. For each module, the inputs and outputs that form a word can be narrowed down by providing the respective pin groups. If no pin groups are given, all pin groups of the module bigger than `min_group_size` will be considered. Defaults to an empty list.
+        py_dataflow_configuration.def_readwrite("known_net_groups", &dataflow::Configuration::known_net_groups, R"(
+            Groups of nets that have been identified as word-level datapathes beforehand. Defaults to an empty list.
 
-            :type: list[list[int]]
+            :type: list[list[hal_py.Net]]
         )");
 
         py_dataflow_configuration.def_readwrite("gate_types", &dataflow::Configuration::gate_types, R"(
@@ -153,51 +153,102 @@ namespace hal
         )");
 
         py_dataflow_configuration.def(
-            "with_known_groups", py::overload_cast<const std::vector<const Module*>&, bool>(&dataflow::Configuration::with_known_groups), py::arg("groups"), py::arg("overwrite") = false, R"(
-            Add modules to the set of previously identified word-level structures to guide datapath analysis.
-            Overwrite the existing set of word-level structures by setting the optional ``overwrite`` flag to ``true``.
+            "with_known_structures", py::overload_cast<const std::vector<Module*>&, bool>(&dataflow::Configuration::with_known_structures), py::arg("structures"), py::arg("overwrite") = false, R"(
+            Add modules to the set of previously identified word-level structures.
+            The gates contained in the modules do not have to be of the target gate types.
+            The input and output pin groups of these modules will be used to guide datapath analysis.
+            Only pin groups larger than ``min_group_size`` will be considered.
+
+            :param list[hal_py.Module] structures: A list of modules.
+            :param bool overwrite: Set ``True`` to overwrite the existing known word-level structures, ``False`` otherwise. Defaults to ``False``.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
+        py_dataflow_configuration.def("with_known_structures",
+                                      py::overload_cast<const std::vector<std::pair<Module*, std::vector<PinGroup<ModulePin>*>>>&, bool>(&dataflow::Configuration::with_known_structures),
+                                      py::arg("structures"),
+                                      py::arg("overwrite") = false,
+                                      R"(
+            Add modules to the set of previously identified word-level structures.
+            The gates contained in the modules do not have to be of the target gate types.
+            The input and output pin groups of these modules will be used to guide datapath analysis.
+            For each module, the input and output pin groups to be considered for analysis must be specified. 
+            An empty pin group vector results in all pin groups of the module being considered.
+            Only pin groups larger than ``min_group_size`` will be considered.
+
+            :param list[tuple(hal_py.Module,list[hal_py.ModulePinGroup])] structures: A list of modules, each of them with a list of module pin groups.
+            :param bool overwrite: Set ``True`` to overwrite the existing known word-level structures, ``False`` otherwise. Defaults to ``False``.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
+        py_dataflow_configuration.def(
+            "with_known_structures", py::overload_cast<const std::vector<Gate*>&, bool>(&dataflow::Configuration::with_known_structures), py::arg("structures"), py::arg("overwrite") = false, R"(
+            Add (typically large) gates to the set of previously identified word-level structures.
+            The gates do not have to be of the target gate types.
+            The input and output pin groups of these gates will be used to guide datapath analysis.
+            Only pin groups larger than ``min_group_size`` will be considered.
+
+            :param list[hal_py.Gate] structures: A list of gates.
+            :param bool overwrite: Set ``True`` to overwrite the existing known word-level structures, ``False`` otherwise. Defaults to ``False``.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
+        py_dataflow_configuration.def("with_known_structures",
+                                      py::overload_cast<const std::vector<std::pair<Gate*, std::vector<PinGroup<GatePin>*>>>&, bool>(&dataflow::Configuration::with_known_structures),
+                                      py::arg("structures"),
+                                      py::arg("overwrite") = false,
+                                      R"(
+            Add (typically large) gates to the set of previously identified word-level structures.
+            The gates do not have to be of the target gate types.
+            The input and output pin groups of these gates will be used to guide datapath analysis.
+            For each gate, the input and output pin groups to be considered for analysis must be specified. 
+            An empty pin group vector results in all pin groups of the gate being considered.
+            Only pin groups larger than ``min_group_size`` will be considered.
+
+            :param list[tuple(hal_py.Gate,list[hal_py.GatePinGroup])] structures: A list of gates, each of them with a list of gate pin groups.
+            :param bool overwrite: Set ``True`` to overwrite the existing known word-level structures, ``False`` otherwise. Defaults to ``False``.
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
+        py_dataflow_configuration.def(
+            "with_known_groups", py::overload_cast<const std::vector<Module*>&, bool>(&dataflow::Configuration::with_known_groups), py::arg("groups"), py::arg("overwrite") = false, R"(
+            Add modules to the set of previously identified word-level groups.
+            These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored.
+            The groups will be used to guide dataflow analysis, but will remain unaltered in the process.
 
             :param list[hal_py.Module] groups: A list of modules.
-            :param bool overwrite: Set `true` to overwrite existing set of identified word-level structures, ``false`` otherwise. Defaults to ``false``.
+            :param bool overwrite: Set ``True`` to overwrite the existing previously identified word-level groups, ``False`` otherwise. Defaults to ``False``.
             :returns: The updated dataflow analysis configuration.
             :rtype: dataflow.Dataflow.Configuration
         )");
 
         py_dataflow_configuration.def("with_known_groups",
-                                      py::overload_cast<const std::vector<std::pair<const Module*, std::vector<const PinGroup<ModulePin>*>>>&, bool>(&dataflow::Configuration::with_known_groups),
+                                      py::overload_cast<const std::vector<std::vector<Gate*>>&, bool>(&dataflow::Configuration::with_known_groups),
                                       py::arg("groups"),
                                       py::arg("overwrite") = false,
                                       R"(
-            Add modules to the set of previously identified word-level structures to guide datapath analysis. For each module, the word-level pin groups to be considered for analysis must be specified. An empty pin group vector results in all pin groups of the module bigger than ``min_group_size`` being considered.
-            Overwrite the existing set of word-level structures by setting the optional ``overwrite`` flag to ``true``.
+            Add lists of gates to the set of previously identified word-level groups.
+            These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored.
+            The groups will be used to guide dataflow analysis, but will remain unaltered in the process.
 
-            :param list[hal_py.Module] groups: A list of modules, each of them with a vector of module pin groups.
-            :param bool overwrite: Set `true` to overwrite existing set of identified word-level structures, ``false`` otherwise. Defaults to ``false``.
-            :returns: The updated dataflow analysis configuration.
-            :rtype: dataflow.Dataflow.Configuration
-        )");
-
-        py_dataflow_configuration.def("with_known_groups",
-                                      py::overload_cast<const std::vector<std::vector<const Gate*>>&, bool>(&dataflow::Configuration::with_known_groups),
-                                      py::arg("groups"),
-                                      py::arg("overwrite") = false,
-                                      R"(
-            Add lists of gates to the set of previously identified word-level structures to guide datapath analysis.
-            Overwrite the existing set of word-level structures by setting the optional ``overwrite`` flag to ``true``.
-
-            :param list[list[hal_py.Gate]] groups: A list of groups, each of them given as a vector of gates.
-            :param bool overwrite: Set `true` to overwrite existing set of identified word-level structures, ``false`` otherwise. Defaults to ``false``.
+            :param list[list[hal_py.Gate]] groups: A list of groups, each of them given as a list of gates.
+            :param bool overwrite: Set ``True`` to overwrite the existing previously identified word-level groups, ``False`` otherwise. Defaults to ``False``.
             :returns: The updated dataflow analysis configuration.
             :rtype: dataflow.Dataflow.Configuration
         )");
 
         py_dataflow_configuration.def(
             "with_known_groups", py::overload_cast<const std::vector<std::vector<u32>>&, bool>(&dataflow::Configuration::with_known_groups), py::arg("groups"), py::arg("overwrite") = false, R"(
-            Add lists of gate IDs to the set of previously identified word-level structures to guide datapath analysis.
-            Overwrite the existing set of word-level structures by setting the optional ``overwrite`` flag to ``true``.
+            Add lists of gate IDs to the set of previously identified word-level groups.
+            These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored.
+            The groups will be used to guide dataflow analysis, but will remain unaltered in the process.
 
-            :param list[list[int]] groups: A list of groups, each of them given as a vector of gate IDs.
-            :param bool overwrite: Set `true` to overwrite existing set of identified word-level structures, ``false`` otherwise. Defaults to ``false``.
+            :param list[list[int]] groups: A list of groups, each of them given as a list of gate IDs.
+            :param bool overwrite: Set ``True`` to overwrite the existing previously identified word-level groups, ``False`` otherwise. Defaults to ``False``.
             :returns: The updated dataflow analysis configuration.
             :rtype: dataflow.Dataflow.Configuration
         )");
@@ -207,12 +258,13 @@ namespace hal
                                       py::arg("groups"),
                                       py::arg("overwrite") = false,
                                       R"(
-            Add groups from a previous dataflow analysis run to the set of previously identified word-level structures to guide datapath analysis.
+            Add groups from a previous dataflow analysis run to the set of previously identified word-level groups.
+            These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored.
+            The groups will be used to guide dataflow analysis, but will remain unaltered in the process.
             The group IDs will be ignored during analysis and the same group may be assigned a new ID.
-            Overwrite the existing set of word-level structures by setting the optional ``overwrite`` flag to ``true``.
 
-            :param dict[int,set[hal_py.Gate]] groups: A map from group IDs to groups, each of them given as a set of gates.
-            :param bool overwrite: Set `true` to overwrite existing set of identified word-level structures, ``false`` otherwise. Defaults to ``false``.
+            :param dict[int,set[hal_py.Gate]] groups: A dict from group IDs to groups, each of them given as a set of gates.
+            :param bool overwrite: Set ``True`` to overwrite the existing previously identified word-level groups, ``False`` otherwise. Defaults to ``False``.
             :returns: The updated dataflow analysis configuration.
             :rtype: dataflow.Dataflow.Configuration
         )");

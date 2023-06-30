@@ -13,7 +13,7 @@ namespace hal
         {
         }
 
-        Grouping::Grouping(const NetlistAbstraction& na, const std::vector<std::vector<const Gate*>>& groups) : Grouping(na)
+        Grouping::Grouping(const NetlistAbstraction& na, const std::vector<std::vector<Gate*>>& groups) : Grouping(na)
         {
             /* initialize state */
             u32 new_id_counter = -1;

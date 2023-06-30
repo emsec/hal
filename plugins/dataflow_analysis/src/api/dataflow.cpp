@@ -46,8 +46,8 @@ namespace hal
                 log_info("dataflow", "will prioritize sizes {}", utils::join(", ", config.expected_sizes));
             }
 
-            auto netlist_abstr    = dataflow::pre_processing::run(config);
-            auto initial_grouping = std::make_shared<dataflow::Grouping>(netlist_abstr, config.known_gate_groups);
+            std::shared_ptr<dataflow::Grouping> initial_grouping = nullptr;
+            auto netlist_abstr                                   = dataflow::pre_processing::run(config, initial_grouping);
             std::shared_ptr<dataflow::Grouping> final_grouping;
 
             u32 iteration = 0;
