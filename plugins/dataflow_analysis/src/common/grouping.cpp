@@ -13,7 +13,7 @@ namespace hal
         {
         }
 
-        Grouping::Grouping(const NetlistAbstraction& na, const std::vector<std::vector<u32>>& groups) : Grouping(na)
+        Grouping::Grouping(const NetlistAbstraction& na, const std::vector<std::vector<const Gate*>>& groups) : Grouping(na)
         {
             /* initialize state */
             u32 new_id_counter = -1;
@@ -24,9 +24,9 @@ namespace hal
                 group_is_known = false;
                 for (const auto& gates : groups)
                 {
-                    for (const auto& gate_id : gates)
+                    for (const auto& g : gates)
                     {
-                        if (gate->get_id() == gate_id)
+                        if (gate == g)
                         {
                             group_is_known = true;
                             break;
@@ -59,12 +59,13 @@ namespace hal
                 u32 new_group_id = ++new_id_counter;
 
                 this->operations_on_group_allowed[new_group_id]   = false;
-                this->group_control_fingerprint_map[new_group_id] = na.gate_to_fingerprint.at(*gates.begin());
-                this->gates_of_group[new_group_id].insert(gates.begin(), gates.end());
+                this->group_control_fingerprint_map[new_group_id] = na.gate_to_fingerprint.at(gates.front()->get_id());
 
-                for (const auto& gate_id : gates)
+                for (const auto& g : gates)
                 {
-                    this->parent_group_of_gate[gate_id] = new_group_id;
+                    auto gid = g->get_id();
+                    this->gates_of_group[new_group_id].insert(gid);
+                    this->parent_group_of_gate[gid] = new_group_id;
                 }
             }
         }

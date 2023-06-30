@@ -566,58 +566,13 @@ namespace hal
                     }
                 }
 
-                for (const auto& [pin_type, nets] : m_group_signals.at(group_id))
+                // rename pins if only single pin in pin group (remove "(" and ")")
+                for (const auto* pin_group : new_mod->get_pin_groups())
                 {
-                    std::string prefix;
-                    if (const auto prefix_it = pin_prefixes.find(std::make_pair(PinDirection::input, pin_type)); prefix_it != pin_prefixes.end())
+                    if (pin_group->size() == 1)
                     {
-                        prefix = prefix_it->second;
-                    }
-                    else
-                    {
-                        prefix = enum_to_string(pin_type);
-                    }
-
-                    PinGroup<ModulePin>* pin_group = nullptr;
-                    for (auto* net : nets)
-                    {
-                        auto* pin = new_mod->get_pin_by_net(net);
-                        if (pin == nullptr)
-                        {
-                            log_warning("dataflow", "net '{}' with ID {} does not pass through a pin, skipping assignment of a pin name...", net->get_name(), net->get_id());
-                            continue;
-                        }
-
-                        if (pin_group == nullptr)
-                        {
-                            pin_group = pin->get_group().first;
-                            new_mod->set_pin_group_name(pin_group, prefix);
-                            new_mod->set_pin_group_type(pin_group, pin_type);
-                        }
-                        else
-                        {
-                            if (const auto res = new_mod->assign_pin_to_group(pin_group, pin); res.is_error())
-                            {
-                                log_warning("dataflow", "{}", res.get_error().get());
-                            }
-                        }
-
-                        if (nets.size() == 1)
-                        {
-                            new_mod->set_pin_name(pin, prefix);
-                        }
-                        else
-                        {
-                            if (const auto res = pin_group->get_index(pin); res.is_error())
-                            {
-                                log_warning("dataflow", "{}", res.get_error().get());
-                            }
-                            else
-                            {
-                                new_mod->set_pin_name(pin, prefix + "(" + std::to_string(res.get()) + ")");
-                            }
-                        }
-                        new_mod->set_pin_type(pin, pin_type);
+                        auto* pin = pin_group->get_pins().front();
+                        new_mod->set_pin_name(pin, pin_group->get_name());
                     }
                 }
             }

@@ -62,7 +62,7 @@ namespace hal
                 }
 
                 /* get all successor/predecessor FFs of all FFs */
-                void identify_all_succesors_predecessors_ffs_of_all_ffs(const dataflow::Configuration& config, NetlistAbstraction& netlist_abstr)
+                void identify_successors_predecessors(const dataflow::Configuration& config, NetlistAbstraction& netlist_abstr)
                 {
                     log_info("dataflow", "identifying successors and predecessors of sequential gates...");
                     measure_block_time("identifying successors and predecessors of sequential gates") ProgressPrinter progress_bar;
@@ -85,10 +85,84 @@ namespace hal
                             netlist_abstr.gate_to_predecessors[gate->get_id()] = std::unordered_set<u32>();
                         }
 
-                        const auto next_target_gates = nl_trav_dec
-                                                           .get_next_gates(
-                                                               gate, true, [config](const Gate* g) { return config.gate_types.find(g->get_type()) != config.gate_types.end(); }, cache)
-                                                           .get();
+                        // const auto next_target_gates = nl_trav_dec
+                        //                                    .get_next_gates(
+                        //                                        gate, true, [config](const Gate* g) { return config.gate_types.find(g->get_type()) != config.gate_types.end(); }, cache)
+                        //                                    .get();
+
+                        std::unordered_set<const Net*> visited;
+                        const auto& start_fan_out_nets = gate->get_fan_out_nets();
+                        std::vector<const Net*> stack(start_fan_out_nets.cbegin(), start_fan_out_nets.cend());
+                        std::vector<const Net*> previous;
+                        while (!stack.empty())
+                        {
+                            const Net* current = stack.back();
+
+                            if (!previous.empty() && current == previous.back())
+                            {
+                                stack.pop_back();
+                                previous.pop_back();
+                                continue;
+                            }
+
+                            visited.insert(current);
+
+                            if (const auto it = cache.find(current); it != cache.end())
+                            {
+                                for (const auto* n : previous)
+                                {
+                                    const std::unordered_set<Gate*>& cached_gates = std::get<1>(*it);
+                                    cache[n].insert(cached_gates.begin(), cached_gates.end());
+                                }
+                                stack.pop_back();
+                            }
+                            else
+                            {
+                                bool added = false;
+                                for (const auto* ep : current->get_destinations())
+                                {
+                                    auto* g = ep->get_gate();
+
+                                    if (config.gate_types.find(g->get_type()) != config.gate_types.end())
+                                    {
+                                        cache[current].insert(g);
+                                        for (const auto* n : previous)
+                                        {
+                                            cache[n].insert(g);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        for (const auto* n : g->get_fan_out_nets())
+                                        {
+                                            if (visited.find(n) == visited.end())
+                                            {
+                                                stack.push_back(n);
+                                                added = true;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (added)
+                                {
+                                    previous.push_back(current);
+                                }
+                                else
+                                {
+                                    stack.pop_back();
+                                }
+                            }
+                        }
+
+                        std::unordered_set<Gate*> next_target_gates;
+                        for (const auto* n : start_fan_out_nets)
+                        {
+                            if (const auto it = cache.find(n); it != cache.end())
+                            {
+                                next_target_gates.insert(std::get<1>(*it).cbegin(), std::get<1>(*it).cend());
+                            }
+                        }
 
                         for (const auto& suc : next_target_gates)
                         {
@@ -109,9 +183,9 @@ namespace hal
                 identify_all_target_gates(config, netlist_abstr);
                 //merge_duplicated_logic_cones(netlist_abstr);
                 identify_all_control_signals(config, netlist_abstr);
-                identify_all_succesors_predecessors_ffs_of_all_ffs(config, netlist_abstr);
+                identify_successors_predecessors(config, netlist_abstr);
 
-                if (config.enable_register_stages)
+                if (config.enable_stages)
                 {
                     identify_register_stages(netlist_abstr);
                 }

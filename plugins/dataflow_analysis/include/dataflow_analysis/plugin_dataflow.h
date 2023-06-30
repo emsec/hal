@@ -60,7 +60,7 @@ namespace hal
 
         std::vector<u32> m_expected_sizes = {};
         u32 m_min_group_size              = 8;
-        bool m_enable_register_stages     = false;
+        bool m_enable_stages              = false;
 
     public:
         GuiExtensionDataflow() = default;

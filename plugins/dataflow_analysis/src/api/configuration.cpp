@@ -26,54 +26,82 @@ namespace hal
             return *this;
         }
 
-        Configuration& Configuration::with_known_groups(const std::vector<Module*>& groups)
+        Configuration& Configuration::with_known_groups(const std::vector<const Module*>& groups, bool overwrite)
         {
+            if (overwrite)
+            {
+                this->known_gate_groups.clear();
+                this->known_module_groups.clear();
+            }
+
             for (const auto* mod : groups)
             {
-                std::vector<u32> group;
-                const auto& gates = mod->get_gates();
-                std::transform(gates.cbegin(), gates.cend(), std::back_inserter(group), [](const Gate* g) { return g->get_id(); });
-                this->known_groups.push_back(std::move(group));
+                this->known_module_groups.push_back(std::make_pair(mod, std::vector<const PinGroup<ModulePin>*>({})));
             }
+
             return *this;
         }
 
-        Configuration& Configuration::with_known_groups(const std::vector<hal::Grouping*>& groups)
+        Configuration& Configuration::with_known_groups(const std::vector<std::pair<const Module*, std::vector<const PinGroup<ModulePin>*>>>& groups, bool overwrite)
         {
-            for (const auto* grp : groups)
+            if (overwrite)
             {
-                std::vector<u32> group;
-                const auto& gates = grp->get_gates();
-                std::transform(gates.cbegin(), gates.cend(), std::back_inserter(group), [](const Gate* g) { return g->get_id(); });
-                this->known_groups.push_back(std::move(group));
+                this->known_gate_groups.clear();
+                this->known_module_groups = groups;
             }
-            return *this;
-        }
-
-        Configuration& Configuration::with_known_groups(const std::vector<std::vector<Gate*>>& groups)
-        {
-            for (const auto& gates : groups)
+            else
             {
-                std::vector<u32> group;
-                std::transform(gates.cbegin(), gates.cend(), std::back_inserter(group), [](const Gate* g) { return g->get_id(); });
-                this->known_groups.push_back(std::move(group));
+                this->known_module_groups.insert(this->known_module_groups.end(), groups.begin(), groups.end());
             }
+
             return *this;
         }
 
-        Configuration& Configuration::with_known_groups(const std::vector<std::vector<u32>>& groups)
+        Configuration& Configuration::with_known_groups(const std::vector<std::vector<const Gate*>>& groups, bool overwrite)
         {
-            this->known_groups = groups;
+            if (overwrite)
+            {
+                this->known_gate_groups = groups;
+                this->known_module_groups.clear();
+            }
+            else
+            {
+                this->known_gate_groups.insert(this->known_gate_groups.end(), groups.begin(), groups.end());
+            }
+
             return *this;
         }
 
-        Configuration& Configuration::with_known_groups(const std::unordered_map<u32, std::unordered_set<Gate*>>& groups)
+        Configuration& Configuration::with_known_groups(const std::vector<std::vector<u32>>& groups, bool overwrite)
         {
+            if (overwrite)
+            {
+                this->known_gate_groups.clear();
+                this->known_module_groups.clear();
+            }
+
+            for (const auto& gate_ids : groups)
+            {
+                std::vector<const Gate*> gates;
+                std::transform(gate_ids.cbegin(), gate_ids.cend(), std::back_inserter(gates), [this](u32 gid) { return this->netlist->get_gate_by_id(gid); });
+                this->known_gate_groups.push_back(gates);
+            }
+
+            return *this;
+        }
+
+        Configuration& Configuration::with_known_groups(const std::unordered_map<u32, std::unordered_set<Gate*>>& groups, bool overwrite)
+        {
+            if (overwrite)
+            {
+                this->known_gate_groups.clear();
+                this->known_module_groups.clear();
+            }
+
             for (const auto& [_, gates] : groups)
             {
-                std::vector<u32> group;
-                std::transform(gates.cbegin(), gates.cend(), std::back_inserter(group), [](const Gate* g) { return g->get_id(); });
-                this->known_groups.push_back(group);
+                std::vector<const Gate*> group(gates.cbegin(), gates.cend());
+                this->known_gate_groups.push_back(group);
             }
 
             return *this;
@@ -126,9 +154,9 @@ namespace hal
             return *this;
         }
 
-        Configuration& Configuration::with_register_stage_identification(bool enable)
+        Configuration& Configuration::with_stage_identification(bool enable)
         {
-            this->enable_register_stages = enable;
+            this->enable_stages = enable;
             return *this;
         }
 

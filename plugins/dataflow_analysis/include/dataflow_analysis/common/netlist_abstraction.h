@@ -62,6 +62,8 @@ namespace hal
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_register_stages;
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_predecessors;
             std::unordered_map<u32, std::unordered_set<u32>> gate_to_successors;
+            std::unordered_map<u32, std::unordered_set<u32>> gate_to_known_predecessor_groups;
+            std::unordered_map<u32, std::unordered_set<u32>> gate_to_known_successor_groups;
             std::unordered_map<u32, std::vector<std::vector<u32>>> gate_to_output_shape;
             std::unordered_map<u32, std::vector<std::vector<u32>>> gate_to_input_shape;
         };
