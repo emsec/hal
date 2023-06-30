@@ -26,6 +26,8 @@
 #pragma once
 
 #include "dataflow_analysis/common/grouping.h"
+#include "hal_core/netlist/gate_library/enums/gate_type_property.h"
+#include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include "hal_core/utilities/result.h"
 
@@ -34,6 +36,7 @@ namespace hal
     class Gate;
     class Net;
     class Module;
+    class GateType;
 
     namespace dataflow
     {
@@ -152,10 +155,26 @@ namespace hal
             /**
              * Create modules for the dataflow analysis result.
              * 
+             * @param[in] module_suffixes - The suffixes to use for modules containing only gates of a specific gate type. Defaults to `"module"` for mixed and unspecified gate types.
+             * @param[in] pin_prefixes - The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific type. Defaults to the pin types string representation.
              * @param[in] group_ids - The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
              * @returns Ok() and a map from group IDs to Modules on success, an error otherwise.
              */
-            hal::Result<std::unordered_map<u32, Module*>> create_modules(const std::unordered_set<u32>& group_ids = {}) const;
+            hal::Result<std::unordered_map<u32, Module*>> create_modules(const std::map<const GateType*, std::string>& module_suffixes               = {},
+                                                                         const std::map<std::pair<PinDirection, PinType>, std::string>& pin_prefixes = {},
+                                                                         const std::unordered_set<u32>& group_ids                                    = {}) const;
+
+            /**
+             * Create modules for the dataflow analysis result.
+             * 
+             * @param[in] module_suffixes - The suffixes to use for modules containing only gates of a specific gate type. All gate types featuring the specified gate type property are considered, but the module must still be pure (i.e., all gates must be of the same type) for the suffix to be used. Defaults to `"module"` for mixed and unspecified gate types.
+             * @param[in] pin_prefixes - The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific type. Defaults to the pin types string representation.
+             * @param[in] group_ids - The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+             * @returns Ok() and a map from group IDs to Modules on success, an error otherwise.
+             */
+            hal::Result<std::unordered_map<u32, Module*>> create_modules(const std::map<GateTypeProperty, std::string>& module_suffixes,
+                                                                         const std::map<std::pair<PinDirection, PinType>, std::string>& pin_prefixes = {},
+                                                                         const std::unordered_set<u32>& group_ids                                   = {}) const;
 
             /**
              * Get the groups of the dataflow analysis result as a list.
