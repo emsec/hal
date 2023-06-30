@@ -3,7 +3,7 @@
 #include "gui/basic_tree_model/tree_item.h"
 #include "gui/gui_globals.h"
 #include "gui/input_dialog/input_dialog.h"
-#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_pingroup.h"
 #include "gui/user_action/action_remove_items_from_object.h"
 #include "gui/user_action/action_reorder_object.h"
 #include "gui/user_action/user_action_compound.h"
@@ -114,23 +114,33 @@ namespace hal
         if(type == "group")
         {
             if(!parentItem)
-                //qDebug() << "group was dropped between groups... with row: " << row; //check in canDropMine if its not an adjacent row?
+            {
+                qDebug() << "group was dropped between groups... with row: " << row; //check in canDropMine if its not an adjacent row?
                 dndGroupBetweenGroup(droppedItem, row);
+            }
             else
-                //qDebug() << "group was dropped on a group?";
+            {
+                qDebug() << "group was dropped on a group?";
                 dndGroupOnGroup(droppedItem, parentItem);
+            }
         }
         else
         {
             if(!parentItem)
-                //qDebug() << "pin was dropped between groups on row " << row;
+            {
+                qDebug() << "pin was dropped between groups on row " << row;
                 dndPinBetweenGroup(droppedItem, row);
+            }
             else if(row != -1)
-                //qDebug() << "pin was dropped between pins";
+            {
+                qDebug() << "pin was dropped between pins";
                 dndPinBetweenPin(droppedItem, parentItem, row);
+            }
             else
-                //qDebug() << "pin was dropped on a group...";
+            {
+                qDebug() << "pin was dropped on a group...";
                 dndPinOnGroup(droppedItem, parentItem);
+            }
         }
 
         return true;
@@ -475,23 +485,30 @@ namespace hal
 //        InputDialog ipd("Name of new group", "Name of new group:", onDroppedGroup->getData(sNameColumn).toString());
 //        if(ipd.exec() == QDialog::Rejected) return false;
         mIgnoreEventsFlag = true;
-        QSet<u32> pins, e;
-        auto group = mModule->get_pin_group_by_id(getIdOfItem(droppedGroup));
-        for(const auto &pin : group->get_pins())
-            pins.insert(pin->get_id());
+        QList<u32> pins;
+        auto srcgroup = mModule->get_pin_group_by_id(getIdOfItem(droppedGroup));
+        for(const auto &pin : srcgroup->get_pins())
+            pins.append(pin->get_id());
+        if (pins.isEmpty()) return;  // no pins to move
 
-        /* TODO PIN
-        UserActionCompound* compAct = new UserActionCompound;
-        ActionReorderObject* reorderActHack = new ActionReorderObject(droppedGroup->getOwnRow());
-        reorderActHack->setObject(UserActionObject(group->get_id(), UserActionObjectType::PinGroup));
-        reorderActHack->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
-        ActionAddItemsToObject* addAct = new ActionAddItemsToObject(e,e,e, pins);
-        addAct->setObject(UserActionObject(getIdOfItem(onDroppedGroup), UserActionObjectType::PinGroup));
-        addAct->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
-        compAct->addAction(reorderActHack);
-        compAct->addAction(addAct);
-        compAct->exec();
-        */
+        auto tgtgroup = mModule->get_pin_group_by_id(getIdOfItem(onDroppedGroup));
+        int ntgt = tgtgroup->size();
+        if (pins.size()>1)
+        {
+            UserActionCompound* compAct = new UserActionCompound;
+            compAct->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
+            compAct->setUseCreatedObject();
+            for (u32 pinId : pins)
+                compAct->addAction(new ActionPingroup(pinId,ntgt++,tgtgroup->get_id()));
+            compAct->exec();
+        }
+        else
+        {
+            ActionPingroup* act = new ActionPingroup(pins.at(0),ntgt,tgtgroup->get_id());
+            act->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
+            act->exec();
+        }
+
         // too keep the order, ActionAddItemsToObject cannot be executed with all pins, but a ComAction must be created
         // with many ActionAddItemsToObject that contain a single pin each -> set destroys order of pins in source pingroup
         setModule(mModule);
@@ -506,15 +523,11 @@ namespace hal
         bool bottomEdge = row == mRootItem->getChildCount();
         auto desiredIdx = bottomEdge ? row-1 : row;
         if(ownRow < row && !bottomEdge) desiredIdx--;
-        //mModule->move_pin_group(mModule->get_pin_group_by_id(getIdOfItem(droppedGroup)), desiredIdx);
-        /* TODO PIN
-        ActionReorderObject* reordObj = new ActionReorderObject(desiredIdx);
-        reordObj->setObject(UserActionObject(getIdOfItem(droppedGroup), UserActionObjectType::PinGroup));
-        reordObj->setParentObject(UserActionObject(mModule->get_id(), UserActionObjectType::Module));
-        auto ret = reordObj->exec();
-        */
-        bool ret = true; // TEMP
-        if(ret){
+        ActionPingroup* act = new ActionPingroup(PinAction::MoveGroup,(u32)getIdOfItem(droppedGroup));
+        act->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
+        act->setPinOrderNo(desiredIdx);
+        bool ok = act->exec();
+        if(ok){
             removeItem(droppedGroup);
             insertItem(droppedGroup, mRootItem, desiredIdx);
         }
@@ -524,13 +537,12 @@ namespace hal
     void ModulePinsTreeModel::dndPinOnGroup(TreeItem *droppedPin, TreeItem *onDroppedGroup)
     {
         mIgnoreEventsFlag = true;
-        QSet<u32> e;
-        /* TODO PIN
-        ActionAddItemsToObject* addAct = new ActionAddItemsToObject(e,e,e, QSet<u32>() << getIdOfItem(droppedPin));
-        addAct->setObject(UserActionObject(getIdOfItem(onDroppedGroup), UserActionObjectType::PinGroup));
-        addAct->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
-        addAct->exec();
-        */
+        u32 pinId = getIdOfItem(droppedPin);
+
+        int inx = onDroppedGroup->getChildCount();
+        ActionPingroup* act = new ActionPingroup(pinId,inx, getIdOfItem(onDroppedGroup));
+        act->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
+        act->exec();
         auto oldParent = droppedPin->getParent();
         removeItem(droppedPin);
         insertItem(droppedPin, onDroppedGroup, onDroppedGroup->getChildCount());
@@ -552,33 +564,11 @@ namespace hal
             bool bottomEdge = row == onDroppedParent->getChildCount();
             desiredIdx = bottomEdge ? row-1 : row;
             if(ownRow < row && !bottomEdge) desiredIdx--; // insert item here
-            /* TODO PIN
-            ActionReorderObject* reorderObj = new ActionReorderObject(desiredIdx);
-            reorderObj->setObject(UserActionObject(getIdOfItem(droppedPin), UserActionObjectType::Pin));
-            reorderObj->setParentObject(UserActionObject(mModule->get_id(), UserActionObjectType::Module));
-            reorderObj->exec();
-            */
         }
-        else // different groups
-        {
-            // reorder action from source group is still needed (for undo action)!
-            /* TODO PIN
-            UserActionCompound* compAct = new UserActionCompound;
-            ActionReorderObject* reorderActHack = new ActionReorderObject(droppedPin->getOwnRow());
-            reorderActHack->setObject(UserActionObject(getIdOfItem(droppedPin), UserActionObjectType::Pin));
-            reorderActHack->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
-            ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), QSet<u32>() << getIdOfItem(droppedPin));
-            addAct->setObject(UserActionObject(getIdOfItem(onDroppedParent), UserActionObjectType::PinGroup));
-            addAct->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
-            ActionReorderObject* reorderAct = new ActionReorderObject(row);
-            reorderAct->setObject(UserActionObject(getIdOfItem(droppedPin), UserActionObjectType::Pin));
-            reorderAct->setParentObject(UserActionObject(mModule->get_id(), UserActionObjectType::Module));
-            compAct->addAction(reorderActHack);
-            compAct->addAction(addAct);
-            compAct->addAction(reorderAct);
-            compAct->exec();
-            */
-        }
+
+        ActionPingroup* act = new ActionPingroup(getIdOfItem(droppedPin),desiredIdx,getIdOfItem(onDroppedParent));
+        act->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
+        act->exec();
         auto oldParent = droppedPin->getParent();
         removeItem(droppedPin);
         insertItem(droppedPin, onDroppedParent, desiredIdx);
@@ -595,19 +585,27 @@ namespace hal
         // row is needed for when groups can change its order within the module
         Q_UNUSED(row)
         mIgnoreEventsFlag = true;
-        auto pinGroup = mModule->get_pin_group_by_id(getIdOfItem(droppedPin->getParent()));
-        QSet<u32> e;
-        /* TODO PIN
-        ActionRemoveItemsFromObject* removeAct = new ActionRemoveItemsFromObject(e,e,e, QSet<u32>() << getIdOfItem(droppedPin));
-        removeAct->setObject(UserActionObject(pinGroup->get_id(), UserActionObjectType::PinGroup));
-        removeAct->setParentObject(UserActionObject(mModuleId, UserActionObjectType::Module));
-        bool ret = removeAct->exec();
-        */
-        bool ret = true; // TEMP
-        // must search for the created group (must secure way is to serve for a group that contains the pin id)
-        // and then move that group (the source group cannot be empty after the pin was removed -> canDropMimeData)
-        if(ret) // can fail if the pins name that one wants to remove has the same name as another group that already exists
+
+        auto pinToMove = mModule->get_pin_by_id(getIdOfItem(droppedPin));
+        if (!pinToMove) return;
+
+        QString groupName = QString::fromStdString(pinToMove->get_name());
+        QString baseName = groupName;
+        int cnt = 2;
+        while (mModule->get_pin_group_by_name(groupName.toStdString()))
+            // pin group name already exists
+            groupName = QString("%1_%2").arg(baseName).arg(cnt++);
+
+        ActionPingroup* actMovePin = new ActionPingroup(pinToMove->get_id(),0,0,groupName);
+        actMovePin->setObject(UserActionObject(mModuleId, UserActionObjectType::Module));
+        bool ok = actMovePin->exec();
+        if (ok && actMovePin->targetGroupId())
         {
+            ActionPingroup* actMoveGroup = new ActionPingroup(PinAction::MoveGroup,actMovePin->targetGroupId());
+            actMoveGroup->setObject(UserActionObject(mModuleId, UserActionObjectType::Module));
+            actMoveGroup->setPinOrderNo(row);
+            actMoveGroup->exec();
+
             auto newGroup = mModule->get_pin_by_id(getIdOfItem(droppedPin))->get_group().first;
             auto pinGroupName = QString::fromStdString(newGroup->get_name());
             auto pinGroupDirection = QString::fromStdString(enum_to_string((newGroup->get_direction())));
@@ -618,14 +616,6 @@ namespace hal
             pinGroupItem->setAdditionalData(keyId, newGroup->get_id());
 
             int pos = mRootItem->getChildCount(); // or query current index
-
-            /* TODO PIN
-            ActionReorderObject* reordObj = new ActionReorderObject(row);
-            reordObj->setObject(UserActionObject(newGroup->get_id(), UserActionObjectType::PinGroup));
-            reordObj->setParentObject(UserActionObject(mModule->get_id(), UserActionObjectType::Module));
-            if(reordObj->exec())
-                pos = row;
-            */
 
             insertItem(pinGroupItem, mRootItem, pos);
             removeItem(droppedPin);
