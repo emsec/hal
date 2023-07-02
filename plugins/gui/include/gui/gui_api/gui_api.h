@@ -50,6 +50,7 @@ namespace hal
             static std::string getName(int id);
             static std::vector<Module*> getModules(int id);
             static std::vector<Gate*> getGates(int id);
+            static std::vector<u32> getIds(const std::vector<Module*> modules, const std::vector<Gate*> gates);
         };
     }
 

@@ -622,4 +622,48 @@ namespace hal
         return std::vector<Gate*>();
     }
 
+    std::vector<u32> GuiApiClasses::View::getIds(const std::vector<Module*> modules, const std::vector<Gate*> gates){
+
+        std::vector<u32> ids;
+
+        QSet<u32> moduleIds;
+        QSet<u32> gateIds;
+
+
+        //Get ids of given modules and gates
+        for(Module* module : modules)
+            moduleIds.insert(module->get_id());
+        for(Gate* gate : gates)
+            gateIds.insert(gate->get_id());
+
+
+        //iterate over each context and look if its showing modules
+        for(GraphContext* ctx : gGraphContextManager->getContexts()){
+            bool isCandidate = true;
+
+            //Check if modules are in ctx
+            for(u32 moduleId : moduleIds){
+                if(ctx->modules().contains(moduleId))
+                    continue;
+                isCandidate = false;
+                break;
+            }
+            //Only check modules if ctx still a valid candidate
+            if(isCandidate){
+                for(u32 gateId : gateIds){
+                    if(ctx->gates().contains(gateId))
+                        continue;
+                    isCandidate = false;
+                    break;
+                }
+            }
+
+            //add it to ids if its a candidate
+            if(isCandidate)
+                ids.push_back(ctx->id());
+
+        }
+
+        return ids;
+    }
 }

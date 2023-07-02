@@ -104,12 +104,12 @@ PYBIND11_PLUGIN(hal_gui)
         :rtype: bool
 )")
        .def_static("deleteView", &GuiApiClasses::View::deleteView, py::arg("id"),R"(
-                Adds the given modules and gates to the view specified by the ID.
+        Adds the given modules and gates to the view specified by the ID.
 
-                :param list[hal.py.module] modules: Modules to be added.
-                :param list[hal.py.Gate] gates: Gates to be added.
-                :returns: True on success, otherwise False.
-                :rtype: bool
+        :param list[hal.py.module] modules: Modules to be added.
+        :param list[hal.py.Gate] gates: Gates to be added.
+        :returns: True on success, otherwise False.
+        :rtype: bool
         )")
     .def_static("removeFrom", &GuiApiClasses::View::removeFrom, py::arg("id"), py::arg("modules"), py::arg("gates"),R"(
         Removes the given modules and gates from the view specified by the ID.
@@ -122,8 +122,8 @@ PYBIND11_PLUGIN(hal_gui)
     .def_static("getId", &GuiApiClasses::View::getId, py::arg("name"),R"(
         Returns the ID of the view with the given name if existing.
 
-        :param string name: Name of the view
-        :returns: ID of the specified view or 0 if none is found
+        :param string name: Name of the view.
+        :returns: ID of the specified view or 0 if none is found.
         :rtype: int
 )")
     .def_static("getName", &GuiApiClasses::View::getName, py::arg("id"), R"(
@@ -134,18 +134,26 @@ PYBIND11_PLUGIN(hal_gui)
         :rtype: string
 )")
     .def_static("getModules", &GuiApiClasses::View::getModules, py::arg("id"), R"(
-        Returns all modules attached to the view
+        Returns all modules attached to the view.
 
         :param int id: ID of the view.
-        :returns: List of the attached modules
+        :returns: List of the attached modules.
         :rtype: list[hal.py.module]
 )")
     .def_static("getGates", &GuiApiClasses::View::getGates, py::arg("id"),R"(
         Returns all gates attached to the view
 
         :param int id: ID of the view.
-        :returns: List of the attached gates
+        :returns: List of the attached gates.
         :rtype: list[hal.py.Gate]
+)")
+    .def_static("getIds", &GuiApiClasses::View::getIds, py::arg("modules"), py::arg("gates"),R"(
+        Returns the ID for from each View containing at least the given modules and gates.
+
+        :param list[hal.py.module] modules: Required modules.
+        :param list[hal.py.Gate] gates: Required gates.
+        :returns: List of ID of views which contains modules and gates.
+        :rtype: list[int]
 )");
 
 
