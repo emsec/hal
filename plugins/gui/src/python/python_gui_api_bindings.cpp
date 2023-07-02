@@ -154,6 +154,22 @@ PYBIND11_PLUGIN(hal_gui)
         :param list[hal.py.Gate] gates: Required gates.
         :returns: List of ID of views which contains modules and gates.
         :rtype: list[int]
+)")
+    .def_static("unfoldModule", &GuiApiClasses::View::unfoldModule, py::arg("view_id"), py::arg("module"), R"(
+            Unfold a specific module. Remove the module from view, add submodules and gates
+
+            :param int view_id: ID of the view.
+            :param Module* module: module to unfold
+            :returns: True on success, otherwise False.
+            :rtype: bool
+)")
+        .def_static("foldModule", &GuiApiClasses::View::foldModule, py::arg("view_id"), py::arg("module"), R"(
+            Fold a specific module. Remove the submodules and gates from view, add parent module
+
+            :param int view_id: ID of the view.
+            :param Module* module: module to fold
+            :returns: True on success, otherwise False.
+            :rtype: bool
 )");
 
 
