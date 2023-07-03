@@ -45,25 +45,35 @@ namespace hal
          * Starting from the given net, get the successor/predecessor gates for which the filter evaluates to `true`.
          * Does not continue traversal beyond gates fulfilling the filter condition, i.e., only the first layer of successors/predecessors is returned.
          * 
+         * @param[in] cache - Gate cache to speed up traversal for parts of the netlist that have been traversed before.
          * @param[in] net - Start net.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
-         * @param[in] cache - Gate cache to speed up traversal for parts of the netlist that have been traversed before.
          * @param[in] filter - Filter condition that must be met for the target gates.
+         * @param[in] forbidden_pins - Types of pins through which propagation shall not continue. Defaults to en empty set.
+         * @returns The next gates fulfilling the filter condition.
          */
-        Result<std::unordered_set<Gate*>>
-            get_next_gates(const Net* net, bool successors, const std::function<bool(const Gate*)>& filter, std::unordered_map<const Net*, std::unordered_set<Gate*>>& cache) const;
+        Result<std::unordered_set<Gate*>> get_next_gates(std::unordered_map<const Net*, std::unordered_set<Gate*>>& cache,
+                                                         const Net* net,
+                                                         bool successors,
+                                                         const std::function<bool(const Gate*)>& filter,
+                                                         const std::set<PinType>& forbidden_pins = {}) const;
 
         /**
          * Starting from the given gate, get the successor/predecessor gates for which the filter evaluates to `true`.
          * Does not continue traversal beyond gates fulfilling the filter condition, i.e., only the first layer of successors/predecessors is returned.
          * 
+         * @param[in] cache - Gate cache to speed up traversal for parts of the netlist that have been traversed before.
          * @param[in] gate - Start gate.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
-         * @param[in] cache - Gate cache to speed up traversal for parts of the netlist that have been traversed before.
          * @param[in] filter - Filter condition that must be met for the target gates.
+         * @param[in] forbidden_pins - Types of pins through which propagation shall not continue. Defaults to en empty set.
+         * @returns The next gates fulfilling the filter condition.
          */
-        Result<std::unordered_set<Gate*>>
-            get_next_gates(const Gate* gate, bool successors, const std::function<bool(const Gate*)>& filter, std::unordered_map<const Net*, std::unordered_set<Gate*>>& cache) const;
+        Result<std::unordered_set<Gate*>> get_next_gates(std::unordered_map<const Net*, std::unordered_set<Gate*>>& cache,
+                                                         const Gate* gate,
+                                                         bool successors,
+                                                         const std::function<bool(const Gate*)>& filter,
+                                                         const std::set<PinType>& forbidden_pins = {}) const;
 
     private:
         const Netlist& m_netlist;

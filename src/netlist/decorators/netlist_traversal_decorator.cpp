@@ -9,10 +9,11 @@ namespace hal
     {
     }
 
-    Result<std::unordered_set<Gate*>> NetlistTraversalDecorator::get_next_gates(const Net* net,
+    Result<std::unordered_set<Gate*>> NetlistTraversalDecorator::get_next_gates(std::unordered_map<const Net*, std::unordered_set<Gate*>>& cache,
+                                                                                const Net* net,
                                                                                 bool successors,
                                                                                 const std::function<bool(const Gate*)>& filter,
-                                                                                std::unordered_map<const Net*, std::unordered_set<Gate*>>& cache) const
+                                                                                const std::set<PinType>& forbidden_pins) const
     {
         if (net == nullptr)
         {
@@ -54,6 +55,14 @@ namespace hal
                 bool added = false;
                 for (const auto* ep : successors ? current->get_destinations() : current->get_sources())
                 {
+                    if (!forbidden_pins.empty())
+                    {
+                        if (forbidden_pins.find(ep->get_pin()->get_type()) != forbidden_pins.end())
+                        {
+                            continue;
+                        }
+                    }
+
                     auto* g = ep->get_gate();
 
                     if (filter(g))
@@ -91,10 +100,11 @@ namespace hal
         return OK(cache[net]);
     }
 
-    Result<std::unordered_set<Gate*>> NetlistTraversalDecorator::get_next_gates(const Gate* gate,
+    Result<std::unordered_set<Gate*>> NetlistTraversalDecorator::get_next_gates(std::unordered_map<const Net*, std::unordered_set<Gate*>>& cache,
+                                                                                const Gate* gate,
                                                                                 bool successors,
                                                                                 const std::function<bool(const Gate*)>& filter,
-                                                                                std::unordered_map<const Net*, std::unordered_set<Gate*>>& cache) const
+                                                                                const std::set<PinType>& forbidden_pins) const
     {
         if (gate == nullptr)
         {
@@ -107,9 +117,17 @@ namespace hal
         }
 
         std::unordered_set<Gate*> res;
-        for (const auto& n : successors ? gate->get_fan_out_nets() : gate->get_fan_in_nets())
+        for (const auto* ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
         {
-            const auto next_res = this->get_next_gates(n, successors, filter, cache);
+            if (!forbidden_pins.empty())
+            {
+                if (forbidden_pins.find(ep->get_pin()->get_type()) != forbidden_pins.end())
+                {
+                    continue;
+                }
+            }
+
+            const auto next_res = this->get_next_gates(cache, ep->get_net(), successors, filter, forbidden_pins);
             if (next_res.is_error())
             {
                 return ERR(next_res.get_error());
@@ -119,4 +137,5 @@ namespace hal
         }
         return OK(res);
     }
+
 }    // namespace hal
