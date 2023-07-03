@@ -10,6 +10,8 @@
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_remove_items_from_object.h"
 #include "gui/user_action/action_rename_object.h"
+#include "gui/user_action/action_fold_module.h"
+#include "gui/user_action/action_unfold_module.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/context_manager_widget/models/context_table_model.h"
 
@@ -656,5 +658,24 @@ namespace hal
         }
 
         return ids;
+    }
+    bool GuiApiClasses::View::unfoldModule(int view_id, Module *module)
+    {
+        GraphContext* context = gGraphContextManager->getContextById(view_id);
+        if(!context->modules().contains(module->get_id())) return false;
+
+        ActionUnfoldModule *act = new ActionUnfoldModule(module->get_id());
+        UserActionManager::instance()->executeActionBlockThread(act);
+        return true;
+    }
+
+    bool GuiApiClasses::View::foldModule(int view_id, Module *module)
+    {
+        GraphContext* context = gGraphContextManager->getContextById(view_id);
+        if(!context->modules().contains(module->get_id())) return false;
+        if(module->get_parent_module() == nullptr) return false;
+        ActionFoldModule *act = new ActionFoldModule(module->get_parent_module()->get_id());
+        UserActionManager::instance()->executeActionBlockThread(act);
+        return true;
     }
 }

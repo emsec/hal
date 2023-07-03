@@ -51,6 +51,8 @@ namespace hal
             static std::vector<Module*> getModules(int id);
             static std::vector<Gate*> getGates(int id);
             static std::vector<u32> getIds(const std::vector<Module*> modules, const std::vector<Gate*> gates);
+            static bool foldModule(int view_id, Module* module);
+            static bool unfoldModule(int view_id, Module* module);
         };
     }
 
