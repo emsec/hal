@@ -32,6 +32,7 @@
 #include <QElapsedTimer>
 #include <QPlainTextEdit>
 #include <QMessageBox>
+#include <QMutex>
 #include "hal_core/defines.h"
 
 namespace hal
@@ -138,6 +139,8 @@ namespace hal
          */
         void crashDump(int sig);
 
+        void executeActionBlockThread(UserAction* act);
+
     private:
         UserActionManager(QObject *parent = nullptr);
         void testUndo();
@@ -151,6 +154,8 @@ namespace hal
         static UserActionManager* inst;
         QPlainTextEdit* mDumpAction;
         SettingsItemCheckbox* mSettingDumpAction;
+        UserAction* mThreadedAction;
+        QMutex mMutex;
 
     public Q_SLOTS:
         /**
@@ -160,6 +165,9 @@ namespace hal
          */
         void handleSettingDumpActionChanged(bool wantDump);
 
+    private Q_SLOTS:
+        void handleTriggerExecute();
+
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted when undoLastAction() is called. The parameter is set to true
@@ -168,5 +176,7 @@ namespace hal
          * @param yesWeCan - True if last action could be undone.
          */
         void canUndoLastAction(bool yesWeCan);
+
+        void triggerExecute();
     };
 }

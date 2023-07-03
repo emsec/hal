@@ -4,9 +4,12 @@
 #include "gui/gui_globals.h"
 #include "gui/user_action/user_action_compound.h"
 #include "gui/user_action/user_action_object.h"
+#include "gui/user_action/user_action_manager.h"
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_delete_object.h"
 #include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_remove_items_from_object.h"
+#include "gui/user_action/action_rename_object.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/context_manager_widget/models/context_table_model.h"
 
@@ -482,7 +485,7 @@ namespace hal
         act->setUseCreatedObject();
         act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
         act->addAction(new ActionAddItemsToObject(moduleIds, gateIds));
-        act->exec();
+        UserActionManager::instance()->executeActionBlockThread(act);
 
         if (isModuleExclusive){
             GraphContext* context = gGraphContextManager->getContextById(act->object().id());
@@ -500,14 +503,9 @@ namespace hal
         {
             return false;
         }
-        ActionDeleteObject* del = new ActionDeleteObject();
-        del->setObject(UserActionObject(id, UserActionObjectType::Context));
-
-        UserActionCompound* act = new UserActionCompound;
-        act->setUseCreatedObject();
-        act->addAction(del);
-        act->addAction(new ActionDeleteObject);
-        act->exec();
+        ActionDeleteObject* act = new ActionDeleteObject();
+        act->setObject(UserActionObject(id, UserActionObjectType::Context));
+        UserActionManager::instance()->executeActionBlockThread(act);
         return true;
     }
 
@@ -524,14 +522,11 @@ namespace hal
         for(Gate* gate : gates)
             gateIds.insert(gate->get_id());
 
-        GraphContext* ctx = gGraphContextManager->getContextById(id);
-        if(ctx != nullptr){
-            //ctx->beginChange();
-            ctx->add(moduleIds, gateIds);
-            //ctx->endChange();
-            return true;
-        }
-        return false;
+        if (!gGraphContextManager->getContextById(id)) return false; // context does not exist
+        ActionAddItemsToObject* act = new ActionAddItemsToObject(moduleIds,gateIds);
+        act->setObject(UserActionObject(id,UserActionObjectType::Context));
+        UserActionManager::instance()->executeActionBlockThread(act);
+        return true;
     }
 
     bool GuiApiClasses::View::removeFrom(int id, const std::vector<Module*> modules, const std::vector<Gate*> gates)
@@ -541,23 +536,22 @@ namespace hal
         QSet<u32> moduleIds;
         QSet<u32> gateIds;
 
+        if (!gGraphContextManager->getContextById(id)) return false; // context does not exist
         for(Module* module : modules)
             moduleIds.insert(module->get_id());
         for(Gate* gate : gates)
             gateIds.insert(gate->get_id());
 
-        GraphContext* ctx = gGraphContextManager->getContextById(id);
-        if(ctx != nullptr){
-            //ctx->beginChange();
-            ctx->remove(moduleIds, gateIds);
-            //ctx->endChange();
-            return true;
-        }
-        return false;
+        ActionRemoveItemsFromObject* act = new ActionRemoveItemsFromObject(moduleIds,gateIds);
+        act->setObject(UserActionObject(id,UserActionObjectType::Context));
+        UserActionManager::instance()->executeActionBlockThread(act);
+        return true;
     }
 
     bool GuiApiClasses::View::setName(int id, const std::string& name)
     {
+        if (!gGraphContextManager->getContextById(id)) return false; // context does not exist
+
         //check if name is occupied
         if(gGraphContextManager->contextWithNameExists(QString::fromStdString(name)))
             return false;
@@ -567,13 +561,10 @@ namespace hal
             return false;
 
         //get context matching id and rename it
-        for(GraphContext* ctx : gGraphContextManager->getContexts()){
-            if(ctx->id() == id){
-                gGraphContextManager->renameGraphContextAction(ctx, QString::fromStdString(name));
-                return true;
-            }
-        }
-        return false;
+        ActionRenameObject* act = new ActionRenameObject(QString::fromStdString(name));
+        act->setObject(UserActionObject(id,UserActionObjectType::Context));
+        UserActionManager::instance()->executeActionBlockThread(act);
+        return true;
     }
 
     int GuiApiClasses::View::getId(const std::string& name)
