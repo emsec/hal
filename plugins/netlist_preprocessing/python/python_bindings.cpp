@@ -169,6 +169,26 @@ namespace hal
             )");
 
         py_netlist_preprocessing.def_static(
+            "manual_mux_optimizations",
+            [](Netlist* nl, GateLibrary* mux_inv_gl) -> std::optional<u32> {
+                auto res = NetlistPreprocessingPlugin::manual_mux_optimizations(nl, mux_inv_gl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            py::arg("mux_inv_gl"),
+            R"(
+
+            )");
+
+        py_netlist_preprocessing.def_static(
             "simplify_lut_inits",
             [](Netlist* nl) -> std::optional<u32> {
                 auto res = NetlistPreprocessingPlugin::simplify_lut_inits(nl);
@@ -290,6 +310,27 @@ namespace hal
             },
             py::arg("nl"),
             py::arg("gate_types"),
+            py::arg("target_gl"),
+            R"(
+               
+            )");
+
+        py_netlist_preprocessing.def_static(
+            "resynthesize_subgraph",
+            [](Netlist* nl, const std::vector<Gate*>& subgraph, GateLibrary* target_gl) -> bool {
+                auto res = NetlistPreprocessingPlugin::resynthesize_subgraph(nl, subgraph, target_gl);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("nl"),
+            py::arg("subgraph"),
             py::arg("target_gl"),
             R"(
                

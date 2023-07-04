@@ -746,6 +746,180 @@ namespace hal
 
     namespace
     {
+        Result<u32> remove_encasing_inverters(Netlist* nl)
+        {
+            // check wether input and output are inverted -> remove all 3 inverters
+            std::vector<Gate*> muxes = nl->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_mux); });
+
+            u32 delete_count = 0;
+            std::vector<Gate*> delete_gate_q;
+
+            for (const auto& g : muxes)
+            {
+                if (g->get_successors().size() > 1)
+                {
+                    continue;
+                }
+
+                auto data_pins = g->get_type()->get_pins([](const GatePin* pin) { return (pin->get_type() == PinType::data) && (pin->get_direction() == PinDirection::input); });
+                auto out_pins  = g->get_type()->get_pins([](const GatePin* pin) { return (pin->get_direction() == PinDirection::output); });
+
+                if (data_pins.size() < 2)
+                {
+                    continue;
+                }
+
+                if (out_pins.size() != 1)
+                {
+                    continue;
+                }
+
+                bool preceded_by_inv = true;
+                for (const auto& pin : data_pins)
+                {
+                    const auto pred = g->get_predecessor(pin);
+                    if (pred == nullptr || pred->get_gate() == nullptr || !pred->get_gate()->get_type()->has_property(GateTypeProperty::c_inverter))
+                    {
+                        preceded_by_inv = false;
+                        break;
+                    }
+                }
+
+                if (!preceded_by_inv)
+                {
+                    continue;
+                }
+
+                bool succeded_by_inv = true;
+                for (const auto& pin : out_pins)
+                {
+                    const auto suc = g->get_successor(pin);
+                    if (suc == nullptr || suc->get_gate() == nullptr || !suc->get_gate()->get_type()->has_property(GateTypeProperty::c_inverter))
+                    {
+                        succeded_by_inv = false;
+                        break;
+                    }
+                }
+
+                if (!succeded_by_inv)
+                {
+                    continue;
+                }
+
+                // delete all connections from and to inverters (and inverter gates if they do not share any other connection)
+                for (const auto& pin : data_pins)
+                {
+                    const auto pred = g->get_predecessor(pin);
+
+                    // disconnect inverter output from mux
+                    pred->get_net()->remove_destination(g, pin);
+
+                    // connect inverter input net to mux
+                    auto in_net = pred->get_gate()->get_fan_in_nets().front();
+                    in_net->add_destination(g, pin);
+
+                    // delete inverter gate if it does not have any successors
+                    if (pred->get_gate()->get_successors().empty())
+                    {
+                        delete_gate_q.push_back(pred->get_gate());
+                    }
+                }
+
+                for (const auto& pin : out_pins)
+                {
+                    const auto suc = g->get_successor(pin);
+
+                    // disconnect inverter input from mux
+                    suc->get_net()->remove_source(g, pin);
+
+                    // connect inverter output net to mux
+                    auto in_net = suc->get_gate()->get_fan_out_nets().front();
+                    in_net->add_source(g, pin);
+
+                    // delete inverter gate if it does not have any predecessors
+                    if (suc->get_gate()->get_predecessors().empty())
+                    {
+                        delete_gate_q.push_back(suc->get_gate());
+                    }
+                }
+            }
+
+            for (auto g : delete_gate_q)
+            {
+                nl->delete_gate(g);
+                delete_count++;
+            }
+
+            log_info("iphone_tools", "removed {} encasing inverters", delete_count);
+
+            return OK(delete_count);
+        }
+
+        Result<u32> unify_select_signals(Netlist* nl, GateLibrary* mux_inv_gl)
+        {
+            // resynthesize all muxes where any select signal is preceded by an inverter hoping to unify the structure with regards to other muxes conntected to the same select signal
+            std::vector<Gate*> muxes = nl->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_mux); });
+
+            u32 count = 0;
+            std::vector<Gate*> delete_gate_q;
+
+            for (const auto& g : muxes)
+            {
+                auto select_pins = g->get_type()->get_pins([](const GatePin* pin) { return (pin->get_type() == PinType::select) && (pin->get_direction() == PinDirection::input); });
+
+                std::vector<Gate*> preceding_inverters;
+                for (const auto& pin : select_pins)
+                {
+                    const auto pred = g->get_predecessor(pin);
+                    if (pred == nullptr || pred->get_gate() == nullptr || !pred->get_gate()->get_type()->has_property(GateTypeProperty::c_inverter))
+                    {
+                        preceding_inverters.push_back(pred->get_gate());
+                    }
+                }
+
+                // if there is at least one inverter in front of the mux gate we build a subgraph containing all inverters and the mux gate and resynthesize
+                if (!preceding_inverters.empty())
+                {
+                    auto subgraph = preceding_inverters;
+                    subgraph.push_back(g);
+
+                    auto resynth_res = NetlistPreprocessingPlugin::resynthesize_subgraph(nl, subgraph, mux_inv_gl);
+                    if (resynth_res.is_error())
+                    {
+                        return ERR_APPEND(resynth_res.get_error(),
+                                          "unable to unify selecet signals: failed to resynthesize mux " + g->get_name() + " with ID " + std::to_string(g->get_id()) + " and its preceding inverters");
+                    }
+                    count++;
+                }
+            }
+
+            return OK(count);
+        }
+    }    // namespace
+
+    Result<u32> NetlistPreprocessingPlugin::manual_mux_optimizations(Netlist* nl, GateLibrary* mux_inv_gl)
+    {
+        u32 res_count = 0;
+
+        auto remove_res = remove_encasing_inverters(nl);
+        if (remove_res.is_error())
+        {
+            return ERR_APPEND(remove_res.get_error(), "unable to apply manual mux optimizations: failed to remove encasing inverters");
+        }
+        res_count += remove_res.get();
+
+        auto unify_res = unify_select_signals(nl, mux_inv_gl);
+        if (unify_res.is_error())
+        {
+            return ERR_APPEND(unify_res.get_error(), "unable to apply manual mux optimizations: failed to unify select signals");
+        }
+        res_count += unify_res.get();
+
+        return OK(res_count);
+    }
+
+    namespace
+    {
         Result<std::tuple<GateType*, std::vector<GatePin*>, std::vector<GatePin*>>>
             find_gate_type(const GateLibrary* gl, const std::set<GateTypeProperty>& properties, const u32 num_inputs, const u32 num_outputs)
         {
@@ -1500,8 +1674,7 @@ namespace hal
         return OK(counter);
     }
 
-    // TODO add a parameter that is limiting the size of the boolean functions and/or find a way to generate the boolean functions and verilog file from z3 expressions
-    Result<u32> NetlistPreprocessingPlugin::resynthesize_subgraph_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl)
+    Result<u32> NetlistPreprocessingPlugin::resynthesize_subgraph(Netlist* nl, const std::vector<Gate*>& subgraph, GateLibrary* target_gl)
     {
         const std::filesystem::path base_path   = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_abc";
         const std::filesystem::path genlib_path = base_path / "new_gate_library.genlib";
@@ -1514,17 +1687,6 @@ namespace hal
             return ERR("unable to resynthesize gates of type: failed to save gate library " + target_gl->get_name() + " to location " + genlib_path.string());
         }
 
-        std::vector<Gate*> subgraph;
-        for (const auto& gt : gate_types)
-        {
-            for (const auto& g : nl->get_gates([gt](const Gate* g) { return g->get_type() == gt; }))
-            {
-                subgraph.push_back(g);
-            }
-        }
-
-        log_info("netlist_preprocessing", "Gathered subgraph with {} gates", subgraph.size());
-
         // auto resynth_res = resynthesize_functional_subgraph_with_abc(nl, subgraph, genlib_path, target_gl, true);
         auto resynth_res = generate_resynth_netlist_for_gate_level_subgraph(nl, subgraph, genlib_path, target_gl, true);
         if (resynth_res.is_error())
@@ -1533,38 +1695,13 @@ namespace hal
         }
         const auto resynth_nl = resynth_res.get();
 
-        std::unordered_map<Net*, Net*> global_io_mapping;
-
-        // This is the way to do it for the functional resynthesis
-        /*
-        for (const auto& g_i : resynth_nl->get_global_input_nets())
-        {
-            auto net_res = BooleanFunctionNetDecorator::get_net_from(nl, g_i->get_name());
-            if (net_res.is_error())
-            {
-                return ERR_APPEND(net_res.get_error(),
-                                  "unable to resynthesize subgraphs of type: failed to reconstruct net in destination netlist from global input " + g_i->get_name() + " in resynthesized netlist");
-            }
-            global_io_mapping.insert({g_i, net_res.get()});
-        }
-        for (const auto& g_o : resynth_nl->get_global_output_nets())
-        {
-            auto net_res = BooleanFunctionNetDecorator::get_net_from(nl, g_o->get_name());
-            if (net_res.is_error())
-            {
-                return ERR_APPEND(net_res.get_error(),
-                                  "unable to resynthesize subgraphs of type: failed to reconstruct net in destination netlist from global output " + g_o->get_name() + " in resynthesized netlist");
-            }
-            global_io_mapping.insert({g_o, net_res.get()});
-        }
-        */
-
         std::unordered_map<std::string, Net*> name_to_net;
         for (const auto n : nl->get_nets())
         {
             name_to_net.insert({n->get_name(), n});
         }
 
+        std::unordered_map<Net*, Net*> global_io_mapping;
         for (const auto& g_i : resynth_nl->get_global_input_nets())
         {
             auto net_it = name_to_net.find(g_i->get_name());
@@ -1596,6 +1733,22 @@ namespace hal
         }
 
         return OK(subgraph.size());
+    }
+
+    Result<u32> NetlistPreprocessingPlugin::resynthesize_subgraph_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl)
+    {
+        std::vector<Gate*> subgraph;
+        for (const auto& gt : gate_types)
+        {
+            for (const auto& g : nl->get_gates([gt](const Gate* g) { return g->get_type() == gt; }))
+            {
+                subgraph.push_back(g);
+            }
+        }
+
+        log_info("netlist_preprocessing", "Gathered subgraph with {} gates", subgraph.size());
+
+        return resynthesize_subgraph(nl, subgraph, target_gl);
     }
 
     namespace

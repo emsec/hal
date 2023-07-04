@@ -1,6 +1,6 @@
 {
     "version": 3,
-    "library": "basic_hal_i2",
+    "library": "basic_hal_i4",
     "gate_locations": {
         "data_category": "generic",
         "data_x_identifier": "X_COORDINATE",
@@ -188,110 +188,6 @@
             ]
         },
         {
-            "name": "HAL_NAND2",
-            "types": [
-                "combinational",
-                "c_nand"
-            ],
-            "pin_groups": [
-                {
-                    "name": "A",
-                    "direction": "input",
-                    "type": "none",
-                    "ascending": false,
-                    "start_index": 0,
-                    "pins": [
-                        {
-                            "name": "A",
-                            "direction": "input",
-                            "type": "none"
-                        }
-                    ]
-                },
-                {
-                    "name": "B",
-                    "direction": "input",
-                    "type": "none",
-                    "ascending": false,
-                    "start_index": 0,
-                    "pins": [
-                        {
-                            "name": "B",
-                            "direction": "input",
-                            "type": "none"
-                        }
-                    ]
-                },
-                {
-                    "name": "O",
-                    "direction": "output",
-                    "type": "none",
-                    "ascending": false,
-                    "start_index": 0,
-                    "pins": [
-                        {
-                            "name": "O",
-                            "direction": "output",
-                            "type": "none",
-                            "function": "(! (A & B))"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "HAL_NOR2",
-            "types": [
-                "combinational",
-                "c_nor"
-            ],
-            "pin_groups": [
-                {
-                    "name": "A",
-                    "direction": "input",
-                    "type": "none",
-                    "ascending": false,
-                    "start_index": 0,
-                    "pins": [
-                        {
-                            "name": "A",
-                            "direction": "input",
-                            "type": "none"
-                        }
-                    ]
-                },
-                {
-                    "name": "B",
-                    "direction": "input",
-                    "type": "none",
-                    "ascending": false,
-                    "start_index": 0,
-                    "pins": [
-                        {
-                            "name": "B",
-                            "direction": "input",
-                            "type": "none"
-                        }
-                    ]
-                },
-                {
-                    "name": "O",
-                    "direction": "output",
-                    "type": "none",
-                    "ascending": false,
-                    "start_index": 0,
-                    "pins": [
-                        {
-                            "name": "O",
-                            "direction": "output",
-                            "type": "none",
-                            "function": "(! (A | B))"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
             "name": "HAL_XOR2",
             "types": [
                 "combinational",
@@ -338,58 +234,6 @@
                             "direction": "output",
                             "type": "none",
                             "function": "(A ^ B)"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "HAL_XNOR2",
-            "types": [
-                "combinational",
-                "c_xnor"
-            ],
-            "pin_groups": [
-                {
-                    "name": "A",
-                    "direction": "input",
-                    "type": "none",
-                    "ascending": false,
-                    "start_index": 0,
-                    "pins": [
-                        {
-                            "name": "A",
-                            "direction": "input",
-                            "type": "none"
-                        }
-                    ]
-                },
-                {
-                    "name": "B",
-                    "direction": "input",
-                    "type": "none",
-                    "ascending": false,
-                    "start_index": 0,
-                    "pins": [
-                        {
-                            "name": "B",
-                            "direction": "input",
-                            "type": "none"
-                        }
-                    ]
-                },
-                {
-                    "name": "O",
-                    "direction": "output",
-                    "type": "none",
-                    "ascending": false,
-                    "start_index": 0,
-                    "pins": [
-                        {
-                            "name": "O",
-                            "direction": "output",
-                            "type": "none",
-                            "function": "(! (A ^ B))"
                         }
                     ]
                 }

@@ -90,6 +90,10 @@ namespace hal
          */
         static Result<u32> remove_unconnected_nets(Netlist* nl);
 
+        // TODO document
+        // TODO the mux_inv_gl can go as soon as we can dynamically create gate libs and copy gates types
+        static Result<u32> manual_mux_optimizations(Netlist* nl, GateLibrary* mux_inv_gl);
+
         /**
          * Replaces pins connected to GND/VCC with constants and simplifies the boolean function of a LUT by recomputing the INIT string.
          * 
@@ -125,10 +129,13 @@ namespace hal
          */
         static Result<u32> decompose_gates_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types);
 
+        // TODO document
         // TODO provide function interfaces that do not requiere the genlib path but instead write out the genlib path inside the function
         static Result<std::monostate> resynthesize_gate(Netlist* nl, Gate* g, GateLibrary* hgl_lib, const std::filesystem::path& genlib_path, const bool delete_gate);
 
         static Result<u32> resynthesize_gates_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl);
+
+        static Result<u32> resynthesize_subgraph(Netlist* nl, const std::vector<Gate*>& subgraph, GateLibrary* target_gl);
 
         static Result<u32> resynthesize_subgraph_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl);
 
