@@ -81,6 +81,8 @@ namespace hal
         {
             JsonWriteObject& tabObj = tabArr.add_object();
             tabObj["tab"]  = pece.tabInx;
+            if (pece.active)
+                tabObj["active"] = true;
             if (!pece.restore.empty())
                 tabObj["restore"] = pece.restore;
             tabObj["filename"] = pece.filename;
@@ -111,6 +113,7 @@ namespace hal
 
             PythonEditorControlEntry pece;
             pece.tabInx = tabInx;
+            pece.active = (tabw->currentWidget() == pce);
 
             QString tabPath = pce->getRelFilename();
             if (tabPath.isEmpty())
@@ -166,6 +169,7 @@ namespace hal
 
         bool restoreAutosave = false;
 
+        int activeInx = -1;
         if (document.HasMember("tabs"))
         {
             for (const rapidjson::Value& tabVal : document["tabs"].GetArray())
@@ -183,8 +187,13 @@ namespace hal
                     restoreAutosave = true;
                 }
                 pedit->tabLoadFile(tabInx, tabPath);
+                if (tabVal.HasMember("active"))
+                    activeInx = tabInx;
             }
         }
+
+        if (activeInx >= 0)
+            pedit->getTabWidget()->setCurrentIndex(activeInx);
 
         if (restoreAutosave)
         {
