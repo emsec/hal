@@ -150,7 +150,7 @@ namespace hal
             }
             else if (par.get_tagname() == "register_stage_identification")
             {
-                m_enable_register_stages = (par.get_value() == "true");
+                m_enable_stages = (par.get_value() == "true");
             }
             else if (par.get_tagname() == "exec")
             {
@@ -181,7 +181,7 @@ namespace hal
         auto config = dataflow::Configuration(nl)
                           .with_expected_sizes(m_expected_sizes)
                           .with_min_group_size(m_min_group_size)
-                          .with_register_stage_identification(m_enable_register_stages)
+                          .with_stage_identification(m_enable_stages)
                           .with_control_pin_types({PinType::clock, PinType::enable, PinType::reset, PinType::set})
                           .with_gate_types({GateTypeProperty::ff});
         auto grouping_res = dataflow::analyze(config);
@@ -235,7 +235,7 @@ namespace hal
                           .with_min_group_size(min_group_size)
                           .with_expected_sizes(sizes)
                           .with_known_groups(known_groups)
-                          .with_register_stage_identification(register_stage_identification)
+                          .with_stage_identification(register_stage_identification)
                           .with_control_pin_types({PinType::clock, PinType::enable, PinType::reset, PinType::set})
                           .with_gate_types({GateTypeProperty::ff});
 

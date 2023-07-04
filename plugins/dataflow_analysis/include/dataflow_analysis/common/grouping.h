@@ -42,7 +42,7 @@ namespace hal
         struct Grouping
         {
             Grouping(const NetlistAbstraction& na);
-            Grouping(const NetlistAbstraction& na, const std::vector<std::vector<u32>>& groups);
+            Grouping(const NetlistAbstraction& na, const std::vector<std::vector<Gate*>>& groups);
             Grouping(const Grouping& other);
 
             const NetlistAbstraction& netlist_abstr;

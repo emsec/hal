@@ -208,7 +208,7 @@ namespace hal
          * @param[in] gate - The gate to check.
          * @returns True if the gate is in the netlist, false otherwise.
          */
-        bool is_gate_in_netlist(Gate* gate) const;
+        bool is_gate_in_netlist(const Gate* gate) const;
 
         /**
          * Get the gate specified by the given ID.
@@ -342,7 +342,7 @@ namespace hal
          * @param[in] net - The net to check.
          * @returns True if the net is in the netlist, false otherwise.
          */
-        bool is_net_in_netlist(Net* net) const;
+        bool is_net_in_netlist(const Net* net) const;
 
         /**
          * Get the net specified by the given ID.
@@ -488,7 +488,7 @@ namespace hal
          * @param[in] module - The module to check.
          * @returns True if the module is in the netlist, false otherwise.
          */
-        bool is_module_in_netlist(Module* module) const;
+        bool is_module_in_netlist(const Module* module) const;
 
         /**
          * Get the module specified by the given ID.
@@ -567,7 +567,7 @@ namespace hal
          * @param[in] grouping - The grouping to check.
          * @returns True if the grouping is in the netlist, false otherwise.
          */
-        bool is_grouping_in_netlist(Grouping* grouping) const;
+        bool is_grouping_in_netlist(const Grouping* grouping) const;
 
         /**
          * Get the grouping specified by the given ID.
@@ -835,22 +835,22 @@ namespace hal
         /* stores the modules */
         Module* m_top_module;
         std::unordered_map<u32, std::unique_ptr<Module>> m_modules_map;
-        std::unordered_set<Module*> m_modules_set;
+        std::unordered_set<const Module*> m_modules_set;
         std::vector<Module*> m_modules;
 
         /* stores the nets */
         std::unordered_map<u32, std::unique_ptr<Net>> m_nets_map;
-        std::unordered_set<Net*> m_nets_set;
+        std::unordered_set<const Net*> m_nets_set;
         std::vector<Net*> m_nets;
 
         /* stores the gates */
         std::unordered_map<u32, std::unique_ptr<Gate>> m_gates_map;
-        std::unordered_set<Gate*> m_gates_set;
+        std::unordered_set<const Gate*> m_gates_set;
         std::vector<Gate*> m_gates;
 
         /* stores the groupings */
         std::unordered_map<u32, std::unique_ptr<Grouping>> m_groupings_map;
-        std::unordered_set<Grouping*> m_groupings_set;
+        std::unordered_set<const Grouping*> m_groupings_set;
         std::vector<Grouping*> m_groupings;
 
         /* stores the set of global gates and nets */

@@ -5,7 +5,6 @@
 #include "dataflow_analysis/processing/passes/group_by_input_output_size.h"
 #include "dataflow_analysis/processing/passes/group_by_successors_predecessors.h"
 #include "dataflow_analysis/processing/passes/group_by_successors_predecessors_iteratively.h"
-#include "dataflow_analysis/processing/passes/merge_successor_predecessor_groupings.h"
 #include "dataflow_analysis/processing/passes/split_by_successors_predecessors.h"
 
 #include <algorithm>

@@ -3026,14 +3026,14 @@
                 {
                     "name": "Z",
                     "direction": "output",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "Z",
                             "direction": "output",
-                            "type": "none",
+                            "type": "data",
                             "function": "(((! S) & A) | (S & B))"
                         }
                     ]
@@ -3134,14 +3134,14 @@
                 {
                     "name": "Z",
                     "direction": "output",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "Z",
                             "direction": "output",
-                            "type": "none",
+                            "type": "data",
                             "function": "((D0 & ((! A) & (! B))) | ((D1 & (A & (! B))) | ((D2 & ((! A) & B)) | (D3 & (A & B)))))"
                         }
                     ]
@@ -5642,14 +5642,14 @@
                 {
                     "name": "Z",
                     "direction": "output",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "Z",
                             "direction": "output",
-                            "type": "none",
+                            "type": "data",
                             "function": "(((! S) & A) | (S & B))"
                         }
                     ]
@@ -5708,14 +5708,14 @@
                 {
                     "name": "Z",
                     "direction": "output",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "Z",
                             "direction": "output",
-                            "type": "none",
+                            "type": "data",
                             "function": "(((! S) & (! A)) | (S & (! B)))"
                         }
                     ]
@@ -5774,14 +5774,14 @@
                 {
                     "name": "Z",
                     "direction": "output",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "Z",
                             "direction": "output",
-                            "type": "none",
+                            "type": "data",
                             "function": "(((! S) & (! A)) | (S & (! B)))"
                         }
                     ]
@@ -5868,14 +5868,14 @@
                 {
                     "name": "Z",
                     "direction": "output",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "Z",
                             "direction": "output",
-                            "type": "none",
+                            "type": "data",
                             "function": "(((! D0) & ((! A) & (! B))) | (((! D1) & (A & (! B))) | ((! D2) & B)))"
                         }
                     ]
@@ -5962,14 +5962,14 @@
                 {
                     "name": "Z",
                     "direction": "output",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "Z",
                             "direction": "output",
-                            "type": "none",
+                            "type": "data",
                             "function": "(((! D0) & ((! A) & (! B))) | (((! D1) & (A & (! B))) | ((! D2) & B)))"
                         }
                     ]
@@ -6070,14 +6070,14 @@
                 {
                     "name": "Z",
                     "direction": "output",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "Z",
                             "direction": "output",
-                            "type": "none",
+                            "type": "data",
                             "function": "((D0 & ((! A) & (! B))) | ((D1 & (A & (! B))) | ((D2 & ((! A) & B)) | (D3 & (A & B)))))"
                         }
                     ]
@@ -6150,14 +6150,14 @@
                 {
                     "name": "Z",
                     "direction": "output",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "Z",
                             "direction": "output",
-                            "type": "none",
+                            "type": "data",
                             "function": "(! ((A & ((! S) & SN)) | (B & (S & (! SN)))))"
                         }
                     ]
@@ -6286,14 +6286,14 @@
                 {
                     "name": "Z",
                     "direction": "output",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "Z",
                             "direction": "output",
-                            "type": "none",
+                            "type": "data",
                             "function": "((D0 & ((! A) & ((! B) & (! C)))) | ((D1 & (A & ((! B) & (! C)))) | ((D2 & ((! A) & (B & (! C)))) | ((D3 & (A & (B & (! C)))) | (D4 & C)))))"
                         }
                     ]
@@ -6422,14 +6422,14 @@
                 {
                     "name": "Z",
                     "direction": "output",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "Z",
                             "direction": "output",
-                            "type": "none",
+                            "type": "data",
                             "function": "((D0 & ((! A) & ((! B) & (! C)))) | ((D1 & (A & ((! B) & (! C)))) | ((D2 & ((! A) & (B & (! C)))) | ((D3 & (A & (B & (! C)))) | (D4 & C)))))"
                         }
                     ]
@@ -6600,14 +6600,14 @@
                 {
                     "name": "Z",
                     "direction": "output",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "Z",
                             "direction": "output",
-                            "type": "none",
+                            "type": "data",
                             "function": "((D0 & ((! A) & ((! B) & (! C)))) | ((D1 & (A & ((! B) & (! C)))) | ((D2 & ((! A) & (B & (! C)))) | ((D3 & (A & (B & (! C)))) | ((D4 & ((! A) & ((! B) & C))) | ((D5 & (A & ((! B) & C))) | ((D6 & ((! A) & (B & C))) | (D7 & (A & (B & C))))))))))"
                         }
                     ]
@@ -6778,14 +6778,14 @@
                 {
                     "name": "Z",
                     "direction": "output",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "Z",
                             "direction": "output",
-                            "type": "none",
+                            "type": "data",
                             "function": "((D0 & ((! A) & ((! B) & (! C)))) | ((D1 & (A & ((! B) & (! C)))) | ((D2 & ((! A) & (B & (! C)))) | ((D3 & (A & (B & (! C)))) | ((D4 & ((! A) & ((! B) & C))) | ((D5 & (A & ((! B) & C))) | ((D6 & ((! A) & (B & C))) | (D7 & (A & (B & C))))))))))"
                         }
                     ]
@@ -7562,14 +7562,14 @@
                 {
                     "name": "Z",
                     "direction": "output",
-                    "type": "none",
+                    "type": "data",
                     "ascending": false,
                     "start_index": 0,
                     "pins": [
                         {
                             "name": "Z",
                             "direction": "output",
-                            "type": "none",
+                            "type": "data",
                             "function": "(! ((A & ((! S) & SN)) | (B & (S & (! SN)))))"
                         }
                     ]
