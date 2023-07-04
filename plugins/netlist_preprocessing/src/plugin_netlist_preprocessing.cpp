@@ -1225,7 +1225,7 @@ namespace hal
 
             const auto abc_path       = abc_query_res.get();
             const std::string command = abc_path + " -c " + '"' + "read_verilog " + functional_netlist_path.string() + "; " + "read_library " + genlib_path.string() + "; "
-                                        + "cleanup; sweep; strash; dc2; logic; " + "map" + (optimize_area ? "" : " -a") + "; " + "write_verilog " + resynthesized_netlist_path.string() + ";" + '"';
+                                        + "cleanup; sweep; strash; dc2; logic; " + "map" + (optimize_area ? " -a" : "") + "; " + "write_verilog " + resynthesized_netlist_path.string() + ";" + '"';
 
             system(command.c_str());
 
@@ -1298,7 +1298,8 @@ namespace hal
 
             const auto abc_path       = abc_query_res.get();
             const std::string command = abc_path + " -c " + '"' + "read_library " + genlib_path.string() + "; " + "read_verilog -m " + org_netlist_path.string() + "; "
-                                        + "cleanup; sweep; strash; dc2; logic; " + "map" + (optimize_area ? "" : " -a") + "; " + "write_verilog " + resynthesized_netlist_path.string() + ";" + '"';
+                                        + "unmap; cleanup; sweep; strash; dc2; logic; " + "map" + (optimize_area ? " -a" : "") + "; " + "write_verilog " + resynthesized_netlist_path.string() + ";"
+                                        + '"';
 
             system(command.c_str());
 
@@ -1332,7 +1333,7 @@ namespace hal
             return {outputs.begin(), outputs.end()};
         }
 
-        // TODO delete function and just build boolean functions in caller
+        // TODO delete function and just build boolean functions in caller (or maybe dont, think about it)
         Result<std::unique_ptr<Netlist>> generate_resynth_netlist_for_functional_subgraph(const Netlist* nl,
                                                                                           const std::vector<Gate*>& subgraph,
                                                                                           const std::filesystem::path& genlib_path,

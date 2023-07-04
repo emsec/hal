@@ -7,3 +7,13 @@
 !lsi_10k.hgl
 !NangateOpenCellLibrary.hgl
 !NanGate_15nm_OCL.hgl
+
+!ice40ultra_hal.hgl
+!XILINX_UNISIM_hal.hgl
+
+!aoi_hal_i2.hgl
+!aoim_hal_i2.hgl
+!aoim_hal_i4.hgl
+!aoixm_hal_i2.hgl
+!basic_hal_i2.hgl
+!basic_hal.hgl
