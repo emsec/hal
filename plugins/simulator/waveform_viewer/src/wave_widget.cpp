@@ -26,7 +26,7 @@
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
-#include "gui/selection_details_widget/tree_navigation/selection_base_tree_item.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
 #include "gui/gui_globals.h"
 
 namespace hal {

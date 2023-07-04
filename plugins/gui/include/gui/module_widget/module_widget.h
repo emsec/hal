@@ -180,8 +180,6 @@ namespace hal
 
         QAction* mFilterAction;
 
-        QSortFilterProxyModel* mCurrentModel;
-
         QList<QRegExp*> mRegexps;
 
         bool mIgnoreSelectionChange;
