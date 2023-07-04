@@ -27,6 +27,8 @@
 #include "hal_core/defines.h"
 #include <QIcon>
 #include <QMap>
+#include <string>
+
 
 namespace hal
 {
@@ -34,6 +36,23 @@ namespace hal
     class Gate;
     class Net;
     class BaseTreeItem;
+
+    class ModuleTreeitem : public BaseTreeItem
+    {
+
+        private:
+            std::string mType;
+            int mId;
+            std::string mName;
+        public:
+
+            ModuleTreeitem(const std::string& name, int id, std::string tp);
+            QVariant getData(int column) const override;
+            void setData(QList<QVariant> data) override;
+            void setDataAtIndex(int index, QVariant& data) override;
+            void appendData(QVariant data) override;
+            int getColumnCount() const override;
+    };
 
     class ModuleTreeModel : public BaseTreeModel
     {

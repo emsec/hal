@@ -131,4 +131,9 @@ namespace hal
         mHeaderLabels[index] = data.toString();
     }
 
+    void RootTreeItem::appendData(QVariant data)
+    {
+
+    }
+
 }

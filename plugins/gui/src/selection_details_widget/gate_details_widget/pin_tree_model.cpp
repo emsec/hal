@@ -12,12 +12,81 @@
 namespace hal
 {
 
+    PinTreeItem::PinTreeItem(const std::string &pinName, QString pinDirection, QString pinType, QString netName)
+        :mPinName(pinName), mPinDirection(pinDirection), mPinType(pinType), mNetName(netName)
+    {;}
+
+    PinTreeItem::PinTreeItem()
+    {;}
+
+    QVariant PinTreeItem::getData(int index) const
+    {
+        switch (index)
+        {
+        case 0: {
+            QVariant qvPinName = QVariant(QString::fromStdString(mPinName));
+            return qvPinName;
+            break;}
+        case 1: {
+            QVariant qvPinDirection  = QVariant(mPinDirection);
+            return qvPinDirection;
+            break;}
+        case 2: {
+            QVariant qvPinType = QVariant(mPinType);
+            return qvPinType;
+            break;}
+        case 3: {
+            QVariant qvNetName = QVariant(mNetName);
+            return qvNetName;
+            break;}
+        }
+    }
+
+    void PinTreeItem::setData(QList<QVariant> data)
+    {
+        mPinName = data[0].toString().toStdString();
+        mPinDirection = data[1].toString();
+        mPinType = data[2].toString();
+        mNetName = data[3].toString();
+    }
+
+    void PinTreeItem::setDataAtIndex(int index, QVariant &data)
+    {
+        switch (index)
+        {
+        case 0: {
+            mPinName = data.toString().toStdString();
+            break;}
+        case 1: {
+            mPinDirection = data.toString();
+            break;}
+        case 2: {
+            mPinType = data.toString();
+            break;}
+        case 3: {
+            mNetName = data.toString();
+            break;}
+        }
+
+
+    }
+
+    void PinTreeItem::appendData(QVariant data)
+    {
+
+    }
+
+    int PinTreeItem::getColumnCount() const
+    {
+        return 4;
+    }
+
     GatePinsTreeModel::GatePinsTreeModel(QObject* parent) : BaseTreeModel(parent)
     {
-        setHeaderLabels(QList<QVariant>() << "Name"
-                                          << "Direction"
-                                          << "Type"
-                                          << "Connected Net");
+        setHeaderLabels(QStringList() << "Name"
+                                      << "Direction"
+                                      << "Type"
+                                      << "Connected Net");
 
         //added to store a list of (multiple) net ids in a given treeitem (perhaps dont do this
         //at all, handle it in the view? (since the gate-id and pin name is accessable, the nets can be evaluated there
@@ -45,7 +114,7 @@ namespace hal
         GateType* gateType = g->get_type();
         for (auto pin : gateType->get_pins())
         {
-            BaseTreeItem* pinItem = new BaseTreeItem();
+            PinTreeItem* pinItem = new PinTreeItem();
             //get all infos for that pin
             const std::string& grouping = pin->get_group().first->get_name();
             PinDirection direction      = pin->get_direction();
@@ -100,7 +169,7 @@ namespace hal
                 if (!groupingsItem)
                 {
                     //assume all items in the same grouping habe the same direction and type, so the grouping-item has also these types
-                    groupingsItem = new BaseTreeItem(QList<QVariant>() << QString::fromStdString(grouping) << pinDirection << pinType << "");
+                    groupingsItem = new PinTreeItem(grouping, pinDirection, pinType, "");
                     groupingsItem->setAdditionalData(keyType, QVariant::fromValue(itemType::grouping));
                     mRootItem->appendChild(groupingsItem);
                     mPinGroupingToTreeItem.insert(grouping, groupingsItem);
@@ -136,4 +205,7 @@ namespace hal
 
         return g->get_type()->get_pins().size();
     }
+
+
+
 }    // namespace hal

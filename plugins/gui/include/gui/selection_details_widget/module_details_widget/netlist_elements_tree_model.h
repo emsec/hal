@@ -39,8 +39,7 @@ namespace hal
 
     class NetlistElementsTreeitem : public BaseTreeItem
     {
-        public:
-            enum class Type {module = 0, gate = 1, net = 2};
+
         private:
             QString mType;
             int mId;
@@ -51,6 +50,7 @@ namespace hal
             QVariant getData(int column) const override;
             void setData(QList<QVariant> data) override;
             void setDataAtIndex(int index, QVariant& data) override;
+            void appendData(QVariant data) override;
             int getColumnCount() const override;
     };
 

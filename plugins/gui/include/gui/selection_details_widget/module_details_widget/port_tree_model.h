@@ -35,6 +35,25 @@ namespace hal
     class Net;
 
 
+    class PortTreeItem : public BaseTreeItem
+    {
+
+        private:
+            QString mPinName;
+            QString mPinDirection;
+            QString mPinType;
+            QString mNetName;
+        public:
+
+            PortTreeItem(QString pinName, QString pinDirection, QString pinTypee, QString netName);
+            PortTreeItem();
+            QVariant getData(int column) const override;
+            void setData(QList<QVariant> data) override;
+            void setDataAtIndex(int index, QVariant& data) override;
+            void appendData(QVariant data) override;
+            int getColumnCount() const override;
+    };
+
     /**
      * @brief A model to represent the ports of a module.
      */

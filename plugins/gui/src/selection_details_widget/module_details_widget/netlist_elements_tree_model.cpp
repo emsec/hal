@@ -27,7 +27,7 @@ namespace hal
             return qvId;
             break;}
         case 2: {
-            QVariant qvType = QVariant(mTypee);
+            QVariant qvType = QVariant(mType);
             return qvType;
             break;}
         }
@@ -43,7 +43,7 @@ namespace hal
 
     void NetlistElementsTreeitem::setDataAtIndex(int index, QVariant &data)
     {
-        const char* ctyp[] = { "Module", "Gate", "Net"};
+        const char* ctyp[] = { "module", "gate", "net"};
 
         switch (index)
         {
@@ -57,6 +57,11 @@ namespace hal
                     break;
                 }
         }
+    }
+
+    void NetlistElementsTreeitem::appendData(QVariant data)
+    {
+
     }
 
     int NetlistElementsTreeitem::getColumnCount() const
@@ -473,7 +478,9 @@ namespace hal
 
     void NetlistElementsTreeModel::updateInternalNetsOfModule(NetlistElementsTreeitem *moduleItem)
     {
-        int moduleId = (moduleItem == mRootItem) ? mModId : moduleItem->getAdditionalData(keyRepresentedID).toInt();
+        BaseTreeItem* moduleItemBase = static_cast<BaseTreeItem*>(moduleItem);
+       BaseTreeItem* mRootBase = static_cast<BaseTreeItem*>(mRootItem);
+        int moduleId = (moduleItemBase == mRootBase) ? mModId : moduleItem->getAdditionalData(keyRepresentedID).toInt();
         Module* mod = gNetlist->get_module_by_id(moduleId);
         //remove and delte the last child of the module-item until no net items are left
         while(moduleItem->getChildCount() > 0 && getTypeOfItem(static_cast<NetlistElementsTreeitem*>(moduleItem->getChild(moduleItem->getChildCount()-1))) == itemType::net)

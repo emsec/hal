@@ -19,12 +19,77 @@
 
 namespace hal
 {
+    PortTreeItem::PortTreeItem(QString pinName, QString pinDirection, QString pinTypee, QString netName)
+    {
+
+    }
+
+    QVariant PortTreeItem::getData(int index) const
+    {
+        switch (index)
+        {
+        case 0: {
+            QVariant qvPinName = QVariant(mPinName);
+            return qvPinName;
+            break;}
+        case 1: {
+            QVariant qvPinDirection  = QVariant(mPinDirection);
+            return qvPinDirection;
+            break;}
+        case 2: {
+            QVariant qvPinType = QVariant(mPinType);
+            return qvPinType;
+            break;}
+        case 3: {
+            QVariant qvNetName = QVariant(mNetName);
+            return qvNetName;
+            break;}
+        }
+    }
+
+    void PortTreeItem::setData(QList<QVariant> data)
+    {
+        mPinName = data[0].toString();
+        mPinDirection = data[1].toString();
+        mPinType = data[2].toString();
+        mNetName = data[3].toString();
+    }
+
+    void PortTreeItem::setDataAtIndex(int index, QVariant &data)
+    {
+        switch (index)
+        {
+        case 0: {
+            mPinName = data.toString();
+            break;}
+        case 1: {
+            mPinDirection = data.toString();
+            break;}
+        case 2: {
+            mPinType = data.toString();
+            break;}
+        case 3: {
+            mNetName = data.toString();
+            break;}
+        }
+    }
+
+    void PortTreeItem::appendData(QVariant data)
+    {
+
+    }
+
+    int PortTreeItem::getColumnCount() const
+    {
+        return 4;
+    }
+
     ModulePinsTreeModel::ModulePinsTreeModel(QObject* parent) : BaseTreeModel(parent), mIgnoreEventsFlag(false)
     {
         setHeaderLabels(QStringList() << "Name"
-                                          << "Direction"
-                                          << "Type"
-                                          << "Connected Net");
+                                      << "Direction"
+                                      << "Type"
+                                      << "Connected Net");
         setModule(gNetlist->get_module_by_id(1));
 
         //connections
@@ -348,16 +413,16 @@ namespace hal
             auto pinGroupDirection = QString::fromStdString(enum_to_string((pinGroup->get_direction())));
             auto pinGroupType = QString::fromStdString(enum_to_string(pinGroup->get_type()));
 
-            BaseTreeItem* pinGroupItem = new BaseTreeItem(QList<QVariant>() << pinGroupName << pinGroupDirection << pinGroupType << "");
+            PortTreeItem* pinGroupItem = new PortTreeItem(pinGroupName, pinGroupDirection, pinGroupType, "");
             pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::group)); // port multi bit
             pinGroupItem->setAdditionalData(keyId, pinGroup->get_id());
             mIdToGroupItem.insert(pinGroup->get_id(), pinGroupItem);
             for(ModulePin* pin : pinGroup->get_pins())
             {
-                BaseTreeItem* pinItem = new BaseTreeItem(QList<QVariant>() << QString::fromStdString(pin->get_name())
-                                                 << QString::fromStdString(enum_to_string(pin->get_direction()))
-                                                 << QString::fromStdString(enum_to_string(pin->get_type()))
-                                                 << QString::fromStdString(pin->get_net()->get_name()));
+                PortTreeItem* pinItem = new PortTreeItem(QString::fromStdString(pin->get_name()),
+                                                 QString::fromStdString(enum_to_string(pin->get_direction())),
+                                                 QString::fromStdString(enum_to_string(pin->get_type())),
+                                                 QString::fromStdString(pin->get_net()->get_name()));
                 pinItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
                 pinItem->setAdditionalData(keyId, pin->get_id());
                 pinGroupItem->appendChild(pinItem);
@@ -599,7 +664,7 @@ namespace hal
             auto pinGroupDirection = QString::fromStdString(enum_to_string((newGroup->get_direction())));
             auto pinGroupType = QString::fromStdString(enum_to_string(newGroup->get_type()));
 
-            BaseTreeItem* pinGroupItem = new BaseTreeItem(QList<QVariant>() << pinGroupName << pinGroupDirection << pinGroupType << "");
+            PortTreeItem* pinGroupItem = new PortTreeItem(pinGroupName, pinGroupDirection, pinGroupType, "");
             pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::group));
             pinGroupItem->setAdditionalData(keyId, newGroup->get_id());
 
@@ -638,4 +703,7 @@ namespace hal
         //mIdToPinItem.remove(getIdOfItem(item));
         //delete item;
     }
+
+
+
 }    // namespace hal

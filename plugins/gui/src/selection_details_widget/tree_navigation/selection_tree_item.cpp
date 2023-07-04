@@ -1,5 +1,5 @@
 #include "gui/gui_globals.h"
-#include "gui/selection_details_widget/tree_navigation/selection_base_tree_item.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
 #include "gui/selection_details_widget/selection_details_icon_provider.h"
 
 namespace hal

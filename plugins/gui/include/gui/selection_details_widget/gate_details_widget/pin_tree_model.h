@@ -34,6 +34,25 @@ namespace hal
 
     class Gate;
 
+    class PinTreeItem : public BaseTreeItem
+    {
+
+        private:
+            std::string mPinName;
+            QString mPinDirection;
+            QString mPinType;
+            QString mNetName;
+        public:
+
+            PinTreeItem(const std::string& pinName, QString pinDirection, QString pinTypee, QString netName);
+            PinTreeItem();
+            QVariant getData(int column) const override;
+            void setData(QList<QVariant> data) override;
+            void setDataAtIndex(int index, QVariant& data) override;
+            void appendData(QVariant data) override;
+            int getColumnCount() const override;
+    };
+
 /**
  * @ingroup gui
  * @brief A model to display the pins of a gate.

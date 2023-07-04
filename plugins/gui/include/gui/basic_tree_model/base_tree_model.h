@@ -141,7 +141,7 @@ namespace hal
         BaseTreeItem* getRootItem() const;
 
     protected:
-        BaseTreeItem* mRootItem;
+        RootTreeItem* mRootItem;
     };
 
 }

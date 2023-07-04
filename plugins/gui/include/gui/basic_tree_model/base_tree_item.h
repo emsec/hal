@@ -92,14 +92,14 @@ namespace hal
          * @param index - The column to set the new data.
          * @param data - The new column data.
          */
-        virtual void setDataAtIndex(int index, QVariant& data);
+        virtual void setDataAtIndex(int index, QVariant& data) = 0;
 
         /**
          * Appends a new column to the item.
          *
          * @param data - The data of the new column.
          */
-        virtual void appendData(QVariant data);
+        virtual void appendData(QVariant data) = 0;
 
         /**
          * Get the item's parent.
@@ -254,14 +254,14 @@ namespace hal
          * @param index - The column to set the new data.
          * @param data - The new column data.
          */
-        void setDataAtIndex(int index, QVariant& data);
+        void setDataAtIndex(int index, QVariant& data) override;
 
         /**
          * Appends a new column to the item.
          *
          * @param data - The data of the new column.
          */
-        void appendData(QVariant data);
+        void appendData(QVariant data) override;
 
         /**
          * Get number of sections for which header label exist.
