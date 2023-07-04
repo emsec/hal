@@ -23,12 +23,12 @@ namespace hal
                 auto res = self.get_next_gates(cache, net, successors, filter, forbidden_pins);
                 if (res.is_ok())
                 {
-                    return true;
+                    return res.get();
                 }
                 else
                 {
                     log_error("python_context", "error encountered while getting next gates:\n{}", res.get_error().get());
-                    return false;
+                    return std::nullopt;
                 }
             },
             py::arg("cache"),
@@ -60,12 +60,12 @@ namespace hal
                 auto res = self.get_next_gates(cache, gate, successors, filter, forbidden_pins);
                 if (res.is_ok())
                 {
-                    return true;
+                    return res.get();
                 }
                 else
                 {
                     log_error("python_context", "error encountered while getting next gates:\n{}", res.get_error().get());
-                    return false;
+                    return std::nullopt;
                 }
             },
             py::arg("cache"),
