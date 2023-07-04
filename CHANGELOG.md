@@ -76,6 +76,7 @@ All notable changes to this project will be documented in this file.
   * added pyBinds for the `LogManager` class
   * added pyBinds for the `ProjectDirectory` class
   * added `Module::move_pin_group` to change the order of pin groups of a module
+  * added flag which python editor tab is active when serializing project
   * changed abort being more responsive when aborting layouting of large views
   * changed and improved color scheme for light style
   * changed labels on HAL startup screen to better resemble the new project structure
