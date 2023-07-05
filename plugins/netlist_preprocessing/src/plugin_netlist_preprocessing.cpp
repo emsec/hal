@@ -43,14 +43,7 @@ namespace hal
         Result<std::string> query_binary_path()
         {
             static const std::vector<std::string> abc_binary_paths = {
-                "/usr/bin/berkeley-abc",
-                "/usr/local/bin/berkeley-abc",
-                "/opt/homebrew/bin/berkeley-abc",
-                "/usr/bin/abc",
-                "/usr/local/bin/abc",
-                "/opt/homebrew/bin/abc",
-                "/opt/abc/abc"
-            };
+                "/usr/bin/berkeley-abc", "/usr/local/bin/berkeley-abc", "/opt/homebrew/bin/berkeley-abc", "/usr/bin/abc", "/usr/local/bin/abc", "/opt/homebrew/bin/abc", "/opt/abc/abc"};
 
             for (const auto& path : abc_binary_paths)
             {
@@ -209,6 +202,11 @@ namespace hal
             {
                 for (const auto& ep : fan_in)
                 {
+                    if (ep->get_net()->is_gnd_net() || ep->get_net()->is_vcc_net())
+                    {
+                        continue;
+                    }
+
                     if (std::find(active_pins.begin(), active_pins.end(), ep->get_pin()->get_name()) == active_pins.end())
                     {
                         GatePin* pin = ep->get_pin();
@@ -234,6 +232,8 @@ namespace hal
         return OK(num_eps);
     }
 
+    // TODO make this check every pin of a gate and check whether the generated boolean function (with replaced gnd and vcc nets) is just a variable.
+    //      Afterwards just connect input net to buffer destination. Do this for all pins and delete gate if it has no more successors and not global outputs
     Result<u32> NetlistPreprocessingPlugin::remove_buffers(Netlist* nl)
     {
         u32 num_gates = 0;
