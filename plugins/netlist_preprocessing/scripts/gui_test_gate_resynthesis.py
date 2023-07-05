@@ -1,7 +1,7 @@
 from hal_plugins import netlist_preprocessing
 
 gate_id = 353
-target_gl_path = "/home/simon/projects/hal/plugins/gate_libraries/definitions/aoim_hal_i4.hgl"
+target_gl_path = "/Users/eve/Documents/Uni/Projekte/hal/plugins/gate_libraries/definitions/aoim_hal_i4.hgl"
 genlib_path = "/tmp/resynthesize_boolean_functions_with_abc/new_gate_library.genlib"
 
 g = netlist.get_gate_by_id(gate_id)

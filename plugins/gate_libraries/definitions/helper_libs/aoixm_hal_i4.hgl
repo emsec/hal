@@ -240,6 +240,152 @@
             ]
         },
         {
+            "name": "HAL_XOR3",
+            "types": [
+                "combinational",
+                "c_xor"
+            ],
+            "pin_groups": [
+                {
+                    "name": "A",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "B",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "B",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "C",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(A ^ B ^ C)"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "HAL_XOR4",
+            "types": [
+                "combinational",
+                "c_xor"
+            ],
+            "pin_groups": [
+                {
+                    "name": "A",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "B",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "B",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "C",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "D",
+                            "direction": "input",
+                            "type": "none"
+                        }
+                    ]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "(A ^ B ^ C ^ D)"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "name": "HAL_MUX",
             "types": [
                 "combinational",

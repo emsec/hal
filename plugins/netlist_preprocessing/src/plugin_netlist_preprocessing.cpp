@@ -13,6 +13,7 @@
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/netlist_utils.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
+#include "hal_core/netlist/pins/module_pin.h"
 #include "hal_core/utilities/result.h"
 #include "hal_core/utilities/token_stream.h"
 #include "rapidjson/document.h"
@@ -38,21 +39,13 @@ namespace hal
         return std::string("0.1");
     }
 
-    namespace abc
+    namespace yosys
     {
         Result<std::string> query_binary_path()
         {
-            static const std::vector<std::string> abc_binary_paths = {
-                "/usr/bin/berkeley-abc",
-                "/usr/local/bin/berkeley-abc",
-                "/opt/homebrew/bin/berkeley-abc",
-                "/usr/bin/abc",
-                "/usr/local/bin/abc",
-                "/opt/homebrew/bin/abc",
-                "/opt/abc/abc"
-            };
+            static const std::vector<std::string> yosys_binary_paths = {"/usr/bin/yosys", "/usr/local/bin/yosys", "/opt/homebrew/bin/yosys", "/opt/yosys/yosys"};
 
-            for (const auto& path : abc_binary_paths)
+            for (const auto& path : yosys_binary_paths)
             {
                 if (std::filesystem::exists(path))
                 {
@@ -60,9 +53,9 @@ namespace hal
                 }
             }
 
-            return ERR("could not query binary path: no binary found for abc logic synthesis tool");
+            return ERR("could not query binary path: no binary found for yosys logic synthesis tool");
         }
-    }    // namespace abc
+    }    // namespace yosys
 
     namespace
     {
@@ -1380,7 +1373,7 @@ namespace hal
             const auto verilog_module = build_functional_verilog_module_from(bfs);
 
             // TODO make this more robust
-            const std::filesystem::path base_path                  = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_abc";
+            const std::filesystem::path base_path                  = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_yosys";
             const std::filesystem::path functional_netlist_path    = base_path / "func_netlist.v";
             const std::filesystem::path resynthesized_netlist_path = base_path / "resynth_netlist.v";
 
@@ -1392,22 +1385,33 @@ namespace hal
             out << verilog_module;
             out.close();
 
-            auto abc_query_res = abc::query_binary_path();
-            if (abc_query_res.is_error())
+            auto yosys_query_res = yosys::query_binary_path();
+            if (yosys_query_res.is_error())
             {
-                return ERR_APPEND(abc_query_res.get_error(), "Unable to resynthesize boolean functions with abc: failed to find abc path");
+                return ERR_APPEND(yosys_query_res.get_error(), "Unable to resynthesize boolean functions with yosys: failed to find yosys path");
             }
 
-            const auto abc_path       = abc_query_res.get();
-            const std::string command = abc_path + " -c " + '"' + "read_verilog " + functional_netlist_path.string() + "; " + "read_library " + genlib_path.string() + "; "
-                                        + "cleanup; sweep; strash; dc2; logic; " + "map" + (optimize_area ? " -a" : "") + "; " + "write_verilog " + resynthesized_netlist_path.string() + ";" + '"';
+            const auto yosys_path     = yosys_query_res.get();
+            const std::string command = yosys_path + " -p " + "\"read -sv " + functional_netlist_path.string() + "; hierarchy -top top; proc; fsm; opt; memory; opt; techmap; opt; abc -genlib "
+                                        + genlib_path.string() + "; " + "write_verilog " + resynthesized_netlist_path.string() + "; clean\"";
+
+            log_info("netlist_preprocessing", "yosys command: {}", command);
 
             system(command.c_str());
 
             auto resynth_nl = netlist_factory::load_netlist(resynthesized_netlist_path, hgl_lib);
+
+            // yosys workaround for stupid net renaming
+            for (const auto& pin : resynth_nl->get_top_module()->get_input_pins())
+            {
+                auto net = pin->get_net();
+                net->set_name(pin->get_name());
+                log_info("netlist_preprocessing", "renamed net {} with pin name {}", net->get_name(), pin->get_name());
+            }
+            
             if (resynth_nl == nullptr)
             {
-                return ERR("Unable to resynthesize boolean functions with abc: failed to load resynthesized netlist at " + resynthesized_netlist_path.string());
+                return ERR("Unable to resynthesize boolean functions with yosys: failed to load resynthesized netlist at " + resynthesized_netlist_path.string());
             }
 
             return OK(std::move(resynth_nl));
@@ -1429,7 +1433,7 @@ namespace hal
             const auto subgraph_nl = subgraph_nl_res.get();
 
             // TODO make this more robust
-            const std::filesystem::path base_path                  = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_abc";
+            const std::filesystem::path base_path                  = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_yosys";
             const std::filesystem::path org_netlist_path           = base_path / "org_netlist.v";
             const std::filesystem::path resynthesized_netlist_path = base_path / "resynth_netlist.v";
 
@@ -1439,7 +1443,7 @@ namespace hal
 
             netlist_writer_manager::write(subgraph_nl.get(), org_netlist_path);
 
-            // NOTE this is a way to get rid of the stupid timescale annotation that is added by the verilog writer (for the simulator!?) but cannot be parsed by abc...
+            // NOTE this is a way to get rid of the stupid timescale annotation that is added by the verilog writer (for the simulator!?) but cannot be parsed by yosys...
             // Read the file into a vector of lines
             std::vector<std::string> lines;
             std::ifstream input_file(org_netlist_path);
@@ -1465,14 +1469,14 @@ namespace hal
             }
             output_file.close();
 
-            auto abc_query_res = abc::query_binary_path();
-            if (abc_query_res.is_error())
+            auto yosys_query_res = yosys::query_binary_path();
+            if (yosys_query_res.is_error())
             {
-                return ERR_APPEND(abc_query_res.get_error(), "Unable to resynthesize gate level netlist with abc: failed to find abc path");
+                return ERR_APPEND(yosys_query_res.get_error(), "Unable to resynthesize gate level netlist with yosys: failed to find yosys path");
             }
 
-            const auto abc_path       = abc_query_res.get();
-            const std::string command = abc_path + " -c " + '"' + "read_library " + genlib_path.string() + "; " + "read_verilog -m " + org_netlist_path.string() + "; "
+            const auto yosys_path     = yosys_query_res.get();
+            const std::string command = yosys_path + " -c " + '"' + "read_library " + genlib_path.string() + "; " + "read_verilog -m " + org_netlist_path.string() + "; "
                                         + "unmap; cleanup; sweep; strash; dc2; logic; " + "map" + (optimize_area ? " -a" : "") + "; " + "write_verilog " + resynthesized_netlist_path.string() + ";"
                                         + '"';
 
@@ -1481,7 +1485,7 @@ namespace hal
             auto resynth_nl = netlist_factory::load_netlist(resynthesized_netlist_path, hgl_lib);
             if (resynth_nl == nullptr)
             {
-                return ERR("Unable to resynthesize gate level netlist with abc: failed to load resynthesized netlist at " + resynthesized_netlist_path.string());
+                return ERR("Unable to resynthesize gate level netlist with yosys: failed to load resynthesized netlist at " + resynthesized_netlist_path.string());
             }
 
             return OK(std::move(resynth_nl));
@@ -1596,7 +1600,7 @@ namespace hal
 
     Result<u32> NetlistPreprocessingPlugin::resynthesize_gates_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl)
     {
-        const std::filesystem::path base_path   = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_abc";
+        const std::filesystem::path base_path   = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_yosys";
         const std::filesystem::path genlib_path = base_path / "new_gate_library.genlib";
         std::filesystem::create_directory(base_path);
 
@@ -1677,7 +1681,7 @@ namespace hal
 
     Result<u32> NetlistPreprocessingPlugin::resynthesize_subgraph(Netlist* nl, const std::vector<Gate*>& subgraph, GateLibrary* target_gl)
     {
-        const std::filesystem::path base_path   = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_abc";
+        const std::filesystem::path base_path   = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_yosys";
         const std::filesystem::path genlib_path = base_path / "new_gate_library.genlib";
         std::filesystem::create_directory(base_path);
 
@@ -1688,13 +1692,13 @@ namespace hal
             return ERR("unable to resynthesize gates of type: failed to save gate library " + target_gl->get_name() + " to location " + genlib_path.string());
         }
 
-        // auto resynth_res = resynthesize_functional_subgraph_with_abc(nl, subgraph, genlib_path, target_gl, true);
+        // auto resynth_res = resynthesize_functional_subgraph_with_yosys(nl, subgraph, genlib_path, target_gl, true);
         auto resynth_res = generate_resynth_netlist_for_gate_level_subgraph(nl, subgraph, genlib_path, target_gl, true);
         if (resynth_res.is_error())
         {
             return ERR_APPEND(resynth_res.get_error(), "unable to resynthesize subgraphs of type: failed to resynthesize subgraph to netlist");
         }
-        const auto resynth_nl = resynth_res.get();
+        auto resynth_nl = resynth_res.get();
 
         std::unordered_map<std::string, Net*> name_to_net;
         for (const auto n : nl->get_nets())
@@ -1703,6 +1707,7 @@ namespace hal
         }
 
         std::unordered_map<Net*, Net*> global_io_mapping;
+
         for (const auto& g_i : resynth_nl->get_global_input_nets())
         {
             auto net_it = name_to_net.find(g_i->get_name());
@@ -1712,6 +1717,7 @@ namespace hal
             }
             global_io_mapping.insert({g_i, net_it->second});
         }
+
         for (const auto& g_o : resynth_nl->get_global_output_nets())
         {
             auto net_it = name_to_net.find(g_o->get_name());
