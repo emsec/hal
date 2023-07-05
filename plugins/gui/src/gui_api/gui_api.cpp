@@ -674,6 +674,18 @@ namespace hal
         GraphContext* context = gGraphContextManager->getContextById(view_id);
         if(!context->modules().contains(module->get_id())) return false;
         if(module->get_parent_module() == nullptr) return false;
+
+        //get gates and submodules that belong to the current module
+        std::vector<Module*> submodules = module->get_parent_module()->get_submodules();
+        std::vector<Gate*> gates = module->get_parent_module()->get_gates();
+
+        //check if the view contains gates and submodules of the current module, return false if not
+        for(Gate* gate : gates)
+            if(!context->gates().contains(gate->get_id())) return false;
+        for(Module* submodule : submodules)
+            if(!context->modules().contains(submodule->get_id())) return false;
+
+
         ActionFoldModule *act = new ActionFoldModule(module->get_parent_module()->get_id());
         UserActionManager::instance()->executeActionBlockThread(act);
         return true;
