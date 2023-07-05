@@ -7,6 +7,19 @@
 
 namespace hal
 {
+    int pinGroupIndex(const Module* mod, const PinGroup<ModulePin>* pgrp)
+    {
+        if (!mod || !pgrp) return -1;
+        int inx = 0;
+        for (const PinGroup<ModulePin>* testgrp : mod->get_pin_groups())
+        {
+            if (testgrp == pgrp) return inx;
+            ++inx;
+        }
+        return -1;
+    }
+
+
     QString PinAction::toString(PinAction::Type tp)
     {
         QMetaEnum me = QMetaEnum::fromType<Type>();
@@ -144,7 +157,8 @@ namespace hal
 
         ActionPingroup* undo = nullptr;
 
-        if (mPinActions.size()==1 && mPinActions.at(0) == PinAction::MovePin)
+        if (mPinActions.size()==1 &&
+                (mPinActions.at(0) == PinAction::MovePin || mPinActions.at(0) == PinAction::RemovePin))
         {
             auto* pinToMove = parentModule->get_pin_by_id(mPinIds.at(0));
             if (!pinToMove) return false;
@@ -153,27 +167,30 @@ namespace hal
             int currentIndex = pinToMove->get_group().second;
             mSourceGroupId = srcgrp->get_id();
             undo = new ActionPingroup(pinToMove->get_id(), currentIndex, mSourceGroupId, QString::fromStdString(srcgrp->get_name()));
-            if (srcgrp->get_pins().size() == 1) mPinActions.append(PinAction::Delete);
-            if (mTargetGroupId)
+            if (srcgrp->get_pins().size() == 1) mPinActions.append(PinAction::DeleteGroup);
+            if (mPinActions.at(0) == PinAction::MovePin)
             {
-                auto* tgtgrp = parentModule->get_pin_group_by_id(mTargetGroupId);
-                if (!tgtgrp)
-                    tgtgrp = parentModule->get_pin_group_by_name(mName.toStdString());
-                if (!tgtgrp)
-                    mTargetGroupId = 0;
-            }
-            else
-            {
-                auto* tgtgrp = parentModule->get_pin_group_by_name(mName.toStdString());
-                if (tgtgrp)
-                    mTargetGroupId = tgtgrp->get_id();
-            }
-            if (!mTargetGroupId)
-            {
-                // target group does not exist, create it
-                if (mName.isEmpty())
-                    mName = QString::fromStdString(pinToMove->get_name());
-                mPinActions.replace(0,PinAction::Create); // create will place pins in new group
+                if (mTargetGroupId)
+                {
+                    auto* tgtgrp = parentModule->get_pin_group_by_id(mTargetGroupId);
+                    if (!tgtgrp)
+                        tgtgrp = parentModule->get_pin_group_by_name(mName.toStdString());
+                    if (!tgtgrp)
+                        mTargetGroupId = 0;
+                }
+                else
+                {
+                    auto* tgtgrp = parentModule->get_pin_group_by_name(mName.toStdString());
+                    if (tgtgrp)
+                        mTargetGroupId = tgtgrp->get_id();
+                }
+                if (!mTargetGroupId)
+                {
+                    // target group does not exist, create it
+                    if (mName.isEmpty())
+                        mName = QString::fromStdString(pinToMove->get_name());
+                    mPinActions.replace(0,PinAction::Create); // create will place pins in new group
+                }
             }
         }
 
@@ -199,13 +216,17 @@ namespace hal
                         if (pin) pgrp->assign_pin(pin).is_ok();
                     }
                 }
+                if (mGroupOrderNo >= 0)
+                    parentModule->move_pin_group(res.get(),mGroupOrderNo).is_ok();
                 if (!undo)
-                    undo = new ActionPingroup(PinAction::Delete, mTargetGroupId);
+                    undo = new ActionPingroup(PinAction::DeleteGroup, mTargetGroupId);
                 break;
             }
-            case PinAction::Delete:
+            case PinAction::DeleteGroup:
             {
                 auto* pgrp = parentModule->get_pin_group_by_id(mSourceGroupId);
+                if (!pgrp) return false;
+                int currentIndex = pinGroupIndex(parentModule,pgrp);
                 QList<u32> pins;
                 for (const auto& pin : pgrp->get_pins())
                 {
@@ -215,13 +236,14 @@ namespace hal
                 {
                     undo = new ActionPingroup(PinAction::Create, pgrp->get_id(), QString::fromStdString(pgrp->get_name()));
                     undo->setPinIds(pins);
+                    undo->setGroupOrderNo(currentIndex);
                 }
                 break;
             }
             case PinAction::MovePin:
             {
-                auto* tgtgrp = parentModule->get_pin_group_by_id(mTargetGroupId);
-                auto* pinToMove = parentModule->get_pin_by_id(mPinIds.at(0));
+                PinGroup<ModulePin>* tgtgrp = parentModule->get_pin_group_by_id(mTargetGroupId);
+                ModulePin* pinToMove = parentModule->get_pin_by_id(mPinIds.at(0));
                 if (!tgtgrp || !pinToMove) return false;
                 auto* srcgrp = pinToMove->get_group().first;
 
@@ -230,6 +252,14 @@ namespace hal
                     if (tgtgrp->assign_pin(pinToMove).is_ok()) return false;
                 }
                 tgtgrp->move_pin(pinToMove,mPinOrderNo).is_ok();
+                break;
+            }
+            case PinAction::RemovePin:
+            {
+                PinGroup<ModulePin>* srcgrp = parentModule->get_pin_group_by_id(mSourceGroupId);
+                ModulePin* pinToRemove = parentModule->get_pin_by_id(mPinIds.at(0));
+                if (!srcgrp || !pinToRemove) return false;
+                srcgrp->remove_pin(pinToRemove).is_ok();
                 break;
             }
             case PinAction::MoveGroup:
@@ -253,27 +283,51 @@ namespace hal
                     undo->setPinOrderNo(currentIndex);
                 }
             }
-            case PinAction::Rename:
+            case PinAction::RenamePin:
+            {
+                if (mPinIds.isEmpty()) return false;
+                auto* pin = parentModule->get_pin_by_id(mPinIds.first());
+                if (!pin) return false;
+                QString oldName = QString::fromStdString(pin->get_name());
+                pin->set_name(mName.toStdString());
+                if (!undo)
+                {
+                    undo = new ActionPingroup(PinAction::RenamePin, pin->get_id(), oldName);
+                }
+            }
+            case PinAction::RenameGroup:
             {
                 auto* pgrp = parentModule->get_pin_group_by_id(mTargetGroupId);
                 if (!pgrp) return false;
                 QString oldName = QString::fromStdString(pgrp->get_name());
                 pgrp->set_name(mName.toStdString());
-                if (undo)
+                if (!undo)
                 {
-                    undo->addPinAction(PinAction::Rename);
-                    undo->setName(oldName);
+                    undo = new ActionPingroup(PinAction::RenameGroup, pgrp->get_id(), oldName);
                 }
-                else
-                    undo = new ActionPingroup(PinAction::Rename, pgrp->get_id(), oldName);
                 break;
             }
             case PinAction::TypeChange:
+            {
+                if (mPinIds.isEmpty()) return false;
+                auto* pin = parentModule->get_pin_by_id(mPinIds.first());
+                if (!pin) return false;
+                PinType ptype = enum_from_string<PinType>(mName.toStdString(),PinType::none);
+                PinType oldPtype = pin->get_type();
+                pin->set_type(ptype);
+                if (!undo)
+                {
+                    undo = new ActionPingroup(PinAction::TypeChange, 0, QString::fromStdString(enum_to_string<PinType>(oldPtype)));
+                    undo->setPinId(pin->get_id());
+                }
                 break;
+            }
             default:
                 break;
             }
         }
+        if (undo)
+            undo->setObject(object());
         mUndoAction = undo;
         return UserAction::exec();
     }

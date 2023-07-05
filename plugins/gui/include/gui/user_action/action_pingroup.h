@@ -25,22 +25,25 @@
 
 #pragma once
 #include "user_action.h"
+#include "hal_core/netlist/module.h"
 #include <QString>
 #include <QObject>
 
 namespace hal
 {
+
     class PinAction : public QObject
     {
         Q_OBJECT
     public:
-        enum Type { None, Create, Delete, MovePin, MoveGroup, Rename, TypeChange, MaxAction };
+        enum Type { None, Create, DeleteGroup, RemovePin, MovePin, MoveGroup, RenamePin, RenameGroup, TypeChange, MaxAction };
         Q_ENUM(Type)
     public:
         static QString toString(Type tp);
         static Type fromString(const QString& s);
     };
 
+    int pinGroupIndex(const Module* mod, const PinGroup<Module>* pgrp);
     /**
      * @ingroup user_action
      * @brief Pingroup user actions
@@ -49,20 +52,27 @@ namespace hal
      *
      * Create:
      *     Pingroup with given name gets created.
-     *     Pins listed in mPinIds get moved into new group
+     *     Pins listed in pinIds get moved into new group
      *     Id of created group returned as targetGroupId()
      *
-     * Delete:
-     *     Pingroup ID=mSourceGroupId gets deleted.
+     * DeleteGroup:
+     *     Pingroup ID=sourceGroupId gets deleted.
      *     Pins in group are stored for undo command
      *
+     * RemovePin:
+     *     Remove pin from sourceGroup
+     *
      * MovePin:
-     *     Must use move constructor with mandatory arguments pinId and targetIndex
+     *     Must use move constructor with mandatory arguments pinId and pinOrderNo
      *     One out of targetIndex (existing pingroup) or name (create new pingroup)
      *       must be given to indicate destination
      *
      * MoveGroup:
-     *     Move Group identified by sourceGroupId to new targetIndex
+     *     Move Group identified by sourceGroupId to position groupOrderNo
+     * RenamePin:
+     *     Set new name to first pin in pinIds
+     * RenameGroup:
+     *     Set new name to group identified by targetGroupId
      */
     class ActionPingroup : public UserAction
     {
@@ -89,6 +99,7 @@ namespace hal
         void readFromXml(QXmlStreamReader& xmlIn) override;
         void addToHash(QCryptographicHash& cryptoHash) const override;
         void setPinIds(const QList<u32>& ids) { mPinIds = ids; }
+        void setPinId(u32 id) { mPinIds.clear(); mPinIds.append(id); }
         void addPinAction(PinAction::Type action) { mPinActions.prepend(action); }
         void setSourceGroupId(u32 id) { mSourceGroupId = id; }
         void setTargetGroupId(u32 id) { mTargetGroupId = id; }

@@ -12,6 +12,7 @@
 #include "gui/user_action/action_remove_items_from_object.h"
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_set_object_type.h"
+#include "gui/user_action/action_pingroup.h"
 #include "gui/user_action/user_action_compound.h"
 #include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
@@ -123,7 +124,7 @@ namespace hal
                 PingroupSelectorDialog psd("Pingroup selector", "Select pingroup", mod, false);
                 if (psd.exec() == QDialog::Accepted)
                 {
-                    QSet<u32> pinSet;
+                    QList<u32> pins;
                     auto* pinGroup = mod->get_pin_group_by_id(psd.getSelectedGroupId());
                     if (pinGroup == nullptr)
                         return;
@@ -132,14 +133,12 @@ namespace hal
                         auto* pin = mod->get_pin_by_id(mPortModel->getIdOfItem(item));
                         if (pin == nullptr)
                             return;
-                        pinSet.insert(pin->get_id());
+                        pins.append(pin->get_id());
                     }
-                    /* TODO PIN
-                    ActionAddItemsToObject* act = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), pinSet);
-                    act->setObject(UserActionObject(pinGroup->get_id(), UserActionObjectType::PinGroup));
-                    act->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                    ActionPingroup* act = new ActionPingroup(PinAction::MovePin,pinGroup->get_id());
+                    act->setPinIds(pins);
+                    act->setObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
                     act->exec();
-                    */
                 }
             });
         }
@@ -155,12 +154,9 @@ namespace hal
                     auto* group = gNetlist->get_module_by_id(modId)->get_pin_group_by_id(itemId);
                     if (group != nullptr)
                     {
-                        /* TODO PIN
-                        ActionRenameObject* renameObj = new ActionRenameObject(ipd.textValue());
-                        renameObj->setObject(UserActionObject(group->get_id(), UserActionObjectType::PinGroup));
-                        renameObj->setParentObject(UserActionObject(modId, UserActionObjectType::Module));
-                        renameObj->exec();
-                        */
+                        ActionPingroup* act = new ActionPingroup(PinAction::RenameGroup,itemId,ipd.textValue());
+                        act->setObject(UserActionObject(modId, UserActionObjectType::Module));
+                        act->exec();
                     }
                 }
             });
@@ -168,12 +164,9 @@ namespace hal
                 auto* pinGroup = mod->get_pin_group_by_id(itemId);
                 if (pinGroup != nullptr)
                 {
-                    /* TDOD PIN
-                    ActionDeleteObject* delObj = new ActionDeleteObject;
-                    delObj->setObject(UserActionObject(pinGroup->get_id(), UserActionObjectType::PinGroup));
-                    delObj->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
-                    delObj->exec();
-                    */
+                    ActionPingroup* act = new ActionPingroup(PinAction::DeleteGroup,(u32)itemId);
+                    act->setObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                    act->exec();
                 }
             });
 
@@ -199,12 +192,10 @@ namespace hal
                     auto* pin = mod->get_pin_by_id(itemId);
                     if (pin != nullptr)
                     {
-                        /* TODO PIN
-                        ActionRenameObject* renameObj = new ActionRenameObject(ipd.textValue());
-                        renameObj->setObject(UserActionObject(pin->get_id(), UserActionObjectType::Pin));
-                        renameObj->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
-                        renameObj->exec();
-                        */
+                        ActionPingroup* act = new ActionPingroup(PinAction::RenamePin,0,ipd.textValue());
+                        act->setPinId(pin->get_id());
+                        act->setObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                        act->exec();
                     }
                 }
             });
@@ -222,12 +213,10 @@ namespace hal
 
                 if (cbd.exec() == QDialog::Accepted)
                 {
-                    /* TODO PIN
-                    ActionSetObjectType* act = new ActionSetObjectType(cbd.textValue());
-                    act->setObject(UserActionObject(pin->get_id(), UserActionObjectType::Pin));
-                    act->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                    ActionPingroup* act = new ActionPingroup(PinAction::TypeChange,0,cbd.textValue());
+                    act->setPinId(pin->get_id());
+                    act->setObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
                     act->exec();
-                    */
                 }
             });
             menu.addAction("Add net to current selection", [this, n]() {
@@ -244,16 +233,14 @@ namespace hal
         if (sameGroup.first && mod->get_pin_group_by_id(sameGroup.second)->size() > 1)
         {
             menu.addAction("Remove selection from group", [this, selectedPins, mod, sameGroup]() {
-                QSet<u32> pins;
+                QList<u32> pins;
                 for (auto item : selectedPins)
-                    pins.insert(mPortModel->getIdOfItem(item));
+                    pins.append(mPortModel->getIdOfItem(item));
 
-                /* TODO PIN
-                ActionRemoveItemsFromObject* act = new ActionRemoveItemsFromObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), pins);
-                act->setObject(UserActionObject(mod->get_pin_group_by_id(sameGroup.second)->get_id(), UserActionObjectType::PinGroup));
-                act->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
+                ActionPingroup* act = new ActionPingroup(PinAction::RemovePin,mod->get_pin_group_by_id(sameGroup.second)->get_id());
+                act->setPinIds(pins);
+                act->setObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
                 act->exec();
-                */
             });
         }
 
@@ -288,26 +275,20 @@ namespace hal
                 InputDialog ipd("Pingroup name", "New pingroup name", "ExampleName");
                 if (ipd.exec() == QDialog::Accepted && !ipd.textValue().isEmpty())
                 {
-                    QSet<u32> pins;
+                    QList<u32> pins;
                     auto mod = gNetlist->get_module_by_id(modId);
                     for (auto item : selectedPins)
                     {
                         auto* pin = mod->get_pin_by_id(mPortModel->getIdOfItem(item));
                         if (pin == nullptr)
                             return;
-                        pins.insert(pin->get_id());
+                        pins.append(pin->get_id());
                     }
-                    /* TODO PIN
-                    UserActionCompound* act = new UserActionCompound;
-                    act->setUseCreatedObject();
-                    ActionCreateObject* actCreate = new ActionCreateObject(UserActionObjectType::PinGroup, ipd.textValue());
-                    actCreate->setParentObject(UserActionObject(modId, UserActionObjectType::Module));
-                    ActionAddItemsToObject* actAdd = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), pins);
-                    actAdd->setUsedInCreateContext();
-                    act->addAction(actCreate);
-                    act->addAction(actAdd);
+
+                    ActionPingroup* act = new ActionPingroup(PinAction::Create,0,ipd.textValue());
+                    act->setPinIds(pins);
+                    act->setObject(UserActionObject(modId, UserActionObjectType::Module));
                     act->exec();
-                    */
                 }
             });
         }

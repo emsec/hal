@@ -523,8 +523,9 @@ namespace hal
         bool bottomEdge = row == mRootItem->getChildCount();
         auto desiredIdx = bottomEdge ? row-1 : row;
         if(ownRow < row && !bottomEdge) desiredIdx--;
-        ActionPingroup* act = new ActionPingroup(PinAction::MoveGroup,(u32)getIdOfItem(droppedGroup));
+        ActionPingroup* act = new ActionPingroup(PinAction::MoveGroup);
         act->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
+        act->setGroupOrderNo(getIdOfItem(droppedGroup));
         act->setPinOrderNo(desiredIdx);
         bool ok = act->exec();
         if(ok){
