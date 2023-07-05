@@ -189,6 +189,25 @@ namespace hal
             )");
 
         py_netlist_preprocessing.def_static(
+            "propagate_constants",
+            [](Netlist* nl) -> std::optional<u32> {
+                auto res = NetlistPreprocessingPlugin::propagate_constants(nl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            R"(
+
+            )");
+
+        py_netlist_preprocessing.def_static(
             "simplify_lut_inits",
             [](Netlist* nl) -> std::optional<u32> {
                 auto res = NetlistPreprocessingPlugin::simplify_lut_inits(nl);

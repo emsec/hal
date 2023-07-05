@@ -94,6 +94,9 @@ namespace hal
         // TODO the mux_inv_gl can go as soon as we can dynamically create gate libs and copy gates types
         static Result<u32> manual_mux_optimizations(Netlist* nl, GateLibrary* mux_inv_gl);
 
+        // TODO
+        static Result<u32> propagate_constants(Netlist* nl);
+
         /**
          * Replaces pins connected to GND/VCC with constants and simplifies the boolean function of a LUT by recomputing the INIT string.
          * 
