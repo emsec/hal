@@ -1,0 +1,3 @@
+from hal_plugins import netlist_preprocessing
+
+netlist_preprocessing.NetlistPreprocessingPlugin.simplify_lut_inits(netlist)

@@ -202,6 +202,11 @@ namespace hal
             {
                 for (const auto& ep : fan_in)
                 {
+                    if (ep->get_net()->is_gnd_net() || ep->get_net()->is_vcc_net())
+                    {
+                        continue;
+                    }
+
                     if (std::find(active_pins.begin(), active_pins.end(), ep->get_pin()->get_name()) == active_pins.end())
                     {
                         GatePin* pin = ep->get_pin();
@@ -227,6 +232,8 @@ namespace hal
         return OK(num_eps);
     }
 
+    // TODO make this check every pin of a gate and check whether the generated boolean function (with replaced gnd and vcc nets) is just a variable.
+    //      Afterwards just connect input net to buffer destination. Do this for all pins and delete gate if it has no more successors and not global outputs
     Result<u32> NetlistPreprocessingPlugin::remove_buffers(Netlist* nl)
     {
         u32 num_gates = 0;
@@ -912,6 +919,107 @@ namespace hal
         return OK(res_count);
     }
 
+    Result<u32> NetlistPreprocessingPlugin::propagate_constants(Netlist* nl)
+    {
+        Net* gnd_net = nl->get_gnd_gates().front()->get_fan_out_nets().front();
+        Net* vcc_net = nl->get_vcc_gates().front()->get_fan_out_nets().front();
+
+        u32 total_replaced_dst_count = 0;
+
+        while (true)
+        {
+            u32 replaced_dst_count = 0;
+            std::vector<Gate*> to_delete;
+            for (const auto g : nl->get_gates([](const auto g) {
+                     return g->get_type()->has_property(GateTypeProperty::combinational) && !g->get_type()->has_property(GateTypeProperty::ground)
+                            && !g->get_type()->has_property(GateTypeProperty::power);
+                 }))
+            {
+                bool has_global_output = false;
+                for (const auto ep : g->get_fan_out_endpoints())
+                {
+                    if (ep->get_net()->is_global_output_net())
+                    {
+                        has_global_output = true;
+                    }
+
+                    auto bf_res = g->get_resolved_boolean_function(ep->get_pin(), false);
+                    if (bf_res.is_error())
+                    {
+                        return ERR_APPEND(bf_res.get_error(),
+                                          "unable to propagate constants: failed to generate boolean function at gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + " for pin "
+                                              + ep->get_pin()->get_name());
+                    }
+                    auto bf      = bf_res.get();
+                    auto sub_res = BooleanFunctionDecorator(bf).substitute_power_ground_nets(nl);
+                    if (sub_res.is_error())
+                    {
+                        return ERR_APPEND(bf_res.get_error(),
+                                          "unable to propagate constants: failed to substitue power and ground nets in boolean function of gate " + g->get_name() + " with ID "
+                                              + std::to_string(g->get_id()) + " for pin " + ep->get_pin()->get_name());
+                    }
+                    bf = sub_res.get();
+                    bf = bf.simplify_local();
+
+                    // if boolean function of output pin can be simplified to a constant connect all its successors to gnd/vcc instead
+                    if (bf.is_constant())
+                    {
+                        Net* new_source;
+                        if (bf.has_constant_value(0))
+                        {
+                            new_source = gnd_net;
+                        }
+                        else if (bf.has_constant_value(1))
+                        {
+                            new_source = vcc_net;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+
+                        std::vector<std::pair<Gate*, GatePin*>> to_replace;
+                        for (auto dst : ep->get_net()->get_destinations())
+                        {
+                            to_replace.push_back({dst->get_gate(), dst->get_pin()});
+                        }
+
+                        for (const auto& [dst_g, dst_p] : to_replace)
+                        {
+                            ep->get_net()->remove_destination(dst_g, dst_p);
+                            new_source->add_destination(dst_g, dst_p);
+
+                            replaced_dst_count++;
+                        }
+
+                        nl->delete_net(ep->get_net());
+                    }
+                }
+
+                if (!has_global_output && g->get_successors().empty())
+                {
+                    to_delete.push_back(g);
+                }
+            }
+
+            for (auto g : to_delete)
+            {
+                nl->delete_gate(g);
+            }
+
+            if (replaced_dst_count == 0)
+            {
+                break;
+            }
+
+            log_info("netlist_preprocessing", "replaced {} destinations this with power/ground nets this iteration", replaced_dst_count);
+            total_replaced_dst_count += replaced_dst_count;
+        }
+
+        log_info("netlist_preprocessing", "replaced {} destinations with power/ground nets in total", total_replaced_dst_count);
+        return OK(total_replaced_dst_count);
+    }
+
     namespace
     {
         Result<std::tuple<GateType*, std::vector<GatePin*>, std::vector<GatePin*>>>
@@ -1408,7 +1516,7 @@ namespace hal
                 net->set_name(pin->get_name());
                 log_info("netlist_preprocessing", "renamed net {} with pin name {}", net->get_name(), pin->get_name());
             }
-            
+
             if (resynth_nl == nullptr)
             {
                 return ERR("Unable to resynthesize boolean functions with yosys: failed to load resynthesized netlist at " + resynthesized_netlist_path.string());
