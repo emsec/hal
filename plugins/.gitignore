@@ -9,6 +9,8 @@
 !gate_libraries/**/*
 !gexf_writer*
 !gexf_writer/**/*
+!genlib_writer*
+!genlib_writer/**/*
 !graph_algorithm*
 !graph_algorithm/**/*
 !gui*
