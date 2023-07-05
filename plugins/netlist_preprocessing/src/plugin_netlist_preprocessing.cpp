@@ -49,6 +49,7 @@ namespace hal
                 "/usr/bin/abc",
                 "/usr/local/bin/abc",
                 "/opt/homebrew/bin/abc",
+                "/opt/abc/abc"
             };
 
             for (const auto& path : abc_binary_paths)

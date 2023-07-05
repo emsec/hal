@@ -4,6 +4,7 @@
 #include "hal_core/utilities/log.h"
 
 #include <fstream>
+#include <clocale>
 
 namespace hal
 {
