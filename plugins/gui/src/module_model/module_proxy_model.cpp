@@ -5,13 +5,27 @@
 
 namespace hal
 {
-    ModuleProxyModel::ModuleProxyModel(QObject* parent) : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical)
+    ModuleProxyModel::ModuleProxyModel(QObject* parent) : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical), mFilterNets(false), mFilterGates(false)
     {
         // QTS PROXY MODELS ARE DUMB, IMPLEMENT CUSTOM SOLUTION OR SWITCH TO A DIFFERENT FILTER METHOD
 
         // IN VIEW
         // EVERY TIME FILTER CHANGES / ITEM GETS ADDED MODIFY LOCAL DATA STRUCTURE TO REFLECT CURRENT ITEM VISUALS
         // STYLED DELEGATES USE THAT DATA STRUCTURE TO DRAW THEMSELVES
+    }
+
+    bool ModuleProxyModel::toggleFilterNets()
+    {
+        mFilterNets = !mFilterNets;
+        invalidateFilter();
+        return mFilterNets;
+    }
+
+    bool ModuleProxyModel::toggleFilterGates()
+    {
+        mFilterGates = !mFilterGates;
+        invalidateFilter();
+        return mFilterGates;
     }
 
     bool ModuleProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const

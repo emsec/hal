@@ -64,6 +64,18 @@ namespace hal
          */
         void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
 
+        /**
+         * Toggles whether or not nets are accepted by the filter. NOT YET ACTUALLY IMPLEMENTED
+         * @returns <b>true</b> if nets are filtered out now. <b>false</b> if not. 
+         */
+        bool toggleFilterNets();
+
+        /**
+         * Toggles whether or not gates are accepted by the filter. NOT YET ACTUALLY IMPLEMENTED
+         * @returns <b>true</b> if gates are filtered out now. <b>false</b> if not. 
+         */
+        bool toggleFilterGates();
+
     protected:
         /**
          * Overrides QSortFilterProxyModel::filterAcceptsRow to implement the filter logic based on the regular
@@ -89,5 +101,8 @@ namespace hal
 
     private:
         gui_utility::mSortMechanism mSortMechanism;
+
+        bool mFilterNets;
+        bool mFilterGates;
     };
 }
