@@ -1682,6 +1682,21 @@ namespace hal
 
     Result<std::monostate> NetlistPreprocessingPlugin::resynthesize_gate(Netlist* nl, Gate* g, GateLibrary* hgl_lib, const std::filesystem::path& genlib_path, const bool delete_gate)
     {
+        if (g == nullptr)
+        {
+            return ERR("no valid gate selected (gate is nullptr)");
+        }
+
+        if (hgl_lib == nullptr)
+        {
+            return ERR("no valid hgl_lib selected (hgl_lib is nullptr)");
+        }
+
+        if (!utils::file_exists(genlib_path.string()))
+        {
+            return ERR("genlib does not exist");
+        }
+
         auto resynth_res = generate_resynth_netlist_for_gate(g, hgl_lib, genlib_path);
         if (resynth_res.is_error())
         {
