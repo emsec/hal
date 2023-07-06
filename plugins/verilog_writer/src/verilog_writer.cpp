@@ -375,7 +375,7 @@ namespace hal
             {
                 const Net* net = *it;
 
-                if (first_net)
+                if (!first_net)
                 {
                     res_stream << "," << std::endl;
                 }
