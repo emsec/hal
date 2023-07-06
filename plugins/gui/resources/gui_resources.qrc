@@ -84,6 +84,8 @@
         <file alias="ne_gate_nor">icons/netlist_elements/gate_nor.svg</file>
         <file alias="ne_gate_xor">icons/netlist_elements/gate_xor.svg</file>
         <file alias="ne_gate_xnor">icons/netlist_elements/gate_xnor.svg</file>
+        <file alias="ne_no_gate">icons/netlist_elements/no_gate.svg</file>
+        <file alias="ne_no_net">icons/netlist_elements/no_net.svg</file>
         <file alias="toolbox">icons/toolbox.png</file>
         <file alias="undo2">icons/0104-undo2.svg</file>
         <file alias="module_cursor">icons/module_cursor.png</file>

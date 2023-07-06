@@ -62,6 +62,7 @@ namespace hal
     {
         struct PythonEditorControlEntry {
             int tabInx;
+            bool active;
             std::string restore;
             std::string filename;
         };

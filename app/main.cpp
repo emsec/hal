@@ -102,14 +102,26 @@ int main(int argc, const char* argv[])
         lm->deactivate_all_channels();
     }
 
-    /*
-    if (!plugin_manager::load_all_plugins())
+    plugin_manager::load("hal_gui");
+    // We need to check at an early stage (before CLI options are parsed) whether GUI will take control over HAL.
+    //    if yes :    User determines which plugins get loaded
+    //    if no  :    Need to load all plugins to have full range of CLI options available
+    bool guictrl = false;
+    auto ui_plugin_flags = plugin_manager::get_ui_plugin_flags();
+    for (int i=1; i<argc; i++)
     {
+        std::string option(argv[i]);
+        auto it = ui_plugin_flags.find(option);
+        if (it != ui_plugin_flags.end()) {
+            guictrl = true;
+            break;
+        }
+    }
+    if (!guictrl && !plugin_manager::load_all_plugins())
+    {
+        // error loading all plugins
         return cleanup(ERROR);
     }
-*/
-    plugin_manager::load("hal_gui");
-
 
     /* add plugin cli options */
     auto options = plugin_manager::get_cli_plugin_options();

@@ -668,7 +668,7 @@ namespace hal
          * If `recursive` is `true`, gates in submodules are considered as well.
          *
          * @param[in] filter - Filter function to be evaluated on each gate.
-         * @param[in] recursive - Set to `true` to also consider gates in submodules, `false` otherwise.
+         * @param[in] recursive - Set to `true` to also consider gates in submodules, `false` otherwise. Defaults to `false`.
          * @return A vector of gates.
          */
         std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter, bool recursive = false) const;
