@@ -180,11 +180,11 @@ namespace hal
 
                 res_stream << "    wire " << net_alias;
 
-                if (net->is_vcc_net())
+                if (net->is_vcc_net() && net->get_num_of_sources() == 0)
                 {
                     res_stream << " = 1'b1";
                 }
-                else if (net->is_gnd_net())
+                else if (net->is_gnd_net() && net->get_num_of_sources() == 0)
                 {
                     res_stream << " = 1'b0";
                 }
