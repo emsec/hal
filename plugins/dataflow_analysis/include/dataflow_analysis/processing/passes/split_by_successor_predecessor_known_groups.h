@@ -31,17 +31,18 @@ namespace hal
 {
     namespace dataflow
     {
+        /* forward declaration */
+        struct Grouping;
+
         namespace processing
         {
-            struct Configuration
-            {
-                u32 pass_layers;
-                u32 num_threads;
+            struct Configuration;
+        }
 
-                bool enforce_type_consistency;
-                bool has_known_groups = false;
-            };
+        namespace split_by_successor_predecessor_known_groups
+        {
+            std::shared_ptr<Grouping> process(const processing::Configuration& config, const std::shared_ptr<Grouping>& state, bool successors);
 
-        }    // namespace processing
+        }    // namespace split_by_successor_predecessor_known_groups
     }        // namespace dataflow
-}
+}    // namespace hal
