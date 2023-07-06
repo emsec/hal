@@ -39,6 +39,25 @@ namespace hal
         return std::string("0.1");
     }
 
+    namespace abc
+    {
+        Result<std::string> query_binary_path()
+        {
+            static const std::vector<std::string> abc_binary_paths = {
+                "/usr/bin/berkeley-abc", "/usr/local/bin/berkeley-abc", "/opt/homebrew/bin/berkeley-abc", "/usr/bin/abc", "/usr/local/bin/abc", "/opt/homebrew/bin/abc", "/opt/abc/abc"};
+
+            for (const auto& path : abc_binary_paths)
+            {
+                if (std::filesystem::exists(path))
+                {
+                    return OK(path);
+                }
+            }
+
+            return ERR("could not query binary path: no binary found for yosys logic synthesis tool");
+        }
+    }    // namespace abc
+
     namespace yosys
     {
         Result<std::string> query_binary_path()
@@ -465,6 +484,7 @@ namespace hal
         return OK(num_gates);
     }
 
+    // TODO this is very slow, which is to be expected but maybe think about ways to improve this
     Result<u32> NetlistPreprocessingPlugin::remove_redundant_logic(Netlist* nl)
     {
         const auto& nets   = nl->get_nets();
@@ -1541,7 +1561,7 @@ namespace hal
             const auto subgraph_nl = subgraph_nl_res.get();
 
             // TODO make this more robust
-            const std::filesystem::path base_path                  = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_yosys";
+            const std::filesystem::path base_path                  = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_abc";
             const std::filesystem::path org_netlist_path           = base_path / "org_netlist.v";
             const std::filesystem::path resynthesized_netlist_path = base_path / "resynth_netlist.v";
 
@@ -1577,14 +1597,14 @@ namespace hal
             }
             output_file.close();
 
-            auto yosys_query_res = yosys::query_binary_path();
-            if (yosys_query_res.is_error())
+            auto abc_query_res = abc::query_binary_path();
+            if (abc_query_res.is_error())
             {
-                return ERR_APPEND(yosys_query_res.get_error(), "Unable to resynthesize gate level netlist with yosys: failed to find yosys path");
+                return ERR_APPEND(abc_query_res.get_error(), "Unable to resynthesize gate level netlist with abc: failed to find abc path");
             }
 
-            const auto yosys_path     = yosys_query_res.get();
-            const std::string command = yosys_path + " -c " + '"' + "read_library " + genlib_path.string() + "; " + "read_verilog -m " + org_netlist_path.string() + "; "
+            const auto abc_path       = abc_query_res.get();
+            const std::string command = abc_path + " -c " + '"' + "read_library " + genlib_path.string() + "; " + "read_verilog -m " + org_netlist_path.string() + "; "
                                         + "unmap; cleanup; sweep; strash; dc2; logic; " + "map" + (optimize_area ? " -a" : "") + "; " + "write_verilog " + resynthesized_netlist_path.string() + ";"
                                         + '"';
 
