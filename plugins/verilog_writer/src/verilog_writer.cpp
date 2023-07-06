@@ -375,17 +375,14 @@ namespace hal
             {
                 const Net* net = *it;
 
+                if (first_net)
+                {
+                    res_stream << "," << std::endl;
+                }
+                first_net = false;
+
                 if (net != nullptr)
                 {
-                    if (first_net)
-                    {
-                        first_net = false;
-                    }
-                    else
-                    {
-                        res_stream << "," << std::endl;
-                    }
-
                     if (const auto alias_it = aliases.find(net); alias_it != aliases.end())
                     {
                         res_stream << alias_it->second;
