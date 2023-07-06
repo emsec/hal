@@ -474,25 +474,22 @@ namespace hal
             return;
 
         int irow = currentIndex.row();
-        QString oldName = mGroupingTableModel->data(mGroupingTableModel->index(irow, 0), Qt::DisplayRole).toString();
-        u32 grpId = mGroupingTableModel->data(mGroupingTableModel->index(irow, 1), Qt::DisplayRole).toInt();
+        GroupingTableEntry gte = mGroupingTableModel->groupingAt(irow);
+
+        QString grpName  = gte.name();
+        u32     grpId    = gte.id();
+        QColor  grpColor = gte.color();
 
         QDialog dialog;
-        dialog.setWindowTitle(QString("Content of %1 (ID: %2)").arg(oldName).arg(grpId));
+        dialog.setWindowTitle(QString("Content of %1 (ID: %2)").arg(grpName).arg(grpId));
 
 
         // Create color rectangle
-        Grouping* grouping = gNetlist->get_grouping_by_id(grpId);
-        utils::Color color = grouping->get_color();
-        QColor qColor;
-        qColor.setHsv(color.h, color.s, color.v);
-
-        QLabel* colorTriangle = new QLabel();
-        colorTriangle->setText("");  // Unicode-Zeichen für ein nach oben zeigendes Dreieck
-        colorTriangle->setStyleSheet("background-color: " + qColor.name());
-        colorTriangle->setFixedSize(20, 20);  // Größe des Dreiecks anpassen
-        colorTriangle->setAutoFillBackground(true);
-        colorTriangle->show();
+        QLabel* colorRectangle = new QLabel();
+        colorRectangle->setText(QString());  // Empty text to visualize grouping color
+        colorRectangle->setStyleSheet("background-color: " + grpColor.name());
+        colorRectangle->setFixedSize(25, 25);  // Adapt size of grouping color
+        colorRectangle->setAutoFillBackground(true);
 
         // Replace InputDialog with SelectionTreeView
         SelectionTreeView* selectionTreeView = new SelectionTreeView(&dialog, true);
@@ -501,11 +498,13 @@ namespace hal
         QPushButton* closeButton = new QPushButton("Close", &dialog);
         connect(closeButton, &QPushButton::clicked, [&dialog](){ dialog.close(); });
 
-        QVBoxLayout* layout = new QVBoxLayout();
-        layout->addWidget(colorTriangle);
+        QVBoxLayout* layout = new QVBoxLayout(&dialog);
+        QHBoxLayout* hlay = new QHBoxLayout;
+        hlay->addStretch();
+        hlay->addWidget(colorRectangle);
+        layout->addLayout(hlay);
         layout->addWidget(selectionTreeView);
         layout->addWidget(closeButton);
-        dialog.setLayout(layout);
 
         dialog.exec();
     }
