@@ -61,6 +61,9 @@ namespace hal
             std::unordered_set<u32> get_successor_groups_of_group(u32 group_id) const;
             std::unordered_set<u32> get_predecessor_groups_of_group(u32 group_id) const;
 
+            std::unordered_set<u32> get_known_successor_groups_of_group(u32 group_id) const;
+            std::unordered_set<u32> get_known_predecessor_groups_of_group(u32 group_id) const;
+
             std::set<u32> get_register_stage_intersect_of_group(u32 group_id) const;
 
             bool are_groups_allowed_to_merge(u32 group_1_id, u32 group_2_id, bool enforce_type_consistency) const;
@@ -73,6 +76,8 @@ namespace hal
                 std::shared_mutex mutex;
                 std::unordered_map<u32, std::unordered_set<u32>> suc_cache;
                 std::unordered_map<u32, std::unordered_set<u32>> pred_cache;
+                std::unordered_map<u32, std::unordered_set<u32>> suc_known_group_cache;
+                std::unordered_map<u32, std::unordered_set<u32>> pred_known_group_cache;
                 std::set<std::set<u32>> comparison_cache;
             } cache;
 

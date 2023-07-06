@@ -153,11 +153,11 @@ namespace hal
             return std::set<u32>(intersect.begin(), intersect.end());
         }
 
-        std::unordered_set<u32> Grouping::get_successor_groups_of_group(u32 id) const
+        std::unordered_set<u32> Grouping::get_successor_groups_of_group(u32 group_id) const
         {
             {
                 std::shared_lock lock(cache.mutex);
-                if (auto it = cache.suc_cache.find(id); it != cache.suc_cache.end())
+                if (auto it = cache.suc_cache.find(group_id); it != cache.suc_cache.end())
                 {
                     return it->second;
                 }
@@ -165,13 +165,13 @@ namespace hal
             std::unique_lock lock(cache.mutex);
 
             // check again, since another thread might have gotten the unique lock first
-            if (auto it = cache.suc_cache.find(id); it != cache.suc_cache.end())
+            if (auto it = cache.suc_cache.find(group_id); it != cache.suc_cache.end())
             {
                 return it->second;
             }
 
             std::unordered_set<u32> successors;
-            for (auto gate : gates_of_group.at(id))
+            for (auto gate : gates_of_group.at(group_id))
             {
                 for (auto gate_id : this->netlist_abstr.gate_to_successors.at(gate))
                 {
@@ -179,16 +179,16 @@ namespace hal
                 }
             }
 
-            cache.suc_cache.emplace(id, successors);
+            cache.suc_cache.emplace(group_id, successors);
 
             return successors;
         }
 
-        std::unordered_set<u32> Grouping::get_predecessor_groups_of_group(u32 id) const
+        std::unordered_set<u32> Grouping::get_predecessor_groups_of_group(u32 group_id) const
         {
             {
                 std::shared_lock lock(cache.mutex);
-                if (auto it = cache.pred_cache.find(id); it != cache.pred_cache.end())
+                if (auto it = cache.pred_cache.find(group_id); it != cache.pred_cache.end())
                 {
                     return it->second;
                 }
@@ -196,13 +196,13 @@ namespace hal
             std::unique_lock lock(cache.mutex);
 
             // check again, since another thread might have gotten the unique lock first
-            if (auto it = cache.pred_cache.find(id); it != cache.pred_cache.end())
+            if (auto it = cache.pred_cache.find(group_id); it != cache.pred_cache.end())
             {
                 return it->second;
             }
 
             std::unordered_set<u32> predecessors;
-            for (auto gate : gates_of_group.at(id))
+            for (auto gate : gates_of_group.at(group_id))
             {
                 for (auto gate_id : this->netlist_abstr.gate_to_predecessors.at(gate))
                 {
@@ -210,7 +210,69 @@ namespace hal
                 }
             }
 
-            cache.pred_cache.emplace(id, predecessors);
+            cache.pred_cache.emplace(group_id, predecessors);
+
+            return predecessors;
+        }
+
+        std::unordered_set<u32> Grouping::get_known_successor_groups_of_group(u32 group_id) const
+        {
+            {
+                std::shared_lock lock(cache.mutex);
+                if (auto it = cache.suc_known_group_cache.find(group_id); it != cache.suc_known_group_cache.end())
+                {
+                    return it->second;
+                }
+            }
+            std::unique_lock lock(cache.mutex);
+
+            // check again, since another thread might have gotten the unique lock first
+            if (auto it = cache.suc_known_group_cache.find(group_id); it != cache.suc_known_group_cache.end())
+            {
+                return it->second;
+            }
+
+            std::unordered_set<u32> successors;
+            for (auto gate : gates_of_group.at(group_id))
+            {
+                for (auto gate_id : this->netlist_abstr.gate_to_known_successor_groups.at(gate))
+                {
+                    successors.insert(parent_group_of_gate.at(gate_id));
+                }
+            }
+
+            cache.suc_known_group_cache.emplace(group_id, successors);
+
+            return successors;
+        }
+
+        std::unordered_set<u32> Grouping::get_known_predecessor_groups_of_group(u32 group_id) const
+        {
+            {
+                std::shared_lock lock(cache.mutex);
+                if (auto it = cache.pred_known_group_cache.find(group_id); it != cache.pred_known_group_cache.end())
+                {
+                    return it->second;
+                }
+            }
+            std::unique_lock lock(cache.mutex);
+
+            // check again, since another thread might have gotten the unique lock first
+            if (auto it = cache.pred_known_group_cache.find(group_id); it != cache.pred_known_group_cache.end())
+            {
+                return it->second;
+            }
+
+            std::unordered_set<u32> predecessors;
+            for (auto gate : gates_of_group.at(group_id))
+            {
+                for (auto gate_id : this->netlist_abstr.gate_to_known_predecessor_groups.at(gate))
+                {
+                    predecessors.insert(parent_group_of_gate.at(gate_id));
+                }
+            }
+
+            cache.pred_known_group_cache.emplace(group_id, predecessors);
 
             return predecessors;
         }
