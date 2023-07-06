@@ -132,6 +132,66 @@ namespace hal
             return *this;
         }
 
+        Configuration& Configuration::with_known_structures(const std::unordered_set<const GateType*>& structures, bool overwrite)
+        {
+            if (overwrite)
+            {
+                this->known_net_groups.clear();
+            }
+
+            for (const auto* gate : this->netlist->get_gates([structures](const Gate* g) { return structures.find(g->get_type()) != structures.end(); }))
+            {
+                for (const auto* pin_group : gate->get_type()->get_pin_groups())
+                {
+                    std::vector<Net*> nets;
+                    for (const auto* pin : pin_group->get_pins())
+                    {
+                        if (pin->get_direction() == PinDirection::input)
+                        {
+                            nets.push_back(gate->get_fan_in_net(pin));
+                        }
+                        else if (pin->get_direction() == PinDirection::output)
+                        {
+                            nets.push_back(gate->get_fan_out_net(pin));
+                        }
+                    }
+                    this->known_net_groups.push_back(nets);
+                }
+            }
+
+            return *this;
+        }
+
+        Configuration& Configuration::with_known_structures(const std::unordered_map<const GateType*, std::vector<PinGroup<GatePin>*>>& structures, bool overwrite)
+        {
+            if (overwrite)
+            {
+                this->known_net_groups.clear();
+            }
+
+            for (const auto* gate : this->netlist->get_gates([structures](const Gate* g) { return structures.find(g->get_type()) != structures.end(); }))
+            {
+                for (const auto* pin_group : structures.at(gate->get_type()))
+                {
+                    std::vector<Net*> nets;
+                    for (const auto* pin : pin_group->get_pins())
+                    {
+                        if (pin->get_direction() == PinDirection::input)
+                        {
+                            nets.push_back(gate->get_fan_in_net(pin));
+                        }
+                        else if (pin->get_direction() == PinDirection::output)
+                        {
+                            nets.push_back(gate->get_fan_out_net(pin));
+                        }
+                    }
+                    this->known_net_groups.push_back(nets);
+                }
+            }
+
+            return *this;
+        }
+
         Configuration& Configuration::with_known_groups(const std::vector<Module*>& groups, bool overwrite)
         {
             if (overwrite)

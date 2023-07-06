@@ -172,6 +172,32 @@ namespace hal
             Configuration& with_known_structures(const std::vector<std::pair<Gate*, std::vector<PinGroup<GatePin>*>>>& structures, bool overwrite = false);
 
             /**
+             * Add all gates of a (typically large) gate type to the set of previously identified word-level structures.
+             * The gate types do not have to be part of the target gate types.
+             * The input and output pin groups of the gates of these types will be used to guide datapath analysis.
+             * Only pin groups larger than `min_group_size´ will be considered.
+             * 
+             * @param[in] structures - A set of gate types.
+             * @param[in] overwrite - Set `true` to overwrite the existing known word-level structures, `false` otherwise. Defaults to `false`.
+             * @returns The updated dataflow analysis configuration.
+             */
+            Configuration& with_known_structures(const std::unordered_set<const GateType*>& structures, bool overwrite = false);
+
+            /**
+             * Add all gates of a (typically large) gate type to the set of previously identified word-level structures.
+             * The gate types do not have to be part of the target gate types.
+             * The input and output pin groups of the gates of these types will be used to guide datapath analysis.
+             * For each gate type, the input and output pin groups to be considered for analysis must be specified. 
+             * An empty pin group vector results in all pin groups of the gate type being considered.
+             * Only pin groups larger than `min_group_size´ will be considered.
+             *
+             * @param[in] structures - A map from gates to a vector of a subset of their pin groups.
+             * @param[in] overwrite - Set `true` to overwrite the existing known word-level structures, `false` otherwise. Defaults to `false`.
+             * @returns The updated dataflow analysis configuration.
+             */
+            Configuration& with_known_structures(const std::unordered_map<const GateType*, std::vector<PinGroup<GatePin>*>>& structures, bool overwrite = false);
+
+            /**
              * Add modules to the set of previously identified word-level groups.
              * These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored.
              * The groups will be used to guide dataflow analysis, but will remain unaltered in the process.
