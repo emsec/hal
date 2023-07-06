@@ -378,7 +378,7 @@ namespace hal
             res_stream << "        ." << escape(pin) << "(";
             if (nets.size() > 1)
             {
-                res_stream << "{";
+                res_stream << "{" << std::endl << "            ";
             }
 
             bool first_net = true;
@@ -388,7 +388,7 @@ namespace hal
 
                 if (!first_net)
                 {
-                    res_stream << "," << std::endl;
+                    res_stream << "," << std::endl << "            ";
                 }
                 first_net = false;
 
@@ -412,7 +412,7 @@ namespace hal
 
             if (nets.size() > 1)
             {
-                res_stream << "}";
+                res_stream << std::endl << "        }";
             }
 
             res_stream << ")";
