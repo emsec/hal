@@ -487,172 +487,155 @@ namespace hal
     // TODO this is very slow, which is to be expected but maybe think about ways to improve this
     Result<u32> NetlistPreprocessingPlugin::remove_redundant_logic(Netlist* nl)
     {
-        const auto& nets   = nl->get_nets();
-        auto nets_to_check = std::set<Net*>(nets.begin(), nets.end());
+        struct GateFingerprint
+        {
+            const GateType* type;
+            std::vector<Net*> ordered_fan_in = {};
+            std::set<Net*> unordered_fan_in  = {};
+            u8 trust_table_hw                = 0;
+
+            bool operator<(const GateFingerprint& other) const
+            {
+                return (other.type < type) || (other.type == type && other.ordered_fan_in < ordered_fan_in)
+                       || (other.type == type && other.ordered_fan_in == ordered_fan_in && other.unordered_fan_in < unordered_fan_in)
+                       || (other.type == type && other.ordered_fan_in == ordered_fan_in && other.unordered_fan_in == unordered_fan_in && other.trust_table_hw < trust_table_hw);
+            }
+        };
+
+        static std::vector<u8> hw_map = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4};
 
         u32 num_gates = 0;
-        while (!nets_to_check.empty())
+        bool progress;
+        std::vector<Gate*> target_gates = nl->get_gates([](const Gate* g) {
+            const auto* type = g->get_type();
+            return type->has_property(GateTypeProperty::combinational) || type->has_property(GateTypeProperty::ff);
+        });
+
+        do
         {
-            auto* current_net = *nets_to_check.begin();
-            nets_to_check.erase(current_net);
+            std::map<GateFingerprint, std::vector<Gate*>> fingerprinted_gates;
 
-            // only continue for nets with multiple destinations
-            if (current_net->get_num_of_destinations() <= 1)
+            progress = false;
+
+            for (auto* gate : target_gates)
             {
-                nets_to_check.erase(current_net);
-                continue;
-            }
-
-            std::set<Gate*> visited_gates;
-            std::vector<std::vector<Gate*>> gates_to_delete;
-            auto destinations = current_net->get_destinations();
-            for (u32 i = 0; i < destinations.size(); i++)
-            {
-                auto* master_destination = destinations.at(i);
-                auto* master_gate        = master_destination->get_gate();
-
-                // check if we have already identified the current master gate as duplicate of some other gate
-                if (visited_gates.find(master_gate) != visited_gates.end())
+                GateFingerprint fingerprint;
+                fingerprint.type = gate->get_type();
+                if (fingerprint.type->has_property(GateTypeProperty::combinational))
                 {
-                    continue;
-                }
-
-                // skip everything that is not combinational, a FF, or a latch
-                auto* master_type = master_gate->get_type();
-
-                // cache master input nets and endpoints
-                std::variant<std::vector<Net*>, std::map<GatePin*, Net*>> master_inputs;
-                if (master_type->has_property(GateTypeProperty::combinational))
-                {
-                    // for combinational gates, the order of inputs will be considered by the final SMT check only (accounts for commutative Boolean functions)
-                    auto tmp = master_gate->get_fan_in_nets();
-                    std::sort(tmp.begin(), tmp.end());
-                    master_inputs = std::move(tmp);
-                }
-                else if (master_type->has_property(GateTypeProperty::ff) || master_type->has_property(GateTypeProperty::latch))
-                {
-                    // for FF and latch gates, pins and nets must match exactly
-                    std::map<GatePin*, Net*> tmp;
-                    for (auto& ep : master_gate->get_fan_in_endpoints())
+                    const auto& tmp = gate->get_fan_in_nets();
+                    fingerprint.unordered_fan_in.insert(tmp.cbegin(), tmp.cend());
+                    if (fingerprint.type->has_property(GateTypeProperty::c_lut))
                     {
-                        tmp[ep->get_pin()] = ep->get_net();
-                    }
-                    master_inputs = std::move(tmp);
-                }
-                else
-                {
-                    continue;
-                }
-
-                // identify duplicate gates
-                std::vector<Gate*> duplicate_gates = {master_gate};
-                for (u32 j = i + 1; j < destinations.size(); j++)
-                {
-                    auto* current_destination = destinations.at(j);
-                    auto* current_gate        = current_destination->get_gate();
-
-                    if (current_gate == master_gate)
-                    {
-                        continue;
-                    }
-
-                    // check if we have already identified the current gate as duplicate of some other gate
-                    if (visited_gates.find(current_gate) != visited_gates.end())
-                    {
-                        continue;
-                    }
-
-                    // check against master gate type
-                    auto* current_type = current_gate->get_type();
-                    if (current_type != master_type)
-                    {
-                        continue;
-                    }
-
-                    // check current inputs against master input nets
-                    std::variant<std::vector<Net*>, std::map<GatePin*, Net*>> current_inputs;
-                    if (master_type->has_property(GateTypeProperty::combinational))
-                    {
-                        // for combinational gates, the order of inputs will be considered by the final SMT check only (accounts for commutative Boolean functions)
-                        auto tmp = current_gate->get_fan_in_nets();
-                        std::sort(tmp.begin(), tmp.end());
-                        current_inputs = std::move(tmp);
-                    }
-                    else if (master_type->has_property(GateTypeProperty::ff) || master_type->has_property(GateTypeProperty::latch))
-                    {
-                        // for FF and latch gates, pins and nets must match exactly
-                        std::map<GatePin*, Net*> tmp;
-                        for (auto& ep : current_gate->get_fan_in_endpoints())
+                        if (const auto res = gate->get_init_data(); res.is_ok())
                         {
-                            tmp[ep->get_pin()] = ep->get_net();
-                        }
-                        current_inputs = std::move(tmp);
-                    }
-
-                    if (current_inputs != master_inputs)
-                    {
-                        continue;
-                    }
-
-                    if (master_type->has_property(GateTypeProperty::combinational))
-                    {
-                        // SMT Boolean function equivalence check for combinational gates
-                        bool skip_gate = false;
-                        for (const auto* pin : master_type->get_output_pins())
-                        {
-                            const auto solver_res =
-                                master_gate->get_resolved_boolean_function(pin)
-                                    .map<BooleanFunction>([pin, current_gate](BooleanFunction&& bf_master) {
-                                        return current_gate->get_resolved_boolean_function(pin).map<BooleanFunction>(
-                                            [bf_master = std::move(bf_master)](BooleanFunction&& bf_current) mutable { return BooleanFunction::Eq(std::move(bf_master), std::move(bf_current), 1); });
-                                    })
-                                    .map<BooleanFunction>([](auto&& bf_eq) { return BooleanFunction::Not(bf_eq.clone(), 1); })
-                                    .map<SMT::SolverResult>([](auto&& bf_not) -> Result<SMT::SolverResult> { return SMT::Solver({SMT::Constraint(std::move(bf_not))}).query(SMT::QueryConfig()); });
-
-                            if (solver_res.is_error() || !solver_res.get().is_unsat())
+                            const auto& init_str = res.get().front();
+                            for (const auto c : init_str)
                             {
-                                skip_gate = true;
-                                break;
+                                u8 tmp = std::toupper(c) - 0x30;
+                                if (tmp > 9)
+                                {
+                                    tmp -= 0x11;
+                                }
+                                fingerprint.trust_table_hw += hw_map.at(tmp);
                             }
                         }
+                    }
+                }
+                else if (fingerprint.type->has_property(GateTypeProperty::ff))
+                {
+                    fingerprint.ordered_fan_in = gate->get_fan_in_nets();
+                }
 
-                        if (skip_gate)
+                fingerprinted_gates[fingerprint].push_back(gate);
+            }
+
+            std::vector<std::vector<Gate*>> duplicate_gates;
+            for (const auto& [fingerprint, gates] : fingerprinted_gates)
+            {
+                if (gates.size() == 1)
+                {
+                    continue;
+                }
+
+                if (fingerprint.type->has_property(GateTypeProperty::combinational))
+                {
+                    std::set<const Gate*> visited;
+                    for (size_t i = 0; i < gates.size(); i++)
+                    {
+                        Gate* master_gate = gates.at(i);
+
+                        if (visited.find(master_gate) != visited.cend())
                         {
                             continue;
                         }
+
+                        std::vector<Gate*> current_duplicates = {master_gate};
+
+                        for (size_t j = i + 1; j < gates.size(); j++)
+                        {
+                            Gate* current_gate = gates.at(j);
+                            for (const auto* pin : fingerprint.type->get_output_pins())
+                            {
+                                const auto solver_res =
+                                    master_gate->get_resolved_boolean_function(pin)
+                                        .map<BooleanFunction>([pin, current_gate](BooleanFunction&& bf_master) {
+                                            return current_gate->get_resolved_boolean_function(pin).map<BooleanFunction>([bf_master = std::move(bf_master)](BooleanFunction&& bf_current) mutable {
+                                                return BooleanFunction::Eq(std::move(bf_master), std::move(bf_current), 1);
+                                            });
+                                        })
+                                        .map<BooleanFunction>([](auto&& bf_eq) { return BooleanFunction::Not(bf_eq.clone(), 1); })
+                                        .map<SMT::SolverResult>([](auto&& bf_not) -> Result<SMT::SolverResult> { return SMT::Solver({SMT::Constraint(std::move(bf_not))}).query(SMT::QueryConfig()); });
+
+                                if (solver_res.is_ok() && solver_res.get().is_unsat())
+                                {
+                                    current_duplicates.push_back(current_gate);
+                                    visited.insert(current_gate);
+                                }
+                            }
+                        }
+
+                        if (current_duplicates.size() > 1)
+                        {
+                            duplicate_gates.push_back(current_duplicates);
+                        }
                     }
-
-                    // gate is determined to be duplicate of other gate
-                    duplicate_gates.push_back(current_gate);
-                    visited_gates.insert(current_gate);
                 }
-
-                // remove duplicate gates
-                if (duplicate_gates.size() > 1)
+                else if (fingerprint.type->has_property(GateTypeProperty::ff))
                 {
-                    gates_to_delete.push_back(duplicate_gates);
+                    duplicate_gates.push_back(gates);
                 }
             }
 
-            for (auto& duplicate_gates : gates_to_delete)
+            std::set<Gate*> affected_gates;
+            for (const auto& current_duplicates : duplicate_gates)
             {
-                auto* surviver_gate = duplicate_gates.front();
+                auto* surviver_gate = current_duplicates.front();
                 std::map<GatePin*, Net*> out_pins_to_nets;
                 for (auto* ep : surviver_gate->get_fan_out_endpoints())
                 {
-                    out_pins_to_nets[ep->get_pin()] = ep->get_net();
-                    nets_to_check.insert(ep->get_net());
+                    Net* out_net                    = ep->get_net();
+                    out_pins_to_nets[ep->get_pin()] = out_net;
+                    for (const auto* dst : out_net->get_destinations())
+                    {
+                        auto* dst_gate = dst->get_gate();
+                        auto* dst_type = dst_gate->get_type();
+                        if (dst_type->has_property(GateTypeProperty::combinational) || dst_type->has_property(GateTypeProperty::ff))
+                        {
+                            affected_gates.insert(dst_gate);
+                        }
+                    }
                 }
 
-                for (u32 k = 1; k < duplicate_gates.size(); k++)
+                for (u32 k = 1; k < current_duplicates.size(); k++)
                 {
-                    auto* current_gate = duplicate_gates.at(k);
+                    auto* current_gate = current_duplicates.at(k);
                     for (auto* ep : current_gate->get_fan_out_endpoints())
                     {
                         auto* ep_net = ep->get_net();
                         auto* ep_pin = ep->get_pin();
 
-                        if (auto it = out_pins_to_nets.find(ep_pin); it != out_pins_to_nets.end())
+                        if (auto it = out_pins_to_nets.find(ep_pin); it != out_pins_to_nets.cend())
                         {
                             // surviver already has net connected to this output -> add destination to surviver's net
                             for (auto* dst : ep_net->get_destinations())
@@ -661,33 +644,49 @@ namespace hal
                                 auto* dst_pin  = dst->get_pin();
                                 dst->get_net()->remove_destination(dst);
                                 it->second->add_destination(dst_gate, dst_pin);
+
+                                auto* dst_type = dst_gate->get_type();
+                                if (dst_type->has_property(GateTypeProperty::combinational) || dst_type->has_property(GateTypeProperty::ff))
+                                {
+                                    affected_gates.insert(dst_gate);
+                                }
                             }
                             if (!nl->delete_net(ep_net))
                             {
                                 log_warning("netlist_preprocessing", "could not delete net '{}' with ID {} from netlist with ID {}.", ep_net->get_name(), ep_net->get_id(), nl->get_id());
                             }
-                            nets_to_check.erase(ep_net);
                         }
                         else
                         {
                             // surviver does not feature net on this output pin -> connect this net to surviver
                             ep_net->add_source(surviver_gate, ep_pin);
                             out_pins_to_nets[ep_pin] = ep_net;
-                            nets_to_check.insert(ep_net);
+                            for (auto* dst : ep_net->get_destinations())
+                            {
+                                auto* dst_gate = dst->get_gate();
+                                auto* dst_type = dst_gate->get_type();
+                                if (dst_type->has_property(GateTypeProperty::combinational) || dst_type->has_property(GateTypeProperty::ff))
+                                {
+                                    affected_gates.insert(dst_gate);
+                                }
+                            }
                         }
                     }
 
+                    affected_gates.erase(current_gate);
                     if (!nl->delete_gate(current_gate))
                     {
                         log_warning("netlist_preprocessing", "could not delete gate '{}' with ID {} from netlist with ID {}.", current_gate->get_name(), current_gate->get_id(), nl->get_id());
                     }
                     else
                     {
+                        progress = true;
                         num_gates++;
                     }
                 }
             }
-        }
+            target_gates = std::vector<Gate*>(affected_gates.cbegin(), affected_gates.cend());
+        } while (progress);
 
         log_info("netlist_preprocessing", "removed {} redundant logic gates from netlist with ID {}.", num_gates, nl->get_id());
         return OK(num_gates);
