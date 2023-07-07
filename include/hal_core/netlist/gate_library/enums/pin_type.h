@@ -54,4 +54,20 @@ namespace hal
 
     template<>
     std::map<PinType, std::string> EnumStrings<PinType>::data;
+
+    enum class PinEvent
+    {
+        unknown,
+        GroupCreate,
+        GroupReorder,
+        GroupRename,
+        GroupTypeChange,
+        GroupPinAssign,
+        GroupDelete,
+        PinCreate,
+        PinReorder,
+        PinRename,
+        PinTypeChange,
+        PinDelete
+    };
 }    // namespace hal

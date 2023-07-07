@@ -26,6 +26,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 
 #include <QObject>
 #include <QStringList>
@@ -193,7 +194,7 @@ namespace hal
          *
          * @param m - The module with the changed port
          */
-        void handleModulePortsChanged(Module* m);
+        void handleModulePortsChanged(Module* m, hal::PinEvent pev, u32 pgid);
 
         /**
          * Handler to be called after a gate has been removed. <br>

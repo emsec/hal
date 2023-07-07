@@ -26,6 +26,7 @@
 #pragma once
 
 #include "hal_core/netlist/event_system/event_handler.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include "gui/grouping/grouping_color_serializer.h"
 #include <QMap>
 #include <QObject>
@@ -332,7 +333,7 @@ namespace hal
          * @param m - The module with the changed port
          * @param respective_net - The id of the net of the renamed input port
          */
-        void modulePortsChanged(Module* m) const;
+        void modulePortsChanged(Module* m, PinEvent pev, u32 pgid) const;
 
         /**
          * Q_SIGNAL to notify that the type of a module has been changed. <br>

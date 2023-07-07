@@ -660,13 +660,13 @@ namespace hal
                 {
                     m_output_nets.insert(net);
                     pin->set_direction(PinDirection::inout);
-                    m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+                    m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::PinTypeChange,pin->get_id()));
                 }
                 else if (direction == PinDirection::output)
                 {
                     m_input_nets.insert(net);
                     pin->set_direction(PinDirection::inout);
-                    m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+                    m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::PinTypeChange,pin->get_id()));
                 }
             }
             else
@@ -687,7 +687,7 @@ namespace hal
                     m_input_nets.insert(net);
                     m_output_nets.erase(net);
                     pin->set_direction(PinDirection::input);
-                    m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+                    m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::PinTypeChange,pin->get_id()));
                 }
             }
             else
@@ -709,7 +709,7 @@ namespace hal
                     m_output_nets.insert(net);
                     m_input_nets.erase(net);
                     pin->set_direction(PinDirection::output);
-                    m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+                    m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::PinTypeChange,pin->get_id()));
                 }
             }
             else
@@ -831,6 +831,7 @@ namespace hal
         }
         else
         {
+            // create_pin_internal OK
             if (create_group)
             {
                 if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name, direction, type, false, 0); group_res.is_error())
@@ -840,6 +841,7 @@ namespace hal
                 }
                 else
                 {
+                    // create_pin_group_internal OK
                     if (const auto assign_res = group_res.get()->assign_pin(pin_res.get()); assign_res.is_error())
                     {
                         assert(delete_pin_internal(pin_res.get()).is_ok());
@@ -847,9 +849,17 @@ namespace hal
                         return ERR_APPEND(assign_res.get_error(),
                                           "could not create pin '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": failed to assign pin to pin group");
                     }
+                    else
+                    {
+                        // pin assigned to new group OK
+                        m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::GroupCreate,group_res.get()->get_id()));
+                    }
                 }
             }
-            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+            else
+            {
+                m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::PinCreate,pin_res.get()->get_id()));
+            }
             return pin_res;
         }
     }
@@ -1093,7 +1103,7 @@ namespace hal
             m_pin_names_map.erase(old_name);
             pin->set_name(new_name);
             m_pin_names_map[new_name] = pin;
-            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::PinRename,pin->get_id()));
         }
 
         return true;
@@ -1116,7 +1126,7 @@ namespace hal
         if (pin->get_type() != new_type)
         {
             pin->set_type(new_type);
-            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::PinTypeChange,pin->get_id()));
         }
 
         return true;
@@ -1161,7 +1171,7 @@ namespace hal
             m_pin_group_names_map.erase(old_name);
             pin_group->set_name(new_name);
             m_pin_group_names_map[new_name] = pin_group;
-            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::GroupRename,pin_group->get_id()));
         }
 
         return true;
@@ -1185,7 +1195,7 @@ namespace hal
         if (pin_group->get_type() != new_type)
         {
             pin_group->set_type(new_type);
-            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::GroupTypeChange,pin_group->get_id()));
         }
         return true;
     }
@@ -1212,7 +1222,7 @@ namespace hal
         if (pin_group->get_direction() != new_direction)
         {
             pin_group->set_direction(new_direction);
-            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::GroupTypeChange,pin_group->get_id()));
         }
         return true;
     }
@@ -1260,7 +1270,7 @@ namespace hal
             }
         }
 
-        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::GroupCreate,pin_group->get_id()));
         return OK(pin_group);
     }
 
@@ -1295,6 +1305,8 @@ namespace hal
             }
         }
 
+        u32 pin_group_id_to_delete = pin_group->get_id();
+
         if (auto res = delete_pin_group_internal(pin_group); res.is_error())
         {
             return ERR(res.get_error());
@@ -1302,7 +1314,7 @@ namespace hal
 
         if (removed_pins)
         {
-            m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::GroupDelete,pin_group_id_to_delete));
         }
         return OK({});
     }
@@ -1343,7 +1355,7 @@ namespace hal
             m_pin_groups_ordered.splice(dst_it, m_pin_groups_ordered, src_it);
         }
 
-        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::GroupReorder,pin_group->get_id()));
         return OK({});
     }
 
@@ -1402,7 +1414,7 @@ namespace hal
                                   + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id));
         }
 
-        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::GroupPinAssign,pin_group->get_id()));
         return OK({});
     }
 
@@ -1438,7 +1450,7 @@ namespace hal
                                   + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id));
         }
 
-        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::PinReorder,pin->get_id()));
         return OK({});
     }
 
@@ -1533,7 +1545,7 @@ namespace hal
             }
         }
 
-        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::GroupCreate,pin->get_group().first->get_id()));
         return OK(pin);
     }
 
@@ -1565,6 +1577,8 @@ namespace hal
             }
         }
 
+        u32 pin_id_to_delete = pin->get_id();
+
         if (const auto res = delete_pin_internal(pin); res.is_error())
         {
             return ERR_APPEND(res.get_error(),
@@ -1572,7 +1586,7 @@ namespace hal
                                   + ": failed to delete pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()));
         }
 
-        m_event_handler->notify(ModuleEvent::event::pin_changed, this);
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::PinDelete,pin_id_to_delete));
         return OK({});
     }
 
@@ -1705,4 +1719,10 @@ namespace hal
 
         return OK({});
     }
+
+    u32 Module::pinevent_associated_data(PinEvent pev, u32 id)
+    {
+        return (id << 4) | (((u32)pev)&0xF);
+    }
+
 }    // namespace hal

@@ -688,6 +688,8 @@ namespace hal
             bool has_external_destination;
         };
 
+        static u32 pinevent_associated_data(PinEvent pev, u32 id);
+
         NetConnectivity check_net_endpoints(const Net* net) const;
         Result<std::monostate> check_net(Net* net, bool recursive = false);
         Result<ModulePin*> assign_pin_net(const u32 pin_id, Net* net, PinDirection direction, const std::string& name = "", PinType type = PinType::none);

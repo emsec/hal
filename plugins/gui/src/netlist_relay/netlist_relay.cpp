@@ -448,11 +448,12 @@ namespace hal
                 break;
             }
             case ModuleEvent::event::pin_changed: {
-                //< no associated_data
+                 //< associated_data = [4LSB: type of action]  [28HSB: id of pin group or pin]
+                PinEvent pev = (PinEvent) (associated_data&0xF);
+                u32 id = (associated_data >> 4);
+                gGraphContextManager->handleModulePortsChanged(mod,pev,id);
 
-                gGraphContextManager->handleModulePortsChanged(mod);
-
-                Q_EMIT modulePortsChanged(mod);
+                Q_EMIT modulePortsChanged(mod,pev,id);
                 break;
             }
             case ModuleEvent::event::type_changed: {
