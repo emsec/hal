@@ -941,8 +941,8 @@ namespace hal
 
     Result<u32> NetlistPreprocessingPlugin::propagate_constants(Netlist* nl)
     {
-        Net* gnd_net = nl->get_gnd_gates().front()->get_fan_out_nets().front();
-        Net* vcc_net = nl->get_vcc_gates().front()->get_fan_out_nets().front();
+        Net* gnd_net = nl->get_gnd_gates().empty() ? nullptr : nl->get_gnd_gates().front()->get_fan_out_nets().front();
+        Net* vcc_net = nl->get_vcc_gates().empty() ? nullptr : nl->get_vcc_gates().front()->get_fan_out_nets().front();
 
         u32 total_replaced_dst_count = 0;
 
@@ -996,6 +996,11 @@ namespace hal
                         else
                         {
                             continue;
+                        }
+
+                        if (new_source == nullptr)
+                        {
+                            log_error("netlist_preprocessing", "failed to replace bf {} with constant net because netlist is missing GND gate or VCC gate");
                         }
 
                         std::vector<std::pair<Gate*, GatePin*>> to_replace;
