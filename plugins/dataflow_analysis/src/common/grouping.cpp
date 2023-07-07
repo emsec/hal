@@ -235,9 +235,9 @@ namespace hal
             std::unordered_set<u32> successors;
             for (auto gate : gates_of_group.at(group_id))
             {
-                for (auto gate_id : this->netlist_abstr.gate_to_known_successor_groups.at(gate))
+                for (auto known_group_id : this->netlist_abstr.gate_to_known_successor_groups.at(gate))
                 {
-                    successors.insert(parent_group_of_gate.at(gate_id));
+                    successors.insert(known_group_id);
                 }
             }
 
@@ -266,9 +266,9 @@ namespace hal
             std::unordered_set<u32> predecessors;
             for (auto gate : gates_of_group.at(group_id))
             {
-                for (auto gate_id : this->netlist_abstr.gate_to_known_predecessor_groups.at(gate))
+                for (auto known_group_id : this->netlist_abstr.gate_to_known_predecessor_groups.at(gate))
                 {
-                    predecessors.insert(parent_group_of_gate.at(gate_id));
+                    predecessors.insert(known_group_id);
                 }
             }
 

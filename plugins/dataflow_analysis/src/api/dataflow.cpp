@@ -34,6 +34,7 @@ namespace hal
             proc_config.pass_layers              = 2;
             proc_config.num_threads              = std::thread::hardware_concurrency();
             proc_config.enforce_type_consistency = config.enforce_type_consistency;
+            proc_config.has_known_groups         = !config.known_net_groups.empty();
 
             dataflow::evaluation::Context eval_ctx;
 
