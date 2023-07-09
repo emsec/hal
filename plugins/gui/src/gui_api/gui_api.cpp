@@ -672,22 +672,25 @@ namespace hal
     bool GuiApiClasses::View::foldModule(int view_id, Module *module)
     {
         GraphContext* context = gGraphContextManager->getContextById(view_id);
-        if(!context->modules().contains(module->get_id())) return false;
-        if(module->get_parent_module() == nullptr) return false;
 
         //get gates and submodules that belong to the current module
-        std::vector<Module*> submodules = module->get_parent_module()->get_submodules();
-        std::vector<Gate*> gates = module->get_parent_module()->get_gates();
+        std::vector<Module*> submodules = module->get_submodules();
+        std::vector<Gate*> gates = module->get_gates();
 
+        bool isValidToFold = false;
         //check if the view contains gates and submodules of the current module, return false if not
         for(Gate* gate : gates)
-            if(!context->gates().contains(gate->get_id())) return false;
+            if(context->gates().contains(gate->get_id())) {isValidToFold = true; break;}
         for(Module* submodule : submodules)
-            if(!context->modules().contains(submodule->get_id())) return false;
+            if(context->modules().contains(submodule->get_id())) {isValidToFold = true; break;}
 
 
-        ActionFoldModule *act = new ActionFoldModule(module->get_parent_module()->get_id());
-        UserActionManager::instance()->executeActionBlockThread(act);
-        return true;
+        if (isValidToFold)
+        {
+            ActionFoldModule *act = new ActionFoldModule(module->get_id());
+            UserActionManager::instance()->executeActionBlockThread(act);
+            return true;
+        }
+        return false;
     }
 }
