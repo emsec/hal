@@ -471,17 +471,19 @@ namespace hal
             //Get the number which has to be appended to name
             name   = gGraphContextManager->nextViewName("Isolated View");
         }
+        GuiApiClasses::View::ModuleGateIdPair pair = GuiApiClasses::View::getValidObjects(NULL, modules, gates);
 
 
         // Get ids from modules and gates
-        QSet<u32> moduleIds;
-        QSet<u32> gateIds;
+        QSet<u32> moduleIds = pair.moduleIds;
+        QSet<u32> gateIds = pair.gateIds;
 
+        /*
         for(Module* module : modules)
             moduleIds.insert(module->get_id());
         for(Gate* gate : gates)
             gateIds.insert(gate->get_id());
-
+        */
 
         UserActionCompound* act = new UserActionCompound;
         act->setUseCreatedObject();
@@ -692,5 +694,75 @@ namespace hal
             return true;
         }
         return false;
+    }
+
+    GuiApiClasses::View::ModuleGateIdPair GuiApiClasses::View::getValidObjects(int viewId, const std::vector<Module*> mods, const std::vector<Gate*> gats)
+    {
+        if(viewId != NULL){
+            //TODO check content of view before processing further
+        }
+
+        //copy to prevent inplace operations
+        std::vector<Module*> modules = mods;
+        std::vector<Gate*> gates = gats;
+
+        //TODO validate gates and modules
+        //here we dont have any view so we dont have to check there
+
+        //1) sort them by priority in DESCENDING order
+        std::sort(modules.begin(), modules.end(), [](const Module* a, const Module* b) -> bool
+                  {
+                      //sorting in DESCENDING order to check from lowest to highest priority
+                      return a->get_submodule_depth() > b->get_submodule_depth();
+                  }
+        );
+
+        //2) create set which stores module Ids
+        QSet<u32> modIds;
+        QSet<u32> gatIds;
+
+        Module* topModule  = gNetlist->get_top_module();
+
+        for(Module* mod : modules){
+            modIds.insert(mod->get_id());
+        }
+
+
+        //3) remove id if parent is in set
+        bool onlyAddParent = false;
+        for(Module* mod : modules){
+            //get top module
+            if(mod == gNetlist->get_top_module()){
+                // only add the top module because it has highest priority
+                QSet<u32> temp;
+                temp.insert(topModule->get_id());
+                modIds = temp;
+                break;
+            }
+
+            //check if parent is in current set and if so  remove current mod
+            Module* iterator = mod->get_parent_module();
+            while(iterator != topModule){
+                if(modIds.contains(iterator->get_id()))
+                {
+                    // parent is already in the set so remove mod and stop traversing parent tree
+                    modIds.remove(mod->get_id());
+                    break;
+                }
+                iterator = iterator->get_parent_module();
+            }
+        }
+
+
+
+        //TODO check gates if valid to place
+
+
+        GuiApiClasses::View::ModuleGateIdPair pair;
+        pair.moduleIds = modIds;
+        pair.gateIds = gatIds;
+
+        return pair;
+        ///End
     }
 }

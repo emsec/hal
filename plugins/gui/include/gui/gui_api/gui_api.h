@@ -30,10 +30,10 @@
 #include "hal_core/netlist/module.h"
 
 
-#include <vector>
-#include <tuple>
-
 #include <QObject>
+#include <QSet>
+#include <tuple>
+#include <vector>
 
 namespace hal
 {
@@ -53,6 +53,13 @@ namespace hal
             static std::vector<u32> getIds(const std::vector<Module*> modules, const std::vector<Gate*> gates);
             static bool foldModule(int view_id, Module* module);
             static bool unfoldModule(int view_id, Module* module);
+
+            struct ModuleGateIdPair {
+                QSet<u32> moduleIds;
+                QSet<u32> gateIds;
+            };
+
+            static ModuleGateIdPair getValidObjects(int viewId, const std::vector<Module*>, const std::vector<Gate*>);
         };
     }
 
