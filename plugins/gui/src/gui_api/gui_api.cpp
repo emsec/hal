@@ -749,15 +749,19 @@ namespace hal
                 validMods.push_back(mod);
                 modIds.insert(mod->get_id());
             }
-            modules = validMods;
-        }
-        // no existing view so insert module ids here
-        else{
-            for (Module* mod : modules)
-            {
-                modIds.insert(mod->get_id());
+            qInfo() << "Starting -2";
+            for(Module* modId : validMods){
+                qInfo() << QString::fromStdString(modId->get_name());
             }
+            modules = validMods;
+
         }
+        //get ids of modules
+        for (Module* mod : modules)
+        {
+            modIds.insert(mod->get_id());
+        }
+
 
         //1) sort them by priority in DESCENDING order
         std::sort(modules.begin(), modules.end(), [](const Module* a, const Module* b) -> bool
@@ -767,9 +771,10 @@ namespace hal
                   }
         );
 
-
-
-
+        qInfo() << "Starting 0";
+        for(u32 modId : modIds){
+            qInfo() << QString::fromStdString(gNetlist->get_module_by_id(modId)->get_name());
+        }
 
         //TODO store parents maybe in the same set if it wont cause problems (it did in some cases)
         //2) remove id if parent is in set
@@ -801,6 +806,11 @@ namespace hal
 
         //check ancestors until topmodule or found in modIds
         //TODO maybe create allowed parents if there is a link from gate upto topmodule so we can break loop if we encounter one of these
+
+        qInfo() << "Starting 1";
+        for(u32 modId : modIds){
+            qInfo() << QString::fromStdString(gNetlist->get_module_by_id(modId)->get_name());
+        }
         for(Gate* gate : gates){
             Module* itr = gate->get_module();
             bool shouldInsert = true;
