@@ -767,13 +767,12 @@ namespace hal
                   }
         );
 
-        //2) create set which stores module Ids of modules already in view and which has to be added to the view
 
 
 
 
         //TODO store parents maybe in the same set if it wont cause problems (it did in some cases)
-        //3) remove id if parent is in set
+        //2) remove id if parent is in set
         for(Module* mod : modules){
             //check if top module
             if(mod == topModule){
@@ -798,7 +797,7 @@ namespace hal
         }
 
 
-        //4) remove all gates which has its ancestor in modIds
+        //3) remove all gates which has its ancestor in modIds
 
         //check ancestors until topmodule or found in modIds
         //TODO maybe create allowed parents if there is a link from gate upto topmodule so we can break loop if we encounter one of these
