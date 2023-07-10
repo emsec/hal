@@ -79,7 +79,7 @@ namespace hal
 
     void EdifParser::tokenize()
     {
-        const std::string delimiters = "() \"";
+        const std::string delimiters = "() ";
         std::string current_token;
         u32 line_number = 0;
 
@@ -130,8 +130,6 @@ namespace hal
 
     Result<std::monostate> EdifParser::parse_tokens()
     {
-        u32 line_number;
-
         m_token_stream.consume("(", true);
         m_token_stream.consume("edif", true);
         m_token_stream.consume();    // consume design name (repeated later on)
@@ -192,15 +190,168 @@ namespace hal
     Result<std::monostate> EdifParser::parse_cell()
     {
         EdifCell cell;
-        const auto first_token = m_token_stream.consume();
+        const auto first_token = m_token_stream.peek();
+        u32 line_number        = first_token.number;
+
         if (first_token != "(")
         {
             cell.m_name = m_token_stream.consume();
         }
-        else
+
+        while (m_token_stream.consume("("))
         {
-            m_token_stream.consume("rename", true);
+            const auto next_token = m_token_stream.consume();
+            if (next_token == "rename")
+            {
+                cell.m_name        = m_token_stream.consume();
+                const auto re_name = m_token_stream.consume();
+                if (re_name.string.substr(1, re_name.string.size() - 2) != cell.m_name)
+                {
+                    return ERR("could not parse cell in line " + std::to_string(re_name.number) + ": renaming not yet supported");
+                }
+            }
+            else if (next_token == "view")
+            {
+                if (auto res = parse_view(cell); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse cell '" + cell.m_name + "' in line " + std::to_string(next_token.number) + ": failed to parse view");
+                }
+            }
+            else
+            {
+                m_token_stream.consume_until(")");
+            }
+            m_token_stream.consume(")", true);
         }
+
+        if (cell.m_name.empty())
+        {
+            return ERR("could not parse cell in line " + std::to_string(line_number) + ": no name given for cell");
+        }
+
+        return OK({});
+    }
+
+    Result<std::monostate> EdifParser::parse_view(EdifCell& cell)
+    {
+        const auto view_name = m_token_stream.consume();
+        while (m_token_stream.consume("("))
+        {
+            const auto next_token = m_token_stream.consume();
+            if (next_token == "interface")
+            {
+                if (auto res = parse_interface(cell); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse view '" + view_name.string + "' in line " + std::to_string(view_name.number) + ": failed to parse interface");
+                }
+            }
+            else if (next_token == "contents")
+            {
+                if (auto res = parse_contents(cell); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse view '" + view_name.string + "' in line " + std::to_string(view_name.number) + ": failed to parse contents");
+                }
+            }
+            else
+            {
+                m_token_stream.consume_until(")", TokenStream<std::string>::END_OF_STREAM, true);
+            }
+            m_token_stream.consume(")", true);
+        }
+
+        return OK({});
+    }
+
+    Result<std::monostate> EdifParser::parse_interface(EdifCell& cell)
+    {
+        while (m_token_stream.consume("("))
+        {
+            m_token_stream.consume("port", true);
+            std::string port_name = m_token_stream.consume();
+            m_token_stream.consume("(", true);
+            m_token_stream.consume("direction", true);
+            const auto direction_token  = m_token_stream.consume();
+            PinDirection port_direction = enum_from_string<PinDirection>(utils::to_lower(direction_token.string), PinDirection::none);
+            if (port_direction == PinDirection::none)
+            {
+                return ERR("could not parse interface: invalid port direction " + direction_token.string + " in line " + std::to_string(direction_token.number));
+            }
+            m_token_stream.consume(")", true);
+            m_token_stream.consume(")", true);
+            cell.m_ports.push_back(std::make_pair(port_direction, port_name));
+        }
+
+        return OK({});
+    }
+
+    Result<std::monostate> EdifParser::parse_contents(EdifCell& cell)
+    {
+        while (m_token_stream.consume("("))
+        {
+            const auto next_token = m_token_stream.consume();
+            if (next_token == "instance")
+            {
+                if (auto res = parse_instance(cell); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse contents: failed to parse instance in line " + std::to_string(next_token.number));
+                }
+            }
+            else if (next_token == "net")
+            {
+                // TODO
+            }
+            m_token_stream.consume(")", true);
+        }
+
+        return OK({});
+    }
+
+    Result<std::monostate> EdifParser::parse_instance(EdifCell& cell)
+    {
+        EdifInstance instance;
+        const auto first_token = m_token_stream.peek();
+        u32 line_number        = first_token.number;
+
+        if (first_token != "(")
+        {
+            instance.m_name = m_token_stream.consume();
+        }
+
+        while (m_token_stream.consume("("))
+        {
+            const auto next_token = m_token_stream.consume();
+            if (next_token == "rename")
+            {
+                instance.m_name    = m_token_stream.consume();
+                const auto re_name = m_token_stream.consume();
+                if (re_name.string.substr(1, re_name.string.size() - 2) != instance.m_name)
+                {
+                    return ERR("could not parse instance in line " + std::to_string(re_name.number) + ": renaming not yet supported");
+                }
+            }
+            else if (next_token == "viewRef")
+            {
+                m_token_stream.consume();    // view name
+                m_token_stream.consume("(", true);
+                m_token_stream.consume("cellRef", true);
+                instance.m_type = m_token_stream.consume();
+                m_token_stream.consume_until(")");    // skip libraryRef
+                m_token_stream.consume(")", true);
+            }
+            else if (next_token == "property")
+            {
+                EdifProperty prop;
+                prop.m_name = m_token_stream.consume();
+                m_token_stream.consume("(", true);
+                prop.m_type  = m_token_stream.consume();
+                prop.m_value = m_token_stream.consume();
+                m_token_stream.consume(")", true);
+                instance.m_properties.push_back(prop);
+            }
+            m_token_stream.consume(")", true);
+        }
+
+        cell.m_instances.push_back(instance);
 
         return OK({});
     }

@@ -67,10 +67,25 @@ namespace hal
         Result<std::unique_ptr<Netlist>> instantiate(const GateLibrary* gate_library) override;
 
     private:
+        struct EdifProperty
+        {
+            std::string m_name;
+            std::string m_type;
+            std::string m_value;
+        };
+
+        struct EdifInstance
+        {
+            std::string m_name;
+            std::string m_type;
+            std::vector<EdifProperty> m_properties;
+        };
+
         struct EdifCell
         {
             std::string m_name;
             std::vector<std::pair<PinDirection, std::string>> m_ports;
+            std::vector<EdifInstance> m_instances;
         };
 
         std::stringstream m_fs;
@@ -87,5 +102,9 @@ namespace hal
         Result<std::monostate> parse_tokens();
         Result<std::monostate> parse_library();
         Result<std::monostate> parse_cell();
+        Result<std::monostate> parse_view(EdifCell& cell);
+        Result<std::monostate> parse_interface(EdifCell& cell);
+        Result<std::monostate> parse_contents(EdifCell& cell);
+        Result<std::monostate> parse_instance(EdifCell& cell);
     };
 }    // namespace hal
