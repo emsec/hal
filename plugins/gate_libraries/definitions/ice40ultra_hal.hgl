@@ -1,6 +1,6 @@
 {
     "version": 3,
-    "library": "ICE40ULTRA",
+    "library": "ICE40ULTRA_WITH_HAL_TYPES",
     "gate_locations": {
         "data_category": "generic",
         "data_x_identifier": "X_COORDINATE",
