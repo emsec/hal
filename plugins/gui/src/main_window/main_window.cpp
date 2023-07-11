@@ -747,7 +747,7 @@ namespace hal
 
         QString title = "Import Netlist";
         SupportedFileFormats sff = gPluginRelay->mGuiPluginTable->listFacFeature(FacExtensionInterface::FacNetlistParser);
-        QString text  = sff.toFileDialog();
+        QString text  = sff.toFileDialog(true);
 
         // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
         QString path = QDir::currentPath();

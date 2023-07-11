@@ -105,7 +105,7 @@ namespace hal {
         FacExtensionInterface::Feature mFeature;
     public:
         SupportedFileFormats(FacExtensionInterface::Feature ft) : mFeature(ft) {;}
-        QString toFileDialog() const;
+        QString toFileDialog(bool addHalFormat) const;
     };
 
     class GuiPluginTable : public QAbstractTableModel

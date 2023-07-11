@@ -436,8 +436,12 @@ namespace hal {
         return retval;
     }
 
-    QString SupportedFileFormats::toFileDialog() const
+    QString SupportedFileFormats::toFileDialog(bool addHalFormat) const
     {
+        QMap<QString,QString> pluginMap = *this; // might want to add hal format temporarily
+        if (addHalFormat)
+            pluginMap.insert(".hal", "HAL progress files ");
+
         QString reStr = "(.*)";
         if (mFeature == FacExtensionInterface::FacGatelibParser || mFeature == FacExtensionInterface::FacNetlistParser)
             reStr = "Default (.*) Parser";
@@ -447,9 +451,9 @@ namespace hal {
 
         QString retval;
 
-        if (size() > 1)
+        if (pluginMap.size() > 1)
         {
-            for (const QString& ext: keys())
+            for (const QString& ext: pluginMap.keys())
             {
                 if (!retval.isEmpty()) retval += " ";
                 retval += "*" + ext;
@@ -458,7 +462,7 @@ namespace hal {
             retval.prepend("All supported files (");
         }
         QMap<QString,QString> formatMap;
-        for (auto it = constBegin(); it != constEnd(); ++it)
+        for (auto it = pluginMap.constBegin(); it != pluginMap.constEnd(); ++it)
         {
             QString label = it.value();
             QString fileFmt = (re.indexIn(label) < 0)
