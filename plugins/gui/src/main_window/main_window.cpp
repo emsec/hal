@@ -746,7 +746,8 @@ namespace hal
         }
 
         QString title = "Import Netlist";
-        QString text  = "All Files(*.vhd *.vhdl *.v *.hal);;VHDL Files (*.vhd *.vhdl);;Verilog Files (*.v);;HAL Progress Files (*.hal)";
+        SupportedFileFormats sff = gPluginRelay->mGuiPluginTable->listFacFeature(FacExtensionInterface::FacNetlistParser);
+        QString text  = sff.toFileDialog();
 
         // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
         QString path = QDir::currentPath();
@@ -758,6 +759,10 @@ namespace hal
 
         if (!fileName.isNull())
         {
+            QString ext = QFileInfo(fileName).suffix();
+            if (!ext.isEmpty())
+                gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacNetlistParser,ext);
+
             gGuiState->setValue("FileDialog/Path/MainWindow", fileName);
 
             ActionOpenNetlistFile* actOpenfile = new ActionOpenNetlistFile(ActionOpenNetlistFile::ImportFile, fileName);
