@@ -1,5 +1,9 @@
 var NAVTREEINDEX24 =
 {
+"groupings__of__item__model_8cpp.html":[7,0,1,3,2,38,11],
+"groupings__of__item__model_8cpp_source.html":[7,0,1,3,2,38,11],
+"groupings__of__item__model_8h.html":[7,0,1,3,0,0,40,11],
+"groupings__of__item__model_8h_source.html":[7,0,1,3,0,0,40,11],
 "groupings__of__item__widget_8cpp.html":[7,0,1,3,2,38,12],
 "groupings__of__item__widget_8cpp_source.html":[7,0,1,3,2,38,12],
 "groupings__of__item__widget_8h.html":[7,0,1,3,0,0,40,12],
@@ -245,9 +249,5 @@ var NAVTREEINDEX24 =
 "module__pin_8h.html":[7,0,0,0,1,7,2],
 "module__pin_8h_source.html":[7,0,0,0,1,7,2],
 "module__pin__group_8cpp.html":[7,0,2,2,0,18],
-"module__pin__group_8cpp.html#ga99c6b86dabda84a9ccb3b6612557f10f":[7,0,2,2,0,18,0],
-"module__pin__group_8cpp_source.html":[7,0,2,2,0,18],
-"module__ports__tree_8cpp.html":[7,0,1,3,2,38,1,2],
-"module__ports__tree_8cpp_source.html":[7,0,1,3,2,38,1,2],
-"module__ports__tree_8h.html":[7,0,1,3,0,0,40,1,2]
+"module__pin__group_8cpp.html#ga99c6b86dabda84a9ccb3b6612557f10f":[7,0,2,2,0,18,0]
 };

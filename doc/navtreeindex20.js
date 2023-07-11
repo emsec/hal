@@ -1,5 +1,9 @@
 var NAVTREEINDEX20 =
 {
+"communities__multilevel_8cpp.html":[7,0,1,2,2,0,1],
+"communities__multilevel_8cpp_source.html":[7,0,1,2,2,0,1],
+"communities__spinglass_8cpp.html":[7,0,1,2,2,0,2],
+"communities__spinglass_8cpp_source.html":[7,0,1,2,2,0,2],
 "community__detection_8cpp.html":[7,0,1,2,2,0,3],
 "community__detection_8cpp_source.html":[7,0,1,2,2,0,3],
 "configuration_8cpp.html":[7,0,1,1,3,0,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX20 =
 "dir_7817d8fc06cb0036165928b25a13b50a.html":[7,0,1,3,2,44],
 "dir_789103a3fceb0fc143b85dbe9979f451.html":[7,0,1,3,2,14],
 "dir_78f3dec0c5ef157ac74258fc012bc3cd.html":[7,0,1,3,2,38],
-"dir_7a0626338f63bd87363790a595d37c04.html":[7,0,1,3,2,29],
-"dir_7b5d38f1875f1b693f62ca6a108a1129.html":[7,0,2,3],
-"dir_7b8680038fe815bf46a10a8a86ec7bf9.html":[7,0,1,3,0,0,0],
-"dir_7ba3acdd1ecebd43dd3c77911577a6fa.html":[7,0,1,3,2,4],
-"dir_7c60c7799a36d4b54909bd1a1d09337f.html":[7,0,1,3,2,13]
+"dir_7a0626338f63bd87363790a595d37c04.html":[7,0,1,3,2,29]
 };

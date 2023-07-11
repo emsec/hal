@@ -13,6 +13,7 @@ var classhal_1_1_gui_plugin_table =
     [ "headerData", "classhal_1_1_gui_plugin_table.html#a7c3bd292448bb9a8b9c35fc8efdc519b", null ],
     [ "isHalGui", "classhal_1_1_gui_plugin_table.html#a17003723a4eb28d969cb72e8a8161845", null ],
     [ "isLoaded", "classhal_1_1_gui_plugin_table.html#a2ce0b50da50d0ade2e2a360b4977be6f", null ],
+    [ "listFacFeature", "classhal_1_1_gui_plugin_table.html#a1240edccf31a2aaf98116ce021c18d3b", null ],
     [ "load", "classhal_1_1_gui_plugin_table.html#a41e65edbe489f857831bceb3a3b13ec0", null ],
     [ "loadFeature", "classhal_1_1_gui_plugin_table.html#aca2ab7929d7d7d013a69d4e54fd0fe12", null ],
     [ "neededBy", "classhal_1_1_gui_plugin_table.html#adab5160b38fa7673c16d2dda1d80b642", null ],

@@ -74,7 +74,7 @@ var searchData=
   ['imagedata_5928',['imageData',['https://doc.qt.io/qt-5/qmimedata.html#imageData',1,'QMimeData']]],
   ['imageformat_5929',['imageFormat',['https://doc.qt.io/qt-5/qimagereader.html#imageFormat',1,'QImageReader::imageFormat() const const'],['https://doc.qt.io/qt-5/qimagereader.html#imageFormat-1',1,'QImageReader::imageFormat(const QString &amp;fileName)'],['https://doc.qt.io/qt-5/qimagereader.html#imageFormat-2',1,'QImageReader::imageFormat(QIODevice *device)'],['https://doc.qt.io/qt-5/qimageiohandler.html#ImageOption-enum',1,'QImageIOHandler::ImageFormat()']]],
   ['imageformatsformimetype_5930',['imageFormatsForMimeType',['https://doc.qt.io/qt-5/qimagereader.html#imageFormatsForMimeType',1,'QImageReader::imageFormatsForMimeType()'],['https://doc.qt.io/qt-5/qimagewriter.html#imageFormatsForMimeType',1,'QImageWriter::imageFormatsForMimeType()']]],
-  ['imageheight_5931',['ImageHeight',['https://doc.qt.io/qt-5/qtextformat.html#Property-enum',1,'QTextFormat::ImageHeight()'],['https://doc.qt.io/qt-5/qopenglpixeltransferoptions.html#imageHeight',1,'QOpenGLPixelTransferOptions::imageHeight()']]],
+  ['imageheight_5931',['imageHeight',['https://doc.qt.io/qt-5/qopenglpixeltransferoptions.html#imageHeight',1,'QOpenGLPixelTransferOptions::imageHeight()'],['https://doc.qt.io/qt-5/qtextformat.html#Property-enum',1,'QTextFormat::ImageHeight()']]],
   ['imageinterface_5932',['ImageInterface',['https://doc.qt.io/qt-5/qaccessible.html#InterfaceType-enum',1,'QAccessible']]],
   ['imagename_5933',['ImageName',['https://doc.qt.io/qt-5/qtextformat.html#Property-enum',1,'QTextFormat']]],
   ['imageobject_5934',['ImageObject',['https://doc.qt.io/qt-5/qtextformat.html#ObjectTypes-enum',1,'QTextFormat']]],

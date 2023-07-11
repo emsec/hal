@@ -1,5 +1,9 @@
 var NAVTREEINDEX33 =
 {
+"verilog__parser_8h.html":[7,0,1,8,0,0,1],
+"verilog__parser_8h_source.html":[7,0,1,8,0,0,1],
+"verilog__writer_8h.html":[7,0,1,9,0,0,1],
+"verilog__writer_8h_source.html":[7,0,1,9,0,0,1],
 "vhdl__parser_8h.html":[7,0,1,10,0,0,1],
 "vhdl__parser_8h_source.html":[7,0,1,10,0,0,1],
 "wait__to__be__seated_8cpp.html":[7,0,1,3,2,19,2,8],

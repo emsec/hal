@@ -74,8 +74,8 @@ var hierarchy =
     [ "hal::CommentEntry", "classhal_1_1_comment_entry.html", null ],
     [ "hal::CommonSuccessorPredecessor", "classhal_1_1_common_successor_predecessor.html", null ],
     [ "hal::CommonSuccessorPredecessorGateQueue", "classhal_1_1_common_successor_predecessor_gate_queue.html", null ],
-    [ "hal::dataflow::evaluation::Configuration", "structhal_1_1dataflow_1_1evaluation_1_1_configuration.html", null ],
     [ "hal::dataflow::Configuration", "structhal_1_1dataflow_1_1_configuration.html", null ],
+    [ "hal::dataflow::evaluation::Configuration", "structhal_1_1dataflow_1_1evaluation_1_1_configuration.html", null ],
     [ "hal::dataflow::processing::Configuration", "structhal_1_1dataflow_1_1processing_1_1_configuration.html", null ],
     [ "hal::SMT::Constraint", "structhal_1_1_s_m_t_1_1_constraint.html", null ],
     [ "hal::ContentAnchor", "classhal_1_1_content_anchor.html", [
@@ -274,6 +274,9 @@ var hierarchy =
     ] ],
     [ "QMap< NetLayoutMetric, NetLayoutConnection * >", "https://doc.qt.io/qt-5/qmap.html", [
       [ "hal::NetLayoutConnectionMetric", "classhal_1_1_net_layout_connection_metric.html", null ]
+    ] ],
+    [ "QMap< QString, QString >", "https://doc.qt.io/qt-5/qmap.html", [
+      [ "hal::SupportedFileFormats", "classhal_1_1_supported_file_formats.html", null ]
     ] ],
     [ "QObject", "https://doc.qt.io/qt-5/qobject.html", [
       [ "hal::CommentManager", "classhal_1_1_comment_manager.html", null ],
@@ -577,10 +580,10 @@ var hierarchy =
       [ "hal::NodeBoxes", "classhal_1_1_node_boxes.html", null ]
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
-    [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
-    [ "hal::Result< T >", "classhal_1_1_result.html", null ],
-    [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
     [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
+    [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
+    [ "hal::Result< T >", "classhal_1_1_result.html", null ],
+    [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
     [ "hal::RuntimeLibrary", "classhal_1_1_runtime_library.html", null ],
     [ "hal::SelectionTreeItem", "classhal_1_1_selection_tree_item.html", [
       [ "hal::SelectionTreeItemGate", "classhal_1_1_selection_tree_item_gate.html", null ],

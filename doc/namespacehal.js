@@ -395,6 +395,7 @@ var namespacehal =
     [ "StateComponent", "classhal_1_1_state_component.html", "classhal_1_1_state_component" ],
     [ "StateComponentEntry", "classhal_1_1_state_component_entry.html", "classhal_1_1_state_component_entry" ],
     [ "SubgraphNetlistDecorator", "classhal_1_1_subgraph_netlist_decorator.html", "classhal_1_1_subgraph_netlist_decorator" ],
+    [ "SupportedFileFormats", "classhal_1_1_supported_file_formats.html", "classhal_1_1_supported_file_formats" ],
     [ "SvgIconEngine", "classhal_1_1_svg_icon_engine.html", "classhal_1_1_svg_icon_engine" ],
     [ "TabWidget", "classhal_1_1_tab_widget.html", "classhal_1_1_tab_widget" ],
     [ "Token", "structhal_1_1_token.html", "structhal_1_1_token" ],
