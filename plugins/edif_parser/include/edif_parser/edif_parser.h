@@ -81,6 +81,12 @@ namespace hal
             std::vector<EdifProperty> m_properties;
         };
 
+        struct EdifNet
+        {
+            std::string m_name;
+            std::vector<std::pair<std::string, std::string>> m_endpoints;
+        };
+
         struct EdifCell
         {
             std::string m_name;
@@ -106,5 +112,6 @@ namespace hal
         Result<std::monostate> parse_interface(EdifCell& cell);
         Result<std::monostate> parse_contents(EdifCell& cell);
         Result<std::monostate> parse_instance(EdifCell& cell);
+        Result<std::monostate> parse_net(EdifCell& cell);
     };
 }    // namespace hal

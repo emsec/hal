@@ -298,7 +298,10 @@ namespace hal
             }
             else if (next_token == "net")
             {
-                // TODO
+                if (auto res = parse_net(cell); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "could not parse contents: failed to parse net in line " + std::to_string(next_token.number));
+                }
             }
             m_token_stream.consume(")", true);
         }
@@ -354,6 +357,11 @@ namespace hal
         cell.m_instances.push_back(instance);
 
         return OK({});
+    }
+
+    Result<std::monostate> EdifParser::parse_net(EdifCell& cell)
+    {
+        // TODO
     }
 
     // ###########################################################################
