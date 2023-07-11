@@ -123,6 +123,29 @@ namespace hal
             )");
 
         py_netlist_preprocessing.def_static(
+            "remove_redundant_loops",
+            [](Netlist* nl) -> std::optional<u32> {
+                auto res = NetlistPreprocessingPlugin::remove_redundant_loops(nl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            R"(
+                TODO 
+                
+                :param hal_py.Netlist nl: The netlist to operate on. 
+                :returns: The number of removed gates on success, `None` otherwise.
+                :rtype: int or None
+            )");
+
+        py_netlist_preprocessing.def_static(
             "remove_unconnected_gates",
             [](Netlist* nl) -> std::optional<u32> {
                 auto res = NetlistPreprocessingPlugin::remove_unconnected_gates(nl);

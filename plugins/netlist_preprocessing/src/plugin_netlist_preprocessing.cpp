@@ -523,8 +523,8 @@ namespace hal
                 fingerprint.type = gate->get_type();
                 if (fingerprint.type->has_property(GateTypeProperty::combinational))
                 {
-                    const auto& tmp = gate->get_fan_in_nets();
-                    fingerprint.unordered_fan_in.insert(tmp.cbegin(), tmp.cend());
+                    const auto& fan_in_nets = gate->get_fan_in_nets();
+                    fingerprint.unordered_fan_in.insert(fan_in_nets.cbegin(), fan_in_nets.cend());
                     if (fingerprint.type->has_property(GateTypeProperty::c_lut))
                     {
                         if (const auto res = gate->get_init_data(); res.is_ok())
@@ -575,6 +575,7 @@ namespace hal
                         for (size_t j = i + 1; j < gates.size(); j++)
                         {
                             Gate* current_gate = gates.at(j);
+                            bool equal         = true;
                             for (const auto* pin : fingerprint.type->get_output_pins())
                             {
                                 const auto solver_res =
@@ -584,14 +585,19 @@ namespace hal
                                                 return BooleanFunction::Eq(std::move(bf_master), std::move(bf_current), 1);
                                             });
                                         })
-                                        .map<BooleanFunction>([](auto&& bf_eq) { return BooleanFunction::Not(bf_eq.clone(), 1); })
+                                        .map<BooleanFunction>([](auto&& bf_eq) -> Result<BooleanFunction> { return BooleanFunction::Not(std::move(bf_eq), 1); })
                                         .map<SMT::SolverResult>([](auto&& bf_not) -> Result<SMT::SolverResult> { return SMT::Solver({SMT::Constraint(std::move(bf_not))}).query(SMT::QueryConfig()); });
 
-                                if (solver_res.is_ok() && solver_res.get().is_unsat())
+                                if (solver_res.is_error() || !solver_res.get().is_unsat())
                                 {
-                                    current_duplicates.push_back(current_gate);
-                                    visited.insert(current_gate);
+                                    equal = false;
                                 }
+                            }
+
+                            if (equal)
+                            {
+                                current_duplicates.push_back(current_gate);
+                                visited.insert(current_gate);
                             }
                         }
 
@@ -603,7 +609,7 @@ namespace hal
                 }
                 else if (fingerprint.type->has_property(GateTypeProperty::ff))
                 {
-                    duplicate_gates.push_back(gates);
+                    duplicate_gates.push_back(std::move(gates));
                 }
             }
 
@@ -689,6 +695,248 @@ namespace hal
         } while (progress);
 
         log_info("netlist_preprocessing", "removed {} redundant logic gates from netlist with ID {}.", num_gates, nl->get_id());
+        return OK(num_gates);
+    }
+
+    Result<u32> NetlistPreprocessingPlugin::remove_redundant_loops(Netlist* nl)
+    {
+        struct LoopFingerprint
+        {
+            std::map<const GateType*, u32> types;
+            std::set<std::string> external_variable_names;
+            std::set<const Net*> ff_control_nets;
+
+            bool operator<(const LoopFingerprint& other) const
+            {
+                return (other.types < types) || (other.types == types && other.external_variable_names < external_variable_names)
+                       || (other.types == types && other.external_variable_names == external_variable_names && other.ff_control_nets < ff_control_nets);
+            }
+        };
+
+        u32 num_gates = 0;
+
+        static const std::set<PinType> ff_control_pin_types = {PinType::clock, PinType::enable, PinType::reset, PinType::set};
+
+        // detect combinational loops that begin and end at the same FF
+        // for some FFs, multiple combinational lops may exist; such loops wil be merged into a single one
+        std::unordered_map<Gate*, std::unordered_set<Gate*>> loops_by_start_gate;
+        for (auto* start_ff : nl->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); }))
+        {
+            std::vector<Gate*> stack = {start_ff};
+            std::vector<Gate*> previous_gates;
+            std::unordered_set<Gate*> visited_gates;
+            std::unordered_set<Gate*> cache;
+
+            while (!stack.empty())
+            {
+                auto* current_gate = stack.back();
+
+                if (!previous_gates.empty() && current_gate == previous_gates.back())
+                {
+                    stack.pop_back();
+                    previous_gates.pop_back();
+                    continue;
+                }
+
+                visited_gates.insert(current_gate);
+
+                bool added = false;
+                for (const auto* suc_ep : current_gate->get_successors())
+                {
+                    if (ff_control_pin_types.find(suc_ep->get_pin()->get_type()) != ff_control_pin_types.end())
+                    {
+                        continue;
+                    }
+
+                    auto* suc_gate = suc_ep->get_gate();
+                    if (suc_gate == start_ff || cache.find(suc_gate) != cache.end())
+                    {
+                        loops_by_start_gate[start_ff].insert(current_gate);
+                        cache.insert(current_gate);
+                        for (auto it = ++(previous_gates.begin()); it != previous_gates.end(); it++)
+                        {
+                            cache.insert(*it);
+                            loops_by_start_gate[start_ff].insert(*it);
+                        }
+                    }
+                    else if (!suc_gate->get_type()->has_property(GateTypeProperty::ff))
+                    {
+                        if (visited_gates.find(suc_gate) == visited_gates.end())
+                        {
+                            stack.push_back(suc_gate);
+                            added = true;
+                        }
+                    }
+                }
+
+                if (added)
+                {
+                    previous_gates.push_back(current_gate);
+                }
+                else
+                {
+                    stack.pop_back();
+                }
+            }
+        }
+
+        std::map<LoopFingerprint, std::vector<std::pair<std::vector<Gate*>, BooleanFunction>>> fingerprinted_loops;
+        for (const auto& [start_ff, comb_gates] : loops_by_start_gate)
+        {
+            LoopFingerprint fingerprint;
+
+            // collect FF control and data nets
+            std::vector<const Endpoint*> data_in;
+            for (const auto* ep : start_ff->get_fan_in_endpoints())
+            {
+                auto pin_type = ep->get_pin()->get_type();
+                if (ff_control_pin_types.find(pin_type) != ff_control_pin_types.end())
+                {
+                    fingerprint.ff_control_nets.insert(ep->get_net());
+                }
+                else if (pin_type == PinType::data)
+                {
+                    data_in.push_back(ep);
+                }
+            }
+
+            if (data_in.size() != 1)
+            {
+                continue;
+            }
+
+            std::vector<const Gate*> comb_gates_vec(comb_gates.cbegin(), comb_gates.cend());
+            if (auto function_res = SubgraphNetlistDecorator(*nl).get_subgraph_function(comb_gates_vec, data_in.front()->get_net()); function_res.is_ok())
+            {
+                // collect gate types
+                fingerprint.types[start_ff->get_type()] = 1;
+                for (const auto* g : comb_gates)
+                {
+                    const auto* gt = g->get_type();
+                    if (const auto type_it = fingerprint.types.find(gt); type_it == fingerprint.types.end())
+                    {
+                        fingerprint.types[gt] = 0;
+                    }
+                    fingerprint.types[gt]++;
+                }
+
+                // get Boolean function variable names
+                BooleanFunction function            = function_res.get();
+                fingerprint.external_variable_names = function.get_variable_names();
+
+                // replace FF output net identifier from function variables (otherwise varies depending on FF, preventing later SMT check)
+                for (const auto* ep : start_ff->get_fan_out_endpoints())
+                {
+                    if (const auto it = fingerprint.external_variable_names.find(BooleanFunctionNetDecorator(*(ep->get_net())).get_boolean_variable_name());
+                        it != fingerprint.external_variable_names.end())
+                    {
+                        function = function.substitute(*it, ep->get_pin()->get_name());
+                        fingerprint.external_variable_names.erase(it);
+                    }
+                }
+
+                std::vector<Gate*> loop_gates = {start_ff};
+                loop_gates.insert(loop_gates.end(), comb_gates.begin(), comb_gates.end());
+                fingerprinted_loops[fingerprint].push_back(std::make_pair(loop_gates, std::move(function)));
+            }
+        }
+
+        std::vector<std::vector<std::vector<Gate*>>> duplicate_loops;
+        for (const auto& [_, loops] : fingerprinted_loops)
+        {
+            if (loops.size() == 1)
+            {
+                continue;
+            }
+
+            std::set<u32> visited;
+            for (u32 i = 0; i < loops.size(); i++)
+            {
+                if (visited.find(i) != visited.cend())
+                {
+                    continue;
+                }
+
+                const auto& master_loop = loops.at(i);
+
+                std::vector<std::vector<Gate*>> current_duplicates = {std::get<0>(master_loop)};
+
+                for (size_t j = i + 1; j < loops.size(); j++)
+                {
+                    const auto& current_loop = loops.at(j);
+                    const auto solver_res =
+                        BooleanFunction::Eq(std::get<1>(master_loop).clone(), std::get<1>(current_loop).clone(), 1)
+                            .map<BooleanFunction>([](auto&& bf_eq) -> Result<BooleanFunction> { return BooleanFunction::Not(std::move(bf_eq), 1); })
+                            .map<SMT::SolverResult>([](auto&& bf_not) -> Result<SMT::SolverResult> { return SMT::Solver({SMT::Constraint(std::move(bf_not))}).query(SMT::QueryConfig()); });
+
+                    if (solver_res.is_ok() && solver_res.get().is_unsat())
+                    {
+                        current_duplicates.push_back(std::get<0>(current_loop));
+                        visited.insert(j);
+                    }
+                }
+
+                if (current_duplicates.size() > 1)
+                {
+                    duplicate_loops.push_back(std::move(current_duplicates));
+                }
+            }
+        }
+
+        for (const auto& current_duplicates : duplicate_loops)
+        {
+            const auto& surviver_loop = current_duplicates.front();
+            auto* surviver_ff         = surviver_loop.front();
+
+            std::map<GatePin*, Net*> out_pins_to_nets;
+            for (auto* ep : surviver_ff->get_fan_out_endpoints())
+            {
+                Net* out_net                    = ep->get_net();
+                out_pins_to_nets[ep->get_pin()] = out_net;
+            }
+
+            for (u32 i = 1; i < current_duplicates.size(); i++)
+            {
+                auto* current_ff = current_duplicates.at(i).front();
+                for (auto* ep : current_ff->get_fan_out_endpoints())
+                {
+                    auto* ep_net = ep->get_net();
+                    auto* ep_pin = ep->get_pin();
+
+                    if (auto it = out_pins_to_nets.find(ep_pin); it != out_pins_to_nets.cend())
+                    {
+                        // surviver already has net connected to this output -> add destination to surviver's net
+                        for (auto* dst : ep_net->get_destinations())
+                        {
+                            auto* dst_gate = dst->get_gate();
+                            auto* dst_pin  = dst->get_pin();
+                            dst->get_net()->remove_destination(dst);
+                            it->second->add_destination(dst_gate, dst_pin);
+                        }
+                        if (!nl->delete_net(ep_net))
+                        {
+                            log_warning("netlist_preprocessing", "could not delete net '{}' with ID {} from netlist with ID {}.", ep_net->get_name(), ep_net->get_id(), nl->get_id());
+                        }
+                    }
+                    else
+                    {
+                        // surviver does not feature net on this output pin -> connect this net to surviver
+                        ep_net->add_source(surviver_ff, ep_pin);
+                        out_pins_to_nets[ep_pin] = ep_net;
+                    }
+                }
+
+                if (!nl->delete_gate(current_ff))
+                {
+                    log_warning("netlist_preprocessing", "could not delete gate '{}' with ID {} from netlist with ID {}.", current_ff->get_name(), current_ff->get_id(), nl->get_id());
+                }
+                else
+                {
+                    num_gates++;
+                }
+            }
+        }
+
         return OK(num_gates);
     }
 

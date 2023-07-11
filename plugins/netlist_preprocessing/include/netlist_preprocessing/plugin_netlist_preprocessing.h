@@ -75,6 +75,14 @@ namespace hal
         static Result<u32> remove_redundant_logic(Netlist* nl);
 
         /**
+         * TODO document
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @return The number of removed gates on success, an error otherwise.
+         */
+        static Result<u32> remove_redundant_loops(Netlist* nl);
+
+        /**
          * Removes gates which outputs are all unconnected and not a global output net.
          * 
          * @param[in] nl - The netlist to operate on. 
