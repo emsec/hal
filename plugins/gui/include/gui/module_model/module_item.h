@@ -43,12 +43,14 @@ namespace hal
     class ModuleItem
     {
     public:
+        enum class TreeItemType {Top, Module, Gate, Net};
+
         /**
          * Constructor.
          *
          * @param id - The id of the module this item represents
          */
-        ModuleItem(const u32 id);
+        ModuleItem(const u32 id, const TreeItemType type = TreeItemType::Module);
 
         /**
          * Appends a child ModuleItem to this ModuleItem.
@@ -199,9 +201,10 @@ namespace hal
 
     private:
         ModuleItem* mParent;
-        QList<ModuleItem*> mChildItems;
+        QList<ModuleItem*> mChildItems; // memory leak? qDeleteAll() or mChildItems.clear()? in Destructor
 
         u32 mId;
+        TreeItemType mType;
         QString mName;
 
         QColor mColor;

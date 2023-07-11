@@ -60,7 +60,7 @@ namespace hal
         mTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
         mTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
         mTreeView->setFrameStyle(QFrame::NoFrame);
-        mTreeView->header()->close();
+        //mTreeView->header()->close();
         mTreeView->setExpandsOnDoubleClick(false);
         mTreeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
         mTreeView->expandAll();

@@ -20,16 +20,18 @@ namespace hal
     {
         // BEHAVIOR FOR ILLEGAL INDICES IS UNDEFINED
         // SEE QT DOCUMENTATION
+        if (!hasIndex(row, column, parent))
+            return QModelIndex();
 
         if (!parent.isValid())
         {
-            if (row == 0 && column == 0 && mTopModuleItem)
-                return createIndex(0, 0, mTopModuleItem);
+            if (row == 0 && column >= 0 && column < 3 && mTopModuleItem)
+                return createIndex(0, column, mTopModuleItem);
             else
                 return QModelIndex();
         }
 
-        if (column != 0 || parent.column() != 0)
+        if (column < 0 || column >= 3 || parent.column() < 0 || parent.column() >= 3)
             return QModelIndex();
 
         ModuleItem* parent_item = getItem(parent);
@@ -86,8 +88,8 @@ namespace hal
         if (!parent.isValid())    // ??
             return 1;
 
-        if (parent.column() != 0)
-            return 0;
+        //if (parent.column() != 0)
+        //    return 0;
 
         ModuleItem* parent_item = getItem(parent);
 
@@ -98,7 +100,7 @@ namespace hal
     {
         Q_UNUSED(parent)
 
-        return 1;
+        return 3;
     }
 
     QVariant ModuleModel::data(const QModelIndex& index, int role) const
@@ -151,9 +153,14 @@ namespace hal
 
     QVariant ModuleModel::headerData(int section, Qt::Orientation orientation, int role) const
     {
-        Q_UNUSED(section)
+        /*Q_UNUSED(section)
         Q_UNUSED(orientation)
         Q_UNUSED(role)
+
+        return QVariant();*/
+        const char* horizontalHeader[] = { "Name", "ID", "Type"};
+        if (orientation == Qt::Horizontal && role == Qt::DisplayRole && section < columnCount())
+            return QString(horizontalHeader[section]);
 
         return QVariant();
     }
