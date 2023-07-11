@@ -1511,7 +1511,7 @@ namespace hal
 
             std::filesystem::create_directory(base_path);
 
-            log_info("netlist_preprocessing", "Writing Verilog file to {} ...", functional_netlist_path.string());
+            log_debug("netlist_preprocessing", "Writing Verilog file to {} ...", functional_netlist_path.string());
 
             std::ofstream out(functional_netlist_path);
             out << verilog_module;
@@ -1524,10 +1524,10 @@ namespace hal
             }
 
             const auto yosys_path     = yosys_query_res.get();
-            const std::string command = yosys_path + " -p " + "\"read -sv " + functional_netlist_path.string() + "; hierarchy -top top; proc; fsm; opt; memory; opt; techmap; opt; abc -genlib "
+            const std::string command = yosys_path + " -q -p " + "\"read -sv " + functional_netlist_path.string() + "; hierarchy -top top; proc; fsm; opt; memory; opt; techmap; opt; abc -genlib "
                                         + genlib_path.string() + "; " + "write_verilog " + resynthesized_netlist_path.string() + "; clean\"";
 
-            log_info("netlist_preprocessing", "yosys command: {}", command);
+            log_debug("netlist_preprocessing", "yosys command: {}", command);
 
             system(command.c_str());
 
@@ -1538,7 +1538,7 @@ namespace hal
             {
                 auto net = pin->get_net();
                 net->set_name(pin->get_name());
-                log_info("netlist_preprocessing", "renamed net {} with pin name {}", net->get_name(), pin->get_name());
+                log_debug("netlist_preprocessing", "renamed net {} with pin name {}", net->get_name(), pin->get_name());
             }
 
             if (resynth_nl == nullptr)
