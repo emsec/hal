@@ -904,10 +904,10 @@ namespace hal
                     auto subgraph = preceding_inverters;
                     subgraph.push_back(g);
 
-                    log_debug("netlist_preprocessing", "trying to simplify subgraph:");
+                    log_info("netlist_preprocessing", "trying to simplify subgraph:");
                     for (const auto& subgraph_g : subgraph)
                     {
-                        log_debug("netlist_preprocessing", "\t{}", subgraph_g->get_name());
+                        log_info("netlist_preprocessing", "\t{}", subgraph_g->get_name());
                     }
 
                     auto resynth_res = NetlistPreprocessingPlugin::resynthesize_subgraph(nl, subgraph, mux_inv_gl);
@@ -1890,7 +1890,7 @@ namespace hal
 
         for (const auto g : subgraph)
         {
-            log_debug("netlist_preprocessing", "removing gate: {}", g->get_name());
+            log_info("netlist_preprocessing", "removing gate: {}", g->get_name());
             nl->delete_gate(g);
         }
 
