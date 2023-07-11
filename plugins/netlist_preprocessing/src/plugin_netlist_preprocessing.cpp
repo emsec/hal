@@ -1118,7 +1118,7 @@ namespace hal
                 delete_count++;
             }
 
-            log_info("iphone_tools", "removed {} encasing inverters", delete_count);
+            log_info("netlist_preprocessing", "removed {} encasing inverters", delete_count);
 
             return OK(delete_count);
         }
@@ -1141,8 +1141,9 @@ namespace hal
                     const auto pred = g->get_predecessor(pin);
                     if (pred == nullptr || pred->get_gate() == nullptr || !pred->get_gate()->get_type()->has_property(GateTypeProperty::c_inverter))
                     {
-                        preceding_inverters.push_back(pred->get_gate());
+                        continue;
                     }
+                    preceding_inverters.push_back(pred->get_gate());
                 }
 
                 // if there is at least one inverter in front of the mux gate we build a subgraph containing all inverters and the mux gate and resynthesize
@@ -1150,6 +1151,12 @@ namespace hal
                 {
                     auto subgraph = preceding_inverters;
                     subgraph.push_back(g);
+
+                    log_debug("netlist_preprocessing", "trying to simplify subgraph:");
+                    for (const auto& subgraph_g : subgraph)
+                    {
+                        log_debug("netlist_preprocessing", "\t{}", subgraph_g->get_name());
+                    }
 
                     auto resynth_res = NetlistPreprocessingPlugin::resynthesize_subgraph(nl, subgraph, mux_inv_gl);
                     if (resynth_res.is_error())
@@ -1759,7 +1766,7 @@ namespace hal
 
             std::filesystem::create_directory(base_path);
 
-            log_info("netlist_preprocessing", "Writing Verilog file to {} ...", functional_netlist_path.string());
+            log_debug("netlist_preprocessing", "Writing Verilog file to {} ...", functional_netlist_path.string());
 
             std::ofstream out(functional_netlist_path);
             out << verilog_module;
@@ -1772,10 +1779,10 @@ namespace hal
             }
 
             const auto yosys_path     = yosys_query_res.get();
-            const std::string command = yosys_path + " -p " + "\"read -sv " + functional_netlist_path.string() + "; hierarchy -top top; proc; fsm; opt; memory; opt; techmap; opt; abc -genlib "
+            const std::string command = yosys_path + " -q -p " + "\"read -sv " + functional_netlist_path.string() + "; hierarchy -top top; proc; fsm; opt; memory; opt; techmap; opt; abc -genlib "
                                         + genlib_path.string() + "; " + "write_verilog " + resynthesized_netlist_path.string() + "; clean\"";
 
-            log_info("netlist_preprocessing", "yosys command: {}", command);
+            log_debug("netlist_preprocessing", "yosys command: {}", command);
 
             system(command.c_str());
 
@@ -1786,7 +1793,7 @@ namespace hal
             {
                 auto net = pin->get_net();
                 net->set_name(pin->get_name());
-                log_info("netlist_preprocessing", "renamed net {} with pin name {}", net->get_name(), pin->get_name());
+                log_debug("netlist_preprocessing", "renamed net {} with pin name {}", net->get_name(), pin->get_name());
             }
 
             if (resynth_nl == nullptr)
@@ -2131,6 +2138,7 @@ namespace hal
 
         for (const auto g : subgraph)
         {
+            log_debug("netlist_preprocessing", "removing gate: {}", g->get_name());
             nl->delete_gate(g);
         }
 
