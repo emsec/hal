@@ -135,12 +135,12 @@ Signals</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af64e42ba6f9eab23b52d160d1ac6f4a7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_selection_tree_view.html#af64e42ba6f9eab23b52d160d1ac6f4a7">SelectionTreeView</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>=nullptr)</td></tr>
-<tr class="separator:af64e42ba6f9eab23b52d160d1ac6f4a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6537e37433bc1b2118c57cb7b150ddcc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_selection_tree_view.html#a6537e37433bc1b2118c57cb7b150ddcc">SelectionTreeView</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>=nullptr, bool isGrouping=false)</td></tr>
+<tr class="separator:a6537e37433bc1b2118c57cb7b150ddcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80c6b14c0f26e332e15ae000358e23ea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_selection_tree_view.html#a80c6b14c0f26e332e15ae000358e23ea">setDefaultColumnWidth</a> ()</td></tr>
 <tr class="separator:a80c6b14c0f26e332e15ae000358e23ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b1a90833ca8e039bbe7659ed493aab1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_selection_tree_view.html#a2b1a90833ca8e039bbe7659ed493aab1">populate</a> (bool mVisible)</td></tr>
-<tr class="separator:a2b1a90833ca8e039bbe7659ed493aab1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d57b5438fa1540c910fc12b20b40477"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_selection_tree_view.html#a4d57b5438fa1540c910fc12b20b40477">populate</a> (bool mVisible, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> groupingId=-1)</td></tr>
+<tr class="separator:a4d57b5438fa1540c910fc12b20b40477"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeccd713447b14d8c26c5d5d3b53db2da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_selection_tree_item.html">SelectionTreeItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_selection_tree_view.html#aeccd713447b14d8c26c5d5d3b53db2da">itemFromIndex</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;index=<a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>()) const</td></tr>
 <tr class="separator:aeccd713447b14d8c26c5d5d3b53db2da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abffcb20d54a094da1076360c5da65a92"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_selection_tree_proxy_model.html">SelectionTreeProxyModel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_selection_tree_view.html#abffcb20d54a094da1076360c5da65a92">proxyModel</a> ()</td></tr>
@@ -1792,8 +1792,8 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="selection__tree__view_8h_source.html#l00045">45</a> of file <a class="el" href="selection__tree__view_8h_source.html">selection_tree_view.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="af64e42ba6f9eab23b52d160d1ac6f4a7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af64e42ba6f9eab23b52d160d1ac6f4a7">&#9670;&nbsp;</a></span>SelectionTreeView()</h2>
+<a id="a6537e37433bc1b2118c57cb7b150ddcc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6537e37433bc1b2118c57cb7b150ddcc">&#9670;&nbsp;</a></span>SelectionTreeView()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1802,8 +1802,18 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">hal::SelectionTreeView::SelectionTreeView </td>
           <td>(</td>
           <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *&#160;</td>
-          <td class="paramname"><em>parent</em> = <code>nullptr</code></td><td>)</td>
+          <td class="paramname"><em>parent</em> = <code>nullptr</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>isGrouping</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1815,9 +1825,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00018">18</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00019">19</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#AlignmentFlag-enum">Qt::AlignCenter</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#AlignmentFlag-enum">Qt::AlignHCenter</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ContextMenuPolicy-enum">Qt::CustomContextMenu</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#customContextMenuRequested">QWidget::customContextMenuRequested()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Expanding</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtreeview.html#header">QTreeView::header()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#contextMenuPolicy-prop">QWidget::setContextMenuPolicy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qheaderview.html#defaultAlignment-prop">QHeaderView::setDefaultAlignment()</a>, <a class="el" href="selection__tree__view_8cpp_source.html#l00032">setDefaultColumnWidth()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtreeview.html#setModel">QTreeView::setModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#sizePolicy-prop">QWidget::setSizePolicy()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#setSourceModel">QSortFilterProxyModel::setSourceModel()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#AlignmentFlag-enum">Qt::AlignCenter</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#AlignmentFlag-enum">Qt::AlignHCenter</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ContextMenuPolicy-enum">Qt::CustomContextMenu</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#customContextMenuRequested">QWidget::customContextMenuRequested()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsizepolicy.html#Policy-enum">QSizePolicy::Expanding</a>, <a class="el" href="classhal_1_1_selection_tree_view.html#a8eeca3ab47eea84731688109c2ff3d60">focusItemClicked()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtreeview.html#header">QTreeView::header()</a>, <a class="el" href="classhal_1_1_selection_tree_view.html#a7d2993e7658a9c191d212e55c0cafb3a">itemDoubleClicked()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#contextMenuPolicy-prop">QWidget::setContextMenuPolicy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qheaderview.html#defaultAlignment-prop">QHeaderView::setDefaultAlignment()</a>, <a class="el" href="selection__tree__view_8cpp_source.html#l00038">setDefaultColumnWidth()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtreeview.html#setModel">QTreeView::setModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#sizePolicy-prop">QWidget::setSizePolicy()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#setSourceModel">QSortFilterProxyModel::setSourceModel()</a>.</p>
 
 </div>
 </div>
@@ -1866,9 +1876,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qtreeview.html#currentChanged">QTreeView</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00040">40</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00046">46</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, <a class="el" href="selection__tree__view_8cpp_source.html#l00063">itemFromIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, and <a class="el" href="classhal_1_1_selection_tree_view.html#aa32c88a22d9710d4e672f29c5fd95153">triggerSelection()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, <a class="el" href="selection__tree__view_8cpp_source.html#l00069">itemFromIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, and <a class="el" href="classhal_1_1_selection_tree_view.html#aa32c88a22d9710d4e672f29c5fd95153">triggerSelection()</a>.</p>
 
 </div>
 </div>
@@ -1903,7 +1913,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="selection__details__widget_8cpp_source.html#l00058">hal::SelectionDetailsWidget::SelectionDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="selection__details__widget_8cpp_source.html#l00058">hal::SelectionDetailsWidget::SelectionDetailsWidget()</a>, and <a class="el" href="selection__tree__view_8cpp_source.html#l00019">SelectionTreeView()</a>.</p>
 
 </div>
 </div>
@@ -1938,7 +1948,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00213">213</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00262">262</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qitemselectionmodel.html#SelectionFlag-enum">QItemSelectionModel::ClearAndSelect</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtreeview.html#expandAll">QTreeView::expandAll()</a>, <a class="el" href="selection__tree__proxy_8cpp_source.html#l00059">hal::SelectionTreeProxyModel::handleFilterTextChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#index">QSortFilterProxyModel::index()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#rootIndex">QAbstractItemView::rootIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qitemselectionmodel.html#SelectionFlag-enum">QItemSelectionModel::Rows</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#selectionModel">QAbstractItemView::selectionModel()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qitemselectionmodel.html#setCurrentIndex">QItemSelectionModel::setCurrentIndex()</a>.</p>
 
@@ -1976,7 +1986,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00143">143</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00192">192</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="user__action__compound_8cpp_source.html#l00024">hal::UserActionCompound::addAction()</a>, <a class="el" href="user__action__object_8h_source.html#l00056">hal::UserActionObjectType::Context</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00130">hal::GraphContextManager::contextWithNameExists()</a>, <a class="el" href="user__action__compound_8cpp_source.html#l00030">hal::UserActionCompound::exec()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="gui__def_8h_source.html#l00061">hal::Node::Gate</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00078">hal::gContentManager</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00087">hal::Module::get_name()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00120">hal::GraphContextManager::getContextByExclusiveModuleId()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00100">hal::GraphContextManager::getContextById()</a>, <a class="el" href="content__manager_8cpp_source.html#l00135">hal::ContentManager::getContextManagerWidget()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gGraphContextManager</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00125">hal::ContextManagerWidget::handleOpenContextClicked()</a>, <a class="el" href="gui__def_8h_source.html#l00075">hal::Node::id()</a>, <a class="el" href="user__action__object_8h_source.html#l00098">hal::UserActionObject::id()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="gui__def_8h_source.html#l00061">hal::Node::Module</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">name</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#number-1">QString::number()</a>, <a class="el" href="user__action_8h_source.html#l00102">hal::UserAction::object()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00218">hal::ContextManagerWidget::selectViewContext()</a>, <a class="el" href="graph__context_8cpp_source.html#l00859">hal::GraphContext::setDirty()</a>, <a class="el" href="graph__context_8cpp_source.html#l00912">hal::GraphContext::setExclusiveModuleId()</a>, <a class="el" href="user__action__compound_8h_source.html#l00044">hal::UserActionCompound::setUseCreatedObject()</a>, and <a class="el" href="gui__def_8h_source.html#l00069">hal::Node::type()</a>.</p>
 
@@ -2015,7 +2025,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="selection__tree__view_8cpp_source.html#l00049">mouseDoubleClickEvent()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00058">hal::SelectionDetailsWidget::SelectionDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="selection__tree__view_8cpp_source.html#l00055">mouseDoubleClickEvent()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00058">hal::SelectionDetailsWidget::SelectionDetailsWidget()</a>, and <a class="el" href="selection__tree__view_8cpp_source.html#l00019">SelectionTreeView()</a>.</p>
 
 </div>
 </div>
@@ -2043,11 +2053,11 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The item that is represented. Returns a nullptr if the index is invalid or the conversion fails. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00063">63</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00069">69</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#index">QSortFilterProxyModel::index()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#mapToSource">QSortFilterProxyModel::mapToSource()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#rootIndex">QAbstractItemView::rootIndex()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="selection__tree__view_8cpp_source.html#l00040">currentChanged()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00307">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>, and <a class="el" href="selection__tree__view_8cpp_source.html#l00049">mouseDoubleClickEvent()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="selection__tree__view_8cpp_source.html#l00046">currentChanged()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00307">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>, and <a class="el" href="selection__tree__view_8cpp_source.html#l00055">mouseDoubleClickEvent()</a>.</p>
 
 </div>
 </div>
@@ -2084,14 +2094,14 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qtreeview.html#mouseDoubleClickEvent">QTreeView</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00049">49</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00055">55</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#event">QAbstractItemView::event()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtreeview.html#indexAt">QTreeView::indexAt()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, <a class="el" href="classhal_1_1_selection_tree_view.html#a7d2993e7658a9c191d212e55c0cafb3a">itemDoubleClicked()</a>, <a class="el" href="selection__tree__view_8cpp_source.html#l00063">itemFromIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#mapFromGlobal">QWidget::mapFromGlobal()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#viewport">QAbstractScrollArea::viewport()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#event">QAbstractItemView::event()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtreeview.html#indexAt">QTreeView::indexAt()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, <a class="el" href="classhal_1_1_selection_tree_view.html#a7d2993e7658a9c191d212e55c0cafb3a">itemDoubleClicked()</a>, <a class="el" href="selection__tree__view_8cpp_source.html#l00069">itemFromIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#mapFromGlobal">QWidget::mapFromGlobal()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#viewport">QAbstractScrollArea::viewport()</a>.</p>
 
 </div>
 </div>
-<a id="a2b1a90833ca8e039bbe7659ed493aab1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b1a90833ca8e039bbe7659ed493aab1">&#9670;&nbsp;</a></span>populate()</h2>
+<a id="a4d57b5438fa1540c910fc12b20b40477"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d57b5438fa1540c910fc12b20b40477">&#9670;&nbsp;</a></span>populate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2100,8 +2110,18 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">void hal::SelectionTreeView::populate </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>mVisible</em></td><td>)</td>
+          <td class="paramname"><em>mVisible</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>groupingId</em> = <code>-1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2113,9 +2133,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00194">194</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00243">243</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qitemselectionmodel.html#clear">QItemSelectionModel::clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qitemselectionmodel.html#SelectionFlag-enum">QItemSelectionModel::ClearAndSelect</a>, <a class="el" href="selection__tree__model_8cpp_source.html#l00147">hal::SelectionTreeModel::fetchSelection()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">QWidget::hide()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#index">QSortFilterProxyModel::index()</a>, <a class="el" href="selection__tree__proxy_8h_source.html#l00066">hal::SelectionTreeProxyModel::isGraphicsBusy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#SelectionMode-enum">QAbstractItemView::NoSelection</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#rootIndex">QAbstractItemView::rootIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qitemselectionmodel.html#SelectionFlag-enum">QItemSelectionModel::Rows</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#selectionModel">QAbstractItemView::selectionModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qitemselectionmodel.html#setCurrentIndex">QItemSelectionModel::setCurrentIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#selectionMode-prop">QAbstractItemView::setSelectionMode()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#show">QWidget::show()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#SelectionMode-enum">QAbstractItemView::SingleSelection</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qitemselectionmodel.html#clear">QItemSelectionModel::clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qitemselectionmodel.html#SelectionFlag-enum">QItemSelectionModel::ClearAndSelect</a>, <a class="el" href="selection__tree__model_8cpp_source.html#l00148">hal::SelectionTreeModel::fetchSelection()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">QWidget::hide()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#index">QSortFilterProxyModel::index()</a>, <a class="el" href="selection__tree__proxy_8h_source.html#l00066">hal::SelectionTreeProxyModel::isGraphicsBusy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#SelectionMode-enum">QAbstractItemView::NoSelection</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#rootIndex">QAbstractItemView::rootIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qitemselectionmodel.html#SelectionFlag-enum">QItemSelectionModel::Rows</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#selectionModel">QAbstractItemView::selectionModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qitemselectionmodel.html#setCurrentIndex">QItemSelectionModel::setCurrentIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#selectionMode-prop">QAbstractItemView::setSelectionMode()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#show">QWidget::show()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#SelectionMode-enum">QAbstractItemView::SingleSelection</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="selection__details__widget_8cpp_source.html#l00307">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>.</p>
 
@@ -2138,7 +2158,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the view's proxy model for the <a class="el" href="classhal_1_1_selection_tree_model.html" title="A model that contains the current selection.">SelectionTreeModel</a>.</p>
 <dl class="section return"><dt>Returns</dt><dd>The proxy model. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00222">222</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00271">271</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
 
 </div>
 </div>
@@ -2158,11 +2178,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Sets the default width of each column. </p>
 
-<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00032">32</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="selection__tree__view_8cpp_source.html#l00038">38</a> of file <a class="el" href="selection__tree__view_8cpp_source.html">selection_tree_view.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qtreeview.html#header">QTreeView::header()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtreeview.html#setColumnWidth">QTreeView::setColumnWidth()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qheaderview.html#stretchLastSection-prop">QHeaderView::setStretchLastSection()</a>, <a class="el" href="selection__tree__model_8h_source.html#l00148">hal::SelectionTreeModel::sIdColumn</a>, <a class="el" href="selection__tree__model_8h_source.html#l00147">hal::SelectionTreeModel::sNameColumn</a>, and <a class="el" href="selection__tree__model_8h_source.html#l00149">hal::SelectionTreeModel::sTypeColumn</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="selection__tree__view_8cpp_source.html#l00018">SelectionTreeView()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="selection__tree__view_8cpp_source.html#l00019">SelectionTreeView()</a>.</p>
 
 </div>
 </div>
@@ -2197,7 +2217,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="reference">Referenced by <a class="el" href="selection__tree__view_8cpp_source.html#l00040">currentChanged()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00058">hal::SelectionDetailsWidget::SelectionDetailsWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="selection__tree__view_8cpp_source.html#l00046">currentChanged()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00058">hal::SelectionDetailsWidget::SelectionDetailsWidget()</a>.</p>
 
 </div>
 </div>
@@ -2211,7 +2231,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_selection_tree_view.html">SelectionTreeView</a></li>
-    <li class="footer">Generated on Tue Jul 11 2023 15:49:34 for HAL by
+    <li class="footer">Generated on Tue Jul 11 2023 16:05:20 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

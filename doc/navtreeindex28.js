@@ -1,5 +1,11 @@
 var NAVTREEINDEX28 =
 {
+"python__bindings_2bindings_2module_8cpp_source.html":[7,0,2,2,0,16],
+"python__bindings_2bindings_2module__pin_8cpp.html":[7,0,2,2,0,17],
+"python__bindings_2bindings_2module__pin_8cpp.html#ga246f05eb11a611390bc2cb4daec5fef4":[7,0,2,2,0,17,0],
+"python__bindings_2bindings_2module__pin_8cpp_source.html":[7,0,2,2,0,17],
+"python__bindings_2bindings_2net_8cpp.html":[7,0,2,2,0,19],
+"python__bindings_2bindings_2net_8cpp.html#ga434508b48c606a9d6f30e5f2f39730b5":[7,0,2,2,0,19,0],
 "python__bindings_2bindings_2net_8cpp_source.html":[7,0,2,2,0,19],
 "python__bindings_2bindings_2netlist__factory_8cpp.html":[7,0,2,2,0,21],
 "python__bindings_2bindings_2netlist__factory_8cpp.html#gaf8d3775de7aff4ada2993c698332de33":[7,0,2,2,0,21,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX28 =
 "settings__widget__slider_8h.html":[7,0,1,3,0,0,42,1,4],
 "settings__widget__slider_8h_source.html":[7,0,1,3,0,0,42,1,4],
 "settings__widget__spinbox_8cpp.html":[7,0,1,3,2,40,1,5],
-"settings__widget__spinbox_8cpp_source.html":[7,0,1,3,2,40,1,5],
-"settings__widget__spinbox_8h.html":[7,0,1,3,0,0,42,1,5],
-"settings__widget__spinbox_8h_source.html":[7,0,1,3,0,0,42,1,5],
-"settings__widget__text_8cpp.html":[7,0,1,3,2,40,1,6],
-"settings__widget__text_8cpp_source.html":[7,0,1,3,2,40,1,6],
-"settings__widget__text_8h.html":[7,0,1,3,0,0,42,1,6],
-"settings__widget__text_8h_source.html":[7,0,1,3,0,0,42,1,6]
+"settings__widget__spinbox_8cpp_source.html":[7,0,1,3,2,40,1,5]
 };

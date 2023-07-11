@@ -4,7 +4,7 @@ var classhal_1_1_selection_tree_model =
     [ "~SelectionTreeModel", "classhal_1_1_selection_tree_model.html#a92d1e1c9a31770e34cb7a4cdeb39e576", null ],
     [ "columnCount", "classhal_1_1_selection_tree_model.html#a4d5c83a3d9b380ea3b00c4e12f09b329", null ],
     [ "data", "classhal_1_1_selection_tree_model.html#a1dd9a9eda59a5dfa3b0986df57447f35", null ],
-    [ "fetchSelection", "classhal_1_1_selection_tree_model.html#a47b8a8218576ad5034e288ea0280fcc2", null ],
+    [ "fetchSelection", "classhal_1_1_selection_tree_model.html#a100c76a0f51676a3e49a68fd50caf6d7", null ],
     [ "flags", "classhal_1_1_selection_tree_model.html#a78b46c059f16e3922a76d462f7ee284d", null ],
     [ "handleGateItemChanged", "classhal_1_1_selection_tree_model.html#af0c459f2f4f7fd78e3dd97229c96d7ae", null ],
     [ "handleModuleItemChanged", "classhal_1_1_selection_tree_model.html#a344466253f572cbd207403fbeebb9996", null ],
