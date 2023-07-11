@@ -747,7 +747,6 @@ namespace hal
                 if (Parents.contains(mod->get_id()))
                     continue;
                 validMods.push_back(mod);
-                modIds.insert(mod->get_id());
             }
             modules = validMods;
 
