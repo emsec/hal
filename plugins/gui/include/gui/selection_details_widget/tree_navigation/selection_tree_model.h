@@ -121,7 +121,7 @@ namespace hal
          *
          * @param hasEntries - Decides wether the current selection is fetched.
          */
-        void fetchSelection(bool hasEntries);
+        void fetchSelection(bool hasEntries, u32 groupingId);
 
         /**
          * Helper functions to convert between an item and its corresponding index.

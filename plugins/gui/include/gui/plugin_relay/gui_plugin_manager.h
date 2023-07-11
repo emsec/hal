@@ -100,6 +100,14 @@ namespace hal {
         void updateQss(GuiPluginManager* gpm);
     };
 
+    class SupportedFileFormats : public QMap<QString,QString>
+    {
+        FacExtensionInterface::Feature mFeature;
+    public:
+        SupportedFileFormats(FacExtensionInterface::Feature ft) : mFeature(ft) {;}
+        QString toFileDialog(bool addHalFormat) const;
+    };
+
     class GuiPluginTable : public QAbstractTableModel
     {
         Q_OBJECT
@@ -137,6 +145,7 @@ namespace hal {
         bool hasCliExtension(const QModelIndex& index) const;
         bool isHalGui(const QModelIndex& index) const;
         void loadFeature(FacExtensionInterface::Feature ft, const QString& extension=QString());
+        SupportedFileFormats listFacFeature(FacExtensionInterface::Feature ft) const;
    };
 
     class GuiPluginView : public QTableView
