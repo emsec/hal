@@ -362,6 +362,7 @@ namespace hal
     Result<std::monostate> EdifParser::parse_net(EdifCell& cell)
     {
         // TODO
+        return ERR("not yet implemented");
     }
 
     // ###########################################################################
