@@ -5,6 +5,8 @@
 !boolean_influence/**/*
 !dataflow_analysis*
 !dataflow_analysis/**/*
+!edif_parser*
+!edif_parser/**/*
 !gate_libraries*
 !gate_libraries/**/*
 !gexf_writer*

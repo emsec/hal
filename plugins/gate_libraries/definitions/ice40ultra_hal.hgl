@@ -1338,6 +1338,208 @@
             ]
         },
         {
+            "name": "HAL_MUX3",
+            "types": [
+                "combinational",
+                "c_mux"
+            ],
+            "pin_groups": [
+                {
+                    "name": "A",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "B",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "B",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "C",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "S1",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "S1",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
+                },
+                {
+                    "name": "S2",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "S2",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "((A & S1) | (!S1 & ((B & S2) | (C & !S2))))"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "HAL_MUX4",
+            "types": [
+                "combinational",
+                "c_mux"
+            ],
+            "pin_groups": [
+                {
+                    "name": "A",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "A",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "B",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "B",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "C",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "C",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "D",
+                            "direction": "input",
+                            "type": "data"
+                        }
+                    ]
+                },
+                {
+                    "name": "S1",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "S1",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
+                },
+                {
+                    "name": "S2",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "S2",
+                            "direction": "input",
+                            "type": "select"
+                        }
+                    ]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [
+                        {
+                            "name": "O",
+                            "direction": "output",
+                            "type": "none",
+                            "function": "((A & S1 & S2) | (B & S1 & !S2) | (C & !S1 & S2) | (D & !S1 & !S2))"
+                        }
+                    ]
+                }
+            ]
+        },        
+        {
             "name": "SB_CARRY",
             "types": [
                 "combinational",
