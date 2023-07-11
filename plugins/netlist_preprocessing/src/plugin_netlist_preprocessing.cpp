@@ -893,8 +893,9 @@ namespace hal
                     const auto pred = g->get_predecessor(pin);
                     if (pred == nullptr || pred->get_gate() == nullptr || !pred->get_gate()->get_type()->has_property(GateTypeProperty::c_inverter))
                     {
-                        preceding_inverters.push_back(pred->get_gate());
+                        continue;
                     }
+                    preceding_inverters.push_back(pred->get_gate());
                 }
 
                 // if there is at least one inverter in front of the mux gate we build a subgraph containing all inverters and the mux gate and resynthesize
