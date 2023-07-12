@@ -704,15 +704,14 @@ namespace hal
         QSet<u32> modIds;
         QSet<u32> gatIds;
 
-        //0) if its not a new view we have to check all parents which have to be placed
+        //0) if its not a new view we have to check and remove all parents which have to be placed
         if (viewId)
         {
+            //put topmodule into parents because we dont iterate over it here
             Parents.insert(topModule->get_id());
-
-            //check if view is valid
             std::vector<Module*> validMods;
 
-            //Add parents from module to parents
+            //Add parents from the view modules to Parents
             for (Module* mod : GuiApiClasses::View::getModules(viewId))
             {
                 validMods.push_back(mod);
@@ -797,24 +796,26 @@ namespace hal
         //3) remove all gates which has its ancestor in modIds
 
         //check ancestors until topmodule or found in modIds
-        //TODO maybe create allowed parents if there is a link from gate upto topmodule so we can break loop if we encounter one of these
-
-        for(Gate* gate : gates){
-            Module* itr = gate->get_module();
-            bool shouldInsert = true;
-            while(itr != topModule)
+        if(!modIds.contains(topModule->get_id()))
+        {
+            for (Gate* gate : gates)
             {
-                if (modIds.contains(itr->get_id())){
-                    gatIds.remove(gate->get_id());
-                    shouldInsert = false;
-                    break;
+                Module* itr       = gate->get_module();
+                bool shouldInsert = true;
+                while (itr != topModule)
+                {
+                    if (modIds.contains(itr->get_id()))
+                    {
+                        gatIds.remove(gate->get_id());
+                        shouldInsert = false;
+                        break;
+                    }
+                    itr = itr->get_parent_module();
                 }
-                itr = itr->get_parent_module();
+                if (shouldInsert)
+                    gatIds.insert(gate->get_id());
             }
-            if(shouldInsert)
-                gatIds.insert(gate->get_id());
         }
-        //remove child gates
 
 
 
