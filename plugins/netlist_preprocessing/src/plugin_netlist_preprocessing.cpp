@@ -759,7 +759,7 @@ namespace hal
                             loops_by_start_gate[start_ff].insert(*it);
                         }
                     }
-                    else if (!suc_gate->get_type()->has_property(GateTypeProperty::ff))
+                    else if (suc_gate->get_type()->has_property(GateTypeProperty::combinational))
                     {
                         if (visited_gates.find(suc_gate) == visited_gates.end())
                         {
