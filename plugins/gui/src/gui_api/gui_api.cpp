@@ -704,34 +704,33 @@ namespace hal
         QSet<u32> modIds;
         QSet<u32> gatIds;
 
+
         //0) if its not a new view we have to check and remove all parents which have to be placed
         if (viewId)
         {
             //put topmodule into parents because we dont iterate over it here
-            Parents.insert(topModule->get_id());
+            //Parents.insert(topModule->get_id());
             std::vector<Module*> validMods;
 
             //Add parents from the view modules to Parents
             for (Module* mod : GuiApiClasses::View::getModules(viewId))
             {
                 validMods.push_back(mod);
-                if (mod != topModule)
+                Module* itr = mod->get_parent_module();
+                while (itr != nullptr)
                 {
-                    Module* itr = mod->get_parent_module();
-                    while (itr != topModule)
-                    {
-                        if (Parents.contains(itr->get_id()))
-                            break;
-                        Parents.insert(itr->get_id());
-                        itr = itr->get_parent_module();
-                    }
+                    if (Parents.contains(itr->get_id()))
+                        break;
+                    Parents.insert(itr->get_id());
+                    itr = itr->get_parent_module();
                 }
+
             }
             //Add parents from gate to parents
             for (Gate* gate : GuiApiClasses::View::getGates(viewId))
             {
                 Module* itr = gate->get_module();
-                while (itr != topModule)
+                while (itr != nullptr)
                 {
                     if (Parents.contains(itr->get_id()))
                         break;
@@ -781,7 +780,7 @@ namespace hal
 
             //check if parent is in current set and if so  remove current mod
             Module* iterator = mod->get_parent_module();
-            while(iterator != topModule){
+            while(iterator != nullptr){
                 if(modIds.contains(iterator->get_id()))
                 {
                     // parent is already in the set so remove mod and stop traversing parent tree
@@ -802,7 +801,7 @@ namespace hal
             {
                 Module* itr       = gate->get_module();
                 bool shouldInsert = true;
-                while (itr != topModule)
+                while (itr != nullptr)
                 {
                     if (modIds.contains(itr->get_id()))
                     {
