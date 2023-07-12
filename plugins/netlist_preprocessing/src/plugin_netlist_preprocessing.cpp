@@ -785,6 +785,12 @@ namespace hal
         {
             LoopFingerprint fingerprint;
 
+            // do not consider loop of more than 30 gates
+            if (comb_gates.size() > 30)
+            {
+                continue;
+            }
+
             // collect FF control and data nets
             std::vector<const Endpoint*> data_in;
             for (const auto* ep : start_ff->get_fan_in_endpoints())
@@ -805,21 +811,21 @@ namespace hal
                 continue;
             }
 
+            // collect gate types
+            fingerprint.types[start_ff->get_type()] = 1;
+            for (const auto* g : comb_gates)
+            {
+                const auto* gt = g->get_type();
+                if (const auto type_it = fingerprint.types.find(gt); type_it == fingerprint.types.end())
+                {
+                    fingerprint.types[gt] = 0;
+                }
+                fingerprint.types[gt]++;
+            }
+
             std::vector<const Gate*> comb_gates_vec(comb_gates.cbegin(), comb_gates.cend());
             if (auto function_res = SubgraphNetlistDecorator(*nl).get_subgraph_function(comb_gates_vec, data_in.front()->get_net()); function_res.is_ok())
             {
-                // collect gate types
-                fingerprint.types[start_ff->get_type()] = 1;
-                for (const auto* g : comb_gates)
-                {
-                    const auto* gt = g->get_type();
-                    if (const auto type_it = fingerprint.types.find(gt); type_it == fingerprint.types.end())
-                    {
-                        fingerprint.types[gt] = 0;
-                    }
-                    fingerprint.types[gt]++;
-                }
-
                 // get Boolean function variable names
                 BooleanFunction function            = function_res.get();
                 fingerprint.external_variable_names = function.get_variable_names();
@@ -937,6 +943,7 @@ namespace hal
             }
         }
 
+        log_info("netlist_preprocessing", "removed {} redundant loops from netlist with ID {}.", num_gates, nl->get_id());
         return OK(num_gates);
     }
 
