@@ -819,8 +819,11 @@ namespace hal
 
 
         //remove duplicates
-        for(Module* mod : GuiApiClasses::View::getModules(viewId)){
-                 modIds.remove(mod->get_id());
+        if (viewId)
+        {
+            for(Module* mod : GuiApiClasses::View::getModules(viewId)){
+                     modIds.remove(mod->get_id());
+            }
         }
 
         //create struct to return module and gate ID pairs
