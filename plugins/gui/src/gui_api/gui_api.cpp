@@ -699,6 +699,10 @@ namespace hal
         std::vector<Module*> modules = mods;
         std::vector<Gate*> gates     = gats;
 
+        //set to store already existing mods and gates
+        QSet<u32> existingModules;
+        QSet<u32> existingGates;
+
         QSet<u32> Parents;
 
         QSet<u32> modIds;
@@ -715,6 +719,7 @@ namespace hal
             //Add parents from the view modules to Parents
             for (Module* mod : GuiApiClasses::View::getModules(viewId))
             {
+                existingModules.insert(mod->get_id());
                 validMods.push_back(mod);
                 Module* itr = mod->get_parent_module();
                 while (itr != nullptr)
@@ -729,6 +734,7 @@ namespace hal
             //Add parents from gate to parents
             for (Gate* gate : GuiApiClasses::View::getGates(viewId))
             {
+                existingGates.insert(gate->get_id());
                 Module* itr = gate->get_module();
                 while (itr != nullptr)
                 {
@@ -821,10 +827,10 @@ namespace hal
         //remove duplicates
         if (viewId)
         {
-            for(Module* mod : GuiApiClasses::View::getModules(viewId)){
-                     modIds.remove(mod->get_id());
-            }
+            modIds -= existingModules;
+            gatIds -= existingGates;
         }
+
 
         //create struct to return module and gate ID pairs
         //TODO maybe use QHash with "module" / "gate" value with (void*) ptr of module / gate as key
