@@ -487,6 +487,13 @@ namespace hal
     // TODO this is very slow, which is to be expected but maybe think about ways to improve this
     Result<u32> NetlistPreprocessingPlugin::remove_redundant_logic(Netlist* nl)
     {
+        auto config = hal::SMT::QueryConfig();
+
+#ifdef BITWUZLA_LIBRARY
+        auto s_type = hal::SMT::SolverType::Bitwuzla;
+        auto s_call = hal::SMT::SolverCall::Library;
+        config.with_solver(s_type).with_call(s_call);
+#endif
         struct GateFingerprint
         {
             const GateType* type;
@@ -586,7 +593,7 @@ namespace hal
                                             });
                                         })
                                         .map<BooleanFunction>([](auto&& bf_eq) -> Result<BooleanFunction> { return BooleanFunction::Not(std::move(bf_eq), 1); })
-                                        .map<SMT::SolverResult>([](auto&& bf_not) -> Result<SMT::SolverResult> { return SMT::Solver({SMT::Constraint(std::move(bf_not))}).query(SMT::QueryConfig()); });
+                                        .map<SMT::SolverResult>([&config](auto&& bf_not) -> Result<SMT::SolverResult> { return SMT::Solver({SMT::Constraint(std::move(bf_not))}).query(config); });
 
                                 if (solver_res.is_error() || !solver_res.get().is_unsat())
                                 {
@@ -712,6 +719,14 @@ namespace hal
                        || (other.types == types && other.external_variable_names == external_variable_names && other.ff_control_nets < ff_control_nets);
             }
         };
+
+        auto config = hal::SMT::QueryConfig();
+
+#ifdef BITWUZLA_LIBRARY
+        auto s_type = hal::SMT::SolverType::Bitwuzla;
+        auto s_call = hal::SMT::SolverCall::Library;
+        config.with_solver(s_type).with_call(s_call);
+#endif
 
         u32 num_gates = 0;
 
@@ -873,7 +888,7 @@ namespace hal
                     const auto solver_res =
                         BooleanFunction::Eq(std::get<1>(master_loop).clone(), std::get<1>(current_loop).clone(), 1)
                             .map<BooleanFunction>([](auto&& bf_eq) -> Result<BooleanFunction> { return BooleanFunction::Not(std::move(bf_eq), 1); })
-                            .map<SMT::SolverResult>([](auto&& bf_not) -> Result<SMT::SolverResult> { return SMT::Solver({SMT::Constraint(std::move(bf_not))}).query(SMT::QueryConfig()); });
+                            .map<SMT::SolverResult>([&config](auto&& bf_not) -> Result<SMT::SolverResult> { return SMT::Solver({SMT::Constraint(std::move(bf_not))}).query(config); });
 
                     if (solver_res.is_ok() && solver_res.get().is_unsat())
                     {
