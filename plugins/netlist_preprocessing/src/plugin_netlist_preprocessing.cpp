@@ -484,7 +484,6 @@ namespace hal
         return OK(num_gates);
     }
 
-    // TODO this is very slow, which is to be expected but maybe think about ways to improve this
     Result<u32> NetlistPreprocessingPlugin::remove_redundant_logic(Netlist* nl)
     {
         auto config = hal::SMT::QueryConfig();
