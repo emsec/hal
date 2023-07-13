@@ -50,6 +50,8 @@ All notable changes to this project will be documented in this file.
     * changed both versions of fsm_solving to now not only consider data inputs of the state register, but also synchronous control signals.
   * `xilinx_toolbox`
     * added the first version of the xilinx_toolbox plugin that provides functionality especially fitted to xilinx fpga netlists
+  * parser plugins
+    * changed supported input file formats from hard coded list to list provided by loadable parser plugins
 * decorators
   * added `NetlistModificationDecorator`
     * added `delete_modules` to delete all (or a filtered subset of) the modules in a netlist

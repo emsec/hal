@@ -422,6 +422,65 @@ namespace hal {
         Q_EMIT dataChanged(index(irow,0),index(irow,10));
     }
 
+    SupportedFileFormats GuiPluginTable::listFacFeature(FacExtensionInterface::Feature ft) const
+    {
+        SupportedFileFormats retval(ft);
+        for (GuiPluginEntry* gpe : mEntries)
+        {
+            if (gpe->mFeature != ft) continue;
+            for (QString arg : gpe->mFeatureArguments)
+            {
+                retval.insert(arg,gpe->mDescription);
+            }
+        }
+        return retval;
+    }
+
+    QString SupportedFileFormats::toFileDialog(bool addHalFormat) const
+    {
+        QMap<QString,QString> pluginMap = *this; // might want to add hal format temporarily
+        if (addHalFormat)
+            pluginMap.insert(".hal", "HAL progress files ");
+
+        QString reStr = "(.*)";
+        if (mFeature == FacExtensionInterface::FacGatelibParser || mFeature == FacExtensionInterface::FacNetlistParser)
+            reStr = "Default (.*) Parser";
+        else if (mFeature == FacExtensionInterface::FacGatelibWriter || mFeature == FacExtensionInterface::FacNetlistWriter)
+            reStr = "Default (.*) Writer";
+        QRegExp re(reStr, Qt::CaseInsensitive);
+
+        QString retval;
+
+        if (pluginMap.size() > 1)
+        {
+            for (const QString& ext: pluginMap.keys())
+            {
+                if (!retval.isEmpty()) retval += " ";
+                retval += "*" + ext;
+            }
+            retval+= ")";
+            retval.prepend("All supported files (");
+        }
+        QMap<QString,QString> formatMap;
+        for (auto it = pluginMap.constBegin(); it != pluginMap.constEnd(); ++it)
+        {
+            QString label = it.value();
+            QString fileFmt = (re.indexIn(label) < 0)
+                    ? label.remove(QChar(':'))
+                    : re.cap(1) + QString(" files ");
+            if (formatMap.contains(fileFmt))
+                formatMap[fileFmt] += " *" + it.key();
+            else
+                formatMap[fileFmt] = "*" + it.key();
+        }
+        for (auto it = formatMap.constBegin(); it != formatMap.constEnd(); ++it)
+        {
+            if (!retval.isEmpty()) retval += ";;";
+            retval += it.key() + "(" + it.value() + ")";
+        }
+        return retval;
+    }
+
     void GuiPluginTable::loadFeature(FacExtensionInterface::Feature ft, const QString& extension)
     {
         for (GuiPluginEntry* gpe : mEntries)
