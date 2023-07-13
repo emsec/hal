@@ -232,6 +232,7 @@ namespace hal
                 {
                     pins.append(pin->get_id());
                 }
+                if (parentModule->delete_pin_group(pgrp).is_error()) return false;
                 if (!undo)
                 {
                     undo = new ActionPingroup(PinAction::Create, pgrp->get_id(), QString::fromStdString(pgrp->get_name()));
@@ -289,7 +290,7 @@ namespace hal
                 auto* pin = parentModule->get_pin_by_id(mPinIds.first());
                 if (!pin) return false;
                 QString oldName = QString::fromStdString(pin->get_name());
-                pin->set_name(mName.toStdString());
+                if (!parentModule->set_pin_name(pin,mName.toStdString())) return false; // RenamePin
                 if (!undo)
                 {
                     undo = new ActionPingroup(PinAction::RenamePin, pin->get_id(), oldName);
@@ -300,7 +301,7 @@ namespace hal
                 auto* pgrp = parentModule->get_pin_group_by_id(mTargetGroupId);
                 if (!pgrp) return false;
                 QString oldName = QString::fromStdString(pgrp->get_name());
-                pgrp->set_name(mName.toStdString());
+                if (!parentModule->set_pin_group_name(pgrp,mName.toStdString())) return false; // RenameGroup
                 if (!undo)
                 {
                     undo = new ActionPingroup(PinAction::RenameGroup, pgrp->get_id(), oldName);
@@ -314,7 +315,7 @@ namespace hal
                 if (!pin) return false;
                 PinType ptype = enum_from_string<PinType>(mName.toStdString(),PinType::none);
                 PinType oldPtype = pin->get_type();
-                pin->set_type(ptype);
+                if (!parentModule->set_pin_type(pin,ptype)) return false; // TypeChange
                 if (!undo)
                 {
                     undo = new ActionPingroup(PinAction::TypeChange, 0, QString::fromStdString(enum_to_string<PinType>(oldPtype)));
