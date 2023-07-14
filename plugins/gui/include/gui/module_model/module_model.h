@@ -194,7 +194,7 @@ namespace hal
          * @param modules - The list of modules which should be added to the item model together
          *                  with all their submodules, gates and nets.
          */
-        void addRecursively(const std::vector<Module*>& modules);
+        void addRecursively(const std::vector<Module*>& modules, QSet<u32>& added_nets);
 
         /**
          * Removes a module from the item model. The specified module MUST be contained in the item model.

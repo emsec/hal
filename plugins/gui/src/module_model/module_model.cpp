@@ -227,12 +227,17 @@ namespace hal
 
         // recursively insert modules
         Module* m = gNetlist->get_top_module();
-        addRecursively(m->get_submodules());
+        QSet<u32> added_nets;
+        addRecursively(m->get_submodules(), added_nets);
         // add remaining gates and modules
         for(auto g : m->get_gates())
             addGate(g->get_id(), 1);
-        for(auto n: m->get_internal_nets())
-            addNet(n->get_id(), 1);
+        for(auto n : m->get_internal_nets()){
+            int size = added_nets.size();
+            added_nets.insert(n->get_id());
+            if(added_nets.size() > size)
+                addNet(n->get_id(), m->get_id());
+        }
     }
 
     void ModuleModel::clear()
@@ -328,17 +333,22 @@ namespace hal
         endInsertRows();
     }
 
-    void ModuleModel::addRecursively(const std::vector<Module*>& modules)
+    void ModuleModel::addRecursively(const std::vector<Module*>& modules, QSet<u32>& added_nets)
     {
         for (auto &m : modules)
         {
             addModule(m->get_id(), m->get_parent_module()->get_id());
-            addRecursively(m->get_submodules());
+            addRecursively(m->get_submodules(), added_nets);
 
             for(auto &g : m->get_gates())
                 addGate(g->get_id(), m->get_id());
             for(auto &n : m->get_internal_nets())
-                addNet(n->get_id(), m->get_id());
+            {
+                int size = added_nets.size();
+                added_nets.insert(n->get_id());
+                if(added_nets.size() > size)
+                    addNet(n->get_id(), m->get_id());
+            }
         }
     }
 

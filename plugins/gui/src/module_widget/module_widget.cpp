@@ -241,8 +241,13 @@ namespace hal
 
         for (const auto& index : current_selection)
         {
-            u32 module_id = getModuleItemFromIndex(index)->id();
-            gSelectionRelay->addModule(module_id);
+            ModuleItem* mi = getModuleItemFromIndex(index);
+            if(mi->getType() == ModuleItem::TreeItemType::Module)
+                gSelectionRelay->addModule(mi->id());
+            else if(mi->getType() == ModuleItem::TreeItemType::Gate)
+                gSelectionRelay->addGate(mi->id());
+            else if(mi->getType() == ModuleItem::TreeItemType::Net)
+                gSelectionRelay->addNet(mi->id());
         }
 
         if (current_selection.size() == 1)
