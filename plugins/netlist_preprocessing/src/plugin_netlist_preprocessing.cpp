@@ -1131,6 +1131,16 @@ namespace hal
 
         Result<u32> unify_select_signals(Netlist* nl, GateLibrary* mux_inv_gl)
         {
+            if (nl == nullptr)
+            {
+                return ERR("netlist is a nullptr");
+            }
+
+            if (mux_inv_gl == nullptr)
+            {
+                return ERR("gate library is a nullptr");
+            }
+
             // resynthesize all muxes where any select signal is preceded by an inverter hoping to unify the structure with regards to other muxes conntected to the same select signal
             std::vector<Gate*> muxes = nl->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_mux); });
 
@@ -1181,6 +1191,16 @@ namespace hal
     Result<u32> NetlistPreprocessingPlugin::manual_mux_optimizations(Netlist* nl, GateLibrary* mux_inv_gl)
     {
         u32 res_count = 0;
+
+        if (nl == nullptr)
+        {
+            return ERR("netlist is a nullptr");
+        }
+
+        if (mux_inv_gl == nullptr)
+        {
+            return ERR("gate library is a nullptr");
+        }
 
         auto remove_res = remove_encasing_inverters(nl);
         if (remove_res.is_error())
@@ -1817,6 +1837,15 @@ namespace hal
                                                                                           const bool optimize_area)
         {
             // TODO sanity check wether all gates in the subgraph have types that are in the genlib/target library
+            if (nl == nullptr)
+            {
+                return ERR("netlist is a nullptr");
+            }
+
+            if (mux_inv_gl == nullptr)
+            {
+                return ERR("gate library is a nullptr");
+            }
 
             auto subgraph_nl_res = SubgraphNetlistDecorator(*nl).copy_subgraph_netlist(subgraph);
             if (subgraph_nl_res.is_error())
@@ -2089,6 +2118,16 @@ namespace hal
 
     Result<u32> NetlistPreprocessingPlugin::resynthesize_subgraph(Netlist* nl, const std::vector<Gate*>& subgraph, GateLibrary* target_gl)
     {
+        if (nl == nullptr)
+        {
+            return ERR("netlist is a nullptr");
+        }
+
+        if (mux_inv_gl == nullptr)
+        {
+            return ERR("gate library is a nullptr");
+        }
+
         const std::filesystem::path base_path   = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_yosys";
         const std::filesystem::path genlib_path = base_path / "new_gate_library.genlib";
         std::filesystem::create_directory(base_path);
