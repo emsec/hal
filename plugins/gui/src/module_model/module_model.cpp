@@ -9,7 +9,6 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 
-
 namespace hal
 {
     ModuleModel::ModuleModel(QObject* parent) : QAbstractItemModel(parent), mTopModuleItem(nullptr)
@@ -120,9 +119,21 @@ namespace hal
                 if (index.column() == 0)
                 {
                     QString runIconStyle = "all->" + item->color().name();
-                    QString runIconPath  = ":/icons/filled-circle";
+                    //QString runIconPath  = ":/icons/filled-circle";
+                    QString moduleIconPath = ":/icons/ne_module";
+                    QString gateIconPath = ":/icons/ne_gate";
+                    QString netIconPath = ":/icons/ne_net";
 
-                    return gui_utility::getStyledSvgIcon(runIconStyle, runIconPath);
+                    switch(item->getType()){
+                        case ModuleItem::TreeItemType::Module:
+                            return gui_utility::getStyledSvgIcon(runIconStyle, moduleIconPath);
+                        case ModuleItem::TreeItemType::Gate:
+                            runIconStyle = "all->" + item->parent()->color().name();
+                            return gui_utility::getStyledSvgIcon(runIconStyle, gateIconPath);
+                        case ModuleItem::TreeItemType::Net:
+                            runIconStyle = "all->" + item->parent()->color().name();
+                            return gui_utility::getStyledSvgIcon(runIconStyle, netIconPath);
+                    }
                 }
                 break;
             }
@@ -198,8 +209,7 @@ namespace hal
     {
         setModuleColor(1, QColor(96, 110, 112));
         ModuleItem* item = new ModuleItem(1);
-
-        mModuleItems.insert(1, item);
+        mModuleMap.insert(1, item);
 
         beginInsertRows(index(0, 0, QModelIndex()), 0, 0);
         mTopModuleItem = item;
@@ -218,6 +228,11 @@ namespace hal
         // recursively insert modules
         Module* m = gNetlist->get_top_module();
         addRecursively(m->get_submodules());
+        // add remaining gates and modules
+        for(auto g : m->get_gates())
+            addGate(g->get_id(), 1);
+        for(auto n: m->get_internal_nets())
+            addNet(n->get_id(), 1);
     }
 
     void ModuleModel::clear()
@@ -226,10 +241,16 @@ namespace hal
 
         mTopModuleItem = nullptr;
 
-        for (ModuleItem* m : mModuleItems)
+        for (ModuleItem* m : mModuleMap)
             delete m;
+        for (ModuleItem* g : mGateMap)
+            delete g;
+        for (ModuleItem* n : mNetMap)
+            delete n;
 
-        mModuleItems.clear();
+        mModuleMap.clear();
+        mGateMap.clear();
+        mNetMap.clear();
         mModuleColors.clear();
 
         endResetModel();
@@ -239,15 +260,63 @@ namespace hal
     {
         assert(gNetlist->get_module_by_id(id));
         assert(gNetlist->get_module_by_id(parent_module));
-        assert(!mModuleItems.contains(id));
-        assert(mModuleItems.contains(parent_module));
+        assert(!mModuleMap.contains(id));
+        assert(mModuleMap.contains(parent_module));
 
         ModuleItem* item   = new ModuleItem(id);
-        item->appendExistingChildIfAny(mModuleItems);
-        ModuleItem* parent = mModuleItems.value(parent_module);
+        item->appendExistingChildIfAny(mModuleMap);
+        ModuleItem* parent = mModuleMap.value(parent_module);
 
         item->setParent(parent);
-        mModuleItems.insert(id, item);
+        mModuleMap.insert(id, item);
+
+        QModelIndex index = getIndex(parent);
+
+        int row = parent->childCount();
+        mIsModifying = true;
+        beginInsertRows(index, row, row);
+        parent->insertChild(row, item);
+        mIsModifying = false;
+        endInsertRows();
+    }
+
+    void ModuleModel::addGate(u32 id, u32 parent_module)
+    {
+        assert(gNetlist->get_gate_by_id(id));
+        assert(gNetlist->get_module_by_id(parent_module));
+        assert(!mGateMap.contains(id));
+        assert(mModuleMap.contains(parent_module));
+        ModuleItem* item   = new ModuleItem(id, ModuleItem::TreeItemType::Gate);
+        //item->appendExistingChildIfAny(mModuleMap);
+        ModuleItem* parent = mModuleMap.value(parent_module);
+
+        item->setParent(parent);
+        mGateMap.insert(id, item);
+
+        QModelIndex index = getIndex(parent);
+
+        int row = parent->childCount();
+        mIsModifying = true;
+        beginInsertRows(index, row, row);
+        parent->insertChild(row, item);
+        mIsModifying = false;
+        endInsertRows();
+    }
+
+
+    void ModuleModel::addNet(u32 id, u32 parent_module)
+    {
+        assert(gNetlist->get_net_by_id(id));
+        assert(gNetlist->get_module_by_id(parent_module));
+        assert(!mNetMap.contains(id));
+        assert(mModuleMap.contains(parent_module));
+
+        ModuleItem* item   = new ModuleItem(id, ModuleItem::TreeItemType::Net);
+        //item->appendExistingChildIfAny(mModuleMap);
+        ModuleItem* parent = mModuleMap.value(parent_module);
+
+        item->setParent(parent);
+        mNetMap.insert(id, item);
 
         QModelIndex index = getIndex(parent);
 
@@ -265,6 +334,11 @@ namespace hal
         {
             addModule(m->get_id(), m->get_parent_module()->get_id());
             addRecursively(m->get_submodules());
+
+            for(auto &g : m->get_gates())
+                addGate(g->get_id(), m->get_id());
+            for(auto &n : m->get_internal_nets())
+                addNet(n->get_id(), m->get_id());
         }
     }
 
@@ -272,9 +346,9 @@ namespace hal
     {
         assert(id != 1);
         assert(gNetlist->get_module_by_id(id));
-        assert(mModuleItems.contains(id));
+        assert(mModuleMap.contains(id));
 
-        ModuleItem* item   = mModuleItems.value(id);
+        ModuleItem* item   = mModuleMap.value(id);
         ModuleItem* parent = item->parent();
         assert(item);
         assert(parent);
@@ -289,28 +363,76 @@ namespace hal
         mIsModifying = false;
         endRemoveRows();
 
-        mModuleItems.remove(id);
+        mModuleMap.remove(id);
+        delete item;
+    }
+
+    void ModuleModel::remove_gate(const u32 id)
+    {
+        assert(gNetlist->get_gate_by_id(id));
+        assert(mGateMap.contains(id));
+
+        ModuleItem* item   = mGateMap.value(id);
+        ModuleItem* parent = item->parent();
+        assert(item);
+        assert(parent);
+
+        QModelIndex index = getIndex(parent);
+
+        int row = item->row();
+
+        mIsModifying = true;
+        beginRemoveRows(index, row, row);
+        parent->removeChild(item);
+        mIsModifying = false;
+        endRemoveRows();
+
+        mGateMap.remove(id);
+        delete item;
+    }
+
+    void ModuleModel::remove_net(const u32 id)
+    {
+        assert(gNetlist->get_net_by_id(id));
+        assert(mModuleMap.contains(id));
+
+        ModuleItem* item   = mNetMap.value(id);
+        ModuleItem* parent = item->parent();
+        assert(item);
+        assert(parent);
+
+        QModelIndex index = getIndex(parent);
+
+        int row = item->row();
+
+        mIsModifying = true;
+        beginRemoveRows(index, row, row);
+        parent->removeChild(item);
+        mIsModifying = false;
+        endRemoveRows();
+
+        mNetMap.remove(id);
         delete item;
     }
 
     void ModuleModel::updateModule(u32 id)    // SPLIT ???
     {
         assert(gNetlist->get_module_by_id(id));
-        assert(mModuleItems.contains(id));
+        assert(mModuleMap.contains(id));
 
-        ModuleItem* item = mModuleItems.value(id);
+        ModuleItem* item = mModuleMap.value(id);
         assert(item);
 
-        item->set_name(QString::fromStdString(gNetlist->get_module_by_id(id)->get_name()));    // REMOVE & ADD AGAIN
+        item->setName(QString::fromStdString(gNetlist->get_module_by_id(id)->get_name()));    // REMOVE & ADD AGAIN
         item->setColor(gNetlistRelay->getModuleColor(id));
 
         QModelIndex index = getIndex(item);
         Q_EMIT dataChanged(index, index);
     }
 
-    ModuleItem* ModuleModel::getItem(u32 module_id) const
+    ModuleItem* ModuleModel::getItem(u32 id, ModuleItem::TreeItemType type) const
     {
-        return mModuleItems.value(module_id);
+        return mModuleItemMaps[(int)type]->value(id);
     }
 
     QColor ModuleModel::moduleColor(u32 id) const

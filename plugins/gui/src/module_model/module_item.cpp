@@ -11,10 +11,22 @@ namespace hal
         mParent(nullptr),
         mId(id),
         mType(type),
-        mName(QString::fromStdString(gNetlist->get_module_by_id(id)->get_name())),
-        mColor(gNetlistRelay->getModuleColor(id)),
         mHighlighted(false)
-    {}
+    {
+        switch(type)
+        {
+        case TreeItemType::Module:
+            mName = QString::fromStdString(gNetlist->get_module_by_id(id)->get_name());
+            mColor = gNetlistRelay->getModuleColor(id);
+            break;
+        case TreeItemType::Gate:
+            mName = QString::fromStdString(gNetlist->get_gate_by_id(id)->get_name());
+            break;
+        case TreeItemType::Net:
+            mName = QString::fromStdString(gNetlist->get_net_by_id(id)->get_name());
+            break;
+        }
+    }
 
     void ModuleItem::insertChild(int row, ModuleItem* child)
     {
@@ -33,7 +45,7 @@ namespace hal
 
     void ModuleItem::appendExistingChildIfAny(const QMap<u32,ModuleItem*>& moduleMap)
     {
-        if(mType != TreeItemType::Module && mType != TreeItemType::Top)
+        if(mType != TreeItemType::Module) // only module can have children
             return;
 
         Module* m = gNetlist->get_module_by_id(mId);
@@ -137,12 +149,16 @@ namespace hal
         return mHighlighted;
     }
 
+    ModuleItem::TreeItemType ModuleItem::getType() const{
+        return mType;
+    }
+
     void ModuleItem::setParent(ModuleItem* parent)
     {
         mParent = parent;
     }
 
-    void ModuleItem::set_name(const QString& name)
+    void ModuleItem::setName(const QString& name)
     {
         mName = name;
     }

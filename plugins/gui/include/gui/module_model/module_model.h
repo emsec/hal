@@ -28,6 +28,7 @@
 #include "hal_core/defines.h"
 #include "gui/gui_utils/sort.h"
 #include "hal_core/netlist/module.h"
+#include "gui/module_model/module_item.h"
 
 #include <QAbstractItemModel>
 #include <QModelIndex>
@@ -116,7 +117,7 @@ namespace hal
 
         /**
          * Returns the data for the given role and section in the header with the specified orientation.
-         * Since the model has not headers, an empty QVariant is always returned.
+         * //Since the model has not headers, an empty QVariant is always returned. // REMOVE THIS LINE?
          *
          * @param section - The section
          * @param orientation - The orientation
@@ -130,26 +131,27 @@ namespace hal
         /**
          * Returns the ModuleItem stored under the specified model index.
          *
-         * @param index - The model index to get the module item from
+         * @param index - The model index to get the ModuleItem from
          * @returns the module item at the specified index
          */
         ModuleItem* getItem(const QModelIndex& index) const;
 
         /**
-         * Returns the module index where the specified ModuleItem can be found.
+         * Returns the index where the specified ModuleItem can be found.
          *
-         * @param item - The module item to search for in the item model
+         * @param item - The ModuleItem to search for in the item model
          * @returns the model index of the specified ModuleItem
          */
         QModelIndex getIndex(const ModuleItem* const item) const;
 
         /**
-         * Returns the ModuleItem for a specified module id.
+         * Returns the ModuleItem for a specified id and type.
          *
-         * @param module_id - The id of the module to get the ModuleItem for
-         * @returns the ModuleItem with the id module_id
+         * @param module_id - The id of the ModuleItem
+         * @param type - The type of the ModuleItem
+         * @returns the ModuleItem with the specified id and type.
          */
-        ModuleItem* getItem(const u32 module_id) const;
+        ModuleItem* getItem(const u32 id, ModuleItem::TreeItemType type = ModuleItem::TreeItemType::Module) const;
 
         /**
          * Initializes the item model using the global netlist object gNetlist.
@@ -157,7 +159,7 @@ namespace hal
         void init();
 
         /**
-         * Clears the item model.
+         * Clears the item model and deletes all ModuleItems.
          */
         void clear();
 
@@ -170,20 +172,50 @@ namespace hal
         void addModule(const u32 id, const u32 parent_module);
 
         /**
-         * Recursively adds all given modules with all their sub modules (and their submodules and so on...) to
-         * the item model.
+         * Add a gate to the item model. For the specified gate a new ModuleItem is created and stored.
+         *
+         * @param id - The id of the gate to add.
+         * @param parent_module - The id of the parent module of the gate to add.
+         */
+        void addGate(const u32 id, const u32 parent_module);
+
+        /**
+         * Add a net to the item model. For the specified net a new ModuleItem is created and stored.
+         *
+         * @param id - The id of the net to add.
+         * @param parent_module - The id of the parent module of the net to add.
+         */
+        void addNet(const u32 id, const u32 parent_module);
+
+        /**
+         * Recursively adds all given modules with all their sub modules (and their submodules and so on...)
+         * and the gates and nets of those modules to the item model.
          *
          * @param modules - The list of modules which should be added to the item model together
-         *                  with all their submodules.
+         *                  with all their submodules, gates and nets.
          */
         void addRecursively(const std::vector<Module*>& modules);
 
         /**
          * Removes a module from the item model. The specified module MUST be contained in the item model.
          *
-         * @param id - The id of the model to remove
+         * @param id - The id of the module to remove
          */
         void remove_module(const u32 id);
+
+        /**
+         * Removes a gate from the item model. The specified gate MUST be contained in the item model.
+         *
+         * @param id - The id of the gate to remove
+         */
+        void remove_gate(const u32 id);
+
+        /**
+         * Removes a net from the item model. The specified net MUST be contained in the item model.
+         *
+         * @param id - The id of the net to remove
+         */
+        void remove_net(const u32 id);
 
         /**
          * Updates the ModuleItem for the specified module. The specified module MUST be contained in the item model.
@@ -242,7 +274,10 @@ namespace hal
     private:
         ModuleItem* mTopModuleItem;
 
-        QMap<u32, ModuleItem*> mModuleItems;
+        QMap<u32, ModuleItem*> mModuleMap;
+        QMap<u32, ModuleItem*> mGateMap;
+        QMap<u32, ModuleItem*> mNetMap;
+        std::array<QMap<u32, ModuleItem*>*, 3> mModuleItemMaps = {&mModuleMap, &mGateMap, &mNetMap};
         QMap<u32, QColor> mModuleColors;
 
         bool mIsModifying;

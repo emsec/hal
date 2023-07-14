@@ -38,17 +38,21 @@ namespace hal
      * @ingroup gui
      * @brief An item in the ModuleModel.
      *
-     * The ModuleItem is one item in the ModuleModel item model. It represents one module of the netlist.
+     * The ModuleItem is one item in the ModuleModel item model. It represents either a module, a gate or a net of the netlist.
      */
     class ModuleItem
     {
     public:
-        enum class TreeItemType {Top, Module, Gate, Net};
+        /**
+         * The possible types that a ModuleItem in the ModuleModel can have.
+         */
+        enum class TreeItemType {Module, Gate, Net};
 
         /**
          * Constructor.
          *
-         * @param id - The id of the module this item represents
+         * @param id - The id of the netlist item this ModuleItem represents
+         * @param type - The type of the netlist item
          */
         ModuleItem(const u32 id, const TreeItemType type = TreeItemType::Module);
 
@@ -121,7 +125,7 @@ namespace hal
         const ModuleItem* constChild(int row) const;
 
         /**
-         * Gets the current amount of children of this ModuleItem
+         * Gets the current amount of children of this ModuleItem.
          *
          * @returns the amount of children
          */
@@ -143,21 +147,21 @@ namespace hal
         int row() const;
 
         /**
-         * Gets the name of the module this ModuleItem represents.
+         * Gets the name of the netlist item this ModuleItem represents.
          *
-         * @returns the modules name
+         * @returns the netlist items name
          */
         QString name() const;
 
         /**
-         * Gets the id of the module this ModuleItem represents.
+         * Gets the id of the netlist item this ModuleItem represents.
          *
          * @returns the module id
          */
         u32 id() const;
 
         /**
-         * Gets the color of the module this ModuleItem represents.
+         * Gets the color of the netlist item this ModuleItem represents.
          *
          * @returns the module color
          */
@@ -166,9 +170,16 @@ namespace hal
         /**
          * Checks if this ModuleItem is currently highlighted.
          *
-         * @returns <b>true</b> iff this ModuleItem is currently highlighted.
+         * @returns <b>true</b> if this ModuleItem is currently highlighted.
          */
         bool highlighted() const;
+
+        /**
+         * Gets the type of the netlist item this ModuleItem represents.
+         *
+         * @returns the ModuleItem type
+         */
+        TreeItemType getType() const;
 
         /**
          * Sets the parent ModuleItem of this ModuleItem.
@@ -182,7 +193,7 @@ namespace hal
          *
          * @param name - The new name
          */
-        void set_name(const QString& name);
+        void setName(const QString& name);
 
         /**
          * Sets the color of the module this ModuleItem represents.
@@ -201,7 +212,7 @@ namespace hal
 
     private:
         ModuleItem* mParent;
-        QList<ModuleItem*> mChildItems; // memory leak? qDeleteAll() or mChildItems.clear()? in Destructor
+        QList<ModuleItem*> mChildItems;
 
         u32 mId;
         TreeItemType mType;
