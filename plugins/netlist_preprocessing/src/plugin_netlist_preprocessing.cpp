@@ -1842,7 +1842,7 @@ namespace hal
                 return ERR("netlist is a nullptr");
             }
 
-            if (mux_inv_gl == nullptr)
+            if (hgl_lib == nullptr)
             {
                 return ERR("gate library is a nullptr");
             }
@@ -2123,7 +2123,7 @@ namespace hal
             return ERR("netlist is a nullptr");
         }
 
-        if (mux_inv_gl == nullptr)
+        if (target_gl == nullptr)
         {
             return ERR("gate library is a nullptr");
         }
