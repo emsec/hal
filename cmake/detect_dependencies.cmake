@@ -30,7 +30,10 @@ find_package(Sanitizers REQUIRED)
 find_package(Bitwuzla)
 
 if(Bitwuzla_FOUND)
+    message(STATUS "Found Bitwuzla")
     set(BITWUZLA_LIBRARY Bitwuzla::bitwuzla)
+else()
+    message(STATUS "NOooooooooooooooooooooooooooooooooooooooooo")
 endif()
 
 # ###############################
@@ -243,7 +246,7 @@ endif(Z3_FOUND)
 # ###############################
 # ####   igraph
 # ###############################
-set (IGRAPH_SUBDIR "${CMAKE_SOURCE_DIR}/deps/igraph-0.9.10")
+set(IGRAPH_SUBDIR "${CMAKE_SOURCE_DIR}/deps/igraph-0.9.10")
 add_subdirectory(${IGRAPH_SUBDIR})
 get_directory_property(IGRAPH_INCLUDES DIRECTORY ${IGRAPH_SUBDIR} DEFINITION IGRAPH_INCLUDES)
-get_directory_property(IGRAPH_LIB      DIRECTORY ${IGRAPH_SUBDIR} DEFINITION IGRAPH_LIB)
+get_directory_property(IGRAPH_LIB DIRECTORY ${IGRAPH_SUBDIR} DEFINITION IGRAPH_LIB)
