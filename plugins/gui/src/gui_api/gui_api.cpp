@@ -471,19 +471,13 @@ namespace hal
             //Get the number which has to be appended to name
             name   = gGraphContextManager->nextViewName("Isolated View");
         }
-        GuiApiClasses::View::ModuleGateIdPair pair = GuiApiClasses::View::getValidObjects(NULL, modules, gates);
+        GuiApiClasses::View::ModuleGateIdPair pair = GuiApiClasses::View::getValidObjects(0, modules, gates);
 
 
         // Get ids from modules and gates
         QSet<u32> moduleIds = pair.moduleIds;
         QSet<u32> gateIds = pair.gateIds;
 
-        /*
-        for(Module* module : modules)
-            moduleIds.insert(module->get_id());
-        for(Gate* gate : gates)
-            gateIds.insert(gate->get_id());
-        */
 
         UserActionCompound* act = new UserActionCompound;
         act->setUseCreatedObject();
@@ -516,17 +510,21 @@ namespace hal
 
     bool GuiApiClasses::View::addTo(int id, const std::vector<Module*> modules, const std::vector<Gate*> gates)
     {
-        //TODO check why ctx->add does clear the whole view and only apply after a restart
-        // Get ids from modules and gates
-        QSet<u32> moduleIds;
-        QSet<u32> gateIds;
-
-        for(Module* module : modules)
-            moduleIds.insert(module->get_id());
-        for(Gate* gate : gates)
-            gateIds.insert(gate->get_id());
 
         if (!gGraphContextManager->getContextById(id)) return false; // context does not exist
+
+
+        if (gGraphContextManager->getContextById(id)->isShowingModuleExclusively() && gGraphContextManager->getContextById(id)->getExclusiveModuleId() == gNetlist->get_top_module()->get_id())
+            return false; //context shows topmodule so we can not add anything to it
+
+
+        GuiApiClasses::View::ModuleGateIdPair pair = GuiApiClasses::View::getValidObjects(id, modules, gates);
+
+        // Get ids from modules and gates
+        QSet<u32> moduleIds = pair.moduleIds;
+        QSet<u32> gateIds = pair.gateIds;
+
+
         ActionAddItemsToObject* act = new ActionAddItemsToObject(moduleIds,gateIds);
         act->setObject(UserActionObject(id,UserActionObjectType::Context));
         UserActionManager::instance()->executeActionBlockThread(act);
@@ -535,12 +533,12 @@ namespace hal
 
     bool GuiApiClasses::View::removeFrom(int id, const std::vector<Module*> modules, const std::vector<Gate*> gates)
     {
-        //TODO check why ctx->remove does clear the whole view and only apply after a restart
-        // Get ids from modules and gates
+
+        if (!gGraphContextManager->getContextById(id)) return false; // context does not exist
+
         QSet<u32> moduleIds;
         QSet<u32> gateIds;
 
-        if (!gGraphContextManager->getContextById(id)) return false; // context does not exist
         for(Module* module : modules)
             moduleIds.insert(module->get_id());
         for(Gate* gate : gates)
@@ -698,16 +696,74 @@ namespace hal
 
     GuiApiClasses::View::ModuleGateIdPair GuiApiClasses::View::getValidObjects(int viewId, const std::vector<Module*> mods, const std::vector<Gate*> gats)
     {
-        if(viewId != NULL){
-            //TODO check content of view before processing further
-        }
+        Module* topModule = gNetlist->get_top_module();
 
         //copy to prevent inplace operations
         std::vector<Module*> modules = mods;
-        std::vector<Gate*> gates = gats;
+        std::vector<Gate*> gates     = gats;
 
-        //TODO validate gates and modules
-        //here we dont have any view so we dont have to check there
+        //set to store already existing mods and gates
+        QSet<u32> existingModules;
+        QSet<u32> existingGates;
+
+        QSet<u32> Parents;
+
+        QSet<u32> modIds;
+        QSet<u32> gatIds;
+
+
+        //0) if its not a new view we have to check and remove all parents which have to be placed
+        if (viewId)
+        {
+            //put topmodule into parents because we dont iterate over it here
+            //Parents.insert(topModule->get_id());
+            std::vector<Module*> validMods;
+
+            //Add parents from the view modules to Parents
+            for (Module* mod : GuiApiClasses::View::getModules(viewId))
+            {
+                existingModules.insert(mod->get_id());
+                validMods.push_back(mod);
+                Module* itr = mod->get_parent_module();
+                while (itr != nullptr)
+                {
+                    if (Parents.contains(itr->get_id()))
+                        break;
+                    Parents.insert(itr->get_id());
+                    itr = itr->get_parent_module();
+                }
+
+            }
+            //Add parents from gate to parents
+            for (Gate* gate : GuiApiClasses::View::getGates(viewId))
+            {
+                existingGates.insert(gate->get_id());
+                Module* itr = gate->get_module();
+                while (itr != nullptr)
+                {
+                    if (Parents.contains(itr->get_id()))
+                        break;
+                    Parents.insert(itr->get_id());
+                    itr = itr->get_parent_module();
+                }
+            }
+
+            //Delete every parent from the list if submodule is in the view
+            for (Module* mod : modules)
+            {
+                if (Parents.contains(mod->get_id()))
+                    continue;
+                validMods.push_back(mod);
+            }
+            modules = validMods;
+
+        }
+        //get ids of modules
+        for (Module* mod : modules)
+        {
+            modIds.insert(mod->get_id());
+        }
+
 
         //1) sort them by priority in DESCENDING order
         std::sort(modules.begin(), modules.end(), [](const Module* a, const Module* b) -> bool
@@ -717,22 +773,13 @@ namespace hal
                   }
         );
 
-        //2) create set which stores module Ids
-        QSet<u32> modIds;
-        QSet<u32> gatIds;
 
-        Module* topModule  = gNetlist->get_top_module();
 
+        //TODO store parents maybe in the same set if it wont cause problems (it did in some cases)
+        //2) remove id if parent is in set
         for(Module* mod : modules){
-            modIds.insert(mod->get_id());
-        }
-
-
-        //3) remove id if parent is in set
-        bool onlyAddParent = false;
-        for(Module* mod : modules){
-            //get top module
-            if(mod == gNetlist->get_top_module()){
+            //check if top module
+            if(mod == topModule){
                 // only add the top module because it has highest priority
                 QSet<u32> temp;
                 temp.insert(topModule->get_id());
@@ -742,7 +789,7 @@ namespace hal
 
             //check if parent is in current set and if so  remove current mod
             Module* iterator = mod->get_parent_module();
-            while(iterator != topModule){
+            while(iterator != nullptr){
                 if(modIds.contains(iterator->get_id()))
                 {
                     // parent is already in the set so remove mod and stop traversing parent tree
@@ -754,15 +801,47 @@ namespace hal
         }
 
 
+        //3) remove all gates which has its ancestor in modIds
 
-        //TODO check gates if valid to place
+        //check ancestors until topmodule or found in modIds
+        if(!modIds.contains(topModule->get_id()))
+        {
+            for (Gate* gate : gates)
+            {
+                Module* itr       = gate->get_module();
+                bool shouldInsert = true;
+                while (itr != nullptr)
+                {
+                    if (modIds.contains(itr->get_id()))
+                    {
+                        gatIds.remove(gate->get_id());
+                        shouldInsert = false;
+                        break;
+                    }
+                    itr = itr->get_parent_module();
+                }
+                if (shouldInsert)
+                    gatIds.insert(gate->get_id());
+            }
+        }
 
 
+
+        //remove duplicates
+        if (viewId)
+        {
+            modIds -= existingModules;
+            gatIds -= existingGates;
+        }
+
+
+        //create struct to return module and gate ID pairs
+        //TODO maybe use QHash with "module" / "gate" value with (void*) ptr of module / gate as key
         GuiApiClasses::View::ModuleGateIdPair pair;
         pair.moduleIds = modIds;
         pair.gateIds = gatIds;
 
         return pair;
-        ///End
+
     }
 }
