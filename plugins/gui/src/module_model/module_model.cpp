@@ -5,6 +5,7 @@
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
 //#include "gui/ModuleModel/ModuleItem.h"
+#include "gui/selection_details_widget/selection_details_icon_provider.h"
 
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
@@ -118,21 +119,13 @@ namespace hal
             {
                 if (index.column() == 0)
                 {
-                    QString runIconStyle = "all->" + item->color().name();
-                    //QString runIconPath  = ":/icons/filled-circle";
-                    QString moduleIconPath = ":/icons/ne_module";
-                    QString gateIconPath = ":/icons/ne_gate";
-                    QString netIconPath = ":/icons/ne_net";
-
                     switch(item->getType()){
                         case ModuleItem::TreeItemType::Module:
-                            return gui_utility::getStyledSvgIcon(runIconStyle, moduleIconPath);
+                            return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::ModuleIcon, item->id()));
                         case ModuleItem::TreeItemType::Gate:
-                            runIconStyle = "all->" + item->parent()->color().name();
-                            return gui_utility::getStyledSvgIcon(runIconStyle, gateIconPath);
+                            return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::GateIcon, item->id()));
                         case ModuleItem::TreeItemType::Net:
-                            runIconStyle = "all->" + item->parent()->color().name();
-                            return gui_utility::getStyledSvgIcon(runIconStyle, netIconPath);
+                            return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::NetIcon, item->id()));
                     }
                 }
                 break;
