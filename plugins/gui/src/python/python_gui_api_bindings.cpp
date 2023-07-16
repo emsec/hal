@@ -103,7 +103,7 @@ PYBIND11_PLUGIN(hal_gui)
         :returns: True on success, otherwise False.
         :rtype: bool
 )")
-       .def_static("deleteView", &GuiApiClasses::View::deleteView, py::arg("id"),R"(
+    .def_static("deleteView", &GuiApiClasses::View::deleteView, py::arg("id"),R"(
         Adds the given modules and gates to the view specified by the ID.
 
         :param list[hal.py.module] modules: Modules to be added.
@@ -163,7 +163,7 @@ PYBIND11_PLUGIN(hal_gui)
             :returns: True on success, otherwise False.
             :rtype: bool
 )")
-        .def_static("foldModule", &GuiApiClasses::View::foldModule, py::arg("view_id"), py::arg("module"), R"(
+    .def_static("foldModule", &GuiApiClasses::View::foldModule, py::arg("view_id"), py::arg("module"), R"(
             Fold a specific module. Remove the submodules and gates from view, add parent module
 
             :param int view_id: ID of the view.

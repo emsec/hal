@@ -450,14 +450,16 @@ namespace hal
             if(mod == nullptr) return 0;
 
         QString name;
+
+        bool isModuleExclusive = false;
+
+
         //make sure that modules and gates are not empty
         if(modules.empty() && gates.empty())
             return 0;
 
-        bool isModuleExclusive = false;
-
         //Check if view should be bound exclusively to module
-        if(modules.size() == 1 && gates.empty()){
+        if(modules.size() == 1 && gates.empty() && modules[0]){
             name = QString::fromStdString(modules[0]->get_name()) + QString(" (ID: %1)").arg(modules[0]->get_id());
             isModuleExclusive = true;
             //If the view already exists then return existing id
@@ -482,6 +484,8 @@ namespace hal
         QSet<u32> moduleIds = pair.moduleIds;
         QSet<u32> gateIds = pair.gateIds;
 
+        if(moduleIds.isEmpty() && gateIds.isEmpty())
+            return 0;
 
         UserActionCompound* act = new UserActionCompound;
         act->setUseCreatedObject();
@@ -646,12 +650,18 @@ namespace hal
         QSet<u32> gateIds;
 
 
+
         //Get ids of given modules and gates
         for(Module* module : modules)
-            moduleIds.insert(module->get_id());
+        {
+            if(module)
+                moduleIds.insert(module->get_id());
+        }
         for(Gate* gate : gates)
-            gateIds.insert(gate->get_id());
-
+        {
+            if(gate)
+                gateIds.insert(gate->get_id());
+        }
 
         //iterate over each context and look if its showing modules
         for(GraphContext* ctx : gGraphContextManager->getContexts()){
@@ -684,7 +694,12 @@ namespace hal
     }
     bool GuiApiClasses::View::unfoldModule(int view_id, Module *module)
     {
+<<<<<<< HEAD
 
+=======
+        if(!module)
+            return false;
+>>>>>>> fc77bfef73d2199f67ad0ca4ea00cf0d6a40831c
         GraphContext* context = gGraphContextManager->getContextById(view_id);
 
         //check if the inputs are valid
@@ -700,6 +715,8 @@ namespace hal
 
     bool GuiApiClasses::View::foldModule(int view_id, Module *module)
     {
+        if(!module)
+            return false;
         GraphContext* context = gGraphContextManager->getContextById(view_id);
 
         //check if the inputs are valid
@@ -734,6 +751,10 @@ namespace hal
         //copy to prevent inplace operations
         std::vector<Module*> modules = mods;
         std::vector<Gate*> gates     = gats;
+
+        //remove nullptr from list
+        modules.erase(std::remove_if(modules.begin(), modules.end(), [](const auto& element) { return element == nullptr; }), modules.end());
+        gates.erase(std::remove_if(gates.begin(), gates.end(), [](const auto& element) { return element == nullptr; }), gates.end());
 
         //set to store already existing mods and gates
         QSet<u32> existingModules;
@@ -813,7 +834,6 @@ namespace hal
 
 
 
-        //TODO store parents maybe in the same set if it wont cause problems (it did in some cases)
         //2) remove id if parent is in set
         for(Module* mod : modules){
             //check if top module
@@ -842,25 +862,23 @@ namespace hal
         //3) remove all gates which has its ancestor in modIds
 
         //check ancestors until topmodule or found in modIds
-        if(!modIds.contains(topModule->get_id()))
+
+        for (Gate* gate : gates)
         {
-            for (Gate* gate : gates)
+            Module* itr       = gate->get_module();
+            bool shouldInsert = true;
+            while (itr != nullptr)
             {
-                Module* itr       = gate->get_module();
-                bool shouldInsert = true;
-                while (itr != nullptr)
+                if (modIds.contains(itr->get_id()))
                 {
-                    if (modIds.contains(itr->get_id()))
-                    {
-                        gatIds.remove(gate->get_id());
-                        shouldInsert = false;
-                        break;
-                    }
-                    itr = itr->get_parent_module();
+                    gatIds.remove(gate->get_id());
+                    shouldInsert = false;
+                    break;
                 }
-                if (shouldInsert)
-                    gatIds.insert(gate->get_id());
+                itr = itr->get_parent_module();
             }
+            if (shouldInsert)
+                gatIds.insert(gate->get_id());
         }
 
 
@@ -874,7 +892,6 @@ namespace hal
 
 
         //create struct to return module and gate ID pairs
-        //TODO maybe use QHash with "module" / "gate" value with (void*) ptr of module / gate as key
         GuiApiClasses::View::ModuleGateIdPair pair;
         pair.moduleIds = modIds;
         pair.gateIds = gatIds;
