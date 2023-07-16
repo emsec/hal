@@ -694,12 +694,8 @@ namespace hal
     }
     bool GuiApiClasses::View::unfoldModule(int view_id, Module *module)
     {
-<<<<<<< HEAD
-
-=======
         if(!module)
             return false;
->>>>>>> fc77bfef73d2199f67ad0ca4ea00cf0d6a40831c
         GraphContext* context = gGraphContextManager->getContextById(view_id);
 
         //check if the inputs are valid
