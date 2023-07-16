@@ -65,13 +65,13 @@ namespace hal
         void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
 
         /**
-         * Toggles whether or not nets are accepted by the filter. NOT YET ACTUALLY IMPLEMENTED
+         * Toggles whether or not nets are accepted by the filter.
          * @returns <b>true</b> if nets are filtered out now. <b>false</b> if not. 
          */
         bool toggleFilterNets();
 
         /**
-         * Toggles whether or not gates are accepted by the filter. NOT YET ACTUALLY IMPLEMENTED
+         * Toggles whether or not gates are accepted by the filter.
          * @returns <b>true</b> if gates are filtered out now. <b>false</b> if not. 
          */
         bool toggleFilterGates();
@@ -79,7 +79,8 @@ namespace hal
     protected:
         /**
          * Overrides QSortFilterProxyModel::filterAcceptsRow to implement the filter logic based on the regular
-         * expression stored by setFilterRegularExpression.<br>
+         * expression stored by setFilterRegularExpression. Also filters nets or gates, depending on the state
+         * of the toggle buttons.<br>
          * Returns <b>true</b> if the item in the row indicated by <i>sourceRow</i> and <i>sourceParent</i> should be included
          * in the model.
          * TODO: Filtering seems to be broken. Can't search for submodules. Works only for the topmodule.
@@ -91,7 +92,8 @@ namespace hal
         bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 
         /**
-         * Implements a comparison operator used for sorting. In this case it is based on the module names.
+         * Implements a comparison operator used for sorting. 
+         * In this case it is based on the ModuleItem names and types.
          *
          * @param source_left - The model index of the left element
          * @param source_right - The model index of the right element
