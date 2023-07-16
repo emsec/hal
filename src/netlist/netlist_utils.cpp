@@ -483,6 +483,7 @@ namespace hal
         {
             u32 num_gates = 0;
 
+            std::vector<Gate*> gates_to_delete;
             for (const auto& gate : netlist->get_gates())
             {
                 std::vector<Endpoint*> fan_out = gate->get_fan_out_endpoints();
@@ -592,8 +593,7 @@ namespace hal
 
                     // delete output net and buffer gate
                     netlist->delete_net(out_net);
-                    netlist->delete_gate(gate);
-                    num_gates++;
+                    gates_to_delete.push_back(gate);
                 }
                 else if (func_str == "0" || func_str == "1")
                 {
@@ -660,9 +660,14 @@ namespace hal
 
                     // delete output net and buffer gate
                     netlist->delete_net(out_net);
-                    netlist->delete_gate(gate);
-                    num_gates++;
+                    gates_to_delete.push_back(gate);
                 }
+            }
+
+            for (auto* gate : gates_to_delete)
+            {
+                netlist->delete_gate(gate);
+                num_gates++;
             }
 
             return OK(num_gates);

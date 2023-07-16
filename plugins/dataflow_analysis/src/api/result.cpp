@@ -421,12 +421,18 @@ namespace hal
             auto* nl = this->get_netlist();
 
             // delete all modules that start with DANA
+            std::vector<Module*> modules_to_delete;
             for (const auto mod : nl->get_modules())
             {
                 if (utils::starts_with(mod->get_name(), std::string("DANA_")))
                 {
-                    nl->delete_module(mod);
+                    modules_to_delete.push_back(mod);
                 }
+            }
+
+            for (auto* mod : modules_to_delete)
+            {
+                nl->delete_module(mod);
             }
             log_info("dataflow", "successfully deleted old DANA modules");
 
