@@ -415,7 +415,7 @@ namespace hal
         }
 
         hal::Result<std::unordered_map<u32, Module*>> dataflow::Result::create_modules(const std::map<const GateType*, std::string>& module_suffixes,
-                                                                                       const std::map<std::pair<PinDirection, PinType>, std::string>& pin_prefixes,
+                                                                                       const std::map<std::pair<PinDirection, std::string>, std::string>& pin_prefixes,
                                                                                        const std::unordered_set<u32>& group_ids) const
         {
             auto* nl = this->get_netlist();
@@ -485,17 +485,19 @@ namespace hal
                 auto* new_mod             = nl->create_module("DANA_" + suffix + "_" + std::to_string(group_id), reference_module, gates);
                 group_to_module[group_id] = new_mod;
 
-                std::map<const std::pair<PinDirection, PinType>, PinGroup<ModulePin>*> pin_groups;
+                std::map<const std::pair<PinDirection, std::string>, PinGroup<ModulePin>*> pin_groups;
                 for (auto* pin : new_mod->get_pins())
                 {
                     if (pin->get_direction() == PinDirection::input)
                     {
                         const auto destinations = pin->get_net()->get_destinations([new_mod](const Endpoint* ep) { return ep->get_gate()->get_module() == new_mod; });
 
-                        auto pin_type = destinations.at(0)->get_pin()->get_type();
-                        if (std::all_of(destinations.begin(), destinations.end(), [pin_type](const Endpoint* ep) { return ep->get_pin()->get_type() == pin_type; }))
+                        const auto* first_pin = destinations.front()->get_pin();
+                        auto pin_type         = first_pin->get_type();
+                        auto pin_name         = first_pin->get_name();
+                        if (std::all_of(destinations.begin(), destinations.end(), [pin_name](const Endpoint* ep) { return ep->get_pin()->get_name() == pin_name; }))
                         {
-                            const auto pg_key = std::make_pair(PinDirection::input, pin_type);
+                            const auto pg_key = std::make_pair(PinDirection::input, pin_name);
 
                             std::string prefix;
                             if (const auto prefix_it = pin_prefixes.find(pg_key); prefix_it != pin_prefixes.end())
@@ -504,7 +506,7 @@ namespace hal
                             }
                             else
                             {
-                                prefix = "i_" + enum_to_string(pin_type);
+                                prefix = "i_" + pin_name;
                             }
 
                             if (const auto pg_it = pin_groups.find(pg_key); pg_it == pin_groups.end())
@@ -530,10 +532,12 @@ namespace hal
                     {
                         const auto sources = pin->get_net()->get_sources([new_mod](const Endpoint* ep) { return ep->get_gate()->get_module() == new_mod; });
 
-                        auto pin_type = sources.at(0)->get_pin()->get_type();
+                        const auto* first_pin = sources.front()->get_pin();
+                        auto pin_type         = first_pin->get_type();
+                        auto pin_name         = first_pin->get_name();
                         if (sources.size() == 1)
                         {
-                            const auto pg_key = std::make_pair(PinDirection::output, pin_type);
+                            const auto pg_key = std::make_pair(PinDirection::output, pin_name);
 
                             std::string prefix;
                             if (const auto prefix_it = pin_prefixes.find(pg_key); prefix_it != pin_prefixes.end())
@@ -542,7 +546,7 @@ namespace hal
                             }
                             else
                             {
-                                prefix = "o_" + enum_to_string(pin_type);
+                                prefix = "o_" + pin_name;
                             }
 
                             if (const auto pg_it = pin_groups.find(pg_key); pg_it == pin_groups.end())
@@ -580,7 +584,7 @@ namespace hal
         }
 
         hal::Result<std::unordered_map<u32, Module*>> dataflow::Result::create_modules(const std::map<GateTypeProperty, std::string>& module_suffixes,
-                                                                                       const std::map<std::pair<PinDirection, PinType>, std::string>& pin_prefixes,
+                                                                                       const std::map<std::pair<PinDirection, std::string>, std::string>& pin_prefixes,
                                                                                        const std::unordered_set<u32>& group_ids) const
         {
             const auto* gl = this->m_netlist->get_gate_library();
