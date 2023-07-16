@@ -75,7 +75,11 @@ namespace hal
         static Result<u32> remove_redundant_logic(Netlist* nl);
 
         /**
-         * TODO document
+         * Removes redundant sequential feedback loops.
+         * Sometimes flip-flops and some of their combinational fan-in form a feedback loop where the flip-flop input depends on its own output.
+         * For optimization, some synthesizers create multiple equivalent instances of these feedback loops.
+         * To simplify structural analysis, this function removes the redundant flip-flop gate of the loop from the netlist.
+         * Other preprocessing functions can then take care of the remaining combination gates of the loop.
          * 
          * @param[in] nl - The netlist to operate on. 
          * @return The number of removed gates on success, an error otherwise.
@@ -83,7 +87,7 @@ namespace hal
         static Result<u32> remove_redundant_loops(Netlist* nl);
 
         /**
-         * Removes gates which outputs are all unconnected and not a global output net.
+         * Removes gates for which all fan-out nets do not have a destination and are not global output nets.
          * 
          * @param[in] nl - The netlist to operate on. 
          * @return The number of removed gates on success, an error otherwise.
@@ -91,15 +95,19 @@ namespace hal
         static Result<u32> remove_unconnected_gates(Netlist* nl);
 
         /**
-         * Remove nets which have no source and not destination.
+         * Removes nets who have neither a source, nor a destination.
          * 
          * @param[in] nl - The netlist to operate on. 
          * @return The number of removed nets on success, an error otherwise.
          */
         static Result<u32> remove_unconnected_nets(Netlist* nl);
 
-        // TODO document
-        // TODO the mux_inv_gl can go as soon as we can dynamically create gate libs and copy gates types
+        /**
+         * TODO 
+         * 
+         * @param[in] nl - The netlist to operate on.
+         * @param[in] mux_inv_gl - TODO
+         */
         static Result<u32> manual_mux_optimizations(Netlist* nl, GateLibrary* mux_inv_gl);
 
         // TODO
@@ -115,7 +123,7 @@ namespace hal
 
         /**
          * Builds the Boolean function of each output pin of the gate and constructs a gate tree implementing it.
-         * Afterwards the original output net is connected to the built gate tree and the gate is deleted if the 'delete_gate' flag is set.
+         * Afterwards the original output net is connected to the built gate tree and the gate is deleted if the ``delete_gate`` flag is set.
          * 
          * For the decomposition we currently only support the base operands AND, OR, INVERT, XOR.
          * The function searches in the gate library for a fitting two input gate and uses a standard HAL gate type if none is found.
@@ -128,7 +136,7 @@ namespace hal
         static Result<std::monostate> decompose_gate(Netlist* nl, Gate* g, const bool delete_gate = true);
 
         /**
-         * Decomposes each gate of the specified type by building the Boolean function for each output pin of the gate and contructing a gate tree implementing it.
+         * Decomposes each gate of the specified type by building the Boolean function for each output pin of the gate and constructing a gate tree implementing it.
          * Afterwards the original gate is deleted and the output net is connected to the built gate tree.
          * 
          * For the decomposition we currently only support the base operands AND, OR, INVERT, XOR.

@@ -70,7 +70,7 @@ namespace hal
                 Removes all LUT fan-in endpoints that do not correspond to a variable within the Boolean function that determines the output of a gate.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
-                :returns: The number of removed LUT endpoints on success, `None` otherwise.
+                :returns: The number of removed LUT endpoints on success, ``None`` otherwise.
                 :rtype: int or None
             )");
 
@@ -92,10 +92,10 @@ namespace hal
             R"(
                 Removes buffer gates from the netlist and connect their fan-in to their fan-out nets.
                 Considers all combinational gates and takes their inputs into account.
-                For example, a 2-input AND gate with one input being connected to constant '1' will also be removed.
+                For example, a 2-input AND gate with one input being connected to constant ``1`` will also be removed.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
-                :returns: The number of removed buffers on success, `None` otherwise.
+                :returns: The number of removed buffers on success, ``None`` otherwise.
                 :rtype: int or None
             )");
 
@@ -118,7 +118,7 @@ namespace hal
                 Removes redundant gates from the netlist, i.e., gates that are functionally equivalent and are connected to the same input nets.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
-                :returns: The number of removed gates on success, `None` otherwise.
+                :returns: The number of removed gates on success, ``None`` otherwise.
                 :rtype: int or None
             )");
 
@@ -138,10 +138,14 @@ namespace hal
             },
             py::arg("nl"),
             R"(
-                TODO 
+                Removes redundant sequential feedback loops.
+                Sometimes flip-flops and some of their combinational fan-in form a feedback loop where the flip-flop input depends on its own output.
+                For optimization, some synthesizers create multiple equivalent instances of these feedback loops.
+                To simplify structural analysis, this function removes the redundant flip-flop gate of the loop from the netlist.
+                Other preprocessing functions can then take care of the remaining combination gates of the loop.
                 
                 :param hal_py.Netlist nl: The netlist to operate on. 
-                :returns: The number of removed gates on success, `None` otherwise.
+                :returns: The number of removed gates on success, ``None`` otherwise.
                 :rtype: int or None
             )");
 
@@ -161,10 +165,10 @@ namespace hal
             },
             py::arg("nl"),
             R"(
-                Removes gates which outputs are all unconnected and not a global output net.
+                Removes gates for which all fan-out nets do not have a destination and are not global output nets.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
-                :returns: The number of removed gates on success, `None` otherwise.
+                :returns: The number of removed gates on success, ``None`` otherwise.
                 :rtype: int or None
             )");
 
@@ -184,10 +188,10 @@ namespace hal
             },
             py::arg("nl"),
             R"(
-                Remove nets which have no source and not destination.
+                Removes nets who have neither a source, nor a destination.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
-                :returns: The number of removed nets on success, `None` otherwise.
+                :returns: The number of removed nets on success, ``None`` otherwise.
                 :rtype: int or None
             )");
 
@@ -249,7 +253,7 @@ namespace hal
                 Replaces pins connected to GND/VCC with constants and simplifies the boolean function of a LUT by recomputing the INIT string.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
-                :returns: The number of simplified INIT strings on success, `None` otherwise.
+                :returns: The number of simplified INIT strings on success, ``None`` otherwise.
                 :rtype: int or None
             )");
 
@@ -272,15 +276,15 @@ namespace hal
             py::arg("delete_gate") = true,
             R"(
                 Builds the Boolean function of each output pin of the gate and constructs a gate tree implementing it.
-                Afterwards the original output net is connected to the built gate tree and the gate is deleted if the 'delete_gate' flag is set.
+                Afterwards the original output net is connected to the built gate tree and the gate is deleted if the ``delete_gate`` flag is set.
 
                 For the decomposition we currently only support the base operands AND, OR, INVERT.
                 The function searches in the gate library for a fitting two input gate and uses a standard HAL gate type if none is found.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
                 :param hal_py.Gate gate: The gate to decompose.
-                :param bool delete_gate: Determines whether the original gate gets deleted by the function, defaults to `True`. 
-                :returns: `True` on success, `False` otherwise.
+                :param bool delete_gate: Determines whether the original gate gets deleted by the function, defaults to ``True``. 
+                :returns: ``True`` on success, ``False`` otherwise.
                 :rtype: bool
             )");
 
@@ -301,7 +305,7 @@ namespace hal
             py::arg("nl"),
             py::arg("gate_types"),
             R"(
-                Decomposes each gate of the specified type by building the Boolean function for each output pin of the gate and contructing a gate tree implementing it.
+                Decomposes each gate of the specified type by building the Boolean function for each output pin of the gate and constructing a gate tree implementing it.
                 Afterwards the original gate is deleted and the output net is connected to the built gate tree.
 
                 For the decomposition we currently only support the base operands AND, OR, INVERT.
@@ -309,7 +313,7 @@ namespace hal
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
                 :param list[hal_py.GateType] gate_types: The gate types that should be decomposed.
-                :returns: The number of decomposed gates on success, `None` otherwise.
+                :returns: The number of decomposed gates on success, ``None`` otherwise.
                 :rtype: int or None
             )");
 
@@ -421,7 +425,7 @@ namespace hal
                 We try to reconstruct name and index for each flip flop based on the name of its output nets.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
-                :returns: The number of reconstructed names on success, `None` otherwise.
+                :returns: The number of reconstructed names on success, ``None`` otherwise.
                 :rtype: int or None
             )");
 
@@ -447,7 +451,7 @@ namespace hal
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
                 :param pathlib.Path def_file: The path to the def file
-                :returns: `True` on success, `False` otherwise.
+                :returns: ``True`` on success, ``False`` otherwise.
                 :rtype: bool
             )");
 

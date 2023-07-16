@@ -1037,7 +1037,7 @@ namespace hal
     {
         Result<u32> remove_encasing_inverters(Netlist* nl)
         {
-            // check wether input and output are inverted -> remove all 3 inverters
+            // check whether all inputs and output are inverted -> remove all inverters
             std::vector<Gate*> muxes = nl->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_mux); });
 
             u32 delete_count = 0;
