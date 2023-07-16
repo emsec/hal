@@ -445,6 +445,10 @@ namespace hal
 
     int GuiApiClasses::View::isolateInNew(std::vector<Module*> modules, std::vector<Gate*> gates)
     {
+        //check if the inputs are valid
+        for(Module* mod : modules)
+            if(mod == nullptr) return 0;
+
         QString name;
         //make sure that modules and gates are not empty
         if(modules.empty() && gates.empty())
@@ -497,7 +501,7 @@ namespace hal
 
     bool GuiApiClasses::View::deleteView(int id)
     {
-        if(gGraphContextManager->getContextById(id)->empty())
+        if(gGraphContextManager->getContextById(id) == nullptr)
         {
             return false;
         }
@@ -510,6 +514,12 @@ namespace hal
 
     bool GuiApiClasses::View::addTo(int id, const std::vector<Module*> modules, const std::vector<Gate*> gates)
     {
+        //check if the inputs are valid
+        for(Module* mod : modules)
+            if(mod == nullptr) return false;
+        for(Gate* gt : gates)
+            if(gt == nullptr) return false;
+
 
         if (!gGraphContextManager->getContextById(id)) return false; // context does not exist
 
@@ -533,6 +543,11 @@ namespace hal
 
     bool GuiApiClasses::View::removeFrom(int id, const std::vector<Module*> modules, const std::vector<Gate*> gates)
     {
+        //check if the inputs are valid
+        for(Module* mod : modules)
+            if(mod == nullptr) return false;
+        for(Gate* gt : gates)
+            if(gt == nullptr) return false;
 
         if (!gGraphContextManager->getContextById(id)) return false; // context does not exist
 
@@ -552,6 +567,8 @@ namespace hal
 
     bool GuiApiClasses::View::setName(int id, const std::string& name)
     {
+
+
         if (!gGraphContextManager->getContextById(id)) return false; // context does not exist
 
         //check if name is occupied
@@ -615,7 +632,13 @@ namespace hal
         return std::vector<Gate*>();
     }
 
-    std::vector<u32> GuiApiClasses::View::getIds(const std::vector<Module*> modules, const std::vector<Gate*> gates){
+    std::vector<u32> GuiApiClasses::View::getIds(const std::vector<Module*> modules, const std::vector<Gate*> gates)
+    {
+        //check if the inputs are valid
+        for(Module* mod : modules)
+            if(mod == nullptr) return {};
+        for(Gate* gt : gates)
+            if(gt == nullptr) return {};
 
         std::vector<u32> ids;
 
@@ -661,7 +684,13 @@ namespace hal
     }
     bool GuiApiClasses::View::unfoldModule(int view_id, Module *module)
     {
+
         GraphContext* context = gGraphContextManager->getContextById(view_id);
+
+        //check if the inputs are valid
+        if(module == nullptr || context == nullptr) return false;
+
+
         if(!context->modules().contains(module->get_id())) return false;
 
         ActionUnfoldModule *act = new ActionUnfoldModule(module->get_id());
@@ -672,6 +701,9 @@ namespace hal
     bool GuiApiClasses::View::foldModule(int view_id, Module *module)
     {
         GraphContext* context = gGraphContextManager->getContextById(view_id);
+
+        //check if the inputs are valid
+        if(module == nullptr || context == nullptr) return false;
 
         //get gates and submodules that belong to the current module
         std::vector<Module*> submodules = module->get_submodules();
@@ -697,6 +729,7 @@ namespace hal
     GuiApiClasses::View::ModuleGateIdPair GuiApiClasses::View::getValidObjects(int viewId, const std::vector<Module*> mods, const std::vector<Gate*> gats)
     {
         Module* topModule = gNetlist->get_top_module();
+
 
         //copy to prevent inplace operations
         std::vector<Module*> modules = mods;
@@ -757,6 +790,11 @@ namespace hal
             }
             modules = validMods;
 
+
+            for (Module* mod : modules)
+            {
+                qInfo() << mod->get_id();
+            }
         }
         //get ids of modules
         for (Module* mod : modules)
