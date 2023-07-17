@@ -1160,10 +1160,14 @@ namespace hal
             std::vector<Gate*> muxes = nl->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_mux); });
 
             u32 count = 0;
-            std::vector<Gate*> delete_gate_q;
 
             for (const auto& g : muxes)
             {
+                // if (g->get_id() == 9857)
+                // {
+                //     return ERR("GOT HERE");
+                // }
+
                 auto select_pins = g->get_type()->get_pins([](const GatePin* pin) { return (pin->get_type() == PinType::select) && (pin->get_direction() == PinDirection::input); });
 
                 std::vector<Gate*> preceding_inverters;
@@ -1183,6 +1187,7 @@ namespace hal
                     auto subgraph = preceding_inverters;
                     subgraph.push_back(g);
 
+                    // TODO remove debug printing
                     log_info("netlist_preprocessing", "trying to simplify subgraph:");
                     for (const auto& subgraph_g : subgraph)
                     {
@@ -1696,7 +1701,11 @@ namespace hal
                         const auto org_src_name     = src_ep->get_gate()->get_name();
                         const auto org_src_pin_name = src_ep->get_pin()->get_name();
                         auto new_src_g              = gate_name_to_gate.at(org_src_name);
-                        new_net->add_source(new_src_g, org_src_pin_name);
+                        if (!new_net->add_source(new_src_g, org_src_pin_name))
+                        {
+                            return ERR("unable to replace subgraph with netlist: failed to add gate " + new_src_g->get_name() + " with ID " + std::to_string(new_src_g->get_id()) + " at pin "
+                                       + org_src_pin_name + " as new source to net " + new_net->get_name() + " with ID " + std::to_string(new_net->get_id()));
+                        }
                     }
                 }
 
@@ -1708,7 +1717,11 @@ namespace hal
                         const auto org_dst_name     = src_ep->get_gate()->get_name();
                         const auto org_dst_pin_name = src_ep->get_pin()->get_name();
                         auto new_dst_g              = gate_name_to_gate.at(org_dst_name);
-                        new_net->add_destination(new_dst_g, org_dst_pin_name);
+                        if (!new_net->add_destination(new_dst_g, org_dst_pin_name))
+                        {
+                            return ERR("unable to replace subgraph with netlist: failed to add gate " + new_dst_g->get_name() + " with ID " + std::to_string(new_dst_g->get_id()) + " at pin "
+                                       + org_dst_pin_name + " as new destination to net " + new_net->get_name() + " with ID " + std::to_string(new_net->get_id()));
+                        }
                     }
                 }
             }
@@ -1716,9 +1729,31 @@ namespace hal
             // delete subgraph gates if flag is set
             if (delete_subgraph_gates)
             {
+                std::vector<Gate*> to_delete;
                 for (const auto g : subgraph)
                 {
-                    dst_nl->delete_gate(g);
+                    bool has_no_outside_destinations = true;
+                    for (const auto& suc : g->get_successors())
+                    {
+                        if (std::find(subgraph.begin(), subgraph.end(), suc->get_gate()) == subgraph.end())
+                        {
+                            has_no_outside_destinations = false;
+                            break;
+                        }
+                    }
+
+                    if (has_no_outside_destinations)
+                    {
+                        to_delete.push_back(g);
+                    }
+                }
+
+                for (const auto g : to_delete)
+                {
+                    if (!dst_nl->delete_gate(g))
+                    {
+                        return ERR("unable to replace subgraph with netlist: failed to delete gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + " in destination netlist");
+                    }
                 }
             }
 
@@ -1854,12 +1889,12 @@ namespace hal
             // TODO sanity check wether all gates in the subgraph have types that are in the genlib/target library
             if (nl == nullptr)
             {
-                return ERR("netlist is a nullptr");
+                return ERR("unable to resynthesize gate level subgraph: netlist is a nullptr");
             }
 
             if (hgl_lib == nullptr)
             {
-                return ERR("gate library is a nullptr");
+                return ERR("unable to resynthesize gate level subgraph: gate library is a nullptr");
             }
 
             auto subgraph_nl_res = SubgraphNetlistDecorator(*nl).copy_subgraph_netlist(subgraph);
@@ -1878,7 +1913,10 @@ namespace hal
 
             log_info("netlist_preprocessing", "Writing Verilog file to {} ...", org_netlist_path.string());
 
-            netlist_writer_manager::write(subgraph_nl.get(), org_netlist_path);
+            if (!netlist_writer_manager::write(subgraph_nl.get(), org_netlist_path))
+            {
+                return ERR("unable to resynthesize gate level subgraph: failed to write netlist to file");
+            }
 
             // NOTE this is a way to get rid of the stupid timescale annotation that is added by the verilog writer (for the simulator!?) but cannot be parsed by yosys...
             // Read the file into a vector of lines
@@ -1924,6 +1962,10 @@ namespace hal
             {
                 return ERR("Unable to resynthesize gate level netlist with yosys: failed to load resynthesized netlist at " + resynthesized_netlist_path.string());
             }
+
+            // delete the two created files
+            std::filesystem::remove(org_netlist_path);
+            std::filesystem::remove(resynthesized_netlist_path);
 
             return OK(std::move(resynth_nl));
         }
@@ -2143,7 +2185,7 @@ namespace hal
             return ERR("gate library is a nullptr");
         }
 
-        const std::filesystem::path base_path   = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_yosys";
+        const std::filesystem::path base_path   = std::filesystem::temp_directory_path() / "resynthesize_boolean_functions_with_abc";
         const std::filesystem::path genlib_path = base_path / "new_gate_library.genlib";
         std::filesystem::create_directory(base_path);
 
@@ -2196,10 +2238,38 @@ namespace hal
             return ERR_APPEND(replace_res.get_error(), "unable to resynthesize subgraphs of type: failed to replace subgrap with resynthesized netlist");
         }
 
+        // delete subgraph gates if they do not have any more outside successors
+        std::vector<Gate*> to_delete;
         for (const auto g : subgraph)
         {
-            log_info("netlist_preprocessing", "removing gate: {}", g->get_name());
-            nl->delete_gate(g);
+            bool has_no_outside_destinations   = true;
+            bool has_only_outside_destinations = true;
+            for (const auto& suc : g->get_successors())
+            {
+                const auto it = std::find(subgraph.begin(), subgraph.end(), suc->get_gate());
+                if (it == subgraph.end())
+                {
+                    has_no_outside_destinations = false;
+                }
+
+                if (it != subgraph.end())
+                {
+                    has_only_outside_destinations = false;
+                }
+            }
+
+            if (has_no_outside_destinations || has_only_outside_destinations)
+            {
+                to_delete.push_back(g);
+            }
+        }
+
+        for (const auto g : to_delete)
+        {
+            if (!nl->delete_gate(g))
+            {
+                return ERR("unable to replace subgraph with netlist: failed to delete gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + " in destination netlist");
+            }
         }
 
         return OK(subgraph.size());
