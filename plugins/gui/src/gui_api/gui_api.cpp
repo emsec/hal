@@ -14,6 +14,7 @@
 #include "gui/user_action/action_unfold_module.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/context_manager_widget/models/context_table_model.h"
+#include "hal_core/utilities/log.h"
 
 #include <algorithm>
 
@@ -447,7 +448,22 @@ namespace hal
     {
         //check if the inputs are valid
         for(Module* mod : modules)
-            if(mod == nullptr) return 0;
+        {
+            if (mod == nullptr)
+            {
+                log_warning("gui","Null values not allowed in module argument");
+                return 0;
+            }
+        }
+
+        for(Gate* gate : gates)
+        {
+            if (gate == nullptr)
+            {
+                log_warning("gui","Null values not allowed in gate argument");
+                return 0;
+            }
+        }
 
         QString name;
 
@@ -480,7 +496,7 @@ namespace hal
         GuiApiClasses::View::ModuleGateIdPair pair = GuiApiClasses::View::getValidObjects(0, modules, gates);
 
 
-        // Get ids from modules and gates
+        // Unpack return values and check if not empty
         QSet<u32> moduleIds = pair.moduleIds;
         QSet<u32> gateIds = pair.gateIds;
 
@@ -505,10 +521,12 @@ namespace hal
 
     bool GuiApiClasses::View::deleteView(int id)
     {
+        // check if id is valid
         if(gGraphContextManager->getContextById(id) == nullptr)
         {
             return false;
         }
+
         ActionDeleteObject* act = new ActionDeleteObject();
         act->setObject(UserActionObject(id, UserActionObjectType::Context));
         UserActionManager::instance()->executeActionBlockThread(act);
@@ -520,10 +538,22 @@ namespace hal
     {
         //check if the inputs are valid
         for(Module* mod : modules)
-            if(mod == nullptr) return false;
-        for(Gate* gt : gates)
-            if(gt == nullptr) return false;
+        {
+            if (mod == nullptr)
+            {
+                log_warning("gui","Null values not allowed in module argument");
+                return 0;
+            }
+        }
 
+        for(Gate* gate : gates)
+        {
+            if (gate == nullptr)
+            {
+                log_warning("gui","Null values not allowed in gate argument");
+                return 0;
+            }
+        }
 
         if (!gGraphContextManager->getContextById(id)) return false; // context does not exist
 
@@ -549,9 +579,22 @@ namespace hal
     {
         //check if the inputs are valid
         for(Module* mod : modules)
-            if(mod == nullptr) return false;
-        for(Gate* gt : gates)
-            if(gt == nullptr) return false;
+        {
+            if (mod == nullptr)
+            {
+                log_warning("gui","Null values not allowed in module argument");
+                return 0;
+            }
+        }
+
+        for(Gate* gate : gates)
+        {
+            if (gate == nullptr)
+            {
+                log_warning("gui","Null values not allowed in gate argument");
+                return 0;
+            }
+        }
 
         if (!gGraphContextManager->getContextById(id)) return false; // context does not exist
 
@@ -592,6 +635,10 @@ namespace hal
 
     int GuiApiClasses::View::getId(const std::string& name)
     {
+        //check if there exists a context with the given name before we iterate over each of them
+        if(!gGraphContextManager->contextWithNameExists(QString::fromStdString(name)))
+            return 0;
+
         //find View related to the name
         for(GraphContext* ctx : gGraphContextManager->getContexts()){
             if(ctx->name() == QString::fromStdString(name)){
@@ -607,7 +654,7 @@ namespace hal
         if(ctx != nullptr){
             return ctx->name().toStdString();
         }
-        return std::string(); //
+        return {}; //
     }
 
     std::vector<Module*> GuiApiClasses::View::getModules(int id)
@@ -620,7 +667,7 @@ namespace hal
             }
             return modules;
         }
-        return std::vector<Module*>();
+        return {};
     }
 
     std::vector<Gate*> GuiApiClasses::View::getGates(int id)
@@ -633,16 +680,29 @@ namespace hal
             }
             return gates;
         }
-        return std::vector<Gate*>();
+        return {};
     }
 
     std::vector<u32> GuiApiClasses::View::getIds(const std::vector<Module*> modules, const std::vector<Gate*> gates)
     {
         //check if the inputs are valid
         for(Module* mod : modules)
-            if(mod == nullptr) return {};
-        for(Gate* gt : gates)
-            if(gt == nullptr) return {};
+        {
+            if (mod == nullptr)
+            {
+                log_warning("gui","Null values not allowed in module argument");
+                return {};
+            }
+        }
+
+        for(Gate* gate : gates)
+        {
+            if (gate == nullptr)
+            {
+                log_warning("gui","Null values not allowed in gate argument");
+                return {};
+            }
+        }
 
         std::vector<u32> ids;
 
@@ -695,11 +755,14 @@ namespace hal
     bool GuiApiClasses::View::unfoldModule(int view_id, Module *module)
     {
         if(!module)
+        {
+            log_warning("gui","module must not be null");
             return false;
+        }
         GraphContext* context = gGraphContextManager->getContextById(view_id);
 
         //check if the inputs are valid
-        if(module == nullptr || context == nullptr) return false;
+        if(context == nullptr) return false;
 
 
         if(!context->modules().contains(module->get_id())) return false;
@@ -712,11 +775,15 @@ namespace hal
     bool GuiApiClasses::View::foldModule(int view_id, Module *module)
     {
         if(!module)
+        {
+            log_warning("gui","module must not be null");
             return false;
+        }
         GraphContext* context = gGraphContextManager->getContextById(view_id);
 
         //check if the inputs are valid
-        if(module == nullptr || context == nullptr) return false;
+        if(context == nullptr) return false;
+
 
         //get gates and submodules that belong to the current module
         std::vector<Module*> submodules = module->get_submodules();
@@ -747,10 +814,6 @@ namespace hal
         //copy to prevent inplace operations
         std::vector<Module*> modules = mods;
         std::vector<Gate*> gates     = gats;
-
-        //remove nullptr from list
-        modules.erase(std::remove_if(modules.begin(), modules.end(), [](const auto& element) { return element == nullptr; }), modules.end());
-        gates.erase(std::remove_if(gates.begin(), gates.end(), [](const auto& element) { return element == nullptr; }), gates.end());
 
         //set to store already existing mods and gates
         QSet<u32> existingModules;
@@ -807,11 +870,6 @@ namespace hal
             }
             modules = validMods;
 
-
-            for (Module* mod : modules)
-            {
-                qInfo() << mod->get_id();
-            }
         }
         //get ids of modules
         for (Module* mod : modules)
