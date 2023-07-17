@@ -78,6 +78,44 @@ PYBIND11_PLUGIN(hal_gui)
 
     py::class_<GuiApi> py_gui_api(m, "GuiApi", R"(GUI API)");
 
+    py::class_<GridPlacement>(py_gui_api,"GridPlacement",R"(
+                      Helper class to determine placement of nodes on gui grid.
+            )")
+
+            .def(py::init<>(), R"(
+                 Constructor for empty placement hash.
+            )")
+
+            .def("setGatePosition", &GridPlacement::setGatePosition, R"(
+                 Set position for gate identified by ID.
+
+                 :param int gateId: Gate ID.
+                 :param tuple(int,int) pos: New position.
+            )")
+
+            .def("setModulePosition", &GridPlacement::setModulePosition, R"(
+                 Set position for module identified by ID.
+
+                 :param int moduleId: Module ID.
+                 :param tuple(int,int) pos: New position.
+            )")
+
+            .def("gatePosition", &GridPlacement::gatePosition, R"(
+                 Query position for gate identified by ID.
+
+                 :param int gateId: Gate ID.
+                 :returns: Position of gate or None if gate not found in hash.
+                 :rtype: tuple(int,int) or None
+            )")
+
+            .def("modulePosition", &GridPlacement::modulePosition, R"(
+                 Query position for module identified by ID.
+
+                 :param int moduleId: Module ID.
+                 :returns: Position of module or None if module not found in hash.
+                 :rtype: tuple(int,int) or None
+            )");
+
     py::class_<GuiApiClasses::View>(py_gui_api, "View")
     .def_static("isolateInNew", &GuiApiClasses::View::isolateInNew, py::arg("modules"), py::arg("gates"),R"(
         Isolates given modules and gates into a new view
