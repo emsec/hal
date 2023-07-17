@@ -27,6 +27,7 @@
 
 //#include "gui/new_selection_details_widget/models/base_tree_model.h"
 #include "gui/basic_tree_model/base_tree_model.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include <QMap>
 
 namespace hal
@@ -117,7 +118,7 @@ namespace hal
         /** @name Event Handler Functions
          */
         ///@{
-        void handleModulePortsChanged(Module* m);
+        void handleModulePortsChanged(Module* m, PinEvent pev, u32 pgid);
         ///@}
 
         //column identifier

@@ -469,8 +469,10 @@ namespace hal
         return item->getAdditionalData(keyId).toInt();
     }
 
-    void ModulePinsTreeModel::handleModulePortsChanged(Module* m)
+    void ModulePinsTreeModel::handleModulePortsChanged(Module* m, PinEvent pev, u32 pgid)
     {
+        Q_UNUSED(pev);
+        Q_UNUSED(pgid);
         if ((int)m->get_id() == mModuleId)
         {
             if (!mIgnoreEventsFlag)

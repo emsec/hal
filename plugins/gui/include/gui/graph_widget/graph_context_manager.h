@@ -194,7 +194,7 @@ namespace hal
          *
          * @param m - The module with the changed port
          */
-        void handleModulePortsChanged(Module* m, hal::PinEvent pev, u32 pgid);
+        void handleModulePortsChanged(Module* m, PinEvent pev, u32 pgid);
 
         /**
          * Handler to be called after a gate has been removed. <br>
