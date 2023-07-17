@@ -1156,10 +1156,10 @@ namespace hal
                 return ERR("gate library is a nullptr");
             }
 
+            const i64 initial_size = nl->get_gates().size();
+
             // resynthesize all muxes where any select signal is preceded by an inverter hoping to unify the structure with regards to other muxes conntected to the same select signal
             std::vector<Gate*> muxes = nl->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_mux); });
-
-            u32 count = 0;
 
             for (const auto& g : muxes)
             {
@@ -1200,11 +1200,13 @@ namespace hal
                         return ERR_APPEND(resynth_res.get_error(),
                                           "unable to unify selecet signals: failed to resynthesize mux " + g->get_name() + " with ID " + std::to_string(g->get_id()) + " and its preceding inverters");
                     }
-                    count++;
                 }
             }
 
-            return OK(count);
+            const i64 new_size   = nl->get_gates().size();
+            const i64 difference = std::abs(initial_size - new_size);
+
+            return OK(u32(difference));
         }
     }    // namespace
 
