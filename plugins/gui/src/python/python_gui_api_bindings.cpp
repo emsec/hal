@@ -208,6 +208,12 @@ PYBIND11_PLUGIN(hal_gui)
             :param Module* module: module to fold
             :returns: True on success, otherwise False.
             :rtype: bool
+)")
+    .def_static("getGridPlacement", &GuiApiClasses::View::getGridPlacement, py::arg("view_id"), R"(
+            Get positions of all nodes in the view
+
+            :param int view_id: ID of the view.
+            :rtype: GridPlacement
 )");
 
 

@@ -28,6 +28,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/module.h"
+#include "gui/include/gui/gui_def.h"
 
 
 #include <QObject>
@@ -60,6 +61,7 @@ namespace hal
             };
 
             static ModuleGateIdPair getValidObjects(int viewId, const std::vector<Module*>, const std::vector<Gate*>);
+            static GridPlacement* getGridPlacement(int viewId);
         };
     }
 
