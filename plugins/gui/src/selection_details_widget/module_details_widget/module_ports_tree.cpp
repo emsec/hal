@@ -87,7 +87,7 @@ namespace hal
             return;
 
         //all relevant information
-        BaseTreeItem* clickedItem              = mPortModel->getItemFromIndex(clickedIndex);
+        PortTreeItem* clickedItem              =  static_cast<PortTreeItem*>(mPortModel->getItemFromIndex(clickedIndex));
         ModulePinsTreeModel::itemType type = mPortModel->getTypeOfItem(clickedItem);
         Net* n                             = mPortModel->getNetFromItem(clickedItem);
         QString name                       = clickedItem->getData(ModulePinsTreeModel::sNameColumn).toString();
@@ -308,7 +308,7 @@ namespace hal
         int groupId    = -1;
         for (auto index : selectionModel()->selectedRows())
         {
-            BaseTreeItem* item = mPortModel->getItemFromIndex(index);
+            PortTreeItem* item =  static_cast<PortTreeItem*>(mPortModel->getItemFromIndex(index));
             auto itemType  = mPortModel->getTypeOfItem(item);
             if (itemType == ModulePinsTreeModel::itemType::pin)
             {
