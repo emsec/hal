@@ -114,6 +114,15 @@ namespace hal
         static Result<u32> propagate_constants(Netlist* nl);
 
         /**
+         * Removes two consecutive inverters and reconnects the input of the first inverter to the output of the second one.
+         * If the first inverter has additional successors, only the second inverter is deleted.
+         * 
+         * @param[in] nl - The netlist to operate on.
+         * @returns The number of removed inverter gates on success, an error otherwise.
+         */
+        static Result<u32> remove_consecutive_inverters(Netlist* nl);
+
+        /**
          * Replaces pins connected to GND/VCC with constants and simplifies the boolean function of a LUT by recomputing the INIT string.
          * 
          * @param[in] nl - The netlist to operate on. 

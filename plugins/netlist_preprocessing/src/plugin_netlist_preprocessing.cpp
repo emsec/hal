@@ -54,7 +54,7 @@ namespace hal
                 }
             }
 
-            return ERR("could not query binary path: no binary found for yosys logic synthesis tool");
+            return ERR("could not query binary path: no binary found for ABC logic synthesis tool");
         }
     }    // namespace abc
 
@@ -1238,6 +1238,11 @@ namespace hal
 
     Result<u32> NetlistPreprocessingPlugin::propagate_constants(Netlist* nl)
     {
+        if (nl == nullptr)
+        {
+            return ERR("netlist is a nullptr");
+        }
+
         Net* gnd_net = nl->get_gnd_gates().empty() ? nullptr : nl->get_gnd_gates().front()->get_fan_out_nets().front();
         Net* vcc_net = nl->get_vcc_gates().empty() ? nullptr : nl->get_vcc_gates().front()->get_fan_out_nets().front();
 
@@ -1340,6 +1345,91 @@ namespace hal
 
         log_info("netlist_preprocessing", "replaced {} destinations with power/ground nets in total", total_replaced_dst_count);
         return OK(total_replaced_dst_count);
+    }
+
+    Result<u32> NetlistPreprocessingPlugin::remove_consecutive_inverters(Netlist* nl)
+    {
+        if (nl == nullptr)
+        {
+            return ERR("netlist is a nullptr");
+        }
+
+        std::set<Gate*> gates_to_delete;
+        for (auto* inv_gate : nl->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_inverter); }))
+        {
+            if (gates_to_delete.find(inv_gate) != gates_to_delete.end())
+            {
+                continue;
+            }
+
+            const auto& connection_endpoints = inv_gate->get_fan_in_endpoints();
+            if (connection_endpoints.size() != 1)
+            {
+                log_warning("netlist_preprocessing", "could not handle gate '{}' with ID {} due to a fan-in size != 1", inv_gate->get_name(), inv_gate->get_id());
+                continue;
+            }
+
+            auto* middle_fan_in_ep = connection_endpoints.front();
+            auto* middle_net       = middle_fan_in_ep->get_net();
+            if (middle_net->get_sources().size() != 1)
+            {
+                log_warning("netlist_preprocessing", "could not handle gate '{}' with ID {} due to a number of predecessors != 1", inv_gate->get_name(), inv_gate->get_id());
+                continue;
+            }
+            auto* pred_gate = middle_net->get_sources().front()->get_gate();
+
+            if (pred_gate->get_type()->has_property(GateTypeProperty::c_inverter))
+            {
+                const auto& fan_in = pred_gate->get_fan_in_endpoints();
+                if (fan_in.size() != 1)
+                {
+                    log_warning("netlist_preprocessing", "could not handle gate '{}' with ID {} due to a fan-in size != 1", pred_gate->get_name(), pred_gate->get_id());
+                    continue;
+                }
+                if (pred_gate->get_fan_out_endpoints().size() != 1)
+                {
+                    log_warning("netlist_preprocessing", "could not handle gate '{}' with ID {} due to a fan-out size != 1", pred_gate->get_name(), pred_gate->get_id());
+                    continue;
+                }
+                auto* in_net = fan_in.front()->get_net();
+
+                const auto& fan_out = inv_gate->get_fan_out_endpoints();
+                if (fan_out.size() != 1)
+                {
+                    log_warning("netlist_preprocessing", "could not handle gate '{}' with ID {} due to a fan-out size != 1", inv_gate->get_name(), inv_gate->get_id());
+                    continue;
+                }
+                auto* out_net = fan_out.front()->get_net();
+
+                for (auto* dst_ep : out_net->get_destinations())
+                {
+                    auto* dst_pin  = dst_ep->get_pin();
+                    auto* dst_gate = dst_ep->get_gate();
+
+                    out_net->remove_destination(dst_ep);
+                    in_net->add_destination(dst_gate, dst_pin);
+                }
+
+                middle_net->remove_destination(middle_fan_in_ep);
+
+                if (middle_net->get_num_of_destinations() == 0)
+                {
+                    nl->delete_net(middle_net);
+                    gates_to_delete.insert(pred_gate);
+                }
+
+                gates_to_delete.insert(inv_gate);
+            }
+        }
+
+        u32 removed_ctr = 0;
+        for (auto* g : gates_to_delete)
+        {
+            nl->delete_gate(g);
+            removed_ctr++;
+        }
+
+        return OK(removed_ctr);
     }
 
     namespace

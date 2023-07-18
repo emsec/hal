@@ -81,17 +81,32 @@ namespace hal
             std::vector<EdifProperty> m_properties;
         };
 
+        struct EdifEndpoint
+        {
+            std::string m_port_name;
+            u32 m_index                 = 1;
+            std::string m_instance_name = "";
+        };
+
         struct EdifNet
         {
             std::string m_name;
-            std::vector<std::pair<std::string, std::string>> m_endpoints;
+            std::vector<EdifEndpoint> m_endpoints;
+        };
+
+        struct EdifPort
+        {
+            std::string m_name;
+            PinDirection m_direction;
+            u32 m_width = 1;
         };
 
         struct EdifCell
         {
             std::string m_name;
-            std::vector<std::pair<PinDirection, std::string>> m_ports;
+            std::vector<EdifPort> m_ports;
             std::vector<EdifInstance> m_instances;
+            std::vector<EdifNet> m_nets;
         };
 
         std::stringstream m_fs;
@@ -113,5 +128,9 @@ namespace hal
         Result<std::monostate> parse_contents(EdifCell& cell);
         Result<std::monostate> parse_instance(EdifCell& cell);
         Result<std::monostate> parse_net(EdifCell& cell);
+        Result<std::monostate> parse_endpoints(EdifNet& net);
+
+        Result<std::string> parse_rename(TokenStream<std::string>& stream, bool enforce_match = true);
+        Result<std::pair<std::string, u32>> parse_array(TokenStream<std::string>& stream);
     };
 }    // namespace hal
