@@ -54,7 +54,7 @@ namespace hal
                 }
             }
 
-            return ERR("could not query binary path: no binary found for yosys logic synthesis tool");
+            return ERR("could not query binary path: no binary found for ABC logic synthesis tool");
         }
     }    // namespace abc
 
