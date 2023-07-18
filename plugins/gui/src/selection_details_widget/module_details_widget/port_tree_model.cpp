@@ -20,9 +20,8 @@
 namespace hal
 {
     PortTreeItem::PortTreeItem(QString pinName, QString pinDirection, QString pinTypee, QString netName)
-    {
-
-    }
+        : mPinName(pinName), mPinDirection(pinDirection), mPinType(pinTypee), mNetName(netName)
+    {;}
 
     QVariant PortTreeItem::getData(int index) const
     {
