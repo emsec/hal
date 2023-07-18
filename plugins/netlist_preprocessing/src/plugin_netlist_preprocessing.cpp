@@ -1163,11 +1163,6 @@ namespace hal
 
             for (const auto& g : muxes)
             {
-                // if (g->get_id() == 9857)
-                // {
-                //     return ERR("GOT HERE");
-                // }
-
                 auto select_pins = g->get_type()->get_pins([](const GatePin* pin) { return (pin->get_type() == PinType::select) && (pin->get_direction() == PinDirection::input); });
 
                 std::vector<Gate*> preceding_inverters;
@@ -1628,6 +1623,44 @@ namespace hal
             return new_gate->get_name() + "_" + std::to_string(dst_gate->get_id()) + "_RESYNTH";
         }
 
+        Result<std::monostate> delete_subgraph(Netlist* nl, const std::vector<Gate*>& subgraph)
+        {
+            std::vector<Gate*> to_delete;
+            for (const auto g : subgraph)
+            {
+                bool has_no_outside_destinations   = true;
+                bool has_only_outside_destinations = true;
+                for (const auto& suc : g->get_successors())
+                {
+                    const auto it = std::find(subgraph.begin(), subgraph.end(), suc->get_gate());
+                    if (it == subgraph.end())
+                    {
+                        has_no_outside_destinations = false;
+                    }
+
+                    if (it != subgraph.end())
+                    {
+                        has_only_outside_destinations = false;
+                    }
+                }
+
+                if (has_no_outside_destinations || has_only_outside_destinations)
+                {
+                    to_delete.push_back(g);
+                }
+            }
+
+            for (const auto& g : to_delete)
+            {
+                if (!nl->delete_gate(g))
+                {
+                    return ERR("unable to delete subgraph: failed to delete gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + " in destination netlist");
+                }
+            }
+
+            return OK({});
+        }
+
         // NOTE there are about a hundred more checks that we could do here
         Result<std::monostate> replace_subgraph_with_netlist(const std::vector<Gate*>& subgraph,
                                                              const std::unordered_map<Net*, Net*>& global_io_mapping,
@@ -1731,31 +1764,10 @@ namespace hal
             // delete subgraph gates if flag is set
             if (delete_subgraph_gates)
             {
-                std::vector<Gate*> to_delete;
-                for (const auto g : subgraph)
+                auto delete_res = delete_subgraph(dst_nl, subgraph);
+                if (delete_res.is_error())
                 {
-                    bool has_no_outside_destinations = true;
-                    for (const auto& suc : g->get_successors())
-                    {
-                        if (std::find(subgraph.begin(), subgraph.end(), suc->get_gate()) == subgraph.end())
-                        {
-                            has_no_outside_destinations = false;
-                            break;
-                        }
-                    }
-
-                    if (has_no_outside_destinations)
-                    {
-                        to_delete.push_back(g);
-                    }
-                }
-
-                for (const auto g : to_delete)
-                {
-                    if (!dst_nl->delete_gate(g))
-                    {
-                        return ERR("unable to replace subgraph with netlist: failed to delete gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + " in destination netlist");
-                    }
+                    return ERR_APPEND(delete_res.get_error(), "unable to replace subgraph with netlist: failed to delete subgraph");
                 }
             }
 
@@ -2240,38 +2252,11 @@ namespace hal
             return ERR_APPEND(replace_res.get_error(), "unable to resynthesize subgraphs of type: failed to replace subgrap with resynthesized netlist");
         }
 
-        // delete subgraph gates if they do not have any more outside successors
-        std::vector<Gate*> to_delete;
-        for (const auto g : subgraph)
+        // delete subgraph gates
+        auto delete_res = delete_subgraph(nl, subgraph);
+        if (delete_res.is_error())
         {
-            bool has_no_outside_destinations   = true;
-            bool has_only_outside_destinations = true;
-            for (const auto& suc : g->get_successors())
-            {
-                const auto it = std::find(subgraph.begin(), subgraph.end(), suc->get_gate());
-                if (it == subgraph.end())
-                {
-                    has_no_outside_destinations = false;
-                }
-
-                if (it != subgraph.end())
-                {
-                    has_only_outside_destinations = false;
-                }
-            }
-
-            if (has_no_outside_destinations || has_only_outside_destinations)
-            {
-                to_delete.push_back(g);
-            }
-        }
-
-        for (const auto g : to_delete)
-        {
-            if (!nl->delete_gate(g))
-            {
-                return ERR("unable to replace subgraph with netlist: failed to delete gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + " in destination netlist");
-            }
+            return ERR_APPEND(delete_res.get_error(), "unable to replace subgraph with netlist: failed to delete subgraph");
         }
 
         return OK(subgraph.size());
