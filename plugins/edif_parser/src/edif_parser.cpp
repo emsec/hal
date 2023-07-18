@@ -203,12 +203,12 @@ namespace hal
             const auto next_token = m_token_stream.consume();
             if (next_token == "rename")
             {
-                cell.m_name        = m_token_stream.consume();
-                const auto re_name = m_token_stream.consume();
-                if (re_name.string.substr(1, re_name.string.size() - 2) != cell.m_name)
+                const auto rename_res = parse_rename(m_token_stream);
+                if (rename_res.is_error())
                 {
-                    return ERR("could not parse cell in line " + std::to_string(re_name.number) + ": renaming not yet supported");
+                    return ERR(rename_res.get_error());
                 }
+                cell.m_name = rename_res.get();
             }
             else if (next_token == "view")
             {
@@ -267,18 +267,54 @@ namespace hal
         while (m_token_stream.consume("("))
         {
             m_token_stream.consume("port", true);
-            std::string port_name = m_token_stream.consume();
+
+            EdifPort port;
+
+            if (m_token_stream.consume("("))
+            {
+                const auto next_token = m_token_stream.consume();
+                if (next_token == "rename")
+                {
+                    const auto rename_res = parse_rename(m_token_stream);
+                    if (rename_res.is_error())
+                    {
+                        return ERR(rename_res.get_error());
+                    }
+                    port.m_name = rename_res.get();
+                }
+                else if (next_token == "array")
+                {
+                    const auto rename_res = parse_array(m_token_stream);
+                    if (rename_res.is_error())
+                    {
+                        return ERR(rename_res.get_error());
+                    }
+                    const auto array = rename_res.get();
+                    port.m_name      = array.first;
+                    port.m_width     = array.second;
+                }
+                else
+                {
+                    return ERR("unsupported token '" + next_token.string + "' in line " + std::to_string(next_token.number));
+                }
+                m_token_stream.consume(")", true);
+            }
+            else
+            {
+                port.m_name = m_token_stream.consume();
+            }
+
             m_token_stream.consume("(", true);
             m_token_stream.consume("direction", true);
-            const auto direction_token  = m_token_stream.consume();
-            PinDirection port_direction = enum_from_string<PinDirection>(utils::to_lower(direction_token.string), PinDirection::none);
-            if (port_direction == PinDirection::none)
+            const auto direction_token = m_token_stream.consume();
+            port.m_direction           = enum_from_string<PinDirection>(utils::to_lower(direction_token.string), PinDirection::none);
+            if (port.m_direction == PinDirection::none)
             {
                 return ERR("could not parse interface: invalid port direction " + direction_token.string + " in line " + std::to_string(direction_token.number));
             }
             m_token_stream.consume(")", true);
             m_token_stream.consume(")", true);
-            cell.m_ports.push_back(std::make_pair(port_direction, port_name));
+            cell.m_ports.push_back(port);
         }
 
         return OK({});
@@ -303,6 +339,10 @@ namespace hal
                     return ERR_APPEND(res.get_error(), "could not parse contents: failed to parse net in line " + std::to_string(next_token.number));
                 }
             }
+            else
+            {
+                return ERR("unsupported token '" + next_token.string + "' in line " + std::to_string(next_token.number));
+            }
             m_token_stream.consume(")", true);
         }
 
@@ -313,7 +353,6 @@ namespace hal
     {
         EdifInstance instance;
         const auto first_token = m_token_stream.peek();
-        u32 line_number        = first_token.number;
 
         if (first_token != "(")
         {
@@ -325,12 +364,12 @@ namespace hal
             const auto next_token = m_token_stream.consume();
             if (next_token == "rename")
             {
-                instance.m_name    = m_token_stream.consume();
-                const auto re_name = m_token_stream.consume();
-                if (re_name.string.substr(1, re_name.string.size() - 2) != instance.m_name)
+                const auto rename_res = parse_rename(m_token_stream);
+                if (rename_res.is_error())
                 {
-                    return ERR("could not parse instance in line " + std::to_string(re_name.number) + ": renaming not yet supported");
+                    return ERR(rename_res.get_error());
                 }
+                instance.m_name = rename_res.get();
             }
             else if (next_token == "viewRef")
             {
@@ -351,22 +390,160 @@ namespace hal
                 m_token_stream.consume(")", true);
                 instance.m_properties.push_back(prop);
             }
+            else
+            {
+                return ERR("unsupported token '" + next_token.string + "' in line " + std::to_string(next_token.number));
+            }
             m_token_stream.consume(")", true);
         }
 
-        cell.m_instances.push_back(instance);
+        cell.m_instances.push_back(std::move(instance));
 
         return OK({});
     }
 
     Result<std::monostate> EdifParser::parse_net(EdifCell& cell)
     {
-        // TODO
-        return ERR("not yet implemented");
+        EdifNet net;
+        const auto first_token = m_token_stream.peek();
+
+        if (first_token != "(")
+        {
+            net.m_name = m_token_stream.consume();
+        }
+
+        while (m_token_stream.consume("("))
+        {
+            const auto next_token = m_token_stream.consume();
+            if (next_token == "rename")
+            {
+                const auto rename_res = parse_rename(m_token_stream);
+                if (rename_res.is_error())
+                {
+                    return ERR(rename_res.get_error());
+                }
+                net.m_name = rename_res.get();
+            }
+            else if (next_token == "joined")
+            {
+                if (const auto ep_res = parse_endpoints(net); ep_res.is_error())
+                {
+                    return ERR(ep_res.get_error());
+                }
+            }
+            else
+            {
+                return ERR("unsupported token '" + next_token.string + "' in line " + std::to_string(next_token.number));
+            }
+            m_token_stream.consume(")", true);
+        }
+
+        cell.m_nets.push_back(std::move(net));
+
+        return OK({});
+    }
+
+    Result<std::monostate> EdifParser::parse_endpoints(EdifNet& net)
+    {
+        while (m_token_stream.consume("("))
+        {
+            m_token_stream.consume("portRef", true);
+            EdifEndpoint ep;
+
+            if (!m_token_stream.consume("("))
+            {
+                ep.m_port_name = m_token_stream.consume();
+            }
+
+            while (m_token_stream.consume("("))
+            {
+                const auto next_token = m_token_stream.consume();
+                if (next_token == "member")
+                {
+                    ep.m_port_name         = m_token_stream.consume();
+                    const auto index_token = m_token_stream.consume();
+                    try
+                    {
+                        ep.m_index = std::stoul(index_token.string);
+                    }
+                    catch (const std::exception& e)
+                    {
+                        return ERR("could not convert string '" + index_token.string + "' in line " + std::to_string(index_token.number) + " to integer: " + e.what());
+                    }
+                }
+                else if (next_token == "instanceRef")
+                {
+                    ep.m_instance_name = m_token_stream.consume();
+                }
+                else
+                {
+                    return ERR("unsupported token '" + next_token.string + "' in line " + std::to_string(next_token.number));
+                }
+                m_token_stream.consume(")", true);
+            }
+
+            net.m_endpoints.push_back(std::move(ep));
+            m_token_stream.consume(")", true);
+        }
+
+        return OK({});
     }
 
     // ###########################################################################
     // ###################          Helper Functions          ####################
     // ###########################################################################
+
+    Result<std::string> EdifParser::parse_rename(TokenStream<std::string>& stream, bool enforce_match)
+    {
+        auto new_name = stream.consume();
+        auto old_name = stream.consume();
+        if (old_name.string.substr(1, old_name.string.size() - 2) != new_name.string)
+        {
+            if (enforce_match)
+            {
+                return ERR("could not parse instance in line " + std::to_string(old_name.number) + ": renaming not yet supported");
+            }
+            else
+            {
+                log_warning("edif_parser", "renaming not yet supported, ignoring old name in line {}", old_name.number);
+            }
+        }
+
+        return OK(new_name);
+    }
+
+    Result<std::pair<std::string, u32>> EdifParser::parse_array(TokenStream<std::string>& stream)
+    {
+        std::string name;
+        u32 width;
+
+        if (stream.consume("("))
+        {
+            stream.consume("rename", true);
+            const auto rename_res = parse_rename(stream);
+            if (rename_res.is_error())
+            {
+                return ERR(rename_res.get_error());
+            }
+            name = rename_res.get();
+            stream.consume(")", true);
+        }
+        else
+        {
+            name = stream.consume();
+        }
+
+        const auto width_token = stream.consume();
+        try
+        {
+            width = std::stoul(width_token.string);
+        }
+        catch (const std::exception& e)
+        {
+            return ERR("could not convert string '" + width_token.string + "' in line " + std::to_string(width_token.number) + " to integer: " + e.what());
+        }
+
+        return OK(std::make_pair(std::move(name), width));
+    }
 
 }    // namespace hal
