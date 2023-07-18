@@ -214,6 +214,15 @@ PYBIND11_PLUGIN(hal_gui)
 
             :param int view_id: ID of the view.
             :rtype: GridPlacement
+)")
+
+
+    .def_static("setGridPlacement", &GuiApiClasses::View::setGridPlacement, py::arg("view_id"), py::arg("grid placement"), R"(
+            Set grid placement to the view
+
+            :param int view_id: ID of the view.
+            :param GridPlacement* gp: grid placement.
+            :rtype: bool
 )");
 
 

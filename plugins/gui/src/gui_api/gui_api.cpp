@@ -12,6 +12,7 @@
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_fold_module.h"
 #include "gui/user_action/action_unfold_module.h"
+#include "gui/user_action/action_move_node.h"
 #include "gui/graph_widget/graph_context_manager.h"
 #include "gui/context_manager_widget/models/context_table_model.h"
 #include "hal_core/utilities/log.h"
@@ -963,5 +964,34 @@ namespace hal
         for (auto it = contextNodeMap.begin(); it != contextNodeMap.end(); it++)
             retval->insert(it.key(), it.value());
         return retval;
+    }
+
+    bool GuiApiClasses::View::setGridPlacement(int viewId, GridPlacement *gp)
+    {
+        /*UserActionCompound* actComp = new UserActionCompound;
+        actComp->setUseCreatedObject();*/
+
+        for(Node nd : gp->keys())
+        {
+            ActionMoveNode* act = new ActionMoveNode(viewId, gp->value(nd));
+            if(nd.isGate()) act->setObject(UserActionObject(nd.Gate, UserActionObjectType::Gate));
+            else if(nd.isModule()) act->setObject(UserActionObject(nd.Module, UserActionObjectType::Module));
+            else return false;
+
+            UserActionManager::instance()->executeActionBlockThread(act);
+
+        }
+
+       /* for(auto i = gp->begin(); i != gp->end(); i++)
+        {
+            ActionMoveNode* act = new ActionMoveNode(viewId, i.value());
+            qInfo() << i.key().type();
+            if(i.key().isGate()) act->setObject(UserActionObject(i.key().Gate, UserActionObjectType::Gate));
+            else if(i.key().isModule()) act->setObject(UserActionObject(i.key().Module, UserActionObjectType::Module));
+            else return false;
+            actComp->addAction(act);
+        }*/
+        return true;
+
     }
 }

@@ -62,6 +62,7 @@ namespace hal
 
             static ModuleGateIdPair getValidObjects(int viewId, const std::vector<Module*>, const std::vector<Gate*>);
             static GridPlacement* getGridPlacement(int viewId);
+            static bool setGridPlacement(int viewId, GridPlacement* gp);
         };
     }
 
