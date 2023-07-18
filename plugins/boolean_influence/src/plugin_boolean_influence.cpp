@@ -239,7 +239,7 @@ int main(int argc, char *argv[]) {
         replaced_e      = replaced_e.substitute(from_vec, to_vec);
 
         // translate expression into a c program
-        const std::filesystem::path directory = "/tmp/boolean_influence_tmp/";
+        const std::filesystem::path directory = std::filesystem::temp_directory_path() / "boolean_influence_tmp/";
         std::filesystem::create_directory(directory);
 
         const std::filesystem::path file_path = directory / (unique_identifier.empty() ? ("boolean_func.cpp") : ("boolean_func_" + unique_identifier + ".cpp"));
