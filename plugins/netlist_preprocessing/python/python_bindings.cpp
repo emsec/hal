@@ -235,6 +235,30 @@ namespace hal
             )");
 
         py_netlist_preprocessing.def_static(
+            "remove_consecutive_inverters",
+            [](Netlist* nl) -> std::optional<u32> {
+                auto res = NetlistPreprocessingPlugin::remove_consecutive_inverters(nl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            R"(
+                Removes two consecutive inverters and reconnects the input of the first inverter to the output of the second one.
+                If the first inverter has additional successors, only the second inverter is deleted.
+
+                :param hal_py.Netlist nl: The netlist to operate on.
+                :returns: The number of removed inverter gates on success, ``None`` otherwise.
+                :rtype: int or None
+            )");
+
+        py_netlist_preprocessing.def_static(
             "simplify_lut_inits",
             [](Netlist* nl) -> std::optional<u32> {
                 auto res = NetlistPreprocessingPlugin::simplify_lut_inits(nl);
