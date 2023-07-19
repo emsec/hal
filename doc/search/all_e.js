@@ -529,7 +529,7 @@ var searchData=
   ['numbercolor_9344',['numberColor',['../classhal_1_1_python_qss_adapter.html#adce06b14c4df3ea04d32253a415b58f1',1,'hal::PythonQssAdapter::numberColor()'],['../classhal_1_1_python_qss_adapter.html#a3e7b96f852c8eae97b40bdbb1c724a43',1,'hal::PythonQssAdapter::numberColor() const']]],
   ['numberentries_9345',['numberEntries',['../classhal_1_1_net_layout_junction_net.html#aa8f91f4758404cc593aefb3ff5d67625',1,'hal::NetLayoutJunctionNet']]],
   ['numberflag_9346',['NumberFlag',['https://doc.qt.io/qt-5/qtextstream.html#NumberFlag-enum',1,'QTextStream']]],
-  ['numberflags_9347',['NumberFlags',['https://doc.qt.io/qt-5/qtextstream.html#NumberFlag-enum',1,'QTextStream::NumberFlags()'],['https://doc.qt.io/qt-5/qtextstream.html#numberFlags',1,'QTextStream::numberFlags() const const']]],
+  ['numberflags_9347',['numberFlags',['https://doc.qt.io/qt-5/qtextstream.html#numberFlags',1,'QTextStream::numberFlags() const const'],['https://doc.qt.io/qt-5/qtextstream.html#NumberFlag-enum',1,'QTextStream::NumberFlags()']]],
   ['numberinput_9348',['NumberInput',['../classhal_1_1_python_thread.html#ae153632cff534a9bcb961ffc35718c8caa9ec369b88e5d843010f1e9f6078bbe9',1,'hal::PythonThread']]],
   ['numberofportschanged_9349',['numberOfPortsChanged',['../classhal_1_1_module_pins_tree_model.html#ae7b02e4137a6250b6e5baad35d6cf554',1,'hal::ModulePinsTreeModel']]],
   ['numberofsubmoduleschanged_9350',['numberOfSubmodulesChanged',['../classhal_1_1_module_tree_model.html#a34c143fe0a785ea1ff9b6e88bc02e7e1',1,'hal::ModuleTreeModel::numberOfSubmodulesChanged()'],['../classhal_1_1_netlist_elements_tree_model.html#a83b219f499c9d2c38b6f7b5927141d93',1,'hal::NetlistElementsTreeModel::numberOfSubmodulesChanged()']]],
