@@ -53,8 +53,8 @@ namespace hal
         layout->setRowStretch(irow - 1, 20);
 
         layout->addWidget(new QLabel("Location of project directory:", this), irow++, 0, Qt::AlignLeft);
-        mProjectdir = filename;
-        mProjectdir.remove(QRegularExpression("\\.\\w*$"));
+        setSuggestedProjectDir(filename);
+
         QFrame* frameProjectdir    = new QFrame(this);
         QHBoxLayout* layProjectdir = new QHBoxLayout(frameProjectdir);
         mEditProjectdir            = new QLineEdit(mProjectdir, frameProjectdir);
@@ -117,6 +117,21 @@ namespace hal
         layout->addWidget(dbb, irow++, 0, Qt::AlignRight);
         connect(mComboGatelib, &QComboBox::currentTextChanged, this, &ImportNetlistDialog::handleGateLibraryPathChanged);
         handleGateLibraryPathChanged(mComboGatelib->currentText());
+    }
+
+    void ImportNetlistDialog::setSuggestedProjectDir(const QString& filename)
+    {
+        mProjectdir = filename;
+        mProjectdir.remove(QRegularExpression("\\.\\w*$"));
+
+        QString basedir = mProjectdir;
+        int count = 2;
+
+        for (;;) // loop until non existing directory found
+        {
+            if (!QFileInfo(mProjectdir).exists()) return;
+            mProjectdir = QString("%1_%2").arg(basedir).arg(count++);
+        }
     }
 
     QString ImportNetlistDialog::projectDirectory() const
