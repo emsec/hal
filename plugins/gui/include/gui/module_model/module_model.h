@@ -35,6 +35,7 @@
 #include <QVariant>
 #include <QColor>
 #include <set>
+#include <array>
 
 namespace hal
 {
@@ -277,7 +278,7 @@ namespace hal
         QMap<u32, ModuleItem*> mModuleMap;
         QMap<u32, ModuleItem*> mGateMap;
         QMap<u32, ModuleItem*> mNetMap;
-        std::array<QMap<u32, ModuleItem*>*, 3> mModuleItemMaps;
+        std::array<QMap<u32, ModuleItem*>*, 3> mModuleItemMaps = {&mModuleMap, &mGateMap, &mNetMap};;
         QMap<u32, QColor> mModuleColors;
 
         bool mIsModifying;

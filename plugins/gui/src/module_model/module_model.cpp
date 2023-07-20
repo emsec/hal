@@ -14,7 +14,6 @@ namespace hal
 {
     ModuleModel::ModuleModel(QObject* parent) : QAbstractItemModel(parent), mTopModuleItem(nullptr)
     {
-        mModuleItemMaps = {&mModuleMap, &mGateMap, &mNetMap};
     }
 
     QModelIndex ModuleModel::index(int row, int column, const QModelIndex& parent) const
