@@ -277,7 +277,7 @@ namespace hal
         QMap<u32, ModuleItem*> mModuleMap;
         QMap<u32, ModuleItem*> mGateMap;
         QMap<u32, ModuleItem*> mNetMap;
-        std::array<QMap<u32, ModuleItem*>*, 3> mModuleItemMaps = {&mModuleMap, &mGateMap, &mNetMap};
+        std::array<QMap<u32, ModuleItem*>*, 3> mModuleItemMaps;
         QMap<u32, QColor> mModuleColors;
 
         bool mIsModifying;
