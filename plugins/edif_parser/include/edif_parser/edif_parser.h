@@ -78,6 +78,7 @@ namespace hal
         {
             std::string m_name;
             std::string m_type;
+            std::string m_library;
             std::vector<EdifProperty> m_properties;
         };
 
@@ -109,11 +110,21 @@ namespace hal
             std::vector<EdifNet> m_nets;
         };
 
+        struct EdifLibrary
+        {
+            std::string m_name;
+            std::vector<std::unique_ptr<EdifCell>> m_cells;
+            std::unordered_map<std::string, EdifCell*> m_cells_by_name;
+        };
+
         std::stringstream m_fs;
         std::filesystem::path m_path;
 
         // temporary netlist
         Netlist* m_netlist = nullptr;
+
+        std::vector<std::unique_ptr<EdifLibrary>> m_libraries;
+        std::unordered_map<std::string, EdifLibrary*> m_libraries_by_name;
 
         // token stream of entire input file
         TokenStream<std::string> m_token_stream;
@@ -122,12 +133,12 @@ namespace hal
         void tokenize();
         Result<std::monostate> parse_tokens();
         Result<std::monostate> parse_library();
-        Result<std::monostate> parse_cell();
-        Result<std::monostate> parse_view(EdifCell& cell);
-        Result<std::monostate> parse_interface(EdifCell& cell);
-        Result<std::monostate> parse_contents(EdifCell& cell);
-        Result<std::monostate> parse_instance(EdifCell& cell);
-        Result<std::monostate> parse_net(EdifCell& cell);
+        Result<std::monostate> parse_cell(EdifLibrary* library);
+        Result<std::monostate> parse_view(EdifCell* cell);
+        Result<std::monostate> parse_interface(EdifCell* cell);
+        Result<std::monostate> parse_contents(EdifCell* cell);
+        Result<std::monostate> parse_instance(EdifCell* cell);
+        Result<std::monostate> parse_net(EdifCell* cell);
         Result<std::monostate> parse_endpoints(EdifNet& net);
 
         Result<std::string> parse_rename(TokenStream<std::string>& stream, bool enforce_match = true);

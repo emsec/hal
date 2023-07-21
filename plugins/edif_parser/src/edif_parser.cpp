@@ -14,11 +14,6 @@
 
 namespace hal
 {
-    namespace
-    {
-
-    }    // namespace
-
     Result<std::monostate> EdifParser::parse(const std::filesystem::path& file_path)
     {
         m_path = file_path;
@@ -57,7 +52,7 @@ namespace hal
             }
         }
 
-        return ERR("not implemented");
+        return OK({});
     }
 
     Result<std::unique_ptr<Netlist>> EdifParser::instantiate(const GateLibrary* gate_library)
@@ -69,6 +64,62 @@ namespace hal
         {
             return ERR("could not instantiate EDIF netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': failed to create empty netlist");
         }
+
+        std::unordered_set<std::string> referenced_library_names;
+        std::unordered_set<std::string> referenced_cell_names;
+        for (auto& [_lib_name, lib] : m_libraries_by_name)
+        {
+            for (const auto& [_cell_name, cell] : lib->m_cells_by_name)
+            {
+                for (const auto& inst : cell->m_instances)
+                {
+                    referenced_cell_names.insert(inst.m_type);
+                    referenced_library_names.insert(inst.m_library);
+                }
+            }
+        }
+
+        EdifLibrary* top_lib = nullptr;
+        for (const auto& [name, lib] : m_libraries_by_name)
+        {
+            if (referenced_library_names.find(name) == referenced_library_names.end())
+            {
+                if (top_lib != nullptr)
+                {
+                    return ERR("could not instantiate EDIF netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name()
+                               + "': found multiple libraries as candidates for the top library");
+                }
+
+                top_lib = lib;
+            }
+        }
+
+        if (top_lib == nullptr)
+        {
+            return ERR("could not instantiate EDIF netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': unable to find a top library");
+        }
+
+        EdifCell* top_cell = nullptr;
+        for (const auto& [name, cell] : top_lib->m_cells_by_name)
+        {
+            if (referenced_cell_names.find(name) == referenced_cell_names.end())
+            {
+                if (top_cell != nullptr)
+                {
+                    return ERR("could not instantiate EDIF netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name()
+                               + "': found multiple cells as candidates for the top cell");
+                }
+
+                top_cell = cell;
+            }
+        }
+
+        if (top_cell == nullptr)
+        {
+            return ERR("could not instantiate EDIF netlist '" + m_path.string() + "' with gate library '" + gate_library->get_name() + "': unable to find a top cell");
+        }
+
+        // TODO implement instantiate
 
         return ERR("not implemented");
     }
@@ -166,15 +217,19 @@ namespace hal
 
     Result<std::monostate> EdifParser::parse_library()
     {
-        const auto lib_name = m_token_stream.consume();
+        auto lib      = std::make_unique<EdifLibrary>();
+        auto* lib_raw = lib.get();
+
+        const auto lib_name_token = m_token_stream.consume();
+        lib_raw->m_name           = lib_name_token.string;
         while (m_token_stream.consume("("))
         {
             const auto next_token = m_token_stream.consume();
             if (next_token == "cell")
             {
-                if (auto res = parse_cell(); res.is_error())
+                if (auto res = parse_cell(lib_raw); res.is_error())
                 {
-                    return ERR_APPEND(res.get_error(), "could not parse library '" + lib_name.string + "' in line " + std::to_string(lib_name.number) + ": failed to parse cell");
+                    return ERR_APPEND(res.get_error(), "could not parse library '" + lib_name_token.string + "' in line " + std::to_string(lib_name_token.number) + ": failed to parse cell");
                 }
             }
             else
@@ -184,18 +239,23 @@ namespace hal
             m_token_stream.consume(")", true);
         }
 
+        m_libraries.push_back(std::move(lib));
+        m_libraries_by_name[lib_raw->m_name] = lib_raw;
+
         return OK({});
     }
 
-    Result<std::monostate> EdifParser::parse_cell()
+    Result<std::monostate> EdifParser::parse_cell(EdifLibrary* lib)
     {
-        EdifCell cell;
+        auto cell      = std::make_unique<EdifCell>();
+        auto* cell_raw = cell.get();
+
         const auto first_token = m_token_stream.peek();
         u32 line_number        = first_token.number;
 
         if (first_token != "(")
         {
-            cell.m_name = m_token_stream.consume();
+            cell_raw->m_name = m_token_stream.consume();
         }
 
         while (m_token_stream.consume("("))
@@ -208,13 +268,13 @@ namespace hal
                 {
                     return ERR(rename_res.get_error());
                 }
-                cell.m_name = rename_res.get();
+                cell_raw->m_name = rename_res.get();
             }
             else if (next_token == "view")
             {
-                if (auto res = parse_view(cell); res.is_error())
+                if (auto res = parse_view(cell_raw); res.is_error())
                 {
-                    return ERR_APPEND(res.get_error(), "could not parse cell '" + cell.m_name + "' in line " + std::to_string(next_token.number) + ": failed to parse view");
+                    return ERR_APPEND(res.get_error(), "could not parse cell '" + cell_raw->m_name + "' in line " + std::to_string(next_token.number) + ": failed to parse view");
                 }
             }
             else
@@ -224,15 +284,18 @@ namespace hal
             m_token_stream.consume(")", true);
         }
 
-        if (cell.m_name.empty())
+        if (cell_raw->m_name.empty())
         {
             return ERR("could not parse cell in line " + std::to_string(line_number) + ": no name given for cell");
         }
 
+        lib->m_cells.push_back(std::move(cell));
+        lib->m_cells_by_name[cell_raw->m_name] = cell_raw;
+
         return OK({});
     }
 
-    Result<std::monostate> EdifParser::parse_view(EdifCell& cell)
+    Result<std::monostate> EdifParser::parse_view(EdifCell* cell)
     {
         const auto view_name = m_token_stream.consume();
         while (m_token_stream.consume("("))
@@ -262,7 +325,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> EdifParser::parse_interface(EdifCell& cell)
+    Result<std::monostate> EdifParser::parse_interface(EdifCell* cell)
     {
         while (m_token_stream.consume("("))
         {
@@ -314,13 +377,13 @@ namespace hal
             }
             m_token_stream.consume(")", true);
             m_token_stream.consume(")", true);
-            cell.m_ports.push_back(port);
+            cell->m_ports.push_back(port);
         }
 
         return OK({});
     }
 
-    Result<std::monostate> EdifParser::parse_contents(EdifCell& cell)
+    Result<std::monostate> EdifParser::parse_contents(EdifCell* cell)
     {
         while (m_token_stream.consume("("))
         {
@@ -349,7 +412,7 @@ namespace hal
         return OK({});
     }
 
-    Result<std::monostate> EdifParser::parse_instance(EdifCell& cell)
+    Result<std::monostate> EdifParser::parse_instance(EdifCell* cell)
     {
         EdifInstance instance;
         const auto first_token = m_token_stream.peek();
@@ -377,7 +440,10 @@ namespace hal
                 m_token_stream.consume("(", true);
                 m_token_stream.consume("cellRef", true);
                 instance.m_type = m_token_stream.consume();
-                m_token_stream.consume_until(")");    // skip libraryRef
+                m_token_stream.consume("(", true);
+                m_token_stream.consume("libraryRef", true);
+                instance.m_library = m_token_stream.consume();
+                m_token_stream.consume(")", true);    // skip libraryRef
                 m_token_stream.consume(")", true);
             }
             else if (next_token == "property")
@@ -397,12 +463,12 @@ namespace hal
             m_token_stream.consume(")", true);
         }
 
-        cell.m_instances.push_back(std::move(instance));
+        cell->m_instances.push_back(std::move(instance));
 
         return OK({});
     }
 
-    Result<std::monostate> EdifParser::parse_net(EdifCell& cell)
+    Result<std::monostate> EdifParser::parse_net(EdifCell* cell)
     {
         EdifNet net;
         const auto first_token = m_token_stream.peek();
@@ -438,7 +504,7 @@ namespace hal
             m_token_stream.consume(")", true);
         }
 
-        cell.m_nets.push_back(std::move(net));
+        cell->m_nets.push_back(std::move(net));
 
         return OK({});
     }
