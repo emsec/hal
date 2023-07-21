@@ -56,6 +56,11 @@ namespace hal
         return res;
     }
 
+    GateType* GateLibrary::create_gate_type(const std::string& name, std::set<GateTypeProperty> properties)
+    {
+        return create_gate_type(name, properties, nullptr);
+    }
+
     bool GateLibrary::contains_gate_type(GateType* gate_type) const
     {
         if (gate_type == nullptr)

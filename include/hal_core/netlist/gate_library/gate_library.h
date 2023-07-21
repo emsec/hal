@@ -1,20 +1,20 @@
 // MIT License
-// 
+//
 // Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
 // Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
 // Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 // Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -68,20 +68,20 @@ namespace hal
 
         /**
          * Set the data category of the gate location information.
-         * 
+         *
          * @param[in] category - The data category.
          */
         void set_gate_location_data_category(const std::string& category);
 
         /**
          * Get the data category of the gate location information.
-         * 
+         *
          * @returns The data category.
          */
         const std::string& get_gate_location_data_category() const;
         /**
          * Set the data identifiers of the gate location information for both the x- and y-coordinates.
-         * 
+         *
          * @param[in] x_coordinate - The data identifier for the x-coordinate.
          * @param[in] y_coordinate - The data identifier for the y-coordinate.
          */
@@ -89,7 +89,7 @@ namespace hal
 
         /**
          * Get the data identifiers of the gate location information for both the x- and y-coordinates.
-         * 
+         *
          * @returns A pair of data identifiers.
          */
         const std::pair<std::string, std::string>& get_gate_location_data_identifiers() const;
@@ -97,13 +97,22 @@ namespace hal
         /**
          * TODO pybind
          * Create a new gate type, add it to the gate library, and return it.
-         * 
+         *
          * @param[in] name - The name of the gate type.
          * @param[in] properties - The properties of the gate type.
          * @param[in] component - A component adding additional functionality to the gate type.
          * @returns The new gate type instance on success, a nullptr otherwise.
          */
-        GateType* create_gate_type(const std::string& name, std::set<GateTypeProperty> properties = {GateTypeProperty::combinational}, std::unique_ptr<GateTypeComponent> component = nullptr);
+        GateType* create_gate_type(const std::string& name, std::set<GateTypeProperty> properties, std::unique_ptr<GateTypeComponent> component);
+
+        /**
+         * Create a new gate type, add it to the gate library, and return it.
+         *
+         * @param[in] name - The name of the gate type.
+         * @param[in] properties - The properties of the gate type.
+         * @returns The new gate type instance on success, a nullptr otherwise.
+         */
+        GateType* create_gate_type(const std::string& name, std::set<GateTypeProperty> properties = {GateTypeProperty::combinational});
 
         /**
          * Check whether the given gate type is contained in this library.
