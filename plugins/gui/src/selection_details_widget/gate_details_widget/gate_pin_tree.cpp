@@ -96,7 +96,7 @@ namespace hal
         if(!idx.isValid())
             return;
 
-        TreeItem* clickedItem = mPinModel->getItemFromIndex(idx);
+        BaseTreeItem* clickedItem = mPinModel->getItemFromIndex(idx);
         QMenu menu;
         GatePinsTreeModel::itemType type = mPinModel->getTypeOfItem(clickedItem);
         bool isMiscSectionSet = false;//so that the misc-section is not set multiple times
@@ -201,7 +201,7 @@ namespace hal
 
     }
 
-    void GatePinTree::buildPythonMenuForPin(QMenu &menu, TreeItem *clickedPinItem)
+    void GatePinTree::buildPythonMenuForPin(QMenu &menu, BaseTreeItem *clickedPinItem)
     {
         // 1.) NET-OBJECT
         QList<int> netIdsOfItem = mPinModel->getNetIDsOfTreeItem(clickedPinItem);
@@ -243,7 +243,7 @@ namespace hal
 
     }
 
-    void GatePinTree::buildPythonMenuForPinGroup(QMenu &menu, TreeItem *clickedPinIGrouptem)
+    void GatePinTree::buildPythonMenuForPinGroup(QMenu &menu, BaseTreeItem *clickedPinIGrouptem)
     {
         // 1. PYTHON LIST OF PIN GROUPS
         QString pythonList = "[";
@@ -259,7 +259,7 @@ namespace hal
             });
 
         //2. DIRECTION and TYPE(determined by the pin(s) within the group)
-        TreeItem* firstPinItemOfGroup = clickedPinIGrouptem->getChild(0);
+        BaseTreeItem* firstPinItemOfGroup = clickedPinIGrouptem->getChild(0);
         if(firstPinItemOfGroup)
         {
             QString pythonCommandGroupDirection = PyCodeProvider::pyCodeGateTypePinDirection(mPinModel->getCurrentGateID(),

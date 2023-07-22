@@ -33,7 +33,7 @@ namespace hal
 {
     class ModuleTableModel;
     class Net;
-    class TreeItem;
+    class BaseTreeItem;
 
     class NetModuleTable : public QTableView
     {
