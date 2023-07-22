@@ -1099,6 +1099,9 @@ hal--GroupingManagerWidget
     qproperty-searchActiveIconStyle: "all->#30ac4f";
     qproperty-searchIconStyle: "all->#e8e8e8";
     qproperty-searchIconPath: ":/icons/search";
+
+    qproperty-tableIconStyle: "all->#e8e8e8";
+    qproperty-tableIconPath: ":/icons/list";
 }
 
 hal--ContextManagerWidget

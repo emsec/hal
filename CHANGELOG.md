@@ -50,6 +50,8 @@ All notable changes to this project will be documented in this file.
     * changed both versions of fsm_solving to now not only consider data inputs of the state register, but also synchronous control signals.
   * `xilinx_toolbox`
     * added the first version of the xilinx_toolbox plugin that provides functionality especially fitted to xilinx fpga netlists
+  * parser plugins
+    * changed supported input file formats from hard coded list to list provided by loadable parser plugins
 * decorators
   * added `NetlistModificationDecorator`
     * added `delete_modules` to delete all (or a filtered subset of) the modules in a netlist
@@ -76,6 +78,8 @@ All notable changes to this project will be documented in this file.
   * added pyBinds for the `LogManager` class
   * added pyBinds for the `ProjectDirectory` class
   * added `Module::move_pin_group` to change the order of pin groups of a module
+  * added flag which python editor tab is active when serializing project
+  * changed behavior of import netlist dialog, suggest only non-existing directories and loop until an acceptable name was entered
   * changed abort being more responsive when aborting layouting of large views
   * changed and improved color scheme for light style
   * changed labels on HAL startup screen to better resemble the new project structure
