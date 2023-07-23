@@ -31,59 +31,91 @@
 
 namespace hal
 {
-
-    class PinAction : public QObject
+    class PinActionType : public QObject
     {
         Q_OBJECT
     public:
-        enum Type { None, Create, DeleteGroup, RemovePin, MovePin, MoveGroup, RenamePin, RenameGroup, TypeChange, MaxAction };
-        Q_ENUM(Type)
+        enum Type { None, GroupCreate, GroupDelete, GroupMove, GroupRename, GroupTypechange, GroupDirection,
+                    PinAddgroup, PinRename, PinTypechange, PinDirection, PinSetindex, MaxAction };
+        Q_ENUM(Type);
+
     public:
         static QString toString(Type tp);
         static Type fromString(const QString& s);
+        static bool useExistingGroup(Type tp);
+        static bool useExistingPin(Type tp);
     };
 
     int pinGroupIndex(const Module* mod, const PinGroup<Module>* pgrp);
+
     /**
      * @ingroup user_action
      * @brief Pingroup user actions
      *
-     * Action depends on PinAction::Type:
+     * Arguments depends on PinActionType::Type:
      *
-     * Create:
-     *     Pingroup with given name gets created.
-     *     Pins listed in pinIds get moved into new group
-     *     Id of created group returned as targetGroupId()
+     * GroupCreate:
+     *     ID       : ID of group to create
+     *                   negative ID: call constructor without ID, however,
+     *                   ID will be used internally for subsequent commands related to crated group
+     *     name     : name of group
+     *     value    : start index, assume ascending
+     *                   negative value: descending order starting with (-value)
      *
-     * DeleteGroup:
-     *     Pingroup ID=sourceGroupId gets deleted.
-     *     Pins in group are stored for undo command
+     * GroupDelete
+     *     ID       : ID of group to delete
      *
-     * RemovePin:
-     *     Remove pin from sourceGroup
+     * GroupMove
+     *     ID       : ID of group to move
+     *     value    : new position in vector of pin groups
      *
-     * MovePin:
-     *     Must use move constructor with mandatory arguments pinId and pinOrderNo
-     *     One out of targetIndex (existing pingroup) or name (create new pingroup)
-     *       must be given to indicate destination
+     * GroupRename
+     *     ID       : ID of group to rename
+     *     name     : new name
      *
-     * MoveGroup:
-     *     Move Group identified by sourceGroupId to position groupOrderNo
-     * RenamePin:
-     *     Set new name to first pin in pinIds
-     * RenameGroup:
-     *     Set new name to group identified by targetGroupId
+     * GroupTypechange
+     *     ID       : ID of group to modifiy
+     *     value    : (int) PinType   as of hal_core/netlist/gate_library/enums/pin_type.h
+     *
+     * GroupDirection
+     *     ID       : ID of group to modifiy
+     *     value    : (int) PinDirection    as of hal_core/netlist/gate_library/enums/pin_direction.h
+     *
+     * PinAddgroup
+     *     ID       : ID of pin
+     *     value    : ID of group, might be negative if group recently created
+     *
+     * PinRename
+     *     ID       : ID of pin to rename
+     *     name     : new name
+     *
+     * PinTypechange
+     *     ID       : ID of pin to modify
+     *     value    : (int) PinType
+     *
+     * PinDirection
+     *     ID       : ID of pin to modify
+     *     value    : (int) PinDirection
+     *
+     * PinSetindex
+     *     ID       : ID of pin
+     *     value    : new index in pingroup. Calculated from row by
+     *                  index = startindex + a * row      with a=1 for ascending, a=-1 for descending
      */
     class ActionPingroup : public UserAction
     {
+        class AtomicAction
+        {
+        public:
+            PinActionType::Type mType;
+            int mId;
+            QString mName;
+            int mValue;
+            AtomicAction(PinActionType::Type tp, int id, const QString& name = QString(), int v=0) : mType(tp), mId(id), mName(name), mValue(v) {;}
+        };
+
     private:
-        QList<PinAction::Type> mPinActions;
-        QList<u32> mPinIds;
-        u32 mSourceGroupId;
-        u32 mTargetGroupId;
-        int mPinOrderNo;
-        int mGroupOrderNo;
-        QString mName;
+        QList<AtomicAction> mPinActions;
     public:
         /**
          * Action Constructor.
@@ -91,22 +123,16 @@ namespace hal
          * @param type - The UserActionObjectType of the item that should be created (default type: None)
          * @param objName - The name of the object to create (default name: "").
          */
-        ActionPingroup(PinAction::Type action = PinAction::None, u32 pingroupId = 0, const QString& name=QString());
-        ActionPingroup(u32 pinId, int pinIndex, u32 tgtgroupId=0, const QString& name=QString(), int grpIndex=-1); // action = MovePin
+        ActionPingroup(PinActionType::Type tp = PinActionType::None, u32 id = 0, const QString& name=QString(), int value=0);
         bool exec() override;
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;
         void addToHash(QCryptographicHash& cryptoHash) const override;
-        void setPinIds(const QList<u32>& ids) { mPinIds = ids; }
-        void setPinId(u32 id) { mPinIds.clear(); mPinIds.append(id); }
-        void addPinAction(PinAction::Type action) { mPinActions.prepend(action); }
-        void setSourceGroupId(u32 id) { mSourceGroupId = id; }
-        void setTargetGroupId(u32 id) { mTargetGroupId = id; }
-        void setPinOrderNo(int inx)   { mPinOrderNo   = inx; }
-        void setGroupOrderNo(int inx) { mGroupOrderNo = inx; }
-        void setName(const QString& name) { mName = name; }
-        u32 targetGroupId() const { return mTargetGroupId; }
+
+        static ActionPingroup* addPinsToExistingGroup(u32 grpId, QList<u32> pinIds);
+        static ActionPingroup* addPinsToNewGroup(const QString& name, QList<u32> pinIds);
+        static ActionPingroup* addPinToNewGroup(const QString& name, u32 pinId);
     };
 
     /**

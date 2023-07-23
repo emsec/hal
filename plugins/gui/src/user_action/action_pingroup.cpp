@@ -20,13 +20,13 @@ namespace hal
     }
 
 
-    QString PinAction::toString(PinAction::Type tp)
+    QString PinActionType::toString(PinActionType::Type tp)
     {
         QMetaEnum me = QMetaEnum::fromType<Type>();
         return QString(me.key(tp));
     }
 
-    PinAction::Type PinAction::fromString(const QString &s)
+    PinActionType::Type PinActionType::fromString(const QString &s)
     {
         QMetaEnum me = QMetaEnum::fromType<Type>();
         for (int t = None; t < MaxAction; t++)
@@ -35,6 +35,18 @@ namespace hal
                 return static_cast<Type>(t);
             }
         return None;
+    }
+
+    bool PinActionType::useExistingGroup(PinActionType::Type tp)
+    {
+        static const QSet<Type> types = {GroupDelete, GroupMove, GroupRename, GroupTypechange, GroupDirection};
+        return types.contains(tp);
+    }
+
+    bool PinActionType::useExistingPin(PinActionType::Type tp)
+    {
+        static const QSet<Type> types = {PinAddgroup, PinRename, PinTypechange, PinDirection, PinSetindex};
+        return types.contains(tp);
     }
 
     ActionPingroupFactory::ActionPingroupFactory()
@@ -52,97 +64,57 @@ namespace hal
         return ActionPingroupFactory::sFactory->tagname();
     }
 
-    ActionPingroup::ActionPingroup(PinAction::Type action, u32 pingroupId, const QString &name)
-      : mSourceGroupId(pingroupId), mTargetGroupId(pingroupId), mPinOrderNo(-1), mGroupOrderNo(-1), mName(name)
+    ActionPingroup::ActionPingroup(PinActionType::Type tp, u32 id, const QString &name, int value)
     {
-        switch (action)
-        {
-        case PinAction::None:
-            break;
-        case PinAction::MovePin:
-            // use move constructor
-            break;
-        default:
-            mPinActions.append(action);
-        }
-    }
-
-    ActionPingroup::ActionPingroup(u32 pinId, int pinIndex, u32 tgtgroupId, const QString& name, int grpIndex)
-        :  mSourceGroupId(0), mTargetGroupId(tgtgroupId),  mPinOrderNo(pinIndex), mGroupOrderNo(grpIndex), mName(name)
-    {
-        mPinIds.append(pinId);
-        mPinActions.append(PinAction::MovePin);
+        mPinActions.append(AtomicAction(tp, id, name, value));
     }
 
     void ActionPingroup::addToHash(QCryptographicHash &cryptoHash) const
     {
-        for (PinAction::Type tp : mPinActions)
-            cryptoHash.addData((char*)(&tp),sizeof(tp));
-        for (u32 pid: mPinIds)
-            cryptoHash.addData((char*)(&pid),sizeof(pid));
-        cryptoHash.addData((char*)(&mSourceGroupId),sizeof(mSourceGroupId));
-        cryptoHash.addData((char*)(&mTargetGroupId),sizeof(mTargetGroupId));
-        cryptoHash.addData((char*)(&mPinOrderNo),sizeof(mPinOrderNo));
-        cryptoHash.addData((char*)(&mGroupOrderNo),sizeof(mGroupOrderNo));
+        for (const AtomicAction& aa : mPinActions)
+        {
+            cryptoHash.addData((char*)(&aa.mType),sizeof(aa.mType));
+            cryptoHash.addData((char*)(&aa.mId),sizeof(aa.mId));
+            cryptoHash.addData(aa.mName.toUtf8());
+            cryptoHash.addData((char*)(&aa.mValue),sizeof(aa.mValue));
+        }
     }
 
     void ActionPingroup::writeToXml(QXmlStreamWriter& xmlOut) const
     {
-        //todo: remove parentId, switch entirely to parentObject
-        if (!mPinActions.isEmpty())
+        // TODO xml parent element
+        for (const AtomicAction& aa : mPinActions)
         {
-            QString s;
-            for (PinAction::Type tp : mPinActions)
-            {
-                if (!s.isEmpty()) s += ',';
-                s += PinAction::toString(tp);
-            }
-            xmlOut.writeTextElement("pinactions", s);
+            if (aa.mType != PinActionType::None)
+                xmlOut.writeTextElement("type", PinActionType::toString(aa.mType));
+            if (aa.mId)
+                xmlOut.writeTextElement("id", QString::number(aa.mId));
+            if (!aa.mName.isEmpty())
+                xmlOut.writeTextElement("name", aa.mName);
+            if (aa.mValue)
+                xmlOut.writeTextElement("value", QString::number(aa.mValue));
         }
-        if (!mPinIds.isEmpty())
-        {
-            QString s;
-            for (u32 pinId : mPinIds)
-            {
-                if (!s.isEmpty()) s += ',';
-                s += QString::number(pinId);
-            }
-            xmlOut.writeTextElement("pinids", s);
-        }
-        if (mSourceGroupId)
-            xmlOut.writeTextElement("srcgroupid", QString::number(mSourceGroupId));
-        if (mTargetGroupId)
-            xmlOut.writeTextElement("tgtgroupid", QString::number(mTargetGroupId));
-        if (mPinOrderNo >= 0)
-            xmlOut.writeTextElement("pinorder", QString::number(mPinOrderNo));
-        if (mGroupOrderNo >= 0)
-            xmlOut.writeTextElement("grporder", QString::number(mGroupOrderNo));
     }
 
     void ActionPingroup::readFromXml(QXmlStreamReader& xmlIn)
     {
+        // TODO loop xml parent element
         while (xmlIn.readNextStartElement())
         {
-            //todo: emove parentId, switch entirely to parentObject
-            readParentObjectFromXml(xmlIn);
-            if (xmlIn.name() == "pinactions")
-            {
-                for (QString pinact : xmlIn.readElementText().split(','))
-                    mPinActions.append(PinAction::fromString(pinact));
-            }
-            if (xmlIn.name() == "pinids")
-            {
-                for (QString pinid : xmlIn.readElementText().split(','))
-                    mPinIds.append(pinid.toInt());
-            }
-            if (xmlIn.name() == "srcgroupid")
-                mSourceGroupId = xmlIn.readElementText().toInt();
-            if (xmlIn.name() == "tgtgroupid")
-                mTargetGroupId = xmlIn.readElementText().toInt();
-            if (xmlIn.name() == "pinorder")
-                mPinOrderNo = xmlIn.readElementText().toInt();
-            if (xmlIn.name() == "grporder")
-                mGroupOrderNo = xmlIn.readElementText().toInt();
+            PinActionType::Type tp = PinActionType::None;
+            int id = 0;
+            QString name;
+            int val = 0;
+
+            if (xmlIn.name() == "type")
+                tp = PinActionType::fromString(xmlIn.readElementText());
+            if (xmlIn.name() == "id")
+                id = xmlIn.readElementText().toInt();
+            if (xmlIn.name() == "name")
+                name = xmlIn.readElementText();
+            if (xmlIn.name() == "value")
+                val = xmlIn.readElementText().toInt();
+            mPinActions.append(AtomicAction(tp,id,name,val));
         }
     }
 
@@ -157,6 +129,96 @@ namespace hal
 
         ActionPingroup* undo = nullptr;
 
+        QHash<int,PinGroup<ModulePin>*> pgroups;
+
+        for (const AtomicAction& aa : mPinActions)
+        {
+            PinGroup<ModulePin>* pgroup = nullptr;
+            ModulePin* pin              = nullptr;
+
+            if (PinActionType::useExistingGroup(aa.mType))
+            {
+                auto it = pgroups.find(aa.mId);
+                if (it == pgroups.end())
+                {
+                    pgroup = parentModule->get_pin_group_by_id(aa.mId);
+                    if (!pgroup) return false;
+                    pgroups.insert(aa.mId,pgroup);
+                }
+                else
+                    pgroup = it.value();
+            }
+
+            if (PinActionType::useExistingPin(aa.mType))
+            {
+                pin = parentModule->get_pin_by_id(aa.mId);
+            }
+
+            switch (aa.mType)
+            {
+            case PinActionType::GroupCreate:
+            {
+                int startIndex = aa.mValue;
+                bool ascending = true;
+                if (aa.mValue < 0)
+                {
+                    ascending = false;
+                    startIndex = -aa.mValue;
+                }
+                if (aa.mId > 0)
+                {
+                    if (auto res = parentModule->create_pin_group(aa.mId, aa.mName.toStdString(), {}, PinDirection::none, PinType::none,ascending,startIndex); res.is_ok())
+                        pgroups.insert(aa.mId,res.get());
+                    else
+                        return false;
+                }
+                else
+                {
+                    if (auto res = parentModule->create_pin_group(aa.mName.toStdString(), {}, PinDirection::none, PinType::none,ascending,startIndex); res.is_ok())
+                        pgroups.insert(aa.mId,res.get());
+                    else
+                        return false;
+                }
+                break;
+            }
+            case PinActionType::GroupDelete:
+                if (parentModule->delete_pin_group(pgroup).is_error())
+                    return false;
+                break;
+            case PinActionType::GroupMove:
+                if (parentModule->move_pin_group(pgroup,aa.mValue).is_error())
+                    return false;
+                break;
+            case PinActionType::GroupRename:
+                if (!parentModule->set_pin_group_name(pgroup,aa.mName.toStdString()))
+                    return false;
+                break;
+            case PinActionType::GroupTypechange:
+                if (!parentModule->set_pin_group_type(pgroup, (PinType) aa.mValue))
+                    return false;
+                break;
+            case PinActionType::GroupDirection:
+                if (!parentModule->set_pin_group_direction(pgroup, (PinDirection) aa.mValue))
+                    return false;
+                break;
+            case PinActionType::PinAddgroup:
+                break;
+            case PinActionType::PinRename:
+                if (!parentModule->set_pin_name(pin, aa.mName.toStdString()))
+                    return false;
+                break;
+            case PinActionType::PinTypechange:
+                if (!parentModule->set_pin_type(pin, (PinType) aa.mValue))
+                    return false;
+                break;
+            case PinActionType::PinSetindex:
+                break;
+            default:
+                break;
+            }
+        }
+
+        /*
         if (mPinActions.size()==1 &&
                 (mPinActions.at(0) == PinAction::MovePin || mPinActions.at(0) == PinAction::RemovePin))
         {
@@ -327,6 +389,7 @@ namespace hal
                 break;
             }
         }
+        */
         if (undo)
             undo->setObject(object());
         mUndoAction = undo;
