@@ -36,7 +36,7 @@ namespace hal
         Q_OBJECT
     public:
         enum Type { None, GroupCreate, GroupDelete, GroupMove, GroupRename, GroupTypechange, GroupDirection,
-                    PinAddgroup, PinRename, PinTypechange, PinDirection, PinSetindex, MaxAction };
+                    PinAsignGroup, PinRename, PinTypechange, PinDirection, PinSetindex, MaxAction };
         Q_ENUM(Type);
 
     public:
@@ -81,7 +81,7 @@ namespace hal
      *     ID       : ID of group to modifiy
      *     value    : (int) PinDirection    as of hal_core/netlist/gate_library/enums/pin_direction.h
      *
-     * PinAddgroup
+     * PinAsignGroup
      *     ID       : ID of pin
      *     value    : ID of group, might be negative if group recently created
      *
@@ -104,6 +104,7 @@ namespace hal
      */
     class ActionPingroup : public UserAction
     {
+    private:
         class AtomicAction
         {
         public:
@@ -114,25 +115,45 @@ namespace hal
             AtomicAction(PinActionType::Type tp, int id, const QString& name = QString(), int v=0) : mType(tp), mId(id), mName(name), mValue(v) {;}
         };
 
-    private:
+        class GroupRestore
+        {
+        public:
+            int mId;
+            QString mName;
+            int mRow;
+            int mStartIndex;
+            PinDirection mDirection;
+            PinType mType;
+            GroupRestore(Module* m, PinGroup<ModulePin>* pgroup);
+        };
+
+        QHash<int,PinGroup<ModulePin>*> mPinGroups;
         QList<AtomicAction> mPinActions;
+        Module* mParentModule;
+        QMap<int,GroupRestore> mGroupRestore;
+        QSet<u32> mPinsMoved;
+        QSet<int> mGroupToRemove;
+
+        PinGroup<ModulePin>* getGroup(ModulePin* pin) const;
+        PinGroup<ModulePin>* getGroup(int grpId) const;
+        void prepareUndoAction();
+        void finalizeUndoAction();
+        void addUndoAction(PinActionType::Type tp, int id = 0, const QString& name=QString(), int value=0);
+        static int pinGroupRow(Module* m, PinGroup<ModulePin>* pgroup);
     public:
-        /**
-         * Action Constructor.
-         *
-         * @param type - The UserActionObjectType of the item that should be created (default type: None)
-         * @param objName - The name of the object to create (default name: "").
-         */
-        ActionPingroup(PinActionType::Type tp = PinActionType::None, u32 id = 0, const QString& name=QString(), int value=0);
+        ActionPingroup(PinActionType::Type tp = PinActionType::None, int id = 0, const QString& name=QString(), int value=0);
+        ActionPingroup(const QList<AtomicAction>& aaList);
         bool exec() override;
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;
         void addToHash(QCryptographicHash& cryptoHash) const override;
 
-        static ActionPingroup* addPinsToExistingGroup(u32 grpId, QList<u32> pinIds);
-        static ActionPingroup* addPinsToNewGroup(const QString& name, QList<u32> pinIds);
-        static ActionPingroup* addPinToNewGroup(const QString& name, u32 pinId);
+        static ActionPingroup* addPinsToExistingGroup(const Module* m, u32 grpId, QList<u32> pinIds, int irow = -1);
+        static ActionPingroup* addPinToExistingGroup(const Module* m, u32 grpId, u32 pinId, int irow = -1);
+        static ActionPingroup* addPinsToNewGroup(const Module* m, const QString& name, QList<u32> pinIds);
+        static ActionPingroup* addPinToNewGroup(const Module* m, const QString& name, u32 pinId);
+        static ActionPingroup* removePinsFromGroup(const Module* m, QList<u32> pinIds);
     };
 
     /**

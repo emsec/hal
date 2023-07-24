@@ -135,10 +135,8 @@ namespace hal
                             return;
                         pins.append(pin->get_id());
                     }
-                    ActionPingroup* act = new ActionPingroup(PinAction::MovePin,pinGroup->get_id());
-                    act->setPinIds(pins);
-                    act->setObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
-                    act->exec();
+                    ActionPingroup* act = ActionPingroup::addPinsToExistingGroup(mod,pinGroup->get_id(),pins);
+                    if (act) act->exec();
                 }
             });
         }
@@ -154,7 +152,7 @@ namespace hal
                     auto* group = gNetlist->get_module_by_id(modId)->get_pin_group_by_id(itemId);
                     if (group != nullptr)
                     {
-                        ActionPingroup* act = new ActionPingroup(PinAction::RenameGroup,itemId,ipd.textValue());
+                        ActionPingroup* act = new ActionPingroup(PinActionType::GroupRename,itemId,ipd.textValue());
                         act->setObject(UserActionObject(modId, UserActionObjectType::Module));
                         act->exec();
                     }
@@ -164,7 +162,7 @@ namespace hal
                 auto* pinGroup = mod->get_pin_group_by_id(itemId);
                 if (pinGroup != nullptr)
                 {
-                    ActionPingroup* act = new ActionPingroup(PinAction::DeleteGroup,(u32)itemId);
+                    ActionPingroup* act = new ActionPingroup(PinActionType::GroupDelete,(u32)itemId);
                     act->setObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
                     act->exec();
                 }
@@ -192,8 +190,7 @@ namespace hal
                     auto* pin = mod->get_pin_by_id(itemId);
                     if (pin != nullptr)
                     {
-                        ActionPingroup* act = new ActionPingroup(PinAction::RenamePin,0,ipd.textValue());
-                        act->setPinId(pin->get_id());
+                        ActionPingroup* act = new ActionPingroup(PinActionType::PinRename,pin->get_id(),ipd.textValue());
                         act->setObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
                         act->exec();
                     }
@@ -213,8 +210,9 @@ namespace hal
 
                 if (cbd.exec() == QDialog::Accepted)
                 {
-                    ActionPingroup* act = new ActionPingroup(PinAction::TypeChange,0,cbd.textValue());
-                    act->setPinId(pin->get_id());
+                    PinType ptype = enum_from_string<PinType>(cbd.textValue().toStdString(),PinType::none);
+
+                    ActionPingroup* act = new ActionPingroup(PinActionType::PinTypechange,pin->get_id(),"",(int)ptype);
                     act->setObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
                     act->exec();
                 }
@@ -232,15 +230,13 @@ namespace hal
         //can be both single(simple right-click, no real selection) and multi-selection
         if (sameGroup.first && mod->get_pin_group_by_id(sameGroup.second)->size() > 1)
         {
-            menu.addAction("Remove selection from group", [this, selectedPins, mod, sameGroup]() {
+            menu.addAction("Remove selection from group", [this, selectedPins, mod /*, sameGroup*/]() {
                 QList<u32> pins;
                 for (auto item : selectedPins)
                     pins.append(mPortModel->getIdOfItem(item));
 
-                ActionPingroup* act = new ActionPingroup(PinAction::RemovePin,mod->get_pin_group_by_id(sameGroup.second)->get_id());
-                act->setPinIds(pins);
-                act->setObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
-                act->exec();
+                ActionPingroup* act = ActionPingroup::removePinsFromGroup(mod, pins);
+                if (act) act->exec();
             });
         }
 
@@ -276,7 +272,7 @@ namespace hal
                 if (ipd.exec() == QDialog::Accepted && !ipd.textValue().isEmpty())
                 {
                     QList<u32> pins;
-                    auto mod = gNetlist->get_module_by_id(modId);
+                    Module* mod = gNetlist->get_module_by_id(modId);
                     for (auto item : selectedPins)
                     {
                         auto* pin = mod->get_pin_by_id(mPortModel->getIdOfItem(item));
@@ -285,10 +281,8 @@ namespace hal
                         pins.append(pin->get_id());
                     }
 
-                    ActionPingroup* act = new ActionPingroup(PinAction::Create,0,ipd.textValue());
-                    act->setPinIds(pins);
-                    act->setObject(UserActionObject(modId, UserActionObjectType::Module));
-                    act->exec();
+                    ActionPingroup* act = ActionPingroup::addPinsToNewGroup(mod,ipd.textValue(),pins);
+                    if (act) act->exec();
                 }
             });
         }

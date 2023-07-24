@@ -282,6 +282,7 @@ namespace hal
 
     bool ModulePinsTreeModel::canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const
     {
+        Q_UNUSED(column)
         Q_UNUSED(action)
         if(!data->formats().contains("pintreemodel/item")) return false;
 
@@ -494,22 +495,9 @@ namespace hal
         if (pins.isEmpty()) return;  // no pins to move
 
         auto tgtgroup = mModule->get_pin_group_by_id(getIdOfItem(onDroppedGroup));
-        int ntgt = tgtgroup->size();
-        if (pins.size()>1)
-        {
-            UserActionCompound* compAct = new UserActionCompound;
-            compAct->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
-            compAct->setUseCreatedObject();
-            for (u32 pinId : pins)
-                compAct->addAction(new ActionPingroup(pinId,ntgt++,tgtgroup->get_id()));
-            compAct->exec();
-        }
-        else
-        {
-            ActionPingroup* act = new ActionPingroup(pins.at(0),ntgt,tgtgroup->get_id());
-            act->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
-            act->exec();
-        }
+
+        ActionPingroup* act = ActionPingroup::addPinsToExistingGroup(mModule,tgtgroup->get_id(),pins);
+        if (act) act->exec();
 
         // too keep the order, ActionAddItemsToObject cannot be executed with all pins, but a ComAction must be created
         // with many ActionAddItemsToObject that contain a single pin each -> set destroys order of pins in source pingroup
@@ -525,10 +513,8 @@ namespace hal
         bool bottomEdge = row == mRootItem->getChildCount();
         auto desiredIdx = bottomEdge ? row-1 : row;
         if(ownRow < row && !bottomEdge) desiredIdx--;
-        ActionPingroup* act = new ActionPingroup(PinAction::MoveGroup);
+        ActionPingroup* act = new ActionPingroup(PinActionType::GroupMove,getIdOfItem(droppedGroup),"",desiredIdx);
         act->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
-        act->setGroupOrderNo(getIdOfItem(droppedGroup));
-        act->setPinOrderNo(desiredIdx);
         bool ok = act->exec();
         if(ok){
             removeItem(droppedGroup);
@@ -542,9 +528,7 @@ namespace hal
         mIgnoreEventsFlag = true;
         u32 pinId = getIdOfItem(droppedPin);
 
-        int inx = onDroppedGroup->getChildCount();
-        ActionPingroup* act = new ActionPingroup(pinId,inx, getIdOfItem(onDroppedGroup));
-        act->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
+        ActionPingroup* act = new ActionPingroup(PinActionType::PinAsignGroup,pinId,"",getIdOfItem(onDroppedGroup));
         act->exec();
         auto oldParent = droppedPin->getParent();
         removeItem(droppedPin);
@@ -561,15 +545,20 @@ namespace hal
     {
         mIgnoreEventsFlag = true;
         int desiredIdx = row;
+        ActionPingroup* act = nullptr;
         if(droppedPin->getParent() == onDroppedParent) // same group
         {
             int ownRow = droppedPin->getOwnRow();
             bool bottomEdge = row == onDroppedParent->getChildCount();
             desiredIdx = bottomEdge ? row-1 : row;
             if(ownRow < row && !bottomEdge) desiredIdx--; // insert item here
+            act = new ActionPingroup(PinActionType::PinSetindex,getIdOfItem(droppedPin),"",desiredIdx);  // TODO : start_index, descending
         }
-
-        ActionPingroup* act = new ActionPingroup(getIdOfItem(droppedPin),desiredIdx,getIdOfItem(onDroppedParent));
+        else
+        {
+            act = ActionPingroup::addPinToExistingGroup(mModule,getIdOfItem(onDroppedParent),getIdOfItem(droppedPin),desiredIdx);
+            if (!act) return;
+        }
         act->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
         act->exec();
         auto oldParent = droppedPin->getParent();
@@ -598,7 +587,7 @@ namespace hal
         while (mModule->get_pin_group_by_name(groupName.toStdString()))
             // pin group name already exists
             groupName = QString("%1_%2").arg(baseName).arg(cnt++);
-
+/*
         ActionPingroup* actMovePin = new ActionPingroup(pinToMove->get_id(),0,0,groupName);
         actMovePin->setObject(UserActionObject(mModuleId, UserActionObjectType::Module));
         bool ok = actMovePin->exec();
@@ -624,6 +613,7 @@ namespace hal
             removeItem(droppedPin);
             insertItem(droppedPin, pinGroupItem, 0);
         }
+        */
         mIgnoreEventsFlag = false;
     }
 
