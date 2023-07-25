@@ -147,31 +147,32 @@ $(document).ready(function(){initNavTree('selection__tree__view_8h_source.html',
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_selection_tree_view.html#a80c6b14c0f26e332e15ae000358e23ea">setDefaultColumnWidth</a>();</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_selection_tree_view.html#a4d57b5438fa1540c910fc12b20b40477">populate</a>(<span class="keywordtype">bool</span> mVisible, <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> groupingId=-1);</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <a class="code" href="classhal_1_1_selection_tree_item.html">SelectionTreeItem</a>* <a class="code" href="classhal_1_1_selection_tree_view.html#aeccd713447b14d8c26c5d5d3b53db2da">itemFromIndex</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>&amp; index = <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>()) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        <a class="code" href="classhal_1_1_selection_tree_proxy_model.html">SelectionTreeProxyModel</a>* <a class="code" href="classhal_1_1_selection_tree_view.html#abffcb20d54a094da1076360c5da65a92">proxyModel</a>();</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_selection_tree_view.html#a0774ed1693c4e33164da728a0fc6594d">isolateInNewViewAction</a>(<a class="code" href="classhal_1_1_node.html">Node</a> nd);</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <span class="keyword">private</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <span class="keywordtype">void</span> handleCustomContextMenuRequested(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>&amp; point);</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keywordtype">void</span> handleIsolationViewAction(<span class="keyword">const</span> <a class="code" href="classhal_1_1_selection_tree_item.html">SelectionTreeItem</a>* sti);</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <span class="keywordtype">void</span> handleAddToSelection(<span class="keyword">const</span> <a class="code" href="classhal_1_1_selection_tree_item.html">SelectionTreeItem</a>* sti);</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <span class="keywordtype">void</span> handleTreeViewItemFocusClicked(<span class="keyword">const</span> <a class="code" href="classhal_1_1_selection_tree_item.html">SelectionTreeItem</a>* sti);</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <a class="code" href="classhal_1_1_selection_tree_model.html">SelectionTreeModel</a>* mSelectionTreeModel;</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <a class="code" href="classhal_1_1_selection_tree_proxy_model.html">SelectionTreeProxyModel</a>* mSelectionTreeProxyModel;</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <span class="keywordtype">bool</span> mIsGrouping;</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    };</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_selection_tree_view.html#a1ab58314a44ddeb92e3ba91918d23dc8">populate</a>(<span class="keywordtype">bool</span> mVisible, <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> groupingId=0);</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        <a class="code" href="classhal_1_1_selection_tree_item.html">SelectionTreeItem</a>* <a class="code" href="classhal_1_1_selection_tree_view.html#aeccd713447b14d8c26c5d5d3b53db2da">itemFromIndex</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>&amp; index = <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>()) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <a class="code" href="classhal_1_1_selection_tree_proxy_model.html">SelectionTreeProxyModel</a>* <a class="code" href="classhal_1_1_selection_tree_view.html#abffcb20d54a094da1076360c5da65a92">proxyModel</a>();</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_selection_tree_view.html#a0774ed1693c4e33164da728a0fc6594d">isolateInNewViewAction</a>(<a class="code" href="classhal_1_1_node.html">Node</a> nd);</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    <span class="keyword">private</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keywordtype">void</span> handleCustomContextMenuRequested(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>&amp; point);</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <span class="keywordtype">void</span> handleIsolationViewAction(<span class="keyword">const</span> <a class="code" href="classhal_1_1_selection_tree_item.html">SelectionTreeItem</a>* sti);</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        <span class="keywordtype">void</span> handleAddToSelection(<span class="keyword">const</span> <a class="code" href="classhal_1_1_selection_tree_item.html">SelectionTreeItem</a>* sti);</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <span class="keywordtype">void</span> handleTreeViewItemFocusClicked(<span class="keyword">const</span> <a class="code" href="classhal_1_1_selection_tree_item.html">SelectionTreeItem</a>* sti);</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <a class="code" href="classhal_1_1_selection_tree_model.html">SelectionTreeModel</a>* mSelectionTreeModel;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        <a class="code" href="classhal_1_1_selection_tree_proxy_model.html">SelectionTreeProxyModel</a>* mSelectionTreeProxyModel;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        <span class="keywordtype">bool</span> mIsGrouping;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    };</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
 <div class="ttc" id="aclasshal_1_1_node_html"><div class="ttname"><a href="classhal_1_1_node.html">hal::Node</a></div><div class="ttdoc">The Node class object represents a module or a gate.</div><div class="ttdef"><b>Definition:</b> <a href="gui__def_8h_source.html#l00058">gui_def.h:58</a></div></div>
+<div class="ttc" id="aclasshal_1_1_selection_tree_view_html_a1ab58314a44ddeb92e3ba91918d23dc8"><div class="ttname"><a href="classhal_1_1_selection_tree_view.html#a1ab58314a44ddeb92e3ba91918d23dc8">hal::SelectionTreeView::populate</a></div><div class="ttdeci">void populate(bool mVisible, u32 groupingId=0)</div><div class="ttdef"><b>Definition:</b> <a href="selection__tree__view_8cpp_source.html#l00243">selection_tree_view.cpp:243</a></div></div>
 <div class="ttc" id="aselection__tree__proxy_8h_html"><div class="ttname"><a href="selection__tree__proxy_8h.html">selection_tree_proxy.h</a></div></div>
 <div class="ttc" id="aselection__tree__model_8h_html"><div class="ttname"><a href="selection__tree__model_8h.html">selection_tree_model.h</a></div></div>
 <div class="ttc" id="aqobject_html_Q_SLOTS"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">QObject::Q_SLOTS</a></div><div class="ttdeci">Q_SLOTSQ_SLOTS</div></div>
@@ -201,14 +202,13 @@ $(document).ready(function(){initNavTree('selection__tree__view_8h_source.html',
 <div class="ttc" id="aqmodelindex_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a></div></div>
 <div class="ttc" id="aqtreeview_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtreeview.html">QTreeView</a></div></div>
 <div class="ttc" id="aclasshal_1_1_selection_tree_view_html_aeccd713447b14d8c26c5d5d3b53db2da"><div class="ttname"><a href="classhal_1_1_selection_tree_view.html#aeccd713447b14d8c26c5d5d3b53db2da">hal::SelectionTreeView::itemFromIndex</a></div><div class="ttdeci">SelectionTreeItem * itemFromIndex(const QModelIndex &amp;index=QModelIndex()) const</div><div class="ttdef"><b>Definition:</b> <a href="selection__tree__view_8cpp_source.html#l00069">selection_tree_view.cpp:69</a></div></div>
-<div class="ttc" id="aclasshal_1_1_selection_tree_view_html_a4d57b5438fa1540c910fc12b20b40477"><div class="ttname"><a href="classhal_1_1_selection_tree_view.html#a4d57b5438fa1540c910fc12b20b40477">hal::SelectionTreeView::populate</a></div><div class="ttdeci">void populate(bool mVisible, u32 groupingId=-1)</div><div class="ttdef"><b>Definition:</b> <a href="selection__tree__view_8cpp_source.html#l00243">selection_tree_view.cpp:243</a></div></div>
 <div class="ttc" id="aqobject_html_parent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent</a></div><div class="ttdeci">QObject * parent() const const</div></div>
 <div class="ttc" id="aqpoint_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_a35da49c385fb45d333860c108c1de8d.html">selection_details_widget</a></li><li class="navelem"><a class="el" href="dir_9c362a02028ca18fcfb20999e509ef9e.html">tree_navigation</a></li><li class="navelem"><a class="el" href="selection__tree__view_8h.html">selection_tree_view.h</a></li>
-    <li class="footer">Generated on Wed Jul 19 2023 14:50:27 for HAL by
+    <li class="footer">Generated on Tue Jul 25 2023 09:18:06 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

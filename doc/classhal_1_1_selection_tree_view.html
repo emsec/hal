@@ -139,8 +139,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6537e37433bc1b2118c57cb7b150ddcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80c6b14c0f26e332e15ae000358e23ea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_selection_tree_view.html#a80c6b14c0f26e332e15ae000358e23ea">setDefaultColumnWidth</a> ()</td></tr>
 <tr class="separator:a80c6b14c0f26e332e15ae000358e23ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d57b5438fa1540c910fc12b20b40477"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_selection_tree_view.html#a4d57b5438fa1540c910fc12b20b40477">populate</a> (bool mVisible, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> groupingId=-1)</td></tr>
-<tr class="separator:a4d57b5438fa1540c910fc12b20b40477"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ab58314a44ddeb92e3ba91918d23dc8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_selection_tree_view.html#a1ab58314a44ddeb92e3ba91918d23dc8">populate</a> (bool mVisible, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> groupingId=0)</td></tr>
+<tr class="separator:a1ab58314a44ddeb92e3ba91918d23dc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeccd713447b14d8c26c5d5d3b53db2da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_selection_tree_item.html">SelectionTreeItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_selection_tree_view.html#aeccd713447b14d8c26c5d5d3b53db2da">itemFromIndex</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;index=<a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>()) const</td></tr>
 <tr class="separator:aeccd713447b14d8c26c5d5d3b53db2da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abffcb20d54a094da1076360c5da65a92"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_selection_tree_proxy_model.html">SelectionTreeProxyModel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_selection_tree_view.html#abffcb20d54a094da1076360c5da65a92">proxyModel</a> ()</td></tr>
@@ -2100,8 +2100,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a4d57b5438fa1540c910fc12b20b40477"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d57b5438fa1540c910fc12b20b40477">&#9670;&nbsp;</a></span>populate()</h2>
+<a id="a1ab58314a44ddeb92e3ba91918d23dc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ab58314a44ddeb92e3ba91918d23dc8">&#9670;&nbsp;</a></span>populate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2116,7 +2116,7 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
-          <td class="paramname"><em>groupingId</em> = <code>-1</code>&#160;</td>
+          <td class="paramname"><em>groupingId</em> = <code>0</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2129,6 +2129,7 @@ Additional Inherited Members</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">mVisible</td><td>- The bool to determine the described behaviour. </td></tr>
+    <tr><td class="paramname">groupingId</td><td>- If non-zero tree gets populated from grouping rather than from selection </td></tr>
   </table>
   </dd>
 </dl>
@@ -2231,7 +2232,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_selection_tree_view.html">SelectionTreeView</a></li>
-    <li class="footer">Generated on Wed Jul 19 2023 14:50:35 for HAL by
+    <li class="footer">Generated on Tue Jul 25 2023 09:18:13 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
