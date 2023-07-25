@@ -290,7 +290,7 @@ namespace hal
          * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
          * @param[in] direction - The direction of the pin group. Defaults to `PinDirection::none`.
          * @param[in] type - The type of the pin group. Defaults to `PinType::none`.
-         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
+         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `true`.
          * @param[in] start_index - The start index of the pin group. Defaults to `0`.
          * @returns The pin group on success, an error message otherwise.
          */
@@ -299,8 +299,8 @@ namespace hal
                                                     const std::vector<GatePin*> pins = {},
                                                     PinDirection direction           = PinDirection::none,
                                                     PinType type                     = PinType::none,
-                                                    bool ascending                   = false,
-                                                    u32 start_index                  = 0);
+                                                    bool ascending                   = true,
+                                                    i32 start_index                  = 0);
 
         /**
          * Create a pin group with the given name.
@@ -310,7 +310,7 @@ namespace hal
          * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
          * @param[in] direction - The direction of the pin group. Defaults to `PinDirection::none`.
          * @param[in] type - The type of the pin group. Defaults to `PinType::none`.
-         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
+         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `true`.
          * @param[in] start_index - The start index of the pin group. Defaults to `0`.
          * @returns The pin group on success, an error message otherwise.
          */
@@ -318,8 +318,8 @@ namespace hal
                                                     const std::vector<GatePin*> pins = {},
                                                     PinDirection direction           = PinDirection::none,
                                                     PinType type                     = PinType::none,
-                                                    bool ascending                   = false,
-                                                    u32 start_index                  = 0);
+                                                    bool ascending                   = true,
+                                                    i32 start_index                  = 0);
 
         /**
          * Get an ordered vector of all pin groups of the gate type.

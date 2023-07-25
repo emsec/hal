@@ -644,11 +644,57 @@ namespace hal
         py_module.def(
             "create_pin_group",
             [](Module& self,
+               const u32 id,
                const std::string& name,
                const std::vector<ModulePin*> pins = {},
                PinDirection direction             = PinDirection::none,
                PinType type                       = PinType::none,
-               bool ascending                     = false,
+               bool ascending                     = true,
+               u32 start_index                    = 0,
+               bool delete_empty_groups           = true) -> PinGroup<ModulePin>* {
+                auto res = self.create_pin_group(id, name, pins, direction, type, ascending, start_index, delete_empty_groups);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while creating pin group:\n{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("id"),
+            py::arg("name"),
+            py::arg("pins"),
+            py::arg("direction")           = PinDirection::none,
+            py::arg("type")                = PinType::none,
+            py::arg("ascending")           = true,
+            py::arg("start_index")         = 0,
+            py::arg("delete_empty_groups") = true,
+            R"(
+            Create a new pin group with the given name.
+            All pins to be added to the pin group must have the same direction and type.
+
+            :param int id: The ID of the pin group.
+            :param str name: The name of the pin group.
+            :param list[hal_py.ModulePin] pins: The pins to be assigned to the pin group. Defaults to an empty list.
+            :param hal_py.PinDirection direction: The direction of the pin group, if any. Defaults to ``hal_py.PinDirection.none``.
+            :param hal_py.PinType type: The type of the pin group, if any. Defaults to ``hal_py.PinType.none``.
+            :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``True``.
+            :param int start_index: The start index of the pin group. Defaults to ``0``.
+            :param bool delete_empty_groups: Set `True`` to delete groups that are empty after the pins have been assigned to the new group, ``False`` to keep empty groups. Defaults to ``True``.
+            :returns: The pin group on success, ``None`` otherwise.
+            :rtype: hal_py.ModulePinGroup or None
+        )");
+
+        py_module.def(
+            "create_pin_group",
+            [](Module& self,
+               const std::string& name,
+               const std::vector<ModulePin*> pins = {},
+               PinDirection direction             = PinDirection::none,
+               PinType type                       = PinType::none,
+               bool ascending                     = true,
                u32 start_index                    = 0,
                bool delete_empty_groups           = true) -> PinGroup<ModulePin>* {
                 auto res = self.create_pin_group(name, pins, direction, type, ascending, start_index, delete_empty_groups);
@@ -666,7 +712,7 @@ namespace hal
             py::arg("pins"),
             py::arg("direction")           = PinDirection::none,
             py::arg("type")                = PinType::none,
-            py::arg("ascending")           = false,
+            py::arg("ascending")           = true,
             py::arg("start_index")         = 0,
             py::arg("delete_empty_groups") = true,
             R"(
@@ -675,12 +721,12 @@ namespace hal
 
             :param str name: The name of the pin group.
             :param list[hal_py.ModulePin] pins: The pins to be assigned to the pin group. Defaults to an empty list.
-            :param hal_py.PinDirection direction: The direction of the pin group, if any. Defaults to hal_py.PinDirection.none.
-            :param hal_py.PinType type: The type of the pin group, if any. Defaults to hal_py.PinType.none.
-            :param bool ascending: Set True for ascending pin order (from 0 to n-1), False otherwise (from n-1 to 0). Defaults to False.
-            :param int start_index: The start index of the pin group. Defaults to 0.
-            :param bool delete_empty_groups: Set True to delete groups that are empty after the pins have been assigned to the new group, False to keep empty groups. Defaults to True.
-            :returns: The pin group on success, None otherwise.
+            :param hal_py.PinDirection direction: The direction of the pin group, if any. Defaults to ``hal_py.PinDirection.none``.
+            :param hal_py.PinType type: The type of the pin group, if any. Defaults to ``hal_py.PinType.none``.
+            :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``True``.
+            :param int start_index: The start index of the pin group. Defaults to ``0``.
+            :param bool delete_empty_groups: Set `True`` to delete groups that are empty after the pins have been assigned to the new group, ``False`` to keep empty groups. Defaults to ``True``.
+            :returns: The pin group on success, ``None`` otherwise.
             :rtype: hal_py.ModulePinGroup or None
         )");
 

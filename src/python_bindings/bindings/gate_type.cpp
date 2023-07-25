@@ -379,7 +379,7 @@ namespace hal
                const std::vector<GatePin*> pins = {},
                PinDirection direction           = PinDirection::none,
                PinType type                     = PinType::none,
-               bool ascending                   = false,
+               bool ascending                   = true,
                u32 start_index                  = 0) -> PinGroup<GatePin>* {
                 auto res = self.create_pin_group(id, name, pins, direction, type, ascending, start_index);
                 if (res.is_ok())
@@ -397,7 +397,7 @@ namespace hal
             py::arg("pins")        = std::vector<GatePin*>(),
             py::arg("direction")   = PinDirection::none,
             py::arg("type")        = PinType::none,
-            py::arg("ascending")   = false,
+            py::arg("ascending")   = true,
             py::arg("start_index") = 0,
             R"(
             Create a gate pin group with the given name.
@@ -405,11 +405,11 @@ namespace hal
             :param int id: The ID of the pin group.
             :param str name: The name of the pin group.
             :param list[hal_py.GatePin] pins: The pins to be assigned to the pin group. Defaults to an empty list.
-            :param hal_py.PinDirection direction: The direction of the pin group. Defaults to hal_py.PinDirection.none.
-            :param hal_py.PinType type: The type of the pin group. Defaults to hal_py.PinType.none.
-            :param bool ascending: Set True for ascending pin order (from 0 to n-1), False otherwise (from n-1 to 0). Defaults to False.
-            :param int start_index: The start index of the pin group. Defaults to 0.
-            :returns: The pin group on success, None otherwise.
+            :param hal_py.PinDirection direction: The direction of the pin group. Defaults to ``hal_py.PinDirection.none``.
+            :param hal_py.PinType type: The type of the pin group. Defaults to ``hal_py.PinType.none``.
+            :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``True``.
+            :param int start_index: The start index of the pin group. Defaults to ``0``.
+            :returns: The pin group on success, ``None`` otherwise.
             :rtype: hal_py.GatePinGroup or None
         )");
 
@@ -420,7 +420,7 @@ namespace hal
                const std::vector<GatePin*> pins = {},
                PinDirection direction           = PinDirection::none,
                PinType type                     = PinType::none,
-               bool ascending                   = false,
+               bool ascending                   = true,
                u32 start_index                  = 0) -> PinGroup<GatePin>* {
                 auto res = self.create_pin_group(name, pins, direction, type, ascending, start_index);
                 if (res.is_ok())
@@ -437,7 +437,7 @@ namespace hal
             py::arg("pins")        = std::vector<GatePin*>(),
             py::arg("direction")   = PinDirection::none,
             py::arg("type")        = PinType::none,
-            py::arg("ascending")   = false,
+            py::arg("ascending")   = true,
             py::arg("start_index") = 0,
             R"(
             Create a gate pin group with the given name.
@@ -445,11 +445,11 @@ namespace hal
 
             :param str name: The name of the pin group.
             :param list[hal_py.GatePin] pins: The pins to be assigned to the pin group. Defaults to an empty list.
-            :param hal_py.PinDirection direction: The direction of the pin group. Defaults to hal_py.PinDirection.none.
-            :param hal_py.PinType type: The type of the pin group. Defaults to hal_py.PinType.none.
-            :param bool ascending: Set True for ascending pin order (from 0 to n-1), False otherwise (from n-1 to 0). Defaults to False.
-            :param int start_index: The start index of the pin group. Defaults to 0.
-            :returns: The pin group on success, None otherwise.
+            :param hal_py.PinDirection direction: The direction of the pin group. Defaults to ``hal_py.PinDirection.none``.
+            :param hal_py.PinType type: The type of the pin group. Defaults to ``hal_py.PinType.none``.
+            :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``True``.
+            :param int start_index: The start index of the pin group. Defaults to ``0``.
+            :returns: The pin group on success, ``None`` otherwise.
             :rtype: hal_py.GatePinGroup or None
         )");
 

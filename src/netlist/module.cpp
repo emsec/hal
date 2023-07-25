@@ -833,7 +833,7 @@ namespace hal
         {
             if (create_group)
             {
-                if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name, direction, type, false, 0); group_res.is_error())
+                if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name, direction, type, true, 0); group_res.is_error())
                 {
                     assert(delete_pin_internal(pin_res.get()).is_ok());
                     return ERR_APPEND(group_res.get_error(), "could not create pin '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": failed to create pin group");
@@ -1289,7 +1289,7 @@ namespace hal
         for (ModulePin* pin : pins_copy)
         {
             removed_pins = true;
-            if (auto res = create_pin_group(pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), false, 0, false); res.is_error())
+            if (auto res = create_pin_group(pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), true, 0, false); res.is_error())
             {
                 return ERR(res.get_error());
             }
@@ -1467,7 +1467,7 @@ namespace hal
                        + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin does not belong to module");
         }
 
-        if (auto res = create_pin_group(get_unique_pin_group_id(), pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), false, 0, delete_empty_groups); res.is_error())
+        if (auto res = create_pin_group(get_unique_pin_group_id(), pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), true, 0, delete_empty_groups); res.is_error())
         {
             return ERR_APPEND(res.get_error(),
                               "could not remove pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " from pin group '" + pin_group->get_name() + "' with ID "
@@ -1521,7 +1521,7 @@ namespace hal
             pin = res.get();
         }
 
-        if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name_internal, pin->get_direction(), pin->get_type(), false, 0); group_res.is_error())
+        if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name_internal, pin->get_direction(), pin->get_type(), true, 0); group_res.is_error())
         {
             return ERR_APPEND(group_res.get_error(), "could not assign pin '" + name_internal + "' to net: failed to create pin group");
         }

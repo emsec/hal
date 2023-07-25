@@ -480,7 +480,7 @@ namespace hal
          * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
          * @param[in] direction - The direction of the pin group, if any. Defaults to `PinDirection::none`.
          * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
-         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
+         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `true`.
          * @param[in] start_index - The start index of the pin group. Defaults to `0`.
          * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
          * @returns The pin group on success, an error message otherwise.
@@ -490,7 +490,7 @@ namespace hal
                                                       const std::vector<ModulePin*> pins = {},
                                                       PinDirection direction             = PinDirection::none,
                                                       PinType type                       = PinType::none,
-                                                      bool ascending                     = false,
+                                                      bool ascending                     = true,
                                                       u32 start_index                    = 0,
                                                       bool delete_empty_groups           = true);
 
@@ -502,7 +502,7 @@ namespace hal
          * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
          * @param[in] direction - The direction of the pin group, if any. Defaults to `PinDirection::none`.
          * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
-         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
+         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `true`.
          * @param[in] start_index - The start index of the pin group. Defaults to `0`.
          * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
          * @returns The pin group on success, an error message otherwise.
@@ -511,7 +511,7 @@ namespace hal
                                                       const std::vector<ModulePin*> pins = {},
                                                       PinDirection direction             = PinDirection::none,
                                                       PinType type                       = PinType::none,
-                                                      bool ascending                     = false,
+                                                      bool ascending                     = true,
                                                       u32 start_index                    = 0,
                                                       bool delete_empty_groups           = true);
 

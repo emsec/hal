@@ -322,7 +322,7 @@ namespace hal
     }
 
     Result<PinGroup<GatePin>*>
-        GateType::create_pin_group(const u32 id, const std::string& name, const std::vector<GatePin*> pins, PinDirection direction, PinType type, bool ascending, u32 start_index)
+        GateType::create_pin_group(const u32 id, const std::string& name, const std::vector<GatePin*> pins, PinDirection direction, PinType type, bool ascending, i32 start_index)
     {
         if (name.empty())
         {
@@ -406,7 +406,7 @@ namespace hal
         return OK(pin_group);
     }
 
-    Result<PinGroup<GatePin>*> GateType::create_pin_group(const std::string& name, const std::vector<GatePin*> pins, PinDirection direction, PinType type, bool ascending, u32 start_index)
+    Result<PinGroup<GatePin>*> GateType::create_pin_group(const std::string& name, const std::vector<GatePin*> pins, PinDirection direction, PinType type, bool ascending, i32 start_index)
     {
         return create_pin_group(get_unique_pin_group_id(), name, pins, direction, type, ascending, start_index);
     }
