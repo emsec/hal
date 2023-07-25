@@ -353,7 +353,7 @@ var searchData=
   ['pin_5ftype_2eh_10015',['pin_type.h',['../pin__type_8h.html',1,'']]],
   ['pinchgesture_10016',['PinchGesture',['https://doc.qt.io/qt-5/qt.html#GestureType-enum',1,'Qt']]],
   ['pindirection_10017',['PinDirection',['../namespacehal.html#a119eb4e25d047caa41d83e762cbed8ec',1,'hal']]],
-  ['pingroup_10018',['PinGroup',['../classhal_1_1_pin_group.html',1,'hal::PinGroup&lt; T &gt;'],['../classhal_1_1_user_action_object_type.html#a2de00e63df4cf86816f688fad6754d79a50c3269bce53b14015d72460dd2a97f0',1,'hal::UserActionObjectType::PinGroup()'],['../classhal_1_1_pin_group.html#a005abdb38bda7b960ea5216cc735461f',1,'hal::PinGroup::PinGroup()']]],
+  ['pingroup_10018',['PinGroup',['../classhal_1_1_pin_group.html',1,'hal::PinGroup&lt; T &gt;'],['../classhal_1_1_user_action_object_type.html#a2de00e63df4cf86816f688fad6754d79a50c3269bce53b14015d72460dd2a97f0',1,'hal::UserActionObjectType::PinGroup()'],['../classhal_1_1_pin_group.html#aec50c4d67f32b3d4d621bbc116a998e6',1,'hal::PinGroup::PinGroup()']]],
   ['pingroup_5fselector_5fdialog_2ecpp_10019',['pingroup_selector_dialog.cpp',['../pingroup__selector__dialog_8cpp.html',1,'']]],
   ['pingroup_5fselector_5fdialog_2eh_10020',['pingroup_selector_dialog.h',['../pingroup__selector__dialog_8h.html',1,'']]],
   ['pingroupselectordialog_10021',['PingroupSelectorDialog',['../classhal_1_1_pingroup_selector_dialog.html',1,'hal::PingroupSelectorDialog'],['../classhal_1_1_pingroup_selector_dialog.html#a067a24701fe2e689297f8126b1206f6b',1,'hal::PingroupSelectorDialog::PingroupSelectorDialog()']]],

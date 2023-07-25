@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Boolean Function Decorator &mdash; hal_py v4.2.0-32-g2ef870f4d documentation</title>
+  <title>Boolean Function Decorator &mdash; hal_py v4.2.0-36-g4daba123c documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-32-g2ef870f4d
+                v4.2.0-36-g4daba123c
               </div>
             
           
@@ -292,7 +292,7 @@ The Boolean function can optionally be extended to any desired size greater the 
 <dl class="method">
 <dt id="hal_py.BooleanFunctionDecorator.substitute_power_ground_nets">
 <code class="descname">substitute_power_ground_nets</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunctionDecorator</em>, <em>nl: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunctionDecorator.substitute_power_ground_nets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Substitute all Boolean function variables fed by power or ground gates by constant ‘1’ and ‘0’.</p>
+<dd><p>Substitute all Boolean function variables fed by power or ground gates by constant <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -309,23 +309,17 @@ The Boolean function can optionally be extended to any desired size greater the 
 
 <dl class="method">
 <dt id="hal_py.BooleanFunctionDecorator.substitute_power_ground_pins">
-<code class="descname">substitute_power_ground_pins</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunctionDecorator</em>, <em>nl: hal_py.Netlist</em>, <em>g: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunctionDecorator.substitute_power_ground_pins" title="Permalink to this definition">¶</a></dt>
-<dd><p>Substitute all Boolean function variables that belong to a pin connected to a power or ground gate by constant ‘1’ and ‘0’.</p>
+<code class="descname">substitute_power_ground_pins</code><span class="sig-paren">(</span><em>self: hal_py.BooleanFunctionDecorator</em>, <em>g: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; Optional[hal_py.BooleanFunction]<a class="headerlink" href="#hal_py.BooleanFunctionDecorator.substitute_power_ground_pins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Substitute all Boolean function variables that belong to a pin connected to a power or ground gate by constant <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</li>
-<li><strong>hal_py.Gate</strong> – The gate which is connected to the pins and belongs to the boolean function under inspection.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>g</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate which is connected to the pins and belongs to the Boolean function under inspection.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The resulting Boolean function on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
-</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The resulting Boolean function on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
-</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
 </tr>
 </tbody>
 </table>

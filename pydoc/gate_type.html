@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Type &mdash; hal_py v4.2.0-32-g2ef870f4d documentation</title>
+  <title>Gate Type &mdash; hal_py v4.2.0-36-g4daba123c documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-32-g2ef870f4d
+                v4.2.0-36-g4daba123c
               </div>
             
           
@@ -341,7 +341,7 @@ The ID of the pin is set automatically.</p>
 <code class="descname">create_pin_group</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.GateType.create_pin_group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p class="first">create_pin_group(self: hal_py.GateType, id: int, name: str, pins: List[hal::GatePin] = [], direction: hal_py.PinDirection = &lt;PinDirection.none: 0&gt;, type: hal_py.PinType = &lt;PinType.none: 0&gt;, ascending: bool = False, start_index: int = 0) -&gt; hal::PinGroup&lt;hal::GatePin&gt;</p>
+<li><p class="first">create_pin_group(self: hal_py.GateType, id: int, name: str, pins: List[hal::GatePin] = [], direction: hal_py.PinDirection = &lt;PinDirection.none: 0&gt;, type: hal_py.PinType = &lt;PinType.none: 0&gt;, ascending: bool = True, start_index: int = 0) -&gt; hal::PinGroup&lt;hal::GatePin&gt;</p>
 <blockquote>
 <div><p>Create a gate pin group with the given name.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -356,18 +356,18 @@ The ID of the pin is set automatically.</p>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">The pins to be assigned to the pin group. Defaults to an empty list.</td>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">param hal_py.PinDirection direction:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">The direction of the pin group. Defaults to hal_py.PinDirection.none.</td>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The direction of the pin group. Defaults to <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.none</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.PinType type:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The type of the pin group. Defaults to hal_py.PinType.none.</td>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The type of the pin group. Defaults to <code class="docutils literal notranslate"><span class="pre">hal_py.PinType.none</span></code>.</td>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">param bool ascending:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Set True for ascending pin order (from 0 to n-1), False otherwise (from n-1 to 0). Defaults to False.</td>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> for ascending pin order (from 0 to n-1), <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise (from n-1 to 0). Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">param int start_index:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The start index of the pin group. Defaults to 0.</td>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The start index of the pin group. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The pin group on success, None otherwise.</td>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The pin group on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.GatePinGroup or None</td>
 </tr>
@@ -375,7 +375,7 @@ The ID of the pin is set automatically.</p>
 </table>
 </div></blockquote>
 </li>
-<li><p class="first">create_pin_group(self: hal_py.GateType, name: str, pins: List[hal::GatePin] = [], direction: hal_py.PinDirection = &lt;PinDirection.none: 0&gt;, type: hal_py.PinType = &lt;PinType.none: 0&gt;, ascending: bool = False, start_index: int = 0) -&gt; hal::PinGroup&lt;hal::GatePin&gt;</p>
+<li><p class="first">create_pin_group(self: hal_py.GateType, name: str, pins: List[hal::GatePin] = [], direction: hal_py.PinDirection = &lt;PinDirection.none: 0&gt;, type: hal_py.PinType = &lt;PinType.none: 0&gt;, ascending: bool = True, start_index: int = 0) -&gt; hal::PinGroup&lt;hal::GatePin&gt;</p>
 <blockquote>
 <div><p>Create a gate pin group with the given name.
 The ID of the pin group is set automatically.</p>
@@ -389,18 +389,18 @@ The ID of the pin group is set automatically.</p>
 <tr class="field-even field"><td>&#160;</td><td class="field-body">The pins to be assigned to the pin group. Defaults to an empty list.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.PinDirection direction:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The direction of the pin group. Defaults to hal_py.PinDirection.none.</td>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The direction of the pin group. Defaults to <code class="docutils literal notranslate"><span class="pre">hal_py.PinDirection.none</span></code>.</td>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">param hal_py.PinType type:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">The type of the pin group. Defaults to hal_py.PinType.none.</td>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The type of the pin group. Defaults to <code class="docutils literal notranslate"><span class="pre">hal_py.PinType.none</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">param bool ascending:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Set True for ascending pin order (from 0 to n-1), False otherwise (from n-1 to 0). Defaults to False.</td>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> for ascending pin order (from 0 to n-1), <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise (from n-1 to 0). Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</td>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">param int start_index:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">The start index of the pin group. Defaults to 0.</td>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The start index of the pin group. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The pin group on success, None otherwise.</td>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The pin group on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.GatePinGroup or None</td>
 </tr>

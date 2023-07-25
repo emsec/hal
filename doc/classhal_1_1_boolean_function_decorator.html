@@ -107,8 +107,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad2fa1dcb5d71de4bc95766630dc30a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a033064c8f8a022e02b093366f3997e6d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function_decorator.html#a033064c8f8a022e02b093366f3997e6d">substitute_power_ground_nets</a> (const <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl) const</td></tr>
 <tr class="separator:a033064c8f8a022e02b093366f3997e6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae48d1cac6958baa887536fc24f2f4da4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function_decorator.html#ae48d1cac6958baa887536fc24f2f4da4">substitute_power_ground_pins</a> (const <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const <a class="el" href="classhal_1_1_gate.html">Gate</a> *g) const</td></tr>
-<tr class="separator:ae48d1cac6958baa887536fc24f2f4da4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb16861fbaa063a412a9ffd43d66fff3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_boolean_function_decorator.html#afb16861fbaa063a412a9ffd43d66fff3">substitute_power_ground_pins</a> (const <a class="el" href="classhal_1_1_gate.html">Gate</a> *g) const</td></tr>
+<tr class="separator:afb16861fbaa063a412a9ffd43d66fff3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -336,7 +336,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Substitute all Boolean function variables fed by power or ground gates by constant '1' and '0'.</p>
+<p>Substitute all Boolean function variables fed by power or ground gates by constant <code>0</code> and <code>1</code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>- The netlist to operate on. </td></tr>
@@ -351,8 +351,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae48d1cac6958baa887536fc24f2f4da4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae48d1cac6958baa887536fc24f2f4da4">&#9670;&nbsp;</a></span>substitute_power_ground_pins()</h2>
+<a id="afb16861fbaa063a412a9ffd43d66fff3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb16861fbaa063a412a9ffd43d66fff3">&#9670;&nbsp;</a></span>substitute_power_ground_pins()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -360,27 +360,16 @@ Static Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_boolean_function.html">BooleanFunction</a> &gt; hal::BooleanFunctionDecorator::substitute_power_ground_pins </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *&#160;</td>
-          <td class="paramname"><em>nl</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">const <a class="el" href="classhal_1_1_gate.html">Gate</a> *&#160;</td>
-          <td class="paramname"><em>g</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
+          <td class="paramname"><em>g</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Substitute all Boolean function variables that belong to a pin connected to a power or ground gate by constant '1' and '0'.</p>
+<p>Substitute all Boolean function variables that belong to a pin connected to a power or ground gate by constant <code>0</code> and <code>1</code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>- The netlist to operate on. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>- The gate which is connected to the pins and belongs to the boolean function under inspection. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>- The gate which is connected to the pins and belongs to the Boolean function under inspection. </td></tr>
   </table>
   </dd>
 </dl>
@@ -402,7 +391,7 @@ Static Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_boolean_function_decorator.html">BooleanFunctionDecorator</a></li>
-    <li class="footer">Generated on Tue Jul 25 2023 09:18:10 for HAL by
+    <li class="footer">Generated on Tue Jul 25 2023 10:13:39 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

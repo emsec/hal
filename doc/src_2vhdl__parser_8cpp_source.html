@@ -1693,9 +1693,9 @@ $(document).ready(function(){initNavTree('src_2vhdl__parser_8cpp_source.html',''
 <div class="line"><a name="l01605"></a><span class="lineno"> 1605</span>&#160;                    std::vector&lt;ci_string&gt; next_slaves;</div>
 <div class="line"><a name="l01606"></a><span class="lineno"> 1606</span>&#160;                    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; s : current_slaves)</div>
 <div class="line"><a name="l01607"></a><span class="lineno"> 1607</span>&#160;                    {</div>
-<div class="line"><a name="l01608"></a><span class="lineno"> 1608</span>&#160;                        <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> m2s_it = master_to_slaves.find(s); m2s_it != master_to_slaves.end())</div>
+<div class="line"><a name="l01608"></a><span class="lineno"> 1608</span>&#160;                        <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> m2s_inner_it = master_to_slaves.find(s); m2s_inner_it != master_to_slaves.end())</div>
 <div class="line"><a name="l01609"></a><span class="lineno"> 1609</span>&#160;                        {</div>
-<div class="line"><a name="l01610"></a><span class="lineno"> 1610</span>&#160;                            next_slaves.insert(next_slaves.end(), m2s_it-&gt;second.begin(), m2s_it-&gt;second.end());</div>
+<div class="line"><a name="l01610"></a><span class="lineno"> 1610</span>&#160;                            next_slaves.insert(next_slaves.end(), m2s_inner_it-&gt;second.begin(), m2s_inner_it-&gt;second.end());</div>
 <div class="line"><a name="l01611"></a><span class="lineno"> 1611</span>&#160;                        }</div>
 <div class="line"><a name="l01612"></a><span class="lineno"> 1612</span>&#160;                    }</div>
 <div class="line"><a name="l01613"></a><span class="lineno"> 1613</span>&#160; </div>
@@ -2737,7 +2737,7 @@ $(document).ready(function(){initNavTree('src_2vhdl__parser_8cpp_source.html',''
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_b2e15e0a6fe3a6a07f9d14a493185f01.html">vhdl_parser</a></li><li class="navelem"><a class="el" href="dir_9d74caa11a0db9d268d42e2db73237a0.html">src</a></li><li class="navelem"><a class="el" href="src_2vhdl__parser_8cpp.html">vhdl_parser.cpp</a></li>
-    <li class="footer">Generated on Tue Jul 25 2023 09:18:08 for HAL by
+    <li class="footer">Generated on Tue Jul 25 2023 10:13:37 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
