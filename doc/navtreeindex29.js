@@ -1,5 +1,7 @@
 var NAVTREEINDEX29 =
 {
+"settings__widget__spinbox_8cpp.html":[7,0,1,3,2,40,1,5],
+"settings__widget__spinbox_8cpp_source.html":[7,0,1,3,2,40,1,5],
 "settings__widget__spinbox_8h.html":[7,0,1,3,0,0,42,1,5],
 "settings__widget__spinbox_8h_source.html":[7,0,1,3,0,0,42,1,5],
 "settings__widget__text_8cpp.html":[7,0,1,3,2,40,1,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX29 =
 "struct_abc___frame__t__.html#a5010ad6741bc9ec39bbf5141925bd5e9":[6,0,2,72],
 "struct_abc___frame__t__.html#a5098dc98174fe15c8be8e02c766bec06":[6,0,2,28],
 "struct_abc___frame__t__.html#a535869784010d5109f19a59ba7f3ebfa":[6,0,2,8],
-"struct_abc___frame__t__.html#a537c046f5942ebad99d2049018ed7a10":[6,0,2,79],
-"struct_abc___frame__t__.html#a5c942d7a24333b97287fc8b3693fa1e5":[6,0,2,6],
-"struct_abc___frame__t__.html#a5fa64aadb6dc493fdc5f49cbc32594b7":[6,0,2,0]
+"struct_abc___frame__t__.html#a537c046f5942ebad99d2049018ed7a10":[6,0,2,79]
 };

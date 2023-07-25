@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Module &mdash; hal_py v4.2.0-36-g4daba123c documentation</title>
+  <title>Module &mdash; hal_py v4.2.0-39-gfe91fec32 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-36-g4daba123c
+                v4.2.0-39-gfe91fec32
               </div>
             
           
@@ -236,8 +236,7 @@ The gates are removed from their previous module in the process.</p>
 <dl class="method">
 <dt id="hal_py.Module.assign_pin_to_group">
 <code class="descname">assign_pin_to_group</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin_group: hal_py.ModulePinGroup</em>, <em>pin: hal_py.ModulePin</em>, <em>delete_empty_groups: bool = True</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.assign_pin_to_group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Assign a pin to a pin group.
-Only pins with matching direction and type can be assigned to an existing pin group.</p>
+<dd><p>Assign a pin to a pin group.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -245,11 +244,11 @@ Only pins with matching direction and type can be assigned to an existing pin gr
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pin_group</strong> (<a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a>) – The new pin group.</li>
 <li><strong>pin</strong> (<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin"><em>hal_py.ModulePin</em></a>) – The pin to be added.</li>
-<li><strong>delete_empty_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to delete groups that are empty after the pin has been assigned to the new group, False to keep empty groups. Defaults to True.</li>
+<li><strong>delete_empty_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to delete groups that are empty after the pin has been assigned to the new group, <code class="docutils literal notranslate"><span class="pre">False</span></code> to keep empty groups. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
@@ -336,32 +335,73 @@ If <code class="docutils literal notranslate"><span class="pre">recursive</span>
 
 <dl class="method">
 <dt id="hal_py.Module.create_pin">
-<code class="descname">create_pin</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>name: str</em>, <em>net: hal_py.Net</em>, <em>type: hal_py.PinType = &lt;PinType.none: 0&gt;</em>, <em>create_group: bool = True</em><span class="sig-paren">)</span> &#x2192; hal_py.ModulePin<a class="headerlink" href="#hal_py.Module.create_pin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Manually assign a module pin to a net.
+<code class="descname">create_pin</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Module.create_pin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">create_pin(self: hal_py.Module, id: int, name: str, net: hal_py.Net, type: hal_py.PinType = &lt;PinType.none: 0&gt;, create_group: bool = True) -&gt; hal_py.ModulePin</p>
+<blockquote>
+<div><p>Manually assign a module pin to a net.
 Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
-Hence, make sure to update the module nets beforehand using hal_py.Module.update_net.
-If create_group is set to False, the pin will not be added to a pin group.</p>
-<p>WARNING: can only be used when automatic net checks have been disabled using hal_py.Netlist.enable_automatic_net_checks.</p>
+Hence, make sure to update the module nets beforehand using <code class="docutils literal notranslate"><span class="pre">hal_py.Module.update_net</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">create_group</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, the pin will not be added to a pin group.</p>
+<p>WARNING: can only be used when automatic net checks have been disabled using <code class="docutils literal notranslate"><span class="pre">hal_py.Netlist.enable_automatic_net_checks</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the pin.</li>
-<li><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net that the pin is being assigned to.</li>
-<li><strong>type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The type of the pin. Defaults to hal_py.PinType.none.</li>
-<li><strong>create_group</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to automatically create a pin group and assign the pin, False otherwise.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">param int id:</th><td class="field-body">The ID of the pin.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The module pin on success, None otherwise.</p>
-</td>
+<tr class="field-even field"><th class="field-name">param str name:</th><td class="field-body">The name of the pin.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin">hal_py.ModulePin</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></p>
-</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Net net:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The net that the pin is being assigned to.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param hal_py.PinType type:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The type of the pin. Defaults to <code class="docutils literal notranslate"><span class="pre">hal_py.PinType.none</span></code>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool create_group:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to automatically create a pin group and assign the pin, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The module pin on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.ModulePin or None</td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</li>
+<li><p class="first">create_pin(self: hal_py.Module, name: str, net: hal_py.Net, type: hal_py.PinType = &lt;PinType.none: 0&gt;, create_group: bool = True) -&gt; hal_py.ModulePin</p>
+<blockquote>
+<div><p>Manually assign a module pin to a net.
+The ID of the pin is set automatically.
+Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
+Hence, make sure to update the module nets beforehand using <code class="docutils literal notranslate"><span class="pre">hal_py.Module.update_net</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">create_group</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, the pin will not be added to a pin group.</p>
+<p>WARNING: can only be used when automatic net checks have been disabled using <code class="docutils literal notranslate"><span class="pre">hal_py.Netlist.enable_automatic_net_checks</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param str name:</th><td class="field-body">The name of the pin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param hal_py.Net net:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The net that the pin is being assigned to.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.PinType type:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The type of the pin. Defaults to <code class="docutils literal notranslate"><span class="pre">hal_py.PinType.none</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool create_group:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to automatically create a pin group and assign the pin, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The module pin on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.ModulePin or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
 </dd></dl>
 
 <dl class="method">
@@ -397,7 +437,7 @@ All pins to be added to the pin group must have the same direction and type.</p>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">The start index of the pin group. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</td>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">param bool delete_empty_groups:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <cite>True`</cite> to delete groups that are empty after the pins have been assigned to the new group, <code class="docutils literal notranslate"><span class="pre">False</span></code> to keep empty groups. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</td>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to delete groups that are empty after the pins have been assigned to the new group, <code class="docutils literal notranslate"><span class="pre">False</span></code> to keep empty groups. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The pin group on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
 </tr>
@@ -495,7 +535,7 @@ All pins to be added to the pin group must have the same direction and type.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pin_group</strong> (<a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a>) – The pin group to be deleted.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True on success, False otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></td>
 </tr>
@@ -903,7 +943,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The ID of the pin.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin on success, None otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin">hal_py.ModulePin</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
 </tr>
@@ -921,7 +961,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the pin.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin on success, None otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin">hal_py.ModulePin</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
 </tr>
@@ -939,7 +979,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin on success, None otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin">hal_py.ModulePin</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
 </tr>
@@ -957,7 +997,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The ID of the pin group.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin group on success, None otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin group on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup">hal_py.ModulePinGroup</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
 </tr>
@@ -975,7 +1015,7 @@ The optional filter is evaluated on every candidate such that the result only co
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the pin group.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin group on success, None otherwise.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The pin group on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup">hal_py.ModulePinGroup</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
 </tr>
@@ -1004,7 +1044,7 @@ The optional filter is evaluated on every candidate such that the result only co
 
 <dl class="method">
 <dt id="hal_py.Module.get_pin_names">
-<code class="descname">get_pin_names</code><span class="sig-paren">(</span><em>self: hal_py.Module, arg0: Callable[[hal_py.ModulePin], bool]</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#hal_py.Module.get_pin_names" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_pin_names</code><span class="sig-paren">(</span><em>self: hal_py.Module, filter: Callable[[hal_py.ModulePin], bool] = None</em><span class="sig-paren">)</span> &#x2192; List[str]<a class="headerlink" href="#hal_py.Module.get_pin_names" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get an ordered list of the names of all pins of the module.
 The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1358,7 +1398,7 @@ The indices of some other pin groups will be incremented or decremented to make 
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
@@ -1384,7 +1424,7 @@ The indices of some other pins within the group will be incremented or decrement
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
@@ -1599,11 +1639,11 @@ The pin will be moved to a new group that goes by the pin’s name.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pin_group</strong> (<a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a>) – The old pin group.</li>
 <li><strong>pin</strong> (<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin"><em>hal_py.ModulePin</em></a>) – The pin to be removed.</li>
-<li><strong>delete_empty_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set True to delete the group of it is empty after the pin has been removed, False to keep the empty group. Defaults to True.</li>
+<li><strong>delete_empty_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to delete the group of it is empty after the pin has been removed, <code class="docutils literal notranslate"><span class="pre">False</span></code> to keep the empty group. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
@@ -1688,7 +1728,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
@@ -1712,7 +1752,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
@@ -1736,7 +1776,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
@@ -1760,7 +1800,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
@@ -1784,7 +1824,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True on success, False otherwise.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>

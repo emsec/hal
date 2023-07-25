@@ -387,7 +387,7 @@ var searchData=
   ['assign_5fnet_20927',['assign_net',['../classhal_1_1_grouping.html#ae987f8404ba96b884090f63966827fa6',1,'hal::Grouping']]],
   ['assign_5fnet_5fby_5fid_20928',['assign_net_by_id',['../classhal_1_1_grouping.html#ad253f42f616ed52a57d9384385e1155f',1,'hal::Grouping']]],
   ['assign_5fpin_20929',['assign_pin',['../classhal_1_1_pin_group.html#a22cc6275e512ed0dc066c67257d31f29',1,'hal::PinGroup']]],
-  ['assign_5fpin_5fto_5fgroup_20930',['assign_pin_to_group',['../classhal_1_1_module.html#ac4af95319b189814e0c717eb965e6c0c',1,'hal::Module']]],
+  ['assign_5fpin_5fto_5fgroup_20930',['assign_pin_to_group',['../classhal_1_1_gate_type.html#a8bcf19e34c52058b993eae449157e48d',1,'hal::GateType::assign_pin_to_group()'],['../classhal_1_1_module.html#ac4af95319b189814e0c717eb965e6c0c',1,'hal::Module::assign_pin_to_group()']]],
   ['assign_5fproperty_20931',['assign_property',['../classhal_1_1_gate_type.html#acddce742fd033a669f275a9c79c421e1',1,'hal::GateType']]],
   ['assignproperty_20932',['assignProperty',['https://doc.qt.io/qt-5/qstate.html#assignProperty',1,'QState']]],
   ['associatedgraphicswidgets_20933',['associatedGraphicsWidgets',['https://doc.qt.io/qt-5/qaction.html#associatedGraphicsWidgets',1,'QAction']]],

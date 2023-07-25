@@ -185,7 +185,7 @@ var searchData=
   ['delete_5fmodule_2604',['delete_module',['../classhal_1_1_netlist.html#a68c1b5ea177438f4a6fadeed0b82ab44',1,'hal::Netlist']]],
   ['delete_5fmodules_2605',['delete_modules',['../classhal_1_1_netlist_modification_decorator.html#ae91a170e4b8f382a356e263e264939b5',1,'hal::NetlistModificationDecorator']]],
   ['delete_5fnet_2606',['delete_net',['../classhal_1_1_netlist.html#a3c2fbba09aa1857d44790bbd16c9df4e',1,'hal::Netlist']]],
-  ['delete_5fpin_5fgroup_2607',['delete_pin_group',['../classhal_1_1_module.html#aeb0e98c2056854a17ac7a1ab1158b4bc',1,'hal::Module']]],
+  ['delete_5fpin_5fgroup_2607',['delete_pin_group',['../classhal_1_1_gate_type.html#ab3e1c9de6aebc8a9c33817f118e05761',1,'hal::GateType::delete_pin_group()'],['../classhal_1_1_module.html#aeb0e98c2056854a17ac7a1ab1158b4bc',1,'hal::Module::delete_pin_group()']]],
   ['delete_5frequested_2608',['delete_requested',['../classhal_1_1_comment_item.html#a10e919b4a23456dd3e2e9ed3be4c10d0',1,'hal::CommentItem']]],
   ['deleteaccessibleinterface_2609',['deleteAccessibleInterface',['https://doc.qt.io/qt-5/qaccessible.html#deleteAccessibleInterface',1,'QAccessible']]],
   ['deleteallitems_2610',['deleteAllItems',['../classhal_1_1_graphics_scene.html#a0a15f1459122eb8fc2936f5a60a1af13',1,'hal::GraphicsScene']]],
