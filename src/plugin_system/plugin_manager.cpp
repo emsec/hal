@@ -345,8 +345,8 @@ namespace hal
 
         bool unload(const std::string& plugin_name)
         {
-            auto it = m_loaded_plugins.find(plugin_name);
-            if (it == m_loaded_plugins.end())
+            auto loaded_it = m_loaded_plugins.find(plugin_name);
+            if (loaded_it == m_loaded_plugins.end())
             {
                 log_debug("core", "cannot find plugin '{}' to unload it", plugin_name);
                 return true;
@@ -355,8 +355,8 @@ namespace hal
             log_info("core", "unloading plugin '{}'...", plugin_name);
 
 
-            auto rt_library  = std::move(std::get<1>(it->second));
-            auto plugin_inst = std::move(std::get<0>(it->second));
+            auto rt_library  = std::move(std::get<1>(loaded_it->second));
+            auto plugin_inst = std::move(std::get<0>(loaded_it->second));
 
             {
                 auto iplugType = dynamic_cast<UIPluginInterface*>(plugin_inst.get()) ? 1 : 0;
@@ -371,11 +371,13 @@ namespace hal
                         it = m_cli_option_to_plugin_name[iplugType].erase(it);
                     }
                     else
+                    {
                         ++it;
+                    }
                 }
             }
 
-            m_loaded_plugins.erase(it);
+            m_loaded_plugins.erase(loaded_it);
 
             for (AbstractExtensionInterface* aeif : plugin_inst->get_extensions())
             {

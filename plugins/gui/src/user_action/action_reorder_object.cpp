@@ -67,7 +67,7 @@ namespace hal
 
                 // todo: perhaps provide aa function that returns the index of a group within the module? Similar to pin-index within group
                 auto groups = mod->get_pin_groups();
-                for(int i = 0; i < groups.size(); i++)
+                for(size_t i = 0; i < groups.size(); i++)
                     if(pinGroup == groups.at(i))
                         oldIndex = i;
 
