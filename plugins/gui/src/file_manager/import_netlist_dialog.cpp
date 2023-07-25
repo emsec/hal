@@ -77,7 +77,7 @@ namespace hal
         else
         {
             mComboGatelib->addItem("(Auto detect)");
-            for (const std::filesystem::path path : gate_library_manager::get_all_path())
+            for (const std::filesystem::path& path : gate_library_manager::get_all_path())
             {
                 int n         = mGateLibraryPath.size();
                 QString qName = QString::fromStdString(path.filename());
@@ -125,11 +125,12 @@ namespace hal
         mProjectdir.remove(QRegularExpression("\\.\\w*$"));
 
         QString basedir = mProjectdir;
-        int count = 2;
+        int count       = 2;
 
-        for (;;) // loop until non existing directory found
+        for (;;)    // loop until non existing directory found
         {
-            if (!QFileInfo(mProjectdir).exists()) return;
+            if (!QFileInfo(mProjectdir).exists())
+                return;
             mProjectdir = QString("%1_%2").arg(basedir).arg(count++);
         }
     }
