@@ -1605,9 +1605,9 @@ namespace hal
                     std::vector<ci_string> next_slaves;
                     for (const auto& s : current_slaves)
                     {
-                        if (const auto m2s_it = master_to_slaves.find(s); m2s_it != master_to_slaves.end())
+                        if (const auto m2s_inner_it = master_to_slaves.find(s); m2s_inner_it != master_to_slaves.end())
                         {
-                            next_slaves.insert(next_slaves.end(), m2s_it->second.begin(), m2s_it->second.end());
+                            next_slaves.insert(next_slaves.end(), m2s_inner_it->second.begin(), m2s_inner_it->second.end());
                         }
                     }
 
