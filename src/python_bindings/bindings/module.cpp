@@ -516,7 +516,7 @@ namespace hal
             :type: list[str]
         )");
 
-        py_module.def("get_pin_names", &Module::get_pin_names, R"(
+        py_module.def("get_pin_names", &Module::get_pin_names, py::arg("filter") = nullptr, R"(
             Get an ordered list of the names of all pins of the module.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 

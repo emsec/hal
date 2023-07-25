@@ -1332,8 +1332,10 @@ namespace hal
                             std::unordered_map<ci_string, std::vector<ci_string>> pin_groups;
                             for (const auto pin_group : gate_type_it->second->get_pin_groups())
                             {
-                                for (const auto pin : pin_group->get_pins())
+                                const auto pins = pin_group->get_pins();
+                                for (auto it = pins.rbegin(); it != pins.rend(); it++)
                                 {
+                                    const auto* pin = *it;
                                     pin_groups[core_strings::to<ci_string>(pin_group->get_name())].push_back(core_strings::to<ci_string>(pin->get_name()));
                                 }
                             }
