@@ -143,7 +143,7 @@ namespace hal
 
         // Compute the appearance
         int rowIdx = 0;
-        for(const DataEntry entry : mDataEntries)
+        for(const DataEntry& entry : mDataEntries)
         {
             mEntryToRowStyle[QPair(entry.category, entry.key)] = getRowStyleByEntry(entry, rowIdx);
             rowIdx++;

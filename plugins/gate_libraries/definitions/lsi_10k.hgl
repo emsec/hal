@@ -267,8 +267,8 @@
             "name": "IVDA",
             "types": [
                 "combinational",
-                "c_inverter",
-                "c_buffer"
+                "c_buffer",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -321,8 +321,8 @@
             "name": "IVDAP",
             "types": [
                 "combinational",
-                "c_inverter",
-                "c_buffer"
+                "c_buffer",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -2420,8 +2420,7 @@
         {
             "name": "AN2P",
             "types": [
-                "combinational"
-                ,
+                "combinational",
                 "c_and"
             ],
             "pin_groups": [
@@ -13377,8 +13376,8 @@
             "name": "BTS4",
             "types": [
                 "combinational",
-                "c_buffer",
-                "tristate"
+                "tristate",
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -13431,8 +13430,8 @@
             "name": "BTS4P",
             "types": [
                 "combinational",
-                "c_buffer",
-                "tristate"
+                "tristate",
+                "c_buffer"
             ],
             "pin_groups": [
                 {
@@ -13485,8 +13484,8 @@
             "name": "BTS5",
             "types": [
                 "combinational",
-                "c_inverter",
-                "tristate"
+                "tristate",
+                "c_inverter"
             ],
             "pin_groups": [
                 {
@@ -13539,8 +13538,8 @@
             "name": "BTS5P",
             "types": [
                 "combinational",
-                "c_inverter",
-                "tristate"
+                "tristate",
+                "c_inverter"
             ],
             "pin_groups": [
                 {

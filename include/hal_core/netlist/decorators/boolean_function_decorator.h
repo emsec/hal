@@ -44,7 +44,7 @@ namespace hal
         BooleanFunctionDecorator(const BooleanFunction& bf);
 
         /**
-         * Substitute all Boolean function variables fed by power or ground gates by constant '1' and '0'. 
+         * Substitute all Boolean function variables fed by power or ground gates by constant `0` and `1`. 
          * 
          * @param[in] nl - The netlist to operate on.
          * @return The resulting Boolean function on success, an error otherwise.
@@ -52,13 +52,12 @@ namespace hal
         Result<BooleanFunction> substitute_power_ground_nets(const Netlist* nl) const;
 
         /**
-         * Substitute all Boolean function variables that belong to a pin connected to a power or ground gate by constant '1' and '0'. 
+         * Substitute all Boolean function variables that belong to a pin connected to a power or ground gate by constant `0` and `1`. 
          * 
-         * @param[in] nl - The netlist to operate on.
-         * @param[in] g  - The gate which is connected to the pins and belongs to the boolean function under inspection.
+         * @param[in] g  - The gate which is connected to the pins and belongs to the Boolean function under inspection.
          * @return The resulting Boolean function on success, an error otherwise.
          */
-        Result<BooleanFunction> substitute_power_ground_pins(const Netlist* nl, const Gate* g) const;
+        Result<BooleanFunction> substitute_power_ground_pins(const Gate* g) const;
 
         /**
          * Get the Boolean function that is the concatenation of Boolean functions.

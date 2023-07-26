@@ -145,7 +145,7 @@ namespace hal
             const auto bf_org   = g->get_boolean_function(out_ep->get_pin());
             const auto org_vars = bf_org.get_variable_names();
 
-            const auto bf_replaced   = BooleanFunctionDecorator(bf_org).substitute_power_ground_pins(nl, g).get();
+            const auto bf_replaced   = BooleanFunctionDecorator(bf_org).substitute_power_ground_pins(g).get();
             const auto bf_simplified = bf_replaced.simplify_local();
 
             const auto new_vars = bf_simplified.get_variable_names();
@@ -295,7 +295,7 @@ namespace hal
             BooleanFunction func          = functions.begin()->second;
 
             // simplify Boolean function for constant 0 or 1 inputs (takes care of, e.g., an AND2 connected to an input and logic 1)
-            const auto substitute_res = BooleanFunctionDecorator(func).substitute_power_ground_pins(nl, gate);
+            const auto substitute_res = BooleanFunctionDecorator(func).substitute_power_ground_pins(gate);
             if (substitute_res.is_error())
             {
                 return ERR_APPEND(substitute_res.get_error(),

@@ -80,7 +80,6 @@ namespace hal
             }
         }
 
-        Module* top_module   = m_netlist.get_top_module();
         Module* c_top_module = c_netlist->get_top_module();
 
         for (Net* c_net : c_netlist->get_nets())

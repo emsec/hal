@@ -8,6 +8,7 @@
 #include <QComboBox>
 #include <QDebug>
 #include <QDialogButtonBox>
+#include <QDir>
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -19,7 +20,6 @@
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QSpacerItem>
-#include <QDir>
 
 QLineEdit* mEditProjectdir;
 QComboBox* mComboGatelib;
@@ -35,8 +35,9 @@ namespace hal
         QString suggestedGateLibraryName;
 
         int suggestedProjectCount = 0;
-        do {
-            ++ suggestedProjectCount;
+        do
+        {
+            ++suggestedProjectCount;
             mProjectdir = QDir::current().absoluteFilePath(QString("hal_project_%1").arg(suggestedProjectCount));
         } while (QFileInfo(mProjectdir).exists());
 
@@ -63,7 +64,7 @@ namespace hal
         layout->addWidget(labGatelib, irow++, 0, Qt::AlignLeft);
         mComboGatelib = new QComboBox(this);
         mComboGatelib->addItem(QString());
-        for (const std::filesystem::path path : gate_library_manager::get_all_path())
+        for (const std::filesystem::path& path : gate_library_manager::get_all_path())
         {
             int n         = mGateLibraryPath.size();
             QString qName = QString::fromStdString(path.filename());
@@ -123,12 +124,14 @@ namespace hal
         {
             mCheckCopyGatelib->setCheckState(Qt::Unchecked);
             mCheckCopyGatelib->setDisabled(true);
-            if (mOkButton) mOkButton->setDisabled(true);
+            if (mOkButton)
+                mOkButton->setDisabled(true);
         }
         else
         {
             mCheckCopyGatelib->setEnabled(true);
-            if (mOkButton) mOkButton->setEnabled(true);
+            if (mOkButton)
+                mOkButton->setEnabled(true);
         }
     }
 

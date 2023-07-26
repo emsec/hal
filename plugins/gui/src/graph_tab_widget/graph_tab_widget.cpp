@@ -352,7 +352,7 @@ namespace hal
 
         contextMenu.addSeparator();
 
-        contextMenu.addAction("Close all", [this, index](){
+        contextMenu.addAction("Close all", [this](){
             handleCloseAllTabs();
         });
 
