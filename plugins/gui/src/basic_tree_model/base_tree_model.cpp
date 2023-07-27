@@ -1,12 +1,12 @@
 #include "gui/basic_tree_model/base_tree_model.h"
-#include "gui/basic_tree_model/tree_item.h"
+#include "gui/basic_tree_model/base_tree_item.h"
 
 namespace hal
 {
 
     BaseTreeModel::BaseTreeModel(QObject *parent) : QAbstractItemModel(parent)
     {
-        mRootItem = new TreeItem();
+        mRootItem = new RootTreeItem(QStringList());
     }
 
     QVariant BaseTreeModel::data(const QModelIndex &index, int role) const
@@ -14,7 +14,7 @@ namespace hal
         if(!index.isValid())
             return QVariant();
 
-        TreeItem* item = getItemFromIndex(index);
+        BaseTreeItem* item = getItemFromIndex(index);
         if(!item)
             return QVariant();
 
@@ -38,8 +38,8 @@ namespace hal
         if(!hasIndex(row, column, parent))
             return QModelIndex();
 
-        TreeItem* parentItem = parent.isValid() ? getItemFromIndex(parent) : mRootItem;
-        TreeItem* childItem = parentItem->getChild(row);
+        BaseTreeItem* parentItem = parent.isValid() ? getItemFromIndex(parent) : mRootItem;
+        BaseTreeItem* childItem = parentItem->getChild(row);
         return (childItem) ? createIndex(row, column, childItem) : QModelIndex();
     }
 
@@ -48,11 +48,11 @@ namespace hal
         if(!index.isValid())
             return QModelIndex();
 
-        TreeItem* currentItem = getItemFromIndex(index);
+        BaseTreeItem* currentItem = getItemFromIndex(index);
         if(!currentItem)
             return QModelIndex();
 
-        TreeItem* parentItem = currentItem->getParent();
+        BaseTreeItem* parentItem = currentItem->getParent();
         if(parentItem == mRootItem)
             return QModelIndex();
 
@@ -80,7 +80,7 @@ namespace hal
         return mRootItem->getColumnCount();
     }
 
-    void BaseTreeModel::setContent(QList<TreeItem *> firstLevelItems)
+    void BaseTreeModel::setContent(QList<BaseTreeItem *> firstLevelItems)
     {
         for(auto item : firstLevelItems)
             mRootItem->appendChild(item);
@@ -92,25 +92,30 @@ namespace hal
         //delete all children, not the root item
         while(mRootItem->getChildCount() > 0)
         {
-            TreeItem* tmp = mRootItem->removeChildAtPos(0);
+            BaseTreeItem* tmp = mRootItem->removeChildAtPos(0);
             delete tmp;
         }
         endResetModel();
     }
 
-    void BaseTreeModel::setHeaderLabels(QList<QVariant> labels)
+    void BaseTreeModel::setHeaderLabels(const QStringList& labels)
     {
         if(!mRootItem)
-            mRootItem = new TreeItem();
+            mRootItem = new RootTreeItem(labels);
+        else
+            for (int i=0; i<labels.size(); i++) {
+                QVariant qv = QVariant(labels.at(i));
+                mRootItem->setDataAtIndex(i, qv);
+            }
 
-        mRootItem->setData(labels);
+
     }
 
-    QModelIndex BaseTreeModel::getIndexFromItem(TreeItem *item) const
+    QModelIndex BaseTreeModel::getIndexFromItem(BaseTreeItem *item) const
     {
         assert(item);
 
-        TreeItem* parentItem = item->getParent();
+        BaseTreeItem* parentItem = item->getParent();
 
         // if the given item has no parent, it is the root item
         if(!parentItem)
@@ -124,12 +129,12 @@ namespace hal
         return QModelIndex();
     }
 
-    TreeItem *BaseTreeModel::getItemFromIndex(QModelIndex index) const
+    BaseTreeItem *BaseTreeModel::getItemFromIndex(QModelIndex index) const
     {
-        return (index.isValid()) ? static_cast<TreeItem*>(index.internalPointer()) : nullptr;
+        return (index.isValid()) ? static_cast<BaseTreeItem*>(index.internalPointer()) : nullptr;
     }
 
-    TreeItem *BaseTreeModel::getRootItem() const
+    BaseTreeItem *BaseTreeModel::getRootItem() const
     {
         return mRootItem;
     }

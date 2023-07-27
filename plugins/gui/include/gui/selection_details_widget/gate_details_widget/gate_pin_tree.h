@@ -33,7 +33,7 @@ namespace hal
 {
     class GatePinsTreeModel;
     class Gate;
-    class TreeItem;
+    class BaseTreeItem;
     class GraphNavigationWidget;
 
     /**
@@ -98,8 +98,8 @@ namespace hal
         bool mClearSelection;
 
         //helper functions
-        void buildPythonMenuForPin(QMenu &menu, TreeItem* clickedPinItem);
-        void buildPythonMenuForPinGroup(QMenu &menu, TreeItem* clickedPinIGrouptem);
+        void buildPythonMenuForPin(QMenu &menu, BaseTreeItem* clickedPinItem);
+        void buildPythonMenuForPinGroup(QMenu &menu, BaseTreeItem* clickedPinIGrouptem);
         void addSourceOurDestinationToSelection(int netId, bool isInputPin);
         void handleNavigationCloseRequested();
         void handleNavigationJumpRequested(const Node& origin, const u32 via_net, const QSet<u32>& to_gates, const QSet<u32>& to_modules);

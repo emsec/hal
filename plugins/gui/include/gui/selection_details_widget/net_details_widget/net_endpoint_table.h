@@ -32,7 +32,7 @@ namespace hal
 {
     class EndpointTableModel;
     class Net;
-    class TreeItem;
+    class BaseTreeItem;
 
     class NetEndpointTable : public QTableView
     {

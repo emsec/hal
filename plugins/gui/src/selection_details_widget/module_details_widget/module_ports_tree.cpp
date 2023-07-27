@@ -88,13 +88,13 @@ namespace hal
             return;
 
         //all relevant information
-        TreeItem* clickedItem              = mPortModel->getItemFromIndex(clickedIndex);
+        PortTreeItem* clickedItem              =  static_cast<PortTreeItem*>(mPortModel->getItemFromIndex(clickedIndex));
         ModulePinsTreeModel::itemType type = mPortModel->getTypeOfItem(clickedItem);
         Net* n                             = mPortModel->getNetFromItem(clickedItem);
         QString name                       = clickedItem->getData(ModulePinsTreeModel::sNameColumn).toString();
         u32 modId                          = mPortModel->getRepresentedModuleId();
         auto mod                           = gNetlist->get_module_by_id(modId);
-        QList<TreeItem*> selectedPins;
+        QList<BaseTreeItem*> selectedPins;
         std::pair<bool, int> sameGroup;
         bool onlyPins;
         std::tie(selectedPins, sameGroup, onlyPins) = getSelectedPins();
@@ -261,7 +261,7 @@ namespace hal
 
     void ModulePinsTree::appendMultiSelectionEntries(QMenu& menu, int modId)
     {
-        QList<TreeItem*> selectedPins;
+        QList<BaseTreeItem*> selectedPins;
         std::pair<bool, int> sameGroup;
         bool onlyPins;
         std::tie(selectedPins, sameGroup, onlyPins) = getSelectedPins();
@@ -288,16 +288,16 @@ namespace hal
         }
     }
 
-    std::tuple<QList<TreeItem*>, std::pair<bool, int>, bool> ModulePinsTree::getSelectedPins()
+    std::tuple<QList<BaseTreeItem*>, std::pair<bool, int>, bool> ModulePinsTree::getSelectedPins()
     {
-        QList<TreeItem*> selectedPins;           //ordered
-        QSet<TreeItem*> alreadyProcessedPins;    //only for performance purposes
+        QList<BaseTreeItem*> selectedPins;           //ordered
+        QSet<BaseTreeItem*> alreadyProcessedPins;    //only for performance purposes
         bool sameGroup = true;
         bool onlyPins  = true;
         int groupId    = -1;
         for (auto index : selectionModel()->selectedRows())
         {
-            TreeItem* item = mPortModel->getItemFromIndex(index);
+            PortTreeItem* item =  static_cast<PortTreeItem*>(mPortModel->getItemFromIndex(index));
             auto itemType  = mPortModel->getTypeOfItem(item);
             if (itemType == ModulePinsTreeModel::itemType::pin)
             {
