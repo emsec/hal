@@ -1921,8 +1921,6 @@ namespace hal
             {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
     }    // namespace
 
-    const std::string instance_name_seperator = "/";
-
     // generate a unique name for a gate/module instance
     std::string VerilogParser::get_unique_alias(const std::string& parent_name, const std::string& name, const std::unordered_map<std::string, u32>& name_occurences) const
     {

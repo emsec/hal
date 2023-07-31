@@ -74,40 +74,50 @@ namespace hal
             std::string m_value;
         };
 
-        struct EdifInstance
-        {
-            std::string m_name;
-            std::string m_type;
-            std::string m_library;
-            std::vector<EdifProperty> m_properties;
-        };
-
         struct EdifEndpoint
         {
             std::string m_port_name;
-            u32 m_index                 = 1;
+            i32 m_index                 = -1;
             std::string m_instance_name = "";
-        };
-
-        struct EdifNet
-        {
-            std::string m_name;
-            std::vector<EdifEndpoint> m_endpoints;
         };
 
         struct EdifPort
         {
             std::string m_name;
+            std::vector<std::string> m_expanded_names;
             PinDirection m_direction;
             u32 m_width = 1;
+        };
+
+        struct EdifPortAssignment
+        {
+            EdifPort* m_port;
+            std::string m_net_name;
+            i32 m_index = -1;
+        };
+
+        struct EdifLibrary;
+        struct EdifCell;
+
+        struct EdifInstance
+        {
+            std::string m_name;
+            EdifCell* m_cell;
+            EdifLibrary* m_library;
+            std::vector<EdifPortAssignment> m_port_assignments;
+            std::vector<EdifProperty> m_properties;
         };
 
         struct EdifCell
         {
             std::string m_name;
-            std::vector<EdifPort> m_ports;
-            std::vector<EdifInstance> m_instances;
-            std::vector<EdifNet> m_nets;
+            std::vector<std::unique_ptr<EdifPort>> m_ports;
+            std::map<std::string, EdifPort*> m_ports_by_name;
+            std::vector<std::unique_ptr<EdifInstance>> m_instances;
+            std::map<std::string, EdifInstance*> m_instances_by_name;
+            std::vector<std::string> m_net_names;
+            std::vector<EdifPortAssignment> m_internal_port_assignments;
+            EdifLibrary* m_library;
         };
 
         struct EdifLibrary
@@ -129,6 +139,27 @@ namespace hal
         // token stream of entire input file
         TokenStream<std::string> m_token_stream;
 
+        // some caching
+        std::unordered_map<std::string, GateType*> m_gate_types;
+        std::unordered_map<std::string, GateType*> m_vcc_gate_types;
+        std::unordered_map<std::string, GateType*> m_gnd_gate_types;
+        std::unordered_map<Net*, std::vector<std::pair<Module*, u32>>> m_module_port_by_net;
+        std::unordered_map<Module*, std::vector<std::tuple<std::string, Net*>>> m_module_ports;
+
+        // unique aliases
+        std::unordered_map<std::string, u32> m_instance_name_occurences;
+        std::unordered_map<std::string, u32> m_net_name_occurences;
+
+        // nets
+        Net* m_zero_net;
+        Net* m_one_net;
+        std::unordered_map<std::string, Net*> m_net_by_name;
+        std::vector<std::pair<std::string, std::string>> m_nets_to_merge;
+
+        // parser settings
+        bool array_msb_at_0                       = true;
+        const std::string instance_name_seperator = "/";
+
         // parse HDL into intermediate format
         void tokenize();
         Result<std::monostate> parse_tokens();
@@ -139,9 +170,15 @@ namespace hal
         Result<std::monostate> parse_contents(EdifCell* cell);
         Result<std::monostate> parse_instance(EdifCell* cell);
         Result<std::monostate> parse_net(EdifCell* cell);
-        Result<std::monostate> parse_endpoints(EdifNet& net);
+        Result<std::monostate> parse_endpoints(EdifCell* cell, const std::string& net_name);
 
+        // construct netlist from intermediate format
+        Result<std::monostate> construct_netlist(EdifCell* top_cell);
+        Result<Module*> instantiate_module(const std::string& instance_name, EdifCell* cell, Module* parent, const std::unordered_map<std::string, std::string>& parent_module_assignments);
+
+        // helper functions
         Result<std::string> parse_rename(TokenStream<std::string>& stream, bool enforce_match = true);
         Result<std::pair<std::string, u32>> parse_array(TokenStream<std::string>& stream);
+        std::string get_unique_alias(const std::string& parent_name, const std::string& name, const std::unordered_map<std::string, u32>& name_occurences) const;
     };
 }    // namespace hal
