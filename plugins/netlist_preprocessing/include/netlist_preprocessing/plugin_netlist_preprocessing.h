@@ -163,7 +163,7 @@ namespace hal
 
         static Result<u32> resynthesize_gates_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl);
 
-        static Result<u32> resynthesize_subgraph(Netlist* nl, const std::vector<Gate*>& subgraph, GateLibrary* target_gl);
+        static Result<u32> resynthesize_subgraph(Netlist* nl, const std::vector<Gate*>& subgraph, std::filesystem::path yosys_helper_verilog_lib,  GateLibrary* target_gl);
 
         static Result<u32> resynthesize_subgraph_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl);
 
