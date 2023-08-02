@@ -44,7 +44,7 @@ namespace hal
             }
 
             // TODO make this read out the area from the gate library (currently not implemented)
-            const double gate_area = gt->has_property(GateTypeProperty::c_mux) ? 1.5 : gt->get_input_pins().size();
+            const double gate_area = gt->has_property(GateTypeProperty::c_mux) ? 1.2 : (gt->get_input_pins().size() * 0.3 + 1);
             auto [output_pin, bf]  = *(gt->get_boolean_functions().begin());
             // simplify to get rid of XOR which we currently cannot translate to genlib
             bf          = bf.simplify();
