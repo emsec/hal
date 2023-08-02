@@ -88,8 +88,7 @@ namespace hal
             return;
 
         //all relevant information
-        PortTreeItem* clickedItem              =  static_cast<PortTreeItem*>(mPortModel->getItemFromIndex(clickedIndex));
-        ModulePinsTreeModel::itemType type = mPortModel->getTypeOfItem(clickedItem);
+        PortTreeItem* clickedItem          =  static_cast<PortTreeItem*>(mPortModel->getItemFromIndex(clickedIndex));
         Net* n                             = mPortModel->getNetFromItem(clickedItem);
         QString name                       = clickedItem->getData(ModulePinsTreeModel::sNameColumn).toString();
         u32 modId                          = mPortModel->getRepresentedModuleId();
@@ -141,7 +140,7 @@ namespace hal
             });
         }
 
-        if (type == ModulePinsTreeModel::itemType::group)    //group specific context, own helper function? (returns at the end)
+        if (clickedItem->type() == PortTreeItem::Group)    //group specific context, own helper function? (returns at the end)
         {
             menu.addAction("Change name", [name, modId, itemId]() {
                 InputDialog ipd("Change pin group name", "New group name", name);
@@ -245,7 +244,7 @@ namespace hal
             appendMultiSelectionEntries(menu, modId);
 
         menu.addSection("Python");
-        if(type == ModulePinsTreeModel::itemType::pin)
+        if(clickedItem->type()==PortTreeItem::Pin)
             menu.addAction(QIcon(":/icons/python"), "Get pin", [modId, itemId]() { QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinById(modId, itemId)); });
         else
             menu.addAction(QIcon(":/icons/python"), "Get group", [modId, itemId]() { QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinGroup(modId, itemId)); });
@@ -298,8 +297,7 @@ namespace hal
         for (auto index : selectionModel()->selectedRows())
         {
             PortTreeItem* item =  static_cast<PortTreeItem*>(mPortModel->getItemFromIndex(index));
-            auto itemType  = mPortModel->getTypeOfItem(item);
-            if (itemType == ModulePinsTreeModel::itemType::pin)
+            if (item->type() == PortTreeItem::Pin)
             {
                 if (!alreadyProcessedPins.contains(item))
                 {
@@ -307,7 +305,7 @@ namespace hal
                     alreadyProcessedPins.insert(item);
                 }
             }
-            else if (itemType == ModulePinsTreeModel::itemType::group)
+            else if (item->type() == PortTreeItem::Group)
             {
                 onlyPins = false;
                 for (auto pinItem : item->getChildren())

@@ -35,15 +35,10 @@ namespace hal
     /**
      * @brief (Future) Base class for all tree models related to the details widget.
      *
-     * This class functions as a generic data container for all tree models. For this
-     * purpose, it uses QVariants as its main type of storage for its columns. (Note: Perhaps add
-     * additional data in form of a list or map (split it from "normal" displayed column data)
+     * This class functions as a generic data container for all tree models.
      */
     class BaseTreeItem
     {
-    // maybe add enum type for all possible scenarios? or use additional data with key to access type
-    // and handle type handling in model...e.g.: item->getAddData("type")(structure, more generalization,...)
-
     private:
         /**
          * Copy constructor. Copies the item's data, not the parent/children.
@@ -194,31 +189,9 @@ namespace hal
          */
         virtual int getOwnRow();
 
-        /**
-         * Stores additional data. Can be accessed by getAdditionalData.
-         * (For example, a menu or color)
-         *
-         * @param key - The key to store the data under.
-         * @param data - The actual data to store.
-         */
-        virtual void setAdditionalData(QString key, QVariant data);
-
-        /**
-         * Retrieve the data stored under the given key.
-         *
-         * @param key - The key for the requested data.
-         * @return The data if something was stored under the key, empty QVariant otherwise.
-         */
-        virtual QVariant getAdditionalData(QString key) const;
-
     private:
         BaseTreeItem* mParent;
         QList<BaseTreeItem*> mChildren;
-
-        // experimental, additional data (for anything)
-        QMap<QString, QVariant> mAdditionalData;
-        //QList<QVariant> mAdditionalData;
-
     };
 
     /**

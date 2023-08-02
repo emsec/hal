@@ -19,8 +19,8 @@
 
 namespace hal
 {
-    PortTreeItem::PortTreeItem(QString pinName, QString pinDirection, QString pinTypee, QString netName)
-        : mPinName(pinName), mPinDirection(pinDirection), mPinType(pinTypee), mNetName(netName)
+    PortTreeItem::PortTreeItem(Type tp, QString pinName, QString pinDirection, QString pinTypee, QString netName)
+        : mType(tp), mPinName(pinName), mPinDirection(pinDirection), mPinType(pinTypee), mNetName(netName)
     {;}
 
     QVariant PortTreeItem::getData(int index) const
@@ -146,7 +146,7 @@ namespace hal
         auto item = static_cast<PortTreeItem*>(getItemFromIndex(indexes.at(0)));
         QByteArray encodedData;
         QDataStream stream(&encodedData, QIODevice::WriteOnly);
-        QString type = getTypeOfItem(item) == itemType::pin ? "pin" : "group";
+        QString type = item->type() == PortTreeItem::Pin ? "pin" : "group";
         stream << type << getIdOfItem(item);
         data->setText(item->getData(sNameColumn).toString());
         data->setData("pintreemodel/item", encodedData);
@@ -364,11 +364,10 @@ namespace hal
         // 5: drop adjecent index to itself, must be at least 1 item apart
         if(type == "group")
         {
-            auto item = mIdToGroupItem[id];
+            auto item = static_cast<PortTreeItem*>(mIdToGroupItem[id]);
             if(parentItem)
             {
-                auto type = getTypeOfItem(parentItem);
-                if(type == itemType::pin || (type == itemType::group && row != -1) || item == parentItem)
+                if(item->type() == PortTreeItem::Pin || (item->type() == PortTreeItem::Group && row != -1) || item == parentItem)
                     return false;
             }
             else // here, only check for adjacent rows
@@ -384,7 +383,7 @@ namespace hal
             // otherwise it does not make much sense...perhaps change this check
             auto item = mIdToPinItem[id];
             if((!parentItem && item->getParent()->getChildCount() == 1) || (item->getParent() == parentItem && row == -1) || item == parentItem
-                || (parentItem && (getTypeOfItem(parentItem) == itemType::pin)))
+                || (parentItem && (parentItem->type() == PortTreeItem::Pin)))
                 return false;
             // case if one wants to drop between pins in same group, check if its not adjacent row (other cases are handled on case above
             if(item->getParent() == parentItem)
@@ -423,7 +422,7 @@ namespace hal
             auto pinGroupDirection = QString::fromStdString(enum_to_string((pinGroup->get_direction())));
             auto pinGroupType = QString::fromStdString(enum_to_string(pinGroup->get_type()));
 
-            PortTreeItem* pinGroupItem = new PortTreeItem(pinGroupName, pinGroupDirection, pinGroupType, "");
+            PortTreeItem* pinGroupItem = new PortTreeItem(PortTreeItem::Group,pinGroupName, pinGroupDirection, pinGroupType, "");
             pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::group)); // port multi bit
             pinGroupItem->setAdditionalData(keyId, pinGroup->get_id());
             mIdToGroupItem.insert(pinGroup->get_id(), pinGroupItem);

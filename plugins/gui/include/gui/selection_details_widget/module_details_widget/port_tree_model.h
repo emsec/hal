@@ -38,21 +38,29 @@ namespace hal
 
     class PortTreeItem : public BaseTreeItem
     {
+    public:
+        enum Type {None, Pin, Group};
 
         private:
+            Type mType;
+            u32 mId;
             QString mPinName;
             QString mPinDirection;
             QString mPinType;
             QString mNetName;
         public:
 
-            PortTreeItem(QString pinName, QString pinDirection, QString pinType, QString netName);
-            PortTreeItem();
+            PortTreeItem(Type tp, QString pinName, QString pinDirection, QString pinType, QString netName);
+            PortTreeItem() : mType(None), mId(0) {;}
             QVariant getData(int column) const override;
             void setData(QList<QVariant> data) override;
             void setDataAtIndex(int index, QVariant& data) override;
             void appendData(QVariant data) override;
             int getColumnCount() const override;
+            setType(Type tp) { mType = tp; }
+            Type type() const { return mType; }
+            void setId(u32 id_) { mId = id_; }
+            u32 id() const { return mId; }
     };
 
     /**
@@ -62,10 +70,6 @@ namespace hal
     {
         Q_OBJECT
     public:
-
-        //metatype declaration at the end of file (portSingleBit and portMultiBit are deprecated)
-        //important now are pins and groups
-        enum class itemType{portSingleBit = 0, portMultiBit = 1, pin = 2, group = 3};
 
         /**
          * The constructor.
@@ -116,14 +120,6 @@ namespace hal
          * @return The module id.
          */
         int getRepresentedModuleId();
-
-        /**
-         * Get the type (enum) of a given item.
-         *
-         * @param item - The item for which the type is requested.
-         * @return The item's type.
-         */
-        itemType getTypeOfItem(PortTreeItem* item) const;
 
         /**
          * Returns the pin-id if the item represents a pin or the pingroup-id
@@ -179,5 +175,3 @@ namespace hal
         void dndPinBetweenGroup(PortTreeItem* droppedPin, int row);
     };
 }
-
-Q_DECLARE_METATYPE(hal::ModulePinsTreeModel::itemType)

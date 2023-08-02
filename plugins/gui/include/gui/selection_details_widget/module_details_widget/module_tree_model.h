@@ -39,28 +39,36 @@ namespace hal
 
     class ModuleTreeitem : public BaseTreeItem
     {
+    public:
+        enum ItemType { None, Module, Gate};
 
         private:
-            std::string mType;
+            ItemType mItemType;
             int mId;
-            std::string mName;
+            QString mName;
+            QString mNodeType;
         public:
 
-            ModuleTreeitem(const std::string& name, int id, std::string tp);
+            ModuleTreeitem(ItemType itp, int id, const QString& name, const QString& ntp);
             QVariant getData(int column) const override;
             void setData(QList<QVariant> data) override;
             void setDataAtIndex(int index, QVariant& data) override;
             void appendData(QVariant data) override;
             int getColumnCount() const override;
+
+            /**
+             * Get the type (enum) of a given item.
+             *
+             * @param item - The item for which the type is requested.
+             * @return The item's type.
+             */
+            ItemType itemType() const { return mItemType; }
     };
 
     class ModuleTreeModel : public BaseTreeModel
     {
         Q_OBJECT
     public:
-
-        //metatype declaration at the end of file
-        enum class itemType {module = 0, gate = 1};
 
         ModuleTreeModel(QObject* parent = nullptr);
 
@@ -80,14 +88,6 @@ namespace hal
           */
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
         ///@}
-
-        /**
-         * Get the type (enum) of a given item.
-         *
-         * @param item - The item for which the type is requested.
-         * @return The item's type.
-         */
-        itemType getTypeOfItem(BaseTreeItem* item) const;
 
         /**
          * Disconnects all events from the model. Can be called to increase performance when
@@ -142,7 +142,7 @@ namespace hal
          * @param item - The requested item.
          * @return A module, net, or gate icon depending on the item's type.
          */
-        QIcon getIconFromItem(BaseTreeItem* item) const;
+        QIcon getIconFromItem(ModuleTreeitem* item) const;
 
         void clearOwnStructures();
 
@@ -165,5 +165,3 @@ namespace hal
     };
 
 }
-
-Q_DECLARE_METATYPE(hal::ModuleTreeModel::itemType)
