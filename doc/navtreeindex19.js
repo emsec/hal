@@ -1,5 +1,8 @@
 var NAVTREEINDEX19 =
 {
+"classhal_1_1_user_action.html#a20078295a03bb71886a9abfd2665f843":[4,0,5,26,11],
+"classhal_1_1_user_action.html#a3490590a446995b5529e43eb5283d05d":[4,0,5,26,27],
+"classhal_1_1_user_action.html#a3cec3c2f826595eec152331e9dfbaeb7":[4,0,5,26,20],
 "classhal_1_1_user_action.html#a3e62c38d2ee19c4fc44067464a995108":[4,0,5,26,1],
 "classhal_1_1_user_action.html#a43279ab1a608a840ea2fc66890e55aa9":[4,0,5,26,3],
 "classhal_1_1_user_action.html#a49f5683828bd9940db72d46885ec6570":[4,0,5,26,24],
@@ -246,8 +249,5 @@ var NAVTREEINDEX19 =
 "comment__manager_8h_source.html":[7,0,1,3,0,0,4,2],
 "comment__speech__bubble_8cpp.html":[7,0,1,3,2,4,3],
 "comment__speech__bubble_8cpp_source.html":[7,0,1,3,2,4,3],
-"comment__speech__bubble_8h.html":[7,0,1,3,0,0,4,3],
-"comment__speech__bubble_8h_source.html":[7,0,1,3,0,0,4,3],
-"comment__widget_8cpp.html":[7,0,1,3,2,4,0,3],
-"comment__widget_8cpp_source.html":[7,0,1,3,2,4,0,3]
+"comment__speech__bubble_8h.html":[7,0,1,3,0,0,4,3]
 };

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Type &mdash; hal_py v4.2.0-39-gfe91fec32 documentation</title>
+  <title>Gate Type &mdash; hal_py v4.2.0-41-g89b16a830 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-39-gfe91fec32
+                v4.2.0-41-g89b16a830
               </div>
             
           
@@ -1004,6 +1004,78 @@ The optional filter is evaluated on every candidate such that the result only co
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.11)">set</a>[<a class="reference internal" href="gate_type_property.html#hal_py.GateTypeProperty" title="hal_py.GateTypeProperty">hal_py.GateTypeProperty</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.set_pin_group_direction">
+<code class="descname">set_pin_group_direction</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin_group: hal::PinGroup&lt;hal::GatePin&gt;</em>, <em>new_direction: hal_py.PinDirection</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.set_pin_group_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the direction of the given pin group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pin_group</strong> (<a class="reference internal" href="gate_pin_group.html#hal_py.GatePinGroup" title="hal_py.GatePinGroup"><em>hal_py.GatePinGroup</em></a>) – The pin group.</li>
+<li><strong>new_direction</strong> (<a class="reference internal" href="pin_direction.html#hal_py.PinDirection" title="hal_py.PinDirection"><em>hal_py.PinDirection</em></a>) – The direction to be assigned to the pin group.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.set_pin_group_name">
+<code class="descname">set_pin_group_name</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin_group: hal::PinGroup&lt;hal::GatePin&gt;</em>, <em>new_name: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.set_pin_group_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the name of the given pin group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pin_group</strong> (<a class="reference internal" href="gate_pin_group.html#hal_py.GatePinGroup" title="hal_py.GatePinGroup"><em>hal_py.GatePinGroup</em></a>) – The pin group.</li>
+<li><strong>new_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name to be assigned to the pin group.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GateType.set_pin_group_type">
+<code class="descname">set_pin_group_type</code><span class="sig-paren">(</span><em>self: hal_py.GateType</em>, <em>pin_group: hal::PinGroup&lt;hal::GatePin&gt;</em>, <em>new_type: hal_py.PinType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GateType.set_pin_group_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the type of the given pin group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pin_group</strong> (<a class="reference internal" href="gate_pin_group.html#hal_py.GatePinGroup" title="hal_py.GatePinGroup"><em>hal_py.GatePinGroup</em></a>) – The pin group.</li>
+<li><strong>new_type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The type to be assigned to the pin group.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</td>
 </tr>
 </tbody>
 </table>

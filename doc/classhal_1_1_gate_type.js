@@ -37,6 +37,9 @@ var classhal_1_1_gate_type =
     [ "has_property", "classhal_1_1_gate_type.html#ab480841ed9b5429943496d26e1a782ae", null ],
     [ "operator!=", "classhal_1_1_gate_type.html#a458d7c707652effb6fae238f52b09afc", null ],
     [ "operator==", "classhal_1_1_gate_type.html#a5b64a93c37b450a4ab84a64ad83610e3", null ],
+    [ "set_pin_group_direction", "classhal_1_1_gate_type.html#a3eae4fcfd259884f840d1b214811c043", null ],
+    [ "set_pin_group_name", "classhal_1_1_gate_type.html#a01aedabc602e618be27a5052a70821ea", null ],
+    [ "set_pin_group_type", "classhal_1_1_gate_type.html#a791fffa975de77ffa83f80474332c406", null ],
     [ "to_string", "classhal_1_1_gate_type.html#a915e963632c94eec513e895da5ecef4a", null ],
     [ "GateLibrary", "classhal_1_1_gate_type.html#acaf9a4267eaeba61fa2cf28952d58bc4", null ],
     [ "operator<<", "classhal_1_1_gate_type.html#ae9cedd88ac3a4898cda1e966b4978ab3", null ]

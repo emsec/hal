@@ -1,5 +1,8 @@
 var NAVTREEINDEX22 =
 {
+"files.html":[7,0],
+"functions.html":[6,3,0],
+"functions.html":[6,3,0,0],
 "functions_b.html":[6,3,0,1],
 "functions_c.html":[6,3,0,2],
 "functions_d.html":[6,3,0,3],
@@ -54,8 +57,8 @@ var NAVTREEINDEX22 =
 "functions_type.html":[6,3,3],
 "functions_u.html":[6,3,0,20],
 "functions_v.html":[6,3,0,21],
-"functions_vars.html":[6,3,2],
 "functions_vars.html":[6,3,2,0],
+"functions_vars.html":[6,3,2],
 "functions_vars_b.html":[6,3,2,1],
 "functions_vars_c.html":[6,3,2,2],
 "functions_vars_d.html":[6,3,2,3],
@@ -225,8 +228,8 @@ var NAVTREEINDEX22 =
 "get__in__touch__widget_8cpp_source.html":[7,0,1,3,2,48,1],
 "get__in__touch__widget_8h.html":[7,0,1,3,0,0,51,1],
 "get__in__touch__widget_8h_source.html":[7,0,1,3,0,0,51,1],
-"globals.html":[7,1,0],
 "globals.html":[7,1,0,0],
+"globals.html":[7,1,0],
 "globals_a.html":[7,1,0,1],
 "globals_b.html":[7,1,0,2],
 "globals_c.html":[7,1,0,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX22 =
 "globals_m.html":[7,1,0,13],
 "globals_n.html":[7,1,0,14],
 "globals_o.html":[7,1,0,15],
-"globals_p.html":[7,1,0,16],
-"globals_q.html":[7,1,0,17],
-"globals_r.html":[7,1,0,18],
-"globals_s.html":[7,1,0,19]
+"globals_p.html":[7,1,0,16]
 };
