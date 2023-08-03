@@ -534,6 +534,33 @@ namespace hal
             :rtype: bool
         )");
 
+        py_gate_type.def("set_pin_group_name", &GateType::set_pin_group_name, py::arg("pin_group"), py::arg("new_name"), R"(
+            Set the name of the given pin group.
+
+            :param hal_py.GatePinGroup pin_group: The pin group.
+            :param str new_name: The name to be assigned to the pin group.
+            :returns: ``True`` on success, ``False`` otherwise.
+            :rtype: bool
+        )");
+
+        py_gate_type.def("set_pin_group_type", &GateType::set_pin_group_type, py::arg("pin_group"), py::arg("new_type"), R"(
+            Set the type of the given pin group.
+
+            :param hal_py.GatePinGroup pin_group: The pin group.
+            :param hal_py.PinType new_type: The type to be assigned to the pin group.
+            :returns: ``True`` on success, ``False`` otherwise.
+            :rtype: bool
+        )");
+
+        py_gate_type.def("set_pin_group_direction", &GateType::set_pin_group_direction, py::arg("pin_group"), py::arg("new_direction"), R"(
+            Set the direction of the given pin group.
+
+            :param hal_py.GatePinGroup pin_group: The pin group.
+            :param hal_py.PinDirection new_direction: The direction to be assigned to the pin group.
+            :returns: ``True`` on success, ``False`` otherwise.
+            :rtype: bool
+        )");
+
         py_gate_type.def("add_boolean_function", &GateType::add_boolean_function, py::arg("pin_name"), py::arg("function"), R"(
             Add a Boolean function with the specified name to the gate type.
 
