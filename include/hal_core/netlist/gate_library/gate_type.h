@@ -369,6 +369,33 @@ namespace hal
         Result<std::monostate> assign_pin_to_group(PinGroup<GatePin>* pin_group, GatePin* pin, bool delete_empty_groups = true);
 
         /**
+         * Set the name of the given pin group.
+         * 
+         * @param[in] pin_group - The pin group.
+         * @param[in] new_name - The name to be assigned to the pin group.
+         * @returns `true` on success, `false` otherwise.
+         */
+        bool set_pin_group_name(PinGroup<GatePin>* pin_group, const std::string& new_name);
+
+        /**
+         * Set the type of the given pin group.
+         * 
+         * @param[in] pin_group - The pin group.
+         * @param[in] new_type - The type to be assigned to the pin group.
+         * @returns `true` on success, `false` otherwise.
+         */
+        bool set_pin_group_type(PinGroup<GatePin>* pin_group, PinType new_type);
+
+        /**
+         * Set the direction of the given pin group.
+         * 
+         * @param[in] pin_group - The pin group.
+         * @param[in] new_direction - The direction to be assigned to the pin group.
+         * @returns `true` on success, `false` otherwise.
+         */
+        bool set_pin_group_direction(PinGroup<GatePin>* pin_group, PinDirection new_direction);
+
+        /**
          * Add a Boolean function with the specified name to the gate type.
          *
          * @param[in] name - The name of the Boolean function.

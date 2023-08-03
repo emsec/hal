@@ -87,6 +87,7 @@ namespace hal
             std::vector<std::string> m_expanded_names;
             PinDirection m_direction;
             u32 m_width = 1;
+            std::vector<EdifProperty> m_properties;
         };
 
         struct EdifPortAssignment
@@ -179,6 +180,7 @@ namespace hal
         // helper functions
         Result<std::string> parse_rename(TokenStream<std::string>& stream, bool enforce_match = true);
         Result<std::pair<std::string, u32>> parse_array(TokenStream<std::string>& stream);
+        Result<EdifProperty> parse_property(TokenStream<std::string>& stream);
         std::string get_unique_alias(const std::string& parent_name, const std::string& name, const std::unordered_map<std::string, u32>& name_occurences) const;
     };
 }    // namespace hal

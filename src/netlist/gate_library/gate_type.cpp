@@ -571,6 +571,104 @@ namespace hal
         return nullptr;
     }
 
+    bool GateType::set_pin_group_name(PinGroup<GatePin>* pin_group, const std::string& new_name)
+    {
+        if (pin_group == nullptr)
+        {
+            log_warning("gate_type", "could not set name for pin group of gate type '{}' with ID {}: pin group is a 'nullptr'", m_name, m_id);
+            return false;
+        }
+
+        if (new_name.empty())
+        {
+            log_warning("gate_type",
+                        "could not set name for pin group '{}' with ID {} of gate type '{}' with ID {}: empty string passed as new name",
+                        pin_group->get_name(),
+                        pin_group->get_id(),
+                        m_name,
+                        m_id);
+            return false;
+        }
+
+        if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
+        {
+            log_warning("gate_type",
+                        "could not set name for pin group '{}' with ID {} of gate type '{}' with ID {}: pin group does not belong to gate type",
+                        pin_group->get_name(),
+                        pin_group->get_id(),
+                        m_name,
+                        m_id);
+            return false;
+        }
+
+        if (m_pin_group_names_map.find(new_name) != m_pin_group_names_map.end())
+        {
+            log_warning("gate_type",
+                        "could not set name for pin group '{}' with ID {} of gate type '{}' with ID {}: a pin group with name '{}' already exists within the gate type",
+                        pin_group->get_name(),
+                        pin_group->get_id(),
+                        m_name,
+                        m_id,
+                        new_name);
+            return false;
+        }
+
+        if (const std::string& old_name = pin_group->get_name(); old_name != new_name)
+        {
+            m_pin_group_names_map.erase(old_name);
+            pin_group->set_name(new_name);
+            m_pin_group_names_map[new_name] = pin_group;
+        }
+
+        return true;
+    }
+
+    bool GateType::set_pin_group_type(PinGroup<GatePin>* pin_group, PinType new_type)
+    {
+        if (pin_group == nullptr)
+        {
+            log_warning("gate_type", "could not set type for pin group of gate type '{}' with ID {}: pin group is a 'nullptr'", m_name, m_id);
+            return false;
+        }
+
+        if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
+        {
+            log_warning("gate_type",
+                        "could not set type for pin group '{}' with ID {} of gate type '{}' with ID {}: pin group does not belong to gate type",
+                        pin_group->get_name(),
+                        pin_group->get_id(),
+                        m_name,
+                        m_id);
+            return false;
+        }
+
+        pin_group->set_type(new_type);
+        return true;
+    }
+
+    bool GateType::set_pin_group_direction(PinGroup<GatePin>* pin_group, PinDirection new_direction)
+    {
+        if (pin_group == nullptr)
+        {
+            log_warning("gate_type", "could not set direction for pin group of gate type '{}' with ID {}: pin group is a 'nullptr'", m_name, m_id);
+            return false;
+        }
+
+        if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
+        {
+            log_warning("gate_type",
+                        "could not set direction for pin group '{}' with ID {} of gate type '{}' with ID {}: pin group does not belong to gate type",
+                        pin_group->get_name(),
+                        pin_group->get_id(),
+                        m_name,
+                        m_id);
+            return false;
+        }
+
+        pin_group->set_direction(new_direction);
+        return true;
+    }
+
     void GateType::add_boolean_function(const std::string& pin_name, const BooleanFunction& bf)
     {
         m_functions.emplace(pin_name, bf.clone());

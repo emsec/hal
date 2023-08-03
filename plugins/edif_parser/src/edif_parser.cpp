@@ -74,7 +74,7 @@ namespace hal
                 for (const auto& [_, inst] : cell->m_instances_by_name)
                 {
                     referenced_cell_names.insert(inst->m_cell->m_name);
-                    referenced_library_names.insert(inst->m_library->m_name);
+                    referenced_library_names.insert(inst->m_cell->m_library->m_name);
                 }
             }
         }
@@ -268,6 +268,8 @@ namespace hal
         auto cell      = std::make_unique<EdifCell>();
         auto* cell_raw = cell.get();
 
+        cell->m_library = lib;
+
         const auto first_token = m_token_stream.peek();
         u32 line_number        = first_token.number;
 
@@ -351,7 +353,13 @@ namespace hal
 
             auto port = std::make_unique<EdifPort>();
 
-            if (m_token_stream.consume("("))
+            if (m_token_stream.peek() != "(")
+            {
+                port->m_name = m_token_stream.consume();
+                port->m_expanded_names.push_back(port->m_name);
+            }
+
+            while (m_token_stream.consume("("))
             {
                 const auto next_token = m_token_stream.consume();
                 if (next_token == "rename")
@@ -390,6 +398,26 @@ namespace hal
                         }
                     }
                 }
+                else if (next_token == "property")
+                {
+                    if (const auto property_res = parse_property(m_token_stream); property_res.is_ok())
+                    {
+                        port->m_properties.push_back(property_res.get());
+                    }
+                    else
+                    {
+                        return ERR(property_res.get_error());
+                    }
+                }
+                else if (next_token == "direction")
+                {
+                    const auto direction_token = m_token_stream.consume();
+                    port->m_direction          = enum_from_string<PinDirection>(utils::to_lower(direction_token.string), PinDirection::none);
+                    if (port->m_direction == PinDirection::none)
+                    {
+                        return ERR("could not parse interface: invalid port direction " + direction_token.string + " in line " + std::to_string(direction_token.number));
+                    }
+                }
                 else
                 {
                     return ERR("unsupported token '" + next_token.string + "' in line " + std::to_string(next_token.number));
@@ -397,21 +425,7 @@ namespace hal
 
                 m_token_stream.consume(")", true);
             }
-            else
-            {
-                port->m_name = m_token_stream.consume();
-                port->m_expanded_names.push_back(port->m_name);
-            }
 
-            m_token_stream.consume("(", true);
-            m_token_stream.consume("direction", true);
-            const auto direction_token = m_token_stream.consume();
-            port->m_direction          = enum_from_string<PinDirection>(utils::to_lower(direction_token.string), PinDirection::none);
-            if (port->m_direction == PinDirection::none)
-            {
-                return ERR("could not parse interface: invalid port direction " + direction_token.string + " in line " + std::to_string(direction_token.number));
-            }
-            m_token_stream.consume(")", true);
             m_token_stream.consume(")", true);
             cell->m_ports_by_name[port->m_name] = port.get();
             cell->m_ports.push_back(std::move(port));
@@ -465,7 +479,7 @@ namespace hal
             const auto next_token = m_token_stream.consume();
             if (next_token == "rename")
             {
-                const auto rename_res = parse_rename(m_token_stream);
+                const auto rename_res = parse_rename(m_token_stream, false);
                 if (rename_res.is_error())
                 {
                     return ERR(rename_res.get_error());
@@ -509,13 +523,14 @@ namespace hal
             }
             else if (next_token == "property")
             {
-                EdifProperty prop;
-                prop.m_name = m_token_stream.consume();
-                m_token_stream.consume("(", true);
-                prop.m_type  = m_token_stream.consume();
-                prop.m_value = m_token_stream.consume();
-                m_token_stream.consume(")", true);
-                instance->m_properties.push_back(prop);
+                if (const auto property_res = parse_property(m_token_stream); property_res.is_ok())
+                {
+                    instance->m_properties.push_back(property_res.get());
+                }
+                else
+                {
+                    return ERR(property_res.get_error());
+                }
             }
             else
             {
@@ -545,7 +560,7 @@ namespace hal
             const auto next_token = m_token_stream.consume();
             if (next_token == "rename")
             {
-                const auto rename_res = parse_rename(m_token_stream);
+                const auto rename_res = parse_rename(m_token_stream, false);
                 if (rename_res.is_error())
                 {
                     return ERR(rename_res.get_error());
@@ -577,11 +592,14 @@ namespace hal
         {
             EdifEndpoint ep;
 
+            u32 line_number;
             m_token_stream.consume("portRef", true);
 
-            if (!m_token_stream.consume("("))
+            if (m_token_stream.peek() != "(")
             {
-                ep.m_port_name = m_token_stream.consume();
+                const auto name_token = m_token_stream.consume();
+                ep.m_port_name        = name_token.string;
+                line_number           = name_token.number;
             }
 
             while (m_token_stream.consume("("))
@@ -589,7 +607,9 @@ namespace hal
                 const auto next_token = m_token_stream.consume();
                 if (next_token == "member")
                 {
-                    ep.m_port_name         = m_token_stream.consume();
+                    const auto name_token  = m_token_stream.consume();
+                    ep.m_port_name         = name_token.string;
+                    line_number            = name_token.number;
                     const auto index_token = m_token_stream.consume();
                     try
                     {
@@ -628,12 +648,13 @@ namespace hal
                     else
                     {
                         return ERR("invalid port name '" + ep.m_port_name + "' given for port ref of instance '" + inst->m_name + "' in cell '" + cell->m_name + "' of library '"
-                                   + cell->m_library->m_name + "'");
+                                   + cell->m_library->m_name + "' in line " + std::to_string(line_number));
                     }
                 }
                 else
                 {
-                    return ERR("invalid instance name '" + ep.m_instance_name + "' given for port ref in cell '" + cell->m_name + "' of library '" + cell->m_library->m_name + "'");
+                    return ERR("invalid instance name '" + ep.m_instance_name + "' given for port ref in cell '" + cell->m_name + "' of library '" + cell->m_library->m_name + "' in line "
+                               + std::to_string(line_number));
                 }
             }
             else
@@ -1096,7 +1117,7 @@ namespace hal
         if (stream.consume("("))
         {
             stream.consume("rename", true);
-            const auto rename_res = parse_rename(stream);
+            const auto rename_res = parse_rename(stream, false);
             if (rename_res.is_error())
             {
                 return ERR(rename_res.get_error());
@@ -1120,6 +1141,17 @@ namespace hal
         }
 
         return OK(std::make_pair(std::move(name), width));
+    }
+
+    Result<EdifParser::EdifProperty> EdifParser::parse_property(TokenStream<std::string>& stream)
+    {
+        EdifProperty prop;
+        prop.m_name = stream.consume();
+        stream.consume("(", true);
+        prop.m_type  = stream.consume();
+        prop.m_value = stream.consume();
+        stream.consume(")", true);
+        return OK(prop);
     }
 
     std::string EdifParser::get_unique_alias(const std::string& parent_name, const std::string& name, const std::unordered_map<std::string, u32>& name_occurences) const
