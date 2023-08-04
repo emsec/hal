@@ -548,6 +548,366 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "HAL_MUX5",
+            "types": ["combinational", "c_mux"],
+            "pin_groups": [
+                {
+                    "name": "A",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "A", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "B",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "B", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "C",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "C", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "D", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "E",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "E", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "S1",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "S1", "direction": "input", "type": "select"}]
+                },
+                {
+                    "name": "S2",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "S2", "direction": "input", "type": "select"}]
+                },
+                {
+                    "name": "S3",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "S3", "direction": "input", "type": "select"}]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "O", "direction": "output", "type": "none", "function": "((!S1 & !S2 & !S3 & A) | (S1 & !S2 & !S3 & B) | (!S1 & S2 & !S3 & C) | (!S1 & !S2 & S3 & D) | (S1 & S2 & !S3 & E))"}]
+                }
+            ]
+        },
+        {
+            "name": "HAL_MUX6",
+            "types": ["combinational", "c_mux"],
+            "pin_groups": [
+                {
+                    "name": "A",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "A", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "B",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "B", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "C",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "C", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "D", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "E",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "E", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "F",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "F", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "S1",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "S1", "direction": "input", "type": "select"}]
+                },
+                {
+                    "name": "S2",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "S2", "direction": "input", "type": "select"}]
+                },
+                {
+                    "name": "S3",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "S3", "direction": "input", "type": "select"}]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "O", "direction": "output", "type": "none", "function": "((!S1 & !S2 & !S3 & A) | (S1 & !S2 & !S3 & B) | (!S1 & S2 & !S3 & C) | (!S1 & !S2 & S3 & D) | (S1 & S2 & !S3 & E) | (S1 & !S2 & S3 & F))"}]
+                }
+            ]
+        },
+        {
+            "name": "HAL_MUX7",
+            "types": ["combinational", "c_mux"],
+            "pin_groups": [
+                {
+                    "name": "A",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "A", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "B",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "B", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "C",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "C", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "D", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "E",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "E", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "F",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "F", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "G",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "G", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "S1",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "S1", "direction": "input", "type": "select"}]
+                },
+                {
+                    "name": "S2",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "S2", "direction": "input", "type": "select"}]
+                },
+                {
+                    "name": "S3",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "S3", "direction": "input", "type": "select"}]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "O", "direction": "output", "type": "none", "function": "((!S1 & !S2 & !S3 & A) | (S1 & !S2 & !S3 & B) | (!S1 & S2 & !S3 & C) | (!S1 & !S2 & S3 & D) | (S1 & S2 & !S3 & E) | (S1 & !S2 & S3 & F) | (!S1 & S2 & S3 & G))"}]
+                }
+            ]
+        },
+        {
+            "name": "HAL_MUX8",
+            "types": ["combinational", "c_mux"],
+            "pin_groups": [
+                {
+                    "name": "A",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "A", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "B",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "B", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "C",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "C", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "D",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "D", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "E",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "E", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "F",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "F", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "G",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "G", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "H",
+                    "direction": "input",
+                    "type": "data",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "H", "direction": "input", "type": "data"}]
+                },
+                {
+                    "name": "S1",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "S1", "direction": "input", "type": "select"}]
+                },
+                {
+                    "name": "S2",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "S2", "direction": "input", "type": "select"}]
+                },
+                {
+                    "name": "S3",
+                    "direction": "input",
+                    "type": "select",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "S3", "direction": "input", "type": "select"}]
+                },
+                {
+                    "name": "O",
+                    "direction": "output",
+                    "type": "none",
+                    "ascending": false,
+                    "start_index": 0,
+                    "pins": [{"name": "O", "direction": "output", "type": "none", "function": "((!S1 & !S2 & !S3 & A) | (S1 & !S2 & !S3 & B) | (!S1 & S2 & !S3 & C) | (!S1 & !S2 & S3 & D) | (S1 & S2 & !S3 & E) | (S1 & !S2 & S3 & F) | (!S1 & S2 & S3 & G) | (S1 & S2 & S3 & H))"}]
+                }
+            ]
         }
     ]
 }

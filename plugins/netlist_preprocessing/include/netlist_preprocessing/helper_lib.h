@@ -135,6 +135,33 @@ namespace hal
         yosys_helper_lib += "assign O = ((A & S1 & S2) | (B & S1 & !S2) | (C & !S1 & S2) | (D & !S1 & !S2));\n";
         yosys_helper_lib += "endmodule\n";
         yosys_helper_lib += "\n";
+        yosys_helper_lib += "module HAL_MUX5 (A, B, C, D, E, S1, S2, S3, O);\n";
+        yosys_helper_lib += "input A, B, C, D, E, S1, S2, S3;\n";
+        yosys_helper_lib += "output O;\n";
+        yosys_helper_lib += "assign O = ((~S1 & ~S2 & ~S3 & A) | (S1 & ~S2 & ~S3 & B) | (~S1 & S2 & ~S3 & C) | (~S1 & ~S2 & S3 & D) | (S1 & S2 & ~S3 & E));\n";
+        yosys_helper_lib += "endmodule\n";
+        yosys_helper_lib += "\n";
+        yosys_helper_lib += "module HAL_MUX6 (A, B, C, D, E, F, S1, S2, S3, O);\n";
+        yosys_helper_lib += "input A, B, C, D, E, F, S1, S2, S3;\n";
+        yosys_helper_lib += "output O;\n";
+        yosys_helper_lib += "assign O = ((~S1 & ~S2 & ~S3 & A) | (S1 & ~S2 & ~S3 & B) | (~S1 & S2 & ~S3 & C) | (~S1 & ~S2 & S3 & D) | (S1 & S2 & ~S3 & E) | (S1 & ~S2 & S3 & F));\n";
+        yosys_helper_lib += "endmodule\n";
+        yosys_helper_lib += "\n";
+        yosys_helper_lib += "module HAL_MUX7 (A, B, C, D, E, F, G, S1, S2, S3, O);\n";
+        yosys_helper_lib += "input A, B, C, D, E, F, G, S1, S2, S3;\n";
+        yosys_helper_lib += "output O;\n";
+        yosys_helper_lib +=
+            "assign O = ((~S1 & ~S2 & ~S3 & A) | (S1 & ~S2 & ~S3 & B) | (~S1 & S2 & ~S3 & C) | (~S1 & ~S2 & S3 & D) | (S1 & S2 & ~S3 & E) | (S1 & ~S2 & S3 & F) | (S1 & S2 & S3 & G));\n";
+        yosys_helper_lib += "endmodule\n";
+        yosys_helper_lib += "\n";
+        yosys_helper_lib += "module HAL_MUX8 (A, B, C, D, E, F, G, H, S1, S2, S3, O);\n";
+        yosys_helper_lib += "input A, B, C, D, E, F, G, H, S1, S2, S3;\n";
+        yosys_helper_lib += "output O;\n";
+        yosys_helper_lib += "assign O = ((~S1 & ~S2 & ~S3 & A) | (S1 & ~S2 & ~S3 & B) | (~S1 & S2 & ~S3 & C) | (~S1 & ~S2 & S3 & D) | (S1 & S2 & ~S3 & E) | (S1 & ~S2 & S3 & F) | (S1 & S2 & S3 & G) | "
+                            "(H & S1 & S2 & S3));\n";
+        yosys_helper_lib += "endmodule\n";
+        yosys_helper_lib += "\n";
+
         return yosys_helper_lib;
     }
 }    // namespace hal

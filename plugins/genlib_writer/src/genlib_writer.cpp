@@ -3,8 +3,8 @@
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/utilities/log.h"
 
-#include <fstream>
 #include <clocale>
+#include <fstream>
 
 namespace hal
 {
@@ -44,7 +44,10 @@ namespace hal
             }
 
             // TODO make this read out the area from the gate library (currently not implemented)
-            const double gate_area = gt->has_property(GateTypeProperty::c_mux) ? 1.2 : (gt->get_input_pins().size() * 0.3 + 1);
+            u32 base_value         = gt->get_input_pins().size();
+            u32 mux_value          = (base_value - 1) * 0.15 + 1;
+            u32 other_values       = base_value * 0.3 + 1;
+            const double gate_area = gt->has_property(GateTypeProperty::c_mux) ? mux_value : other_values;
             auto [output_pin, bf]  = *(gt->get_boolean_functions().begin());
             // simplify to get rid of XOR which we currently cannot translate to genlib
             bf          = bf.simplify();
