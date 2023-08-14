@@ -589,7 +589,7 @@ namespace hal
                 }
                 else
                 {
-                    ActionMoveNode* act = new ActionMoveNode(sourceLayouterPos,targetLayouterPos);
+                    ActionMoveNode* act = new ActionMoveNode(context->id(),sourceLayouterPos,targetLayouterPos);
                     act->setObject(UserActionObject(context->id(),UserActionObjectType::Context));
                     act->exec();
                 }

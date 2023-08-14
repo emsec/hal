@@ -970,10 +970,11 @@ namespace hal
     {
         /*UserActionCompound* actComp = new UserActionCompound;
         actComp->setUseCreatedObject();*/
-
+        GridPlacement* oldGp = GuiApiClasses::View::getGridPlacement(viewId);
+        qInfo() << oldGp->values();
         for(Node nd : gp->keys())
         {
-            ActionMoveNode* act = new ActionMoveNode(viewId, gp->value(nd));
+            ActionMoveNode* act = new ActionMoveNode(viewId, oldGp->value(nd), gp->value(nd));
             if(nd.isGate()) act->setObject(UserActionObject(nd.Gate, UserActionObjectType::Gate));
             else if(nd.isModule()) act->setObject(UserActionObject(nd.Module, UserActionObjectType::Module));
             else return false;
@@ -981,6 +982,7 @@ namespace hal
             UserActionManager::instance()->executeActionBlockThread(act);
 
         }
+        qInfo() << gp->values();
 
        /* for(auto i = gp->begin(); i != gp->end(); i++)
         {

@@ -44,19 +44,26 @@ namespace hal
         QPoint mFrom, mTo;
 
         int mContextId;
+        GridPlacement* mGridPlacement;
 
         static QPoint parseFromString(const QString& s);
     public:
         /**
+         * empty constructor
+         * @param ctxId
+         */
+
+        /*ActionMoveNode(u32 ctxId)
+             :mContextId(ctxId) {;}*/
+        /**
          * Action constructor.
          *
          * The action object is the graphics context
-         *
+         * @param ctxID - context
          * @param from - The initial position of the node to move
          * @param to - The destination of the node
          */
-        ActionMoveNode(const QPoint& from = QPoint(), const QPoint& to = QPoint())
-            : mFrom(from), mTo(to), mContextId(-1) {;}
+        ActionMoveNode(u32 ctxID=0, const QPoint& from = QPoint(), const QPoint& to = QPoint());
 
         /**
          * Action constructor.
@@ -67,8 +74,8 @@ namespace hal
          * @param  - The initial position of the node to move
          * @param to - The destination of the node
          */
-        ActionMoveNode(u32 ctxId, const QPoint& to)
-            : mTo(to), mContextId(ctxId) {;}
+       /*ActionMoveNode(u32 ctxId, const QPoint& to)
+            :mContextId(ctxId), mTo(to) {;}*/
 
         bool exec() override;
         QString tagname() const override;
