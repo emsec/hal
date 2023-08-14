@@ -57,9 +57,17 @@ namespace hal
             void setDataAtIndex(int index, QVariant& data) override;
             void appendData(QVariant data) override;
             int getColumnCount() const override;
-            setType(Type tp) { mType = tp; }
+            void setType(Type tp) { mType = tp; }
             Type type() const { return mType; }
             void setId(u32 id_) { mId = id_; }
+
+            /**
+             * Returns the pin-id if the item represents a pin or the pingroup-id
+             * if the item represents a pingroup.
+             *
+             * @param item - The item.
+             * @return The pin- or pingroup-id.
+             */
             u32 id() const { return mId; }
     };
 
@@ -121,15 +129,6 @@ namespace hal
          */
         int getRepresentedModuleId();
 
-        /**
-         * Returns the pin-id if the item represents a pin or the pingroup-id
-         * if the item represents a pingroup.
-         *
-         * @param item - The item.
-         * @return The pin- or pingroup-id.
-         */
-        int getIdOfItem(BaseTreeItem* item) const;
-
         /** @name Event Handler Functions
          */
         ///@{
@@ -141,10 +140,6 @@ namespace hal
         static const int sDirectionColumn = 1;
         static const int sTypeColumn = 2;
         static const int sNetColumn = 3;
-
-        //additional data keys
-        const QString keyType = "type";
-        const QString keyId = "id";
 
     Q_SIGNALS:
         /**

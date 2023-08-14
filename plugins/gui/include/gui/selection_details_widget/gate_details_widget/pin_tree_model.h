@@ -133,10 +133,6 @@ public:
     static const int sTypeColumn = 2;
     static const int sConnectedNetColumn = 3;
 
-    //additional data keys
-    const QString keyType = "type";
-    const QString keyRepresentedNetsID = "netID"; //might not be needed
-
 private:
     int mGateId;
     QMap<std::string, BaseTreeItem*> mPinGroupToTreeItem;
