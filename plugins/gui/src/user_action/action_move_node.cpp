@@ -2,6 +2,8 @@
 #include <QStringList>
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/gui_globals.h"
+#include "gui/implementations/qpoint_extension.h"
+#include "hal_core/utilities/log.h"
 
 namespace hal
 {
@@ -15,38 +17,61 @@ namespace hal
         return new ActionMoveNode;
     }
 
-    ActionMoveNode::ActionMoveNode(u32 ctxID, const QPoint& from, const QPoint& to)
+    bool ActionMoveNode::checkContextId()
     {
-        mContextId = ctxID;
-        GraphContext* ctx = mContextId >= 0
-                    ? gGraphContextManager->getContextById(mContextId)
-                    : gGraphContextManager->getContextById(mObject.id());
-
-        mGridPlacement = GuiApiClasses::View::getGridPlacement(ctxID);
-        mFrom = from;
-        mTo = to;
-
-        /*GraphContext* context = gGraphContextManager->getContextById(mContextId);
-        Node nd = context->getLayouter()->positionToNodeMap().find(from).value();*/
-        qInfo() << "mFrom: " << mFrom.isNull();
-        qInfo() << "mTo: " << mTo.isNull();
-        if(!mFrom.isNull() && !mTo.isNull())
+        if (!mContextId)
         {
-
-            UserActionObject undoObject(mObject);
-            if (mContextId != 0)
-            {
-                undoObject = UserActionObject(ctx->id(),UserActionObjectType::Context);
-            }
-            GridPlacement oldGp = *mGridPlacement;
-            Node ndToMove = mGridPlacement->key(mFrom); // get the node we want to move
-            mGridPlacement->insert(ndToMove, mTo); // set the position of the node to the new one
-            ActionMoveNode* undo = new ActionMoveNode(mContextId);
-            undo->mGridPlacement = &oldGp;
-            undo->setObject(undoObject);
-            mUndoAction = undo;
+            log_warning("gui", "ActionMoveNode invoked without context ID.");
+            return false;
         }
+        GraphContext* ctx = gGraphContextManager->getContextById(mContextId);
+        if (!ctx)
+        {
+            log_warning("gui", "ActionMoveNode invoked with illegal context ID {}.", mContextId);
+            mContextId = 0;
+            return false;
+        }
+        return true;
+    }
 
+    ActionMoveNode::ActionMoveNode(u32 ctxId, const GridPlacement* gridPlc)
+        : mContextId(ctxId)
+    {
+        if (!checkContextId()) return;
+        if (gridPlc)
+            mGridPlacement = *gridPlc;
+    }
+
+    ActionMoveNode::ActionMoveNode(u32 ctxID, const QPoint& to)
+        : mContextId(ctxID), mTo(to)
+    {
+        if (!checkContextId()) return;
+    }
+
+    ActionMoveNode::ActionMoveNode(u32 ctxID, const QPoint& from, const QPoint& to)
+        : mContextId(ctxID), mTo(to)
+    {
+        if (!checkContextId()) return;
+        GraphContext* ctx = gGraphContextManager->getContextById(mContextId);
+        auto it = ctx->getLayouter()->positionToNodeMap().find(from);
+        if (it == ctx->getLayouter()->positionToNodeMap().constEnd())
+        {
+            mContextId = 0; // node not found, exit
+            return;
+        }
+        Node ndToMove = it.value(); // get the node we want to move
+        switch (ndToMove.type())
+        {
+        case Node::Module:
+            mObject = UserActionObject(ndToMove.id(),UserActionObjectType::Module);
+            break;
+        case Node::Gate:
+            mObject = UserActionObject(ndToMove.id(),UserActionObjectType::Gate);
+            break;
+        default:
+            mContextId = 0; // node type None, exit
+            return;
+        }
     }
 
     QString ActionMoveNode::tagname() const
@@ -86,26 +111,51 @@ namespace hal
 
     bool ActionMoveNode::exec()
     {
+        if (!mContextId) return false;
+
         qInfo() << "1";
         GraphContext* ctx = gGraphContextManager->getContextById(mContextId);
-        if(ctx == nullptr) return false;
+        if (!ctx) return false;
 
+        // current placement for undo
+        ActionMoveNode* undo = new ActionMoveNode(mContextId, GuiApiClasses::View::getGridPlacement(mContextId));
+        mUndoAction = undo;
+
+        // test whether there is a user object
+        Node ndToMove;
+        switch (mObject.type()) {
+        case UserActionObjectType::Gate:
+            ndToMove = Node(mObject.id(),Node::Gate);
+            break;
+        case UserActionObjectType::Module:
+            ndToMove = Node(mObject.id(),Node::Module);
+            break;
+        default:
+            break;
+        }
+
+        qInfo() << "2";
+
+        if (ndToMove.type() != Node::None)
+        {
+            mGridPlacement = undo->mGridPlacement;
+            mGridPlacement[ndToMove] = mTo; // set the position of the node to the new one
+        }
 
         ctx->clear();
+
         QSet<u32> modIds;
         QSet<u32> gateIds;
 
-        qInfo() << "2";
-        QList<Node> nodes = mGridPlacement->keys();
-
         qInfo() << "3";
-        for (Node node : nodes)
+        for (Node node : mGridPlacement.keys())
         {
             if(node.isModule()) modIds.insert(node.id());
             else gateIds.insert(node.id());
         }
 
-        ctx->add(modIds, gateIds);
+        ctx->add(modIds, gateIds, PlacementHint(mGridPlacement));
+        ctx->scheduleSceneUpdate();
 
         /*if (!ctx) return false;
         if (mContextId >= 0)
