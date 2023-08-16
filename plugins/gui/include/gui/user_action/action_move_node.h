@@ -42,7 +42,8 @@ namespace hal
     class ActionMoveNode : public UserAction
     {
         u32 mContextId;
-        QPoint mFrom, mTo;
+        QPoint mTo;
+        bool mSwap;
 
         GridPlacement mGridPlacement;
 
@@ -65,7 +66,7 @@ namespace hal
          * @param from - The initial position of the node to move
          * @param to - The destination of the node
          */
-        ActionMoveNode(u32 ctxID, const QPoint& from, const QPoint& to);
+        ActionMoveNode(u32 ctxID, const QPoint& from, const QPoint& to, bool swap = false);
 
         /**
          * Action constructor.

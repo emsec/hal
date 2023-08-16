@@ -35,7 +35,7 @@ namespace hal
     }
 
     ActionMoveNode::ActionMoveNode(u32 ctxId, const GridPlacement* gridPlc)
-        : mContextId(ctxId)
+        : mContextId(ctxId), mSwap(false)
     {
         if (!checkContextId()) return;
         if (gridPlc)
@@ -43,13 +43,13 @@ namespace hal
     }
 
     ActionMoveNode::ActionMoveNode(u32 ctxID, const QPoint& to)
-        : mContextId(ctxID), mTo(to)
+        : mContextId(ctxID), mTo(to), mSwap(false)
     {
         if (!checkContextId()) return;
     }
 
-    ActionMoveNode::ActionMoveNode(u32 ctxID, const QPoint& from, const QPoint& to)
-        : mContextId(ctxID), mTo(to)
+    ActionMoveNode::ActionMoveNode(u32 ctxID, const QPoint& from, const QPoint& to, bool swap)
+        : mContextId(ctxID), mTo(to), mSwap(swap)
     {
         if (!checkContextId()) return;
         GraphContext* ctx = gGraphContextManager->getContextById(mContextId);
@@ -81,13 +81,11 @@ namespace hal
 
     void ActionMoveNode::addToHash(QCryptographicHash& cryptoHash) const
     {
-        cryptoHash.addData((char*)(&mFrom), sizeof(QPoint));
         cryptoHash.addData((char*)(&mTo)  , sizeof(QPoint));
     }
 
     void ActionMoveNode::writeToXml(QXmlStreamWriter& xmlOut) const
     {
-        xmlOut.writeTextElement("from", QString("%1,%2").arg(mFrom.x()).arg(mFrom.y()));
         xmlOut.writeTextElement("to", QString("%1,%2").arg(mTo.x()).arg(mTo.y()));
     }
 
@@ -95,8 +93,6 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
-            if (xmlIn.name() == "from")
-                mFrom = parseFromString(xmlIn.readElementText());
             if (xmlIn.name() == "to")
                 mTo = parseFromString(xmlIn.readElementText());
         }
