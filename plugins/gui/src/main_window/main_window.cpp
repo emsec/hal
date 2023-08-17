@@ -141,7 +141,7 @@ namespace hal
         mActionSaveAs             = new Action(this);
         mActionExportProject      = new Action(this);
         mActionImportProject      = new Action(this);
-        mActionGateLibraryManager = new Action(this);
+//        mActionGateLibraryManager = new Action(this);
         mActionAbout              = new Action(this);
 
         mActionStartRecording     = new Action(this);
@@ -187,7 +187,7 @@ namespace hal
         mActionSaveAs->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
         mActionClose->setIcon(gui_utility::getStyledSvgIcon(mCloseIconStyle, mCloseIconPath));
         mActionQuit->setIcon(gui_utility::getStyledSvgIcon(mQuitIconStyle, mQuitIconPath));
-        mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
+//        mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
         mActionUndo->setIcon(gui_utility::getStyledSvgIcon(mUndoIconStyle, mUndoIconPath));
         mActionSettings->setIcon(gui_utility::getStyledSvgIcon(mSettingsIconStyle, mSettingsIconPath));
         mActionPlugins->setIcon(gui_utility::getStyledSvgIcon(mPluginsIconStyle, mPluginsIconPath));
@@ -206,7 +206,7 @@ namespace hal
         mMenuFile->addAction(mActionClose);
         mMenuFile->addAction(mActionSave);
         mMenuFile->addAction(mActionSaveAs);
-        mMenuFile->addAction(mActionGateLibraryManager);
+//        mMenuFile->addAction(mActionGateLibraryManager);
 
         QMenu* menuImport = new QMenu("Import …", this);
         menuImport->addAction(mActionImportNetlist);
@@ -288,7 +288,7 @@ namespace hal
         mActionImportNetlist->setText("Import Netlist");
         mActionImportProject->setText("Import Project");
         mActionExportProject->setText("Export Project");
-        mActionGateLibraryManager->setText("Gate Library Manager");
+//        mActionGateLibraryManager->setText("Gate Library Manager");
         mActionUndo->setText("Undo");
         mActionAbout->setText("About");
         mActionSettings->setText("Settings");
@@ -341,7 +341,7 @@ namespace hal
         connect(mActionSaveAs, &Action::triggered, this, &MainWindow::handleSaveAsTriggered);
         connect(mActionExportProject, &Action::triggered, this, &MainWindow::handleExportProjectTriggered);
         connect(mActionImportProject, &Action::triggered, this, &MainWindow::handleImportProjectTriggered);
-        connect(mActionGateLibraryManager, &Action::triggered, this, &MainWindow::handleActionGatelibraryManager);
+//        connect(mActionGateLibraryManager, &Action::triggered, this, &MainWindow::handleActionGatelibraryManager);
         connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionCloseFile);
         connect(mActionQuit, &Action::triggered, this, &MainWindow::onActionQuitTriggered);
 
@@ -788,7 +788,7 @@ namespace hal
         }
         gPythonContext->updateNetlist();
 
-        mActionGateLibraryManager->setVisible(false);
+//        mActionGateLibraryManager->setVisible(false);
     }
 
     void MainWindow::handleActionExport()
@@ -1056,7 +1056,7 @@ namespace hal
 
         gNetlistRelay->reset();
 
-        mActionGateLibraryManager->setVisible(true);
+//        mActionGateLibraryManager->setVisible(true);
 
         return true;
     }

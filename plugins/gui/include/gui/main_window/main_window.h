@@ -614,7 +614,7 @@ namespace hal
         Action* mActionImportNetlist;
         Action* mActionSave;
         Action* mActionSaveAs;
-        Action* mActionGateLibraryManager;
+//        Action* mActionGateLibraryManager;
         Action* mActionAbout;
         Action* mActionStartRecording;
         Action* mActionStopRecording;
