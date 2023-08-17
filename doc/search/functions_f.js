@@ -251,7 +251,7 @@ var searchData=
   ['project_5fmanager_5finit_25839',['project_manager_init',['../group__pybind.html#gac072de2b8e9f09d8320090e5873be90d',1,'hal']]],
   ['projectdirdialog_25840',['ProjectDirDialog',['../classhal_1_1_project_dir_dialog.html#a2694c7fc4719e69b4bd41df7eb407b18',1,'hal::ProjectDirDialog']]],
   ['projectdirdialogstatus_25841',['ProjectDirDialogStatus',['../classhal_1_1_project_dir_dialog_status.html#a02c6f91a897e56086e88d49db3ed0f6e',1,'hal::ProjectDirDialogStatus']]],
-  ['projectdirectory_25842',['projectDirectory',['../classhal_1_1_import_netlist_dialog.html#a5080c5299f1991b4d4389501ecba24f5',1,'hal::ImportNetlistDialog::projectDirectory()'],['../classhal_1_1_new_project_dialog.html#abfb87429ef84485dec41f3f8ece4fb18',1,'hal::NewProjectDialog::projectDirectory()'],['../classhal_1_1_project_directory.html#a6eedb87774801b9838792d12720ad181',1,'hal::ProjectDirectory::ProjectDirectory()']]],
+  ['projectdirectory_25842',['ProjectDirectory',['../classhal_1_1_project_directory.html#a6eedb87774801b9838792d12720ad181',1,'hal::ProjectDirectory::ProjectDirectory()'],['../classhal_1_1_import_netlist_dialog.html#a5080c5299f1991b4d4389501ecba24f5',1,'hal::ImportNetlistDialog::projectDirectory()'],['../classhal_1_1_new_project_dialog.html#abfb87429ef84485dec41f3f8ece4fb18',1,'hal::NewProjectDialog::projectDirectory()']]],
   ['projectjson_25843',['ProjectJson',['../classhal_1_1_project_json.html#a81d21b98b238a95f7b93a459d558bc66',1,'hal::ProjectJson']]],
   ['projectopened_25844',['projectOpened',['../classhal_1_1_file_manager.html#ad0826acdc85c5fb03e0eae1259822635',1,'hal::FileManager']]],
   ['projectsaved_25845',['projectSaved',['../classhal_1_1_file_manager.html#a7866d600e9ead9829f6a61018d8b80f2',1,'hal::FileManager']]],

@@ -12,7 +12,7 @@ var searchData=
   ['yearrange_17788',['YearRange',['https://doc.qt.io/qt-5/qdatetime.html#YearRange-enum',1,'QDateTime']]],
   ['yearsection_17789',['YearSection',['https://doc.qt.io/qt-5/qdatetimeedit.html#Section-enum',1,'QDateTimeEdit']]],
   ['yearshown_17790',['yearShown',['https://doc.qt.io/qt-5/qcalendarwidget.html#yearShown',1,'QCalendarWidget']]],
-  ['yellow_17791',['yellow',['https://doc.qt.io/qt-5/qcolor.html#yellow',1,'QColor::yellow()'],['../classhal_1_1_comment_color_picker.html#afadf18f3e4ef80c099c4252871edd4c8a51e6cd92b6c45f9affdc158ecca2b8b8',1,'hal::CommentColorPicker::Yellow()'],['https://doc.qt.io/qt-5/qt.html#GlobalColor-enum',1,'Qt::yellow()']]],
+  ['yellow_17791',['Yellow',['../classhal_1_1_comment_color_picker.html#afadf18f3e4ef80c099c4252871edd4c8a51e6cd92b6c45f9affdc158ecca2b8b8',1,'hal::CommentColorPicker::Yellow()'],['https://doc.qt.io/qt-5/qcolor.html#yellow',1,'QColor::yellow()'],['https://doc.qt.io/qt-5/qt.html#GlobalColor-enum',1,'Qt::yellow()']]],
   ['yellowcolor_17792',['yellowColor',['../classhal_1_1_comment_dialog.html#abcf9a266df7ecaf63b5c01157642a98f',1,'hal::CommentDialog::yellowColor()'],['../classhal_1_1_comment_dialog.html#ac47b88a015cd4b566399b242de2a8aca',1,'hal::CommentDialog::yellowColor()']]],
   ['yellowf_17793',['yellowF',['https://doc.qt.io/qt-5/qcolor.html#yellowF',1,'QColor']]],
   ['yellowsize_17794',['yellowSize',['https://doc.qt.io/qt-5/qpixelformat.html#yellowSize',1,'QPixelFormat']]],

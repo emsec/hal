@@ -436,7 +436,7 @@ var searchData=
   ['dockmimedata_2855',['DockMimeData',['../classhal_1_1_dock_mime_data.html',1,'hal::DockMimeData'],['../classhal_1_1_dock_mime_data.html#a68e0d254c49318e582e18b1fd3fa15a5',1,'hal::DockMimeData::DockMimeData()']]],
   ['docknestingenabled_2856',['dockNestingEnabled',['https://doc.qt.io/qt-5/qmainwindow.html#dockNestingEnabled-prop',1,'QMainWindow']]],
   ['dockoption_2857',['DockOption',['https://doc.qt.io/qt-5/qmainwindow.html#DockOption-enum',1,'QMainWindow']]],
-  ['dockoptions_2858',['DockOptions',['https://doc.qt.io/qt-5/qmainwindow.html#DockOption-enum',1,'QMainWindow::DockOptions()'],['https://doc.qt.io/qt-5/qmainwindow.html#dockOptions-prop',1,'QMainWindow::dockOptions()'],['https://doc.qt.io/qt-5/qmainwindow.html#dockOptions-prop',1,'QMainWindow::dockOptions() const const']]],
+  ['dockoptions_2858',['dockOptions',['https://doc.qt.io/qt-5/qmainwindow.html#dockOptions-prop',1,'QMainWindow::dockOptions()'],['https://doc.qt.io/qt-5/qmainwindow.html#dockOptions-prop',1,'QMainWindow::dockOptions() const const'],['https://doc.qt.io/qt-5/qmainwindow.html#DockOption-enum',1,'QMainWindow::DockOptions()']]],
   ['dockwidgetarea_2859',['dockWidgetArea',['https://doc.qt.io/qt-5/qmainwindow.html#dockWidgetArea',1,'QMainWindow::dockWidgetArea()'],['https://doc.qt.io/qt-5/qt.html#DockWidgetArea-enum',1,'Qt::DockWidgetArea()']]],
   ['dockwidgetarea_5fmask_2860',['DockWidgetArea_Mask',['https://doc.qt.io/qt-5/qt.html#DockWidgetArea-enum',1,'Qt']]],
   ['dockwidgetareas_2861',['DockWidgetAreas',['https://doc.qt.io/qt-5/qt.html#DockWidgetArea-enum',1,'Qt']]],
