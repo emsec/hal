@@ -43,6 +43,17 @@ namespace hal
 
     namespace netlist_serializer
     {
+        enum ErrorCode { NoError,
+                         ProjectNotAccessible,
+                         NetlistNotAccessible,
+                         NetlistJsonParseError,
+                         GatelibNotProvieded,
+                         GatelibFileNotFound,
+                         GatelibParserError,
+                         HglPluginNotLoaded,
+                         LibPluginNotLoaded,
+                         OtherPluginNotLoaded,
+                       } last_error;
 
         /**
          * Serializes a netlist into a `.hal` file.

@@ -18,9 +18,11 @@ namespace hal
     {
         std::unique_ptr<Netlist> create_netlist(const GateLibrary* gate_library)
         {
+            netlist_serializer::last_error = netlist_serializer::NoError;
             if (gate_library == nullptr)
             {
                 log_critical("netlist", "nullptr given as gate library.");
+                netlist_serializer::last_error = netlist_serializer::GatelibNotProvieded;
                 return nullptr;
             }
 
@@ -29,9 +31,11 @@ namespace hal
 
         std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file, const std::filesystem::path& gate_library_file)
         {
+            netlist_serializer::last_error = netlist_serializer::NoError;
             if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
             {
                 log_critical("netlist", "could not access file '{}'.", netlist_file.string());
+                netlist_serializer::last_error = netlist_serializer::NetlistNotAccessible;
                 return nullptr;
             }
 
@@ -64,9 +68,11 @@ namespace hal
 
         std::unique_ptr<Netlist> load_hal_project(const std::filesystem::path& project_dir)
         {
+            netlist_serializer::last_error = netlist_serializer::NoError;
             if (!std::filesystem::is_directory(project_dir))
             {
                 log_critical("netlist", "could not access hal project '{}'.", project_dir.string());
+                netlist_serializer::last_error = netlist_serializer::ProjectNotAccessible;
                 return nullptr;
             }
 
@@ -74,6 +80,7 @@ namespace hal
             if (!pm->open_project(project_dir.string()))
             {
                 log_critical("netlist", "could not open hal project '{}'.", project_dir.string());
+                netlist_serializer::last_error = netlist_serializer::ProjectNotAccessible;
                 return nullptr;
             }
 
@@ -83,6 +90,7 @@ namespace hal
 
         std::unique_ptr<Netlist> load_netlist(const ProjectDirectory& pdir, const ProgramArguments& args)
         {
+            netlist_serializer::last_error = netlist_serializer::NoError;
             std::filesystem::path netlist_file = args.is_option_set("--import-netlist")
                     ? std::filesystem::path(args.get_parameter("--import-netlist"))
                     : pdir.get_default_filename();
@@ -90,6 +98,7 @@ namespace hal
             if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
             {
                 log_critical("netlist", "cannot access file '{}'.", netlist_file.string());
+                netlist_serializer::last_error = netlist_serializer::NetlistNotAccessible;
                 return nullptr;
             }
 
@@ -105,6 +114,7 @@ namespace hal
 
         std::vector<std::unique_ptr<Netlist>> load_netlists(const std::filesystem::path& netlist_file)
         {
+            netlist_serializer::last_error = netlist_serializer::NoError;
             if (access(netlist_file.c_str(), F_OK | R_OK) == -1)
             {
                 log_critical("netlist", "could not access file '{}'.", netlist_file.string());

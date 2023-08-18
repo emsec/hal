@@ -3,6 +3,7 @@
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser_manager.h"
 #include "hal_core/netlist/gate_library/gate_library_writer/gate_library_writer_manager.h"
+#include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
 
@@ -77,6 +78,7 @@ namespace hal
             if (!std::filesystem::exists(file_path))
             {
                 log_error("gate_library_manager", "gate library file '{}' does not exist.", file_path.string());
+                netlist_serializer::last_error = netlist_serializer::GatelibFileNotFound;
                 return nullptr;
             }
 

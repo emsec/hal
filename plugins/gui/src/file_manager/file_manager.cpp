@@ -521,23 +521,44 @@ namespace hal
         QFileInfo nlInfo(filename);
         if (nlInfo.suffix()=="hal")
         {
-            // event_controls::enable_all(false); won't get events until callbacks are registered
-            auto netlist = netlist_factory::load_netlist(filename.toStdString());
-            // event_controls::enable_all(true);
-            if (netlist)
+            QHash<int,int> errorCount;
+            for (;;) // try loading hal file until exit by return
             {
-                gNetlistOwner = std::move(netlist);
-                gNetlist       = gNetlistOwner.get();
-                gNetlistRelay->registerNetlistCallbacks();
-                fileSuccessfullyLoaded(logical_file_name);
-                return true;
-            }
-            else
-            {
-                std::string error_message("Failed to create netlist from .hal file");
-                log_error("gui", "{}", error_message);
-                displayErrorMessage(QString::fromStdString(error_message));
-                return false;
+                // event_controls::enable_all(false); won't get events until callbacks are registered
+                auto netlist = netlist_factory::load_netlist(filename.toStdString());
+                // event_controls::enable_all(true);
+                if (netlist)
+                {
+                    gNetlistOwner = std::move(netlist);
+                    gNetlist       = gNetlistOwner.get();
+                    gNetlistRelay->registerNetlistCallbacks();
+                    fileSuccessfullyLoaded(logical_file_name);
+                    return true;
+                }
+                else
+                {
+                    bool tryAgain = false;
+                    if (++errorCount[netlist_serializer::last_error] < 3)
+                    {
+                        switch (netlist_serializer::last_error)
+                        {
+                        case netlist_serializer::HglPluginNotLoaded:
+                            gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,".hgl");
+                            tryAgain = true;
+                        case netlist_serializer::LibPluginNotLoaded:
+                            gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,".hgl");
+                            tryAgain = true;
+                        default:
+                            break;
+                        }
+                    }
+                    if (tryAgain) continue;
+
+                    std::string error_message("Failed to create netlist from .hal file");
+                    log_error("gui", "{}", error_message);
+                    displayErrorMessage(QString::fromStdString(error_message));
+                    return false;
+                }
             }
         }
         else
