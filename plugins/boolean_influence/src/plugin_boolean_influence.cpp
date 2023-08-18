@@ -293,6 +293,11 @@ int main(int argc, char *argv[]) {
 
             pclose(pipe);
 
+            if (result.empty() || (result.find_first_not_of("0123456789") == std::string::npos))
+            {
+                return ERR("unable to generate Boolean influence: result is empty or not a number, result: " + result);
+            }
+
             const u32 count            = std::stoi(result);
             const u32 real_evaluations = deterministic ? (1 << input_vars.size()) : num_evaluations;
             double cv                  = (double)(count) / (double)(real_evaluations);
