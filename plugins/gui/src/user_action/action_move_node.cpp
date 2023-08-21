@@ -136,20 +136,17 @@ namespace hal
         if (ndToMove.type() != Node::None)
         {
             mGridPlacement = undo->mGridPlacement;
-            auto it = ctx->getLayouter()->positionToNodeMap().find(mTo);//node and its coordinate at the destination position
-            if (it != ctx->getLayouter()->positionToNodeMap().constEnd() && mSwap)
+            auto it = ctx->getLayouter()->positionToNodeMap().find(mTo);
+            if (it != ctx->getLayouter()->positionToNodeMap().constEnd() && mSwap) //if the position is not available and swap is set
             {
-                QPoint temp = mGridPlacement[ndToMove];//current position of the node to move
-                mGridPlacement[ndToMove] = mTo; // set the position of the first node to the new one
-                mGridPlacement[it.value()] = temp; //set the position of the second node to the position of the first node
-            }
-            else if (it.key() == ctx->getLayouter()->positionToNodeMap().find(mGridPlacement[ndToMove]).key() && !mSwap) //check if the destination position is occupied and if we want to swap nodes
-            {
-                log_warning("gui", "The destination position is already occupied", mContextId);
-                return false;
-            }
-            else
+                QPoint temp = mGridPlacement[ndToMove];
                 mGridPlacement[ndToMove] = mTo;
+                mGridPlacement[it.value()] = temp;
+            }
+            else if(it == ctx->getLayouter()->positionToNodeMap().constEnd()) //if the position is available
+            {
+                mGridPlacement[ndToMove] = mTo;
+            }
         }
 
         ctx->clear();
