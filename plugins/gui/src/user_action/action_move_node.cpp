@@ -137,16 +137,8 @@ namespace hal
         {
             mGridPlacement = undo->mGridPlacement;
             auto it = ctx->getLayouter()->positionToNodeMap().find(mTo);
-            if (it != ctx->getLayouter()->positionToNodeMap().constEnd() && mSwap) //if the position is not available and swap is set
-            {
-                QPoint temp = mGridPlacement[ndToMove];
+            if (it != ctx->getLayouter()->positionToNodeMap().constEnd())
                 mGridPlacement[ndToMove] = mTo;
-                mGridPlacement[it.value()] = temp;
-            }
-            else if(it == ctx->getLayouter()->positionToNodeMap().constEnd()) //if the position is available
-            {
-                mGridPlacement[ndToMove] = mTo;
-            }
         }
 
         ctx->clear();
