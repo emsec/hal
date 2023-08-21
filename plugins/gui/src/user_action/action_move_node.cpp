@@ -60,6 +60,12 @@ namespace hal
             return;
         }
         Node ndToMove = it.value(); // get the node we want to move
+
+        if(mSwap)
+        {
+
+        }
+
         switch (ndToMove.type())
         {
         case Node::Module:
@@ -108,8 +114,6 @@ namespace hal
     bool ActionMoveNode::exec()
     {
         if (!mContextId) return false;
-
-        qInfo() << "1";
         GraphContext* ctx = gGraphContextManager->getContextById(mContextId);
         if (!ctx) return false;
 
@@ -129,13 +133,23 @@ namespace hal
         default:
             break;
         }
-
-        qInfo() << "2";
-
         if (ndToMove.type() != Node::None)
         {
             mGridPlacement = undo->mGridPlacement;
-            mGridPlacement[ndToMove] = mTo; // set the position of the node to the new one
+            auto it = ctx->getLayouter()->positionToNodeMap().find(mTo);//node and its coordinate at the destination position
+            if (it != ctx->getLayouter()->positionToNodeMap().constEnd() && mSwap)
+            {
+                QPoint temp = mGridPlacement[ndToMove];//current position of the node to move
+                mGridPlacement[ndToMove] = mTo; // set the position of the first node to the new one
+                mGridPlacement[it.value()] = temp; //set the position of the second node to the position of the first node
+            }
+            else if (it.key() == ctx->getLayouter()->positionToNodeMap().find(mGridPlacement[ndToMove]).key() && !mSwap) //check if the destination position is occupied and if we want to swap nodes
+            {
+                log_warning("gui", "The destination position is already occupied", mContextId);
+                return false;
+            }
+            else
+                mGridPlacement[ndToMove] = mTo;
         }
 
         ctx->clear();
@@ -143,7 +157,6 @@ namespace hal
         QSet<u32> modIds;
         QSet<u32> gateIds;
 
-        qInfo() << "3";
         for (Node node : mGridPlacement.keys())
         {
             if(node.isModule()) modIds.insert(node.id());

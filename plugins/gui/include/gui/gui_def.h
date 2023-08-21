@@ -26,6 +26,8 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/utilities/log.h"
+#include <QDebug>
 #include <QPoint>
 #include <QHash>
 #include <QSet>
@@ -139,10 +141,37 @@ namespace hal
     {
     public:
         GridPlacement() {;}
-        void setGatePosition(u32 gateId, std::pair<int,int>p) {
-            operator[](hal::Node(gateId,hal::Node::Gate)) = QPoint(p.first,p.second); };
-        void setModulePosition(u32 moduleId, std::pair<int,int>p){
-            operator[](hal::Node(moduleId,hal::Node::Module)) = QPoint(p.first,p.second);};
+        void setGatePosition(u32 gateId, std::pair<int,int>p, bool swap = false) {
+            QPoint pos = QPoint(gatePosition(gateId)->first, gatePosition(gateId)->second); //position of current gate to move
+            hal::Node nd = key(QPoint(p.first, p.second)); //find the node in the destination
+
+            if(!nd.isNull() && !swap) //if the destination placement is not available
+                log_warning("gui", "Target position is already occupied");
+            else if (!nd.isNull() && swap)
+            {
+                operator[](hal::Node(gateId,hal::Node::Gate)) = QPoint(p.first,p.second);//set the position of the first node to the destination
+                if(nd.isGate())
+                    operator[](hal::Node(nd.id(), hal::Node::Gate)) = pos;//set the position of the destination node to the position of the first node
+                else operator[](hal::Node(nd.id(), hal::Node::Module)) = pos;
+            }
+            else
+                operator[](hal::Node(gateId,hal::Node::Gate)) = QPoint(p.first,p.second);
+        }
+        void setModulePosition(u32 moduleId, std::pair<int,int>p, bool swap = false){
+            QPoint pos = QPoint(modulePosition(moduleId)->first, modulePosition(moduleId)->second);
+            hal::Node nd = key(QPoint(p.first, p.second));
+
+            if(!nd.isNull() && !swap)
+                log_warning("gui", "Target position is already occupied");
+            else if (!nd.isNull() && swap)
+            {
+                operator[](hal::Node(moduleId,hal::Node::Module)) = QPoint(p.first,p.second);
+                if(nd.isGate())
+                    operator[](hal::Node(nd.id(), hal::Node::Gate)) = pos;
+                else operator[](hal::Node(nd.id(), hal::Node::Module)) = pos;
+            }
+            else
+                operator[](hal::Node(moduleId,hal::Node::Module)) = QPoint(p.first,p.second);};
         std::pair<int,int>* gatePosition(u32 gateId) const
         {
             auto it = constFind(hal::Node(gateId,hal::Node::Gate));
