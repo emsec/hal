@@ -9,8 +9,6 @@
 #include <filesystem>
 #include <fstream>
 
-std::mutex testMutex;
-
 namespace hal
 {
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
@@ -283,22 +281,25 @@ int main(int argc, char *argv[]) {
 
             QStringList args;
             args << QString::number(idx);
-            if (!deterministic) args << QString::number(num_evaluations);
-
-            char buffer[129];
-            memset(buffer,0,sizeof(buffer));
-            std::string result;
+            if (!deterministic)
+            {
+                args << QString::number(num_evaluations);
+            }
 
             QProcess proc;
-            proc.start(QString::fromStdString(program_name),args);
+            proc.start(QString::fromStdString(program_name), args);
             proc.waitForStarted();
             proc.waitForFinished();
             QByteArray output = proc.readAllStandardError();
             output += proc.readAllStandardOutput();
 
+            std::string result;
             result = QString::fromUtf8(output).toStdString();
 
             /*
+            char buffer[129];
+            memset(buffer,0,sizeof(buffer));
+
             FILE* pipe = popen(run_command.c_str(), "r");
             if (!pipe)
             {
@@ -322,18 +323,7 @@ int main(int argc, char *argv[]) {
 
             if (result.empty() || (result.find_first_not_of("0123456789") == std::string::npos))
             {
-                testMutex.lock();
-                std::cerr << "fail <" << run_command <<  ">" << (result.empty() ? " empty" : " filled") << std::endl;
-                      //    << (feof(pipe) ? " feof" : " no-eof") << (ferror(pipe) ? " ferror" : " no-err") << std::endl;
-                testMutex.unlock();
                 return ERR("unable to generate Boolean influence: result is empty or not a number, result: " + result);
-            }
-            else
-            {
-                testMutex.lock();
-                std::cerr << "good <" << run_command <<  ">" << (result.empty() ? " empty" : " filled") << std::endl;
-                      //    << (feof(pipe) ? " feof" : " no-eof") << (ferror(pipe) ? " ferror" : " no-err") << std::endl;
-                testMutex.unlock();
             }
 
             const u32 count            = std::stoi(result);
