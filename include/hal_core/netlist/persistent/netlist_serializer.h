@@ -53,7 +53,9 @@ namespace hal
                          HglPluginNotLoaded,
                          LibPluginNotLoaded,
                          OtherPluginNotLoaded,
-                       } last_error;
+                       };
+
+        static ErrorCode last_error;
 
         /**
          * Serializes a netlist into a `.hal` file.
