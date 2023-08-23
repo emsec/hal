@@ -155,18 +155,6 @@ namespace hal
         ctx->add(modIds, gateIds, PlacementHint(mGridPlacement));
         ctx->scheduleSceneUpdate();
 
-        /*if (!ctx) return false;
-        if (mContextId >= 0)
-        {
-            Node nd(mObject.id(),UserActionObjectType::toNodeType(mObject.type()));
-            NodeBox* box = ctx->getLayouter()->boxes().boxForNode(nd);
-            if (!box) return false;
-            mFrom.setX(box->x());
-            mFrom.setY(box->y());
-
-        }
-        ctx->moveNodeAction(mFrom,mTo);*/
-
         return UserAction::exec();
     }
 }

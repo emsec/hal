@@ -968,23 +968,10 @@ namespace hal
 
     bool GuiApiClasses::View::setGridPlacement(int viewId, GridPlacement *gp)
     {
-        /*UserActionCompound* actComp = new UserActionCompound;
-        actComp->setUseCreatedObject();*/
-        GridPlacement* oldGp = GuiApiClasses::View::getGridPlacement(viewId);
-        qInfo() << oldGp->values();
+
         ActionMoveNode* act = new ActionMoveNode(viewId, gp);
         act->exec();
-        qInfo() << gp->values();
 
-       /* for(auto i = gp->begin(); i != gp->end(); i++)
-        {
-            ActionMoveNode* act = new ActionMoveNode(viewId, i.value());
-            qInfo() << i.key().type();
-            if(i.key().isGate()) act->setObject(UserActionObject(i.key().Gate, UserActionObjectType::Gate));
-            else if(i.key().isModule()) act->setObject(UserActionObject(i.key().Module, UserActionObjectType::Module));
-            else return false;
-            actComp->addAction(act);
-        }*/
         return true;
 
     }
