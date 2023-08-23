@@ -418,6 +418,7 @@ namespace hal
             return extract_net_ids(get_variable_names(e));
         }
 
+        // TODO make this return a result (i think)
         std::set<u32> extract_net_ids(const std::set<std::string>& variable_names)
         {
             std::set<u32> net_ids;
