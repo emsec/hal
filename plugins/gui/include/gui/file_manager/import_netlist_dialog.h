@@ -54,7 +54,6 @@ namespace hal {
     private Q_SLOTS:
         void handleGateLibraryPathChanged(const QString& txt);
         void handleFileDialogTriggered();
-        void setSuggestedProjectDir(const QString& filename);
     public:
         ImportNetlistDialog(const QString& filename, QWidget* parent = nullptr);
         QString projectDirectory() const;

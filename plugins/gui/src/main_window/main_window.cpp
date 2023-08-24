@@ -817,7 +817,7 @@ namespace hal
             if (ipd.importProject())
             {
                 ActionOpenNetlistFile* act = new ActionOpenNetlistFile(ActionOpenNetlistFile::OpenProject,
-                                                                       ipd.extractedProjectDir());
+                                                                       ipd.extractedProjectAbsolutePath());
                 act->exec();
             }
             else
