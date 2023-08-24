@@ -8,7 +8,7 @@ var classhal_1_1_import_project_dialog =
       [ "NoImport", "classhal_1_1_import_project_dialog.html#ac277dfe4f14e954702c7951d93929e17ab55e5ec7f9b9af33c231ae558d6673a0", null ]
     ] ],
     [ "ImportProjectDialog", "classhal_1_1_import_project_dialog.html#a9b7af9fa1cf0d45f3f24e0633397adc6", null ],
-    [ "extractedProjectDir", "classhal_1_1_import_project_dialog.html#a72d96a578be5036beada9829ee7ca225", null ],
+    [ "extractedProjectAbsolutePath", "classhal_1_1_import_project_dialog.html#a294ebcef84e29fb3b4054440e66cd478", null ],
     [ "importProject", "classhal_1_1_import_project_dialog.html#a2007fc4a4a11d18565bb2fec5d592f30", null ],
     [ "status", "classhal_1_1_import_project_dialog.html#a3227f983fb6b5e7c7d46871b4e1d0aee", null ]
 ];

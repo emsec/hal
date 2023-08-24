@@ -1,17 +1,17 @@
 var searchData=
 [
-  ['background_38436',['background',['https://doc.qt.io/qt-5/qmdiarea.html#background-prop',1,'QMdiArea']]],
-  ['backgroundbrush_38437',['backgroundBrush',['https://doc.qt.io/qt-5/qgraphicsscene.html#backgroundBrush-prop',1,'QGraphicsScene::backgroundBrush()'],['https://doc.qt.io/qt-5/qgraphicsview.html#backgroundBrush-prop',1,'QGraphicsView::backgroundBrush()']]],
-  ['backgroundvisible_38438',['backgroundVisible',['https://doc.qt.io/qt-5/qplaintextedit.html#backgroundVisible-prop',1,'QPlainTextEdit']]],
-  ['basesize_38439',['baseSize',['https://doc.qt.io/qt-5/qwidget.html#baseSize-prop',1,'QWidget']]],
-  ['baseurl_38440',['baseUrl',['https://doc.qt.io/qt-5/qtextdocument.html#baseUrl-prop',1,'QTextDocument']]],
-  ['batchsize_38441',['batchSize',['https://doc.qt.io/qt-5/qlistview.html#batchSize-prop',1,'QListView']]],
-  ['blockcount_38442',['blockCount',['https://doc.qt.io/qt-5/qtextdocument.html#blockCount-prop',1,'QTextDocument::blockCount()'],['https://doc.qt.io/qt-5/qplaintextedit.html#blockCount-prop',1,'QPlainTextEdit::blockCount()']]],
-  ['blurhints_38443',['blurHints',['https://doc.qt.io/qt-5/qgraphicsblureffect.html#blurHints-prop',1,'QGraphicsBlurEffect']]],
-  ['blurradius_38444',['blurRadius',['https://doc.qt.io/qt-5/qgraphicsblureffect.html#blurRadius-prop',1,'QGraphicsBlurEffect::blurRadius()'],['https://doc.qt.io/qt-5/qgraphicsdropshadoweffect.html#blurRadius-prop',1,'QGraphicsDropShadowEffect::blurRadius()']]],
-  ['bottom_38445',['bottom',['https://doc.qt.io/qt-5/qdoublevalidator.html#bottom-prop',1,'QDoubleValidator::bottom()'],['https://doc.qt.io/qt-5/qintvalidator.html#bottom-prop',1,'QIntValidator::bottom()']]],
-  ['bracecolor_38446',['braceColor',['../classhal_1_1_python_qss_adapter.html#a573880840a601e67ee717cca04d104c4',1,'hal::PythonQssAdapter']]],
-  ['bsptreedepth_38447',['bspTreeDepth',['https://doc.qt.io/qt-5/qgraphicsscene.html#bspTreeDepth-prop',1,'QGraphicsScene']]],
-  ['button_38448',['button',['https://doc.qt.io/qt-5/qmouseeventtransition.html#button-prop',1,'QMouseEventTransition']]],
-  ['buttonsymbols_38449',['buttonSymbols',['https://doc.qt.io/qt-5/qabstractspinbox.html#buttonSymbols-prop',1,'QAbstractSpinBox']]]
+  ['background_38438',['background',['https://doc.qt.io/qt-5/qmdiarea.html#background-prop',1,'QMdiArea']]],
+  ['backgroundbrush_38439',['backgroundBrush',['https://doc.qt.io/qt-5/qgraphicsscene.html#backgroundBrush-prop',1,'QGraphicsScene::backgroundBrush()'],['https://doc.qt.io/qt-5/qgraphicsview.html#backgroundBrush-prop',1,'QGraphicsView::backgroundBrush()']]],
+  ['backgroundvisible_38440',['backgroundVisible',['https://doc.qt.io/qt-5/qplaintextedit.html#backgroundVisible-prop',1,'QPlainTextEdit']]],
+  ['basesize_38441',['baseSize',['https://doc.qt.io/qt-5/qwidget.html#baseSize-prop',1,'QWidget']]],
+  ['baseurl_38442',['baseUrl',['https://doc.qt.io/qt-5/qtextdocument.html#baseUrl-prop',1,'QTextDocument']]],
+  ['batchsize_38443',['batchSize',['https://doc.qt.io/qt-5/qlistview.html#batchSize-prop',1,'QListView']]],
+  ['blockcount_38444',['blockCount',['https://doc.qt.io/qt-5/qtextdocument.html#blockCount-prop',1,'QTextDocument::blockCount()'],['https://doc.qt.io/qt-5/qplaintextedit.html#blockCount-prop',1,'QPlainTextEdit::blockCount()']]],
+  ['blurhints_38445',['blurHints',['https://doc.qt.io/qt-5/qgraphicsblureffect.html#blurHints-prop',1,'QGraphicsBlurEffect']]],
+  ['blurradius_38446',['blurRadius',['https://doc.qt.io/qt-5/qgraphicsblureffect.html#blurRadius-prop',1,'QGraphicsBlurEffect::blurRadius()'],['https://doc.qt.io/qt-5/qgraphicsdropshadoweffect.html#blurRadius-prop',1,'QGraphicsDropShadowEffect::blurRadius()']]],
+  ['bottom_38447',['bottom',['https://doc.qt.io/qt-5/qdoublevalidator.html#bottom-prop',1,'QDoubleValidator::bottom()'],['https://doc.qt.io/qt-5/qintvalidator.html#bottom-prop',1,'QIntValidator::bottom()']]],
+  ['bracecolor_38448',['braceColor',['../classhal_1_1_python_qss_adapter.html#a573880840a601e67ee717cca04d104c4',1,'hal::PythonQssAdapter']]],
+  ['bsptreedepth_38449',['bspTreeDepth',['https://doc.qt.io/qt-5/qgraphicsscene.html#bspTreeDepth-prop',1,'QGraphicsScene']]],
+  ['button_38450',['button',['https://doc.qt.io/qt-5/qmouseeventtransition.html#button-prop',1,'QMouseEventTransition']]],
+  ['buttonsymbols_38451',['buttonSymbols',['https://doc.qt.io/qt-5/qabstractspinbox.html#buttonSymbols-prop',1,'QAbstractSpinBox']]]
 ];

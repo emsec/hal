@@ -85,6 +85,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_import_project_dialog.htm
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classhal_1_1_import_project_dialog-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hal::ImportProjectDialog Class Reference</div>  </div>
@@ -97,9 +98,9 @@ Inheritance diagram for hal::ImportProjectDialog:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_import_project_dialog__inherit__graph.png" border="0" usemap="#hal_1_1_import_project_dialog_inherit__map" alt="Inheritance graph"/></div>
 <map name="hal_1_1_import_project_dialog_inherit__map" id="hal_1_1_import_project_dialog_inherit__map">
-<area shape="rect" title=" " alt="" coords="19,828,199,949"/>
-<area shape="rect" href="https://doc.qt.io/qt-5/qdialog.html" title=" " alt="" coords="24,497,193,780"/>
-<area shape="rect" href="https://doc.qt.io/qt-5/qwidget.html" title=" " alt="" coords="5,5,212,449"/>
+<area shape="rect" title=" " alt="" coords="5,828,244,964"/>
+<area shape="rect" href="https://doc.qt.io/qt-5/qdialog.html" title=" " alt="" coords="40,497,209,780"/>
+<area shape="rect" href="https://doc.qt.io/qt-5/qwidget.html" title=" " alt="" coords="21,5,228,449"/>
 </map>
 </div>
 <div class="dynheader">
@@ -107,9 +108,9 @@ Collaboration diagram for hal::ImportProjectDialog:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_import_project_dialog__coll__graph.png" border="0" usemap="#hal_1_1_import_project_dialog_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_import_project_dialog_coll__map" id="hal_1_1_import_project_dialog_coll__map">
-<area shape="rect" title=" " alt="" coords="19,828,199,949"/>
-<area shape="rect" href="https://doc.qt.io/qt-5/qdialog.html" title=" " alt="" coords="24,497,193,780"/>
-<area shape="rect" href="https://doc.qt.io/qt-5/qwidget.html" title=" " alt="" coords="5,5,212,449"/>
+<area shape="rect" title=" " alt="" coords="5,828,244,964"/>
+<area shape="rect" href="https://doc.qt.io/qt-5/qdialog.html" title=" " alt="" coords="40,497,209,780"/>
+<area shape="rect" href="https://doc.qt.io/qt-5/qwidget.html" title=" " alt="" coords="21,5,228,449"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -143,8 +144,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2007fc4a4a11d18565bb2fec5d592f30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3227f983fb6b5e7c7d46871b4e1d0aee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_import_project_dialog.html#ac277dfe4f14e954702c7951d93929e17">ImportStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_import_project_dialog.html#a3227f983fb6b5e7c7d46871b4e1d0aee">status</a> () const</td></tr>
 <tr class="separator:a3227f983fb6b5e7c7d46871b4e1d0aee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72d96a578be5036beada9829ee7ca225"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_import_project_dialog.html#a72d96a578be5036beada9829ee7ca225">extractedProjectDir</a> () const</td></tr>
-<tr class="separator:a72d96a578be5036beada9829ee7ca225"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a294ebcef84e29fb3b4054440e66cd478"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_import_project_dialog.html#a294ebcef84e29fb3b4054440e66cd478">extractedProjectAbsolutePath</a> () const</td></tr>
+<tr class="separator:a294ebcef84e29fb3b4054440e66cd478"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_qdialog"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_qdialog')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qdialog.html">QDialog</a></td></tr>
 <tr class="memitem:QDialog inherit pub_methods_qdialog"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qdialog.html#QDialog">QDialog</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#WindowType-enum">Qt::WindowFlags</a> f)</td></tr>
 <tr class="separator:QDialog inherit pub_methods_qdialog"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -844,8 +845,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:depth inherit pub_methods_qpaintdevice"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qpaintdevice.html#depth">depth</a> () const const</td></tr>
 <tr class="separator:depth inherit pub_methods_qpaintdevice"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a1337294775eb8a141f5b32f23f9f76ad"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_import_project_dialog.html#a1337294775eb8a141f5b32f23f9f76ad">suggestedProjectDir</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;filename)</td></tr>
+<tr class="separator:a1337294775eb8a141f5b32f23f9f76ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_static_methods_qwidget"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_qwidget')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></td></tr>
 <tr class="memitem:setTabOrder inherit pub_static_methods_qwidget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setTabOrder">setTabOrder</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *first, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *second)</td></tr>
 <tr class="separator:setTabOrder inherit pub_static_methods_qwidget"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -880,6 +883,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:disconnect-4 inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:disconnect-5 inherit pub_static_methods_qobject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#disconnect-5">disconnect</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">sender</a>, PointerToMemberFunction signal, const <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *receiver, PointerToMemberFunction method)</td></tr>
 <tr class="separator:disconnect-5 inherit pub_static_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_attribs_qdialog"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_qdialog')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el"  href="https://doc.qt.io/qt-5/qdialog.html">QDialog</a></td></tr>
 <tr class="memitem:DialogCode-enum inherit pub_attribs_qdialog"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qdialog.html#DialogCode-enum">Rejected</a></td></tr>
 <tr class="separator:DialogCode-enum inherit pub_attribs_qdialog"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1194,15 +1200,15 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="import__project__dialog_8cpp_source.html#l00052">52</a> of file <a class="el" href="import__project__dialog_8cpp_source.html">import_project_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="import__project__dialog_8cpp_source.html#l00055">55</a> of file <a class="el" href="import__project__dialog_8cpp_source.html">import_project_dialog.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdialog.html#accept">QDialog::accept()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdialogbuttonbox.html#accepted">QDialogButtonBox::accepted()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlayout.html#addWidget">QLayout::addWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdialogbuttonbox.html#StandardButton-enum">QDialogButtonBox::Cancel</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#currentPath">QDir::currentPath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#layout">QWidget::layout()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdialogbuttonbox.html#StandardButton-enum">QDialogButtonBox::Ok</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdialog.html#reject">QDialog::reject()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdialogbuttonbox.html#rejected">QDialogButtonBox::rejected()</a>, <a class="el" href="classhal_1_1_file_select_widget.html#aa4e03ee8e94d9cf8d0b7df61916f890a">hal::FileSelectWidget::selectionStatusChanged()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#windowTitle-prop">QWidget::setWindowTitle()</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a72d96a578be5036beada9829ee7ca225"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a72d96a578be5036beada9829ee7ca225">&#9670;&nbsp;</a></span>extractedProjectDir()</h2>
+<a id="a294ebcef84e29fb3b4054440e66cd478"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a294ebcef84e29fb3b4054440e66cd478">&#9670;&nbsp;</a></span>extractedProjectAbsolutePath()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1211,7 +1217,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> hal::ImportProjectDialog::extractedProjectDir </td>
+          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> hal::ImportProjectDialog::extractedProjectAbsolutePath </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1224,7 +1230,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="import__project__dialog_8h_source.html#l00072">72</a> of file <a class="el" href="import__project__dialog_8h_source.html">import_project_dialog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="import__project__dialog_8h_source.html#l00076">76</a> of file <a class="el" href="import__project__dialog_8h_source.html">import_project_dialog.h</a>.</p>
 
 </div>
 </div>
@@ -1243,9 +1249,9 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="import__project__dialog_8cpp_source.html#l00083">83</a> of file <a class="el" href="import__project__dialog_8cpp_source.html">import_project_dialog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="import__project__dialog_8cpp_source.html#l00111">111</a> of file <a class="el" href="import__project__dialog_8cpp_source.html">import_project_dialog.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#at">QList::at()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#back">QString::back()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#begin">QList::begin()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#chop">QString::chop()</a>, <a class="el" href="file__manager_8cpp_source.html#l00162">hal::FileManager::directoryStatus()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#end">QList::end()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#erase">QList::erase()</a>, <a class="el" href="import__project__dialog_8h_source.html#l00059">ErrorDecompress</a>, <a class="el" href="file__manager_8h_source.html#l00094">hal::FileManager::GatelibError</a>, <a class="el" href="file__manager_8h_source.html#l00093">hal::FileManager::InvalidExtension</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfileinfo.html#isDir">QFileInfo::isDir()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#isEmpty">QList::isEmpty()</a>, <a class="el" href="file__manager_8h_source.html#l00093">hal::FileManager::IsFile</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="file__manager_8h_source.html#l00094">hal::FileManager::NetlistError</a>, <a class="el" href="import__project__dialog_8h_source.html#l00059">NoFileSelected</a>, <a class="el" href="import__project__dialog_8h_source.html#l00059">NotAHalProject</a>, <a class="el" href="file__manager_8h_source.html#l00093">hal::FileManager::NotExisting</a>, <a class="el" href="import__project__dialog_8h_source.html#l00059">Ok</a>, <a class="el" href="file__manager_8h_source.html#l00093">hal::FileManager::OtherDirectory</a>, <a class="el" href="file__manager_8h_source.html#l00093">hal::FileManager::ParseError</a>, <a class="el" href="file__manager_8h_source.html#l00093">hal::FileManager::ProjectDirectory</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfile.html#remove">QFile::remove()</a>, <a class="el" href="import__project__dialog_8h_source.html#l00051">hal::FileSelectWidget::selection()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qchar.html#unicode">QChar::unicode()</a>, and <a class="el" href="file__manager_8h_source.html#l00094">hal::FileManager::UnknownDirectoryEntry</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#at">QList::at()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#back">QString::back()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#chop">QString::chop()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/quuid.html#createUuid">QUuid::createUuid()</a>, <a class="el" href="file__manager_8cpp_source.html#l00162">hal::FileManager::directoryStatus()</a>, <a class="el" href="import__project__dialog_8h_source.html#l00059">ErrorDecompress</a>, <a class="el" href="file__manager_8h_source.html#l00094">hal::FileManager::GatelibError</a>, <a class="el" href="file__manager_8h_source.html#l00093">hal::FileManager::InvalidExtension</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#isEmpty">QList::isEmpty()</a>, <a class="el" href="file__manager_8h_source.html#l00093">hal::FileManager::IsFile</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#mkpath">QDir::mkpath()</a>, <a class="el" href="file__manager_8h_source.html#l00094">hal::FileManager::NetlistError</a>, <a class="el" href="import__project__dialog_8h_source.html#l00059">NoFileSelected</a>, <a class="el" href="import__project__dialog_8h_source.html#l00059">NotAHalProject</a>, <a class="el" href="file__manager_8h_source.html#l00093">hal::FileManager::NotExisting</a>, <a class="el" href="import__project__dialog_8h_source.html#l00059">Ok</a>, <a class="el" href="file__manager_8h_source.html#l00093">hal::FileManager::OtherDirectory</a>, <a class="el" href="file__manager_8h_source.html#l00093">hal::FileManager::ParseError</a>, <a class="el" href="file__manager_8h_source.html#l00093">hal::FileManager::ProjectDirectory</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfile.html#rename">QFile::rename()</a>, <a class="el" href="import__project__dialog_8h_source.html#l00051">hal::FileSelectWidget::selection()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#text-prop">QLineEdit::text</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qchar.html#unicode">QChar::unicode()</a>, <a class="el" href="file__manager_8h_source.html#l00094">hal::FileManager::UnknownDirectoryEntry</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#warning">QMessageBox::warning()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/quuid.html#StringFormat-enum">QUuid::WithoutBraces</a>.</p>
 
 </div>
 </div>
@@ -1272,7 +1278,39 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="import__project__dialog_8h_source.html#l00071">71</a> of file <a class="el" href="import__project__dialog_8h_source.html">import_project_dialog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="import__project__dialog_8h_source.html#l00075">75</a> of file <a class="el" href="import__project__dialog_8h_source.html">import_project_dialog.h</a>.</p>
+
+</div>
+</div>
+<a id="a1337294775eb8a141f5b32f23f9f76ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1337294775eb8a141f5b32f23f9f76ad">&#9670;&nbsp;</a></span>suggestedProjectDir()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> hal::ImportProjectDialog::suggestedProjectDir </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;&#160;</td>
+          <td class="paramname"><em>filename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="import__project__dialog_8cpp_source.html#l00242">242</a> of file <a class="el" href="import__project__dialog_8cpp_source.html">import_project_dialog.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#remove">QString::remove()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="import__netlist__dialog_8cpp_source.html#l00025">hal::ImportNetlistDialog::ImportNetlistDialog()</a>.</p>
 
 </div>
 </div>
@@ -1286,7 +1324,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_import_project_dialog.html">ImportProjectDialog</a></li>
-    <li class="footer">Generated on Fri Aug 18 2023 10:39:11 for HAL by
+    <li class="footer">Generated on Thu Aug 24 2023 20:23:10 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

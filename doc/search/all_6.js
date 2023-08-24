@@ -39,7 +39,7 @@ var searchData=
   ['fcompl0_3534',['fCompl0',['../struct_abc___obj__t__.html#aea66857cfe6c5cf1370a28bde565359d',1,'Abc_Obj_t_']]],
   ['fcompl1_3535',['fCompl1',['../struct_abc___obj__t__.html#a9cdaa2ce34b0ce55a85575faa71d7b40',1,'Abc_Obj_t_']]],
   ['fdiagpattern_3536',['FDiagPattern',['https://doc.qt.io/qt-5/qt.html#BrushStyle-enum',1,'Qt']]],
-  ['feature_3537',['Feature',['https://doc.qt.io/qt-5/qopengltexture.html#Feature-enum',1,'QOpenGLTexture::Feature()'],['../classhal_1_1_fac_extension_interface.html#a51208001cb7c820db7b388507c59a4f0',1,'hal::FacExtensionInterface::Feature()'],['../structhal_1_1plugin__manager_1_1_plugin_feature.html#a72d3b8b0b2394c90af135499e241bdaf',1,'hal::plugin_manager::PluginFeature::feature()']]],
+  ['feature_3537',['feature',['../structhal_1_1plugin__manager_1_1_plugin_feature.html#a72d3b8b0b2394c90af135499e241bdaf',1,'hal::plugin_manager::PluginFeature::feature()'],['https://doc.qt.io/qt-5/qopengltexture.html#Feature-enum',1,'QOpenGLTexture::Feature()'],['../classhal_1_1_fac_extension_interface.html#a51208001cb7c820db7b388507c59a4f0',1,'hal::FacExtensionInterface::Feature()']]],
   ['features_3538',['Features',['https://doc.qt.io/qt-5/qopengltexture.html#Feature-enum',1,'QOpenGLTexture::Features()'],['https://doc.qt.io/qt-5/qdockwidget.html#features-prop',1,'QDockWidget::features()'],['https://doc.qt.io/qt-5/qdockwidget.html#features-prop',1,'QDockWidget::features() const const']]],
   ['featureschanged_3539',['featuresChanged',['https://doc.qt.io/qt-5/qdockwidget.html#featuresChanged',1,'QDockWidget']]],
   ['februaryink_3540',['FebruaryInk',['https://doc.qt.io/qt-5/qgradient.html#Preset-enum',1,'QGradient']]],
