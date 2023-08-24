@@ -57,7 +57,7 @@ namespace hal
                     op.erase(op.size() - 3);
                     break;
                 default:
-                    log_error("verifiaction", "unkown operation for operation building ({})", operation);
+                    log_error("verifiaction", "unkown operation for operation building ({})", operation_to_string(operation));
                     return "NOT IMPLEMENTED REACHED";
             }
 

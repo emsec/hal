@@ -140,7 +140,7 @@ namespace hal
                     break;
                 case BooleanFunction::Value::X:
                 case BooleanFunction::Value::Z:
-                    log_error("hal_simulator", "RAM gate '{}' with ID {} of type {} cannot be initialized with value '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name(), value);
+                    log_error("hal_simulator", "RAM gate '{}' with ID {} of type {} cannot be initialized with value '{}'.", m_gate->get_name(), m_gate->get_id(), gate_type->get_name(), BooleanFunction::to_string(value));
                     return;
             }
 
