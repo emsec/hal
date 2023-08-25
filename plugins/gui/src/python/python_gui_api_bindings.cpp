@@ -86,21 +86,21 @@ PYBIND11_PLUGIN(hal_gui)
                  Constructor for empty placement hash.
             )")
 
-            .def("setGatePosition", &GridPlacement::setGatePosition, R"(
+            .def("setGatePosition", &GridPlacement::setGatePosition, py::arg("gateId"), py::arg("point"), py::arg("swap") = false, R"(
                  Set position for gate identified by ID.
 
                  :param int gateId: Gate ID.
                  :param tuple(int,int) pos: New position.
             )")
 
-            .def("setModulePosition", &GridPlacement::setModulePosition, R"(
+            .def("setModulePosition", &GridPlacement::setModulePosition, py::arg("moduleId"), py::arg("point"), py::arg("swap") = false, R"(
                  Set position for module identified by ID.
 
                  :param int moduleId: Module ID.
                  :param tuple(int,int) pos: New position.
             )")
 
-            .def("gatePosition", &GridPlacement::gatePosition, R"(
+            .def("gatePosition", &GridPlacement::gatePosition, py::arg("gateId"), R"(
                  Query position for gate identified by ID.
 
                  :param int gateId: Gate ID.
@@ -108,7 +108,7 @@ PYBIND11_PLUGIN(hal_gui)
                  :rtype: tuple(int,int) or None
             )")
 
-            .def("modulePosition", &GridPlacement::modulePosition, R"(
+            .def("modulePosition", &GridPlacement::modulePosition, py::arg("moduleId"), R"(
                  Query position for module identified by ID.
 
                  :param int moduleId: Module ID.
