@@ -1,10 +1,14 @@
+#include "hal_core/netlist/boolean_function/solver.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
+#include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
+#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
 #include "z3_utils/include/utils/json.hpp"
 #include "z3_utils/include/z3_utils.h"
+
 
 namespace hal
 {
@@ -133,15 +137,15 @@ namespace hal
                 {
                     return ERR("could not get subgraph z3 function of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": net has more than one source");
                 }
-                else if (net->is_global_input_net())
-                {
-                    const auto net_dec = BooleanFunctionNetDecorator(*net);
-                    return OK(ctx.bv_const(net_dec.get_boolean_variable_name().c_str(), 1));
-                }
-                else if (net->get_num_of_sources() == 0)
-                {
-                    return ERR("could not get subgraph function of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": net has no sources");
-                }
+                // else if (net->is_global_input_net())
+                // {
+                //     const auto net_dec = BooleanFunctionNetDecorator(*net);
+                //     return OK(ctx.bv_const(net_dec.get_boolean_variable_name().c_str(), 1));
+                // }
+                // else if (net->get_num_of_sources() == 0)
+                // {
+                //     return ERR("could not get subgraph function of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": net has no sources");
+                // }
 
                 return get_prefixed_function_of_net(subgraph_gates, net, variable_prefix, ctx, net_cache, gate_cache);
             }
@@ -188,7 +192,27 @@ namespace hal
                     }
 
                     const std::string var_name = variable_prefix + BooleanFunctionNetDecorator(*net).get_boolean_variable_name();
-                    if (net->get_sources().empty())
+                    const auto sources = net->get_sources([](const Endpoint* ep) { return (ep->get_gate() != nullptr) && (ep->get_gate()->get_type()->has_property(GateTypeProperty::sequential)); });
+                    if (net->is_global_input_net())
+                    {
+                        const auto pin = nl->get_top_module()->get_pin_by_net(net);
+
+                        if (pin == nullptr)
+                        {
+                            return ERR("cannot replace net id for net " + net->get_name() + " with ID " + std::to_string(net->get_id()) + ": net is global input but unable to find pin at top module!");
+                        }
+
+                        const z3::expr new_expr = ctx.bv_const(("GLOBAL_IN_" + pin->get_name()).c_str(), 1);
+                        const z3::expr net_expr = ctx.bv_const(var_name.c_str(), 1);
+
+                        // TODO remove
+                        // std::cout << "Added global IO constraint: " << (net_expr == new_expr) << std::endl;
+
+                        s.add(net_expr == new_expr);
+                        continue;
+                    }
+                    
+                    if (sources.empty())
                     {
                         // TODO this is not an ideal solution, but i dont know a better one
                         log_debug("z3_utils", "No source found for net {}. Cannot replace net and will rename with net name {}!", net->get_id(), net->get_name());
@@ -196,11 +220,14 @@ namespace hal
                         const z3::expr new_expr = ctx.bv_const(net->get_name().c_str(), 1);
                         const z3::expr net_expr = ctx.bv_const(var_name.c_str(), 1);
 
+                        // TODO remove
+                        // std::cout << "Added constraint: " << (net_expr == new_expr) << std::endl;
+
                         s.add(net_expr == new_expr);
                         continue;
                     }
 
-                    const Endpoint* src = net->get_sources().front();
+                    const Endpoint* src = sources.front();
 
                     if (src->get_gate() == nullptr)
                     {
@@ -225,6 +252,7 @@ namespace hal
                 return OK({});
             }
 
+            /*
             Result<std::monostate> substitute_net_ids(z3::context& ctx, z3::solver& s, const z3::expr& bf, const std::string& variable_prefix, const Netlist* nl)
             {
                 const auto input_vars = z3_utils::get_variable_names(bf);
@@ -247,6 +275,7 @@ namespace hal
 
                 return substitute_net_ids(ctx, s, nets, variable_prefix, nl);
             }
+            */
 
             void add_replacements_equal_constraints(z3::context& ctx, z3::solver& s, const std::unordered_map<Gate*, std::vector<std::string>>& replacements)
             {
@@ -270,6 +299,44 @@ namespace hal
                 return;
             }
 
+            Result<std::monostate> setup_solver(z3::context& ctx, z3::solver& s, const Netlist* netlist_a, const Netlist* netlist_b, const std::unordered_map<hal::Gate *, std::vector<std::string>>& ff_replacements_a, const std::unordered_map<hal::Gate *, std::vector<std::string>>& ff_replacements_b)
+            {
+                std::vector<Net*> sub_nets_a;
+                for (const auto& n : netlist_a->get_nets())
+                {
+                    const auto comb_sources = n->get_sources([](const Endpoint* ep) { return (ep->get_gate() != nullptr) && (ep->get_gate()->get_type()->has_property(GateTypeProperty::combinational)); });
+                    if (comb_sources.empty())
+                    {
+                        sub_nets_a.push_back(n);
+                    }
+                }
+                std::vector<Net*> sub_nets_b;
+                for (const auto& n : netlist_b->get_nets())
+                {
+                    const auto comb_sources = n->get_sources([](const Endpoint* ep) { return (ep->get_gate() != nullptr) && (ep->get_gate()->get_type()->has_property(GateTypeProperty::combinational)); });
+                    if (comb_sources.empty())
+                    {
+                        sub_nets_b.push_back(n);
+                    }
+                }
+
+                auto sub_a_res = substitute_net_ids(ctx, s, sub_nets_a, "netlist_a_", netlist_a);
+                if (sub_a_res.is_error())
+                {
+                    return ERR_APPEND(sub_a_res.get_error(), "cannot compare netA" + std::to_string(netlist_a->get_id()));
+                }
+                auto sub_b_res = substitute_net_ids(ctx, s, sub_nets_b, "netlist_b_", netlist_b);
+                if (sub_b_res.is_error())
+                {
+                    return ERR_APPEND(sub_b_res.get_error(), "cannot compare net A " + std::to_string(netlist_b->get_id()));
+                }
+
+                add_replacements_equal_constraints(ctx, s, ff_replacements_a);
+                add_replacements_equal_constraints(ctx, s, ff_replacements_b);
+
+                return OK({});
+            }
+
             Result<bool> compare_nets_internal(z3::context& ctx,
                                                z3::solver& s,
                                                const Netlist* netlist_a,
@@ -279,6 +346,15 @@ namespace hal
                                                const std::vector<Gate*>& gates_a,
                                                const std::vector<Gate*>& gates_b)
             {
+                // TODO Debug printing remove
+                /*
+                std::cout << "Comparing net A: " << net_a->get_id() << " / " << net_a->get_name() << " with " << net_b->get_id() << " / " << net_b->get_name() << std::endl;
+                const auto inputs_a = SubgraphNetlistDecorator(*netlist_a).get_subgraph_function_inputs(gates_a, net_a).get();
+                std::cout << "Function A inputs: " << inputs_a.size() << std::endl;
+                const auto inputs_b = SubgraphNetlistDecorator(*netlist_b).get_subgraph_function_inputs(gates_b, net_b).get();
+                std::cout << "Function B inputs: " << inputs_b.size() << std::endl;
+                */
+
                 const auto bf_res_a = z3_utils::get_prefixed_subgraph_z3_function(gates_a, net_a, "netlist_a_", ctx);
                 if (bf_res_a.is_error())
                 {
@@ -297,17 +373,36 @@ namespace hal
                 }
                 const auto bf_b = bf_res_b.get();
 
-                s.add(bf_a != bf_b);
-                const z3::check_result c = s.check();
+                auto config = hal::SMT::QueryConfig().with_timeout(120).without_model_generation();
+                
+                // TODO we can enable this again after we add time out capabilities to the bitwuzla call
+                // if (SMT::Solver::has_local_solver_for(hal::SMT::SolverType::Bitwuzla, hal::SMT::SolverCall::Library))
+                // {
+                //     config = config.with_solver(hal::SMT::SolverType::Bitwuzla).with_call(hal::SMT::SolverCall::Library);
+                // }
 
-                if (c == z3::unsat)
+                s.add(bf_a != bf_b);
+                auto smt2_str = s.to_smt2();
+                auto query_res = SMT::Solver::query_local(config, smt2_str);
+                if (query_res.is_error())
+                {
+                    return ERR_APPEND(query_res.get_error(), "cannot compare net A " + net_a->get_name() + " with ID " + std::to_string(net_a->get_id()) + " with net B " + net_b->get_name() + " with ID "
+                                          + std::to_string(net_b->get_id()) + ": failed solver_check");
+                }
+                const auto check_result = query_res.get();
+
+                if (check_result.is_unsat())
                 {
                     return OK(true);
                 }
 
-                std::cout << "A: " << bf_a << std::endl;
-                std::cout << "B: " << bf_b << std::endl;
-                std::cout << "Model: " << s.get_model() << std::endl;
+                if (check_result.is_unknown())
+                {
+                    log_warning("z3_utils", "net comparison returned unknown, but everything is probably fine :)");
+                    return OK(true);
+                }
+
+                log_warning("z3_utils", "Failed net comparison for net A {} / {}  and net B {} / {}", net_a->get_id(), net_a->get_name(), net_b->get_id(), net_b->get_name());
 
                 return OK(false);
             }
@@ -335,46 +430,20 @@ namespace hal
                 return ERR("cannot compare nets: net_b is a nullptr!");
             }
 
-            const std::vector<Gate*> seq_gates_a = netlist_a->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::sequential); });
-            const std::vector<Gate*> seq_gates_b = netlist_b->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::sequential); });
-
-            const std::vector<Gate*> comb_gates_a = netlist_a->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); });
-            const std::vector<Gate*> comb_gates_b = netlist_b->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); });
-
             z3::context ctx;
             z3::solver s(ctx);
-
-            std::vector<Net*> seq_out_nets_a;
-            for (const auto& sg : seq_gates_a)
-            {
-                seq_out_nets_a.insert(seq_out_nets_a.end(), sg->get_fan_in_nets().begin(), sg->get_fan_out_nets().end());
-            }
-            std::vector<Net*> seq_out_nets_b;
-            for (const auto& sg : seq_gates_b)
-            {
-                seq_out_nets_b.insert(seq_out_nets_b.end(), sg->get_fan_in_nets().begin(), sg->get_fan_out_nets().end());
-            }
-
-            auto sub_a_res = substitute_net_ids(ctx, s, seq_out_nets_a, "netlist_a_", netlist_a);
-            if (sub_a_res.is_error())
-            {
-                return ERR_APPEND(sub_a_res.get_error(),
-                                  "cannot compare net A " + net_a->get_name() + " with ID " + std::to_string(net_a->get_id()) + " with net B " + net_b->get_name() + " with ID "
-                                      + std::to_string(net_b->get_id()) + ": failed to substitute net ids for bf_a");
-            }
-            auto sub_b_res = substitute_net_ids(ctx, s, seq_out_nets_b, "netlist_b_", netlist_b);
-            if (sub_b_res.is_error())
-            {
-                return ERR_APPEND(sub_b_res.get_error(),
-                                  "cannot compare net A " + net_a->get_name() + " with ID " + std::to_string(net_a->get_id()) + " with net B " + net_b->get_name() + " with ID "
-                                      + std::to_string(net_b->get_id()) + ": failed to substitute net ids for bf_b");
-            }
 
             const auto ff_replacements_a = restore_ff_replacements(netlist_a);
             const auto ff_replacements_b = restore_ff_replacements(netlist_b);
 
-            add_replacements_equal_constraints(ctx, s, ff_replacements_a);
-            add_replacements_equal_constraints(ctx, s, ff_replacements_b);
+            const std::vector<Gate*> comb_gates_a = netlist_a->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); });
+            const std::vector<Gate*> comb_gates_b = netlist_b->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); });
+
+            auto setup_res = setup_solver(ctx, s, netlist_a, netlist_b, ff_replacements_a, ff_replacements_b);
+            if (setup_res.is_error())
+            {
+                return ERR_APPEND(setup_res.get_error(), "cannot compare netlist a with ID " + std::to_string(netlist_a->get_id()) + " netlist b with ID " + std::to_string(netlist_b->get_id()) + ": failed to setup solver");
+            }
 
             return compare_nets_internal(ctx, s, netlist_a, netlist_b, net_a, net_b, comb_gates_a, comb_gates_b);
         }
@@ -423,7 +492,7 @@ namespace hal
             {
                 if (const auto gate_b_it = gate_name_to_gate_b.find(gate_a_name); gate_b_it == gate_name_to_gate_b.end())
                 {
-                    log_debug("iphone_tools",
+                    log_debug("z3_utils",
                               "netlist a with ID {} and netlist b with ID {} are not equal: gate a {} with ID {} is included in netlist a but does not have a counter part in netlist b!",
                               netlist_a->get_id(),
                               netlist_b->get_id(),
@@ -436,7 +505,7 @@ namespace hal
             {
                 if (const auto gate_a_it = gate_name_to_gate_a.find(gate_b_name); gate_a_it == gate_name_to_gate_a.end())
                 {
-                    log_debug("iphone_tools",
+                    log_debug("z3_utils",
                               "netlist a with ID {} and netlist b with ID {} are not equal: gate b {} with ID {} is included in netlist b but does not have a counter part in netlist a!",
                               netlist_a->get_id(),
                               netlist_b->get_id(),
@@ -446,47 +515,61 @@ namespace hal
                 }
             }
 
-            log_info("iphone_tools", "Checking {} sequential gates for equality.", seq_gates_a.size());
+            log_info("z3_utils", "Checking {} sequential gates for equality.", seq_gates_a.size());
 
             z3::context ctx;
             z3::solver s(ctx);
 
-            std::vector<Net*> seq_out_nets_a;
-            for (const auto& sg : seq_gates_a)
+            auto setup_res = setup_solver(ctx, s, netlist_a, netlist_b, ff_replacements_a, ff_replacements_b);
+            if (setup_res.is_error())
             {
-                seq_out_nets_a.insert(seq_out_nets_a.end(), sg->get_fan_in_nets().begin(), sg->get_fan_out_nets().end());
-            }
-            std::vector<Net*> seq_out_nets_b;
-            for (const auto& sg : seq_gates_b)
-            {
-                seq_out_nets_b.insert(seq_out_nets_b.end(), sg->get_fan_in_nets().begin(), sg->get_fan_out_nets().end());
+                return ERR_APPEND(setup_res.get_error(), "cannot compare netlist a with ID " + std::to_string(netlist_a->get_id()) + " netlist b with ID " + std::to_string(netlist_b->get_id()) + ": failed to setup solver");
             }
 
-            auto sub_a_res = substitute_net_ids(ctx, s, seq_out_nets_a, "netlist_a_", netlist_a);
-            if (sub_a_res.is_error())
+            std::set<std::pair<Net*, Net*>> to_compare;
+
+            // find matching global output and add the to the comparison set
+            const auto out_pins_a = netlist_a->get_top_module()->get_output_pin_names();
+            const auto out_pins_b = netlist_b->get_top_module()->get_output_pin_names();
+
+            if (out_pins_a.size() != out_pins_b.size())
             {
-                return ERR_APPEND(sub_a_res.get_error(),
-                                  "cannot compare netlist A with ID " + std::to_string(netlist_a->get_id()) + " with netlist B  with ID " + std::to_string(netlist_b->get_id())
-                                      + ": failed to substitute net ids for netlist a");
-            }
-            auto sub_b_res = substitute_net_ids(ctx, s, seq_out_nets_b, "netlist_b_", netlist_b);
-            if (sub_b_res.is_error())
-            {
-                return ERR_APPEND(sub_b_res.get_error(),
-                                  "cannot compare netlist A with ID " + std::to_string(netlist_a->get_id()) + " with netlist B  with ID " + std::to_string(netlist_b->get_id())
-                                      + ": failed to substitute net ids for netlist b");
+                log_debug("z3_utils",
+                            "netlist a with ID {} and netlist b with ID {} are not equal: netlist a has {} output pins while netlist b has {}, we require an exact match!",
+                            netlist_a->get_id(),
+                            netlist_b->get_id(),
+                            out_pins_a.size(),
+                            out_pins_b.size());
+                return OK(false);
             }
 
-            add_replacements_equal_constraints(ctx, s, ff_replacements_a);
-            add_replacements_equal_constraints(ctx, s, ff_replacements_b);
+            for (const auto& pa : out_pins_a)
+            {
+                auto it = std::find(out_pins_b.begin(), out_pins_b.end(), pa);
+                if (it == out_pins_b.end())
+                {
+                    log_debug("z3_utils",
+                            "netlist a with ID {} and netlist b with ID {} are not equal: netlist a has output pin {} that does not exist in netlist b!",
+                            netlist_a->get_id(),
+                            netlist_b->get_id(),
+                            pa);
+                    return OK(false);
+                }
 
+                Net* net_a = netlist_a->get_top_module()->get_pin_by_name(pa)->get_net();
+                Net* net_b = netlist_b->get_top_module()->get_pin_by_name(pa)->get_net();
+            
+                to_compare.insert({net_a, net_b});
+            }
+
+            // add inputs of sequential gates to the comparison list
             for (const Gate* gate_a : seq_gates_a)
             {
                 const Gate* gate_b = gate_name_to_gate_b.at(gate_a->get_name());
 
                 if (gate_a->get_type() != gate_b->get_type())
                 {
-                    log_debug("iphone_tools",
+                    log_debug("z3_utils",
                               "netlist a with ID {} and netlist b with ID {} are not equal: gate a {} with ID {} and gate b {} with ID {} do not have the same type! {} vs. {}",
                               netlist_a->get_id(),
                               netlist_b->get_id(),
@@ -501,40 +584,43 @@ namespace hal
 
                 for (const GatePin* pin : gate_a->get_type()->get_input_pins())
                 {
-                    const Net* net_a = gate_a->get_fan_in_net(pin);
-                    const Net* net_b = gate_b->get_fan_in_net(pin);
+                    Net* net_a = gate_a->get_fan_in_net(pin);
+                    Net* net_b = gate_b->get_fan_in_net(pin);
 
-                    if (net_a == nullptr && net_b == nullptr)
-                    {
-                        continue;
-                    }
+                    to_compare.insert({net_a, net_b});
+                }
+            }
 
-                    s.push();
-                    const auto eq_res = compare_nets_internal(ctx, s, netlist_a, netlist_b, net_a, net_b, comb_gates_a, comb_gates_b);
-                    s.pop();
+            for (const auto& [net_a, net_b] : to_compare)
+            {
+                if (net_a == nullptr && net_b == nullptr)
+                {
+                    continue;
+                }
 
-                    if (eq_res.is_error())
-                    {
-                        return ERR_APPEND(eq_res.get_error(),
-                                          "cannot compare netlist a with ID " + std::to_string(netlist_a->get_id()) + " netlist b with ID " + std::to_string(netlist_b->get_id())
-                                              + ": failed to compare nets at gate a " + gate_a->get_name() + " with ID " + std::to_string(gate_a->get_id()) + " and gate b" + gate_b->get_name()
-                                              + "with ID " + std::to_string(gate_b->get_id()));
-                    }
-                    const bool eq = eq_res.get();
+                s.push();
+                const auto eq_res = compare_nets_internal(ctx, s, netlist_a, netlist_b, net_a, net_b, comb_gates_a, comb_gates_b);
+                s.pop();
 
-                    if (!eq)
-                    {
-                        log_debug("iphone_tools",
-                                  "netlist a with ID {} and netlist b with ID {} are not equal: gate a {} with ID {} and gate b {} with ID {} are not equal at pin {}",
-                                  netlist_a->get_id(),
-                                  netlist_b->get_id(),
-                                  gate_a->get_name(),
-                                  gate_a->get_id(),
-                                  gate_b->get_name(),
-                                  gate_b->get_id(),
-                                  pin->get_name());
-                        return OK(false);
-                    }
+                if (eq_res.is_error())
+                {
+                    return ERR_APPEND(eq_res.get_error(),
+                                      "cannot compare netlist a with ID " + std::to_string(netlist_a->get_id()) + " netlist b with ID " + std::to_string(netlist_b->get_id())
+                                          + ": failed to compare net a " + net_a->get_name() + " with ID " + std::to_string(net_a->get_id()) + " and net b" + net_b->get_name() + " with ID " + std::to_string(net_b->get_id()));
+                }
+                const bool eq = eq_res.get();
+
+                if (!eq)
+                {
+                    log_debug("z3_utils",
+                              "netlist a with ID {} and netlist b with ID {} are not equal: net a {} / {} and net b {} / {} are not equal",
+                              netlist_a->get_id(),
+                              netlist_b->get_id(),
+                              net_a->get_id(),
+                              net_a->get_name(),
+                              net_b->get_id(),
+                              net_b->get_name());
+                    return OK(false);
                 }
             }
 

@@ -4,8 +4,11 @@
 #include "hal_core/netlist/boolean_function/types.h"
 #include "subprocess/process.h"
 
+#include <ctime>
 #include <numeric>
 #include <set>
+
+#include <boost/thread.hpp>
 
 #ifdef BITWUZLA_LIBRARY
 #include "bitwuzla/bitwuzla.h"
@@ -381,7 +384,7 @@ namespace hal
                         return false;
                 }
             }
-            else if (call == SolverCall::Binary)
+            else if (call == SolverCall::Library)
             {
                 switch (auto it = type2link_status.find(type); it != type2link_status.end())
                 {
@@ -430,7 +433,12 @@ namespace hal
             }
 
             auto input_str = input.get();
-            auto query     = spec2query.at({config.solver, config.call})(input_str, config);
+            return query_local(config, input_str);
+        }
+
+        Result<SolverResult> Solver::query_local(const QueryConfig& config, std::string& smt2)
+        {
+            auto query = spec2query.at({config.solver, config.call})(smt2, config);
             if (query.is_ok())
             {
                 auto [was_killed, output] = query.get();

@@ -436,6 +436,8 @@ namespace hal
         {
             Gate* gate = gates_to_be_deleted.front();
             gates_to_be_deleted.pop();
+            // TODO remove
+            std::cout << "Buffer gate: " << gate->get_id() << " / " << gate->get_name() << std::endl;
             if (!nl->delete_gate(gate))
             {
                 log_warning("netlist_preprocessing", "failed to remove buffer gate '{}' with ID {} from netlist with ID {}.", gate->get_name(), gate->get_id(), nl->get_id());
@@ -506,7 +508,7 @@ namespace hal
 #ifdef BITWUZLA_LIBRARY
         auto s_type = hal::SMT::SolverType::Bitwuzla;
         auto s_call = hal::SMT::SolverCall::Library;
-        config.with_solver(s_type).with_call(s_call);
+        config = config.with_solver(s_type).with_call(s_call);
 #endif
         struct GateFingerprint
         {
@@ -745,7 +747,7 @@ namespace hal
 #ifdef BITWUZLA_LIBRARY
         auto s_type = hal::SMT::SolverType::Bitwuzla;
         auto s_call = hal::SMT::SolverCall::Library;
-        config.with_solver(s_type).with_call(s_call);
+        config = config.with_solver(s_type).with_call(s_call);
 #endif
 
         u32 num_gates = 0;
