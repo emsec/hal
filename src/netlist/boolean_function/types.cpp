@@ -254,8 +254,6 @@ namespace hal
                 return OK(Model(ModelParser::parser_context.model));
             }
 
-            std::cout << "Model: " << s << std::endl; 
-            exit(0);
             return ERR("could not parse SMT-Lib model");
         }
 

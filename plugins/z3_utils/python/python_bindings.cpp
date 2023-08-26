@@ -33,6 +33,37 @@ namespace hal
         py_z3_utils.def("get_subgraph_function", &Z3UtilsPlugin::get_subgraph_function_py);
 
         py_z3_utils.def_static(
+            "compare_nets",
+            [](const Netlist* netlist_a, const Netlist* netlist_b, const Net* net_a, const Net* net_b) -> std::optional<bool> {
+                auto res = z3_utils::compare_nets(netlist_a, netlist_b, net_a, net_b);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("netlist_a"),
+            py::arg("netlist_b"),
+            py::arg("net_a"),
+            py::arg("net_b"),
+            R"(
+            Compare two nets from two different netlist. 
+            This is done on a functional level by buidling the subgraph function of each net considering all combinational gates of the netlist.
+            In order for this two work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
+
+            :param hal_py.Netlist netlist_a: First netlist. 
+            :param hal_py.Netlist netlist_b: Second netlist. 
+            :param hal_py.Netlist net_a: First net. 
+            :param hal_py.Netlist net_b: Second net. 
+            :returns: A Boolean indicating whether the two nets are functionally equivalent on success, None otherwise.
+            :rtype: bool or None
+        )");
+
+        py_z3_utils.def_static(
             "compare_netlists",
             [](const Netlist* netlist_a, const Netlist* netlist_b) -> std::optional<bool> {
                 auto res = z3_utils::compare_netlists(netlist_a, netlist_b);
