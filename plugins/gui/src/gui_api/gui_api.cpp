@@ -465,11 +465,9 @@ namespace hal
                 return 0;
             }
         }
-
         QString name;
 
         bool isModuleExclusive = false;
-
 
         //make sure that modules and gates are not empty
         if(modules.empty() && gates.empty())
@@ -496,7 +494,6 @@ namespace hal
         }
         GuiApiClasses::View::ModuleGateIdPair pair = GuiApiClasses::View::getValidObjects(0, modules, gates);
 
-
         // Unpack return values and check if not empty
         QSet<u32> moduleIds = pair.moduleIds;
         QSet<u32> gateIds = pair.gateIds;
@@ -515,8 +512,6 @@ namespace hal
             context->setDirty(false);
             context->setExclusiveModuleId(modules[0]->get_id());
         }
-
-
         return act->object().id();
     }
 
@@ -562,13 +557,11 @@ namespace hal
         if (gGraphContextManager->getContextById(id)->isShowingModuleExclusively() && gGraphContextManager->getContextById(id)->getExclusiveModuleId() == gNetlist->get_top_module()->get_id())
             return false; //context shows topmodule so we can not add anything to it
 
-
         GuiApiClasses::View::ModuleGateIdPair pair = GuiApiClasses::View::getValidObjects(id, modules, gates);
 
         // Get ids from modules and gates
         QSet<u32> moduleIds = pair.moduleIds;
         QSet<u32> gateIds = pair.gateIds;
-
 
         ActionAddItemsToObject* act = new ActionAddItemsToObject(moduleIds,gateIds);
         act->setObject(UserActionObject(id,UserActionObjectType::Context));
@@ -615,8 +608,6 @@ namespace hal
 
     bool GuiApiClasses::View::setName(int id, const std::string& name)
     {
-
-
         if (!gGraphContextManager->getContextById(id)) return false; // context does not exist
 
         //check if name is occupied
@@ -710,8 +701,6 @@ namespace hal
         QSet<u32> moduleIds;
         QSet<u32> gateIds;
 
-
-
         //Get ids of given modules and gates
         for(Module* module : modules)
         {
@@ -750,7 +739,6 @@ namespace hal
                 ids.push_back(ctx->id());
 
         }
-
         return ids;
     }
     bool GuiApiClasses::View::unfoldModule(int view_id, Module *module)
@@ -764,7 +752,6 @@ namespace hal
 
         //check if the inputs are valid
         if(context == nullptr) return false;
-
 
         if(!context->modules().contains(module->get_id())) return false;
 
@@ -785,7 +772,6 @@ namespace hal
         //check if the inputs are valid
         if(context == nullptr) return false;
 
-
         //get gates and submodules that belong to the current module
         std::vector<Module*> submodules = module->get_submodules();
         std::vector<Gate*> gates = module->get_gates();
@@ -796,8 +782,6 @@ namespace hal
             if(context->gates().contains(gate->get_id())) {isValidToFold = true; break;}
         for(Module* submodule : submodules)
             if(context->modules().contains(submodule->get_id())) {isValidToFold = true; break;}
-
-
         if (isValidToFold)
         {
             ActionFoldModule *act = new ActionFoldModule(module->get_id());
@@ -810,8 +794,6 @@ namespace hal
     GuiApiClasses::View::ModuleGateIdPair GuiApiClasses::View::getValidObjects(int viewId, const std::vector<Module*> mods, const std::vector<Gate*> gats)
     {
         Module* topModule = gNetlist->get_top_module();
-
-
         //copy to prevent inplace operations
         std::vector<Module*> modules = mods;
         std::vector<Gate*> gates     = gats;
@@ -821,18 +803,14 @@ namespace hal
         QSet<u32> existingGates;
 
         QSet<u32> Parents;
-
         QSet<u32> modIds;
         QSet<u32> gatIds;
-
-
         //0) if its not a new view we have to check and remove all parents which have to be placed
         if (viewId)
         {
             //put topmodule into parents because we dont iterate over it here
             //Parents.insert(topModule->get_id());
             std::vector<Module*> validMods;
-
             //Add parents from the view modules to Parents
             for (Module* mod : GuiApiClasses::View::getModules(viewId))
             {
@@ -861,7 +839,6 @@ namespace hal
                     itr = itr->get_parent_module();
                 }
             }
-
             //Delete every parent from the list if submodule is in the view
             for (Module* mod : modules)
             {
@@ -870,15 +847,12 @@ namespace hal
                 validMods.push_back(mod);
             }
             modules = validMods;
-
         }
         //get ids of modules
         for (Module* mod : modules)
         {
             modIds.insert(mod->get_id());
         }
-
-
         //1) sort them by priority in DESCENDING order
         std::sort(modules.begin(), modules.end(), [](const Module* a, const Module* b) -> bool
                   {
@@ -886,9 +860,6 @@ namespace hal
                       return a->get_submodule_depth() > b->get_submodule_depth();
                   }
         );
-
-
-
         //2) remove id if parent is in set
         for(Module* mod : modules){
             //check if top module
@@ -899,7 +870,6 @@ namespace hal
                 modIds = temp;
                 break;
             }
-
             //check if parent is in current set and if so  remove current mod
             Module* iterator = mod->get_parent_module();
             while(iterator != nullptr){
@@ -912,12 +882,8 @@ namespace hal
                 iterator = iterator->get_parent_module();
             }
         }
-
-
         //3) remove all gates which has its ancestor in modIds
-
         //check ancestors until topmodule or found in modIds
-
         for (Gate* gate : gates)
         {
             Module* itr       = gate->get_module();
@@ -936,16 +902,12 @@ namespace hal
                 gatIds.insert(gate->get_id());
         }
 
-
-
         //remove duplicates
         if (viewId)
         {
             modIds -= existingModules;
             gatIds -= existingGates;
         }
-
-
         //create struct to return module and gate ID pairs
         GuiApiClasses::View::ModuleGateIdPair pair;
         pair.moduleIds = modIds;
@@ -968,11 +930,9 @@ namespace hal
 
     bool GuiApiClasses::View::setGridPlacement(int viewId, GridPlacement *gp)
     {
-
         ActionMoveNode* act = new ActionMoveNode(viewId, gp);
         act->exec();
 
         return true;
-
     }
 }

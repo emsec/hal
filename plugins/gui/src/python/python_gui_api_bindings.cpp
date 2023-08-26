@@ -91,6 +91,7 @@ PYBIND11_PLUGIN(hal_gui)
 
                  :param int gateId: Gate ID.
                  :param tuple(int,int) pos: New position.
+                 :param bool swap: set the swap of positions of the nodes
             )")
 
             .def("setModulePosition", &GridPlacement::setModulePosition, py::arg("moduleId"), py::arg("point"), py::arg("swap") = false, R"(
@@ -98,6 +99,7 @@ PYBIND11_PLUGIN(hal_gui)
 
                  :param int moduleId: Module ID.
                  :param tuple(int,int) pos: New position.
+                 :param bool swap: set the swap of positions of the nodes
             )")
 
             .def("gatePosition", &GridPlacement::gatePosition, py::arg("gateId"), R"(
@@ -136,22 +138,23 @@ PYBIND11_PLUGIN(hal_gui)
     .def_static("addTo", &GuiApiClasses::View::addTo, py::arg("id"), py::arg("modules"), py::arg("gates"),R"(
         Adds the given modules and gates to the view specified by the ID.
 
+        :param int id: ID of the view.
         :param list[hal.py.module] modules: Modules to be added.
         :param list[hal.py.Gate] gates: Gates to be added.
         :returns: True on success, otherwise False.
         :rtype: bool
 )")
     .def_static("deleteView", &GuiApiClasses::View::deleteView, py::arg("id"),R"(
-        Adds the given modules and gates to the view specified by the ID.
+        Deletes the view specified by the ID.
 
-        :param list[hal.py.module] modules: Modules to be added.
-        :param list[hal.py.Gate] gates: Gates to be added.
+        :param int id: ID of the view.
         :returns: True on success, otherwise False.
         :rtype: bool
         )")
     .def_static("removeFrom", &GuiApiClasses::View::removeFrom, py::arg("id"), py::arg("modules"), py::arg("gates"),R"(
         Removes the given modules and gates from the view specified by the ID.
 
+        :param int id: ID of the view.
         :param list[hal.py.module] modules: Modules to be removed.
         :param list[hal.py.Gate] gates: Gates to be removed.
         :returns: True on success, otherwise False.
@@ -186,7 +189,7 @@ PYBIND11_PLUGIN(hal_gui)
         :rtype: list[hal.py.Gate]
 )")
     .def_static("getIds", &GuiApiClasses::View::getIds, py::arg("modules"), py::arg("gates"),R"(
-        Returns the ID for from each View containing at least the given modules and gates.
+        Returns the ID of each View containing at least the given modules and gates.
 
         :param list[hal.py.module] modules: Required modules.
         :param list[hal.py.Gate] gates: Required gates.
@@ -194,7 +197,7 @@ PYBIND11_PLUGIN(hal_gui)
         :rtype: list[int]
 )")
     .def_static("unfoldModule", &GuiApiClasses::View::unfoldModule, py::arg("view_id"), py::arg("module"), R"(
-            Unfold a specific module. Remove the module from view, add submodules and gates
+            Unfold a specific module. Hides the module, shows submodules and gates
 
             :param int view_id: ID of the view.
             :param Module* module: module to unfold
@@ -202,7 +205,7 @@ PYBIND11_PLUGIN(hal_gui)
             :rtype: bool
 )")
     .def_static("foldModule", &GuiApiClasses::View::foldModule, py::arg("view_id"), py::arg("module"), R"(
-            Fold a specific module. Remove the submodules and gates from view, add parent module
+            Fold a specific module. Hides the submodules and gates, shows the specific module
 
             :param int view_id: ID of the view.
             :param Module* module: module to fold
@@ -210,7 +213,7 @@ PYBIND11_PLUGIN(hal_gui)
             :rtype: bool
 )")
     .def_static("getGridPlacement", &GuiApiClasses::View::getGridPlacement, py::arg("view_id"), R"(
-            Get positions of all nodes in the view
+            Get positions of all nodes in the view specified by id
 
             :param int view_id: ID of the view.
             :rtype: GridPlacement
@@ -218,7 +221,7 @@ PYBIND11_PLUGIN(hal_gui)
 
 
     .def_static("setGridPlacement", &GuiApiClasses::View::setGridPlacement, py::arg("view_id"), py::arg("grid placement"), R"(
-            Set grid placement to the view
+            Set grid placement to the view specified by id
 
             :param int view_id: ID of the view.
             :param GridPlacement* gp: grid placement.
