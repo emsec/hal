@@ -130,7 +130,7 @@ PYBIND11_PLUGIN(hal_gui)
     .def_static("rename", &GuiApiClasses::View::setName, py::arg("id"), py::arg("name"),R"(
         Renames the view specified by the given ID.
 
-        :param int id: ID of the view.
+        :param int viewId: ID of the view.
         :param string name: New unique name.
         :returns: True on success otherwise False.
         :rtype: bool
@@ -138,7 +138,7 @@ PYBIND11_PLUGIN(hal_gui)
     .def_static("addTo", &GuiApiClasses::View::addTo, py::arg("id"), py::arg("modules"), py::arg("gates"),R"(
         Adds the given modules and gates to the view specified by the ID.
 
-        :param int id: ID of the view.
+        :param int viewId: ID of the view.
         :param list[hal.py.module] modules: Modules to be added.
         :param list[hal.py.Gate] gates: Gates to be added.
         :returns: True on success, otherwise False.
@@ -147,14 +147,14 @@ PYBIND11_PLUGIN(hal_gui)
     .def_static("deleteView", &GuiApiClasses::View::deleteView, py::arg("id"),R"(
         Deletes the view specified by the ID.
 
-        :param int id: ID of the view.
+        :param int viewId: ID of the view.
         :returns: True on success, otherwise False.
         :rtype: bool
         )")
     .def_static("removeFrom", &GuiApiClasses::View::removeFrom, py::arg("id"), py::arg("modules"), py::arg("gates"),R"(
         Removes the given modules and gates from the view specified by the ID.
 
-        :param int id: ID of the view.
+        :param int viewId: ID of the view.
         :param list[hal.py.module] modules: Modules to be removed.
         :param list[hal.py.Gate] gates: Gates to be removed.
         :returns: True on success, otherwise False.
@@ -170,21 +170,21 @@ PYBIND11_PLUGIN(hal_gui)
     .def_static("getName", &GuiApiClasses::View::getName, py::arg("id"), R"(
         Returns the name of the view with the given ID if existing.
 
-        :param int id: ID of the view.
+        :param int viewId: ID of the view.
         :returns: Name of the view specified by the ID or empty string if none is found.
         :rtype: string
 )")
     .def_static("getModules", &GuiApiClasses::View::getModules, py::arg("id"), R"(
         Returns all modules attached to the view.
 
-        :param int id: ID of the view.
+        :param int viewId: ID of the view.
         :returns: List of the attached modules.
         :rtype: list[hal.py.module]
 )")
     .def_static("getGates", &GuiApiClasses::View::getGates, py::arg("id"),R"(
         Returns all gates attached to the view
 
-        :param int id: ID of the view.
+        :param int viewId: ID of the view.
         :returns: List of the attached gates.
         :rtype: list[hal.py.Gate]
 )")
@@ -199,7 +199,7 @@ PYBIND11_PLUGIN(hal_gui)
     .def_static("unfoldModule", &GuiApiClasses::View::unfoldModule, py::arg("view_id"), py::arg("module"), R"(
             Unfold a specific module. Hides the module, shows submodules and gates
 
-            :param int view_id: ID of the view.
+            :param int viewId: ID of the view.
             :param Module* module: module to unfold
             :returns: True on success, otherwise False.
             :rtype: bool
@@ -207,7 +207,7 @@ PYBIND11_PLUGIN(hal_gui)
     .def_static("foldModule", &GuiApiClasses::View::foldModule, py::arg("view_id"), py::arg("module"), R"(
             Fold a specific module. Hides the submodules and gates, shows the specific module
 
-            :param int view_id: ID of the view.
+            :param int viewId: ID of the view.
             :param Module* module: module to fold
             :returns: True on success, otherwise False.
             :rtype: bool
@@ -215,7 +215,8 @@ PYBIND11_PLUGIN(hal_gui)
     .def_static("getGridPlacement", &GuiApiClasses::View::getGridPlacement, py::arg("view_id"), R"(
             Get positions of all nodes in the view specified by id
 
-            :param int view_id: ID of the view.
+            :param int viewId: ID of the view.
+            :returns: GridPlacement of the specified view.
             :rtype: GridPlacement
 )")
 
@@ -223,7 +224,7 @@ PYBIND11_PLUGIN(hal_gui)
     .def_static("setGridPlacement", &GuiApiClasses::View::setGridPlacement, py::arg("view_id"), py::arg("grid placement"), R"(
             Set grid placement to the view specified by id
 
-            :param int view_id: ID of the view.
+            :param int viewId ID of the view.
             :param GridPlacement* gp: grid placement.
             :rtype: bool
 )");
