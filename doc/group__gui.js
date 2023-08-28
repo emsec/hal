@@ -206,6 +206,7 @@ var group__gui =
       [ "getSelectedModules", "classhal_1_1_gui_api.html#ad2972d459e59dfdc8801d09f5d3ffb0f", null ],
       [ "getSelectedNetIds", "classhal_1_1_gui_api.html#a0ad4b380bac2d2f83350a8683eeb4123", null ],
       [ "getSelectedNets", "classhal_1_1_gui_api.html#a4d274e1caacf20b07b61d2e16b5cddaa", null ],
+      [ "isolateInNewView", "classhal_1_1_gui_api.html#afddd3e3d1932b2fd870712bc82a09bcb", null ],
       [ "navigationRequested", "classhal_1_1_gui_api.html#a8b99127cadfa881522186c3c33b86450", null ],
       [ "select", "classhal_1_1_gui_api.html#ae279afeff30835e70a19c56e5396ab55", null ],
       [ "select", "classhal_1_1_gui_api.html#aef790d165107eed06d3591851e98a0f7", null ],

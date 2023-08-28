@@ -1,5 +1,16 @@
 var NAVTREEINDEX17 =
 {
+"classhal_1_1_selection_details_widget.html#af7bea19b748dfc54a047b824ee8d87d5":[4,0,7,3,18,2],
+"classhal_1_1_selection_relay.html":[4,0,41],
+"classhal_1_1_selection_relay.html#a024cc6d548be6648ae580e6ee8b35855":[4,0,41,22],
+"classhal_1_1_selection_relay.html#a07863fc3c994cf568555455cc58dd844":[4,0,41,13],
+"classhal_1_1_selection_relay.html#a0a02eb403c7d8ada1a1262e182a54f28":[4,0,41,53],
+"classhal_1_1_selection_relay.html#a0d6b960c05ac6b5862b8a549cad40119":[4,0,41,5],
+"classhal_1_1_selection_relay.html#a1162df01f394b8e7347377d4fe8e7d4f":[4,0,41,54],
+"classhal_1_1_selection_relay.html#a157ad32237ade68c1632c68e83a14bfe":[4,0,41,23],
+"classhal_1_1_selection_relay.html#a17b3b9645a4bb93c3b35f9e65a63d4c2":[4,0,41,9],
+"classhal_1_1_selection_relay.html#a188cf58279acb2970352895c82406ff7":[4,0,41,45],
+"classhal_1_1_selection_relay.html#a1bc4a95ff5facc74556c37ca01d7b663":[4,0,41,20],
 "classhal_1_1_selection_relay.html#a2c60a03847a015475d7f3e5018ca1956":[4,0,41,44],
 "classhal_1_1_selection_relay.html#a31fbada76372c95e06abfaa47993daf8":[4,0,41,40],
 "classhal_1_1_selection_relay.html#a3417dd40b6902e97ffa6ddc8b10fc0bc":[4,0,41,19],
@@ -238,16 +249,5 @@ var NAVTREEINDEX17 =
 "classhal_1_1_settings_item_text.html#acebf14359fae37de8a5fd1e72c6f6bb0":[4,0,4,15,3],
 "classhal_1_1_settings_manager.html":[4,0,4,16],
 "classhal_1_1_settings_manager.html#a011128656408a12f7264d16d490f735f":[4,0,4,16,8],
-"classhal_1_1_settings_manager.html#a1a421b88aab931e2f604e4d747b609dd":[4,0,4,16,7],
-"classhal_1_1_settings_manager.html#a373e5ab19699d11afc0612acef4333af":[4,0,4,16,0],
-"classhal_1_1_settings_manager.html#a3b30e94ab9f48efbd2322e23cf20972e":[4,0,4,16,4],
-"classhal_1_1_settings_manager.html#a99531e4a11c3726aaf0f9b03a007b619":[4,0,4,16,9],
-"classhal_1_1_settings_manager.html#aa4c336da25420a7509d971a3772b12c0":[4,0,4,16,6],
-"classhal_1_1_settings_manager.html#aafaafc8d6f57304c92350dc4b779bca7":[4,0,4,16,2],
-"classhal_1_1_settings_manager.html#ab03781ce8ef9ebf152d6f6c2437b472f":[4,0,4,16,10],
-"classhal_1_1_settings_manager.html#ab0f2583b40115764c9189074b9ac40bf":[4,0,4,16,1],
-"classhal_1_1_settings_manager.html#add001bf6cbff37262612014f4239c871":[4,0,4,16,5],
-"classhal_1_1_settings_manager.html#ae0349b9494d2da1e2714df25400a9601":[4,0,4,16,3],
-"classhal_1_1_settings_widget.html":[4,0,4,17],
-"classhal_1_1_settings_widget.html#a00534a28fc3641d3ef9d6f48a66960bb":[4,0,4,17,10]
+"classhal_1_1_settings_manager.html#a1a421b88aab931e2f604e4d747b609dd":[4,0,4,16,7]
 };

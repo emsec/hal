@@ -4,7 +4,7 @@
 <area shape="rect" id="node3" href="$classhal_1_1_action_add_items_to_object.html" title="Adds an item to a module or grouping." alt="" coords="254,365,463,516"/>
 <area shape="rect" id="node4" href="$classhal_1_1_action_create_object.html" title="Create a new item." alt="" coords="488,358,664,523"/>
 <area shape="rect" id="node5" href="$classhal_1_1_action_delete_object.html" title="Deletes an object." alt="" coords="688,387,864,494"/>
-<area shape="rect" id="node6" href="$classhal_1_1_action_move_node.html" title="Moves a node." alt="" coords="889,358,1050,523"/>
+<area shape="rect" id="node6" href="$classhal_1_1_action_move_node.html" title="Moves a node." alt="" coords="889,365,1050,516"/>
 <area shape="rect" id="node7" href="$classhal_1_1_action_open_netlist_file.html" title="Loads a netlist." alt="" coords="1074,365,1265,516"/>
 <area shape="rect" id="node8" href="$classhal_1_1_action_remove_items_from_object.html" title="Removes an item from a Module or Grouping." alt="" coords="1289,358,1543,523"/>
 <area shape="rect" id="node9" href="$classhal_1_1_action_rename_object.html" title="Renames an item." alt="" coords="1568,365,1755,516"/>

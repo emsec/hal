@@ -796,70 +796,71 @@ $(document).ready(function(){initNavTree('graphics__scene_8cpp_source.html','');
 <div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160; </div>
 <div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;    <span class="keywordtype">void</span> GraphicsScene::debugDrawLayouterGrid(<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a>* painter, <span class="keyword">const</span> <span class="keywordtype">int</span> x_from, <span class="keyword">const</span> <span class="keywordtype">int</span> x_to, <span class="keyword">const</span> <span class="keywordtype">int</span> y_from, <span class="keyword">const</span> <span class="keywordtype">int</span> y_to)</div>
 <div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;    {</div>
-<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;        painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#setPen-1">setPen</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpen.html">QPen</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#GlobalColor-enum">Qt::magenta</a>));</div>
-<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160; </div>
-<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;        <span class="keywordflow">for</span> (qreal x : mDebugXLines)</div>
-<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;        {</div>
-<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlinef.html">QLineF</a> line(x, y_from, x, y_to);</div>
-<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#drawLine">drawLine</a>(line);</div>
-<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;        }</div>
-<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160; </div>
-<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;        <span class="keywordflow">for</span> (qreal y : mDebugYLines)</div>
-<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;        {</div>
-<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlinef.html">QLineF</a> line(x_from, y, x_to, y);</div>
-<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#drawLine">drawLine</a>(line);</div>
-<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;        }</div>
-<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160; </div>
-<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;        painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#setPen-1">setPen</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpen.html">QPen</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#GlobalColor-enum">Qt::green</a>));</div>
-<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160; </div>
-<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;        qreal x = mDebugXLines.last() + mDebugDefaultWidth;</div>
-<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160; </div>
-<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;        <span class="keywordflow">while</span> (x &lt;= x_to)</div>
-<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;        {</div>
-<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlinef.html">QLineF</a> line(x, y_from, x, y_to);</div>
-<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#drawLine">drawLine</a>(line);</div>
-<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;            x += mDebugDefaultWidth;</div>
-<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;        }</div>
-<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160; </div>
-<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;        x = mDebugXLines.first() - mDebugDefaultWidth;</div>
-<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160; </div>
-<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;        <span class="keywordflow">while</span> (x &gt;= x_from)</div>
-<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;        {</div>
-<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlinef.html">QLineF</a> line(x, y_from, x, y_to);</div>
-<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#drawLine">drawLine</a>(line);</div>
-<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;            x -= mDebugDefaultWidth;</div>
-<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;        }</div>
-<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160; </div>
-<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;        qreal y = mDebugYLines.last() + mDebugDefaultHeight;</div>
-<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160; </div>
-<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;        <span class="keywordflow">while</span> (y &lt;= y_to)</div>
-<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;        {</div>
-<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlinef.html">QLineF</a> line(x_from, y, x_to, y);</div>
-<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#drawLine">drawLine</a>(line);</div>
-<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;            y += mDebugDefaultHeight;</div>
-<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;        }</div>
-<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160; </div>
-<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;        y = mDebugYLines.first() - mDebugDefaultHeight;</div>
-<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160; </div>
-<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;        <span class="keywordflow">while</span> (y &gt;= y_from)</div>
-<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;        {</div>
-<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlinef.html">QLineF</a> line(x_from, y, x_to, y);</div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#drawLine">drawLine</a>(line);</div>
-<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;            y -= mDebugDefaultHeight;</div>
-<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;        }</div>
-<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;    }</div>
-<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160; </div>
-<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;    <span class="keywordtype">void</span> GraphicsScene::setDebugGridEnabled(<span class="keywordtype">bool</span> enabled)</div>
-<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;    {</div>
-<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;        mDebugGridEnable = enabled;</div>
-<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;    }</div>
-<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160; </div>
-<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;    <span class="keywordtype">bool</span> GraphicsScene::debugGridEnabled()</div>
-<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;    {</div>
-<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;        <span class="keywordflow">return</span> mDebugGridEnable;</div>
-<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;    }</div>
-<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;<span class="preprocessor">    #endif</span></div>
-<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;}</div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;        <span class="keywordflow">if</span> (mDebugXLines.isEmpty() || mDebugYLines.isEmpty()) <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;        painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#setPen-1">setPen</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpen.html">QPen</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#GlobalColor-enum">Qt::magenta</a>));</div>
+<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160; </div>
+<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;        <span class="keywordflow">for</span> (qreal x : mDebugXLines)</div>
+<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;        {</div>
+<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlinef.html">QLineF</a> line(x, y_from, x, y_to);</div>
+<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#drawLine">drawLine</a>(line);</div>
+<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;        }</div>
+<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160; </div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;        <span class="keywordflow">for</span> (qreal y : mDebugYLines)</div>
+<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;        {</div>
+<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlinef.html">QLineF</a> line(x_from, y, x_to, y);</div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#drawLine">drawLine</a>(line);</div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;        }</div>
+<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160; </div>
+<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;        painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#setPen-1">setPen</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpen.html">QPen</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#GlobalColor-enum">Qt::green</a>));</div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160; </div>
+<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;        qreal x = mDebugXLines.last() + mDebugDefaultWidth;</div>
+<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160; </div>
+<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;        <span class="keywordflow">while</span> (x &lt;= x_to)</div>
+<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;        {</div>
+<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlinef.html">QLineF</a> line(x, y_from, x, y_to);</div>
+<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#drawLine">drawLine</a>(line);</div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;            x += mDebugDefaultWidth;</div>
+<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;        }</div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160; </div>
+<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;        x = mDebugXLines.first() - mDebugDefaultWidth;</div>
+<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160; </div>
+<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;        <span class="keywordflow">while</span> (x &gt;= x_from)</div>
+<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;        {</div>
+<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlinef.html">QLineF</a> line(x, y_from, x, y_to);</div>
+<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#drawLine">drawLine</a>(line);</div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;            x -= mDebugDefaultWidth;</div>
+<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;        }</div>
+<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160; </div>
+<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;        qreal y = mDebugYLines.last() + mDebugDefaultHeight;</div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160; </div>
+<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;        <span class="keywordflow">while</span> (y &lt;= y_to)</div>
+<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;        {</div>
+<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlinef.html">QLineF</a> line(x_from, y, x_to, y);</div>
+<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#drawLine">drawLine</a>(line);</div>
+<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;            y += mDebugDefaultHeight;</div>
+<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;        }</div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160; </div>
+<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;        y = mDebugYLines.first() - mDebugDefaultHeight;</div>
+<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160; </div>
+<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;        <span class="keywordflow">while</span> (y &gt;= y_from)</div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;        {</div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qlinef.html">QLineF</a> line(x_from, y, x_to, y);</div>
+<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#drawLine">drawLine</a>(line);</div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;            y -= mDebugDefaultHeight;</div>
+<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;        }</div>
+<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;    }</div>
+<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160; </div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;    <span class="keywordtype">void</span> GraphicsScene::setDebugGridEnabled(<span class="keywordtype">bool</span> enabled)</div>
+<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;    {</div>
+<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;        mDebugGridEnable = enabled;</div>
+<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;    }</div>
+<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160; </div>
+<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;    <span class="keywordtype">bool</span> GraphicsScene::debugGridEnabled()</div>
+<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;    {</div>
+<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;        <span class="keywordflow">return</span> mDebugGridEnable;</div>
+<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;    }</div>
+<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;<span class="preprocessor">    #endif</span></div>
+<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqpainter_html_RenderHint-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpainter.html#RenderHint-enum">QPainter::Antialiasing</a></div><div class="ttdeci">Antialiasing</div></div>
@@ -1027,7 +1028,7 @@ $(document).ready(function(){initNavTree('graphics__scene_8cpp_source.html','');
 <div class="ttc" id="aqt_html_GlobalColor-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qt.html#GlobalColor-enum">Qt::magenta</a></div><div class="ttdeci">magenta</div></div>
 <div class="ttc" id="astructhal_1_1_graph_shader_1_1_shading_html"><div class="ttname"><a href="structhal_1_1_graph_shader_1_1_shading.html">hal::GraphShader::Shading</a></div><div class="ttdef"><b>Definition:</b> <a href="graph__shader_8h_source.html#l00049">graph_shader.h:49</a></div></div>
 <div class="ttc" id="aqset_html_isEmpty"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#isEmpty">QSet::isEmpty</a></div><div class="ttdeci">bool isEmpty() const const</div></div>
-<div class="ttc" id="aclasshal_1_1_graph_context_manager_html_a97d0b3e9b5b552dc336755ed6ea80d14"><div class="ttname"><a href="classhal_1_1_graph_context_manager.html#a97d0b3e9b5b552dc336755ed6ea80d14">hal::GraphContextManager::sSettingNetGroupingToPins</a></div><div class="ttdeci">static SettingsItemCheckbox * sSettingNetGroupingToPins</div><div class="ttdef"><b>Definition:</b> <a href="graph__context__manager_8h_source.html#l00359">graph_context_manager.h:359</a></div></div>
+<div class="ttc" id="aclasshal_1_1_graph_context_manager_html_a97d0b3e9b5b552dc336755ed6ea80d14"><div class="ttname"><a href="classhal_1_1_graph_context_manager.html#a97d0b3e9b5b552dc336755ed6ea80d14">hal::GraphContextManager::sSettingNetGroupingToPins</a></div><div class="ttdeci">static SettingsItemCheckbox * sSettingNetGroupingToPins</div><div class="ttdef"><b>Definition:</b> <a href="graph__context__manager_8h_source.html#l00366">graph_context_manager.h:366</a></div></div>
 <div class="ttc" id="aqgraphicsscene_html_removeItem"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsscene.html#removeItem">QGraphicsScene::removeItem</a></div><div class="ttdeci">void removeItem(QGraphicsItem *item)</div></div>
 <div class="ttc" id="aqgraphicsscene_html_clearSelection"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsscene.html#clearSelection">QGraphicsScene::clearSelection</a></div><div class="ttdeci">void clearSelection()</div></div>
 <div class="ttc" id="astructhal_1_1_graph_shader_1_1_shading_html_a8a21c27a07d51b21511cae9951aebd6c"><div class="ttname"><a href="structhal_1_1_graph_shader_1_1_shading.html#a8a21c27a07d51b21511cae9951aebd6c">hal::GraphShader::Shading::mGateVisuals</a></div><div class="ttdeci">QMap&lt; u32, GraphicsNode::Visuals &gt; mGateVisuals</div><div class="ttdef"><b>Definition:</b> <a href="graph__shader_8h_source.html#l00052">graph_shader.h:52</a></div></div>
@@ -1040,7 +1041,7 @@ $(document).ready(function(){initNavTree('graphics__scene_8cpp_source.html','');
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_62580450d675343767dbe0503393e994.html">graph_widget</a></li><li class="navelem"><a class="el" href="graphics__scene_8cpp.html">graphics_scene.cpp</a></li>
-    <li class="footer">Generated on Thu Aug 24 2023 20:23:06 for HAL by
+    <li class="footer">Generated on Mon Aug 28 2023 15:26:47 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

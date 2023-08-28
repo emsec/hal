@@ -94,8 +94,8 @@ $(document).ready(function(){initNavTree('main__window_8cpp.html',''); initResiz
 <code>#include &quot;<a class="el" href="action_8h_source.html">gui/action/action.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="content__manager_8h_source.html">gui/content_manager/content_manager.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="dock__bar_8h_source.html">gui/docking_system/dock_bar.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="export__registered__format_8h_source.html">gui/export/export_registered_format.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="export__project__dialog_8h_source.html">gui/export/export_project_dialog.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="export__registered__format_8h_source.html">gui/export/export_registered_format.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="import__project__dialog_8h_source.html">gui/export/import_project_dialog.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="file__manager_8h_source.html">gui/file_manager/file_manager.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="project__dir__dialog_8h_source.html">gui/file_manager/project_dir_dialog.h</a>&quot;</code><br />
@@ -115,32 +115,33 @@ $(document).ready(function(){initNavTree('main__window_8cpp.html',''); initResiz
 <code>#include &quot;<a class="el" href="action__open__netlist__file_8h_source.html">gui/user_action/action_open_netlist_file.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="welcome__screen_8h_source.html">gui/welcome_screen/welcome_screen.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="defines_8h_source.html">hal_core/defines.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="event__log_8h_source.html">hal_core/netlist/event_system/event_log.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gate_8h_source.html">hal_core/netlist/gate.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gate__library__manager_8h_source.html">hal_core/netlist/gate_library/gate_library_manager.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="include_2hal__core_2netlist_2grouping_8h_source.html">hal_core/netlist/grouping.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="net_8h_source.html">hal_core/netlist/net.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="include_2hal__core_2netlist_2netlist_8h_source.html">hal_core/netlist/netlist.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="netlist__factory_8h_source.html">hal_core/netlist/netlist_factory.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="netlist__writer__manager_8h_source.html">hal_core/netlist/netlist_writer/netlist_writer_manager.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="netlist__serializer_8h_source.html">hal_core/netlist/persistent/netlist_serializer.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="log_8h_source.html">hal_core/utilities/log.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="event__log_8h_source.html">hal_core/netlist/event_system/event_log.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="project__manager_8h_source.html">hal_core/netlist/project_manager.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="project__directory_8h_source.html">hal_core/utilities/project_directory.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="plugin__manager_8h_source.html">hal_core/plugin_system/plugin_manager.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gui__extension__interface_8h_source.html">hal_core/plugin_system/gui_extension_interface.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="plugin__manager_8h_source.html">hal_core/plugin_system/plugin_manager.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="log_8h_source.html">hal_core/utilities/log.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="project__directory_8h_source.html">hal_core/utilities/project_directory.h</a>&quot;</code><br />
 <code>#include &lt;QApplication&gt;</code><br />
 <code>#include &lt;QCloseEvent&gt;</code><br />
 <code>#include &lt;QDesktopWidget&gt;</code><br />
+<code>#include &lt;QDir&gt;</code><br />
 <code>#include &lt;QFileDialog&gt;</code><br />
 <code>#include &lt;QFuture&gt;</code><br />
 <code>#include &lt;QInputDialog&gt;</code><br />
 <code>#include &lt;QMessageBox&gt;</code><br />
 <code>#include &lt;QPushButton&gt;</code><br />
-<code>#include &lt;QShortcut&gt;</code><br />
-<code>#include &lt;QtConcurrent&gt;</code><br />
 <code>#include &lt;QRegExp&gt;</code><br />
+<code>#include &lt;QShortcut&gt;</code><br />
 <code>#include &lt;QStringList&gt;</code><br />
-<code>#include &lt;QDir&gt;</code><br />
+<code>#include &lt;QtConcurrent&gt;</code><br />
 </div>
 <p><a href="main__window_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -165,7 +166,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_7a0626338f63bd87363790a595d37c04.html">main_window</a></li><li class="navelem"><a class="el" href="main__window_8cpp.html">main_window.cpp</a></li>
-    <li class="footer">Generated on Thu Aug 24 2023 20:23:08 for HAL by
+    <li class="footer">Generated on Mon Aug 28 2023 15:26:49 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -151,6 +151,7 @@ var hierarchy =
     [ "hal::dataflow::measure_block_time_t", "classhal_1_1dataflow_1_1measure__block__time__t.html", null ],
     [ "hal::SMT::Model", "structhal_1_1_s_m_t_1_1_model.html", null ],
     [ "hal::ModuleEvent", "classhal_1_1_module_event.html", null ],
+    [ "hal::GuiApiClasses::View::ModuleGateIdPair", "structhal_1_1_gui_api_classes_1_1_view_1_1_module_gate_id_pair.html", null ],
     [ "hal::ModuleItem", "classhal_1_1_module_item.html", null ],
     [ "hal::GraphicsModule::ModulePin", "structhal_1_1_graphics_module_1_1_module_pin.html", null ],
     [ "hal::ModuleSelectEntry", "classhal_1_1_module_select_entry.html", null ],
@@ -245,6 +246,9 @@ var hierarchy =
     ] ],
     [ "QHash< NetLayoutPoint, NetLayoutJunction * >", "https://doc.qt.io/qt-5/qhash.html", [
       [ "hal::NetLayoutJunctionHash", "classhal_1_1_net_layout_junction_hash.html", null ]
+    ] ],
+    [ "QHash< Node, QPoint >", "https://doc.qt.io/qt-5/qhash.html", [
+      [ "hal::GridPlacement", "classhal_1_1_grid_placement.html", null ]
     ] ],
     [ "QIconEngine", "https://doc.qt.io/qt-5/qiconengine.html", [
       [ "hal::SvgIconEngine", "classhal_1_1_svg_icon_engine.html", null ]
@@ -580,10 +584,10 @@ var hierarchy =
       [ "hal::NodeBoxes", "classhal_1_1_node_boxes.html", null ]
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
-    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
-    [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
-    [ "hal::Result< T >", "classhal_1_1_result.html", null ],
     [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
+    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
+    [ "hal::Result< T >", "classhal_1_1_result.html", null ],
+    [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
     [ "hal::RuntimeLibrary", "classhal_1_1_runtime_library.html", null ],
     [ "hal::SelectionTreeItem", "classhal_1_1_selection_tree_item.html", [
       [ "hal::SelectionTreeItemGate", "classhal_1_1_selection_tree_item_gate.html", null ],
@@ -606,8 +610,8 @@ var hierarchy =
       [ "hal::VerilogWriterTest", "classhal_1_1_verilog_writer_test.html", null ],
       [ "hal::VHDLParserTest", "classhal_1_1_v_h_d_l_parser_test.html", null ]
     ] ],
-    [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
     [ "hal::Token< T >", "structhal_1_1_token.html", null ],
+    [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
     [ "hal::TokenStream< T >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< ci_string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< std::string >", "classhal_1_1_token_stream.html", null ],
@@ -661,8 +665,9 @@ var hierarchy =
     [ "Vec_Int_t_", "struct_vec___int__t__.html", null ],
     [ "Vec_Ptr_t_", "struct_vec___ptr__t__.html", null ],
     [ "Vec_Vec_t_", "struct_vec___vec__t__.html", null ],
-    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
+    [ "hal::GuiApiClasses::View", "classhal_1_1_gui_api_classes_1_1_view.html", null ],
     [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
+    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
     [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ]
 ];

@@ -1,12 +1,14 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/include/gui/comment_system/widgets/comment_widget.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/comment_system/widgets/comment_widget.h">
-<area shape="rect" id="node1" title=" " alt="" coords="235,5,457,76"/>
-<area shape="rect" id="node2" title=" " alt="" coords="136,124,215,151"/>
-<area shape="rect" id="node3" href="$gui__def_8h.html" title=" " alt="" coords="239,124,344,151"/>
-<area shape="rect" id="node9" title=" " alt="" coords="369,124,435,151"/>
-<area shape="rect" id="node10" title=" " alt="" coords="460,124,563,151"/>
-<area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="5,199,145,225"/>
-<area shape="rect" id="node5" title=" " alt="" coords="169,199,235,225"/>
-<area shape="rect" id="node6" title=" " alt="" coords="259,199,324,225"/>
-<area shape="rect" id="node7" title=" " alt="" coords="349,199,402,225"/>
-<area shape="rect" id="node8" title=" " alt="" coords="427,199,521,225"/>
+<area shape="rect" id="node1" title=" " alt="" coords="292,5,515,76"/>
+<area shape="rect" id="node2" title=" " alt="" coords="193,124,272,151"/>
+<area shape="rect" id="node3" href="$gui__def_8h.html" title=" " alt="" coords="296,124,401,151"/>
+<area shape="rect" id="node11" title=" " alt="" coords="426,124,493,151"/>
+<area shape="rect" id="node12" title=" " alt="" coords="517,124,620,151"/>
+<area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="5,288,145,315"/>
+<area shape="rect" id="node5" href="$log_8h.html" title=" " alt="" coords="62,199,193,240"/>
+<area shape="rect" id="node6" title=" " alt="" coords="217,206,291,233"/>
+<area shape="rect" id="node7" title=" " alt="" coords="316,206,381,233"/>
+<area shape="rect" id="node8" title=" " alt="" coords="405,206,471,233"/>
+<area shape="rect" id="node9" title=" " alt="" coords="495,206,549,233"/>
+<area shape="rect" id="node10" title=" " alt="" coords="573,206,668,233"/>
 </map>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>GUI API &mdash; hal_py v4.2.0-45-geaef6898b documentation</title>
+  <title>GUI API &mdash; hal_py v4.2.0-92-gb68f9c907 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-45-geaef6898b
+                v4.2.0-92-gb68f9c907
               </div>
             
           
@@ -171,6 +171,86 @@
 <dt id="hal_gui.GuiApi">
 <em class="property">class </em><code class="descclassname">hal_gui.</code><code class="descname">GuiApi</code><a class="headerlink" href="#hal_gui.GuiApi" title="Permalink to this definition">¶</a></dt>
 <dd><p>GUI API</p>
+<dl class="class">
+<dt id="hal_gui.GuiApi.GridPlacement">
+<em class="property">class </em><code class="descname">GridPlacement</code><a class="headerlink" href="#hal_gui.GuiApi.GridPlacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper class to determine placement of nodes on gui grid.</p>
+<dl class="method">
+<dt id="hal_gui.GuiApi.GridPlacement.gatePosition">
+<code class="descname">gatePosition</code><span class="sig-paren">(</span><em>self: hal_gui.GuiApi.GridPlacement</em>, <em>gateId: int</em><span class="sig-paren">)</span> &#x2192; Tuple[int, int]<a class="headerlink" href="#hal_gui.GuiApi.GridPlacement.gatePosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query position for gate identified by ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gateId</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Gate ID.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Position of gate or None if gate not found in hash.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>) or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.GridPlacement.modulePosition">
+<code class="descname">modulePosition</code><span class="sig-paren">(</span><em>self: hal_gui.GuiApi.GridPlacement</em>, <em>moduleId: int</em><span class="sig-paren">)</span> &#x2192; Tuple[int, int]<a class="headerlink" href="#hal_gui.GuiApi.GridPlacement.modulePosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query position for module identified by ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>moduleId</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Module ID.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Position of module or None if module not found in hash.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>) or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.GridPlacement.setGatePosition">
+<code class="descname">setGatePosition</code><span class="sig-paren">(</span><em>self: hal_gui.GuiApi.GridPlacement, gateId: int, point: Tuple[int, int], swap: bool = False</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_gui.GuiApi.GridPlacement.setGatePosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set position for gate identified by ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>gateId</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Gate ID.</li>
+<li><strong>pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>)</em>) – New position.</li>
+<li><strong>swap</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – set the swap of positions of the nodes</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_gui.GuiApi.GridPlacement.setModulePosition">
+<code class="descname">setModulePosition</code><span class="sig-paren">(</span><em>self: hal_gui.GuiApi.GridPlacement, moduleId: int, point: Tuple[int, int], swap: bool = False</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_gui.GuiApi.GridPlacement.setModulePosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set position for module identified by ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>moduleId</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Module ID.</li>
+<li><strong>pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>)</em>) – New position.</li>
+<li><strong>swap</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – set the swap of positions of the nodes</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="method">
 <dt id="hal_gui.GuiApi.deselect">
 <code class="descname">deselect</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_gui.GuiApi.deselect" title="Permalink to this definition">¶</a></dt>

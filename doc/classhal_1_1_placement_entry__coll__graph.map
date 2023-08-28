@@ -1,5 +1,5 @@
 <map id="hal::PlacementEntry" name="hal::PlacementEntry">
-<area shape="rect" id="node1" title="Container class to store a PlacementHint togerther with a set of modules and gates." alt="" coords="99,321,252,399"/>
-<area shape="rect" id="node2" href="$classhal_1_1_placement_hint.html" title="The PlacementHint class object provides hints for the layouter how new box objects are placed on a vi..." alt="" coords="5,42,156,207"/>
-<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qset.html" title=" " alt="" coords="180,5,363,244"/>
+<area shape="rect" id="node1" title="Container class to store a PlacementHint togerther with a set of modules and gates." alt="" coords="97,321,250,399"/>
+<area shape="rect" id="node2" href="$classhal_1_1_placement_hint.html" title="The PlacementHint class object provides hints for the layouter how new box objects are placed on a vi..." alt="" coords="5,49,152,200"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qset.html" title=" " alt="" coords="177,5,359,244"/>
 </map>

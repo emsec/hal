@@ -125,6 +125,8 @@ Public Slots</h2></td></tr>
 Signals</h2></td></tr>
 <tr class="memitem:a474db8c46babe0e14afcbd14f2236f63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_user_action_manager.html#a474db8c46babe0e14afcbd14f2236f63">canUndoLastAction</a> (bool yesWeCan)</td></tr>
 <tr class="separator:a474db8c46babe0e14afcbd14f2236f63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfd77eb251e31e00735ffa62c5603f5e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_user_action_manager.html#acfd77eb251e31e00735ffa62c5603f5e">triggerExecute</a> ()</td></tr>
+<tr class="separator:acfd77eb251e31e00735ffa62c5603f5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -150,6 +152,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1806f69156c7a564fcdba056fda7db5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5d614246698ac63b34009aa17274438"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_user_action_manager.html#af5d614246698ac63b34009aa17274438">crashDump</a> (int sig)</td></tr>
 <tr class="separator:af5d614246698ac63b34009aa17274438"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4dafc6a034e9f1b0e0047bbd5b8ab0f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_user_action_manager.html#a4dafc6a034e9f1b0e0047bbd5b8ab0f4">executeActionBlockThread</a> (<a class="el" href="classhal_1_1_user_action.html">UserAction</a> *act)</td></tr>
+<tr class="separator:a4dafc6a034e9f1b0e0047bbd5b8ab0f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_qobject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_qobject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qobject.html">QObject</a></td></tr>
 <tr class="memitem:metaObject inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject.html">QMetaObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#metaObject">metaObject</a> () const const</td></tr>
 <tr class="separator:metaObject inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -350,7 +354,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="textblock"><p>Handles and manages user actions related proccesses. </p>
 <p>The <a class="el" href="classhal_1_1_user_action_manager.html" title="Handles and manages user actions related proccesses.">UserActionManager</a> class manages everything related to user actions such as saving and recording actions. It is implemented as a singleton pattern. </p>
 
-<p class="definition">Definition at line <a class="el" href="user__action__manager_8h_source.html#l00052">52</a> of file <a class="el" href="user__action__manager_8h_source.html">user_action_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action__manager_8h_source.html#l00053">53</a> of file <a class="el" href="user__action__manager_8h_source.html">user_action_manager.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a0688dc0fa9585f5b75eed11e536ed6b3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0688dc0fa9585f5b75eed11e536ed6b3">&#9670;&nbsp;</a></span>addExecutedAction()</h2>
@@ -375,7 +379,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00046">46</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00062">62</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="user__action_8cpp_source.html#l00110">hal::UserAction::debugDump()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextcursor.html#MoveOperation-enum">QTextCursor::End</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#insertPlainText">QPlainTextEdit::insertPlainText()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#moveCursor">QPlainTextEdit::moveCursor()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#show">QWidget::show()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toBool">QVariant::toBool()</a>, and <a class="el" href="settings__item__checkbox_8cpp_source.html#l00020">hal::SettingsItemCheckbox::value()</a>.</p>
 
@@ -439,9 +443,33 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00070">70</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00086">86</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="user__action__manager_8cpp_source.html#l00077">setStopRecording()</a>.</p>
+<p class="reference">References <a class="el" href="user__action__manager_8cpp_source.html#l00093">setStopRecording()</a>.</p>
+
+</div>
+</div>
+<a id="a4dafc6a034e9f1b0e0047bbd5b8ab0f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4dafc6a034e9f1b0e0047bbd5b8ab0f4">&#9670;&nbsp;</a></span>executeActionBlockThread()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::UserActionManager::executeActionBlockThread </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_user_action.html">UserAction</a> *&#160;</td>
+          <td class="paramname"><em>act</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00039">39</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qmutex.html#lock">QMutex::lock()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="classhal_1_1_user_action_manager.html#acfd77eb251e31e00735ffa62c5603f5e">triggerExecute()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmutex.html#unlock">QMutex::unlock()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00533">hal::GuiApiClasses::View::addTo()</a>, <a class="el" href="gui__api_8cpp_source.html#l00518">hal::GuiApiClasses::View::deleteView()</a>, <a class="el" href="gui__api_8cpp_source.html#l00763">hal::GuiApiClasses::View::foldModule()</a>, <a class="el" href="gui__api_8cpp_source.html#l00448">hal::GuiApiClasses::View::isolateInNew()</a>, <a class="el" href="gui__api_8cpp_source.html#l00572">hal::GuiApiClasses::View::removeFrom()</a>, <a class="el" href="gui__api_8cpp_source.html#l00609">hal::GuiApiClasses::View::setName()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00744">hal::GuiApiClasses::View::unfoldModule()</a>.</p>
 
 </div>
 </div>
@@ -469,11 +497,11 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The next <a class="el" href="classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions.">UserAction</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00176">176</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00192">192</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#attributes">QXmlStreamReader::attributes()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstringref.html#isEmpty">QStringRef::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstringref.html#isNull">QStringRef::isNull()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#name">QXmlStreamReader::name()</a>, <a class="el" href="classhal_1_1_user_action_factory.html#a218bcaeabde2d8e8eb6266aea7607452">hal::UserActionFactory::newAction()</a>, <a class="el" href="user__action_8cpp_source.html#l00100">hal::UserAction::readFromXml()</a>, <a class="el" href="user__action__object_8cpp_source.html#l00113">hal::UserActionObject::readFromXml()</a>, <a class="el" href="user__action_8h_source.html#l00139">hal::UserAction::setCompoundOrder()</a>, <a class="el" href="user__action_8cpp_source.html#l00033">hal::UserAction::setObject()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstringref.html#toInt">QStringRef::toInt()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstringref.html#toString">QStringRef::toString()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamattributes.html#value">QXmlStreamAttributes::value()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="user__action__manager_8cpp_source.html#l00129">playMacro()</a>, and <a class="el" href="user__action__compound_8cpp_source.html#l00060">hal::UserActionCompound::readFromXml()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="user__action__manager_8cpp_source.html#l00145">playMacro()</a>, and <a class="el" href="user__action__compound_8cpp_source.html#l00060">hal::UserActionCompound::readFromXml()</a>.</p>
 
 </div>
 </div>
@@ -508,7 +536,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00037">37</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00053">53</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#deleteLater">QObject::deleteLater()</a>.</p>
 
@@ -531,11 +559,11 @@ Additional Inherited Members</h2></td></tr>
 <p>Tests whether actions are currently recorded and at least one command has been executed</p>
 <dl class="section return"><dt>Returns</dt><dd>True if there are recorded and executed actions, False otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00201">201</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00217">217</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="user__action__manager_8cpp_source.html#l00206">isRecording()</a>.</p>
+<p class="reference">References <a class="el" href="user__action__manager_8cpp_source.html#l00222">isRecording()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="main__window_8cpp_source.html#l00918">hal::MainWindow::handleActionStopRecording()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="main__window_8cpp_source.html#l00924">hal::MainWindow::handleActionStopRecording()</a>.</p>
 
 </div>
 </div>
@@ -564,9 +592,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the singleton instance.</p>
 <dl class="section return"><dt>Returns</dt><dd>The singleton instance. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00216">216</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00232">232</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="user__action_8cpp_source.html#l00024">hal::UserAction::exec()</a>, <a class="el" href="user__action__compound_8cpp_source.html#l00060">hal::UserActionCompound::readFromXml()</a>, and <a class="el" href="user__action_8cpp_source.html#l00006">hal::UserActionFactory::UserActionFactory()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00533">hal::GuiApiClasses::View::addTo()</a>, <a class="el" href="gui__api_8cpp_source.html#l00518">hal::GuiApiClasses::View::deleteView()</a>, <a class="el" href="user__action_8cpp_source.html#l00024">hal::UserAction::exec()</a>, <a class="el" href="gui__api_8cpp_source.html#l00763">hal::GuiApiClasses::View::foldModule()</a>, <a class="el" href="gui__api_8cpp_source.html#l00448">hal::GuiApiClasses::View::isolateInNew()</a>, <a class="el" href="user__action__compound_8cpp_source.html#l00060">hal::UserActionCompound::readFromXml()</a>, <a class="el" href="gui__api_8cpp_source.html#l00572">hal::GuiApiClasses::View::removeFrom()</a>, <a class="el" href="gui__api_8cpp_source.html#l00609">hal::GuiApiClasses::View::setName()</a>, <a class="el" href="gui__api_8cpp_source.html#l00744">hal::GuiApiClasses::View::unfoldModule()</a>, and <a class="el" href="user__action_8cpp_source.html#l00006">hal::UserActionFactory::UserActionFactory()</a>.</p>
 
 </div>
 </div>
@@ -587,9 +615,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Tests whether actions are currently recorded.</p>
 <dl class="section return"><dt>Returns</dt><dd>True if it is currently recording, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00206">206</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00222">222</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="user__action__manager_8cpp_source.html#l00201">hasRecorded()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="user__action__manager_8cpp_source.html#l00217">hasRecorded()</a>.</p>
 
 </div>
 </div>
@@ -616,9 +644,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00129">129</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00145">145</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#atEnd">QXmlStreamReader::atEnd()</a>, <a class="el" href="user__action_8cpp_source.html#l00024">hal::UserAction::exec()</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="el" href="user__action__manager_8cpp_source.html#l00176">getParsedAction()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#hasError">QXmlStreamReader::hasError()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#isEndElement">QXmlStreamReader::isEndElement()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#isStartElement">QXmlStreamReader::isStartElement()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#name">QXmlStreamReader::name()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#readNext">QXmlStreamReader::readNext()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::ReadOnly</a>, <a class="el" href="classhal_1_1_user_action.html#a0a21a47562362b7a154f7843381c1e0b">hal::UserAction::tagname()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#atEnd">QXmlStreamReader::atEnd()</a>, <a class="el" href="user__action_8cpp_source.html#l00024">hal::UserAction::exec()</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="el" href="user__action__manager_8cpp_source.html#l00192">getParsedAction()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#hasError">QXmlStreamReader::hasError()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#isEndElement">QXmlStreamReader::isEndElement()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#isStartElement">QXmlStreamReader::isStartElement()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#name">QXmlStreamReader::name()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamreader.html#readNext">QXmlStreamReader::readNext()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::ReadOnly</a>, <a class="el" href="classhal_1_1_user_action.html#a0a21a47562362b7a154f7843381c1e0b">hal::UserAction::tagname()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
 
 </div>
 </div>
@@ -645,7 +673,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00211">211</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00227">227</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="user__action_8h_source.html#l00255">hal::UserActionFactory::tagname()</a>.</p>
 
@@ -669,7 +697,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Sets a start marker for macro recording. </p>
 
-<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00065">65</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00081">81</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
 
 </div>
 </div>
@@ -697,11 +725,11 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok=stopped and saved Discard=stopped not saved Retry=try with other filename Cancel=user changed his mind </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00077">77</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00093">93</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Cancel</a>, <a class="el" href="user__action_8h_source.html#l00132">hal::UserAction::compoundOrder()</a>, <a class="el" href="user__action_8cpp_source.html#l00045">hal::UserAction::cryptographicHash()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Discard</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="test_8py_source.html#l00008">test::n</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#number-1">QString::number()</a>, <a class="el" href="user__action_8h_source.html#l00102">hal::UserAction::object()</a>, <a class="el" href="_apache_01_license_8txt_source.html#l00057">of</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Ok</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#StandardButton-enum">QMessageBox::Retry</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamwriter.html#setAutoFormatting">QXmlStreamWriter::setAutoFormatting()</a>, <a class="el" href="classhal_1_1_user_action.html#a0a21a47562362b7a154f7843381c1e0b">hal::UserAction::tagname()</a>, <a class="el" href="user__action_8h_source.html#l00146">hal::UserAction::timeStamp()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmessagebox.html#warning">QMessageBox::warning()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamwriter.html#writeAttribute-1">QXmlStreamWriter::writeAttribute()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamwriter.html#writeEndDocument">QXmlStreamWriter::writeEndDocument()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamwriter.html#writeEndElement">QXmlStreamWriter::writeEndElement()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::WriteOnly</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamwriter.html#writeStartDocument-1">QXmlStreamWriter::writeStartDocument()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qxmlstreamwriter.html#writeStartElement-1">QXmlStreamWriter::writeStartElement()</a>, <a class="el" href="user__action_8cpp_source.html#l00095">hal::UserAction::writeToXml()</a>, and <a class="el" href="user__action__object_8cpp_source.html#l00106">hal::UserActionObject::writeToXml()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="user__action__manager_8cpp_source.html#l00070">crashDump()</a>, and <a class="el" href="main__window_8cpp_source.html#l00918">hal::MainWindow::handleActionStopRecording()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="user__action__manager_8cpp_source.html#l00086">crashDump()</a>, and <a class="el" href="main__window_8cpp_source.html#l00924">hal::MainWindow::handleActionStopRecording()</a>.</p>
 
 </div>
 </div>
@@ -730,11 +758,38 @@ Additional Inherited Members</h2></td></tr>
 <p>Get the elapsed time in milliseconds since GUI start.</p>
 <dl class="section return"><dt>Returns</dt><dd>The elapsed time. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="user__action__manager_8h_source.html#l00127">127</a> of file <a class="el" href="user__action__manager_8h_source.html">user_action_manager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action__manager_8h_source.html#l00128">128</a> of file <a class="el" href="user__action__manager_8h_source.html">user_action_manager.h</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qelapsedtimer.html#elapsed">QElapsedTimer::elapsed()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="user__action_8cpp_source.html#l00024">hal::UserAction::exec()</a>.</p>
+
+</div>
+</div>
+<a id="acfd77eb251e31e00735ffa62c5603f5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfd77eb251e31e00735ffa62c5603f5e">&#9670;&nbsp;</a></span>triggerExecute</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::UserActionManager::triggerExecute </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="user__action__manager_8cpp_source.html#l00039">executeActionBlockThread()</a>.</p>
 
 </div>
 </div>
@@ -754,7 +809,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Undo last action. </p>
 
-<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00241">241</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="user__action__manager_8cpp_source.html#l00257">257</a> of file <a class="el" href="user__action__manager_8cpp_source.html">user_action_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#append">QList::append()</a>, <a class="el" href="user__action_8h_source.html#l00132">hal::UserAction::compoundOrder()</a>, <a class="el" href="test_8py_source.html#l00008">test::n</a>, and <a class="el" href="user__action_8h_source.html#l00168">hal::UserAction::undoAction()</a>.</p>
 
@@ -770,7 +825,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_user_action_manager.html">UserActionManager</a></li>
-    <li class="footer">Generated on Thu Aug 24 2023 20:23:12 for HAL by
+    <li class="footer">Generated on Mon Aug 28 2023 15:26:53 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

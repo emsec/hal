@@ -7,6 +7,7 @@ var classhal_1_1_placement_hint =
       [ "GridPosition", "classhal_1_1_placement_hint.html#ad09aba494db43e08dc70e4c26b83b8e0a30472caec088342be6e3c336a35fcfbc", null ]
     ] ],
     [ "PlacementHint", "classhal_1_1_placement_hint.html#ab3b7053970c596c2fc440a435bf2c427", null ],
+    [ "PlacementHint", "classhal_1_1_placement_hint.html#a883c4f136b26b4bf34896f6bdd805b30", null ],
     [ "addGridPosition", "classhal_1_1_placement_hint.html#a704ed8624588be38d3b934de6e2c751d", null ],
     [ "gridPosition", "classhal_1_1_placement_hint.html#addeee89e239e71feffce0f710595207d", null ],
     [ "mode", "classhal_1_1_placement_hint.html#ac5b9ad8472ea00e21577d7224d8517d5", null ],

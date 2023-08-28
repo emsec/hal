@@ -100,6 +100,7 @@ var group__graph_contexts =
       [ "handleUnmarkedGlobalInput", "classhal_1_1_graph_context_manager.html#a86baed5ae448d4d126dc9594b228d312", null ],
       [ "handleUnmarkedGlobalOutput", "classhal_1_1_graph_context_manager.html#a7ca5ecaa4ee2a3d8a23e110e767b3f7b", null ],
       [ "nextDefaultName", "classhal_1_1_graph_context_manager.html#a6f1d5ea1f0e018f9340636c4f29972df", null ],
+      [ "nextViewName", "classhal_1_1_graph_context_manager.html#a1c37120eb4e430ed189af9ab1ae29349", null ],
       [ "renameGraphContextAction", "classhal_1_1_graph_context_manager.html#a2809e7e6154892eff9f191080a109098", null ],
       [ "restoreFromFile", "classhal_1_1_graph_context_manager.html#ac02e7e472109776e7f9d0aeffd04506b", null ],
       [ "setContextId", "classhal_1_1_graph_context_manager.html#a2fad5a577d6bad8cc3f8d569f3def1eb", null ]

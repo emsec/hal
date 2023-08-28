@@ -1,5 +1,6 @@
 var gui__def_8h =
 [
+    [ "GridPlacement", "classhal_1_1_grid_placement.html", "classhal_1_1_grid_placement" ],
     [ "PlacementHint", "classhal_1_1_placement_hint.html", "classhal_1_1_placement_hint" ],
     [ "PlacementEntry", "classhal_1_1_placement_entry.html", "classhal_1_1_placement_entry" ],
     [ "ItemType", "gui__def_8h.html#gaab0cd38a41c1215ae70822b1d501daa1", [
