@@ -81,11 +81,11 @@ namespace hal
             if (!factory)
             {
                 if (file_path.extension().string() == ".hgl")
-                    netlist_serializer::last_error = netlist_serializer::HglPluginNotLoaded;
+                    netlist_serializer::Error::instance()->setError(netlist_serializer::Error::HglPluginNotLoaded);
                 else if (file_path.extension().string() == ".lib")
-                    netlist_serializer::last_error = netlist_serializer::LibPluginNotLoaded;
+                    netlist_serializer::Error::instance()->setError(netlist_serializer::Error::LibPluginNotLoaded);
                 else
-                    netlist_serializer::last_error = netlist_serializer::OtherPluginNotLoaded;
+                    netlist_serializer::Error::instance()->setError(netlist_serializer::Error::OtherPluginNotLoaded);
                 return nullptr;
             }
 
@@ -96,7 +96,7 @@ namespace hal
             if (auto res = parser->parse(file_path); res.is_error())
             {
                 log_error("gate_library_parser", "error encountered while parsing gate library from file '{}':\n{}", file_path.string(), res.get_error().get());
-                netlist_serializer::last_error = netlist_serializer::GatelibParserError;
+                netlist_serializer::Error::instance()->setError(netlist_serializer::Error::GatelibParserError);
                 return nullptr;
             }
             else

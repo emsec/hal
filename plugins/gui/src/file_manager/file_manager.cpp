@@ -525,7 +525,7 @@ namespace hal
             for (;;) // try loading hal file until exit by return
             {
                 // event_controls::enable_all(false); won't get events until callbacks are registered
-                auto netlist = netlist_factory::load_netlist(filename.toStdString());
+                auto netlist = netlist_factory::load_netlist(filename.toStdString(),gatelibraryPath.toStdString());
                 // event_controls::enable_all(true);
                 if (netlist)
                 {
@@ -538,14 +538,16 @@ namespace hal
                 else
                 {
                     bool tryAgain = false;
-                    if (++errorCount[netlist_serializer::last_error] < 3)
+
+                    netlist_serializer::Error::ErrorCode errCode = netlist_serializer::Error::instance()->code();
+                    if (++errorCount[errCode] < 3)
                     {
-                        switch (netlist_serializer::last_error)
+                        switch (errCode)
                         {
-                        case netlist_serializer::HglPluginNotLoaded:
+                        case netlist_serializer::Error::HglPluginNotLoaded:
                             gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,".hgl");
                             tryAgain = true;
-                        case netlist_serializer::LibPluginNotLoaded:
+                        case netlist_serializer::Error::LibPluginNotLoaded:
                             gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,".hgl");
                             tryAgain = true;
                         default:

@@ -30,11 +30,12 @@
 #include <QList>
 #include <QMap>
 
-class QComboBox;
 class QCheckBox;
 class QLineEdit;
 
 namespace hal {
+
+    class GateLibrarySelection;
 
     class ImportNetlistDialog : public QDialog
     {
@@ -43,16 +44,14 @@ namespace hal {
         Q_PROPERTY(QString saveIconStyle READ saveIconStyle WRITE setSaveIconStyle)
         QString mProjectdir;
         QLineEdit* mEditProjectdir;
-        QComboBox* mComboGatelib;
+        GateLibrarySelection* mGatelibSelection;
         QCheckBox* mCheckMoveNetlist;
         QCheckBox* mCheckCopyGatelib;
 
-        QStringList mGateLibraryPath;
-        QMap<QString,int> mGateLibraryMap;
         QString mSaveIconPath;
         QString mSaveIconStyle;
     private Q_SLOTS:
-        void handleGateLibraryPathChanged(const QString& txt);
+        void handleGatelibSelected(bool singleFile);
         void handleFileDialogTriggered();
         void setSuggestedProjectDir(const QString& filename);
     public:

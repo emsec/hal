@@ -1,16 +1,13 @@
 #include "gui/file_manager/import_netlist_dialog.h"
 
 #include "gui/gui_utils/graphics.h"
-#include "hal_core/netlist/gate_library/gate_library.h"
-#include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "gui/gatelibrary_management/gatelibrary_selection.h"
 
 #include <QCheckBox>
-#include <QComboBox>
 #include <QDebug>
 #include <QDialogButtonBox>
 #include <QFile>
 #include <QFileDialog>
-#include <QFileInfo>
 #include <QGridLayout>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -19,6 +16,7 @@
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QSpacerItem>
+#include <QStyle>
 
 namespace hal
 {
@@ -27,8 +25,7 @@ namespace hal
         QStyle* s = style();
         s->unpolish(this);
         s->polish(this);
-        QString suggestedGateLibraryPath;
-        QString suggestedGateLibraryName;
+        QString gatelibFromHal;
         if (filename.endsWith(".hal"))
         {
             QFile halFile(filename);
@@ -40,7 +37,7 @@ namespace hal
                 {
                     const QJsonObject& nlObj = halObj["netlist"].toObject();
                     if (nlObj.contains("gate_library") && nlObj["gate_library"].isString())
-                        suggestedGateLibraryPath = nlObj["gate_library"].toString();
+                        gatelibFromHal = nlObj["gate_library"].toString();
                 }
             }
         }
@@ -66,42 +63,10 @@ namespace hal
         layout->addWidget(frameProjectdir, irow++, 0);
         layout->addItem(new QSpacerItem(30, 30), irow++, 0);
 
-        QLabel* labGatelib = new QLabel("Gate library:", this);
-        layout->addWidget(labGatelib, irow++, 0, Qt::AlignLeft);
-        mComboGatelib = new QComboBox(this);
-        if (filename.endsWith(".hal"))
-        {
-            mComboGatelib->setDisabled(true);
-            labGatelib->setDisabled(true);
-        }
-        else
-        {
-            mComboGatelib->addItem("(Auto detect)");
-            for (const std::filesystem::path& path : gate_library_manager::get_all_path())
-            {
-                int n         = mGateLibraryPath.size();
-                QString qName = QString::fromStdString(path.filename());
-                mGateLibraryMap.insert(qName, n);
-                QString qPath = QString::fromStdString(path.string());
-                mGateLibraryPath.append(qPath);
-                if (qPath == suggestedGateLibraryPath)
-                    suggestedGateLibraryName = qName;
-            }
-            if (suggestedGateLibraryName.isEmpty() && !suggestedGateLibraryPath.isEmpty())
-            {
-                // suggested gate library not found in default path
-                QFileInfo info(suggestedGateLibraryPath);
-                suggestedGateLibraryName = info.fileName();
-                int n                    = mGateLibraryPath.size();
-                mGateLibraryMap.insert(suggestedGateLibraryName, n);
-                mGateLibraryPath.append(suggestedGateLibraryPath);
-            }
-            mComboGatelib->addItems(mGateLibraryMap.keys());
-            if (!suggestedGateLibraryName.isEmpty())
-                mComboGatelib->setCurrentText(suggestedGateLibraryName);
-        }
-        mComboGatelib->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        layout->addWidget(mComboGatelib, irow++, 0);
+        mGatelibSelection = new GateLibrarySelection(gatelibFromHal, this);
+        mGatelibSelection->setIcon(mSaveIconPath, mSaveIconStyle);
+        layout->addWidget(mGatelibSelection, irow++, 0);
+        //mGatelibSelection->setDisabled(filename.endsWith(".hal"));
 
         layout->addItem(new QSpacerItem(30, 30), irow++, 0);
         layout->setRowStretch(irow - 1, 20);
@@ -115,8 +80,6 @@ namespace hal
         connect(dbb, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(dbb, &QDialogButtonBox::rejected, this, &QDialog::reject);
         layout->addWidget(dbb, irow++, 0, Qt::AlignRight);
-        connect(mComboGatelib, &QComboBox::currentTextChanged, this, &ImportNetlistDialog::handleGateLibraryPathChanged);
-        handleGateLibraryPathChanged(mComboGatelib->currentText());
     }
 
     void ImportNetlistDialog::setSuggestedProjectDir(const QString& filename)
@@ -148,24 +111,22 @@ namespace hal
         mEditProjectdir->setText(dir);
     }
 
-    void ImportNetlistDialog::handleGateLibraryPathChanged(const QString& txt)
+    void ImportNetlistDialog::handleGatelibSelected(bool singleFile)
     {
-        if (mGateLibraryMap.value(txt, -1) < 0)
+        if (singleFile)
+        {
+             mCheckCopyGatelib->setEnabled(true);
+        }
+        else
         {
             mCheckCopyGatelib->setCheckState(Qt::Unchecked);
             mCheckCopyGatelib->setDisabled(true);
         }
-        else
-            mCheckCopyGatelib->setEnabled(true);
     }
 
     QString ImportNetlistDialog::gateLibraryPath() const
     {
-        QString seltxt = mComboGatelib->currentText();
-        int inx        = mGateLibraryMap.value(seltxt, -1);
-        if (inx < 0)
-            return QString();
-        return mGateLibraryPath.at(inx);
+        return mGatelibSelection->gateLibraryPath();
     }
 
     bool ImportNetlistDialog::isMoveNetlistChecked() const
@@ -177,4 +138,5 @@ namespace hal
     {
         return mCheckCopyGatelib->isChecked();
     }
+
 }    // namespace hal

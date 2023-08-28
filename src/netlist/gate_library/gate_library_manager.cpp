@@ -78,7 +78,7 @@ namespace hal
             if (!std::filesystem::exists(file_path))
             {
                 log_error("gate_library_manager", "gate library file '{}' does not exist.", file_path.string());
-                netlist_serializer::last_error = netlist_serializer::GatelibFileNotFound;
+                netlist_serializer::Error::instance()->setError(netlist_serializer::Error::GatelibFileNotFound);
                 return nullptr;
             }
 
