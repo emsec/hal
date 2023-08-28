@@ -78,6 +78,159 @@ PYBIND11_PLUGIN(hal_gui)
 
     py::class_<GuiApi> py_gui_api(m, "GuiApi", R"(GUI API)");
 
+    py::class_<GridPlacement>(py_gui_api,"GridPlacement",R"(
+                      Helper class to determine placement of nodes on gui grid.
+            )")
+
+            .def(py::init<>(), R"(
+                 Constructor for empty placement hash.
+            )")
+
+            .def("setGatePosition", &GridPlacement::setGatePosition, py::arg("gateId"), py::arg("point"), py::arg("swap") = false, R"(
+                 Set position for gate identified by ID.
+
+                 :param int gateId: Gate ID.
+                 :param tuple(int,int) pos: New position.
+                 :param bool swap: set the swap of positions of the nodes
+            )")
+
+            .def("setModulePosition", &GridPlacement::setModulePosition, py::arg("moduleId"), py::arg("point"), py::arg("swap") = false, R"(
+                 Set position for module identified by ID.
+
+                 :param int moduleId: Module ID.
+                 :param tuple(int,int) pos: New position.
+                 :param bool swap: set the swap of positions of the nodes
+            )")
+
+            .def("gatePosition", &GridPlacement::gatePosition, py::arg("gateId"), R"(
+                 Query position for gate identified by ID.
+
+                 :param int gateId: Gate ID.
+                 :returns: Position of gate or None if gate not found in hash.
+                 :rtype: tuple(int,int) or None
+            )")
+
+            .def("modulePosition", &GridPlacement::modulePosition, py::arg("moduleId"), R"(
+                 Query position for module identified by ID.
+
+                 :param int moduleId: Module ID.
+                 :returns: Position of module or None if module not found in hash.
+                 :rtype: tuple(int,int) or None
+            )");
+
+    py::class_<GuiApiClasses::View>(py_gui_api, "View")
+    .def_static("isolateInNew", &GuiApiClasses::View::isolateInNew, py::arg("modules"), py::arg("gates"),R"(
+        Isolates given modules and gates into a new view
+
+        :param list[hal_py.module] modules: List of modules to be added.
+        :param list[hal_py.Gate] gates: List of gates to be added.
+        :returns: ID of created view or the existing one if view is exclusively bound to a module.
+        :rtype: int
+)")
+    .def_static("rename", &GuiApiClasses::View::setName, py::arg("id"), py::arg("name"),R"(
+        Renames the view specified by the given ID.
+
+        :param int viewId: ID of the view.
+        :param string name: New unique name.
+        :returns: True on success otherwise False.
+        :rtype: bool
+)")
+    .def_static("addTo", &GuiApiClasses::View::addTo, py::arg("id"), py::arg("modules"), py::arg("gates"),R"(
+        Adds the given modules and gates to the view specified by the ID.
+
+        :param int viewId: ID of the view.
+        :param list[hal.py.module] modules: Modules to be added.
+        :param list[hal.py.Gate] gates: Gates to be added.
+        :returns: True on success, otherwise False.
+        :rtype: bool
+)")
+    .def_static("deleteView", &GuiApiClasses::View::deleteView, py::arg("id"),R"(
+        Deletes the view specified by the ID.
+
+        :param int viewId: ID of the view.
+        :returns: True on success, otherwise False.
+        :rtype: bool
+        )")
+    .def_static("removeFrom", &GuiApiClasses::View::removeFrom, py::arg("id"), py::arg("modules"), py::arg("gates"),R"(
+        Removes the given modules and gates from the view specified by the ID.
+
+        :param int viewId: ID of the view.
+        :param list[hal.py.module] modules: Modules to be removed.
+        :param list[hal.py.Gate] gates: Gates to be removed.
+        :returns: True on success, otherwise False.
+        :rtype: bool
+)")
+    .def_static("getId", &GuiApiClasses::View::getId, py::arg("name"),R"(
+        Returns the ID of the view with the given name if existing.
+
+        :param string name: Name of the view.
+        :returns: ID of the specified view or 0 if none is found.
+        :rtype: int
+)")
+    .def_static("getName", &GuiApiClasses::View::getName, py::arg("id"), R"(
+        Returns the name of the view with the given ID if existing.
+
+        :param int viewId: ID of the view.
+        :returns: Name of the view specified by the ID or empty string if none is found.
+        :rtype: string
+)")
+    .def_static("getModules", &GuiApiClasses::View::getModules, py::arg("id"), R"(
+        Returns all modules attached to the view.
+
+        :param int viewId: ID of the view.
+        :returns: List of the attached modules.
+        :rtype: list[hal.py.module]
+)")
+    .def_static("getGates", &GuiApiClasses::View::getGates, py::arg("id"),R"(
+        Returns all gates attached to the view
+
+        :param int viewId: ID of the view.
+        :returns: List of the attached gates.
+        :rtype: list[hal.py.Gate]
+)")
+    .def_static("getIds", &GuiApiClasses::View::getIds, py::arg("modules"), py::arg("gates"),R"(
+        Returns the ID of each View containing at least the given modules and gates.
+
+        :param list[hal.py.module] modules: Required modules.
+        :param list[hal.py.Gate] gates: Required gates.
+        :returns: List of ID of views which contains modules and gates.
+        :rtype: list[int]
+)")
+    .def_static("unfoldModule", &GuiApiClasses::View::unfoldModule, py::arg("view_id"), py::arg("module"), R"(
+            Unfold a specific module. Hides the module, shows submodules and gates
+
+            :param int viewId: ID of the view.
+            :param Module* module: module to unfold
+            :returns: True on success, otherwise False.
+            :rtype: bool
+)")
+    .def_static("foldModule", &GuiApiClasses::View::foldModule, py::arg("view_id"), py::arg("module"), R"(
+            Fold a specific module. Hides the submodules and gates, shows the specific module
+
+            :param int viewId: ID of the view.
+            :param Module* module: module to fold
+            :returns: True on success, otherwise False.
+            :rtype: bool
+)")
+    .def_static("getGridPlacement", &GuiApiClasses::View::getGridPlacement, py::arg("view_id"), R"(
+            Get positions of all nodes in the view specified by id
+
+            :param int viewId: ID of the view.
+            :returns: GridPlacement of the specified view.
+            :rtype: GridPlacement
+)")
+
+
+    .def_static("setGridPlacement", &GuiApiClasses::View::setGridPlacement, py::arg("view_id"), py::arg("grid placement"), R"(
+            Set grid placement to the view specified by id
+
+            :param int viewId ID of the view.
+            :param GridPlacement* gp: grid placement.
+            :rtype: bool
+)");
+
+
+
     py_gui_api.def("getSelectedGateIds", &GuiApi::getSelectedGateIds, R"(
         Get the gate ids of currently selected gates in the graph view of the GUI.
 
@@ -465,6 +618,8 @@ PYBIND11_PLUGIN(hal_gui)
     py_gui_api.def("deselectAllItems", py::overload_cast<>(&GuiApi::deselectAllItems), R"(
        Deselect all gates, nets and modules in the graph view of the GUI.
 )");
+
+
 
 #ifndef PYBIND11_MODULE
     return m.ptr();

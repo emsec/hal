@@ -197,14 +197,7 @@ namespace hal
 
         if (nd.type() == Node::Gate)
         {
-            u32 cnt = 0;
-            for (;;)
-            {
-                ++cnt;
-                name = "Isolated View " + QString::number(cnt);
-                if (!gGraphContextManager->contextWithNameExists(name))
-                    break;
-            }
+            name = gGraphContextManager->nextViewName("Isolated View");
             gateId.insert(nd.id());
         }
         else if (nd.type() == Node::Module)
