@@ -315,6 +315,8 @@ namespace hal
                     gates_to_be_deleted.push(gate);
                 }
             }
+            // TODO this functionality is not a buffer and is covered by propagate_constants
+            /*
             else if (func.is_constant() && (func.has_constant_value(0) || func.has_constant_value(1)))
             {
                 auto* out_net = out_endpoint->get_net();
@@ -428,6 +430,7 @@ namespace hal
                     gates_to_be_deleted.push(gate);
                 }
             }
+            */
         }
 
         log_debug("netlist_preprocessing", "removing {} buffer gates...", gates_to_be_deleted.size());
@@ -436,8 +439,6 @@ namespace hal
         {
             Gate* gate = gates_to_be_deleted.front();
             gates_to_be_deleted.pop();
-            // TODO remove
-            std::cout << "Buffer gate: " << gate->get_id() << " / " << gate->get_name() << std::endl;
             if (!nl->delete_gate(gate))
             {
                 log_warning("netlist_preprocessing", "failed to remove buffer gate '{}' with ID {} from netlist with ID {}.", gate->get_name(), gate->get_id(), nl->get_id());
@@ -1333,7 +1334,8 @@ namespace hal
 
                         if (new_source == nullptr)
                         {
-                            log_error("netlist_preprocessing", "failed to replace bf {} with constant net because netlist is missing GND gate or VCC gate");
+                            // log_error("netlist_preprocessing", "failed to replace bf {} with constant net because netlist is missing GND gate or VCC gate");
+                            return ERR("unable to propagate constants: netlist is missing gnd or vcc net!");
                         }
 
                         std::vector<std::pair<Gate*, GatePin*>> to_replace;

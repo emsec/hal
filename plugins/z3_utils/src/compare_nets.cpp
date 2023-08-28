@@ -448,6 +448,62 @@ namespace hal
             return compare_nets_internal(ctx, s, netlist_a, netlist_b, net_a, net_b, comb_gates_a, comb_gates_b);
         }
 
+        Result<bool> compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const std::vector<std::pair<Net*, Net*>>& nets)
+        {
+            if (netlist_a == nullptr)
+            {
+                return ERR("cannot compare nets: netlist_a is a nullptr!");
+            }
+
+            if (netlist_b == nullptr)
+            {
+                return ERR("cannot compare nets: netlist_b is a nullptr!");
+            }
+
+            z3::context ctx;
+            z3::solver s(ctx);
+
+            const auto ff_replacements_a = restore_ff_replacements(netlist_a);
+            const auto ff_replacements_b = restore_ff_replacements(netlist_b);
+
+            const std::vector<Gate*> comb_gates_a = netlist_a->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); });
+            const std::vector<Gate*> comb_gates_b = netlist_b->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); });
+
+            auto setup_res = setup_solver(ctx, s, netlist_a, netlist_b, ff_replacements_a, ff_replacements_b);
+            if (setup_res.is_error())
+            {
+                return ERR_APPEND(setup_res.get_error(), "cannot compare netlist a with ID " + std::to_string(netlist_a->get_id()) + " netlist b with ID " + std::to_string(netlist_b->get_id()) + ": failed to setup solver");
+            }
+
+            for (const auto& [net_a, net_b] : nets)
+            {
+                s.push();
+                auto comp_res = compare_nets_internal(ctx, s, netlist_a, netlist_b, net_a, net_b, comb_gates_a, comb_gates_b);
+                s.pop();
+                
+                if (comp_res.is_error())
+                {
+                    return ERR_APPEND(setup_res.get_error(), "cannot compare netlist a with ID " + std::to_string(netlist_a->get_id()) + " netlist b with ID " + std::to_string(netlist_b->get_id()) + ": failed net comparison");
+                }
+                const auto eq = comp_res.get();
+
+                if (!eq)
+                {
+                    log_debug("z3_utils",
+                              "netlist a with ID {} and netlist b with ID {} are not equal: net a {} / {} and net b {} / {} are not equal",
+                              netlist_a->get_id(),
+                              netlist_b->get_id(),
+                              net_a->get_id(),
+                              net_a->get_name(),
+                              net_b->get_id(),
+                              net_b->get_name());
+                    return OK(false);
+                }
+            }
+
+            return OK(true);
+        }
+
         Result<bool> compare_netlists(const Netlist* netlist_a, const Netlist* netlist_b)
         {
             const std::vector<Gate*> seq_gates_a = netlist_a->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::sequential); });
@@ -532,32 +588,35 @@ namespace hal
             const auto out_pins_a = netlist_a->get_top_module()->get_output_pin_names();
             const auto out_pins_b = netlist_b->get_top_module()->get_output_pin_names();
 
-            if (out_pins_a.size() != out_pins_b.size())
-            {
-                log_debug("z3_utils",
-                            "netlist a with ID {} and netlist b with ID {} are not equal: netlist a has {} output pins while netlist b has {}, we require an exact match!",
-                            netlist_a->get_id(),
-                            netlist_b->get_id(),
-                            out_pins_a.size(),
-                            out_pins_b.size());
-                return OK(false);
-            }
+            auto all_out_pins = out_pins_a;
+            all_out_pins.insert(all_out_pins.end(), out_pins_b.begin(), out_pins_b.end());
 
-            for (const auto& pa : out_pins_a)
+            for (const auto& pin : all_out_pins)
             {
-                auto it = std::find(out_pins_b.begin(), out_pins_b.end(), pa);
-                if (it == out_pins_b.end())
+                auto it_a = std::find(out_pins_a.begin(), out_pins_a.end(), pin);
+                if (it_a == out_pins_a.end())
                 {
-                    log_debug("z3_utils",
-                            "netlist a with ID {} and netlist b with ID {} are not equal: netlist a has output pin {} that does not exist in netlist b!",
+                    log_warning("z3_utils",
+                            "netlist a with ID {} and netlist b with ID {} might not be equal: netlist a has output pin {} that does not exist in netlist b!",
                             netlist_a->get_id(),
                             netlist_b->get_id(),
-                            pa);
-                    return OK(false);
+                            pin);
+                    continue;
                 }
 
-                Net* net_a = netlist_a->get_top_module()->get_pin_by_name(pa)->get_net();
-                Net* net_b = netlist_b->get_top_module()->get_pin_by_name(pa)->get_net();
+                auto it_b = std::find(out_pins_b.begin(), out_pins_b.end(), pin);
+                if (it_b == out_pins_b.end())
+                {
+                    log_warning("z3_utils",
+                            "netlist a with ID {} and netlist b with ID {} might not be equal: netlist a has output pin {} that does not exist in netlist b!",
+                            netlist_a->get_id(),
+                            netlist_b->get_id(),
+                            pin);
+                    continue;
+                }
+
+                Net* net_a = netlist_a->get_top_module()->get_pin_by_name(pin)->get_net();
+                Net* net_b = netlist_b->get_top_module()->get_pin_by_name(pin)->get_net();
             
                 to_compare.insert({net_a, net_b});
             }
@@ -590,41 +649,8 @@ namespace hal
                     to_compare.insert({net_a, net_b});
                 }
             }
-
-            for (const auto& [net_a, net_b] : to_compare)
-            {
-                if (net_a == nullptr && net_b == nullptr)
-                {
-                    continue;
-                }
-
-                s.push();
-                const auto eq_res = compare_nets_internal(ctx, s, netlist_a, netlist_b, net_a, net_b, comb_gates_a, comb_gates_b);
-                s.pop();
-
-                if (eq_res.is_error())
-                {
-                    return ERR_APPEND(eq_res.get_error(),
-                                      "cannot compare netlist a with ID " + std::to_string(netlist_a->get_id()) + " netlist b with ID " + std::to_string(netlist_b->get_id())
-                                          + ": failed to compare net a " + net_a->get_name() + " with ID " + std::to_string(net_a->get_id()) + " and net b" + net_b->get_name() + " with ID " + std::to_string(net_b->get_id()));
-                }
-                const bool eq = eq_res.get();
-
-                if (!eq)
-                {
-                    log_debug("z3_utils",
-                              "netlist a with ID {} and netlist b with ID {} are not equal: net a {} / {} and net b {} / {} are not equal",
-                              netlist_a->get_id(),
-                              netlist_b->get_id(),
-                              net_a->get_id(),
-                              net_a->get_name(),
-                              net_b->get_id(),
-                              net_b->get_name());
-                    return OK(false);
-                }
-            }
-
-            return OK(true);
+            
+            return compare_nets(netlist_a, netlist_b, utils::to_vector(to_compare));
         }
     }    // namespace z3_utils
 }    // namespace hal

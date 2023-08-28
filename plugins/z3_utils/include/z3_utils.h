@@ -152,6 +152,18 @@ namespace hal
         Result<bool> compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const Net* net_a, const Net* net_b);
 
         /**
+         * Compare pairs of nets from two different netlist. 
+         * This is done on a functional level by buidling the subgraph function of each net considering all combinational gates of the netlist.
+         * In order for this two work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
+         * 
+         * @param[in] netlist_a - The first netlist.
+         * @param[in] netlist_b - The second netlist.
+         * @param[in] net_s - The pairs of nets to compare against each other.
+         * @returns Ok and a Boolean indicating whether the two nets are functionally equivalent, an error otherwise.
+         */
+        Result<bool> compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const std::vector<std::pair<Net*, Net*>>& nets);
+
+        /**
          * Compares two netlist by finding a corresponding partner for each sequential gate in the netlist and checking whether they are identical.
          * This is done on a functional level by buidling the subgraph function of all their input nets considering all combinational gates of the netlist.
          * In order for this two work the sequential gates of both netlists must have identical names and only the combinational gates may differ.

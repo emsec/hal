@@ -220,6 +220,11 @@ int main(int argc, char *argv[]) {
             return ERR("unable to generate Boolean influence: Cannot evaluate Boolean function deterministically for more than 16 variables but got " + std::to_string(input_vars.size()));
         }
 
+        if (input_vars.empty())
+        {
+            return OK(influences);
+        }
+
         std::vector<std::string> replacement_vars;
 
         z3::expr_vector from_vec(expr.ctx());
