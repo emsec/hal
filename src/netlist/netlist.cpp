@@ -867,10 +867,9 @@ namespace hal
 
         if (failed > 0)
         {
-            log_warning("netlist", "failed to load locations of {} gates.", failed);
+            log_debug("netlist", "failed to load locations of {} gates.", failed);
         }
 
         return true;
     }
-
 }    // namespace hal

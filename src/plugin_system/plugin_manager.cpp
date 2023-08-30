@@ -199,7 +199,7 @@ namespace hal
                 }
             }
             else
-                log_info("core", "loading plugin '{}'...", file_path.string());
+                log_debug("core", "loading plugin '{}'...", file_path.string());
 
             if (m_loaded_plugins.find(plugin_name) != m_loaded_plugins.end())
             {
@@ -352,8 +352,7 @@ namespace hal
                 return true;
             }
 
-            log_info("core", "unloading plugin '{}'...", plugin_name);
-
+            log_debug("core", "unloading plugin '{}'...", plugin_name);
 
             auto rt_library  = std::move(std::get<1>(loaded_it->second));
             auto plugin_inst = std::move(std::get<0>(loaded_it->second));
