@@ -53,7 +53,6 @@ namespace hal {
     private Q_SLOTS:
         void handleGatelibSelected(bool singleFile);
         void handleFileDialogTriggered();
-        void setSuggestedProjectDir(const QString& filename);
     public:
         ImportNetlistDialog(const QString& filename, QWidget* parent = nullptr);
         QString projectDirectory() const;

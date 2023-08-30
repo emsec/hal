@@ -27,7 +27,7 @@ namespace hal {
         setFrameStyle(QFrame::Sunken | QFrame::Panel);
 
         mComboGatelib = new QComboBox(this);
-        GateLibrarySelectionTable* glTable = new GateLibrarySelectionTable(true,this);
+        GateLibrarySelectionTable* glTable = new GateLibrarySelectionTable(defaultGl.isEmpty(),this);
         mComboGatelib->setModel(glTable);
 
         mComboGatelib->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -87,7 +87,7 @@ namespace hal {
         switch(column)
         {
         case 0:
-            if (!mCount) return mName;
+            if (mCount <= 0) return mName;
             return QString("%1 (%2)").arg(mName).arg(mCount+1);
         case 1: return mPath;
         }
@@ -99,6 +99,8 @@ namespace hal {
     {
         if (addAutoDetect)
             mEntries.append(GateLibrarySelectionEntry("(Auto detect)", "", -1));
+        else
+            mEntries.append(GateLibrarySelectionEntry("", "", -1));
         QMap<QString,int> nameMap;
         for (const std::filesystem::path& path : gate_library_manager::get_all_path())
         {

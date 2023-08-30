@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
   * added `GateType::delete_pin_group` and `GateType::assign_pin_to_group` to enable more operations on pin groups of gate pins
   * changed supported input file formats for import from hard coded list to list provided by loadable parser plugins
   * changed behavior of import netlist dialog, suggest only non-existing directory names and loop until an acceptable name was entered
+  * changed appearance and behavior of import project dialog, make sure existing hal projects don't get overwritten
 * bugfixes
   * fixed colors in Python Console when switching between color schemes
   * fixed pybind of `Module::get_gates`
