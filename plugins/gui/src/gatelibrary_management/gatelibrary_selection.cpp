@@ -17,6 +17,10 @@ namespace hal {
     GateLibrarySelection::GateLibrarySelection(const QString &defaultGl, QWidget* parent)
         : QFrame(parent)
     {
+        QStyle* s = style();
+        s->unpolish(this);
+        s->polish(this);
+
         QVBoxLayout* vlayout = new QVBoxLayout(this);
         QLabel* labGatelib = new QLabel("Gate library:", this);
         vlayout->addWidget(labGatelib);
@@ -31,25 +35,48 @@ namespace hal {
         mComboGatelib->setModel(glTable);
 
         mComboGatelib->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
         hlayout->addWidget(mComboGatelib);
 
-        int inx = glTable->getIndexByPath(defaultGl);
-        if (inx >= 0) mComboGatelib->setCurrentIndex(inx);
+        mWarningMsg = new QLabel(this);
+        mWarningMsg->setObjectName("warningMsg");
+        if (!defaultGl.isEmpty())
+        {
+            int inx = glTable->getIndexByPath(defaultGl);
+            if (inx < 0)
+            {
+                mWarningMsg->setText("Gate library '" + defaultGl + "' not found,\nplease select gate library from list.");
+            }
+            else
+            {
+                mComboGatelib->setCurrentIndex(inx);
+                if (glTable->isWarnSubstitute())
+                   mWarningMsg->setText("Gate library '" + defaultGl + "' not found,\na substitute has been suggested.");
+            }
+        }
 
-        mInvokeFileDialog = new QPushButton(this);
+
+        mInvokeFileDialog = new QPushButton(gui_utility::getStyledSvgIcon(mSaveIconStyle, mSaveIconPath),"",this);
         connect(mInvokeFileDialog, &QPushButton::clicked, this, &GateLibrarySelection::handleInvokeFileDialog);
         hlayout->addWidget(mInvokeFileDialog);
 
         vlayout->addLayout(hlayout);
+        vlayout->addWidget(mWarningMsg);
+        if (mWarningMsg->text().isEmpty())
+            mWarningMsg->hide();
+
         mCheckFullPath = new QCheckBox("Show full path");
         mCheckFullPath->setChecked(false);
         connect(mCheckFullPath,&QCheckBox::toggled,this,&GateLibrarySelection::handleShowFullPath);
         vlayout->addWidget(mCheckFullPath);
+        connect(mComboGatelib,QOverload<int>::of(&QComboBox::currentIndexChanged),this,&GateLibrarySelection::handleGatelibIndexChanged);
     }
 
-    void GateLibrarySelection::setIcon(const QString &path, const QString &style)
+    void GateLibrarySelection::handleGatelibIndexChanged(int inx)
     {
-        mInvokeFileDialog->setIcon(gui_utility::getStyledSvgIcon(style, path));
+        Q_UNUSED(inx);
+        mWarningMsg->clear();
+        mWarningMsg->hide();
     }
 
     void GateLibrarySelection::handleInvokeFileDialog()
@@ -95,7 +122,7 @@ namespace hal {
     }
 
     GateLibrarySelectionTable::GateLibrarySelectionTable(bool addAutoDetect, QObject *parent)
-        : QAbstractTableModel(parent), mShowFullPath(false)
+        : QAbstractTableModel(parent), mShowFullPath(false), mWarnSubstitute(false)
     {
         if (addAutoDetect)
             mEntries.append(GateLibrarySelectionEntry("(Auto detect)", "", -1));
@@ -168,11 +195,13 @@ namespace hal {
             if (glse.name() == name)
             {
                 log_info("gui", "Requested gate library '{}' not found, suggest '{}' instead.", path.toStdString(), glse.path().toStdString());
+                mWarnSubstitute = true;
                 return inx;
             }
             ++inx;
         }
 
+        log_info("gui", "Requested gate library '{}' not found.", path.toStdString());
         return -1;
     }
 

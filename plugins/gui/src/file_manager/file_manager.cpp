@@ -494,6 +494,9 @@ namespace hal
     {
         QString logical_file_name = filename;
 
+        QString glSuffix = QFileInfo(gatelibraryPath).suffix();
+        gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,"."+glSuffix);
+
         if (gNetlist)
         {
             // ADD ERROR MESSAGE
@@ -537,25 +540,6 @@ namespace hal
                 }
                 else
                 {
-                    bool tryAgain = false;
-
-                    netlist_serializer::Error::ErrorCode errCode = netlist_serializer::Error::instance()->code();
-                    if (++errorCount[errCode] < 3)
-                    {
-                        switch (errCode)
-                        {
-                        case netlist_serializer::Error::HglPluginNotLoaded:
-                            gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,".hgl");
-                            tryAgain = true;
-                        case netlist_serializer::Error::LibPluginNotLoaded:
-                            gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,".hgl");
-                            tryAgain = true;
-                        default:
-                            break;
-                        }
-                    }
-                    if (tryAgain) continue;
-
                     std::string error_message("Failed to create netlist from .hal file");
                     log_error("gui", "{}", error_message);
                     displayErrorMessage(QString::fromStdString(error_message));

@@ -64,7 +64,6 @@ namespace hal
         layout->addItem(new QSpacerItem(30, 30), irow++, 0);
 
         mGatelibSelection = new GateLibrarySelection(gatelibFromHal, this);
-        mGatelibSelection->setIcon(mSaveIconPath, mSaveIconStyle);
         layout->addWidget(mGatelibSelection, irow++, 0);
         //mGatelibSelection->setDisabled(filename.endsWith(".hal"));
 

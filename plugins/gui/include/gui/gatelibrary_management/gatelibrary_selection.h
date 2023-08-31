@@ -26,6 +26,7 @@
 #pragma once
 
 #include <QFrame>
+#include <QLabel>
 #include <QAbstractTableModel>
 #include <QModelIndex>
 
@@ -52,6 +53,7 @@ namespace hal {
         Q_OBJECT
         QList<GateLibrarySelectionEntry> mEntries;
         bool mShowFullPath;
+        bool mWarnSubstitute;
     public:
         GateLibrarySelectionTable(bool addAutoDetect, QObject* parent = nullptr);
         int columnCount(const QModelIndex& index = QModelIndex()) const override;
@@ -61,23 +63,33 @@ namespace hal {
         int addGateLibrary(const QString& path);
         QString gateLibraryPath(int inx) const;
         int getIndexByPath(const QString& path);
+        bool isWarnSubstitute() const { return mWarnSubstitute; }
     };
 
     class GateLibrarySelection : public QFrame
     {
         Q_OBJECT
+        Q_PROPERTY(QString saveIconPath READ saveIconPath WRITE setSaveIconPath)
+        Q_PROPERTY(QString saveIconStyle READ saveIconStyle WRITE setSaveIconStyle)
         QComboBox* mComboGatelib;
         QPushButton* mInvokeFileDialog;
+        QLabel* mWarningMsg;
         QCheckBox* mCheckFullPath;
+        QString mSaveIconPath;
+        QString mSaveIconStyle;
     Q_SIGNALS:
         void gatelibSelected(bool singleFile);
     private Q_SLOTS:
+        void handleGatelibIndexChanged(int inx);
         void handleInvokeFileDialog();
         void handleShowFullPath(bool checked);
     public:
         GateLibrarySelection(const QString& defaultGl, QWidget* parent = nullptr);
         QString gateLibraryPath() const;
-        void setIcon(const QString& path, const QString& style);
         void setCurrent(const QString& glPath);
+        QString saveIconPath()  const { return mSaveIconPath; }
+        QString saveIconStyle() const { return mSaveIconStyle; }
+        void setSaveIconPath(const QString& path) { mSaveIconPath = path; }
+        void setSaveIconStyle(const QString& sty) { mSaveIconStyle = sty; }
     };
 }
