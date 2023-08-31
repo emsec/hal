@@ -47,25 +47,28 @@ namespace hal
          * Get a deep copy of a netlist subgraph including all of its gates and nets, but excluding modules and groupings.
          * 
          * @param[in] subgraph_gates - The gates making up the subgraph that shall be copied from the netlist.
+         * @param[in] outside_conncetions_as_global_io - Option determining what nets are considered as global inout. Either only nets with no source or destination or all nets that lost any conneciton to a source or destination.
          * @return The copied subgraph netlist on success, an error otherwise.
          */
-        Result<std::unique_ptr<Netlist>> copy_subgraph_netlist(const std::vector<const Gate*>& subgraph_gates) const;
+        Result<std::unique_ptr<Netlist>> copy_subgraph_netlist(const std::vector<const Gate*>& subgraph_gates, const bool outside_conncetions_as_global_io) const;
 
         /**
          * Get a deep copy of a netlist subgraph including all of its gates and nets, but excluding modules and groupings.
          * 
          * @param[in] subgraph_gates - The gates making up the subgraph that shall be copied from the netlist.
+         * @param[in] outside_conncetions_as_global_io - Option determining what nets are considered as global inout. Either only nets with no source or destination or all nets that lost any conneciton to a source or destination.
          * @return The copied subgraph netlist on success, an error otherwise.
          */
-        Result<std::unique_ptr<Netlist>> copy_subgraph_netlist(const std::vector<Gate*>& subgraph_gates) const;
+        Result<std::unique_ptr<Netlist>> copy_subgraph_netlist(const std::vector<Gate*>& subgraph_gates, const bool outside_conncetions_as_global_io) const;
 
         /**
          * Get a deep copy of a netlist subgraph including all of its gates and nets, but excluding modules and groupings.
          * 
          * @param[in] subgraph_module - The module making up the subgraph that shall be copied from the netlist.
+         * @param[in] outside_conncetions_as_global_io - Option determining what nets are considered as global inout. Either only nets with no source or destination or all nets that lost any conneciton to a source or destination.
          * @return The copied subgraph netlist on success, an error otherwise.
          */
-        Result<std::unique_ptr<Netlist>> copy_subgraph_netlist(const Module* subgraph_module) const;
+        Result<std::unique_ptr<Netlist>> copy_subgraph_netlist(const Module* subgraph_module, const bool outside_conncetions_as_global_io) const;
 
         /**
          * Get the combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.

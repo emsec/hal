@@ -72,7 +72,7 @@ namespace hal
          * @param[in] nl - The netlist to operate on. 
          * @return The number of removed gates on success, an error otherwise.
          */
-        static Result<u32> remove_redundant_logic(Netlist* nl);
+        static Result<u32> remove_redundant_gates(Netlist* nl);
 
         /**
          * Removes redundant sequential feedback loops.
@@ -85,6 +85,15 @@ namespace hal
          * @return The number of removed gates on success, an error otherwise.
          */
         static Result<u32> remove_redundant_loops(Netlist* nl);
+
+        /**
+         * Removes redundant logic trees made up of combinational gates.
+         * If two trees compute the exact same function even if implemented with different gates we will disconnect one of the trees and afterwards clean up all dangling gates and nets. 
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @return The number of disconnected net on success, an error otherwise.
+         */
+        static Result<u32> remove_redundant_logic_trees(Netlist* nl);
 
         /**
          * Removes gates for which all fan-out nets do not have a destination and are not global output nets.
@@ -103,14 +112,24 @@ namespace hal
         static Result<u32> remove_unconnected_nets(Netlist* nl);
 
         /**
-         * TODO 
+         * Apply manually implemented optimizations to the netlist centered around muxes.
+         * Currently implemented optimizations include:
+         *  - removing inverters incase there are inverter gates infront and behind every data input and output of the mux
+         *  - optimizing and therefore unifying possible inverters preceding the select signals by resynthesizing
          * 
          * @param[in] nl - The netlist to operate on.
-         * @param[in] mux_inv_gl - TODO
+         * @param[in] mux_inv_gl - A gate library only containing mux and inverter gates used for resynthesis.
+         * @return The difference in total gates caused by these optimizations.
          */
         static Result<u32> manual_mux_optimizations(Netlist* nl, GateLibrary* mux_inv_gl);
 
-        // TODO
+        /**
+         * Builds for all gate output nets the Boolean function and substitutes all variables connected to vcc/gnd nets with the respective boolean value.
+         * If the function simplifies to a static boolean constant cut the connection to the nets destinations and directly connect it to vcc/gnd. 
+         * 
+         * @param[in] nl - The netlist to operate on.
+         * @return The number of total rerouted destinations on succes, an error otherwise.
+         */
         static Result<u32> propagate_constants(Netlist* nl);
 
         /**
@@ -131,22 +150,22 @@ namespace hal
         static Result<u32> simplify_lut_inits(Netlist* nl);
 
         /**
-         * Builds the Boolean function of each output pin of the gate and constructs a gate tree implementing it.
-         * Afterwards the original output net is connected to the built gate tree and the gate is deleted if the ``delete_gate`` flag is set.
+         * Builds the Boolean function of each output pin of the gate and constructs a small netlist computing the same fucntions.
+         * Afterwards the original gate ist replaced by this netlist and the gate is deleted if the ``delete_gate`` flag is set.
          * 
          * For the decomposition we currently only support the base operands AND, OR, INVERT, XOR.
          * The function searches in the gate library for a fitting two input gate and uses a standard HAL gate type if none is found.
          * 
          * @param[in] nl - The netlist to operate on. 
          * @param[in] gate - The gate to decompose.
-         * @param[in] delete_gate - Determines whether the original gate gets deleted by the function, defaults to true,
+         * @param[in] delete_gate - Determines whether the original gate gets deleted by the function, defaults to true.
          * @return Ok on success, an error otherwise.
          */
         static Result<std::monostate> decompose_gate(Netlist* nl, Gate* g, const bool delete_gate = true);
 
         /**
-         * Decomposes each gate of the specified type by building the Boolean function for each output pin of the gate and constructing a gate tree implementing it.
-         * Afterwards the original gate is deleted and the output net is connected to the built gate tree.
+         * Decomposes each gate of the specified type by building the Boolean function for each output pin of the gate types and constructing a small netlsst implementing these.
+         * Afterwards the original gates are deleted and replaced by the corresponding netlists.
          * 
          * For the decomposition we currently only support the base operands AND, OR, INVERT, XOR.
          * The function searches in the gate library for a fitting two input gate and uses a standard HAL gate type if none is found.
@@ -157,14 +176,51 @@ namespace hal
          */
         static Result<u32> decompose_gates_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types);
 
-        // TODO document
-        // TODO provide function interfaces that do not requiere the genlib path but instead write out the genlib path inside the function
-        static Result<std::monostate> resynthesize_gate(Netlist* nl, Gate* g, GateLibrary* hgl_lib, const std::filesystem::path& genlib_path, const bool delete_gate);
+        /**
+         * Build the Boolean function of the gate and resynthesize a functional description of that function with a logic synthesizer.
+         * Afterwards the original gate is replaced by the technology mapped netlist produced by the synthesizer.
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @param[in] g -  The gate to resynthesize.
+         * @param[in] target_lib -  Gatelibrary containing the gates used for technology mapping.
+         * @param[in] genlib_path - Path to file containg the target library in genlib format.
+         * @param[in] delete_gate - Determines whether the original gate gets deleted by the function, defaults to true.
+         * @return Ok and the number of decomposed gates on success, an error otherwise.
+         */
+        static Result<std::monostate> resynthesize_gate(Netlist* nl, Gate* g, GateLibrary* target_lib, const std::filesystem::path& genlib_path, const bool delete_gate);
 
+        /**
+         * Build the Boolean functions of all gates of the specified types and resynthesize a functional description of those functions with a logic synthesizer.
+         * Afterwards the original gates are replaced by the technology mapped netlists produced by the synthesizer.
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @param[in] gate_types - The gate types specifying which gates should be resynthesized.
+         * @param[in] target_lib -  Gatelibrary containing the gates used for technology mapping.
+         * @return Ok and the number of decomposed gates on success, an error otherwise.
+         */
         static Result<u32> resynthesize_gates_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl);
 
+        /**
+         * Build a verilog description of a subgraph of gates and synthesize a new technology mapped netlist of the whole subgraph with a logic synthesizer.
+         * Afterwards the original subgraph is replaced by the technology mapped netlist produced by the synthesizer.
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @param[in] subgraph -  The subgraph to resynthesize.
+         * @param[in] target_gl -  Gatelibrary containing the gates used for technology mapping.
+         * @return Ok and the number of decomposed gates on success, an error otherwise.
+         */
         static Result<u32> resynthesize_subgraph(Netlist* nl, const std::vector<Gate*>& subgraph, GateLibrary* target_gl);
 
+        /**
+         * Build a verilog description of the subgraph consisting of all the gates of the specified types. 
+         * Then synthesize a new technology mapped netlist of the whole subgraph with a logic synthesizer.
+         * Afterwards the original subgraph is replaced by the technology mapped netlist produced by the synthesizer.
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @param[in] gate_types -  The gate types specifying which gates should be part of the subgraph.
+         * @param[in] target_gl -  Gatelibrary containing the gates used for technology mapping.
+         * @return Ok and the number of decomposed gates on success, an error otherwise.
+         */
         static Result<u32> resynthesize_subgraph_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl);
 
         /**
@@ -181,7 +237,7 @@ namespace hal
         static Result<u32> reconstruct_indexed_ff_identifiers(Netlist* nl);
 
         /**
-         * Parses a design exchange format file and extracts the coordinated of a placed design for each component/gate.
+         * Parses a design exchange format file and extracts the coordinates of a placed design for each component/gate.
          * The extracted coordinates get annotated to the gates.
          * 
          * @param[in] nl - The netlist to operate on.

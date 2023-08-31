@@ -344,7 +344,9 @@ namespace hal
                                                const Net* net_a,
                                                const Net* net_b,
                                                const std::vector<Gate*>& gates_a,
-                                               const std::vector<Gate*>& gates_b)
+                                               const std::vector<Gate*>& gates_b,
+                                               const bool fail_on_unknown,
+                                               const u32 solver_timeout)
             {
                 // TODO Debug printing remove
                 /*
@@ -373,8 +375,8 @@ namespace hal
                 }
                 const auto bf_b = bf_res_b.get();
 
-                auto config = hal::SMT::QueryConfig().with_timeout(120).without_model_generation();
-                
+                auto config = hal::SMT::QueryConfig().with_timeout(solver_timeout).without_model_generation();
+
                 // TODO we can enable this again after we add time out capabilities to the bitwuzla call
                 // if (SMT::Solver::has_local_solver_for(hal::SMT::SolverType::Bitwuzla, hal::SMT::SolverCall::Library))
                 // {
@@ -398,17 +400,14 @@ namespace hal
 
                 if (check_result.is_unknown())
                 {
-                    log_warning("z3_utils", "net comparison returned unknown, but everything is probably fine :)");
-                    return OK(true);
+                    return OK(!fail_on_unknown);
                 }
-
-                log_warning("z3_utils", "Failed net comparison for net A {} / {}  and net B {} / {}", net_a->get_id(), net_a->get_name(), net_b->get_id(), net_b->get_name());
 
                 return OK(false);
             }
         }    // namespace
 
-        Result<bool> compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const Net* net_a, const Net* net_b)
+        Result<bool> compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const Net* net_a, const Net* net_b, const bool fail_on_unknown, const u32 solver_timeout)
         {
             if (netlist_a == nullptr)
             {
@@ -445,10 +444,10 @@ namespace hal
                 return ERR_APPEND(setup_res.get_error(), "cannot compare netlist a with ID " + std::to_string(netlist_a->get_id()) + " netlist b with ID " + std::to_string(netlist_b->get_id()) + ": failed to setup solver");
             }
 
-            return compare_nets_internal(ctx, s, netlist_a, netlist_b, net_a, net_b, comb_gates_a, comb_gates_b);
+            return compare_nets_internal(ctx, s, netlist_a, netlist_b, net_a, net_b, comb_gates_a, comb_gates_b, fail_on_unknown, solver_timeout);
         }
 
-        Result<bool> compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const std::vector<std::pair<Net*, Net*>>& nets)
+        Result<bool> compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const std::vector<std::pair<Net*, Net*>>& nets, const bool fail_on_unknown, const u32 solver_timeout)
         {
             if (netlist_a == nullptr)
             {
@@ -477,26 +476,31 @@ namespace hal
 
             for (const auto& [net_a, net_b] : nets)
             {
+                if ((net_a == nullptr) && (net_b == nullptr))
+                {
+                    continue;
+                }
+
+                if ((net_a == nullptr) || (net_b == nullptr))
+                {
+                    return OK(false);
+                }
+
                 s.push();
-                auto comp_res = compare_nets_internal(ctx, s, netlist_a, netlist_b, net_a, net_b, comb_gates_a, comb_gates_b);
+                auto comp_res = compare_nets_internal(ctx, s, netlist_a, netlist_b, net_a, net_b, comb_gates_a, comb_gates_b, fail_on_unknown, solver_timeout);
                 s.pop();
                 
                 if (comp_res.is_error())
                 {
-                    return ERR_APPEND(setup_res.get_error(), "cannot compare netlist a with ID " + std::to_string(netlist_a->get_id()) + " netlist b with ID " + std::to_string(netlist_b->get_id()) + ": failed net comparison");
+                    return ERR_APPEND(comp_res.get_error(),
+                                      "cannot compare netlist a with ID " + std::to_string(netlist_a->get_id()) + " netlist b with ID " + std::to_string(netlist_b->get_id())
+                                          + ": failed net comparison");
                 }
                 const auto eq = comp_res.get();
 
                 if (!eq)
                 {
-                    log_debug("z3_utils",
-                              "netlist a with ID {} and netlist b with ID {} are not equal: net a {} / {} and net b {} / {} are not equal",
-                              netlist_a->get_id(),
-                              netlist_b->get_id(),
-                              net_a->get_id(),
-                              net_a->get_name(),
-                              net_b->get_id(),
-                              net_b->get_name());
+                    log_warning("z3_utils", "Failed net comparison for net A {} / {}  and net B {} / {}", net_a->get_id(), net_a->get_name(), net_b->get_id(), net_b->get_name());
                     return OK(false);
                 }
             }
@@ -504,7 +508,7 @@ namespace hal
             return OK(true);
         }
 
-        Result<bool> compare_netlists(const Netlist* netlist_a, const Netlist* netlist_b)
+        Result<bool> compare_netlists(const Netlist* netlist_a, const Netlist* netlist_b, const bool fail_on_unknown, const u32 solver_timeout)
         {
             const std::vector<Gate*> seq_gates_a = netlist_a->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::sequential); });
             const std::vector<Gate*> seq_gates_b = netlist_b->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::sequential); });
@@ -628,16 +632,16 @@ namespace hal
 
                 if (gate_a->get_type() != gate_b->get_type())
                 {
-                    log_debug("z3_utils",
-                              "netlist a with ID {} and netlist b with ID {} are not equal: gate a {} with ID {} and gate b {} with ID {} do not have the same type! {} vs. {}",
-                              netlist_a->get_id(),
-                              netlist_b->get_id(),
-                              gate_a->get_name(),
-                              gate_a->get_id(),
-                              gate_b->get_name(),
-                              gate_b->get_id(),
-                              gate_a->get_type()->get_name(),
-                              gate_b->get_type()->get_name());
+                    log_warning("z3_utils",
+                                "netlist a with ID {} and netlist b with ID {} are not equal: gate a {} with ID {} and gate b {} with ID {} do not have the same type! {} vs. {}",
+                                netlist_a->get_id(),
+                                netlist_b->get_id(),
+                                gate_a->get_name(),
+                                gate_a->get_id(),
+                                gate_b->get_name(),
+                                gate_b->get_id(),
+                                gate_a->get_type()->get_name(),
+                                gate_b->get_type()->get_name());
                     return OK(false);
                 }
 
@@ -649,8 +653,8 @@ namespace hal
                     to_compare.insert({net_a, net_b});
                 }
             }
-            
-            return compare_nets(netlist_a, netlist_b, utils::to_vector(to_compare));
+
+            return compare_nets(netlist_a, netlist_b, utils::to_vector(to_compare), fail_on_unknown, solver_timeout);
         }
     }    // namespace z3_utils
 }    // namespace hal

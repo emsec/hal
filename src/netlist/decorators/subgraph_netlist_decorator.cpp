@@ -1,6 +1,7 @@
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
+#include "hal_core/netlist/decorators/boolean_function_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -13,7 +14,7 @@ namespace hal
     {
     }
 
-    Result<std::unique_ptr<Netlist>> SubgraphNetlistDecorator::copy_subgraph_netlist(const std::vector<const Gate*>& subgraph_gates) const
+    Result<std::unique_ptr<Netlist>> SubgraphNetlistDecorator::copy_subgraph_netlist(const std::vector<const Gate*>& subgraph_gates, const bool outside_conncetions_as_global_io) const
     {
         std::unique_ptr<Netlist> c_netlist = netlist_factory::create_netlist(m_netlist.get_gate_library());
         c_netlist->enable_automatic_net_checks(false);
@@ -86,19 +87,31 @@ namespace hal
         {
             Net* net = m_netlist.get_net_by_id(c_net->get_id());
 
-            // mark new global inputs
-            if (c_net->get_num_of_sources() == 0)
+
+            if (outside_conncetions_as_global_io)
             {
-                if (net->get_num_of_sources() != 0 || net->is_global_input_net())
+                // mark all nets as global input that either lost a source or were a global input originally
+                if ((c_net->get_num_of_sources() < net->get_num_of_sources()) || net->is_global_input_net())
                 {
                     c_netlist->mark_global_input_net(c_net);
                 }
-            }
 
-            // mark nets that had a destination previously but now dont as global outputs
-            if (c_net->get_num_of_destinations() == 0)
+                // mark all nets as global output that either lost a destination or were a global output originally
+                if ((c_net->get_num_of_destinations() < net->get_num_of_destinations()) || net->is_global_output_net())
+                {
+                    c_netlist->mark_global_output_net(c_net);
+                }
+            }
+            else
             {
-                if (net->get_num_of_destinations() != 0 || net->is_global_output_net())
+                // mark all nets as global input that now have zero sources but had a source in the orginal netlist or were a global input originally
+                if ((c_net->get_num_of_sources() == 0 && net->get_num_of_sources() != 0) || net->is_global_input_net())
+                {
+                    c_netlist->mark_global_input_net(c_net);
+                }
+
+                // mark all nets as global output that now have zero destinations but had at least one destination in the orginal netlist or were a global output originally
+                if ((net->get_num_of_destinations() != 0  && c_net->get_num_of_destinations() == 0)|| net->is_global_output_net())
                 {
                     c_netlist->mark_global_output_net(c_net);
                 }
@@ -151,10 +164,10 @@ namespace hal
         return OK(std::move(c_netlist));
     }
 
-    Result<std::unique_ptr<Netlist>> SubgraphNetlistDecorator::copy_subgraph_netlist(const std::vector<Gate*>& subgraph_gates) const
+    Result<std::unique_ptr<Netlist>> SubgraphNetlistDecorator::copy_subgraph_netlist(const std::vector<Gate*>& subgraph_gates, const bool outside_conncetions_as_global_io) const
     {
         const auto subgraph_gates_const = std::vector<const Gate*>(subgraph_gates.begin(), subgraph_gates.end());
-        if (auto res = copy_subgraph_netlist(subgraph_gates_const); res.is_ok())
+        if (auto res = copy_subgraph_netlist(subgraph_gates_const, outside_conncetions_as_global_io); res.is_ok())
         {
             return res;
         }
@@ -164,9 +177,9 @@ namespace hal
         }
     }
 
-    Result<std::unique_ptr<Netlist>> SubgraphNetlistDecorator::copy_subgraph_netlist(const Module* subgraph_module) const
+    Result<std::unique_ptr<Netlist>> SubgraphNetlistDecorator::copy_subgraph_netlist(const Module* subgraph_module, const bool outside_conncetions_as_global_io) const
     {
-        if (auto res = copy_subgraph_netlist(subgraph_module->get_gates()); res.is_ok())
+        if (auto res = copy_subgraph_netlist(subgraph_module->get_gates(), outside_conncetions_as_global_io); res.is_ok())
         {
             return res;
         }

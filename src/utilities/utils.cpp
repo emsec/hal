@@ -4,6 +4,7 @@
 
 #include <dirent.h>
 #include <fstream>
+#include <random>
 #include <sstream>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -260,6 +261,29 @@ namespace hal
                 }
             }
             return std::filesystem::path();
+        }
+
+        Result<std::filesystem::path> get_unique_temp_directory(const u32 max_attmeps)
+        {
+            const auto tmp_dir = std::filesystem::temp_directory_path();
+
+            std::random_device dev;
+            std::mt19937 prng(dev());
+            std::uniform_int_distribution<uint64_t> rand(0);
+
+            for (u32 i = 0; i < max_attmeps; i++)
+            {
+                std::stringstream ss;
+                ss << std::hex << rand(prng);
+                std::filesystem::path tmp_path = tmp_dir / ss.str();
+
+                if (std::filesystem::create_directory(tmp_path))
+                {
+                    return OK(tmp_path);
+                }
+            }
+
+            return ERR("failed to create unique temporary directory path");
         }
 
         std::string get_open_source_licenses()

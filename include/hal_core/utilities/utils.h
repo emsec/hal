@@ -635,6 +635,14 @@ namespace hal
         CORE_API std::filesystem::path get_file(std::string file_name, std::vector<std::filesystem::path> path_hints);
 
         /**
+         * Try to generate a unique temporary directory.
+         * 
+         * @param[in] max_attmeps - The maximum amount of attempts before the function fails.
+         * @returns OK and the created directory path on success, an ERROR otherwise
+         */
+        CORE_API Result<std::filesystem::path> get_unique_temp_directory(const u32 max_attmeps = 42);
+
+        /**
          * Get the licenses of all embedded OpenSource Projects.
          *
          * @returns The open source licenses.

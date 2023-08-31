@@ -152,7 +152,7 @@ namespace hal
 
         std::unique_ptr<Netlist> get_partial_netlist(const Netlist* nl, const std::vector<const Gate*>& subgraph_gates)
         {
-            if (auto res = SubgraphNetlistDecorator(*nl).copy_subgraph_netlist(subgraph_gates); res.is_ok())
+            if (auto res = SubgraphNetlistDecorator(*nl).copy_subgraph_netlist(subgraph_gates, false); res.is_ok())
             {
                 return res.get();
             }

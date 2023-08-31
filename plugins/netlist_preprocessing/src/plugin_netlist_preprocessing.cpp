@@ -18,6 +18,7 @@
 #include "hal_core/utilities/token_stream.h"
 #include "netlist_preprocessing/utils/json.hpp"
 #include "rapidjson/document.h"
+#include "z3_utils.h"
 
 #include <fstream>
 #include <queue>
@@ -451,6 +452,110 @@ namespace hal
         return OK(num_gates);
     }
 
+    Result<u32> NetlistPreprocessingPlugin::remove_unconnected_gates(Netlist* nl)
+    {
+        u32 num_gates = 0;
+        std::vector<Gate*> to_delete;
+        do
+        {
+            to_delete.clear();
+
+            for (const auto& g : nl->get_gates())
+            {
+                bool is_unconnected = true;
+                for (const auto& on : g->get_fan_out_nets())
+                {
+                    if (!on->get_destinations().empty() || on->is_global_output_net())
+                    {
+                        is_unconnected = false;
+                    }
+                }
+
+                if (is_unconnected)
+                {
+                    to_delete.push_back(g);
+                }
+            }
+
+            for (const auto& g : to_delete)
+            {
+                if (!nl->delete_gate(g))
+                {
+                    log_warning("netlist_preprocessing", "could not delete gate '{}' with ID {} from netlist with ID {}.", g->get_name(), g->get_id(), nl->get_id());
+                }
+                else
+                {
+                    num_gates++;
+                }
+            }
+        } while (!to_delete.empty());
+
+        log_info("netlist_preprocessing", "removed {} unconnected gates from netlist with ID {}.", num_gates, nl->get_id());
+        return OK(num_gates);
+    }
+
+    Result<u32> NetlistPreprocessingPlugin::remove_unconnected_nets(Netlist* nl)
+    {
+        u32 num_nets = 0;
+
+        std::vector<Net*> to_delete;
+
+        for (const auto& n : nl->get_nets())
+        {
+            if (!n->is_global_input_net() && n->get_sources().empty() && !n->is_global_output_net() && n->get_destinations().empty())
+            {
+                to_delete.push_back(n);
+            }
+        }
+
+        for (const auto& n : to_delete)
+        {
+            if (!nl->delete_net(n))
+            {
+                log_warning("netlist_preprocessing", "could not delete net '{}' with ID {} from netlist with ID {}.", n->get_name(), n->get_id(), nl->get_id());
+            }
+            else
+            {
+                num_nets++;
+            }
+        }
+
+        log_info("netlist_preprocessing", "removed {} unconnected nets from netlist with ID {}.", num_nets, nl->get_id());
+        return OK(num_nets);
+    }
+
+    namespace
+    {
+        Result<u32> cleanup_loop(Netlist* nl)
+        {
+            u32 total_removed = 0;
+
+            while (true)
+            {
+                auto gate_res = NetlistPreprocessingPlugin::remove_unconnected_gates(nl);
+                if (gate_res.is_error())
+                {
+                    return ERR_APPEND(gate_res.get_error(), "unable to execute clean up loop: failed to remove unconnected gates");
+                }
+
+                auto net_res = NetlistPreprocessingPlugin::remove_unconnected_nets(nl);
+                if (net_res.is_error())
+                {
+                    return ERR_APPEND(net_res.get_error(), "unable to execute clean up loop: failed to remove unconnected nets");
+                }
+
+                const u32 removed = gate_res.get() + net_res.get();
+                total_removed += removed;
+                if (!removed)
+                {
+                    break;
+                }
+            }
+
+            return OK(total_removed);
+        }
+    }    // namespace
+
     namespace
     {
         std::unordered_map<Gate*, std::vector<std::string>> restore_ff_replacements(const Netlist* nl)
@@ -502,7 +607,7 @@ namespace hal
         }
     }    // namespace
 
-    Result<u32> NetlistPreprocessingPlugin::remove_redundant_logic(Netlist* nl)
+    Result<u32> NetlistPreprocessingPlugin::remove_redundant_gates(Netlist* nl)
     {
         auto config = hal::SMT::QueryConfig();
 
@@ -992,280 +1097,139 @@ namespace hal
         return OK(num_gates);
     }
 
-    Result<u32> NetlistPreprocessingPlugin::remove_unconnected_gates(Netlist* nl)
+    Result<u32> NetlistPreprocessingPlugin::remove_redundant_logic_trees(Netlist* nl)
     {
-        u32 num_gates = 0;
-        std::vector<Gate*> to_delete;
-        do
+        struct TreeFingerprint
         {
-            to_delete.clear();
+            std::set<const Net*> external_inputs;
+            // std::set<std::string> external_inputs;
 
-            for (const auto& g : nl->get_gates())
+            bool operator<(const TreeFingerprint& other) const
             {
-                bool is_unconnected = true;
-                for (const auto& on : g->get_fan_out_nets())
+                return (other.external_inputs < external_inputs);
+            }
+        };
+
+        const std::vector<Gate*> all_comb_gates_vec = nl->get_gates([](const auto& g) { return g->get_type()->has_property(GateTypeProperty::combinational); });
+        // const std::unordered_set<Gate*> all_comb_gates_set = {all_comb_gates_vec.begin(), all_comb_gates_vec.end()};
+
+        std::map<TreeFingerprint, std::set<Net*>> fingerprint_to_nets;
+        for (const auto& g : all_comb_gates_vec)
+        {
+            for (const auto& out_ep : g->get_fan_out_endpoints())
+            {
+                // const auto non_comb_destinations = out_ep->get_net()->get_destinations([](const auto& in_ep){ return !in_ep->get_gate()->get_type()->has_property(GateTypeProperty::combinational);});
+                // if (!non_comb_destinations.empty())
                 {
-                    if (!on->get_destinations().empty() || on->is_global_output_net())
+                    const auto& out_net = out_ep->get_net();
+                    auto inputs_res     = SubgraphNetlistDecorator(*nl).get_subgraph_function_inputs(all_comb_gates_vec, out_net);
+                    if (inputs_res.is_error())
                     {
-                        is_unconnected = false;
+                        return ERR_APPEND(inputs_res.get_error(),
+                                          "Unable to remove redundant logic trees: failed to gather inputs for net " + out_net->get_name() + " with ID " + std::to_string(out_net->get_id()));
                     }
+                    TreeFingerprint tf;
+                    tf.external_inputs = inputs_res.get();
+                    // tf.external_inputs = SubgraphNetlistDecorator(*nl).get_subgraph_function(all_comb_gates_vec, out_net).get().simplify().get_variable_names();
+
+                    fingerprint_to_nets[tf].insert(out_net);
                 }
-
-                if (is_unconnected)
-                {
-                    to_delete.push_back(g);
-                }
-            }
-
-            for (const auto& g : to_delete)
-            {
-                if (!nl->delete_gate(g))
-                {
-                    log_warning("netlist_preprocessing", "could not delete gate '{}' with ID {} from netlist with ID {}.", g->get_name(), g->get_id(), nl->get_id());
-                }
-                else
-                {
-                    num_gates++;
-                }
-            }
-        } while (!to_delete.empty());
-
-        log_info("netlist_preprocessing", "removed {} unconnected gates from netlist with ID {}.", num_gates, nl->get_id());
-        return OK(num_gates);
-    }
-
-    Result<u32> NetlistPreprocessingPlugin::remove_unconnected_nets(Netlist* nl)
-    {
-        u32 num_nets = 0;
-
-        std::vector<Net*> to_delete;
-
-        for (const auto& n : nl->get_nets())
-        {
-            if (!n->is_global_input_net() && n->get_sources().empty() && !n->is_global_output_net() && n->get_destinations().empty())
-            {
-                to_delete.push_back(n);
             }
         }
 
-        for (const auto& n : to_delete)
+        std::vector<std::vector<Net*>> equality_classes;
+
+        for (const auto& [_fingerprint, nets] : fingerprint_to_nets)
         {
-            if (!nl->delete_net(n))
+            // TODO remove
+            // std::cout << "Fingerprint(" << _fingerprint.external_inputs.size() << "): " << std::endl;
+            // for (const auto& n : _fingerprint.external_inputs)
+            // {
+            //     std::cout << "\t" << n << std::endl;
+            // }
+            // std::cout << "Checking nets: " << std::endl;
+            // for (const auto& n : nets)
+            // {
+            //     std::cout << "\t" << n->get_name() << std::endl;
+            // }
+
+            std::vector<Net*> current_candidate_nets = {nets.begin(), nets.end()};
+            std::vector<Net*> next_candidate_nets;
+
+            while (!current_candidate_nets.empty())
             {
-                log_warning("netlist_preprocessing", "could not delete net '{}' with ID {} from netlist with ID {}.", n->get_name(), n->get_id(), nl->get_id());
-            }
-            else
-            {
-                num_nets++;
-            }
-        }
+                const auto n = current_candidate_nets.back();
+                current_candidate_nets.pop_back();
 
-        log_info("netlist_preprocessing", "removed {} unconnected nets from netlist with ID {}.", num_nets, nl->get_id());
-        return OK(num_nets);
-    }
+                std::vector<Net*> new_equality_class = {n};
 
-    namespace
-    {
-        Result<u32> remove_encasing_inverters(Netlist* nl)
-        {
-            // check whether all inputs and output are inverted -> remove all inverters
-            // TODO: ONLY CONCIDER HAL_MUXES
-            std::vector<Gate*> muxes = nl->get_gates([](const Gate* g) { return (g->get_type()->get_name().find("HAL_MUX") != std::string::npos); });
-
-            u32 delete_count = 0;
-            std::vector<Gate*> delete_gate_q;
-
-            for (const auto& g : muxes)
-            {
-                if (g->get_successors().size() > 1)
+                for (const auto& m : current_candidate_nets)
                 {
-                    continue;
-                }
-
-                auto data_pins = g->get_type()->get_pins([](const GatePin* pin) { return (pin->get_type() == PinType::data) && (pin->get_direction() == PinDirection::input); });
-                auto out_pins  = g->get_type()->get_pins([](const GatePin* pin) { return (pin->get_direction() == PinDirection::output); });
-
-                if (data_pins.size() < 2)
-                {
-                    continue;
-                }
-
-                if (out_pins.size() != 1)
-                {
-                    continue;
-                }
-
-                bool preceded_by_inv = true;
-                for (const auto& pin : data_pins)
-                {
-                    const auto pred = g->get_predecessor(pin);
-                    if (pred == nullptr || pred->get_gate() == nullptr || !pred->get_gate()->get_type()->has_property(GateTypeProperty::c_inverter))
+                    auto comp_res = z3_utils::compare_nets(nl, nl, n, m);
+                    if (comp_res.is_error())
                     {
-                        preceded_by_inv = false;
-                        break;
+                        return ERR_APPEND(comp_res.get_error(),
+                                          "Unable to remove redundant logic trees: failed to compare net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + " with net " + m->get_name()
+                                              + " with ID " + std::to_string(m->get_id()));
+                    }
+                    const auto are_equal = comp_res.get();
+
+                    if (are_equal)
+                    {
+                        new_equality_class.push_back(m);
+                    }
+                    else
+                    {
+                        next_candidate_nets.push_back(m);
                     }
                 }
 
-                if (!preceded_by_inv)
-                {
-                    continue;
-                }
-
-                bool succeded_by_inv = true;
-                for (const auto& pin : out_pins)
-                {
-                    const auto suc = g->get_successor(pin);
-                    if (suc == nullptr || suc->get_gate() == nullptr || !suc->get_gate()->get_type()->has_property(GateTypeProperty::c_inverter))
-                    {
-                        succeded_by_inv = false;
-                        break;
-                    }
-                }
-
-                if (!succeded_by_inv)
-                {
-                    continue;
-                }
-
-                // delete all connections from and to inverters (and inverter gates if they do not share any other connection)
-                for (const auto& pin : data_pins)
-                {
-                    const auto pred = g->get_predecessor(pin);
-
-                    // disconnect inverter output from mux
-                    pred->get_net()->remove_destination(g, pin);
-
-                    // connect inverter input net to mux
-                    auto in_net = pred->get_gate()->get_fan_in_nets().front();
-                    in_net->add_destination(g, pin);
-
-                    // delete inverter gate if it does not have any successors
-                    if (pred->get_gate()->get_successors().empty())
-                    {
-                        delete_gate_q.push_back(pred->get_gate());
-                    }
-                }
-
-                for (const auto& pin : out_pins)
-                {
-                    const auto suc = g->get_successor(pin);
-
-                    // disconnect inverter input from mux
-                    suc->get_net()->remove_source(g, pin);
-
-                    // connect inverter output net to mux
-                    auto in_net = suc->get_gate()->get_fan_out_nets().front();
-                    in_net->add_source(g, pin);
-
-                    // delete inverter gate if it does not have any predecessors
-                    if (suc->get_gate()->get_predecessors().empty())
-                    {
-                        delete_gate_q.push_back(suc->get_gate());
-                    }
-                }
+                equality_classes.push_back(new_equality_class);
+                current_candidate_nets = next_candidate_nets;
+                next_candidate_nets.clear();
             }
+        }
 
-            for (auto g : delete_gate_q)
+        for (const auto& eq_class : equality_classes)
+        {
+            // TODO remove
+            // std::cout << "Equal nets: " << std::endl;
+            // for (const auto& n : eq_class)
+            // {
+            //     std::cout << n->get_name() << std::endl;
+            // }
+
+            auto survivor_net = eq_class.front();
+
+            for (u32 i = 1; i < eq_class.size(); i++)
             {
-                nl->delete_gate(g);
-                delete_count++;
-            }
-
-            log_info("netlist_preprocessing", "removed {} encasing inverters", delete_count);
-
-            return OK(delete_count);
-        }
-
-        Result<u32> unify_select_signals(Netlist* nl, GateLibrary* mux_inv_gl)
-        {
-            if (nl == nullptr)
-            {
-                return ERR("netlist is a nullptr");
-            }
-
-            if (mux_inv_gl == nullptr)
-            {
-                return ERR("gate library is a nullptr");
-            }
-
-            const i64 initial_size = nl->get_gates().size();
-
-            // resynthesize all muxes where any select signal is preceded by an inverter hoping to unify the structure with regards to other muxes conntected to the same select signal
-            std::vector<Gate*> muxes = nl->get_gates([](const Gate* g) { return (g->get_type()->get_name().find("HAL_MUX") != std::string::npos); });
-
-            for (const auto& g : muxes)
-            {
-                auto select_pins = g->get_type()->get_pins([](const GatePin* pin) { return (pin->get_type() == PinType::select) && (pin->get_direction() == PinDirection::input); });
-
-                std::vector<Gate*> preceding_inverters;
-                for (const auto& pin : select_pins)
+                auto victim_net = eq_class.at(i);
+                for (const auto& dst : victim_net->get_destinations())
                 {
-                    const auto pred = g->get_predecessor(pin);
-                    if (pred == nullptr || pred->get_gate() == nullptr || !pred->get_gate()->get_type()->has_property(GateTypeProperty::c_inverter))
+                    auto dst_gate = dst->get_gate();
+                    auto dst_pin  = dst->get_pin();
+
+                    if (!victim_net->remove_destination(dst))
                     {
-                        continue;
+                        return ERR("Unable to remove redundant logic trees: failed to remove destination of net " + victim_net->get_name() + " with ID " + std::to_string(victim_net->get_id())
+                                   + " at gate " + dst_gate->get_name() + " with ID " + std::to_string(dst_gate->get_id()) + " and pin " + dst_pin->get_name());
                     }
-                    preceding_inverters.push_back(pred->get_gate());
-                }
-
-                // if there is at least one inverter in front of the mux gate we build a subgraph containing all inverters and the mux gate and resynthesize
-                if (!preceding_inverters.empty())
-                {
-                    auto subgraph = preceding_inverters;
-                    subgraph.push_back(g);
-
-                    // TODO remove debug printing
-                    log_debug("netlist_preprocessing", "trying to simplify subgraph:");
-                    for (const auto& subgraph_g : subgraph)
+                    if (!survivor_net->add_destination(dst_gate, dst_pin))
                     {
-                        log_debug("netlist_preprocessing", "\t{}", subgraph_g->get_name());
-                    }
-
-                    auto resynth_res = NetlistPreprocessingPlugin::resynthesize_subgraph(nl, subgraph, mux_inv_gl);
-                    if (resynth_res.is_error())
-                    {
-                        return ERR_APPEND(resynth_res.get_error(),
-                                          "unable to unify selecet signals: failed to resynthesize mux " + g->get_name() + " with ID " + std::to_string(g->get_id()) + " and its preceding inverters");
+                        return ERR("Unable to remove redundant logic trees: failed to add destination to net " + survivor_net->get_name() + " with ID " + std::to_string(survivor_net->get_id())
+                                   + " at gate " + dst_gate->get_name() + " with ID " + std::to_string(dst_gate->get_id()) + " and pin " + dst_pin->get_name());
                     }
                 }
             }
-
-            const i64 new_size   = nl->get_gates().size();
-            const i64 difference = std::abs(initial_size - new_size);
-
-            return OK(u32(difference));
         }
-    }    // namespace
 
-    Result<u32> NetlistPreprocessingPlugin::manual_mux_optimizations(Netlist* nl, GateLibrary* mux_inv_gl)
-    {
-        u32 res_count = 0;
-
-        if (nl == nullptr)
+        auto clean_up_res = cleanup_loop(nl);
+        if (clean_up_res.is_error())
         {
-            return ERR("netlist is a nullptr");
+            return ERR_APPEND(clean_up_res.get_error(), "Unable to remove redundant logic trees: failed to clean up dangling trees");
         }
 
-        if (mux_inv_gl == nullptr)
-        {
-            return ERR("gate library is a nullptr");
-        }
-
-        auto remove_res = remove_encasing_inverters(nl);
-        if (remove_res.is_error())
-        {
-            return ERR_APPEND(remove_res.get_error(), "unable to apply manual mux optimizations: failed to remove encasing inverters");
-        }
-        res_count += remove_res.get();
-
-        auto unify_res = unify_select_signals(nl, mux_inv_gl);
-        if (unify_res.is_error())
-        {
-            return ERR_APPEND(unify_res.get_error(), "unable to apply manual mux optimizations: failed to unify select signals");
-        }
-        res_count += unify_res.get();
-
-        return OK(res_count);
+        return OK(clean_up_res.get());
     }
 
     Result<u32> NetlistPreprocessingPlugin::propagate_constants(Netlist* nl)
@@ -1372,7 +1336,7 @@ namespace hal
                 break;
             }
 
-            log_info("netlist_preprocessing", "replaced {} destinations this with power/ground nets this iteration", replaced_dst_count);
+            log_debug("netlist_preprocessing", "replaced {} destinations this with power/ground nets this iteration", replaced_dst_count);
             total_replaced_dst_count += replaced_dst_count;
         }
 
