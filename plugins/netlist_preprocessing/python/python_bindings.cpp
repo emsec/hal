@@ -412,7 +412,7 @@ namespace hal
 
         py_netlist_preprocessing.def_static(
             "resynthesize_gates_of_type",
-            [](Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl) -> -> std::optional<u32> {
+            [](Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl) -> std::optional<u32> {
                 auto res = NetlistPreprocessingPlugin::resynthesize_gates_of_type(nl, gate_types, target_gl);
                 if (res.is_ok())
                 {
@@ -440,7 +440,7 @@ namespace hal
 
         py_netlist_preprocessing.def_static(
             "resynthesize_subgraph",
-            [](Netlist* nl, const std::vector<Gate*>& subgraph, GateLibrary* target_gl) -> -> std::optional<u32> {
+            [](Netlist* nl, const std::vector<Gate*>& subgraph, GateLibrary* target_gl) -> std::optional<u32> {
                 auto res = NetlistPreprocessingPlugin::resynthesize_subgraph(nl, subgraph, target_gl);
                 if (res.is_ok())
                 {
@@ -468,7 +468,7 @@ namespace hal
 
         py_netlist_preprocessing.def_static(
             "resynthesize_subgraph_of_type",
-            [](Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl) -> -> std::optional<u32> {
+            [](Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl) -> std::optional<u32> {
                 auto res = NetlistPreprocessingPlugin::resynthesize_subgraph_of_type(nl, gate_types, target_gl);
                 if (res.is_ok())
                 {
