@@ -31,14 +31,6 @@ namespace hal
 {
     namespace netlist_serializer
     {
-        Error* Error::inst = nullptr;
-
-        Error* Error::instance()
-        {
-            if (!inst) inst = new Error;
-            return inst;
-        }
-
         // serializing functions
         namespace
         {
@@ -988,7 +980,6 @@ namespace hal
 
         std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file, GateLibrary* gatelib)
         {
-            Error::instance()->reset();
             auto begin_time = std::chrono::high_resolution_clock::now();
 
             // event_controls::enable_all(false);
@@ -997,7 +988,6 @@ namespace hal
             if (pFile == NULL)
             {
                 log_error("netlist_persistent", "unable to open '{}'.", hal_file.string());
-                Error::instance()->setError(Error::NetlistNotAccessible);
                 return nullptr;
             }
 
@@ -1010,7 +1000,6 @@ namespace hal
             if (document.HasParseError())
             {
                 log_error("netlist_persistent", "invalid json string for deserialization");
-                Error::instance()->setError(Error::NetlistJsonParseError);
                 return nullptr;
             }
 

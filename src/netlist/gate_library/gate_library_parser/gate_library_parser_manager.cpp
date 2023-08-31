@@ -2,7 +2,6 @@
 
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_library_parser/gate_library_parser.h"
-#include "hal_core/netlist/persistent/netlist_serializer.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
@@ -80,12 +79,6 @@ namespace hal
             auto factory = get_parser_factory_for_file(file_path);
             if (!factory)
             {
-                if (file_path.extension().string() == ".hgl")
-                    netlist_serializer::Error::instance()->setError(netlist_serializer::Error::HglPluginNotLoaded);
-                else if (file_path.extension().string() == ".lib")
-                    netlist_serializer::Error::instance()->setError(netlist_serializer::Error::LibPluginNotLoaded);
-                else
-                    netlist_serializer::Error::instance()->setError(netlist_serializer::Error::OtherPluginNotLoaded);
                 return nullptr;
             }
 
@@ -96,7 +89,6 @@ namespace hal
             if (auto res = parser->parse(file_path); res.is_error())
             {
                 log_error("gate_library_parser", "error encountered while parsing gate library from file '{}':\n{}", file_path.string(), res.get_error().get());
-                netlist_serializer::Error::instance()->setError(netlist_serializer::Error::GatelibParserError);
                 return nullptr;
             }
             else
