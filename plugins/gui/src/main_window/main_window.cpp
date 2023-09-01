@@ -265,11 +265,6 @@ namespace hal
         mMenuHelp->addAction(mActionAbout);
         mMenuHelp->addSeparator();
         mMenuHelp->addAction(mActionPlugins);
-        mMenuHelp->addAction("Test developed function", [this] () {
-            std::vector<Module*> modules;
-            std::vector<Gate*> gates;
-            isolateInNewView(modules, gates);
-        });
         mLeftToolBar->addAction(mActionNew);
         mLeftToolBar->addAction(mActionOpenProject);
         mLeftToolBar->addAction(mActionSave);
@@ -1082,25 +1077,4 @@ namespace hal
         SettingsManager::instance()->mainWindowSaveGeometry(pos(), size());
     }
 
-    int MainWindow::isolateInNewView(std::vector<Module*> modules, std::vector<Gate*> gates)
-    {
-
-        //Creating modules for testing purposes
-        modules.push_back(gNetlist->get_module_by_id(4));
-        modules.push_back(gNetlist->get_module_by_id(2));
-        modules.push_back(gNetlist->get_module_by_id(1));
-
-        gates.push_back(gNetlist->get_gate_by_id(10));
-        gates.push_back(gNetlist->get_gate_by_id(2));
-        gates.push_back(gNetlist->get_gate_by_id(1));
-
-
-        qInfo() << "Test action isolateInNewView was called";
-        //Create a new view which contains the given Modules and Gates
-
-        //return GuiApi().isolateInNewView(modules, gates);
-        return GuiApiClasses::View::isolateInNew(modules, gates);
-
-
-    }
 }    // namespace hal

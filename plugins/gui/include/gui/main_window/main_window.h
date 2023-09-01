@@ -565,8 +565,6 @@ namespace hal
 
         void handleImportProjectTriggered();
 
-        int isolateInNewView(const std::vector<Module*>, const std::vector<Gate*>);
-
     private:
         /**
          * Overwritten Qt function to handle the close event.
