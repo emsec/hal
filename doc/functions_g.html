@@ -171,11 +171,22 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_gate_library_parser.html#ae465d61b825304d2c03f2bcd795a55c0">hal::GateLibraryParser</a>
 </li>
 <li>gateLibraryPath()
-: <a class="el" href="classhal_1_1_import_netlist_dialog.html#acfc20710d0d6528edfbc0b49105947ed">hal::ImportNetlistDialog</a>
+: <a class="el" href="classhal_1_1_gate_library_selection.html#a02486844b019aed7c509abb8050fccb5">hal::GateLibrarySelection</a>
+, <a class="el" href="classhal_1_1_gate_library_selection_table.html#afa5ca3b6bf8f6fefed88aa4d8ce2ef8f">hal::GateLibrarySelectionTable</a>
+, <a class="el" href="classhal_1_1_import_netlist_dialog.html#acfc20710d0d6528edfbc0b49105947ed">hal::ImportNetlistDialog</a>
 , <a class="el" href="classhal_1_1_new_project_dialog.html#af252573e21cb2865972da077ef84972e">hal::NewProjectDialog</a>
 </li>
 <li>GatelibraryProxyModel()
 : <a class="el" href="classhal_1_1_gatelibrary_proxy_model.html#a8a6379cf19d8760f446688d48f11de97">hal::GatelibraryProxyModel</a>
+</li>
+<li>GateLibrarySelection()
+: <a class="el" href="classhal_1_1_gate_library_selection.html#ac603bc4cc35a2d620efefb57fdc5851f">hal::GateLibrarySelection</a>
+</li>
+<li>GateLibrarySelectionEntry()
+: <a class="el" href="classhal_1_1_gate_library_selection_entry.html#a6b1488c8f2236cbdabac720d3b8243bd">hal::GateLibrarySelectionEntry</a>
+</li>
+<li>GateLibrarySelectionTable()
+: <a class="el" href="classhal_1_1_gate_library_selection_table.html#a998bf260da95889cacfbea84327c2692">hal::GateLibrarySelectionTable</a>
 </li>
 <li>GatelibraryTableModel()
 : <a class="el" href="classhal_1_1_gatelibrary_table_model.html#a84a5ffa7430f06a54c1c360b89e25e40">hal::GatelibraryTableModel</a>
@@ -185,6 +196,9 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 </li>
 <li>GateLibraryWriter()
 : <a class="el" href="classhal_1_1_gate_library_writer.html#a9d59a4cdd3f9169f81846b3a4d5365c6">hal::GateLibraryWriter</a>
+</li>
+<li>gatelibSelected()
+: <a class="el" href="classhal_1_1_gate_library_selection.html#ab212ec2197f5377bffa24ac72eab6623">hal::GateLibrarySelection</a>
 </li>
 <li>gateLocationChanged()
 : <a class="el" href="classhal_1_1_netlist_relay.html#af33291efb9fbfa54ec9c171942297dbe">hal::NetlistRelay</a>
@@ -228,8 +242,8 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>GateSelectEntry()
 : <a class="el" href="classhal_1_1_gate_select_entry.html#adcf61769da81352845e533ecaf71ba0e">hal::GateSelectEntry</a>
 </li>
-<li>gateSelectionColor
-: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#ae6a8afb321af8574b45ea1045b0d222c">hal::GraphicsQssAdapter</a>
+<li>gateSelectionColor()
+: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a71c7a5e5855ccd52686f276ace71fb75">hal::GraphicsQssAdapter</a>
 </li>
 <li>GateSelectModel()
 : <a class="el" href="classhal_1_1_gate_select_model.html#a12f8299a8797658b34faa023c6ae4b6f">hal::GateSelectModel</a>
@@ -930,7 +944,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#ae8245fa6d538060a09860b7d747b7d6a">hal::SubgraphNetlistDecorator</a>
 </li>
 <li>get_subgraph_function_inputs()
-: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a602fe3be3c5979579024b42b8c4439eb">hal::SubgraphNetlistDecorator</a>
+: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a455e99786471a0d9293000f56b28be7a">hal::SubgraphNetlistDecorator</a>
 </li>
 <li>get_submodule_depth()
 : <a class="el" href="classhal_1_1_module.html#a533cbe33380469fe81fcead287efc437">hal::Module</a>
@@ -1220,6 +1234,9 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>getIndex()
 : <a class="el" href="classhal_1_1_context_table_model.html#aa50c41fbb2e8a3027c6c40a9c6b8b8f3">hal::ContextTableModel</a>
 , <a class="el" href="classhal_1_1_module_model.html#a8cfa0483c12efe5c220a93e126a86a6c">hal::ModuleModel</a>
+</li>
+<li>getIndexByPath()
+: <a class="el" href="classhal_1_1_gate_library_selection_table.html#a92517982912b2c975cd4ecb411c88015">hal::GateLibrarySelectionTable</a>
 </li>
 <li>getIndexFromItem()
 : <a class="el" href="classhal_1_1_base_tree_model.html#aba03bbb5da24d1cbc23bbc34e07458e8">hal::BaseTreeModel</a>
@@ -1534,14 +1551,14 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_graph_graphics_view.html#a883185841d7deb422d7400dafea4e113">hal::GraphGraphicsView</a>
 , <a class="el" href="classhal_1_1_graph_widget.html#a0421e8059b062ba06f1bb84ea141fdc8">hal::GraphWidget</a>
 </li>
-<li>greenColor
-: <a class="el" href="classhal_1_1_comment_dialog.html#a1070c10067626f942ae4ce7dbb99c578">hal::CommentDialog</a>
+<li>greenColor()
+: <a class="el" href="classhal_1_1_comment_dialog.html#a1707766aab8cdc1b481b7423ac9ebd94">hal::CommentDialog</a>
 </li>
 <li>gridBaseDotColor
 : <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a20397d891f58e3b5790725dfb9d8843e">hal::GraphicsQssAdapter</a>
 </li>
-<li>gridBaseLineColor
-: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#afff6b69c76ff8bae52a0cc09252c1925">hal::GraphicsQssAdapter</a>
+<li>gridBaseLineColor()
+: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a0d2a008588e0a6f3ddacb0a3963577bc">hal::GraphicsQssAdapter</a>
 </li>
 <li>gridClusterDotColor
 : <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a31b8d28575ff766a99f59a7ff88f0efe">hal::GraphicsQssAdapter</a>
@@ -1560,12 +1577,10 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 </li>
 <li>gridPosition()
 : <a class="el" href="classhal_1_1_node_box.html#ac6c6fde7e4fe21bec776050f6debd747">hal::NodeBox</a>
+, <a class="el" href="classhal_1_1_placement_hint.html#addeee89e239e71feffce0f710595207d">hal::PlacementHint</a>
 </li>
 <li>GridPosition
 : <a class="el" href="classhal_1_1_placement_hint.html#ad09aba494db43e08dc70e4c26b83b8e0a30472caec088342be6e3c336a35fcfbc">hal::PlacementHint</a>
-</li>
-<li>gridPosition()
-: <a class="el" href="classhal_1_1_placement_hint.html#addeee89e239e71feffce0f710595207d">hal::PlacementHint</a>
 </li>
 <li>gridType()
 : <a class="el" href="classhal_1_1_graph_graphics_view.html#a97baf9d89b508f4168006103e2b1c0ba">hal::GraphGraphicsView</a>
@@ -1675,7 +1690,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_groupings_of_item_widget.html#a11b92486b219ac0edf4a9bfb30daa9ea">hal::GroupingsOfItemWidget</a>
 </li>
 <li>GroupingTableEntry()
-: <a class="el" href="classhal_1_1_grouping_table_entry.html#a5a7b41bbacfe16d7cce06e07aa9ac903">hal::GroupingTableEntry</a>
+: <a class="el" href="classhal_1_1_grouping_table_entry.html#ae620437a3a81bef2b83bba661054135e">hal::GroupingTableEntry</a>
 </li>
 <li>GroupingTableModel()
 : <a class="el" href="classhal_1_1_grouping_table_model.html#a361bc539eceb5a6712460cf0522b7897">hal::GroupingTableModel</a>
@@ -1698,8 +1713,8 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>guiIconDisabledStyle
 : <a class="el" href="classhal_1_1_gui_plugin_manager.html#a381db7dc32ea08dd560ca6d74c315a44">hal::GuiPluginManager</a>
 </li>
-<li>guiIconPath
-: <a class="el" href="classhal_1_1_gui_plugin_manager.html#a5c15ac800feeb10e3cd56859bac1c8ec">hal::GuiPluginManager</a>
+<li>guiIconPath()
+: <a class="el" href="classhal_1_1_gui_plugin_manager.html#ac1e74d9f31a8d65e321af080e851417a">hal::GuiPluginManager</a>
 </li>
 <li>guiIconStyle
 : <a class="el" href="classhal_1_1_gui_plugin_manager.html#a491b5a4c1fa9cd70ac645618e6aec972">hal::GuiPluginManager</a>
@@ -1730,7 +1745,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Sep 1 2023 10:12:40 for HAL by
+    <li class="footer">Generated on Fri Sep 1 2023 14:06:48 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

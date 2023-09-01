@@ -106,6 +106,7 @@ var hierarchy =
       [ "hal::HGLParser", "classhal_1_1_h_g_l_parser.html", null ],
       [ "hal::LibertyParser", "classhal_1_1_liberty_parser.html", null ]
     ] ],
+    [ "hal::GateLibrarySelectionEntry", "classhal_1_1_gate_library_selection_entry.html", null ],
     [ "hal::GateLibraryWriter", "classhal_1_1_gate_library_writer.html", [
       [ "hal::HGLWriter", "classhal_1_1_h_g_l_writer.html", null ]
     ] ],
@@ -358,6 +359,7 @@ var hierarchy =
           [ "hal::ContextTableModel", "classhal_1_1_context_table_model.html", null ],
           [ "hal::DataTableModel", "classhal_1_1_data_table_model.html", null ],
           [ "hal::EndpointTableModel", "classhal_1_1_endpoint_table_model.html", null ],
+          [ "hal::GateLibrarySelectionTable", "classhal_1_1_gate_library_selection_table.html", null ],
           [ "hal::GatelibraryTableModel", "classhal_1_1_gatelibrary_table_model.html", null ],
           [ "hal::GateSelectModel", "classhal_1_1_gate_select_model.html", null ],
           [ "hal::GroupingsOfItemModel", "classhal_1_1_groupings_of_item_model.html", null ],
@@ -474,6 +476,7 @@ var hierarchy =
           [ "hal::ExpandingListItem", "classhal_1_1_expanding_list_item.html", null ],
           [ "hal::FileModifiedBar", "classhal_1_1_file_modified_bar.html", null ],
           [ "hal::FileSelectWidget", "classhal_1_1_file_select_widget.html", null ],
+          [ "hal::GateLibrarySelection", "classhal_1_1_gate_library_selection.html", null ],
           [ "hal::GetInTouchItem", "classhal_1_1_get_in_touch_item.html", null ],
           [ "hal::GetInTouchWidget", "classhal_1_1_get_in_touch_widget.html", null ],
           [ "hal::LabeledFrame", "classhal_1_1_labeled_frame.html", null ],
@@ -584,9 +587,9 @@ var hierarchy =
       [ "hal::NodeBoxes", "classhal_1_1_node_boxes.html", null ]
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
-    [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
-    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "hal::Result< T >", "classhal_1_1_result.html", null ],
+    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
+    [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
     [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
     [ "hal::RuntimeLibrary", "classhal_1_1_runtime_library.html", null ],
     [ "hal::SelectionTreeItem", "classhal_1_1_selection_tree_item.html", [
@@ -610,8 +613,8 @@ var hierarchy =
       [ "hal::VerilogWriterTest", "classhal_1_1_verilog_writer_test.html", null ],
       [ "hal::VHDLParserTest", "classhal_1_1_v_h_d_l_parser_test.html", null ]
     ] ],
-    [ "hal::Token< T >", "structhal_1_1_token.html", null ],
     [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
+    [ "hal::Token< T >", "structhal_1_1_token.html", null ],
     [ "hal::TokenStream< T >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< ci_string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< std::string >", "classhal_1_1_token_stream.html", null ],
