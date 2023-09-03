@@ -117,6 +117,13 @@ namespace hal
         bool contextWithNameExists(const QString& name) const;
 
         /**
+         * Generate next view with given prefix
+         * @param prefix
+         * @return the view name which does not exist so far
+         */
+        QString nextViewName(const QString& prefix) const;
+
+        /**
          * Handler to be called after a module has been created. Used to apply the changes in the affected contexts.<br>
          *
          * @param m - The module that has been created

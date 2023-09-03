@@ -54,10 +54,10 @@ namespace hal
          * @param[in] name - The name of the pin group.
          * @param[in] direction - The direction of the pin group.
          * @param[in] type - The type of the pin group.
-         * @param[in] ascending - True for ascending pin order (from 0 to n-1), false otherwise (from n-1 to 0).
-         * @param[in] start_index - The start index of the pin group.
+         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `true`.
+         * @param[in] start_index - The start index of the pin group. Defaults to `0`.
          */
-        PinGroup(const u32 id, const std::string& name, PinDirection direction, PinType type, bool ascending = false, u32 start_index = 0)
+        PinGroup(const u32 id, const std::string& name, PinDirection direction, PinType type, bool ascending = true, u32 start_index = 0)
             : m_id(id), m_name(name), m_direction(direction), m_type(type), m_ascending(ascending), m_start_index(start_index), m_next_index(start_index)
         {
         }
@@ -68,7 +68,7 @@ namespace hal
          * Check whether two pin groups are equal.
          *
          * @param[in] other - The pin group to compare against.
-         * @returns True if both pin groups are equal, false otherwise.
+         * @returns `true` if both pin groups are equal, `false` otherwise.
          */
         bool operator==(const PinGroup<T>& other) const
         {
@@ -101,7 +101,7 @@ namespace hal
          * Check whether two pin groups are unequal.
          *
          * @param[in] other - The pin group to compare against.
-         * @returns True if both pin groups are unequal, false otherwise.
+         * @returns `true` if both pin groups are unequal, `false` otherwise.
          */
         bool operator!=(const PinGroup<T>& other) const
         {
@@ -221,14 +221,27 @@ namespace hal
          * @param[in] index - The index of the pin within the pin group.
          * @returns The pin on success, an error message otherwise.
          */
-        Result<T*> get_pin_at_index(u32 index) const
+        Result<T*> get_pin_at_index(i32 index) const
         {
-            if (index >= m_start_index && index < m_next_index)
+            if (m_ascending)
             {
-                auto it = m_pins.begin();
-                std::advance(it, index - m_start_index);
-                return OK(*it);
+                if (index >= m_start_index && index < m_next_index)
+                {
+                    auto it = m_pins.begin();
+                    std::advance(it, index - m_start_index);
+                    return OK(*it);
+                }
             }
+            else
+            {
+                if (index <= m_start_index && index > m_next_index)
+                {
+                    auto it = m_pins.begin();
+                    std::advance(it, m_start_index - index);
+                    return OK(*it);
+                }
+            }
+
             return ERR("no pin exists at index " + std::to_string(index) + " within pin group '" + m_name + "'");
         }
 
@@ -270,7 +283,7 @@ namespace hal
          * 
          * @returns The start index. 
          */
-        u32 get_start_index() const
+        i32 get_start_index() const
         {
             return m_start_index;
         }
@@ -308,7 +321,7 @@ namespace hal
                 return ERR("'nullptr' given instead of a pin when trying to assign a pin to pin group '" + m_name + "' with ID " + std::to_string(m_id));
             }
 
-            u32 index = m_next_index++;
+            i32 index = m_ascending ? m_next_index++ : m_next_index--;
             m_pins.push_back(pin);
             pin->m_group = std::make_pair(this, index);
             return OK({});
@@ -321,7 +334,7 @@ namespace hal
          * @param[in] new_index - The index to move the pin to.
          * @returns Ok on success, an error message otherwise.
          */
-        Result<std::monostate> move_pin(T* pin, u32 new_index)
+        Result<std::monostate> move_pin(T* pin, i32 new_index)
         {
             if (pin == nullptr)
             {
@@ -333,32 +346,59 @@ namespace hal
                 return ERR("pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " does not belong to pin group '" + m_name + "' with ID " + std::to_string(m_id));
             }
 
-            if (new_index >= m_start_index && new_index < m_next_index)
+            if (m_ascending && new_index >= m_start_index && new_index < m_next_index)
             {
-                u32 old_index = pin->m_group.second;
+                i32 old_index = pin->m_group.second;
                 if (old_index == new_index)
                 {
                     return OK({});
                 }
 
                 i32 direction = (old_index > new_index) ? 1 : -1;
+
+                // move pin within vector
                 m_pins.erase(std::next(m_pins.begin(), old_index - m_start_index));
                 auto it = std::next(m_pins.begin(), new_index - m_start_index);
                 it      = m_pins.insert(it, pin);
-                for (u32 i = new_index; i != old_index; i += direction)
+
+                // update indices; 'it' now points to inserted pin
+                for (i32 i = new_index; i != old_index; i += direction)
                 {
                     std::advance(it, direction);
                     std::get<1>((*it)->m_group) += direction;
                 }
                 std::get<1>(pin->m_group) = new_index;
+            }
+            else if (!m_ascending && new_index <= m_start_index && new_index > m_next_index)
+            {
+                i32 old_index = pin->m_group.second;
+                if (old_index == new_index)
+                {
+                    return OK({});
+                }
 
-                return OK({});
+                i32 direction = (old_index < new_index) ? 1 : -1;
+
+                // move pin within vector
+                m_pins.erase(std::next(m_pins.begin(), m_start_index - old_index));
+                auto it = std::next(m_pins.begin(), m_start_index - new_index);
+                it      = m_pins.insert(it, pin);
+
+                // update indices; 'it' now points to inserted pin
+                for (i32 i = new_index; i != old_index; i -= direction)
+                {
+                    std::advance(it, direction);
+                    std::get<1>((*it)->m_group) -= direction;
+                }
+                std::get<1>(pin->m_group) = new_index;
             }
             else
             {
                 return ERR("new index (" + std::to_string(new_index) + ") for pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " is not between start index ("
                            + std::to_string(m_start_index) + ") and end index(" + std::to_string(m_next_index - 1) + ") of pin group '" + m_name + "' with ID " + std::to_string(m_id));
             }
+
+            return OK({});
         }
 
         /**
@@ -379,15 +419,28 @@ namespace hal
                 return ERR("pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " does not belong to pin group '" + m_name + "' with ID " + std::to_string(m_id));
             }
 
-            u32 index    = pin->m_group.second;
+            i32 index    = pin->m_group.second;
             pin->m_group = std::make_pair(nullptr, 0);
-            auto it      = std::next(m_pins.begin(), index - m_start_index);
-            it           = m_pins.erase(it);
-            for (; it != m_pins.end(); it++)
+            if (m_ascending)
             {
-                std::get<1>((*it)->m_group)--;
+                auto it = std::next(m_pins.begin(), index - m_start_index);
+                it      = m_pins.erase(it);
+                for (; it != m_pins.end(); it++)
+                {
+                    std::get<1>((*it)->m_group)--;
+                }
+                m_next_index--;
             }
-            m_next_index--;
+            else
+            {
+                auto it = std::next(m_pins.begin(), m_start_index - index);
+                it      = m_pins.erase(it);
+                for (; it != m_pins.end(); it++)
+                {
+                    std::get<1>((*it)->m_group)++;
+                }
+                m_next_index++;
+            }
 
             return OK({});
         }
@@ -420,8 +473,8 @@ namespace hal
         PinType m_type;
         std::list<T*> m_pins;
         bool m_ascending;
-        u32 m_start_index;
-        u32 m_next_index;
+        i32 m_start_index;
+        i32 m_next_index;
 
         PinGroup(const PinGroup&)            = delete;
         PinGroup(PinGroup&&)                 = delete;

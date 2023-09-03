@@ -149,7 +149,7 @@ namespace hal
     {
         SelectionTreeItemRoot* nextRootItem
                 = new SelectionTreeItemRoot();
-        if (groupingId == -1)
+        if (!groupingId)
         {
             if (hasEntries)
             {

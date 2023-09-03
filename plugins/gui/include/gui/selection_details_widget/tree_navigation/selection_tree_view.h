@@ -117,8 +117,9 @@ namespace hal
          * selection model is cleared and the view itself hides.
          *
          * @param mVisible - The bool to determine the described behaviour.
+         * @param groupingId - If non-zero tree gets populated from grouping rather than from selection
          */
-        void populate(bool mVisible, u32 groupingId=-1);
+        void populate(bool mVisible, u32 groupingId=0);
 
         /**
          * Converts a given modelIntex to the item it represents.

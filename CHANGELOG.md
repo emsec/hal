@@ -2,6 +2,24 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+* miscellaneous
+  * added `Show content` button to `Groupings` widget to show content of grouping as a list
+  * added flag which python editor tab is active when serializing project
+  * added `GateType::delete_pin_group` and `GateType::assign_pin_to_group` to enable more operations on pin groups of gate pins
+  * added extended gate library picker when importing a netlist
+  * changed supported input file formats for import from hard coded list to list provided by loadable parser plugins
+  * changed behavior of import netlist dialog, suggest only non-existing directory names and loop until an acceptable name was entered
+  * changed appearance and behavior of import project dialog, make sure existing hal projects don't get overwritten
+* bugfixes
+  * fixed colors in Python Console when switching between color schemes
+  * fixed pybind of `Module::get_gates`
+  * fixed Python script execution abort button disappearing when switching tabs
+  * fixed segfault when deleting a module for which an exclusive view exists
+  * fixed not loading all plugins if the GUI is not in control
+  * fixed Verilog writer not being a dependency of Verilator plugin
+  * fixed order of pins within pin groups not being properly handled for modules and gate types
+  * fixed netlist parsers assigning gate pins in wrong order (compensated by the bug above, imported netlists were still correct)
+  * fixed wrong order of pins within pin groups in provided gate libraries
 
 ## [4.2.0](v4.2.0) - 2023-05-24 10:02:04-07:00 (urgency: medium)
 * GUI plugin manager
@@ -50,8 +68,6 @@ All notable changes to this project will be documented in this file.
     * changed both versions of fsm_solving to now not only consider data inputs of the state register, but also synchronous control signals.
   * `xilinx_toolbox`
     * added the first version of the xilinx_toolbox plugin that provides functionality especially fitted to xilinx fpga netlists
-  * parser plugins
-    * changed supported input file formats from hard coded list to list provided by loadable parser plugins
 * decorators
   * added `NetlistModificationDecorator`
     * added `delete_modules` to delete all (or a filtered subset of) the modules in a netlist
@@ -78,8 +94,6 @@ All notable changes to this project will be documented in this file.
   * added pyBinds for the `LogManager` class
   * added pyBinds for the `ProjectDirectory` class
   * added `Module::move_pin_group` to change the order of pin groups of a module
-  * added flag which python editor tab is active when serializing project
-  * changed behavior of import netlist dialog, suggest only non-existing directories and loop until an acceptable name was entered
   * changed abort being more responsive when aborting layouting of large views
   * changed and improved color scheme for light style
   * changed labels on HAL startup screen to better resemble the new project structure
@@ -96,10 +110,6 @@ All notable changes to this project will be documented in this file.
   * fixed nets without source or destination not being shown when unfolding the module they belong to in the selection details widget
   * fixed cmake failing to parse HAL version number from file
   * fixed pins and pin groups not being hashable in Python
-  * fixed Python script execution abort button disappearing when switching tabs
-  * fixed segfault when deleting a module for which an exclusive view exists
-  * fixed not loading all plugins if the GUI is not in control
-  * fixed Verilog writer not being a dependency of Verilator plugin
 
 ## [4.1.0](v4.1.0) - 2023-03-08 16:57:06+01:00 (urgency: medium)
 * selection details widget

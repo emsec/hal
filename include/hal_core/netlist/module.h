@@ -338,7 +338,7 @@ namespace hal
          * @param[in] name - The name of the pin.
          * @param[in] net - The net that the pin is being assigned to.
          * @param[in] type - The type of the pin. Defaults to `PinType::none`.
-         * @param[in] create_group - Set `true` to automatically create a pin group and assign the pin, `false` otherwise.
+         * @param[in] create_group - Set `true` to automatically create a pin group and assign the pin, `false` otherwise. Defaults to `true`.
          * @returns The module pin on success, an error message otherwise.
          */
         Result<ModulePin*> create_pin(const u32 id, const std::string& name, Net* net, PinType type = PinType::none, bool create_group = true);
@@ -354,7 +354,7 @@ namespace hal
          * @param[in] name - The name of the pin.
          * @param[in] net - The net that the pin is being assigned to.
          * @param[in] type - The type of the pin. Defaults to `PinType::none`.
-         * @param[in] create_group - Set `true` to automatically create a pin group and assign the pin, `false` otherwise.
+         * @param[in] create_group - Set `true` to automatically create a pin group and assign the pin, `false` otherwise. Defaults to `true`.
          * @returns The module pin on success, an error message otherwise.
          */
         Result<ModulePin*> create_pin(const std::string& name, Net* net, PinType type = PinType::none, bool create_group = true);
@@ -480,7 +480,7 @@ namespace hal
          * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
          * @param[in] direction - The direction of the pin group, if any. Defaults to `PinDirection::none`.
          * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
-         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
+         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `true`.
          * @param[in] start_index - The start index of the pin group. Defaults to `0`.
          * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
          * @returns The pin group on success, an error message otherwise.
@@ -490,7 +490,7 @@ namespace hal
                                                       const std::vector<ModulePin*> pins = {},
                                                       PinDirection direction             = PinDirection::none,
                                                       PinType type                       = PinType::none,
-                                                      bool ascending                     = false,
+                                                      bool ascending                     = true,
                                                       u32 start_index                    = 0,
                                                       bool delete_empty_groups           = true);
 
@@ -502,7 +502,7 @@ namespace hal
          * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
          * @param[in] direction - The direction of the pin group, if any. Defaults to `PinDirection::none`.
          * @param[in] type - The type of the pin group, if any. Defaults to `PinType::none`.
-         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
+         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `true`.
          * @param[in] start_index - The start index of the pin group. Defaults to `0`.
          * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
          * @returns The pin group on success, an error message otherwise.
@@ -511,7 +511,7 @@ namespace hal
                                                       const std::vector<ModulePin*> pins = {},
                                                       PinDirection direction             = PinDirection::none,
                                                       PinType type                       = PinType::none,
-                                                      bool ascending                     = false,
+                                                      bool ascending                     = true,
                                                       u32 start_index                    = 0,
                                                       bool delete_empty_groups           = true);
 
@@ -562,7 +562,6 @@ namespace hal
 
         /**
          * Assign a pin to a pin group.
-         * Only pins with matching direction and type can be assigned to an existing pin group.
          * 
          * @param[in] pin_group - The new pin group.
          * @param[in] pin - The pin to be added.
@@ -690,15 +689,6 @@ namespace hal
 
         static u32 pinevent_associated_data(PinEvent pev, u32 id);
 
-        NetConnectivity check_net_endpoints(const Net* net) const;
-        Result<std::monostate> check_net(Net* net, bool recursive = false);
-        Result<ModulePin*> assign_pin_net(const u32 pin_id, Net* net, PinDirection direction, const std::string& name = "", PinType type = PinType::none);
-        Result<std::monostate> remove_pin_net(Net* net);
-        Result<ModulePin*> create_pin_internal(const u32 id, const std::string& name, Net* net, PinDirection direction, PinType type);
-        Result<std::monostate> delete_pin_internal(ModulePin* pin);
-        Result<PinGroup<ModulePin>*> create_pin_group_internal(const u32 id, const std::string& name, PinDirection direction, PinType type, bool ascending, u32 start_index);
-        Result<std::monostate> delete_pin_group_internal(PinGroup<ModulePin>* pin_group);
-
         std::string m_name;
         std::string m_type;
 
@@ -742,5 +732,14 @@ namespace hal
         std::unordered_set<Net*> m_internal_nets;
 
         EventHandler* m_event_handler;
+
+        NetConnectivity check_net_endpoints(const Net* net) const;
+        Result<std::monostate> check_net(Net* net, bool recursive = false);
+        Result<ModulePin*> assign_pin_net(const u32 pin_id, Net* net, PinDirection direction, const std::string& name = "", PinType type = PinType::none);
+        Result<std::monostate> remove_pin_net(Net* net);
+        Result<ModulePin*> create_pin_internal(const u32 id, const std::string& name, Net* net, PinDirection direction, PinType type);
+        Result<std::monostate> delete_pin_internal(ModulePin* pin);
+        Result<PinGroup<ModulePin>*> create_pin_group_internal(const u32 id, const std::string& name, PinDirection direction, PinType type, bool ascending, u32 start_index);
+        Result<std::monostate> delete_pin_group_internal(PinGroup<ModulePin>* pin_group);
     };
 }    // namespace hal

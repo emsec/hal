@@ -834,7 +834,7 @@ namespace hal
             // create_pin_internal OK
             if (create_group)
             {
-                if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name, direction, type, false, 0); group_res.is_error())
+                if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name, direction, type, true, 0); group_res.is_error())
                 {
                     assert(delete_pin_internal(pin_res.get()).is_ok());
                     return ERR_APPEND(group_res.get_error(), "could not create pin '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": failed to create pin group");
@@ -1236,11 +1236,12 @@ namespace hal
                                                           u32 start_index,
                                                           bool delete_empty_groups)
     {
-        PinGroup<ModulePin>* pin_group;
         if (name.empty())
         {
             return ERR("could not create pin group for module '" + m_name + "' with ID " + std::to_string(m_id) + ": empty string passed as name");
         }
+
+        PinGroup<ModulePin>* pin_group;
         if (auto res = create_pin_group_internal(id, name, direction, type, ascending, start_index); res.is_error())
         {
             return ERR_APPEND(res.get_error(), "could not create pin group '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id));
@@ -1250,19 +1251,8 @@ namespace hal
             pin_group = res.get();
         }
 
-        for (ModulePin* pin : pins)
+        for (auto* pin : pins)
         {
-            if (pin == nullptr)
-            {
-                return ERR("could not create pin group '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin is a 'nullptr'");
-            }
-
-            if (const auto it = m_pins_map.find(pin->get_id()); it == m_pins_map.end() || it->second != pin)
-            {
-                return ERR("could not create pin group '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin '" + pin->get_name() + "' with ID "
-                           + std::to_string(pin->get_id()) + " does not belong to module");
-            }
-
             if (auto res = assign_pin_to_group(pin_group, pin, delete_empty_groups); res.is_error())
             {
                 assert(delete_pin_group(pin_group).is_ok());
@@ -1290,7 +1280,7 @@ namespace hal
         if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
         {
             return ERR("could not delete pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " from module '" + m_name + "' with ID " + std::to_string(m_id)
-                       + ": pin group does not belong to gate type");
+                       + ": pin group does not belong to module");
         }
 
         bool removed_pins = false;
@@ -1299,7 +1289,7 @@ namespace hal
         for (ModulePin* pin : pins_copy)
         {
             removed_pins = true;
-            if (auto res = create_pin_group(pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), false, 0, false); res.is_error())
+            if (auto res = create_pin_group(pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), true, 0, false); res.is_error())
             {
                 return ERR(res.get_error());
             }
@@ -1479,7 +1469,7 @@ namespace hal
                        + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin does not belong to module");
         }
 
-        if (auto res = create_pin_group(get_unique_pin_group_id(), pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), false, 0, delete_empty_groups); res.is_error())
+        if (auto res = create_pin_group(get_unique_pin_group_id(), pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), true, 0, delete_empty_groups); res.is_error())
         {
             return ERR_APPEND(res.get_error(),
                               "could not remove pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " from pin group '" + pin_group->get_name() + "' with ID "
@@ -1533,7 +1523,7 @@ namespace hal
             pin = res.get();
         }
 
-        if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name_internal, pin->get_direction(), pin->get_type(), false, 0); group_res.is_error())
+        if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name_internal, pin->get_direction(), pin->get_type(), true, 0); group_res.is_error())
         {
             return ERR_APPEND(group_res.get_error(), "could not assign pin '" + name_internal + "' to net: failed to create pin group");
         }
@@ -1697,7 +1687,7 @@ namespace hal
         // some sanity checks
         if (pin_group == nullptr)
         {
-            return ERR("could not delete pin group of gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": pin group is a 'nullptr'");
+            return ERR("could not delete pin group of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin group is a 'nullptr'");
         }
         if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
         {
