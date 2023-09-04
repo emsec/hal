@@ -1362,6 +1362,12 @@ namespace hal
                        + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin does not belong to module");
         }
 
+        if (pin->get_group().first == pin_group)
+        {
+            return ERR("could not assign pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " to pin group '" + pin_group->get_name() + "' with ID "
+                       + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin already belongs to pin group");
+        }
+
         if (PinGroup<ModulePin>* pg = pin->get_group().first; pg != nullptr)
         {
             // remove from old group and potentially delete old group if empty
@@ -1651,9 +1657,9 @@ namespace hal
         }
 
         // create pin group
-        std::unique_ptr<PinGroup<ModulePin>> pin_group_owner(new PinGroup<ModulePin>(id, name, direction, type, ascending, start_index));
-        PinGroup<ModulePin>* pin_group = pin_group_owner.get();
+        std::unique_ptr<PinGroup<ModulePin>> pin_group_owner = std::make_unique<PinGroup<ModulePin>>(id, name, direction, type, ascending, start_index);
         m_pin_groups.push_back(std::move(pin_group_owner));
+        PinGroup<ModulePin>* pin_group = m_pin_groups.back().get();
         m_pin_groups_ordered.push_back(pin_group);
         m_pin_groups_map[id]        = pin_group;
         m_pin_group_names_map[name] = pin_group;

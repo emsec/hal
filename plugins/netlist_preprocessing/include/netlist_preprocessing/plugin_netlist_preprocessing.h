@@ -112,6 +112,14 @@ namespace hal
         static Result<u32> remove_unconnected_nets(Netlist* nl);
 
         /**
+         * Calls remove_unconnected_gates / remove_unconnected_nets until there are no further changes.
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @return The total number of removed nets and gates on success, an error otherwise.
+         */
+        static Result<u32> remove_unconnected_looped(Netlist* nl);
+
+        /**
          * Apply manually implemented optimizations to the netlist centered around muxes.
          * Currently implemented optimizations include:
          *  - removing inverters incase there are inverter gates infront and behind every data input and output of the mux

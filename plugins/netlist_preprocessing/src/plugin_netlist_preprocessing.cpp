@@ -524,37 +524,34 @@ namespace hal
         return OK(num_nets);
     }
 
-    namespace
+    Result<u32> NetlistPreprocessingPlugin::remove_unconnected_looped(Netlist* nl)
     {
-        Result<u32> cleanup_loop(Netlist* nl)
+        u32 total_removed = 0;
+
+        while (true)
         {
-            u32 total_removed = 0;
-
-            while (true)
+            auto gate_res = NetlistPreprocessingPlugin::remove_unconnected_gates(nl);
+            if (gate_res.is_error())
             {
-                auto gate_res = NetlistPreprocessingPlugin::remove_unconnected_gates(nl);
-                if (gate_res.is_error())
-                {
-                    return ERR_APPEND(gate_res.get_error(), "unable to execute clean up loop: failed to remove unconnected gates");
-                }
-
-                auto net_res = NetlistPreprocessingPlugin::remove_unconnected_nets(nl);
-                if (net_res.is_error())
-                {
-                    return ERR_APPEND(net_res.get_error(), "unable to execute clean up loop: failed to remove unconnected nets");
-                }
-
-                const u32 removed = gate_res.get() + net_res.get();
-                total_removed += removed;
-                if (!removed)
-                {
-                    break;
-                }
+                return ERR_APPEND(gate_res.get_error(), "unable to execute clean up loop: failed to remove unconnected gates");
             }
 
-            return OK(total_removed);
+            auto net_res = NetlistPreprocessingPlugin::remove_unconnected_nets(nl);
+            if (net_res.is_error())
+            {
+                return ERR_APPEND(net_res.get_error(), "unable to execute clean up loop: failed to remove unconnected nets");
+            }
+
+            const u32 removed = gate_res.get() + net_res.get();
+            total_removed += removed;
+            if (!removed)
+            {
+                break;
+            }
         }
-    }    // namespace
+
+        return OK(total_removed);
+    }
 
     namespace
     {
@@ -619,7 +616,7 @@ namespace hal
         struct GateFingerprint
         {
             const GateType* type;
-            std::vector<Net*> ordered_fan_in = {};
+            std::map<GatePin*, Net*> ordered_fan_in = {};
             std::set<Net*> unordered_fan_in  = {};
             u8 trust_table_hw                = 0;
 
@@ -636,7 +633,7 @@ namespace hal
         u32 num_gates = 0;
         bool progress;
         std::vector<Gate*> target_gates = nl->get_gates([](const Gate* g) {
-            const auto* type = g->get_type();
+            const auto& type = g->get_type();
             return type->has_property(GateTypeProperty::combinational) || type->has_property(GateTypeProperty::ff);
         });
 
@@ -675,7 +672,10 @@ namespace hal
                 }
                 else if (fingerprint.type->has_property(GateTypeProperty::ff))
                 {
-                    fingerprint.ordered_fan_in = gate->get_fan_in_nets();
+                    for (const auto& ep : gate->get_fan_in_endpoints())
+                    {
+                        fingerprint.ordered_fan_in[ep->get_pin()] = ep->get_net();
+                    }
                 }
 
                 fingerprinted_gates[fingerprint].push_back(gate);
@@ -745,8 +745,10 @@ namespace hal
             }
 
             std::set<Gate*> affected_gates;
-            for (const auto& current_duplicates : duplicate_gates)
+            for (auto& current_duplicates : duplicate_gates)
             {
+                std::sort(current_duplicates.begin(), current_duplicates.end(), [](const auto& g1, const auto& g2) { return g1->get_name().length() < g2->get_name().length(); });
+
                 auto* survivor_gate = current_duplicates.front();
                 std::map<GatePin*, Net*> out_pins_to_nets;
                 for (auto* ep : survivor_gate->get_fan_out_endpoints())
@@ -829,7 +831,7 @@ namespace hal
 
         update_ff_replacements(ff_replacements);
 
-        log_info("netlist_preprocessing", "removed {} redundant logic gates from netlist with ID {}.", num_gates, nl->get_id());
+        log_info("netlist_preprocessing", "removed {} redundant gates from netlist with ID {}.", num_gates, nl->get_id());
         return OK(num_gates);
     }
 
@@ -1190,6 +1192,7 @@ namespace hal
             }
         }
 
+        u32 counter = 0;
         for (const auto& eq_class : equality_classes)
         {
             // TODO remove
@@ -1219,17 +1222,19 @@ namespace hal
                         return ERR("Unable to remove redundant logic trees: failed to add destination to net " + survivor_net->get_name() + " with ID " + std::to_string(survivor_net->get_id())
                                    + " at gate " + dst_gate->get_name() + " with ID " + std::to_string(dst_gate->get_id()) + " and pin " + dst_pin->get_name());
                     }
+
+                    counter += 1;
                 }
             }
         }
 
-        auto clean_up_res = cleanup_loop(nl);
+        auto clean_up_res = remove_unconnected_looped(nl);
         if (clean_up_res.is_error())
         {
             return ERR_APPEND(clean_up_res.get_error(), "Unable to remove redundant logic trees: failed to clean up dangling trees");
         }
 
-        return OK(clean_up_res.get());
+        return OK(clean_up_res.get() + counter);
     }
 
     Result<u32> NetlistPreprocessingPlugin::propagate_constants(Netlist* nl)

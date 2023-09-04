@@ -220,6 +220,29 @@ namespace hal
             )");
 
         py_netlist_preprocessing.def_static(
+            "remove_unconnected_looped",
+            [](Netlist* nl) -> std::optional<u32> {
+                auto res = NetlistPreprocessingPlugin::remove_unconnected_looped(nl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            R"(
+                Calls remove_unconnected_gates / remove_unconnected_nets until there are no further changes.
+
+                :param hal_py.Netlist nl: The netlist to operate on. 
+                :returns: The total number of removed nets and gates on success, ``None`` otherwise.
+                :rtype: int or ``None``
+            )");
+
+        py_netlist_preprocessing.def_static(
             "manual_mux_optimizations",
             [](Netlist* nl, GateLibrary* mux_inv_gl) -> std::optional<u32> {
                 auto res = NetlistPreprocessingPlugin::manual_mux_optimizations(nl, mux_inv_gl);
