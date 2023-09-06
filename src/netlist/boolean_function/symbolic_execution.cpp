@@ -810,12 +810,12 @@ namespace hal
                         }
 
                         // X | (~X & Y)   =>   X | Y
-                        if ((~p1_parameter[0] == p[0]) || (p1_parameter[0] == ~p[0]))
+                        if (is_x_not_y(p1_parameter[0], p[0]))
                         {
                             return BooleanFunction::Or(p[0].clone(), p1_parameter[1].clone(), node.size);
                         }
                         // X | (Y & ~X)   =>   X | Y
-                        if ((~p1_parameter[1] == p[0]) || (p1_parameter[1] == ~p[0]))
+                        if (is_x_not_y(p1_parameter[1], p[0]))
                         {
                             return BooleanFunction::Or(p[0].clone(), p1_parameter[0].clone(), node.size);
                         }
@@ -837,13 +837,13 @@ namespace hal
                         }
 
                         // X | (~X | Y)   =>   1
-                        if ((~p1_parameter[0] == p[0]) || (p1_parameter[0] == ~p[0]))
+                        if (is_x_not_y(p1_parameter[0], p[0]))
                         {
                             return OK(One(node.size));
                         }
 
                         // X | (Y | ~X)   =>   1
-                        if ((~p1_parameter[1] == p[0]) || (p1_parameter[1] == ~p[0]))
+                        if (is_x_not_y(p1_parameter[1], p[0]))
                         {
                             return OK(One(node.size));
                         }
