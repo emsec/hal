@@ -123,7 +123,7 @@ namespace hal
                 get_base_directory() / "lib64/",
                 get_base_directory() / "lib/",
             };
-            
+
             for (const auto& path : path_hints)
             {
                 hal::error_code ec;
@@ -263,7 +263,7 @@ namespace hal
             return std::filesystem::path();
         }
 
-        Result<std::filesystem::path> get_unique_temp_directory(const u32 max_attmeps)
+        Result<std::filesystem::path> get_unique_temp_directory(const std::string& prefix, const u32 max_attmeps)
         {
             const auto tmp_dir = std::filesystem::temp_directory_path();
 
@@ -274,10 +274,10 @@ namespace hal
             for (u32 i = 0; i < max_attmeps; i++)
             {
                 std::stringstream ss;
-                ss << std::hex << rand(prng);
-                std::filesystem::path tmp_path = tmp_dir / ss.str();
+                ss << std::setw(16) << std::setfill('0') << std::hex << rand(prng);
+                std::filesystem::path tmp_path = tmp_dir / (prefix + ss.str());
 
-                if (std::filesystem::create_directory(tmp_path))
+                if (std::filesystem::create_directories(tmp_path))
                 {
                     return OK(tmp_path);
                 }
@@ -719,5 +719,5 @@ permanent authorization for you to choose that version for the Library.
             return ERR("encountered unknown error");
         }
 
-    }    // namespace core_utils
+    }    // namespace utils
 }    // namespace hal

@@ -245,8 +245,12 @@ int main(int argc, char *argv[]) {
         replaced_e      = replaced_e.substitute(from_vec, to_vec);
 
         // translate expression into a c program
-        const std::filesystem::path directory = std::filesystem::temp_directory_path() / "boolean_influence_tmp/";
-        std::filesystem::create_directory(directory);
+        auto directory_res = utils::get_unique_temp_directory("boolean_influence/");
+        if (directory_res.is_error())
+        {
+            return ERR_APPEND(directory_res.get_error(), "unable to generate Boolean influence: could not create temporary directory");
+        }
+        const std::filesystem::path directory = directory_res.get();
 
         const std::filesystem::path file_path = directory / (unique_identifier.empty() ? ("boolean_func.cpp") : ("boolean_func_" + unique_identifier + ".cpp"));
 

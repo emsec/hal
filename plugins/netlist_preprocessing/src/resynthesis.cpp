@@ -670,12 +670,12 @@ namespace hal
         {
             const auto verilog_module = build_functional_verilog_module_from(bfs);
 
-            auto base_path_res = utils::get_unique_temp_directory();
+            auto base_path_res = utils::get_unique_temp_directory("resynthesis/");
             if (base_path_res.is_error())
             {
                 return ERR_APPEND(base_path_res.get_error(), "unable to resynthesize boolean functions with yosys: failed to get unique temp directory");
             }
-            const std::filesystem::path base_path                  = base_path_res.get() / "resynthesize_boolean_functions_with_yosys";
+            const std::filesystem::path base_path                  = base_path_res.get();
             const std::filesystem::path functional_netlist_path    = base_path / "func_netlist.v";
             const std::filesystem::path resynthesized_netlist_path = base_path / "resynth_netlist.v";
 
@@ -743,12 +743,12 @@ namespace hal
             }
             const auto subgraph_nl = subgraph_nl_res.get();
 
-            auto base_path_res = utils::get_unique_temp_directory();
+            auto base_path_res = utils::get_unique_temp_directory("resynthesis/");
             if (base_path_res.is_error())
             {
                 return ERR_APPEND(base_path_res.get_error(), "unable to resynthesize boolean functions with yosys: failed to get unique temp directory");
             }
-            const std::filesystem::path base_path                  = base_path_res.get() / "resynthesize_subgraph_with_yosys";
+            const std::filesystem::path base_path                  = base_path_res.get();
             const std::filesystem::path org_netlist_path           = base_path / "org_netlist.v";
             const std::filesystem::path resynthesized_netlist_path = base_path / "resynth_netlist.v";
             const std::filesystem::path yosys_helper_lib_path      = base_path / "yosys_helper_lib.v";
@@ -938,12 +938,12 @@ namespace hal
 
     Result<u32> NetlistPreprocessingPlugin::resynthesize_gates_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl)
     {
-        auto base_path_res = utils::get_unique_temp_directory();
+        auto base_path_res = utils::get_unique_temp_directory("resynthesis/");
         if (base_path_res.is_error())
         {
             return ERR_APPEND(base_path_res.get_error(), "unable to resynthesize boolean functions with yosys: failed to get unique temp directory");
         }
-        const std::filesystem::path base_path   = base_path_res.get() / "resynthesize_boolean_functions_with_yosys";
+        const std::filesystem::path base_path   = base_path_res.get();
         const std::filesystem::path genlib_path = base_path / "new_gate_library.genlib";
         std::filesystem::create_directory(base_path);
 
@@ -1036,12 +1036,12 @@ namespace hal
             return ERR("gate library is a nullptr");
         }
 
-        auto base_path_res = utils::get_unique_temp_directory();
+        auto base_path_res = utils::get_unique_temp_directory("resynthesis/");
         if (base_path_res.is_error())
         {
             return ERR_APPEND(base_path_res.get_error(), "unable to resynthesize boolean functions with yosys: failed to get unique temp directory");
         }
-        const std::filesystem::path base_path   = base_path_res.get() / "resynthesize_subgraph_with_yosys";
+        const std::filesystem::path base_path   = base_path_res.get();
         const std::filesystem::path genlib_path = base_path / "new_gate_library.genlib";
         std::filesystem::create_directory(base_path);
 
@@ -1257,12 +1257,12 @@ namespace hal
                 return ERR("gate library is a nullptr");
             }
 
-            auto base_path_res = utils::get_unique_temp_directory();
+            auto base_path_res = utils::get_unique_temp_directory("resynthesis/");
             if (base_path_res.is_error())
             {
                 return ERR_APPEND(base_path_res.get_error(), "unable to resynthesize boolean functions with yosys: failed to get unique temp directory");
             }
-            const std::filesystem::path base_path   = base_path_res.get() / "resynthesize_muxes_with_yosys";
+            const std::filesystem::path base_path   = base_path_res.get();
             const std::filesystem::path genlib_path = base_path / "mux_inv.genlib";
             std::filesystem::create_directory(base_path);
 
