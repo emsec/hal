@@ -798,7 +798,7 @@ namespace hal
                     {
                         auto p1_parameter = p[1].get_parameters();
                         // X | (Y & !X)   =>   X | Y
-                        if ((~p1_parameter[1]) == p[0])
+                        if (is_x_not_y(p1_parameter[1], p[0]))
                         {
                             return BooleanFunction::Or(p[0].clone(), p1_parameter[0].clone(), node.size);
                         }
@@ -924,7 +924,7 @@ namespace hal
                         return OK(BooleanFunction::Const(0, node.size));
                     }
                     // X ^ ~X   =>   1
-                    if (~p[0] == p[1])
+                    if (is_x_not_y(p[0], p[1]))
                     {
                         return OK(One(node.size));
                     }
