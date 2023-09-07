@@ -1,4 +1,4 @@
-// MIT License
+ // MIT License
 // 
 // Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
 // Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
@@ -112,6 +112,8 @@ namespace hal
         void setSearchIconStyle(const QString &style);
         void setSearchActiveIconStyle(const QString &style);
         ///@}
+
+        void deleteSelectedItem();
 
     public Q_SLOTS:
         /**

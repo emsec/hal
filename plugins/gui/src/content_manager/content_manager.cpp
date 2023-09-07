@@ -32,9 +32,11 @@
 #include "hal_core/plugin_system/gui_extension_interface.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 
+#include <QApplication>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QOpenGLWidget>
+
 
 namespace hal
 {
@@ -260,7 +262,26 @@ namespace hal
 
         for (GuiExtensionInterface* geif : GuiPluginManager::getGuiExtensions().values())
             geif->netlist_loaded(gNetlist);
+    }
 
+    void ContentManager::handleShortcutDelete()
+    {
+        QWidget* focusWidget = qApp->focusWidget();
+        if(focusWidget->parent() == mGroupingManagerWidget)
+        {
+            mGroupingManagerWidget->deleteSelectedGrouping();
+        }
+        if(focusWidget->parent() == mContextManagerWidget)
+        {
+            mContextManagerWidget->deleteSelectedContext();
+        }
+        if(focusWidget->parent() == mModuleWidget){
+            mModuleWidget->deleteSelectedItem();
+        }
+        else
+        {
+            log_error("core", "unknown focused");
+        }
     }
 
     void ContentManager::addExternalWidget(ContentFactory* factory)

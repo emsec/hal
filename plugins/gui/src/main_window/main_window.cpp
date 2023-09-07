@@ -1,5 +1,6 @@
 #include "gui/main_window/main_window.h"
 
+#include "gui/grouping/grouping_manager_widget.h"
 #include "gui/action/action.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/docking_system/dock_bar.h"
@@ -316,20 +317,31 @@ namespace hal
 
         mSettingUndoLast = new SettingsItemKeybind("Undo Last Action", "keybinds/action_undo", QKeySequence("Ctrl+Z"), "Keybindings:Global", "Keybind for having last user interaction undone.");
 
+        mSettingDeleteItem = new SettingsItemKeybind("Delete Item", "keybinds/item_delete", QKeySequence(QKeySequence::Delete), "Keybindings:Global", "Keybind for deleting the focused Item.");
+
+
         QShortcut* shortCutNewFile  = new QShortcut(mSettingCreateFile->value().toString(), this);
         QShortcut* shortCutOpenFile = new QShortcut(mSettingOpenFile->value().toString(), this);
         QShortcut* shortCutSaveFile = new QShortcut(mSettingSaveFile->value().toString(), this);
         QShortcut* shortCutUndoLast = new QShortcut(mSettingUndoLast->value().toString(), this);
+        QShortcut* shortCutDeleteItem = new QShortcut(mSettingDeleteItem->value().toString(), this);
+
 
         connect(mSettingCreateFile, &SettingsItemKeybind::keySequenceChanged, shortCutNewFile, &QShortcut::setKey);
         connect(mSettingOpenFile, &SettingsItemKeybind::keySequenceChanged, shortCutOpenFile, &QShortcut::setKey);
         connect(mSettingSaveFile, &SettingsItemKeybind::keySequenceChanged, shortCutSaveFile, &QShortcut::setKey);
         connect(mSettingUndoLast, &SettingsItemKeybind::keySequenceChanged, shortCutUndoLast, &QShortcut::setKey);
+        connect(mSettingDeleteItem, &SettingsItemKeybind::keySequenceChanged, shortCutDeleteItem, &QShortcut::setKey);
+
 
         connect(shortCutNewFile, &QShortcut::activated, mActionNew, &QAction::trigger);
         connect(shortCutOpenFile, &QShortcut::activated, mActionOpenProject, &QAction::trigger);
         connect(shortCutSaveFile, &QShortcut::activated, mActionSave, &QAction::trigger);
         connect(shortCutUndoLast, &QShortcut::activated, mActionUndo, &QAction::trigger);
+        connect(shortCutDeleteItem, &QShortcut::activated, [&]() {
+            gContentManager->handleShortcutDelete();
+        });
+
 
         connect(mActionNew, &Action::triggered, this, &MainWindow::handleActionNew);
         connect(mActionOpenProject, &Action::triggered, this, &MainWindow::handleActionOpenProject);

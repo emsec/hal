@@ -324,4 +324,18 @@ namespace hal
     {
         mSearchActiveIconStyle = style;
     }
+
+    void ModuleWidget::deleteSelectedItem()
+    {
+        if(!mTreeView->currentIndex().isValid())
+        {
+            return;
+        }
+
+        ModuleItem* selectedItem = getModuleItemFromIndex(mTreeView->currentIndex());
+        if(selectedItem->parent() != nullptr)
+        {
+            gNetlistRelay->deleteModule(getModuleItemFromIndex(mTreeView->currentIndex())->id());
+        }
+    }
 }

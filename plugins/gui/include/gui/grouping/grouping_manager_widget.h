@@ -201,6 +201,8 @@ namespace hal
          */
         void newGroupingByDistance(int maxDepth, bool succ, const GraphicsItem* item);
 
+        void deleteSelectedGrouping();
+
     public Q_SLOTS:
         /**
          * Q_SLOT to handle that the last entry of GroupingTableModel was deleted.

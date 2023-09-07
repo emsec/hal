@@ -835,4 +835,15 @@ namespace hal
     {
         mTableIconStyle = style;
     }
+
+    void GroupingManagerWidget::deleteSelectedGrouping()
+    {
+        QModelIndex currentIndex = mGroupingTableView->currentIndex();
+        if(!currentIndex.isValid())
+        {
+            return;
+        }
+
+        mDeleteAction->trigger();
+    }
 }    // namespace hal

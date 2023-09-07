@@ -150,6 +150,8 @@ namespace hal
         void setSearchIconStyle(const QString &style);
         void setSearchActiveIconStyle(const QString &style);
         ///@}
+        void deleteSelectedContext();
+
 
     public Q_SLOTS:
         //void handleContextCreated(GraphContext* context);

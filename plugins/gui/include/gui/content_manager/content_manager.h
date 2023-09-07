@@ -169,6 +169,7 @@ namespace hal
     public:
         static SettingsItemKeybind* sSettingSearch;
         void addExternalWidget(ContentFactory* factory);
+        void handleShortcutDelete();
 
     private:
         MainWindow* mMainWindow;

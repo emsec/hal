@@ -446,4 +446,15 @@ namespace hal
     {
         mSearchActiveIconStyle = style;
     }
+
+    void ContextManagerWidget::deleteSelectedContext()
+    {
+        QModelIndex currentIndex = mContextTableView->currentIndex();
+        if(!currentIndex.isValid())
+        {
+            return;
+        }
+
+        mDeleteAction->trigger();
+    }
 }

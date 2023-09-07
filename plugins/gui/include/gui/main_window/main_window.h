@@ -671,6 +671,7 @@ namespace hal
         SettingsItemKeybind* mSettingOpenFile;
         SettingsItemKeybind* mSettingSaveFile;
         SettingsItemKeybind* mSettingUndoLast;
+        SettingsItemKeybind* mSettingDeleteItem;
 
     };
 }
