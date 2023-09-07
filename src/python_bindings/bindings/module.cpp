@@ -770,14 +770,13 @@ namespace hal
         py_module.def(
             "delete_pin_group",
             [](Module& self, PinGroup<ModulePin>* pin_group) {
-                auto res = self.delete_pin_group(pin_group);
-                if (res.is_ok())
+                if (self.delete_pin_group(pin_group))
                 {
                     return true;
                 }
                 else
                 {
-                    log_error("python_context", "error encountered while deleting pin group:\n{}", res.get_error().get());
+                    log_error("python_context", "error encountered while deleting pin group.");
                     return false;
                 }
             },
@@ -793,14 +792,13 @@ namespace hal
         py_module.def(
             "move_pin_group",
             [](Module& self, PinGroup<ModulePin>* pin_group, u32 new_index) {
-                auto res = self.move_pin_group(pin_group, new_index);
-                if (res.is_ok())
+                if (self.move_pin_group(pin_group, new_index))
                 {
                     return true;
                 }
                 else
                 {
-                    log_error("python_context", "error encountered while moving pin group:\n{}", res.get_error().get());
+                    log_error("python_context", "error encountered while moving pin group.");
                     return false;
                 }
             },
@@ -819,14 +817,13 @@ namespace hal
         py_module.def(
             "assign_pin_to_group",
             [](Module& self, PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups = true) {
-                auto res = self.assign_pin_to_group(pin_group, pin, delete_empty_groups);
-                if (res.is_ok())
+                if (self.assign_pin_to_group(pin_group, pin, delete_empty_groups))
                 {
                     return true;
                 }
                 else
                 {
-                    log_error("python_context", "error encountered while assigning pin to pin group:\n{}", res.get_error().get());
+                    log_error("python_context", "error encountered while assigning pin to pin group.");
                     return false;
                 }
             },
@@ -846,14 +843,13 @@ namespace hal
         py_module.def(
             "move_pin_within_group",
             [](Module& self, PinGroup<ModulePin>* pin_group, ModulePin* pin, u32 new_index) {
-                auto res = self.move_pin_within_group(pin_group, pin, new_index);
-                if (res.is_ok())
+                if (self.move_pin_within_group(pin_group, pin, new_index))
                 {
                     return true;
                 }
                 else
                 {
-                    log_error("python_context", "error encountered while moving pin within pin group:\n{}", res.get_error().get());
+                    log_error("python_context", "error encountered while moving pin within pin group.");
                     return false;
                 }
             },
@@ -874,14 +870,13 @@ namespace hal
         py_module.def(
             "remove_pin_from_group",
             [](Module& self, PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups = true) {
-                auto res = self.remove_pin_from_group(pin_group, pin, delete_empty_groups);
-                if (res.is_ok())
+                if (self.remove_pin_from_group(pin_group, pin, delete_empty_groups))
                 {
                     return true;
                 }
                 else
                 {
-                    log_error("python_context", "error encountered while removing pin from pin group:\n{}", res.get_error().get());
+                    log_error("python_context", "error encountered while removing pin from pin group.");
                     return false;
                 }
             },

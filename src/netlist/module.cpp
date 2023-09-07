@@ -734,9 +734,9 @@ namespace hal
                 {
                     m_output_nets.erase(net);
                 }
-                if (auto res = remove_pin_net(net); res.is_error())
+                if (!remove_pin_net(net))
                 {
-                    return res;
+                    return ERR("Remove pin net failed");
                 }
             }
         }
@@ -836,7 +836,7 @@ namespace hal
             {
                 if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name, direction, type, true, 0); group_res.is_error())
                 {
-                    assert(delete_pin_internal(pin_res.get()).is_ok());
+                    assert(delete_pin_internal(pin_res.get()));
                     return ERR_APPEND(group_res.get_error(), "could not create pin '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": failed to create pin group");
                 }
                 else
@@ -844,8 +844,8 @@ namespace hal
                     // create_pin_group_internal OK
                     if (const auto assign_res = group_res.get()->assign_pin(pin_res.get()); assign_res.is_error())
                     {
-                        assert(delete_pin_internal(pin_res.get()).is_ok());
-                        assert(delete_pin_group_internal(group_res.get()).is_ok());
+                        assert(delete_pin_internal(pin_res.get()));
+                        assert(delete_pin_group_internal(group_res.get()));
                         return ERR_APPEND(assign_res.get_error(),
                                           "could not create pin '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": failed to assign pin to pin group");
                     }
@@ -1253,10 +1253,10 @@ namespace hal
 
         for (auto* pin : pins)
         {
-            if (auto res = assign_pin_to_group(pin_group, pin, delete_empty_groups); res.is_error())
+            if (!assign_pin_to_group(pin_group, pin, delete_empty_groups))
             {
-                assert(delete_pin_group(pin_group).is_ok());
-                return ERR(res.get_error());
+                assert(delete_pin_group(pin_group));
+                return ERR("Assign pin to group failed.");
             }
         }
 
@@ -1270,17 +1270,20 @@ namespace hal
         return create_pin_group(get_unique_pin_group_id(), name, pins, direction, type, ascending, start_index, delete_empty_groups);
     }
 
-    Result<std::monostate> Module::delete_pin_group(PinGroup<ModulePin>* pin_group)
+    bool Module::delete_pin_group(PinGroup<ModulePin>* pin_group)
     {
         if (pin_group == nullptr)
         {
-            return ERR("could not delete pin group from module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin group is a 'nullptr'");
+            log_warning("module", "could not delete pin group from module '{}' with ID {}: pin group is a 'nullptr'", m_name, m_id);
+            return false;
         }
 
         if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
         {
-            return ERR("could not delete pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " from module '" + m_name + "' with ID " + std::to_string(m_id)
-                       + ": pin group does not belong to module");
+            log_warning("module",
+                        "could not delete pin group '{}' with ID {} from module '{}' with ID {}: pin group does not belong to module",
+                        pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            return false;
         }
 
         bool removed_pins = false;
@@ -1291,41 +1294,44 @@ namespace hal
             removed_pins = true;
             if (auto res = create_pin_group(pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), true, 0, false); res.is_error())
             {
-                return ERR(res.get_error());
+                return false;
             }
         }
 
         u32 pin_group_id_to_delete = pin_group->get_id();
 
-        if (auto res = delete_pin_group_internal(pin_group); res.is_error())
+        if (!delete_pin_group_internal(pin_group))
         {
-            return ERR(res.get_error());
+            return false;
         }
 
         if (removed_pins)
         {
             m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::GroupDelete,pin_group_id_to_delete));
         }
-        return OK({});
+        return true;
     }
 
-    Result<std::monostate> Module::move_pin_group(PinGroup<ModulePin>* pin_group, u32 new_index)
+    bool Module::move_pin_group(PinGroup<ModulePin>* pin_group, u32 new_index)
     {
         if (pin_group == nullptr)
         {
-            return ERR("could not move pin group of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin group is a 'nullptr'");
+            log_warning("module", "could not move pin group of module '{}' with ID {}: pin group is a 'nullptr'", m_name, m_id);
+            return false;
         }
 
         if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
         {
-            return ERR("could not move pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " within module '" + m_name + "' with ID " + std::to_string(m_id)
-                       + ": pin group does not belong to module");
+            log_warning("module", "could not move pin group '{}' with ID {} within module '{}' with ID {}: pin group does not belong to module",
+                     pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            return false;
         }
 
         if (new_index >= m_pin_groups_ordered.size())
         {
-            return ERR("could not move pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id)
-                       + ": index " + std::to_string(new_index) + " is out of bounds");
+            log_warning("module", "could not move pin group '{}' with ID {} of module '{}' with ID {}: index {} is out of bounds",
+                        pin_group->get_name(), pin_group->get_id(), m_name, m_id, new_index);
+            return false;
         }
 
         auto src_it = std::find(m_pin_groups_ordered.begin(), m_pin_groups_ordered.end(), pin_group);
@@ -1333,7 +1339,7 @@ namespace hal
         std::advance(dst_it, new_index);
         if (src_it == dst_it)
         {
-            return OK({});
+            return true;
         }
         else if (std::distance(m_pin_groups_ordered.begin(), src_it) < std::distance(m_pin_groups_ordered.begin(), dst_it))
         {
@@ -1346,32 +1352,36 @@ namespace hal
         }
 
         m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::GroupReorder,pin_group->get_id()));
-        return OK({});
+        return true;
     }
 
-    Result<std::monostate> Module::assign_pin_to_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups)
+    bool Module::assign_pin_to_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups)
     {
         if (pin_group == nullptr)
         {
-            return ERR("could not assign pin to pin group of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin group is a 'nullptr'");
+            log_warning("module", "could not assign pin to pin group of module '{}' with ID {}: pin group is a 'nullptr'", m_name, m_id);
+            return false;
         }
 
         if (pin == nullptr)
         {
-            return ERR("could not assign pin to pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID "
-                       + std::to_string(m_id) + ": pin is a 'nullptr'");
+            log_warning("module", "could not assign pin to pin group '{}' with ID {} of module '{}' with ID {}: pin is a 'nullptr'",
+                         pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            return false;
         }
 
         if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
         {
-            return ERR("could not assign pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " to pin group '" + pin_group->get_name() + "' with ID "
-                       + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin group does not belong to module");
+            log_warning("module", "could not assign pin '{}' with ID {} to pin group '{}' with ID {} of module '{}' with ID {}: pin group does not belong to module",
+                        pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            return false;
         }
 
         if (const auto it = m_pins_map.find(pin->get_id()); it == m_pins_map.end() || it->second != pin)
         {
-            return ERR("could not assign pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " to pin group '" + pin_group->get_name() + "' with ID "
-                       + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin does not belong to module");
+            log_warning("module", "could not assign pin '{}' with ID {} to pin group '{}' with ID {} of module '{}' with ID {}: pin does not belong to module",
+                        pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            return false;
         }
 
         if (PinGroup<ModulePin>* pg = pin->get_group().first; pg != nullptr)
@@ -1379,104 +1389,111 @@ namespace hal
             // remove from old group and potentially delete old group if empty
             if (auto res = pg->remove_pin(pin); res.is_error())
             {
-                return ERR_APPEND(res.get_error(),
-                                  "could not assign pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " to pin group '" + pin_group->get_name() + "' with ID "
-                                      + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id) + ": unable to remove pin from pin group '" + pg->get_name()
-                                      + "' with ID " + std::to_string(pg->get_id()));
+                log_warning("module",
+                            "could not assign pin '{}' with ID {} to pin group '{}' with ID {} of module '{}' with ID {}: unable to remove pin from pin group '{}' with ID {}",
+                            pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id, pg->get_name(), pg->get_id());
+                return false;
             }
 
             if (delete_empty_groups && pg->empty())
             {
-                if (auto res = delete_pin_group_internal(pg); res.is_error())
+                if (!delete_pin_group_internal(pg))
                 {
-                    return ERR_APPEND(res.get_error(),
-                                      "could not assign pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " to pin group '" + pin_group->get_name() + "' with ID "
-                                          + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id) + ": unable to delete pin group '" + pg->get_name()
-                                          + "' with ID " + std::to_string(pg->get_id()));
+                    log_warning("module",
+                                "could not assign pin '{}' with ID {} to pin group '{}' with ID {} of module '{}' with ID {}: unable to delete pin group '{}' with ID {}",
+                                pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id, pg->get_name(), pg->get_id());
+                    return false;
                 }
             }
         }
 
         if (auto res = pin_group->assign_pin(pin); res.is_error())
         {
-            return ERR_APPEND(res.get_error(),
-                              "could not assign pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " to pin group '" + pin_group->get_name() + "' with ID "
-                                  + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id));
+            log_warning("module",
+                              "could not assign pin '{}' with ID {} to pin group '{}' with ID {} of module '{}' with ID {}", pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            return false;
         }
 
         m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::GroupPinAssign,pin_group->get_id()));
-        return OK({});
+        return true;;
     }
 
-    Result<std::monostate> Module::move_pin_within_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, u32 new_index)
+    bool Module::move_pin_within_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, u32 new_index)
     {
         if (pin_group == nullptr)
         {
-            return ERR("could not move pin within pin group of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin group is a 'nullptr'");
+            log_warning("module", "could not move pin within pin group of module '{}' with ID {}: pin group is a 'nullptr'", m_name, m_id);
+            return false;
         }
 
         if (pin == nullptr)
         {
-            return ERR("could not move pin within pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID "
-                       + std::to_string(m_id) + ": pin is a 'nullptr'");
+            log_warning("module", "could not move pin within pin group '{}' with ID {} of module '{}' with ID {}: pin is a 'nullptr'",
+                        pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            return false;
         }
 
         if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
         {
-            return ERR("could not move pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " within pin group '" + pin_group->get_name() + "' with ID "
-                       + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin group does not belong to module");
+            log_warning("module",
+                        "could not move pin '{}' with ID {} within pin group '{}' with ID {} of module '{}' with ID {}: pin group does not belong to module",
+                        pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            return false;
         }
 
         if (const auto it = m_pins_map.find(pin->get_id()); it == m_pins_map.end() || it->second != pin)
         {
-            return ERR("could not move pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " within pin group '" + pin_group->get_name() + "' with ID "
-                       + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin does not belong to module");
+            log_warning("module",
+                        "could not move pin '{}' with ID {} within pin group '{}' with return ERRID {} of module '{}' with ID {}: pin does not belong to module",
+                        pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            return false;
         }
 
         if (auto res = pin_group->move_pin(pin, new_index); res.is_error())
         {
-            return ERR_APPEND(res.get_error(),
-                              "could not move pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " within pin group '" + pin_group->get_name() + "' with ID "
-                                  + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id));
+            log_warning("module",
+                        "could not move pin '{}' with ID {} within pin group '{}' with ID {} of module '{}' with ID {}",
+                        pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            return false;
         }
 
         m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::PinReorder,pin->get_id()));
-        return OK({});
+        return true;
     }
 
-    Result<std::monostate> Module::remove_pin_from_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups)
+    bool Module::remove_pin_from_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups)
     {
         if (pin_group == nullptr)
         {
-            return ERR("could not remove pin from pin group of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin group is a 'nullptr'");
+            log_warning("module", "could not remove pin from pin group of module '{}' with ID {}: pin group is a 'nullptr'", m_name, m_id);
+            return false;
         }
 
         if (pin == nullptr)
         {
-            return ERR("could not remove pin from pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID "
-                       + std::to_string(m_id) + ": pin is a 'nullptr'");
+            log_warning("module", "could not remove pin from pin group '{}' with ID {} of module '{}' with ID {}: pin is a 'nullptr'", pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            return false;
         }
 
         if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
         {
-            return ERR("could not remove pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " from pin group '" + pin_group->get_name() + "' with ID "
-                       + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin group does not belong to module");
+            log_warning("module", "could not remove pin '{}' with ID {} from pin group '{}' with ID {} of module '{}' with ID {}: pin group does not belong to module", pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            return false;
         }
 
         if (const auto it = m_pins_map.find(pin->get_id()); it == m_pins_map.end() || it->second != pin)
         {
-            return ERR("could not remove pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " from pin group '" + pin_group->get_name() + "' with ID "
-                       + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin does not belong to module");
+            log_warning("module", "could not remove pin '{}' with ID {} from pin group '{}' with ID {} of module '{}' with ID {}: pin does not belong to module", pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            return false;
         }
 
         if (auto res = create_pin_group(get_unique_pin_group_id(), pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), true, 0, delete_empty_groups); res.is_error())
         {
-            return ERR_APPEND(res.get_error(),
-                              "could not remove pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " from pin group '" + pin_group->get_name() + "' with ID "
-                                  + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id) + ": unable to create new pin group for pin");
+            log_warning("module", "could not remove pin '{}' with ID {} from pin group '{}' with ID {} of module '{}' with ID : unable to create new pin group for pin", pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            return false;
         }
 
-        return OK({});
+        return true;
     }
 
     Result<ModulePin*> Module::assign_pin_net(const u32 pin_id, Net* net, PinDirection direction, const std::string& name, PinType type)
@@ -1539,12 +1556,13 @@ namespace hal
         return OK(pin);
     }
 
-    Result<std::monostate> Module::remove_pin_net(Net* net)
+    bool Module::remove_pin_net(Net* net)
     {
         auto pin = get_pin_by_net(net);
         if (pin == nullptr)
         {
-            return ERR("could not remove pin from net: failed to get pin corresponding to net");
+            log_warning("module", "could not remove pin from net: failed to get pin corresponding to net");
+            return false;
         }
 
         PinGroup<ModulePin>* pin_group = pin->get_group().first;
@@ -1552,32 +1570,29 @@ namespace hal
 
         if (auto res = pin_group->remove_pin(pin); res.is_error())
         {
-            return ERR_APPEND(res.get_error(),
-                              "could not remove pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " from net '" + net->get_name() + "' with ID " + std::to_string(net->get_id())
-                                  + ": failed to remove pin from pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()));
+            log_warning("module", "could not remove pin '{}' with ID {} from net '{}' with ID {}: failed to remove pin from pin group '{}' with ID {}", pin->get_name(), pin->get_id(), net->get_name(), net->get_id(), pin_group->get_name(), pin_group->get_id());
+            return false;
         }
 
         if (pin_group->empty())
         {
-            if (auto res = delete_pin_group_internal(pin_group); res.is_error())
+            if (!delete_pin_group_internal(pin_group))
             {
-                return ERR_APPEND(res.get_error(),
-                                  "could not remove pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " from net '" + net->get_name() + "' with ID "
-                                      + std::to_string(net->get_id()) + ": failed to delete pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()));
+                log_warning("module", "could not remove pin '{}' with ID {} from net '{}' with ID {}: failed to delete pin group '{}' with ID {}", pin->get_name(), pin->get_id(), net->get_name(), net->get_id(), pin_group->get_name(), pin_group->get_id());
+                return false;
             }
         }
 
         u32 pin_id_to_delete = pin->get_id();
 
-        if (const auto res = delete_pin_internal(pin); res.is_error())
+        if (!delete_pin_internal(pin))
         {
-            return ERR_APPEND(res.get_error(),
-                              "could not remove pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " from net '" + net->get_name() + "' with ID " + std::to_string(net->get_id())
-                                  + ": failed to delete pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()));
+            log_warning("module", "could not remove pin '{}' with ID {} from net '{}' with ID {}: failed to delete pin '{}' with ID {}", pin->get_name(), pin->get_id(), net->get_name(), net->get_id(), pin->get_name(), pin->get_id());
+            return false;
         }
 
         m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::PinDelete,pin_id_to_delete));
-        return OK({});
+        return true;
     }
 
     Result<ModulePin*> Module::create_pin_internal(const u32 id, const std::string& name, Net* net, PinDirection direction, PinType type)
@@ -1621,17 +1636,18 @@ namespace hal
         return OK(pin);
     }
 
-    Result<std::monostate> Module::delete_pin_internal(ModulePin* pin)
+    bool Module::delete_pin_internal(ModulePin* pin)
     {
         // some sanity checks
         if (pin == nullptr)
         {
-            return ERR("could not delete pin of gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": pin is a 'nullptr'");
+            log_warning("module", "could not delete pin of gate type '{}' with ID {}: pin is a 'nullptr'", m_name, m_id);
+            return false;
         }
         if (const auto it = m_pins_map.find(pin->get_id()); it == m_pins_map.end() || it->second != pin)
         {
-            return ERR("could not delete pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id)
-                       + ": pin does not belong to module");
+            log_warning("module", "could not delete pin '{}' with ID {} of module '{}' with ID {}: pin does not belong to module", pin->get_name(), pin->get_id(), m_name, m_id);
+            return false;
         }
 
         // erase pin
@@ -1645,7 +1661,7 @@ namespace hal
         m_free_pin_ids.insert(del_id);
         m_used_pin_ids.erase(del_id);
 
-        return OK({});
+        return true;
     }
 
     Result<PinGroup<ModulePin>*> Module::create_pin_group_internal(const u32 id, const std::string& name, PinDirection direction, PinType type, bool ascending, u32 start_index)
@@ -1682,17 +1698,20 @@ namespace hal
         return OK(pin_group);
     }
 
-    Result<std::monostate> Module::delete_pin_group_internal(PinGroup<ModulePin>* pin_group)
+    bool Module::delete_pin_group_internal(PinGroup<ModulePin>* pin_group)
     {
         // some sanity checks
         if (pin_group == nullptr)
         {
-            return ERR("could not delete pin group of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin group is a 'nullptr'");
+            log_warning("module", "could not delete pin group of module '{}' with ID {}: pin group is a 'nullptr'", m_name, m_id);
+            return false;
         }
         if (const auto it = m_pin_groups_map.find(pin_group->get_id()); it == m_pin_groups_map.end() || it->second != pin_group)
         {
-            return ERR("could not delete pin group '" + pin_group->get_name() + "' with ID " + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id)
-                       + ": pin group does not belong to module");
+            log_warning("module",
+                        "could not delete pin group '{}' with ID {} of module '{}' with ID {}: pin group does not belong to module",
+                        pin_group->get_name(), pin_group->get_id(), m_name, m_id);
+            return false;
         }
 
         // erase pin group
@@ -1707,7 +1726,7 @@ namespace hal
         m_free_pin_group_ids.insert(del_id);
         m_used_pin_group_ids.erase(del_id);
 
-        return OK({});
+        return true;
     }
 
     u32 Module::pinevent_associated_data(PinEvent pev, u32 id)

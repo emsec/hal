@@ -325,7 +325,7 @@ namespace hal
 //            if (droppedParentItem != onDroppedItem)
 //            {
 //                mIgnoreEventsFlag = true;
-//                //int ret = mod->assign_pin_to_group(onDroppedGroup, droppedPin).is_ok();
+//                //bool ret = mod->assign_pin_to_group(onDroppedGroup, droppedPin);
 //                ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), QSet<u32>() << droppedPin->get_id());
 //                addAct->setObject(UserActionObject(onDroppedGroup->get_id(), UserActionObjectType::PinGroup));
 //                addAct->setParentObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));

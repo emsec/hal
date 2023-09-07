@@ -44,8 +44,7 @@ namespace hal
                     if (pinGroup->size() > 1)
                     {
                         oldIndex = pin->get_group().second;
-                        auto result   = mod->move_pin_within_group(pinGroup, pin, mNewIndex);
-                        if (result.is_error())
+                        if (!mod->move_pin_within_group(pinGroup, pin, mNewIndex))
                         {
                             return false;
                         }

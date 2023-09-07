@@ -297,10 +297,9 @@ namespace hal
                 // delete old pin group incase it is now empty
                 if (current_pin_group->get_pins().empty())
                 {
-                    if (const auto res = m->delete_pin_group(current_pin_group); !res.is_ok())
+                    if (!m->delete_pin_group(current_pin_group))
                     {
-                        return ERR_APPEND(res.get_error(),
-                                          "could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name()
+                        return ERR("could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name()
                                               + "' with ID " + std::to_string(slave_net->get_id()) + ": failed to delete pingroup " + current_pin_group->get_name() + "with ID "
                                               + std::to_string(current_pin_group->get_id()) + " that is now empty.");
                     }

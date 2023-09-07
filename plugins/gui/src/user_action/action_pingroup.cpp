@@ -304,7 +304,7 @@ namespace hal
                 int ptype = (int) pgroup->get_type();
                 int pdir  = (int) pgroup->get_direction();
                 QString name = QString::fromStdString(pgroup->get_name());
-                if (mParentModule->delete_pin_group(pgroup).is_error())
+                if (!mParentModule->delete_pin_group(pgroup))
                     return false;
                 addUndoAction(PinActionType::GroupCreate,id,name,v);
                 addUndoAction(PinActionType::GroupTypechange,id,"",ptype);
@@ -316,7 +316,7 @@ namespace hal
                 int inx = pinGroupRow(mParentModule,pgroup);
                 if (inx < 0) return false;
                 addUndoAction(PinActionType::GroupMove,pgroup->get_id(),"",inx);
-                if (mParentModule->move_pin_group(pgroup,aa.mValue).is_error())
+                if (!mParentModule->move_pin_group(pgroup,aa.mValue))
                     return false;
                 break;
             }
@@ -341,7 +341,7 @@ namespace hal
                 mPinsMoved.insert(aa.mId);
                 pgroup = getGroup(aa.mValue);
                 if (!pgroup) return false;
-                if (mParentModule->assign_pin_to_group(pgroup,pin).is_error())
+                if (!mParentModule->assign_pin_to_group(pgroup,pin))
                     return false;
                 break;
             case PinActionType::PinRename:
@@ -358,7 +358,7 @@ namespace hal
                 if (!mPinsMoved.contains(aa.mId))
                     addUndoAction(PinActionType::PinSetindex,aa.mId,"",pin->get_group().second);
                 pgroup = pin->get_group().first;
-                if (!mParentModule->move_pin_within_group(pgroup,pin,aa.mValue).is_ok())
+                if (!mParentModule->move_pin_within_group(pgroup,pin,aa.mValue))
                     return false;
                 break;
             default:

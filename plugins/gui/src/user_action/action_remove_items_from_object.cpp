@@ -136,7 +136,7 @@ namespace hal
                     }
                     for (u32 id : mPins)
                     {
-                        if (mod->remove_pin_from_group(pinGroup, mod->get_pin_by_id(id), false).is_error())
+                        if (!mod->remove_pin_from_group(pinGroup, mod->get_pin_by_id(id), false))
                         {
                             return false;
                         }
