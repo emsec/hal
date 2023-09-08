@@ -27,7 +27,7 @@ find_package(Sanitizers REQUIRED)
 # ###############################
 # ####   Bitwuzla
 # ###############################
-pkg_check_modules(BITWUZLA REQUIRED bitwuzla)
+pkg_check_modules(BITWUZLA bitwuzla)
 
 # find_package(Bitwuzla)
 
