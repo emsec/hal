@@ -84,6 +84,7 @@ namespace hal
                 z3.close_output();
                 z3.close_error();
                 z3.kill();
+                // log_info("solver", "\ninput: \n{}\n\noutput:{}\n", input, output);
 
                 return OK({false, output});
             }
@@ -246,6 +247,7 @@ namespace hal
                 const char* smt2_char_string = input.c_str();
 
                 auto in_stream = fmemopen((void*)smt2_char_string, strlen(smt2_char_string), "r");
+                std::vector<bitwuzla::Term> all_vars;
 
                 if (config.generate_model)
                 {
@@ -263,13 +265,9 @@ namespace hal
 
                 fclose(in_stream);
 
-                auto bitwuzla_solver    = parser.bitwuzla();
-                bitwuzla::Result result = bitwuzla_solver->check_sat();
+                auto bitwuzla_solver = parser.bitwuzla();
 
-                std::stringstream output_string;
-                output_string << (result == bitwuzla::Result::SAT ? "sat" : (result == bitwuzla::Result::UNSAT ? "unsat" : "unknown")) << std::endl;
-
-                if (config.generate_model && result == bitwuzla::Result::SAT)
+                if (config.generate_model)
                 {
                     std::stringbuf formula_string;
                     std::ostream output_stream(&formula_string);
@@ -299,15 +297,21 @@ namespace hal
                         }
                     }
 
-                    std::vector<bitwuzla::Term> all_vars;
-
                     for (const auto& var_name : var_names)
                     {
                         auto sort = bitwuzla::mk_bv_sort(1);
                         auto var  = bitwuzla::mk_const(sort, var_name);
                         all_vars.push_back(var);
                     }
+                }
 
+                bitwuzla::Result result = bitwuzla_solver->check_sat();
+
+                std::stringstream output_string;
+                output_string << (result == bitwuzla::Result::SAT ? "sat" : (result == bitwuzla::Result::UNSAT ? "unsat" : "unknown")) << std::endl;
+
+                if (config.generate_model && result == bitwuzla::Result::SAT)
+                {
                     // Print model in SMT-LIBv2 format.
                     output_string << "(model" << std::endl;
                     for (const auto& term : all_vars)
@@ -336,7 +340,7 @@ namespace hal
                     }
                     output_string << ")" << std::endl;
                 }
-                log_info("solver", "{}", output_string.str());
+                // log_info("solver", "\ninput: \n{}\n\noutput:{}\n", input, output_string.str());
                 return OK({false, output_string.str()});
 #else
                 return ERR("Bitwuzla Library not linked!");
@@ -605,6 +609,7 @@ namespace hal
                 });
             };
 
+            auto preamble        = ((config.generate_model) ? std::string("(set-option :produce-models true)\n") : "");
             auto theory          = std::string("(set-logic QF_ABV)");
             auto declarations    = translate_declarations(constraints);
             auto constraints_str = translate_constraints(constraints);
@@ -612,7 +617,7 @@ namespace hal
 
             if (constraints_str.is_ok())
             {
-                return OK(theory + "\n" + declarations + "\n" + constraints_str.get() + "\n" + epilogue);
+                return OK(preamble + theory + "\n" + declarations + "\n" + constraints_str.get() + "\n" + epilogue);
             }
             return ERR_APPEND(constraints_str.get_error(), "could not translate constraint to SMT-LIB v2: unable to generate translation constraints");
         }

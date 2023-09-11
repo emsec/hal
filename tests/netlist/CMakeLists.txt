@@ -1,5 +1,10 @@
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/tests)
 
+if(BITWUZLA_FOUND)
+    add_compile_definitions(BITWUZLA_LIBRARY)
+    message(STATUS "found bitwuzla, adding define for solver query to bitwuzla library")    
+endif()
+
 add_executable(runTest-netlist netlist.cpp)
 add_executable(runTest-gate_type gate_type.cpp)
 add_executable(runTest-gate gate.cpp)

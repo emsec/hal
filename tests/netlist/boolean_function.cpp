@@ -1648,4 +1648,29 @@ namespace hal {
             }
         }
     }
+
+#ifdef BITWUZLA_LIBRARY
+    TEST(BooleanFunction, BitwuzlaTest) {
+        const auto  a = BooleanFunction::Var("a"),
+                   _1 = BooleanFunction::Const(1, 1);
+
+        const auto boolean_function = a | _1;
+        const auto constraint = BooleanFunction::Eq(a.clone(), boolean_function.clone(), 1);
+
+
+        auto s = SMT::Solver();
+        auto config = SMT::QueryConfig();
+        auto s_type = SMT::SolverType::Bitwuzla;
+        auto s_call = SMT::SolverCall::Library;
+        config.with_solver(s_type).with_call(s_call);
+        auto result = s.with_constraint(SMT::Constraint(constraint.get().clone())).query(config);
+
+
+        ASSERT_TRUE(result.is_ok());
+        // auto solver_result = result.get();
+        // EXPECT_EQ(solver_result.type, SMT::SolverResultType::Sat);
+        // }
+    }
+#endif
+
 } //namespace hal
