@@ -38,7 +38,7 @@ target_link_libraries(netlist
                         RapidJSON::RapidJSON
                         ${Z3_LIBRARIES}
                         ${ABC_LIBRARY}
-                        ${BITWUZLA_LIBRARIES}
+                        ${BITWUZLA_LINK_LIBRARIES}
                       )
 
 install(TARGETS netlist
