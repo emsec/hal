@@ -137,10 +137,57 @@ namespace hal
          *
          * @param[in] gate - The initial gate.
          * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
+         * @param[in] allowed_pin_types - Only returns gates which are reached through one of the pins whose types are in this vector.
+         * @param[inout] cache - The cache. 
+         * @returns All sequential successors or predecessors of the gate.
+         */
+        CORE_API std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors, const std::vector<PinType>& allowed_pin_types, std::unordered_map<u32, std::vector<Gate*>>& cache);
+
+        /**
+         * Find all sequential predecessors or successors of a gate.
+         * Traverses combinational logic of all input or output nets until sequential gates are found.
+         * The result may include the provided gate itself.
+         * The use of the this cached version is recommended in case of extensive usage to improve performance. 
+         * The cache will be filled by this function and should initially be provided empty.
+         * Different caches for different values of get_successors shall be used.
+         *
+         * @param[in] gate - The initial gate.
+         * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
          * @param[inout] cache - The cache. 
          * @returns All sequential successors or predecessors of the gate.
          */
         CORE_API std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache);
+
+        /**
+         * Find all sequential predecessors or successors of a net.
+         * Traverses combinational logic of all input or output nets until sequential gates are found.
+         * The result may include the provided gate itself.
+         * The use of the this cached version is recommended in case of extensive usage to improve performance. 
+         * The cache will be filled by this function and should initially be provided empty.
+         * Different caches for different values of get_successors shall be used.
+         *
+         * @param[in] gate - The initial gate.
+         * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
+         * @param[in] allowed_pin_types - Only returns gates which are reached through one of the pins whose types are in this vector.
+         * @param[inout] cache - The cache. 
+         * @returns All sequential successors or predecessors of the gate.
+         */
+        CORE_API std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors, const std::vector<PinType>& allowed_pin_types, std::unordered_map<u32, std::vector<Gate*>>& cache);
+
+        /**
+         * Find all sequential predecessors or successors of a net.
+         * Traverses combinational logic of all input or output nets until sequential gates are found.
+         * The result may include the provided gate itself.
+         * The use of the this cached version is recommended in case of extensive usage to improve performance. 
+         * The cache will be filled by this function and should initially be provided empty.
+         * Different caches for different values of get_successors shall be used.
+         *
+         * @param[in] gate - The initial gate.
+         * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
+         * @param[inout] cache - The cache. 
+         * @returns All sequential successors or predecessors of the gate.
+         */
+        CORE_API std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache);
 
         /**
          * Find all sequential predecessors or successors of a gate.
@@ -176,6 +223,29 @@ namespace hal
          * @returns All sequential successors or predecessors of the net.
          */
         CORE_API std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors);
+
+        /**
+         * Find all sequential predecessors or successors of a gate.
+         * Traverses combinational logic of all input or output nets until sequential gates are found.
+         * The result may include the provided gate itself.
+         *
+         * @param[in] gate - The initial gate.
+         * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
+         * @param[in] allowed_pin_types - Only returns gates which are reached through one of the pins whose types are in this vector.
+         * @returns All sequential successors or predecessors of the gate.
+         */
+        CORE_API std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors, const std::vector<PinType>& allowed_pin_types);
+
+        /**
+         * Find all sequential predecessors or successors of a net.
+         * Traverses combinational logic of all input or output nets until sequential gates are found.
+         *
+         * @param[in] net - The initial net.
+         * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
+         * @param[in] allowed_pin_types - Only returns gates which are reached through one of the pins whose types are in this vector.
+         * @returns All sequential successors or predecessors of the net.
+         */
+        CORE_API std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors, const std::vector<PinType>& allowed_pin_types);
 
         /**
          * Find all gates on the predecessor or successor path of a gate.

@@ -279,7 +279,11 @@ namespace hal
 
         namespace
         {
-            std::vector<Gate*> get_next_sequential_gates_internal(const Net* start_net, bool forward, std::unordered_set<u32>& seen, std::unordered_map<u32, std::vector<Gate*>>& cache)
+            std::vector<Gate*> get_next_sequential_gates_internal(const Net* start_net,
+                                                                  bool forward,
+                                                                  std::unordered_set<u32>& seen,
+                                                                  const std::vector<PinType>& allowed_pin_types,
+                                                                  std::unordered_map<u32, std::vector<Gate*>>& cache)
             {
                 if (auto it = cache.find(start_net->get_id()); it != cache.end())
                 {
@@ -301,13 +305,16 @@ namespace hal
 
                     if (next_gate->get_type()->has_property(GateTypeProperty::ff))
                     {
-                        found_ffs.push_back(next_gate);
+                        if (std::find(allowed_pin_types.begin(), allowed_pin_types.end(), endpoint->get_pin()->get_type()) != allowed_pin_types.end() || allowed_pin_types.empty())
+                        {
+                            found_ffs.push_back(next_gate);
+                        }
                     }
                     else
                     {
                         for (auto n : forward ? next_gate->get_fan_out_nets() : next_gate->get_fan_in_nets())
                         {
-                            auto next_gates = get_next_sequential_gates_internal(n, forward, seen, cache);
+                            auto next_gates = get_next_sequential_gates_internal(n, forward, seen, allowed_pin_types, cache);
                             found_ffs.insert(found_ffs.end(), next_gates.begin(), next_gates.end());
                         }
                     }
@@ -321,9 +328,31 @@ namespace hal
             }
         }    // namespace
 
+        std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors, const std::vector<PinType>& allowed_pin_types, std::unordered_map<u32, std::vector<Gate*>>& cache)
+        {
+            std::vector<Gate*> found_ffs;
+
+            for (const auto& endpoint : get_successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
+            {
+                if (std::find(allowed_pin_types.begin(), allowed_pin_types.end(), endpoint->get_pin()->get_type()) != allowed_pin_types.end() || allowed_pin_types.empty())
+                {
+                    auto n = endpoint->get_net();
+                    auto suc = get_next_sequential_gates(n, get_successors, allowed_pin_types, cache);
+                    found_ffs.insert(found_ffs.end(), suc.begin(), suc.end());
+                }
+            }
+
+            std::sort(found_ffs.begin(), found_ffs.end());
+            found_ffs.erase(std::unique(found_ffs.begin(), found_ffs.end()), found_ffs.end());
+
+            return found_ffs;
+        }
+
         std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache)
         {
             std::vector<Gate*> found_ffs;
+            std::vector<PinType> allowed_pin_types;
+
             for (const auto& n : get_successors ? gate->get_fan_out_nets() : gate->get_fan_in_nets())
             {
                 auto suc = get_next_sequential_gates(n, get_successors, cache);
@@ -336,22 +365,42 @@ namespace hal
             return found_ffs;
         }
 
-        std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache)
+        std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors, const std::vector<PinType>& allowed_pin_types, std::unordered_map<u32, std::vector<Gate*>>& cache)
         {
             std::unordered_set<u32> seen;
-            return get_next_sequential_gates_internal(net, get_successors, seen, cache);
+            return get_next_sequential_gates_internal(net, get_successors, seen, allowed_pin_types, cache);
         }
 
         std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors)
         {
             std::unordered_map<u32, std::vector<Gate*>> cache;
-            return get_next_sequential_gates(gate, get_successors, cache);
+            std::vector<PinType> allowed_pin_types;
+            return get_next_sequential_gates(gate, get_successors, allowed_pin_types, cache);
         }
 
         std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors)
         {
             std::unordered_map<u32, std::vector<Gate*>> cache;
-            return get_next_sequential_gates(net, get_successors, cache);
+            std::vector<PinType> allowed_pin_types;
+            return get_next_sequential_gates(net, get_successors, allowed_pin_types, cache);
+        }
+
+        std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors, const std::vector<PinType>& allowed_pin_types)
+        {
+            std::unordered_map<u32, std::vector<Gate*>> cache;
+            return get_next_sequential_gates(net, get_successors, allowed_pin_types, cache);
+        }
+
+        std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors, const std::vector<PinType>& allowed_pin_types)
+        {
+            std::unordered_map<u32, std::vector<Gate*>> cache;
+            return get_next_sequential_gates(gate, get_successors, allowed_pin_types, cache);
+        }
+
+        std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache)
+        {
+            std::vector<PinType> allowed_pin_types;
+            return get_next_sequential_gates(net, get_successors, allowed_pin_types, cache);
         }
 
         namespace
