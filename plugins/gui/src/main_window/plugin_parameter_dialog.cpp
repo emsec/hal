@@ -1,6 +1,8 @@
 #include "gui/main_window/plugin_parameter_dialog.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/plugin_system/gui_extension_interface.h"
+#include "gui/module_dialog/module_dialog.h"
+#include "gui/module_dialog/gate_dialog.h"
 #include "gui/main_window/color_selection.h"
 #include "gui/main_window/key_value_table.h"
 #include "gui/gui_utils/graphics.h"
@@ -140,6 +142,12 @@ namespace hal {
             case PluginParameter::NewFile:
                 mWidgetMap[parTagname] = new PluginParameterFileDialog(par,this);
                 break;
+            case PluginParameter::Module:
+                mWidgetMap[parTagname] = new PluginParameterNodeDialog(par,this);
+                break;
+            case PluginParameter::Gate:
+                mWidgetMap[parTagname] = new PluginParameterNodeDialog(par,this);
+                break;
             default:
                 break;
             }
@@ -242,6 +250,13 @@ namespace hal {
                 par.set_value(fileDlg->getFilename().toStdString());
                 break;
             }
+            case PluginParameter::Gate:
+            case PluginParameter::Module:
+            {
+                const PluginParameterNodeDialog* nodeDlg = static_cast<const PluginParameterNodeDialog*>(w);
+                par.set_value(QString::number(nodeDlg->getNodeId()).toStdString());
+                break;
+            }
             default:
                 continue;
                 break;
@@ -308,5 +323,107 @@ namespace hal {
     QString PluginParameterFileDialog::getFilename() const
     {
         return mEditor->text();
+    }
+
+    PluginParameterNodeDialog::PluginParameterNodeDialog(const PluginParameter& par, QWidget* parent)
+        : QWidget(parent), mParameter(par)
+    {
+        QGridLayout* layout = new QGridLayout(this);
+        mNodeId = new QSpinBox(this);
+        mNodeId->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+        layout->addWidget(mNodeId,0,0);
+        mNodeName = new QLabel(this);
+        mNodeName->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
+        mNodeName->setMinimumWidth(280);
+        layout->addWidget(mNodeName,0,1);
+
+        mButton = new QPushButton("",this);
+
+        u32 defaultId = QString::fromStdString(mParameter.get_value()).toUInt();
+        mNodeId->setValue(defaultId);
+
+        QString iconPath;
+        switch (mParameter.get_type()) {
+        case PluginParameter::Module:
+            iconPath = ":/icons/ne_module";
+            setModule(defaultId);
+            connect(mButton,&QPushButton::clicked,this,&PluginParameterNodeDialog::handleActivateModuleDialog);
+            connect(mNodeId,static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),this,&PluginParameterNodeDialog::setModule);
+            mValidIds = gNetlist->get_used_module_ids();
+            break;
+        case PluginParameter::Gate:
+            iconPath = ":/icons/ne_gate";
+            setGate(defaultId);
+            connect(mButton,&QPushButton::clicked,this,&PluginParameterNodeDialog::handleActivateGateDialog);
+            connect(mNodeId,static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),this,&PluginParameterNodeDialog::setGate);
+            mValidIds = gNetlist->get_used_gate_ids();
+            break;
+        default:
+            Q_ASSERT(1==0); // widget must not be created if parameter type not module or gate
+            break;
+        }
+
+        u32 maxValue = 0;
+        for (u32 id : mValidIds)
+            if (id > maxValue)
+                maxValue = id;
+        mNodeId->setMaximum(maxValue);
+        if (defaultId > maxValue)
+            mNodeId->setValue(0);
+        mButton->setIcon(gui_utility::getStyledSvgIcon("all->#F0F0F1",iconPath));
+        mButton->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
+        layout->addWidget(mButton,0,2);
+    }
+
+    void PluginParameterNodeDialog::setGate(int id)
+    {
+        if (!id || !isValidId(id))
+        {
+            mNodeName->setText("(no gate selected)");
+            return;
+        }
+        Gate* g = gNetlist->get_gate_by_id(id);
+        if (g) mNodeName->setText(QString::fromStdString(g->get_name()));
+    }
+
+    void PluginParameterNodeDialog::setModule(int id)
+    {
+        if (!id || !isValidId(id))
+        {
+            mNodeName->setText("(no module selected)");
+            return;
+        }
+        Module* m = gNetlist->get_module_by_id(id);
+        if (m) mNodeName->setText(QString::fromStdString(m->get_name()));
+    }
+
+    bool PluginParameterNodeDialog::isValidId(int id) const
+    {
+        return (mValidIds.find(id)!=mValidIds.end());
+    }
+
+    void PluginParameterNodeDialog::handleActivateModuleDialog()
+    {
+        ModuleDialog md({}, "Select module", nullptr, this);
+        if (md.exec() == QDialog::Accepted)
+        {
+            setModule(md.selectedId());
+            mNodeId->setValue(md.selectedId());
+        }
+    }
+
+    void PluginParameterNodeDialog::handleActivateGateDialog()
+    {
+        GateDialog gd({}, "Select gate", nullptr, this);
+        if (gd.exec() == QDialog::Accepted)
+        {
+            setGate(gd.selectedId());
+            mNodeId->setValue(gd.selectedId());
+        }
+    }
+
+    int PluginParameterNodeDialog::getNodeId() const
+    {
+        return mNodeId->value();
     }
 }
