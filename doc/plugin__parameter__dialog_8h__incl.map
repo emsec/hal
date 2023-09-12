@@ -1,10 +1,11 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/include/gui/main_window/plugin_parameter_dialog.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/main_window/plugin_parameter_dialog.h">
-<area shape="rect" id="node1" title=" " alt="" coords="396,5,580,76"/>
+<area shape="rect" id="node1" title=" " alt="" coords="472,5,656,76"/>
 <area shape="rect" id="node2" title=" " alt="" coords="241,131,316,158"/>
 <area shape="rect" id="node3" href="$plugin__parameter_8h.html" title=" " alt="" coords="5,213,181,255"/>
 <area shape="rect" id="node5" href="$gui__extension__interface_8h.html" title=" " alt="" coords="391,124,585,165"/>
 <area shape="rect" id="node11" title=" " alt="" coords="610,131,670,158"/>
 <area shape="rect" id="node12" title=" " alt="" coords="694,131,749,158"/>
+<area shape="rect" id="node13" title=" " alt="" coords="773,131,816,158"/>
 <area shape="rect" id="node4" title=" " alt="" coords="295,303,353,329"/>
 <area shape="rect" id="node6" href="$defines_8h.html" title=" " alt="" coords="730,303,870,329"/>
 <area shape="rect" id="node7" href="$include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="544,221,723,247"/>

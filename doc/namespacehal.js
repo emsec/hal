@@ -319,6 +319,7 @@ var namespacehal =
     [ "PluginParameter", "classhal_1_1_plugin_parameter.html", "classhal_1_1_plugin_parameter" ],
     [ "PluginParameterDialog", "classhal_1_1_plugin_parameter_dialog.html", "classhal_1_1_plugin_parameter_dialog" ],
     [ "PluginParameterFileDialog", "classhal_1_1_plugin_parameter_file_dialog.html", "classhal_1_1_plugin_parameter_file_dialog" ],
+    [ "PluginParameterNodeDialog", "classhal_1_1_plugin_parameter_node_dialog.html", "classhal_1_1_plugin_parameter_node_dialog" ],
     [ "PluginRelay", "classhal_1_1_plugin_relay.html", "classhal_1_1_plugin_relay" ],
     [ "PositionGenerator", "classhal_1_1_position_generator.html", "classhal_1_1_position_generator" ],
     [ "PreviewWidget", "classhal_1_1_preview_widget.html", "classhal_1_1_preview_widget" ],

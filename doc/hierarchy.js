@@ -406,6 +406,7 @@ var hierarchy =
         [ "hal::MainWindow", "classhal_1_1_main_window.html", null ],
         [ "hal::MinimapScrollbar", "classhal_1_1_minimap_scrollbar.html", null ],
         [ "hal::PluginParameterFileDialog", "classhal_1_1_plugin_parameter_file_dialog.html", null ],
+        [ "hal::PluginParameterNodeDialog", "classhal_1_1_plugin_parameter_node_dialog.html", null ],
         [ "hal::PythonConsoleQssAdapter", "classhal_1_1_python_console_qss_adapter.html", null ],
         [ "hal::PythonQssAdapter", "classhal_1_1_python_qss_adapter.html", null ],
         [ "hal::SpinnerWidget", "classhal_1_1_spinner_widget.html", null ],
@@ -587,9 +588,9 @@ var hierarchy =
       [ "hal::NodeBoxes", "classhal_1_1_node_boxes.html", null ]
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
+    [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
     [ "hal::Result< T >", "classhal_1_1_result.html", null ],
     [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
-    [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
     [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
     [ "hal::RuntimeLibrary", "classhal_1_1_runtime_library.html", null ],
     [ "hal::SelectionTreeItem", "classhal_1_1_selection_tree_item.html", [
@@ -669,8 +670,8 @@ var hierarchy =
     [ "Vec_Ptr_t_", "struct_vec___ptr__t__.html", null ],
     [ "Vec_Vec_t_", "struct_vec___vec__t__.html", null ],
     [ "hal::GuiApiClasses::View", "classhal_1_1_gui_api_classes_1_1_view.html", null ],
-    [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
+    [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
     [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ]
 ];

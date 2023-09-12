@@ -10,6 +10,7 @@ var dir_0a12066b2078697757e25e9f28d5f2f1 =
     [ "main_window.h", "main__window_8h.html", null ],
     [ "plugin_parameter_dialog.h", "plugin__parameter__dialog_8h.html", [
       [ "PluginParameterFileDialog", "classhal_1_1_plugin_parameter_file_dialog.html", "classhal_1_1_plugin_parameter_file_dialog" ],
+      [ "PluginParameterNodeDialog", "classhal_1_1_plugin_parameter_node_dialog.html", "classhal_1_1_plugin_parameter_node_dialog" ],
       [ "PluginParameterDialog", "classhal_1_1_plugin_parameter_dialog.html", "classhal_1_1_plugin_parameter_dialog" ]
     ] ]
 ];

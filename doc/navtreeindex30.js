@@ -1,5 +1,10 @@
 var NAVTREEINDEX30 =
 {
+"src_2netlist_2grouping_8cpp.html":[7,0,2,0,12],
+"src_2netlist_2grouping_8cpp_source.html":[7,0,2,0,12],
+"src_2netlist_2netlist_8cpp.html":[7,0,2,0,15],
+"src_2netlist_2netlist_8cpp_source.html":[7,0,2,0,15],
+"src_2python__bindings_2bindings_2grouping_8cpp.html":[7,0,2,2,0,14],
 "src_2python__bindings_2bindings_2grouping_8cpp.html#ga0b8291fb8af058d824b23bcd16a86821":[7,0,2,2,0,14,0],
 "src_2python__bindings_2bindings_2grouping_8cpp_source.html":[7,0,2,2,0,14],
 "src_2python__bindings_2bindings_2netlist_8cpp.html":[7,0,2,2,0,20],
@@ -244,10 +249,5 @@ var NAVTREEINDEX30 =
 "struct_hop___obj__t__.html#a5661782c9f258b920432e6ed22866d30":[6,0,6,3],
 "struct_hop___obj__t__.html#a7afe1c7febadfee9264725b25a1229ca":[6,0,6,1],
 "struct_hop___obj__t__.html#a8cfae4234b989a987295ab00132a2b86":[6,0,6,9],
-"struct_hop___obj__t__.html#a9002d8b9970f133cd0e88e660385aada":[6,0,6,6],
-"struct_vec___int__t__.html":[6,0,7],
-"struct_vec___int__t__.html#a1e28bb412871d25734ce8333c410b77d":[6,0,7,1],
-"struct_vec___int__t__.html#a3122cbf46c7105b837d073cdbd93f594":[6,0,7,2],
-"struct_vec___int__t__.html#aa4e999ab47a7bbfa2251160dc7d5134d":[6,0,7,0],
-"struct_vec___ptr__t__.html":[6,0,8]
+"struct_hop___obj__t__.html#a9002d8b9970f133cd0e88e660385aada":[6,0,6,6]
 };
