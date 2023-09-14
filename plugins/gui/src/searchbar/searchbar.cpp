@@ -35,6 +35,7 @@ namespace hal
         //Placeholder icons get better ones
         mDownButton->setIcon(QIcon(":/icons/arrow-down"));
         mUpButton->setIcon(QIcon(":/icons/arrow-up"));
+        mExactMatchButton->setIcon(QIcon(":/icons/menu"));
 
         mSearchIconLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
         mLineEdit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
