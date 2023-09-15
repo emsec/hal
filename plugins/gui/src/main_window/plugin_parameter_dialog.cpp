@@ -19,6 +19,7 @@
 #include <QTabWidget>
 #include <QFileDialog>
 #include <QTableWidget>
+#include <QComboBox>
 
 namespace hal {
     PluginParameterDialog::PluginParameterDialog(const QString &pname, GuiExtensionInterface *geif, QWidget* parent)
@@ -148,6 +149,14 @@ namespace hal {
             case PluginParameter::Gate:
                 mWidgetMap[parTagname] = new PluginParameterNodeDialog(par,this);
                 break;
+            case PluginParameter::ComboBox:
+            {
+                QComboBox* cbox = new QComboBox(this);
+                cbox->insertItems(0,QString::fromStdString(par.get_value()).split(';'));
+                if (!par.get_value().empty()) cbox->setCurrentIndex(0);
+                mWidgetMap[parTagname] = cbox;
+                break;
+            }
             default:
                 break;
             }
@@ -255,6 +264,12 @@ namespace hal {
             {
                 const PluginParameterNodeDialog* nodeDlg = static_cast<const PluginParameterNodeDialog*>(w);
                 par.set_value(QString::number(nodeDlg->getNodeId()).toStdString());
+                break;
+            }
+            case PluginParameter::ComboBox:
+            {
+                const QComboBox* cbox = static_cast<const QComboBox*>(w);
+                par.set_value(cbox->currentText().toStdString());
                 break;
             }
             default:

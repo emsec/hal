@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 * miscellaneous
+  * added GUI PluginParameter type 'ComboBox' for parameters that can be requested from plugin
   * added GUI PluginParameter types 'Module' and 'Gated' for parameters that can be requested from plugin
   * added `Show content` button to `Groupings` widget to show content of grouping as a list
   * added flag which python editor tab is active when serializing project
