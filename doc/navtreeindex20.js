@@ -1,5 +1,6 @@
 var NAVTREEINDEX20 =
 {
+"cli__extension__interface_8h.html":[7,0,0,0,2,1],
 "cli__extension__interface_8h_source.html":[7,0,0,0,2,1],
 "code__editor_8cpp.html":[7,0,1,3,2,3,1],
 "code__editor_8cpp_source.html":[7,0,1,3,2,3,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX20 =
 "dir_3f63d10c0ad45883b01bb370d77dad89.html":[7,0,1,7,0],
 "dir_4252469b3ac735c304362e15e3ea1050.html":[7,0,1,3,0,0,18],
 "dir_42b0fcf9e93e34cd4b79b75ca410450e.html":[7,0,1,4,1],
-"dir_42e05bd9637b80495264a1929f470918.html":[7,0,1,3,2,38,0],
-"dir_4306e172ec3ba51db6685fbbd77505c2.html":[7,0,1,3,2,25]
+"dir_42e05bd9637b80495264a1929f470918.html":[7,0,1,3,2,38,0]
 };

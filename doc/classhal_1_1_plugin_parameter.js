@@ -4,6 +4,7 @@ var classhal_1_1_plugin_parameter =
       [ "Absent", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3ad5691ecc71199c8cd7f6aefa720157a8", null ],
       [ "Boolean", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3a4514aac0b00ebc54fb1470d910277feb", null ],
       [ "Color", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3ac725b445c422cfb4648508c91cc11b0e", null ],
+      [ "ComboBox", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3a13699b827f61d66ab54de4a54c3fbd24", null ],
       [ "Dictionary", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3a1bf50e09b50020b936175d874a06fd01", null ],
       [ "ExistingDir", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3a22eb6523661c264761b5c587c65a8fba", null ],
       [ "Float", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3a64911c89f3f485ff0ae51f0121129599", null ],
