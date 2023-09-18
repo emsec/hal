@@ -21,7 +21,8 @@ namespace hal
     UserActionManager::UserActionManager(QObject *parent)
         : QObject(parent), mStartRecording(-1),
           mRecordHashAttribute(true),
-          mDumpAction(nullptr)
+          mDumpAction(nullptr),
+          mThreadedAction(nullptr)
     {
         mElapsedTime.start();
         mSettingDumpAction = new SettingsItemCheckbox(
@@ -32,6 +33,21 @@ namespace hal
             "Specifies whether hal opens an extra window to list all executed instances of UserAction"
         );
         connect(mSettingDumpAction,&SettingsItemCheckbox::boolChanged,this,&UserActionManager::handleSettingDumpActionChanged);
+        connect(this,&UserActionManager::triggerExecute,this,&UserActionManager::handleTriggerExecute,Qt::BlockingQueuedConnection);
+    }
+
+    void UserActionManager::executeActionBlockThread(UserAction *act)
+    {
+        if (!act) return;
+        mMutex.lock();
+        mThreadedAction = act;
+        Q_EMIT triggerExecute();
+        mMutex.unlock();
+    }
+
+    void UserActionManager::handleTriggerExecute()
+    {
+        mThreadedAction->exec();
     }
 
     void UserActionManager::handleSettingDumpActionChanged(bool wantDump)

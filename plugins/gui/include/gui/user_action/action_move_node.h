@@ -41,34 +41,52 @@ namespace hal
      */
     class ActionMoveNode : public UserAction
     {
-        QPoint mFrom, mTo;
+        u32 mContextId;
+        QPoint mTo;
+        bool mSwap;
 
-        int mContextId;
+        GridPlacement mGridPlacement;
 
         static QPoint parseFromString(const QString& s);
+
+        bool checkContextId();
     public:
+        /**
+         * empty constructor
+         * @param ctxId
+         */
+
+        /*ActionMoveNode(u32 ctxId)
+             :mContextId(ctxId) {;}*/
         /**
          * Action constructor.
          *
-         * The action object is the graphics context
-         *
+         * The action object will be set by 'from' node
+         * @param ctxID - context
          * @param from - The initial position of the node to move
          * @param to - The destination of the node
          */
-        ActionMoveNode(const QPoint& from = QPoint(), const QPoint& to = QPoint())
-            : mFrom(from), mTo(to), mContextId(-1) {;}
+        ActionMoveNode(u32 ctxID, const QPoint& from, const QPoint& to, bool swap = false);
 
         /**
          * Action constructor.
          *
-         * Will move the node object (gate or module) in view identified by context
-         * A call to setObject is required to identify the node object
-         *
-         * @param  - The initial position of the node to move
+         * The action object is the node to be moved
+         * @param ctxID - context
          * @param to - The destination of the node
          */
-        ActionMoveNode(u32 ctxId, const QPoint& to)
-            : mTo(to), mContextId(ctxId) {;}
+        ActionMoveNode(u32 ctxID, const QPoint& to);
+
+        /**
+         * Action constructor.
+         *
+         * Will move the nodes according to GridPlacement position info,
+         * no action object should be given
+         *
+         * @param ctxID - context
+         * @param gridPlc - The grid placement instance to copy (if any)
+         */
+        ActionMoveNode(u32 ctxId=0, const GridPlacement* gridPlc=nullptr);
 
         bool exec() override;
         QString tagname() const override;

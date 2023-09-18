@@ -27,6 +27,7 @@
 #include "hal_core/netlist/event_system/event_log.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
@@ -134,15 +135,15 @@ namespace hal
 
         setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
 
-        mActionNew                = new Action(this);
-        mActionOpenProject        = new Action(this);
-        mActionImportNetlist      = new Action(this);
-        mActionSave               = new Action(this);
-        mActionSaveAs             = new Action(this);
-        mActionExportProject      = new Action(this);
-        mActionImportProject      = new Action(this);
-        mActionGateLibraryManager = new Action(this);
-        mActionAbout              = new Action(this);
+        mActionNew           = new Action(this);
+        mActionOpenProject   = new Action(this);
+        mActionImportNetlist = new Action(this);
+        mActionSave          = new Action(this);
+        mActionSaveAs        = new Action(this);
+        mActionExportProject = new Action(this);
+        mActionImportProject = new Action(this);
+        //        mActionGateLibraryManager = new Action(this);
+        mActionAbout = new Action(this);
 
         mActionStartRecording = new Action(this);
         mActionStopRecording  = new Action(this);
@@ -187,7 +188,7 @@ namespace hal
         mActionSaveAs->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
         mActionClose->setIcon(gui_utility::getStyledSvgIcon(mCloseIconStyle, mCloseIconPath));
         mActionQuit->setIcon(gui_utility::getStyledSvgIcon(mQuitIconStyle, mQuitIconPath));
-        mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
+        //        mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
         mActionUndo->setIcon(gui_utility::getStyledSvgIcon(mUndoIconStyle, mUndoIconPath));
         mActionSettings->setIcon(gui_utility::getStyledSvgIcon(mSettingsIconStyle, mSettingsIconPath));
         mActionPlugins->setIcon(gui_utility::getStyledSvgIcon(mPluginsIconStyle, mPluginsIconPath));
@@ -206,7 +207,7 @@ namespace hal
         mMenuFile->addAction(mActionClose);
         mMenuFile->addAction(mActionSave);
         mMenuFile->addAction(mActionSaveAs);
-        mMenuFile->addAction(mActionGateLibraryManager);
+        //        mMenuFile->addAction(mActionGateLibraryManager);
 
         QMenu* menuImport = new QMenu("Import …", this);
         menuImport->addAction(mActionImportNetlist);
@@ -286,7 +287,7 @@ namespace hal
         mActionImportNetlist->setText("Import Netlist");
         mActionImportProject->setText("Import Project");
         mActionExportProject->setText("Export Project");
-        mActionGateLibraryManager->setText("Gate Library Manager");
+        //        mActionGateLibraryManager->setText("Gate Library Manager");
         mActionUndo->setText("Undo");
         mActionAbout->setText("About");
         mActionSettings->setText("Settings");
@@ -339,7 +340,7 @@ namespace hal
         connect(mActionSaveAs, &Action::triggered, this, &MainWindow::handleSaveAsTriggered);
         connect(mActionExportProject, &Action::triggered, this, &MainWindow::handleExportProjectTriggered);
         connect(mActionImportProject, &Action::triggered, this, &MainWindow::handleImportProjectTriggered);
-        connect(mActionGateLibraryManager, &Action::triggered, this, &MainWindow::handleActionGatelibraryManager);
+        //        connect(mActionGateLibraryManager, &Action::triggered, this, &MainWindow::handleActionGatelibraryManager);
         connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionCloseFile);
         connect(mActionQuit, &Action::triggered, this, &MainWindow::onActionQuitTriggered);
 
@@ -788,7 +789,7 @@ namespace hal
         }
         gPythonContext->updateNetlist();
 
-        mActionGateLibraryManager->setVisible(false);
+        //        mActionGateLibraryManager->setVisible(false);
     }
 
     void MainWindow::handleActionExport()
@@ -817,7 +818,7 @@ namespace hal
         {
             if (ipd.importProject())
             {
-                ActionOpenNetlistFile* act = new ActionOpenNetlistFile(ActionOpenNetlistFile::OpenProject, ipd.extractedProjectDir());
+                ActionOpenNetlistFile* act = new ActionOpenNetlistFile(ActionOpenNetlistFile::OpenProject, ipd.extractedProjectAbsolutePath());
                 act->exec();
             }
             else
@@ -1060,7 +1061,7 @@ namespace hal
 
         gNetlistRelay->reset();
 
-        mActionGateLibraryManager->setVisible(true);
+        //        mActionGateLibraryManager->setVisible(true);
 
         return true;
     }
@@ -1079,4 +1080,5 @@ namespace hal
     {
         SettingsManager::instance()->mainWindowSaveGeometry(pos(), size());
     }
+
 }    // namespace hal
