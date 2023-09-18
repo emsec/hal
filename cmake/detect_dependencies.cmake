@@ -27,21 +27,11 @@ find_package(Sanitizers REQUIRED)
 # ###############################
 # ####   Bitwuzla
 # ###############################
-pkg_check_modules(BITWUZLA bitwuzla)
+find_package(Bitwuzla)
 
-# find_package(Bitwuzla)
-
-if(BITWUZLA_FOUND)
-    message(STATUS "Found BITWUZLA")
-    message(STATUS "    BITWUZLA_LIBRARIES: ${BITWUZLA_LIBRARIES}")
-    message(STATUS "    BITWUZLA_LINK_LIBRARIES: ${BITWUZLA_LINK_LIBRARIES}")
-    message(STATUS "    BITWUZLA_INCLUDE_DIRS: ${BITWUZLA_INCLUDE_DIRS}")
-else()
-    set(BITWUZLA_LIBRARY "")
-    set(BITWUZLA_INCLUDE_DIRS "")
-    
-    message(STATUS "Bitwuzla not found, but this is optional...")
-endif(BITWUZLA_FOUND)
+if(Bitwuzla_FOUND)
+    set(BITWUZLA_LIBRARY Bitwuzla::bitwuzla)
+endif()
 
 # ###############################
 # ####   OpenMP

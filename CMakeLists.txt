@@ -181,10 +181,11 @@ if(UNIX)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
 
-    # set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer -fsanitize=address")
+    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer -fsanitize=thread -fsanitize=undefined")
 
-    # SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fsanitize=address")
-    # SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
+    # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -fsanitize=undefined")
+    # SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=thread -fsanitize=undefined")
+
     if(USE_LIBCXX)
         enable_cxx_compile_option_if_supported("-stdlib=libc++" "" "PUBLIC")
         enable_c_compile_option_if_supported("-stdlib=libc++" "" "PUBLIC")
@@ -317,7 +318,6 @@ install(FILES tools/genversion.py
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/pybind11 DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/spdlog-${spdlog_VERSION} DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/subprocess DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
-
 
 if(NOT(CMAKE_VERSION VERSION_LESS 3.0))
     install(EXPORT hal

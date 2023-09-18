@@ -11,10 +11,8 @@
 #include <set>
 
 #ifdef BITWUZLA_LIBRARY
-#include "bitwuzla/cpp/bitwuzla.h"
-#include "bitwuzla/cpp/parser.h"
+#include "bitwuzla/bitwuzla.h"
 #endif
-
 namespace hal
 {
     namespace SMT
@@ -238,110 +236,40 @@ namespace hal
             Result<std::tuple<bool, std::string>> query_library(std::string& input, const QueryConfig& config)
             {
 #ifdef BITWUZLA_LIBRARY
+                auto bzla = bitwuzla_new();
 
-                // First, create a Bitwuzla options instance.
-                bitwuzla::Options options;
-                // We will parse example file `smt2/quickstart.smt2`.
-                // Create parser instance.
-                // We expect no error to occur.
                 const char* smt2_char_string = input.c_str();
 
-                auto in_stream = fmemopen((void*)smt2_char_string, strlen(smt2_char_string), "r");
-                std::vector<bitwuzla::Term> all_vars;
+                char* out;
+                size_t out_len = {};
+
+                auto in_stream  = fmemopen((void*)smt2_char_string, strlen(smt2_char_string), "r");
+                auto out_stream = open_memstream(&out, &out_len);
+
+                BitwuzlaResult _r;
+                char* error;
 
                 if (config.generate_model)
                 {
-                    options.set(bitwuzla::Option::PRODUCE_MODELS, true);
+                    bitwuzla_set_option(bzla, BITWUZLA_OPT_PRODUCE_MODELS, 1);
                 }
 
-                bitwuzla::parser::Parser parser(options, "VIRTUAL_FILE", in_stream, "smt2");
-                // Now parse the input file.
-                std::string err_msg = parser.parse(true);
+                auto res = bitwuzla_parse_format(bzla, "smt2", in_stream, "VIRTUAL FILE", out_stream, &error, &_r);
+                fflush(out_stream);
 
-                if (!err_msg.empty())
+                if (error != nullptr)
                 {
-                    return ERR("failed to parse input file: " + err_msg);
+                    return ERR("failed to solve provided smt2 solver with bitwuzla: " + std::string(error));
                 }
 
                 fclose(in_stream);
+                fclose(out_stream);
 
-                auto bitwuzla_solver = parser.bitwuzla();
+                bitwuzla_delete(bzla);
 
-                if (config.generate_model)
-                {
-                    std::stringbuf formula_string;
-                    std::ostream output_stream(&formula_string);
+                std::string output(out);
 
-                    bitwuzla_solver->print_formula(output_stream, "smt2");
-
-                    std::set<std::string> var_names;
-
-                    // get inputs from smt2 string, much faster than iterating over z3 things
-                    const auto smt = formula_string.str();
-
-                    std::istringstream iss(smt);
-                    for (std::string line; std::getline(iss, line);)
-                    {
-                        if (line.find("declare-const") != std::string::npos)
-                        {
-                            auto start_index = line.find_first_of(' ') + 1;    // variable name starts after the first space
-                            auto end_index   = line.find_first_of(' ', start_index);
-
-                            if (start_index == std::string::npos + 1 || end_index == std::string::npos)
-                            {
-                                continue;
-                            }
-
-                            auto var_name = line.substr(start_index, end_index - start_index);
-                            var_names.insert(var_name);
-                        }
-                    }
-
-                    for (const auto& var_name : var_names)
-                    {
-                        auto sort = bitwuzla::mk_bv_sort(1);
-                        auto var  = bitwuzla::mk_const(sort, var_name);
-                        all_vars.push_back(var);
-                    }
-                }
-
-                bitwuzla::Result result = bitwuzla_solver->check_sat();
-
-                std::stringstream output_string;
-                output_string << (result == bitwuzla::Result::SAT ? "sat" : (result == bitwuzla::Result::UNSAT ? "unsat" : "unknown")) << std::endl;
-
-                if (config.generate_model && result == bitwuzla::Result::SAT)
-                {
-                    // Print model in SMT-LIBv2 format.
-                    output_string << "(model" << std::endl;
-                    for (const auto& term : all_vars)
-                    {
-                        bitwuzla::Sort sort = term.sort();
-                        output_string << "  (define-fun " << (term.symbol() ? *term.symbol() : "@t" + std::to_string(term.id())) << " (";
-                        if (sort.is_fun())
-                        {
-                            bitwuzla::Term value = bitwuzla_solver->get_value(term);
-                            assert(value.kind() == bitwuzla::Kind::LAMBDA);
-                            assert(value.num_children() == 2);
-                            while (value[1].kind() == bitwuzla::Kind::LAMBDA)
-                            {
-                                assert(value[0].is_variable());
-                                output_string << "(" << value[0] << " " << value[0].sort() << ") ";
-                                value = value[1];
-                            }
-                            assert(value[0].is_variable());
-                            output_string << "(" << value[0] << " " << value[0].sort() << ")) " << sort.fun_codomain() << " ";
-                            output_string << value[1] << ")" << std::endl;
-                        }
-                        else
-                        {
-                            output_string << ") " << sort << " " << bitwuzla_solver->get_value(term) << ")" << std::endl;
-                        }
-                    }
-                    output_string << ")" << std::endl;
-                }
-                // log_info("solver", "\ninput: \n{}\n\noutput:{}\n", input, output_string.str());
-                return OK({false, output_string.str()});
+                return OK({false, output});
 #else
                 return ERR("Bitwuzla Library not linked!");
 #endif
