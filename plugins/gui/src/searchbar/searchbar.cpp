@@ -2,7 +2,7 @@
 
 #include "gui/gui_utils/graphics.h"
 #include "gui/label_button/label_button.h"
-#include "gui/src/searchoptions_dialog/searchoptions_dialog.h"
+#include "gui/searchbar/searchoptions_dialog.h"
 
 #include <QHBoxLayout>
 #include <QIcon>

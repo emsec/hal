@@ -1,4 +1,4 @@
-#include "gui/src/searchoptions_dialog/searchoptions_dialog.h"
+#include "gui/searchbar/searchoptions_dialog.h"
 
 namespace hal
 {

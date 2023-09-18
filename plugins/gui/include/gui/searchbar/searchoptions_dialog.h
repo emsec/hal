@@ -14,7 +14,7 @@ namespace hal
          *
          * @param parent - The parent widget.
          */
-        explicit SearchOptionsDialog(QWidget *parent = nullptr);
+        SearchOptionsDialog(QWidget *parent = nullptr);
 
     private:
         QGridLayout* mLayout;
