@@ -525,11 +525,17 @@ namespace hal
     {
         Q_UNUSED(pev);
         Q_UNUSED(pgid);
-        if ((int)m->get_id() == mModuleId)
-        {
-            if (!mIgnoreEventsFlag)
-                setModule(m);
-        }
+        if ((int)m->get_id() != mModuleId) return;
+
+        if (!mIgnoreEventsFlag)
+            setModule(m);
+
+        PortTreeItem* pti = nullptr;
+
+        if (pev < PinEvent::PinCreate)
+            pti = dynamic_cast<PortTreeItem*>(mIdToGroupItem.value(pgid));
+        else
+            pti = dynamic_cast<PortTreeItem*>(mIdToPinItem.value(pgid));
     }
 
     void ModulePinsTreeModel::dndGroupOnGroup(BaseTreeItem *droppedGroup, BaseTreeItem *onDroppedGroup)

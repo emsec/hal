@@ -62,12 +62,14 @@ namespace hal
         GroupReorder,
         GroupRename,
         GroupTypeChange,
+        GroupDirChange,
         GroupPinAssign,
         GroupDelete,
         PinCreate,
         PinReorder,
         PinRename,
         PinTypeChange,
+        PinDirChange,
         PinDelete
     };
 }    // namespace hal
