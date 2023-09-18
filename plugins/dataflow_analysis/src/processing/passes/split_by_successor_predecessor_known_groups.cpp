@@ -54,10 +54,7 @@ namespace hal
                                 }
                             }
 
-                            if (!characteristics_of_gate.empty())
-                            {
-                                characteristics_map[characteristics_of_gate].insert(gate);
-                            }
+                            characteristics_map[characteristics_of_gate].insert(gate);
                         }
 
                         /* merge gates */

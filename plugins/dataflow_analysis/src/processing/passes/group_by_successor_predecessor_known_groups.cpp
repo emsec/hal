@@ -35,10 +35,7 @@ namespace hal
                         characteristics_of_group.insert(predecessing_known_group.begin(), predecessing_known_group.end());
                     }
 
-                    if (!characteristics_of_group.empty())
-                    {
-                        characteristics_map[characteristics_of_group].push_back(group_id);
-                    }
+                    characteristics_map[characteristics_of_group].push_back(group_id);
                 }
 
                 /* check if merge is allowed */
