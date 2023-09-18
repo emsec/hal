@@ -2,6 +2,7 @@
 
 #include "gui/gui_utils/graphics.h"
 #include "gui/label_button/label_button.h"
+#include "gui/src/searchoptions_dialog/searchoptions_dialog.h"
 
 #include <QHBoxLayout>
 #include <QIcon>
@@ -35,7 +36,7 @@ namespace hal
         //Placeholder icons get better ones
         mDownButton->setIcon(QIcon(":/icons/arrow-down"));
         mUpButton->setIcon(QIcon(":/icons/arrow-up"));
-        mExactMatchButton->setIcon(QIcon(":/icons/menu"));
+        mExactMatchButton->setIcon(QIcon(":/icons/settings"));
 
         mSearchIconLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
         mLineEdit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -43,17 +44,17 @@ namespace hal
         mLayout->addWidget(mSearchIconLabel);
         mLayout->addWidget(mLineEdit);
 
-        mExactMatchButton->setText("==");
+        //mExactMatchButton->setText("==");
         mExactMatchButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
         mExactMatchButton->setCheckable(true);
-        mExactMatchButton->setToolTip("Exact Match");
+        mExactMatchButton->setToolTip("Search Options");
         mLayout->addWidget(mExactMatchButton);
 
-        mCaseSensitiveButton->setText("Aa");
+        /*mCaseSensitiveButton->setText("Aa");
         mCaseSensitiveButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
         mCaseSensitiveButton->setCheckable(true);
         mCaseSensitiveButton->setToolTip("Case Sensitive");
-        mLayout->addWidget(mCaseSensitiveButton);
+        mLayout->addWidget(mCaseSensitiveButton);*/
 
         mClearButton->setIcon(gui_utility::getStyledSvgIcon(mClearIconStyle, mClearIcon));
         mClearButton->setIconSize(QSize(10, 10));
@@ -67,8 +68,10 @@ namespace hal
         connect(mLineEdit, &QLineEdit::textEdited, this, &Searchbar::emitTextEdited);
         connect(mLineEdit, &QLineEdit::returnPressed, this, &Searchbar::handleReturnPressed);
         connect(mCaseSensitiveButton, &QToolButton::clicked, this, &Searchbar::emitTextEdited);
-        connect(mExactMatchButton, &QToolButton::clicked, this, &Searchbar::emitTextEdited);
+        //connect(mExactMatchButton, &QToolButton::clicked, this, &Searchbar::emitTextEdited);
         connect(mClearButton, &QToolButton::clicked, this, &Searchbar::handleClearClicked);
+
+        connect(mExactMatchButton, &QToolButton::clicked, this, &Searchbar::handleSearchOptionsDialog);
 
         setFocusProxy(mLineEdit);
     }
@@ -268,5 +271,12 @@ namespace hal
     bool Searchbar::filterApplied()
     {
         return !getCurrentText().isEmpty() || exactMatchChecked() || caseSensitiveChecked();
+    }
+
+    void Searchbar::handleSearchOptionsDialog()
+    {
+        SearchOptionsDialog sd;
+        qInfo() << "opened";
+        sd.exec();
     }
 }

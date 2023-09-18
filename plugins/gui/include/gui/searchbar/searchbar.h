@@ -193,6 +193,8 @@ namespace hal
          */
         void handleClearClicked();
 
+        void handleSearchOptionsDialog();
+
     private:
         QHBoxLayout* mLayout;
 
