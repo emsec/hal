@@ -245,7 +245,7 @@ int main(int argc, char *argv[]) {
         replaced_e      = replaced_e.substitute(from_vec, to_vec);
 
         // translate expression into a c program
-        auto directory_res = utils::get_unique_temp_directory("boolean_influence/");
+        auto directory_res = utils::get_unique_temp_directory("boolean_influence_");
         if (directory_res.is_error())
         {
             return ERR_APPEND(directory_res.get_error(), "unable to generate Boolean influence: could not create temporary directory");
