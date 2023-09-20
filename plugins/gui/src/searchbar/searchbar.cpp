@@ -276,7 +276,6 @@ namespace hal
     void Searchbar::handleSearchOptionsDialog()
     {
         SearchOptionsDialog sd;
-        qInfo() << "opened";
         sd.exec();
     }
 }
