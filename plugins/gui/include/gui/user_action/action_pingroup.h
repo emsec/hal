@@ -46,7 +46,7 @@ namespace hal
         static bool useExistingPin(Type tp);
     };
 
-    int pinGroupIndex(const Module* mod, const PinGroup<Module>* pgrp);
+    int pinGroupIndex(const Module* mod, const PinGroup<ModulePin>* pgrp);
 
     /**
      * @ingroup user_action

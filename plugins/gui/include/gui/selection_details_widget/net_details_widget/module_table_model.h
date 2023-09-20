@@ -26,6 +26,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 
 #include <QAbstractTableModel>
 #include <QList>
@@ -154,7 +155,7 @@ public:
     /** @name Event Handler Functions
      */
     ///@{
-    void handleModulePortsChanged(Module* m);
+    void handleModulePortsChanged(Module* m, PinEvent pev, u32 pgid);
     void handleModuleRemoved(Module* m);
     ///@}
 

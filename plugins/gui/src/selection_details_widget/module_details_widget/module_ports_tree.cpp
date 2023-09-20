@@ -140,7 +140,7 @@ namespace hal
             });
         }
 
-        if (clickedItem->type() == PortTreeItem::Group)    //group specific context, own helper function? (returns at the end)
+        if (clickedItem->itemType() == PortTreeItem::Group)    //group specific context, own helper function? (returns at the end)
         {
             menu.addAction("Change name", [name, modId, itemId]() {
                 InputDialog ipd("Change pin group name", "New group name", name);
@@ -244,7 +244,7 @@ namespace hal
             appendMultiSelectionEntries(menu, modId);
 
         menu.addSection("Python");
-        if(clickedItem->type()==PortTreeItem::Pin)
+        if(clickedItem->itemType()==PortTreeItem::Pin)
             menu.addAction(QIcon(":/icons/python"), "Get pin", [modId, itemId]() { QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinById(modId, itemId)); });
         else
             menu.addAction(QIcon(":/icons/python"), "Get group", [modId, itemId]() { QApplication::clipboard()->setText(PyCodeProvider::pyCodeModulePinGroup(modId, itemId)); });
@@ -297,7 +297,7 @@ namespace hal
         for (auto index : selectionModel()->selectedRows())
         {
             PortTreeItem* item =  static_cast<PortTreeItem*>(mPortModel->getItemFromIndex(index));
-            if (item->type() == PortTreeItem::Pin)
+            if (item->itemType() == PortTreeItem::Pin)
             {
                 if (!alreadyProcessedPins.contains(item))
                 {
@@ -305,7 +305,7 @@ namespace hal
                     alreadyProcessedPins.insert(item);
                 }
             }
-            else if (item->type() == PortTreeItem::Group)
+            else if (item->itemType() == PortTreeItem::Group)
             {
                 onlyPins = false;
                 for (auto pinItem : item->getChildren())

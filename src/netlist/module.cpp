@@ -1357,6 +1357,8 @@ namespace hal
 
     bool Module::assign_pin_to_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups)
     {
+        u32 pin_group_id_to_delete = 0;
+
         if (pin_group == nullptr)
         {
             log_warning("module", "could not assign pin to pin group of module '{}' with ID {}: pin group is a 'nullptr'", m_name, m_id);
@@ -1397,6 +1399,7 @@ namespace hal
 
             if (delete_empty_groups && pg->empty())
             {
+                pin_group_id_to_delete = pin_group->get_id();
                 if (!delete_pin_group_internal(pg))
                 {
                     log_warning("module",
@@ -1414,7 +1417,9 @@ namespace hal
             return false;
         }
 
-        m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::GroupPinAssign,pin_group->get_id()));
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::PinAssignToGroup,pin->get_id()));
+        if (pin_group_id_to_delete)
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::GroupDelete,pin_group_id_to_delete));
         return true;;
     }
 
@@ -1558,6 +1563,7 @@ namespace hal
 
     bool Module::remove_pin_net(Net* net)
     {
+        u32 pin_group_id_to_delete = 0;
         auto pin = get_pin_by_net(net);
         if (pin == nullptr)
         {
@@ -1576,6 +1582,7 @@ namespace hal
 
         if (pin_group->empty())
         {
+            pin_group_id_to_delete = pin_group->get_id();
             if (!delete_pin_group_internal(pin_group))
             {
                 log_warning("module", "could not remove pin '{}' with ID {} from net '{}' with ID {}: failed to delete pin group '{}' with ID {}", pin->get_name(), pin->get_id(), net->get_name(), net->get_id(), pin_group->get_name(), pin_group->get_id());
@@ -1587,11 +1594,14 @@ namespace hal
 
         if (!delete_pin_internal(pin))
         {
+
             log_warning("module", "could not remove pin '{}' with ID {} from net '{}' with ID {}: failed to delete pin '{}' with ID {}", pin->get_name(), pin->get_id(), net->get_name(), net->get_id(), pin->get_name(), pin->get_id());
             return false;
         }
 
         m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::PinDelete,pin_id_to_delete));
+        if (pin_group_id_to_delete)
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::GroupDelete,pin_group_id_to_delete));
         return true;
     }
 
