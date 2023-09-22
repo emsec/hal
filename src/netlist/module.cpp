@@ -1272,6 +1272,7 @@ namespace hal
 
     bool Module::delete_pin_group(PinGroup<ModulePin>* pin_group)
     {
+        std::vector<u32> distribute_events;
         if (pin_group == nullptr)
         {
             log_warning("module", "could not delete pin group from module '{}' with ID {}: pin group is a 'nullptr'", m_name, m_id);
@@ -1286,16 +1287,16 @@ namespace hal
             return false;
         }
 
-        bool removed_pins = false;
-
         std::vector<ModulePin*> pins_copy = pin_group->get_pins();
         for (ModulePin* pin : pins_copy)
         {
-            removed_pins = true;
-            if (auto res = create_pin_group(pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), true, 0, false); res.is_error())
+            auto res = create_pin_group(pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), true, 0, false);
+            if (res.is_error())
             {
                 return false;
             }
+            distribute_events.push_back(pinevent_associated_data(PinEvent::GroupCreate,res.get()->get_id()));
+            distribute_events.push_back(pinevent_associated_data(PinEvent::PinAssignToGroup,pin->get_id()));
         }
 
         u32 pin_group_id_to_delete = pin_group->get_id();
@@ -1305,10 +1306,9 @@ namespace hal
             return false;
         }
 
-        if (removed_pins)
-        {
-            m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::GroupDelete,pin_group_id_to_delete));
-        }
+        for (u32 dist_ev : distribute_events)
+            m_event_handler->notify(ModuleEvent::event::pin_changed, this, dist_ev);
+        m_event_handler->notify(ModuleEvent::event::pin_changed, this, pinevent_associated_data(PinEvent::GroupDelete,pin_group_id_to_delete));
         return true;
     }
 
@@ -1399,7 +1399,7 @@ namespace hal
 
             if (delete_empty_groups && pg->empty())
             {
-                pin_group_id_to_delete = pin_group->get_id();
+                pin_group_id_to_delete = pg->get_id();
                 if (!delete_pin_group_internal(pg))
                 {
                     log_warning("module",

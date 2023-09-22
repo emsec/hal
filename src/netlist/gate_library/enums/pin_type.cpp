@@ -19,4 +19,22 @@ namespace hal
                                                                  {PinType::select, "select"},
                                                                  {PinType::carry, "carry"},
                                                                  {PinType::sum, "sum"}};
+
+    template<>
+    std::map<PinEvent, std::string> EnumStrings<PinEvent>::data = {
+        {PinEvent::unknown, "unknown"},
+        {PinEvent::GroupCreate, "GroupCreate"},
+        {PinEvent::GroupReorder, "GroupReorder"},
+        {PinEvent::GroupRename, "GroupRename"},
+        {PinEvent::GroupTypeChange, "GroupTypeChange"},
+        {PinEvent::GroupDirChange, "GroupDirChange"},
+        {PinEvent::GroupDelete, "GroupDelete"},
+        {PinEvent::PinCreate, "PinCreate"},
+        {PinEvent::PinReorder, "PinReorder"},
+        {PinEvent::PinAssignToGroup, "PinAssignToGroup"},
+        {PinEvent::PinRename, "PinRename"},
+        {PinEvent::PinTypeChange, "PinTypeChange"},
+        {PinEvent::PinDirChange, "PinDirChange"},
+        {PinEvent::PinDelete, "PinDelete"}
+    };
 }

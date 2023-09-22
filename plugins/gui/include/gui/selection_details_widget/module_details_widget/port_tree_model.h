@@ -50,8 +50,6 @@ namespace hal
             PinType mPinType;
             QString mNetName;
 
-            void setPinType(const QString& type);
-            void setPinDirection(const QString& dir);
         public:
 
             PortTreeItem(Type itype, QString pinName, PinDirection dir, PinType ptype, QString netName = QString());

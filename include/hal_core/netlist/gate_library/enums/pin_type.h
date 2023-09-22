@@ -72,4 +72,7 @@ namespace hal
         PinDirChange,
         PinDelete
     };
+
+    template<>
+    std::map<PinEvent, std::string> EnumStrings<PinEvent>::data;
 }    // namespace hal
