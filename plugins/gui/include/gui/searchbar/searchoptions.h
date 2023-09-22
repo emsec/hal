@@ -25,7 +25,7 @@
 
 #pragma once
 #include <QList>
-#include "searchoptions_dialog.h"
+//#include "searchoptions_dialog.h"
 
 namespace hal
 {

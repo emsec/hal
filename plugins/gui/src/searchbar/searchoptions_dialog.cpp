@@ -5,6 +5,7 @@ namespace hal
     SearchOptionsDialog::SearchOptionsDialog(QWidget* parent): QDialog(parent)
     {
         setWindowTitle("Search");
+        searchProxy = new SearchProxyModel();
         mLayout = new QGridLayout(this);
 
         mInputBox = new QComboBox();
