@@ -24,46 +24,19 @@
 // SOFTWARE.
 
 #pragma once
-
-#include "gui/searchbar/search_proxy_model.h"
-#include <QDialog>
-#include <QGridLayout>
-#include <QComboBox>
-#include <QCheckBox>
-#include <QLabel>
-#include <QPushButton>
+#include "qsortfilterproxymodel.h"
+#include "gui/searchbar/searchoptions.h"
 
 namespace hal
 {
-    class SearchOptionsDialog : public QDialog
+    class SearchProxyModel : public QSortFilterProxyModel
     {
-        Q_OBJECT
     public:
-        /**
-         * Constructor. Initializes the Dialog.
-         *
-         * @param parent - The parent widget.
-         */
-        SearchOptionsDialog(QWidget *parent = nullptr);
+        SearchProxyModel();
 
-        void startSearch(QString text, int options);
-
-    public Q_SLOTS:
-        void optionsChanged();
-
+        void updateProxy(int options, QString text);
     private:
-        SearchProxyModel* searchProxy;
-        QString searchText;
-
-        QGridLayout* mLayout;
-        QComboBox* mInputBox;
-        QComboBox* mColumnBox;
-        QCheckBox* mIncrementalSearchBox;
-        QCheckBox* mExactMatchBox;
-        QCheckBox* mCaseSensitiveBox;
-        QCheckBox* mRegExBox;
-        QLabel* mColumnLabel;
-        QPushButton* mSearchBtn;
-        QPushButton* mCloseBtn;
+        SearchOptions opts;
     };
 }
+

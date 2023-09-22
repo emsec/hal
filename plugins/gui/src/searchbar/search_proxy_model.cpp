@@ -7,8 +7,8 @@ namespace hal {
 
     }
 
-    void SearchProxyModel::updateProxy(bool exactMatch, bool caseSensitive, bool regEx, QList<int> columns)
+    void SearchProxyModel::updateProxy(int options, QString text)
     {
-        opts.setOptions(exactMatch, caseSensitive, regEx, columns);
+        //opts.setOptions(exactMatch, caseSensitive, regEx, columns);
     }
 }

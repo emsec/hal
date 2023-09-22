@@ -25,7 +25,9 @@ namespace hal
         mSearchBtn = new QPushButton("Search");
         mCloseBtn = new QPushButton("Close");
 
-        mLayout->addWidget(mInputBox, 0, 0, 0, 3);
+        searchText = mInputBox->currentText();
+
+        mLayout->addWidget(mInputBox, 0, 0, 0, 3, Qt::AlignTop);
         mLayout->addWidget(mIncrementalSearchBox, 1, 0);
         mLayout->addWidget(mExactMatchBox, 2, 0);
         mLayout->addWidget(mCaseSensitiveBox, 3, 0);
@@ -51,6 +53,6 @@ namespace hal
 
     void SearchOptionsDialog::optionsChanged()
     {
-        searchProxy->updateProxy(mExactMatchBox->isChecked(), mCaseSensitiveBox->isChecked(), mRegExBox->isChecked(), {});
+       // searchProxy->updateProxy(mExactMatchBox->isChecked(), mCaseSensitiveBox->isChecked(), mRegExBox->isChecked(), {}, searchText);
     }
 }

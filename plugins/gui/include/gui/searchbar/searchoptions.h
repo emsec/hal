@@ -35,6 +35,7 @@ namespace hal
         SearchOptions(bool exactMatchCmb, bool caseSensitiveCmb, bool regExCmb, QList<int> cols);
 
         void setOptions(bool exactMatch, bool caseSensitive, bool regEx, QList<int> columns);
+        int toInt() const;
     private:
         bool mExactMatch;
         bool mCaseSensitive;
