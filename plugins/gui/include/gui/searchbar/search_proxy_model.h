@@ -31,9 +31,12 @@ namespace hal
 {
     class SearchProxyModel : public QSortFilterProxyModel
     {
+        Q_OBJECT
+
     public:
         SearchProxyModel();
 
+    public Q_SLOTS:
         void startSearch(QString text, int options);
     private:
         SearchOptions* opts;

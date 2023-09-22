@@ -7,6 +7,7 @@ namespace hal
     {
         setWindowTitle("Search");
         searchProxy = new SearchProxyModel();
+        //TODO fix layout size to prevent overlapping
         mLayout = new QGridLayout(this);
 
         mInputBox = new QComboBox();
@@ -40,8 +41,9 @@ namespace hal
 
         connect(mCloseBtn, &QPushButton::clicked, this, &SearchOptionsDialog::close);
 
+        //TODO get corresponding proxy
         connect(mSearchBtn, &QPushButton::clicked, this, &SearchOptionsDialog::emitStartSearch);
-        //connect(this, &SearchOptionsDialog::emitStartSearch, searchProxy, &SearchProxyModel::startSearch);
+        connect(this, SIGNAL(emitOptions(QString, int)), searchProxy, SLOT(startSearch(QString, int)));
 
         connect(mIncrementalSearchBox, &QCheckBox::stateChanged, this, &SearchOptionsDialog::optionsChanged);
         connect(mExactMatchBox, &QCheckBox::stateChanged, this, &SearchOptionsDialog::optionsChanged);
@@ -53,10 +55,7 @@ namespace hal
     void SearchOptionsDialog::emitStartSearch()
     {
         qInfo() << "emitstartSearch";
-        /*TODO
-        replace searchProxy
-        */
-        searchProxy->startSearch(searchText, SearchOptions::toInt(mExactMatchBox->isChecked(), mCaseSensitiveBox->isChecked(), mRegExBox->isChecked(), {}));
+        Q_EMIT emitOptions(searchText, SearchOptions::toInt(mExactMatchBox->isChecked(), mCaseSensitiveBox->isChecked(), mRegExBox->isChecked(), {}));
     }
 
     void SearchOptionsDialog::optionsChanged()

@@ -12,4 +12,5 @@ namespace hal {
         opts = new SearchOptions(options);
         qInfo() << "startSearch emitted";
     }
+
 }
