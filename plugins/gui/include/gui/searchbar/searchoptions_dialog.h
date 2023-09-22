@@ -46,10 +46,12 @@ namespace hal
          */
         SearchOptionsDialog(QWidget *parent = nullptr);
 
+    Q_SIGNALS:
         void startSearch(QString text, int options);
 
     public Q_SLOTS:
         void optionsChanged();
+        void emitStartSearch();
 
     private:
         SearchProxyModel* searchProxy;

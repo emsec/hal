@@ -25,17 +25,18 @@
 
 #pragma once
 #include <QList>
-//#include "searchoptions_dialog.h"
 
 namespace hal
 {
     class SearchOptions
     {
     public:
-        SearchOptions(bool exactMatchCmb, bool caseSensitiveCmb, bool regExCmb, QList<int> cols);
+        SearchOptions();
+        SearchOptions(int code);
 
         void setOptions(bool exactMatch, bool caseSensitive, bool regEx, QList<int> columns);
         int toInt() const;
+        static int toInt(bool exactMatch, bool caseSensitive, bool regEx, QList<int> columns);
     private:
         bool mExactMatch;
         bool mCaseSensitive;

@@ -1,4 +1,5 @@
 #include "gui/searchbar/searchoptions_dialog.h"
+#include <QDebug>
 
 namespace hal
 {
@@ -39,6 +40,9 @@ namespace hal
 
         connect(mCloseBtn, &QPushButton::clicked, this, &SearchOptionsDialog::close);
 
+        connect(mSearchBtn, &QPushButton::clicked, this, &SearchOptionsDialog::emitStartSearch);
+        //connect(this, &SearchOptionsDialog::emitStartSearch, searchProxy, &SearchProxyModel::startSearch);
+
         connect(mIncrementalSearchBox, &QCheckBox::stateChanged, this, &SearchOptionsDialog::optionsChanged);
         connect(mExactMatchBox, &QCheckBox::stateChanged, this, &SearchOptionsDialog::optionsChanged);
         connect(mCaseSensitiveBox, &QCheckBox::stateChanged, this, &SearchOptionsDialog::optionsChanged);
@@ -46,13 +50,18 @@ namespace hal
 
     }
 
-    void SearchOptionsDialog::startSearch(QString text, int options)
+    void SearchOptionsDialog::emitStartSearch()
     {
-
+        qInfo() << "emitstartSearch";
+        /*TODO
+        replace searchProxy
+        */
+        searchProxy->startSearch(searchText, SearchOptions::toInt(mExactMatchBox->isChecked(), mCaseSensitiveBox->isChecked(), mRegExBox->isChecked(), {}));
     }
 
     void SearchOptionsDialog::optionsChanged()
     {
-       // searchProxy->updateProxy(mExactMatchBox->isChecked(), mCaseSensitiveBox->isChecked(), mRegExBox->isChecked(), {}, searchText);
+       // searchProxy->startSearch(12, "");
+       //searchProxy->updateProxy(mExactMatchBox->isChecked(), mCaseSensitiveBox->isChecked(), mRegExBox->isChecked(), {}, searchText);
     }
 }

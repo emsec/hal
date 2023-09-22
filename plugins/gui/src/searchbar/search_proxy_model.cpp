@@ -1,14 +1,15 @@
 #include "gui/searchbar/search_proxy_model.h"
+#include <QDebug>
 
 namespace hal {
     SearchProxyModel::SearchProxyModel()
-        : opts(false, false, false, {})
     {
-
+        opts = new SearchOptions();
     }
 
-    void SearchProxyModel::updateProxy(int options, QString text)
+    void SearchProxyModel::startSearch(QString text, int options)
     {
-        //opts.setOptions(exactMatch, caseSensitive, regEx, columns);
+        opts = new SearchOptions(options);
+        qInfo() << "startSearch emitted";
     }
 }

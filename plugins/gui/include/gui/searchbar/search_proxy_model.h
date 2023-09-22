@@ -34,9 +34,9 @@ namespace hal
     public:
         SearchProxyModel();
 
-        void updateProxy(int options, QString text);
+        void startSearch(QString text, int options);
     private:
-        SearchOptions opts;
+        SearchOptions* opts;
     };
 }
 
