@@ -45,11 +45,13 @@ namespace hal
          * @param parent - The parent widget.
          */
         SearchOptionsDialog(QWidget *parent = nullptr);
+        void emitOptions();
 
     Q_SIGNALS:
         void emitOptions(QString text, int options);
 
     public Q_SLOTS:
+        void textEdited(QString);
         void optionsChanged();
         void emitStartSearch();
 
@@ -67,5 +69,6 @@ namespace hal
         QLabel* mColumnLabel;
         QPushButton* mSearchBtn;
         QPushButton* mCloseBtn;
+
     };
 }

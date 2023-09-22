@@ -10,7 +10,7 @@ namespace hal {
     void SearchProxyModel::startSearch(QString text, int options)
     {
         opts = new SearchOptions(options);
-        qInfo() << "startSearch emitted";
+        qInfo() << "Proxy received searchOptions";
     }
 
 }

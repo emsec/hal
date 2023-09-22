@@ -9,7 +9,7 @@ namespace hal
         searchProxy = new SearchProxyModel();
         //TODO fix layout size to prevent overlapping
         mLayout = new QGridLayout(this);
-
+        mLayout->setRowMinimumHeight(0,35);
         mInputBox = new QComboBox();
         mInputBox->setEditable(true);
 
@@ -27,7 +27,7 @@ namespace hal
         mSearchBtn = new QPushButton("Search");
         mCloseBtn = new QPushButton("Close");
 
-        searchText = mInputBox->currentText();
+        QString searchString;
 
         mLayout->addWidget(mInputBox, 0, 0, 0, 3, Qt::AlignTop);
         mLayout->addWidget(mIncrementalSearchBox, 1, 0);
@@ -42,6 +42,7 @@ namespace hal
         connect(mCloseBtn, &QPushButton::clicked, this, &SearchOptionsDialog::close);
 
         //TODO get corresponding proxy
+        connect(mInputBox, &QComboBox::currentTextChanged, this, &SearchOptionsDialog::textEdited);
         connect(mSearchBtn, &QPushButton::clicked, this, &SearchOptionsDialog::emitStartSearch);
         connect(this, SIGNAL(emitOptions(QString, int)), searchProxy, SLOT(startSearch(QString, int)));
 
@@ -52,15 +53,30 @@ namespace hal
 
     }
 
+    void SearchOptionsDialog::textEdited(QString text)
+    {
+        //check if incremental search is enabled and start and min 3 symbols
+        if(mIncrementalSearchBox->isChecked() && text.length() >= 3){
+            emitOptions();
+        }
+    }
+
     void SearchOptionsDialog::emitStartSearch()
     {
-        qInfo() << "emitstartSearch";
-        Q_EMIT emitOptions(searchText, SearchOptions::toInt(mExactMatchBox->isChecked(), mCaseSensitiveBox->isChecked(), mRegExBox->isChecked(), {}));
+        emitOptions();
     }
 
     void SearchOptionsDialog::optionsChanged()
     {
        // searchProxy->startSearch(12, "");
        //searchProxy->updateProxy(mExactMatchBox->isChecked(), mCaseSensitiveBox->isChecked(), mRegExBox->isChecked(), {}, searchText);
+    }
+
+    void SearchOptionsDialog::emitOptions(){
+        searchText = mInputBox->currentText();
+        int options = SearchOptions::toInt(mExactMatchBox->isChecked(), mCaseSensitiveBox->isChecked(), mRegExBox->isChecked(), {});
+        qInfo() << "Emit search with string: " << searchText << " and options: " << options;
+
+        Q_EMIT emitOptions(searchText, options);
     }
 }
