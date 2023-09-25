@@ -79,4 +79,12 @@ namespace hal
 
         Q_EMIT emitOptions(searchText, options);
     }
+
+    SearchOptions SearchOptionsDialog::getOptions() const
+    {
+        SearchOptions retval;
+        //  TODO :: retval.setOptions()
+        return retval;
+    }
+
 }

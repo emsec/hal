@@ -65,7 +65,11 @@ namespace hal {
         addAction(mToggleSearchbar);
 
         connect(mTabWidget, &QTabWidget::currentChanged, this, &GroupingDialog::handleCurrentTabChanged);
-        connect(mSearchbar, &Searchbar::textEdited, this, &GroupingDialog::filter);
+
+        // connect(mSearchbar, &Searchbar::textEdited, this, &GroupingDialog::filter);
+
+        // TODO: change parameter in filter() method
+        // connect(mSearchbar, &Searchbar::triggerNewSearch, this, &GroupingDialog::filter);
         connect(mToggleSearchbar, &QAction::triggered, this, &GroupingDialog::handleToggleSearchbar);
         connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
@@ -92,7 +96,7 @@ namespace hal {
         }
     }
 
-    void GroupingDialog::filter(const QString& text)
+    void GroupingDialog::filter(const QString& text) // TODO : add int parameter search options
     {
         static_cast<GroupingProxyModel*>(mGroupingTableView->model())->setFilterRegularExpression(text);
         if (mLastUsed)

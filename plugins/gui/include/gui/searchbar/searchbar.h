@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "gui/searchbar/searchoptions.h"
 #include <QFrame>
 
 class QLabel;
@@ -161,13 +162,25 @@ namespace hal
         bool eventFilter(QObject *object, QEvent *event);
 
     Q_SIGNALS:
-        /**
-         * Q_SIGNAL that is emitted whenever the search string (i.e. the string withing the Searchbar's QLineEdit)
+        /** TODO : remove textEdited signal
+         * textEdited should be handled internally
+         * If incremental search is switched off a new search will be issued if user presses Enter or clicks "Search" in Dialog
+         * If incremental search is switched on a new search will be issued if search text has sufficient length
+         *
+         *
+         *
          * has been changed.
          *
-         * @param text - The new search string
+         * @param text
          */
         void textEdited(const QString& text);
+
+        /**
+         * Q_SIGNAL that is emitted whenever the Proxy should be updated or a new search should be issued
+         * @param text - The new search string
+         * @param searchOptions - Search options encoded as int (use  SearchOptions(int) constructor to get settings)
+         */
+        void triggerNewSearch(const QString& text, int searchOptions);
 
         /**
          * Q_SIGNAL that is emitted whenever the Return/Enter key has been pressed.
@@ -179,9 +192,9 @@ namespace hal
 
     public Q_SLOTS:
         /**
-         * Emits textEdited with respect to mEmitTextWithFlags.
+         * Handle textEdited signal, might emit triggerNewSearch with respect to mEmitTextWithFlags.
          */
-        void emitTextEdited();
+        void handleTextEdited();
 
         /**
          * Handles Return/Enter key pressed. Emits the signal returnPressed.
@@ -220,5 +233,7 @@ namespace hal
         // One can decide wether to receive the text (emitted by textEdited) with or without regex modifier
         // If set to false, one has to manually implement 'Exact Match'/'Case Sensitive' functionality
         bool mEmitTextWithFlags = true;
+
+        SearchOptions mCurrentOptions;
     };
 }

@@ -65,9 +65,9 @@ namespace hal
 
         setFrameStyle(QFrame::NoFrame);
 
-        connect(mLineEdit, &QLineEdit::textEdited, this, &Searchbar::emitTextEdited);
+        connect(mLineEdit, &QLineEdit::textEdited, this, &Searchbar::handleTextEdited);
         connect(mLineEdit, &QLineEdit::returnPressed, this, &Searchbar::handleReturnPressed);
-        connect(mCaseSensitiveButton, &QToolButton::clicked, this, &Searchbar::emitTextEdited);
+        connect(mCaseSensitiveButton, &QToolButton::clicked, this, &Searchbar::handleTextEdited);
         //connect(mExactMatchButton, &QToolButton::clicked, this, &Searchbar::emitTextEdited);
         connect(mClearButton, &QToolButton::clicked, this, &Searchbar::handleClearClicked);
 
@@ -164,7 +164,7 @@ namespace hal
     void Searchbar::clear()
     {
         mLineEdit->clear();
-        emitTextEdited();
+        handleTextEdited(); // TODO : check use cases . Must reset proxy filter when search string emptied.
     }
 
     void Searchbar::hideEvent(QHideEvent *)
@@ -174,8 +174,7 @@ namespace hal
 
     void Searchbar::showEvent(QShowEvent *)
     {
-        if (!mLineEdit->text().isEmpty())
-            emitTextEdited();
+        // ???
     }
 
     QString Searchbar::getCurrentText()
@@ -219,15 +218,21 @@ namespace hal
         s->polish(mLineEdit);
     }
 
-    void Searchbar::emitTextEdited()
+    void Searchbar::handleTextEdited()
     {
         repolish();
-        Q_EMIT textEdited(mEmitTextWithFlags ? getCurrentTextWithFlags() : getCurrentText());
+        // TODO : emit only if incremental search switched on and minimum number of characters entered in search field
+
+        // TODO : should emit triggerNewSearch()
+        // Q_EMIT textEdited(mEmitTextWithFlags ? getCurrentTextWithFlags() : getCurrentText());
     }
 
     void Searchbar::handleReturnPressed()
     {
-        Q_EMIT returnPressed();
+        // Q_EMIT returnPressed();
+
+        // TODO : check if member variables present
+        Q_EMIT triggerNewSearch(mLineEdit->text(), mCurrentOptions.toInt());
     }
 
     void Searchbar::handleClearClicked()
@@ -276,6 +281,12 @@ namespace hal
     void Searchbar::handleSearchOptionsDialog()
     {
         SearchOptionsDialog sd;
-        sd.exec();
+        if (sd.exec() == QDialog::Accepted)
+        {
+            mCurrentOptions = sd.getOptions();
+
+            QString txt ; // TODO : get modified text from sd
+            Q_EMIT triggerNewSearch(txt,mCurrentOptions.toInt());
+        }
     }
 }
