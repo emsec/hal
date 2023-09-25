@@ -32,6 +32,7 @@
 #include <QCheckBox>
 #include <QLabel>
 #include <QPushButton>
+#include <QLineEdit>
 
 namespace hal
 {
@@ -53,8 +54,6 @@ namespace hal
         void emitOptions(QString text, int options);
 
     public Q_SLOTS:
-        void textEdited(QString);
-        void optionsChanged();
         void emitStartSearch();
 
     private:
@@ -62,6 +61,7 @@ namespace hal
 
         QGridLayout* mLayout;
         QComboBox* mInputBox;
+        QLineEdit* mLineEdit;
         QComboBox* mColumnBox;
         QCheckBox* mIncrementalSearchBox;
         QCheckBox* mExactMatchBox;

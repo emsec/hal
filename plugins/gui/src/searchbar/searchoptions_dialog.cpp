@@ -12,6 +12,8 @@ namespace hal
         mInputBox = new QComboBox();
         mInputBox->setEditable(true);
 
+        mLineEdit = mInputBox->lineEdit();
+
         mIncrementalSearchBox = new QCheckBox("Incremental search");
         mExactMatchBox = new QCheckBox("Exact match");
         mCaseSensitiveBox = new QCheckBox("Case sensitive");
@@ -26,8 +28,6 @@ namespace hal
         mSearchBtn = new QPushButton("Search");
         mCloseBtn = new QPushButton("Close");
 
-        QString searchString;
-
         mLayout->addWidget(mInputBox, 0, 0, 0, 3, Qt::AlignTop);
         mLayout->addWidget(mIncrementalSearchBox, 1, 0);
         mLayout->addWidget(mExactMatchBox, 2, 0);
@@ -40,36 +40,25 @@ namespace hal
 
         connect(mCloseBtn, &QPushButton::clicked, this, &SearchOptionsDialog::close);
 
-        //TODO add signal logic from searchbutton / enter pressed within mInputBox
-        connect(mInputBox, &QComboBox::currentTextChanged, this, &SearchOptionsDialog::textEdited);
+
         connect(mSearchBtn, &QPushButton::clicked, this, &SearchOptionsDialog::emitStartSearch);
-        //connect(this, SIGNAL(emitOptions(QString, int)), searchProxy, SLOT(startSearch(QString, int)));
 
-        connect(mIncrementalSearchBox, &QCheckBox::stateChanged, this, &SearchOptionsDialog::optionsChanged);
-        connect(mExactMatchBox, &QCheckBox::stateChanged, this, &SearchOptionsDialog::optionsChanged);
-        connect(mCaseSensitiveBox, &QCheckBox::stateChanged, this, &SearchOptionsDialog::optionsChanged);
-        connect(mRegExBox, &QCheckBox::stateChanged, this, &SearchOptionsDialog::optionsChanged);
+        //TODO maybe delete this because edit triggers also the mSearchBtn signal as if it was clicked. Currently the emit search is emited twice while pressing Enter
+        // discuss with Joern
+        connect(mLineEdit, &QLineEdit::returnPressed, this, &SearchOptionsDialog::emitStartSearch);
+
+
 
     }
 
-    void SearchOptionsDialog::textEdited(QString text)
-    {
-        //check if incremental search is enabled and start and min 3 symbols
-        if(mIncrementalSearchBox->isChecked() && text.length() >= 3){
-            emitOptions();
-        }
-    }
+
 
     void SearchOptionsDialog::emitStartSearch()
     {
+        qInfo() << "emitStartSearch from searchOptionsDialog";
         emitOptions();
     }
 
-    void SearchOptionsDialog::optionsChanged()
-    {
-       // searchProxy->startSearch(12, "");
-       //searchProxy->updateProxy(mExactMatchBox->isChecked(), mCaseSensitiveBox->isChecked(), mRegExBox->isChecked(), {}, searchText);
-    }
 
     void SearchOptionsDialog::emitOptions(){
         mSearchText = mInputBox->currentText();
