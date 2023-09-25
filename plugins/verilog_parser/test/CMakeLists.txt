@@ -3,7 +3,7 @@ if(BUILD_TESTS)
 
     add_executable(runTest-verilog_parser  verilog_parser.cpp)
 
-    target_link_libraries(runTest-verilog_parser  verilog_parser pthread gtest hal::core hal::netlist test_utils)
+    target_link_libraries(runTest-verilog_parser  verilog_parser gtest hal::core hal::netlist test_utils)
 
     add_test(runTest-verilog_parser ${CMAKE_BINARY_DIR}/bin/hal_plugins/runTest-verilog_parser --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 

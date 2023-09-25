@@ -21,13 +21,13 @@ add_executable(runTest-plugin_manager
         add_executable(runTest-result
         result.cpp)
 
-target_link_libraries(runTest-callback_hook   pthread  gtest hal::core hal::netlist test_utils)
-target_link_libraries(runTest-log   pthread  gtest hal::core hal::netlist test_utils)
-target_link_libraries(runTest-program_arguments   pthread  gtest hal::core hal::netlist test_utils)
-target_link_libraries(runTest-program_options   pthread  gtest hal::core hal::netlist test_utils)
-target_link_libraries(runTest-utils pthread   gtest hal::core hal::netlist test_utils)
-target_link_libraries(runTest-plugin_manager   pthread  gtest hal::core hal::netlist test_utils)
-target_link_libraries(runTest-result pthread   gtest hal::core hal::netlist test_utils)
+target_link_libraries(runTest-callback_hook   gtest hal::core hal::netlist test_utils)
+target_link_libraries(runTest-log   gtest hal::core hal::netlist test_utils)
+target_link_libraries(runTest-program_arguments   gtest hal::core hal::netlist test_utils)
+target_link_libraries(runTest-program_options   gtest hal::core hal::netlist test_utils)
+target_link_libraries(runTest-utils  gtest hal::core hal::netlist test_utils)
+target_link_libraries(runTest-plugin_manager   gtest hal::core hal::netlist test_utils)
+target_link_libraries(runTest-result  gtest hal::core hal::netlist test_utils)
 
 
 add_test(runTest-callback_hook_test ${CMAKE_BINARY_DIR}/bin/runTest-callback_hook --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
