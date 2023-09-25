@@ -6,7 +6,6 @@ namespace hal
     SearchOptionsDialog::SearchOptionsDialog(QWidget* parent): QDialog(parent)
     {
         setWindowTitle("Search");
-        searchProxy = new SearchProxyModel();
         //TODO fix layout size to prevent overlapping
         mLayout = new QGridLayout(this);
         mLayout->setRowMinimumHeight(0,35);
@@ -41,10 +40,10 @@ namespace hal
 
         connect(mCloseBtn, &QPushButton::clicked, this, &SearchOptionsDialog::close);
 
-        //TODO get corresponding proxy
+        //TODO add signal logic from searchbutton / enter pressed within mInputBox
         connect(mInputBox, &QComboBox::currentTextChanged, this, &SearchOptionsDialog::textEdited);
         connect(mSearchBtn, &QPushButton::clicked, this, &SearchOptionsDialog::emitStartSearch);
-        connect(this, SIGNAL(emitOptions(QString, int)), searchProxy, SLOT(startSearch(QString, int)));
+        //connect(this, SIGNAL(emitOptions(QString, int)), searchProxy, SLOT(startSearch(QString, int)));
 
         connect(mIncrementalSearchBox, &QCheckBox::stateChanged, this, &SearchOptionsDialog::optionsChanged);
         connect(mExactMatchBox, &QCheckBox::stateChanged, this, &SearchOptionsDialog::optionsChanged);
@@ -73,11 +72,11 @@ namespace hal
     }
 
     void SearchOptionsDialog::emitOptions(){
-        searchText = mInputBox->currentText();
+        mSearchText = mInputBox->currentText();
         int options = SearchOptions::toInt(mExactMatchBox->isChecked(), mCaseSensitiveBox->isChecked(), mRegExBox->isChecked(), {});
-        qInfo() << "Emit search with string: " << searchText << " and options: " << options;
+        qInfo() << "Emit search with string: " << mSearchText << " and options: " << options;
 
-        Q_EMIT emitOptions(searchText, options);
+        Q_EMIT emitOptions(mSearchText, options);
     }
 
     SearchOptions SearchOptionsDialog::getOptions() const
@@ -85,6 +84,11 @@ namespace hal
         SearchOptions retval;
         //  TODO :: retval.setOptions()
         return retval;
+    }
+
+    QString SearchOptionsDialog::getText() const
+    {
+        return mSearchText;
     }
 
 }

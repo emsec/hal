@@ -47,6 +47,7 @@ namespace hal
         SearchOptionsDialog(QWidget *parent = nullptr);
         void emitOptions();
         SearchOptions getOptions() const;
+        QString getText() const;
 
     Q_SIGNALS:
         void emitOptions(QString text, int options);
@@ -57,8 +58,7 @@ namespace hal
         void emitStartSearch();
 
     private:
-        SearchProxyModel* searchProxy;
-        QString searchText;
+        QString mSearchText;
 
         QGridLayout* mLayout;
         QComboBox* mInputBox;

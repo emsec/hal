@@ -285,7 +285,7 @@ namespace hal
         {
             mCurrentOptions = sd.getOptions();
 
-            QString txt ; // TODO : get modified text from sd
+            QString txt = sd.getText(); // TODO : get modified text from sd
             Q_EMIT triggerNewSearch(txt,mCurrentOptions.toInt());
         }
     }
