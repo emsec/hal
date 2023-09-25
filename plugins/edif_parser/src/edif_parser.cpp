@@ -1081,6 +1081,84 @@ namespace hal
             }
         }
 
+        // process instances i.e. gates or other cells
+        for (const auto& instance : cell->m_instances)
+        {
+            // will later hold either module or gate, so attributes can be assigned properly
+            DataContainer* container = nullptr;
+
+            // assign actual signal names to ports
+            std::unordered_map<std::string, std::string> instance_assignments;
+
+            // if the instance is another cell (i.e., not a gate type) of the same library, recursively instantiate it
+            if (const auto gate_type_it = m_gate_types.find(instance->m_cell->m_name); gate_type_it == m_gate_types.end())
+            {
+                // expand port assignments
+                for (const auto& port_assignment : instance->m_cell->m_internal_port_assignments)
+                {
+                    const auto& assignment = port_assignment.m_expanded_net_name;
+                    auto port_name         = port_assignment.m_port->m_name;
+                    if (port_assignment.m_index != -1)
+                    {
+                        port_name += "(" + std::to_string(port_assignment.m_index) + ")";
+                    }
+
+                    if (const auto alias_it = signal_alias.find(assignment); alias_it != signal_alias.end())
+                    {
+                        instance_assignments[port_name] = alias_it->second;
+                    }
+                    else
+                    {
+                        return ERR("could not create instance '" + instance_name + "' of type '" + instance_type + "': port assignment '" + port_name + " = " + assignment + "' is invalid");
+                    }
+                }
+
+                if (auto res = instantiate_module(instance->m_name, instance->m_cell, module, instance_assignments); res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "could not create instance '" + instance_name + "' of type '" + instance_type + "': unable to create instance '" + instance->m_name + "' of type '"
+                                          + instance->m_cell->m_name + "'");
+                }
+                else
+                {
+                    container = res.get();
+                }
+            }
+            // otherwise it has to be an element from the gate library
+            else
+            {
+                // create the new gate
+                instance_alias[instance->m_name] = get_unique_alias(module->get_name(), instance->m_name, m_instance_name_occurences);
+
+                Gate* new_gate = m_netlist->create_gate(gate_type_it->second, instance_alias.at(instance->m_name));
+                if (new_gate == nullptr)
+                {
+                    return ERR("could not create instance '" + instance_name + "' of type '" + instance_type + "': failed to create gate '" + instance->m_name + "'");
+                }
+
+                if (!module->is_top_module())
+                {
+                    module->assign_gate(new_gate);
+                }
+
+                container = new_gate;
+
+                // if gate is of a GND or VCC gate type, mark it as such
+                if (m_vcc_gate_types.find(instance->m_type) != m_vcc_gate_types.end() && !new_gate->mark_vcc_gate())
+                {
+                    return ERR("could not create instance '" + instance_name + "' of type '" + instance_type + "': failed to mark '" + instance->m_name + "' of type '" + instance->m_type
+                               + "' as GND gate");
+                }
+                if (m_gnd_gate_types.find(instance->m_type) != m_gnd_gate_types.end() && !new_gate->mark_gnd_gate())
+                {
+                    return ERR("could not create instance '" + instance_name + "' of type '" + instance_type + "': failed to mark '" + instance->m_name + "' of type '" + instance->m_type
+                               + "' as VCC gate");
+                }
+
+                // TODO implement rest
+            }
+        }
+
         // TODO create instances and assign nets
 
         return ERR("not implemented");
@@ -1100,10 +1178,10 @@ namespace hal
             {
                 return ERR("could not parse instance in line " + std::to_string(old_name.number) + ": renaming not yet supported");
             }
-            else
-            {
-                log_warning("edif_parser", "renaming not yet supported, ignoring old name in line {}", old_name.number);
-            }
+            // else
+            // {
+            //     log_warning("edif_parser", "renaming not yet supported, ignoring old name in line {}", old_name.number);
+            // }
         }
 
         return OK(new_name);
