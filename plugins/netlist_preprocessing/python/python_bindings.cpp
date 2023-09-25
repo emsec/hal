@@ -434,6 +434,34 @@ namespace hal
             )");
 
         py_netlist_preprocessing.def_static(
+            "resynthesize_gates",
+            [](Netlist* nl, const std::vector<Gate*>& gates, GateLibrary* target_lib) -> bool {
+                auto res = NetlistPreprocessingPlugin::resynthesize_gates(nl, gates, target_lib);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("nl"),
+            py::arg("gates"),
+            py::arg("target_lib"),
+            R"(
+                Build the Boolean function for each gate and resynthesize a functional description of that function with a logic synthesizer.
+                Afterwards all the original gates are replaced by the technology mapped netlists produced by the synthesizer.
+
+                :param hal_py.Netlist nl: The netlist to operate on. 
+                :param hal_py.Gate g: The gates to resynthesize.
+                :param hal_py.GateLibrary target_lib: Gatelibrary containing the gates used for technology mapping.
+                :returns: ``True`` on success, ``False`` otherwise.
+                :rtype: bool
+            )");
+
+        py_netlist_preprocessing.def_static(
             "resynthesize_gates_of_type",
             [](Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl) -> std::optional<u32> {
                 auto res = NetlistPreprocessingPlugin::resynthesize_gates_of_type(nl, gate_types, target_gl);

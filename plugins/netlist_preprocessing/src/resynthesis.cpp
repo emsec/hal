@@ -936,7 +936,7 @@ namespace hal
         return OK({});
     }
 
-    Result<u32> NetlistPreprocessingPlugin::resynthesize_gates_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl)
+    Result<u32> NetlistPreprocessingPlugin::resynthesize_gates(Netlist* nl, const std::vector<Gate*>& gates, GateLibrary* target_gl)
     {
         auto base_path_res = utils::get_unique_temp_directory("resynthesis/");
         if (base_path_res.is_error())
@@ -955,66 +955,62 @@ namespace hal
 
         std::map<std::pair<const GateType*, std::vector<std::string>>, std::unique_ptr<Netlist>> gt_to_resynth;
 
+        std::vector<Gate*> to_delete;
         u32 counter = 0;
-        for (const auto& gt : gate_types)
+        for (const auto& g : gates)
         {
-            std::vector<Gate*> to_delete;
-            for (const auto& g : nl->get_gates([gt](const Gate* g) { return g->get_type() == gt; }))
+            const auto& gt = g->get_type();
+
+            Netlist* resynth_nl                = nullptr;
+            std::vector<std::string> init_data = {};
+
+            if (gt->has_property(GateTypeProperty::c_lut))
             {
-                const Netlist* resynth_nl = nullptr;
-                std::vector<std::string> init_data;
-
-                if (gt->has_property(GateTypeProperty::c_lut))
+                const auto init_res = g->get_init_data();
+                if (init_res.is_error())
                 {
-                    const auto init_res = g->get_init_data();
-                    if (init_res.is_error())
-                    {
-                        return ERR_APPEND(init_res.get_error(),
-                                          "unable to resynthesize gates of type: failed to get init string from gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
-                    }
-                    const auto init_vec = init_res.get();
-                    if (init_vec.size() != 1)
-                    {
-                        return ERR("unable tor resynthesize gates of type: got " + std::to_string(init_vec.size()) + " init strings for gate" + g->get_name() + " with ID "
-                                   + std::to_string(g->get_id()));
-                    }
-
-                    init_data = init_vec;
+                    return ERR_APPEND(init_res.get_error(), "unable to resynthesize gates of type: failed to get init string from gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                }
+                const auto init_vec = init_res.get();
+                if (init_vec.size() != 1)
+                {
+                    return ERR("unable tor resynthesize gates of type: got " + std::to_string(init_vec.size()) + " init strings for gate" + g->get_name() + " with ID " + std::to_string(g->get_id()));
                 }
 
-                // get resynth netlist from cache or create it
-                if (const auto it = gt_to_resynth.find({gt, init_data}); it != gt_to_resynth.end())
-                {
-                    resynth_nl = it->second.get();
-                }
-                else
-                {
-                    auto resynth_res = generate_resynth_netlist_for_gate(g, target_gl, genlib_path);
-                    if (resynth_res.is_error())
-                    {
-                        return ERR_APPEND(resynth_res.get_error(), "unable to resynthesize gates of type: failed to resynthesize gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
-                    }
-                    auto unique_resynth_nl = resynth_res.get();
-                    resynth_nl             = unique_resynth_nl.get();
-                    gt_to_resynth.insert({std::make_pair(gt, init_data), std::move(unique_resynth_nl)});
-                }
-
-                const auto replace_res = replace_gate_with_netlist(g, resynth_nl, nl, false);
-                if (replace_res.is_error())
-                {
-                    return ERR_APPEND(replace_res.get_error(),
-                                      "unable to resynthesize gates of type " + gt->get_name() + ": failed for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
-                }
-                to_delete.push_back(g);
+                init_data = init_vec;
             }
 
-            for (const auto& g : to_delete)
+            // get resynth netlist from cache or create it
+            if (const auto it = gt_to_resynth.find({gt, init_data}); it != gt_to_resynth.end())
             {
-                counter += 1;
-                if (!nl->delete_gate(g))
+                resynth_nl = it->second.get();
+            }
+            else
+            {
+                auto resynth_res = generate_resynth_netlist_for_gate(g, target_gl, genlib_path);
+                if (resynth_res.is_error())
                 {
-                    return ERR("unable to resynthesize gates of type " + gt->get_name() + ": failed to delete gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                    return ERR_APPEND(resynth_res.get_error(), "unable to resynthesize gates of type: failed to resynthesize gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
                 }
+                auto unique_resynth_nl = resynth_res.get();
+                resynth_nl             = unique_resynth_nl.get();
+                gt_to_resynth.insert({std::make_pair(gt, init_data), std::move(unique_resynth_nl)});
+            }
+
+            const auto replace_res = replace_gate_with_netlist(g, resynth_nl, nl, false);
+            if (replace_res.is_error())
+            {
+                return ERR_APPEND(replace_res.get_error(), "unable to resynthesize gates of type " + gt->get_name() + ": failed for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+            }
+            to_delete.push_back(g);
+        }
+
+        for (const auto& g : to_delete)
+        {
+            counter += 1;
+            if (!nl->delete_gate(g))
+            {
+                return ERR("unable to resynthesize gates of type " + g->get_type()->get_name() + ": failed to delete gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
             }
         }
 
@@ -1022,6 +1018,25 @@ namespace hal
         std::filesystem::remove_all(base_path);
 
         return OK(counter);
+    }
+
+    Result<u32> NetlistPreprocessingPlugin::resynthesize_gates_of_type(Netlist* nl, const std::vector<const GateType*>& gate_types, GateLibrary* target_gl)
+    {
+        const std::vector<Gate*> filtered_gates = nl->get_gates([gate_types](const auto& gate) {
+            bool is_included = false;
+            for (const auto& gt : gate_types)
+            {
+                if (gate->get_type() == gt)
+                {
+                    is_included = true;
+                    break;
+                }
+            }
+
+            return is_included;
+        });
+
+        return resynthesize_gates(nl, filtered_gates, target_gl);
     }
 
     Result<u32> NetlistPreprocessingPlugin::resynthesize_subgraph(Netlist* nl, const std::vector<Gate*>& subgraph, GateLibrary* target_gl)

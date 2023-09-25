@@ -198,6 +198,18 @@ namespace hal
         static Result<std::monostate> resynthesize_gate(Netlist* nl, Gate* g, GateLibrary* target_lib, const std::filesystem::path& genlib_path, const bool delete_gate);
 
         /**
+         * Build the Boolean function for each gate and resynthesize a functional description of that function with a logic synthesizer.
+         * Afterwards all the original gates are replaced by the technology mapped netlists produced by the synthesizer.
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @param[in] gates -  The gates to resynthesize.
+         * @param[in] target_lib -  Gatelibrary containing the gates used for technology mapping.
+         * @param[in] genlib_path - Path to file containg the target library in genlib format.
+         * @return Ok and the number of decomposed gates on success, an error otherwise.
+         */
+        static Result<u32> resynthesize_gates(Netlist* nl, const std::vector<Gate*>& gates, GateLibrary* target_lib);
+
+        /**
          * Build the Boolean functions of all gates of the specified types and resynthesize a functional description of those functions with a logic synthesizer.
          * Afterwards the original gates are replaced by the technology mapped netlists produced by the synthesizer.
          * 
