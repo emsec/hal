@@ -5,7 +5,7 @@ if(BUILD_TESTS)
 
     add_executable(runTest-hgl_writer  hgl_writer.cpp)
 
-    target_link_libraries(runTest-hgl_writer hgl_writer hgl_parser pthread gtest hal::core hal::netlist test_utils)
+    target_link_libraries(runTest-hgl_writer hgl_writer hgl_parser gtest hal::core hal::netlist test_utils)
 
     add_test(runTest-hgl_writer ${CMAKE_BINARY_DIR}/bin/hal_plugins/runTest-hgl_writer --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 

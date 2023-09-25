@@ -15,7 +15,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/gate_libraries/test.hgl ${CMAKE_BINAR
 
 target_include_directories(test_utils PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
-target_link_libraries(test_utils  pthread gtest hal::core hal::netlist)
+target_link_libraries(test_utils gtest hal::core hal::netlist)
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 add_sanitizers(test_utils)
