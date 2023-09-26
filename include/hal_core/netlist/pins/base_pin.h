@@ -100,6 +100,17 @@ namespace hal
             m_name = name;
         }
 
+        int get_pos() const
+        {
+            auto g = get_group();
+            int i = 0;
+            for (auto p : g.first->get_pins())
+            {
+                if (p == this) return i;
+                ++i;
+            }
+            return -1;
+        }
         /**
          * Get the name of the pin.
          * 

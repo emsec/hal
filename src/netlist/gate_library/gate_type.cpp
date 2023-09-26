@@ -507,10 +507,9 @@ namespace hal
             }
         }
 
-        if (auto res = pin_group->assign_pin(pin); res.is_error())
+        if (!pin_group->assign_pin(pin))
         {
-            return ERR_APPEND(res.get_error(),
-                              "could not assign pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " to pin group '" + pin_group->get_name() + "' with ID "
+            return ERR("could not assign pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " to pin group '" + pin_group->get_name() + "' with ID "
                                   + std::to_string(pin_group->get_id()) + " of gate type '" + m_name + "' with ID " + std::to_string(m_id));
         }
 

@@ -19,6 +19,22 @@ namespace hal
         return -1;
     }
 
+    void dumpPingroups(Module *m)
+    {
+        if (!m) m = gNetlist->get_top_module();
+        std::cerr << "module: " << m->get_id() << " <" << m->get_name() << ">\n";
+        for (PinGroup<ModulePin>* pg : m->get_pin_groups())
+        {
+            std::cerr << "  grp: " << pg->get_id() << (pg->is_ascending()?" asc ": " des ") << pg->get_start_index()
+                      << " <" << pg->get_name() << ">\n";
+            for (ModulePin* pin : pg->get_pins())
+                std::cerr << "     pin: " << pin->get_id() << " inx:" << pin->get_group().second << " pos:" << pin->get_pos() << " <" << pin->get_name() << ">\n";
+        }
+        std::cerr << "-------------" << std::endl;
+        for (Module* sm : m->get_submodules())
+            dumpPingroups(sm);
+    }
+
     QString PinActionType::toString(PinActionType::Type tp)
     {
         QMetaEnum me = QMetaEnum::fromType<Type>();
@@ -342,7 +358,11 @@ namespace hal
                 pgroup = getGroup(aa.mValue);
                 if (!pgroup) return false;
                 if (!mParentModule->assign_pin_to_group(pgroup,pin))
+                {
+                    qDebug() << "assign_pin_to_group failed";
                     return false;
+                }
+                dumpPingroups();
                 break;
             case PinActionType::PinRename:
                 addUndoAction(PinActionType::PinRename,aa.mId, QString::fromStdString(pin->get_name()));
@@ -359,7 +379,11 @@ namespace hal
                     addUndoAction(PinActionType::PinSetindex,aa.mId,"",pin->get_group().second);
                 pgroup = pin->get_group().first;
                 if (!mParentModule->move_pin_within_group(pgroup,pin,aa.mValue))
+                {
+                    qDebug() << "move_pin_within_group failed";
                     return false;
+                }
+                dumpPingroups();
                 break;
             default:
                 break;

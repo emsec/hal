@@ -326,7 +326,7 @@ namespace hal
                     pin_group = pin_groups.front();
                 }
 
-                pin_group->assign_pin(pin).get();
+                pin_group->assign_pin(pin);
                 if (const auto res = pin_group->move_pin(pin, pin_index); res.is_error())
                 {
                     return ERR_APPEND(res.get_error(),

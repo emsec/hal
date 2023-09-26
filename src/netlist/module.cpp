@@ -842,12 +842,11 @@ namespace hal
                 else
                 {
                     // create_pin_group_internal OK
-                    if (const auto assign_res = group_res.get()->assign_pin(pin_res.get()); assign_res.is_error())
+                    if (!group_res.get()->assign_pin(pin_res.get()))
                     {
                         assert(delete_pin_internal(pin_res.get()));
                         assert(delete_pin_group_internal(group_res.get()));
-                        return ERR_APPEND(assign_res.get_error(),
-                                          "could not create pin '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": failed to assign pin to pin group");
+                        return ERR("could not create pin '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": failed to assign pin to pin group");
                     }
                     else
                     {
@@ -1410,7 +1409,7 @@ namespace hal
             }
         }
 
-        if (auto res = pin_group->assign_pin(pin); res.is_error())
+        if (!pin_group->assign_pin(pin))
         {
             log_warning("module",
                               "could not assign pin '{}' with ID {} to pin group '{}' with ID {} of module '{}' with ID {}", pin->get_name(), pin->get_id(), pin_group->get_name(), pin_group->get_id(), m_name, m_id);
@@ -1551,9 +1550,9 @@ namespace hal
         }
         else
         {
-            if (const auto assign_res = group_res.get()->assign_pin(pin); assign_res.is_error())
+            if (!group_res.get()->assign_pin(pin))
             {
-                return ERR_APPEND(assign_res.get_error(), "could not assign pin '" + name_internal + "' to net: failed to assign pin to pin group");
+                return ERR("could not assign pin '" + name_internal + "' to net: failed to assign pin to pin group");
             }
         }
 

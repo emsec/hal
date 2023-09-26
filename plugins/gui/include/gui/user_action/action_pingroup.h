@@ -48,6 +48,7 @@ namespace hal
 
     int pinGroupIndex(const Module* mod, const PinGroup<ModulePin>* pgrp);
 
+    void dumpPingroups(Module* m = nullptr);
     /**
      * @ingroup user_action
      * @brief Pingroup user actions

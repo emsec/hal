@@ -27,6 +27,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/utilities/result.h"
+#include "hal_core/utilities/log.h"
 
 #include <list>
 #include <string>
@@ -312,19 +313,30 @@ namespace hal
          * Assign a pin to the pin group.
          * 
          * @param[in] pin - The pin to assign.
-         * @returns Ok on success, an error message otherwise.
+         * @returns true on success, false otherwise.
          */
-        Result<std::monostate> assign_pin(T* pin)
+        bool assign_pin(T* pin)
         {
             if (pin == nullptr)
             {
-                return ERR("'nullptr' given instead of a pin when trying to assign a pin to pin group '" + m_name + "' with ID " + std::to_string(m_id));
+                log_warning("pin_group", "'nullptr' given instead of a pin when trying to assign a pin to pin group '{}' with ID {}",
+                            m_name, m_id);
+                return false;
             }
 
-            i32 index = m_ascending ? m_next_index++ : m_next_index--;
-            m_pins.push_back(pin);
+            i32 index = 0;
+            if (m_ascending)
+            {
+                index = m_next_index++;
+                m_pins.push_back(pin);
+            }
+            else
+            {
+                index = ++m_start_index;
+                m_pins.push_front(pin);
+            }
             pin->m_group = std::make_pair(this, index);
-            return OK({});
+            return true;
         }
 
         /**
