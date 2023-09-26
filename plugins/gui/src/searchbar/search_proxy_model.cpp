@@ -2,7 +2,7 @@
 #include <QDebug>
 
 namespace hal {
-    SearchProxyModel::SearchProxyModel()
+    SearchProxyModel::SearchProxyModel(QObject* parent): QSortFilterProxyModel(parent)
     {
         opts = new SearchOptions();
     }

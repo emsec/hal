@@ -51,10 +51,10 @@ namespace hal
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
         Q_PROPERTY(QString clearIcon READ clearIcon WRITE setClearIcon)
         Q_PROPERTY(QString clearIconStyle READ clearIconStyle WRITE setClearIconStyle)
-        Q_PROPERTY(QString caseSensitivityIcon READ caseSensitivityIcon WRITE setCaseSensitivityIcon)
+        /*Q_PROPERTY(QString caseSensitivityIcon READ caseSensitivityIcon WRITE setCaseSensitivityIcon)
         Q_PROPERTY(QString caseSensitivityIconStyle READ caseSensitivityIconStyle WRITE setCaseSensitivityIconStyle)
         Q_PROPERTY(QString exactMatchIcon READ exactMatchIcon WRITE setExactMatchIcon)
-        Q_PROPERTY(QString exactMatchIconStyle READ exactMatchIconStyle WRITE setExactMatchIconStyle)
+        Q_PROPERTY(QString exactMatchIconStyle READ exactMatchIconStyle WRITE setExactMatchIconStyle)*/
 
     public:
         /**
@@ -70,10 +70,10 @@ namespace hal
         QString searchIconStyle() const;
         QString clearIcon() const;
         QString clearIconStyle() const;
-        QString caseSensitivityIcon() const;
+        /*QString caseSensitivityIcon() const;
         QString caseSensitivityIconStyle() const;
         QString exactMatchIcon() const;
-        QString exactMatchIconStyle() const;
+        QString exactMatchIconStyle() const;*/
         ///@}
 
         /// @name Q_PROPERTY WRITE Functions
@@ -82,10 +82,10 @@ namespace hal
         void setSearchIconStyle(const QString& style);
         void setClearIcon(const QString& icon);
         void setClearIconStyle(const QString& style);
-        void setCaseSensitivityIcon(const QString& icon);
+        /*void setCaseSensitivityIcon(const QString& icon);
         void setCaseSensitivityIconStyle(const QString& style);
         void setExactMatchIcon(const QString& icon);
-        void setExactMatchIconStyle(const QString& style);
+        void setExactMatchIconStyle(const QString& style);*/
         ///@}
 
         /**
@@ -217,7 +217,7 @@ namespace hal
 
         QToolButton* mDownButton;
         QToolButton* mUpButton;
-        QToolButton* mCaseSensitiveButton;
+        //QToolButton* mCaseSensitiveButton;
         QToolButton* mSearchOptionsButton;
         QToolButton* mClearButton;
 
@@ -225,10 +225,10 @@ namespace hal
         QString mSearchIconStyle;
         QString mClearIcon;
         QString mClearIconStyle;
-        QString mCaseSensitivityIcon;
+        /*QString mCaseSensitivityIcon;
         QString mCaseSensitivityIconStyle;
         QString mExactMatchIcon;
-        QString mExactMatchIconStyle;
+        QString mExactMatchIconStyle;*/
 
         // One can decide wether to receive the text (emitted by textEdited) with or without regex modifier
         // If set to false, one has to manually implement 'Exact Match'/'Case Sensitive' functionality

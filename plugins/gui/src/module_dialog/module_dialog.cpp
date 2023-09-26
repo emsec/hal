@@ -104,6 +104,7 @@ namespace hal {
         connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
         connect(mTreeView, &QTreeView::doubleClicked, this, &ModuleDialog::handleTreeDoubleClick);
         connect(mTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ModuleDialog::handleTreeSelectionChanged);
+
     }
 
     void ModuleDialog::enableButtons()

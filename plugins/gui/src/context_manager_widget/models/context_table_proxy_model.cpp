@@ -6,7 +6,7 @@
 
 namespace hal
 {
-    ContextTableProxyModel::ContextTableProxyModel(QObject* parent) : QSortFilterProxyModel(parent)
+    ContextTableProxyModel::ContextTableProxyModel(QObject* parent) : SearchProxyModel(parent)
     {
         mFilterExpression.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
     }
@@ -36,9 +36,15 @@ namespace hal
             return !(gui_utility::compare(gui_utility::mSortMechanism::natural, leftData.toString(), rightData.toString()));
     }
 
-    void ContextTableProxyModel::handleFilterTextChanged(const QString& filter_text)
+    /*void ContextTableProxyModel::handleFilterTextChanged(const QString& filter_text)
     {
         mFilterExpression.setPattern(filter_text);
+        invalidateFilter();
+    }*/
+
+    void ContextTableProxyModel::startSearch(QString text, int options)
+    {
+        mFilterExpression.setPattern(text);
         invalidateFilter();
     }
 }

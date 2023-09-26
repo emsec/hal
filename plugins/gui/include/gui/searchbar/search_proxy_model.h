@@ -34,10 +34,10 @@ namespace hal
         Q_OBJECT
 
     public:
-        SearchProxyModel();
+        SearchProxyModel(QObject* parent = nullptr);
 
     public Q_SLOTS:
-        void startSearch(QString text, int options);
+        virtual void startSearch(QString text, int options) = 0;
     private:
         SearchOptions* opts;
     };
