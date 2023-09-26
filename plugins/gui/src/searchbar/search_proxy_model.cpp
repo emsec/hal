@@ -4,13 +4,34 @@
 namespace hal {
     SearchProxyModel::SearchProxyModel(QObject* parent): QSortFilterProxyModel(parent)
     {
-        mSearchOptions = new SearchOptions();
+        mSearchOptions = SearchOptions();
     }
 
     void SearchProxyModel::startSearch(QString text, int options)
     {
-        mSearchOptions = new SearchOptions(options);
+        mSearchOptions = SearchOptions(options);
         qInfo() << "Proxy received searchOptions";
+    }
+    bool SearchProxyModel::isMatching(const QString searchString, const QString stringToCheck) const
+    {
+        if(!mSearchOptions.isExactMatch()){
+            //check if stringToCheck contains the searchString
+            return stringToCheck.contains(searchString, mSearchOptions.isCaseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive);
+        }
+        else if(mSearchOptions.isExactMatch()){
+            //check if the stringToCheck is the same as the searchString   - also checks CaseSensitivity
+
+            return 0 == QString::compare(searchString, stringToCheck, mSearchOptions.isCaseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive);
+        }
+        else if(mSearchOptions.isRegularExpression()){
+            //checks if the stringToCheck matches the regEx given by searchString
+
+            //TODO regEx does not work
+
+            auto regEx = QRegularExpression(searchString, mSearchOptions.isCaseSensitive() ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
+            return regEx.match(stringToCheck).hasMatch();
+        }
+        return false;
     }
 
 }

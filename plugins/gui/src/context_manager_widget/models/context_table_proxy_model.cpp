@@ -8,12 +8,12 @@ namespace hal
 {
     ContextTableProxyModel::ContextTableProxyModel(QObject* parent) : SearchProxyModel(parent)
     {
-        mFilterExpression.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
+
     }
 
     bool ContextTableProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
     {
-        QList<int> columns = mSearchOptions->getMColumns();
+        QList<int> columns = mSearchOptions.getColumns();
 
 
         //TODO get column count
@@ -21,8 +21,12 @@ namespace hal
             //iterate over each column
             for(int index = 0; index < 2; index++){
                 QString entry = sourceModel()->index(source_row, index, source_parent).data().toString();
-                if(mFilterExpression.match(entry).hasMatch())
+                qInfo() << "Checking " << entry;
+                if(isMatching(mSearchString, entry))
+                {
+                    qInfo() << "true";
                     return true;
+                }
             }
             return false;
         }else
@@ -30,7 +34,7 @@ namespace hal
             for(int index : columns)
             {
                 QString entry = sourceModel()->index(source_row, index, source_parent).data().toString();
-                if(mFilterExpression.match(entry).hasMatch())
+                if(SearchProxyModel::isMatching(mSearchString, entry));
                     return true;
             }
             return false;
@@ -64,7 +68,8 @@ namespace hal
 
     void ContextTableProxyModel::startSearch(QString text, int options)
     {
-        mFilterExpression.setPattern(text);
+        mSearchString = text;
+        mSearchOptions = SearchOptions(options);
         invalidateFilter();
     }
 }

@@ -80,9 +80,9 @@ namespace hal
 
     void SearchOptionsDialog::setOptions(SearchOptions* opts, bool incSearch, int minIncSearch) const
     {
-        mExactMatchBox->setChecked(opts->isMExactMatch());
-        mCaseSensitiveBox->setChecked(opts->isMCaseSensitive());
-        mRegExBox->setChecked(opts->isMRegularExpression());
+        mExactMatchBox->setChecked(opts->isExactMatch());
+        mCaseSensitiveBox->setChecked(opts->isCaseSensitive());
+        mRegExBox->setChecked(opts->isRegularExpression());
         mIncrementalSearchBox->setChecked(incSearch);
 
         mSpinBox->setValue(minIncSearch);

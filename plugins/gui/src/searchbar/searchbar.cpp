@@ -27,7 +27,7 @@ namespace hal
 
         ensurePolished();
 
-        mCurrentOptions = new SearchOptions(9);//exact match and search in all columns is on
+        mCurrentOptions = new SearchOptions(8);//exact match and search in all columns is on
         mIncrementalSearch = false;
         mSearchIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIcon).pixmap(QSize(16, 16)));
         mSearchIconLabel->installEventFilter(this);

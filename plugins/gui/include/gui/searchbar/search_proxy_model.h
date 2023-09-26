@@ -36,11 +36,23 @@ namespace hal
     public:
         SearchProxyModel(QObject* parent = nullptr);
 
+        /**
+         * @brief Check if a string matches the SearchOptions.
+         *
+         * This function checks whether a given `stringToCheck` matches the search criteria
+         * specified by `searchString` based on search options.
+         *
+         * @param searchString The search criteria to match against `stringToCheck`.
+         * @param stringToCheck The string to be checked for a match.
+         * @return True if `stringToCheck` matches the search criteria, otherwise false.
+         */
+        bool isMatching(const QString searchString, const QString stringToCheck) const;
+
     public Q_SLOTS:
         virtual void startSearch(QString text, int options) = 0;
 
     protected:
-        SearchOptions* mSearchOptions;
+        SearchOptions mSearchOptions;
     };
 }
 

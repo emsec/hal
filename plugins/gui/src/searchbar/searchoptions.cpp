@@ -70,22 +70,22 @@ namespace hal
         mColumns = columns;
     }
 
-    bool SearchOptions::isMExactMatch() const
+    bool SearchOptions::isExactMatch() const
     {
         return mExactMatch;
     }
 
-    bool SearchOptions::isMCaseSensitive() const
+    bool SearchOptions::isCaseSensitive() const
     {
         return mCaseSensitive;
     }
 
-    bool SearchOptions::isMRegularExpression() const
+    bool SearchOptions::isRegularExpression() const
     {
         return mRegularExpression;
     }
 
-    const QList<int>& SearchOptions::getMColumns() const
+    const QList<int>& SearchOptions::getColumns() const
     {
         return mColumns;
     }
