@@ -47,7 +47,7 @@ namespace hal
          */
         SearchOptionsDialog(QWidget *parent = nullptr);
         void emitOptions();
-        SearchOptions getOptions() const;
+        SearchOptions* getOptions() const;
         QString getText() const;
 
     Q_SIGNALS:

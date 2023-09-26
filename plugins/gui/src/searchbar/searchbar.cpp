@@ -27,6 +27,8 @@ namespace hal
 
         ensurePolished();
 
+        mCurrentOptions = new SearchOptions(9);//exact match and search in all columns is on
+        mIncrementalSearch = false;
         mSearchIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIcon).pixmap(QSize(16, 16)));
         mSearchIconLabel->installEventFilter(this);
         mLineEdit->setPlaceholderText("Search");
@@ -221,18 +223,15 @@ namespace hal
     void Searchbar::handleTextEdited()
     {
         repolish();
-        // TODO : emit only if incremental search switched on and minimum number of characters entered in search field
-
-        // TODO : should emit triggerNewSearch()
-        // Q_EMIT textEdited(mEmitTextWithFlags ? getCurrentTextWithFlags() : getCurrentText());
+        if(mIncrementalSearch && mLineEdit->text().length()>=3)
+        {
+            Q_EMIT triggerNewSearch(mLineEdit->text(), mCurrentOptions->toInt());
+        }
     }
 
     void Searchbar::handleReturnPressed()
     {
-        // Q_EMIT returnPressed();
-
-        // TODO : check if member variables present
-        Q_EMIT triggerNewSearch(mLineEdit->text(), mCurrentOptions.toInt());
+        Q_EMIT triggerNewSearch(mLineEdit->text(), mCurrentOptions->toInt());
     }
 
     void Searchbar::handleClearClicked()
@@ -286,7 +285,7 @@ namespace hal
             mCurrentOptions = sd.getOptions();
 
             QString txt = sd.getText(); // TODO : get modified text from sd
-            Q_EMIT triggerNewSearch(txt, mCurrentOptions.toInt());
+            Q_EMIT triggerNewSearch(txt, mCurrentOptions->toInt());
         }
     }
 }

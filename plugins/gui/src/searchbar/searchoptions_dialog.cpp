@@ -46,9 +46,6 @@ namespace hal
         //TODO maybe delete this because edit triggers also the mSearchBtn signal as if it was clicked. Currently the emit search is emited twice while pressing Enter
         // discuss with Joern
         connect(mLineEdit, &QLineEdit::returnPressed, this, &SearchOptionsDialog::emitStartSearch);
-
-
-
     }
 
 
@@ -60,18 +57,19 @@ namespace hal
     }
 
 
-    void SearchOptionsDialog::emitOptions(){
+    void SearchOptionsDialog::emitOptions()
+    {
         mSearchText = mInputBox->currentText();
-        int options = SearchOptions::toInt(mExactMatchBox->isChecked(), mCaseSensitiveBox->isChecked(), mRegExBox->isChecked(), {});
+        int options = SearchOptions::toInt(mExactMatchBox->isChecked(), mCaseSensitiveBox->isChecked(), mRegExBox->isChecked(), {}); //TO-DO: fill the columns
         qInfo() << "Emit search with string: " << mSearchText << " and options: " << options;
 
         Q_EMIT emitOptions(mSearchText, options);
     }
 
-    SearchOptions SearchOptionsDialog::getOptions() const
+    SearchOptions* SearchOptionsDialog::getOptions() const
     {
-        SearchOptions retval;
-        //  TODO :: retval.setOptions()
+        SearchOptions* retval = new SearchOptions();
+        retval->setOptions(mExactMatchBox->isChecked(), mCaseSensitiveBox->isChecked(), mRegExBox->isChecked(), {}); //TO-DO: fill the columns
         return retval;
     }
 

@@ -234,6 +234,7 @@ namespace hal
         // If set to false, one has to manually implement 'Exact Match'/'Case Sensitive' functionality
         bool mEmitTextWithFlags = true;
 
-        SearchOptions mCurrentOptions;
+        SearchOptions* mCurrentOptions;
+        bool mIncrementalSearch;
     };
 }
