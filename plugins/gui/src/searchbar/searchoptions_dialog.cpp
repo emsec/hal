@@ -54,8 +54,6 @@ namespace hal
 
     }
 
-
-
     void SearchOptionsDialog::emitStartSearch()
     {
         qInfo() << "emitStartSearch from searchOptionsDialog";
@@ -78,6 +76,16 @@ namespace hal
         SearchOptions* retval = new SearchOptions();
         retval->setOptions(mExactMatchBox->isChecked(), mCaseSensitiveBox->isChecked(), mRegExBox->isChecked(), {}); //TO-DO: fill the columns
         return retval;
+    }
+
+    void SearchOptionsDialog::setOptions(SearchOptions* opts, bool incSearch, int minIncSearch) const
+    {
+        mExactMatchBox->setChecked(opts->isMExactMatch());
+        mCaseSensitiveBox->setChecked(opts->isMCaseSensitive());
+        mRegExBox->setChecked(opts->isMRegularExpression());
+        mIncrementalSearchBox->setChecked(incSearch);
+
+        mSpinBox->setValue(minIncSearch);
     }
 
     QString SearchOptionsDialog::getText() const

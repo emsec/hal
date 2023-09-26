@@ -275,6 +275,7 @@ namespace hal
         //TODO discuss if previous options should be passed back to the dialog to build dialog from them.
         // otherwise the use has to enter the same options again
         SearchOptionsDialog sd;
+        sd.setOptions(mCurrentOptions, mIncrementalSearch, mMinCharsToStartIncSearch);
         if (sd.exec() == QDialog::Accepted)
         {
             mCurrentOptions = sd.getOptions();

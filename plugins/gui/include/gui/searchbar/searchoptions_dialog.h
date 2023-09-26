@@ -49,6 +49,7 @@ namespace hal
         SearchOptionsDialog(QWidget *parent = nullptr);
         void emitOptions();
         SearchOptions* getOptions() const;
+        void setOptions(SearchOptions* opts, bool incSearch, int minIncSearch) const;
         QString getText() const;
         int getMinIncSearchValue();
         bool getIncrementalSearch();
