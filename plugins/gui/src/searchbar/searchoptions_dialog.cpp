@@ -21,7 +21,6 @@ namespace hal
         mSpinBox->setMaximum(50);
         mSpinBox->setSuffix(" chars");
         mExactMatchBox = new QCheckBox("Exact match");
-        mExactMatchBox->setChecked(true);
         mCaseSensitiveBox = new QCheckBox("Case sensitive");
         mRegExBox = new QCheckBox("Regular expression");
 
