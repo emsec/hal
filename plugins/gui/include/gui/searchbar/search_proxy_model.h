@@ -38,8 +38,9 @@ namespace hal
 
     public Q_SLOTS:
         virtual void startSearch(QString text, int options) = 0;
-    private:
-        SearchOptions* opts;
+
+    protected:
+        SearchOptions* mSearchOptions;
     };
 }
 

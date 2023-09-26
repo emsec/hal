@@ -37,6 +37,12 @@ namespace hal
         void setOptions(bool exactMatch, bool caseSensitive, bool regEx, QList<int> columns);
         int toInt() const;
         static int toInt(bool exactMatch, bool caseSensitive, bool regEx, QList<int> columns);
+
+        bool isMExactMatch() const;
+        bool isMCaseSensitive() const;
+        bool isMRegularExpression() const;
+        const QList<int>& getMColumns() const;
+
     private:
         bool mExactMatch;
         bool mCaseSensitive;

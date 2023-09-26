@@ -69,4 +69,24 @@ namespace hal
         mRegularExpression = regEx;
         mColumns = columns;
     }
+
+    bool SearchOptions::isMExactMatch() const
+    {
+        return mExactMatch;
+    }
+
+    bool SearchOptions::isMCaseSensitive() const
+    {
+        return mCaseSensitive;
+    }
+
+    bool SearchOptions::isMRegularExpression() const
+    {
+        return mRegularExpression;
+    }
+
+    const QList<int>& SearchOptions::getMColumns() const
+    {
+        return mColumns;
+    }
 }

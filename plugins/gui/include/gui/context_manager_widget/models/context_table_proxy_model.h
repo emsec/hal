@@ -63,11 +63,12 @@ namespace hal
     public Q_SLOTS:
 
         /**
-         * Sets the proxy model's filter to the given string.
+         * Sets the proxy model's filter to the given string
+         * and sets the searchOptions.
          *
          * @param filter_text - The new filter string.
+         * @param SearchOptions_bitmask - SearchOptions.
          */
-        void handleFilterTextChanged(const QString& filter_text);
         void startSearch(QString text, int options) override;
 
     protected:

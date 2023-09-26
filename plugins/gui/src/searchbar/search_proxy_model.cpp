@@ -4,12 +4,12 @@
 namespace hal {
     SearchProxyModel::SearchProxyModel(QObject* parent): QSortFilterProxyModel(parent)
     {
-        opts = new SearchOptions();
+        mSearchOptions = new SearchOptions();
     }
 
     void SearchProxyModel::startSearch(QString text, int options)
     {
-        opts = new SearchOptions(options);
+        mSearchOptions = new SearchOptions(options);
         qInfo() << "Proxy received searchOptions";
     }
 
