@@ -13,8 +13,9 @@ namespace hal
 
     bool ContextTableProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
     {
-        QList<int> columns = mSearchOptions.getColumns();
 
+        //TODO  somehow the program crashes with segfault if this method ever returns a false at the initial start
+        QList<int> columns = mSearchOptions.getColumns();
 
         //TODO get column count
         if(columns.empty()){

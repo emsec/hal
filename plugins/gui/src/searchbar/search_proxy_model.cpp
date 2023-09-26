@@ -4,7 +4,7 @@
 namespace hal {
     SearchProxyModel::SearchProxyModel(QObject* parent): QSortFilterProxyModel(parent)
     {
-        mSearchOptions = SearchOptions();
+        mSearchOptions = SearchOptions(8);
     }
 
     void SearchProxyModel::startSearch(QString text, int options)
