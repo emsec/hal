@@ -33,6 +33,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QLineEdit>
+#include <QSpinBox>
 
 namespace hal
 {
@@ -49,6 +50,8 @@ namespace hal
         void emitOptions();
         SearchOptions* getOptions() const;
         QString getText() const;
+        int getMinIncSearchValue();
+        bool getIncrementalSearch();
 
     Q_SIGNALS:
         void emitOptions(QString text, int options);
@@ -63,13 +66,16 @@ namespace hal
         QComboBox* mInputBox;
         QLineEdit* mLineEdit;
         QComboBox* mColumnBox;
+        QLabel* mSpinBoxLabel;
         QCheckBox* mIncrementalSearchBox;
+        QSpinBox* mSpinBox;
         QCheckBox* mExactMatchBox;
         QCheckBox* mCaseSensitiveBox;
         QCheckBox* mRegExBox;
         QLabel* mColumnLabel;
         QPushButton* mSearchBtn;
         QPushButton* mCloseBtn;
+
 
     };
 }

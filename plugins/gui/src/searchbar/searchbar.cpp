@@ -18,7 +18,7 @@ namespace hal
 {
     Searchbar::Searchbar(QWidget* parent)
         : QFrame(parent), mLayout(new QHBoxLayout()), mSearchIconLabel(new QLabel()), mLineEdit(new QLineEdit()), mClearIconLabel(new QLabel()), mDownButton(new QToolButton()),
-          mUpButton(new QToolButton()), mCaseSensitiveButton(new QToolButton()), mExactMatchButton(new QToolButton()), mClearButton(new QToolButton())
+          mUpButton(new QToolButton()), mCaseSensitiveButton(new QToolButton()), mSearchOptionsButton(new QToolButton()), mClearButton(new QToolButton())
     {
         setLayout(mLayout);
 
@@ -38,7 +38,7 @@ namespace hal
         //Placeholder icons get better ones
         mDownButton->setIcon(QIcon(":/icons/arrow-down"));
         mUpButton->setIcon(QIcon(":/icons/arrow-up"));
-        mExactMatchButton->setIcon(QIcon(":/icons/settings"));
+        mSearchOptionsButton->setIcon(QIcon(":/icons/settings"));
 
         mSearchIconLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
         mLineEdit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -46,17 +46,7 @@ namespace hal
         mLayout->addWidget(mSearchIconLabel);
         mLayout->addWidget(mLineEdit);
 
-        //mExactMatchButton->setText("==");
-        mExactMatchButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
-        mExactMatchButton->setCheckable(true);
-        mExactMatchButton->setToolTip("Search Options");
-        mLayout->addWidget(mExactMatchButton);
 
-        /*mCaseSensitiveButton->setText("Aa");
-        mCaseSensitiveButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
-        mCaseSensitiveButton->setCheckable(true);
-        mCaseSensitiveButton->setToolTip("Case Sensitive");
-        mLayout->addWidget(mCaseSensitiveButton);*/
 
         mClearButton->setIcon(gui_utility::getStyledSvgIcon(mClearIconStyle, mClearIcon));
         mClearButton->setIconSize(QSize(10, 10));
@@ -65,15 +55,20 @@ namespace hal
         mClearButton->setToolTip("Clear");
         mLayout->addWidget(mClearButton);
 
+        mSearchOptionsButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
+        mSearchOptionsButton->setCheckable(true);
+        mSearchOptionsButton->setToolTip("Search Options");
+        mLayout->addWidget(mSearchOptionsButton);
+
         setFrameStyle(QFrame::NoFrame);
 
         connect(mLineEdit, &QLineEdit::textEdited, this, &Searchbar::handleTextEdited);
         connect(mLineEdit, &QLineEdit::returnPressed, this, &Searchbar::handleReturnPressed);
         connect(mCaseSensitiveButton, &QToolButton::clicked, this, &Searchbar::handleTextEdited);
-        //connect(mExactMatchButton, &QToolButton::clicked, this, &Searchbar::emitTextEdited);
+        //connect(mSearchOptionsButton, &QToolButton::clicked, this, &Searchbar::emitTextEdited);
         connect(mClearButton, &QToolButton::clicked, this, &Searchbar::handleClearClicked);
 
-        connect(mExactMatchButton, &QToolButton::clicked, this, &Searchbar::handleSearchOptionsDialog);
+        connect(mSearchOptionsButton, &QToolButton::clicked, this, &Searchbar::handleSearchOptionsDialog);
 
         setFocusProxy(mLineEdit);
     }
@@ -194,7 +189,7 @@ namespace hal
         QString textWithFlags;
 
         textWithFlags.append(mCaseSensitiveButton->isChecked() ? "(?-i)" : "(?i)");
-        if (mExactMatchButton->isChecked())
+        if (mSearchOptionsButton->isChecked())
         {
             textWithFlags.append("^");
             textWithFlags.append(text);
@@ -223,7 +218,7 @@ namespace hal
     void Searchbar::handleTextEdited()
     {
         repolish();
-        if(mIncrementalSearch && mLineEdit->text().length()>=3)
+        if(mIncrementalSearch && mLineEdit->text().length() >= mMinCharsToStartIncSearch)
         {
             Q_EMIT triggerNewSearch(mLineEdit->text(), mCurrentOptions->toInt());
         }
@@ -241,7 +236,7 @@ namespace hal
 
     bool Searchbar::exactMatchChecked()
     {
-        return mExactMatchButton->isChecked();
+        return mSearchOptionsButton->isChecked();
     }
 
     bool Searchbar::caseSensitiveChecked()
@@ -279,12 +274,18 @@ namespace hal
 
     void Searchbar::handleSearchOptionsDialog()
     {
+        //TODO discuss if previous options should be passed back to the dialog to build dialog from them.
+        // otherwise the use has to enter the same options again
         SearchOptionsDialog sd;
         if (sd.exec() == QDialog::Accepted)
         {
             mCurrentOptions = sd.getOptions();
 
             QString txt = sd.getText(); // TODO : get modified text from sd
+            mIncrementalSearch = sd.getIncrementalSearch();
+            mMinCharsToStartIncSearch = sd.getMinIncSearchValue();
+
+            qInfo() << "Searchbar starts search with: " << txt << " " << mCurrentOptions->toInt() << "  inc search: " << mIncrementalSearch << " " << mMinCharsToStartIncSearch;
             Q_EMIT triggerNewSearch(txt, mCurrentOptions->toInt());
         }
     }

@@ -15,7 +15,13 @@ namespace hal
         mLineEdit = mInputBox->lineEdit();
 
         mIncrementalSearchBox = new QCheckBox("Incremental search");
+        mSpinBoxLabel = new QLabel("start at: ");
+        mSpinBox = new QSpinBox();
+        mSpinBox->setMinimum(0);
+        mSpinBox->setMaximum(50);
+        mSpinBox->setSuffix(" chars");
         mExactMatchBox = new QCheckBox("Exact match");
+        mExactMatchBox->setChecked(true);
         mCaseSensitiveBox = new QCheckBox("Case sensitive");
         mRegExBox = new QCheckBox("Regular expression");
 
@@ -30,6 +36,8 @@ namespace hal
 
         mLayout->addWidget(mInputBox, 0, 0, 0, 3, Qt::AlignTop);
         mLayout->addWidget(mIncrementalSearchBox, 1, 0);
+        mLayout->addWidget(mSpinBoxLabel, 1, 1, Qt::AlignRight);
+        mLayout->addWidget(mSpinBox, 1, 2, Qt::AlignLeft);
         mLayout->addWidget(mExactMatchBox, 2, 0);
         mLayout->addWidget(mCaseSensitiveBox, 3, 0);
         mLayout->addWidget(mRegExBox, 4, 0);
@@ -39,13 +47,12 @@ namespace hal
         mLayout->addWidget(mCloseBtn, 6, 3);
 
         connect(mCloseBtn, &QPushButton::clicked, this, &SearchOptionsDialog::close);
-
-
         connect(mSearchBtn, &QPushButton::clicked, this, &SearchOptionsDialog::emitStartSearch);
 
         //TODO maybe delete this because edit triggers also the mSearchBtn signal as if it was clicked. Currently the emit search is emited twice while pressing Enter
         // discuss with Joern
         connect(mLineEdit, &QLineEdit::returnPressed, this, &SearchOptionsDialog::emitStartSearch);
+
     }
 
 
@@ -64,6 +71,7 @@ namespace hal
         qInfo() << "Emit search with string: " << mSearchText << " and options: " << options;
 
         Q_EMIT emitOptions(mSearchText, options);
+        Q_EMIT accept();
     }
 
     SearchOptions* SearchOptionsDialog::getOptions() const
@@ -76,6 +84,16 @@ namespace hal
     QString SearchOptionsDialog::getText() const
     {
         return mSearchText;
+    }
+
+
+    int SearchOptionsDialog::getMinIncSearchValue()
+    {
+        return mSpinBox->value();
+    }
+    bool SearchOptionsDialog::getIncrementalSearch()
+    {
+        return mIncrementalSearchBox->isChecked();
     }
 
 }

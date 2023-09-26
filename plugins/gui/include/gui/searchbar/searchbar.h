@@ -218,7 +218,7 @@ namespace hal
         QToolButton* mDownButton;
         QToolButton* mUpButton;
         QToolButton* mCaseSensitiveButton;
-        QToolButton* mExactMatchButton;
+        QToolButton* mSearchOptionsButton;
         QToolButton* mClearButton;
 
         QString mSearchIcon;
@@ -236,5 +236,6 @@ namespace hal
 
         SearchOptions* mCurrentOptions;
         bool mIncrementalSearch;
+        int mMinCharsToStartIncSearch;
     };
 }
