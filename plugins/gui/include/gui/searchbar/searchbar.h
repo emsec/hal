@@ -235,7 +235,7 @@ namespace hal
         bool mEmitTextWithFlags = true;
 
         SearchOptions* mCurrentOptions;
-        bool mIncrementalSearch;
-        int mMinCharsToStartIncSearch;
+        bool mIncrementalSearch = true;
+        int mMinCharsToStartIncSearch = 3;
     };
 }

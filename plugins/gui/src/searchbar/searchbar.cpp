@@ -28,7 +28,7 @@ namespace hal
         ensurePolished();
 
         mCurrentOptions = new SearchOptions(8);//exact match and search in all columns is on
-        mIncrementalSearch = false;
+        mIncrementalSearch = true;
         mSearchIconLabel->setPixmap(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIcon).pixmap(QSize(16, 16)));
         mSearchIconLabel->installEventFilter(this);
         mLineEdit->setPlaceholderText("Search");
@@ -275,14 +275,15 @@ namespace hal
         //TODO discuss if previous options should be passed back to the dialog to build dialog from them.
         // otherwise the use has to enter the same options again
         SearchOptionsDialog sd;
-        sd.setOptions(mCurrentOptions, mIncrementalSearch, mMinCharsToStartIncSearch);
+        sd.setOptions(mCurrentOptions, mLineEdit->text(), mIncrementalSearch, mMinCharsToStartIncSearch);
         if (sd.exec() == QDialog::Accepted)
         {
             mCurrentOptions = sd.getOptions();
 
-            QString txt = sd.getText(); // TODO : get modified text from sd
+            QString txt = sd.getText();
             mIncrementalSearch = sd.getIncrementalSearch();
             mMinCharsToStartIncSearch = sd.getMinIncSearchValue();
+            mLineEdit->setText(txt);
 
             qInfo() << "Searchbar starts search with: " << txt << " " << mCurrentOptions->toInt() << "  inc search: " << mIncrementalSearch << " " << mMinCharsToStartIncSearch;
             Q_EMIT triggerNewSearch(txt, mCurrentOptions->toInt());
