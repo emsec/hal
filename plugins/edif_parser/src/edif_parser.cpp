@@ -14,6 +14,7 @@
 
 namespace hal
 {
+    /*
     Result<std::monostate> EdifParser::parse(const std::filesystem::path& file_path)
     {
         m_path = file_path;
@@ -1247,5 +1248,5 @@ namespace hal
 
         return unique_alias;
     }
-
+    */
 }    // namespace hal

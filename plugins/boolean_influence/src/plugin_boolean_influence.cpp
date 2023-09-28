@@ -5,7 +5,6 @@
 #include "hal_core/netlist/netlist_utils.h"
 #include "z3_utils/include/z3_utils.h"
 
-#include <QProcess>
 #include <filesystem>
 #include <fstream>
 
@@ -285,29 +284,29 @@ int main(int argc, char *argv[]) {
             const auto idx = idx_res.get();
 
             const std::string num_evaluations_str = deterministic ? "" : std::to_string(num_evaluations);
-
-            const std::string run_command = program_name + " " + std::to_string(idx) + " " + num_evaluations_str + " 2>&1";
-
-            QStringList args;
-            args << QString::number(idx);
-            if (!deterministic)
-            {
-                args << QString::number(num_evaluations);
-            }
-
-            QProcess proc;
-            proc.start(QString::fromStdString(program_name), args);
-            proc.waitForStarted();
-            proc.waitForFinished();
-            QByteArray output = proc.readAllStandardError();
-            output += proc.readAllStandardOutput();
-
-            std::string result;
-            result = QString::fromUtf8(output).toStdString();
+            const std::string run_command         = program_name + " " + std::to_string(idx) + " " + num_evaluations_str + " 2>&1";
 
             /*
+            auto p = subprocess::Popen(
+                {program_name, std::to_string(idx), num_evaluations_str}, subprocess::error{subprocess::PIPE}, subprocess::output{subprocess::PIPE}, subprocess::input{subprocess::PIPE});
+
+            auto p_communication = p.communicate();
+
+            const std::vector<char> output_buf = p_communication.first.buf;
+            const std::string result           = {output_buf.begin(), output_buf.end()};
+
+            // TODO:
+            // check whether process was terminated (i.e. killed) via the subprocess
+            // API to channel this to the caller
+            p.close_input();
+            p.close_output();
+            p.close_error();
+            p.kill();
+            */
+
+            std::string result;
             char buffer[129];
-            memset(buffer,0,sizeof(buffer));
+            memset(buffer, 0, sizeof(buffer));
 
             FILE* pipe = popen(run_command.c_str(), "r");
             if (!pipe)
@@ -315,20 +314,13 @@ int main(int argc, char *argv[]) {
                 return ERR("unable to generate Boolean influence: error during execution of compiled boolean program");
             }
 
-            testMutex.lock();
-            std::cerr << "run  <" << run_command <<  ">" << (result.empty() ? " empty" : " filled")
-                      << (feof(pipe) ? " feof" : " no-eof") << (ferror(pipe) ? " ferror" : " no-err") << std::endl;
-            testMutex.unlock();
-
             while (fgets(buffer, 128, pipe) != NULL)
             {
                 result += buffer;
-                memset(buffer,0,sizeof(buffer));
+                memset(buffer, 0, sizeof(buffer));
             }
 
             pclose(pipe);
-
-*/
 
             if (result.empty() || (result.find_first_not_of("0123456789") == std::string::npos))
             {
@@ -353,7 +345,7 @@ int main(int argc, char *argv[]) {
         std::remove(file_path.string().c_str());
         std::remove(program_name.c_str());
 
-        //std::filesystem::remove(directory);
+        std::filesystem::remove(directory);
 
         return OK(influences);
     }
