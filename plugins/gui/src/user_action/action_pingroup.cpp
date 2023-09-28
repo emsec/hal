@@ -28,11 +28,28 @@ namespace hal
             std::cerr << "  grp: " << pg->get_id() << (pg->is_ascending()?" asc ": " des ") << pg->get_start_index()
                       << " <" << pg->get_name() << ">\n";
             for (ModulePin* pin : pg->get_pins())
-                std::cerr << "     pin: " << pin->get_id() << " inx:" << pin->get_group().second << " pos:" << pin->get_pos() << " <" << pin->get_name() << ">\n";
+                std::cerr << "     pin: " << pin->get_id() << " inx:" << pin->get_group().second << " pos:" << pin->get_pos() << " row:"
+                          << pinIndex2Row(pin,pin->get_group().second) << " <" << pin->get_name() << ">\n";
         }
         std::cerr << "-------------" << std::endl;
         for (Module* sm : m->get_submodules())
             dumpPingroups(sm);
+    }
+
+    int pinIndex2Row(const ModulePin* pin, int index)
+    {
+        auto pg = pin->get_group();
+        if (pg.first->is_ascending())
+            return index - pg.first->get_start_index();
+        return pg.first->get_start_index() - index;
+    }
+
+    int pinRow2Index(const ModulePin* pin, int row)
+    {
+        auto pg = pin->get_group();
+        if (pg.first->is_ascending())
+            return pg.first->get_start_index() + row;
+        return pg.first->get_start_index() - row;
     }
 
     QString PinActionType::toString(PinActionType::Type tp)
@@ -353,7 +370,7 @@ namespace hal
                 break;
             case PinActionType::PinAsignGroup:
                 addUndoAction(PinActionType::PinAsignGroup,aa.mId,"",pin->get_group().first->get_id());
-                addUndoAction(PinActionType::PinSetindex,aa.mId,"",pin->get_group().second);
+                addUndoAction(PinActionType::PinSetindex,aa.mId,"",pinIndex2Row(pin,pin->get_group().second));
                 mPinsMoved.insert(aa.mId);
                 pgroup = getGroup(aa.mValue);
                 if (!pgroup) return false;
@@ -376,9 +393,9 @@ namespace hal
                 break;
             case PinActionType::PinSetindex:
                 if (!mPinsMoved.contains(aa.mId))
-                    addUndoAction(PinActionType::PinSetindex,aa.mId,"",pin->get_group().second);
+                    addUndoAction(PinActionType::PinSetindex,aa.mId,"",pinIndex2Row(pin,pin->get_group().second));
                 pgroup = pin->get_group().first;
-                if (!mParentModule->move_pin_within_group(pgroup,pin,aa.mValue))
+                if (!mParentModule->move_pin_within_group(pgroup,pin,pinRow2Index(pin,aa.mValue)))
                 {
                     qDebug() << "move_pin_within_group failed";
                     return false;

@@ -48,6 +48,10 @@ namespace hal
 
     int pinGroupIndex(const Module* mod, const PinGroup<ModulePin>* pgrp);
 
+    int pinIndex2Row(const ModulePin* pin, int index);
+
+    int pinRow2Index(const ModulePin* pin, int row);
+
     void dumpPingroups(Module* m = nullptr);
     /**
      * @ingroup user_action

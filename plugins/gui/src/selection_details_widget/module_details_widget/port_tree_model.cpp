@@ -546,7 +546,7 @@ namespace hal
                 }
                 auto pgPair = pin->get_group();
                 pgroup = pgPair.first;
-                pinRow = pgPair.second;
+                pinRow = pinIndex2Row(pin,pgPair.second);
                 if (pgroup)
                     ptiGroup = mIdToGroupItem.value(pgroup->get_id());
             }
@@ -672,6 +672,7 @@ namespace hal
         auto tgtgroup = mModule->get_pin_group_by_id(static_cast<PortTreeItem*>(onDroppedGroup)->id());
 
         ActionPingroup* act = ActionPingroup::addPinsToExistingGroup(mModule,tgtgroup->get_id(),pins);
+        act->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
         if (act) act->exec();
 
         // too keep the order, ActionAddItemsToObject cannot be executed with all pins, but a ComAction must be created
@@ -692,6 +693,7 @@ namespace hal
     void ModulePinsTreeModel::dndPinOnGroup(PortTreeItem *droppedPin, BaseTreeItem *onDroppedGroup)
     {
         ActionPingroup* act = new ActionPingroup(PinActionType::PinAsignGroup,droppedPin->id(),"",static_cast<PortTreeItem*>(onDroppedGroup)->id());
+        act->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
         act->exec();
     }
 

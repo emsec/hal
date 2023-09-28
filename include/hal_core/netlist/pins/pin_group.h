@@ -332,7 +332,16 @@ namespace hal
             }
             else
             {
-                index = ++m_start_index;
+                if (m_start_index == m_next_index)
+                {
+                    // special case empty pin group
+                    index = m_start_index;
+                   -- m_next_index;
+                }
+                else
+                {
+                    index = ++m_start_index;
+                }
                 m_pins.push_front(pin);
             }
             pin->m_group = std::make_pair(this, index);
