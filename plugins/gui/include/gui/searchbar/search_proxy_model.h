@@ -48,6 +48,12 @@ namespace hal
          */
         bool isMatching(const QString searchString, const QString stringToCheck) const;
 
+
+        /**
+         * @return List of QString matching the corresponding column header.
+         */
+        virtual QList<QString> getColumnNames();
+
     public Q_SLOTS:
         virtual void startSearch(QString text, int options) = 0;
 

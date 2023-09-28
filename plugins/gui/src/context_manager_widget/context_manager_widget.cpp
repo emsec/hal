@@ -93,6 +93,7 @@ namespace hal
         mContentLayout->addWidget(mSearchbar);
 
         mSearchbar->hide();
+        mSearchbar->setColumnNames(mContextTableProxyModel->getColumnNames());
         enableSearchbar(mContextTableProxyModel->rowCount() > 0);
 
         connect(mOpenAction, &QAction::triggered, this, &ContextManagerWidget::handleOpenContextClicked);

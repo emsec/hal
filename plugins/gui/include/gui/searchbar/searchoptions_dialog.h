@@ -26,13 +26,15 @@
 #pragma once
 
 #include "gui/searchbar/search_proxy_model.h"
+
+#include <QCheckBox>
+#include <QComboBox>
 #include <QDialog>
 #include <QGridLayout>
-#include <QComboBox>
-#include <QCheckBox>
 #include <QLabel>
-#include <QPushButton>
 #include <QLineEdit>
+#include <QListWidget>
+#include <QPushButton>
 #include <QSpinBox>
 
 namespace hal
@@ -49,7 +51,7 @@ namespace hal
         SearchOptionsDialog(QWidget *parent = nullptr);
         void emitOptions();
         SearchOptions* getOptions() const;
-        void setOptions(SearchOptions* opts, QString searchString, bool incSearch, int minIncSearch) const;
+        void setOptions(SearchOptions* opts, QString searchString, QList<QString> columnNames, bool incSearch, int minIncSearch) const;
         QString getText() const;
         int getMinIncSearchValue();
         bool getIncrementalSearch();
@@ -60,6 +62,8 @@ namespace hal
     public Q_SLOTS:
         void emitStartSearch();
         void incrementalSearchToggled(int);
+        //TODO can be deleted later on
+        void testWidget();
 
     private:
         QString mSearchText;
@@ -67,7 +71,6 @@ namespace hal
         QGridLayout* mLayout;
         QComboBox* mInputBox;
         QLineEdit* mLineEdit;
-        QComboBox* mColumnBox;
         QLabel* mSpinBoxLabel;
         QCheckBox* mIncrementalSearchBox;
         QSpinBox* mSpinBox;
@@ -77,6 +80,7 @@ namespace hal
         QLabel* mColumnLabel;
         QPushButton* mSearchBtn;
         QPushButton* mCloseBtn;
+        QListWidget* mListWidget;
 
 
     };

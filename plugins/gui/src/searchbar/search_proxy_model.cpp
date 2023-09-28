@@ -10,7 +10,6 @@ namespace hal {
     void SearchProxyModel::startSearch(QString text, int options)
     {
         mSearchOptions = SearchOptions(options);
-        qInfo() << "Proxy received searchOptions";
     }
     bool SearchProxyModel::isMatching(const QString searchString, const QString stringToCheck) const
     {
@@ -32,6 +31,17 @@ namespace hal {
             return regEx.match(stringToCheck).hasMatch();
         }
         return false;
+    }
+    QList<QString> SearchProxyModel::getColumnNames()
+    {
+        QList<QString> list = QList<QString>();
+        for(int column = 0; column < this->columnCount(); column++){
+            QVariant header = this->headerData(column, Qt::Horizontal, Qt::DisplayRole);
+            if(header.isValid() && header.canConvert<QString>()){
+                list.append(header.toString());
+            }
+        }
+        return list;
     }
 
 }

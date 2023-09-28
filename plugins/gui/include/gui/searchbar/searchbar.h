@@ -82,6 +82,7 @@ namespace hal
         void setSearchIconStyle(const QString& style);
         void setClearIcon(const QString& icon);
         void setClearIconStyle(const QString& style);
+        void setColumnNames(QList<QString> list);
         /*void setCaseSensitivityIcon(const QString& icon);
         void setCaseSensitivityIconStyle(const QString& style);
         void setExactMatchIcon(const QString& icon);
@@ -225,10 +226,9 @@ namespace hal
         QString mSearchIconStyle;
         QString mClearIcon;
         QString mClearIconStyle;
-        /*QString mCaseSensitivityIcon;
-        QString mCaseSensitivityIconStyle;
-        QString mExactMatchIcon;
-        QString mExactMatchIconStyle;*/
+
+        QList<QString> mColumnNames;
+
 
         // One can decide wether to receive the text (emitted by textEdited) with or without regex modifier
         // If set to false, one has to manually implement 'Exact Match'/'Case Sensitive' functionality
