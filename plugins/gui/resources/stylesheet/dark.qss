@@ -293,10 +293,12 @@ hal--Searchbar
     border-width                : 6px;
     border-style                : solid;
     border-color                : rgb(9, 11, 13);
-    qproperty-searchIcon       : ":/icons/search";
-    qproperty-searchIconStyle : "all -> #E4E4E4";
-    qproperty-clearIcon        : ":/icons/cross";
-    qproperty-clearIconStyle  : "all -> #E4E4E4";
+    qproperty-searchIcon        : ":/icons/search";
+    qproperty-searchIconStyle   : "all -> #E4E4E4";
+    qproperty-clearIcon         : ":/icons/cross";
+    qproperty-clearIconStyle    : "all -> #E4E4E4";
+    qproperty-optionDialogIcon  : ":/icons/settings";
+    qproperty-optionDialogIconStyle : "all -> #E4E4E4";
 }
 
 hal--Searchbar QLabel

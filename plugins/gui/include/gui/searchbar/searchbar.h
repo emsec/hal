@@ -51,10 +51,8 @@ namespace hal
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
         Q_PROPERTY(QString clearIcon READ clearIcon WRITE setClearIcon)
         Q_PROPERTY(QString clearIconStyle READ clearIconStyle WRITE setClearIconStyle)
-        /*Q_PROPERTY(QString caseSensitivityIcon READ caseSensitivityIcon WRITE setCaseSensitivityIcon)
-        Q_PROPERTY(QString caseSensitivityIconStyle READ caseSensitivityIconStyle WRITE setCaseSensitivityIconStyle)
-        Q_PROPERTY(QString exactMatchIcon READ exactMatchIcon WRITE setExactMatchIcon)
-        Q_PROPERTY(QString exactMatchIconStyle READ exactMatchIconStyle WRITE setExactMatchIconStyle)*/
+        Q_PROPERTY(QString optionDialogIcon READ optionDialogIcon WRITE setOptionDialogIcon)
+        Q_PROPERTY(QString optionDialogIconStyle READ optionDialogIconStyle WRITE setOptionDialogIconStyle)
 
     public:
         /**
@@ -70,10 +68,8 @@ namespace hal
         QString searchIconStyle() const;
         QString clearIcon() const;
         QString clearIconStyle() const;
-        /*QString caseSensitivityIcon() const;
-        QString caseSensitivityIconStyle() const;
-        QString exactMatchIcon() const;
-        QString exactMatchIconStyle() const;*/
+        QString optionDialogIcon() const;
+        QString optionDialogIconStyle() const;
         ///@}
 
         /// @name Q_PROPERTY WRITE Functions
@@ -83,10 +79,8 @@ namespace hal
         void setClearIcon(const QString& icon);
         void setClearIconStyle(const QString& style);
         void setColumnNames(QList<QString> list);
-        /*void setCaseSensitivityIcon(const QString& icon);
-        void setCaseSensitivityIconStyle(const QString& style);
-        void setExactMatchIcon(const QString& icon);
-        void setExactMatchIconStyle(const QString& style);*/
+        void setOptionDialogIcon(const QString& icon);
+        void setOptionDialogIconStyle(const QString& style);
         ///@}
 
         /**
@@ -138,15 +132,16 @@ namespace hal
          */
         void repolish();
 
+        SearchOptions getSearchOptions() const;
         /**
          * @return mExactMatch->isChecked()
          */
-        bool exactMatchChecked();
+        // bool exactMatchChecked();
 
         /**
          * @return mCaseSensitive->isChecked()
          */
-        bool caseSensitiveChecked();
+        // bool caseSensitiveChecked();
 
         /**
          * A filter is applied when the searchbar contains text or (at least) one of the flags
@@ -226,6 +221,8 @@ namespace hal
         QString mSearchIconStyle;
         QString mClearIcon;
         QString mClearIconStyle;
+        QString mOptionDialogIcon;
+        QString mOptionDialogIconStyle;
 
         QList<QString> mColumnNames;
 

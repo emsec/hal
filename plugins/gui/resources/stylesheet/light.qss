@@ -316,10 +316,12 @@ hal--Searchbar
     border-width                : 6px;
     border-style                : solid;
     border-color                : black;
-    qproperty-searchIcon       : ":/icons/search";
-    qproperty-searchIconStyle : "all -> #000000";
-    qproperty-clearIcon        : ":/icons/cross";
-    qproperty-clearIconStyle  : "all -> #000000";
+    qproperty-searchIcon        : ":/icons/search";
+    qproperty-searchIconStyle   : "all -> #000000";
+    qproperty-clearIcon         : ":/icons/cross";
+    qproperty-clearIconStyle    : "all -> #000000";
+    qproperty-optionDialogIcon  : ":/icons/settings";
+    qproperty-optionDialogIconStyle : "all -> #000000";
 }
 
 hal--Searchbar QLabel

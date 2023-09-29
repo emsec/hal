@@ -1631,9 +1631,9 @@ namespace hal
     QTextDocument::FindFlags PythonEditor::getFindFlags()
     {
         QTextDocument::FindFlags options = QTextDocument::FindFlags();
-        if (mSearchbar->caseSensitiveChecked())
+        if (mSearchbar->getSearchOptions().isCaseSensitive())
             options = options | QTextDocument::FindCaseSensitively;
-        if (mSearchbar->exactMatchChecked())
+        if (mSearchbar->getSearchOptions().isExactMatch())
             options = options | QTextDocument::FindWholeWords;
         return options;
     }

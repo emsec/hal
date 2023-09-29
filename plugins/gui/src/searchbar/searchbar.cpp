@@ -18,7 +18,7 @@ namespace hal
 {
     Searchbar::Searchbar(QWidget* parent)
         : QFrame(parent), mLayout(new QHBoxLayout()), mSearchIconLabel(new QLabel()), mLineEdit(new QLineEdit()), mClearIconLabel(new QLabel()), mDownButton(new QToolButton()),
-          mUpButton(new QToolButton()), /*mCaseSensitiveButton(new QToolButton()),*/ mSearchOptionsButton(new QToolButton()), mClearButton(new QToolButton())
+          mUpButton(new QToolButton()), mSearchOptionsButton(new QToolButton()), mClearButton(new QToolButton())
     {
         setLayout(mLayout);
 
@@ -38,7 +38,7 @@ namespace hal
         //Placeholder icons get better ones
         mDownButton->setIcon(QIcon(":/icons/arrow-down"));
         mUpButton->setIcon(QIcon(":/icons/arrow-up"));
-        mSearchOptionsButton->setIcon(QIcon(":/icons/settings"));
+        mSearchOptionsButton->setIcon(gui_utility::getStyledSvgIcon(mOptionDialogIconStyle,mOptionDialogIcon));
 
         mSearchIconLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
         mLineEdit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -62,13 +62,17 @@ namespace hal
 
         connect(mLineEdit, &QLineEdit::textEdited, this, &Searchbar::handleTextEdited);
         connect(mLineEdit, &QLineEdit::returnPressed, this, &Searchbar::handleReturnPressed);
-        //connect(mCaseSensitiveButton, &QToolButton::clicked, this, &Searchbar::handleTextEdited);
-        //connect(mSearchOptionsButton, &QToolButton::clicked, this, &Searchbar::emitTextEdited);
         connect(mClearButton, &QToolButton::clicked, this, &Searchbar::handleClearClicked);
 
         connect(mSearchOptionsButton, &QToolButton::clicked, this, &Searchbar::handleSearchOptionsDialog);
 
         setFocusProxy(mLineEdit);
+    }
+
+    SearchOptions Searchbar::getSearchOptions() const
+    {
+        if (!mCurrentOptions) return SearchOptions();
+        return *mCurrentOptions;
     }
 
     QString Searchbar::searchIcon() const
@@ -91,25 +95,15 @@ namespace hal
         return mClearIconStyle;
     }
 
-    /*QString Searchbar::caseSensitivityIcon() const
+    QString Searchbar::optionDialogIcon() const
     {
-        return mCaseSensitivityIcon;
+        return mOptionDialogIcon;
     }
 
-    QString Searchbar::caseSensitivityIconStyle() const
+    QString Searchbar::optionDialogIconStyle() const
     {
-        return mCaseSensitivityIconStyle;
+        return mOptionDialogIconStyle;
     }
-
-    QString Searchbar::exactMatchIcon() const
-    {
-        return mExactMatchIcon;
-    }
-
-    QString Searchbar::exactMatchIconStyle() const
-    {
-        return mExactMatchIconStyle;
-    }*/
 
     void Searchbar::setSearchIcon(const QString& icon)
     {
@@ -136,25 +130,15 @@ namespace hal
         mColumnNames = list;
     }
 
-    /*void Searchbar::setCaseSensitivityIcon(const QString& icon)
+    void Searchbar::setOptionDialogIcon(const QString& icon)
     {
-        mCaseSensitivityIcon = icon;
+        mOptionDialogIcon = icon;
     }
 
-    void Searchbar::setCaseSensitivityIconStyle(const QString& style)
+    void Searchbar::setOptionDialogIconStyle(const QString& style)
     {
-        mCaseSensitivityIconStyle = style;
+        mOptionDialogIconStyle = style;
     }
-
-    void Searchbar::setExactMatchIcon(const QString& icon)
-    {
-        mExactMatchIcon = icon;
-    }
-
-    void Searchbar::setExactMatchIconStyle(const QString& style)
-    {
-        mExactMatchIconStyle = style;
-    }*/
 
     void Searchbar::setPlaceholderText(const QString& text)
     {
@@ -191,8 +175,8 @@ namespace hal
     {
         QString textWithFlags;
 
-        textWithFlags.append(caseSensitiveChecked() ? "(?-i)" : "(?i)");
-        if (exactMatchChecked())
+        textWithFlags.append(mCurrentOptions->isCaseSensitive() ? "(?-i)" : "(?i)");
+        if (mCurrentOptions->isExactMatch())
         {
             textWithFlags.append("^");
             textWithFlags.append(text);
@@ -237,6 +221,7 @@ namespace hal
         clear();
     }
 
+    /*
     bool Searchbar::exactMatchChecked()
     {
         return mCurrentOptions->toInt()&&1;
@@ -246,6 +231,7 @@ namespace hal
     {
         return mCurrentOptions->toInt()&&2;
     }
+*/
 
     void Searchbar::setEmitTextWithFlags(bool emitTextWithFlags)
     {
@@ -272,7 +258,7 @@ namespace hal
 
     bool Searchbar::filterApplied()
     {
-        return !getCurrentText().isEmpty() || exactMatchChecked() || caseSensitiveChecked();
+        return !getCurrentText().isEmpty() || mCurrentOptions->isExactMatch() || mCurrentOptions->isCaseSensitive();
     }
 
     void Searchbar::handleSearchOptionsDialog()
