@@ -19,8 +19,8 @@
 
 namespace hal
 {
-    PortTreeItem::PortTreeItem(Type itype, QString pinName, PinDirection dir, PinType ptype, QString netName)
-        : mItemType(itype), mPinName(pinName), mPinDirection(dir), mPinType(ptype), mNetName(netName)
+    PortTreeItem::PortTreeItem(Type itype, u32 id_, QString pinName, PinDirection dir, PinType ptype, QString netName)
+        : mItemType(itype), mId(id_), mPinName(pinName), mPinDirection(dir), mPinType(ptype), mNetName(netName)
     {;}
 
     QVariant PortTreeItem::getData(int index) const
@@ -145,6 +145,7 @@ namespace hal
         data->setData("pintreemodel/item", encodedData);
         return data;
     }
+
     bool ModulePinsTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
     {
         Q_UNUSED(action)
@@ -154,6 +155,7 @@ namespace hal
         int id;
         QByteArray encItem = data->data("pintreemodel/item");
         QDataStream dataStream(&encItem, QIODevice::ReadOnly);
+        qDebug() << "dropMimeData" << encItem << row << column;
         dataStream >> type >> id;
 
         auto droppedItem = (type == "group") ?  static_cast<PortTreeItem*>(mIdToGroupItem.value(id)) :  static_cast<PortTreeItem*>(mIdToPinItem.value(id));
@@ -405,17 +407,16 @@ namespace hal
                 continue;
 
             auto pinGroupName = QString::fromStdString(pinGroup->get_name());
-            PortTreeItem* pinGroupItem = new PortTreeItem(PortTreeItem::Group,pinGroupName, pinGroup->get_direction(), pinGroup->get_type());
-            pinGroupItem->setId(pinGroup->get_id());
+            PortTreeItem* pinGroupItem = new PortTreeItem(PortTreeItem::Group, pinGroup->get_id(), pinGroupName, pinGroup->get_direction(), pinGroup->get_type());
             mIdToGroupItem.insert(pinGroup->get_id(), pinGroupItem);
             for(ModulePin* pin : pinGroup->get_pins())
             {
                 PortTreeItem* pinItem = new PortTreeItem(PortTreeItem::Pin,
+                                                         pin->get_id(),
                                                          QString::fromStdString(pin->get_name()),
                                                          pin->get_direction(),
                                                          pin->get_type(),
                                                          QString::fromStdString(pin->get_net()->get_name()));
-                pinItem->setId(pin->get_id());
                 pinGroupItem->appendChild(pinItem);
                 mNameToTreeItem.insert(QString::fromStdString(pin->get_name()), pinItem);
                 mIdToPinItem.insert(pin->get_id(), pinItem);
@@ -559,9 +560,11 @@ namespace hal
         case PinEvent::GroupCreate:
         {
             ptiGroup = new PortTreeItem(PortTreeItem::Group,
+                                        pgroup->get_id(),
                                    QString::fromStdString(pgroup->get_name()),
                                    pgroup->get_direction(),
                                    pgroup->get_type());
+            mIdToGroupItem.insert(ptiGroup->id(), ptiGroup);
             int inx = pinGroupIndex(m,pgroup);
             insertItem(ptiGroup, mRootItem, inx);
             break;
@@ -600,11 +603,12 @@ namespace hal
             if (pin->get_net())
                 netName = QString::fromStdString(pin->get_net()->get_name());
             ptiPin = new PortTreeItem(PortTreeItem::Pin,
+                                      pin->get_id(),
                                    QString::fromStdString(pin->get_name()),
                                    pin->get_direction(),
                                    pin->get_type(),
                                    netName);
-
+            mIdToPinItem.insert(ptiPin->id(), ptiPin);
             insertItem(ptiPin, ptiGroup, pinRow);
             break;
         }
@@ -726,39 +730,10 @@ namespace hal
         auto pinToMove = mModule->get_pin_by_id(droppedPin->id());
         if (!pinToMove) return;
 
-        QString groupName = QString::fromStdString(pinToMove->get_name());
-        QString baseName = groupName;
-        int cnt = 2;
-        while (mModule->get_pin_group_by_name(groupName.toStdString()))
-            // pin group name already exists
-            groupName = QString("%1_%2").arg(baseName).arg(cnt++);
-/*
-        ActionPingroup* actMovePin = new ActionPingroup(pinToMove->get_id(),0,0,groupName);
-        actMovePin->setObject(UserActionObject(mModuleId, UserActionObjectType::Module));
-        bool ok = actMovePin->exec();
-        if (ok && actMovePin->targetGroupId())
-        {
-            ActionPingroup* actMoveGroup = new ActionPingroup(PinAction::MoveGroup,actMovePin->targetGroupId());
-            actMoveGroup->setObject(UserActionObject(mModuleId, UserActionObjectType::Module));
-            actMoveGroup->setPinOrderNo(row);
-            actMoveGroup->exec();
+        QString groupName = generateGroupName(mModule,pinToMove);
 
-            auto newGroup = mModule->get_pin_by_id(getIdOfItem(droppedPin))->get_group().first;
-            auto pinGroupName = QString::fromStdString(newGroup->get_name());
-            auto pinGroupDirection = QString::fromStdString(enum_to_string((newGroup->get_direction())));
-            auto pinGroupType = QString::fromStdString(enum_to_string(newGroup->get_type()));
-
-            PortTreeItem* pinGroupItem = new PortTreeItem(pinGroupName, pinGroupDirection, pinGroupType, "");
-            pinGroupItem->setAdditionalData(keyType, QVariant::fromValue(itemType::group));
-            pinGroupItem->setAdditionalData(keyId, newGroup->get_id());
-
-            int pos = mRootItem->getChildCount(); // or query current index
-
-            insertItem(pinGroupItem, mRootItem, pos);
-            removeItem(droppedPin);
-            insertItem(droppedPin, pinGroupItem, 0);
-        }
-        */
+        ActionPingroup* act = ActionPingroup::addPinToNewGroup(mModule, groupName, droppedPin->id(),row);
+        act->exec();
     }
 
     void ModulePinsTreeModel::insertItem(PortTreeItem* item, BaseTreeItem* parent, int index)

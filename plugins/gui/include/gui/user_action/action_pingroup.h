@@ -52,6 +52,8 @@ namespace hal
 
     int pinRow2Index(const ModulePin* pin, int row);
 
+    QString generateGroupName(const Module* mod, const ModulePin* pin);
+
     void dumpPingroups(Module* m = nullptr);
     /**
      * @ingroup user_action
@@ -154,10 +156,10 @@ namespace hal
         void readFromXml(QXmlStreamReader& xmlIn) override;
         void addToHash(QCryptographicHash& cryptoHash) const override;
 
-        static ActionPingroup* addPinsToExistingGroup(const Module* m, u32 grpId, QList<u32> pinIds, int irow = -1);
-        static ActionPingroup* addPinToExistingGroup(const Module* m, u32 grpId, u32 pinId, int irow = -1);
-        static ActionPingroup* addPinsToNewGroup(const Module* m, const QString& name, QList<u32> pinIds);
-        static ActionPingroup* addPinToNewGroup(const Module* m, const QString& name, u32 pinId);
+        static ActionPingroup* addPinsToExistingGroup(const Module* m, u32 grpId, QList<u32> pinIds, int pinRow = -1);
+        static ActionPingroup* addPinToExistingGroup(const Module* m, u32 grpId, u32 pinId, int pinRow = -1);
+        static ActionPingroup* addPinsToNewGroup(const Module* m, const QString& name, QList<u32> pinIds, int grpRow = -1);
+        static ActionPingroup* addPinToNewGroup(const Module* m, const QString& name, u32 pinId, int grpRow = -1);
         static ActionPingroup* removePinsFromGroup(const Module* m, QList<u32> pinIds);
     };
 

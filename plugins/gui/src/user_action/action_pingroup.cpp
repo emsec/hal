@@ -52,6 +52,19 @@ namespace hal
         return pg.first->get_start_index() - row;
     }
 
+    QString generateGroupName(const Module* mod, const ModulePin* pin)
+    {
+        QString baseName = QString::fromStdString(pin->get_name());
+        QSet<QString> existingGroups;
+        for (auto g : mod->get_pin_groups())
+            existingGroups.insert(QString::fromStdString(g->get_name()));
+        QString retval = baseName;
+        int count = 1;
+        while (existingGroups.contains(retval))
+            retval = QString("%1_%2").arg(baseName).arg(++count);
+        return retval;
+    }
+
     QString PinActionType::toString(PinActionType::Type tp)
     {
         QMetaEnum me = QMetaEnum::fromType<Type>();
@@ -412,7 +425,7 @@ namespace hal
         return UserAction::exec();
     }
 
-    ActionPingroup* ActionPingroup::addPinsToExistingGroup(const Module *m, u32 grpId, QList<u32> pinIds, int irow)
+    ActionPingroup* ActionPingroup::addPinsToExistingGroup(const Module *m, u32 grpId, QList<u32> pinIds, int pinRow)
     {
         ActionPingroup* retval = nullptr;
         for (u32 pinId : pinIds)
@@ -421,21 +434,21 @@ namespace hal
                 retval->mPinActions.append(AtomicAction(PinActionType::PinAsignGroup,pinId,"",grpId));
             else
                 retval = new ActionPingroup(PinActionType::PinAsignGroup,pinId,"",grpId);
-            if (irow >= 0)
-                retval->mPinActions.append(AtomicAction(PinActionType::PinSetindex,pinId,"",irow++));
+            if (pinRow >= 0)
+                retval->mPinActions.append(AtomicAction(PinActionType::PinSetindex,pinId,"",pinRow++));
         }
         retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
         return retval;
     }
 
-    ActionPingroup* ActionPingroup::addPinToExistingGroup(const Module* m, u32 grpId, u32 pinId, int irow)
+    ActionPingroup* ActionPingroup::addPinToExistingGroup(const Module* m, u32 grpId, u32 pinId, int pinRow)
     {
         QList<u32> pinIds;
         pinIds << pinId;
-        return addPinsToExistingGroup(m,grpId,pinIds,irow);
+        return addPinsToExistingGroup(m,grpId,pinIds,pinRow);
     }
 
-    ActionPingroup* ActionPingroup::addPinsToNewGroup(const Module* m, const QString& name, QList<u32> pinIds)
+    ActionPingroup* ActionPingroup::addPinsToNewGroup(const Module* m, const QString& name, QList<u32> pinIds, int grpRow)
     {
         static int vid = -9;
         ActionPingroup* retval = new ActionPingroup(PinActionType::GroupCreate,vid,name);
@@ -450,15 +463,18 @@ namespace hal
         }
         for (u32 pinId : pinIds)
             retval->mPinActions.append(AtomicAction(PinActionType::PinAsignGroup,pinId,"",vid));
+
+        if (grpRow >= 0)
+            retval->mPinActions.append(AtomicAction(PinActionType::GroupMove,vid,"",grpRow));
         retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
         return retval;
     }
 
-    ActionPingroup* ActionPingroup::addPinToNewGroup(const Module *m, const QString& name, u32 pinId)
+    ActionPingroup* ActionPingroup::addPinToNewGroup(const Module *m, const QString& name, u32 pinId, int grpRow)
     {
         QList<u32> pinIds;
         pinIds << pinId;
-        return addPinsToNewGroup(m,name,pinIds);
+        return addPinsToNewGroup(m,name,pinIds, grpRow);
     }
 
     ActionPingroup* ActionPingroup::removePinsFromGroup(const Module* m, QList<u32> pinIds)

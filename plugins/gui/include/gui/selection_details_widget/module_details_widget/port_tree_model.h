@@ -52,7 +52,7 @@ namespace hal
 
         public:
 
-            PortTreeItem(Type itype, QString pinName, PinDirection dir, PinType ptype, QString netName = QString());
+            PortTreeItem(Type itype, u32 id_, QString pinName, PinDirection dir, PinType ptype, QString netName = QString());
             PortTreeItem() : mItemType(None), mId(0) {;}
             QVariant getData(int column) const override;
             void setData(QList<QVariant> data) override;
@@ -61,7 +61,6 @@ namespace hal
             int getColumnCount() const override;
             void setItemType(Type tp) { mItemType = tp; }
             Type itemType() const { return mItemType; }
-            void setId(u32 id_) { mId = id_; }
             QString name() const { return mPinName; }
             void setName(const QString& nam) { mPinName = nam; }
             void setPinType(PinType ptype) { mPinType = ptype; }
