@@ -24,66 +24,31 @@
 // SOFTWARE.
 
 #pragma once
-
-#include "gui/searchbar/search_proxy_model.h"
-
-#include <QCheckBox>
-#include <QComboBox>
+#include <QAbstractTableModel>
+#include <QList>
 #include <QDialog>
-#include <QGridLayout>
-#include <QLabel>
-#include <QLineEdit>
-#include <QListWidget>
-#include <QPushButton>
-#include <QSpinBox>
+#include <QPair>
+#include <QCheckBox>
+#include <QDialogButtonBox>
 
-namespace hal
-{
-    class SearchOptionsDialog : public QDialog
+namespace hal {
+
+    class SearchColumnDialog : public QDialog
     {
         Q_OBJECT
-    public:
-        /**
-         * Constructor. Initializes the Dialog.
-         *
-         * @param parent - The parent widget.
-         */
-        SearchOptionsDialog(QWidget *parent = nullptr);
-        void emitOptions();
-        SearchOptions* getOptions() const;
-        void setOptions(SearchOptions* opts, QString searchString, QList<QString> columnNames, bool incSearch, int minIncSearch);
-        QString getText() const;
-        int getMinIncSearchValue();
-        bool getIncrementalSearch();
 
-    Q_SIGNALS:
-        void emitOptions(QString text, int options);
-
+        QCheckBox* mCheckAllColumns;
+        QList<QCheckBox*> mCheckColumn;
+        QDialogButtonBox* mButtonBox;
+        bool mDisableHandler;
+    private Q_SLOTS:
+        void handleCheckStateChanged(int state);
     public Q_SLOTS:
-        void emitStartSearch();
-        void incrementalSearchToggled(int);
-        void selectColumns();
-        //TODO can be deleted later on
-        void testWidget();
-
-    private:
-        QString mSearchText;
-        QList<int> mSelectedColumns = {};
-        QStringList mColumnNames;
-
-        QGridLayout* mLayout;
-        QComboBox* mInputBox;
-        QLineEdit* mLineEdit;
-        QLabel* mSpinBoxLabel;
-        QCheckBox* mIncrementalSearchBox;
-        QSpinBox* mSpinBox;
-        QCheckBox* mExactMatchBox;
-        QCheckBox* mCaseSensitiveBox;
-        QCheckBox* mRegExBox;
-        //QLabel* mColumnLabel;
-        QPushButton* mSearchBtn;
-        QPushButton* mCloseBtn;
-        QPushButton* mSelectColumnsBtn;
-        //QListWidget* mListWidget;
+        void accept() override;
+    public:
+        SearchColumnDialog(const QStringList& colNames, const QList<int>& selected);
+        QString selectedColumnNames() const;
+        QList<int> selectedColumns() const;
     };
+
 }
