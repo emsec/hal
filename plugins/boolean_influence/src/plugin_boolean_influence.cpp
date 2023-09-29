@@ -31,6 +31,24 @@ namespace hal
 
     namespace
     {
+        static unsigned long x = 123456789, y = 362436069, z = 521288629;
+
+        // period 2^96-1
+        unsigned long xorshf96(void)
+        {
+            unsigned long t;
+
+            x ^= x << 16;
+            x ^= x >> 5;
+            x ^= x << 1;
+
+            t = x;
+            x = y;
+            y = z;
+            z = t ^ x ^ y;
+
+            return z;
+        }
         void add_inputs(Gate* gate, std::unordered_set<Gate*>& gates)
         {
             if (!gate->get_type()->has_property(GateTypeProperty::combinational) || gate->is_vcc_gate() || gate->is_gnd_gate())
@@ -169,6 +187,7 @@ int main(int argc, char *argv[]) {
     Result<std::unordered_map<std::string, double>>
         BooleanInfluencePlugin::get_boolean_influence_internal(const z3::expr& expr, const u32 num_evaluations, const bool deterministic, const std::string& unique_identifier)
     {
+        bool use_z3                   = true;
         const auto to_replacement_var = [](const u32 var_idx) -> std::string { return "var_" + std::to_string(var_idx); };
 
         const auto extract_index = [](const std::string& var) -> Result<u32> {
@@ -287,22 +306,22 @@ int main(int argc, char *argv[]) {
             const std::string run_command         = program_name + " " + std::to_string(idx) + " " + num_evaluations_str + " 2>&1";
 
             /*
-            auto p = subprocess::Popen(
-                {program_name, std::to_string(idx), num_evaluations_str}, subprocess::error{subprocess::PIPE}, subprocess::output{subprocess::PIPE}, subprocess::input{subprocess::PIPE});
+                auto p = subprocess::Popen(
+                    {program_name, std::to_string(idx), num_evaluations_str}, subprocess::error{subprocess::PIPE}, subprocess::output{subprocess::PIPE}, subprocess::input{subprocess::PIPE});
 
-            auto p_communication = p.communicate();
+                auto p_communication = p.communicate();
 
-            const std::vector<char> output_buf = p_communication.first.buf;
-            const std::string result           = {output_buf.begin(), output_buf.end()};
+                const std::vector<char> output_buf = p_communication.first.buf;
+                const std::string result           = {output_buf.begin(), output_buf.end()};
 
-            // TODO:
-            // check whether process was terminated (i.e. killed) via the subprocess
-            // API to channel this to the caller
-            p.close_input();
-            p.close_output();
-            p.close_error();
-            p.kill();
-            */
+                // TODO:
+                // check whether process was terminated (i.e. killed) via the subprocess
+                // API to channel this to the caller
+                p.close_input();
+                p.close_output();
+                p.close_error();
+                p.kill();
+                */
 
             std::string result;
             char buffer[129];
@@ -346,7 +365,6 @@ int main(int argc, char *argv[]) {
         std::remove(program_name.c_str());
 
         std::filesystem::remove(directory);
-
         return OK(influences);
     }
 
@@ -456,6 +474,60 @@ int main(int argc, char *argv[]) {
         const auto z3_bf = z3_utils::from_bf(bf, ctx);
 
         return get_boolean_influence(z3_bf, num_evaluations, unique_identifier);
+    }
+
+    Result<std::unordered_map<std::string, double>> BooleanInfluencePlugin::get_boolean_influence_with_hal_boolean_function_class(const BooleanFunction& bf, const u32 num_evaluations)
+    {
+        std::unordered_map<std::string, double> influences;
+        std::set<std::string> variables = bf.get_variable_names();
+
+        for (const auto& var : variables)
+        {
+            u32 count = 0;
+            for (unsigned long long i = 0; i < num_evaluations; i++)
+            {
+                std::unordered_map<std::string, BooleanFunction::Value> values;
+                // build value
+                for (const auto& var_to_set : variables)
+                {
+                    if (var == var_to_set)
+                    {
+                        continue;
+                    }
+
+                    BooleanFunction::Value random_value = (xorshf96() % 2) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO;
+                    values.insert({var_to_set, random_value});
+                }
+
+                // evaluate 1
+                values[var]      = BooleanFunction::Value::ONE;
+                const auto res_1 = bf.evaluate(values);
+                if (res_1.is_error())
+                {
+                    return ERR_APPEND(res_1.get_error(), "unable to evaluate boolean function ");
+                }
+
+                // evaluate 0
+                values[var]      = BooleanFunction::Value::ZERO;
+                const auto res_2 = bf.evaluate(values);
+                if (res_2.is_error())
+                {
+                    return ERR_APPEND(res_2.get_error(), "unable to evaluate boolean function ");
+                }
+
+                const auto r1 = res_1.get();
+                const auto r2 = res_2.get();
+
+                if (r1 != r2)
+                {
+                    count++;
+                }
+            }
+            double cv = (double)(count) / (double)(num_evaluations);
+            influences.insert({var, cv});
+        }
+
+        return OK(influences);
     }
 
     Result<std::unordered_map<std::string, double>> BooleanInfluencePlugin::get_boolean_influence(const z3::expr& expr, const u32 num_evaluations, const std::string& unique_identifier)
