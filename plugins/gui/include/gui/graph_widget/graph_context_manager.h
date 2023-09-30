@@ -26,7 +26,7 @@
 #pragma once
 
 #include "hal_core/defines.h"
-#include "hal_core/netlist/gate_library/enums/pin_type.h"
+#include "hal_core/netlist/gate_library/enums/pin_event.h"
 
 #include <QObject>
 #include <QStringList>

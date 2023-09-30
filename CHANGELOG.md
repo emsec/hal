@@ -21,6 +21,11 @@ All notable changes to this project will be documented in this file.
   * fixed order of pins within pin groups not being properly handled for modules and gate types
   * fixed netlist parsers assigning gate pins in wrong order (compensated by the bug above, imported netlists were still correct)
   * fixed wrong order of pins within pin groups in provided gate libraries
+* module pins
+  * added qualifier for `pin_changed` core events telling receiver details about the recent modification
+  * added event scope and stacking classes so that `pin_changed` events can be collected and prioritized
+  * added specific GUI handler for every `pin_changed` event thus replacing the reload-entire-pingroup-tree policy
+  * added class `ActionPingroup` so that UNDO function works for all pin / pin group actions issued from GUI
 
 ## [4.2.0](v4.2.0) - 2023-05-24 10:02:04-07:00 (urgency: medium)
 * GUI plugin manager

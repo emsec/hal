@@ -30,6 +30,7 @@
 #include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
+#include "hal_core/netlist/gate_library/enums/pin_event.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/pins/module_pin.h"
 #include "hal_core/netlist/pins/pin_group.h"
@@ -672,6 +673,12 @@ namespace hal
          */
         std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter, bool recursive = false) const;
 
+        /**
+         * Get the event handler connected to module
+         * @return The event handler;
+         */
+        EventHandler* get_event_handler() const;
+
     private:
         friend class NetlistInternalManager;
         Module(NetlistInternalManager* internal_manager, EventHandler* event_handler, u32 id, Module* parent, const std::string& name);
@@ -686,8 +693,6 @@ namespace hal
             bool has_external_source;
             bool has_external_destination;
         };
-
-        static u32 pinevent_associated_data(PinEvent pev, u32 id);
 
         std::string m_name;
         std::string m_type;

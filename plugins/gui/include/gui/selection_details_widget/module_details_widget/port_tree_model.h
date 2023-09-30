@@ -27,8 +27,9 @@
 
 //#include "gui/new_selection_details_widget/models/base_tree_model.h"
 #include "gui/basic_tree_model/base_tree_model.h"
-#include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include "hal_core/netlist/gate_library/enums/pin_direction.h"
+#include "hal_core/netlist/gate_library/enums/pin_event.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include <QMap>
 
 namespace hal

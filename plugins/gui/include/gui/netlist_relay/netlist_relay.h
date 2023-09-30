@@ -26,7 +26,7 @@
 #pragma once
 
 #include "hal_core/netlist/event_system/event_handler.h"
-#include "hal_core/netlist/gate_library/enums/pin_type.h"
+#include "hal_core/netlist/gate_library/enums/pin_event.h"
 #include "gui/grouping/grouping_color_serializer.h"
 #include <QMap>
 #include <QObject>

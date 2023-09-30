@@ -52,6 +52,11 @@ namespace hal
         return pg.first->get_start_index() - row;
     }
 
+    uint qHash(PinEvent pev)
+    {
+        return (uint) pev;
+    }
+
     QString generateGroupName(const Module* mod, const ModulePin* pin)
     {
         QString baseName = QString::fromStdString(pin->get_name());

@@ -174,4 +174,6 @@ namespace hal
         UserAction* newAction() const;
         static ActionPingroupFactory* sFactory;
     };
+
+    uint qHash(PinEvent pev);
 }

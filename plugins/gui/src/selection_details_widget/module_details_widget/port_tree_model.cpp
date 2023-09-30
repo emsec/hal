@@ -507,6 +507,12 @@ namespace hal
 
     void ModulePinsTreeModel::handleModulePortsChanged(Module* m, PinEvent pev, u32 pgid)
     {
+        static const QSet<PinEvent> groupEvents = {   PinEvent::GroupCreate,
+                                                      PinEvent::GroupReorder,
+                                                      PinEvent::GroupRename,
+                                                      PinEvent::GroupTypeChange,
+                                                      PinEvent::GroupDirChange,
+                                                      PinEvent::GroupDelete};
         Q_UNUSED(pev);
         Q_UNUSED(pgid);
         if ((int)m->get_id() != mModuleId) return;
@@ -519,7 +525,7 @@ namespace hal
         int pinRow = -1;
 
 
-        if (pev < PinEvent::PinCreate)
+        if (groupEvents.contains(pev))
         {
             // group event
             ptiGroup = mIdToGroupItem.value(pgid);
