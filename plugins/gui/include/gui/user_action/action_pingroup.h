@@ -35,8 +35,8 @@ namespace hal
     {
         Q_OBJECT
     public:
-        enum Type { None, GroupCreate, GroupDelete, GroupMove, GroupRename, GroupTypechange, GroupDirection,
-                    PinAsignGroup, PinRename, PinTypechange, PinDirection, PinSetindex, MaxAction };
+        enum Type { None, GroupCreate, GroupDelete, GroupMoveToRow, GroupRename, GroupTypeChange, GroupDirChange,
+                    PinAsignToGroup, PinRename, PinTypeChange, PinDirChange, PinMoveToRow, MaxAction };
         Q_ENUM(Type);
 
     public:
@@ -67,28 +67,28 @@ namespace hal
      *                   ID will be used internally for subsequent commands related to crated group
      *     name     : name of group
      *     value    : start index, assume ascending
-     *                   negative value: descending order starting with (-value)
+     *                   negative value: descending order starting with (-value-1)
      *
      * GroupDelete
      *     ID       : ID of group to delete
      *
-     * GroupMove
+     * GroupMoveToRow
      *     ID       : ID of group to move
-     *     value    : new position in vector of pin groups
+     *     value    : row to which group get moved within vector of pin groups
      *
      * GroupRename
      *     ID       : ID of group to rename
      *     name     : new name
      *
-     * GroupTypechange
+     * GroupTypeChange
      *     ID       : ID of group to modifiy
      *     value    : (int) PinType   as of hal_core/netlist/gate_library/enums/pin_type.h
      *
-     * GroupDirection
+     * GroupDirChange
      *     ID       : ID of group to modifiy
      *     value    : (int) PinDirection    as of hal_core/netlist/gate_library/enums/pin_direction.h
      *
-     * PinAsignGroup
+     * PinAsignToGroup
      *     ID       : ID of pin
      *     value    : ID of group, might be negative if group recently created
      *
@@ -96,18 +96,17 @@ namespace hal
      *     ID       : ID of pin to rename
      *     name     : new name
      *
-     * PinTypechange
+     * PinTypeChange
      *     ID       : ID of pin to modify
      *     value    : (int) PinType
      *
-     * PinDirection
+     * PinDirChange
      *     ID       : ID of pin to modify
      *     value    : (int) PinDirection
      *
-     * PinSetindex
+     * PinMoveToRow
      *     ID       : ID of pin
-     *     value    : new index in pingroup. Calculated from row by
-     *                  index = startindex + a * row      with a=1 for ascending, a=-1 for descending
+     *     value    : row to which pin gets moved in pingroup
      */
     class ActionPingroup : public UserAction
     {

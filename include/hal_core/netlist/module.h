@@ -530,7 +530,7 @@ namespace hal
          * 
          * @param[in] pin_group - The pin group to be moved.
          * @param[in] new_index - The index to which the pin group is moved.
-         * @returns Ok on success, an error message otherwise.
+         * @returns true on success, false message otherwise.
          */
         bool move_pin_group(PinGroup<ModulePin>* pin_group, u32 new_index);
 

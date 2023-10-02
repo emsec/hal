@@ -211,7 +211,7 @@ namespace hal
                 {
                     PinType ptype = enum_from_string<PinType>(cbd.textValue().toStdString(),PinType::none);
 
-                    ActionPingroup* act = new ActionPingroup(PinActionType::PinTypechange,pin->get_id(),"",(int)ptype);
+                    ActionPingroup* act = new ActionPingroup(PinActionType::PinTypeChange,pin->get_id(),"",(int)ptype);
                     act->setObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
                     act->exec();
                 }

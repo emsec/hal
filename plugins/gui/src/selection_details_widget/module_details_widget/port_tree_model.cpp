@@ -695,14 +695,14 @@ namespace hal
         bool bottomEdge = row == mRootItem->getChildCount();
         auto desiredIdx = bottomEdge ? row-1 : row;
         if(ownRow < row && !bottomEdge) desiredIdx--;
-        ActionPingroup* act = new ActionPingroup(PinActionType::GroupMove,droppedGroup->id(),"",desiredIdx);
+        ActionPingroup* act = new ActionPingroup(PinActionType::GroupMoveToRow,droppedGroup->id(),"",desiredIdx);
         act->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
         act->exec();
     }
 
     void ModulePinsTreeModel::dndPinOnGroup(PortTreeItem *droppedPin, BaseTreeItem *onDroppedGroup)
     {
-        ActionPingroup* act = new ActionPingroup(PinActionType::PinAsignGroup,droppedPin->id(),"",static_cast<PortTreeItem*>(onDroppedGroup)->id());
+        ActionPingroup* act = new ActionPingroup(PinActionType::PinAsignToGroup,droppedPin->id(),"",static_cast<PortTreeItem*>(onDroppedGroup)->id());
         act->setObject(UserActionObject(mModuleId,UserActionObjectType::Module));
         act->exec();
     }
@@ -717,7 +717,7 @@ namespace hal
             bool bottomEdge = row == onDroppedParent->getChildCount();
             desiredIdx = bottomEdge ? row-1 : row;
             if(ownRow < row && !bottomEdge) desiredIdx--; // insert item here
-            act = new ActionPingroup(PinActionType::PinSetindex,droppedPin->id(),"",desiredIdx);  // TODO : start_index, descending
+            act = new ActionPingroup(PinActionType::PinMoveToRow,droppedPin->id(),"",desiredIdx);  // TODO : start_index, descending
         }
         else
         {
