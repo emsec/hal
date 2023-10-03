@@ -32,6 +32,8 @@
 #include "gui/selection_relay/selection_relay.h"
 #include "gui/module_widget/module_tree_view.h"
 #include "hal_core/netlist/module.h"
+#include "gui/settings/settings_items/settings_item_keybind.h"
+
 
 #include <QAction>
 #include <QItemSelection>
@@ -170,6 +172,11 @@ namespace hal
         void handleModuleRemoved(Module* module, u32 module_id);
 
 
+    private Q_SLOTS:
+        void handleDeleteShortcutOnFocusChanged(QWidget *oldWidget, QWidget *newWidget);
+
+        void deleteSelectedItem();
+
     private:
         ModuleTreeView* mTreeView;
         Searchbar* mSearchbar;
@@ -188,8 +195,11 @@ namespace hal
 
         ModuleProxyModel* mModuleProxyModel;
 
+        QShortcut* mShortCutDeleteItem;
+
         void openModuleInView(const QModelIndex& index);
 
         ModuleItem* getModuleItemFromIndex(const QModelIndex& index);
+
     };
 }    // namespace hal

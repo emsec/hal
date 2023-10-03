@@ -32,6 +32,7 @@
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/user_action_compound.h"
 #include <QShortcut>
+#include <QApplication>
 
 namespace hal
 {
@@ -110,6 +111,14 @@ namespace hal
 
         connect(mSearchbar, &Searchbar::textEdited, mContextTableProxyModel, &ContextTableProxyModel::handleFilterTextChanged);
         connect(mSearchbar, &Searchbar::textEdited, this, &ContextManagerWidget::updateSearchIcon);
+
+        mShortCutDeleteItem = new QShortcut(ContentManager::sSettingDeleteItem->value().toString(), this);
+        mShortCutDeleteItem->setEnabled(false);
+
+        connect(ContentManager::sSettingDeleteItem, &SettingsItemKeybind::keySequenceChanged, mShortCutDeleteItem, &QShortcut::setKey);
+        connect(mShortCutDeleteItem, &QShortcut::activated, this, &ContextManagerWidget::handleDeleteContextClicked);
+
+        connect(qApp, &QApplication::focusChanged, this, &ContextManagerWidget::handleDeleteShortcutOnFocusChanged);
     }
 
     void ContextManagerWidget::handleCreateContextClicked()
@@ -167,6 +176,8 @@ namespace hal
 
     void ContextManagerWidget::handleDeleteContextClicked()
     {
+        QModelIndex current     = mContextTableView->currentIndex();
+        if (!current.isValid()) return;
         GraphContext* clicked_context = getCurrentContext();
         ActionDeleteObject* act = new ActionDeleteObject;
         act->setObject(UserActionObject(clicked_context->id(),UserActionObjectType::Context));
@@ -446,4 +457,20 @@ namespace hal
     {
         mSearchActiveIconStyle = style;
     }
+
+    void ContextManagerWidget::handleDeleteShortcutOnFocusChanged(QWidget* oldWidget, QWidget* newWidget)
+    {
+        if(!newWidget) return;
+        if(newWidget->parent() == this)
+        {
+            mShortCutDeleteItem->setEnabled(true);
+            return;
+        }
+        else
+        {
+            mShortCutDeleteItem->setEnabled(false);
+            return;
+        }
+    }
+
 }
