@@ -168,6 +168,7 @@ namespace hal
 
     public:
         static SettingsItemKeybind* sSettingSearch;
+        static SettingsItemKeybind* sSettingDeleteItem;
         void addExternalWidget(ContentFactory* factory);
 
     private:
