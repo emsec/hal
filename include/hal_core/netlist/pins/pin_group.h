@@ -426,18 +426,20 @@ namespace hal
          * Remove a pin from the pin group.
          * 
          * @param[in] pin - The pin to remove.
-         * @returns Ok on success, an error message otherwise.
+         * @returns true on success, false otherwise.
          */
-        Result<std::monostate> remove_pin(T* pin)
+        bool remove_pin(T* pin)
         {
             if (pin == nullptr)
             {
-                return ERR("'nullptr' given instead of a pin when trying to remove pin from pin group '" + m_name + "' with ID " + std::to_string(m_id));
+                log_warning("pin_group", "'nullptr' given instead of a pin when trying to remove pin from pin group '{}' with ID {}.", m_name, m_id);
+                return false;
             }
 
             if (pin->m_group.first != this)
             {
-                return ERR("pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " does not belong to pin group '" + m_name + "' with ID " + std::to_string(m_id));
+                log_warning("pin_group", "pin '{}' with ID {} does not belong to pin group '{}' with ID {}.", pin->get_name(), pin->get_id(), m_name, m_id);
+                return false;
             }
 
             i32 index    = pin->m_group.second;
@@ -454,16 +456,24 @@ namespace hal
             }
             else
             {
-                auto it = std::next(m_pins.begin(), m_start_index - index);
-                it      = m_pins.erase(it);
-                for (; it != m_pins.end(); it++)
+                if (m_pins.size()==1)
                 {
-                    std::get<1>((*it)->m_group)++;
+                    m_pins.clear();
+                    m_next_index++;
                 }
-                m_next_index++;
-            }
+                else
+                {
+                    auto it = m_pins.begin();
+                    for (int i=m_start_index; i>index;i--)
+                    {
+                        std::get<1>((*(it++))->m_group)--;
+                    }
+                    m_pins.erase(it);
+                    --m_start_index;
+                }
+             }
 
-            return OK({});
+            return true;
         }
 
         /**

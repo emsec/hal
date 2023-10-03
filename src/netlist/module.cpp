@@ -1243,6 +1243,12 @@ namespace hal
         }
 
         PinGroup<ModulePin>* pin_group;
+        if (!ascending && !pins.empty())
+        {
+            // compensate for shifting the start index
+            start_index -= (pins.size()-1);
+        }
+
         if (auto res = create_pin_group_internal(id, name, direction, type, ascending, start_index); res.is_error())
         {
             return ERR_APPEND(res.get_error(), "could not create pin group '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id));
@@ -1252,13 +1258,23 @@ namespace hal
             pin_group = res.get();
         }
 
-        for (auto* pin : pins)
+        if (ascending)
         {
-            if (!assign_pin_to_group(pin_group, pin, delete_empty_groups))
-            {
-                assert(delete_pin_group(pin_group));
-                return ERR("Assign pin to group failed.");
-            }
+            for (auto it = pins.begin(); it != pins.end(); ++it)
+                if (!assign_pin_to_group(pin_group, *it, delete_empty_groups))
+                {
+                    assert(delete_pin_group(pin_group));
+                    return ERR("Assign pin to group failed.");
+                }
+        }
+        else
+        {
+            for (auto it = pins.rbegin(); it != pins.rend(); ++it)
+                if (!assign_pin_to_group(pin_group, *it, delete_empty_groups))
+                {
+                    assert(delete_pin_group(pin_group));
+                    return ERR("Assign pin to group failed.");
+                }
         }
 
         PinChangedEvent(this,PinEvent::GroupCreate,pin_group->get_id()).send();
@@ -1390,7 +1406,7 @@ namespace hal
         if (PinGroup<ModulePin>* pg = pin->get_group().first; pg != nullptr)
         {
             // remove from old group and potentially delete old group if empty
-            if (auto res = pg->remove_pin(pin); res.is_error())
+            if (!pg->remove_pin(pin))
             {
                 log_warning("module",
                             "could not assign pin '{}' with ID {} to pin group '{}' with ID {} of module '{}' with ID {}: unable to remove pin from pin group '{}' with ID {}",
@@ -1574,7 +1590,7 @@ namespace hal
         PinGroup<ModulePin>* pin_group = pin->get_group().first;
         assert(pin_group != nullptr);
 
-        if (auto res = pin_group->remove_pin(pin); res.is_error())
+        if (!pin_group->remove_pin(pin))
         {
             log_warning("module", "could not remove pin '{}' with ID {} from net '{}' with ID {}: failed to remove pin from pin group '{}' with ID {}", pin->get_name(), pin->get_id(), net->get_name(), net->get_id(), pin_group->get_name(), pin_group->get_id());
             return false;

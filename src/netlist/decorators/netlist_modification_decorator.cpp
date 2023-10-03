@@ -292,7 +292,7 @@ namespace hal
                 // remove pin from current pin group
                 auto current_pin_group = pin->get_group().first;
                 // This get is safe, since we make sure that the pin is a valid pointer and part of the group
-                current_pin_group->remove_pin(pin).get();
+                current_pin_group->remove_pin(pin);
 
                 // delete old pin group incase it is now empty
                 if (current_pin_group->get_pins().empty())

@@ -370,6 +370,12 @@ namespace hal
         }
 
         PinGroup<GatePin>* pin_group;
+        if (!ascending && !pins.empty())
+        {
+            // compensate for shifting the start index
+            start_index -= (pins.size()-1);
+        }
+
         if (auto res = create_pin_group_internal(id, name, direction, type, ascending, start_index); res.is_error())
         {
             return ERR_APPEND(res.get_error(), "could not create pin group '" + name + "' for gate type '" + m_name + "' with ID " + std::to_string(m_id));
@@ -379,13 +385,23 @@ namespace hal
             pin_group = res.get();
         }
 
-        for (auto* pin : pins)
+        if (ascending)
         {
-            if (auto res = assign_pin_to_group(pin_group, pin, delete_empty_groups); res.is_error())
-            {
-                assert(delete_pin_group(pin_group));
-                return ERR(res.get_error());
-            }
+            for (auto it = pins.begin(); it != pins.end(); ++it)
+                if (auto res = assign_pin_to_group(pin_group, *it, delete_empty_groups); res.is_error())
+                {
+                    assert(delete_pin_group(pin_group));
+                    return ERR(res.get_error());
+                }
+        }
+        else
+        {
+            for (auto it = pins.rbegin(); it != pins.rend(); ++it)
+                if (auto res = assign_pin_to_group(pin_group, *it, delete_empty_groups); res.is_error())
+                {
+                    assert(delete_pin_group(pin_group));
+                    return ERR(res.get_error());
+                }
         }
 
         return OK(pin_group);
@@ -488,10 +504,9 @@ namespace hal
         if (PinGroup<GatePin>* pg = pin->get_group().first; pg != nullptr)
         {
             // remove from old group and potentially delete old group if empty
-            if (auto res = pg->remove_pin(pin); res.is_error())
+            if (!pg->remove_pin(pin))
             {
-                return ERR_APPEND(res.get_error(),
-                                  "could not assign pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " to pin group '" + pin_group->get_name() + "' with ID "
+                return ERR("could not assign pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " to pin group '" + pin_group->get_name() + "' with ID "
                                       + std::to_string(pin_group->get_id()) + " of gate type '" + m_name + "' with ID " + std::to_string(m_id) + ": unable to remove pin from pin group '"
                                       + pg->get_name() + "' with ID " + std::to_string(pg->get_id()));
             }
