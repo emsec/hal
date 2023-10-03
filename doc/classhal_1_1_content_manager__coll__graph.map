@@ -1,5 +1,5 @@
 <map id="hal::ContentManager" name="hal::ContentManager">
-<area shape="rect" id="node1" title="Manages all ContentWidgets." alt="" coords="5,809,203,975"/>
+<area shape="rect" id="node1" title="Manages all ContentWidgets." alt="" coords="5,824,203,989"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="15,5,182,347"/>
 <area shape="rect" id="node4" href="$classhal_1_1_settings_item.html" title="The interface for the logical part of a setting." alt="" coords="130,396,275,547"/>
 <area shape="rect" id="node3" href="$classhal_1_1_settings_item_keybind.html" title="A SettingsItem to modify keybinds." alt="" coords="121,596,306,747"/>

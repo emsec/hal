@@ -234,7 +234,7 @@ var searchData=
   ['linef_7747',['LineF',['https://doc.qt.io/qt-5/qvariant-obsolete.html#Type-enum',1,'QVariant']]],
   ['linefeed_7748',['LineFeed',['https://doc.qt.io/qt-5/qchar.html#SpecialCharacter-enum',1,'QChar']]],
   ['linefortextposition_7749',['lineForTextPosition',['https://doc.qt.io/qt-5/qtextlayout.html#lineForTextPosition',1,'QTextLayout']]],
-  ['lineheight_7750',['lineHeight',['https://doc.qt.io/qt-5/qtextblockformat.html#lineHeight',1,'QTextBlockFormat::lineHeight(qreal scriptLineHeight, qreal scaling) const const'],['https://doc.qt.io/qt-5/qtextblockformat.html#lineHeight-1',1,'QTextBlockFormat::lineHeight() const const'],['https://doc.qt.io/qt-5/qtextformat.html#Property-enum',1,'QTextFormat::LineHeight()']]],
+  ['lineheight_7750',['LineHeight',['https://doc.qt.io/qt-5/qtextformat.html#Property-enum',1,'QTextFormat::LineHeight()'],['https://doc.qt.io/qt-5/qtextblockformat.html#lineHeight',1,'QTextBlockFormat::lineHeight(qreal scriptLineHeight, qreal scaling) const const'],['https://doc.qt.io/qt-5/qtextblockformat.html#lineHeight-1',1,'QTextBlockFormat::lineHeight() const const']]],
   ['lineheighttype_7751',['LineHeightType',['https://doc.qt.io/qt-5/qtextformat.html#Property-enum',1,'QTextFormat::LineHeightType()'],['https://doc.qt.io/qt-5/qtextblockformat.html#lineHeightType',1,'QTextBlockFormat::lineHeightType()']]],
   ['lineheighttypes_7752',['LineHeightTypes',['https://doc.qt.io/qt-5/qtextblockformat.html#LineHeightTypes-enum',1,'QTextBlockFormat']]],
   ['linenumber_7753',['lineNumber',['https://doc.qt.io/qt-5/qxmlstreamreader.html#lineNumber',1,'QXmlStreamReader::lineNumber()'],['https://doc.qt.io/qt-5/qtextline.html#lineNumber',1,'QTextLine::lineNumber()']]],
