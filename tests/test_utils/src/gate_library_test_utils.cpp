@@ -424,22 +424,14 @@ namespace hal
                 {
                     const auto grp = res_grp.get();
 
-                    if (auto res = carry4->create_pin("DI(3)", PinDirection::input, PinType::none, false); res.is_error())
+                    std::list<GatePin*> pins;
+                    if (auto res = carry4->create_pin("DI(0)", PinDirection::input, PinType::none, false); res.is_error())
                     {
                         return nullptr;
                     }
                     else
                     {
-                        grp->assign_pin(res.get());
-                    }
-
-                    if (auto res = carry4->create_pin("DI(2)", PinDirection::input, PinType::none, false); res.is_error())
-                    {
-                        return nullptr;
-                    }
-                    else
-                    {
-                        grp->assign_pin(res.get());
+                        pins.push_front(res.get());
                     }
 
                     if (auto res = carry4->create_pin("DI(1)", PinDirection::input, PinType::none, false); res.is_error())
@@ -448,17 +440,29 @@ namespace hal
                     }
                     else
                     {
-                        grp->assign_pin(res.get());
+                        pins.push_front(res.get());
                     }
 
-                    if (auto res = carry4->create_pin("DI(0)", PinDirection::input, PinType::none, false); res.is_error())
+                    if (auto res = carry4->create_pin("DI(2)", PinDirection::input, PinType::none, false); res.is_error())
                     {
                         return nullptr;
                     }
                     else
                     {
-                        grp->assign_pin(res.get());
+                        pins.push_front(res.get());
                     }
+
+                    if (auto res = carry4->create_pin("DI(3)", PinDirection::input, PinType::none, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else
+                    {
+                        pins.push_front(res.get());
+                    }
+
+                    for (auto pin : pins)
+                        grp->assign_pin(pin);
                 }
 
                 if (auto res_grp = carry4->create_pin_group("S", {}, PinDirection::input, PinType::none, false, 3); res_grp.is_error())
@@ -469,22 +473,14 @@ namespace hal
                 {
                     const auto grp = res_grp.get();
 
-                    if (auto res = carry4->create_pin("S(3)", PinDirection::input, PinType::none, false); res.is_error())
+                    std::list<GatePin*> pins;
+                    if (auto res = carry4->create_pin("S(0)", PinDirection::input, PinType::none, false); res.is_error())
                     {
                         return nullptr;
                     }
                     else
                     {
-                        grp->assign_pin(res.get());
-                    }
-
-                    if (auto res = carry4->create_pin("S(2)", PinDirection::input, PinType::none, false); res.is_error())
-                    {
-                        return nullptr;
-                    }
-                    else
-                    {
-                        grp->assign_pin(res.get());
+                        pins.push_front(res.get());
                     }
 
                     if (auto res = carry4->create_pin("S(1)", PinDirection::input, PinType::none, false); res.is_error())
@@ -493,17 +489,29 @@ namespace hal
                     }
                     else
                     {
-                        grp->assign_pin(res.get());
+                        pins.push_front(res.get());
                     }
 
-                    if (auto res = carry4->create_pin("S(0)", PinDirection::input, PinType::none, false); res.is_error())
+                    if (auto res = carry4->create_pin("S(2)", PinDirection::input, PinType::none, false); res.is_error())
                     {
                         return nullptr;
                     }
                     else
                     {
-                        grp->assign_pin(res.get());
+                        pins.push_front(res.get());
                     }
+
+                    if (auto res = carry4->create_pin("S(3)", PinDirection::input, PinType::none, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else
+                    {
+                        pins.push_front(res.get());
+                    }
+
+                    for (auto pin : pins)
+                        grp->assign_pin(pin);
                 }
 
                 if (auto res_grp = carry4->create_pin_group("CO", {}, PinDirection::output, PinType::carry, false, 3); res_grp.is_error())
@@ -514,22 +522,14 @@ namespace hal
                 {
                     const auto grp = res_grp.get();
 
-                    if (auto res = carry4->create_pin("CO(3)", PinDirection::output, PinType::carry, false); res.is_error())
+                    std::list<GatePin*> pins;
+                    if (auto res = carry4->create_pin("CO(0)", PinDirection::output, PinType::carry, false); res.is_error())
                     {
                         return nullptr;
                     }
                     else
                     {
-                        grp->assign_pin(res.get());
-                    }
-
-                    if (auto res = carry4->create_pin("CO(2)", PinDirection::output, PinType::carry, false); res.is_error())
-                    {
-                        return nullptr;
-                    }
-                    else
-                    {
-                        grp->assign_pin(res.get());
+                        pins.push_front(res.get());
                     }
 
                     if (auto res = carry4->create_pin("CO(1)", PinDirection::output, PinType::carry, false); res.is_error())
@@ -538,17 +538,29 @@ namespace hal
                     }
                     else
                     {
-                        grp->assign_pin(res.get());
+                        pins.push_front(res.get());
                     }
 
-                    if (auto res = carry4->create_pin("CO(0)", PinDirection::output, PinType::carry, false); res.is_error())
+                    if (auto res = carry4->create_pin("CO(2)", PinDirection::output, PinType::carry, false); res.is_error())
                     {
                         return nullptr;
                     }
                     else
                     {
-                        grp->assign_pin(res.get());
+                        pins.push_front(res.get());
                     }
+
+                    if (auto res = carry4->create_pin("CO(3)", PinDirection::output, PinType::carry, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else
+                    {
+                        pins.push_front(res.get());
+                    }
+
+                    for (auto pin : pins)
+                        grp->assign_pin(pin);
                 }
 
                 if (auto res_grp = carry4->create_pin_group("O", {}, PinDirection::output, PinType::none, false, 3); res_grp.is_error())
@@ -559,22 +571,14 @@ namespace hal
                 {
                     const auto grp = res_grp.get();
 
-                    if (auto res = carry4->create_pin("O(3)", PinDirection::output, PinType::none, false); res.is_error())
+                    std::list<GatePin*> pins;
+                    if (auto res = carry4->create_pin("O(0)", PinDirection::output, PinType::none, false); res.is_error())
                     {
                         return nullptr;
                     }
                     else
                     {
-                        grp->assign_pin(res.get());
-                    }
-
-                    if (auto res = carry4->create_pin("O(2)", PinDirection::output, PinType::none, false); res.is_error())
-                    {
-                        return nullptr;
-                    }
-                    else
-                    {
-                        grp->assign_pin(res.get());
+                        pins.push_front(res.get());
                     }
 
                     if (auto res = carry4->create_pin("O(1)", PinDirection::output, PinType::none, false); res.is_error())
@@ -583,17 +587,29 @@ namespace hal
                     }
                     else
                     {
-                        grp->assign_pin(res.get());
+                        pins.push_front(res.get());
                     }
 
-                    if (auto res = carry4->create_pin("O(0)", PinDirection::output, PinType::none, false); res.is_error())
+                    if (auto res = carry4->create_pin("O(2)", PinDirection::output, PinType::none, false); res.is_error())
                     {
                         return nullptr;
                     }
                     else
                     {
-                        grp->assign_pin(res.get());
+                       pins.push_front(res.get());
                     }
+
+                    if (auto res = carry4->create_pin("O(3)", PinDirection::output, PinType::none, false); res.is_error())
+                    {
+                        return nullptr;
+                    }
+                    else
+                    {
+                        pins.push_front(res.get());
+                    }
+
+                    for (auto pin : pins)
+                        grp->assign_pin(pin);
                 }
 
                 carry4->add_boolean_function("CO(0)", BooleanFunction::from_string("((S(0) & (CI | CYINIT)) | ((! S(0)) & DI(0)))").get());
