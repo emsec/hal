@@ -1151,7 +1151,7 @@ namespace hal {
                 EXPECT_EQ(in_group->get_pin_at_index(1).get(), in_pin_0);
                 EXPECT_EQ(in_group->get_pin_at_index(2).get(), in_pin_1);
 
-                EXPECT_TRUE(m_1->move_pin_within_group(in_group, in_pin_0, 2));
+                EXPECT_TRUE(m_1->move_pin_within_group(in_group, in_pin_1, 1));
                 // descending group start index 2
                 //     in_pin_0    "I0"   index 2
                 //     in_pin_1    "I1"   index 1
