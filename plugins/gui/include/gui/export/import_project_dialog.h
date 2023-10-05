@@ -61,14 +61,19 @@ namespace hal
         ImportStatus mStatus;
         FileSelectWidget* mZippedFile;
         FileSelectWidget* mTargetDirectory;
+        QLineEdit* mExtractProjectEdit;
         QDialogButtonBox* mButtonBox;
-        QString mExtractedProjectDir;
+        QString mTargetProjectName;
+        QString mExtractedProjectAbsolutePath;
+        static void deleteFilesList(QStringList files);
+        static void deleteFilesRecursion(QString dir);
     private Q_SLOTS:
         void handleSelectionStatusChanged();
     public:
         ImportProjectDialog(QWidget* parent = nullptr);
         bool importProject();
         ImportStatus status() const { return mStatus; }
-        QString extractedProjectDir() const { return mExtractedProjectDir; }
+        QString extractedProjectAbsolutePath() const { return mExtractedProjectAbsolutePath; }
+        static QString suggestedProjectDir(const QString& filename);
     };
 }

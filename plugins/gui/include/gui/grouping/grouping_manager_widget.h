@@ -28,6 +28,7 @@
 #include "gui/content_widget/content_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 #include "hal_core/defines.h"
+#include "gui/settings/settings_items/settings_item_keybind.h"
 
 #include <QColor>
 #include "gui/grouping/grouping_color_serializer.h"
@@ -315,6 +316,8 @@ namespace hal
          */
         void handleDoubleClicked(const QModelIndex& index);
 
+        void handleDeleteShortcutOnFocusChanged(QWidget *oldWidget, QWidget *newWidget);
+
     private:
         class ToolboxModuleHash
         {
@@ -374,6 +377,8 @@ namespace hal
 
         QString mDisabledIconStyle;
         GroupingColorSerializer mColorSerializer;
+
+        QShortcut* mShortCutDeleteItem;
 
         GroupingTableEntry getCurrentGrouping();
     };

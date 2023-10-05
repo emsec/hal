@@ -29,6 +29,7 @@
 #include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
 #include "hal_core/defines.h"
 
+
 class QTableWidget;
 class QStackedWidget;
 class QSplitter;

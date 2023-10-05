@@ -33,6 +33,7 @@
 #include "gui/context_manager_widget/models/context_table_model.h"
 #include "gui/context_manager_widget/models/context_table_proxy_model.h"
 #include "gui/searchbar/searchbar.h"
+#include "gui/settings/settings_items/settings_item_keybind.h"
 
 #include <QListWidget>
 #include <QPoint>
@@ -166,6 +167,11 @@ namespace hal
          */
         void updateSearchIcon();
 
+    private Q_SLOTS:
+
+        void handleDeleteShortcutOnFocusChanged(QWidget* oldWidget, QWidget* newWidget);
+
+
     private:
         GraphTabWidget* mTabView;
 
@@ -200,6 +206,8 @@ namespace hal
         QString mSearchIconPath;
         QString mSearchIconStyle;
         QString mSearchActiveIconStyle;
+
+        QShortcut* mShortCutDeleteItem;
 
         void handleCreateContextClicked();
         void handleRenameContextClicked();

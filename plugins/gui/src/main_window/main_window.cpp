@@ -3,8 +3,8 @@
 #include "gui/action/action.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/docking_system/dock_bar.h"
-#include "gui/export/export_registered_format.h"
 #include "gui/export/export_project_dialog.h"
+#include "gui/export/export_registered_format.h"
 #include "gui/export/import_project_dialog.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/file_manager/project_dir_dialog.h"
@@ -24,33 +24,34 @@
 #include "gui/user_action/action_open_netlist_file.h"
 #include "gui/welcome_screen/welcome_screen.h"
 #include "hal_core/defines.h"
+#include "hal_core/netlist/event_system/event_log.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
-#include "hal_core/utilities/log.h"
-#include "hal_core/netlist/event_system/event_log.h"
 #include "hal_core/netlist/project_manager.h"
-#include "hal_core/utilities/project_directory.h"
-#include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/plugin_system/gui_extension_interface.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/project_directory.h"
 
 #include <QApplication>
 #include <QCloseEvent>
 #include <QDesktopWidget>
+#include <QDir>
 #include <QFileDialog>
 #include <QFuture>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QShortcut>
-#include <QtConcurrent>
 #include <QRegExp>
+#include <QShortcut>
 #include <QStringList>
-#include <QDir>
+#include <QtConcurrent>
 
 namespace hal
 {
@@ -817,7 +818,7 @@ namespace hal
             if (ipd.importProject())
             {
                 ActionOpenNetlistFile* act = new ActionOpenNetlistFile(ActionOpenNetlistFile::OpenProject,
-                                                                       ipd.extractedProjectDir());
+                                                                       ipd.extractedProjectAbsolutePath());
                 act->exec();
             }
             else
@@ -1075,4 +1076,5 @@ namespace hal
     {
         SettingsManager::instance()->mainWindowSaveGeometry(pos(), size());
     }
+
 }    // namespace hal

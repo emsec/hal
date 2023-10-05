@@ -14,6 +14,7 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "gui/module_model/module_model.h"
+#include <QApplication>
 #include <QHeaderView>
 #include <QItemSelectionModel>
 #include <QMenu>
@@ -24,7 +25,6 @@
 #include <QShortcut>
 #include <QTreeView>
 #include <QVBoxLayout>
-#include "hal_core/utilities/log.h"
 
 namespace hal
 {
@@ -73,6 +73,15 @@ namespace hal
 
         connect(mSearchAction, &QAction::triggered, this, &ModuleWidget::toggleSearchbar);
         connect(mSearchbar, &Searchbar::textEdited, this, &ModuleWidget::updateSearchIcon);
+
+        mShortCutDeleteItem = new QShortcut(ContentManager::sSettingDeleteItem->value().toString(), this);
+        mShortCutDeleteItem->setEnabled(false);
+
+        connect(ContentManager::sSettingDeleteItem, &SettingsItemKeybind::keySequenceChanged, mShortCutDeleteItem, &QShortcut::setKey);
+        connect(mShortCutDeleteItem, &QShortcut::activated, this, &ModuleWidget::deleteSelectedItem);
+
+        connect(qApp, &QApplication::focusChanged, this, &ModuleWidget::handleDeleteShortcutOnFocusChanged);
+
     }
 
     void ModuleWidget::setupToolbar(Toolbar* toolbar)
@@ -323,5 +332,34 @@ namespace hal
     void ModuleWidget::setSearchActiveIconStyle(const QString& style)
     {
         mSearchActiveIconStyle = style;
+    }
+
+    void ModuleWidget::deleteSelectedItem()
+    {
+        if(!mTreeView->currentIndex().isValid())
+        {
+            return;
+        }
+
+        ModuleItem* selectedItem = getModuleItemFromIndex(mTreeView->currentIndex());
+        if(selectedItem->parent() != nullptr)
+        {
+            gNetlistRelay->deleteModule(getModuleItemFromIndex(mTreeView->currentIndex())->id());
+        }
+    }
+
+    void ModuleWidget::handleDeleteShortcutOnFocusChanged(QWidget* oldWidget, QWidget* newWidget)
+    {
+        if(!newWidget) return;
+        if(newWidget->parent() == this)
+        {
+            mShortCutDeleteItem->setEnabled(true);
+            return;
+        }
+        else
+        {
+            mShortCutDeleteItem->setEnabled(false);
+            return;
+        }
     }
 }
