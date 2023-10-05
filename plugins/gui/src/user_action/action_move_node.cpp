@@ -137,7 +137,7 @@ namespace hal
         {
             mGridPlacement = undo->mGridPlacement;
             auto it = ctx->getLayouter()->positionToNodeMap().find(mTo);
-            if (it != ctx->getLayouter()->positionToNodeMap().constEnd())
+            if (it == ctx->getLayouter()->positionToNodeMap().constEnd())
                 mGridPlacement[ndToMove] = mTo;
         }
 
