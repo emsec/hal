@@ -102,6 +102,7 @@ namespace hal {
 
      u32 GateDialog::treeGateId(const QModelIndex& index)
      {
+        Q_UNUSED(index);
          return 0;
          /*
         GateModel* treeModel = static_cast<GateModel*>(mGateTreeProxyModel->sourceModel());
@@ -116,6 +117,8 @@ namespace hal {
 
      void GateDialog::handleTreeSelectionChanged(const QModelIndex& current, const QModelIndex& previous)
      {
+        Q_UNUSED(current);
+        Q_UNUSED(previous);
          /*
          Q_UNUSED(previous);
          u32 moduleId = treeGateId(current);

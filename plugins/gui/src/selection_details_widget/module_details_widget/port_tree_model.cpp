@@ -336,7 +336,8 @@ namespace hal
 
     bool ModulePinsTreeModel::canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const
     {
-        Q_UNUSED(action)
+        Q_UNUSED(action);
+        Q_UNUSED(column);
         if(!data->formats().contains("pintreemodel/item")) return false;
 
         QString type; int id;

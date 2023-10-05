@@ -45,6 +45,7 @@ namespace hal
 
     void ExpandingListWidget::clearSelected()
     {
+        if (!mSelectedButton) return;
         mSelectedButton->setSelected(false);
         mSelectedButton = nullptr;
     }

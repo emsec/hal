@@ -20,6 +20,7 @@
 #include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
 
 #include <QAction>
+#include <QApplication>
 #include <QColorDialog>
 #include <QHeaderView>
 #include <QImage>
@@ -114,6 +115,14 @@ namespace hal
         connect(mGroupingTableModel, &GroupingTableModel::newEntryAdded, this, &GroupingManagerWidget::handleNewEntryAdded);
         connect(mGroupingTableView, &QTableView::doubleClicked, this, &GroupingManagerWidget::handleDoubleClicked);
         handleCurrentChanged();
+
+        mShortCutDeleteItem = new QShortcut(ContentManager::sSettingDeleteItem->value().toString(), this);
+        mShortCutDeleteItem->setEnabled(false);
+
+        connect(ContentManager::sSettingDeleteItem, &SettingsItemKeybind::keySequenceChanged, mShortCutDeleteItem, &QShortcut::setKey);
+        connect(mShortCutDeleteItem, &QShortcut::activated, this, &GroupingManagerWidget::handleDeleteGroupingClicked);
+
+        connect(qApp, &QApplication::focusChanged, this, &GroupingManagerWidget::handleDeleteShortcutOnFocusChanged);
     }
 
     QList<QShortcut*> GroupingManagerWidget::createShortcuts()
@@ -511,6 +520,10 @@ namespace hal
 
     void GroupingManagerWidget::handleDeleteGroupingClicked()
     {
+        if (!hasFocus() && !mGroupingTableView->hasFocus()) return;
+
+        QModelIndex current     = mGroupingTableView->currentIndex();
+        if (!current.isValid()) return;
         int irow                = mProxyModel->mapToSource(mGroupingTableView->currentIndex()).row();
         u32 grpId               = mGroupingTableModel->groupingAt(irow).id();
         ActionDeleteObject* act = new ActionDeleteObject;
@@ -834,5 +847,20 @@ namespace hal
     void GroupingManagerWidget::setTableIconStyle(const QString& style)
     {
         mTableIconStyle = style;
+    }
+
+    void GroupingManagerWidget::handleDeleteShortcutOnFocusChanged(QWidget* oldWidget, QWidget* newWidget)
+    {
+        if(!newWidget) return;
+        if(newWidget->parent() == this)
+        {
+            mShortCutDeleteItem->setEnabled(true);
+            return;
+        }
+        else
+        {
+            mShortCutDeleteItem->setEnabled(false);
+            return;
+        }
     }
 }    // namespace hal

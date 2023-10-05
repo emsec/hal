@@ -290,8 +290,9 @@ namespace hal
          * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
          * @param[in] direction - The direction of the pin group. Defaults to `PinDirection::none`.
          * @param[in] type - The type of the pin group. Defaults to `PinType::none`.
-         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
+         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `true`.
          * @param[in] start_index - The start index of the pin group. Defaults to `0`.
+         * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
          * @returns The pin group on success, an error message otherwise.
          */
         Result<PinGroup<GatePin>*> create_pin_group(const u32 id,
@@ -299,8 +300,9 @@ namespace hal
                                                     const std::vector<GatePin*> pins = {},
                                                     PinDirection direction           = PinDirection::none,
                                                     PinType type                     = PinType::none,
-                                                    bool ascending                   = false,
-                                                    u32 start_index                  = 0);
+                                                    bool ascending                   = true,
+                                                    i32 start_index                  = 0,
+                                                    bool delete_empty_groups         = true);
 
         /**
          * Create a pin group with the given name.
@@ -310,16 +312,18 @@ namespace hal
          * @param[in] pins - The pins to be assigned to the pin group. Defaults to an empty vector.
          * @param[in] direction - The direction of the pin group. Defaults to `PinDirection::none`.
          * @param[in] type - The type of the pin group. Defaults to `PinType::none`.
-         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `false`.
+         * @param[in] ascending - Set `true` for ascending pin order (from 0 to n-1), `false` otherwise (from n-1 to 0). Defaults to `true`.
          * @param[in] start_index - The start index of the pin group. Defaults to `0`.
+         * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pins have been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
          * @returns The pin group on success, an error message otherwise.
          */
         Result<PinGroup<GatePin>*> create_pin_group(const std::string& name,
                                                     const std::vector<GatePin*> pins = {},
                                                     PinDirection direction           = PinDirection::none,
                                                     PinType type                     = PinType::none,
-                                                    bool ascending                   = false,
-                                                    u32 start_index                  = 0);
+                                                    bool ascending                   = true,
+                                                    i32 start_index                  = 0,
+                                                    bool delete_empty_groups         = true);
 
         /**
          * Get an ordered vector of all pin groups of the gate type.
@@ -345,6 +349,51 @@ namespace hal
          * @returns The pin group on success, a `nullptr` otherwise.
          */
         PinGroup<GatePin>* get_pin_group_by_name(const std::string& name) const;
+
+        /**
+         * Delete the given pin group.
+         * 
+         * @param[in] pin_group - The pin group to be deleted.
+         * @returns Ok on success, an error message otherwise.
+         */
+        Result<std::monostate> delete_pin_group(PinGroup<GatePin>* pin_group);
+
+        /**
+         * Assign a pin to a pin group.
+         * 
+         * @param[in] pin_group - The new pin group.
+         * @param[in] pin - The pin to be added.
+         * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pin has been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
+         * @returns Ok on success, an error message otherwise.
+         */
+        Result<std::monostate> assign_pin_to_group(PinGroup<GatePin>* pin_group, GatePin* pin, bool delete_empty_groups = true);
+
+        /**
+         * Set the name of the given pin group.
+         * 
+         * @param[in] pin_group - The pin group.
+         * @param[in] new_name - The name to be assigned to the pin group.
+         * @returns `true` on success, `false` otherwise.
+         */
+        bool set_pin_group_name(PinGroup<GatePin>* pin_group, const std::string& new_name);
+
+        /**
+         * Set the type of the given pin group.
+         * 
+         * @param[in] pin_group - The pin group.
+         * @param[in] new_type - The type to be assigned to the pin group.
+         * @returns `true` on success, `false` otherwise.
+         */
+        bool set_pin_group_type(PinGroup<GatePin>* pin_group, PinType new_type);
+
+        /**
+         * Set the direction of the given pin group.
+         * 
+         * @param[in] pin_group - The pin group.
+         * @param[in] new_direction - The direction to be assigned to the pin group.
+         * @returns `true` on success, `false` otherwise.
+         */
+        bool set_pin_group_direction(PinGroup<GatePin>* pin_group, PinDirection new_direction);
 
         /**
          * Add a Boolean function with the specified name to the gate type.
@@ -418,5 +467,8 @@ namespace hal
 
         GateType(const GateType&)            = delete;
         GateType& operator=(const GateType&) = delete;
+
+        Result<PinGroup<GatePin>*> create_pin_group_internal(const u32 id, const std::string& name, PinDirection direction, PinType type, bool ascending, u32 start_index);
+        Result<std::monostate> delete_pin_group_internal(PinGroup<GatePin>* pin_group);
     };
 }    // namespace hal

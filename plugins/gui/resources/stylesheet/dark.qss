@@ -884,6 +884,22 @@ hal--OpenFileWidget #icon-label
     margin-top : 220px;
 }
 
+hal--GateLibrarySelection
+{
+    qproperty-saveIconStyle: "all->#3192C5";
+    qproperty-saveIconPath: ":/icons/folder-down";
+}
+
+hal--GateLibrarySelection QLabel
+{
+    background: #171e22;
+}
+
+hal--GateLibrarySelection QLabel#warningMsg
+{
+    color: yellow;
+}
+
 hal--ImportNetlistDialog
 {
     qproperty-saveIconStyle: "all->#3192C5";

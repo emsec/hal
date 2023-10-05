@@ -708,6 +708,7 @@ namespace hal
 
     void GraphicsScene::debugDrawLayouterGrid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to)
     {
+        if (mDebugXLines.isEmpty() || mDebugYLines.isEmpty()) return;
         painter->setPen(QPen(Qt::magenta));
 
         for (qreal x : mDebugXLines)

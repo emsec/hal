@@ -127,6 +127,17 @@ namespace hal
         return nullptr;
     }
 
+    QString GraphContextManager::nextViewName(const QString& prefix) const
+    {
+        int cnt = 0;
+
+        for (;;)
+        {
+            QString name = QString("%1 %2").arg(prefix).arg(++cnt);
+            if (!contextWithNameExists(name)) return name;
+        }
+    }
+
     bool GraphContextManager::contextWithNameExists(const QString& name) const
     {
         for (GraphContext* ctx : mContextTableModel->list())
