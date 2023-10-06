@@ -2,6 +2,7 @@
 #include <QStringList>
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/gui_globals.h"
+#include "gui/graph_widget/layout_locker.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "hal_core/utilities/log.h"
 
@@ -141,6 +142,7 @@ namespace hal
                 mGridPlacement[ndToMove] = mTo;
         }
 
+        LayoutLocker llock;
         ctx->clear();
 
         QSet<u32> modIds;
