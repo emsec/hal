@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['joining_37888',['Joining',['https://doc.qt.io/qt-5/qchar-obsolete.html#Joining-enum',1,'QChar']]],
-  ['joiningtype_37889',['JoiningType',['https://doc.qt.io/qt-5/qchar.html#JoiningType-enum',1,'QChar']]],
-  ['jsonformat_37890',['JsonFormat',['https://doc.qt.io/qt-5/qjsondocument.html#JsonFormat-enum',1,'QJsonDocument']]]
+  ['joining_37893',['Joining',['https://doc.qt.io/qt-5/qchar-obsolete.html#Joining-enum',1,'QChar']]],
+  ['joiningtype_37894',['JoiningType',['https://doc.qt.io/qt-5/qchar.html#JoiningType-enum',1,'QChar']]],
+  ['jsonformat_37895',['JsonFormat',['https://doc.qt.io/qt-5/qjsondocument.html#JsonFormat-enum',1,'QJsonDocument']]]
 ];

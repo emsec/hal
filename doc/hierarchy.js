@@ -216,6 +216,7 @@ var hierarchy =
       [ "hal::PythonEditor", "classhal_1_1_python_editor.html", null ],
       [ "hal::PythonThread", "classhal_1_1_python_thread.html", null ]
     ] ],
+    [ "hal::PythonMutex", "classhal_1_1_python_mutex.html", null ],
     [ "QGraphicsItem", "https://doc.qt.io/qt-5/qgraphicsitem.html", [
       [ "hal::CommentSpeechBubble", "classhal_1_1_comment_speech_bubble.html", null ],
       [ "hal::GraphicsItem", "classhal_1_1_graphics_item.html", [
@@ -589,8 +590,8 @@ var hierarchy =
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
     [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
-    [ "hal::Result< T >", "classhal_1_1_result.html", null ],
     [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
+    [ "hal::Result< T >", "classhal_1_1_result.html", null ],
     [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
     [ "hal::RuntimeLibrary", "classhal_1_1_runtime_library.html", null ],
     [ "hal::SelectionTreeItem", "classhal_1_1_selection_tree_item.html", [
@@ -614,8 +615,8 @@ var hierarchy =
       [ "hal::VerilogWriterTest", "classhal_1_1_verilog_writer_test.html", null ],
       [ "hal::VHDLParserTest", "classhal_1_1_v_h_d_l_parser_test.html", null ]
     ] ],
-    [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
     [ "hal::Token< T >", "structhal_1_1_token.html", null ],
+    [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
     [ "hal::TokenStream< T >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< ci_string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< std::string >", "classhal_1_1_token_stream.html", null ],

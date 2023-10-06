@@ -345,6 +345,7 @@ var namespacehal =
     [ "PythonEditorCodeCompletionDialog", "classhal_1_1_python_editor_code_completion_dialog.html", "classhal_1_1_python_editor_code_completion_dialog" ],
     [ "PythonGateSelectionReceiver", "classhal_1_1_python_gate_selection_receiver.html", "classhal_1_1_python_gate_selection_receiver" ],
     [ "PythonModuleSelectionReceiver", "classhal_1_1_python_module_selection_receiver.html", "classhal_1_1_python_module_selection_receiver" ],
+    [ "PythonMutex", "classhal_1_1_python_mutex.html", "classhal_1_1_python_mutex" ],
     [ "PythonQssAdapter", "classhal_1_1_python_qss_adapter.html", "classhal_1_1_python_qss_adapter" ],
     [ "PythonSerializer", "classhal_1_1_python_serializer.html", "classhal_1_1_python_serializer" ],
     [ "PythonSyntaxHighlighter", "classhal_1_1_python_syntax_highlighter.html", "classhal_1_1_python_syntax_highlighter" ],

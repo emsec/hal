@@ -20,6 +20,7 @@ var dir_7c750ac7d7398768b8029f5632912b7a =
     ] ],
     [ "python_editor_code_completion_dialog.h", "python__editor__code__completion__dialog_8h.html", null ],
     [ "python_thread.h", "python__thread_8h.html", [
+      [ "PythonMutex", "classhal_1_1_python_mutex.html", "classhal_1_1_python_mutex" ],
       [ "PythonThread", "classhal_1_1_python_thread.html", "classhal_1_1_python_thread" ]
     ] ]
 ];

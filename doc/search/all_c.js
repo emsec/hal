@@ -2,7 +2,7 @@ var searchData=
 [
   ['layouters_7516',['Layouters',['../group__graph-layouter.html',1,'']]],
   ['l_7517',['L',['../namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ad20caec3b48a1eef164cb4ca81ba2587',1,'hal']]],
-  ['label_7518',['Label',['https://doc.qt.io/qt-5/qaccessible.html#RelationFlag-enum',1,'QAccessible::Label()'],['https://doc.qt.io/qt-5/qsizepolicy.html#ControlType-enum',1,'QSizePolicy::Label()'],['../classhal_1_1_settings_item.html#abbe4de4ca07f5194069798b31673470f',1,'hal::SettingsItem::label()']]],
+  ['label_7518',['label',['../classhal_1_1_settings_item.html#abbe4de4ca07f5194069798b31673470f',1,'hal::SettingsItem::label()'],['https://doc.qt.io/qt-5/qaccessible.html#RelationFlag-enum',1,'QAccessible::Label()'],['https://doc.qt.io/qt-5/qsizepolicy.html#ControlType-enum',1,'QSizePolicy::Label()']]],
   ['label_5f_7519',['LABEL_',['../timing__utils_8h.html#af36adc407b65851bc28fd14fa37ed4f0',1,'timing_utils.h']]],
   ['label_5fbutton_2ecpp_7520',['label_button.cpp',['../label__button_8cpp.html',1,'']]],
   ['label_5fbutton_2eh_7521',['label_button.h',['../label__button_8h.html',1,'']]],
