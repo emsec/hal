@@ -178,7 +178,7 @@ namespace hal
         public:
             bool mValid;
             QRectF mRect;
-            QVector<QPoint> mGrid;
+            QPair<QPoint,QPointF> mGrid;
             StoreViewport() : mValid(false) {;}
         };
 
