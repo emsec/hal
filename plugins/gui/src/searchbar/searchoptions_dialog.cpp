@@ -36,22 +36,17 @@ namespace hal
         //RegEx widget
         mRegExBox = new QCheckBox("Regular expression", this);
 
-        //Column widgets
-        /*mColumnLabel = new QLabel(this);
-        mColumnLabel->setText("Search in:");*/
-
-        /*mListWidget = new QListWidget(this);
-        mListWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
-        mListWidget->setMaximumHeight(150);*/
-
+        //Column label
+        mSearchInLabel = new QLabel("Search in:", this);
 
         //Pushbuttons
         mSearchBtn = new QPushButton("Search", this);
         mCloseBtn = new QPushButton("Close", this);
-        mSelectColumnsBtn = new QPushButton("Search in columns", this);
+
+        mSelectColumnsBtn = new QPushButton("...", this);
 
         //Connect widgets with layout
-        mLayout->addWidget(mInputBox, 0, 0, 0, 3, Qt::AlignTop);
+        mLayout->addWidget(mInputBox, 0, 0, 0, 2, Qt::AlignTop);
         //mLayout->addWidget(mColumnLabel, 1, 2);
         mLayout->addWidget(mIncrementalSearchBox, 1, 0, 1, 2);
         //mLayout->addWidget(mListWidget, 2, 2, 5, Qt::AlignLeft);
@@ -60,7 +55,8 @@ namespace hal
         mLayout->addWidget(mExactMatchBox, 3, 0, 1, 2);
         mLayout->addWidget(mCaseSensitiveBox, 4, 0, 1, 2);
         mLayout->addWidget(mRegExBox, 5, 0, 1, 2);
-        mLayout->addWidget(mSelectColumnsBtn, 6, 0);
+        mLayout->addWidget(mSearchInLabel, 6, 0, Qt::AlignRight);
+        mLayout->addWidget(mSelectColumnsBtn, 6, 1);
         mLayout->addWidget(mSearchBtn, 7, 0);
         mLayout->addWidget(mCloseBtn, 7, 1);
         mLayout->setHorizontalSpacing(20);
@@ -79,16 +75,6 @@ namespace hal
         // de-/ activate spinBox widgets based on IncCheckBox
         this->incrementalSearchToggled(mIncrementalSearchBox->isChecked());
     }
-
-    //TODO can be deleted later on
-   /* void SearchOptionsDialog::testWidget()
-    {
-        auto list = mListWidget->selectedItems();
-
-        for(auto elem : list){
-            qInfo() << elem->text();
-        }
-    }*/
 
     void SearchOptionsDialog::emitStartSearch()
     {
@@ -111,17 +97,6 @@ namespace hal
     {
         SearchOptions* retval = new SearchOptions();
 
-        //get index of each selected column
-        /*QList<int> selectedItems = {};
-        for(auto elem : mListWidget->selectedItems()){
-            int index = mListWidget->row(elem);
-            if(index > 0)
-                selectedItems.append(index - 1);
-            else{
-                selectedItems = {};
-                break;
-            }
-        }*/
         retval->setOptions(mExactMatchBox->isChecked(), mCaseSensitiveBox->isChecked(), mRegExBox->isChecked(), mSelectedColumns); //TO-DO: fill the columns
         return retval;
     }
@@ -136,23 +111,17 @@ namespace hal
         mCaseSensitiveBox->setChecked(opts->isCaseSensitive());
         mRegExBox->setChecked(opts->isRegularExpression());
         mIncrementalSearchBox->setChecked(incSearch);
+        mSpinBox->setValue(minIncSearch);
+        mSelectedColumns = opts->getColumns();
 
         if(!columnNames.isEmpty())
         {
             for(QString name : columnNames)
                 mColumnNames.append(name);
         }
-        //add the given column names into the widget if there are any, if not then hide the widget
-        /*if(!columnNames.isEmpty()){
-            mListWidget->addItem("All columns");
-            for (auto elem : columnNames)
-            {
-                mListWidget->addItem(elem);
-            }
-        }else{
-            mListWidget->hide();
-            mColumnLabel->hide();
-        }*/
+        mSelectColumnsBtn->setText(formatColumnButtonText(buildColumnButtonText()));
+        //TODO resize button after it updates its text
+
     }
 
     QString SearchOptionsDialog::getText() const
@@ -184,9 +153,51 @@ namespace hal
         if (scd.exec() == QDialog::Accepted)
         {
 
-            mSelectColumnsBtn->setText(scd.selectedColumnNames());
+            mSelectColumnsBtn->setText(formatColumnButtonText(scd.selectedColumnNames()));
             mSelectedColumns = scd.selectedColumns();
         }
+    }
+
+    QString SearchOptionsDialog::formatColumnButtonText(QString text)
+    {
+        //if text is longer than MAX_LENGTH then replace following entries with [...]
+        const int MAX_LENGTH = 20;
+        const QString placeholder = "[...]";
+
+
+        if(text.length() <= MAX_LENGTH){
+            return text;
+        }
+        else{
+            // text is too long so
+            QString result = "";
+            auto list = text.split(",");
+            for(int i = 0; i < list.length(); ++i){
+                if(result.length() > MAX_LENGTH){
+                    result.append(placeholder);
+                    break;
+                }
+                result += list[i];
+                if(i < list.length() - 1)
+                    result += ",";
+            }
+            return result;
+        }
+    }
+
+    QString SearchOptionsDialog::buildColumnButtonText()
+    {
+        if(mSelectedColumns.length() < 1)
+            return "All columns";
+
+        //get selected column names and concat them seperated by ","
+        QString result = "";
+        for(int i = 0; i < mSelectedColumns.length(); ++i){
+            result += mColumnNames[mSelectedColumns[i]];
+            if(i < mSelectedColumns.length() - 1)
+                result += ",";
+        }
+        return result;
     }
 
 }

@@ -8,7 +8,7 @@ namespace hal {
     SearchColumnDialog::SearchColumnDialog(const QStringList& colNames, const QList<int> &selected)
         : mDisableHandler(false)
     {
-        setWindowTitle("Search in column:");
+        setWindowTitle("Search in:");
         QVBoxLayout* layout = new QVBoxLayout(this);
         mCheckAllColumns = new QCheckBox("All columns", this);
         connect(mCheckAllColumns,&QCheckBox::stateChanged,this,&SearchColumnDialog::handleCheckStateChanged);

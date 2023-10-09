@@ -63,8 +63,6 @@ namespace hal
         void emitStartSearch();
         void incrementalSearchToggled(int);
         void selectColumns();
-        //TODO can be deleted later on
-        void testWidget();
 
     private:
         QString mSearchText;
@@ -80,10 +78,13 @@ namespace hal
         QCheckBox* mExactMatchBox;
         QCheckBox* mCaseSensitiveBox;
         QCheckBox* mRegExBox;
-        //QLabel* mColumnLabel;
+        QLabel* mSearchInLabel;
         QPushButton* mSearchBtn;
         QPushButton* mCloseBtn;
         QPushButton* mSelectColumnsBtn;
-        //QListWidget* mListWidget;
+
+
+        QString formatColumnButtonText(QString text);
+        QString buildColumnButtonText();
     };
 }
