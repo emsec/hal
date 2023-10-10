@@ -96,8 +96,9 @@ namespace hal
         mContentLayout->addWidget(mSearchbar);
 
         mSearchbar->hide();
+        mSearchbar->setColumnNames(mProxyModel->getColumnNames());
 
-        connect(mSearchbar, &Searchbar::textEdited, this, &GroupingManagerWidget::filter);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mProxyModel, &GroupingProxyModel::startSearch);
         connect(mSearchbar, &Searchbar::textEdited, this, &GroupingManagerWidget::updateSearchIcon);
 
         connect(mNewGroupingAction, &QAction::triggered, this, &GroupingManagerWidget::handleCreateGroupingClicked);

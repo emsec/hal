@@ -59,6 +59,7 @@ namespace hal
 
     protected:
         SearchOptions mSearchOptions;
+        QString mSearchString;
     };
 }
 

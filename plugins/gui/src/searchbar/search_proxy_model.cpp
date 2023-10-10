@@ -13,7 +13,7 @@ namespace hal {
     }
     bool SearchProxyModel::isMatching(const QString searchString, const QString stringToCheck) const
     {
-        if(!mSearchOptions.isExactMatch()){
+        if(!mSearchOptions.isExactMatch() && !mSearchOptions.isRegularExpression()){
             //check if stringToCheck contains the searchString
             return stringToCheck.contains(searchString, mSearchOptions.isCaseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive);
         }
@@ -24,9 +24,6 @@ namespace hal {
         }
         else if(mSearchOptions.isRegularExpression()){
             //checks if the stringToCheck matches the regEx given by searchString
-
-            //TODO regEx does not work
-
             auto regEx = QRegularExpression(searchString, mSearchOptions.isCaseSensitive() ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
             return regEx.match(stringToCheck).hasMatch();
         }

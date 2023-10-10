@@ -28,6 +28,7 @@
 #include "gui/gui_utils/sort.h"
 
 #include <QSortFilterProxyModel>
+#include <gui/searchbar/search_proxy_model.h>
 
 namespace hal
 {
@@ -39,7 +40,7 @@ namespace hal
      * GroupingTableModel (source model) to support data filtering.
      * It is used to provide a search bar (<i>CTRL+F</i>) for groupings.
      */
-    class GroupingProxyModel : public QSortFilterProxyModel
+    class GroupingProxyModel : public SearchProxyModel
     {
         Q_OBJECT
 
@@ -64,6 +65,7 @@ namespace hal
          * @param sortMechanism - the new sorting mechanism
          */
         void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
+        void startSearch(QString text, int options) override;
 
     protected:
         /**
