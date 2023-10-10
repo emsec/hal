@@ -244,6 +244,11 @@ namespace hal
 
         void openModuleInView(const QModelIndex& index);
 
+        void openGateInView(const QModelIndex& index);
+
+        void changeGateName(const QModelIndex& index);
+
+
         ModuleItem* getModuleItemFromIndex(const QModelIndex& index);
 
     };

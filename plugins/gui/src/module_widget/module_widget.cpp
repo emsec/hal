@@ -10,6 +10,7 @@
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_unfold_module.h"
 #include "gui/user_action/user_action_compound.h"
+#include "gui/user_action/action_rename_object.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -25,6 +26,7 @@
 #include <QShortcut>
 #include <QTreeView>
 #include <QVBoxLayout>
+#include <QInputDialog>
 
 namespace hal
 {
@@ -172,27 +174,73 @@ namespace hal
         if (!index.isValid())
             return;
 
+        ModuleItem::TreeItemType type = getModuleItemFromIndex(index)->getType();
+
         QMenu context_menu;
 
-        QAction isolate_action("Isolate in new view", &context_menu);
-        QAction add_selection_action("Add selected gates to module", &context_menu);
-        QAction add_child_action("Add child module", &context_menu);
-        QAction change_name_action("Change module name", &context_menu);
-        QAction change_type_action("Change module type", &context_menu);
-        QAction change_color_action("Change module color", &context_menu);
-        QAction delete_action("Delete module", &context_menu);
+        QAction isolate_action;
+        QAction add_selection_action;
+        QAction add_child_action;
+        QAction change_name_action;
+        QAction change_type_action;
+        QAction change_color_action;
+        QAction delete_action;
 
-        context_menu.addAction(&isolate_action);
-        context_menu.addAction(&add_selection_action);
-        context_menu.addAction(&add_child_action);
-        context_menu.addAction(&change_name_action);
-        context_menu.addAction(&change_type_action);
-        context_menu.addAction(&change_color_action);
+        switch(type) {
+
+            case ModuleItem::TreeItemType::Module:{
+                isolate_action.setText("Isolate in new view");
+                isolate_action.setParent(&context_menu);
+
+                add_selection_action.setText("Add selected gates to module");
+                add_selection_action.setParent(&context_menu);
+
+                add_child_action.setText("Add child module");
+                add_child_action.setParent(&context_menu);
+
+                change_name_action.setText("Change module name");
+                change_name_action.setParent(&context_menu);
+
+                change_type_action.setText("Change module type");
+                change_type_action.setParent(&context_menu);
+
+                change_color_action.setText("Change module color");
+                change_color_action.setParent(&context_menu);
+
+                delete_action.setText("Delete module");
+                delete_action.setParent(&context_menu);
+                break;
+            }
+            case ModuleItem::TreeItemType::Gate: {
+                isolate_action.setText("Isolate in new view");
+                isolate_action.setParent(&context_menu);
+
+                change_name_action.setText("Change Gate name");
+                change_name_action.setParent(&context_menu);
+                break;
+            }
+            case ModuleItem::TreeItemType::Net: {
+                return;
+            }
+        }
+
+        if (type == ModuleItem::TreeItemType::Gate || type == ModuleItem::TreeItemType::Module){
+            context_menu.addAction(&isolate_action);
+            context_menu.addAction(&change_name_action);
+
+        }
+
+        if (type == ModuleItem::TreeItemType::Module){
+            context_menu.addAction(&add_selection_action);
+            context_menu.addAction(&add_child_action);
+            context_menu.addAction(&change_type_action);
+            context_menu.addAction(&change_color_action);
+        }
 
         u32 module_id = getModuleItemFromIndex(index)->id();
         auto module = gNetlist->get_module_by_id(module_id);
 
-        if(!(module == gNetlist->get_top_module()))
+        if(!(module == gNetlist->get_top_module()) && type == ModuleItem::TreeItemType::Module)
             context_menu.addAction(&delete_action);
 
         QAction* clicked = context_menu.exec(mTreeView->viewport()->mapToGlobal(point));
@@ -200,7 +248,9 @@ namespace hal
         if (!clicked)
             return;
 
-        if (clicked == &isolate_action)
+        if (clicked == &isolate_action && type == ModuleItem::TreeItemType::Gate)
+            openGateInView(index);
+        else if (clicked == &isolate_action)
             openModuleInView(index);
 
         if (clicked == &add_selection_action)
@@ -212,7 +262,9 @@ namespace hal
             mTreeView->setExpanded(index, true);
         }
 
-        if (clicked == &change_name_action)
+        if (clicked == &change_name_action && type == ModuleItem::TreeItemType::Gate)
+            changeGateName(index);
+        else if (clicked == &change_name_action)
             gNetlistRelay->changeModuleName(getModuleItemFromIndex(index)->id());
 
         if (clicked == &change_type_action)
@@ -221,8 +273,10 @@ namespace hal
         if (clicked == &change_color_action)
             gNetlistRelay->changeModuleColor(getModuleItemFromIndex(index)->id());
 
-        if (clicked == &delete_action)
+        if (clicked == &delete_action){
             gNetlistRelay->deleteModule(getModuleItemFromIndex(index)->id());
+        }
+
     }
 
     void ModuleWidget::handleModuleRemoved(Module* module, u32 module_id)
@@ -276,6 +330,37 @@ namespace hal
     void ModuleWidget::openModuleInView(const QModelIndex& index)
     {
         openModuleInView(getModuleItemFromIndex(index)->id(), false);
+    }
+
+    void ModuleWidget::openGateInView(const QModelIndex &index)
+    {
+        QSet<u32> gateId;
+        QSet<u32> moduleId;
+        QString name;
+
+        name = gGraphContextManager->nextViewName("Isolated View");
+        gateId.insert(getModuleItemFromIndex(index)->id());
+
+        UserActionCompound* act = new UserActionCompound;
+        act->setUseCreatedObject();
+        act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+        act->addAction(new ActionAddItemsToObject(moduleId, gateId));
+        act->exec();
+    }
+
+    void ModuleWidget::changeGateName(const QModelIndex &index)
+    {
+        QString oldName = getModuleItemFromIndex(index)->name();
+
+        bool confirm;
+        QString newName = QInputDialog::getText(this, "Change gate name", "New name:", QLineEdit::Normal, oldName, &confirm);
+
+        if (confirm && !newName.isEmpty())
+        {
+            ActionRenameObject* act = new ActionRenameObject(newName);
+            act->setObject(UserActionObject(getModuleItemFromIndex(index)->id(), UserActionObjectType::ObjectType::Gate));
+            act->exec();
+        }
     }
 
     void ModuleWidget::openModuleInView(u32 moduleId, bool unfold)
