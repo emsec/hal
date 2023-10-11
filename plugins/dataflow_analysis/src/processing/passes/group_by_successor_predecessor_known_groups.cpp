@@ -20,6 +20,7 @@ namespace hal
 
                 /* check characteristics */
                 std::map<std::set<u32>, std::list<u32>> characteristics_map;
+                std::vector<u32> groups_with_no_characteristics;
                 for (const auto& [group_id, group] : state->gates_of_group)
                 {
                     std::set<u32> characteristics_of_group;
@@ -35,7 +36,14 @@ namespace hal
                         characteristics_of_group.insert(predecessing_known_group.begin(), predecessing_known_group.end());
                     }
 
-                    characteristics_map[characteristics_of_group].push_back(group_id);
+                    if (characteristics_of_group.empty())
+                    {
+                        groups_with_no_characteristics.push_back(group_id);
+                    }
+                    else
+                    {
+                        characteristics_map[characteristics_of_group].push_back(group_id);
+                    }
                 }
 
                 /* check if merge is allowed */
@@ -66,6 +74,12 @@ namespace hal
                         }
                         merge_sets.push_back(merge_set);
                     }
+                }
+
+                /* add all groups with no characteristics as singleton merge set */
+                for (const auto& group_id : groups_with_no_characteristics)
+                {
+                    merge_sets.push_back({group_id});
                 }
 
                 /* merge groups */

@@ -670,7 +670,7 @@ namespace hal
         {
             const auto verilog_module = build_functional_verilog_module_from(bfs);
 
-            auto base_path_res = utils::get_unique_temp_directory("resynthesis/");
+            auto base_path_res = utils::get_unique_temp_directory("resynthesis_");
             if (base_path_res.is_error())
             {
                 return ERR_APPEND(base_path_res.get_error(), "unable to resynthesize boolean functions with yosys: failed to get unique temp directory");
@@ -743,7 +743,7 @@ namespace hal
             }
             const auto subgraph_nl = subgraph_nl_res.get();
 
-            auto base_path_res = utils::get_unique_temp_directory("resynthesis/");
+            auto base_path_res = utils::get_unique_temp_directory("resynthesis_");
             if (base_path_res.is_error())
             {
                 return ERR_APPEND(base_path_res.get_error(), "unable to resynthesize boolean functions with yosys: failed to get unique temp directory");
@@ -938,7 +938,7 @@ namespace hal
 
     Result<u32> NetlistPreprocessingPlugin::resynthesize_gates(Netlist* nl, const std::vector<Gate*>& gates, GateLibrary* target_gl)
     {
-        auto base_path_res = utils::get_unique_temp_directory("resynthesis/");
+        auto base_path_res = utils::get_unique_temp_directory("resynthesis_");
         if (base_path_res.is_error())
         {
             return ERR_APPEND(base_path_res.get_error(), "unable to resynthesize boolean functions with yosys: failed to get unique temp directory");
@@ -1051,7 +1051,7 @@ namespace hal
             return ERR("gate library is a nullptr");
         }
 
-        auto base_path_res = utils::get_unique_temp_directory("resynthesis/");
+        auto base_path_res = utils::get_unique_temp_directory("resynthesis_");
         if (base_path_res.is_error())
         {
             return ERR_APPEND(base_path_res.get_error(), "unable to resynthesize boolean functions with yosys: failed to get unique temp directory");
@@ -1260,7 +1260,7 @@ namespace hal
             }
         };
 
-        Result<u32> unify_select_signals(Netlist* nl, GateLibrary* mux_inv_gl)
+        Result<u32> unify_inverted_select_signals(Netlist* nl, GateLibrary* mux_inv_gl)
         {
             if (nl == nullptr)
             {
@@ -1272,7 +1272,7 @@ namespace hal
                 return ERR("gate library is a nullptr");
             }
 
-            auto base_path_res = utils::get_unique_temp_directory("resynthesis/");
+            auto base_path_res = utils::get_unique_temp_directory("resynthesis_");
             if (base_path_res.is_error())
             {
                 return ERR_APPEND(base_path_res.get_error(), "unable to resynthesize boolean functions with yosys: failed to get unique temp directory");
@@ -1449,6 +1449,165 @@ namespace hal
 
             return OK(u32(difference));
         }
+
+        Result<u32> unify_select_signals(Netlist* nl)
+        {
+            if (nl == nullptr)
+            {
+                return ERR("netlist is a nullptr");
+            }
+
+            u32 changed_connections = 0;
+
+            // sort into groups of same type and identical select signals
+            std::map<std::pair<GateType*, std::set<Net*>>, std::vector<Gate*>> grouped_muxes;
+            for (const auto& g : nl->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_mux); }))
+            {
+                std::set<Net*> select_signals;
+                const auto select_pins = g->get_type()->get_pins([](const GatePin* pin) { return (pin->get_type() == PinType::select) && (pin->get_direction() == PinDirection::input); });
+                for (const auto& sp : select_pins)
+                {
+                    select_signals.insert(g->get_fan_in_net(sp));
+                }
+
+                grouped_muxes[{g->get_type(), select_signals}].push_back(g);
+            }
+
+            // unify select signals for each group
+            for (const auto& [finger_print, mux_group] : grouped_muxes)
+            {
+                const auto& [type, select_signals_set] = finger_print;
+                const auto select_pins                 = type->get_pins([](const GatePin* pin) { return (pin->get_type() == PinType::select) && (pin->get_direction() == PinDirection::input); });
+                const auto output_pins                 = type->get_pins([](const GatePin* pin) { return pin->get_direction() == PinDirection::output; });
+
+                if (output_pins.size() != 1)
+                {
+                    log_warning("netlist_preprocessing",
+                                "Cannot unify select signals for muxes of type {} since the type has {} output signals and we can only handle 1.",
+                                type->get_name(),
+                                output_pins.size());
+                    continue;
+                }
+
+                // check whether there is one mapping from select signals to select pins
+                std::map<std::map<GatePin*, Net*>, std::vector<Gate*>> select_map_to_muxes;
+                for (const auto& g : mux_group)
+                {
+                    std::map<GatePin*, Net*> select_map;
+                    for (const auto& sp : select_pins)
+                    {
+                        select_map.insert({sp, g->get_fan_in_net(sp)});
+                    }
+
+                    select_map_to_muxes[select_map].push_back(g);
+                }
+
+                if (select_map_to_muxes.size() == 1)
+                {
+                    continue;
+                }
+
+                const std::vector<Net*> select_signals = {select_signals_set.begin(), select_signals_set.end()};
+
+                // collect a new mapping from net to gate pin for each mux gate
+                std::map<Gate*, std::map<GatePin*, Net*>> new_net_to_pin;
+
+                // add newly ordered select signals to pin/net mapping
+                for (const auto& g : mux_group)
+                {
+                    for (u32 select_index = 0; select_index < select_pins.size(); select_index++)
+                    {
+                        auto select_pin               = select_pins.at(select_index);
+                        auto select_signal            = select_signals.at(select_index);
+                        new_net_to_pin[g][select_pin] = select_signal;
+                    }
+                }
+
+                // determine new pin/net connection for each "data" signal
+                auto type_bf = type->get_boolean_function(output_pins.front());
+                for (u32 select_val = 0; select_val < (1 << select_signals.size()); select_val++)
+                {
+                    std::map<std::string, BooleanFunction> type_substitution;
+                    for (u32 select_idx = 0; select_idx < select_pins.size(); select_idx++)
+                    {
+                        auto select_pin = select_pins.at(select_idx);
+
+                        auto type_substitution_val = ((select_val >> select_idx) & 0x1) ? BooleanFunction::Const(1, 1) : BooleanFunction::Const(0, 1);
+                        type_substitution.insert({select_pin->get_name(), type_substitution_val});
+                    }
+
+                    auto type_substitution_res = type_bf.substitute(type_substitution);
+                    if (type_substitution_res.is_error())
+                    {
+                        return ERR_APPEND(type_substitution_res.get_error(), "cannot unify mux select signals: failed to substitute type Boolean function with select signal value mapping.");
+                    }
+                    auto input = type_substitution_res.get().simplify_local();
+
+                    if (!input.is_variable())
+                    {
+                        return ERR("cannot unify mux select signals: substituted and simplified type Boolean function (" + input.to_string() + ") is not a variable");
+                    }
+
+                    const auto pin_name = input.get_variable_name().get();
+                    auto pin            = type->get_pins([pin_name](const auto& p) { return p->get_name() == pin_name; }).front();
+
+                    for (const auto& g : mux_group)
+                    {
+                        auto gate_bf_res = g->get_resolved_boolean_function(output_pins.front(), false);
+                        if (gate_bf_res.is_error())
+                        {
+                            return ERR_APPEND(gate_bf_res.get_error(),
+                                              "cannot unify mux select signals: failed to build Boolean function for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+                        }
+                        auto gate_bf = gate_bf_res.get();
+
+                        std::map<std::string, BooleanFunction> gate_substitution;
+
+                        for (u32 select_idx = 0; select_idx < select_pins.size(); select_idx++)
+                        {
+                            auto gate_substitution_val = ((select_val >> select_idx) & 0x1) ? BooleanFunction::Const(1, 1) : BooleanFunction::Const(0, 1);
+                            gate_substitution.insert({BooleanFunctionNetDecorator(*(select_signals.at(select_idx))).get_boolean_variable_name(), gate_substitution_val});
+                        }
+
+                        auto gate_substitution_res = gate_bf.substitute(gate_substitution);
+                        if (gate_substitution_res.is_error())
+                        {
+                            return ERR_APPEND(gate_substitution_res.get_error(), "cannot unify mux select signals: failed to substitute gate Boolean function with select signal value mapping.");
+                        }
+                        auto input_net_var = gate_substitution_res.get().simplify_local();
+                        auto net_res       = BooleanFunctionNetDecorator::get_net_from(nl, input_net_var);
+
+                        if (net_res.is_error())
+                        {
+                            return ERR_APPEND(net_res.get_error(), "cannot unify mux select signals: failed to extract net from substituted and simplified gate Boolean function");
+                        }
+
+                        auto net               = net_res.get();
+                        new_net_to_pin[g][pin] = net;
+                    }
+                }
+
+                // apply new pin/net mapping to all gates
+                for (auto& [g, pin_net] : new_net_to_pin)
+                {
+                    for (const auto& [pin, net] : pin_net)
+                    {
+                        auto connected_net = g->get_fan_in_net(pin);
+                        if (net == connected_net)
+                        {
+                            continue;
+                        }
+
+                        connected_net->remove_destination(g, pin);
+                        net->add_destination(g, pin);
+
+                        changed_connections += 1;
+                    }
+                }
+            }
+
+            return OK(changed_connections);
+        }
     }    // namespace
 
     Result<u32> NetlistPreprocessingPlugin::manual_mux_optimizations(Netlist* nl, GateLibrary* mux_inv_gl)
@@ -1472,7 +1631,14 @@ namespace hal
         }
         res_count += remove_res.get();
 
-        auto unify_res = unify_select_signals(nl, mux_inv_gl);
+        auto unify_inverted_res = unify_inverted_select_signals(nl, mux_inv_gl);
+        if (unify_inverted_res.is_error())
+        {
+            return ERR_APPEND(unify_inverted_res.get_error(), "unable to apply manual mux optimizations: failed to unify inverted select signals");
+        }
+        res_count += unify_inverted_res.get();
+
+        auto unify_res = unify_select_signals(nl);
         if (unify_res.is_error())
         {
             return ERR_APPEND(unify_res.get_error(), "unable to apply manual mux optimizations: failed to unify select signals");

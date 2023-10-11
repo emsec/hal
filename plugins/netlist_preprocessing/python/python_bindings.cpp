@@ -598,6 +598,31 @@ namespace hal
                 :rtype: bool
             )");
 
+        py_netlist_preprocessing.def_static(
+            "create_multi_bit_gate_modules",
+            [](Netlist* nl, const std::map<std::string, std::map<std::string, std::vector<std::string>>>& concatinated_pin_groups) -> std::vector<Module*> {
+                auto res = NetlistPreprocessingPlugin::create_multi_bit_gate_modules(nl, concatinated_pin_groups);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return {};
+                }
+            },
+            py::arg("nl"),
+            py::arg("concatinated_pin_groups"),
+            R"(
+                Create modules from large gates like RAMs and DSPs with the option to concat mutliple gate pingroups to larger consecutive pin groups.
+
+                :param hal_py.Netlist nl: The netlist to operate on. 
+                :param  concatinated_pin_groups: 
+                :returns: ``True`` on success, ``False`` otherwise.
+                :rtype: bool
+            )");
+
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE

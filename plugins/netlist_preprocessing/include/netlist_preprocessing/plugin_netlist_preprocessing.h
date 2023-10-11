@@ -265,5 +265,10 @@ namespace hal
          * return OK on success, an error otherwise.
         */
         static Result<std::monostate> parse_def_file(Netlist* nl, const std::filesystem::path& def_file);
+
+        /**
+         * Create modules from large gates like RAMs and DSPs with the option to concat mutliple gate pingroups to larger consecutive pin groups
+         */
+        static Result<std::vector<Module*>> create_multi_bit_gate_modules(Netlist* nl, const std::map<std::string, std::map<std::string, std::vector<std::string>>>& concatinated_pin_groups);
     };
 }    // namespace hal

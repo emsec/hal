@@ -1815,4 +1815,61 @@ namespace hal
         return OK({});
     }
 
+    Result<std::vector<Module*>> NetlistPreprocessingPlugin::create_multi_bit_gate_modules(Netlist* nl,
+                                                                                           const std::map<std::string, std::map<std::string, std::vector<std::string>>>& concatinated_pin_groups)
+    {
+        std::vector<Module*> all_modules;
+        for (const auto& [gt_name, pin_groups] : concatinated_pin_groups)
+        {
+            for (const auto& g : nl->get_gates([&gt_name](const auto& g) { return g->get_type()->get_name() == gt_name; }))
+            {
+                auto m = nl->create_module("module_" + g->get_name(), g->get_module(), {g});
+
+                for (const auto& [module_pg_name, gate_pg_names] : pin_groups)
+                {
+                    std::vector<ModulePin*> module_pins;
+                    for (const auto& gate_pg_name : gate_pg_names)
+                    {
+                        const auto& gate_pg            = g->get_type()->get_pin_group_by_name(gate_pg_name);
+                        std::vector<GatePin*> pin_list = gate_pg->get_pins();
+                        if (!gate_pg->is_ascending())
+                        {
+                            std::reverse(pin_list.begin(), pin_list.end());
+                        }
+
+                        for (const auto& gate_pin : pin_list)
+                        {
+                            const auto net = (gate_pin->get_direction() == PinDirection::output) ? g->get_fan_out_net(gate_pin) : g->get_fan_in_net(gate_pin);
+                            if (net == nullptr)
+                            {
+                                continue;
+                            }
+
+                            if (net->is_gnd_net() || net->is_vcc_net())
+                            {
+                                continue;
+                            }
+
+                            const auto module_pin = m->get_pin_by_net(net);
+
+                            module_pins.push_back(module_pin);
+                        }
+                    }
+
+                    m->create_pin_group(module_pg_name, module_pins);
+                    u32 idx_counter = 0;
+                    for (const auto& mp : module_pins)
+                    {
+                        m->set_pin_name(mp, module_pg_name + "_" + std::to_string(idx_counter));
+                        idx_counter++;
+                    }
+                }
+
+                all_modules.push_back(m);
+            }
+        }
+
+        return OK(all_modules);
+    }
+
 }    // namespace hal

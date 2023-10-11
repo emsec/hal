@@ -69,10 +69,19 @@ namespace hal
          *
          * @param[in] bf - The Boolean function.
          * @param[in] num_evaluations - The amount of evaluations that are performed for each input variable.
-         * @param[in] unique_identifier - A unique identifier that is applied to file names to prevent collisions during multi-threading.
          * @returns A map from the variables that appear in the function to their Boolean influence on said function on success, an error otherwise.
          */
         static Result<std::unordered_map<std::string, double>> get_boolean_influence_with_hal_boolean_function_class(const BooleanFunction& bf, const u32 num_evaluations);
+
+        /**
+         * Generates the Boolean influence of each input variable of a Boolean function using z3 expressions and substitutions/simplifications only.
+         * The function is slower, but can be better used in multithreading enviroment.
+         *
+         * @param[in] bf - The Boolean function.
+         * @param[in] num_evaluations - The amount of evaluations that are performed for each input variable.
+         * @returns A map from the variables that appear in the function to their Boolean influence on said function on success, an error otherwise.
+         */
+        static Result<std::unordered_map<std::string, double>> get_boolean_influence_with_z3_expr(const BooleanFunction& bf, const u32 num_evaluations);
 
         /**
          * Generates the Boolean influence of each input variable of a Boolean function.

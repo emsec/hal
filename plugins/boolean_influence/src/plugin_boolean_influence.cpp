@@ -31,10 +31,8 @@ namespace hal
 
     namespace
     {
-        static unsigned long x = 123456789, y = 362436069, z = 521288629;
-
         // period 2^96-1
-        unsigned long xorshf96(void)
+        unsigned long xorshf96(u64& x, u64& y, u64& z)
         {
             unsigned long t;
 
@@ -49,6 +47,7 @@ namespace hal
 
             return z;
         }
+
         void add_inputs(Gate* gate, std::unordered_set<Gate*>& gates)
         {
             if (!gate->get_type()->has_property(GateTypeProperty::combinational) || gate->is_vcc_gate() || gate->is_gnd_gate())
@@ -187,7 +186,6 @@ int main(int argc, char *argv[]) {
     Result<std::unordered_map<std::string, double>>
         BooleanInfluencePlugin::get_boolean_influence_internal(const z3::expr& expr, const u32 num_evaluations, const bool deterministic, const std::string& unique_identifier)
     {
-        bool use_z3                   = true;
         const auto to_replacement_var = [](const u32 var_idx) -> std::string { return "var_" + std::to_string(var_idx); };
 
         const auto extract_index = [](const std::string& var) -> Result<u32> {
@@ -481,6 +479,8 @@ int main(int argc, char *argv[]) {
         std::unordered_map<std::string, double> influences;
         std::set<std::string> variables = bf.get_variable_names();
 
+        u64 x = 123456789, y = 362436069, z = 521288629;
+
         for (const auto& var : variables)
         {
             u32 count = 0;
@@ -495,7 +495,7 @@ int main(int argc, char *argv[]) {
                         continue;
                     }
 
-                    BooleanFunction::Value random_value = (xorshf96() % 2) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO;
+                    BooleanFunction::Value random_value = (xorshf96(x, y, z) % 2) ? BooleanFunction::Value::ONE : BooleanFunction::Value::ZERO;
                     values.insert({var_to_set, random_value});
                 }
 
@@ -529,6 +529,161 @@ int main(int argc, char *argv[]) {
 
         return OK(influences);
     }
+
+    Result<std::unordered_map<std::string, double>> BooleanInfluencePlugin::get_boolean_influence_with_z3_expr(const BooleanFunction& bf, const u32 num_evaluations)
+    {
+        std::unordered_map<std::string, double> influences;
+        std::set<std::string> variables = bf.get_variable_names();
+
+        auto ctx   = z3::context();
+        auto z3_bf = z3_utils::from_bf(bf, ctx);
+
+        u64 x = 123456789, y = 362436069, z = 521288629;
+
+        for (const auto& var : variables)
+        {
+            const auto var_expr = ctx.bv_const(var.c_str(), 1);
+
+            u32 count = 0;
+            for (unsigned long long i = 0; i < num_evaluations; i++)
+            {
+                z3::expr_vector from_vec(ctx);
+                z3::expr_vector to_vec(ctx);
+
+                // build value
+                for (const auto& var_to_set : variables)
+                {
+                    if (var == var_to_set)
+                    {
+                        continue;
+                    }
+
+                    const auto var_to_set_expr = ctx.bv_const(var_to_set.c_str(), 1);
+
+                    auto random_value = (xorshf96(x, y, z) % 2) ? ctx.bv_val(1, 1) : ctx.bv_val(0, 1);
+
+                    from_vec.push_back(var_to_set_expr);
+                    to_vec.push_back(random_value);
+                }
+
+                auto z3_bf_substitute = z3_bf.substitute(from_vec, to_vec).simplify();
+
+                z3::expr_vector from_vec_var(ctx);
+                z3::expr_vector to_vec_one(ctx);
+                z3::expr_vector to_vec_zero(ctx);
+
+                from_vec_var.push_back(var_expr);
+                to_vec_one.push_back(ctx.bv_val(1, 1));
+                to_vec_zero.push_back(ctx.bv_val(0, 1));
+
+                // evaluate 1
+                const auto res_1 = z3_bf_substitute.substitute(from_vec_var, to_vec_one).simplify();
+                if (!res_1.is_numeral())
+                {
+                    std::cout << res_1 << std::endl;
+                    return ERR("cannot determine boolean influence of variabel " + var + ": failed to simplify to a constant");
+                }
+
+                // evaluate 0
+                const auto res_2 = z3_bf_substitute.substitute(from_vec_var, to_vec_zero).simplify();
+                if (!res_2.is_numeral())
+                {
+                    std::cout << res_2 << std::endl;
+                    return ERR("cannot determine boolean influence of variabel " + var + ": failed to simplify to a constant");
+                }
+
+                const auto r1 = res_1.get_numeral_uint64();
+                const auto r2 = res_2.get_numeral_uint64();
+
+                if (r1 != r2)
+                {
+                    count++;
+                }
+            }
+            double cv = (double)(count) / (double)(num_evaluations);
+            influences.insert({var, cv});
+        }
+
+        return OK(influences);
+    }
+
+    /*
+    Result<std::unordered_map<std::string, double>> BooleanInfluencePlugin::get_boolean_influence_with_z3_expr(const BooleanFunction& bf, const u32 num_evaluations)
+    {
+        std::unordered_map<std::string, double> influences;
+        std::set<std::string> variables = bf.get_variable_names();
+
+        auto ctx   = z3::context();
+        auto z3_bf = z3_utils::from_bf(bf, ctx);
+        auto s     = z3::solver(ctx);
+
+        u64 x = 123456789, y = 362436069, z = 521288629;
+
+        for (const auto& var : variables)
+        {
+            const auto var_expr = ctx.bv_const(var.c_str(), 1);
+
+            u32 count = 0;
+            for (unsigned long long i = 0; i < num_evaluations; i++)
+            {
+                s.push();
+                // build value
+                for (const auto& var_to_set : variables)
+                {
+                    if (var == var_to_set)
+                    {
+                        continue;
+                    }
+
+                    const auto var_to_set_expr = ctx.bv_const(var_to_set.c_str(), 1);
+
+                    auto random_value = (xorshf96(x, y, z) % 2) ? ctx.bv_val(1, 1) : ctx.bv_val(0, 1);
+
+                    s.add(var_to_set_expr == random_value);
+                }
+
+                // evaluate 1
+                s.push();
+                s.add(var_expr == ctx.bv_val(1, 1));
+                s.check();
+                const auto m_1   = s.get_model();
+                const auto res_1 = m_1.eval(z3_bf);
+                if (!res_1.is_numeral())
+                {
+                    std::cout << res_1 << std::endl;
+                    return ERR("cannot determine boolean influence of variabel " + var + ": failed to simplify to a constant");
+                }
+                s.pop();
+
+                // evaluate 0
+                s.push();
+                s.add(var_expr == ctx.bv_val(0, 1));
+                s.check();
+                const auto m_2   = s.get_model();
+                const auto res_2 = m_2.eval(z3_bf);
+                if (!res_2.is_numeral())
+                {
+                    std::cout << res_2 << std::endl;
+                    return ERR("cannot determine boolean influence of variabel " + var + ": failed to simplify to a constant");
+                }
+                s.pop();
+
+                const auto r1 = res_1.get_numeral_uint64();
+                const auto r2 = res_2.get_numeral_uint64();
+
+                if (r1 != r2)
+                {
+                    count++;
+                }
+                s.pop();
+            }
+            double cv = (double)(count) / (double)(num_evaluations);
+            influences.insert({var, cv});
+        }
+
+        return OK(influences);
+    }
+    */
 
     Result<std::unordered_map<std::string, double>> BooleanInfluencePlugin::get_boolean_influence(const z3::expr& expr, const u32 num_evaluations, const std::string& unique_identifier)
     {

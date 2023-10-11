@@ -8,15 +8,15 @@ namespace hal
     {
         std::string yosys_helper_lib = "";
         yosys_helper_lib += "// GND\n";
-        yosys_helper_lib += "module GND (Y);\n";
-        yosys_helper_lib += "output Y;\n";
-        yosys_helper_lib += "assign Y = 1\'b0;\n";
+        yosys_helper_lib += "module GND (G);\n";
+        yosys_helper_lib += "output G;\n";
+        yosys_helper_lib += "assign G = 1\'b0;\n";
         yosys_helper_lib += "endmodule\n";
         yosys_helper_lib += "\n";
         yosys_helper_lib += "// VCC\n";
-        yosys_helper_lib += "module VCC (Y);\n";
-        yosys_helper_lib += "output Y;\n";
-        yosys_helper_lib += "assign Y = 1\'b1;\n";
+        yosys_helper_lib += "module VCC (P);\n";
+        yosys_helper_lib += "output P;\n";
+        yosys_helper_lib += "assign P = 1\'b1;\n";
         yosys_helper_lib += "endmodule\n";
         yosys_helper_lib += "\n";
         yosys_helper_lib += "// BUF\n";
