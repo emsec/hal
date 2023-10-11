@@ -500,7 +500,7 @@ namespace hal
     void GraphGraphicsView::dragLeaveEvent(QDragLeaveEvent* event)
     {
         Q_UNUSED(event)
-        static_cast<GraphicsScene*>(scene())->stopDragShadow();
+        if (scene()) static_cast<GraphicsScene*>(scene())->stopDragShadow();
     }
 
     void GraphGraphicsView::dragMoveEvent(QDragMoveEvent* event)
@@ -556,7 +556,7 @@ namespace hal
         {
             event->acceptProposedAction();
             GraphicsScene* s = static_cast<GraphicsScene*>(scene());
-            s->stopDragShadow();
+            if (s) s->stopDragShadow();
             if (mDropAllowed)
             {
                 auto context            = mGraphWidget->getContext();
