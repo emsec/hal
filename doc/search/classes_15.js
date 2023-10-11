@@ -17,6 +17,6 @@ var searchData=
   ['vhdlparserplugin_19811',['VHDLParserPlugin',['../classhal_1_1_v_h_d_l_parser_plugin.html',1,'hal']]],
   ['vhdlparsertest_19812',['VHDLParserTest',['../classhal_1_1_v_h_d_l_parser_test.html',1,'hal']]],
   ['view_19813',['View',['../classhal_1_1_gui_api_classes_1_1_view.html',1,'hal::GuiApiClasses']]],
-  ['visuals_19814',['Visuals',['../structhal_1_1_graphics_net_1_1_visuals.html',1,'hal::GraphicsNet::Visuals'],['../structhal_1_1_graphics_node_1_1_visuals.html',1,'hal::GraphicsNode::Visuals']]],
+  ['visuals_19814',['Visuals',['../structhal_1_1_graphics_node_1_1_visuals.html',1,'hal::GraphicsNode::Visuals'],['../structhal_1_1_graphics_net_1_1_visuals.html',1,'hal::GraphicsNet::Visuals']]],
   ['vline_19815',['VLine',['../structhal_1_1_standard_graphics_net_1_1_v_line.html',1,'hal::StandardGraphicsNet']]]
 ];
