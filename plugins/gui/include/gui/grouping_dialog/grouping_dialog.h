@@ -95,6 +95,8 @@ namespace hal {
         GroupingTableView* mGroupingTableView;
         GroupingTableView* mLastUsed;
 
+        GroupingProxyModel* mProxyModel;
+
         QDialogButtonBox* mButtonBox;
         QTabWidget* mTabWidget;
 

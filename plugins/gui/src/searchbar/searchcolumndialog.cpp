@@ -47,6 +47,13 @@ namespace hal {
                 cbox->setChecked(true);
             mDisableHandler = false;
         }
+        if (sender()==mCheckAllColumns && state == Qt::Unchecked)
+        {
+            mDisableHandler = true;
+            for (QCheckBox* cbox : mCheckColumn)
+                cbox->setChecked(false);
+            mDisableHandler = false;
+        }
         bool allChecked = true;
         bool nullChecked = true;
 
@@ -58,8 +65,8 @@ namespace hal {
                 allChecked = false;
         }
 
-        if (mCheckAllColumns->isChecked() != allChecked)
-            mCheckAllColumns->setChecked(allChecked);
+        /*if (mCheckAllColumns->isChecked() != allChecked)
+            mCheckAllColumns->setChecked(allChecked);*/
 
         mButtonBox->button(QDialogButtonBox::Ok)->setDisabled(nullChecked);
     }
