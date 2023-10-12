@@ -26,6 +26,7 @@
 #pragma once
 
 #include "gui/gui_utils/sort.h"
+#include "gui/searchbar/search_proxy_model.h"
 
 
 #include <QSortFilterProxyModel>
@@ -39,7 +40,7 @@ namespace hal
      * The ModuleProxyModel is the QSortFilterProxyModel between the ModuleModel (source model) and the tree view
      * of the ModuleWidget. Its filtering possibilities are needed to provide a searchbar in the module widget.
      */
-    class ModuleProxyModel : public QSortFilterProxyModel
+    class ModuleProxyModel : public SearchProxyModel
     {
         Q_OBJECT
 
@@ -64,6 +65,7 @@ namespace hal
          * @param sortMechanism - The new sorting mechanism
          */
         void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
+        void startSearch(QString text, int options) override;
 
     protected:
         /**

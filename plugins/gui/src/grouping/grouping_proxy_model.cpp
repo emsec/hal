@@ -11,7 +11,6 @@ namespace hal
 
     bool GroupingProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
     {
-
         QList<int> columns = mSearchOptions.getColumns();
         if(columns.empty()){
             //iterate over each column

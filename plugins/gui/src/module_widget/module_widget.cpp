@@ -65,7 +65,7 @@ namespace hal
 
         gSelectionRelay->registerSender(this, name());
 
-        connect(mSearchbar, &Searchbar::textEdited, this, &ModuleWidget::filter);
+        //connect(mSearchbar, &Searchbar::textEdited, this, &ModuleWidget::filter);
         connect(mTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ModuleWidget::handleTreeSelectionChanged);
         connect(mTreeView, &ModuleTreeView::doubleClicked, this, &ModuleWidget::handleItemDoubleClicked);
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &ModuleWidget::handleSelectionChanged);
@@ -73,6 +73,8 @@ namespace hal
 
         connect(mSearchAction, &QAction::triggered, this, &ModuleWidget::toggleSearchbar);
         connect(mSearchbar, &Searchbar::textEdited, this, &ModuleWidget::updateSearchIcon);
+
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mModuleProxyModel, &ModuleProxyModel::startSearch);
     }
 
     void ModuleWidget::setupToolbar(Toolbar* toolbar)

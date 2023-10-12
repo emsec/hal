@@ -5,7 +5,7 @@
 
 namespace hal
 {
-    ModuleProxyModel::ModuleProxyModel(QObject* parent) : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical)
+    ModuleProxyModel::ModuleProxyModel(QObject* parent) : SearchProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical)
     {
         // QTS PROXY MODELS ARE DUMB, IMPLEMENT CUSTOM SOLUTION OR SWITCH TO A DIFFERENT FILTER METHOD
 
@@ -16,17 +16,14 @@ namespace hal
 
     bool ModuleProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
     {
-        if(filterRegularExpression().pattern().isEmpty())
-            return true;
-
         QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
         if(sourceIndex.isValid())
         {
             auto item = static_cast<ModuleItem*>(sourceIndex.internalPointer());
             if(item->childCount() == 0)
-                return sourceModel()->data(sourceIndex, filterRole()).toString().contains(filterRegularExpression());
+                return isMatching(mSearchString, sourceModel()->data(sourceIndex, filterRole()).toString());
 
-            bool shouldBeDisplayed = sourceModel()->data(sourceIndex, filterRole()).toString().contains(filterRegularExpression());;
+            bool shouldBeDisplayed = isMatching(mSearchString, sourceModel()->data(sourceIndex, filterRole()).toString());
             //go through all children and return the check of itself and the check of the children
             for(int i = 0; i < item->childCount(); i++)
             {
@@ -60,5 +57,11 @@ namespace hal
     {
         mSortMechanism = sortMechanism;
         invalidate();
+    }
+    void ModuleProxyModel::startSearch(QString text, int options)
+    {
+        mSearchString = text;
+        mSearchOptions = SearchOptions(options);
+        invalidateFilter();
     }
 }

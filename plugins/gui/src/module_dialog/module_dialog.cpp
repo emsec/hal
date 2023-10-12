@@ -56,6 +56,7 @@ namespace hal {
         mTabWidget->addTab(mTreeView, "Module tree");
 
         mTableView = new ModuleSelectView(false, mSearchbar, &mExcludeIds, mTabWidget);
+
         connect(mTableView, &ModuleSelectView::moduleSelected, this, &ModuleDialog::handleTableSelection);
         mTabWidget->addTab(mTableView, "Module list");
 
@@ -95,7 +96,6 @@ namespace hal {
         enableButtons();
         mSearchbar->hide();
 
-
         connect(mTabWidget, &QTabWidget::currentChanged, this, &ModuleDialog::handleCurrentTabChanged);
         connect(mToggleSearchbar, &QAction::triggered, this, &ModuleDialog::handleToggleSearchbar);
         connect(mSearchbar, &Searchbar::textEdited, this, &ModuleDialog::filter);
@@ -105,6 +105,7 @@ namespace hal {
         connect(mTreeView, &QTreeView::doubleClicked, this, &ModuleDialog::handleTreeDoubleClick);
         connect(mTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ModuleDialog::handleTreeSelectionChanged);
 
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mModuleTreeProxyModel, &ModuleProxyModel::startSearch);
     }
 
     void ModuleDialog::enableButtons()
