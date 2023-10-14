@@ -10,6 +10,7 @@ var plugin__manager_8h =
     [ "get_plugin_instance", "plugin__manager_8h.html#ab7b612656ec8fc57b2df14bc0d44668f", null ],
     [ "get_plugin_instance", "plugin__manager_8h.html#a92bf31018405affc1f416930a69f5123", null ],
     [ "get_plugin_names", "plugin__manager_8h.html#aacd4893d3d32447c4ed1f27b21a827cf", null ],
+    [ "get_plugin_path", "plugin__manager_8h.html#acfef91bcd7b9db938f10e4b705cf3bfb", null ],
     [ "get_ui_plugin_flags", "plugin__manager_8h.html#ac7195b40f8ac66e68cfe5f8e6cf6f074", null ],
     [ "has_valid_file_extension", "plugin__manager_8h.html#a2963a3d18f0df7fa6bb9030810a058c3", null ],
     [ "load", "plugin__manager_8h.html#af5d031db41abe777dfa8da61f5583ff2", null ],

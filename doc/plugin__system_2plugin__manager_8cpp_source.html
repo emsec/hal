@@ -139,54 +139,54 @@ $(document).ready(function(){initNavTree('plugin__system_2plugin__manager_8cpp_s
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            <span class="comment">// stores name of plugin while loading</span></div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            std::string m_current_loading;</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            std::filesystem::path get_plugin_path(std::string plugin_name)</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            <span class="keywordtype">bool</span> solve_dependencies(std::string plugin_name, std::set&lt;std::string&gt; dep_file_name)</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;            {</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                std::filesystem::path retval;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                <span class="keywordflow">if</span> (plugin_name.empty()) <span class="keywordflow">return</span> retval;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                std::string file_name = plugin_name + <span class="stringliteral">&quot;.&quot;</span> + <a class="code" href="arch__linux_8h.html#a8482578c5c42538609e6e0abedcfc132">LIBRARY_FILE_EXTENSION</a>;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                retval = <a class="code" href="namespacehal_1_1utils.html#afbfe0cd7b2ec80643d4c16e4ffb7a7d3">utils::get_file</a>(file_name, m_plugin_folders);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                <span class="keywordflow">if</span> (!retval.empty() || !strlen(<a class="code" href="arch__linux_8h.html#a8b4cd25d21b3d1520a4fc3e967aa470c">ALTERNATE_LIBRARY_FILE_EXTENSION</a>)) <span class="keywordflow">return</span> retval;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                file_name = plugin_name + <span class="stringliteral">&quot;.&quot;</span> + <a class="code" href="arch__linux_8h.html#a8b4cd25d21b3d1520a4fc3e967aa470c">ALTERNATE_LIBRARY_FILE_EXTENSION</a>;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="namespacehal_1_1utils.html#afbfe0cd7b2ec80643d4c16e4ffb7a7d3">utils::get_file</a>(file_name, m_plugin_folders);</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            }</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <span class="keywordtype">bool</span> solve_dependencies(std::string plugin_name, std::set&lt;std::string&gt; dep_file_name)</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            {</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                <span class="keywordflow">if</span> (plugin_name.empty())</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                {</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;core&quot;</span>, <span class="stringliteral">&quot;parameter &#39;plugin_name&#39; is empty&quot;</span>);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                }</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                <span class="keywordflow">if</span> (dep_file_name.empty())</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                {</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                    <a class="code" href="group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>(<span class="stringliteral">&quot;core&quot;</span>, <span class="stringliteral">&quot;no dependency for plugin &#39;{}&#39;&quot;</span>, plugin_name);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                }</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; file_name : dep_file_name)</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                {</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                    <span class="keyword">auto</span> dep_plugin_name        = std::filesystem::path(file_name).stem().string();</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                    <span class="comment">// dependency already loaded</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                    <span class="keywordflow">if</span> (m_loaded_plugins.find(dep_plugin_name) != m_loaded_plugins.end())</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                    {</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                        <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                    }</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                    <span class="comment">// search in plugin directories</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                    std::filesystem::path file_path = get_plugin_path(dep_plugin_name);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                    <span class="keywordflow">if</span> (file_path.empty() || !<a class="code" href="namespacehal_1_1plugin__manager.html#af5d031db41abe777dfa8da61f5583ff2">load</a>(dep_plugin_name, file_path))</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                    {</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                        <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;core&quot;</span>, <span class="stringliteral">&quot;cannot solve dependency &#39;{}&#39; for plugin &#39;{}&#39;&quot;</span>, dep_plugin_name, plugin_name);</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                    }</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                    <a class="code" href="group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>(<span class="stringliteral">&quot;core&quot;</span>, <span class="stringliteral">&quot;solved dependency &#39;{}&#39; for plugin &#39;{}&#39;&quot;</span>, dep_plugin_name, plugin_name);</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                }</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                <a class="code" href="group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>(<span class="stringliteral">&quot;core&quot;</span>, <span class="stringliteral">&quot;solved {} dependencies for plugin &#39;{}&#39;&quot;</span>, dep_file_name.size(), plugin_name);</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            }</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        }    <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                <span class="keywordflow">if</span> (plugin_name.empty())</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                {</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                    <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;core&quot;</span>, <span class="stringliteral">&quot;parameter &#39;plugin_name&#39; is empty&quot;</span>);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                <span class="keywordflow">if</span> (dep_file_name.empty())</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                    <a class="code" href="group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>(<span class="stringliteral">&quot;core&quot;</span>, <span class="stringliteral">&quot;no dependency for plugin &#39;{}&#39;&quot;</span>, plugin_name);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                }</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; file_name : dep_file_name)</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                {</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                    <span class="keyword">auto</span> dep_plugin_name        = std::filesystem::path(file_name).stem().string();</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                    <span class="comment">// dependency already loaded</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                    <span class="keywordflow">if</span> (m_loaded_plugins.find(dep_plugin_name) != m_loaded_plugins.end())</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                    {</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                        <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                    }</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                    <span class="comment">// search in plugin directories</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                    std::filesystem::path file_path = <a class="code" href="namespacehal_1_1plugin__manager.html#acfef91bcd7b9db938f10e4b705cf3bfb">get_plugin_path</a>(dep_plugin_name);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                    <span class="keywordflow">if</span> (file_path.empty() || !<a class="code" href="namespacehal_1_1plugin__manager.html#af5d031db41abe777dfa8da61f5583ff2">load</a>(dep_plugin_name, file_path))</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                    {</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                        <a class="code" href="group__utilities.html#ga522d6d0c8a408128993be37c86656280">log_error</a>(<span class="stringliteral">&quot;core&quot;</span>, <span class="stringliteral">&quot;cannot solve dependency &#39;{}&#39; for plugin &#39;{}&#39;&quot;</span>, dep_plugin_name, plugin_name);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                    }</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                    <a class="code" href="group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>(<span class="stringliteral">&quot;core&quot;</span>, <span class="stringliteral">&quot;solved dependency &#39;{}&#39; for plugin &#39;{}&#39;&quot;</span>, dep_plugin_name, plugin_name);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                }</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                <a class="code" href="group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466">log_debug</a>(<span class="stringliteral">&quot;core&quot;</span>, <span class="stringliteral">&quot;solved {} dependencies for plugin &#39;{}&#39;&quot;</span>, dep_file_name.size(), plugin_name);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            }</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        }    <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="namespacehal_1_1plugin__manager.html#acfef91bcd7b9db938f10e4b705cf3bfb">   92</a></span>&#160;        std::filesystem::path <a class="code" href="namespacehal_1_1plugin__manager.html#acfef91bcd7b9db938f10e4b705cf3bfb">get_plugin_path</a>(std::string plugin_name)</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            std::filesystem::path retval;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <span class="keywordflow">if</span> (plugin_name.empty()) <span class="keywordflow">return</span> retval;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            std::string file_name = plugin_name + <span class="stringliteral">&quot;.&quot;</span> + <a class="code" href="arch__linux_8h.html#a8482578c5c42538609e6e0abedcfc132">LIBRARY_FILE_EXTENSION</a>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            retval = <a class="code" href="namespacehal_1_1utils.html#afbfe0cd7b2ec80643d4c16e4ffb7a7d3">utils::get_file</a>(file_name, m_plugin_folders);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            <span class="keywordflow">if</span> (!retval.empty() || !strlen(<a class="code" href="arch__linux_8h.html#a8b4cd25d21b3d1520a4fc3e967aa470c">ALTERNATE_LIBRARY_FILE_EXTENSION</a>)) <span class="keywordflow">return</span> retval;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            file_name = plugin_name + <span class="stringliteral">&quot;.&quot;</span> + <a class="code" href="arch__linux_8h.html#a8b4cd25d21b3d1520a4fc3e967aa470c">ALTERNATE_LIBRARY_FILE_EXTENSION</a>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespacehal_1_1utils.html#afbfe0cd7b2ec80643d4c16e4ffb7a7d3">utils::get_file</a>(file_name, m_plugin_folders);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        }</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
 <div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="namespacehal_1_1plugin__manager.html#a2963a3d18f0df7fa6bb9030810a058c3">  103</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="namespacehal_1_1plugin__manager.html#a2963a3d18f0df7fa6bb9030810a058c3">has_valid_file_extension</a>(std::filesystem::path file_name)</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        {</div>
@@ -278,7 +278,7 @@ $(document).ready(function(){initNavTree('plugin__system_2plugin__manager_8cpp_s
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;            <span class="keywordflow">if</span> (file_path.empty())</div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;            {</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;                <span class="comment">// file name not provided, search plugin folders</span></div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                file_path = get_plugin_path(plugin_name);</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                file_path = <a class="code" href="namespacehal_1_1plugin__manager.html#acfef91bcd7b9db938f10e4b705cf3bfb">get_plugin_path</a>(plugin_name);</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;                <span class="keywordflow">if</span> (file_path.empty())</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;                {</div>
@@ -602,6 +602,7 @@ $(document).ready(function(){initNavTree('plugin__system_2plugin__manager_8cpp_s
 <div class="ttc" id="anamespacehal_1_1plugin__manager_html_a01b664fe781926cb67034f778e5242b1"><div class="ttname"><a href="namespacehal_1_1plugin__manager.html#a01b664fe781926cb67034f778e5242b1">hal::plugin_manager::add_existing_options_description</a></div><div class="ttdeci">void add_existing_options_description(const ProgramOptions &amp;existing_options)</div><div class="ttdef"><b>Definition:</b> <a href="plugin__system_2plugin__manager_8cpp_source.html#l00454">plugin_manager.cpp:454</a></div></div>
 <div class="ttc" id="anet__layout__point_8h_html_aa7fe0c70576e86ca2c5f641bb47ccc9d"><div class="ttname"><a href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a></div><div class="ttdeci">quint32 u32</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00040">net_layout_point.h:40</a></div></div>
 <div class="ttc" id="anamespacehal_1_1netlist__writer__manager_html_aaa30fb9e667974f36773a5b4de75a7fe"><div class="ttname"><a href="namespacehal_1_1netlist__writer__manager.html#aaa30fb9e667974f36773a5b4de75a7fe">hal::netlist_writer_manager::unregister_writer</a></div><div class="ttdeci">void unregister_writer(const std::string &amp;name)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2netlist__writer_2netlist__writer__manager_8cpp_source.html#l00074">netlist_writer_manager.cpp:74</a></div></div>
+<div class="ttc" id="anamespacehal_1_1plugin__manager_html_acfef91bcd7b9db938f10e4b705cf3bfb"><div class="ttname"><a href="namespacehal_1_1plugin__manager.html#acfef91bcd7b9db938f10e4b705cf3bfb">hal::plugin_manager::get_plugin_path</a></div><div class="ttdeci">std::filesystem::path get_plugin_path(std::string plugin_name)</div><div class="ttdef"><b>Definition:</b> <a href="plugin__system_2plugin__manager_8cpp_source.html#l00092">plugin_manager.cpp:92</a></div></div>
 <div class="ttc" id="anamespacehal_1_1plugin__manager_html_a09fe50a3d6651ef3eebbfcfb2f36cea8"><div class="ttname"><a href="namespacehal_1_1plugin__manager.html#a09fe50a3d6651ef3eebbfcfb2f36cea8">hal::plugin_manager::add_model_changed_callback</a></div><div class="ttdeci">u64 add_model_changed_callback(std::function&lt; void(bool, std::string const &amp;, std::string const &amp;)&gt; callback)</div><div class="ttdef"><b>Definition:</b> <a href="plugin__system_2plugin__manager_8cpp_source.html#l00439">plugin_manager.cpp:439</a></div></div>
 <div class="ttc" id="anamespacehal_1_1plugin__manager_html_ab7b612656ec8fc57b2df14bc0d44668f"><div class="ttname"><a href="namespacehal_1_1plugin__manager.html#ab7b612656ec8fc57b2df14bc0d44668f">hal::plugin_manager::get_plugin_instance</a></div><div class="ttdeci">BasePluginInterface * get_plugin_instance(const std::string &amp;plugin_name, bool initialize, bool silent)</div><div class="ttdef"><b>Definition:</b> <a href="plugin__system_2plugin__manager_8cpp_source.html#l00421">plugin_manager.cpp:421</a></div></div>
 <div class="ttc" id="aclasshal_1_1_fac_factory_provider_html_afb2124d31d070df38834ed3d5096e97c"><div class="ttname"><a href="classhal_1_1_fac_factory_provider.html#afb2124d31d070df38834ed3d5096e97c">hal::FacFactoryProvider::m_factory</a></div><div class="ttdeci">std::function&lt; std::unique_ptr&lt; T &gt;)&gt; m_factory</div><div class="ttdef"><b>Definition:</b> <a href="fac__extension__interface_8h_source.html#l00051">fac_extension_interface.h:51</a></div></div>
@@ -621,7 +622,7 @@ $(document).ready(function(){initNavTree('plugin__system_2plugin__manager_8cpp_s
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_305084980f5b1614aa764d430f06c863.html">plugin_system</a></li><li class="navelem"><a class="el" href="plugin__system_2plugin__manager_8cpp.html">plugin_manager.cpp</a></li>
-    <li class="footer">Generated on Wed Oct 11 2023 16:31:19 for HAL by
+    <li class="footer">Generated on Sat Oct 14 2023 10:55:36 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
