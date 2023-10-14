@@ -74,7 +74,20 @@ namespace hal
 
         QVBoxLayout* containerLayout = new QVBoxLayout(treeViewContainer);
 
+
+
+
+
         mSelectionTreeView  = new SelectionTreeView(treeViewContainer);
+
+        mSelectionTreeModel = new SelectionTreeModel(this);
+        mSelectionTreeProxyModel = new SelectionTreeProxyModel(this);
+        mSelectionTreeProxyModel->setSourceModel(mSelectionTreeModel);
+        mSelectionTreeView->setModel(mSelectionTreeProxyModel);
+
+        //mSelectionTreeProxyModel->setSourceModel(mSelectionTreeView->model());
+        //mSelectionTreeView->setModel(mSelectionTreeProxyModel);
+
         mSelectionTreeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         mSelectionTreeView->setMinimumWidth(280);
         mSelectionTreeView->hide();
@@ -143,6 +156,8 @@ namespace hal
         connect(mSearchbar, &Searchbar::textEdited, this, &SelectionDetailsWidget::updateSearchIcon);
         connect(mSelectionTreeView, &SelectionTreeView::itemDoubleClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
         connect(mSelectionTreeView, &SelectionTreeView::focusItemClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
+
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mSelectionTreeProxyModel, &SelectionTreeProxyModel::startSearch);
     }
 
     void SelectionDetailsWidget::selectionToModuleMenu()
@@ -315,8 +330,8 @@ namespace hal
         }
 
         SelectionTreeProxyModel* proxy = static_cast<SelectionTreeProxyModel*>(mSelectionTreeView->model());
+        //mSelectionTreeView->setModel(mSelectionTreeProxyModel);
         if (proxy->isGraphicsBusy()) return;
-
         if (!mSearchbar->getCurrentText().isEmpty())
         {
             mSearchbar->clear();

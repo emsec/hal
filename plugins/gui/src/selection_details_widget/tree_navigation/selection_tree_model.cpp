@@ -16,6 +16,7 @@ namespace hal
         mRootItem = new SelectionTreeItemRoot;
         // root item has no parent
 
+
         connect(gNetlistRelay,&NetlistRelay::moduleNameChanged,this,&SelectionTreeModel::handleModuleItemChanged);
         connect(gNetlistRelay,&NetlistRelay::moduleTypeChanged,this,&SelectionTreeModel::handleModuleItemChanged);
         connect(gNetlistRelay,&NetlistRelay::gateNameChanged,this,&SelectionTreeModel::handleGateItemChanged);

@@ -85,6 +85,7 @@ namespace hal {
         mTreeView->setModel(mModuleTreeProxyModel);
         mTreeView->expandAll();
 
+
         mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
         layout->addWidget(mButtonBox, 3, 0, 1, 3, Qt::AlignHCenter);
 

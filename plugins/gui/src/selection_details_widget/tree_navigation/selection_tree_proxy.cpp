@@ -7,7 +7,7 @@
 namespace hal
 {
     SelectionTreeProxyModel::SelectionTreeProxyModel(QObject* parent)
-        : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical), mGraphicsBusy(0)
+        : SearchProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical), mGraphicsBusy(0)
     {
         mFilterExpression.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
     }
@@ -73,4 +73,12 @@ namespace hal
         mSortMechanism = sortMechanism;
         invalidate();
     }
+
+    void SelectionTreeProxyModel::startSearch(QString text, int options)
+    {
+        mSearchString = text;
+        mSearchOptions = SearchOptions(options);
+        invalidateFilter();
+    }
+
 }

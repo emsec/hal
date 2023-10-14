@@ -27,6 +27,8 @@
 
 #include "gui/content_widget/content_widget.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_proxy.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
 #include "hal_core/defines.h"
 
 class QTableWidget;
@@ -371,5 +373,7 @@ namespace hal
         GateDetailsTabWidget* mGateDetailsTabs;
         NetDetailsTabWidget* mNetDetailsTabs;
         ModuleDetailsTabWidget* mModuleDetailsTabs;
+        SelectionTreeProxyModel* mSelectionTreeProxyModel;
+        SelectionTreeModel* mSelectionTreeModel;
     };
 }
