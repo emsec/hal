@@ -189,13 +189,23 @@ namespace hal
         void addNet(const u32 id, const u32 parent_module);
 
         /**
-         * Recursively adds all given modules with all their sub modules (and their submodules and so on...)
+         * Recursively adds the given module with all of its submodules (and their submodules and so on...)
          * and the gates and nets of those modules to the item model.
          *
-         * @param modules - The list of modules which should be added to the item model together
-         *                  with all their submodules, gates and nets.
+         * @param module - The module which should be added to the item model together with all its 
+         *                  submodules, gates and nets.
+         * @param added_nets - A set of ids of nets. It's used to keep track of the nets that have already been added 
+         *                      to the item model during the recursion. You can pass an empty set to add all nets.
          */
-        void addRecursively(const std::vector<Module*>& modules, QSet<u32>& added_nets);
+        void addRecursively(const Module* module, QSet<u32>& added_nets);
+
+        /**
+         * Updates the parent of the ModuleItem corresponding to the specified module. 
+         * The new parent must already be set in the Module object.
+         * 
+         * @param module - The module whose ModuleItem will be reattached to a new parent in the item model.
+        */
+        void changeParentModule(const Module* module);
 
         /**
          * Removes a module from the item model. The specified module MUST be contained in the item model.

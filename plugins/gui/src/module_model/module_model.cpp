@@ -221,16 +221,7 @@ namespace hal
         // recursively insert modules
         Module* m = gNetlist->get_top_module();
         QSet<u32> added_nets;
-        addRecursively(m->get_submodules(), added_nets);
-        // add remaining gates and modules
-        for(auto g : m->get_gates())
-            addGate(g->get_id(), 1);
-        for(auto n : m->get_internal_nets()){
-            int size = added_nets.size();
-            added_nets.insert(n->get_id());
-            if(added_nets.size() > size)
-                addNet(n->get_id(), m->get_id());
-        }
+        addRecursively(m, added_nets);
     }
 
     void ModuleModel::clear()
@@ -262,18 +253,17 @@ namespace hal
         assert(mModuleMap.contains(parent_module));
 
         ModuleItem* item   = new ModuleItem(id);
-        item->appendExistingChildIfAny(mModuleMap);
         ModuleItem* parent = mModuleMap.value(parent_module);
 
         item->setParent(parent);
         mModuleMap.insert(id, item);
 
         QModelIndex index = getIndex(parent);
-
+        
         int row = parent->childCount();
         mIsModifying = true;
         beginInsertRows(index, row, row);
-        parent->insertChild(row, item);
+        parent->appendChild(item);
         mIsModifying = false;
         endInsertRows();
     }
@@ -284,8 +274,8 @@ namespace hal
         assert(gNetlist->get_module_by_id(parent_module));
         assert(!mGateMap.contains(id));
         assert(mModuleMap.contains(parent_module));
+
         ModuleItem* item   = new ModuleItem(id, ModuleItem::TreeItemType::Gate);
-        //item->appendExistingChildIfAny(mModuleMap);
         ModuleItem* parent = mModuleMap.value(parent_module);
 
         item->setParent(parent);
@@ -296,7 +286,7 @@ namespace hal
         int row = parent->childCount();
         mIsModifying = true;
         beginInsertRows(index, row, row);
-        parent->insertChild(row, item);
+        parent->appendChild(item);
         mIsModifying = false;
         endInsertRows();
     }
@@ -310,7 +300,6 @@ namespace hal
         assert(mModuleMap.contains(parent_module));
 
         ModuleItem* item   = new ModuleItem(id, ModuleItem::TreeItemType::Net);
-        //item->appendExistingChildIfAny(mModuleMap);
         ModuleItem* parent = mModuleMap.value(parent_module);
 
         item->setParent(parent);
@@ -321,28 +310,56 @@ namespace hal
         int row = parent->childCount();
         mIsModifying = true;
         beginInsertRows(index, row, row);
-        parent->insertChild(row, item);
+        parent->appendChild(item);
         mIsModifying = false;
         endInsertRows();
     }
 
-    void ModuleModel::addRecursively(const std::vector<Module*>& modules, QSet<u32>& added_nets)
+    void ModuleModel::addRecursively(const Module* module, QSet<u32>& added_nets)
     {
-        for (auto &m : modules)
-        {
-            addModule(m->get_id(), m->get_parent_module()->get_id());
-            addRecursively(m->get_submodules(), added_nets);
+        if(!module->is_top_module())
+            addModule(module->get_id(), module->get_parent_module()->get_id());
+        for(auto &m : module->get_submodules())
+            addRecursively(m, added_nets);
 
-            for(auto &g : m->get_gates())
-                addGate(g->get_id(), m->get_id());
-            for(auto &n : m->get_internal_nets())
-            {
-                int size = added_nets.size();
-                added_nets.insert(n->get_id());
-                if(added_nets.size() > size)
-                    addNet(n->get_id(), m->get_id());
-            }
-        }
+        for(auto &g : module->get_gates())
+            addGate(g->get_id(), module->get_id());
+        for(auto &n : module->get_internal_nets())
+        {
+            int size = added_nets.size();
+            added_nets.insert(n->get_id());
+            if(added_nets.size() > size)
+                addNet(n->get_id(), module->get_id());
+        }   
+    }
+
+    void ModuleModel::changeParentModule(const Module* module){
+        assert(module);
+        u32 id = module->get_id();
+        assert(id != 1);
+        assert(mModuleMap.contains(id));
+        ModuleItem* item = mModuleMap.value(id);
+        ModuleItem* oldParent = item->parent();
+        assert(oldParent);
+
+        assert(module->get_parent_module());
+        if(oldParent->id() == module->get_parent_module()->get_id())
+            return;
+
+        assert(mModuleMap.contains(module->get_parent_module()->get_id()));
+        ModuleItem* newParent = mModuleMap.value(module->get_parent_module()->get_id());
+
+        QModelIndex oldIndex = getIndex(oldParent);
+        QModelIndex newIndex = getIndex(newParent);
+        int row = item->row();
+
+        mIsModifying = true;
+        beginMoveRows(oldIndex, row, row, newIndex, newParent->childCount());
+        oldParent->removeChild(item);
+        newParent->appendChild(item);
+        item->setParent(newParent);
+        mIsModifying = false;
+        endMoveRows();
     }
 
     void ModuleModel::remove_module(const u32 id)

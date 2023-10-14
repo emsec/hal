@@ -376,6 +376,7 @@ namespace hal
                 // suppress actions if we receive this for the top module
                 if (mod->get_parent_module() != nullptr)
                 {
+                    mModuleModel->addModule(mod->get_id(), mod->get_parent_module()->get_id());
                     mModuleModel->setRandomColor(mod->get_id());
                 }
 
@@ -388,6 +389,7 @@ namespace hal
                 //< no associated_data
 
                 mModuleModel->removeColor(mod->get_id());
+                mModuleModel->remove_module(mod->get_id());
 
                 gGraphContextManager->handleModuleRemoved(mod);
                 gSelectionRelay->handleModuleRemoved(mod->get_id());
@@ -408,13 +410,13 @@ namespace hal
             case ModuleEvent::event::parent_changed: {
                 //< no associated_data
 
+                mModuleModel->changeParentModule(mod);
+
                 Q_EMIT moduleParentChanged(mod);
                 break;
             }
             case ModuleEvent::event::submodule_added: {
                 //< associated_data = id of added module
-
-                mModuleModel->addModule(associated_data, mod->get_id());
 
                 gGraphContextManager->handleModuleSubmoduleAdded(mod, associated_data);
 
@@ -424,8 +426,6 @@ namespace hal
             case ModuleEvent::event::submodule_removed: {
                 //< associated_data = id of removed module
 
-                mModuleModel->remove_module(associated_data);
-
                 gGraphContextManager->handleModuleSubmoduleRemoved(mod, associated_data);
 
                 Q_EMIT moduleSubmoduleRemoved(mod, associated_data);
@@ -434,6 +434,8 @@ namespace hal
             case ModuleEvent::event::gate_assigned: {
                 //< associated_data = id of inserted gate
 
+                mModuleModel->addGate(associated_data, mod->get_id());
+
                 gGraphContextManager->handleModuleGateAssigned(mod, associated_data);
 
                 Q_EMIT moduleGateAssigned(mod, associated_data);
@@ -441,6 +443,8 @@ namespace hal
             }
             case ModuleEvent::event::gate_removed: {
                 //< associated_data = id of removed gate
+
+                mModuleModel->remove_gate(associated_data);
 
                 gGraphContextManager->handleModuleGateRemoved(mod, associated_data);
 
