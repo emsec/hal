@@ -118,8 +118,12 @@ namespace hal
         {
             for(QString name : columnNames)
                 mColumnNames.append(name);
+        }else{
+            mSearchInLabel->hide();
+            mSelectColumnsBtn->hide();
         }
-        mSelectColumnsBtn->setText(formatColumnButtonText(buildColumnButtonText()));
+        if(!columnNames.isEmpty())
+            mSelectColumnsBtn->setText(formatColumnButtonText(buildColumnButtonText()));
         //TODO resize button after it updates its text
 
     }

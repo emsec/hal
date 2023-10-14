@@ -205,7 +205,11 @@ namespace hal
     void Searchbar::handleTextEdited()
     {
         repolish();
-        if(mIncrementalSearch && mLineEdit->text().length() >= mMinCharsToStartIncSearch)
+        //if the line is empty then start a search with the given filter
+        if(mLineEdit->text().isEmpty()){
+            Q_EMIT triggerNewSearch(mLineEdit->text(), mCurrentOptions->toInt());
+        }
+        else if(mIncrementalSearch && mLineEdit->text().length() >= mMinCharsToStartIncSearch)
         {
             Q_EMIT triggerNewSearch(mLineEdit->text(), mCurrentOptions->toInt());
         }
@@ -220,18 +224,6 @@ namespace hal
     {
         clear();
     }
-
-    /*
-    bool Searchbar::exactMatchChecked()
-    {
-        return mCurrentOptions->toInt()&&1;
-    }
-
-    bool Searchbar::caseSensitiveChecked()
-    {
-        return mCurrentOptions->toInt()&&2;
-    }
-*/
 
     void Searchbar::setEmitTextWithFlags(bool emitTextWithFlags)
     {

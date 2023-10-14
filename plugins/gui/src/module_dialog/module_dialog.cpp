@@ -85,6 +85,10 @@ namespace hal {
         mTreeView->setModel(mModuleTreeProxyModel);
         mTreeView->expandAll();
 
+        mModuleTableProxyModel = new ModuleSelectProxy(this),
+        mModuleTableProxyModel->setSourceModel(mTableView->model());
+        mTableView->setModel(mModuleTableProxyModel);
+
         mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
         layout->addWidget(mButtonBox, 3, 0, 1, 3, Qt::AlignHCenter);
 
@@ -92,9 +96,15 @@ namespace hal {
         mToggleSearchbar->setShortcut(QKeySequence(ContentManager::sSettingSearch->value().toString()));
         addAction(mToggleSearchbar);
 
-        mTabWidget->setCurrentIndex(1);
+        mTabWidget->setCurrentIndex(0);
         enableButtons();
         mSearchbar->hide();
+
+        //get column names for searchbar
+        if(mTabWidget->currentWidget() == mTreeView)
+            mSearchbar->setColumnNames(mModuleTreeProxyModel->getColumnNames());
+        else
+            mSearchbar->setColumnNames(mModuleTableProxyModel->getColumnNames());
 
         connect(mTabWidget, &QTabWidget::currentChanged, this, &ModuleDialog::handleCurrentTabChanged);
         connect(mToggleSearchbar, &QAction::triggered, this, &ModuleDialog::handleToggleSearchbar);
@@ -106,6 +116,7 @@ namespace hal {
         connect(mTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ModuleDialog::handleTreeSelectionChanged);
 
         connect(mSearchbar, &Searchbar::triggerNewSearch, mModuleTreeProxyModel, &ModuleProxyModel::startSearch);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mModuleTableProxyModel, &ModuleSelectProxy::startSearch);
     }
 
     void ModuleDialog::enableButtons()
@@ -220,6 +231,11 @@ namespace hal {
     void ModuleDialog::handleCurrentTabChanged(int index)
     {
         Q_UNUSED(index);
+        //set columnNames for searchbar
+        if(mTabWidget->currentWidget() == mTreeView)
+            mSearchbar->setColumnNames(mModuleTreeProxyModel->getColumnNames());
+        else
+            mSearchbar->setColumnNames(mModuleTableProxyModel->getColumnNames());
         mTreeView->clearSelection();
         mTableView->clearSelection();
         mSearchbar->clear();
