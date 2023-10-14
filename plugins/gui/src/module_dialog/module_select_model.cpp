@@ -158,7 +158,7 @@ namespace hal
     }
 
     //---------------- PROXY ------------------------------------------
-    ModuleSelectProxy::ModuleSelectProxy(QObject* parent) : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::numerated)
+    ModuleSelectProxy::ModuleSelectProxy(QObject* parent) : SearchProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::numerated)
     {
         ;
     }
@@ -199,6 +199,38 @@ namespace hal
     {
         setFilterKeyColumn(-1);
         setFilterRegularExpression(txt);
+    }
+    void ModuleSelectProxy::startSearch(QString text, int options)
+    {
+        mSearchString = text;
+        mSearchOptions = SearchOptions(options);
+        invalidateFilter();
+    }
+
+    bool ModuleSelectProxy::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
+    {
+        QList<int> columns = mSearchOptions.getColumns();
+        if(columns.empty()){
+            //iterate over each column
+            for(int index = 1; index < 4; index++){
+                QString entry = sourceModel()->index(source_row, index, source_parent).data().toString();
+                if(isMatching(mSearchString, entry))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }else
+        {
+            for(int index : columns)
+            {
+                //offset the index by one to account for missing color column
+                QString entry = sourceModel()->index(source_row, index + 1, source_parent).data().toString();
+                if(isMatching(mSearchString, entry))
+                    return true;
+            }
+            return false;
+        }
     }
 
     //---------------- EXCLUDE ----------------------------------------
