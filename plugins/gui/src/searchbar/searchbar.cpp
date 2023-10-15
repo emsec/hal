@@ -13,6 +13,7 @@
 #include <QStyle>
 #include <QToolButton>
 #include <QDebug>
+#include <gui/searchbar/searchoptions.h>
 
 namespace hal
 {
@@ -205,9 +206,9 @@ namespace hal
     void Searchbar::handleTextEdited()
     {
         repolish();
-        //if the line is empty then start a search with the given filter
+        //if the line is empty then start a search with default searchOptions - no filtering
         if(mLineEdit->text().isEmpty()){
-            Q_EMIT triggerNewSearch(mLineEdit->text(), mCurrentOptions->toInt());
+            Q_EMIT triggerNewSearch(mLineEdit->text(), SearchOptions().toInt());
         }
         else if(mIncrementalSearch && mLineEdit->text().length() >= mMinCharsToStartIncSearch)
         {
@@ -217,7 +218,13 @@ namespace hal
 
     void Searchbar::handleReturnPressed()
     {
-        Q_EMIT triggerNewSearch(mLineEdit->text(), mCurrentOptions->toInt());
+        //if the line is empty then start a search with default searchOptions - no filtering
+        if(mLineEdit->text().isEmpty()){
+            Q_EMIT triggerNewSearch(mLineEdit->text(), SearchOptions().toInt());
+        }
+        else{
+            Q_EMIT triggerNewSearch(mLineEdit->text(), mCurrentOptions->toInt());
+        }
     }
 
     void Searchbar::handleClearClicked()
@@ -271,5 +278,9 @@ namespace hal
             qInfo() << "Searchbar starts search with: " << txt << " " << mCurrentOptions->toInt() << "  inc search: " << mIncrementalSearch << " " << mMinCharsToStartIncSearch;
             Q_EMIT triggerNewSearch(txt, mCurrentOptions->toInt());
         }
+        if(mCurrentOptions->toInt() != SearchOptions().toInt())
+            mSearchOptionsButton->setChecked(true);
+        else
+            mSearchOptionsButton->setChecked(false);
     }
 }

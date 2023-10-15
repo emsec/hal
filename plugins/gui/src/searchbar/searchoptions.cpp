@@ -5,7 +5,13 @@
 namespace hal
 {
     SearchOptions::SearchOptions()
-    {};
+    {
+        //construct default filter options
+        mExactMatch = false;
+        mCaseSensitive = false;
+        mRegularExpression = false;
+        mColumns = {};
+    };
 
     SearchOptions::SearchOptions(int code)
     {
