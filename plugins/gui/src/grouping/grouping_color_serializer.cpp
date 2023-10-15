@@ -126,9 +126,11 @@ namespace hal {
             QModelIndex inx = mm->index(irow,0,parent);
             const ModuleItem* mItem = mm->getItem(inx);
             if (!mItem) continue;
+            if(mItem->getType() != ModuleItem::TreeItemType::Module) continue;
+
             QJsonObject mcEntry;
             mcEntry["id"] = (int) mItem->id();
-            mcEntry["color"] = mItem->color().name(QColor::HexArgb);
+            mcEntry["color"] = mm->moduleColor(mItem->id()).name(QColor::HexArgb);
             mcArr.append(mcEntry);
             serializeColorRecursion(mcArr,mm,inx);
         }

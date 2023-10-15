@@ -17,7 +17,6 @@ namespace hal
         {
         case TreeItemType::Module:
             mName = QString::fromStdString(gNetlist->get_module_by_id(id)->get_name());
-            mColor = gNetlistRelay->getModuleColor(id);
             break;
         case TreeItemType::Gate:
             mName = QString::fromStdString(gNetlist->get_gate_by_id(id)->get_name());
@@ -139,11 +138,6 @@ namespace hal
         return mId;
     }
 
-    QColor ModuleItem::color() const
-    {
-        return mColor;
-    }
-
     bool ModuleItem::highlighted() const
     {
         return mHighlighted;
@@ -161,11 +155,6 @@ namespace hal
     void ModuleItem::setName(const QString& name)
     {
         mName = name;
-    }
-
-    void ModuleItem::setColor(const QColor& color)
-    {
-        mColor = color;
     }
 
     void ModuleItem::setHighlighted(const bool highlighted)

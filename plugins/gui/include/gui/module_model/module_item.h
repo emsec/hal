@@ -161,13 +161,6 @@ namespace hal
         u32 id() const;
 
         /**
-         * Gets the color of the netlist item this ModuleItem represents.
-         *
-         * @returns the module color
-         */
-        QColor color() const;
-
-        /**
          * Checks if this ModuleItem is currently highlighted.
          *
          * @returns <b>true</b> if this ModuleItem is currently highlighted.
@@ -196,13 +189,6 @@ namespace hal
         void setName(const QString& name);
 
         /**
-         * Sets the color of the module this ModuleItem represents.
-         *
-         * @param color - The new color
-         */
-        void setColor(const QColor& color);
-
-        /**
          * Marks/Unmarks this ModuleItem as highlighted.
          *
          * @param highlighted - <b>true</b> if the ModuleItem should be marked as highlighted.
@@ -218,7 +204,6 @@ namespace hal
         TreeItemType mType;
         QString mName;
 
-        QColor mColor;
         bool mHighlighted;
     };
 }

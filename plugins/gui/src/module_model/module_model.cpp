@@ -4,7 +4,7 @@
 
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
-//#include "gui/ModuleModel/ModuleItem.h"
+
 #include "gui/selection_details_widget/selection_details_icon_provider.h"
 
 #include "hal_core/netlist/gate.h"
@@ -121,7 +121,7 @@ namespace hal
                 {
                     switch(item->getType()){
                         case ModuleItem::TreeItemType::Module:
-                            return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::ModuleIcon, item->id()));
+                            return QIcon(gui_utility::getStyledSvgIcon("all->" + mModuleColors[item->id()].name(QColor::HexRgb), ":/icons/ne_module"));
                         case ModuleItem::TreeItemType::Gate:
                             return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::GateIcon, item->id()));
                         case ModuleItem::TreeItemType::Net:
@@ -444,7 +444,6 @@ namespace hal
         assert(item);
 
         item->setName(QString::fromStdString(gNetlist->get_module_by_id(id)->get_name()));    // REMOVE & ADD AGAIN
-        item->setColor(gNetlistRelay->getModuleColor(id));
 
         QModelIndex index = getIndex(item);
         Q_EMIT dataChanged(index, index);
