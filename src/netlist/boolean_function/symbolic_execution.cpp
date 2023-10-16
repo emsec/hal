@@ -1279,7 +1279,7 @@ namespace hal
                 case BooleanFunction::NodeType::Slice: {
                     auto start = p[1].get_index_value().get();
                     auto end   = p[2].get_index_value().get();
-                    return OK(BooleanFunction::Const(std::vector<BooleanFunction::Value>(values[0].begin() + start, values[0].begin() + end)));
+                    return OK(BooleanFunction::Const(std::vector<BooleanFunction::Value>(values[0].begin() + start, values[0].begin() + end + 1)));
                 }
                 case BooleanFunction::NodeType::Concat: {
                     values[1].insert(values[1].end(), values[0].begin(), values[0].end());
