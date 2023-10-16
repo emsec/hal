@@ -121,7 +121,7 @@ namespace hal
                 {
                     switch(item->getType()){
                         case ModuleItem::TreeItemType::Module:
-                            return QIcon(gui_utility::getStyledSvgIcon("all->" + mModuleColors[item->id()].name(QColor::HexRgb), ":/icons/ne_module"));
+                            return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::ModuleIcon, item->id()));
                         case ModuleItem::TreeItemType::Gate:
                             return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::GateIcon, item->id()));
                         case ModuleItem::TreeItemType::Net:

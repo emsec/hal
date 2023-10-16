@@ -48,7 +48,6 @@ namespace hal
         {
         case UserActionObjectType::Module:
             oldColor = gNetlistRelay->getModuleModel()->setModuleColor(mObject.id(),mColor);
-            gNetlistRelay->getModuleModel()->updateModule(mObject.id());
 
             // Set module color will fire moduleColorChanged event.
             // However, gGraphContextManager is not in the receiver list and has to be updated manually

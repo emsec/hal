@@ -46,11 +46,11 @@ namespace hal
 
     void SelectionDetailsIconProvider::handleModuleColorChanged(u32 id)
     {
-        auto it = ModuleIconInstance::sInstances.find(id);
-        if (it == ModuleIconInstance::sInstances.end()) return;
+        auto it = mModuleIcons.find(id);
+        if (it == mModuleIcons.end()) return;
         delete it.value();
         QColor col = gNetlistRelay->getModuleColor(id);
-        new ModuleIconInstance(id,gui_utility::getStyledSvgIcon("all->" + col.name(QColor::HexRgb), ":/icons/ne_module"));
+        mModuleIcons[id] = new QIcon(gui_utility::getStyledSvgIcon("all->" + col.name(QColor::HexRgb), ":/icons/ne_module"));
     }
 
     void SelectionDetailsIconProvider::loadIcons(int istyle)
@@ -107,29 +107,17 @@ namespace hal
             col = gNetlistRelay->getModuleColor(itemId);
             if (col.isValid())
             {
-                auto it = ModuleIconInstance::sInstances.find(itemId);
-                if (it != ModuleIconInstance::sInstances.end())
+                auto it = mModuleIcons.find(itemId);
+                if (it != mModuleIcons.end())
                     return it.value();
-
-                return new ModuleIconInstance(itemId,gui_utility::getStyledSvgIcon("all->" + col.name(QColor::HexRgb), ":/icons/ne_module"));
+                QIcon* newIcon = new QIcon(gui_utility::getStyledSvgIcon("all->" + col.name(QColor::HexRgb), ":/icons/ne_module"));
+                mModuleIcons[itemId] = newIcon;
+                return newIcon;
             }
             break;
         default:
             break;
         }
         return mDefaultIcons.value(catg);
-    }
-
-    QHash<u32, ModuleIconInstance*> ModuleIconInstance::sInstances;
-
-    ModuleIconInstance::ModuleIconInstance(u32 id, const QIcon &icon)
-        : QIcon(icon), mId(id)
-    {
-         sInstances[mId] = this;
-    }
-
-    ModuleIconInstance::~ModuleIconInstance()
-    {
-        sInstances.remove(mId);
     }
 }

@@ -52,7 +52,7 @@ namespace hal
     private:
         QHash<IconCategory,const QIcon*> mDefaultIcons;
         QHash<int,const QIcon*> mGateIcons;
-        QHash<void*,const QIcon*> mModuleIcons;
+        QHash<u32,const QIcon*> mModuleIcons;
         static bool sSettingsInitialized;
         static bool initSettings();
     public:
@@ -60,15 +60,4 @@ namespace hal
         static SelectionDetailsIconProvider* instance();
         static SettingsItemDropdown* sIconSizeSetting;
     };
-
-    class ModuleIconInstance : public QIcon
-    {
-        u32 mId;
-        friend class SelectionDetailsIconProvider;
-        static QHash<u32, ModuleIconInstance*> sInstances;
-    public:
-        ModuleIconInstance(u32 id, const QIcon& icon);
-        ~ModuleIconInstance();
-    };
 }
-
