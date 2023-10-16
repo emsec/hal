@@ -51,6 +51,14 @@ namespace hal
     {
         Q_OBJECT
 
+    Q_SIGNALS:
+        /**
+         * Q_SIGNAL to notify that the color of a module has been changed.
+         *
+         * @param m - The module with the changed color
+         */
+        void moduleColorChanged(u32 id) const;
+
     public:
         /**
          * Constructor. <br>

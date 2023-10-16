@@ -463,6 +463,7 @@ namespace hal
     {
         QColor retval = mModuleColors.value(id);
         mModuleColors[id] = col;
+        Q_EMIT moduleColorChanged(id);
         return retval;
     }
 

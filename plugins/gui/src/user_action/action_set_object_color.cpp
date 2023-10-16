@@ -50,8 +50,8 @@ namespace hal
             oldColor = gNetlistRelay->getModuleModel()->setModuleColor(mObject.id(),mColor);
             gNetlistRelay->getModuleModel()->updateModule(mObject.id());
 
-            // Since color is our Overlay over the netlist data, no event is
-            // automatically fired. We need to take care of that ourselves here.
+            // Set module color will fire moduleColorChanged event.
+            // However, gGraphContextManager is not in the receiver list and has to be updated manually
             gGraphContextManager->handleModuleColorChanged(gNetlist->get_module_by_id(mObject.id()));
             break;
         case UserActionObjectType::Grouping:

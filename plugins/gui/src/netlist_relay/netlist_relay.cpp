@@ -140,8 +140,6 @@ namespace hal
         ActionSetObjectColor* act = new ActionSetObjectColor(color);
         act->setObject(UserActionObject(id, UserActionObjectType::Module));
         act->exec();
-
-        Q_EMIT moduleColorChanged(m);
     }
 
     void NetlistRelay::addSelectionToModule(const u32 id)

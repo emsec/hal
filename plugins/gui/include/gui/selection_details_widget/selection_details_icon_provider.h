@@ -31,6 +31,7 @@
 #include <QIcon>
 #include <QHash>
 #include <QObject>
+#include <QList>
 
 namespace hal
 {
@@ -47,6 +48,7 @@ namespace hal
 
     private Q_SLOTS:
         void loadIcons(int istyle);
+        void handleModuleColorChanged(u32 id);
     private:
         QHash<IconCategory,const QIcon*> mDefaultIcons;
         QHash<int,const QIcon*> mGateIcons;
@@ -57,6 +59,16 @@ namespace hal
         const QIcon *getIcon(IconCategory catg, u32 itemId);
         static SelectionDetailsIconProvider* instance();
         static SettingsItemDropdown* sIconSizeSetting;
+    };
+
+    class ModuleIconInstance : public QIcon
+    {
+        u32 mId;
+        friend class SelectionDetailsIconProvider;
+        static QHash<u32, ModuleIconInstance*> sInstances;
+    public:
+        ModuleIconInstance(u32 id, const QIcon& icon);
+        ~ModuleIconInstance();
     };
 }
 

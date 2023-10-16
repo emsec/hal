@@ -584,17 +584,6 @@ namespace hal
         */
         void groupingModuleRemoved(Grouping* grp, u32 id) const;
 
-        /*=======================================
-           Other Signals
-         ========================================*/
-
-        /**
-         * Q_SIGNAL to notify that the color of a module has been changed.
-         *
-         * @param m - The module with the changed color
-         */
-        void moduleColorChanged(Module* m) const;
-
     public Q_SLOTS:
         /**
          * Q_SLOT to handle that a netlist has been opened.
