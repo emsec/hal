@@ -1819,8 +1819,9 @@ namespace hal
                                                                                            const std::map<std::string, std::map<std::string, std::vector<std::string>>>& concatinated_pin_groups)
     {
         std::vector<Module*> all_modules;
-        for (const auto& [gt_name, pin_groups] : concatinated_pin_groups)
+        for (const auto& [gt_name_tmp_for, pin_groups] : concatinated_pin_groups)
         {
+            const auto& gt_name = gt_name_tmp_for;
             for (const auto& g : nl->get_gates([&gt_name](const auto& g) { return g->get_type()->get_name() == gt_name; }))
             {
                 auto m = nl->create_module("module_" + g->get_name(), g->get_module(), {g});
