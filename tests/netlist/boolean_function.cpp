@@ -308,7 +308,7 @@ namespace hal {
             {
                 auto res = BooleanFunction::Slice(_A.clone(), i1.clone(), i1.clone(), 1);
                 ASSERT_TRUE(res.is_ok());
-                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
             }
             {
                 auto res = BooleanFunction::Slice(_A.clone(), i2.clone(), i2.clone(), 1);
