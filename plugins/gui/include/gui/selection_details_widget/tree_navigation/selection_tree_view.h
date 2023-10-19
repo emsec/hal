@@ -155,8 +155,6 @@ namespace hal
         void handleTreeViewItemFocusClicked(const SelectionTreeItem* sti);
 
     private:
-        SelectionTreeModel* mSelectionTreeModel;
-        SelectionTreeProxyModel* mSelectionTreeProxyModel;
 
         bool mIsGrouping;
     };
