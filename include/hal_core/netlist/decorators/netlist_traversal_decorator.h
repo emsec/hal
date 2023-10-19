@@ -75,6 +75,42 @@ namespace hal
                                                          const std::function<bool(const Gate*)>& filter,
                                                          const std::set<PinType>& forbidden_pins = {}) const;
 
+        /**
+         * Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
+         * Stop traversal if (1) the `target_gate_filter` evaluates to `true`, (2) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
+         * Both the `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted.
+         * 
+         * @param[in] net - Start net.
+         * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+         * @returns The next gates fulfilling the target gate filter condition.
+         */
+        Result<std::unordered_set<Gate*>> get_next_gates_fancy(const Net* net,
+                                                               bool successors,
+                                                               const std::function<bool(const Gate*)>& target_gate_filter,
+                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        /**
+         * Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
+         * Stop traversal if (1) the `target_gate_filter` evaluates to `true`, (2) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
+         * Both the `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted.
+         * 
+         * @param[in] gate - Start gate.
+         * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+         * @returns The next gates fulfilling the target gate filter condition.
+         */
+        Result<std::unordered_set<Gate*>> get_next_gates_fancy(const Gate* gate,
+                                                               bool successors,
+                                                               const std::function<bool(const Gate*)>& target_gate_filter,
+                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
     private:
         const Netlist& m_netlist;
     };
