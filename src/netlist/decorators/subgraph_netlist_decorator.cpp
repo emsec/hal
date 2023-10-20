@@ -399,7 +399,9 @@ namespace hal
         }
         else if (subgraph_output->get_num_of_sources() == 0)
         {
-            return ERR("could not get subgraph function of net '" + subgraph_output->get_name() + "' with ID " + std::to_string(subgraph_output->get_id()) + ": net has no sources");
+            const auto net_dec = BooleanFunctionNetDecorator(*subgraph_output);
+            return OK(net_dec.get_boolean_variable());
+            //return ERR("could not get subgraph function of net '" + subgraph_output->get_name() + "' with ID " + std::to_string(subgraph_output->get_id()) + ": net has no sources");
         }
 
         const Gate* start_gate = subgraph_output->get_sources()[0]->get_gate();
