@@ -27,6 +27,7 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 #include <QInputDialog>
+#include <QClipboard>
 
 namespace hal
 {
@@ -185,6 +186,7 @@ namespace hal
         QAction change_type_action;
         QAction change_color_action;
         QAction delete_action;
+        QAction extractPythonAction;
 
         switch(type) {
 
@@ -212,6 +214,10 @@ namespace hal
                 break;
             }
             case ModuleItem::TreeItemType::Gate: {
+                extractPythonAction.setIcon(QIcon(":/icons/python"));
+                extractPythonAction.setText("Extract Gate as python code (copy to clipboard)");
+                extractPythonAction.setParent(&context_menu);
+
                 isolate_action.setText("Isolate in new view");
                 isolate_action.setParent(&context_menu);
 
@@ -224,13 +230,16 @@ namespace hal
             }
         }
 
-        if (type == ModuleItem::TreeItemType::Gate || type == ModuleItem::TreeItemType::Module){
+        if (type == ModuleItem::TreeItemType::Gate){
+            context_menu.addAction(&extractPythonAction);
             context_menu.addAction(&isolate_action);
             context_menu.addAction(&change_name_action);
 
         }
 
         if (type == ModuleItem::TreeItemType::Module){
+            context_menu.addAction(&isolate_action);
+            context_menu.addAction(&change_name_action);
             context_menu.addAction(&add_selection_action);
             context_menu.addAction(&add_child_action);
             context_menu.addAction(&change_type_action);
@@ -247,6 +256,10 @@ namespace hal
 
         if (!clicked)
             return;
+
+        if (clicked == &extractPythonAction){
+            QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")");
+        }
 
         if (clicked == &isolate_action && type == ModuleItem::TreeItemType::Gate)
             openGateInView(index);

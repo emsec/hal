@@ -1,6 +1,5 @@
 #include "gui/selection_details_widget/module_details_widget/module_tree_model.h"
 #include "gui/selection_details_widget/selection_details_icon_provider.h"
-#include "gui/basic_tree_model/base_tree_item.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate.h"
 #include "gui/gui_globals.h"

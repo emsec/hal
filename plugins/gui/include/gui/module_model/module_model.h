@@ -30,6 +30,7 @@
 #include "hal_core/netlist/module.h"
 #include "gui/module_model/module_item.h"
 
+
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
@@ -39,7 +40,6 @@
 
 namespace hal
 {
-    class ModuleItem;
 
     /**
      * @ingroup gui
@@ -47,7 +47,7 @@ namespace hal
      *
      * The ModuleModel is the item model that represents the modules and their hierarchy in the netlist.
      */
-    class ModuleModel : public QAbstractItemModel
+    class ModuleModel : public BaseTreeModel
     {
         Q_OBJECT
 

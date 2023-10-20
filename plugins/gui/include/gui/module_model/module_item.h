@@ -26,6 +26,8 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "gui/basic_tree_model/base_tree_model.h"
+
 
 #include <QColor>
 #include <QList>
@@ -40,13 +42,18 @@ namespace hal
      *
      * The ModuleItem is one item in the ModuleModel item model. It represents either a module, a gate or a net of the netlist.
      */
-    class ModuleItem
+    class ModuleItem : public BaseTreeItem
     {
     public:
         /**
          * The possible types that a ModuleItem in the ModuleModel can have.
          */
         enum class TreeItemType {Module, Gate, Net};
+
+        void setData(QList<QVariant> data) override;
+        void setDataAtIndex(int index, QVariant& data) override;
+        void appendData(QVariant data) override;
+        int getColumnCount() const override;
 
         /**
          * Constructor.
@@ -137,7 +144,7 @@ namespace hal
          * @param column - The column to get the data for
          * @returns the data in the specified column of this ModuleItem
          */
-        QVariant data(int column) const;
+        QVariant getData(int column) const override;
 
         /**
          * Gets the index of this ModuleItem in the list of children ModuleItems of its parent.

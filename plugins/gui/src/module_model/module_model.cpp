@@ -1,7 +1,5 @@
 #include "gui/module_model/module_model.h"
 
-#include "gui/module_model/module_item.h"
-
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
 
@@ -12,7 +10,7 @@
 
 namespace hal
 {
-    ModuleModel::ModuleModel(QObject* parent) : QAbstractItemModel(parent), mTopModuleItem(nullptr)
+    ModuleModel::ModuleModel(QObject* parent) : BaseTreeModel(parent), mTopModuleItem(nullptr)
     {
     }
 
@@ -132,7 +130,7 @@ namespace hal
             }
             case Qt::DisplayRole:
             {
-                return item->data(index.column());
+                return item->getData(index.column());
             }
             case Qt::ForegroundRole:
             {

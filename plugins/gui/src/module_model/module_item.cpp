@@ -7,7 +7,27 @@
 
 namespace hal
 {
-    ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
+void ModuleItem::setData(QList<QVariant> data)
+{
+
+}
+
+void ModuleItem::setDataAtIndex(int index, QVariant &data)
+{
+
+}
+
+void ModuleItem::appendData(QVariant data)
+{
+
+}
+
+int ModuleItem::getColumnCount() const
+{
+
+}
+
+ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
         mParent(nullptr),
         mId(id),
         mType(type),
@@ -100,7 +120,7 @@ namespace hal
             return 0;
     }
 
-    QVariant ModuleItem::data(int column) const
+    QVariant ModuleItem::getData(int column) const
     {
         // DEBUG CODE, USE STYLED DELEGATES OR SOMETHING
         if(column == 0)
