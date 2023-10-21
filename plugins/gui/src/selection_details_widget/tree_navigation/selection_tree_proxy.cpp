@@ -14,11 +14,27 @@ namespace hal
 
     bool SelectionTreeProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
     {
-        //index to element in source mdoel
-        const QModelIndex& itemIndex = sourceModel()->index(source_row, 0, source_parent);
- 
-        const SelectionTreeItem* sti = static_cast<SelectionTreeItem*>(itemIndex.internalPointer());
-        return sti->match(mFilterExpression);
+        QList<int> columns = mSearchOptions.getColumns();
+        if(columns.empty()){
+            //iterate over each column
+            for(int index = 0; index < 3; index++){
+                QString entry = sourceModel()->index(source_row, index, source_parent).data().toString();
+                if(isMatching(mSearchString, entry))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }else
+        {
+            for(int index : columns)
+            {
+                QString entry = sourceModel()->index(source_row, index, source_parent).data().toString();
+                if(isMatching(mSearchString, entry))
+                    return true;
+            }
+            return false;
+        }
     }
 
     bool SelectionTreeProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
