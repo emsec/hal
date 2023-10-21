@@ -94,6 +94,7 @@ namespace hal
 
         mSearchbar = new Searchbar(treeViewContainer);
         mSearchbar->hide();
+        mSearchbar->setColumnNames(mSelectionTreeProxyModel->getColumnNames());
 
         containerLayout->addWidget(mSelectionTreeView);
         containerLayout->addWidget(mSearchbar);
@@ -328,7 +329,7 @@ namespace hal
         {
             return;
         }
-
+        
         SelectionTreeProxyModel* proxy = static_cast<SelectionTreeProxyModel*>(mSelectionTreeView->model());
         mSelectionTreeView->setModel(mSelectionTreeProxyModel);
         if (proxy->isGraphicsBusy()) return;
