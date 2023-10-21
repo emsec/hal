@@ -330,7 +330,7 @@ namespace hal
         }
 
         SelectionTreeProxyModel* proxy = static_cast<SelectionTreeProxyModel*>(mSelectionTreeView->model());
-        //mSelectionTreeView->setModel(mSelectionTreeProxyModel);
+        mSelectionTreeView->setModel(mSelectionTreeProxyModel);
         if (proxy->isGraphicsBusy()) return;
         if (!mSearchbar->getCurrentText().isEmpty())
         {

@@ -250,7 +250,7 @@ namespace hal
         connect(mActionToggleMinimap, &Action::triggered, this, &PythonEditor::handleActionToggleMinimap);
         connect(mSearchAction, &QAction::triggered, this, &PythonEditor::toggleSearchbar);
 
-        connect(mSearchbar, &Searchbar::textEdited, this, &PythonEditor::handleSearchbarTextEdited);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, this, &PythonEditor::handleSearchbarTextEdited);
         connect(mSearchbar, &Searchbar::textEdited, this, &PythonEditor::updateSearchIcon);
         connect(mTabWidget, &QTabWidget::currentChanged, this, &PythonEditor::handleCurrentTabChanged);
 
@@ -411,10 +411,11 @@ namespace hal
         }
     }
 
-    void PythonEditor::handleSearchbarTextEdited(const QString& text)
+    void PythonEditor::handleSearchbarTextEdited(const QString& text, SearchOptions opts)
     {
+        qInfo() << "handleSearchbarTextEdited started";
         if (mTabWidget->count() > 0)
-            dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(text, getFindFlags());
+            dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(text, opts);
 
         if (mSearchbar->filterApplied())
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
@@ -450,7 +451,7 @@ namespace hal
         PythonCodeEditor* currentEditor = dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget());
 
         if (!mSearchbar->isHidden())
-            currentEditor->search(mSearchbar->getCurrentText(), getFindFlags());
+            currentEditor->search(mSearchbar->getCurrentText());
         else if (!currentEditor->extraSelections().isEmpty())
             currentEditor->search("");
 

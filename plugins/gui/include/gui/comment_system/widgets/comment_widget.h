@@ -29,6 +29,7 @@
 //#include <QVBoxLayout>
 //#include <QHBoxLayout>
 #include <QGridLayout>
+#include "gui/searchbar/searchoptions.h"
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -108,6 +109,6 @@ namespace hal
         void handleCommentAboutToBeDeleted(CommentEntry* entry);
         void handleEntryModified(CommentEntry* entry);
         void handleCommentAdded(CommentEntry* entry);
-        void handleSearchbarTextEdited(const QString &text);
+        void handleSearchbarTextEdited(const QString &text, SearchOptions opts);
     };
 }

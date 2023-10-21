@@ -26,6 +26,7 @@
 #pragma once
 
 #include "gui/code_editor/code_editor_minimap.h"
+#include "gui/searchbar/searchoptions.h"
 
 #include <QPlainTextEdit>
 
@@ -189,7 +190,7 @@ namespace hal
          * @param string - The string to mark
          * @param options - Optional QTextDocument::FindFlags (e.g. "FindCaseSensitively" or "FindWholeWords")
          */
-        void search(const QString& string, QTextDocument::FindFlags options = QTextDocument::FindFlags());
+        void search(const QString& string, SearchOptions searchOpts = 8);
 
         /**
          * Shows/Hides the line numbers at the left side of the code editor.

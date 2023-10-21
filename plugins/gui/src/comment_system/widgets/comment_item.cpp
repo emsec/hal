@@ -45,7 +45,7 @@ namespace hal
         //setFixedHeight(mTopWidget->height()+mText->height());
     }
 
-    bool CommentItem::search(const QString &string, QTextDocument::FindFlags options)
+    bool CommentItem::search(const QString &string, SearchOptions searchOpts)
     {
         bool found = false;
         QList<QTextEdit::ExtraSelection> extraSelections;
@@ -54,14 +54,38 @@ namespace hal
         QColor color            = QColor(12, 15, 19);
         QColor mBackgroundColor = QColor(255, 255, 0);
 
-        while (mTextEdit->find(string, options))
+        QTextDocument::FindFlags options = QTextDocument::FindFlags();
+        options.setFlag(QTextDocument::FindCaseSensitively, searchOpts.isCaseSensitive());
+        options.setFlag(QTextDocument::FindWholeWords, searchOpts.isExactMatch());
+        qInfo() << "search in commets";
+        if(searchOpts.isRegularExpression())
         {
-            found = true; // just return if something is found, position doesnt matter
-            QTextEdit::ExtraSelection extra;
-            extra.format.setForeground(QBrush(color));
-            extra.format.setBackground(mBackgroundColor);
-            extra.cursor = mTextEdit->textCursor();
-            extraSelections.append(extra);
+            qInfo() << "is regex";
+            QRegularExpression* regEx = new QRegularExpression(string, searchOpts.isCaseSensitive() ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
+
+            while (mTextEdit->find(*regEx, options))
+            {
+                found = true; // just return if something is found, position doesnt matter
+                QTextEdit::ExtraSelection extra;
+                extra.format.setForeground(QBrush(color));
+                extra.format.setBackground(mBackgroundColor);
+                extra.cursor = mTextEdit->textCursor();
+                extraSelections.append(extra);
+            }
+        }
+        else
+        {
+            while (mTextEdit->find(string, options))
+            {
+
+                qInfo() << "found";
+                found = true; // just return if something is found, position doesnt matter
+                QTextEdit::ExtraSelection extra;
+                extra.format.setForeground(QBrush(color));
+                extra.format.setBackground(mBackgroundColor);
+                extra.cursor = mTextEdit->textCursor();
+                extraSelections.append(extra);
+            }
         }
         mTextEdit->setExtraSelections(extraSelections);
         return found;

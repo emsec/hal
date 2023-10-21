@@ -26,6 +26,8 @@
 #include <QFrame>
 #include <QTextEdit>
 
+#include "gui/searchbar/searchoptions.h"
+
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -52,7 +54,7 @@ namespace hal
 
         void setComment(CommentEntry* entry);
         void updateCurrentEntry();
-        bool search(const QString& string, QTextDocument::FindFlags options = QTextDocument::FindFlags());
+        bool search(const QString& string, SearchOptions searchOpts);
 
         CommentEntry* getEntry();
 

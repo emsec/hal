@@ -27,7 +27,7 @@ namespace hal
             }
         }
 
-        qInfo() << mExactMatch << mCaseSensitive << mRegularExpression << "; " << mColumns;
+        //qInfo() << mExactMatch << mCaseSensitive << mRegularExpression << "; " << mColumns;
     }
 
     int SearchOptions::toInt() const
