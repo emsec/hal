@@ -1443,7 +1443,7 @@ namespace hal
         // add global GND gate if required by any instance
         if (m_netlist->get_gnd_gates().empty())
         {
-            if (!m_zero_net->get_num_of_destinations() > 0)
+            if (m_zero_net->get_num_of_destinations() > 0)
             {
                 GateType* gnd_type  = m_gnd_gate_types.begin()->second;
                 GatePin* output_pin = gnd_type->get_output_pins().front();
@@ -1469,7 +1469,7 @@ namespace hal
         // add global VCC gate if required by any instance
         if (m_netlist->get_vcc_gates().empty())
         {
-            if (!m_one_net->get_num_of_destinations() > 0)
+            if (m_one_net->get_num_of_destinations() > 0)
             {
                 GateType* vcc_type  = m_vcc_gate_types.begin()->second;
                 GatePin* output_pin = vcc_type->get_output_pins().front();
