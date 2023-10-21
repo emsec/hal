@@ -163,16 +163,20 @@ namespace hal
     void GraphContextManager::handleModuleRemoved(Module* m)
     {
         for (GraphContext* context : mContextTableModel->list())
-            if (context->modules().contains(m->get_id()))
+        {
+            if (context->getExclusiveModuleId() == m->get_id())
             {
-                if (context->getExclusiveModuleId() == m->get_id())
-                    context->setExclusiveModuleId(0, false);
-
+                context->setExclusiveModuleId(0, false);
+                deleteGraphContext(context);
+            }
+            else if (context->modules().contains(m->get_id()))
+            {
                 context->remove({m->get_id()}, {});
 
                 if (context->empty() || context->willBeEmptied())
                     deleteGraphContext(context);
             }
+        }
     }
 
     void GraphContextManager::handleModuleNameChanged(Module* m) const
