@@ -71,10 +71,7 @@ namespace hal
 
     }
 
-    void PinTreeItem::appendData(QVariant data)
-    {
-
-    }
+    void PinTreeItem::appendData(QVariant data) {}
 
     int PinTreeItem::getColumnCount() const
     {

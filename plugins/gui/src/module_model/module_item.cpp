@@ -7,25 +7,6 @@
 
 namespace hal
 {
-void ModuleItem::setData(QList<QVariant> data)
-{
-
-}
-
-void ModuleItem::setDataAtIndex(int index, QVariant &data)
-{
-
-}
-
-void ModuleItem::appendData(QVariant data)
-{
-
-}
-
-int ModuleItem::getColumnCount() const
-{
-
-}
 
 ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
         mParent(nullptr),
@@ -148,6 +129,48 @@ ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
         return QVariant();
     }
 
+    void ModuleItem::setData(QList<QVariant> data)
+    {
+        setName(data[0].toString());
+        switch(mType)
+        {
+            case TreeItemType::Module:
+            {
+                Module* module = gNetlist->get_module_by_id(mId);
+                if(!module)
+                    return;
+                module->set_type(data[3].toString().toStdString());
+            }
+            case TreeItemType::Gate:
+                return;
+        }
+    }
+
+    void ModuleItem::setDataAtIndex(int index, QVariant &data)
+    {
+        if(index == 0) {
+            setName(data.toString());
+            return;
+        }
+        else if (index == 1)
+            return;
+        else if(index == 2)
+        {
+            switch(mType)
+            {
+                case TreeItemType::Module:
+                {
+                    Module* module = gNetlist->get_module_by_id(mId);
+                    if(!module)
+                        return;
+                    module->set_type(data.toString().toStdString());
+                }
+                case TreeItemType::Gate:
+                    return;
+            }
+        }
+    }
+
     QString ModuleItem::name() const
     {
         return mName;
@@ -181,4 +204,11 @@ ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
     {
         mHighlighted = highlighted;
     }
+
+    int ModuleItem::getColumnCount() const
+    {
+        return 3;
+    }
+
+    void ModuleItem::appendData(QVariant data) {}
 }

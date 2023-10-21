@@ -59,10 +59,7 @@ namespace hal
         }
     }
 
-    void NetlistElementsTreeitem::appendData(QVariant data)
-    {
-
-    }
+    void NetlistElementsTreeitem::appendData(QVariant data) {}
 
     int NetlistElementsTreeitem::getColumnCount() const
     {
