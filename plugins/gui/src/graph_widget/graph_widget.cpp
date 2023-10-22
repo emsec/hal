@@ -206,7 +206,7 @@ namespace hal
         mStoreViewport.mValid = true;
         mStoreViewport.mRect  = mView->mapToScene(mView->viewport()->geometry()).boundingRect();
         mStoreViewport.mGrid  = mView->closestLayouterPos(mView->mapToScene(QPoint(viewportCenter)));
-        //        qDebug() << "store" << viewportCenter << mStoreViewport.mGrid[0] << mStoreViewport.mGrid[1] << mStoreViewport.mRect;
+        //        qDebug() << "store" << viewportCenter << mStoreViewport.mGrid.first << mStoreViewport.mGrid.second << mStoreViewport.mRect;
     }
 
     QRectF GraphWidget::restoreViewport(bool reset)
@@ -216,8 +216,8 @@ namespace hal
         if (reset)
             mStoreViewport.mValid = false;
 
-        QPointF centerPos(mContext->getLayouter()->gridXposition(mStoreViewport.mGrid[0].x()), mContext->getLayouter()->gridYposition(mStoreViewport.mGrid[0].y()));
-        QPointF topLeft = mStoreViewport.mRect.topLeft() - mStoreViewport.mGrid[1] + centerPos;
+        QPointF centerPos(mContext->getLayouter()->gridXposition(mStoreViewport.mGrid.first.x()), mContext->getLayouter()->gridYposition(mStoreViewport.mGrid.first.y()));
+        QPointF topLeft = mStoreViewport.mRect.topLeft() - mStoreViewport.mGrid.second + centerPos;
         return QRectF(topLeft, mStoreViewport.mRect.size());
     }
 

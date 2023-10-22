@@ -104,7 +104,7 @@ namespace hal
          *
          * @param parent - The widget's parent.
          */
-        SelectionTreeView(QWidget* parent = nullptr);
+        SelectionTreeView(QWidget* parent = nullptr, bool isGrouping = false);
 
         /**
          * Sets the default width of each column.
@@ -117,8 +117,9 @@ namespace hal
          * selection model is cleared and the view itself hides.
          *
          * @param mVisible - The bool to determine the described behaviour.
+         * @param groupingId - If non-zero tree gets populated from grouping rather than from selection
          */
-        void populate(bool mVisible);
+        void populate(bool mVisible, u32 groupingId=0);
 
         /**
          * Converts a given modelIntex to the item it represents.
@@ -143,9 +144,20 @@ namespace hal
     private Q_SLOTS:
         void handleCustomContextMenuRequested(const QPoint& point);
         void handleIsolationViewAction(const SelectionTreeItem* sti);
+        void handleAddToSelection(const SelectionTreeItem* sti);
+
+        /**
+         * Emits either the focusGateClicked, focusNetClicked or focusModuleClicked signal based on the
+         * type of the clicked item.
+         *
+         * @param sti - The clicked item in the selection-treeview.
+         */
+        void handleTreeViewItemFocusClicked(const SelectionTreeItem* sti);
 
     private:
         SelectionTreeModel* mSelectionTreeModel;
         SelectionTreeProxyModel* mSelectionTreeProxyModel;
+
+        bool mIsGrouping;
     };
 }    // namespace hal

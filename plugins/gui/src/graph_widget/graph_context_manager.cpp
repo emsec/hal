@@ -127,6 +127,17 @@ namespace hal
         return nullptr;
     }
 
+    QString GraphContextManager::nextViewName(const QString& prefix) const
+    {
+        int cnt = 0;
+
+        for (;;)
+        {
+            QString name = QString("%1 %2").arg(prefix).arg(++cnt);
+            if (!contextWithNameExists(name)) return name;
+        }
+    }
+
     bool GraphContextManager::contextWithNameExists(const QString& name) const
     {
         for (GraphContext* ctx : mContextTableModel->list())
@@ -152,16 +163,20 @@ namespace hal
     void GraphContextManager::handleModuleRemoved(Module* m)
     {
         for (GraphContext* context : mContextTableModel->list())
-            if (context->modules().contains(m->get_id()))
+        {
+            if (context->getExclusiveModuleId() == m->get_id())
             {
-                if (context->getExclusiveModuleId() == m->get_id())
-                    context->setExclusiveModuleId(0, false);
-
+                context->setExclusiveModuleId(0, false);
+                deleteGraphContext(context);
+            }
+            else if (context->modules().contains(m->get_id()))
+            {
                 context->remove({m->get_id()}, {});
 
                 if (context->empty() || context->willBeEmptied())
                     deleteGraphContext(context);
             }
+        }
     }
 
     void GraphContextManager::handleModuleNameChanged(Module* m) const

@@ -46,9 +46,21 @@ namespace hal
         MainWindow::StyleSheetOption theme = static_cast<MainWindow::StyleSheetOption>(istyle);
         QString solidColor = (theme == MainWindow::Light) ? "all->#000000" : "all->#ffffff";
 
+        if (!mDefaultIcons.isEmpty())
+        {
+            for (auto it = mDefaultIcons.begin(); it != mDefaultIcons.end(); ++it)
+                delete it.value();
+        }
+
         mDefaultIcons[ModuleIcon] = new QIcon(gui_utility::getStyledSvgIcon(solidColor, ":/icons/ne_module"));
         mDefaultIcons[GateIcon]   = new QIcon(gui_utility::getStyledSvgIcon(solidColor, ":/icons/ne_gate"));
         mDefaultIcons[NetIcon]    = new QIcon(gui_utility::getStyledSvgIcon(solidColor, ":/icons/ne_net"));
+
+        if (!mGateIcons.isEmpty())
+        {
+            for (auto it = mGateIcons.begin(); it != mGateIcons.end(); ++it)
+                delete it.value();
+        }
 
         mGateIcons[(int)GateTypeProperty::c_buffer]   = new QIcon(gui_utility::getStyledSvgIcon(solidColor, ":/icons/ne_gate_buffer"));
         mGateIcons[(int)GateTypeProperty::c_inverter] = new QIcon(gui_utility::getStyledSvgIcon(solidColor, ":/icons/ne_gate_inverter"));

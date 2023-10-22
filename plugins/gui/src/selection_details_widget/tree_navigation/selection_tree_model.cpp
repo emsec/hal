@@ -5,6 +5,7 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/module.h"
 #include "gui/gui_utils/graphics.h"
+#include "hal_core/netlist/grouping.h"
 #include <QTimer>
 
 namespace hal
@@ -144,25 +145,50 @@ namespace hal
         return sMaxColumn;
     }
 
-    void SelectionTreeModel::fetchSelection(bool hasEntries)
+    void SelectionTreeModel::fetchSelection(bool hasEntries, u32 groupingId)
     {
         SelectionTreeItemRoot* nextRootItem
                 = new SelectionTreeItemRoot();
-
-        if (hasEntries)
+        if (!groupingId)
         {
-            for(u32 id : gSelectionRelay->selectedModulesList())
+            if (hasEntries)
             {
-                SelectionTreeItemModule* stim = new SelectionTreeItemModule(id);
-                moduleRecursion(stim);
-                nextRootItem->addChild(stim);
+                for(u32 id : gSelectionRelay->selectedModulesList())
+                {
+                    SelectionTreeItemModule* stim = new SelectionTreeItemModule(id);
+                    moduleRecursion(stim);
+                    nextRootItem->addChild(stim);
+                }
+
+                for(u32 id : gSelectionRelay->selectedGatesList())
+                    nextRootItem->addChild(new SelectionTreeItemGate(id));
+
+                for(u32 id : gSelectionRelay->selectedNetsList())
+                    nextRootItem->addChild(new SelectionTreeItemNet(id));
             }
+        }
+        else
+        {
+            Grouping* grouping = gNetlist->get_grouping_by_id(groupingId);
+            if (grouping)
+            {
+                for (u32 id : grouping->get_module_ids())
+                {
+                    SelectionTreeItemModule* stim = new SelectionTreeItemModule(id);
+                    moduleRecursion(stim);
+                    nextRootItem->addChild(stim);
+                }
 
-            for(u32 id : gSelectionRelay->selectedGatesList())
-                nextRootItem->addChild(new SelectionTreeItemGate(id));
+                for (u32 id : grouping->get_gate_ids())
+                {
+                    nextRootItem->addChild(new SelectionTreeItemGate(id));
+                }
 
-            for(u32 id : gSelectionRelay->selectedNetsList())
-                nextRootItem->addChild(new SelectionTreeItemNet(id));
+                for (u32 id : grouping->get_net_ids())
+                {
+                    nextRootItem->addChild(new SelectionTreeItemNet(id));
+                }
+            }
         }
 
         beginResetModel();

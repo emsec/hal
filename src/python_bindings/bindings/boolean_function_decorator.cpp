@@ -28,7 +28,7 @@ namespace hal
             },
             py::arg("nl"),
             R"(
-            Substitute all Boolean function variables fed by power or ground gates by constant '1' and '0'. 
+            Substitute all Boolean function variables fed by power or ground gates by constant ``0`` and ``1``. 
 
             :param hal_py.Netlist nl: The netlist to operate on.
             :returns: The resulting Boolean function on success, ``None`` otherwise.
@@ -37,8 +37,8 @@ namespace hal
 
         py_boolean_function_decorator.def(
             "substitute_power_ground_pins",
-            [](const BooleanFunctionDecorator& self, const Netlist* nl, const Gate* g) -> std::optional<BooleanFunction> {
-                auto res = self.substitute_power_ground_pins(nl, g);
+            [](const BooleanFunctionDecorator& self, const Gate* g) -> std::optional<BooleanFunction> {
+                auto res = self.substitute_power_ground_pins(g);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -49,13 +49,11 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("nl"),
             py::arg("g"),
             R"(
-            Substitute all Boolean function variables that belong to a pin connected to a power or ground gate by constant '1' and '0'.  
+            Substitute all Boolean function variables that belong to a pin connected to a power or ground gate by constant ``0`` and ``1``.  
 
-            :param hal_py.Netlist nl: The netlist to operate on.
-            :param hal_py.Gate: The gate which is connected to the pins and belongs to the boolean function under inspection.
+            :param hal_py.Gate g: The gate which is connected to the pins and belongs to the Boolean function under inspection.
             :returns: The resulting Boolean function on success, ``None`` otherwise.
             :rtype: hal_py.BooleanFunction or None
         )");

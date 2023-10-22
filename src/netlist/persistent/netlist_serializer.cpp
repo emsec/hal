@@ -34,7 +34,8 @@ namespace hal
         // serializing functions
         namespace
         {
-            const int SERIALIZATION_FORMAT_VERSION = 12;
+            const int SERIALIZATION_FORMAT_VERSION = 13;
+            int encoded_format_version;
 
             // Ver 12 : location of gates
 #define JSON_STR_HELPER(x) rapidjson::Value{}.SetString(x.c_str(), x.length(), allocator)
@@ -106,6 +107,7 @@ namespace hal
             {
                 Gate* gate = nl->get_gate_by_id(val["gate_id"].GetUint());
                 GatePin* pin;
+
                 if (val.HasMember("pin_id"))
                 {
                     const u32 pin_id = val["pin_id"].GetUint();
@@ -116,6 +118,32 @@ namespace hal
                                   "could not deserialize destination of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to get pin with ID "
                                       + std::to_string(pin_id));
                         return false;
+                    }
+
+                    if (encoded_format_version <= 12)
+                    {
+                        // swap pins because of legacy pin group bug
+                        if (const auto [group, index] = pin->get_group(); group->size() > 1)
+                        {
+                            bool ascending   = group->is_ascending();
+                            u32 len          = group->size();
+                            i32 start_index  = group->get_start_index();
+                            i32 end_index    = ascending ? (start_index + (i32)len - 1) : (start_index - (i32)len + 1);
+                            i32 target_index = ascending ? (end_index - (index - start_index)) : (end_index + (start_index - index));
+
+                            if (const auto pin_res = group->get_pin_at_index(target_index); pin_res.is_error())
+                            {
+                                log_error("netlist_persistent",
+                                          "could not deserialize destination of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to swap pin with ID "
+                                              + std::to_string(pin_id) + ":\n{}",
+                                          pin_res.get_error().get());
+                                return false;
+                            }
+                            else
+                            {
+                                pin = pin_res.get();
+                            }
+                        }
                     }
                 }
                 else
@@ -130,6 +158,7 @@ namespace hal
                         return false;
                     }
                 }
+
                 if (!net->add_destination(gate, pin))
                 {
                     log_error("netlist_persistent",
@@ -144,6 +173,7 @@ namespace hal
             {
                 Gate* gate = nl->get_gate_by_id(val["gate_id"].GetUint());
                 GatePin* pin;
+
                 if (val.HasMember("pin_id"))
                 {
                     const u32 pin_id = val["pin_id"].GetUint();
@@ -153,6 +183,32 @@ namespace hal
                         log_error("netlist_persistent",
                                   "could not deserialize source of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to get pin with ID " + std::to_string(pin_id));
                         return false;
+                    }
+
+                    if (encoded_format_version <= 12)
+                    {
+                        // swap pins because of legacy pin group bug
+                        if (const auto [group, index] = pin->get_group(); group->size() > 1)
+                        {
+                            bool ascending   = group->is_ascending();
+                            u32 len          = group->size();
+                            i32 start_index  = group->get_start_index();
+                            i32 end_index    = ascending ? (start_index + (i32)len - 1) : (start_index - (i32)len + 1);
+                            i32 target_index = ascending ? (end_index - (index - start_index)) : (end_index + (start_index - index));
+
+                            if (const auto pin_res = group->get_pin_at_index(target_index); pin_res.is_error())
+                            {
+                                log_error("netlist_persistent",
+                                          "could not deserialize source of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": failed to swap pin with ID "
+                                              + std::to_string(pin_id) + ":\n{}",
+                                          pin_res.get_error().get());
+                                return false;
+                            }
+                            else
+                            {
+                                pin = pin_res.get();
+                            }
+                        }
                     }
                 }
                 else
@@ -167,6 +223,7 @@ namespace hal
                         return false;
                     }
                 }
+
                 if (net->add_source(gate, pin) == nullptr)
                 {
                     log_error("netlist_persistent",
@@ -948,12 +1005,12 @@ namespace hal
 
             if (document.HasMember("serialization_format_version"))
             {
-                u32 encoded_version = document["serialization_format_version"].GetUint();
-                if (encoded_version < SERIALIZATION_FORMAT_VERSION)
+                encoded_format_version = document["serialization_format_version"].GetUint();
+                if (encoded_format_version < SERIALIZATION_FORMAT_VERSION)
                 {
                     log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
                 }
-                else if (encoded_version > SERIALIZATION_FORMAT_VERSION)
+                else if (encoded_format_version > SERIALIZATION_FORMAT_VERSION)
                 {
                     log_warning("netlist_persistent", "the netlist was serialized with a newer version of the serializer, deserialization may contain errors.");
                 }

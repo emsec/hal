@@ -30,11 +30,14 @@
 #include "hal_core/plugin_system/gui_extension_interface.h"
 #include <QMap>
 #include <QList>
+#include <set>
 
 class QFormLayout;
 class QDialogButtonBox;
 class QPushButton;
 class QLineEdit;
+class QSpinBox;
+class QLabel;
 
 namespace hal {
 
@@ -53,6 +56,27 @@ namespace hal {
     public:
         PluginParameterFileDialog(const PluginParameter& par, QWidget* parent = nullptr);
         QString getFilename() const;
+    };
+
+    class PluginParameterNodeDialog : public QWidget
+    {
+        Q_OBJECT
+
+        PluginParameter mParameter;
+        QPushButton* mButton;
+        QSpinBox* mNodeId;
+        QLabel* mNodeName;
+        std::set<u32> mValidIds;
+    private Q_SLOTS:
+        void handleActivateModuleDialog();
+        void handleActivateGateDialog();
+    private:
+        void setModule(int id);
+        void setGate(int id);
+        bool isValidId(int id) const;
+    public:
+        PluginParameterNodeDialog(const PluginParameter& par, QWidget* parent = nullptr);
+        int getNodeId() const;
     };
 
     class PluginParameterDialog : public QDialog

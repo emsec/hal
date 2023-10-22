@@ -884,6 +884,22 @@ hal--OpenFileWidget #icon-label
     margin-top : 220px;
 }
 
+hal--GateLibrarySelection
+{
+    qproperty-saveIconStyle: "all->#3192C5";
+    qproperty-saveIconPath: ":/icons/folder-down";
+}
+
+hal--GateLibrarySelection QLabel
+{
+    background: #171e22;
+}
+
+hal--GateLibrarySelection QLabel#warningMsg
+{
+    color: yellow;
+}
+
 hal--ImportNetlistDialog
 {
     qproperty-saveIconStyle: "all->#3192C5";
@@ -1099,6 +1115,9 @@ hal--GroupingManagerWidget
     qproperty-searchActiveIconStyle: "all->#30ac4f";
     qproperty-searchIconStyle: "all->#e8e8e8";
     qproperty-searchIconPath: ":/icons/search";
+
+    qproperty-tableIconStyle: "all->#e8e8e8";
+    qproperty-tableIconPath: ":/icons/list";
 }
 
 hal--ContextManagerWidget

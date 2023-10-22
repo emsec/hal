@@ -3,8 +3,8 @@
 #include "gui/action/action.h"
 #include "gui/content_manager/content_manager.h"
 #include "gui/docking_system/dock_bar.h"
-#include "gui/export/export_registered_format.h"
 #include "gui/export/export_project_dialog.h"
+#include "gui/export/export_registered_format.h"
 #include "gui/export/import_project_dialog.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/file_manager/project_dir_dialog.h"
@@ -24,33 +24,34 @@
 #include "gui/user_action/action_open_netlist_file.h"
 #include "gui/welcome_screen/welcome_screen.h"
 #include "hal_core/defines.h"
+#include "hal_core/netlist/event_system/event_log.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/netlist_writer/netlist_writer_manager.h"
 #include "hal_core/netlist/persistent/netlist_serializer.h"
-#include "hal_core/utilities/log.h"
-#include "hal_core/netlist/event_system/event_log.h"
 #include "hal_core/netlist/project_manager.h"
-#include "hal_core/utilities/project_directory.h"
-#include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/plugin_system/gui_extension_interface.h"
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/utilities/log.h"
+#include "hal_core/utilities/project_directory.h"
 
 #include <QApplication>
 #include <QCloseEvent>
 #include <QDesktopWidget>
+#include <QDir>
 #include <QFileDialog>
 #include <QFuture>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QShortcut>
-#include <QtConcurrent>
 #include <QRegExp>
+#include <QShortcut>
 #include <QStringList>
-#include <QDir>
+#include <QtConcurrent>
 
 namespace hal
 {
@@ -141,7 +142,7 @@ namespace hal
         mActionSaveAs             = new Action(this);
         mActionExportProject      = new Action(this);
         mActionImportProject      = new Action(this);
-        mActionGateLibraryManager = new Action(this);
+//        mActionGateLibraryManager = new Action(this);
         mActionAbout              = new Action(this);
 
         mActionStartRecording     = new Action(this);
@@ -187,7 +188,7 @@ namespace hal
         mActionSaveAs->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
         mActionClose->setIcon(gui_utility::getStyledSvgIcon(mCloseIconStyle, mCloseIconPath));
         mActionQuit->setIcon(gui_utility::getStyledSvgIcon(mQuitIconStyle, mQuitIconPath));
-        mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
+//        mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
         mActionUndo->setIcon(gui_utility::getStyledSvgIcon(mUndoIconStyle, mUndoIconPath));
         mActionSettings->setIcon(gui_utility::getStyledSvgIcon(mSettingsIconStyle, mSettingsIconPath));
         mActionPlugins->setIcon(gui_utility::getStyledSvgIcon(mPluginsIconStyle, mPluginsIconPath));
@@ -206,7 +207,7 @@ namespace hal
         mMenuFile->addAction(mActionClose);
         mMenuFile->addAction(mActionSave);
         mMenuFile->addAction(mActionSaveAs);
-        mMenuFile->addAction(mActionGateLibraryManager);
+//        mMenuFile->addAction(mActionGateLibraryManager);
 
         QMenu* menuImport = new QMenu("Import …", this);
         menuImport->addAction(mActionImportNetlist);
@@ -288,7 +289,7 @@ namespace hal
         mActionImportNetlist->setText("Import Netlist");
         mActionImportProject->setText("Import Project");
         mActionExportProject->setText("Export Project");
-        mActionGateLibraryManager->setText("Gate Library Manager");
+//        mActionGateLibraryManager->setText("Gate Library Manager");
         mActionUndo->setText("Undo");
         mActionAbout->setText("About");
         mActionSettings->setText("Settings");
@@ -341,7 +342,7 @@ namespace hal
         connect(mActionSaveAs, &Action::triggered, this, &MainWindow::handleSaveAsTriggered);
         connect(mActionExportProject, &Action::triggered, this, &MainWindow::handleExportProjectTriggered);
         connect(mActionImportProject, &Action::triggered, this, &MainWindow::handleImportProjectTriggered);
-        connect(mActionGateLibraryManager, &Action::triggered, this, &MainWindow::handleActionGatelibraryManager);
+//        connect(mActionGateLibraryManager, &Action::triggered, this, &MainWindow::handleActionGatelibraryManager);
         connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionCloseFile);
         connect(mActionQuit, &Action::triggered, this, &MainWindow::onActionQuitTriggered);
 
@@ -746,7 +747,8 @@ namespace hal
         }
 
         QString title = "Import Netlist";
-        QString text  = "All Files(*.vhd *.vhdl *.v *.hal);;VHDL Files (*.vhd *.vhdl);;Verilog Files (*.v);;HAL Progress Files (*.hal)";
+        SupportedFileFormats sff = gPluginRelay->mGuiPluginTable->listFacFeature(FacExtensionInterface::FacNetlistParser);
+        QString text  = sff.toFileDialog(true);
 
         // Non native dialogs does not work on macOS. Therefore do net set DontUseNativeDialog!
         QString path = QDir::currentPath();
@@ -758,6 +760,10 @@ namespace hal
 
         if (!fileName.isNull())
         {
+            QString ext = QFileInfo(fileName).suffix();
+            if (!ext.isEmpty())
+                gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacNetlistParser,ext);
+
             gGuiState->setValue("FileDialog/Path/MainWindow", fileName);
 
             ActionOpenNetlistFile* actOpenfile = new ActionOpenNetlistFile(ActionOpenNetlistFile::ImportFile, fileName);
@@ -783,7 +789,7 @@ namespace hal
         }
         gPythonContext->updateNetlist();
 
-        mActionGateLibraryManager->setVisible(false);
+//        mActionGateLibraryManager->setVisible(false);
     }
 
     void MainWindow::handleActionExport()
@@ -812,7 +818,7 @@ namespace hal
             if (ipd.importProject())
             {
                 ActionOpenNetlistFile* act = new ActionOpenNetlistFile(ActionOpenNetlistFile::OpenProject,
-                                                                       ipd.extractedProjectDir());
+                                                                       ipd.extractedProjectAbsolutePath());
                 act->exec();
             }
             else
@@ -1051,7 +1057,7 @@ namespace hal
 
         gNetlistRelay->reset();
 
-        mActionGateLibraryManager->setVisible(true);
+//        mActionGateLibraryManager->setVisible(true);
 
         return true;
     }
@@ -1070,4 +1076,5 @@ namespace hal
     {
         SettingsManager::instance()->mainWindowSaveGeometry(pos(), size());
     }
+
 }    // namespace hal

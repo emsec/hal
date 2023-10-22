@@ -1162,8 +1162,10 @@ namespace hal
                             std::unordered_map<std::string, std::vector<std::string>> pin_groups;
                             for (const auto pin_group : gate_type_it->second->get_pin_groups())
                             {
-                                for (const auto pin : pin_group->get_pins())
+                                const auto pins = pin_group->get_pins();
+                                for (auto it = pins.rbegin(); it != pins.rend(); it++)
                                 {
+                                    const auto* pin = *it;
                                     pin_groups[pin_group->get_name()].push_back(pin->get_name());
                                 }
                             }
@@ -1405,9 +1407,9 @@ namespace hal
                     std::vector<std::string> next_slaves;
                     for (const auto& s : current_slaves)
                     {
-                        if (const auto m2s_it = master_to_slaves.find(s); m2s_it != master_to_slaves.end())
+                        if (const auto m2s_inner_it = master_to_slaves.find(s); m2s_inner_it != master_to_slaves.end())
                         {
-                            next_slaves.insert(next_slaves.end(), m2s_it->second.begin(), m2s_it->second.end());
+                            next_slaves.insert(next_slaves.end(), m2s_inner_it->second.begin(), m2s_inner_it->second.end());
                         }
                     }
 
@@ -1532,7 +1534,7 @@ namespace hal
 
         // TODO check parent module assignments for port aliases
 
-        const std::string parent_name = (parent == nullptr) ? "" : parent->get_name();
+        const std::string parent_name       = (parent == nullptr) ? "" : parent->get_name();
         instance_alias[instance_identifier] = get_unique_alias(parent_name, instance_identifier, m_instance_name_occurences);
 
         // create netlist module
@@ -1934,7 +1936,7 @@ namespace hal
                 unique_alias = parent_name + instance_name_seperator + unique_alias;
             }
         }
-    
+
         return unique_alias;
     }
 
