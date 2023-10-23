@@ -643,11 +643,12 @@ namespace hal
             :rtype: bool
         )");
 
-        py_module.def("set_pin_group_name", &Module::set_pin_group_name, py::arg("pin_group"), py::arg("new_name"), R"(
+        py_module.def("set_pin_group_name", &Module::set_pin_group_name, py::arg("pin_group"), py::arg("new_name"), py::arg("force") = false, R"(
             Set the name of the given pin group.
 
             :param hal_py.ModulePinGroup pin_group: The pin group.
             :param str new_name: The name to be assigned to the pin group.
+            :param bool force: Set ``True`` to enforce renaming, ``False`` otherwise. If a pin group with the same name already exists, that existing pin group will be renamed. Defaults to ``False``.
             :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");

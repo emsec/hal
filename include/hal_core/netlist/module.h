@@ -539,9 +539,10 @@ namespace hal
          * 
          * @param[in] pin_group - The pin group.
          * @param[in] new_name - The name to be assigned to the pin group.
+         * @param[in] force - Set `true` to enforce renaming, `false` otherwise. If a pin group with the same name already exists, that existing pin group will be renamed. Defaults to `false`.
          * @returns `true` on success, `false` otherwise.
          */
-        bool set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name);
+        bool set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name, const bool force = false);
 
         /**
          * Set the type of the given pin group.

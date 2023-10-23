@@ -1133,7 +1133,7 @@ namespace hal
         return true;
     }
 
-    bool Module::set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name)
+    bool Module::set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name, const bool force)
     {
         if (pin_group == nullptr)
         {
@@ -1155,16 +1155,27 @@ namespace hal
             return false;
         }
 
-        if (m_pin_group_names_map.find(new_name) != m_pin_group_names_map.end())
+        if (const auto pin_group_it = m_pin_group_names_map.find(new_name); pin_group_it != m_pin_group_names_map.end())
         {
-            log_warning("module",
-                        "could not set name for pin group '{}' with ID {} of module '{}' with ID {}: a pin group with name '{}' already exists within the module",
-                        pin_group->get_name(),
-                        pin_group->get_id(),
-                        m_name,
-                        m_id,
-                        new_name);
-            return false;
+            if (force)
+            {
+                u32 ctr = 2;
+                while (!this->set_pin_group_name(pin_group_it->second, new_name + "__" + std::to_string(ctr) + "__"))
+                {
+                    ctr++;
+                }
+            }
+            else
+            {
+                log_warning("module",
+                            "could not set name for pin group '{}' with ID {} of module '{}' with ID {}: a pin group with name '{}' already exists within the module",
+                            pin_group->get_name(),
+                            pin_group->get_id(),
+                            m_name,
+                            m_id,
+                            new_name);
+                return false;
+            }
         }
 
         if (const std::string& old_name = pin_group->get_name(); old_name != new_name)
