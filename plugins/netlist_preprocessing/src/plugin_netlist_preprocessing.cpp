@@ -110,7 +110,13 @@ namespace hal
             const auto bf_org   = g->get_boolean_function(out_ep->get_pin());
             const auto org_vars = bf_org.get_variable_names();
 
-            const auto bf_replaced   = BooleanFunctionDecorator(bf_org).substitute_power_ground_pins(g).get();
+            const auto bf_replaced_res = BooleanFunctionDecorator(bf_org).substitute_power_ground_pins(g);
+            if (bf_replaced_res.is_error())
+            {
+                return ERR_APPEND(bf_replaced_res.get_error(),
+                                  "cannot simplify LUT inits: failed to replace power and ground pins for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()));
+            }
+            const auto bf_replaced   = bf_replaced_res.get();
             const auto bf_simplified = bf_replaced.simplify_local();
 
             const auto new_vars = bf_simplified.get_variable_names();
