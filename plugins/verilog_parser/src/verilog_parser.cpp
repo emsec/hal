@@ -1310,6 +1310,16 @@ namespace hal
             {
                 continue;
             }
+            else if (slave_net == m_zero_net || slave_net == m_one_net)
+            {
+                auto* tmp_net = master_net;
+                master_net    = slave_net;
+                slave_net     = tmp_net;
+
+                auto tmp_name = master;
+                master        = slave;
+                slave         = tmp_name;
+            }
 
             // merge sources
             if (slave_net->is_global_input_net())
@@ -1637,18 +1647,11 @@ namespace hal
             {
                 b = alias_it->second;
             }
-            else if (b == "'0'" || b == "'1'")
-            {
-                // '0' or '1' is assigned, make sure that '0' or '1' net does not get deleted by merging
-                const auto tmp = a;
-                a              = b;
-                b              = tmp;
-            }
             else if (b == "'Z'" || b == "'X'")
             {
                 continue;
             }
-            else
+            else if (b != "'0'" && b != "'1'")
             {
                 return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to find alias for net '" + b + "'");
             }
