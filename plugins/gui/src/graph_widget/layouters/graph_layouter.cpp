@@ -593,7 +593,7 @@ namespace hal
                 // iend == 0 =>  horizontal wire: right endpoint   junction: left entry
                 NetLayoutPoint pnt = iend ? it.key().endPoint(NetLayoutWire::SourcePoint) : it.key().endPoint(NetLayoutWire::DestinationPoint);
                 int idirBase       = it.key().isHorizontal() ? NetLayoutDirection::Left : NetLayoutDirection::Up;
-                mJunctionEntries[pnt].setEntries(idirBase + iend, it.value());
+                mJunctionEntries[pnt].mEntries[idirBase + iend] = it.value();
             }
         }
 
@@ -602,10 +602,10 @@ namespace hal
         {
             NetLayoutPoint inPnt(nbox->x(), nbox->y() * 2);
             QList<u32> inpNets = nbox->item()->inputNets();
-            mJunctionEntries[inPnt].setEntries(NetLayoutDirection::Right, nbox->item()->inputNets());
+            mJunctionEntries[inPnt].mEntries[NetLayoutDirection::Right] = nbox->item()->inputNets();
             mEndpointHash[inPnt].setInputPins(nbox->item()->inputNets(), nbox->item()->yTopPinDistance(), nbox->item()->yEndpointDistance());
             NetLayoutPoint outPnt(nbox->x() + 1, nbox->y() * 2);
-            mJunctionEntries[outPnt].setEntries(NetLayoutDirection::Left, nbox->item()->outputNets());
+            mJunctionEntries[outPnt].mEntries[NetLayoutDirection::Left] = nbox->item()->outputNets();
             mEndpointHash[outPnt].setOutputPins(nbox->item()->outputNets(), nbox->item()->yTopPinDistance(), nbox->item()->yEndpointDistance());
         }
 
@@ -614,7 +614,7 @@ namespace hal
             QList<u32> netIds;
             netIds.append(itGlInp.key());
             NetLayoutPoint pnt(mNodeBoundingBox.left(), 2 * itGlInp.value());
-            mJunctionEntries[pnt].setEntries(NetLayoutDirection::Left, netIds);
+            mJunctionEntries[pnt].mEntries[NetLayoutDirection::Left] = netIds;
             if (!mEndpointHash.contains(pnt))
                 mEndpointHash[pnt].setOutputPins(netIds, 0, 0);
         }
@@ -624,18 +624,20 @@ namespace hal
             QList<u32> netIds;
             netIds.append(itGlOut.key());
             NetLayoutPoint pnt(mNodeBoundingBox.right() + 1, 2 * itGlOut.value());
-            mJunctionEntries[pnt].setEntries(NetLayoutDirection::Right, netIds);
+            mJunctionEntries[pnt].mEntries[NetLayoutDirection::Right] = netIds;
             if (!mEndpointHash.contains(pnt))
                 mEndpointHash[pnt].setInputPins(netIds, 0, 0);
         }
 
         for (auto it = mJunctionEntries.constBegin(); it != mJunctionEntries.constEnd(); ++it)
         {
-                        it.value().dumpFile(it.key());
+    //                    it.value().dumpFile(it.key());
                         qDebug() << "Junction at" << it.key().x() << it.key().y();
             NetLayoutJunction* nlj = new NetLayoutJunction(it.value());
+            /*
             if (nlj->lastError() != NetLayoutJunction::Ok)
                 qDebug() << "Junction route error" << nlj->lastError() << it.key();
+                */
             mJunctionHash.insert(it.key(), nlj);
         }
     }
@@ -1540,12 +1542,13 @@ namespace hal
 
             for (const NetLayoutJunctionWire& jw : jt.value()->netById(id).mWires)
             {
-                if (jw.mHorizontal == 0)
+                int li = jw.mIndex.laneIndex();
+                if (jw.mIndex.isHorizontal())
                 {
                     Q_ASSERT(epcIt != mEndpointHash.constEnd() || !isEndpoint);
-                    float x0 = mCoordX.value(x).lanePosition(jw.mFirst);
-                    float x1 = mCoordX.value(x).lanePosition(jw.mLast);
-                    float yy = isEndpoint ? epcIt.value().lanePosition(jw.mRoad, true) : mCoordY.value(y).lanePosition(jw.mRoad);
+                    float x0 = mCoordX.value(x).lanePosition(jw.mRange.first());
+                    float x1 = mCoordX.value(x).lanePosition(jw.mRange.last());
+                    float yy = isEndpoint ? epcIt.value().lanePosition(li, true) : mCoordY.value(y).lanePosition(li);
                     lines.appendHLine(x0, x1, yy);
                 }
                 else
@@ -1553,13 +1556,13 @@ namespace hal
                     float y0, y1;
                     if (!isEndpoint)
                     {
-                        y0 = mCoordY.value(y).lanePosition(jw.mFirst);
-                        y1 = mCoordY.value(y).lanePosition(jw.mLast);
+                        y0 = mCoordY.value(y).lanePosition(jw.mRange.first());
+                        y1 = mCoordY.value(y).lanePosition(jw.mRange.last());
                     }
                     else if (epcIt != mEndpointHash.constEnd())
                     {
-                        y0 = epcIt.value().lanePosition(jw.mFirst, true);
-                        y1 = epcIt.value().lanePosition(jw.mLast, true);
+                        y0 = epcIt.value().lanePosition(jw.mRange.first(), true);
+                        y1 = epcIt.value().lanePosition(jw.mRange.last(), true);
                     }
                     else
                     {
@@ -1568,7 +1571,7 @@ namespace hal
                         if (y1 <= y0)
                             y1 = y0 + 1;
                     }
-                    float xx = mCoordX.value(x).lanePosition(jw.mRoad);
+                    float xx = mCoordX.value(x).lanePosition(li);
                     lines.appendVLine(xx, y0, y1);
                 }
             }
