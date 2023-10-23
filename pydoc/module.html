@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Module &mdash; hal_py v4.2.0-115-g3082657cc documentation</title>
+  <title>Module &mdash; hal_py v4.2.0-116-g4b35a0f3b documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-115-g3082657cc
+                v4.2.0-116-g4b35a0f3b
               </div>
             
           
@@ -338,7 +338,7 @@ If <code class="docutils literal notranslate"><span class="pre">recursive</span>
 <code class="descname">create_pin</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Module.create_pin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p class="first">create_pin(self: hal_py.Module, id: int, name: str, net: hal_py.Net, type: hal_py.PinType = &lt;PinType.none: 0&gt;, create_group: bool = True) -&gt; hal_py.ModulePin</p>
+<li><p class="first">create_pin(self: hal_py.Module, id: int, name: str, net: hal_py.Net, type: hal_py.PinType = &lt;PinType.none: 0&gt;, create_group: bool = True, force_name: bool = False) -&gt; hal_py.ModulePin</p>
 <blockquote>
 <div><p>Manually assign a module pin to a net.
 Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
@@ -362,15 +362,18 @@ If <code class="docutils literal notranslate"><span class="pre">create_group</sp
 <tr class="field-odd field"><th class="field-name" colspan="2">param bool create_group:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to automatically create a pin group and assign the pin, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The module pin on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool force_name:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce the name, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin with the same name already exists, the existing pin will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.ModulePin or None</td>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The module pin on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.ModulePin or None</td>
 </tr>
 </tbody>
 </table>
 </div></blockquote>
 </li>
-<li><p class="first">create_pin(self: hal_py.Module, name: str, net: hal_py.Net, type: hal_py.PinType = &lt;PinType.none: 0&gt;, create_group: bool = True) -&gt; hal_py.ModulePin</p>
+<li><p class="first">create_pin(self: hal_py.Module, name: str, net: hal_py.Net, type: hal_py.PinType = &lt;PinType.none: 0&gt;, create_group: bool = True, force_name: bool = False) -&gt; hal_py.ModulePin</p>
 <blockquote>
 <div><p>Manually assign a module pin to a net.
 The ID of the pin is set automatically.
@@ -393,9 +396,12 @@ If <code class="docutils literal notranslate"><span class="pre">create_group</sp
 <tr class="field-even field"><th class="field-name" colspan="2">param bool create_group:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to automatically create a pin group and assign the pin, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The module pin on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool force_name:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce the name, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin with the same name already exists, the existing pin will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.ModulePin or None</td>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The module pin on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.ModulePin or None</td>
 </tr>
 </tbody>
 </table>
@@ -409,7 +415,7 @@ If <code class="docutils literal notranslate"><span class="pre">create_group</sp
 <code class="descname">create_pin_group</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Module.create_pin_group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p class="first">create_pin_group(self: hal_py.Module, id: int, name: str, pins: List[hal_py.ModulePin], direction: hal_py.PinDirection = &lt;PinDirection.none: 0&gt;, type: hal_py.PinType = &lt;PinType.none: 0&gt;, ascending: bool = True, start_index: int = 0, delete_empty_groups: bool = True) -&gt; hal_py.ModulePinGroup</p>
+<li><p class="first">create_pin_group(self: hal_py.Module, id: int, name: str, pins: List[hal_py.ModulePin], direction: hal_py.PinDirection = &lt;PinDirection.none: 0&gt;, type: hal_py.PinType = &lt;PinType.none: 0&gt;, ascending: bool = True, start_index: int = 0, delete_empty_groups: bool = True, force_name: bool = False) -&gt; hal_py.ModulePinGroup</p>
 <blockquote>
 <div><p>Create a new pin group with the given name.
 All pins to be added to the pin group must have the same direction and type.</p>
@@ -439,15 +445,18 @@ All pins to be added to the pin group must have the same direction and type.</p>
 <tr class="field-even field"><th class="field-name" colspan="2">param bool delete_empty_groups:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to delete groups that are empty after the pins have been assigned to the new group, <code class="docutils literal notranslate"><span class="pre">False</span></code> to keep empty groups. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The pin group on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">param bool force_name:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce the name, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.ModulePinGroup or None</td>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The pin group on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.ModulePinGroup or None</td>
 </tr>
 </tbody>
 </table>
 </div></blockquote>
 </li>
-<li><p class="first">create_pin_group(self: hal_py.Module, name: str, pins: List[hal_py.ModulePin], direction: hal_py.PinDirection = &lt;PinDirection.none: 0&gt;, type: hal_py.PinType = &lt;PinType.none: 0&gt;, ascending: bool = True, start_index: int = 0, delete_empty_groups: bool = True) -&gt; hal_py.ModulePinGroup</p>
+<li><p class="first">create_pin_group(self: hal_py.Module, name: str, pins: List[hal_py.ModulePin], direction: hal_py.PinDirection = &lt;PinDirection.none: 0&gt;, type: hal_py.PinType = &lt;PinType.none: 0&gt;, ascending: bool = True, start_index: int = 0, delete_empty_groups: bool = True, force_name: bool = False) -&gt; hal_py.ModulePinGroup</p>
 <blockquote>
 <div><p>Create a new pin group with the given name.
 All pins to be added to the pin group must have the same direction and type.</p>
@@ -475,9 +484,12 @@ All pins to be added to the pin group must have the same direction and type.</p>
 <tr class="field-odd field"><th class="field-name" colspan="2">param bool delete_empty_groups:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">Set <cite>True`</cite> to delete groups that are empty after the pins have been assigned to the new group, <code class="docutils literal notranslate"><span class="pre">False</span></code> to keep empty groups. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The pin group on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool force_name:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce the name, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">hal_py.ModulePinGroup or None</td>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The pin group on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">hal_py.ModulePinGroup or None</td>
 </tr>
 </tbody>
 </table>
@@ -1740,7 +1752,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 
 <dl class="method">
 <dt id="hal_py.Module.set_pin_group_name">
-<code class="descname">set_pin_group_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin_group: hal_py.ModulePinGroup</em>, <em>new_name: str</em>, <em>force: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_pin_group_name" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_pin_group_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin_group: hal_py.ModulePinGroup</em>, <em>new_name: str</em>, <em>force_name: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_pin_group_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the name of the given pin group.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1749,7 +1761,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pin_group</strong> (<a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a>) – The pin group.</li>
 <li><strong>new_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name to be assigned to the pin group.</li>
-<li><strong>force</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce renaming, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin group with the same name already exists, that existing pin group will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</li>
+<li><strong>force_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce the name, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -1789,7 +1801,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 
 <dl class="method">
 <dt id="hal_py.Module.set_pin_name">
-<code class="descname">set_pin_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin: hal_py.ModulePin</em>, <em>new_name: str</em>, <em>force: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_pin_name" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_pin_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin: hal_py.ModulePin</em>, <em>new_name: str</em>, <em>force_name: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_pin_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the name of the given pin.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1798,7 +1810,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pin</strong> (<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin"><em>hal_py.ModulePin</em></a>) – The pin.</li>
 <li><strong>new_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name to be assigned to the pin.</li>
-<li><strong>force</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce renaming, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin with the same name already exists, that existing pin will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</li>
+<li><strong>force_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce the name, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin with the same name already exists, the existing pin will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</li>
 </ul>
 </td>
 </tr>
