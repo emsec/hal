@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Module &mdash; hal_py v4.2.0-114-g6631b7017 documentation</title>
+  <title>Module &mdash; hal_py v4.2.0-115-g3082657cc documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-114-g6631b7017
+                v4.2.0-115-g3082657cc
               </div>
             
           
@@ -1740,7 +1740,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 
 <dl class="method">
 <dt id="hal_py.Module.set_pin_group_name">
-<code class="descname">set_pin_group_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin_group: hal_py.ModulePinGroup</em>, <em>new_name: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_pin_group_name" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_pin_group_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin_group: hal_py.ModulePinGroup</em>, <em>new_name: str</em>, <em>force: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_pin_group_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the name of the given pin group.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1749,6 +1749,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pin_group</strong> (<a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a>) – The pin group.</li>
 <li><strong>new_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name to be assigned to the pin group.</li>
+<li><strong>force</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce renaming, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin group with the same name already exists, that existing pin group will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</li>
 </ul>
 </td>
 </tr>

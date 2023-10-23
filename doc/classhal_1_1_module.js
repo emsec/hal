@@ -59,7 +59,7 @@ var classhal_1_1_module =
     [ "set_name", "classhal_1_1_module.html#a00c72047157e9a34c9706d2685a90a13", null ],
     [ "set_parent_module", "classhal_1_1_module.html#a2110d4088efee9b9313fce0171d9bc40", null ],
     [ "set_pin_group_direction", "classhal_1_1_module.html#a96099729eaf61532a07dd4fd18fb7d80", null ],
-    [ "set_pin_group_name", "classhal_1_1_module.html#a2172348c521fd1abd12ad52c90215d99", null ],
+    [ "set_pin_group_name", "classhal_1_1_module.html#a90478e875e0ca4576d04007fab8b8b70", null ],
     [ "set_pin_group_type", "classhal_1_1_module.html#a6d846fda0f35a3aab717a5fcbb2b22cd", null ],
     [ "set_pin_name", "classhal_1_1_module.html#ad1d04c8393f1699f8b89d662f61a6df9", null ],
     [ "set_pin_type", "classhal_1_1_module.html#a71e14e85216bde0a7422f0c6ed7cc772", null ],
