@@ -43,6 +43,7 @@
 #include <QRect>
 #include <QSet>
 #include <QVector>
+#include <QThread>
 
 namespace hal
 {
@@ -59,6 +60,7 @@ namespace hal
     class NetLayoutJunctionEntries;
     class CommentSpeechBubble;
     class CommentEntry;
+    class DrawNetThread;
 
     /**
      * @ingroup graph-layouter
@@ -74,6 +76,8 @@ namespace hal
     class GraphLayouter : public QObject
     {
         Q_OBJECT
+
+        friend class DrawNetThread;
 
         class SceneCoordinate
         {
@@ -340,6 +344,9 @@ namespace hal
         QMap<QPoint, Node> mPositionToNodeMap;
         QMap<Node, QPoint> mNodeToPositionRollback;
 
+    private Q_SLOTS:
+        void handleDrawThreadFinished();
+
     private:
         void clearLayoutData();
         void clearComments();
@@ -479,5 +486,23 @@ namespace hal
 
         bool mOptimizeNetLayout;
         QList<CommentSpeechBubble*> mCommentBubbles;
+        QSet<u32> mNetsToDraw;
+        QSet<u32>::const_iterator mNetIterator;
+        QList<DrawNetThread*> mDrawThreads;
+        QHash<u32, QHash<NetLayoutWire, int>> mLaneMap;
+    };
+
+    class DrawNetThread : public QThread
+    {
+        Q_OBJECT
+        u32 mId;
+        GraphLayouter* mLayouter;
+        void drawJunction();
+        void drawEndpoint();
+    public:
+        StandardGraphicsNet::Lines mLines;
+        DrawNetThread(u32 id, GraphLayouter* parent) : QThread(parent), mId(id), mLayouter(parent) {;}
+        u32 id() const { return mId; }
+        void run() override;
     };
 }    // namespace hal

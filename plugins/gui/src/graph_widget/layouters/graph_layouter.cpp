@@ -632,7 +632,7 @@ namespace hal
         for (auto it = mJunctionEntries.constBegin(); it != mJunctionEntries.constEnd(); ++it)
         {
     //                    it.value().dumpFile(it.key());
-                        qDebug() << "Junction at" << it.key().x() << it.key().y();
+    //                    qDebug() << "Junction at" << it.key().x() << it.key().y();
             NetLayoutJunction* nlj = new NetLayoutJunction(it.value());
             /*
             if (nlj->lastError() != NetLayoutJunction::Ok)
@@ -1310,30 +1310,23 @@ namespace hal
     void GraphLayouter::alternateDrawNets()
     {
         // lane for given wire and net id
-        QHash<u32, QHash<NetLayoutWire, int>> laneMap;
 
         for (auto it = mWireHash.constBegin(); it != mWireHash.constEnd(); ++it)
         {
             int ilane = 0;
             for (u32 id : it.value())
-                laneMap[id].insert(it.key(), ilane++);
+                mLaneMap[id].insert(it.key(), ilane++);
         }
 
         int netCount     = mParentContext->nets().size();
         int percentCount = netCount / 93;
         int doneCount    = 0;
 
-        for (const u32 id : mParentContext->nets())
+        mNetsToDraw = mParentContext->nets();
+        mNetIterator = mNetsToDraw.constBegin();
+        while (mNetIterator != mNetsToDraw.constEnd())
         {
-            ++doneCount;
-            if (percentCount)
-            {
-                if (doneCount % percentCount == 0)
-                    mParentContext->layoutProgress(7 + doneCount / percentCount);
-            }
-            else
-                mParentContext->layoutProgress(7 + (int)floor(92. * doneCount / netCount));
-
+            u32 id = *(mNetIterator++);
             Net* n = gNetlist->get_net_by_id(id);
             if (!n)
                 continue;
@@ -1344,10 +1337,12 @@ namespace hal
             switch (epl.netType())
             {
                 case EndpointList::NoEndpoint:
+                    ++doneCount;
                     break;
                 case EndpointList::SingleSource:
                 case EndpointList::SingleDestination:
                 case EndpointList::ConstantLevel:
+                    ++doneCount;
                     drawNetsIsolated(id, n, epl);
                     break;
                     ;
@@ -1359,98 +1354,73 @@ namespace hal
             if (!regularNet)
                 continue;
 
-            StandardGraphicsNet::Lines lines;
-
-            const QHash<NetLayoutWire, int>& wMap = laneMap.value(id);
-            for (auto it = wMap.constBegin(); it != wMap.constEnd(); ++it)
+            if (mDrawThreads.size() < QThread::idealThreadCount())
             {
-                NetLayoutPoint wFromPoint = it.key().endPoint(NetLayoutWire::SourcePoint);
-                NetLayoutPoint wToPoint   = it.key().endPoint(NetLayoutWire::DestinationPoint);
-                NetLayoutJunction* j0     = mJunctionHash.value(wFromPoint);
-                NetLayoutJunction* j1     = mJunctionHash.value(wToPoint);
-                int ilane                 = it.value();
-                int ix0                   = wFromPoint.x();
-                int iy0                   = wFromPoint.y();
-                int ix1                   = wToPoint.x();
-                int iy1                   = wToPoint.y();
-
-                if (it.key().isHorizontal())
+                ++doneCount;
+                if (percentCount)
                 {
-                    float x0 = j0 ? mCoordX[ix0].lanePosition(j0->rect().right()) : mCoordX[ix0].junctionExit();
-                    float x1 = j1 ? mCoordX[ix1].lanePosition(j1->rect().left()) : mCoordX[ix1].junctionEntry();
-                    float yy = mCoordY[iy0].lanePosition(ilane);
-                    lines.appendHLine(x0, x1, yy);
+                    if (doneCount % percentCount == 0)
+                        mParentContext->layoutProgress(7 + doneCount / percentCount);
                 }
                 else
-                {
-                    float y0, y1;
-                    float xx = mCoordX[ix0].lanePosition(ilane);
-                    if (wToPoint.isEndpoint())
-                    {
-                        // netjunction -> endpoint
-                        auto itEpc = mEndpointHash.find(wToPoint);
-                        y0         = j0 ? mCoordY[iy0].lanePosition(j0->rect().bottom()) : mCoordY[iy0].junctionExit();
-                        y1         = itEpc != mEndpointHash.constEnd() ? itEpc.value().lanePosition(j1->rect().top(), true) : mCoordY[iy1].junctionEntry();
-                        //                        if (itEpc==mEndpointHash.constEnd())
-                        //                            qDebug() << "xxx to endp" << wToPoint.x() << wToPoint.y() << y0 << y1;
-                    }
-                    else
-                    {
-                        // endpoint -> netjunction
-                        auto itEpc = mEndpointHash.find(wFromPoint);
-                        y0         = itEpc != mEndpointHash.constEnd() ? itEpc.value().lanePosition(j0->rect().bottom(), true) : mCoordY[iy0].junctionExit();
-                        y1         = j1 ? mCoordY[iy1].lanePosition(j1->rect().top()) : mCoordY[iy1].junctionEntry();
-                        //                        if (itEpc==mEndpointHash.constEnd())
-                        //                            qDebug() << "xxx fr endp" << wFromPoint.x() << wFromPoint.y() << y0 << y1;
-                    }
-                    if (y1 > y0)
-                        lines.appendVLine(xx, y0, y1);
-                }
+                    mParentContext->layoutProgress(7 + (int)floor(92. * doneCount / netCount));
+
+                DrawNetThread* dnt = new DrawNetThread(id,this);
+                connect(dnt,&QThread::finished,this,&GraphLayouter::handleDrawThreadFinished);
+                mDrawThreads.append(dnt);
+                dnt->start();
             }
-            drawNetsJunction(lines, id);
-            drawNetsEndpoint(lines, id);
-
-            lines.mergeLines(mScene);
-
-            GraphicsNet* graphicsNet = nullptr;
-            switch (epl.netType())
-            {
-                case EndpointList::HasGlobalEndpoint:
-                    if (epl.hasInputArrow())
-                    {
-                        StandardArrowNet* san = new StandardArrowNet(n, lines);
-                        graphicsNet           = san;
-                        int yGridPos          = mGlobalInputHash.value(id, -1);
-                        Q_ASSERT(yGridPos >= 0);
-                        const EndpointCoordinate& epc = mEndpointHash.value(QPoint(mNodeBoundingBox.left(), yGridPos * 2));
-                        san->setInputPosition(QPointF(mCoordX.value(mNodeBoundingBox.left()).lanePosition(-1), epc.lanePosition(0, true)));
-                    }
-                    if (epl.hasOutputArrow())
-                    {
-                        if (graphicsNet) mScene->addGraphItem(graphicsNet);
-                        StandardArrowNet* san = new StandardArrowNet(n, lines);
-                        graphicsNet           = san;
-                        int yGridPos          = mGlobalOutputHash.value(id, -1);
-                        Q_ASSERT(yGridPos >= 0);
-                        QPoint pnt(mNodeBoundingBox.right() + 1, yGridPos * 2);
-                        const EndpointCoordinate& epc = mEndpointHash.value(pnt);
-                        const NetLayoutJunction* nlj  = mJunctionHash.value(pnt);
-                        Q_ASSERT(nlj);
-                        san->setOutputPosition(QPointF(mCoordX.value(pnt.x()).lanePosition(nlj->rect().right() + 1), epc.lanePosition(0, true)));
-                    }
-                    break;
-                case EndpointList::SourceAndDestination:
-                    if (lines.nLines() > 0)
-                        graphicsNet = new StandardGraphicsNet(n, lines);
-                    break;
-                default:
-                    Q_ASSERT(0 > 1);    // should never occur
-                    break;
-            }
-
-            if (graphicsNet)
-                mScene->addGraphItem(graphicsNet);
+            qApp->processEvents();
         }
+
+    }
+
+    void GraphLayouter::handleDrawThreadFinished()
+    {
+        DrawNetThread* dnt = static_cast<DrawNetThread*>(sender());
+        Net* n = gNetlist->get_net_by_id(dnt->id());
+        const EndpointList& epl = mWireEndpoint.value(dnt->id());
+
+        GraphicsNet* graphicsNet = nullptr;
+        switch (epl.netType())
+        {
+            case EndpointList::HasGlobalEndpoint:
+                if (epl.hasInputArrow())
+                {
+                    StandardArrowNet* san = new StandardArrowNet(n, dnt->mLines);
+                    graphicsNet           = san;
+                    int yGridPos          = mGlobalInputHash.value(dnt->id(), -1);
+                    Q_ASSERT(yGridPos >= 0);
+                    const EndpointCoordinate& epc = mEndpointHash.value(QPoint(mNodeBoundingBox.left(), yGridPos * 2));
+                    san->setInputPosition(QPointF(mCoordX.value(mNodeBoundingBox.left()).lanePosition(-1), epc.lanePosition(0, true)));
+                }
+                if (epl.hasOutputArrow())
+                {
+                    if (graphicsNet) mScene->addGraphItem(graphicsNet);
+                    StandardArrowNet* san = new StandardArrowNet(n, dnt->mLines);
+                    graphicsNet           = san;
+                    int yGridPos          = mGlobalOutputHash.value(dnt->id(), -1);
+                    Q_ASSERT(yGridPos >= 0);
+                    QPoint pnt(mNodeBoundingBox.right() + 1, yGridPos * 2);
+                    const EndpointCoordinate& epc = mEndpointHash.value(pnt);
+                    const NetLayoutJunction* nlj  = mJunctionHash.value(pnt);
+                    Q_ASSERT(nlj);
+                    san->setOutputPosition(QPointF(mCoordX.value(pnt.x()).lanePosition(nlj->rect().right() + 1), epc.lanePosition(0, true)));
+                }
+                break;
+            case EndpointList::SourceAndDestination:
+                if (dnt->mLines.nLines() > 0)
+                    graphicsNet = new StandardGraphicsNet(n, dnt->mLines);
+                break;
+            default:
+                Q_ASSERT(0 > 1);    // should never occur
+                break;
+        }
+
+        if (graphicsNet)
+            mScene->addGraphItem(graphicsNet);
+
+        mDrawThreads.removeAll(dnt);
     }
 
     void GraphLayouter::drawNetsIsolated(u32 id, Net* n, const EndpointList& epl)
@@ -2889,5 +2859,147 @@ namespace hal
     void GraphLayouter::setOptimizeNetLayoutEnabled(bool enabled)
     {
         mOptimizeNetLayout = enabled;
+    }
+
+    void DrawNetThread::run()
+    {
+        Net* n = gNetlist->get_net_by_id(mId);
+        if (!n)
+            return;
+
+        const QHash<NetLayoutWire, int>& wMap = mLayouter->mLaneMap.value(mId);
+        for (auto it = wMap.constBegin(); it != wMap.constEnd(); ++it)
+        {
+            NetLayoutPoint wFromPoint = it.key().endPoint(NetLayoutWire::SourcePoint);
+            NetLayoutPoint wToPoint   = it.key().endPoint(NetLayoutWire::DestinationPoint);
+            NetLayoutJunction* j0     = mLayouter->mJunctionHash.value(wFromPoint);
+            NetLayoutJunction* j1     = mLayouter->mJunctionHash.value(wToPoint);
+            int ilane                 = it.value();
+            int ix0                   = wFromPoint.x();
+            int iy0                   = wFromPoint.y();
+            int ix1                   = wToPoint.x();
+            int iy1                   = wToPoint.y();
+
+            if (it.key().isHorizontal())
+            {
+                float x0 = j0 ? mLayouter->mCoordX[ix0].lanePosition(j0->rect().right()) : mLayouter->mCoordX[ix0].junctionExit();
+                float x1 = j1 ? mLayouter->mCoordX[ix1].lanePosition(j1->rect().left()) : mLayouter->mCoordX[ix1].junctionEntry();
+                float yy = mLayouter->mCoordY[iy0].lanePosition(ilane);
+                mLines.appendHLine(x0, x1, yy);
+            }
+            else
+            {
+                float y0, y1;
+                float xx = mLayouter->mCoordX[ix0].lanePosition(ilane);
+                if (wToPoint.isEndpoint())
+                {
+                    // netjunction -> endpoint
+                    auto itEpc = mLayouter->mEndpointHash.find(wToPoint);
+                    y0         = j0 ? mLayouter->mCoordY[iy0].lanePosition(j0->rect().bottom()) : mLayouter->mCoordY[iy0].junctionExit();
+                    y1         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j1->rect().top(), true) : mLayouter->mCoordY[iy1].junctionEntry();
+                    //                        if (itEpc==mEndpointHash.constEnd())
+                    //                            qDebug() << "xxx to endp" << wToPoint.x() << wToPoint.y() << y0 << y1;
+                }
+                else
+                {
+                    // endpoint -> netjunction
+                    auto itEpc = mLayouter->mEndpointHash.find(wFromPoint);
+                    y0         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j0->rect().bottom(), true) : mLayouter->mCoordY[iy0].junctionExit();
+                    y1         = j1 ? mLayouter->mCoordY[iy1].lanePosition(j1->rect().top()) : mLayouter->mCoordY[iy1].junctionEntry();
+                    //                        if (itEpc==mEndpointHash.constEnd())
+                    //                            qDebug() << "xxx fr endp" << wFromPoint.x() << wFromPoint.y() << y0 << y1;
+                }
+                if (y1 > y0)
+                    mLines.appendVLine(xx, y0, y1);
+            }
+        }
+        drawJunction();
+        drawEndpoint();
+    }
+
+    void DrawNetThread::drawJunction()
+    {
+        for (auto jt = mLayouter->mJunctionHash.constBegin(); jt != mLayouter->mJunctionHash.constEnd(); ++jt)
+        {
+            auto epcIt      = mLayouter->mEndpointHash.find(jt.key());
+            int x           = jt.key().x();
+            int y           = jt.key().y();
+            bool isEndpoint = (y % 2 == 0);
+
+            for (const NetLayoutJunctionWire& jw : jt.value()->netById(mId).mWires)
+            {
+                int li = jw.mIndex.laneIndex();
+                if (jw.mIndex.isHorizontal())
+                {
+                    Q_ASSERT(epcIt != mLayouter->mEndpointHash.constEnd() || !isEndpoint);
+                    float x0 = mLayouter->mCoordX.value(x).lanePosition(jw.mRange.first());
+                    float x1 = mLayouter->mCoordX.value(x).lanePosition(jw.mRange.last());
+                    float yy = isEndpoint ? epcIt.value().lanePosition(li, true) : mLayouter->mCoordY.value(y).lanePosition(li);
+                    mLines.appendHLine(x0, x1, yy);
+                }
+                else
+                {
+                    float y0, y1;
+                    if (!isEndpoint)
+                    {
+                        y0 = mLayouter->mCoordY.value(y).lanePosition(jw.mRange.first());
+                        y1 = mLayouter->mCoordY.value(y).lanePosition(jw.mRange.last());
+                    }
+                    else if (epcIt != mLayouter->mEndpointHash.constEnd())
+                    {
+                        y0 = epcIt.value().lanePosition(jw.mRange.first(), true);
+                        y1 = epcIt.value().lanePosition(jw.mRange.last(), true);
+                    }
+                    else
+                    {
+                        y0 = mLayouter->mCoordY.value(y).junctionEntry();
+                        y1 = mLayouter->mCoordY.value(y).junctionExit();
+                        if (y1 <= y0)
+                            y1 = y0 + 1;
+                    }
+                    float xx = mLayouter->mCoordX.value(x).lanePosition(li);
+                    mLines.appendVLine(xx, y0, y1);
+                }
+            }
+        }
+    }
+
+    void DrawNetThread::drawEndpoint()
+    {
+        for (auto it = mLayouter->mEndpointHash.constBegin(); it != mLayouter->mEndpointHash.constEnd(); ++it)
+        {
+            const GraphLayouter::EndpointCoordinate& epc = it.value();
+
+            QList<int> inputsById  = epc.inputPinIndex(mId);
+            QList<int> outputsById = epc.outputPinIndex(mId);
+            if (inputsById.isEmpty() && outputsById.isEmpty())
+                continue;
+
+            const NetLayoutJunction* nlj     = mLayouter->mJunctionHash.value(it.key());
+            const GraphLayouter::SceneCoordinate& xScenePos = mLayouter->mCoordX.value(it.key().x());
+            float xjLeft                     = xScenePos.lanePosition(nlj->rect().left());
+            float xjRight                    = xScenePos.lanePosition(nlj->rect().right());
+            Q_ASSERT(nlj);
+
+            for (int inpInx : inputsById)
+            {
+                if (xjRight >= epc.xInput())
+                {
+                    // don't complain if "input" is in fact global output pin
+                    auto ityOut = mLayouter->mGlobalOutputHash.find(mId);
+                    if (ityOut == mLayouter->mGlobalOutputHash.constEnd() || QPoint(mLayouter->mNodeBoundingBox.right() + 1, 2 * ityOut.value()) != it.key())
+                        qDebug() << "cannot connect input pin" << mId << it.key().x() << it.key().y() / 2 << xjRight << epc.xInput();
+                }
+                else
+                    mLines.appendHLine(xjRight, epc.xInput(), epc.lanePosition(inpInx, true));
+            }
+            for (int outInx : outputsById)
+            {
+                if (epc.xOutput() >= xjLeft)
+                    qDebug() << "cannot connect output pin" << mId << it.key().x() << it.key().y() / 2 << xjLeft << epc.xOutput();
+                else
+                    mLines.appendHLine(epc.xOutput(), xjLeft, epc.lanePosition(outInx, true));
+            }
+        }
     }
 }    // namespace hal
