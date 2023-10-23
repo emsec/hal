@@ -705,7 +705,7 @@ var searchData=
   ['set_5fpin_5fgroup_5fdirection_13318',['set_pin_group_direction',['../classhal_1_1_gate_type.html#a3eae4fcfd259884f840d1b214811c043',1,'hal::GateType::set_pin_group_direction()'],['../classhal_1_1_module.html#a96099729eaf61532a07dd4fd18fb7d80',1,'hal::Module::set_pin_group_direction()']]],
   ['set_5fpin_5fgroup_5fname_13319',['set_pin_group_name',['../classhal_1_1_gate_type.html#a01aedabc602e618be27a5052a70821ea',1,'hal::GateType::set_pin_group_name()'],['../classhal_1_1_module.html#a2172348c521fd1abd12ad52c90215d99',1,'hal::Module::set_pin_group_name()']]],
   ['set_5fpin_5fgroup_5ftype_13320',['set_pin_group_type',['../classhal_1_1_gate_type.html#a791fffa975de77ffa83f80474332c406',1,'hal::GateType::set_pin_group_type()'],['../classhal_1_1_module.html#a6d846fda0f35a3aab717a5fcbb2b22cd',1,'hal::Module::set_pin_group_type()']]],
-  ['set_5fpin_5fname_13321',['set_pin_name',['../classhal_1_1_module.html#aa7cfdfceab3245f6d7e7237fd15e06b5',1,'hal::Module']]],
+  ['set_5fpin_5fname_13321',['set_pin_name',['../classhal_1_1_module.html#ad1d04c8393f1699f8b89d662f61a6df9',1,'hal::Module']]],
   ['set_5fpin_5ftype_13322',['set_pin_type',['../classhal_1_1_module.html#a71e14e85216bde0a7422f0c6ed7cc772',1,'hal::Module']]],
   ['set_5fposition_13323',['set_position',['../classhal_1_1_token_stream.html#a505399e571df285e38c42b4b6a7ac98f',1,'hal::TokenStream']]],
   ['set_5fproject_5fdirectory_13324',['set_project_directory',['../classhal_1_1_project_manager.html#ae3e31c378bef8edc9b63f3308029c3eb',1,'hal::ProjectManager']]],

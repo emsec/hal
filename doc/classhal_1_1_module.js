@@ -61,7 +61,7 @@ var classhal_1_1_module =
     [ "set_pin_group_direction", "classhal_1_1_module.html#a96099729eaf61532a07dd4fd18fb7d80", null ],
     [ "set_pin_group_name", "classhal_1_1_module.html#a2172348c521fd1abd12ad52c90215d99", null ],
     [ "set_pin_group_type", "classhal_1_1_module.html#a6d846fda0f35a3aab717a5fcbb2b22cd", null ],
-    [ "set_pin_name", "classhal_1_1_module.html#aa7cfdfceab3245f6d7e7237fd15e06b5", null ],
+    [ "set_pin_name", "classhal_1_1_module.html#ad1d04c8393f1699f8b89d662f61a6df9", null ],
     [ "set_pin_type", "classhal_1_1_module.html#a71e14e85216bde0a7422f0c6ed7cc772", null ],
     [ "set_type", "classhal_1_1_module.html#a9bcc555241bfad8b6abccaecb2f021ce", null ],
     [ "update_nets", "classhal_1_1_module.html#a02af541336529b5ff7a4babadd43bbdb", null ],

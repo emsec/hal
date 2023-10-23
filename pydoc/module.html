@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Module &mdash; hal_py v4.2.0-112-ge88482aef documentation</title>
+  <title>Module &mdash; hal_py v4.2.0-114-g6631b7017 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-112-ge88482aef
+                v4.2.0-114-g6631b7017
               </div>
             
           
@@ -1788,7 +1788,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 
 <dl class="method">
 <dt id="hal_py.Module.set_pin_name">
-<code class="descname">set_pin_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin: hal_py.ModulePin</em>, <em>new_name: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_pin_name" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_pin_name</code><span class="sig-paren">(</span><em>self: hal_py.Module</em>, <em>pin: hal_py.ModulePin</em>, <em>new_name: str</em>, <em>force: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Module.set_pin_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the name of the given pin.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1797,6 +1797,7 @@ If the new parent is a submodule of this module, the new parent is added as a di
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>pin</strong> (<a class="reference internal" href="module_pin.html#hal_py.ModulePin" title="hal_py.ModulePin"><em>hal_py.ModulePin</em></a>) – The pin.</li>
 <li><strong>new_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name to be assigned to the pin.</li>
+<li><strong>force</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enforce renaming, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If a pin with the same name already exists, that existing pin will be renamed. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</li>
 </ul>
 </td>
 </tr>
