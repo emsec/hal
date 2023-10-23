@@ -633,11 +633,12 @@ namespace hal
              :rtype: hal_py.ModulePinGroup or None
          )");
 
-        py_module.def("set_pin_name", &Module::set_pin_name, py::arg("pin"), py::arg("new_name"), R"(
+        py_module.def("set_pin_name", &Module::set_pin_name, py::arg("pin"), py::arg("new_name"), py::arg("force") = false, R"(
             Set the name of the given pin.
 
             :param hal_py.ModulePin pin: The pin.
             :param str new_name: The name to be assigned to the pin.
+            :param bool force: Set ``True`` to enforce renaming, ``False`` otherwise. If a pin with the same name already exists, that existing pin will be renamed. Defaults to ``False``.
             :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");

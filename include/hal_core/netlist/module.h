@@ -459,9 +459,10 @@ namespace hal
          * 
          * @param[in] pin - The pin.
          * @param[in] new_name - The name to be assigned to the pin.
+         * @param[in] force - Set `true` to enforce renaming, `false` otherwise. If a pin with the same name already exists, that existing pin will be renamed. Defaults to `false`.
          * @returns `true` on success, `false` otherwise.
          */
-        bool set_pin_name(ModulePin* pin, const std::string& new_name);
+        bool set_pin_name(ModulePin* pin, const std::string& new_name, const bool force = false);
 
         /**
          * Set the type of the given pin.

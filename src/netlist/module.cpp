@@ -1056,7 +1056,7 @@ namespace hal
         return nullptr;
     }
 
-    bool Module::set_pin_name(ModulePin* pin, const std::string& new_name)
+    bool Module::set_pin_name(ModulePin* pin, const std::string& new_name, const bool force)
     {
         if (pin == nullptr)
         {
@@ -1076,16 +1076,27 @@ namespace hal
             return false;
         }
 
-        if (m_pin_names_map.find(new_name) != m_pin_names_map.end())
+        if (const auto pin_it = m_pin_names_map.find(new_name); pin_it != m_pin_names_map.end())
         {
-            log_warning("module",
-                        "could not set name for pin '{}' with ID {} of module '{}' with ID {}: a pin with name '{}' already exists within the module",
-                        pin->get_name(),
-                        pin->get_id(),
-                        m_name,
-                        m_id,
-                        new_name);
-            return false;
+            if (force)
+            {
+                u32 ctr = 2;
+                while (!this->set_pin_name(pin_it->second, new_name + "__" + std::to_string(ctr) + "__"))
+                {
+                    ctr++;
+                }
+            }
+            else
+            {
+                log_warning("module",
+                            "could not set name for pin '{}' with ID {} of module '{}' with ID {}: a pin with name '{}' already exists within the module",
+                            pin->get_name(),
+                            pin->get_id(),
+                            m_name,
+                            m_id,
+                            new_name);
+                return false;
+            }
         }
 
         if (const std::string& old_name = pin->get_name(); old_name != new_name)
