@@ -148,7 +148,7 @@ namespace hal {
         QJsonArray  mcArr;
 
         const ModuleModel* mm = gNetlistRelay->getModuleModel();
-        if (!mm) std::string();
+        if (!mm) return std::string();
 
         serializeColorRecursion(mcArr,mm);
 

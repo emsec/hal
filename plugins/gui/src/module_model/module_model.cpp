@@ -363,7 +363,7 @@ namespace hal
     void ModuleModel::remove_module(const u32 id)
     {
         assert(id != 1);
-        assert(gNetlist->get_module_by_id(id));
+// module was most likely already purged from netlist
         assert(mModuleMap.contains(id));
 
         ModuleItem* item   = mModuleMap.value(id);
