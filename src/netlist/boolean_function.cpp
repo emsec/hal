@@ -742,7 +742,7 @@ namespace hal
 
     u16 BooleanFunction::size() const
     {
-        return this->m_nodes.back().size;
+        return this->get_top_level_node().size;
     }
 
     bool BooleanFunction::is(u16 type) const

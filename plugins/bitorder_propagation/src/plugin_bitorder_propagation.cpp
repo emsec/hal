@@ -226,9 +226,25 @@ namespace hal
                 }
 
                 // propagate
-                std::vector<Net*> next_nets;
+                std::vector<Endpoint*> next_eps;
 
                 for (const auto& next_ep : successors ? g->get_fan_out_endpoints() : g->get_fan_in_endpoints())
+                {
+                    const GatePin* pin = next_ep->get_pin();
+                    if (g->get_type()->has_property(GateTypeProperty::sequential) && (g->get_type()->has_property(GateTypeProperty::ff) || g->get_type()->has_property(GateTypeProperty::latch)))
+                    {
+                        if (PinType t = pin->get_type(); t == PinType::data || t == PinType::state || t == PinType::neg_state)
+                        {
+                            next_eps.push_back(next_ep);
+                        }
+                    }
+                    else
+                    {
+                        next_eps.push_back(next_ep);
+                    }
+                }
+
+                for (Endpoint* next_ep : next_eps)
                 {
                     // Check whether we leave the gate via a relevant pin group, if that is the case stop
                     bool found_relevant_pin_group = false;
@@ -260,33 +276,17 @@ namespace hal
                         {
                             continue;
                         }
-
-                        const GatePin* pin = next_ep->get_pin();
-                        if (g->get_type()->has_property(GateTypeProperty::sequential) && (g->get_type()->has_property(GateTypeProperty::ff) || g->get_type()->has_property(GateTypeProperty::latch)))
-                        {
-                            if (PinType t = pin->get_type(); t == PinType::data || t == PinType::state || t == PinType::neg_state)
-                            {
-                                next_nets.push_back(next_ep->get_net());
-                            }
-                        }
-                        else
-                        {
-                            next_nets.push_back(next_ep->get_net());
-                        }
                     }
 
-                    for (Net* next_n : next_nets)
+                    auto res = gather_conntected_neighbors(next_ep->get_net(), visited, successors, relevant_pin_groups);
+                    if (res.is_error())
                     {
-                        auto res = gather_conntected_neighbors(next_n, visited, successors, relevant_pin_groups);
-                        if (res.is_error())
-                        {
-                            return res;
-                        }
+                        return res;
+                    }
 
-                        for (auto& [org_mpg, nets] : res.get())
-                        {
-                            connected_neighbors[org_mpg].insert(nets.begin(), nets.end());
-                        }
+                    for (auto& [org_mpg, nets] : res.get())
+                    {
+                        connected_neighbors[org_mpg].insert(nets.begin(), nets.end());
                     }
                 }
             }
