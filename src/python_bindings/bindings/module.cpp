@@ -423,8 +423,8 @@ namespace hal
 
         py_module.def(
             "create_pin",
-            [](Module& self, const u32 id, const std::string& name, Net* net, PinType type = PinType::none, bool create_group = true) -> ModulePin* {
-                auto res = self.create_pin(id, name, net, type, create_group);
+            [](Module& self, const u32 id, const std::string& name, Net* net, PinType type = PinType::none, bool create_group = true, bool force_name = false) -> ModulePin* {
+                auto res = self.create_pin(id, name, net, type, create_group, force_name);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -440,6 +440,7 @@ namespace hal
             py::arg("net"),
             py::arg("type")         = PinType::none,
             py::arg("create_group") = true,
+            py::arg("force_name")   = false,
             R"(
             Manually assign a module pin to a net.
             Checks whether the given direction matches the actual properties of the net, i.e., checks whether the net actually is an input and/or output to the module.
@@ -453,14 +454,15 @@ namespace hal
             :param hal_py.Net net: The net that the pin is being assigned to.
             :param hal_py.PinType type: The type of the pin. Defaults to ``hal_py.PinType.none``.
             :param bool create_group: Set ``True`` to automatically create a pin group and assign the pin, ``False`` otherwise. Defaults to ``True``.
+            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin with the same name already exists, the existing pin will be renamed. Defaults to ``False``.
             :returns: The module pin on success, ``None`` otherwise.
             :rtype: hal_py.ModulePin or None
         )");
 
         py_module.def(
             "create_pin",
-            [](Module& self, const std::string& name, Net* net, PinType type = PinType::none, bool create_group = true) -> ModulePin* {
-                auto res = self.create_pin(name, net, type, create_group);
+            [](Module& self, const std::string& name, Net* net, PinType type = PinType::none, bool create_group = true, bool force_name = false) -> ModulePin* {
+                auto res = self.create_pin(name, net, type, create_group, force_name);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -475,6 +477,7 @@ namespace hal
             py::arg("net"),
             py::arg("type")         = PinType::none,
             py::arg("create_group") = true,
+            py::arg("force_name")   = false,
             R"(
             Manually assign a module pin to a net.
             The ID of the pin is set automatically.
@@ -488,6 +491,7 @@ namespace hal
             :param hal_py.Net net: The net that the pin is being assigned to.
             :param hal_py.PinType type: The type of the pin. Defaults to ``hal_py.PinType.none``.
             :param bool create_group: Set ``True`` to automatically create a pin group and assign the pin, ``False`` otherwise. Defaults to ``True``.
+            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin with the same name already exists, the existing pin will be renamed. Defaults to ``False``.
             :returns: The module pin on success, ``None`` otherwise.
             :rtype: hal_py.ModulePin or None
         )");
@@ -633,20 +637,22 @@ namespace hal
              :rtype: hal_py.ModulePinGroup or None
          )");
 
-        py_module.def("set_pin_name", &Module::set_pin_name, py::arg("pin"), py::arg("new_name"), R"(
+        py_module.def("set_pin_name", &Module::set_pin_name, py::arg("pin"), py::arg("new_name"), py::arg("force_name") = false, R"(
             Set the name of the given pin.
 
             :param hal_py.ModulePin pin: The pin.
             :param str new_name: The name to be assigned to the pin.
+            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin with the same name already exists, the existing pin will be renamed. Defaults to ``False``.
             :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
 
-        py_module.def("set_pin_group_name", &Module::set_pin_group_name, py::arg("pin_group"), py::arg("new_name"), R"(
+        py_module.def("set_pin_group_name", &Module::set_pin_group_name, py::arg("pin_group"), py::arg("new_name"), py::arg("force_name") = false, R"(
             Set the name of the given pin group.
 
             :param hal_py.ModulePinGroup pin_group: The pin group.
             :param str new_name: The name to be assigned to the pin group.
+            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to ``False``.
             :returns: ``True`` on success, ``False`` otherwise.
             :rtype: bool
         )");
@@ -688,8 +694,9 @@ namespace hal
                PinType type                       = PinType::none,
                bool ascending                     = true,
                u32 start_index                    = 0,
-               bool delete_empty_groups           = true) -> PinGroup<ModulePin>* {
-                auto res = self.create_pin_group(id, name, pins, direction, type, ascending, start_index, delete_empty_groups);
+               bool delete_empty_groups           = true,
+               bool force_name                    = false) -> PinGroup<ModulePin>* {
+                auto res = self.create_pin_group(id, name, pins, direction, type, ascending, start_index, delete_empty_groups, force_name);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -708,6 +715,7 @@ namespace hal
             py::arg("ascending")           = true,
             py::arg("start_index")         = 0,
             py::arg("delete_empty_groups") = true,
+            py::arg("force_name")          = false,
             R"(
             Create a new pin group with the given name.
             All pins to be added to the pin group must have the same direction and type.
@@ -720,6 +728,7 @@ namespace hal
             :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``True``.
             :param int start_index: The start index of the pin group. Defaults to ``0``.
             :param bool delete_empty_groups: Set ``True`` to delete groups that are empty after the pins have been assigned to the new group, ``False`` to keep empty groups. Defaults to ``True``.
+            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to ``False``.
             :returns: The pin group on success, ``None`` otherwise.
             :rtype: hal_py.ModulePinGroup or None
         )");
@@ -733,8 +742,9 @@ namespace hal
                PinType type                       = PinType::none,
                bool ascending                     = true,
                u32 start_index                    = 0,
-               bool delete_empty_groups           = true) -> PinGroup<ModulePin>* {
-                auto res = self.create_pin_group(name, pins, direction, type, ascending, start_index, delete_empty_groups);
+               bool delete_empty_groups           = true,
+               bool force_name                    = false) -> PinGroup<ModulePin>* {
+                auto res = self.create_pin_group(name, pins, direction, type, ascending, start_index, delete_empty_groups, force_name);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -752,6 +762,7 @@ namespace hal
             py::arg("ascending")           = true,
             py::arg("start_index")         = 0,
             py::arg("delete_empty_groups") = true,
+            py::arg("force_name")          = false,
             R"(
             Create a new pin group with the given name.
             All pins to be added to the pin group must have the same direction and type.
@@ -763,6 +774,7 @@ namespace hal
             :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``True``.
             :param int start_index: The start index of the pin group. Defaults to ``0``.
             :param bool delete_empty_groups: Set `True`` to delete groups that are empty after the pins have been assigned to the new group, ``False`` to keep empty groups. Defaults to ``True``.
+            :param bool force_name: Set ``True`` to enforce the name, ``False`` otherwise. If a pin group with the same name already exists, the existing pin group will be renamed. Defaults to ``False``.
             :returns: The pin group on success, ``None`` otherwise.
             :rtype: hal_py.ModulePinGroup or None
         )");
