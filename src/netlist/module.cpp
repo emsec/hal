@@ -784,7 +784,7 @@ namespace hal
         return m_next_pin_group_id;
     }
 
-    Result<ModulePin*> Module::create_pin(const u32 id, const std::string& name, Net* net, PinType type, bool create_group)
+    Result<ModulePin*> Module::create_pin(const u32 id, const std::string& name, Net* net, PinType type, bool create_group, bool force_name)
     {
         if (name.empty())
         {
@@ -825,7 +825,7 @@ namespace hal
                        + " is neither an input nor an output");
         }
 
-        if (auto pin_res = create_pin_internal(id, name, net, direction, type); pin_res.is_error())
+        if (auto pin_res = create_pin_internal(id, name, net, direction, type, force_name); pin_res.is_error())
         {
             return ERR_APPEND(pin_res.get_error(), "could not create pin '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id));
         }
@@ -833,7 +833,7 @@ namespace hal
         {
             if (create_group)
             {
-                if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name, direction, type, true, 0); group_res.is_error())
+                if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name, direction, type, true, 0, force_name); group_res.is_error())
                 {
                     assert(delete_pin_internal(pin_res.get()).is_ok());
                     return ERR_APPEND(group_res.get_error(), "could not create pin '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": failed to create pin group");
@@ -854,9 +854,9 @@ namespace hal
         }
     }
 
-    Result<ModulePin*> Module::create_pin(const std::string& name, Net* net, PinType type, bool create_group)
+    Result<ModulePin*> Module::create_pin(const std::string& name, Net* net, PinType type, bool create_group, bool force_name)
     {
-        return create_pin(get_unique_pin_id(), name, net, type, create_group);
+        return create_pin(get_unique_pin_id(), name, net, type, create_group, force_name);
     }
 
     std::vector<ModulePin*> Module::get_pins(const std::function<bool(ModulePin*)>& filter) const
@@ -1056,7 +1056,7 @@ namespace hal
         return nullptr;
     }
 
-    bool Module::set_pin_name(ModulePin* pin, const std::string& new_name)
+    bool Module::set_pin_name(ModulePin* pin, const std::string& new_name, bool force_name)
     {
         if (pin == nullptr)
         {
@@ -1076,16 +1076,27 @@ namespace hal
             return false;
         }
 
-        if (m_pin_names_map.find(new_name) != m_pin_names_map.end())
+        if (const auto pin_it = m_pin_names_map.find(new_name); pin_it != m_pin_names_map.end())
         {
-            log_warning("module",
-                        "could not set name for pin '{}' with ID {} of module '{}' with ID {}: a pin with name '{}' already exists within the module",
-                        pin->get_name(),
-                        pin->get_id(),
-                        m_name,
-                        m_id,
-                        new_name);
-            return false;
+            if (force_name)
+            {
+                u32 ctr = 2;
+                while (!this->set_pin_name(pin_it->second, new_name + "__" + std::to_string(ctr) + "__"))
+                {
+                    ctr++;
+                }
+            }
+            else
+            {
+                log_warning("module",
+                            "could not set name for pin '{}' with ID {} of module '{}' with ID {}: a pin with name '{}' already exists within the module",
+                            pin->get_name(),
+                            pin->get_id(),
+                            m_name,
+                            m_id,
+                            new_name);
+                return false;
+            }
         }
 
         if (const std::string& old_name = pin->get_name(); old_name != new_name)
@@ -1122,7 +1133,7 @@ namespace hal
         return true;
     }
 
-    bool Module::set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name)
+    bool Module::set_pin_group_name(PinGroup<ModulePin>* pin_group, const std::string& new_name, bool force_name)
     {
         if (pin_group == nullptr)
         {
@@ -1144,16 +1155,27 @@ namespace hal
             return false;
         }
 
-        if (m_pin_group_names_map.find(new_name) != m_pin_group_names_map.end())
+        if (const auto pin_group_it = m_pin_group_names_map.find(new_name); pin_group_it != m_pin_group_names_map.end())
         {
-            log_warning("module",
-                        "could not set name for pin group '{}' with ID {} of module '{}' with ID {}: a pin group with name '{}' already exists within the module",
-                        pin_group->get_name(),
-                        pin_group->get_id(),
-                        m_name,
-                        m_id,
-                        new_name);
-            return false;
+            if (force_name)
+            {
+                u32 ctr = 2;
+                while (!this->set_pin_group_name(pin_group_it->second, new_name + "__" + std::to_string(ctr) + "__"))
+                {
+                    ctr++;
+                }
+            }
+            else
+            {
+                log_warning("module",
+                            "could not set name for pin group '{}' with ID {} of module '{}' with ID {}: a pin group with name '{}' already exists within the module",
+                            pin_group->get_name(),
+                            pin_group->get_id(),
+                            m_name,
+                            m_id,
+                            new_name);
+                return false;
+            }
         }
 
         if (const std::string& old_name = pin_group->get_name(); old_name != new_name)
@@ -1224,7 +1246,8 @@ namespace hal
                                                           PinType type,
                                                           bool ascending,
                                                           u32 start_index,
-                                                          bool delete_empty_groups)
+                                                          bool delete_empty_groups,
+                                                          bool force_name)
     {
         if (name.empty())
         {
@@ -1232,7 +1255,7 @@ namespace hal
         }
 
         PinGroup<ModulePin>* pin_group;
-        if (auto res = create_pin_group_internal(id, name, direction, type, ascending, start_index); res.is_error())
+        if (auto res = create_pin_group_internal(id, name, direction, type, ascending, start_index, force_name); res.is_error())
         {
             return ERR_APPEND(res.get_error(), "could not create pin group '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id));
         }
@@ -1254,10 +1277,16 @@ namespace hal
         return OK(pin_group);
     }
 
-    Result<PinGroup<ModulePin>*>
-        Module::create_pin_group(const std::string& name, const std::vector<ModulePin*> pins, PinDirection direction, PinType type, bool ascending, u32 start_index, bool delete_empty_groups)
+    Result<PinGroup<ModulePin>*> Module::create_pin_group(const std::string& name,
+                                                          const std::vector<ModulePin*> pins,
+                                                          PinDirection direction,
+                                                          PinType type,
+                                                          bool ascending,
+                                                          u32 start_index,
+                                                          bool delete_empty_groups,
+                                                          bool force_name)
     {
-        return create_pin_group(get_unique_pin_group_id(), name, pins, direction, type, ascending, start_index, delete_empty_groups);
+        return create_pin_group(get_unique_pin_group_id(), name, pins, direction, type, ascending, start_index, delete_empty_groups, force_name);
     }
 
     Result<std::monostate> Module::delete_pin_group(PinGroup<ModulePin>* pin_group)
@@ -1508,7 +1537,7 @@ namespace hal
 
         // create pin
         ModulePin* pin;
-        if (auto res = create_pin_internal(pin_id, name_internal, net, direction, type); res.is_error())
+        if (auto res = create_pin_internal(pin_id, name_internal, net, direction, type, false); res.is_error())
         {
             return ERR_APPEND(res.get_error(), "could not assign pin '" + name_internal + "' to net: failed to create pin");
         }
@@ -1517,7 +1546,7 @@ namespace hal
             pin = res.get();
         }
 
-        if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name_internal, pin->get_direction(), pin->get_type(), true, 0); group_res.is_error())
+        if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name_internal, pin->get_direction(), pin->get_type(), true, 0, false); group_res.is_error())
         {
             return ERR_APPEND(group_res.get_error(), "could not assign pin '" + name_internal + "' to net: failed to create pin group");
         }
@@ -1572,7 +1601,7 @@ namespace hal
         return OK({});
     }
 
-    Result<ModulePin*> Module::create_pin_internal(const u32 id, const std::string& name, Net* net, PinDirection direction, PinType type)
+    Result<ModulePin*> Module::create_pin_internal(const u32 id, const std::string& name, Net* net, PinDirection direction, PinType type, bool force_name)
     {
         // some sanity checks
         if (id == 0)
@@ -1583,9 +1612,20 @@ namespace hal
         {
             return ERR("could not create pin '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": ID " + std::to_string(id) + " is already taken");
         }
-        if (m_pin_names_map.find(name) != m_pin_names_map.end())
+        if (const auto pin_it = m_pin_names_map.find(name); pin_it != m_pin_names_map.end())
         {
-            return ERR("could not create pin '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": name '" + name + "' is already taken");
+            if (force_name)
+            {
+                u32 ctr = 2;
+                while (!this->set_pin_name(pin_it->second, name + "__" + std::to_string(ctr) + "__"))
+                {
+                    ctr++;
+                }
+            }
+            else
+            {
+                return ERR("could not create pin '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": name '" + name + "' is already taken");
+            }
         }
         if (net == nullptr)
         {
@@ -1640,7 +1680,7 @@ namespace hal
         return OK({});
     }
 
-    Result<PinGroup<ModulePin>*> Module::create_pin_group_internal(const u32 id, const std::string& name, PinDirection direction, PinType type, bool ascending, u32 start_index)
+    Result<PinGroup<ModulePin>*> Module::create_pin_group_internal(const u32 id, const std::string& name, PinDirection direction, PinType type, bool ascending, u32 start_index, bool force_name)
     {
         // some sanity checks
         if (id == 0)
@@ -1651,9 +1691,20 @@ namespace hal
         {
             return ERR("could not create pin group '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": ID " + std::to_string(id) + " is already taken");
         }
-        if (m_pin_group_names_map.find(name) != m_pin_group_names_map.end())
+        if (const auto pin_group_it = m_pin_group_names_map.find(name); pin_group_it != m_pin_group_names_map.end())
         {
-            return ERR("could not create pin group '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": name '" + name + "' is already taken");
+            if (force_name)
+            {
+                u32 ctr = 2;
+                while (!this->set_pin_group_name(pin_group_it->second, name + "__" + std::to_string(ctr) + "__"))
+                {
+                    ctr++;
+                }
+            }
+            else
+            {
+                return ERR("could not create pin group '" + name + "' for module '" + m_name + "' with ID " + std::to_string(m_id) + ": name '" + name + "' is already taken");
+            }
         }
 
         // create pin group
