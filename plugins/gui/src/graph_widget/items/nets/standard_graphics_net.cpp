@@ -76,28 +76,12 @@ namespace hal
             sAlpha = 1;
     }
 
-    StandardGraphicsNet::StandardGraphicsNet(Net* n, const Lines& l) : GraphicsNet(n)
+    StandardGraphicsNet::StandardGraphicsNet(Net* n, const Lines& l, const QList<QPointF> &knots) : GraphicsNet(n)
     {
-        for (const HLine& h : l.mHLines)
+        for (const QPointF& point : knots)
         {
-            for (const VLine& v : l.mVLines)
-            {
-                if (h.mSmallX <= v.x && v.x <= h.mBigX)
-                    if (v.mSmallY < h.y && h.y < v.mBigY)
-                    {
-                        QPointF point(v.x, h.y);
-                        mSplits.append(point);
-                        mShape.addEllipse(point, sSplitRadius, sSplitRadius);
-                    }
-
-                if (v.mSmallY <= h.y && h.y <= v.mBigY)
-                    if (h.mSmallX < v.x && v.x < h.mBigX)
-                    {
-                        QPointF point(v.x, h.y);
-                        mSplits.append(point);
-                        mShape.addEllipse(point, sSplitRadius, sSplitRadius);
-                    }
-            }
+            mSplits.append(point);
+            mShape.addEllipse(point, sSplitRadius, sSplitRadius);
         }
 
         qreal smallest_x = std::numeric_limits<qreal>::max();

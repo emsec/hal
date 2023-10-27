@@ -60,6 +60,7 @@ namespace hal
     class NetLayoutJunctionEntries;
     class CommentSpeechBubble;
     class CommentEntry;
+    class JunctionThread;
     class DrawNetThread;
 
     /**
@@ -345,7 +346,8 @@ namespace hal
         QMap<Node, QPoint> mNodeToPositionRollback;
 
     private Q_SLOTS:
-        void handleDrawThreadFinished();
+        void handleDrawNetThreadFinished();
+        void handleJunctionThreadFinished();
 
     private:
         void clearLayoutData();
@@ -488,7 +490,8 @@ namespace hal
         QList<CommentSpeechBubble*> mCommentBubbles;
         QSet<u32> mNetsToDraw;
         QSet<u32>::const_iterator mNetIterator;
-        QList<DrawNetThread*> mDrawThreads;
+        QList<DrawNetThread*> mDrawNetThreads;
+        QList<JunctionThread*> mJunctionThreads;
         QHash<u32, QHash<NetLayoutWire, int>> mLaneMap;
     };
 
@@ -501,8 +504,21 @@ namespace hal
         void drawEndpoint();
     public:
         StandardGraphicsNet::Lines mLines;
+        QList<QPointF> mKnots;
         DrawNetThread(u32 id, GraphLayouter* parent) : QThread(parent), mId(id), mLayouter(parent) {;}
         u32 id() const { return mId; }
+        void run() override;
+    };
+
+    class JunctionThread : public QThread
+    {
+        Q_OBJECT
+    public:
+        NetLayoutPoint mNetLayoutPoint;
+        NetLayoutJunctionEntries mEntries;
+        NetLayoutJunction* mJunction;
+        JunctionThread(const NetLayoutPoint& nlp, const NetLayoutJunctionEntries& entr)
+            : mNetLayoutPoint(nlp), mEntries(entr), mJunction(nullptr) {;}
         void run() override;
     };
 }    // namespace hal

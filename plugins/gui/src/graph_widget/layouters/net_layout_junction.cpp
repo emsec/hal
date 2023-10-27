@@ -11,8 +11,63 @@
 #include <stdlib.h>
 #include <QDebug>
 #include <QPoint>
+#include <QDir>
 
 #ifdef JUNCTION_DEBUG
+QMap<u32,QColor> debugColorMap;
+
+QColor colorFromId(u32 netId)
+{
+    QColor retval = debugColorMap.value(netId);
+    if (!retval.isValid())
+        return QColor("white");
+    return retval;
+}
+
+void setColorMap(const hal::NetLayoutJunctionEntries& entries)
+{
+    debugColorMap.clear();
+
+    QMap<u32,int> pattern;
+    for (int i=0; i<4; i++)
+    {
+        int mask = 1 << i;
+        for (u32 id : entries.mEntries[i])
+            pattern[id] |= mask;
+    }
+    QSet<int> danglingWire = { 1, 2, 4, 8};
+    int count = 0;
+
+    for (auto it = pattern.begin(); it != pattern.end(); ++it)
+    {
+        if (danglingWire.contains(it.value()))
+        {
+            debugColorMap[it.key()] = QColor::fromRgb(23,25,29);
+            continue;
+        }
+
+        int hue = count++ * 25;
+        if (hue > 255)
+        {
+            int cc = (count-10)%20;
+            int cd = (count-10)/20;
+            int h = cc * 10;
+            int s = 80 - cd*40;
+            int v = 255;
+            qDebug() << cc << cd << h << s << v;
+            if (s <= 0)
+            {
+                int g = (20*count) % 128 + 128;
+                debugColorMap[it.key()] = QColor::fromRgb(g,g,g);
+            }
+            else
+                debugColorMap[it.key()] = QColor::fromHsv(h,s,v);
+        }
+        else
+            debugColorMap[it.key()] = QColor::fromHsv(hue,255,255);
+    }
+}
+
 QGraphicsEllipseItem* getEllipse(QPoint p, u32 netId)
 {
     float dd = DELTA / 2.;
@@ -24,21 +79,10 @@ QGraphicsEllipseItem* getEllipse(QPoint p, u32 netId)
 }
 #endif
 
-QColor colorFromId(u32 netId)
-{
-    int hue = (netId-1) * 25;
-    if (hue > 255)
-    {
-        int gray = (hue - 256) % 160 + 95;
-        return QColor::fromRgb(gray+1,gray,gray);
-    }
-    return QColor::fromHsv(hue,255,255);
-}
-
 namespace hal {
 
     NetLayoutJunction::NetLayoutJunction(const NetLayoutJunctionEntries& entries)
-        : mEntries(entries)
+        : mEntries(entries), mError(Ok)
     {
         memset(maxRoad,0,sizeof(maxRoad));
         for (NetLayoutDirection dir(0); !dir.isMax(); ++dir)
@@ -86,7 +130,7 @@ namespace hal {
                 for (const NetLayoutJunctionWire& vn : vNets)
                     if ((hn.mRange.innerPos(vn.mIndex.laneIndex()) && vn.mRange.contains(hn.mIndex.laneIndex())) ||
                             (hn.mRange.contains(vn.mIndex.laneIndex()) && vn.mRange.innerPos(hn.mIndex.laneIndex())))
-                        it->mJunctions.append(QPoint(vn.mIndex.laneIndex(),hn.mIndex.laneIndex()));
+                        it->mKnots.append(QPoint(vn.mIndex.laneIndex(),hn.mIndex.laneIndex()));
         }
     }
 
@@ -395,7 +439,7 @@ namespace hal {
                     reducedPattern = itNet.value().laneIndex(i1) > itNet.value().laneIndex(i0) ? 10 : 6;
                     break;
                 default:
-                    return;
+                    continue;
                 }
 
                 int roadLink = itNet.value().laneIndex(ilink);
@@ -404,7 +448,7 @@ namespace hal {
                 if (mainWires.isEmpty())
                 {
                     qDebug() << "T-join not found";
-                    return;
+                    continue;
                 }
 
                 int minlen = 0;
@@ -674,6 +718,9 @@ namespace hal {
         int vstep  = dirHoriz.isLeft() ? -1 : 1;
 
         int icount = 0;
+        int tryMax = 2 * mOccupied.size();
+        for (int i=0; i<4; i++)
+            tryMax += 2* mEntries.mEntries[i].size();
         for(;;)
         {
             NetLayoutJunctionRange rngVc(netId,iroadHoriz,hcroad);
@@ -683,9 +730,10 @@ namespace hal {
             NetLayoutJunctionRange rngVe =
                     NetLayoutJunctionRange::entryRange(dirVertic,hcroad,netId);
 
-            if (++icount > 42)
+            if (++icount > tryMax)
             {
                 qDebug() << "giving up";
+                mError = CornerRouteError;
                 return;
             }
 
@@ -707,6 +755,14 @@ namespace hal {
             }
         }
     }
+
+    void NetLayoutJunctionHash::clearAll()
+    {
+        for (NetLayoutJunction* nlj : values())
+            delete nlj;
+        clear();
+    }
+
 
     NetLayoutJunctionNet::NetLayoutJunctionNet()
         : mPattern(0), mEntries(0), mPlaced(false)
@@ -858,18 +914,6 @@ namespace hal {
             retval += ";\n";
         }
         return retval;
-    }
-
-    NetLayoutJunctionHash::~NetLayoutJunctionHash()
-    {
-        clearAll();
-    }
-
-    void NetLayoutJunctionHash::clearAll()
-    {
-        for (NetLayoutJunction* nlj : values())
-            delete nlj;
-        clear();
     }
 
     uint qHash(const LaneIndex& ri) { return ri.mIndex; }

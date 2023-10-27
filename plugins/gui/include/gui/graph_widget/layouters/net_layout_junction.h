@@ -19,8 +19,6 @@ const int DELTA = 20;
 const int FIRST = 400;
 const int GAP   = 200;
 
-QColor colorFromId(u32 netId);
-
 namespace hal {
 
     /**
@@ -279,6 +277,14 @@ namespace hal {
          * String output for debugging purpose
          */
         QString toString() const;
+
+        /**
+         * Dump junction entries to file to debug junction routing
+         * @param pnt Net grid point
+         */
+        void dumpFile(const NetLayoutPoint& pnt) const;
+
+        static QString gridPointName(const QPoint& p);
     };
 
     /**
@@ -318,7 +324,7 @@ namespace hal {
         bool mPlaced;
     public:
         QList<NetLayoutJunctionWire> mWires;
-        QList<QPoint> mJunctions;
+        QList<QPoint> mKnots;
 
         NetLayoutJunctionNet();
         void addEntry(NetLayoutDirection dir, int laneInx);
@@ -339,7 +345,7 @@ namespace hal {
         void setPlaced() { mPlaced = true; }        
         void addWire(const NetLayoutJunctionWire& wire) { mWires.append(wire); }
         void replaceWire(const NetLayoutJunctionRange& rng, const NetLayoutJunctionWire& wire);
-        QList<QPoint> junctionPoints() const { return mJunctions; }
+        QList<QPoint> junctionKnots() const { return mKnots; }
     };
 
     /**
@@ -385,6 +391,9 @@ namespace hal {
         void dump() const;
         NetLayoutJunctionNet netById(u32 id) const { return mNets.value(id); }
 
+        enum ErrorType {StraightRouteError = -3, TRouteError = -2, CornerRouteError = -1, Ok = 0 };
+        ErrorType lastError() const { return mError; }
+
 #ifdef JUNCTION_DEBUG
         void toScene(QGraphicsScene* scene) const;
         void toSceneStep(QGraphicsScene* scene, int istep);
@@ -422,6 +431,7 @@ namespace hal {
         QHash<u32,NetLayoutJunctionNet> mNets;
         NetLayoutJunctionOccupiedHash mOccupied;
         int maxRoad[2];
+        ErrorType mError;
     };
 
     class NetLayoutJunctionHash : public QHash<NetLayoutPoint,NetLayoutJunction*>
@@ -434,4 +444,9 @@ namespace hal {
 
     uint qHash(const LaneIndex& ri);
 }
+
+#ifdef JUNCTION_DEBUG
+    void setColorMap(const hal::NetLayoutJunctionEntries& entries);
+    QColor colorFromId(u32 netId);
+#endif
 
