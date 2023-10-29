@@ -314,8 +314,8 @@ namespace hal
 
         bool done() const;
 
-        bool optimizeNetLayoutEnabled();
-        void setOptimizeNetLayoutEnabled(bool enbabled);
+        bool dumpJunctionEnabled();
+        void setDumpJunctionEnabled(bool enabled);
 
         QVector<qreal> xValues() const;
         QVector<qreal> yValues() const;
@@ -353,23 +353,14 @@ namespace hal
         void clearLayoutData();
         void clearComments();
         void createBoxes();
-        void calculateNets();
         void getWireHash();
         void findMaxBoxDimensions();
-        void alternateMaxChannelLanes();
         void findMaxChannelLanes();
-        void calculateMaxChannelDimensions();
         void calculateJunctionMinDistance();
-        void alternateGateOffsets();
         void calculateGateOffsets();
-        void alternatePlaceGates();
         void placeGates();
-        void resetRoadsAndJunctions();
         void drawNets();
-        void alternateDrawNets();
         void drawComments();
-        void drawNetsJunction(StandardGraphicsNet::Lines& lines, u32 id);
-        void drawNetsEndpoint(StandardGraphicsNet::Lines& lines, u32 id);
         void drawNetsIsolated(u32 id, Net* n, const EndpointList& epl);
         void updateSceneRect();
         static bool verifyModulePort(Net* n, const Node& modNode, bool isModInput);
@@ -384,71 +375,23 @@ namespace hal
         bool vRoadJumpPossible(const int x1, const int x2, const int y) const;
         bool vRoadJumpPossible(const Road* const r1, const Road* const r2) const;
 
-        Road* getHRoad(const int x, const int y);
-        Road* getVRoad(const int x, const int y);
         Junction* getJunction(const int x, const int y);
 
         qreal hRoadHeight(const unsigned int mLanes) const;
         qreal vRoadWidth(const unsigned int mLanes) const;
-
-        qreal sceneYForHChannelLane(const int y, const unsigned int lane) const;
-        qreal sceneXForVChannelLane(const int x, const unsigned int lane) const;
-
-        qreal sceneXForCloseLeftLaneChange(const int channel_x, unsigned int lane_change) const;
-        qreal sceneXForFarLeftLaneChange(const int channel_x, unsigned int lane_change) const;
-
-        qreal sceneXForCloseRightLaneChange(const int channel_x, unsigned int lane_change) const;
-        qreal sceneXForFarRightLaneChange(const int channel_x, unsigned int lane_change) const;
-
-        qreal sceneYForCloseTopLaneChange(const int channel_y, unsigned int lane_change) const;
-        qreal sceneYForFarTopLaneChange(const int channel_y, unsigned int lane_change) const;
-
-        qreal sceneYForCloseBottomLaneChange(const int channel_y, unsigned int lane_change) const;
-        qreal sceneYForFarBottomLaneChange(const int channel_y, unsigned int lane_change) const;
-
-        qreal sceneXForCloseLeftLaneChange(const Junction* const j) const;
-        qreal sceneXForFarLeftLaneChange(const Junction* const j) const;
-
-        qreal sceneXForCloseRightLaneChange(const Junction* const j) const;
-        qreal sceneXForFarRightLaneChange(const Junction* const j) const;
-
-        qreal sceneYForCloseTopLaneChange(const Junction* const j) const;
-        qreal sceneYForFarTopLaneChange(const Junction* const j) const;
-
-        qreal sceneYForCloseBottomLaneChange(const Junction* const j) const;
-        qreal sceneYForFarBottomLaneChange(const Junction* const j) const;
 
         void commitUsedPaths(const UsedPaths& used);
         static bool isConstNet(const Net* n);
 
         NodeBoxes mBoxes;
 
-        QHash<QPoint, Road*> mHRoads;
-        QHash<QPoint, Road*> mVRoads;
         QHash<QPoint, Junction*> mJunctions;
 
         QMap<int, qreal> mMaxNodeWidthForX;
         QMap<int, qreal> mMaxNodeHeightForY;
 
-        QMap<int, unsigned int> mMaxVChannelLanesForX;
-        QMap<int, unsigned int> mMaxHChannelLanesForY;
-
-        QMap<int, qreal> mMaxVChannelLeftSpacingForX;
-        QMap<int, qreal> mMaxVChannelRightSpacingForX;
-        QMap<int, qreal> mMaxHChannelTopSpacingForY;
-        QMap<int, qreal> mMaxHChannelBottomSpacingForY;
-
-        QMap<int, qreal> mMaxVChannelWidthForX;
-        QMap<int, qreal> mMaxHChannelHeightForY;
-
         QMap<int, qreal> mNodeOffsetForX;
         QMap<int, qreal> mNodeOffsetForY;
-
-        QMap<int, qreal> mMaxLeftJunctionSpacingForX;
-        QMap<int, qreal> mMaxRightJunctionSpacingForX;
-
-        QMap<int, qreal> mMaxTopJunctionSpacingForY;
-        QMap<int, qreal> mMaxBottomJunctionSpacingForY;
 
         QMap<int, qreal> mMaxLeftIoPaddingForChannelX;
         QMap<int, qreal> mMaxRightIoPaddingForChannelX;
@@ -486,7 +429,7 @@ namespace hal
         QHash<u32, int> mGlobalInputHash;
         QHash<u32, int> mGlobalOutputHash;
 
-        bool mOptimizeNetLayout;
+        bool mDumpJunctions;
         QList<CommentSpeechBubble*> mCommentBubbles;
         QSet<u32> mNetsToDraw;
         QSet<u32>::const_iterator mNetIterator;

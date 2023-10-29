@@ -282,7 +282,7 @@ namespace hal {
          * Dump junction entries to file to debug junction routing
          * @param pnt Net grid point
          */
-        void dumpFile(const NetLayoutPoint& pnt) const;
+        void dumpToFile(const QPoint& pnt) const;
 
         static QString gridPointName(const QPoint& p);
     };
@@ -388,7 +388,6 @@ namespace hal {
         NetLayoutJunction(const NetLayoutJunctionEntries& entries);
         ~NetLayoutJunction() {;}
         QRect rect() const { return mRect; }
-        void dump() const;
         NetLayoutJunctionNet netById(u32 id) const { return mNets.value(id); }
 
         enum ErrorType {StraightRouteError = -3, TRouteError = -2, CornerRouteError = -1, Ok = 0 };

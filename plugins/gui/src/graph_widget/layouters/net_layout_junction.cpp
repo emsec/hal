@@ -12,6 +12,7 @@
 #include <QDebug>
 #include <QPoint>
 #include <QDir>
+#include "hal_core/netlist/project_manager.h"
 
 #ifdef JUNCTION_DEBUG
 QMap<u32,QColor> debugColorMap;
@@ -902,6 +903,20 @@ namespace hal {
         return mRange.isEntry(0) || mRange.isEntry(1);
     }
 
+    void NetLayoutJunctionEntries::dumpToFile(const QPoint &pnt) const
+    {
+        QFile ff(QString::fromStdString(ProjectManager::instance()->get_project_directory().get_filename("junction_data.txt").string()));
+        if (!ff.open(QIODevice::WriteOnly | QIODevice::Append)) return;
+        QTextStream xout(&ff);
+        xout << "(" << pnt.x() << "," << pnt.y() << ")\n";
+        for (NetLayoutDirection dir(0); !dir.isMax(); ++dir)
+        {
+            for (u32 id : mEntries[dir.index()])
+                xout << " " << id;
+            xout << "\n";
+        }
+        xout.flush();
+    }
 
     QString NetLayoutJunctionEntries::toString() const
     {
