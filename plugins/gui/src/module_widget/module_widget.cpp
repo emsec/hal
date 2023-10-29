@@ -15,6 +15,8 @@
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "gui/module_model/module_model.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
+
 #include <QApplication>
 #include <QHeaderView>
 #include <QItemSelectionModel>
@@ -187,10 +189,15 @@ namespace hal
         QAction change_color_action;
         QAction delete_action;
         QAction extractPythonAction;
+        QAction focus_in_view;
 
         switch(type) {
 
             case ModuleItem::TreeItemType::Module:{
+                extractPythonAction.setIcon(QIcon(":/icons/python"));
+                extractPythonAction.setText("Extract Module as python code (copy to clipboard)");
+                extractPythonAction.setParent(&context_menu);
+
                 isolate_action.setText("Isolate in new view");
                 isolate_action.setParent(&context_menu);
 
@@ -211,6 +218,9 @@ namespace hal
 
                 delete_action.setText("Delete module");
                 delete_action.setParent(&context_menu);
+
+                focus_in_view.setText("Focus item in Graph View");
+                focus_in_view.setParent(&context_menu);
                 break;
             }
             case ModuleItem::TreeItemType::Gate: {
@@ -223,10 +233,19 @@ namespace hal
 
                 change_name_action.setText("Change Gate name");
                 change_name_action.setParent(&context_menu);
+
+                focus_in_view.setText("Focus item in Graph View");
+                focus_in_view.setParent(&context_menu);
                 break;
             }
             case ModuleItem::TreeItemType::Net: {
-                return;
+                extractPythonAction.setIcon(QIcon(":/icons/python"));
+                extractPythonAction.setText("Extract Net as python code (copy to clipboard)");
+                extractPythonAction.setParent(&context_menu);
+
+                focus_in_view.setText("Focus item in Graph View");
+                focus_in_view.setParent(&context_menu);
+                break;
             }
         }
 
@@ -234,16 +253,24 @@ namespace hal
             context_menu.addAction(&extractPythonAction);
             context_menu.addAction(&isolate_action);
             context_menu.addAction(&change_name_action);
+            context_menu.addAction(&focus_in_view);
 
         }
 
         if (type == ModuleItem::TreeItemType::Module){
+            context_menu.addAction(&extractPythonAction);
             context_menu.addAction(&isolate_action);
             context_menu.addAction(&change_name_action);
             context_menu.addAction(&add_selection_action);
             context_menu.addAction(&add_child_action);
             context_menu.addAction(&change_type_action);
             context_menu.addAction(&change_color_action);
+            context_menu.addAction(&focus_in_view);
+        }
+
+        if (type == ModuleItem::TreeItemType::Net){
+            context_menu.addAction(&extractPythonAction);
+            context_menu.addAction(&focus_in_view);
         }
 
         u32 module_id = getModuleItemFromIndex(index)->id();
@@ -258,13 +285,22 @@ namespace hal
             return;
 
         if (clicked == &extractPythonAction){
-            QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")");
+            switch(type)
+            {
+                case ModuleItem::TreeItemType::Module: QApplication::clipboard()->setText("netlist.get_Module_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")"); break;
+                case ModuleItem::TreeItemType::Gate: QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")"); break;
+                case ModuleItem::TreeItemType::Net: QApplication::clipboard()->setText("netlist.get_net_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")"); break;
+            }
         }
 
-        if (clicked == &isolate_action && type == ModuleItem::TreeItemType::Gate)
-            openGateInView(index);
-        else if (clicked == &isolate_action)
-            openModuleInView(index);
+        if (clicked == &isolate_action)
+        {
+            switch(type)
+            {
+                case ModuleItem::TreeItemType::Module: openModuleInView(index); break;
+                case ModuleItem::TreeItemType::Gate: openGateInView(index); break;
+            }
+        }
 
         if (clicked == &add_selection_action)
             gNetlistRelay->addSelectionToModule(getModuleItemFromIndex(index)->id());
@@ -275,10 +311,14 @@ namespace hal
             mTreeView->setExpanded(index, true);
         }
 
-        if (clicked == &change_name_action && type == ModuleItem::TreeItemType::Gate)
-            changeGateName(index);
-        else if (clicked == &change_name_action)
-            gNetlistRelay->changeModuleName(getModuleItemFromIndex(index)->id());
+        if (clicked == &change_name_action)
+        {
+            switch(type)
+            {
+                case ModuleItem::TreeItemType::Module: gNetlistRelay->changeModuleName(getModuleItemFromIndex(index)->id()); break;
+                case ModuleItem::TreeItemType::Gate: changeGateName(index); break;
+            }
+        }
 
         if (clicked == &change_type_action)
             gNetlistRelay->changeModuleType(getModuleItemFromIndex(index)->id());
@@ -289,6 +329,16 @@ namespace hal
         if (clicked == &delete_action){
             gNetlistRelay->deleteModule(getModuleItemFromIndex(index)->id());
         }
+
+        if (clicked == &focus_in_view){
+            switch(type)
+            {
+                case ModuleItem::TreeItemType::Module: gContentManager->getGraphTabWidget()->handleModuleFocus(getModuleItemFromIndex(index)->id()); break;
+                case ModuleItem::TreeItemType::Gate: gContentManager->getGraphTabWidget()->handleGateFocus(getModuleItemFromIndex(index)->id()); break;
+                case ModuleItem::TreeItemType::Net: gContentManager->getGraphTabWidget()->handleNetFocus(getModuleItemFromIndex(index)->id()); break;
+            }
+
+         }
 
     }
 
