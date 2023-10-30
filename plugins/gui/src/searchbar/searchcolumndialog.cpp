@@ -2,6 +2,7 @@
 #include <QVBoxLayout>
 #include <QFrame>
 #include <QPushButton>
+#include <QDebug>
 
 namespace hal {
 
@@ -41,6 +42,10 @@ namespace hal {
     void SearchColumnDialog::handleCheckStateChanged(int state)
     {
         if (mDisableHandler) return;
+
+        bool allChecked = true;
+        bool nullChecked = true;
+
         if (sender()==mCheckAllColumns && state == Qt::Checked)
         {
             mDisableHandler = true;
@@ -48,15 +53,24 @@ namespace hal {
                 cbox->setChecked(true);
             mDisableHandler = false;
         }
-        if (sender()==mCheckAllColumns && state == Qt::Unchecked)
+        else if (sender()==mCheckAllColumns && state == Qt::Unchecked)
         {
             mDisableHandler = true;
-            for (QCheckBox* cbox : mCheckColumn)
-                cbox->setChecked(false);
+            //check if everything is checked
+            for(QCheckBox* cbox: mCheckColumn){
+                if(!cbox->isChecked())
+                {
+                    allChecked = false;
+                    break;
+                }
+            }
+            if(allChecked){
+                for (QCheckBox* cbox : mCheckColumn)
+                    cbox->setChecked(false);
+            }
             mDisableHandler = false;
         }
-        bool allChecked = true;
-        bool nullChecked = true;
+
 
         for (const QCheckBox* cbox : mCheckColumn)
         {
@@ -65,10 +79,12 @@ namespace hal {
             else
                 allChecked = false;
         }
-
-        /*if (mCheckAllColumns->isChecked() != allChecked)
-            mCheckAllColumns->setChecked(allChecked);*/
-
+        // if all columns are checked then check top checkbox - otherwise uncheck it
+        if (mCheckAllColumns->isChecked() != allChecked)
+        {
+            mCheckAllColumns->setCheckState(allChecked ? Qt::Checked : Qt::Unchecked);
+            mCheckAllColumns->setChecked(allChecked);
+        }
         mButtonBox->button(QDialogButtonBox::Ok)->setDisabled(nullChecked);
     }
 
