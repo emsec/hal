@@ -168,7 +168,7 @@ namespace hal
         QList<int> columns = mSearchOptions.getColumns();
         if(columns.empty()){
             //iterate over each column
-            for(int index = 1; index < 4; index++){
+            for(int index = 0; index < 3; index++){
                 QString entry = sourceModel()->index(source_row, index, source_parent).data().toString();
                 if(isMatching(mSearchString, entry))
                 {
@@ -180,8 +180,7 @@ namespace hal
         {
             for(int index : columns)
             {
-                //offset the index by one to account for missing color column
-                QString entry = sourceModel()->index(source_row, index + 1, source_parent).data().toString();
+                QString entry = sourceModel()->index(source_row, index, source_parent).data().toString();
                 if(isMatching(mSearchString, entry))
                     return true;
             }

@@ -79,6 +79,8 @@ namespace hal {
         mTabWidget->setCurrentIndex(1);
         enableButtons();
 
+        mSearchbar->setColumnNames(mGateTableProxyModel->getColumnNames());
+
         connect(mToggleSearchbar,&QAction::triggered,this,&GateDialog::handleToggleSearchbar);
         connect(ContentManager::sSettingSearch,&SettingsItemKeybind::keySequenceChanged,this,&GateDialog::keybindToggleSearchbar);
         connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
