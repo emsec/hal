@@ -297,10 +297,6 @@ namespace hal
         mBoxes.clearBoxes();
         clearComments();
 
-        for (const GraphLayouter::Junction* j : mJunctions.values())
-            delete j;
-        mJunctions.clear();
-
         mMaxNodeWidthForX.clear();
         mMaxNodeHeightForY.clear();
 
@@ -337,6 +333,8 @@ namespace hal
         mNodeBoundingBox = QRect();
         mViewInput.clear();
         mViewOutput.clear();
+
+        mLaneMap.clear();
     }
 
     void GraphLayouter::createBoxes()
@@ -1095,20 +1093,6 @@ namespace hal
         return vRoadJumpPossible(r1->x, r2->x, r1->y);
     }
 
-    GraphLayouter::Junction* GraphLayouter::getJunction(const int x, const int y)
-    {
-        QPoint p(x, y);
-        auto it = mJunctions.find(p);
-        if (it != mJunctions.end())
-        {
-            return it.value();
-        }
-
-        GraphLayouter::Junction* j = new Junction(x, y);
-        mJunctions.insert(p, j);
-        return j;
-    }
-
     qreal GraphLayouter::hRoadHeight(const unsigned int mLanes) const
     {
         // LANES COUNTED FROM 1
@@ -1129,39 +1113,6 @@ namespace hal
             width += (mLanes - 1) * sLaneSpacing;
 
         return width;
-    }
-
-    void GraphLayouter::commitUsedPaths(const UsedPaths& used)
-    {
-        for (Junction* j : used.mHJunctions)
-            j->mHLanes += 1;
-
-        for (Junction* j : used.mVJunctions)
-            j->mVLanes += 1;
-
-        for (Junction* j : used.mCloseLeftJunctions)
-            j->mCloseLeftLaneChanges += 1;
-
-        for (Junction* j : used.mCloseRightJunctions)
-            j->mCloseRightLaneChanges += 1;
-
-        for (Junction* j : used.mCloseTopJunctions)
-            j->mCloseTopLaneChanges += 1;
-
-        for (Junction* j : used.mCloseBottomJunctions)
-            j->mCloseBottomLaneChanges += 1;
-
-        for (Junction* j : used.mFarLeftJunctions)
-            j->mFarLeftLaneChanges += 1;
-
-        for (Junction* j : used.mFarRightJunctions)
-            j->mFarRightLaneChanges += 1;
-
-        for (Junction* j : used.mFarTopJunctions)
-            j->mFarTopLaneChanges += 1;
-
-        for (Junction* j : used.mFarBottomJunctions)
-            j->mFarBottomLaneChanges += 1;
     }
 
     void GraphLayouter::SceneCoordinate::testMinMax(int ilane)

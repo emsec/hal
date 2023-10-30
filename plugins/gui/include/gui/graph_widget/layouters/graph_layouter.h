@@ -208,48 +208,10 @@ namespace hal
             unsigned int mLanes = 0;
         };
 
-        struct Junction
-        {
-            Junction(const int x_coordinate, const int y_coordinate)
-                : x(x_coordinate), y(y_coordinate), mHLanes(0), mVLanes(0), mCloseLeftLaneChanges(0), mCloseRightLaneChanges(0), mCloseTopLaneChanges(0), mCloseBottomLaneChanges(0),
-                  mFarLeftLaneChanges(0), mFarRightLaneChanges(0), mFarTopLaneChanges(0), mFarBottomLaneChanges(0)
-            {
-            }
-
-            int x;
-            int y;
-
-            unsigned int mHLanes = 0;
-            unsigned int mVLanes = 0;
-
-            unsigned int mCloseLeftLaneChanges   = 0;
-            unsigned int mCloseRightLaneChanges  = 0;
-            unsigned int mCloseTopLaneChanges    = 0;
-            unsigned int mCloseBottomLaneChanges = 0;
-
-            unsigned int mFarLeftLaneChanges   = 0;
-            unsigned int mFarRightLaneChanges  = 0;
-            unsigned int mFarTopLaneChanges    = 0;
-            unsigned int mFarBottomLaneChanges = 0;
-        };
-
         struct UsedPaths
         {
             QSet<Road*> mHRoads;
             QSet<Road*> mVRoads;
-
-            QSet<Junction*> mHJunctions;
-            QSet<Junction*> mVJunctions;
-
-            QSet<Junction*> mCloseLeftJunctions;
-            QSet<Junction*> mCloseRightJunctions;
-            QSet<Junction*> mCloseTopJunctions;
-            QSet<Junction*> mCloseBottomJunctions;
-
-            QSet<Junction*> mFarLeftJunctions;
-            QSet<Junction*> mFarRightJunctions;
-            QSet<Junction*> mFarTopJunctions;
-            QSet<Junction*> mFarBottomJunctions;
         };
 
     public:
@@ -375,17 +337,12 @@ namespace hal
         bool vRoadJumpPossible(const int x1, const int x2, const int y) const;
         bool vRoadJumpPossible(const Road* const r1, const Road* const r2) const;
 
-        Junction* getJunction(const int x, const int y);
-
         qreal hRoadHeight(const unsigned int mLanes) const;
         qreal vRoadWidth(const unsigned int mLanes) const;
 
-        void commitUsedPaths(const UsedPaths& used);
         static bool isConstNet(const Net* n);
 
         NodeBoxes mBoxes;
-
-        QHash<QPoint, Junction*> mJunctions;
 
         QMap<int, qreal> mMaxNodeWidthForX;
         QMap<int, qreal> mMaxNodeHeightForY;
