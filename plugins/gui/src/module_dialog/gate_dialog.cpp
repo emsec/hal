@@ -39,6 +39,10 @@ namespace hal {
         connect(mTableView,&GateSelectView::gateSelected,this,&GateDialog::handleTableSelection);
         mTabWidget->addTab(mTableView, "Gate list");
 
+        mGateTableProxyModel = new GateSelectProxy(this),
+        mGateTableProxyModel->setSourceModel(mTableView->model());
+        mTableView->setModel(mGateTableProxyModel);
+
         if (!GateSelectHistory::instance()->isEmpty())
         {
             mLastUsed = new GateSelectView(true,mSearchbar,selectable,mTabWidget);
@@ -79,6 +83,7 @@ namespace hal {
         connect(ContentManager::sSettingSearch,&SettingsItemKeybind::keySequenceChanged,this,&GateDialog::keybindToggleSearchbar);
         connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mGateTableProxyModel, &GateSelectProxy::startSearch);
 //        connect(mTreeView->selectionModel(),&QItemSelectionModel::currentChanged,this,&GateDialog::handleTreeSelectionChanged);
         if (receiver == nullptr)
         {

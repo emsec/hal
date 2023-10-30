@@ -130,6 +130,8 @@ namespace hal
          */
         virtual void clearEditor() {;}
 
+        QString getLabel();
+
     public Q_SLOTS:
 
         /**

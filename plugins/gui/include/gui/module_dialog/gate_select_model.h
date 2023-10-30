@@ -27,6 +27,7 @@
 
 #include "hal_core/defines.h"
 #include "gui/gui_utils/sort.h"
+#include "gui/searchbar/search_proxy_model.h"
 #include <QAbstractTableModel>
 #include <QSortFilterProxyModel>
 #include <QTableView>
@@ -90,7 +91,7 @@ namespace hal {
     /**
      * @brief The GateSelectProxy class allows sorting and filtering of module tables
      */
-    class GateSelectProxy : public QSortFilterProxyModel
+    class GateSelectProxy : public SearchProxyModel
     {
         Q_OBJECT
 
@@ -100,6 +101,8 @@ namespace hal {
     public Q_SLOTS:
         void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
         void searchTextChanged(const QString& txt);
+        void startSearch(QString text, int options);
+        bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
 
     protected:
         bool lessThan(const QModelIndex &sourceLeft, const QModelIndex &sourceRight) const override;
