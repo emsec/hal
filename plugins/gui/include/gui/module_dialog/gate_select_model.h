@@ -165,11 +165,9 @@ namespace hal {
         /**
          * @brief GateSelectView constructor
          * @param history if true a list of modules previously selected gets generated
-         * @param sbar the filter-string editor to connect with
          * @param parent the parent widget
          */
-        GateSelectView(bool history, Searchbar* sbar, const QSet<u32>& selectable,
-                          QWidget* parent=nullptr);
+        GateSelectView(bool history, const QSet<u32>& selectable, QWidget* parent=nullptr);
 
     Q_SIGNALS:
         void gateSelected(u32 gatId, bool doubleClick);

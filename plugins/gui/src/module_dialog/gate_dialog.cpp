@@ -35,17 +35,14 @@ namespace hal {
 //        mTreeView  = new QTreeView(mTabWidget);
 //        mTabWidget->addTab(mTreeView, "Gate tree");
 
-        mTableView = new GateSelectView(false,mSearchbar,selectable,mTabWidget);
+        mTableView = new GateSelectView(false,selectable,mTabWidget);
+        mGateTableProxyModel = static_cast<GateSelectProxy*>(mTableView->model());
         connect(mTableView,&GateSelectView::gateSelected,this,&GateDialog::handleTableSelection);
         mTabWidget->addTab(mTableView, "Gate list");
 
-        mGateTableProxyModel = new GateSelectProxy(this),
-        mGateTableProxyModel->setSourceModel(mTableView->model());
-        mTableView->setModel(mGateTableProxyModel);
-
         if (!GateSelectHistory::instance()->isEmpty())
         {
-            mLastUsed = new GateSelectView(true,mSearchbar,selectable,mTabWidget);
+            mLastUsed = new GateSelectView(true,selectable,mTabWidget);
             if (mLastUsed->model()->rowCount())
             {
                 connect(mLastUsed,&GateSelectView::gateSelected,this,&GateDialog::handleTableSelection);

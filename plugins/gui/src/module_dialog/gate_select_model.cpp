@@ -256,13 +256,12 @@ namespace hal
     }
 
     //---------------- VIEW -------------------------------------------
-    GateSelectView::GateSelectView(bool history, Searchbar* sbar, const QSet<u32> &selectable, QWidget* parent) : QTableView(parent)
+    GateSelectView::GateSelectView(bool history, const QSet<u32> &selectable, QWidget* parent) : QTableView(parent)
     {
         setSelectionBehavior(QAbstractItemView::SelectRows);
         setSelectionMode(QAbstractItemView::SingleSelection);
 
         GateSelectProxy* prox = new GateSelectProxy(this);
-        connect(sbar, &Searchbar::textEdited, prox, &GateSelectProxy::searchTextChanged);
 
         GateSelectModel* modl = new GateSelectModel(history, selectable, this);
         prox->setSourceModel(modl);
