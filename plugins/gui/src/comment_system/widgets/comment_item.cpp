@@ -11,6 +11,11 @@
 #include <QToolButton>
 #include <QDebug>
 #include "gui/gui_utils/graphics.h"
+#if QT_VERSION >= QT_VERSION_CHECK(5,13,0)
+   #include <QRegularExpression>
+#else
+   #include <QRegExp>
+#endif
 
 namespace hal
 {
@@ -61,9 +66,13 @@ namespace hal
         if(searchOpts.isRegularExpression())
         {
             qInfo() << "is regex";
-            QRegularExpression* regEx = new QRegularExpression(string, searchOpts.isCaseSensitive() ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
+#if QT_VERSION >= QT_VERSION_CHECK(5,13,0)
+            QRegularExpression regExp(string, searchOpts.isCaseSensitive() ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
+#else
+            QRegExp regExp(string, searchOpts.isCaseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive);
+#endif
 
-            while (mTextEdit->find(*regEx, options))
+            while (mTextEdit->find(regExp, options))
             {
                 found = true; // just return if something is found, position doesnt matter
                 QTextEdit::ExtraSelection extra;

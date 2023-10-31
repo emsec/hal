@@ -13,6 +13,12 @@
 #include <QTextBlock>
 #include <QDebug>
 
+#if QT_VERSION >= QT_VERSION_CHECK(5,13,0)
+   #include <QRegularExpression>
+#else
+   #include <QRegExp>
+#endif
+
 namespace hal
 {
 
@@ -213,9 +219,12 @@ namespace hal
 
         if(searchOpts.isRegularExpression())
         {
-            QRegularExpression* regEx = new QRegularExpression(string, searchOpts.isCaseSensitive() ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
-
-            while (find(*regEx, options))
+#if QT_VERSION >= QT_VERSION_CHECK(5,13,0)
+            QRegularExpression regExp(string, searchOpts.isCaseSensitive() ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
+#else
+            QRegExp regExp(string, searchOpts.isCaseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive);
+#endif
+            while (find(regExp, options))
             {
                 QTextEdit::ExtraSelection extra;
                 extra.format.setForeground(QBrush(color));
