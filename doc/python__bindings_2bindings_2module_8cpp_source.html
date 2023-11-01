@@ -351,20 +351,20 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2module_8cp
 <div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="stringliteral">        py_module.def_property_readonly(</span><span class="stringliteral">&quot;input_nets&quot;</span>, &amp;<a class="code" href="classhal_1_1_module.html#a8e83b6de125c04f00e5cdc18580bed8d">Module::get_input_nets</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="stringliteral">            A list of all nets that are either a global input to the netlist or have at least one source outside of the module.</span></div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="stringliteral">            A set of all nets that are either a global input to the netlist or have at least one source outside of the module.</span></div>
 <div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="stringliteral">            :type: list[hal_py.Net]</span></div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="stringliteral">            :type: set[hal_py.Net]</span></div>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="stringliteral">        py_module.def(</span><span class="stringliteral">&quot;get_input_nets&quot;</span>, &amp;<a class="code" href="classhal_1_1_module.html#a8e83b6de125c04f00e5cdc18580bed8d">Module::get_input_nets</a>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="stringliteral">            Get all nets that are either a global input to the netlist or have at least one source outside of the module.</span></div>
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="stringliteral">            :returns: A list of input nets.</span></div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.Net]</span></div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="stringliteral">            :returns: A set of input nets.</span></div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="stringliteral">            :rtype: set[hal_py.Net]</span></div>
 <div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="stringliteral">        py_module.def_property_readonly(</span><span class="stringliteral">&quot;output_nets&quot;</span>, &amp;<a class="code" href="classhal_1_1_module.html#af5dd20e748f087e213fccedbf73352ff">Module::get_output_nets</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="stringliteral">            A list of all nets that are either a global output to the netlist or have at least one destination outside of the module.</span></div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="stringliteral">            A set of all nets that are either a global output to the netlist or have at least one destination outside of the module.</span></div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="stringliteral">            :type: set[hal_py.Net]</span></div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
@@ -372,21 +372,21 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2module_8cp
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;<span class="stringliteral">        py_module.def(</span><span class="stringliteral">&quot;get_output_nets&quot;</span>, &amp;<a class="code" href="classhal_1_1_module.html#af5dd20e748f087e213fccedbf73352ff">Module::get_output_nets</a>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;<span class="stringliteral">            Get all nets that are either a global output to the netlist or have at least one destination outside of the module.</span></div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="stringliteral">            :returns: A list of output nets.</span></div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.Net]</span></div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="stringliteral">            :returns: A set of output nets.</span></div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;<span class="stringliteral">            :rtype: set[hal_py.Net]</span></div>
 <div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;<span class="stringliteral">        py_module.def_property_readonly(</span><span class="stringliteral">&quot;internal_nets&quot;</span>, &amp;<a class="code" href="classhal_1_1_module.html#a3a06e13de9d460a68eb4eecda0fa74fc">Module::get_internal_nets</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;<span class="stringliteral">            A list of all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.</span></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;<span class="stringliteral">            A set of all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.</span></div>
 <div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="stringliteral">            :type: list[hal_py.Net]</span></div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="stringliteral">            :type: set[hal_py.Net]</span></div>
 <div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;<span class="stringliteral">        py_module.def(</span><span class="stringliteral">&quot;get_internal_nets&quot;</span>, &amp;<a class="code" href="classhal_1_1_module.html#a3a06e13de9d460a68eb4eecda0fa74fc">Module::get_internal_nets</a>, R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;<span class="stringliteral">            Get all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.</span></div>
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="stringliteral">            :returns: A list of internal nets.</span></div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.Net]</span></div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="stringliteral">            :returns: A set of internal nets.</span></div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;<span class="stringliteral">            :rtype: set[hal_py.Net]</span></div>
 <div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;<span class="stringliteral">        py_module.def(</span><span class="stringliteral">&quot;is_input_net&quot;</span>, &amp;<a class="code" href="classhal_1_1_module.html#a009c72540e8a05665c2ca51ab8e62b07">Module::is_input_net</a>, py::arg(<span class="stringliteral">&quot;net&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
@@ -1081,7 +1081,7 @@ $(document).ready(function(){initNavTree('python__bindings_2bindings_2module_8cp
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2089f1c86a5c695e25bdd8ee7b7d2080.html">python_bindings</a></li><li class="navelem"><a class="el" href="dir_ded422ec9f163017e5e46b66204ec4a3.html">bindings</a></li><li class="navelem"><a class="el" href="python__bindings_2bindings_2module_8cpp.html">module.cpp</a></li>
-    <li class="footer">Generated on Mon Oct 23 2023 16:22:33 for HAL by
+    <li class="footer">Generated on Wed Nov 1 2023 10:09:44 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

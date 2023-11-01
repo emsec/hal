@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Module &mdash; hal_py v4.2.0-116-g4b35a0f3b documentation</title>
+  <title>Module &mdash; hal_py v4.2.0-117-g5526082de documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-116-g4b35a0f3b
+                v4.2.0-117-g5526082de
               </div>
             
           
@@ -720,9 +720,9 @@ If <code class="docutils literal notranslate"><span class="pre">recursive</span>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of input nets.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A set of input nets.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -768,9 +768,9 @@ If <code class="docutils literal notranslate"><span class="pre">recursive</span>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of internal nets.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A set of internal nets.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -862,9 +862,9 @@ If <code class="docutils literal notranslate"><span class="pre">recursive</span>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of output nets.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A set of output nets.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -1227,12 +1227,12 @@ The value of 0 is reserved and represents an invalid ID.</p>
 <dl class="attribute">
 <dt id="hal_py.Module.input_nets">
 <code class="descname">input_nets</code><a class="headerlink" href="#hal_py.Module.input_nets" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list of all nets that are either a global input to the netlist or have at least one source outside of the module.</p>
+<dd><p>A set of all nets that are either a global input to the netlist or have at least one source outside of the module.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -1269,12 +1269,12 @@ The value of 0 is reserved and represents an invalid ID.</p>
 <dl class="attribute">
 <dt id="hal_py.Module.internal_nets">
 <code class="descname">internal_nets</code><a class="headerlink" href="#hal_py.Module.internal_nets" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list of all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.</p>
+<dd><p>A set of all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</td>
 </tr>
 </tbody>
 </table>
@@ -1491,7 +1491,7 @@ The indices of some other pins within the group will be incremented or decrement
 <dl class="attribute">
 <dt id="hal_py.Module.output_nets">
 <code class="descname">output_nets</code><a class="headerlink" href="#hal_py.Module.output_nets" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list of all nets that are either a global output to the netlist or have at least one destination outside of the module.</p>
+<dd><p>A set of all nets that are either a global output to the netlist or have at least one destination outside of the module.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
