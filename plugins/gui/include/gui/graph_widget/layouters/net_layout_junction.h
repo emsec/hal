@@ -436,8 +436,8 @@ namespace hal {
     class NetLayoutJunctionHash : public QHash<NetLayoutPoint,NetLayoutJunction*>
     {
     public:
-        NetLayoutJunctionHash() {;}
-        ~NetLayoutJunctionHash();
+        NetLayoutJunctionHash()  = default;
+        ~NetLayoutJunctionHash() = default;
         void clearAll();
     };
 
