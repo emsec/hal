@@ -364,15 +364,32 @@ namespace hal {
     class NetLayoutJunctionOccupiedHash : public QHash<LaneIndex,NetLayoutJunctionOccupied>
     {
     public:
-        enum AddType { None, Added, Merged };
+        /**
+         * Result class for addOrMerge() function
+         * If range was merged, old and new range will be returned
+         * otherwise these values are not set (nullptr)
+         */
+        class AddOrMerge
+        {
+        public:
+            enum Type { Added, Merged, AlreadyExisting } mType;
+            NetLayoutJunctionRange* mOldRange;
+            NetLayoutJunctionRange* mNewRange;
+            AddOrMerge() : mType(Added), mOldRange(nullptr), mNewRange(nullptr) {;}
+            ~AddOrMerge()
+            {
+                if (mOldRange) delete mOldRange;
+                if (mNewRange) delete mNewRange;
+            }
+        };
 
         /**
          * Adds new entry for range or merges it
          * @param ri Road index where to add
-         * @param rng Range to add, will be modified on merge
+         * @param rng Range to add
          * @return see AddType above.
          */
-        AddType addOrMerge(const LaneIndex &ri, NetLayoutJunctionRange& rng);
+        AddOrMerge addOrMerge(const LaneIndex &ri, const NetLayoutJunctionRange& rng);
 
 #ifdef JUNCTION_DEBUG
         QList<QPair<u32,NetLayoutJunctionWire>> mHistory;

@@ -540,20 +540,24 @@ namespace hal {
 
     void NetLayoutJunction::place(const LaneIndex &ri, const NetLayoutJunctionRange &range)
     {
-        NetLayoutJunctionRange rng = range;
-        NetLayoutJunctionOccupiedHash::AddType added = mOccupied.addOrMerge(ri,rng); // might modify
+        NetLayoutJunctionOccupiedHash::AddOrMerge aom = mOccupied.addOrMerge(ri,range);
 
         auto netIt = mNets.find(range.netId());
         Q_ASSERT(netIt!=mNets.end());
-        NetLayoutJunctionWire nljw(rng,ri);
-        switch (added )
+        switch (aom.mType )
         {
-        case NetLayoutJunctionOccupiedHash::Added:
+        case NetLayoutJunctionOccupiedHash::AddOrMerge::Added:
+        {
+            NetLayoutJunctionWire nljw(range,ri);
             netIt->addWire(nljw);
             break;
-        case NetLayoutJunctionOccupiedHash::Merged:
-            netIt->replaceWire(range,nljw);
+        }
+        case NetLayoutJunctionOccupiedHash::AddOrMerge::Merged:
+        {
+            NetLayoutJunctionWire nljw(*aom.mNewRange,ri);
+            netIt->replaceWire(*aom.mOldRange,nljw);
             break;
+        }
         default:
             break;
         }
@@ -659,30 +663,31 @@ namespace hal {
         }
     }
 
-    NetLayoutJunctionOccupiedHash::AddType NetLayoutJunctionOccupiedHash::addOrMerge(const LaneIndex& ri, NetLayoutJunctionRange& rng)
+    NetLayoutJunctionOccupiedHash::AddOrMerge NetLayoutJunctionOccupiedHash::addOrMerge(const LaneIndex& ri, const NetLayoutJunctionRange &rng)
     {
         // operator will create entry if not existing
         NetLayoutJunctionOccupied& nljo = this->operator[](ri);
 
-        AddType retval = Added;
+        AddOrMerge retval;
 
         for (auto it = nljo.begin(); it!= nljo.end(); ++it)
         {
             if (*it == rng)
             {
-                retval = None;
+                retval.mType = AddOrMerge::AlreadyExisting;
                 break;
             }
             if (it->canJoin(rng))
             {
+                retval.mOldRange = new NetLayoutJunctionRange(*it);
                 it->expand(rng);
-                rng = (*it);
-                retval = Merged;
+                retval.mNewRange = new NetLayoutJunctionRange(*it);
+                retval.mType = AddOrMerge::Merged;
                 break;
             }
         }
 
-        if (retval == Added)
+        if (retval.mType == AddOrMerge::Added)
             nljo.append(rng);
 
 #ifdef JUNCTION_DEBUG
