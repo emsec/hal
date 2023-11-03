@@ -71,7 +71,7 @@ namespace hal
 
         mContextTableModel = gGraphContextManager->getContextTableModel();
 
-        mContextTableProxyModel = new ContextTableProxyModel();
+        mContextTableProxyModel = new ContextTableProxyModel(this);
         mContextTableProxyModel->setSourceModel(mContextTableModel);
         mContextTableProxyModel->setSortRole(Qt::UserRole);
 
