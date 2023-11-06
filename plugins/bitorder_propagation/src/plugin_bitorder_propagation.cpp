@@ -141,7 +141,8 @@ namespace hal
         /*
          * This function gathers the connected neighboring pingroups for a net by propagating to the neighboring gates and searches for module pin groups.
          */
-        Result<std::map<MPG, std::set<Net*>>> gather_conntected_neighbors(Net* n, std::unordered_set<Endpoint*>& visited, bool successors, const std::set<MPG>& relevant_pin_groups)
+        Result<std::map<MPG, std::set<Net*>>>
+            gather_conntected_neighbors(Net* n, std::unordered_set<Endpoint*>& visited, bool successors, const std::set<MPG>& relevant_pin_groups, const bool guarantee_propagation)
         {
             std::map<MPG, std::set<Net*>> connected_neighbors;
 
@@ -193,36 +194,39 @@ namespace hal
 
                 const auto modules = g->get_modules();
 
-                // check whether the net that leads to the gate is part of a relevant pin_group
-                bool found_relevant_pin_group = false;
-                for (const auto& m : modules)
+                if (!guarantee_propagation)
                 {
-                    bool is_border_pin = successors ? m->is_input_net(n) : m->is_output_net(n);
-                    if (is_border_pin)
+                    // check whether the net that leads to the gate is part of a relevant pin_group
+                    bool found_relevant_pin_group = false;
+                    for (const auto& m : modules)
                     {
-                        auto border_pin = m->get_pin_by_net(n);
-                        if (border_pin == nullptr)
+                        bool is_border_pin = successors ? m->is_input_net(n) : m->is_output_net(n);
+                        if (is_border_pin)
                         {
-                            return ERR("cannot get bit index information for net with ID " + std::to_string(n->get_id()) + " from module with ID " + std::to_string(m->get_id())
-                                       + ": net is border net but does not have a pin.");
-                        }
-                        auto border_pg = border_pin->get_group().first;
+                            auto border_pin = m->get_pin_by_net(n);
+                            if (border_pin == nullptr)
+                            {
+                                return ERR("cannot get bit index information for net with ID " + std::to_string(n->get_id()) + " from module with ID " + std::to_string(m->get_id())
+                                           + ": net is border net but does not have a pin.");
+                            }
+                            auto border_pg = border_pin->get_group().first;
 
-                        // only consider relevant pin groups that already have a known bitorder or that are currently unknown but might get one
-                        if (relevant_pin_groups.find({m, border_pg}) == relevant_pin_groups.end())
-                        {
-                            continue;
-                        }
+                            // only consider relevant pin groups that already have a known bitorder or that are currently unknown but might get one
+                            if (relevant_pin_groups.find({m, border_pg}) == relevant_pin_groups.end())
+                            {
+                                continue;
+                            }
 
-                        connected_neighbors[{m, border_pg}].insert(n);
-                        found_relevant_pin_group = true;
+                            connected_neighbors[{m, border_pg}].insert(n);
+                            found_relevant_pin_group = true;
+                        }
                     }
-                }
 
-                // stop the propagation at the gate when we reached it via at least one relevant pin group
-                if (found_relevant_pin_group)
-                {
-                    continue;
+                    // stop the propagation at the gate when we reached it via at least one relevant pin group
+                    if (found_relevant_pin_group)
+                    {
+                        continue;
+                    }
                 }
 
                 // propagate
@@ -278,7 +282,7 @@ namespace hal
                         }
                     }
 
-                    auto res = gather_conntected_neighbors(next_ep->get_net(), visited, successors, relevant_pin_groups);
+                    auto res = gather_conntected_neighbors(next_ep->get_net(), visited, successors, relevant_pin_groups, false);
                     if (res.is_error())
                     {
                         return res;
@@ -635,7 +639,7 @@ namespace hal
                 const auto starting_net = p->get_net();
 
                 std::unordered_set<Endpoint*> visited_outwards;
-                const auto res_outwards = gather_conntected_neighbors(starting_net, visited_outwards, successors, relevant_pin_groups);
+                const auto res_outwards = gather_conntected_neighbors(starting_net, visited_outwards, successors, relevant_pin_groups, false);
                 if (res_outwards.is_error())
                 {
                     return ERR_APPEND(res_outwards.get_error(),
@@ -645,7 +649,8 @@ namespace hal
                 const auto connected_outwards = res_outwards.get();
 
                 std::unordered_set<Endpoint*> visited_inwards;
-                const auto res_inwards = gather_conntected_neighbors(starting_net, visited_inwards, !successors, relevant_pin_groups);
+                // NOTE when propagating inwards we guarantee the first propagation since otherwise we would stop at our starting pingroup
+                const auto res_inwards = gather_conntected_neighbors(starting_net, visited_inwards, !successors, relevant_pin_groups, true);
                 if (res_inwards.is_error())
                 {
                     return ERR_APPEND(res_inwards.get_error(),
