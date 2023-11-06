@@ -205,7 +205,7 @@ namespace hal
 
 
     PythonEditor::PythonEditor(QWidget* parent)
-        : ContentWidget("Python Editor", parent), PythonContextSubscriber(), mSearchbar(new Searchbar()), mActionOpenFile(new Action(this)), mActionRun(new Action(this)),
+        : ContentWidget("Python Editor", parent), PythonContextSubscriber(), mSearchbar(new Searchbar(this)), mActionOpenFile(new Action(this)), mActionRun(new Action(this)),
           mActionSave(new Action(this)), mActionSaveAs(new Action(this)), mActionToggleMinimap(new Action(this)), mActionNewFile(new Action(this)),
           mFileWatcher(nullptr)
     {
@@ -250,8 +250,9 @@ namespace hal
         connect(mActionToggleMinimap, &Action::triggered, this, &PythonEditor::handleActionToggleMinimap);
         connect(mSearchAction, &QAction::triggered, this, &PythonEditor::toggleSearchbar);
 
+        connect(mSearchbar, &Searchbar::triggerNewSearch, this, &PythonEditor::updateSearchIcon);
         connect(mSearchbar, &Searchbar::triggerNewSearch, this, &PythonEditor::handleSearchbarTextEdited);
-        connect(mSearchbar, &Searchbar::textEdited, this, &PythonEditor::updateSearchIcon);
+
         connect(mTabWidget, &QTabWidget::currentChanged, this, &PythonEditor::handleCurrentTabChanged);
 
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &PythonEditor::handleFileOpened);
@@ -413,7 +414,6 @@ namespace hal
 
     void PythonEditor::handleSearchbarTextEdited(const QString& text, SearchOptions opts)
     {
-        qInfo() << "handleSearchbarTextEdited started";
         if (mTabWidget->count() > 0)
             dynamic_cast<PythonCodeEditor*>(mTabWidget->currentWidget())->search(text, opts);
 

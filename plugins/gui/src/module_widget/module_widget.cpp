@@ -42,11 +42,10 @@ namespace hal
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
         mSearchAction->setToolTip("Search");
 
-        mModuleProxyModel->setFilterKeyColumn(-1);
-        mModuleProxyModel->setDynamicSortFilter(true);
+
+
         mModuleProxyModel->setSourceModel(gNetlistRelay->getModuleModel());
-        //mModuleProxyModel->setRecursiveFilteringEnabled(true);
-        mModuleProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+
         mTreeView->setModel(mModuleProxyModel);
         mTreeView->setSortingEnabled(true);
         mTreeView->sortByColumn(0, Qt::AscendingOrder);
@@ -72,8 +71,8 @@ namespace hal
         connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleRemoved, this, &ModuleWidget::handleModuleRemoved);
 
         connect(mSearchAction, &QAction::triggered, this, &ModuleWidget::toggleSearchbar);
-        connect(mSearchbar, &Searchbar::textEdited, this, &ModuleWidget::updateSearchIcon);
 
+        connect(mSearchbar, &Searchbar::triggerNewSearch, this, &ModuleWidget::updateSearchIcon);
         connect(mSearchbar, &Searchbar::triggerNewSearch, mModuleProxyModel, &ModuleProxyModel::startSearch);
     }
 

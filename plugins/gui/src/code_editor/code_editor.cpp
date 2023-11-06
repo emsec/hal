@@ -206,7 +206,6 @@ namespace hal
 
     void CodeEditor::search(const QString& string, SearchOptions searchOpts)
     {
-        qInfo() << "search() started";
         QList<QTextEdit::ExtraSelection> extraSelections;
 
         moveCursor(QTextCursor::Start);

@@ -38,19 +38,6 @@ namespace hal
             return false;
         }
 
-        /*
-        const QModelIndex& context_name_index = sourceModel()->index(source_row, 0, source_parent);
-        const QModelIndex& context_date_index = sourceModel()->index(source_row, 1, source_parent);
-
-        const QString& context_name = context_name_index.data().toString();
-        const QString& context_date = context_date_index.data().toString();
-         */
-
-        /*
-        if(mFilterExpression.match(context_name).hasMatch() || mFilterExpression.match(context_date).hasMatch())
-            return true;
-        else
-            return false;*/
     }
 
     bool ContextTableProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const

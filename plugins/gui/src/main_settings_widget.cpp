@@ -164,7 +164,7 @@ namespace hal
         connect(mOk, &QPushButton::clicked, this, &MainSettingsWidget::handleOkClicked);
 
         connect(mExpandingListWidget, &ExpandingListWidget::buttonSelected, this, &MainSettingsWidget::handleButtonSelected);
-        connect(mSearchbar,&Searchbar::triggerNewSearch,this,&MainSettingsWidget::searchSettings);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, this, &MainSettingsWidget::searchSettings);
     }
 
     void MainSettingsWidget::initWidgets()

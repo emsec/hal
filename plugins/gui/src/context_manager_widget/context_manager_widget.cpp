@@ -109,9 +109,7 @@ namespace hal
         connect(mContextTableModel, &ContextTableModel::rowsRemoved, this, &ContextManagerWidget::handleDataChanged);
         connect(mContextTableModel, &ContextTableModel::rowsInserted, this, &ContextManagerWidget::handleDataChanged);
 
-        //connect(mSearchbar, &Searchbar::textEdited, mContextTableProxyModel, &ContextTableProxyModel::handleFilterTextChanged);
-        connect(mSearchbar, &Searchbar::textEdited, this, &ContextManagerWidget::updateSearchIcon);
-
+        connect(mSearchbar, &Searchbar::triggerNewSearch, this, &ContextManagerWidget::updateSearchIcon);
         connect(mSearchbar, &Searchbar::triggerNewSearch, mContextTableProxyModel, &ContextTableProxyModel::startSearch);
     }
 

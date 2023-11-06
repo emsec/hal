@@ -98,8 +98,8 @@ namespace hal
         mSearchbar->hide();
         mSearchbar->setColumnNames(mProxyModel->getColumnNames());
 
+        connect(mSearchbar, &Searchbar::triggerNewSearch, this, &GroupingManagerWidget::updateSearchIcon);
         connect(mSearchbar, &Searchbar::triggerNewSearch, mProxyModel, &GroupingProxyModel::startSearch);
-        connect(mSearchbar, &Searchbar::textEdited, this, &GroupingManagerWidget::updateSearchIcon);
 
         connect(mNewGroupingAction, &QAction::triggered, this, &GroupingManagerWidget::handleCreateGroupingClicked);
         connect(mRenameAction, &QAction::triggered, this, &GroupingManagerWidget::handleRenameGroupingClicked);

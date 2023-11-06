@@ -16,7 +16,7 @@ namespace hal {
     GroupingDialog::GroupingDialog(QWidget* parent)
         : QDialog(parent),
           mSearchbar(new Searchbar(this)),
-          mProxyModel(new GroupingProxyModel),
+          mProxyModel(new GroupingProxyModel(this)),
           mGroupingTableView(new GroupingTableView(false, this)),
           mLastUsed(nullptr),
           mTabWidget(new QTabWidget(this)),

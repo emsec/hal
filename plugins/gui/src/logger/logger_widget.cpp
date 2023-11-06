@@ -215,7 +215,6 @@ namespace hal
         mPlainTextEdit->clear();
         QWriteLocker item_locker(item->getLock());
 
-        qInfo() << "handleCurrentFilterChanged";
         // Iterate through every log entry
         for (ChannelEntry* entry : *(item->getEntries()))
         {
@@ -224,7 +223,6 @@ namespace hal
             //QRegularExpression re(mSearchFilter);
             if (isMatching(mSearchFilter, QString::fromStdString(entry->mMsg)))
             {
-                qInfo() << "match found";
                 // If entry severity matches the choosen severitys
                 if ((entry->mMsgType == spdlog::level::level_enum::info) && mInfoSeverity) {
                     filter = true;

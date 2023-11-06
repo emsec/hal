@@ -153,11 +153,11 @@ namespace hal
         connect(mSearchAction, &QAction::triggered, this, &SelectionDetailsWidget::toggleSearchbar);
         connect(mSelectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handleTreeSelection);
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &SelectionDetailsWidget::handleSelectionUpdate);
-        connect(mSearchbar, &Searchbar::textEdited, mSelectionTreeView, &SelectionTreeView::handleFilterTextChanged);
-        connect(mSearchbar, &Searchbar::textEdited, this, &SelectionDetailsWidget::updateSearchIcon);
+
         connect(mSelectionTreeView, &SelectionTreeView::itemDoubleClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
         connect(mSelectionTreeView, &SelectionTreeView::focusItemClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
 
+        connect(mSearchbar, &Searchbar::triggerNewSearch, this, &SelectionDetailsWidget::updateSearchIcon);
         connect(mSearchbar, &Searchbar::triggerNewSearch, mSelectionTreeProxyModel, &SelectionTreeProxyModel::startSearch);
     }
 

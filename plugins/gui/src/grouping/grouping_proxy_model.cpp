@@ -26,7 +26,6 @@ namespace hal
             for(int index : columns)
             {
                 QString entry = sourceModel()->index(sourceRow, index, sourceParent).data().toString();
-                qInfo() << "Entry: " << entry;
                 if(isMatching(mSearchString, entry))
                     return true;
             }
