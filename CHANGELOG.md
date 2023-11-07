@@ -3,12 +3,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 * miscellaneous
-  * added GUI PluginParameter type 'ComboBox' for parameters that can be requested from plugin
-  * added GUI PluginParameter types 'Module' and 'Gated' for parameters that can be requested from plugin
+  * added GUI PluginParameter type `ComboBox` for parameters that can be requested from plugin
+  * added GUI PluginParameter types `Module` and `Gated` for parameters that can be requested from plugin
   * added `Show content` button to `Groupings` widget to show content of grouping as a list
   * added flag which python editor tab is active when serializing project
   * added `GateType::delete_pin_group` and `GateType::assign_pin_to_group` to enable more operations on pin groups of gate pins
   * added extended gate library picker when importing a netlist
+  * added parameter `force_name` to enforce pin (group) renaming to `Module::set_pin_name`, `Module::set_pin_group_name`, `Module::create_pin`, and `Module::create_pin_group`
   * changed supported input file formats for import from hard coded list to list provided by loadable parser plugins
   * changed behavior of import netlist dialog, suggest only non-existing directory names and loop until an acceptable name was entered
   * changed appearance and behavior of import project dialog, make sure existing hal projects don't get overwritten
@@ -22,6 +23,8 @@ All notable changes to this project will be documented in this file.
   * fixed order of pins within pin groups not being properly handled for modules and gate types
   * fixed netlist parsers assigning gate pins in wrong order (compensated by the bug above, imported netlists were still correct)
   * fixed wrong order of pins within pin groups in provided gate libraries
+  * fixed format string handling of enums in log outputs
+  * fixed no scrollbar shown in `Data` tab of `Selection Details` widget
 
 ## [4.2.0](v4.2.0) - 2023-05-24 10:02:04-07:00 (urgency: medium)
 * GUI plugin manager
