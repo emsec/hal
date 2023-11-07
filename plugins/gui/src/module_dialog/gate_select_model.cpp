@@ -1,3 +1,4 @@
+
 #include "gui/module_dialog/gate_select_model.h"
 
 #include "gui/content_manager/content_manager.h"
@@ -165,27 +166,7 @@ namespace hal
 
     bool GateSelectProxy::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
     {
-        QList<int> columns = mSearchOptions.getColumns();
-        if(columns.empty()){
-            //iterate over each column
-            for(int index = 0; index < 3; index++){
-                QString entry = sourceModel()->index(source_row, index, source_parent).data().toString();
-                if(isMatching(mSearchString, entry))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }else
-        {
-            for(int index : columns)
-            {
-                QString entry = sourceModel()->index(source_row, index, source_parent).data().toString();
-                if(isMatching(mSearchString, entry))
-                    return true;
-            }
-            return false;
-        }
+        return checkRow(source_row, source_parent, 0, 2);
     }
 
     //---------------- PICKER -----------------------------------------

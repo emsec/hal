@@ -41,4 +41,30 @@ namespace hal {
         return list;
     }
 
+    bool SearchProxyModel::checkRow(int sourceRow, const QModelIndex& sourceParent, int startIndex, int endIndex, int offset) const
+    {
+        QList<int> columns = mSearchOptions.getColumns();
+        if(columns.empty()){
+            //iterate over each column
+            for(int index = startIndex; index <= endIndex; index++){
+                QString entry = sourceModel()->index(sourceRow, index, sourceParent).data().toString();
+                if(isMatching(mSearchString, entry))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }else
+        {
+            for(int index : columns)
+            {
+                QString entry = sourceModel()->index(sourceRow, index + offset, sourceParent).data().toString();
+                if(isMatching(mSearchString, entry))
+                    return true;
+            }
+            return false;
+        }
+
+    }
+
 }

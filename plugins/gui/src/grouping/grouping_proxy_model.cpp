@@ -1,3 +1,7 @@
+
+
+
+
 #include "gui/grouping/grouping_proxy_model.h"
 
 #include "gui/gui_globals.h"
@@ -11,27 +15,7 @@ namespace hal
 
     bool GroupingProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
     {
-        QList<int> columns = mSearchOptions.getColumns();
-        if(columns.empty()){
-            //iterate over each column
-            for(int index = 0; index < 3; index++){
-                QString entry = sourceModel()->index(sourceRow, index, sourceParent).data().toString();
-                if(isMatching(mSearchString, entry))
-                    return true;
-
-            }
-            return false;
-        }else
-        {
-            for(int index : columns)
-            {
-                QString entry = sourceModel()->index(sourceRow, index, sourceParent).data().toString();
-                if(isMatching(mSearchString, entry))
-                    return true;
-            }
-            return false;
-        }
-
+        return checkRow(sourceRow, sourceParent, 0, 2);
     }
 
     bool GroupingProxyModel::lessThan(const QModelIndex& source_left, const QModelIndex& source_right) const

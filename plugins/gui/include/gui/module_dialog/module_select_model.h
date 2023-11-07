@@ -133,11 +133,12 @@ namespace hal {
         void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
         void searchTextChanged(const QString& txt);
         void startSearch(QString text, int options) override;
+         bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
 
     protected:
         static bool lessThan(const QColor& a, const QColor& b);
         bool lessThan(const QModelIndex &sourceLeft, const QModelIndex &sourceRight) const override;
-        bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
+
 
     private:
         gui_utility::mSortMechanism mSortMechanism;

@@ -37,6 +37,15 @@ namespace hal
         SearchProxyModel(QObject* parent = nullptr);
 
         /**
+         * @return List of QString matching the corresponding column header.
+         */
+        virtual QList<QString> getColumnNames();
+
+    public Q_SLOTS:
+        virtual void startSearch(QString text, int options) = 0;
+
+    protected:
+        /**
          * @brief Check if a string matches the SearchOptions.
          *
          * This function checks whether a given `stringToCheck` matches the search criteria
@@ -48,16 +57,21 @@ namespace hal
          */
         bool isMatching(const QString searchString, const QString stringToCheck) const;
 
-
         /**
-         * @return List of QString matching the corresponding column header.
+         * @brief Should be called inside filterAcceptsRow function and returns true if the source_row, source_parent matches given SearchOptions
+         *
+         * This function checks whether a given `source_row` should be shown
+         * based on given `search options` .
+         *
+         * @param sourceRow The row index in the source model to be checked.
+         * @param sourceParent The QModelIndex representing the parent of the source model.
+         * @param startIndex The index of the first column to start checking.
+         * @param endIndex The index of the last column to stop checking.
+         * @param offset The offset to apply to the column indices based on search options if specific columns are checked.
+         *
+         * @return True if the row contains a matching entry, otherwise false.
          */
-        virtual QList<QString> getColumnNames();
-
-    public Q_SLOTS:
-        virtual void startSearch(QString text, int options) = 0;
-
-    protected:
+        bool checkRow(int sourceRow, const QModelIndex& sourceParent, int startIndex, int endIndex, int offset = 0) const;
         SearchOptions mSearchOptions;
         QString mSearchString;
     };

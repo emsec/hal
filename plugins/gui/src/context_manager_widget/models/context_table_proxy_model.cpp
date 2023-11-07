@@ -15,29 +15,7 @@ namespace hal
     {
 
         //TODO  somehow the program crashes with segfault if this method ever returns a false at the initial start
-
-        QList<int> columns = mSearchOptions.getColumns();
-        if(columns.empty()){
-            //iterate over each column
-            for(int index = 0; index < 2; index++){
-                QString entry = sourceModel()->index(source_row, index, source_parent).data().toString();
-                if(isMatching(mSearchString, entry))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }else
-        {
-            for(int index : columns)
-            {
-                QString entry = sourceModel()->index(source_row, index, source_parent).data().toString();
-                if(isMatching(mSearchString, entry))
-                    return true;
-            }
-            return false;
-        }
-
+        return checkRow(source_row, source_parent, 0, 1);
     }
 
     bool ContextTableProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
