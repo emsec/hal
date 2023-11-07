@@ -33,6 +33,7 @@ namespace hal
 
         connect(this, &SelectionTreeView::itemDoubleClicked, this, &SelectionTreeView::handleTreeViewItemFocusClicked);
         connect(this, &SelectionTreeView::focusItemClicked, this, &SelectionTreeView::handleTreeViewItemFocusClicked);
+        connect(gNetlistRelay->getModuleColorManager(),&ModuleColorManager::moduleColorChanged,this,&SelectionTreeView::handleModuleColorChanged);
     }
 
     void SelectionTreeView::setDefaultColumnWidth()
@@ -76,6 +77,12 @@ namespace hal
 
         QModelIndex modelIndex = mSelectionTreeProxyModel->mapToSource(proxyIndex);
         return static_cast<SelectionTreeItem*>(modelIndex.internalPointer());
+    }
+
+    void SelectionTreeView::handleModuleColorChanged(u32 id)
+    {
+        Q_UNUSED(id);
+        update();
     }
 
     void SelectionTreeView::handleCustomContextMenuRequested(const QPoint& point)
