@@ -80,19 +80,5 @@ namespace hal
 
             return getIconFromSvgData(svg_data);
         }
-
-        QColor getRandomColor()
-        {
-            static qreal h = 0.5;
-
-            h += 0.6180339887498948;
-
-            if (h > 1)
-                --h;
-
-            QColor c;
-            c.setHsvF(h, 0.8, 0.95);    // (MAYBE) GET S AND V FROM STYLESHEET OR CYCLE 3 DIMENSIONAL
-            return c;
-        }
     }    // namespace gui_utility
 }

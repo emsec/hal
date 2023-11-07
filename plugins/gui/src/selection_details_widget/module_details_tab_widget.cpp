@@ -9,6 +9,7 @@
 #include "hal_core/netlist/module.h"
 #include "gui/gui_globals.h"
 #include "gui/module_model/module_model.h"
+#include "gui/module_model/module_color_manager.h"
 
 namespace hal
 {
@@ -51,7 +52,7 @@ namespace hal
         mCommentWidget = new CommentWidget(this);
         QTabWidget::addTab(mCommentWidget, "Comments");
 
-        connect(gNetlistRelay->getModuleModel(),&ModuleModel::moduleColorChanged,this,&ModuleDetailsTabWidget::handleModuleColorChanged);
+        connect(gNetlistRelay->getModuleColorManager(),&ModuleColorManager::moduleColorChanged,this,&ModuleDetailsTabWidget::handleModuleColorChanged);
     }
  
     void ModuleDetailsTabWidget::handleModuleColorChanged(u32 id)

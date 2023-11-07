@@ -27,6 +27,7 @@
 
 #include "hal_core/netlist/event_system/event_handler.h"
 #include "gui/grouping/grouping_color_serializer.h"
+#include "gui/module_model/module_color_manager.h"
 #include <QMap>
 #include <QObject>
 
@@ -34,6 +35,8 @@ namespace hal
 {
     class ModuleItem;
     class ModuleModel;
+    class ModuleColorManager;
+    class ModuleColorSerializer;
     class Module;
 
     /**
@@ -88,7 +91,14 @@ namespace hal
          *
          * @returns the module model
          */
-        ModuleModel* getModuleModel();
+        ModuleModel* getModuleModel() const;
+
+        /**
+         * Accesses the module color manager
+         *
+         * @returns the module color manager
+         */
+        ModuleColorManager* getModuleColorManager() const;
 
         /**
          * Changes the name of a specific module by asking the user for a new name in a 'Rename'-dialogue.
@@ -610,6 +620,7 @@ namespace hal
 
         QMap<u32, QColor> mModuleColors;
         ModuleModel* mModuleModel;
+        ModuleColorManager* mModuleColorManager;
         ModuleColorSerializer mColorSerializer;
         enum ThreadEventType { TetNetlist, TetModule, TetGate, TetNet, TetGrouping };
     };

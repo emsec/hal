@@ -4,6 +4,7 @@
 #include "gui/main_window/main_window.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
 #include "gui/module_model/module_model.h"
+#include "gui/module_model/module_color_manager.h"
 #include <QDebug>
 #include <QImage>
 
@@ -40,7 +41,7 @@ namespace hal
         : QObject(parent)
     {
         connect(MainWindow::sSettingStyle, &SettingsItemDropdown::intChanged,this,&SelectionDetailsIconProvider::loadIcons);
-        connect(gNetlistRelay->getModuleModel(),&ModuleModel::moduleColorChanged,this,&SelectionDetailsIconProvider::handleModuleColorChanged);
+        connect(gNetlistRelay->getModuleColorManager(),&ModuleColorManager::moduleColorChanged,this,&SelectionDetailsIconProvider::handleModuleColorChanged);
         loadIcons(MainWindow::sSettingStyle->value().toInt());
     }
 

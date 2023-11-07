@@ -1,7 +1,6 @@
 #include "gui/module_model/module_model.h"
 
 #include "gui/gui_globals.h"
-#include "gui/gui_utils/graphics.h"
 
 #include "gui/selection_details_widget/selection_details_icon_provider.h"
 
@@ -198,7 +197,6 @@ namespace hal
 
     void ModuleModel::init()
     {
-        setModuleColor(1, QColor(96, 110, 112));
         ModuleItem* item = new ModuleItem(1);
         mModuleMap.insert(1, item);
 
@@ -238,8 +236,7 @@ namespace hal
         mModuleMap.clear();
         mGateMap.clear();
         mNetMap.clear();
-        mModuleColors.clear();
-
+        //TODO : clear colors
         endResetModel();
     }
 
@@ -450,31 +447,6 @@ namespace hal
     ModuleItem* ModuleModel::getItem(u32 id, ModuleItem::TreeItemType type) const
     {
         return mModuleItemMaps[(int)type]->value(id);
-    }
-
-    QColor ModuleModel::moduleColor(u32 id) const
-    {
-        return mModuleColors.value(id);
-    }
-
-    QColor ModuleModel::setModuleColor(u32 id, const QColor& col)
-    {
-        QColor retval = mModuleColors.value(id);
-        mModuleColors[id] = col;
-        Q_EMIT moduleColorChanged(id);
-        return retval;
-    }
-
-    QColor ModuleModel::setRandomColor(u32 id)
-    {
-        QColor retval = mModuleColors.value(id);
-        mModuleColors.insert(id,gui_utility::getRandomColor());
-        return retval;
-    }
-
-    void ModuleModel::removeColor(u32 id)
-    {
-        mModuleColors.remove(id);
     }
 
     bool ModuleModel::isModifying()

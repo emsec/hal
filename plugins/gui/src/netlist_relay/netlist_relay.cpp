@@ -27,7 +27,8 @@
 
 namespace hal
 {
-    NetlistRelay::NetlistRelay(QObject* parent) : QObject(parent), mModuleModel(new ModuleModel(this))
+    NetlistRelay::NetlistRelay(QObject* parent)
+        : QObject(parent), mModuleModel(new ModuleModel(this)), mModuleColorManager(new ModuleColorManager(this))
     {
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &NetlistRelay::debugHandleFileOpened);    // DEBUG LINE
         connect(this, &NetlistRelay::signalThreadEvent, this, &NetlistRelay::handleThreadEvent, Qt::BlockingQueuedConnection);
@@ -81,12 +82,17 @@ namespace hal
 
     QColor NetlistRelay::getModuleColor(const u32 id)
     {
-        return mModuleModel->moduleColor(id);
+        return mModuleColorManager->moduleColor(id);
     }
 
-    ModuleModel* NetlistRelay::getModuleModel()
+    ModuleModel* NetlistRelay::getModuleModel() const
     {
         return mModuleModel;
+    }
+
+    ModuleColorManager* NetlistRelay::getModuleColorManager() const
+    {
+        return mModuleColorManager;
     }
 
     void NetlistRelay::changeModuleName(const u32 id)
@@ -375,7 +381,7 @@ namespace hal
                 if (mod->get_parent_module() != nullptr)
                 {
                     mModuleModel->addModule(mod->get_id(), mod->get_parent_module()->get_id());
-                    mModuleModel->setRandomColor(mod->get_id());
+                    mModuleColorManager->setRandomColor(mod->get_id());
                 }
 
                 gGraphContextManager->handleModuleCreated(mod);
@@ -386,7 +392,7 @@ namespace hal
             case ModuleEvent::event::removed: {
                 //< no associated_data
 
-                mModuleModel->removeColor(mod->get_id());
+                mModuleColorManager->removeColor(mod->get_id());
                 mModuleModel->remove_module(mod->get_id());
 
                 gGraphContextManager->handleModuleRemoved(mod);
@@ -672,9 +678,9 @@ namespace hal
     void NetlistRelay::debugHandleFileOpened()
     {
         for (Module* m : gNetlist->get_modules())
-            mModuleModel->setRandomColor(m->get_id());
+            mModuleColorManager->setRandomColor(m->get_id());
         mModuleModel->init();
-        mColorSerializer.restore(mModuleModel);
+        mColorSerializer.restore(mModuleColorManager);
     }
 
     void NetlistRelay::debugHandleFileClosed()

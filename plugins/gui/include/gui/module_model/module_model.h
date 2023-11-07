@@ -34,7 +34,6 @@
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
-#include <QColor>
 #include <set>
 #include <array>
 
@@ -50,14 +49,6 @@ namespace hal
     class ModuleModel : public BaseTreeModel
     {
         Q_OBJECT
-
-    Q_SIGNALS:
-        /**
-         * Q_SIGNAL to notify that the color of a module has been changed.
-         *
-         * @param id - Id of the module with the changed color
-         */
-        void moduleColorChanged(u32 id) const;
 
     public:
         /**
@@ -258,38 +249,6 @@ namespace hal
          */
         bool isModifying();
 
-        /**
-         * Gets the module color of a module of a specific id.
-         *
-         * @param id - The module id of the module to get the color for
-         * @returns the color of the module
-         */
-        QColor moduleColor(u32 id) const;
-
-        /**
-         * Changes the color of a module.
-         *
-         * @param id - The id of the module
-         * @param col - The new color
-         * @returns the old color of the module (used to create an undo action easier)
-         */
-        QColor setModuleColor(u32 id, const QColor& col);
-
-        /**
-         * Changes the color of a module to a random color.
-         *
-         * @param id - The id of the module
-         * @returns the old color of the module (used to create an undo action easier)
-         */
-        QColor setRandomColor(u32 id);
-
-        /**
-         * Removes the color that belongs to the given id.
-         *
-         * @param id - The module id for which to remove the color.
-         */
-        void removeColor(u32 id);
-
     private:
         ModuleItem* mTopModuleItem;
 
@@ -297,7 +256,6 @@ namespace hal
         QMap<u32, ModuleItem*> mGateMap;
         QMap<u32, ModuleItem*> mNetMap;
         std::array<QMap<u32, ModuleItem*>*, 3> mModuleItemMaps = {&mModuleMap, &mGateMap, &mNetMap};;
-        QMap<u32, QColor> mModuleColors;
 
         bool mIsModifying;
     };
