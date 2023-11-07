@@ -9,95 +9,10 @@
 
 namespace hal
 {
-    ModuleModel::ModuleModel(QObject* parent) : BaseTreeModel(parent), mTopModuleItem(nullptr)
+    ModuleModel::ModuleModel(QObject* parent) : BaseTreeModel(parent)
     {
-    }
-
-    QModelIndex ModuleModel::index(int row, int column, const QModelIndex& parent) const
-    {
-        // BEHAVIOR FOR ILLEGAL INDICES IS UNDEFINED
-        // SEE QT DOCUMENTATION
-        if (!hasIndex(row, column, parent))
-            return QModelIndex();
-
-        if (!parent.isValid())
-        {
-            if (row == 0 && column >= 0 && column < 3 && mTopModuleItem)
-                return createIndex(0, column, mTopModuleItem);
-            else
-                return QModelIndex();
-        }
-
-        if (column < 0 || column >= 3 || parent.column() < 0 || parent.column() >= 3)
-            return QModelIndex();
-
-        ModuleItem* parent_item = getItem(parent);
-
-        ModuleItem* child_item = static_cast<ModuleItem*>(parent_item)->child(row);
-        assert(child_item);
-
-        return createIndex(row, column, child_item);
-
-        // NECESSARY ???
-        //    if (column != 0)
-        //        return QModelIndex();
-
-        //    // PROBABLY REDUNDANT
-        //    if (parent.isValid() && parent.column() != 0)
-        //        return QModelIndex();
-
-        //    ModuleItem* parent_item = getItem(parent);
-        //    ModuleItem* child_item = parent_item->child(row);
-
-        //    if (child_item)
-        //        return createIndex(row, column, child_item);
-        //    else
-        //        return QModelIndex();
-    }
-
-    QModelIndex ModuleModel::parent(const QModelIndex& index) const
-    {
-        if (!index.isValid())
-            return QModelIndex();
-
-        ModuleItem* item = getItem(index);
-
-        if (item == mTopModuleItem)
-            return QModelIndex();
-
-        ModuleItem* parent_item = item->parent();
-        return createIndex(parent_item->row(), 0, parent_item);
-
-        //    if (!index.isValid())
-        //        return QModelIndex();
-
-        //    ModuleItem* child_item  = getItem(index);
-        //    ModuleItem* parent_item = child_item->parent();
-
-        //    if (parent_item == m_root_item)
-        //        return QModelIndex();
-
-        //    return createIndex(parent_item->row(), 0, parent_item);
-    }
-
-    int ModuleModel::rowCount(const QModelIndex& parent) const
-    {
-        if (!parent.isValid())    // ??
-            return 1;
-
-        //if (parent.column() != 0)
-        //    return 0;
-
-        ModuleItem* parent_item = getItem(parent);
-
-        return parent_item->childCount();
-    }
-
-    int ModuleModel::columnCount(const QModelIndex& parent) const
-    {
-        Q_UNUSED(parent)
-
-        return 3;
+        // use root item to store header information
+        setHeaderLabels(QStringList() << "Name" << "ID" << "Type");
     }
 
     QVariant ModuleModel::data(const QModelIndex& index, int role) const
@@ -152,20 +67,6 @@ namespace hal
         return QAbstractItemModel::flags(index);
     }
 
-    QVariant ModuleModel::headerData(int section, Qt::Orientation orientation, int role) const
-    {
-        /*Q_UNUSED(section)
-        Q_UNUSED(orientation)
-        Q_UNUSED(role)
-
-        return QVariant();*/
-        const char* horizontalHeader[] = { "Name", "ID", "Type"};
-        if (orientation == Qt::Horizontal && role == Qt::DisplayRole && section < columnCount())
-            return QString(horizontalHeader[section]);
-
-        return QVariant();
-    }
-
     ModuleItem* ModuleModel::getItem(const QModelIndex& index) const
     {
         if (index.isValid())
@@ -181,10 +82,10 @@ namespace hal
         QVector<int> row_numbers;
         const ModuleItem* current_item = item;
 
-        while (current_item != mTopModuleItem)
+        while (current_item != mRootItem->getChild(0))
         {
             row_numbers.append(current_item->row());
-            current_item = current_item->constParent();
+            current_item = static_cast<const ModuleItem*>(current_item->constParent());
         }
 
         QModelIndex model_index = index(0, 0, QModelIndex());
@@ -201,7 +102,7 @@ namespace hal
         mModuleMap.insert(1, item);
 
         beginInsertRows(index(0, 0, QModelIndex()), 0, 0);
-        mTopModuleItem = item;
+        mRootItem->appendChild(item);
         endInsertRows();
 
         Module* m = gNetlist->get_top_module();
@@ -217,15 +118,7 @@ namespace hal
     {
         beginResetModel();
 
-        mTopModuleItem = nullptr;
-
-        for (ModuleItem* m : mModuleMap)
-            delete m;
-        for (ModuleItem* g : mGateMap)
-            delete g;
-        for (ModuleItem* n : mNetMap)
-            delete n;
-
+        BaseTreeModel::clear();
         mModuleMap.clear();
         mGateMap.clear();
         mNetMap.clear();
@@ -247,7 +140,7 @@ namespace hal
         mModuleMap.insert(id, item);
 
         QModelIndex index = getIndex(parent);
-        
+
         int row = parent->childCount();
         mIsModifying = true;
         beginInsertRows(index, row, row);
@@ -320,7 +213,7 @@ namespace hal
         assert(id != 1);
         assert(mModuleMap.contains(id));
         ModuleItem* item = mModuleMap.value(id);
-        ModuleItem* oldParent = item->parent();
+        ModuleItem* oldParent = static_cast<ModuleItem*>(item->getParent());
         assert(oldParent);
 
         assert(module->get_parent_module());
@@ -350,7 +243,7 @@ namespace hal
         assert(mModuleMap.contains(id));
 
         ModuleItem* item   = mModuleMap.value(id);
-        ModuleItem* parent = item->parent();
+        ModuleItem* parent = static_cast<ModuleItem*>(item->getParent());
         assert(item);
         assert(parent);
 
@@ -374,7 +267,7 @@ namespace hal
         assert(mGateMap.contains(id));
 
         ModuleItem* item   = mGateMap.value(id);
-        ModuleItem* parent = item->parent();
+        ModuleItem* parent = static_cast<ModuleItem*>(item->getParent());
         assert(item);
         assert(parent);
 
@@ -398,7 +291,7 @@ namespace hal
         assert(mNetMap.contains(id));
 
         ModuleItem* item   = mNetMap.value(id);
-        ModuleItem* parent = item->parent();
+        ModuleItem* parent = static_cast<ModuleItem*>(item->getParent());
         assert(item);
         assert(parent);
 
@@ -422,7 +315,7 @@ namespace hal
         u32 id = net->get_id();
         assert(mNetMap.contains(id));
         ModuleItem* item = mNetMap.value(id);
-        ModuleItem* oldParentItem = item->parent();
+        ModuleItem* oldParentItem = static_cast<ModuleItem*>(item->getParent());
         assert(oldParentItem);
         
         Module* newParentModule = FindNetParent(net);

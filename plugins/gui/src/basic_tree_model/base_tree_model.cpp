@@ -27,7 +27,7 @@ namespace hal
 
     QVariant BaseTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
     {
-        if(role == Qt::DisplayRole && orientation == Qt::Horizontal && section < mRootItem->getColumnCount())
+        if(role == Qt::DisplayRole && orientation == Qt::Horizontal && section < mRootItem->getColumnCount() && section >= 0)
             return mRootItem->getData(section);
         else
             return QVariant();

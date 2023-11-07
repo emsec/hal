@@ -1,20 +1,20 @@
 // MIT License
-// 
+//
 // Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
 // Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
 // Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 // Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -61,41 +61,6 @@ namespace hal
         explicit ModuleModel(QObject* parent = nullptr);
 
         // === Pure Virtual ===
-        /**
-         * Returns the index of the item in the model specified by the given row, column and parent index.
-         *
-         * @param row - The row of the item
-         * @param column - The column of the item
-         * @param parent - the index of the parent of the item
-         * @returns the index at the specified position
-         */
-        QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
-
-        /**
-         * Returns the parent of the model item with the given index. If the item has no parent (i.e. index is
-         * invalid or module is the top module), and invalid QModelIndex is returned.
-         *
-         * @param index - The index to find the parent for
-         * @returns the model index of the parent
-         */
-        QModelIndex parent(const QModelIndex& index) const override;
-
-        /**
-         * Returns the number of rows under the given parent (i.e. the number of children of the parent).
-         *
-         * @param parent - The model index of the parent
-         * @returns the number of rows under the given parent
-         */
-        int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-
-        /**
-         * Returns the number of columns for the children of the given parent. Since the module model only contains
-         * one column this function returns always 1.
-         *
-         * @param parent - The model index of the parent
-         * @returns the number of columns for the children of the given parent. Always 1.
-         */
-        int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
         /**
          * Returns the data stored under the given role for the item referred to by the index.
@@ -114,17 +79,6 @@ namespace hal
          * @returns the item flags for the given index
          */
         Qt::ItemFlags flags(const QModelIndex& index) const override;
-
-        /**
-         * Returns the data for the given role and section in the header with the specified orientation.
-         * //Since the model has not headers, an empty QVariant is always returned. // REMOVE THIS LINE?
-         *
-         * @param section - The section
-         * @param orientation - The orientation
-         * @param role - The role
-         * @returns the header data. Always empty.
-         */
-        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
         // === Others ===
 
@@ -191,15 +145,15 @@ namespace hal
          * Recursively adds the given module with all of its submodules (and their submodules and so on...)
          * and the gates those modules to the item model.
          *
-         * @param module - The module which should be added to the item model together with all its 
+         * @param module - The module which should be added to the item model together with all its
          *                  submodules, gates and nets.
          */
         void addRecursively(const Module* module);
 
         /**
-         * Updates the parent of the ModuleItem corresponding to the specified module. 
+         * Updates the parent of the ModuleItem corresponding to the specified module.
          * The new parent must already be set in the Module object.
-         * 
+         *
          * @param module - The module whose ModuleItem will be reattached to a new parent in the item model.
         */
         void changeParentModule(const Module* module);
@@ -261,8 +215,6 @@ namespace hal
          * (e.g. net has no sources or destinations), nullptr is returned instead.
         */
         Module* FindNetParent(const Net* net);
-
-        ModuleItem* mTopModuleItem;
 
         QMap<u32, ModuleItem*> mModuleMap;
         QMap<u32, ModuleItem*> mGateMap;

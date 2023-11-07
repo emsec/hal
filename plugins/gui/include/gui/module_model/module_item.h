@@ -64,28 +64,6 @@ namespace hal
         ModuleItem(const u32 id, const TreeItemType type = TreeItemType::Module);
 
         /**
-         * Appends a child ModuleItem to this ModuleItem.
-         *
-         * @param row - The index of the childs of this ModuleItem the new child should be moved to
-         * @param child - The new child to be inserted
-         */
-        void insertChild(int row, ModuleItem* child);
-
-        /**
-         * Removes a child ModuleItem from this ModuleItem.
-         *
-         * @param child - The child to remove
-         */
-        void removeChild(ModuleItem* child);
-
-        /**
-         * Inserts a child ModuleItem at the end of the children list of this ModuleItem.
-         *
-         * @param child - The child to be appended
-         */
-        void appendChild(ModuleItem* child);
-
-        /**
          * Given a set of ModuleItems (in a map [id]->[ModuleItem]) this function adds each ModuleItem of this set as
          * a new children if its underlying module is a submodule (child) of the underlying module of this ModuleItem.
          *
@@ -101,13 +79,6 @@ namespace hal
         void prependChild(ModuleItem* child);
 
         /**
-         * Gets the parent ModuleItem of this ModuleItem.
-         *
-         * @returns the parent ModuleItem
-         */
-        ModuleItem* parent();
-
-        /**
          * Get the child ModuleItem at a certain position in the children list of this ModuleItem.
          *
          * @param row - The position in the children list of this ModuleItem
@@ -120,7 +91,7 @@ namespace hal
          *
          * @returns the parent ModuleItem. Returns a constant ModuleItem pointer
          */
-        const ModuleItem* constParent() const;
+        const BaseTreeItem* constParent() const;
 
         /**
          * Get the child ModuleItem at a certain position in the children list of this ModuleItem.
@@ -182,13 +153,6 @@ namespace hal
         TreeItemType getType() const;
 
         /**
-         * Sets the parent ModuleItem of this ModuleItem.
-         *
-         * @param parent - The new parent
-         */
-        void setParent(ModuleItem* parent);
-
-        /**
          * Sets the name of this ModuleItem (not the underlying module).
          *
          * @param name - The new name
@@ -204,7 +168,6 @@ namespace hal
         void setHighlighted(const bool highlighted);
 
     private:
-        ModuleItem* mParent;
         QList<ModuleItem*> mChildItems;
 
         u32 mId;

@@ -611,7 +611,7 @@ namespace hal
         }
 
         ModuleItem* selectedItem = getModuleItemFromIndex(mTreeView->currentIndex());
-        if(selectedItem->parent() != nullptr)
+        if(selectedItem->getParent() != nullptr)
         {
             gNetlistRelay->deleteModule(getModuleItemFromIndex(mTreeView->currentIndex())->id());
         }

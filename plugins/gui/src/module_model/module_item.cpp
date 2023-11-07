@@ -9,7 +9,7 @@ namespace hal
 {
 
 ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
-        mParent(nullptr),
+        BaseTreeItem(),
         mId(id),
         mType(type),
         mHighlighted(false)
@@ -26,21 +26,6 @@ ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
             mName = QString::fromStdString(gNetlist->get_net_by_id(id)->get_name());
             break;
         }
-    }
-
-    void ModuleItem::insertChild(int row, ModuleItem* child)
-    {
-        mChildItems.insert(row, child);
-    }
-
-    void ModuleItem::removeChild(ModuleItem* child)
-    {
-        mChildItems.removeOne(child);
-    }
-
-    void ModuleItem::appendChild(ModuleItem* child)
-    {
-        mChildItems.append(child);
     }
 
     void ModuleItem::appendExistingChildIfAny(const QMap<u32,ModuleItem*>& moduleMap)
@@ -68,19 +53,14 @@ ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
         mChildItems.prepend(child);
     }
 
-    ModuleItem* ModuleItem::parent()
-    {
-        return mParent;
-    }
-
     ModuleItem* ModuleItem::child(int row)
     {
         return mChildItems.value(row);
     }
 
-    const ModuleItem* ModuleItem::constParent() const
+    const BaseTreeItem* ModuleItem::constParent() const
     {
-        return mParent;
+        return getParent();
     }
 
     const ModuleItem* ModuleItem::constChild(int row) const
@@ -95,8 +75,8 @@ ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
 
     int ModuleItem::row() const
     {
-        if (mParent)
-            return mParent->mChildItems.indexOf(const_cast<ModuleItem*>(this));
+        if (getParent())
+            return static_cast<ModuleItem*>(getParent())->mChildItems.indexOf(const_cast<ModuleItem*>(this));
         else
             return 0;
     }
@@ -188,11 +168,6 @@ ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
 
     ModuleItem::TreeItemType ModuleItem::getType() const{
         return mType;
-    }
-
-    void ModuleItem::setParent(ModuleItem* parent)
-    {
-        mParent = parent;
     }
 
     void ModuleItem::setName(const QString& name)
