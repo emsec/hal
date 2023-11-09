@@ -102,6 +102,7 @@ namespace hal {
         bool isEndpoint() const { return mIsEndpoint; }
         bool isHorizontal() const { return mDir.isHorizontal(); }
         bool operator==(const NetLayoutWire& other) const;
+        QString toString() const;
     private:
         NetLayoutPoint mPoint;
         NetLayoutDirection mDir;
@@ -151,7 +152,6 @@ namespace hal {
     public:
         NetLayoutConnectionFactory(const QList<NetLayoutPoint>& sources, const QList<NetLayoutPoint>& destinations);
         QList<NetLayoutPoint> points() const { return mPoints; }
-        QList<NetLayoutPoint> mJunctions;
         NetLayoutConnection* connection;
         void dump(const QString& stub) const;
     private:

@@ -2,8 +2,8 @@
 
 namespace hal
 {
-    StandardArrowNet::StandardArrowNet(Net* n, const Lines &l)
-        : StandardGraphicsNet(n,l), mArrowNet(n)
+    StandardArrowNet::StandardArrowNet(Net* n, const Lines &l, const QList<QPointF>& knots)
+        : StandardGraphicsNet(n,l,knots), mArrowNet(n)
     {;}
 
     void StandardArrowNet::setInputPosition(const QPointF& pos)
