@@ -120,6 +120,16 @@ namespace hal
             float xBoxOffset() const;
         };
 
+        class SceneCoordinateArray
+        {
+            float* mArray;
+            int mFirstIndex;
+        public:
+            SceneCoordinateArray(const QMap<int,SceneCoordinate>& inputMap);
+            ~SceneCoordinateArray();
+            float lanePosition(int igrid, int ilane) const;
+        };
+
         class EndpointCoordinate
         {
             float mYoffset;
@@ -393,6 +403,9 @@ namespace hal
         QList<DrawNetThread*> mDrawNetThreads;
         QList<JunctionThread*> mJunctionThreads;
         QHash<u32, QHash<NetLayoutWire, int>> mLaneMap;
+
+        SceneCoordinateArray* mCoordArrayX;
+        SceneCoordinateArray* mCoordArrayY;
     };
 
     class DrawNetThread : public QThread

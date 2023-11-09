@@ -94,11 +94,6 @@ namespace hal
             void appendVLine(const qreal x, const qreal mSmallY, const qreal mBigY);
 
             /**
-             * Merges all horizontal and vertical lines so that overlapping lines are replaced by only a single line.
-             */
-            void mergeLines(QGraphicsScene* sc);
-
-            /**
              * Gets the total amount of lines (includes horizontal AND vertical lines).
              *
              * @returns the total amount of lines

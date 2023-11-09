@@ -233,9 +233,12 @@ namespace hal
         mParentContext->layoutProgress(5);
         calculateGateOffsets();
         mParentContext->layoutProgress(6);
+
+        mCoordArrayX = new SceneCoordinateArray(mCoordX);
+        mCoordArrayY = new SceneCoordinateArray(mCoordY);
+
         placeGates();
         mParentContext->layoutProgress(7);
-        mDone = true;
         drawNets();
         drawComments();
         updateSceneRect();
@@ -250,9 +253,8 @@ namespace hal
 
         qDebug() << "elapsed time (experimental new) layout [ms]" << timer.elapsed();
 
-
-        return;
-
+        delete mCoordArrayX;
+        delete mCoordArrayY;
         mDone = true;
     }
 
@@ -934,17 +936,17 @@ namespace hal
             case EndpointList::HasGlobalEndpoint:
                 if (epl.hasInputArrow())
                 {
-                    StandardArrowNet* san = new StandardArrowNet(n, dnt->mLines, dnt->mKnots);
+                    StandardArrowNet* san = new StandardArrowNet(n, dnt->mLines);
                     graphicsNet           = san;
                     int yGridPos          = mGlobalInputHash.value(dnt->id(), -1);
                     Q_ASSERT(yGridPos >= 0);
                     const EndpointCoordinate& epc = mEndpointHash.value(QPoint(mNodeBoundingBox.left(), yGridPos * 2));
-                    san->setInputPosition(QPointF(mCoordX.value(mNodeBoundingBox.left()).lanePosition(0), epc.lanePosition(0, true)));
+                    san->setInputPosition(QPointF(mCoordArrayX->lanePosition(mNodeBoundingBox.left(),-1), epc.lanePosition(0, true)));
                 }
                 if (epl.hasOutputArrow())
                 {
                     if (graphicsNet) mScene->addGraphItem(graphicsNet);
-                    StandardArrowNet* san = new StandardArrowNet(n, dnt->mLines, dnt->mKnots);
+                    StandardArrowNet* san = new StandardArrowNet(n, dnt->mLines);
                     graphicsNet           = san;
                     int yGridPos          = mGlobalOutputHash.value(dnt->id(), -1);
                     Q_ASSERT(yGridPos >= 0);
@@ -952,7 +954,7 @@ namespace hal
                     const EndpointCoordinate& epc = mEndpointHash.value(pnt);
                     const NetLayoutJunction* nlj  = mJunctionHash.value(pnt);
                     Q_ASSERT(nlj);
-                    san->setOutputPosition(QPointF(mCoordX.value(pnt.x()).lanePosition(nlj->rect().right()), epc.lanePosition(0, true)));
+                    san->setOutputPosition(QPointF(mCoordArrayX->lanePosition(pnt.x(),nlj->rect().right() + 1), epc.lanePosition(0, true)));
                 }
                 break;
             case EndpointList::SourceAndDestination:
@@ -1160,6 +1162,31 @@ namespace hal
         return junctionExit() + sHRoadPadding + mPadding;
     }
 
+    GraphLayouter::SceneCoordinateArray::SceneCoordinateArray(const QMap<int,SceneCoordinate>& inputMap)
+        : mArray(nullptr), mFirstIndex(0)
+    {
+        if (!inputMap.isEmpty())
+        {
+            mArray = new float[inputMap.size()];
+            auto it = inputMap.constBegin();
+            mFirstIndex = it.key();
+            for (int i = 0; it != inputMap.constEnd(); ++it)
+            {
+                mArray[i++] = it.value().lanePosition(0);
+            }
+        }
+    }
+
+    GraphLayouter::SceneCoordinateArray::~SceneCoordinateArray()
+    {
+        if (mArray) delete [] mArray;
+    }
+
+    float GraphLayouter::SceneCoordinateArray::lanePosition(int igrid, int ilane) const
+    {
+        return mArray[igrid-mFirstIndex] + ilane * sLaneSpacing;
+    }
+
     float GraphLayouter::EndpointCoordinate::lanePosition(int ilane, bool absolute) const
     {
         float y0 = absolute ? mYoffset : mTopPin;
@@ -1315,20 +1342,20 @@ namespace hal
 
             if (it.key().isHorizontal())
             {
-                float x0 = j0 ? mLayouter->mCoordX[ix0].lanePosition(j0->rect().right()) : mLayouter->mCoordX[ix0].junctionExit();
-                float x1 = j1 ? mLayouter->mCoordX[ix1].lanePosition(j1->rect().left()) : mLayouter->mCoordX[ix1].junctionEntry();
-                float yy = mLayouter->mCoordY[iy0].lanePosition(ilane);
+                float x0 = j0 ? mLayouter->mCoordArrayX->lanePosition(ix0,j0->rect().right()) : mLayouter->mCoordX[ix0].junctionExit();
+                float x1 = j1 ? mLayouter->mCoordArrayX->lanePosition(ix1,j1->rect().left()) : mLayouter->mCoordX[ix1].junctionEntry();
+                float yy = mLayouter->mCoordArrayY->lanePosition(iy0,ilane);
                 mLines.appendHLine(x0, x1, yy);
             }
             else
             {
                 float y0, y1;
-                float xx = mLayouter->mCoordX[ix0].lanePosition(ilane);
+                float xx = mLayouter->mCoordArrayX->lanePosition(ix0,ilane);
                 if (wToPoint.isEndpoint())
                 {
                     // netjunction -> endpoint
                     auto itEpc = mLayouter->mEndpointHash.find(wToPoint);
-                    y0         = j0 ? mLayouter->mCoordY[iy0].lanePosition(j0->rect().bottom()) : mLayouter->mCoordY[iy0].junctionExit();
+                    y0         = j0 ? mLayouter->mCoordArrayY->lanePosition(iy0,j0->rect().bottom()) : mLayouter->mCoordY[iy0].junctionExit();
                     y1         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j1->rect().top(), true) : mLayouter->mCoordY[iy1].junctionEntry();
                     //                        if (itEpc==mEndpointHash.constEnd())
                     //                            qDebug() << "xxx to endp" << wToPoint.x() << wToPoint.y() << y0 << y1;
@@ -1338,7 +1365,7 @@ namespace hal
                     // endpoint -> netjunction
                     auto itEpc = mLayouter->mEndpointHash.find(wFromPoint);
                     y0         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j0->rect().bottom(), true) : mLayouter->mCoordY[iy0].junctionExit();
-                    y1         = j1 ? mLayouter->mCoordY[iy1].lanePosition(j1->rect().top()) : mLayouter->mCoordY[iy1].junctionEntry();
+                    y1         = j1 ? mLayouter->mCoordArrayY->lanePosition(iy1,j1->rect().top()) : mLayouter->mCoordY[iy1].junctionEntry();
                     //                        if (itEpc==mEndpointHash.constEnd())
                     //                            qDebug() << "xxx fr endp" << wFromPoint.x() << wFromPoint.y() << y0 << y1;
                 }
@@ -1359,18 +1386,15 @@ namespace hal
             int y           = jt.key().y();
             bool isEndpoint = (y % 2 == 0);
 
-            const GraphLayouter::SceneCoordinate& scX = mLayouter->mCoordX.value(x);
-            const GraphLayouter::SceneCoordinate& scY = mLayouter->mCoordY.value(y);
-
             for (const NetLayoutJunctionWire& jw : jt.value()->netById(mId).mWires)
             {
                 int li = jw.mIndex.laneIndex();
                 if (jw.mIndex.isHorizontal())
                 {
                     Q_ASSERT(epcIt != mLayouter->mEndpointHash.constEnd() || !isEndpoint);
-                    float x0 = scX.lanePosition(jw.mRange.first());
-                    float x1 = scX.lanePosition(jw.mRange.last());
-                    float yy = isEndpoint ? epcIt.value().lanePosition(li, true) : scY.lanePosition(li);
+                    float x0 = mLayouter->mCoordArrayX->lanePosition(x,jw.mRange.first());
+                    float x1 = mLayouter->mCoordArrayX->lanePosition(x,jw.mRange.last());
+                    float yy = isEndpoint ? epcIt.value().lanePosition(li, true) : mLayouter->mCoordArrayY->lanePosition(y,li);
                     mLines.appendHLine(x0, x1, yy);
                 }
                 else
@@ -1378,8 +1402,8 @@ namespace hal
                     float y0, y1;
                     if (!isEndpoint)
                     {
-                        y0 = scY.lanePosition(jw.mRange.first());
-                        y1 = scY.lanePosition(jw.mRange.last());
+                        y0 = mLayouter->mCoordArrayY->lanePosition(y,jw.mRange.first());
+                        y1 = mLayouter->mCoordArrayY->lanePosition(y,jw.mRange.last());
                     }
                     else if (epcIt != mLayouter->mEndpointHash.constEnd())
                     {
@@ -1388,20 +1412,20 @@ namespace hal
                     }
                     else
                     {
-                        y0 = scY.junctionEntry();
-                        y1 = scY.junctionExit();
+                        y0 = mLayouter->mCoordY.value(y).junctionEntry();
+                        y1 = mLayouter->mCoordY.value(y).junctionExit();
                         if (y1 <= y0)
                             y1 = y0 + 1;
                     }
-                    float xx = scX.lanePosition(li);
+                    float xx = mLayouter->mCoordArrayX->lanePosition(x,li);
                     mLines.appendVLine(xx, y0, y1);
                 }
             }
 
             for (const QPoint& pnt : jt.value()->netById(mId).mKnots)
             {
-                float xp = scX.lanePosition(pnt.x());
-                float yp = isEndpoint ? epcIt.value().lanePosition(pnt.y(), true) : scY.lanePosition(pnt.y());
+                float xp = mLayouter->mCoordArrayX->lanePosition(x,pnt.x());
+                float yp = isEndpoint ? epcIt.value().lanePosition(pnt.y(), true) : mLayouter->mCoordArrayY->lanePosition(y,pnt.y());
                 mKnots.append(QPointF(xp,yp));
             }
         }
@@ -1419,9 +1443,9 @@ namespace hal
                 continue;
 
             const NetLayoutJunction* nlj     = mLayouter->mJunctionHash.value(it.key());
-            const GraphLayouter::SceneCoordinate& xScenePos = mLayouter->mCoordX.value(it.key().x());
-            float xjLeft                     = xScenePos.lanePosition(nlj->rect().left());
-            float xjRight                    = xScenePos.lanePosition(nlj->rect().right());
+            int ix = it.key().x();
+            float xjLeft                     = mLayouter->mCoordArrayX->lanePosition(ix,nlj->rect().left());
+            float xjRight                    = mLayouter->mCoordArrayX->lanePosition(ix,nlj->rect().right());
             Q_ASSERT(nlj);
 
             for (int inpInx : inputsById)
