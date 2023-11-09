@@ -9,14 +9,17 @@ All notable changes to this project will be documented in this file.
   * added flag which python editor tab is active when serializing project
   * added `GateType::delete_pin_group` and `GateType::assign_pin_to_group` to enable more operations on pin groups of gate pins
   * added extended gate library picker when importing a netlist
+  * added keyboard shortcut for delete-item action from toolbar
   * added parameter `force_name` to enforce pin (group) renaming to `Module::set_pin_name`, `Module::set_pin_group_name`, `Module::create_pin`, and `Module::create_pin_group`
   * changed supported input file formats for import from hard coded list to list provided by loadable parser plugins
   * changed behavior of import netlist dialog, suggest only non-existing directory names and loop until an acceptable name was entered
   * changed appearance and behavior of import project dialog, make sure existing hal projects don't get overwritten
+  * changed installation script policy to install Python packages (omit 'pip install' which would need virtual environment)
 * bugfixes
   * fixed colors in Python Console when switching between color schemes
   * fixed pybind of `Module::get_gates`
   * fixed Python script execution abort button disappearing when switching tabs
+  * fixed Python interpreter crash due to release of GIL semaphore before cleanup is done
   * fixed segfault when deleting a module for which an exclusive view exists
   * fixed not loading all plugins if the GUI is not in control
   * fixed Verilog writer not being a dependency of Verilator plugin
@@ -24,7 +27,16 @@ All notable changes to this project will be documented in this file.
   * fixed netlist parsers assigning gate pins in wrong order (compensated by the bug above, imported netlists were still correct)
   * fixed wrong order of pins within pin groups in provided gate libraries
   * fixed format string handling of enums in log outputs
+  * fixed restoring user assigned module colors from project file
   * fixed no scrollbar shown in `Data` tab of `Selection Details` widget
+  * fixed problems in GUI plugin management caused by addressing plugins by absolute path
+  * fixed several bugs related to moving node boxes in GUI by drag'n'drop
+
+* refactored layouter module
+  * switched to multithreaded algorithm
+  * boosted performance by using classes with faster memory access
+  * removed layouter code used prior to version 3.1.0 - thus removing the setting option to use that code
+  * added setting option to dump junction layout input data for experts to debug in case of layout errors
 
 ## [4.2.0](v4.2.0) - 2023-05-24 10:02:04-07:00 (urgency: medium)
 * GUI plugin manager
