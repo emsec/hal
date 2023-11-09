@@ -224,6 +224,7 @@ namespace hal
         }
         else{
             Q_EMIT triggerNewSearch(mLineEdit->text(), mCurrentOptions->toInt());
+            updateSearchHistory(mLineEdit->text());
         }
     }
 
@@ -265,6 +266,7 @@ namespace hal
         //TODO discuss if previous options should be passed back to the dialog to build dialog from them.
         // otherwise the use has to enter the same options again
         SearchOptionsDialog sd;
+        sd.setSearchHistory(mSearchHistory);
         sd.setOptions(mCurrentOptions, mLineEdit->text(),mColumnNames, mIncrementalSearch, mMinCharsToStartIncSearch);
         if (sd.exec() == QDialog::Accepted)
         {
@@ -275,12 +277,30 @@ namespace hal
             mMinCharsToStartIncSearch = sd.getMinIncSearchValue();
             mLineEdit->setText(txt);
 
+            updateSearchHistory(txt);
+
+
             qInfo() << "Searchbar starts search with: " << txt << " " << mCurrentOptions->toInt() << "  inc search: " << mIncrementalSearch << " " << mMinCharsToStartIncSearch;
             Q_EMIT triggerNewSearch(txt, mCurrentOptions->toInt());
+
+
         }
         if(mCurrentOptions->toInt() != SearchOptions().toInt())
             mSearchOptionsButton->setChecked(true);
         else
             mSearchOptionsButton->setChecked(false);
+    }
+
+    void Searchbar::updateSearchHistory(QString entry){
+        if(entry.length() >= 3 && !mSearchHistory.contains(entry))
+        {
+
+            if(!mSearchHistory.empty() && entry.startsWith(mSearchHistory[0])) mSearchHistory[0] = entry;
+            else
+            {
+                if (mSearchHistory.length() >= 10) mSearchHistory.pop_back();
+                mSearchHistory.prepend(entry);
+            }
+        }
     }
 }

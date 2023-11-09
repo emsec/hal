@@ -55,6 +55,7 @@ namespace hal
         QString getText() const;
         int getMinIncSearchValue();
         bool getIncrementalSearch();
+        void setSearchHistory(const QStringList& history);
 
     Q_SIGNALS:
         void emitOptions(QString text, int options);

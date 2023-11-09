@@ -204,4 +204,7 @@ namespace hal
         return result;
     }
 
+    void SearchOptionsDialog::setSearchHistory(const QStringList &history){
+        mInputBox->addItems(history);
+    }
 }

@@ -157,6 +157,8 @@ namespace hal
 
         bool eventFilter(QObject *object, QEvent *event);
 
+        void updateSearchHistory(QString entry);
+
     Q_SIGNALS:
         /** TODO : remove textEdited signal
          * textEdited should be handled internally
@@ -234,5 +236,7 @@ namespace hal
         SearchOptions* mCurrentOptions;
         bool mIncrementalSearch = true;
         int mMinCharsToStartIncSearch = 3;
+
+        QStringList mSearchHistory;
     };
 }
