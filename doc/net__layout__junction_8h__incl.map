@@ -1,11 +1,11 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/layouters/net_layout_junction.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/graph_widget/layouters/net_layout_junction.h">
-<area shape="rect" id="node1" title=" " alt="" coords="230,5,433,76"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,199,71,225"/>
-<area shape="rect" id="node3" title=" " alt="" coords="95,199,168,225"/>
-<area shape="rect" id="node4" title=" " alt="" coords="276,199,331,225"/>
-<area shape="rect" id="node5" title=" " alt="" coords="355,199,420,225"/>
-<area shape="rect" id="node6" title=" " alt="" coords="419,124,486,151"/>
-<area shape="rect" id="node7" title=" " alt="" coords="510,124,571,151"/>
-<area shape="rect" id="node8" href="$net__layout__point_8h.html" title=" " alt="" coords="151,124,293,151"/>
-<area shape="rect" id="node9" title=" " alt="" coords="192,199,252,225"/>
+<area shape="rect" id="node1" title=" " alt="" coords="259,5,462,76"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,213,71,240"/>
+<area shape="rect" id="node3" title=" " alt="" coords="96,213,169,240"/>
+<area shape="rect" id="node4" title=" " alt="" coords="284,213,339,240"/>
+<area shape="rect" id="node5" title=" " alt="" coords="373,213,439,240"/>
+<area shape="rect" id="node6" title=" " alt="" coords="449,131,515,158"/>
+<area shape="rect" id="node7" title=" " alt="" coords="539,131,601,158"/>
+<area shape="rect" id="node8" href="$net__layout__point_8h.html" title=" " alt="" coords="125,124,324,165"/>
+<area shape="rect" id="node9" title=" " alt="" coords="195,213,255,240"/>
 </map>

@@ -106,13 +106,14 @@ $(document).ready(function(){initNavTree('functions_func_i.html',''); initResiza
 , <a class="el" href="classhal_1_1_recent_file_item.html#a3521d3fa589b9b1679de68a1a41655a8">hal::RecentFileItem</a>
 </li>
 <li>id()
-: <a class="el" href="classhal_1_1_gate_select_entry.html#a14c4cda48f4e90606da87f6c06dade84">hal::GateSelectEntry</a>
+: <a class="el" href="classhal_1_1_draw_net_thread.html#a2a9691c431d15fc79e15b80e51f57f1b">hal::DrawNetThread</a>
+, <a class="el" href="classhal_1_1_gate_select_entry.html#a14c4cda48f4e90606da87f6c06dade84">hal::GateSelectEntry</a>
 , <a class="el" href="classhal_1_1_graph_context.html#aecccd028104e704aca70dc383c386477">hal::GraphContext</a>
 , <a class="el" href="classhal_1_1_graphics_item.html#af245ab823135383a30a131a8f173f4a0">hal::GraphicsItem</a>
 , <a class="el" href="classhal_1_1_grouping_table_entry.html#aecb836980aa746e5c0dcdf73f8009b7c">hal::GroupingTableEntry</a>
 , <a class="el" href="classhal_1_1_module_item.html#aa8eb05d41577f125ff7f03cf0e9a6dad">hal::ModuleItem</a>
 , <a class="el" href="classhal_1_1_module_select_entry.html#a3a9d39e00ebb7bc41e1bb5490ca139b8">hal::ModuleSelectEntry</a>
-, <a class="el" href="classhal_1_1_net_layout_junction_entries.html#a9f0db10ccada4d560fe143718f00c1d7">hal::NetLayoutJunctionEntries</a>
+, <a class="el" href="classhal_1_1_net_layout_junction_entries.html#a5fa793ac077d4fe50b3e1cebf492a6fa">hal::NetLayoutJunctionEntries</a>
 , <a class="el" href="classhal_1_1_node.html#aeb47b4912d86e9a074a501e5027b88f4">hal::Node</a>
 , <a class="el" href="classhal_1_1_node_box.html#af5e865b7aad512658e4838e629857ff1">hal::NodeBox</a>
 , <a class="el" href="classhal_1_1_selection_tree_item.html#a9571f0b8bf91dd67fcf8aba04c742f24">hal::SelectionTreeItem</a>
@@ -180,6 +181,9 @@ $(document).ready(function(){initNavTree('functions_func_i.html',''); initResiza
 <li>initSplitterSize()
 : <a class="el" href="classhal_1_1_content_layout_area.html#aa9ecdd246e095f51f64e9e7ddfd7e9fe">hal::ContentLayoutArea</a>
 </li>
+<li>innerPos()
+: <a class="el" href="classhal_1_1_net_layout_junction_range.html#a64dc9c59793923fc4bd3505f7574e0e3">hal::NetLayoutJunctionRange</a>
+</li>
 <li>inputByNet()
 : <a class="el" href="classhal_1_1_graphics_node.html#ab8e9f46fdb8f5e23f98694c47bcf489e">hal::GraphicsNode</a>
 </li>
@@ -241,9 +245,6 @@ $(document).ready(function(){initNavTree('functions_func_i.html',''); initResiza
 </li>
 <li>interrupt()
 : <a class="el" href="classhal_1_1_python_thread.html#a644b0f071b00e2d417bb8954ab4a193d">hal::PythonThread</a>
-</li>
-<li>intersection()
-: <a class="el" href="classhal_1_1_net_layout_junction_wire.html#a00fb3bdebf38f5b1d36e2573af7f7b4e">hal::NetLayoutJunctionWire</a>
 </li>
 <li>is()
 : <a class="el" href="classhal_1_1_boolean_function.html#aa201084398ca07c914e0af196a82645c">hal::BooleanFunction</a>
@@ -422,7 +423,7 @@ $(document).ready(function(){initNavTree('functions_func_i.html',''); initResiza
 , <a class="el" href="classhal_1_1_net_layout_wire.html#a5d2d1c5f4024beedc9d84c70998dd516">hal::NetLayoutWire</a>
 </li>
 <li>isEntry()
-: <a class="el" href="classhal_1_1_net_layout_junction_range.html#a27dcf17dc8c780c37bfde1c8b50a9fc2">hal::NetLayoutJunctionRange</a>
+: <a class="el" href="classhal_1_1_net_layout_junction_range.html#ae3822cb5493714efd75e99a2a086d4cc">hal::NetLayoutJunctionRange</a>
 , <a class="el" href="classhal_1_1_net_layout_junction_wire.html#a6210536101337b240986e8a2072f148b">hal::NetLayoutJunctionWire</a>
 </li>
 <li>isEqual()
@@ -447,7 +448,8 @@ $(document).ready(function(){initNavTree('functions_func_i.html',''); initResiza
 : <a class="el" href="classhal_1_1_gui_plugin_table.html#a17003723a4eb28d969cb72e8a8161845">hal::GuiPluginTable</a>
 </li>
 <li>isHorizontal()
-: <a class="el" href="classhal_1_1_net_layout_direction.html#a1875e8fd7c430a51fad1331fea1c7e82">hal::NetLayoutDirection</a>
+: <a class="el" href="classhal_1_1_lane_index.html#abbf200676d1db9f18428f10b23469f83">hal::LaneIndex</a>
+, <a class="el" href="classhal_1_1_net_layout_direction.html#a1875e8fd7c430a51fad1331fea1c7e82">hal::NetLayoutDirection</a>
 , <a class="el" href="classhal_1_1_net_layout_wire.html#a64d0688c2d49c023cd6366169ddb93a4">hal::NetLayoutWire</a>
 </li>
 <li>isInvalid()
@@ -544,11 +546,9 @@ $(document).ready(function(){initNavTree('functions_func_i.html',''); initResiza
 <li>isUp()
 : <a class="el" href="classhal_1_1_net_layout_direction.html#abeda4dd68246a2bbd823d7186110601e">hal::NetLayoutDirection</a>
 </li>
-<li>isValid()
-: <a class="el" href="classhal_1_1_net_layout_junction_wire_intersection.html#a3e7e55335ab362b7d3c51f41193814be">hal::NetLayoutJunctionWireIntersection</a>
-</li>
 <li>isVertical()
-: <a class="el" href="classhal_1_1_net_layout_direction.html#a6e2e31de259a1d03b6ddd31b9ef700b4">hal::NetLayoutDirection</a>
+: <a class="el" href="classhal_1_1_lane_index.html#af9532b948eec08a319d4f3d71cdf2c4c">hal::LaneIndex</a>
+, <a class="el" href="classhal_1_1_net_layout_direction.html#a6e2e31de259a1d03b6ddd31b9ef700b4">hal::NetLayoutDirection</a>
 </li>
 <li>isWarnSubstitute()
 : <a class="el" href="classhal_1_1_gate_library_selection_table.html#a2fe236460c9c69d5cc3cf521266967db">hal::GateLibrarySelectionTable</a>
@@ -575,7 +575,7 @@ $(document).ready(function(){initNavTree('functions_func_i.html',''); initResiza
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Nov 7 2023 15:50:24 for HAL by
+    <li class="footer">Generated on Thu Nov 9 2023 19:52:11 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

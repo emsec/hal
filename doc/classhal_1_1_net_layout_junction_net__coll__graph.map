@@ -1,4 +1,5 @@
 <map id="hal::NetLayoutJunctionNet" name="hal::NetLayoutJunctionNet">
-<area shape="rect" id="node1" title=" " alt="" coords="18,351,210,501"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qlist.html" title=" " alt="" coords="5,5,223,288"/>
+<area shape="rect" id="node1" title="Single net to be routed through the junction." alt="" coords="113,351,305,501"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qlist.html" title=" " alt="" coords="5,13,188,281"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qlist.html" title=" " alt="" coords="212,5,429,288"/>
 </map>

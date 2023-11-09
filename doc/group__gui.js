@@ -165,16 +165,6 @@ var group__gui =
       [ "rowCount", "classhal_1_1_gatelibrary_table_model.html#a96513b0e49e033c6ad1312f0ccd4f585", null ],
       [ "setup", "classhal_1_1_gatelibrary_table_model.html#ac329ef2df380acc8281f6fd19f9ae728", null ]
     ] ],
-    [ "NetLayoutJunctionWireIntersection", "classhal_1_1_net_layout_junction_wire_intersection.html", [
-      [ "PlacementType", "classhal_1_1_net_layout_junction_wire_intersection.html#afc2efe400507fbb8da994754117b0ae9", [
-        [ "Normal", "classhal_1_1_net_layout_junction_wire_intersection.html#afc2efe400507fbb8da994754117b0ae9a0ad01ece1b442a9f888ae654dda1e8bd", null ],
-        [ "Verify", "classhal_1_1_net_layout_junction_wire_intersection.html#afc2efe400507fbb8da994754117b0ae9aebf2defe950433fa3c332a46208998ab", null ],
-        [ "Endpoint", "classhal_1_1_net_layout_junction_wire_intersection.html#afc2efe400507fbb8da994754117b0ae9aecc4929f52b41baf5650834ce78a7e44", null ]
-      ] ],
-      [ "NetLayoutJunctionWireIntersection", "classhal_1_1_net_layout_junction_wire_intersection.html#ac581a17ec605b8a4e35a4e1700d27e66", null ],
-      [ "graphicsFactory", "classhal_1_1_net_layout_junction_wire_intersection.html#ad17185ac371bc0c92b8e676b7f604a37", null ],
-      [ "isValid", "classhal_1_1_net_layout_junction_wire_intersection.html#a3e7e55335ab362b7d3c51f41193814be", null ]
-    ] ],
     [ "GuiApi", "classhal_1_1_gui_api.html", [
       [ "GuiApi", "classhal_1_1_gui_api.html#a3fff1aea43da474f2b8c62d0e5b8117d", null ],
       [ "deselect", "classhal_1_1_gui_api.html#af821c5bf0f5cf9c5c0b23b322e4b600f", null ],

@@ -22,6 +22,7 @@ var hierarchy =
     [ "hal::AbstractFactoryProvider", "classhal_1_1_abstract_factory_provider.html", [
       [ "hal::FacFactoryProvider< T >", "classhal_1_1_fac_factory_provider.html", null ]
     ] ],
+    [ "hal::NetLayoutJunctionOccupiedHash::AddOrMerge", "classhal_1_1_net_layout_junction_occupied_hash_1_1_add_or_merge.html", null ],
     [ "hal::AssignedKeybindMap", "classhal_1_1_assigned_keybind_map.html", null ],
     [ "base_sink", null, [
       [ "hal::log_gui_sink", "classhal_1_1log__gui__sink.html", null ]
@@ -143,6 +144,7 @@ var hierarchy =
         ] ]
       ] ]
     ] ],
+    [ "hal::LaneIndex", "classhal_1_1_lane_index.html", null ],
     [ "hal::LayoutLocker", "classhal_1_1_layout_locker.html", null ],
     [ "hal::LayoutLockerManager", "classhal_1_1_layout_locker_manager.html", null ],
     [ "hal::StandardGraphicsNet::Lines", "structhal_1_1_standard_graphics_net_1_1_lines.html", null ],
@@ -245,6 +247,9 @@ var hierarchy =
     ] ],
     [ "QHash< hal::Node, CoordinateFromData >", "https://doc.qt.io/qt-5/qhash.html", [
       [ "hal::CoordinateFromDataMap", "classhal_1_1_coordinate_from_data_map.html", null ]
+    ] ],
+    [ "QHash< LaneIndex, NetLayoutJunctionOccupied >", "https://doc.qt.io/qt-5/qhash.html", [
+      [ "hal::NetLayoutJunctionOccupiedHash", "classhal_1_1_net_layout_junction_occupied_hash.html", null ]
     ] ],
     [ "QHash< NetLayoutPoint, NetLayoutJunction * >", "https://doc.qt.io/qt-5/qhash.html", [
       [ "hal::NetLayoutJunctionHash", "classhal_1_1_net_layout_junction_hash.html", null ]
@@ -388,6 +393,8 @@ var hierarchy =
         [ "hal::PythonSyntaxHighlighter", "classhal_1_1_python_syntax_highlighter.html", null ]
       ] ],
       [ "QThread", "https://doc.qt.io/qt-5/qthread.html", [
+        [ "hal::DrawNetThread", "classhal_1_1_draw_net_thread.html", null ],
+        [ "hal::JunctionThread", "classhal_1_1_junction_thread.html", null ],
         [ "hal::PythonThread", "classhal_1_1_python_thread.html", null ]
       ] ],
       [ "QWidget", "https://doc.qt.io/qt-5/qwidget.html", [
@@ -578,7 +585,6 @@ var hierarchy =
     ] ],
     [ "QPoint", "https://doc.qt.io/qt-5/qpoint.html", [
       [ "hal::CoordinateFromData", "classhal_1_1_coordinate_from_data.html", null ],
-      [ "hal::NetLayoutJunctionWireIntersection", "classhal_1_1_net_layout_junction_wire_intersection.html", null ],
       [ "hal::NetLayoutPoint", "classhal_1_1_net_layout_point.html", null ]
     ] ],
     [ "QString", "https://doc.qt.io/qt-5/qstring.html", [
@@ -589,10 +595,10 @@ var hierarchy =
       [ "hal::NodeBoxes", "classhal_1_1_node_boxes.html", null ]
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
+    [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
+    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "hal::Result< T >", "classhal_1_1_result.html", null ],
     [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
-    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
-    [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
     [ "hal::RuntimeLibrary", "classhal_1_1_runtime_library.html", null ],
     [ "hal::SelectionTreeItem", "classhal_1_1_selection_tree_item.html", [
       [ "hal::SelectionTreeItemGate", "classhal_1_1_selection_tree_item_gate.html", null ],
@@ -671,8 +677,8 @@ var hierarchy =
     [ "Vec_Ptr_t_", "struct_vec___ptr__t__.html", null ],
     [ "Vec_Vec_t_", "struct_vec___vec__t__.html", null ],
     [ "hal::GuiApiClasses::View", "classhal_1_1_gui_api_classes_1_1_view.html", null ],
-    [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
+    [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
     [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ]
 ];

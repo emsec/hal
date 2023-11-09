@@ -1,8 +1,12 @@
 var searchData=
 [
-  ['jsonwritearray_39252',['JsonWriteArray',['../classhal_1_1_json_write_complex.html#a42a5f69ea97d64807050171267e0929a',1,'hal::JsonWriteComplex']]],
-  ['jsonwritecomplex_39253',['JsonWriteComplex',['../classhal_1_1_json_write_data.html#a713d13fd5f0953c0ff11168482863458',1,'hal::JsonWriteData']]],
-  ['jsonwritedata_39254',['JsonWriteData',['../classhal_1_1_json_write_complex.html#a164b2a703fdcd6611aa2beebced6c2af',1,'hal::JsonWriteComplex::JsonWriteData()'],['../classhal_1_1_json_write_object.html#a164b2a703fdcd6611aa2beebced6c2af',1,'hal::JsonWriteObject::JsonWriteData()'],['../classhal_1_1_json_write_array.html#a164b2a703fdcd6611aa2beebced6c2af',1,'hal::JsonWriteArray::JsonWriteData()'],['../classhal_1_1_json_write_document.html#a164b2a703fdcd6611aa2beebced6c2af',1,'hal::JsonWriteDocument::JsonWriteData()']]],
-  ['jsonwritedocument_39255',['JsonWriteDocument',['../classhal_1_1_json_write_complex.html#abe080fc9d0efa9c44af302e5e2501af6',1,'hal::JsonWriteComplex::JsonWriteDocument()'],['../classhal_1_1_json_write_object.html#abe080fc9d0efa9c44af302e5e2501af6',1,'hal::JsonWriteObject::JsonWriteDocument()'],['../classhal_1_1_json_write_array.html#abe080fc9d0efa9c44af302e5e2501af6',1,'hal::JsonWriteArray::JsonWriteDocument()']]],
-  ['jsonwriteobject_39256',['JsonWriteObject',['../classhal_1_1_json_write_complex.html#af11569e24e7dbffd025f900dbe1c2c86',1,'hal::JsonWriteComplex']]]
+  ['gate_39260',['Gate',['../classhal_1_1_netlist_internal_manager.html#ad8205f09f8efdf8fab19078d103cd6e7',1,'hal::NetlistInternalManager']]],
+  ['gatelibrary_39261',['GateLibrary',['../classhal_1_1_gate_type.html#acaf9a4267eaeba61fa2cf28952d58bc4',1,'hal::GateType']]],
+  ['graphcontextmanager_39262',['GraphContextManager',['../classhal_1_1_graph_context.html#a86a0cb713ffa26636ccf96114f7566ec',1,'hal::GraphContext']]],
+  ['graphnavigationtablewidget_39263',['GraphNavigationTableWidget',['../classhal_1_1_graph_navigation_widget.html#a2ab5f61391a00d866fcb6f9ac5183547',1,'hal::GraphNavigationWidget']]],
+  ['graphnavigationtreewidget_39264',['GraphNavigationTreeWidget',['../classhal_1_1_graph_navigation_widget.html#a19f4d90bc5f5452e22ff74d595742df9',1,'hal::GraphNavigationWidget']]],
+  ['graphwidget_39265',['GraphWidget',['../classhal_1_1_graph_graphics_view.html#a883185841d7deb422d7400dafea4e113',1,'hal::GraphGraphicsView']]],
+  ['grouping_39266',['Grouping',['../classhal_1_1_netlist_internal_manager.html#ab61c4d8e4b1799e5578ebdd78701c76c',1,'hal::NetlistInternalManager']]],
+  ['guipluginmanager_39267',['GuiPluginManager',['../classhal_1_1_gui_plugin_delegate.html#a0de770239a7ebe00cf4e39a3ed2a0fc8',1,'hal::GuiPluginDelegate']]],
+  ['guiplugintable_39268',['GuiPluginTable',['../classhal_1_1_gui_plugin_entry.html#a0a4e1b69662c4f42309babbb6fc3e0df',1,'hal::GuiPluginEntry']]]
 ];

@@ -97,17 +97,18 @@ Collaboration diagram for hal::NetLayoutJunction:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_net_layout_junction__coll__graph.png" border="0" usemap="#hal_1_1_net_layout_junction_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_net_layout_junction_coll__map" id="hal_1_1_net_layout_junction_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,183,156"/>
+<area shape="rect" title=" " alt="" coords="5,5,183,141"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ad8835a50934d5b10771743ad89b799bc"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction.html#ad8835a50934d5b10771743ad89b799bc">mErrorT</a> { <a class="el" href="classhal_1_1_net_layout_junction.html#ad8835a50934d5b10771743ad89b799bca2fb314bc3b5a2e72c76912d1f9048f34">StraightRouteError</a> = -2, 
-<a class="el" href="classhal_1_1_net_layout_junction.html#ad8835a50934d5b10771743ad89b799bca084da45f511cd00fbed0f006e0a114bb">CornerRouteError</a> = -1, 
-<a class="el" href="classhal_1_1_net_layout_junction.html#ad8835a50934d5b10771743ad89b799bcacf61cd8eb98de819958a126312c27047">Ok</a> = 0
+<tr class="memitem:a952cbf5ad21212b5f7ec0c45b318abbb"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction.html#a952cbf5ad21212b5f7ec0c45b318abbb">ErrorType</a> { <a class="el" href="classhal_1_1_net_layout_junction.html#a952cbf5ad21212b5f7ec0c45b318abbba2fb314bc3b5a2e72c76912d1f9048f34">StraightRouteError</a> = -3, 
+<a class="el" href="classhal_1_1_net_layout_junction.html#a952cbf5ad21212b5f7ec0c45b318abbbaa636e0154d21e92515ee91185271f293">TRouteError</a> = -2, 
+<a class="el" href="classhal_1_1_net_layout_junction.html#a952cbf5ad21212b5f7ec0c45b318abbba084da45f511cd00fbed0f006e0a114bb">CornerRouteError</a> = -1, 
+<a class="el" href="classhal_1_1_net_layout_junction.html#a952cbf5ad21212b5f7ec0c45b318abbbacf61cd8eb98de819958a126312c27047">Ok</a> = 0
  }</td></tr>
-<tr class="separator:ad8835a50934d5b10771743ad89b799bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a952cbf5ad21212b5f7ec0c45b318abbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -117,35 +118,34 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afc5bb5e035a7b08b6a70ef90a58c6c12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ac8220ebdfd2a272bb43f4596bfb31e"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qrect.html">QRect</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction.html#a2ac8220ebdfd2a272bb43f4596bfb31e">rect</a> () const</td></tr>
 <tr class="separator:a2ac8220ebdfd2a272bb43f4596bfb31e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a250da2467d1ad3f9c57eca9dcb04fbcb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction.html#a250da2467d1ad3f9c57eca9dcb04fbcb">dump</a> () const</td></tr>
-<tr class="separator:a250da2467d1ad3f9c57eca9dcb04fbcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9351544319f3865a83211a7fe2b5edae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_net_layout_junction_net.html">NetLayoutJunctionNet</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction.html#a9351544319f3865a83211a7fe2b5edae">netById</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>) const</td></tr>
 <tr class="separator:a9351544319f3865a83211a7fe2b5edae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0b6b3220694b752f088a68ed8a0d628"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_net_layout_junction.html#ad8835a50934d5b10771743ad89b799bc">mErrorT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction.html#ae0b6b3220694b752f088a68ed8a0d628">lastError</a> () const</td></tr>
-<tr class="separator:ae0b6b3220694b752f088a68ed8a0d628"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac13ae44b10cb997425882dc42fa6b48c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_net_layout_junction.html#a952cbf5ad21212b5f7ec0c45b318abbb">ErrorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction.html#ac13ae44b10cb997425882dc42fa6b48c">lastError</a> () const</td></tr>
+<tr class="separator:ac13ae44b10cb997425882dc42fa6b48c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00176">176</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00402">402</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
-<a id="ad8835a50934d5b10771743ad89b799bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad8835a50934d5b10771743ad89b799bc">&#9670;&nbsp;</a></span>mErrorT</h2>
+<a id="a952cbf5ad21212b5f7ec0c45b318abbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a952cbf5ad21212b5f7ec0c45b318abbb">&#9670;&nbsp;</a></span>ErrorType</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="classhal_1_1_net_layout_junction.html#ad8835a50934d5b10771743ad89b799bc">hal::NetLayoutJunction::mErrorT</a></td>
+          <td class="memname">enum <a class="el" href="classhal_1_1_net_layout_junction.html#a952cbf5ad21212b5f7ec0c45b318abbb">hal::NetLayoutJunction::ErrorType</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ad8835a50934d5b10771743ad89b799bca2fb314bc3b5a2e72c76912d1f9048f34"></a>StraightRouteError&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="ad8835a50934d5b10771743ad89b799bca084da45f511cd00fbed0f006e0a114bb"></a>CornerRouteError&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="ad8835a50934d5b10771743ad89b799bcacf61cd8eb98de819958a126312c27047"></a>Ok&#160;</td><td class="fielddoc"></td></tr>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a952cbf5ad21212b5f7ec0c45b318abbba2fb314bc3b5a2e72c76912d1f9048f34"></a>StraightRouteError&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a952cbf5ad21212b5f7ec0c45b318abbbaa636e0154d21e92515ee91185271f293"></a>TRouteError&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a952cbf5ad21212b5f7ec0c45b318abbba084da45f511cd00fbed0f006e0a114bb"></a>CornerRouteError&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a952cbf5ad21212b5f7ec0c45b318abbbacf61cd8eb98de819958a126312c27047"></a>Ok&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00184">184</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00410">410</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
 
 </div>
 </div>
@@ -166,9 +166,9 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00022">22</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00085">85</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="net__layout__junction_8h_source.html#l00086">hal::NetLayoutJunctionEntries::id()</a>, <a class="el" href="net__layout__point_8h_source.html#l00065">hal::NetLayoutDirection::isMax()</a>, <a class="el" href="test_8py_source.html#l00008">test::n</a>, and <a class="el" href="net__layout__junction_8h_source.html#l00085">hal::NetLayoutJunctionEntries::size()</a>.</p>
+<p class="reference">References <a class="el" href="net__layout__junction_8h_source.html#l00274">hal::NetLayoutJunctionEntries::id()</a>, <a class="el" href="net__layout__point_8h_source.html#l00065">hal::NetLayoutDirection::isMax()</a>, <a class="el" href="net__layout__junction_8h_source.html#l00266">hal::NetLayoutJunctionEntries::mEntries</a>, <a class="el" href="test_8py_source.html#l00008">test::n</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#size">QList::size()</a>.</p>
 
 </div>
 </div>
@@ -195,34 +195,13 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00180">180</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00406">406</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a250da2467d1ad3f9c57eca9dcb04fbcb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a250da2467d1ad3f9c57eca9dcb04fbcb">&#9670;&nbsp;</a></span>dump()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::NetLayoutJunction::dump </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00225">225</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="net__layout__junction_8cpp_source.html#l00829">hal::NetLayoutJunctionEntries::dump()</a>.</p>
-
-</div>
-</div>
-<a id="ae0b6b3220694b752f088a68ed8a0d628"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0b6b3220694b752f088a68ed8a0d628">&#9670;&nbsp;</a></span>lastError()</h2>
+<a id="ac13ae44b10cb997425882dc42fa6b48c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac13ae44b10cb997425882dc42fa6b48c">&#9670;&nbsp;</a></span>lastError()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -231,7 +210,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_net_layout_junction.html#ad8835a50934d5b10771743ad89b799bc">mErrorT</a> hal::NetLayoutJunction::lastError </td>
+          <td class="memname"><a class="el" href="classhal_1_1_net_layout_junction.html#a952cbf5ad21212b5f7ec0c45b318abbb">ErrorType</a> hal::NetLayoutJunction::lastError </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -244,7 +223,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00185">185</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00411">411</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
 
 </div>
 </div>
@@ -272,7 +251,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00183">183</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00408">408</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
 
 </div>
 </div>
@@ -299,7 +278,9 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00181">181</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00407">407</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l01324">hal::DrawNetThread::run()</a>.</p>
 
 </div>
 </div>
@@ -313,7 +294,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_net_layout_junction.html">NetLayoutJunction</a></li>
-    <li class="footer">Generated on Tue Nov 7 2023 15:50:22 for HAL by
+    <li class="footer">Generated on Thu Nov 9 2023 19:52:09 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

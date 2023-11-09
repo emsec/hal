@@ -9,5 +9,6 @@ var classhal_1_1_net_layout_wire =
     [ "graphicsFactory", "classhal_1_1_net_layout_wire.html#ad6efc8f5959f1edc5e61d9c50d5150ac", null ],
     [ "isEndpoint", "classhal_1_1_net_layout_wire.html#a5d2d1c5f4024beedc9d84c70998dd516", null ],
     [ "isHorizontal", "classhal_1_1_net_layout_wire.html#a64d0688c2d49c023cd6366169ddb93a4", null ],
-    [ "operator==", "classhal_1_1_net_layout_wire.html#af8a2c14bc4dc2e0361c4fc7ea5a48939", null ]
+    [ "operator==", "classhal_1_1_net_layout_wire.html#af8a2c14bc4dc2e0361c4fc7ea5a48939", null ],
+    [ "toString", "classhal_1_1_net_layout_wire.html#a3af16f47bfffe76a8242461e2ea8fdc1", null ]
 ];

@@ -84,11 +84,11 @@ $(document).ready(function(){initNavTree('classhal_1_1_net_layout_junction_entri
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classhal_1_1_net_layout_junction_entries-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hal::NetLayoutJunctionEntries Class Reference<div class="ingroups"><a class="el" href="group__gui.html">HAL Gui</a> &raquo; <a class="el" href="group__graph.html">Graph Widget</a> &raquo; <a class="el" href="group__graph-layouter.html">Layouters</a></div></div>  </div>
+<div class="title">hal::NetLayoutJunctionEntries Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -98,85 +98,91 @@ Collaboration diagram for hal::NetLayoutJunctionEntries:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_net_layout_junction_entries__coll__graph.png" border="0" usemap="#hal_1_1_net_layout_junction_entries_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_net_layout_junction_entries_coll__map" id="hal_1_1_net_layout_junction_entries_coll__map">
-<area shape="rect" title=" " alt="" coords="5,336,220,472"/>
+<area shape="rect" title=" " alt="" coords="5,336,220,457"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qlist.html" title=" " alt="" coords="21,5,204,273"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3cb43817a230d8fbd46d0827e7d0ad41"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_entries.html#a3cb43817a230d8fbd46d0827e7d0ad41">size</a> (<a class="el" href="classhal_1_1_net_layout_direction.html">NetLayoutDirection</a> dir) const</td></tr>
-<tr class="separator:a3cb43817a230d8fbd46d0827e7d0ad41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f0db10ccada4d560fe143718f00c1d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_entries.html#a9f0db10ccada4d560fe143718f00c1d7">id</a> (<a class="el" href="classhal_1_1_net_layout_direction.html">NetLayoutDirection</a> dir, int i) const</td></tr>
-<tr class="separator:a9f0db10ccada4d560fe143718f00c1d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc36b8cf96e0d7085f79036da15a9268"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_entries.html#adc36b8cf96e0d7085f79036da15a9268">dump</a> () const</td></tr>
-<tr class="separator:adc36b8cf96e0d7085f79036da15a9268"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8fc1f04f6a81f973d629650070169e17"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_entries.html#a8fc1f04f6a81f973d629650070169e17">dumpFile</a> (const <a class="el" href="classhal_1_1_net_layout_point.html">NetLayoutPoint</a> &amp;pnt) const</td></tr>
-<tr class="separator:a8fc1f04f6a81f973d629650070169e17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f62e544d575b2c24535929a86a14935"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_entries.html#a0f62e544d575b2c24535929a86a14935">setEntries</a> (<a class="el" href="classhal_1_1_net_layout_direction.html">NetLayoutDirection</a> dir, const <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;entries_)</td></tr>
-<tr class="separator:a0f62e544d575b2c24535929a86a14935"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fa793ac077d4fe50b3e1cebf492a6fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_entries.html#a5fa793ac077d4fe50b3e1cebf492a6fa">id</a> (<a class="el" href="classhal_1_1_net_layout_direction.html">NetLayoutDirection</a> dir, int ilane) const</td></tr>
+<tr class="separator:a5fa793ac077d4fe50b3e1cebf492a6fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b8f6afefd74c4ed6dec18583c250a01"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_entries.html#a9b8f6afefd74c4ed6dec18583c250a01">toString</a> () const</td></tr>
+<tr class="separator:a9b8f6afefd74c4ed6dec18583c250a01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9f530bfce5f82d22d170a0865d15e3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_entries.html#af9f530bfce5f82d22d170a0865d15e3f">dumpToFile</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> &amp;pnt) const</td></tr>
+<tr class="separator:af9f530bfce5f82d22d170a0865d15e3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a1a1d621292d5d8ba1b3cfba79fdfdace"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_entries.html#a1a1d621292d5d8ba1b3cfba79fdfdace">gridPointName</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> &amp;p)</td></tr>
+<tr class="separator:a1a1d621292d5d8ba1b3cfba79fdfdace"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
 <tr class="memitem:ad6750bacdad52f4c6214be7f7f286ddc"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_entries.html#ad6750bacdad52f4c6214be7f7f286ddc">mEntries</a> [4]</td></tr>
 <tr class="separator:ad6750bacdad52f4c6214be7f7f286ddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:aa692f0ad0a9cb78e958bfc7c110d7201"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_entries.html#aa692f0ad0a9cb78e958bfc7c110d7201">NetLayoutJunction</a></td></tr>
-<tr class="separator:aa692f0ad0a9cb78e958bfc7c110d7201"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00079">79</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<div class="textblock"><p>List of nets entering the junction sorted by entry direction </p>
+
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00260">260</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="adc36b8cf96e0d7085f79036da15a9268"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adc36b8cf96e0d7085f79036da15a9268">&#9670;&nbsp;</a></span>dump()</h2>
+<a id="af9f530bfce5f82d22d170a0865d15e3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9f530bfce5f82d22d170a0865d15e3f">&#9670;&nbsp;</a></span>dumpToFile()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> hal::NetLayoutJunctionEntries::dump </td>
+          <td class="memname">void hal::NetLayoutJunctionEntries::dumpToFile </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00829">829</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
-
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, <a class="el" href="net__layout__point_8h_source.html#l00065">hal::NetLayoutDirection::isMax()</a>, and <a class="el" href="net__layout__junction_8h_source.html#l00083">mEntries</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00225">hal::NetLayoutJunction::dump()</a>.</p>
-
-</div>
-</div>
-<a id="a8fc1f04f6a81f973d629650070169e17"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8fc1f04f6a81f973d629650070169e17">&#9670;&nbsp;</a></span>dumpFile()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::NetLayoutJunctionEntries::dumpFile </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhal_1_1_net_layout_point.html">NetLayoutPoint</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> &amp;&#160;</td>
           <td class="paramname"><em>pnt</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Dump junction entries to file to debug junction routing </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pnt</td><td><a class="el" href="classhal_1_1_net.html">Net</a> grid point </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00842">842</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00911">911</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="el" href="net__layout__point_8h_source.html#l00065">hal::NetLayoutDirection::isMax()</a>, <a class="el" href="net__layout__junction_8h_source.html#l00083">mEntries</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#mkpath">QDir::mkpath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qbytearray.html#number">QByteArray::number()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::WriteOnly</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#x">QPoint::x()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#y">QPoint::y()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::Append</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextstream.html#flush">QTextStream::flush()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="net__layout__junction_8h_source.html#l00274">id()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00037">hal::ProjectManager::instance()</a>, <a class="el" href="net__layout__point_8h_source.html#l00065">hal::NetLayoutDirection::isMax()</a>, <a class="el" href="net__layout__junction_8h_source.html#l00266">mEntries</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::WriteOnly</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#x">QPoint::x()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#y">QPoint::y()</a>.</p>
 
 </div>
 </div>
-<a id="a9f0db10ccada4d560fe143718f00c1d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9f0db10ccada4d560fe143718f00c1d7">&#9670;&nbsp;</a></span>id()</h2>
+<a id="a1a1d621292d5d8ba1b3cfba79fdfdace"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a1d621292d5d8ba1b3cfba79fdfdace">&#9670;&nbsp;</a></span>gridPointName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> hal::NetLayoutJunctionEntries::gridPointName </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> &amp;&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5fa793ac077d4fe50b3e1cebf492a6fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fa793ac077d4fe50b3e1cebf492a6fa">&#9670;&nbsp;</a></span>id()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -194,7 +200,7 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>i</em>&#160;</td>
+          <td class="paramname"><em>ilane</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -208,101 +214,42 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get net ID from junction entry list / array </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dir</td><td>Direction (Left, Right, Up, Down) </td></tr>
+    <tr><td class="paramname">ilane</td><td>Lane index </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classhal_1_1_net.html">Net</a> ID </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00086">86</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00274">274</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#at">QList::at()</a>, <a class="el" href="net__layout__point_8h_source.html#l00062">hal::NetLayoutDirection::index()</a>, and <a class="el" href="net__layout__junction_8h_source.html#l00083">mEntries</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#at">QList::at()</a>, <a class="el" href="net__layout__point_8h_source.html#l00062">hal::NetLayoutDirection::index()</a>, and <a class="el" href="net__layout__junction_8h_source.html#l00266">mEntries</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00022">hal::NetLayoutJunction::NetLayoutJunction()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00911">dumpToFile()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00085">hal::NetLayoutJunction::NetLayoutJunction()</a>.</p>
 
 </div>
 </div>
-<a id="a0f62e544d575b2c24535929a86a14935"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0f62e544d575b2c24535929a86a14935">&#9670;&nbsp;</a></span>setEntries()</h2>
+<a id="a9b8f6afefd74c4ed6dec18583c250a01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b8f6afefd74c4ed6dec18583c250a01">&#9670;&nbsp;</a></span>toString()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void hal::NetLayoutJunctionEntries::setEntries </td>
+          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> hal::NetLayoutJunctionEntries::toString </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classhal_1_1_net_layout_direction.html">NetLayoutDirection</a>&#160;</td>
-          <td class="paramname"><em>dir</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>entries_</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00872">872</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="net__layout__point_8h_source.html#l00062">hal::NetLayoutDirection::index()</a>, and <a class="el" href="net__layout__junction_8h_source.html#l00083">mEntries</a>.</p>
-
-</div>
-</div>
-<a id="a3cb43817a230d8fbd46d0827e7d0ad41"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3cb43817a230d8fbd46d0827e7d0ad41">&#9670;&nbsp;</a></span>size()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int hal::NetLayoutJunctionEntries::size </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classhal_1_1_net_layout_direction.html">NetLayoutDirection</a>&#160;</td>
-          <td class="paramname"><em>dir</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
+<p>String output for debugging purpose </p>
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00085">85</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00926">926</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="net__layout__point_8h_source.html#l00062">hal::NetLayoutDirection::index()</a>, <a class="el" href="net__layout__junction_8h_source.html#l00083">mEntries</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#size">QList::size()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00022">hal::NetLayoutJunction::NetLayoutJunction()</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="aa692f0ad0a9cb78e958bfc7c110d7201"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa692f0ad0a9cb78e958bfc7c110d7201">&#9670;&nbsp;</a></span>NetLayoutJunction</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class <a class="el" href="classhal_1_1_net_layout_junction.html">NetLayoutJunction</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00081">81</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, <a class="el" href="net__layout__point_8h_source.html#l00065">hal::NetLayoutDirection::isMax()</a>, and <a class="el" href="net__layout__junction_8h_source.html#l00266">mEntries</a>.</p>
 
 </div>
 </div>
@@ -312,24 +259,17 @@ Friends</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&gt; hal::NetLayoutJunctionEntries::mEntries[4]</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
+<p>Entries sorted by direction (Left, Right, Up, Down) </p>
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00083">83</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00266">266</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00829">dump()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00842">dumpFile()</a>, <a class="el" href="net__layout__junction_8h_source.html#l00086">id()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00872">setEntries()</a>, and <a class="el" href="net__layout__junction_8h_source.html#l00085">size()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00911">dumpToFile()</a>, <a class="el" href="net__layout__junction_8h_source.html#l00274">id()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00085">hal::NetLayoutJunction::NetLayoutJunction()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00926">toString()</a>.</p>
 
 </div>
 </div>
@@ -343,7 +283,7 @@ Friends</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_net_layout_junction_entries.html">NetLayoutJunctionEntries</a></li>
-    <li class="footer">Generated on Tue Nov 7 2023 15:50:22 for HAL by
+    <li class="footer">Generated on Thu Nov 9 2023 19:52:09 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -23,6 +23,7 @@ var group__graph_layouter =
       [ "defaultGridHeight", "classhal_1_1_graph_layouter.html#a38e4d850112fab62190ec4c6353900a5", null ],
       [ "defaultGridWidth", "classhal_1_1_graph_layouter.html#aad9ef83d62820a8d80bb818c99c81cc4", null ],
       [ "done", "classhal_1_1_graph_layouter.html#ae9541edd55ac9b60e92132e48577d1c3", null ],
+      [ "dumpJunctionEnabled", "classhal_1_1_graph_layouter.html#a709713cc2d020e81c0b49ae3becb3110", null ],
       [ "dumpNodePositions", "classhal_1_1_graph_layouter.html#a5e128152ac90a4e92d5422555867f952", null ],
       [ "gridPointByItem", "classhal_1_1_graph_layouter.html#ac0a09a36d86d794d397d33bc3f2f52cc", null ],
       [ "gridXposition", "classhal_1_1_graph_layouter.html#a11adc9ad17bd5cdbcdf7adc8159ed2a9", null ],
@@ -35,7 +36,6 @@ var group__graph_layouter =
       [ "minYIndex", "classhal_1_1_graph_layouter.html#a1d1154abfdcb2f24fe42f21fbbbd6c8d", null ],
       [ "name", "classhal_1_1_graph_layouter.html#ae16a25c5b2298eea55f4569c243bddca", null ],
       [ "nodeToPositionMap", "classhal_1_1_graph_layouter.html#a62ea0b873099148db83fcb7320726adb", null ],
-      [ "optimizeNetLayoutEnabled", "classhal_1_1_graph_layouter.html#a453370282ae5ee29656154448fca379d", null ],
       [ "positionToNodeMap", "classhal_1_1_graph_layouter.html#a5691840af28d6c8fd39fa1dccbff5ca2", null ],
       [ "positonForNode", "classhal_1_1_graph_layouter.html#a56963777addc1aafb7c1d0bab5147fff", null ],
       [ "prepareRollback", "classhal_1_1_graph_layouter.html#a2ba8316a28d88cadbd756d0ebb075ee7", null ],
@@ -43,88 +43,107 @@ var group__graph_layouter =
       [ "removeNodeFromMaps", "classhal_1_1_graph_layouter.html#a1e3225268ccee84e92e2109f34b33c0d", null ],
       [ "rollback", "classhal_1_1_graph_layouter.html#a7804dd7ee92749c0569365694fb21b16", null ],
       [ "scene", "classhal_1_1_graph_layouter.html#aa659e34b122f066720bd70c6abf210d6", null ],
+      [ "setDumpJunctionEnabled", "classhal_1_1_graph_layouter.html#a3d77007d14091c414fd9374e629b7557", null ],
       [ "setNodePosition", "classhal_1_1_graph_layouter.html#a1a91cb2f3e9d19f5849ccbb04f5fe3c4", null ],
-      [ "setOptimizeNetLayoutEnabled", "classhal_1_1_graph_layouter.html#a51d4bc615050ebb258aacee8a196c420", null ],
       [ "swapNodePositions", "classhal_1_1_graph_layouter.html#a3f56e5f1f0fa2cd19e4773a09021e511", null ],
       [ "xValues", "classhal_1_1_graph_layouter.html#a237bfbe5d88777e3ae96622c1306588d", null ],
       [ "yValues", "classhal_1_1_graph_layouter.html#a0cf1a3d2b61a728278527a1615953536", null ],
+      [ "DrawNetThread", "classhal_1_1_graph_layouter.html#a79fa9762f7855b7b935b2b7ed1ef0cc7", null ],
       [ "mNodeToPositionMap", "classhal_1_1_graph_layouter.html#aeaeddcf086701a164f02e5de0740bac1", null ],
       [ "mNodeToPositionRollback", "classhal_1_1_graph_layouter.html#a23a1081997f0b964ea9f4d52b66ec7c8", null ],
       [ "mParentContext", "classhal_1_1_graph_layouter.html#ae32c79acff59dff2a186a891a59b1ed0", null ],
       [ "mPositionToNodeMap", "classhal_1_1_graph_layouter.html#a446ea8d8b55b22fb8343ec87e790d14c", null ],
       [ "mScene", "classhal_1_1_graph_layouter.html#a5994e7e9693cce878c09fc059eaab324", null ]
     ] ],
-    [ "NetLayoutJunctionWire", "classhal_1_1_net_layout_junction_wire.html", [
-      [ "NetLayoutJunctionWire", "classhal_1_1_net_layout_junction_wire.html#aaa5b952caa4b6ee11943586c67b09390", null ],
-      [ "centralEnd", "classhal_1_1_net_layout_junction_wire.html#ac799e6c03ada2b32f6d3032562f0ffe1", null ],
-      [ "intersection", "classhal_1_1_net_layout_junction_wire.html#a00fb3bdebf38f5b1d36e2573af7f7b4e", null ],
-      [ "isEntry", "classhal_1_1_net_layout_junction_wire.html#a6210536101337b240986e8a2072f148b", null ],
-      [ "mFirst", "classhal_1_1_net_layout_junction_wire.html#a858ac35c515f85a1cee53add137f71d4", null ],
-      [ "mHorizontal", "classhal_1_1_net_layout_junction_wire.html#ac934cfa35e539edac35f0b178a28b2d4", null ],
-      [ "mLast", "classhal_1_1_net_layout_junction_wire.html#ac22fa648c8987fa09f2b6bf2211f96b6", null ],
-      [ "mRoad", "classhal_1_1_net_layout_junction_wire.html#a069a615259d24757ded111a55d287118", null ]
-    ] ],
-    [ "NetLayoutJunctionEntries", "classhal_1_1_net_layout_junction_entries.html", [
-      [ "dump", "classhal_1_1_net_layout_junction_entries.html#adc36b8cf96e0d7085f79036da15a9268", null ],
-      [ "dumpFile", "classhal_1_1_net_layout_junction_entries.html#a8fc1f04f6a81f973d629650070169e17", null ],
-      [ "id", "classhal_1_1_net_layout_junction_entries.html#a9f0db10ccada4d560fe143718f00c1d7", null ],
-      [ "setEntries", "classhal_1_1_net_layout_junction_entries.html#a0f62e544d575b2c24535929a86a14935", null ],
-      [ "size", "classhal_1_1_net_layout_junction_entries.html#a3cb43817a230d8fbd46d0827e7d0ad41", null ],
-      [ "NetLayoutJunction", "classhal_1_1_net_layout_junction_entries.html#aa692f0ad0a9cb78e958bfc7c110d7201", null ],
-      [ "mEntries", "classhal_1_1_net_layout_junction_entries.html#ad6750bacdad52f4c6214be7f7f286ddc", null ]
-    ] ],
-    [ "NetLayoutJunctionNet", "classhal_1_1_net_layout_junction_net.html", [
-      [ "NetLayoutJunctionNet", "classhal_1_1_net_layout_junction_net.html#a27c76618eaf3c3f6ec23d4ba8d9d7173", null ],
-      [ "addEntry", "classhal_1_1_net_layout_junction_net.html#a8ab013debf3feeb151bdbf76cdae5f7c", null ],
-      [ "addWire", "classhal_1_1_net_layout_junction_net.html#a8032a6ddf23c0375d74bd9042e527716", null ],
-      [ "hasPattern", "classhal_1_1_net_layout_junction_net.html#ad085660742c4244743d031a9469a9757", null ],
-      [ "isPlaced", "classhal_1_1_net_layout_junction_net.html#a15645b2c68fb4bf79b2d0f97070a7789", null ],
-      [ "junctionPoint", "classhal_1_1_net_layout_junction_net.html#a4427e2762ae595b1135016dd345cb943", null ],
-      [ "numberEntries", "classhal_1_1_net_layout_junction_net.html#aa8f91f4758404cc593aefb3ff5d67625", null ],
-      [ "pattern", "classhal_1_1_net_layout_junction_net.html#a0805639a5239ecd69aa1c0428acd7cc8", null ],
-      [ "roadNumber", "classhal_1_1_net_layout_junction_net.html#a61465193c8262d8e98dc533b79f68045", null ],
-      [ "setJunctionPoint", "classhal_1_1_net_layout_junction_net.html#a4e38e1123479fe0f3342f18776f12863", null ],
-      [ "setPattern", "classhal_1_1_net_layout_junction_net.html#a26f7903c0cb811aac2ad63d418f26cba", null ],
-      [ "setPlaced", "classhal_1_1_net_layout_junction_net.html#a4c03053e37c743943d6cbeb50f2709e1", null ],
-      [ "toString", "classhal_1_1_net_layout_junction_net.html#afed2a50076bc5da4ae65047df5e507d9", null ],
-      [ "mWires", "classhal_1_1_net_layout_junction_net.html#a5382d1c271223453ed932d2d0c7f9fb6", null ]
+    [ "LaneIndex", "classhal_1_1_lane_index.html", [
+      [ "HVIndex", "classhal_1_1_lane_index.html#a3ddf12df6e59c4a3578340fb0bc085c5", [
+        [ "Horizontal", "classhal_1_1_lane_index.html#a3ddf12df6e59c4a3578340fb0bc085c5a8d137d1292c32d5eb3ba1ae8d00b0037", null ],
+        [ "Vertical", "classhal_1_1_lane_index.html#a3ddf12df6e59c4a3578340fb0bc085c5a1a87cb03cf1a38f7a9e570b419da2986", null ]
+      ] ],
+      [ "LaneIndex", "classhal_1_1_lane_index.html#a6160e4962ff5f93b02650fd3fe9b04ef", null ],
+      [ "hvIndex", "classhal_1_1_lane_index.html#afd8de638d05990538fc5dfe459af1a94", null ],
+      [ "isHorizontal", "classhal_1_1_lane_index.html#abbf200676d1db9f18428f10b23469f83", null ],
+      [ "isVertical", "classhal_1_1_lane_index.html#af9532b948eec08a319d4f3d71cdf2c4c", null ],
+      [ "laneIndex", "classhal_1_1_lane_index.html#a1d43396d0ec3584a0cddbd67b0c9e60c", null ],
+      [ "operator int", "classhal_1_1_lane_index.html#ab930d3b0ffe8fcbca03943344f81bdd1", null ],
+      [ "operator++", "classhal_1_1_lane_index.html#aba8b8f81b1b8689e9b5fd32d1f1b6f93", null ],
+      [ "operator--", "classhal_1_1_lane_index.html#a733e9db37587611ba7fdc98aa4744cd2", null ],
+      [ "qHash", "classhal_1_1_lane_index.html#ae5ca30f66d44079ca924a271ce019cea", null ]
     ] ],
     [ "NetLayoutJunctionRange", "classhal_1_1_net_layout_junction_range.html", [
       [ "NetLayoutJunctionRange", "classhal_1_1_net_layout_junction_range.html#ad70b618717d94d8adf4afc32499f54b5", null ],
       [ "canJoin", "classhal_1_1_net_layout_junction_range.html#a435ca59f6ff5392190136f9b02461fc7", null ],
-      [ "canJoin", "classhal_1_1_net_layout_junction_range.html#a231b272d6541b83921b48a99be1c7c6c", null ],
       [ "conflict", "classhal_1_1_net_layout_junction_range.html#a2c07f8b7a7df4b9a72a3fc1565691942", null ],
-      [ "endPosition", "classhal_1_1_net_layout_junction_range.html#abb3b91b381b37c241d95326fd0611f05", null ],
+      [ "contains", "classhal_1_1_net_layout_junction_range.html#a1695a518e17a5f97dfa05009716e7338", null ],
+      [ "endPosition", "classhal_1_1_net_layout_junction_range.html#a18477a1f37f5db0978f67ba164eae733", null ],
       [ "expand", "classhal_1_1_net_layout_junction_range.html#a39492ff017c6c7df21dd18c329081f76", null ],
-      [ "graphFirst", "classhal_1_1_net_layout_junction_range.html#ab9d8be52ec8ff57781ddbc2fe7118bf2", null ],
-      [ "graphLast", "classhal_1_1_net_layout_junction_range.html#a60b9e0eb94f3268551cfee94f7ff291e", null ],
-      [ "isEntry", "classhal_1_1_net_layout_junction_range.html#a27dcf17dc8c780c37bfde1c8b50a9fc2", null ],
+      [ "first", "classhal_1_1_net_layout_junction_range.html#a30ce635c59c89462e7cb5d1f7fc17d2c", null ],
+      [ "innerPos", "classhal_1_1_net_layout_junction_range.html#a64dc9c59793923fc4bd3505f7574e0e3", null ],
+      [ "isEntry", "classhal_1_1_net_layout_junction_range.html#ae3822cb5493714efd75e99a2a086d4cc", null ],
+      [ "last", "classhal_1_1_net_layout_junction_range.html#a60b00c5505755f95a32edb51b5d67976", null ],
+      [ "length", "classhal_1_1_net_layout_junction_range.html#a006b898035955febcde351323f7e6ea4", null ],
       [ "netId", "classhal_1_1_net_layout_junction_range.html#aa4e30b59f57dbf92a76461b1fd24d6d2", null ],
       [ "operator==", "classhal_1_1_net_layout_junction_range.html#adde72abde4912081b3999f4a1829e1a4", null ],
-      [ "toWire", "classhal_1_1_net_layout_junction_range.html#add1ca926748a9e068f4769bb344a4392", null ]
+      [ "operator==", "classhal_1_1_net_layout_junction_range.html#a52098f3b2f74a0ee6df6064960ef8e03", null ],
+      [ "setFirst", "classhal_1_1_net_layout_junction_range.html#ada3b805d548c9ee5919c228030e46713", null ],
+      [ "setLast", "classhal_1_1_net_layout_junction_range.html#a4f6c52e33c7c9a86e82fd8b59b4f22e1", null ],
+      [ "toString", "classhal_1_1_net_layout_junction_range.html#a6a7f363f44f51f90ccb8f7b3483d0aa1", null ]
+    ] ],
+    [ "NetLayoutJunctionWire", "classhal_1_1_net_layout_junction_wire.html", [
+      [ "NetLayoutJunctionWire", "classhal_1_1_net_layout_junction_wire.html#aee4add7e99638513a6f885c33a62e09a", null ],
+      [ "isEntry", "classhal_1_1_net_layout_junction_wire.html#a6210536101337b240986e8a2072f148b", null ],
+      [ "mIndex", "classhal_1_1_net_layout_junction_wire.html#a950b40897551cafe1617d0b9ab7a8e4f", null ],
+      [ "mRange", "classhal_1_1_net_layout_junction_wire.html#a26ebf99af44c773138a425bf1010ac2e", null ]
+    ] ],
+    [ "NetLayoutJunctionNet", "classhal_1_1_net_layout_junction_net.html", [
+      [ "NetLayoutJunctionNet", "classhal_1_1_net_layout_junction_net.html#a27c76618eaf3c3f6ec23d4ba8d9d7173", null ],
+      [ "addEntry", "classhal_1_1_net_layout_junction_net.html#aa11d60b00ff0eedd06e87c69f75c7168", null ],
+      [ "addWire", "classhal_1_1_net_layout_junction_net.html#a8032a6ddf23c0375d74bd9042e527716", null ],
+      [ "hasPattern", "classhal_1_1_net_layout_junction_net.html#ad085660742c4244743d031a9469a9757", null ],
+      [ "isPlaced", "classhal_1_1_net_layout_junction_net.html#a15645b2c68fb4bf79b2d0f97070a7789", null ],
+      [ "junctionKnots", "classhal_1_1_net_layout_junction_net.html#a27562fccd79025301fa5d4a7f9af95e5", null ],
+      [ "laneIndex", "classhal_1_1_net_layout_junction_net.html#a6264766206847b18ceac97c8ff63d970", null ],
+      [ "numberEntries", "classhal_1_1_net_layout_junction_net.html#aa8f91f4758404cc593aefb3ff5d67625", null ],
+      [ "pattern", "classhal_1_1_net_layout_junction_net.html#a0805639a5239ecd69aa1c0428acd7cc8", null ],
+      [ "replaceWire", "classhal_1_1_net_layout_junction_net.html#ab570bd6b8457d20eeac8d7d81df58350", null ],
+      [ "setPattern", "classhal_1_1_net_layout_junction_net.html#a26f7903c0cb811aac2ad63d418f26cba", null ],
+      [ "setPlaced", "classhal_1_1_net_layout_junction_net.html#a4c03053e37c743943d6cbeb50f2709e1", null ],
+      [ "toString", "classhal_1_1_net_layout_junction_net.html#afed2a50076bc5da4ae65047df5e507d9", null ],
+      [ "wireAtPos", "classhal_1_1_net_layout_junction_net.html#a4ab68c98257354522e7d5598cf2a9670", null ],
+      [ "mKnots", "classhal_1_1_net_layout_junction_net.html#a50d2440ce40f5c072d4dc9bc05ae146e", null ],
+      [ "mWires", "classhal_1_1_net_layout_junction_net.html#a5382d1c271223453ed932d2d0c7f9fb6", null ]
     ] ],
     [ "NetLayoutJunctionOccupied", "classhal_1_1_net_layout_junction_occupied.html", [
-      [ "add", "classhal_1_1_net_layout_junction_occupied.html#a53a20311fe77e27dc5ecb853f9242293", null ],
       [ "canJoin", "classhal_1_1_net_layout_junction_occupied.html#a9db75ea06d47cb80ab176386b222a84c", null ],
       [ "conflict", "classhal_1_1_net_layout_junction_occupied.html#a81d8029c6f545fb558c4b949f7d19daf", null ]
     ] ],
+    [ "NetLayoutJunctionOccupiedHash", "classhal_1_1_net_layout_junction_occupied_hash.html", [
+      [ "AddOrMerge", "classhal_1_1_net_layout_junction_occupied_hash_1_1_add_or_merge.html", [
+        [ "Type", "classhal_1_1_net_layout_junction_occupied_hash_1_1_add_or_merge.html#af2155b10356f0b7d1edd19a93e58832f", [
+          [ "Added", "classhal_1_1_net_layout_junction_occupied_hash_1_1_add_or_merge.html#af2155b10356f0b7d1edd19a93e58832fa6ebcce2d97d98f3ec88d04a99376f441", null ],
+          [ "Merged", "classhal_1_1_net_layout_junction_occupied_hash_1_1_add_or_merge.html#af2155b10356f0b7d1edd19a93e58832fa44d38a12f46662847b661af5846c1490", null ],
+          [ "AlreadyExisting", "classhal_1_1_net_layout_junction_occupied_hash_1_1_add_or_merge.html#af2155b10356f0b7d1edd19a93e58832faef85b735a1f64baf58d94d57cd781f99", null ]
+        ] ],
+        [ "AddOrMerge", "classhal_1_1_net_layout_junction_occupied_hash_1_1_add_or_merge.html#ac86a81f7d54facafee5a4036104538bd", null ],
+        [ "~AddOrMerge", "classhal_1_1_net_layout_junction_occupied_hash_1_1_add_or_merge.html#aa3188273aaba35e98b2adc681c20ef54", null ],
+        [ "mNewRange", "classhal_1_1_net_layout_junction_occupied_hash_1_1_add_or_merge.html#a5b8f180006ed4068df306c35b1648a31", null ],
+        [ "mOldRange", "classhal_1_1_net_layout_junction_occupied_hash_1_1_add_or_merge.html#aab5b3e00163fa47c3f9575c5226d2904", null ],
+        [ "mType", "classhal_1_1_net_layout_junction_occupied_hash_1_1_add_or_merge.html#ad478aad55acff27b25a694e04b471094", null ]
+      ] ],
+      [ "addOrMerge", "classhal_1_1_net_layout_junction_occupied_hash.html#ae2efdbb637992544fb7ae1ab12d5de5d", null ]
+    ] ],
     [ "NetLayoutJunction", "classhal_1_1_net_layout_junction.html", [
-      [ "mErrorT", "classhal_1_1_net_layout_junction.html#ad8835a50934d5b10771743ad89b799bc", [
-        [ "StraightRouteError", "classhal_1_1_net_layout_junction.html#ad8835a50934d5b10771743ad89b799bca2fb314bc3b5a2e72c76912d1f9048f34", null ],
-        [ "CornerRouteError", "classhal_1_1_net_layout_junction.html#ad8835a50934d5b10771743ad89b799bca084da45f511cd00fbed0f006e0a114bb", null ],
-        [ "Ok", "classhal_1_1_net_layout_junction.html#ad8835a50934d5b10771743ad89b799bcacf61cd8eb98de819958a126312c27047", null ]
+      [ "ErrorType", "classhal_1_1_net_layout_junction.html#a952cbf5ad21212b5f7ec0c45b318abbb", [
+        [ "StraightRouteError", "classhal_1_1_net_layout_junction.html#a952cbf5ad21212b5f7ec0c45b318abbba2fb314bc3b5a2e72c76912d1f9048f34", null ],
+        [ "TRouteError", "classhal_1_1_net_layout_junction.html#a952cbf5ad21212b5f7ec0c45b318abbbaa636e0154d21e92515ee91185271f293", null ],
+        [ "CornerRouteError", "classhal_1_1_net_layout_junction.html#a952cbf5ad21212b5f7ec0c45b318abbba084da45f511cd00fbed0f006e0a114bb", null ],
+        [ "Ok", "classhal_1_1_net_layout_junction.html#a952cbf5ad21212b5f7ec0c45b318abbbacf61cd8eb98de819958a126312c27047", null ]
       ] ],
       [ "NetLayoutJunction", "classhal_1_1_net_layout_junction.html#af41c68184bd1a6b6c7fd9ee077062e88", null ],
       [ "~NetLayoutJunction", "classhal_1_1_net_layout_junction.html#afc5bb5e035a7b08b6a70ef90a58c6c12", null ],
-      [ "dump", "classhal_1_1_net_layout_junction.html#a250da2467d1ad3f9c57eca9dcb04fbcb", null ],
-      [ "lastError", "classhal_1_1_net_layout_junction.html#ae0b6b3220694b752f088a68ed8a0d628", null ],
+      [ "lastError", "classhal_1_1_net_layout_junction.html#ac13ae44b10cb997425882dc42fa6b48c", null ],
       [ "netById", "classhal_1_1_net_layout_junction.html#a9351544319f3865a83211a7fe2b5edae", null ],
       [ "rect", "classhal_1_1_net_layout_junction.html#a2ac8220ebdfd2a272bb43f4596bfb31e", null ]
-    ] ],
-    [ "NetLayoutJunctionHash", "classhal_1_1_net_layout_junction_hash.html", [
-      [ "NetLayoutJunctionHash", "classhal_1_1_net_layout_junction_hash.html#a368d772f3046de65ca772e90174b7fa2", null ],
-      [ "~NetLayoutJunctionHash", "classhal_1_1_net_layout_junction_hash.html#ae89d4f2ae1be13e19f64d29d4dc55085", null ],
-      [ "clearAll", "classhal_1_1_net_layout_junction_hash.html#afc5714060472c815dd3ff9a214601413", null ]
     ] ],
     [ "NetLayoutDirection", "classhal_1_1_net_layout_direction.html", [
       [ "DirectionType", "classhal_1_1_net_layout_direction.html#a804a82ac3192d771ed7a64fe9137f142", [
@@ -173,7 +192,8 @@ var group__graph_layouter =
       [ "graphicsFactory", "classhal_1_1_net_layout_wire.html#ad6efc8f5959f1edc5e61d9c50d5150ac", null ],
       [ "isEndpoint", "classhal_1_1_net_layout_wire.html#a5d2d1c5f4024beedc9d84c70998dd516", null ],
       [ "isHorizontal", "classhal_1_1_net_layout_wire.html#a64d0688c2d49c023cd6366169ddb93a4", null ],
-      [ "operator==", "classhal_1_1_net_layout_wire.html#af8a2c14bc4dc2e0361c4fc7ea5a48939", null ]
+      [ "operator==", "classhal_1_1_net_layout_wire.html#af8a2c14bc4dc2e0361c4fc7ea5a48939", null ],
+      [ "toString", "classhal_1_1_net_layout_wire.html#a3af16f47bfffe76a8242461e2ea8fdc1", null ]
     ] ],
     [ "NetLayoutConnection", "classhal_1_1_net_layout_connection.html", [
       [ "NetLayoutConnection", "classhal_1_1_net_layout_connection.html#aa775376d094e0073c3eb8d84a24a1d0c", null ],
@@ -193,8 +213,7 @@ var group__graph_layouter =
       [ "NetLayoutConnectionFactory", "classhal_1_1_net_layout_connection_factory.html#a3487f02ccfc043bb7af7124ee7cde998", null ],
       [ "dump", "classhal_1_1_net_layout_connection_factory.html#a3d24a41876ae685e433d96f4eda72e80", null ],
       [ "points", "classhal_1_1_net_layout_connection_factory.html#ae6f69a095feb85bc598830b6977fe49e", null ],
-      [ "connection", "classhal_1_1_net_layout_connection_factory.html#a56eeaad0dbec8f252e11fae3d07a610d", null ],
-      [ "mJunctions", "classhal_1_1_net_layout_connection_factory.html#ad564e79e59b3996cf408ac9ac53a2692", null ]
+      [ "connection", "classhal_1_1_net_layout_connection_factory.html#a56eeaad0dbec8f252e11fae3d07a610d", null ]
     ] ],
     [ "NetLayoutConnectionMetric", "classhal_1_1_net_layout_connection_metric.html", [
       [ "NetLayoutConnectionMetric", "classhal_1_1_net_layout_connection_metric.html#a845dbe628894a1a52e12c2b867d621d3", null ],

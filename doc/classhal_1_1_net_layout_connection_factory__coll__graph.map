@@ -1,6 +1,5 @@
 <map id="hal::NetLayoutConnectionFactory" name="hal::NetLayoutConnectionFactory">
-<area shape="rect" id="node1" title=" " alt="" coords="53,653,288,775"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qlist.html" title=" " alt="" coords="5,323,219,591"/>
-<area shape="rect" id="node3" href="$classhal_1_1_net_layout_connection.html" title=" " alt="" coords="243,389,434,525"/>
-<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qlist.html" title=" " alt="" coords="247,5,430,273"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,521,240,643"/>
+<area shape="rect" id="node2" href="$classhal_1_1_net_layout_connection.html" title=" " alt="" coords="27,323,218,459"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qlist.html" title=" " alt="" coords="31,5,214,273"/>
 </map>

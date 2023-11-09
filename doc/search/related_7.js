@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['selectionrelay_39265',['SelectionRelay',['../classhal_1_1_action_set_selection_focus.html#a528f0eaecc959a4c005ea9664facc1ce',1,'hal::ActionSetSelectionFocus']]]
+  ['projectmanager_39280',['ProjectManager',['../classhal_1_1_project_directory.html#aa860c957116c15c1b786357fbcd19fc7',1,'hal::ProjectDirectory']]]
 ];

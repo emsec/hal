@@ -55,7 +55,7 @@ var group__graph_visuals_net =
       [ "mOutputPositions", "classhal_1_1_separated_graphics_net.html#ab5aa80bb43972392acdac53a2f3e493a", null ]
     ] ],
     [ "StandardArrowNet", "classhal_1_1_standard_arrow_net.html", [
-      [ "StandardArrowNet", "classhal_1_1_standard_arrow_net.html#aaa48753da848056ae09ea7c789a732d6", null ],
+      [ "StandardArrowNet", "classhal_1_1_standard_arrow_net.html#a199c4c0aa8c2f2e31d4879facc6aba9d", null ],
       [ "paint", "classhal_1_1_standard_arrow_net.html#a7e1c2e41a9fd45f02be0f28a1587e253", null ],
       [ "setInputPosition", "classhal_1_1_standard_arrow_net.html#a203c2fae4518e293fbfe1139605d0307", null ],
       [ "setOutputPosition", "classhal_1_1_standard_arrow_net.html#a6982bd0a152c04851d6d0e96104faff0", null ],
@@ -70,7 +70,6 @@ var group__graph_visuals_net =
       [ "Lines", "structhal_1_1_standard_graphics_net_1_1_lines.html", [
         [ "appendHLine", "structhal_1_1_standard_graphics_net_1_1_lines.html#aaf9c347ff350a36269b7542844438122", null ],
         [ "appendVLine", "structhal_1_1_standard_graphics_net_1_1_lines.html#af7c7d28552756f0ff51de743e23292d3", null ],
-        [ "mergeLines", "structhal_1_1_standard_graphics_net_1_1_lines.html#a663d2d8b4c5a61b4cc7fd39105d5d598", null ],
         [ "nLines", "structhal_1_1_standard_graphics_net_1_1_lines.html#aecddc1cf2fe3331c160b2eb1a1704e54", null ]
       ] ],
       [ "VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", [
@@ -78,7 +77,7 @@ var group__graph_visuals_net =
         [ "mSmallY", "structhal_1_1_standard_graphics_net_1_1_v_line.html#a17fad40fc55af7b9c17065c917a23c4e", null ],
         [ "x", "structhal_1_1_standard_graphics_net_1_1_v_line.html#a8f95c6684677ef6af4006bf2557a14f6", null ]
       ] ],
-      [ "StandardGraphicsNet", "classhal_1_1_standard_graphics_net.html#af11066c874bdcf966de48e3a0939110e", null ],
+      [ "StandardGraphicsNet", "classhal_1_1_standard_graphics_net.html#a7fcb91b1997eb668a0d1abfc8f961dce", null ],
       [ "paint", "classhal_1_1_standard_graphics_net.html#a914e9ab4d19a297804d5f41ce09df474", null ]
     ] ]
 ];
