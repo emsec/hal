@@ -616,6 +616,7 @@ namespace hal
             case NetEvent::event::src_added: {
                 //< associated_data = id of src gate
 
+                mModuleModel->handleNetSourceOrDestinationChanged(net);
                 gGraphContextManager->handleNetSourceAdded(net, associated_data);
 
                 Q_EMIT netSourceAdded(net, associated_data);
@@ -624,6 +625,7 @@ namespace hal
             case NetEvent::event::src_removed: {
                 //< associated_data = id of src gate
 
+                mModuleModel->handleNetSourceOrDestinationChanged(net);
                 gGraphContextManager->handleNetSourceRemoved(net, associated_data);
 
                 Q_EMIT netSourceRemoved(net, associated_data);
@@ -632,6 +634,7 @@ namespace hal
             case NetEvent::event::dst_added: {
                 //< associated_data = id of dst gate
 
+                mModuleModel->handleNetSourceOrDestinationChanged(net);
                 gGraphContextManager->handleNetDestinationAdded(net, associated_data);
 
                 Q_EMIT netDestinationAdded(net, associated_data);
@@ -640,6 +643,7 @@ namespace hal
             case NetEvent::event::dst_removed: {
                 //< associated_data = id of dst gate
 
+                mModuleModel->handleNetSourceOrDestinationChanged(net);
                 gGraphContextManager->handleNetDestinationRemoved(net, associated_data);
 
                 Q_EMIT netDestinationRemoved(net, associated_data);

@@ -204,20 +204,13 @@ namespace hal
         mTopModuleItem = item;
         endInsertRows();
 
-        // This is broken because it can attempt to insert a child before its parent
-        // which will cause an assertion failure and then crash
-
-        // std::set<Module*> s = gNetlist->get_modules();
-        // s.erase(gNetlist->get_top_module());
-        // for (Module* m : s)
-        //     addModule(m->get_id(), m->get_parent_module()->get_id());
-
-        // This works
-
-        // recursively insert modules
         Module* m = gNetlist->get_top_module();
-        QSet<u32> added_nets;
-        addRecursively(m, added_nets);
+        addRecursively(m);
+        for(auto net : gNetlist->get_top_module()->get_internal_nets())
+        {
+            addNet(net->get_id(), m->get_id());
+            handleNetSourceOrDestinationChanged(net);
+        }
     }
 
     void ModuleModel::clear()
@@ -310,22 +303,15 @@ namespace hal
         endInsertRows();
     }
 
-    void ModuleModel::addRecursively(const Module* module, QSet<u32>& added_nets)
+    void ModuleModel::addRecursively(const Module* module)
     {
         if(!module->is_top_module())
             addModule(module->get_id(), module->get_parent_module()->get_id());
         for(auto &m : module->get_submodules())
-            addRecursively(m, added_nets);
+            addRecursively(m);
 
         for(auto &g : module->get_gates())
             addGate(g->get_id(), module->get_id());
-        for(auto &n : module->get_internal_nets())
-        {
-            int size = added_nets.size();
-            added_nets.insert(n->get_id());
-            if(added_nets.size() > size)
-                addNet(n->get_id(), module->get_id());
-        }   
     }
 
     void ModuleModel::changeParentModule(const Module* module){
@@ -360,7 +346,7 @@ namespace hal
     void ModuleModel::remove_module(const u32 id)
     {
         assert(id != 1);
-// module was most likely already purged from netlist
+        // module was most likely already purged from netlist
         assert(mModuleMap.contains(id));
 
         ModuleItem* item   = mModuleMap.value(id);
@@ -384,7 +370,7 @@ namespace hal
 
     void ModuleModel::remove_gate(const u32 id)
     {
-        assert(gNetlist->get_gate_by_id(id));
+        //assert(gNetlist->get_gate_by_id(id));
         assert(mGateMap.contains(id));
 
         ModuleItem* item   = mGateMap.value(id);
@@ -408,8 +394,8 @@ namespace hal
 
     void ModuleModel::remove_net(const u32 id)
     {
-        assert(gNetlist->get_net_by_id(id));
-        assert(mModuleMap.contains(id));
+        //assert(gNetlist->get_net_by_id(id));
+        assert(mNetMap.contains(id));
 
         ModuleItem* item   = mNetMap.value(id);
         ModuleItem* parent = item->parent();
@@ -428,6 +414,36 @@ namespace hal
 
         mNetMap.remove(id);
         delete item;
+    }
+
+    void ModuleModel::handleNetSourceOrDestinationChanged(const Net* net)
+    {
+        assert(net);
+        u32 id = net->get_id();
+        assert(mNetMap.contains(id));
+        ModuleItem* item = mNetMap.value(id);
+        ModuleItem* oldParentItem = item->parent();
+        assert(oldParentItem);
+        
+        Module* newParentModule = FindNetParent(net);
+        if(newParentModule == nullptr)
+            newParentModule = gNetlist->get_top_module();
+        if(newParentModule->get_id() == oldParentItem->id())
+            return;
+
+        assert(mModuleMap.contains(newParentModule->get_id()));
+        ModuleItem* newParentItem = mModuleMap[newParentModule->get_id()];
+        QModelIndex newIndex = getIndex(newParentItem);
+        QModelIndex oldIndex = getIndex(oldParentItem);
+        int row = item->row();
+
+        mIsModifying = true;
+        beginMoveRows(oldIndex, row, row, newIndex, newParentItem->childCount());
+        oldParentItem->removeChild(item);
+        newParentItem->appendChild(item);
+        item->setParent(newParentItem);
+        mIsModifying = false;
+        endMoveRows();
     }
 
     void ModuleModel::updateModule(u32 id)    // SPLIT ???
@@ -452,5 +468,42 @@ namespace hal
     bool ModuleModel::isModifying()
     {
         return mIsModifying;
+    }
+    
+    Module* ModuleModel::FindNetParent(const Net* net){
+        // cannot use Module::get_internal_nets(), because currently that function is implemented so, 
+        // that a net can be "internal" to multiple modules at the same depth.
+        // => instead manually search for deepest module, that contains all sources and destinations of net.
+        assert(net);
+        if(net->get_num_of_sources() == 0 && net->get_num_of_destinations() == 0)
+            return nullptr;
+
+        std::vector<Endpoint*> endpoints = net->get_sources();
+
+        {
+            std::vector<Endpoint*> destinations = net->get_destinations();
+            endpoints.insert(endpoints.end(), destinations.begin(), destinations.end());
+        }
+
+        Module* parent = endpoints[0]->get_gate()->get_module();
+        endpoints.erase(endpoints.begin());
+
+        // might want to split up endpoints, if sources and destinations should be handled differently
+        while(endpoints.size() > 0)
+        {
+            std::vector<Endpoint*>::iterator it = endpoints.begin();
+            while(it != endpoints.end())
+            {
+                if(parent->contains_gate((*it)->get_gate(), true))
+                    it = endpoints.erase(it);
+                else
+                    ++it;
+            }
+
+            if(endpoints.size() > 0)
+                parent = parent->get_parent_module();
+        }
+
+        return parent;
     }
 }

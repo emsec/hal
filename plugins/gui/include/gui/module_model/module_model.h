@@ -189,14 +189,12 @@ namespace hal
 
         /**
          * Recursively adds the given module with all of its submodules (and their submodules and so on...)
-         * and the gates and nets of those modules to the item model.
+         * and the gates those modules to the item model.
          *
          * @param module - The module which should be added to the item model together with all its 
          *                  submodules, gates and nets.
-         * @param added_nets - A set of ids of nets. It's used to keep track of the nets that have already been added 
-         *                      to the item model during the recursion. You can pass an empty set to add all nets.
          */
-        void addRecursively(const Module* module, QSet<u32>& added_nets);
+        void addRecursively(const Module* module);
 
         /**
          * Updates the parent of the ModuleItem corresponding to the specified module. 
@@ -228,17 +226,20 @@ namespace hal
         void remove_net(const u32 id);
 
         /**
+         * Updates the position of a net in the ModuleTree. 
+         * The net will be placed under the deepest module, that contains all sources and destinations of the net.
+         * If no suitable parent could be found, then the net will instead be placed under the top module.
+         * 
+         * @param net The net whose source or destination changed.
+        */
+        void handleNetSourceOrDestinationChanged(const Net* net);
+
+        /**
          * Updates the ModuleItem for the specified module. The specified module MUST be contained in the item model.
          *
          * @param id - The id of the module to update
          */
         void updateModule(const u32 id);
-
-//        void addModule(u32 id, u32 parent_module);
-//        void addRecursively(const std::vector<Module*>& modules);
-//        void remove_module(u32 id);
-//        void updateModule(u32 id);
-
 
         /**
          * Returns <b>true</b> if the item model is currently changed/updated. This is the case while adding and
@@ -250,6 +251,17 @@ namespace hal
         bool isModifying();
 
     private:
+        /**
+         * Searches for a new parent module, such that it is the deepest module in the hierarchy, that contains all
+         * sources and destinations of the net. 
+         * 
+         * @param net The net for which a new parent should be searched.
+         * 
+         * @return The new parent module, that contains all sources and destinations of net. If no such parent could be found 
+         * (e.g. net has no sources or destinations), nullptr is returned instead.
+        */
+        Module* FindNetParent(const Net* net);
+
         ModuleItem* mTopModuleItem;
 
         QMap<u32, ModuleItem*> mModuleMap;
