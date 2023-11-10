@@ -66,6 +66,7 @@ namespace hal
         connect(mClearButton, &QToolButton::clicked, this, &Searchbar::handleClearClicked);
 
         connect(mSearchOptionsButton, &QToolButton::clicked, this, &Searchbar::handleSearchOptionsDialog);
+        connect(this, &Searchbar::triggerNewSearch, this, &Searchbar::updateSearchHistory);
 
         setFocusProxy(mLineEdit);
     }
@@ -224,7 +225,7 @@ namespace hal
         }
         else{
             Q_EMIT triggerNewSearch(mLineEdit->text(), mCurrentOptions->toInt());
-            updateSearchHistory(mLineEdit->text());
+            //updateSearchHistory(mLineEdit->text());
         }
     }
 
@@ -277,7 +278,7 @@ namespace hal
             mMinCharsToStartIncSearch = sd.getMinIncSearchValue();
             mLineEdit->setText(txt);
 
-            updateSearchHistory(txt);
+           // updateSearchHistory(txt);
 
 
             qInfo() << "Searchbar starts search with: " << txt << " " << mCurrentOptions->toInt() << "  inc search: " << mIncrementalSearch << " " << mMinCharsToStartIncSearch;
@@ -295,7 +296,7 @@ namespace hal
         if(entry.length() >= 3 && !mSearchHistory.contains(entry))
         {
 
-            if(!mSearchHistory.empty() && entry.startsWith(mSearchHistory[0])) mSearchHistory[0] = entry;
+            if(!mSearchHistory.empty() && (entry.startsWith(mSearchHistory[0]) || mSearchHistory[0].startsWith(entry))) mSearchHistory[0] = entry;
             else
             {
                 if (mSearchHistory.length() >= 10) mSearchHistory.pop_back();

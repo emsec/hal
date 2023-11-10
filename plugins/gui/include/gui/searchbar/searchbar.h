@@ -157,7 +157,6 @@ namespace hal
 
         bool eventFilter(QObject *object, QEvent *event);
 
-        void updateSearchHistory(QString entry);
 
     Q_SIGNALS:
         /** TODO : remove textEdited signal
@@ -205,6 +204,8 @@ namespace hal
         void handleClearClicked();
 
         void handleSearchOptionsDialog();
+
+        void updateSearchHistory(QString entry);
 
     private:
         QHBoxLayout* mLayout;
