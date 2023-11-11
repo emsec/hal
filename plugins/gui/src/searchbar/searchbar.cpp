@@ -214,7 +214,6 @@ namespace hal
         else if(mIncrementalSearch && mLineEdit->text().length() >= mMinCharsToStartIncSearch)
         {
             Q_EMIT triggerNewSearch(mLineEdit->text(), mCurrentOptions->toInt());
-            updateSearchHistory(mLineEdit->text());
         }
     }
 
@@ -226,7 +225,6 @@ namespace hal
         }
         else{
             Q_EMIT triggerNewSearch(mLineEdit->text(), mCurrentOptions->toInt());
-            //updateSearchHistory(mLineEdit->text());
         }
     }
 
@@ -293,15 +291,23 @@ namespace hal
     }
 
     void Searchbar::updateSearchHistory(QString entry){
-        if(entry.length() >= 3 && !mSearchHistory.contains(entry))
+
+        const int MAX_ENTRIES = 10;
+        const int MIN_LENGTH = 3;
+
+        if(entry.length() >= MIN_LENGTH && !mSearchHistory.contains(entry))
         {
             if(!mSearchHistory.empty() && (entry.startsWith(mSearchHistory[0])))
                 mSearchHistory[0] = entry;
             else
             {
-                if (mSearchHistory.length() >= 10) mSearchHistory.removeLast();
+                if(!mSearchHistory.empty() && mSearchHistory[0].startsWith(entry))
+                    return;
+
+                if (mSearchHistory.length() >= MAX_ENTRIES) mSearchHistory.removeLast();
                 mSearchHistory.prepend(entry);
             }
+
         }
     }
 }
