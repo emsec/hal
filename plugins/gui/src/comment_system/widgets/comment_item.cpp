@@ -1,6 +1,7 @@
 #include "gui/comment_system/widgets/comment_item.h"
 #include "gui/comment_system/comment_entry.h"
 #include "gui/comment_system/widgets/comment_dialog.h"
+#include "gui/searchbar/searchable_label.h"
 #include "gui/gui_globals.h"
 
 #include <QToolBar>
@@ -52,7 +53,8 @@ namespace hal
 
     bool CommentItem::search(const QString &string, SearchOptions searchOpts)
     {
-        bool found = false;
+        mHeader->handleSearchChanged(string,searchOpts.toInt());
+        bool found = mHeader->hasMatch();
         QList<QTextEdit::ExtraSelection> extraSelections;
 
         mTextEdit->moveCursor(QTextCursor::Start);
@@ -125,7 +127,7 @@ namespace hal
         mTopLayout->setSpacing(0);
         mTopLayout->setMargin(0);
 
-        mHeader = new QLabel(this);
+        mHeader = new SearchableLabel(this);
         mHeader->setStyleSheet("font-weight: bold;");
         mCreationDate = new QLabel(this);
         mCreationDate->setStyleSheet("font-size: 12px;");

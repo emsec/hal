@@ -39,6 +39,7 @@ class QToolButton;
 namespace hal
 {
     class CommentEntry;
+    class SearchableLabel;
 
     class CommentItem : public QFrame
     {
@@ -86,7 +87,7 @@ namespace hal
 
         // header part (perhaps no toolbar but a layout with toolbuttons instead of actions?)
         QToolBar* mTopToolbar;
-        QLabel* mHeader;
+        SearchableLabel* mHeader;
         QLabel* mCreationDate;
         QAction* mModifyAction;
         QAction* mDeleteAction;
