@@ -28,6 +28,14 @@ ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
         }
     }
 
+    int ModuleItem::row() const
+    {
+        BaseTreeItem* parent = getParent();
+        if (!parent) return 0;
+        return parent->getRowForChild(this);
+    }
+
+
     void ModuleItem::appendExistingChildIfAny(const QMap<u32,ModuleItem*>& moduleMap)
     {
         if(mType != TreeItemType::Module) // only module can have children
@@ -45,40 +53,6 @@ ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
                 childItem->setParent(this);
             }
         }
-    }
-
-    void ModuleItem::prependChild(ModuleItem* child)
-    {
-        // PROBABLY OBSOLETE
-        mChildItems.prepend(child);
-    }
-
-    ModuleItem* ModuleItem::child(int row)
-    {
-        return mChildItems.value(row);
-    }
-
-    const BaseTreeItem* ModuleItem::constParent() const
-    {
-        return getParent();
-    }
-
-    const ModuleItem* ModuleItem::constChild(int row) const
-    {
-        return mChildItems.value(row);
-    }
-
-    int ModuleItem::childCount() const
-    {
-        return mChildItems.count();
-    }
-
-    int ModuleItem::row() const
-    {
-        if (getParent())
-            return static_cast<ModuleItem*>(getParent())->mChildItems.indexOf(const_cast<ModuleItem*>(this));
-        else
-            return 0;
     }
 
     QVariant ModuleItem::getData(int column) const

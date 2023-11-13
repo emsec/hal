@@ -85,7 +85,7 @@ namespace hal
         while (current_item != mRootItem->getChild(0))
         {
             row_numbers.append(current_item->row());
-            current_item = static_cast<const ModuleItem*>(current_item->constParent());
+            current_item = static_cast<const ModuleItem*>(current_item->getParent());
         }
 
         QModelIndex model_index = index(0, 0, QModelIndex());
@@ -141,7 +141,7 @@ namespace hal
 
         QModelIndex index = getIndex(parent);
 
-        int row = parent->childCount();
+        int row = parent->getChildCount();
         mIsModifying = true;
         beginInsertRows(index, row, row);
         parent->appendChild(item);
@@ -164,7 +164,7 @@ namespace hal
 
         QModelIndex index = getIndex(parent);
 
-        int row = parent->childCount();
+        int row = parent->getChildCount();
         mIsModifying = true;
         beginInsertRows(index, row, row);
         parent->appendChild(item);
@@ -188,7 +188,7 @@ namespace hal
 
         QModelIndex index = getIndex(parent);
 
-        int row = parent->childCount();
+        int row = parent->getChildCount();
         mIsModifying = true;
         beginInsertRows(index, row, row);
         parent->appendChild(item);
@@ -228,7 +228,7 @@ namespace hal
         int row = item->row();
 
         mIsModifying = true;
-        beginMoveRows(oldIndex, row, row, newIndex, newParent->childCount());
+        beginMoveRows(oldIndex, row, row, newIndex, newParent->getChildCount());
         oldParent->removeChild(item);
         newParent->appendChild(item);
         item->setParent(newParent);
@@ -331,7 +331,7 @@ namespace hal
         int row = item->row();
 
         mIsModifying = true;
-        beginMoveRows(oldIndex, row, row, newIndex, newParentItem->childCount());
+        beginMoveRows(oldIndex, row, row, newIndex, newParentItem->getChildCount());
         oldParentItem->removeChild(item);
         newParentItem->appendChild(item);
         item->setParent(newParentItem);

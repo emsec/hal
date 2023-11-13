@@ -77,7 +77,7 @@ namespace hal
         return mChildren.size();
     }
 
-    int BaseTreeItem::getRowForChild(BaseTreeItem *child) const
+    int BaseTreeItem::getRowForChild(const BaseTreeItem *child) const
     {
         int index = -1;
         for(int i = 0; i < mChildren.size(); i++)

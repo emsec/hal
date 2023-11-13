@@ -43,12 +43,12 @@ namespace hal
         if(filterRegularExpression().pattern().isEmpty())
             return true;
 
-        if(item->childCount() == 0)
+        if(item->getChildCount() == 0)
             return sourceModel()->data(sourceIndex, filterRole()).toString().contains(filterRegularExpression());
 
         bool shouldBeDisplayed = sourceModel()->data(sourceIndex, filterRole()).toString().contains(filterRegularExpression());;
         //go through all children and return the check of itself and the check of the children
-        for(int i = 0; i < item->childCount(); i++)
+        for(int i = 0; i < item->getChildCount(); i++)
         {
             shouldBeDisplayed = shouldBeDisplayed || filterAcceptsRow(i, sourceIndex);
         }

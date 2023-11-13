@@ -72,44 +72,6 @@ namespace hal
         void appendExistingChildIfAny(const QMap<u32,ModuleItem*>& moduleMap);
 
         /**
-         * Inserts a child ModuleItem at the beginning of the children list of this ModuleItem.
-         *
-         * @param child - The child to be prepended
-         */
-        void prependChild(ModuleItem* child);
-
-        /**
-         * Get the child ModuleItem at a certain position in the children list of this ModuleItem.
-         *
-         * @param row - The position in the children list of this ModuleItem
-         * @returns then children ModuleItem at the specified position in the children list
-         */
-        ModuleItem* child(int row);
-
-        /**
-         * Gets the parent ModuleItem of this ModuleItem.
-         *
-         * @returns the parent ModuleItem. Returns a constant ModuleItem pointer
-         */
-        const BaseTreeItem* constParent() const;
-
-        /**
-         * Get the child ModuleItem at a certain position in the children list of this ModuleItem.
-         *
-         * @param row - The position in the children list of this ModuleItem
-         * @returns then children ModuleItem at the specified position in the children list.
-         *          Returns a constant ModuleItem pointer
-         */
-        const ModuleItem* constChild(int row) const;
-
-        /**
-         * Gets the current amount of children of this ModuleItem.
-         *
-         * @returns the amount of children
-         */
-        int childCount() const;
-
-        /**
          * Gets the data of this item model item i.e. the name of this ModuleItem if column=1.
          *
          * @param column - The column to get the data for
@@ -168,8 +130,6 @@ namespace hal
         void setHighlighted(const bool highlighted);
 
     private:
-        QList<ModuleItem*> mChildItems;
-
         u32 mId;
         TreeItemType mType;
         QString mName;
