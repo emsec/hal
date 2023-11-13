@@ -32,17 +32,16 @@
 
 namespace hal
 {
-    template<typename T>
     struct FiniteSet
     {
         FiniteSet(const u32 size);
 
         bool operator==(const FiniteSet& rhs) const;
         bool operator<(const FiniteSet& rhs) const;
-        FiniteSet<T> operator&(const FiniteSet& rhs) const;    // intersect
-        FiniteSet<T> operator|(const FiniteSet& rhs) const;    // union
-        FiniteSet<T> operator-(const FiniteSet& rhs) const;    // difference
-        FiniteSet<T> operator^(const FiniteSet& rhs) const;    // symmetric difference
+        FiniteSet operator&(const FiniteSet& rhs) const;    // intersect
+        FiniteSet operator|(const FiniteSet& rhs) const;    // union
+        FiniteSet operator-(const FiniteSet& rhs) const;    // difference
+        FiniteSet operator^(const FiniteSet& rhs) const;    // symmetric difference
 
         bool is_disjoint(const FiniteSet& rhs) const;
         bool is_subset(const FiniteSet& rhs) const;

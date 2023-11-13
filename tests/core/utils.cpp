@@ -1,5 +1,6 @@
 #include "netlist_test_utils.h"
 #include "test_def.h"
+#include "hal_core/utilities/finite_set.h"
 
 #include "gtest/gtest.h"
 #include "hal_core/utilities/log.h"
@@ -640,6 +641,173 @@ namespace hal {
             std::string lic_str = get_open_source_licenses();
             EXPECT_TRUE(lic_str.length() > 0);
 
+        TEST_END
+    }
+
+    /**
+     * Testing FiniteSet
+     *
+     * Classes: FiniteSet
+     */
+    TEST_F(UtilsTest, check_finite_set) 
+    {
+        TEST_START
+        {
+            FiniteSet set_16(16);
+            FiniteSet set_64(64);
+            FiniteSet set_128(128);
+
+            ASSERT_EQ(set_16.m_size, 16);
+            ASSERT_EQ(set_16.m_content.size(), 1);
+
+            ASSERT_EQ(set_64.m_size, 64);
+            ASSERT_EQ(set_64.m_content.size(), 1);
+
+            ASSERT_EQ(set_128.m_size, 128);
+            ASSERT_EQ(set_128.m_content.size(), 2);
+
+            EXPECT_FALSE(set_16.contains(10));
+            EXPECT_EQ(set_16.m_content.at(0), (u64)0);
+            EXPECT_TRUE(set_16.insert(10));
+            EXPECT_TRUE(set_16.contains(10));
+            EXPECT_EQ(set_16.m_content.at(0), ((u64)1) << 10);
+            EXPECT_TRUE(set_16.erase(10));
+            EXPECT_FALSE(set_16.contains(10));
+            EXPECT_EQ(set_16.m_content.at(0), (u64)0);
+
+            EXPECT_FALSE(set_64.contains(63));
+            EXPECT_EQ(set_64.m_content.at(0), (u64)0);
+            EXPECT_TRUE(set_64.insert(63));
+            EXPECT_TRUE(set_64.contains(63));
+            EXPECT_EQ(set_64.m_content.at(0), ((u64)1) << 63);
+            EXPECT_TRUE(set_64.erase(63));
+            EXPECT_FALSE(set_64.contains(63));
+            EXPECT_EQ(set_64.m_content.at(0), (u64)0);
+
+            EXPECT_FALSE(set_128.contains(63));
+            EXPECT_EQ(set_128.m_content.at(0), (u64)0);
+            EXPECT_EQ(set_128.m_content.at(1), (u64)0);
+            EXPECT_TRUE(set_128.insert(63));
+            EXPECT_TRUE(set_128.contains(63));
+            EXPECT_EQ(set_128.m_content.at(0), ((u64)1) << 63);
+            EXPECT_EQ(set_128.m_content.at(1), (u64)0);
+            EXPECT_TRUE(set_128.erase(63));
+            EXPECT_FALSE(set_128.contains(63));
+            EXPECT_EQ(set_128.m_content.at(0), (u64)0);
+            EXPECT_EQ(set_128.m_content.at(1), (u64)0);
+
+            EXPECT_FALSE(set_128.contains(100));
+            EXPECT_EQ(set_128.m_content.at(0), (u64)0);
+            EXPECT_EQ(set_128.m_content.at(1), (u64)0);
+            EXPECT_TRUE(set_128.insert(100));
+            EXPECT_TRUE(set_128.contains(100));
+            EXPECT_EQ(set_128.m_content.at(0), (u64)0);
+            EXPECT_EQ(set_128.m_content.at(1), ((u64)1) << 36);
+            EXPECT_TRUE(set_128.erase(100));
+            EXPECT_FALSE(set_128.contains(100));
+            EXPECT_EQ(set_128.m_content.at(0), (u64)0);
+            EXPECT_EQ(set_128.m_content.at(1), (u64)0);
+        }
+        {
+            FiniteSet set_a(128);
+            FiniteSet set_b(128);
+
+            EXPECT_TRUE(set_a == set_b);
+
+            EXPECT_EQ(set_a.m_content.at(0), (u64)0);
+            EXPECT_EQ(set_a.m_content.at(1), (u64)0);
+            EXPECT_EQ(set_b.m_content.at(0), (u64)0);
+            EXPECT_EQ(set_b.m_content.at(1), (u64)0);
+
+            set_a.insert(10);
+            set_b.insert(10);
+
+            EXPECT_EQ(set_a.m_content.at(0), ((u64)1) << 10);
+            EXPECT_EQ(set_a.m_content.at(1), (u64)0);
+            EXPECT_EQ(set_b.m_content.at(0), ((u64)1) << 10);
+            EXPECT_EQ(set_b.m_content.at(1), (u64)0);
+
+            EXPECT_TRUE(set_a == set_b);
+            EXPECT_TRUE(set_a.is_subset(set_b));
+            EXPECT_TRUE(set_b.is_subset(set_a));
+            EXPECT_TRUE(set_a.is_superset(set_b));
+            EXPECT_TRUE(set_b.is_superset(set_a));
+            EXPECT_FALSE(set_a.is_disjoint(set_b));
+            EXPECT_FALSE(set_b.is_disjoint(set_a));
+
+            set_b.insert(70);
+
+            EXPECT_EQ(set_a.m_content.at(0), ((u64)1) << 10);
+            EXPECT_EQ(set_a.m_content.at(1), (u64)0);
+            EXPECT_EQ(set_b.m_content.at(0), ((u64)1) << 10);
+            EXPECT_EQ(set_b.m_content.at(1), ((u64)1) << 6);
+
+            EXPECT_FALSE(set_a == set_b);
+            EXPECT_TRUE(set_a.is_subset(set_b));
+            EXPECT_FALSE(set_b.is_subset(set_a));
+            EXPECT_FALSE(set_a.is_superset(set_b));
+            EXPECT_TRUE(set_b.is_superset(set_a));
+            EXPECT_FALSE(set_a.is_disjoint(set_b));
+            EXPECT_FALSE(set_b.is_disjoint(set_a));
+
+            EXPECT_TRUE(set_b.erase(10));
+
+            EXPECT_FALSE(set_a == set_b);
+            EXPECT_FALSE(set_a.is_subset(set_b));
+            EXPECT_FALSE(set_b.is_subset(set_a));
+            EXPECT_FALSE(set_a.is_superset(set_b));
+            EXPECT_FALSE(set_b.is_superset(set_a));
+            EXPECT_TRUE(set_a.is_disjoint(set_b));
+            EXPECT_TRUE(set_b.is_disjoint(set_a));
+        }
+        {
+            FiniteSet set_a(128);
+            FiniteSet set_b(128);
+            FiniteSet set_c(128);
+            FiniteSet set_d(128);
+
+            set_a.insert(10);
+            set_b.insert(10);
+            set_b.insert(70);
+            set_c.insert(70);
+            set_d.insert(70);
+            set_d.insert(110);
+
+            auto res_intersect = set_a & set_b;
+            EXPECT_TRUE(set_a.contains(10));
+            EXPECT_FALSE(set_a.contains(70));
+            EXPECT_TRUE(set_b.contains(10));
+            EXPECT_TRUE(set_b.contains(70));
+            EXPECT_TRUE(res_intersect.contains(10));
+            EXPECT_FALSE(res_intersect.contains(70));
+
+            auto res_union = set_a | set_c;
+            EXPECT_TRUE(set_a.contains(10));
+            EXPECT_FALSE(set_a.contains(70));
+            EXPECT_FALSE(set_c.contains(10));
+            EXPECT_TRUE(set_c.contains(70));
+            EXPECT_TRUE(res_union.contains(10));
+            EXPECT_TRUE(res_union.contains(70));
+
+            auto res_difference_1 = set_b - set_d;
+            auto res_difference_2 = set_d - set_b;
+            auto res_sym_difference = set_b ^ set_d;
+            EXPECT_TRUE(set_b.contains(10));
+            EXPECT_TRUE(set_b.contains(70));
+            EXPECT_FALSE(set_b.contains(110));
+            EXPECT_FALSE(set_d.contains(10));
+            EXPECT_TRUE(set_d.contains(70));
+            EXPECT_TRUE(set_d.contains(110));
+            EXPECT_TRUE(res_difference_1.contains(10));
+            EXPECT_FALSE(res_difference_1.contains(70));
+            EXPECT_FALSE(res_difference_1.contains(110));
+            EXPECT_FALSE(res_difference_2.contains(10));
+            EXPECT_FALSE(res_difference_2.contains(70));
+            EXPECT_TRUE(res_difference_2.contains(110));
+            EXPECT_TRUE(res_sym_difference.contains(10));
+            EXPECT_FALSE(res_sym_difference.contains(70));
+            EXPECT_TRUE(res_sym_difference.contains(110));
+        }
         TEST_END
     }
 } //namespace hal
