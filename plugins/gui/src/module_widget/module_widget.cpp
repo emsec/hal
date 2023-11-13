@@ -276,8 +276,8 @@ namespace hal
         u32 module_id = getModuleItemFromIndex(index)->id();
         auto module = gNetlist->get_module_by_id(module_id);
 
-        if(!(module == gNetlist->get_top_module()) && type == ModuleItem::TreeItemType::Module)
-            context_menu.addAction(&delete_action);
+        /*if(!(module == gNetlist->get_top_module()) && type == ModuleItem::TreeItemType::Module)
+            context_menu.addAction(&delete_action);*/
 
         QAction* clicked = context_menu.exec(mTreeView->viewport()->mapToGlobal(point));
 
@@ -327,7 +327,7 @@ namespace hal
             gNetlistRelay->changeModuleColor(getModuleItemFromIndex(index)->id());
 
         if (clicked == &delete_action){
-            gNetlistRelay->deleteModule(getModuleItemFromIndex(index)->id());
+            //gNetlistRelay->deleteModule(getModuleItemFromIndex(index)->id());
         }
 
         if (clicked == &focus_in_view){
@@ -613,7 +613,16 @@ namespace hal
         ModuleItem* selectedItem = getModuleItemFromIndex(mTreeView->currentIndex());
         if(selectedItem->getParent() != nullptr)
         {
-            gNetlistRelay->deleteModule(getModuleItemFromIndex(mTreeView->currentIndex())->id());
+            switch(getModuleItemFromIndex(mTreeView->currentIndex())->getType())
+            {
+                case ModuleItem::TreeItemType::Module: {
+                    //gNetlistRelay->deleteModule(getModuleItemFromIndex(mTreeView->currentIndex())->id());
+                    break;
+                    }
+                case ModuleItem::TreeItemType::Gate: break;
+                case ModuleItem::TreeItemType::Net: break;
+
+            }
         }
     }
 
