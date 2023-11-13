@@ -27,34 +27,222 @@
 
 #include "hal_core/defines.h"
 
+#include <hal_core/utilities/result.h>
 #include <unordered_map>
 #include <vector>
 
 namespace hal
 {
+    template<typename T>
     struct FiniteSet
     {
-        FiniteSet(const u32 size);
+        FiniteSet(const std::vector<T>* const data, const std::unordered_map<T, u32>* const data_to_index) : m_data(data), m_data_to_index(data_to_index)
+        {
+            m_size    = m_data->size();
+            m_content = std::vector<u64>(((m_size - 1) >> 6) + 1, 0);
+        }
 
-        bool operator==(const FiniteSet& rhs) const;
-        bool operator<(const FiniteSet& rhs) const;
-        FiniteSet operator&(const FiniteSet& rhs) const;    // intersect
-        FiniteSet operator|(const FiniteSet& rhs) const;    // union
-        FiniteSet operator-(const FiniteSet& rhs) const;    // difference
-        FiniteSet operator^(const FiniteSet& rhs) const;    // symmetric difference
+        bool operator==(const FiniteSet<T>& rhs) const
+        {
+            return m_content == rhs.m_content;
+        }
 
-        bool is_disjoint(const FiniteSet& rhs) const;
-        bool is_subset(const FiniteSet& rhs) const;
-        bool is_superset(const FiniteSet& rhs) const;
+        bool operator<(const FiniteSet<T>& rhs) const
+        {
+            return m_content < rhs.m_content;
+        }
 
-        bool insert(const u32 index);
-        bool erase(const u32 index);
-        bool contains(const u32 index);
+        FiniteSet<T> operator&(const FiniteSet<T>& rhs) const
+        {
+            FiniteSet<T> res(m_data, m_data_to_index);
+            for (u32 i = 0; i < m_content.size(); i++)
+            {
+                res.m_content.at(i) = m_content.at(i) & rhs.m_content.at(i);
+            }
+            return res;
+        }
+
+        FiniteSet<T> operator|(const FiniteSet<T>& rhs) const
+        {
+            FiniteSet<T> res(m_data, m_data_to_index);
+            for (u32 i = 0; i < m_content.size(); i++)
+            {
+                res.m_content.at(i) = m_content.at(i) | rhs.m_content.at(i);
+            }
+            return res;
+        }
+
+        FiniteSet<T> operator-(const FiniteSet<T>& rhs) const
+        {
+            FiniteSet<T> res(m_data, m_data_to_index);
+            for (u32 i = 0; i < m_content.size(); i++)
+            {
+                res.m_content.at(i) = m_content.at(i) & ~rhs.m_content.at(i);
+            }
+            return res;
+        }
+
+        FiniteSet<T> operator^(const FiniteSet<T>& rhs) const
+        {
+            FiniteSet<T> res(m_data, m_data_to_index);
+            for (u32 i = 0; i < m_content.size(); i++)
+            {
+                res.m_content.at(i) = m_content.at(i) ^ rhs.m_content.at(i);
+            }
+            return res;
+        }
+
+        bool is_disjoint(const FiniteSet<T>& rhs) const
+        {
+            for (u32 i = 0; i < m_content.size(); i++)
+            {
+                if ((m_content.at(i) & rhs.m_content.at(i)) != 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        bool is_subset(const FiniteSet<T>& rhs) const
+        {
+            for (u32 i = 0; i < m_content.size(); i++)
+            {
+                if ((m_content.at(i) & rhs.m_content.at(i)) != m_content.at(i))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        bool is_superset(const FiniteSet<T>& rhs) const
+        {
+            for (u32 i = 0; i < m_content.size(); i++)
+            {
+                if ((m_content.at(i) & rhs.m_content.at(i)) != rhs.m_content.at(i))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        bool insert(const u32 index)
+        {
+            if (index >= m_size)
+            {
+                return false;
+            }
+
+            m_content.at(index >> 6) ^= (u64)1 << (index & 0x3F);
+
+            return true;
+        }
+
+        bool insert(const T& elem)
+        {
+            const auto it = m_data_to_index->find(elem);
+            if (it == m_data_to_index->end())
+            {
+                return false;
+            }
+
+            const u32 index = it->second;
+            m_content.at(index >> 6) ^= (u64)1 << (index & 0x3F);
+            return true;
+        }
+
+        bool erase(const u32 index)
+        {
+            if (index >= m_size)
+            {
+                return false;
+            }
+
+            m_content.at(index >> 6) &= ~((u64)1 << (index & 0x3F));
+
+            return true;
+        }
+
+        bool erase(const T& elem)
+        {
+            const auto it = m_data_to_index->find(elem);
+            if (it == m_data_to_index->end())
+            {
+                return false;
+            }
+
+            const u32 index = it->second;
+            m_content.at(index >> 6) &= ~((u64)1 << (index & 0x3F));
+
+            return true;
+        }
+
+        bool contains(const u32 index)
+        {
+            if (index >= m_size)
+            {
+                return false;
+            }
+
+            return (m_content.at(index >> 6) & (u64)1 << (index & 0x3F)) != 0;
+        }
+
+        bool contains(const T& elem)
+        {
+            const auto it = m_data_to_index->find(elem);
+            if (it == m_data_to_index->end())
+            {
+                return false;
+            }
+
+            const u32 index = it->second;
+            return (m_content.at(index >> 6) & (u64)1 << (index & 0x3F)) != 0;
+        }
+
+        Result<T> get_at(u32 index) const
+        {
+            if (index >= m_size)
+            {
+                return ERR("index " + std::to_string(index) + " is out of range, FiniteSet has size " + std::to_string(m_size));
+            }
+
+            return OK(m_data->at(index));
+        }
+
+        Result<u32> get_index(const T& elem) const
+        {
+            const auto it = m_data_to_index->find(elem);
+            if (it == m_data_to_index->end())
+            {
+                return ERR("element cannot be part of FiniteSet because it is not contained in base data");
+            }
+
+            return OK(it->second);
+        }
+
+        std::vector<T> get_contained() const
+        {
+            std::vector<T> res;
+
+            for (u32 i = 0; i < m_content.size(); i++)
+            {
+                for (u32 j = 0; j < 64; j++)
+                {
+                    if (m_content.at(i) & ((u64)1 << j))
+                    {
+                        res.push_back(m_data->at((i << 6) + j));
+                    }
+                }
+            }
+
+            return res;
+        }
 
         u32 m_size;
+        const std::vector<T>* const m_data;
+        const std::unordered_map<T, u32>* const m_data_to_index;
         std::vector<u64> m_content;
-
-    private:
-        void initialize();
     };
 }    // namespace hal

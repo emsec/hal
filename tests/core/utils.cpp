@@ -9,6 +9,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <string>
 
 namespace hal {
     using namespace utils;
@@ -653,9 +654,32 @@ namespace hal {
     {
         TEST_START
         {
-            FiniteSet set_16(16);
-            FiniteSet set_64(64);
-            FiniteSet set_128(128);
+            std::vector<std::string> dummy_data_16;
+            std::unordered_map<std::string, u32> dummy_map_16;
+            for (u32 i = 0; i < 16; i++)
+            {
+                dummy_data_16.push_back(std::to_string(i));
+                dummy_map_16[std::to_string(i)] = i;
+            }
+            FiniteSet<std::string> set_16(&dummy_data_16, &dummy_map_16);
+
+            std::vector<std::string> dummy_data_64;
+            std::unordered_map<std::string, u32> dummy_map_64;
+            for (u32 i = 0; i < 64; i++)
+            {
+                dummy_data_64.push_back(std::to_string(i));
+                dummy_map_64[std::to_string(i)] = i;
+            }
+            FiniteSet<std::string> set_64(&dummy_data_64, &dummy_map_64);
+
+            std::vector<std::string> dummy_data_128;
+            std::unordered_map<std::string, u32> dummy_map_128;
+            for (u32 i = 0; i < 128; i++)
+            {
+                dummy_data_128.push_back(std::to_string(i));
+                dummy_map_128[std::to_string(i)] = i;
+            }
+            FiniteSet<std::string> set_128(&dummy_data_128, &dummy_map_128);
 
             ASSERT_EQ(set_16.m_size, 16);
             ASSERT_EQ(set_16.m_content.size(), 1);
@@ -674,6 +698,12 @@ namespace hal {
             EXPECT_TRUE(set_16.erase(10));
             EXPECT_FALSE(set_16.contains(10));
             EXPECT_EQ(set_16.m_content.at(0), (u64)0);
+            EXPECT_TRUE(set_16.insert("10"));
+            EXPECT_TRUE(set_16.contains("10"));
+            EXPECT_EQ(set_16.m_content.at(0), ((u64)1) << 10);
+            EXPECT_TRUE(set_16.erase("10"));
+            EXPECT_FALSE(set_16.contains("10"));
+            EXPECT_EQ(set_16.m_content.at(0), (u64)0);
 
             EXPECT_FALSE(set_64.contains(63));
             EXPECT_EQ(set_64.m_content.at(0), (u64)0);
@@ -682,6 +712,12 @@ namespace hal {
             EXPECT_EQ(set_64.m_content.at(0), ((u64)1) << 63);
             EXPECT_TRUE(set_64.erase(63));
             EXPECT_FALSE(set_64.contains(63));
+            EXPECT_EQ(set_64.m_content.at(0), (u64)0);
+            EXPECT_TRUE(set_64.insert("63"));
+            EXPECT_TRUE(set_64.contains("63"));
+            EXPECT_EQ(set_64.m_content.at(0), ((u64)1) << 63);
+            EXPECT_TRUE(set_64.erase("63"));
+            EXPECT_FALSE(set_64.contains("63"));
             EXPECT_EQ(set_64.m_content.at(0), (u64)0);
 
             EXPECT_FALSE(set_128.contains(63));
@@ -693,6 +729,14 @@ namespace hal {
             EXPECT_EQ(set_128.m_content.at(1), (u64)0);
             EXPECT_TRUE(set_128.erase(63));
             EXPECT_FALSE(set_128.contains(63));
+            EXPECT_EQ(set_128.m_content.at(0), (u64)0);
+            EXPECT_EQ(set_128.m_content.at(1), (u64)0);
+            EXPECT_TRUE(set_128.insert("63"));
+            EXPECT_TRUE(set_128.contains("63"));
+            EXPECT_EQ(set_128.m_content.at(0), ((u64)1) << 63);
+            EXPECT_EQ(set_128.m_content.at(1), (u64)0);
+            EXPECT_TRUE(set_128.erase("63"));
+            EXPECT_FALSE(set_128.contains("63"));
             EXPECT_EQ(set_128.m_content.at(0), (u64)0);
             EXPECT_EQ(set_128.m_content.at(1), (u64)0);
 
@@ -707,10 +751,33 @@ namespace hal {
             EXPECT_FALSE(set_128.contains(100));
             EXPECT_EQ(set_128.m_content.at(0), (u64)0);
             EXPECT_EQ(set_128.m_content.at(1), (u64)0);
+            EXPECT_TRUE(set_128.insert("100"));
+            EXPECT_TRUE(set_128.contains("100"));
+            EXPECT_EQ(set_128.m_content.at(0), (u64)0);
+            EXPECT_EQ(set_128.m_content.at(1), ((u64)1) << 36);
+            EXPECT_TRUE(set_128.erase("100"));
+            EXPECT_FALSE(set_128.contains("100"));
+            EXPECT_EQ(set_128.m_content.at(0), (u64)0);
+            EXPECT_EQ(set_128.m_content.at(1), (u64)0);
+
+            EXPECT_TRUE(set_128.insert("10"));
+            EXPECT_TRUE(set_128.insert("30"));
+            EXPECT_TRUE(set_128.insert("50"));
+            EXPECT_TRUE(set_128.insert("70"));
+            EXPECT_TRUE(set_128.insert("90"));
+
+            EXPECT_EQ(set_128.get_contained(), std::vector<std::string>({"10", "30", "50", "70", "90"}));
         }
         {
-            FiniteSet set_a(128);
-            FiniteSet set_b(128);
+            std::vector<std::string> dummy_data;
+            std::unordered_map<std::string, u32> dummy_map;
+            for (u32 i = 0; i < 128; i++)
+            {
+                dummy_data.push_back(std::to_string(i));
+                dummy_map[std::to_string(i)] = i;
+            }
+            FiniteSet<std::string> set_a(&dummy_data, &dummy_map);
+            FiniteSet<std::string> set_b(&dummy_data, &dummy_map);
 
             EXPECT_TRUE(set_a == set_b);
 
@@ -761,10 +828,17 @@ namespace hal {
             EXPECT_TRUE(set_b.is_disjoint(set_a));
         }
         {
-            FiniteSet set_a(128);
-            FiniteSet set_b(128);
-            FiniteSet set_c(128);
-            FiniteSet set_d(128);
+            std::vector<std::string> dummy_data;
+            std::unordered_map<std::string, u32> dummy_map;
+            for (u32 i = 0; i < 128; i++)
+            {
+                dummy_data.push_back(std::to_string(i));
+                dummy_map[std::to_string(i)] = i;
+            }
+            FiniteSet<std::string> set_a(&dummy_data, &dummy_map);
+            FiniteSet<std::string> set_b(&dummy_data, &dummy_map);
+            FiniteSet<std::string> set_c(&dummy_data, &dummy_map);
+            FiniteSet<std::string> set_d(&dummy_data, &dummy_map);
 
             set_a.insert(10);
             set_b.insert(10);
