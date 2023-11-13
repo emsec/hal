@@ -138,11 +138,11 @@ namespace hal
         return OK(res);
     }
 
-    Result<std::unordered_set<Gate*>> NetlistTraversalDecorator::get_next_gates_fancy(const Net* net,
-                                                                                      bool successors,
-                                                                                      const std::function<bool(const Gate*)>& target_gate_filter,
-                                                                                      const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
-                                                                                      const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_gates_fancy(const Net* net,
+                                                                            bool successors,
+                                                                            const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                            const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                            const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
     {
         if (net == nullptr)
         {
@@ -157,7 +157,7 @@ namespace hal
         std::unordered_set<const Net*> visited;
         std::vector<const Net*> stack = {net};
         std::vector<const Net*> previous;
-        std::unordered_set<Gate*> res;
+        std::set<Gate*> res;
         while (!stack.empty())
         {
             const Net* current = stack.back();
@@ -217,11 +217,11 @@ namespace hal
         return OK(res);
     }
 
-    Result<std::unordered_set<Gate*>> NetlistTraversalDecorator::get_next_gates_fancy(const Gate* gate,
-                                                                                      bool successors,
-                                                                                      const std::function<bool(const Gate*)>& target_gate_filter,
-                                                                                      const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
-                                                                                      const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_gates_fancy(const Gate* gate,
+                                                                            bool successors,
+                                                                            const std::function<bool(const Gate*)>& target_gate_filter,
+                                                                            const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
+                                                                            const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
     {
         if (gate == nullptr)
         {
@@ -233,7 +233,7 @@ namespace hal
             return ERR("net does not belong to netlist");
         }
 
-        std::unordered_set<Gate*> res;
+        std::set<Gate*> res;
         for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
         {
             if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, 0))

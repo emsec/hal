@@ -93,7 +93,7 @@ namespace hal
                bool successors,
                const std::function<bool(const Gate*)>& target_gate_filter,
                const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
-               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) -> std::optional<std::unordered_set<Gate*>> {
+               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) -> std::optional<std::set<Gate*>> {
                 auto res = self.get_next_gates_fancy(net, successors, target_gate_filter, exit_endpoint_filter, entry_endpoint_filter);
                 if (res.is_ok())
                 {
@@ -131,7 +131,7 @@ namespace hal
                bool successors,
                const std::function<bool(const Gate*)>& target_gate_filter,
                const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
-               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) -> std::optional<std::unordered_set<Gate*>> {
+               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) -> std::optional<std::set<Gate*>> {
                 auto res = self.get_next_gates_fancy(gate, successors, target_gate_filter, exit_endpoint_filter, entry_endpoint_filter);
                 if (res.is_ok())
                 {
