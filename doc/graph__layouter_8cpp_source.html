@@ -1020,17 +1020,17 @@ $(document).ready(function(){initNavTree('graph__layouter_8cpp_source.html','');
 <div class="line"><a name="l00936"></a><span class="lineno">  936</span>&#160;            <span class="keywordflow">case</span> EndpointList::HasGlobalEndpoint:</div>
 <div class="line"><a name="l00937"></a><span class="lineno">  937</span>&#160;                <span class="keywordflow">if</span> (epl.hasInputArrow())</div>
 <div class="line"><a name="l00938"></a><span class="lineno">  938</span>&#160;                {</div>
-<div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160;                    StandardArrowNet* san = <span class="keyword">new</span> StandardArrowNet(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>, dnt-&gt;mLines);</div>
+<div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160;                    StandardArrowNet* san = <span class="keyword">new</span> StandardArrowNet(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>, dnt-&gt;mLines, dnt-&gt;mKnots);</div>
 <div class="line"><a name="l00940"></a><span class="lineno">  940</span>&#160;                    graphicsNet           = san;</div>
 <div class="line"><a name="l00941"></a><span class="lineno">  941</span>&#160;                    <span class="keywordtype">int</span> yGridPos          = mGlobalInputHash.<a class="codeRef" href="https://doc.qt.io/qt-5/qhash.html#value">value</a>(dnt-&gt;id(), -1);</div>
 <div class="line"><a name="l00942"></a><span class="lineno">  942</span>&#160;                    Q_ASSERT(yGridPos &gt;= 0);</div>
 <div class="line"><a name="l00943"></a><span class="lineno">  943</span>&#160;                    <span class="keyword">const</span> EndpointCoordinate&amp; epc = mEndpointHash.value(<a class="codeRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>(mNodeBoundingBox.<a class="codeRef" href="https://doc.qt.io/qt-5/qrect.html#left">left</a>(), yGridPos * 2));</div>
-<div class="line"><a name="l00944"></a><span class="lineno">  944</span>&#160;                    san-&gt;setInputPosition(<a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>(mCoordArrayX-&gt;lanePosition(mNodeBoundingBox.<a class="codeRef" href="https://doc.qt.io/qt-5/qrect.html#left">left</a>(),-1), epc.lanePosition(0, <span class="keyword">true</span>)));</div>
+<div class="line"><a name="l00944"></a><span class="lineno">  944</span>&#160;                    san-&gt;setInputPosition(<a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>(mCoordArrayX-&gt;lanePosition(mNodeBoundingBox.<a class="codeRef" href="https://doc.qt.io/qt-5/qrect.html#left">left</a>(),0), epc.lanePosition(0, <span class="keyword">true</span>)));</div>
 <div class="line"><a name="l00945"></a><span class="lineno">  945</span>&#160;                }</div>
 <div class="line"><a name="l00946"></a><span class="lineno">  946</span>&#160;                <span class="keywordflow">if</span> (epl.hasOutputArrow())</div>
 <div class="line"><a name="l00947"></a><span class="lineno">  947</span>&#160;                {</div>
 <div class="line"><a name="l00948"></a><span class="lineno">  948</span>&#160;                    <span class="keywordflow">if</span> (graphicsNet) <a class="code" href="classhal_1_1_graph_layouter.html#a5994e7e9693cce878c09fc059eaab324">mScene</a>-&gt;<a class="code" href="classhal_1_1_graphics_scene.html#a8d8dcd1b6f2f156cc3d492bffbd31f69">addGraphItem</a>(graphicsNet);</div>
-<div class="line"><a name="l00949"></a><span class="lineno">  949</span>&#160;                    StandardArrowNet* san = <span class="keyword">new</span> StandardArrowNet(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>, dnt-&gt;mLines);</div>
+<div class="line"><a name="l00949"></a><span class="lineno">  949</span>&#160;                    StandardArrowNet* san = <span class="keyword">new</span> StandardArrowNet(<a class="code" href="namespacetest.html#a20eb10bb18ee6ccd51fa4518f9fd6090">n</a>, dnt-&gt;mLines, dnt-&gt;mKnots);</div>
 <div class="line"><a name="l00950"></a><span class="lineno">  950</span>&#160;                    graphicsNet           = san;</div>
 <div class="line"><a name="l00951"></a><span class="lineno">  951</span>&#160;                    <span class="keywordtype">int</span> yGridPos          = mGlobalOutputHash.<a class="codeRef" href="https://doc.qt.io/qt-5/qhash.html#value">value</a>(dnt-&gt;id(), -1);</div>
 <div class="line"><a name="l00952"></a><span class="lineno">  952</span>&#160;                    Q_ASSERT(yGridPos &gt;= 0);</div>
@@ -1038,7 +1038,7 @@ $(document).ready(function(){initNavTree('graph__layouter_8cpp_source.html','');
 <div class="line"><a name="l00954"></a><span class="lineno">  954</span>&#160;                    <span class="keyword">const</span> EndpointCoordinate&amp; epc = mEndpointHash.value(pnt);</div>
 <div class="line"><a name="l00955"></a><span class="lineno">  955</span>&#160;                    <span class="keyword">const</span> NetLayoutJunction* nlj  = mJunctionHash.<a class="codeRef" href="https://doc.qt.io/qt-5/qhash.html#value">value</a>(pnt);</div>
 <div class="line"><a name="l00956"></a><span class="lineno">  956</span>&#160;                    Q_ASSERT(nlj);</div>
-<div class="line"><a name="l00957"></a><span class="lineno">  957</span>&#160;                    san-&gt;setOutputPosition(<a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>(mCoordArrayX-&gt;lanePosition(pnt.x(),nlj-&gt;rect().right() + 1), epc.lanePosition(0, <span class="keyword">true</span>)));</div>
+<div class="line"><a name="l00957"></a><span class="lineno">  957</span>&#160;                    san-&gt;setOutputPosition(<a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>(mCoordArrayX-&gt;lanePosition(pnt.x(),nlj-&gt;rect().right()), epc.lanePosition(0, <span class="keyword">true</span>)));</div>
 <div class="line"><a name="l00958"></a><span class="lineno">  958</span>&#160;                }</div>
 <div class="line"><a name="l00959"></a><span class="lineno">  959</span>&#160;                <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00960"></a><span class="lineno">  960</span>&#160;            <span class="keywordflow">case</span> EndpointList::SourceAndDestination:</div>
@@ -1757,7 +1757,7 @@ $(document).ready(function(){initNavTree('graph__layouter_8cpp_source.html','');
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_62580450d675343767dbe0503393e994.html">graph_widget</a></li><li class="navelem"><a class="el" href="dir_fda276515715e6a42081e8e393a99d09.html">layouters</a></li><li class="navelem"><a class="el" href="graph__layouter_8cpp.html">graph_layouter.cpp</a></li>
-    <li class="footer">Generated on Thu Nov 9 2023 20:39:33 for HAL by
+    <li class="footer">Generated on Mon Nov 13 2023 19:18:37 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
