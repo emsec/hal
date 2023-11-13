@@ -936,17 +936,17 @@ namespace hal
             case EndpointList::HasGlobalEndpoint:
                 if (epl.hasInputArrow())
                 {
-                    StandardArrowNet* san = new StandardArrowNet(n, dnt->mLines);
+                    StandardArrowNet* san = new StandardArrowNet(n, dnt->mLines, dnt->mKnots);
                     graphicsNet           = san;
                     int yGridPos          = mGlobalInputHash.value(dnt->id(), -1);
                     Q_ASSERT(yGridPos >= 0);
                     const EndpointCoordinate& epc = mEndpointHash.value(QPoint(mNodeBoundingBox.left(), yGridPos * 2));
-                    san->setInputPosition(QPointF(mCoordArrayX->lanePosition(mNodeBoundingBox.left(),-1), epc.lanePosition(0, true)));
+                    san->setInputPosition(QPointF(mCoordArrayX->lanePosition(mNodeBoundingBox.left(),0), epc.lanePosition(0, true)));
                 }
                 if (epl.hasOutputArrow())
                 {
                     if (graphicsNet) mScene->addGraphItem(graphicsNet);
-                    StandardArrowNet* san = new StandardArrowNet(n, dnt->mLines);
+                    StandardArrowNet* san = new StandardArrowNet(n, dnt->mLines, dnt->mKnots);
                     graphicsNet           = san;
                     int yGridPos          = mGlobalOutputHash.value(dnt->id(), -1);
                     Q_ASSERT(yGridPos >= 0);
@@ -954,7 +954,7 @@ namespace hal
                     const EndpointCoordinate& epc = mEndpointHash.value(pnt);
                     const NetLayoutJunction* nlj  = mJunctionHash.value(pnt);
                     Q_ASSERT(nlj);
-                    san->setOutputPosition(QPointF(mCoordArrayX->lanePosition(pnt.x(),nlj->rect().right() + 1), epc.lanePosition(0, true)));
+                    san->setOutputPosition(QPointF(mCoordArrayX->lanePosition(pnt.x(),nlj->rect().right()), epc.lanePosition(0, true)));
                 }
                 break;
             case EndpointList::SourceAndDestination:
