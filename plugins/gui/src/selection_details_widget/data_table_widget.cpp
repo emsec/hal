@@ -23,6 +23,7 @@ namespace hal
         this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         this->verticalHeader()->setVisible(false);
         this->horizontalHeader()->setVisible(true);
+        this->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         setFrameStyle(QFrame::NoFrame);
 
         connect(this, &QTableView::customContextMenuRequested, this, &DataTableWidget::handleContextMenuRequest);
@@ -120,6 +121,7 @@ namespace hal
         this->setWordWrap(true);
         this->resizeRowsToContents();
 
+        /*
         // Configure the widget height
         int h = horizontalHeader()->height();
         for (int i = 0; i < mDataTableModel->rowCount(); i++)
@@ -127,6 +129,7 @@ namespace hal
 
         setMaximumHeight(h);
         setMinimumHeight(h);
+        */
     }
 
     void DataTableWidget::changePropertyRequested(DataTableModel::propertyType prop)

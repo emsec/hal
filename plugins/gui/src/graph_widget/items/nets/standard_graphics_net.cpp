@@ -8,6 +8,9 @@
 #include <QStyleOptionGraphicsItem>
 #include <assert.h>
 #include <limits>
+#include <QThread>
+#include <QDebug>
+#include <QGraphicsScene>
 
 namespace hal
 {
@@ -73,28 +76,12 @@ namespace hal
             sAlpha = 1;
     }
 
-    StandardGraphicsNet::StandardGraphicsNet(Net* n, const Lines& l) : GraphicsNet(n)
+    StandardGraphicsNet::StandardGraphicsNet(Net* n, const Lines& l, const QList<QPointF> &knots) : GraphicsNet(n)
     {
-        for (const HLine& h : l.mHLines)
+        for (const QPointF& point : knots)
         {
-            for (const VLine& v : l.mVLines)
-            {
-                if (h.mSmallX <= v.x && v.x <= h.mBigX)
-                    if (v.mSmallY < h.y && h.y < v.mBigY)
-                    {
-                        QPointF point(v.x, h.y);
-                        mSplits.append(point);
-                        mShape.addEllipse(point, sSplitRadius, sSplitRadius);
-                    }
-
-                if (v.mSmallY <= h.y && h.y <= v.mBigY)
-                    if (h.mSmallX < v.x && v.x < h.mBigX)
-                    {
-                        QPointF point(v.x, h.y);
-                        mSplits.append(point);
-                        mShape.addEllipse(point, sSplitRadius, sSplitRadius);
-                    }
-            }
+            mSplits.append(point);
+            mShape.addEllipse(point, sSplitRadius, sSplitRadius);
         }
 
         qreal smallest_x = std::numeric_limits<qreal>::max();
@@ -203,88 +190,5 @@ namespace hal
         assert(mSmallY < mBigY);
 
         mVLines.append(VLine{x, mSmallY, mBigY});
-    }
-
-    void StandardGraphicsNet::Lines::mergeLines()
-    {
-        QVector<HLine> merged_h_lines;
-        QVector<VLine> merged_v_lines;
-
-        for (const HLine& h : mHLines)
-        {
-            QVector<int> overlaps;
-
-            for (int i = 0; i < merged_h_lines.size(); ++i)
-                if (h.y == merged_h_lines.at(i).y)
-                {
-                    if (h.mBigX < merged_h_lines.at(i).mSmallX || merged_h_lines.at(i).mBigX < h.mSmallX)
-                        continue;
-
-                    overlaps.append(i);
-                }
-
-            if (overlaps.isEmpty())
-                merged_h_lines.append(h);
-            else
-            {
-                qreal smallest_x = h.mSmallX;
-                qreal biggest_x  = h.mBigX;
-
-                for (int i = 0; i < overlaps.size(); ++i)
-                {
-                    int index = overlaps.at(i) - i;
-
-                    if (merged_h_lines.at(index).mSmallX < smallest_x)
-                        smallest_x = merged_h_lines.at(index).mSmallX;
-
-                    if (merged_h_lines.at(index).mBigX > biggest_x)
-                        biggest_x = merged_h_lines.at(index).mBigX;
-
-                    merged_h_lines.remove(index);
-                }
-
-                merged_h_lines.append(HLine{smallest_x, biggest_x, h.y});
-            }
-        }
-
-        for (const VLine& v : mVLines)
-        {
-            QVector<int> overlaps;
-
-            for (int i = 0; i < merged_v_lines.size(); ++i)
-                if (v.x == merged_v_lines.at(i).x)
-                {
-                    if (v.mBigY < merged_v_lines.at(i).mSmallY || merged_v_lines.at(i).mBigY < v.mSmallY)
-                        continue;
-
-                    overlaps.append(i);
-                }
-
-            if (overlaps.isEmpty())
-                merged_v_lines.append(v);
-            else
-            {
-                qreal smallest_y = v.mSmallY;
-                qreal biggest_y  = v.mBigY;
-
-                for (int i = 0; i < overlaps.size(); ++i)
-                {
-                    int index = overlaps.at(i) - i;
-
-                    if (merged_v_lines.at(index).mSmallY < smallest_y)
-                        smallest_y = merged_v_lines.at(index).mSmallY;
-
-                    if (merged_v_lines.at(index).mBigY > biggest_y)
-                        biggest_y = merged_v_lines.at(index).mBigY;
-
-                    merged_v_lines.remove(index);
-                }
-
-                merged_v_lines.append(VLine{v.x, smallest_y, biggest_y});
-            }
-        }
-
-        mHLines = merged_h_lines;
-        mVLines = merged_v_lines;
     }
 }    // namespace hal

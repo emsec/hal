@@ -76,10 +76,9 @@ elif [[ "$platform" == 'linux' ]]; then
         libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr python3-sphinx \
         doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
         pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev libz3-dev z3 \
-        libreadline-dev apport \
+        libreadline-dev apport python3-dateutil \
         $additional_deps \
         graphviz libomp-dev libsuitesparse-dev # For documentation
-        sudo pip3 install -r requirements.txt
     elif [[ "$distribution" == "Arch" ]]; then
         yay -S --needed base-devel lsb-release git verilator cmake boost-libs pkgconf \
         qt5-base python ccache autoconf libsodium qt5-svg ninja lcov \
@@ -97,7 +96,7 @@ elif [[ "$platform" == 'docker' ]]; then
     libpython3-dev ccache autoconf autotools-dev libsodium-dev \
     libqt5svg5-dev libqt5svg5* ninja-build lcov gcovr python3-sphinx \
     doxygen python3-sphinx-rtd-theme python3-jedi python3-pip \
-    pybind11-dev python3-pybind11 rapidjson-dev libspdlog-dev libz3-dev libreadline-dev \
+    pybind11-dev python3-pybind11 python3-dateutil rapidjson-dev \
+    libspdlog-dev libz3-dev libreadline-dev \
     graphviz libomp-dev libsuitesparse-dev # For documentation
-    pip3 install -r requirements.txt
 fi
