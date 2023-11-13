@@ -67,7 +67,7 @@ namespace hal {
          *
          * @param v - The visuals to set.
          */
-        virtual void setVisuals(const Visuals& v);
+        virtual void setVisuals(const Visuals& v) override;
 
         /**
          * Overwritten qt function to draw the net.
