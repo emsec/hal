@@ -53,6 +53,7 @@ namespace hal
 
     bool CommentItem::search(const QString &string, SearchOptions searchOpts)
     {
+        if (string.isEmpty()) return false;
         mHeader->handleSearchChanged(string,searchOpts.toInt());
         bool found = mHeader->hasMatch();
         QList<QTextEdit::ExtraSelection> extraSelections;
