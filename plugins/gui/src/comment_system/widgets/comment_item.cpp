@@ -57,7 +57,8 @@ namespace hal
         if (string.isEmpty())
         {
             mTextEdit->setExtraSelections(QList<QTextEdit::ExtraSelection>());
-            mTextEdit->find(""); // reset find marker
+            // reset find marker
+            mTextEdit->moveCursor(QTextCursor::Start);
             return false;
         }
         bool found = mHeader->hasMatch();
