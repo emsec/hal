@@ -1825,10 +1825,15 @@ namespace hal
                                                                                            const std::map<std::string, std::map<std::string, std::vector<std::string>>>& concatinated_pin_groups)
     {
         std::vector<Module*> all_modules;
-        for (const auto& [gt_name_tmp_for, pin_groups] : concatinated_pin_groups)
+        for (const auto& [gt_name, pin_groups] : concatinated_pin_groups)
         {
-            const auto& gt_name = gt_name_tmp_for;
-            for (const auto& g : nl->get_gates([&gt_name](const auto& g) { return g->get_type()->get_name() == gt_name; }))
+            const auto& gt = nl->get_gate_library()->get_gate_type_by_name(gt_name);
+            if (gt == nullptr)
+            {
+                return ERR("unable to create multi bit gate module for gate type " + gt_name + ": failed to find gate type with that name in gate library " + nl->get_gate_library()->get_name());
+            }
+
+            for (const auto& g : nl->get_gates([&gt](const auto& g) { return g->get_type() == gt; }))
             {
                 auto m = nl->create_module("module_" + g->get_name(), g->get_module(), {g});
 
@@ -1838,6 +1843,12 @@ namespace hal
                     for (const auto& gate_pg_name : gate_pg_names)
                     {
                         const auto& gate_pg            = g->get_type()->get_pin_group_by_name(gate_pg_name);
+
+                        if (gate_pg == nullptr)
+                        {
+                            return ERR("unable to create multi-bit gate module for gate type " + gt_name + " and pin group " + gate_pg_name + ": failed to find pin group with that name");
+                        }
+
                         std::vector<GatePin*> pin_list = gate_pg->get_pins();
                         if (!gate_pg->is_ascending())
                         {
