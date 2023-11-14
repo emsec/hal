@@ -203,6 +203,12 @@ bool NetLayoutWire::operator==(const NetLayoutWire& other) const
             mIsEndpoint==other.mIsEndpoint);
 }
 
+QString NetLayoutWire::toString() const
+{
+    static const char* cdir = "LRUD";
+    return QString("<%1,%2>-%3-%4").arg(mPoint.x()).arg(mPoint.y()).arg(cdir[mDir.index()]).arg(mIsEndpoint?'X':'-');
+}
+
 QGraphicsLineItem* NetLayoutWire::graphicsFactory() const
 {
     if (mDir.isNull()) return nullptr;
@@ -405,7 +411,6 @@ NetLayoutConnectionFactory::NetLayoutConnectionFactory(const QList<NetLayoutPoin
     {
         const NetLayoutPoint& nextPoint = mPoints.at(i);
         const NetLayoutPoint& juncPoint = seedConnection.closestPoint(nextPoint);
-        mJunctions.append(juncPoint);
         NetLayoutConnection nextConnection(nextPoint,juncPoint);
         seedConnection.add(nextConnection,false);
     }

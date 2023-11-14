@@ -87,11 +87,11 @@ namespace hal
          * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
          * @returns The next gates fulfilling the target gate filter condition.
          */
-        Result<std::unordered_set<Gate*>> get_next_gates_fancy(const Net* net,
-                                                               bool successors,
-                                                               const std::function<bool(const Gate*)>& target_gate_filter,
-                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
-                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+        Result<std::set<Gate*>> get_next_gates_fancy(const Net* net,
+                                                     bool successors,
+                                                     const std::function<bool(const Gate*)>& target_gate_filter,
+                                                     const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                     const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
         /**
          * Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
@@ -105,11 +105,11 @@ namespace hal
          * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
          * @returns The next gates fulfilling the target gate filter condition.
          */
-        Result<std::unordered_set<Gate*>> get_next_gates_fancy(const Gate* gate,
-                                                               bool successors,
-                                                               const std::function<bool(const Gate*)>& target_gate_filter,
-                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
-                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+        Result<std::set<Gate*>> get_next_gates_fancy(const Gate* gate,
+                                                     bool successors,
+                                                     const std::function<bool(const Gate*)>& target_gate_filter,
+                                                     const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                     const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
     private:
         const Netlist& m_netlist;

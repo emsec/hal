@@ -520,7 +520,8 @@ namespace hal
 
     void GroupingManagerWidget::handleDeleteGroupingClicked()
     {
-        if (!hasFocus() && !mGroupingTableView->hasFocus()) return;
+        if (sender() != mDeleteAction &&
+                !hasFocus() && !mGroupingTableView->hasFocus()) return;
 
         QModelIndex current     = mGroupingTableView->currentIndex();
         if (!current.isValid()) return;

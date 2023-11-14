@@ -38,7 +38,11 @@ namespace hal
                                                      "eXpert Settings:Debug",
                                                      "Specifies whether the debug grid is displayed in the Graph View. The gird represents the scene as the layouter interprets it.");
 
-        mSettingNetLayout = new SettingsItemCheckbox("Optimize Net Layout", "graph_view/layout_nets", true, "Graph View", "Net optimization - not fully tested yet.");
+        mSettingDumpJunction = new SettingsItemCheckbox("Dump Junction Data",
+                                                     "debug/junction",
+                                                     false,
+                                                     "eXpert Settings:Debug",
+                                                     "Dump input data from junction router to file 'junction_data.txt' for external debugging.");
 
         mSettingParseLayout = new SettingsItemCheckbox("Apply Parsed Position", "graph_view/layout_parse", true, "Graph View", "Use parsed verilog coordinates if available.");
 
@@ -512,11 +516,11 @@ namespace hal
     GraphLayouter* GraphContextManager::getDefaultLayouter(GraphContext* const context) const
     {
         StandardGraphLayouter* layouter = new StandardGraphLayouter(context);
-        layouter->setOptimizeNetLayoutEnabled(mSettingNetLayout->value().toBool());
+        layouter->setDumpJunctionEnabled(mSettingDumpJunction->value().toBool());
         layouter->setParseLayoutEnabled(mSettingParseLayout->value().toBool());
         layouter->setLayoutBoxesEnabled(mSettingLayoutBoxes->value().toBool());
 
-        connect(mSettingNetLayout, &SettingsItemCheckbox::boolChanged, layouter, &GraphLayouter::setOptimizeNetLayoutEnabled);
+        connect(mSettingDumpJunction, &SettingsItemCheckbox::boolChanged, layouter, &GraphLayouter::setDumpJunctionEnabled);
         connect(mSettingParseLayout, &SettingsItemCheckbox::boolChanged, layouter, &StandardGraphLayouter::setParseLayoutEnabled);
         connect(mSettingLayoutBoxes, &SettingsItemCheckbox::boolChanged, layouter, &StandardGraphLayouter::setLayoutBoxesEnabled);
 
