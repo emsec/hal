@@ -257,6 +257,16 @@ namespace hal
         static Result<u32> reconstruct_indexed_ff_identifiers(Netlist* nl);
 
         /**
+         *  Tries to reconstruct top module pin groups via indexed pin names.
+         *  This should really be done by the verilog parser, but this is at the moment not the case.
+         * 
+         * @param[in] nl - The netlist to operate on
+         * 
+         * return OK and the number of reconstructed pingroups on success.
+        */
+        static Result<u32> reconstruct_top_module_pin_groups(Netlist* nl);
+
+        /**
          * Parses a design exchange format file and extracts the coordinates of a placed design for each component/gate.
          * The extracted coordinates get annotated to the gates.
          * 

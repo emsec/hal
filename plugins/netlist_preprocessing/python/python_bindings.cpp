@@ -573,6 +573,29 @@ namespace hal
             )");
 
         py_netlist_preprocessing.def_static(
+            "reconstruct_top_module_pin_groups",
+            [](Netlist* nl) -> std::optional<u32> {
+                auto res = NetlistPreprocessingPlugin::reconstruct_top_module_pin_groups(nl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            R"(
+                Tries to reconstruct top module pin groups via indexed pin names.
+
+                :param hal_py.Netlist nl: The netlist to operate on. 
+                :returns: The number of reconstructed pingroups on success, ``None`` otherwise.
+                :rtype: int or ``None``
+            )");
+
+        py_netlist_preprocessing.def_static(
             "parse_def_file",
             [](Netlist* nl, const std::filesystem::path& def_file) -> bool {
                 auto res = NetlistPreprocessingPlugin::parse_def_file(nl, def_file);

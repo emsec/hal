@@ -1626,6 +1626,58 @@ namespace hal
         return OK(counter);
     }
 
+    Result<u32> NetlistPreprocessingPlugin::reconstruct_top_module_pin_groups(Netlist* nl)
+    {
+        std::map<std::string, std::map<u32, std::vector<ModulePin*>>> pg_name_to_indexed_pins;
+
+        for (const auto& pin : nl->get_top_module()->get_pins())
+        {
+            auto reconstruct = extract_index(pin->get_name(), net_index_pattern, "");
+            if (!reconstruct.has_value())
+            {
+                continue;
+            }
+
+            auto [pg_name, index, _] = reconstruct.value();
+
+            pg_name_to_indexed_pins[pg_name][index].push_back(pin);
+        }
+
+        u32 reconstructed_counter = 0;
+        for (const auto& [pg_name, indexed_pins] : pg_name_to_indexed_pins)
+        {
+            std::vector<ModulePin*> ordered_pins;
+
+            bool valid_indices = true;
+            // NOTE: since the map already orders the indices from low to high, if we iterate over it we also get the pins in the right order
+            for (const auto& [_index, pins] : indexed_pins)
+            {
+                if (pins.size() > 1)
+                {
+                    valid_indices = false;
+                    break;
+                }
+
+                ordered_pins.push_back(pins.front());
+            }
+
+            if (!valid_indices)
+            {
+                continue;
+            }
+
+            auto res = nl->get_top_module()->create_pin_group(pg_name, ordered_pins);
+            if (res.is_error())
+            {
+                return ERR_APPEND(res.get_error(), "cannot reconstruct top module pin groups: failed to create pin group " + pg_name);
+            }
+
+            reconstructed_counter++;
+        }
+
+        return OK(reconstructed_counter);
+    }
+
     namespace
     {
         struct ComponentData
