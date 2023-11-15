@@ -16,12 +16,12 @@ namespace hal {
     GroupingDialog::GroupingDialog(QWidget* parent)
         : QDialog(parent),
           mSearchbar(new Searchbar(this)),
-          mProxyModel(new GroupingProxyModel(this)),
           mGroupingTableView(new GroupingTableView(false, this)),
           mLastUsed(nullptr),
           mTabWidget(new QTabWidget(this)),
           mNewGrouping(false)
     {
+        mProxyModel = static_cast<GroupingProxyModel*>(mGroupingTableView->model());
         setWindowTitle("Move to grouping …");
         QGridLayout* layout = new QGridLayout(this);
 
@@ -35,9 +35,7 @@ namespace hal {
         connect(butSearch, &QPushButton::pressed, this, &GroupingDialog::handleToggleSearchbar);
         layout->addWidget(butSearch, 0, 1);
 
-        mProxyModel->setSourceModel(mGroupingTableView->model());
         mProxyModel->setSortRole(Qt::UserRole);
-        mGroupingTableView->setModel(mProxyModel);
 
         mSearchbar->hide();
         mSearchbar->setColumnNames(mProxyModel->getColumnNames());
