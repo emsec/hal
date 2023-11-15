@@ -616,6 +616,9 @@ namespace hal
             switch(getModuleItemFromIndex(mTreeView->currentIndex())->getType())
             {
                 case ModuleItem::TreeItemType::Module: {
+                    auto module = gNetlist->get_module_by_id(selectedItem->id());
+                    if((module == gNetlist->get_top_module()))
+                        break;
                     gNetlistRelay->deleteModule(getModuleItemFromIndex(mTreeView->currentIndex())->id());
                     break;
                     }
