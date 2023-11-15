@@ -151,49 +151,66 @@ namespace hal
         void addRecursively(const Module* module);
 
         /**
-         * Updates the parent of the ModuleItem corresponding to the specified module.
-         * The new parent must already be set in the Module object.
-         *
-         * @param module - The module whose ModuleItem will be reattached to a new parent in the item model.
-        */
-        void changeParentModule(const Module* module);
-
-        /**
          * Removes a module from the item model. The specified module MUST be contained in the item model.
          *
          * @param id - The id of the module to remove
          */
-        void remove_module(const u32 id);
+        void removeModule(const u32 id);
 
         /**
          * Removes a gate from the item model. The specified gate MUST be contained in the item model.
          *
          * @param id - The id of the gate to remove
          */
-        void remove_gate(const u32 id);
+        void removeGate(const u32 id);
 
         /**
-         * Removes a net from the item model. The specified net MUST be contained in the item model.
+         * Removes a net from the item model.
          *
          * @param id - The id of the net to remove
          */
-        void remove_net(const u32 id);
+        void removeNet(const u32 id);
+
+        /**
+         * Moves the ModuleItem corresponding to the module under it's new parent ModuleItem.
+         * The items for all nets, that have at least one source or one destination within the module, 
+         * will be updated afterwards.
+         * 
+         * @param module The module whose parent has changed.
+        */
+        void handleModuleParentChanged(const Module* module);
+
+        /**
+         * Handles the assigment of gates to modules. 
+         * If the gate does not yet exist in the item model, a new one is created.
+         * All nets, that are connected to the gate, will be updated.
+        */
+        void handleModuleGateAssinged(const u32 id, const u32 parent_module);
 
         /**
          * Updates the position of a net in the ModuleTree. 
          * The net will be placed under the deepest module, that contains all sources and destinations of the net.
          * If no suitable parent could be found, then the net will instead be placed under the top module.
+         * If the net does not exist in the item model (e.g. it's a global net), then nothing is updated.
          * 
-         * @param net The net whose source or destination changed.
+         * @param net The net whose source or destination might have changed.
         */
-        void handleNetSourceOrDestinationChanged(const Net* net);
+        void updateNet(const Net* net);
+
+        /**
+         * Reattaches the ModuleItem corresponding to the specified module to a new parent item.
+         * The new parent must already be set in the Module object.
+         *
+         * @param module - The module whose ModuleItem will be reattached to a new parent in the item model.
+        */
+        void updateModuleParent(const Module* module);
 
         /**
          * Updates the ModuleItem for the specified module. The specified module MUST be contained in the item model.
          *
          * @param id - The id of the module to update
          */
-        void updateModule(const u32 id);
+        void updateModuleName(const u32 id);
 
         /**
          * Returns <b>true</b> if the item model is currently changed/updated. This is the case while adding and
@@ -214,7 +231,7 @@ namespace hal
          * @return The new parent module, that contains all sources and destinations of net. If no such parent could be found 
          * (e.g. net has no sources or destinations), nullptr is returned instead.
         */
-        Module* FindNetParent(const Net* net);
+        Module* findNetParent(const Net* net);
 
         QMap<u32, ModuleItem*> mModuleMap;
         QMap<u32, ModuleItem*> mGateMap;

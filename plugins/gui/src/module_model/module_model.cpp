@@ -110,7 +110,7 @@ namespace hal
         for(auto net : gNetlist->get_top_module()->get_internal_nets())
         {
             addNet(net->get_id(), m->get_id());
-            handleNetSourceOrDestinationChanged(net);
+            updateNet(net);
         }
     }
 
@@ -172,7 +172,6 @@ namespace hal
         endInsertRows();
     }
 
-
     void ModuleModel::addNet(u32 id, u32 parent_module)
     {
         assert(gNetlist->get_net_by_id(id));
@@ -207,36 +206,7 @@ namespace hal
             addGate(g->get_id(), module->get_id());
     }
 
-    void ModuleModel::changeParentModule(const Module* module){
-        assert(module);
-        u32 id = module->get_id();
-        assert(id != 1);
-        assert(mModuleMap.contains(id));
-        ModuleItem* item = mModuleMap.value(id);
-        ModuleItem* oldParent = static_cast<ModuleItem*>(item->getParent());
-        assert(oldParent);
-
-        assert(module->get_parent_module());
-        if(oldParent->id() == module->get_parent_module()->get_id())
-            return;
-
-        assert(mModuleMap.contains(module->get_parent_module()->get_id()));
-        ModuleItem* newParent = mModuleMap.value(module->get_parent_module()->get_id());
-
-        QModelIndex oldIndex = getIndex(oldParent);
-        QModelIndex newIndex = getIndex(newParent);
-        int row = item->row();
-
-        mIsModifying = true;
-        beginMoveRows(oldIndex, row, row, newIndex, newParent->getChildCount());
-        oldParent->removeChild(item);
-        newParent->appendChild(item);
-        item->setParent(newParent);
-        mIsModifying = false;
-        endMoveRows();
-    }
-
-    void ModuleModel::remove_module(const u32 id)
+    void ModuleModel::removeModule(const u32 id)
     {
         assert(id != 1);
         // module was most likely already purged from netlist
@@ -261,7 +231,7 @@ namespace hal
         delete item;
     }
 
-    void ModuleModel::remove_gate(const u32 id)
+    void ModuleModel::removeGate(const u32 id)
     {
         //assert(gNetlist->get_gate_by_id(id));
         assert(mGateMap.contains(id));
@@ -285,10 +255,11 @@ namespace hal
         delete item;
     }
 
-    void ModuleModel::remove_net(const u32 id)
+    void ModuleModel::removeNet(const u32 id)
     {
         //assert(gNetlist->get_net_by_id(id));
-        assert(mNetMap.contains(id));
+        if(!mNetMap.contains(id)) // global nets are not contained in the item model
+            return;
 
         ModuleItem* item   = mNetMap.value(id);
         ModuleItem* parent = static_cast<ModuleItem*>(item->getParent());
@@ -309,16 +280,43 @@ namespace hal
         delete item;
     }
 
-    void ModuleModel::handleNetSourceOrDestinationChanged(const Net* net)
+    void ModuleModel::handleModuleParentChanged(const Module* module)
+    {
+        assert(module);
+        updateModuleParent(module);
+
+        for(Net* net : module->get_nets())
+            updateNet(net);
+    }
+
+    void ModuleModel::handleModuleGateAssinged(const u32 id, const u32 parent_module)
+    {
+        // Don't need new function handleModuleGateRemoved(), because the GateAssinged event always follows GateRemoved
+        // or NetlistInternalManager updates Net connections when a gate is deleted.
+
+        if(!mGateMap.contains(id))
+            addGate(id, parent_module);
+            
+        Gate* gate = gNetlist->get_gate_by_id(id);
+        for(Net* in_net : gate->get_fan_in_nets())
+            updateNet(in_net);
+        for(Net* in_net : gate->get_fan_out_nets())
+            updateNet(in_net);
+    }
+
+    void ModuleModel::updateNet(const Net* net)
     {
         assert(net);
         u32 id = net->get_id();
-        assert(mNetMap.contains(id));
+
+        if(!mNetMap.contains(id))
+            return;
+            
         ModuleItem* item = mNetMap.value(id);
         ModuleItem* oldParentItem = static_cast<ModuleItem*>(item->getParent());
         assert(oldParentItem);
-        
-        Module* newParentModule = FindNetParent(net);
+
+        Module* newParentModule = findNetParent(net);
         if(newParentModule == nullptr)
             newParentModule = gNetlist->get_top_module();
         if(newParentModule->get_id() == oldParentItem->id())
@@ -334,12 +332,39 @@ namespace hal
         beginMoveRows(oldIndex, row, row, newIndex, newParentItem->getChildCount());
         oldParentItem->removeChild(item);
         newParentItem->appendChild(item);
-        item->setParent(newParentItem);
         mIsModifying = false;
         endMoveRows();
     }
 
-    void ModuleModel::updateModule(u32 id)    // SPLIT ???
+    void ModuleModel::updateModuleParent(const Module* module){
+        assert(module);
+        u32 id = module->get_id();
+        assert(id != 1);
+        assert(mModuleMap.contains(id));
+        ModuleItem* item = mModuleMap.value(id);
+        ModuleItem* oldParent = static_cast<ModuleItem*>(item->getParent());
+        assert(oldParent);
+
+        assert(module->get_parent_module());
+        if(oldParent->id() == module->get_parent_module()->get_id())
+            return;
+
+        assert(mModuleMap.contains(module->get_parent_module()->get_id()));
+        ModuleItem* newParent = mModuleMap.value(module->get_parent_module()->get_id());
+
+        QModelIndex oldIndex = getIndex(oldParent);
+        QModelIndex newIndex = getIndex(newParent);
+        int row = item->row();
+
+        mIsModifying = true;
+        beginMoveRows(oldIndex, row, row, newIndex, newParent->getChildCount());
+        oldParent->removeChild(item);
+        newParent->appendChild(item);
+        mIsModifying = false;
+        endMoveRows();
+    }
+
+    void ModuleModel::updateModuleName(u32 id)    // SPLIT ???
     {
         assert(gNetlist->get_module_by_id(id));
         assert(mModuleMap.contains(id));
@@ -363,7 +388,7 @@ namespace hal
         return mIsModifying;
     }
     
-    Module* ModuleModel::FindNetParent(const Net* net){
+    Module* ModuleModel::findNetParent(const Net* net){
         // cannot use Module::get_internal_nets(), because currently that function is implemented so, 
         // that a net can be "internal" to multiple modules at the same depth.
         // => instead manually search for deepest module, that contains all sources and destinations of net.
