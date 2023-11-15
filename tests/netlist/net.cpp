@@ -451,7 +451,8 @@ namespace hal {
                 Net* test_net = nl->create_net("test_net");
                 ASSERT_NE(test_net, nullptr);
                 EXPECT_TRUE(test_net->get_destinations().empty());
-            }
+                EXPECT_EQ(test_net->get_num_of_destinations(), 0);
+                }
             {
                 // add destination to net
                 auto nl = test_utils::create_empty_netlist();
@@ -461,9 +462,11 @@ namespace hal {
                 Gate* test_gate = nl->create_gate(nl->get_gate_library()->get_gate_type_by_name("BUF"), "test_gate");
                 ASSERT_NE(test_gate, nullptr);
                 EXPECT_TRUE(test_net->get_destinations().empty());
+                EXPECT_EQ(test_net->get_num_of_destinations(), 0);
                 EXPECT_NE(test_net->add_destination(test_gate, "I"), nullptr);
                 ASSERT_EQ(test_net->get_destinations().size(), 1);
                 EXPECT_EQ(test_net->get_destinations().at(0), test_gate->get_fan_in_endpoint("I"));
+                EXPECT_EQ(test_net->get_num_of_destinations(), 1);
             }
             {
                 // get multiple destinations (no filter applied)
@@ -478,6 +481,7 @@ namespace hal {
                 EXPECT_NE(test_net->add_destination(test_gate, "DATA_IN(2)"), nullptr);
                 EXPECT_NE(test_net->add_destination(test_gate, "DATA_IN(3)"), nullptr);
                 EXPECT_EQ(test_net->get_destinations(), std::vector<Endpoint*>(test_gate->get_fan_in_endpoints()));
+                EXPECT_EQ(test_net->get_num_of_destinations(), 4);
             }
             {
                 // get multiple destinations (filter applied)
@@ -495,6 +499,7 @@ namespace hal {
                 EXPECT_NE(test_net->add_destination(test_gate_2, "DATA_IN(1)"), nullptr);
                 EXPECT_EQ(test_net->get_destinations([](const Endpoint* ep){return ep->get_gate()->get_name() == "test_gate_1";}),
                           std::vector<Endpoint*>(test_gate_1->get_fan_in_endpoints()));
+                EXPECT_EQ(test_net->get_num_of_destinations([](const Endpoint* ep){return ep->get_gate()->get_name() == "test_gate_1";} ), 2);
             }
             {
                 // remove a destination by specifying gate and pin

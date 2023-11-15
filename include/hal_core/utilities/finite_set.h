@@ -153,6 +153,20 @@ namespace hal
             return true;
         }
 
+        template<typename InputIt>
+        bool insert(InputIt begin, InputIt end)
+        {
+            for (InputIt it = begin; it != end; ++it)
+            {
+                if (!insert(*it))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         bool erase(const u32 index)
         {
             if (index >= m_size)
