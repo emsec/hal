@@ -290,9 +290,41 @@ namespace hal
             UserAction* act = groupingUnassignActionFactory(obj);
             if (act) compound->addAction(act);
         }
-        ActionAddItemsToObject* act = new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
-                                                                 gSelectionRelay->selectedGates(),
-                                                                 gSelectionRelay->selectedNets());
+
+        //get selected items from Model
+        QSet<u32> mods = {};
+        QSet<u32> gates = {};
+        QSet<u32> nets = {};
+        auto* sourceModel = static_cast<SelectionTreeModel*>(mSelectionTreeProxyModel->sourceModel());
+
+        //check each row for its Itemtype and append the ID to the corresponding QSet {mods, gates, nets}
+        for(int i = 0; i < mSelectionTreeProxyModel->rowCount(); i++){
+
+                QModelIndex sourceModelIndex = mSelectionTreeProxyModel->mapToSource(mSelectionTreeProxyModel->index(i,0));
+                SelectionTreeItem* item              = sourceModel->itemFromIndex(sourceModelIndex);
+                SelectionTreeItem::TreeItemType type = item->itemType();
+                switch (type)
+                {
+                    case SelectionTreeItem::TreeItemType::ModuleItem:
+                        mods.insert(item->id());
+                        break;
+
+                    case SelectionTreeItem::TreeItemType::GateItem:
+                        gates.insert(item->id());
+                        break;
+
+                    case SelectionTreeItem::TreeItemType::NetItem:
+                        nets.insert(item->id());
+                        break;
+                    default:
+                        break;
+                }          
+        }
+        ActionAddItemsToObject* act = new ActionAddItemsToObject(mods,
+                                                                 gates,
+                                                                 nets);
+
+
         act->setObject(UserActionObject(grpId,UserActionObjectType::Grouping));
         compound->addAction(act);
         compound->addAction(new ActionSetSelectionFocus);
