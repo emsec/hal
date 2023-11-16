@@ -599,6 +599,7 @@ namespace hal
             case NetEvent::event::name_changed: {
                 //< no associated_data
 
+                mModuleModel->updateNetName(net->get_id());
                 gGraphContextManager->handleNetNameChanged(net);
 
                 Q_EMIT netNameChanged(net);

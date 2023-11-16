@@ -248,6 +248,7 @@ namespace hal
 
         void changeGateName(const QModelIndex& index);
 
+        void changeNetName(const QModelIndex& index);
 
         ModuleItem* getModuleItemFromIndex(const QModelIndex& index);
 

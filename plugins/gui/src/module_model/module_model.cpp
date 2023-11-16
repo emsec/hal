@@ -364,7 +364,7 @@ namespace hal
         endMoveRows();
     }
 
-    void ModuleModel::updateModuleName(u32 id)    // SPLIT ???
+    void ModuleModel::updateModuleName(u32 id)
     {
         assert(gNetlist->get_module_by_id(id));
         assert(mModuleMap.contains(id));
@@ -378,16 +378,29 @@ namespace hal
         Q_EMIT dataChanged(index, index);
     }
 
-    void ModuleModel::updateGateName(u32 id)    // SPLIT ???
+    void ModuleModel::updateGateName(u32 id)
     {
         assert(gNetlist->get_gate_by_id(id));
-
         assert(mGateMap.contains(id));
 
         ModuleItem* item = mGateMap.value(id);
         assert(item);
 
         item->setName(QString::fromStdString(gNetlist->get_gate_by_id(id)->get_name()));    // REMOVE & ADD AGAIN
+
+        QModelIndex index = getIndex(item);
+        Q_EMIT dataChanged(index, index);
+    }
+
+    void ModuleModel::updateNetName(u32 id)
+    {
+        assert(gNetlist->get_net_by_id(id));
+        assert(mNetMap.contains(id));
+
+        ModuleItem* item = mNetMap.value(id);
+        assert(item);
+        
+        item->setName(QString::fromStdString(gNetlist->get_net_by_id(id)->get_name()));    // REMOVE & ADD AGAIN
 
         QModelIndex index = getIndex(item);
         Q_EMIT dataChanged(index, index);

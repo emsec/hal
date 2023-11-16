@@ -243,6 +243,9 @@ namespace hal
                 extractPythonAction.setText("Extract Net as python code (copy to clipboard)");
                 extractPythonAction.setParent(&context_menu);
 
+                change_name_action.setText("Change Net name");
+                change_name_action.setParent(&context_menu);
+
                 focus_in_view.setText("Focus item in Graph View");
                 focus_in_view.setParent(&context_menu);
                 break;
@@ -270,6 +273,7 @@ namespace hal
 
         if (type == ModuleItem::TreeItemType::Net){
             context_menu.addAction(&extractPythonAction);
+            context_menu.addAction(&change_name_action);
             context_menu.addAction(&focus_in_view);
         }
 
@@ -317,6 +321,7 @@ namespace hal
             {
                 case ModuleItem::TreeItemType::Module: gNetlistRelay->changeModuleName(getModuleItemFromIndex(index)->id()); break;
                 case ModuleItem::TreeItemType::Gate: changeGateName(index); break;
+                case ModuleItem::TreeItemType::Net: changeNetName(index); break;
             }
         }
 
@@ -416,12 +421,27 @@ namespace hal
         QString oldName = getModuleItemFromIndex(index)->name();
 
         bool confirm;
-        QString newName = QInputDialog::getText(this, "Change gate name", "New name:", QLineEdit::Normal, oldName, &confirm);
+        QString newName = QInputDialog::getText(this, "Rename Gate", "New name:", QLineEdit::Normal, oldName, &confirm);
 
         if (confirm && !newName.isEmpty())
         {
             ActionRenameObject* act = new ActionRenameObject(newName);
             act->setObject(UserActionObject(getModuleItemFromIndex(index)->id(), UserActionObjectType::ObjectType::Gate));
+            act->exec();
+        }
+    }
+
+    void ModuleWidget::changeNetName(const QModelIndex &index)
+    {
+        QString oldName = getModuleItemFromIndex(index)->name();
+
+        bool confirm;
+        QString newName = QInputDialog::getText(this, "Rename Net", "New name:", QLineEdit::Normal, oldName, &confirm);
+
+        if (confirm && !newName.isEmpty())
+        {
+            ActionRenameObject* act = new ActionRenameObject(newName);
+            act->setObject(UserActionObject(getModuleItemFromIndex(index)->id(), UserActionObjectType::ObjectType::Net));
             act->exec();
         }
     }

@@ -220,6 +220,13 @@ namespace hal
         void updateGateName(const u32 id);
 
         /**
+         * Updates the ModuleItem for the specified net. The specified gate MUST be contained in the item model.
+         *
+         * @param id - The id of the net to update
+         */
+        void updateNetName(const u32 id);
+
+        /**
          * Returns <b>true</b> if the item model is currently changed/updated. This is the case while adding and
          * removing modules to/from the item model. It can be used to ignore certain signals sent by the item model
          * while the model is modified.
