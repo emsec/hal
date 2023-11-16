@@ -378,6 +378,21 @@ namespace hal
         Q_EMIT dataChanged(index, index);
     }
 
+    void ModuleModel::updateGateName(u32 id)    // SPLIT ???
+    {
+        assert(gNetlist->get_gate_by_id(id));
+
+        assert(mGateMap.contains(id));
+
+        ModuleItem* item = mGateMap.value(id);
+        assert(item);
+
+        item->setName(QString::fromStdString(gNetlist->get_gate_by_id(id)->get_name()));    // REMOVE & ADD AGAIN
+
+        QModelIndex index = getIndex(item);
+        Q_EMIT dataChanged(index, index);
+    }
+
     ModuleItem* ModuleModel::getItem(u32 id, ModuleItem::TreeItemType type) const
     {
         return mModuleItemMaps[(int)type]->value(id);

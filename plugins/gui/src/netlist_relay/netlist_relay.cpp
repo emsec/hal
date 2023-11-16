@@ -535,6 +535,7 @@ namespace hal
             case GateEvent::event::name_changed: {
                 //< no associated_data
 
+                mModuleModel->updateGateName(gat->get_id());
                 gGraphContextManager->handleGateNameChanged(gat);
 
                 Q_EMIT gateNameChanged(gat);
