@@ -46,8 +46,8 @@ namespace hal
 
         connect(mTreeView, &QTreeView::customContextMenuRequested, this, &ModuleWidget::handleTreeViewContextMenuRequested);
 
-        mToggleNetsAction->setIcon(gui_utility::getStyledSvgIcon(mShowNetsIconStyle, mShowNetsIconPath));
-        mToggleGatesAction->setIcon(gui_utility::getStyledSvgIcon(mShowGatesIconStyle, mShowGatesIconPath));
+        mToggleNetsAction->setIcon(gui_utility::getStyledSvgIcon(mHideNetsIconStyle, mHideNetsIconPath));
+        mToggleGatesAction->setIcon(gui_utility::getStyledSvgIcon(mHideGatesIconStyle, mHideGatesIconPath));
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
 
         mToggleNetsAction->setToolTip("Toggle Net Visibility");
