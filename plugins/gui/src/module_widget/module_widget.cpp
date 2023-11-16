@@ -60,6 +60,7 @@ namespace hal
         //mModuleProxyModel->setRecursiveFilteringEnabled(true);
         mModuleProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
         mTreeView->setModel(mModuleProxyModel);
+        mTreeView->setDefaultColumnWidth();
         mTreeView->setSortingEnabled(true);
         mTreeView->sortByColumn(0, Qt::AscendingOrder);
         mTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
