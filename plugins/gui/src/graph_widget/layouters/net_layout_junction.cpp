@@ -12,6 +12,7 @@
 #include <QDebug>
 #include <QPoint>
 #include <QDir>
+#include <QDateTime>
 #include "hal_core/netlist/project_manager.h"
 
 #ifdef JUNCTION_DEBUG
@@ -908,6 +909,15 @@ namespace hal {
         return mRange.isEntry(0) || mRange.isEntry(1);
     }
 
+    bool NetLayoutJunctionEntries::isTrivial() const
+    {
+        if (mEntries[NetLayoutDirection::Left].isEmpty() && mEntries[NetLayoutDirection::Right].isEmpty())
+            return mEntries[NetLayoutDirection::Up] == mEntries[NetLayoutDirection::Down];
+        if (mEntries[NetLayoutDirection::Up].isEmpty() && mEntries[NetLayoutDirection::Down].isEmpty())
+            return mEntries[NetLayoutDirection::Left] == mEntries[NetLayoutDirection::Right];
+        return false;
+    }
+
     void NetLayoutJunctionEntries::dumpToFile(const QPoint &pnt) const
     {
         QFile ff(QString::fromStdString(ProjectManager::instance()->get_project_directory().get_filename("junction_data.txt").string()));
@@ -921,6 +931,13 @@ namespace hal {
             xout << "\n";
         }
         xout.flush();
+    }
+
+    void NetLayoutJunctionEntries::resetFile()
+    {
+        QFile ff(QString::fromStdString(ProjectManager::instance()->get_project_directory().get_filename("junction_data.txt").string()));
+        if (!ff.open(QIODevice::WriteOnly)) return;
+        ff.write(QDateTime::currentDateTime().toLocalTime().toString("--- dd.MM.yyyy hh:mm:ss ---\n").toUtf8());
     }
 
     QString NetLayoutJunctionEntries::toString() const
