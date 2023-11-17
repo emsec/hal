@@ -958,8 +958,7 @@ namespace hal
                     QPoint pnt(mNodeBoundingBox.right() + 1, yGridPos * 2);
                     const EndpointCoordinate& epc = mEndpointHash.value(pnt);
                     const NetLayoutJunction* nlj  = mJunctionHash.value(pnt);
-                    Q_ASSERT(nlj);
-                    san->setOutputPosition(QPointF(mCoordArrayX->lanePosition(pnt.x(),nlj->rect().right()), epc.lanePosition(0, true)));
+                    san->setOutputPosition(QPointF(mCoordArrayX->lanePosition(pnt.x(),nlj?nlj->rect().right():0), epc.lanePosition(0, true)));
                 }
                 break;
             case EndpointList::SourceAndDestination:
@@ -1447,9 +1446,8 @@ namespace hal
 
             const NetLayoutJunction* nlj     = mLayouter->mJunctionHash.value(it.key());
             int ix = it.key().x();
-            float xjLeft                     = mLayouter->mCoordArrayX->lanePosition(ix,nlj->rect().left());
-            float xjRight                    = mLayouter->mCoordArrayX->lanePosition(ix,nlj->rect().right());
-            Q_ASSERT(nlj);
+            float xjLeft                     = mLayouter->mCoordArrayX->lanePosition(ix,nlj?nlj->rect().left():0);
+            float xjRight                    = mLayouter->mCoordArrayX->lanePosition(ix,nlj?nlj->rect().right():0);
 
             for (int inpInx : inputsById)
             {
