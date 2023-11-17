@@ -945,8 +945,10 @@ namespace hal
                     graphicsNet           = san;
                     int yGridPos          = mGlobalInputHash.value(dnt->id(), -1);
                     Q_ASSERT(yGridPos >= 0);
-                    const EndpointCoordinate& epc = mEndpointHash.value(QPoint(mNodeBoundingBox.left(), yGridPos * 2));
-                    san->setInputPosition(QPointF(mCoordArrayX->lanePosition(mNodeBoundingBox.left(),0), epc.lanePosition(0, true)));
+                    QPoint pnt(mNodeBoundingBox.left(), yGridPos * 2);
+                    const EndpointCoordinate& epc = mEndpointHash.value(pnt);
+                    const NetLayoutJunction* nlj  = mJunctionHash.value(pnt);
+                    san->setInputPosition(QPointF(mCoordArrayX->lanePosition(mNodeBoundingBox.left(),nlj?nlj->rect().left():0), epc.lanePosition(0, true)));
                 }
                 if (epl.hasOutputArrow())
                 {

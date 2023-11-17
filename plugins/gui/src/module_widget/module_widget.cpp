@@ -10,10 +10,13 @@
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_unfold_module.h"
 #include "gui/user_action/user_action_compound.h"
+#include "gui/user_action/action_rename_object.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "gui/module_model/module_model.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
+
 #include <QApplication>
 #include <QHeaderView>
 #include <QItemSelectionModel>
@@ -25,6 +28,8 @@
 #include <QShortcut>
 #include <QTreeView>
 #include <QVBoxLayout>
+#include <QInputDialog>
+#include <QClipboard>
 
 namespace hal
 {
@@ -32,6 +37,8 @@ namespace hal
         : ContentWidget("Modules", parent),
           mTreeView(new ModuleTreeView(this)),
           mSearchbar(new Searchbar(this)),
+          mToggleNetsAction(new QAction(this)),
+          mToggleGatesAction(new QAction(this)),
           mModuleProxyModel(new ModuleProxyModel(this))
 
     {
@@ -39,7 +46,12 @@ namespace hal
 
         connect(mTreeView, &QTreeView::customContextMenuRequested, this, &ModuleWidget::handleTreeViewContextMenuRequested);
 
+        mToggleNetsAction->setIcon(gui_utility::getStyledSvgIcon(mHideNetsIconStyle, mHideNetsIconPath));
+        mToggleGatesAction->setIcon(gui_utility::getStyledSvgIcon(mHideGatesIconStyle, mHideGatesIconPath));
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+
+        mToggleNetsAction->setToolTip("Toggle Net Visibility");
+        mToggleGatesAction->setToolTip("Toggle Gate Visibility");
         mSearchAction->setToolTip("Search");
 
         mModuleProxyModel->setFilterKeyColumn(-1);
@@ -48,12 +60,13 @@ namespace hal
         //mModuleProxyModel->setRecursiveFilteringEnabled(true);
         mModuleProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
         mTreeView->setModel(mModuleProxyModel);
+        mTreeView->setDefaultColumnWidth();
         mTreeView->setSortingEnabled(true);
         mTreeView->sortByColumn(0, Qt::AscendingOrder);
         mTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
         mTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
         mTreeView->setFrameStyle(QFrame::NoFrame);
-        mTreeView->header()->close();
+        //mTreeView->header()->close();
         mTreeView->setExpandsOnDoubleClick(false);
         mTreeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
         mTreeView->expandAll();
@@ -82,10 +95,39 @@ namespace hal
 
         connect(qApp, &QApplication::focusChanged, this, &ModuleWidget::handleDeleteShortcutOnFocusChanged);
 
+
+        connect(mToggleNetsAction, &QAction::triggered, this, &ModuleWidget::handleToggleNetsClicked);
+        connect(mToggleGatesAction, &QAction::triggered, this, &ModuleWidget::handleToggleGatesClicked);
+    }
+
+    void ModuleWidget::handleToggleNetsClicked()
+    {
+        if(mModuleProxyModel->toggleFilterNets())
+        {
+            mToggleNetsAction->setIcon(gui_utility::getStyledSvgIcon(mHideNetsIconStyle, mHideNetsIconPath));
+        }
+        else
+        {
+            mToggleNetsAction->setIcon(gui_utility::getStyledSvgIcon(mShowNetsIconStyle, mShowNetsIconPath));
+        }
+    }
+
+    void ModuleWidget::handleToggleGatesClicked()
+    {
+        if(mModuleProxyModel->toggleFilterGates())
+        {
+            mToggleGatesAction->setIcon(gui_utility::getStyledSvgIcon(mHideGatesIconStyle, mHideGatesIconPath));
+        }
+        else
+        {
+            mToggleGatesAction->setIcon(gui_utility::getStyledSvgIcon(mShowGatesIconStyle, mShowGatesIconPath));
+        }
     }
 
     void ModuleWidget::setupToolbar(Toolbar* toolbar)
     {
+        toolbar->addAction(mToggleNetsAction);
+        toolbar->addAction(mToggleGatesAction);
         toolbar->addAction(mSearchAction);
     }
 
@@ -136,27 +178,110 @@ namespace hal
         if (!index.isValid())
             return;
 
+        ModuleItem::TreeItemType type = getModuleItemFromIndex(index)->getType();
+
         QMenu context_menu;
 
-        QAction isolate_action("Isolate in new view", &context_menu);
-        QAction add_selection_action("Add selected gates to module", &context_menu);
-        QAction add_child_action("Add child module", &context_menu);
-        QAction change_name_action("Change module name", &context_menu);
-        QAction change_type_action("Change module type", &context_menu);
-        QAction change_color_action("Change module color", &context_menu);
-        QAction delete_action("Delete module", &context_menu);
+        QAction isolate_action;
+        QAction add_selection_action;
+        QAction add_child_action;
+        QAction change_name_action;
+        QAction change_type_action;
+        QAction change_color_action;
+        QAction delete_action;
+        QAction extractPythonAction;
+        QAction focus_in_view;
 
-        context_menu.addAction(&isolate_action);
-        context_menu.addAction(&add_selection_action);
-        context_menu.addAction(&add_child_action);
-        context_menu.addAction(&change_name_action);
-        context_menu.addAction(&change_type_action);
-        context_menu.addAction(&change_color_action);
+        switch(type) {
+
+            case ModuleItem::TreeItemType::Module:{
+                extractPythonAction.setIcon(QIcon(":/icons/python"));
+                extractPythonAction.setText("Extract Module as python code (copy to clipboard)");
+                extractPythonAction.setParent(&context_menu);
+
+                isolate_action.setText("Isolate in new view");
+                isolate_action.setParent(&context_menu);
+
+                add_selection_action.setText("Add selected gates to module");
+                add_selection_action.setParent(&context_menu);
+
+                add_child_action.setText("Add child module");
+                add_child_action.setParent(&context_menu);
+
+                change_name_action.setText("Change module name");
+                change_name_action.setParent(&context_menu);
+
+                change_type_action.setText("Change module type");
+                change_type_action.setParent(&context_menu);
+
+                change_color_action.setText("Change module color");
+                change_color_action.setParent(&context_menu);
+
+                delete_action.setText("Delete module");
+                delete_action.setParent(&context_menu);
+
+                focus_in_view.setText("Focus item in Graph View");
+                focus_in_view.setParent(&context_menu);
+                break;
+            }
+            case ModuleItem::TreeItemType::Gate: {
+                extractPythonAction.setIcon(QIcon(":/icons/python"));
+                extractPythonAction.setText("Extract Gate as python code (copy to clipboard)");
+                extractPythonAction.setParent(&context_menu);
+
+                isolate_action.setText("Isolate in new view");
+                isolate_action.setParent(&context_menu);
+
+                change_name_action.setText("Change Gate name");
+                change_name_action.setParent(&context_menu);
+
+                focus_in_view.setText("Focus item in Graph View");
+                focus_in_view.setParent(&context_menu);
+                break;
+            }
+            case ModuleItem::TreeItemType::Net: {
+                extractPythonAction.setIcon(QIcon(":/icons/python"));
+                extractPythonAction.setText("Extract Net as python code (copy to clipboard)");
+                extractPythonAction.setParent(&context_menu);
+
+                change_name_action.setText("Change Net name");
+                change_name_action.setParent(&context_menu);
+
+                focus_in_view.setText("Focus item in Graph View");
+                focus_in_view.setParent(&context_menu);
+                break;
+            }
+        }
+
+        if (type == ModuleItem::TreeItemType::Gate){
+            context_menu.addAction(&extractPythonAction);
+            context_menu.addAction(&isolate_action);
+            context_menu.addAction(&change_name_action);
+            context_menu.addAction(&focus_in_view);
+
+        }
+
+        if (type == ModuleItem::TreeItemType::Module){
+            context_menu.addAction(&extractPythonAction);
+            context_menu.addAction(&isolate_action);
+            context_menu.addAction(&change_name_action);
+            context_menu.addAction(&add_selection_action);
+            context_menu.addAction(&add_child_action);
+            context_menu.addAction(&change_type_action);
+            context_menu.addAction(&change_color_action);
+            context_menu.addAction(&focus_in_view);
+        }
+
+        if (type == ModuleItem::TreeItemType::Net){
+            context_menu.addAction(&extractPythonAction);
+            context_menu.addAction(&change_name_action);
+            context_menu.addAction(&focus_in_view);
+        }
 
         u32 module_id = getModuleItemFromIndex(index)->id();
         auto module = gNetlist->get_module_by_id(module_id);
 
-        if(!(module == gNetlist->get_top_module()))
+        if(!(module == gNetlist->get_top_module()) && type == ModuleItem::TreeItemType::Module)
             context_menu.addAction(&delete_action);
 
         QAction* clicked = context_menu.exec(mTreeView->viewport()->mapToGlobal(point));
@@ -164,8 +289,23 @@ namespace hal
         if (!clicked)
             return;
 
+        if (clicked == &extractPythonAction){
+            switch(type)
+            {
+                case ModuleItem::TreeItemType::Module: QApplication::clipboard()->setText("netlist.get_Module_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")"); break;
+                case ModuleItem::TreeItemType::Gate: QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")"); break;
+                case ModuleItem::TreeItemType::Net: QApplication::clipboard()->setText("netlist.get_net_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")"); break;
+            }
+        }
+
         if (clicked == &isolate_action)
-            openModuleInView(index);
+        {
+            switch(type)
+            {
+                case ModuleItem::TreeItemType::Module: openModuleInView(index); break;
+                case ModuleItem::TreeItemType::Gate: openGateInView(index); break;
+            }
+        }
 
         if (clicked == &add_selection_action)
             gNetlistRelay->addSelectionToModule(getModuleItemFromIndex(index)->id());
@@ -177,7 +317,14 @@ namespace hal
         }
 
         if (clicked == &change_name_action)
-            gNetlistRelay->changeModuleName(getModuleItemFromIndex(index)->id());
+        {
+            switch(type)
+            {
+                case ModuleItem::TreeItemType::Module: gNetlistRelay->changeModuleName(getModuleItemFromIndex(index)->id()); break;
+                case ModuleItem::TreeItemType::Gate: changeGateName(index); break;
+                case ModuleItem::TreeItemType::Net: changeNetName(index); break;
+            }
+        }
 
         if (clicked == &change_type_action)
             gNetlistRelay->changeModuleType(getModuleItemFromIndex(index)->id());
@@ -185,8 +332,20 @@ namespace hal
         if (clicked == &change_color_action)
             gNetlistRelay->changeModuleColor(getModuleItemFromIndex(index)->id());
 
-        if (clicked == &delete_action)
+        if (clicked == &delete_action){
             gNetlistRelay->deleteModule(getModuleItemFromIndex(index)->id());
+        }
+
+        if (clicked == &focus_in_view){
+            switch(type)
+            {
+                case ModuleItem::TreeItemType::Module: gContentManager->getGraphTabWidget()->handleModuleFocus(getModuleItemFromIndex(index)->id()); break;
+                case ModuleItem::TreeItemType::Gate: gContentManager->getGraphTabWidget()->handleGateFocus(getModuleItemFromIndex(index)->id()); break;
+                case ModuleItem::TreeItemType::Net: gContentManager->getGraphTabWidget()->handleNetFocus(getModuleItemFromIndex(index)->id()); break;
+            }
+
+         }
+
     }
 
     void ModuleWidget::handleModuleRemoved(Module* module, u32 module_id)
@@ -214,8 +373,13 @@ namespace hal
 
         for (const auto& index : current_selection)
         {
-            u32 module_id = getModuleItemFromIndex(index)->id();
-            gSelectionRelay->addModule(module_id);
+            ModuleItem* mi = getModuleItemFromIndex(index);
+            if(mi->getType() == ModuleItem::TreeItemType::Module)
+                gSelectionRelay->addModule(mi->id());
+            else if(mi->getType() == ModuleItem::TreeItemType::Gate)
+                gSelectionRelay->addGate(mi->id());
+            else if(mi->getType() == ModuleItem::TreeItemType::Net)
+                gSelectionRelay->addNet(mi->id());
         }
 
         if (current_selection.size() == 1)
@@ -235,6 +399,52 @@ namespace hal
     void ModuleWidget::openModuleInView(const QModelIndex& index)
     {
         openModuleInView(getModuleItemFromIndex(index)->id(), false);
+    }
+
+    void ModuleWidget::openGateInView(const QModelIndex &index)
+    {
+        QSet<u32> gateId;
+        QSet<u32> moduleId;
+        QString name;
+
+        name = gGraphContextManager->nextViewName("Isolated View");
+        gateId.insert(getModuleItemFromIndex(index)->id());
+
+        UserActionCompound* act = new UserActionCompound;
+        act->setUseCreatedObject();
+        act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+        act->addAction(new ActionAddItemsToObject(moduleId, gateId));
+        act->exec();
+    }
+
+    void ModuleWidget::changeGateName(const QModelIndex &index)
+    {
+        QString oldName = getModuleItemFromIndex(index)->name();
+
+        bool confirm;
+        QString newName = QInputDialog::getText(this, "Rename Gate", "New name:", QLineEdit::Normal, oldName, &confirm);
+
+        if (confirm && !newName.isEmpty())
+        {
+            ActionRenameObject* act = new ActionRenameObject(newName);
+            act->setObject(UserActionObject(getModuleItemFromIndex(index)->id(), UserActionObjectType::ObjectType::Gate));
+            act->exec();
+        }
+    }
+
+    void ModuleWidget::changeNetName(const QModelIndex &index)
+    {
+        QString oldName = getModuleItemFromIndex(index)->name();
+
+        bool confirm;
+        QString newName = QInputDialog::getText(this, "Rename Net", "New name:", QLineEdit::Normal, oldName, &confirm);
+
+        if (confirm && !newName.isEmpty())
+        {
+            ActionRenameObject* act = new ActionRenameObject(newName);
+            act->setObject(UserActionObject(getModuleItemFromIndex(index)->id(), UserActionObjectType::ObjectType::Net));
+            act->exec();
+        }
     }
 
     void ModuleWidget::openModuleInView(u32 moduleId, bool unfold)
@@ -304,6 +514,46 @@ namespace hal
         return mModuleProxyModel;
     }
 
+    QString ModuleWidget::showNetsIconPath() const
+    {
+        return mShowNetsIconPath;
+    }
+
+    QString ModuleWidget::showNetsIconStyle() const
+    {
+        return mShowNetsIconStyle;
+    }
+
+    QString ModuleWidget::hideNetsIconPath() const
+    {
+        return mHideNetsIconPath;
+    }
+
+    QString ModuleWidget::hideNetsIconStyle() const
+    {
+        return mHideNetsIconStyle;
+    }
+
+    QString ModuleWidget::showGatesIconPath() const
+    {
+        return mShowGatesIconPath;
+    }
+
+    QString ModuleWidget::showGatesIconStyle() const
+    {
+        return mShowGatesIconStyle;
+    }
+
+    QString ModuleWidget::hideGatesIconPath() const
+    {
+        return mHideGatesIconPath;
+    }
+
+    QString ModuleWidget::hideGatesIconStyle() const
+    {
+        return mHideGatesIconStyle;
+    }
+
     QString ModuleWidget::searchIconPath() const
     {
         return mSearchIconPath;
@@ -317,6 +567,46 @@ namespace hal
     QString ModuleWidget::searchActiveIconStyle() const
     {
         return mSearchActiveIconStyle;
+    }
+
+    void ModuleWidget::setShowNetsIconPath(const QString& path)
+    {
+        mShowNetsIconPath = path;
+    }
+
+    void ModuleWidget::setShowNetsIconStyle(const QString& path)
+    {
+        mShowNetsIconStyle = path;
+    }
+
+    void ModuleWidget::setHideNetsIconPath(const QString& path)
+    {
+        mHideNetsIconPath = path;
+    }
+
+    void ModuleWidget::setHideNetsIconStyle(const QString& path)
+    {
+        mHideNetsIconStyle = path;
+    }
+
+    void ModuleWidget::setShowGatesIconPath(const QString& path)
+    {
+        mShowGatesIconPath = path;
+    }
+
+    void ModuleWidget::setShowGatesIconStyle(const QString& path)
+    {
+        mShowGatesIconStyle = path;
+    }
+
+    void ModuleWidget::setHideGatesIconPath(const QString& path)
+    {
+        mHideGatesIconPath = path;
+    }
+
+    void ModuleWidget::setHideGatesIconStyle(const QString& path)
+    {
+        mHideGatesIconStyle = path;
     }
 
     void ModuleWidget::setSearchIconPath(const QString& path)
@@ -342,9 +632,21 @@ namespace hal
         }
 
         ModuleItem* selectedItem = getModuleItemFromIndex(mTreeView->currentIndex());
-        if(selectedItem->parent() != nullptr)
+        if(selectedItem->getParent() != nullptr)
         {
-            gNetlistRelay->deleteModule(getModuleItemFromIndex(mTreeView->currentIndex())->id());
+            switch(getModuleItemFromIndex(mTreeView->currentIndex())->getType())
+            {
+                case ModuleItem::TreeItemType::Module: {
+                    auto module = gNetlist->get_module_by_id(selectedItem->id());
+                    if((module == gNetlist->get_top_module()))
+                        break;
+                    gNetlistRelay->deleteModule(getModuleItemFromIndex(mTreeView->currentIndex())->id());
+                    break;
+                    }
+                case ModuleItem::TreeItemType::Gate: break;
+                case ModuleItem::TreeItemType::Net: break;
+
+            }
         }
     }
 

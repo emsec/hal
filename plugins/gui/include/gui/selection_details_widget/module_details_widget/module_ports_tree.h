@@ -33,7 +33,7 @@ namespace hal
 {
     class Module;
     class ModulePinsTreeModel;
-    class TreeItem;
+    class BaseTreeItem;
 
     /**
      * @brief A widget to display the ports of a given module.
@@ -104,7 +104,7 @@ namespace hal
          * (and if yes it returns the group id, otherwise -1),
          * second boolean = true if only pins (and no groups) were selected.
          */
-        std::tuple<QList<TreeItem*>, std::pair<bool, int>, bool> getSelectedPins();
+        std::tuple<QList<BaseTreeItem*>, std::pair<bool, int>, bool> getSelectedPins();
 
     };
 }

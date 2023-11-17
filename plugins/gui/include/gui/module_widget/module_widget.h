@@ -57,6 +57,14 @@ namespace hal
     class ModuleWidget : public ContentWidget
     {
         Q_OBJECT
+        Q_PROPERTY(QString showNetsIconPath READ showNetsIconPath WRITE setShowNetsIconPath)
+        Q_PROPERTY(QString showNetsIconStyle READ showNetsIconStyle WRITE setShowNetsIconStyle)
+        Q_PROPERTY(QString hideNetsIconPath READ hideNetsIconPath WRITE setHideNetsIconPath)
+        Q_PROPERTY(QString hideNetsIconStyle READ hideNetsIconStyle WRITE setHideNetsIconStyle)
+        Q_PROPERTY(QString showGatesIconPath READ showGatesIconPath WRITE setShowGatesIconPath)
+        Q_PROPERTY(QString showGatesIconStyle READ showGatesIconStyle WRITE setShowGatesIconStyle)
+        Q_PROPERTY(QString hideGatesIconPath READ hideGatesIconPath WRITE setHideGatesIconPath)
+        Q_PROPERTY(QString hideGatesIconStyle READ hideGatesIconStyle WRITE setHideGatesIconStyle)
         Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
         Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
@@ -102,6 +110,14 @@ namespace hal
         /** @name Q_PROPERTY READ Functions
          */
         ///@{
+        QString showNetsIconPath() const;
+        QString showNetsIconStyle() const;
+        QString hideNetsIconPath() const;
+        QString hideNetsIconStyle() const;
+        QString showGatesIconPath() const;
+        QString showGatesIconStyle() const;
+        QString hideGatesIconPath() const;
+        QString hideGatesIconStyle() const;
         QString searchIconPath() const;
         QString searchIconStyle() const;
         QString searchActiveIconStyle() const;
@@ -110,6 +126,14 @@ namespace hal
         /** @name Q_PROPERTY WRITE Functions
          */
         ///@{
+        void setShowNetsIconPath(const QString &path);
+        void setShowNetsIconStyle(const QString &path);
+        void setHideNetsIconPath(const QString &path);
+        void setHideNetsIconStyle(const QString &path);
+        void setShowGatesIconPath(const QString &path);
+        void setShowGatesIconStyle(const QString &path);
+        void setHideGatesIconPath(const QString &path);
+        void setHideGatesIconStyle(const QString &path);
         void setSearchIconPath(const QString &path);
         void setSearchIconStyle(const QString &style);
         void setSearchActiveIconStyle(const QString &style);
@@ -171,6 +195,17 @@ namespace hal
          */
         void handleModuleRemoved(Module* module, u32 module_id);
 
+    private Q_SLOTS:
+        /**
+         * Q_SLOT to toggle the visibility of nets in the module widget. Called when the 'Toggle Net Visibility'-buttons was clicked.
+         */
+        void handleToggleNetsClicked();
+
+        /**
+         * Q_SLOT to toggle the visibility of gates in the module widget. Called when the 'Toggle Gate Visibility'-buttons was clicked.
+         */
+        void handleToggleGatesClicked();
+
 
     private Q_SLOTS:
         void handleDeleteShortcutOnFocusChanged(QWidget *oldWidget, QWidget *newWidget);
@@ -181,13 +216,23 @@ namespace hal
         ModuleTreeView* mTreeView;
         Searchbar* mSearchbar;
 
+        QAction* mToggleNetsAction;
+        QString mShowNetsIconPath;
+        QString mShowNetsIconStyle;
+        QString mHideNetsIconPath;
+        QString mHideNetsIconStyle;
+
+        QAction* mToggleGatesAction;
+        QString mShowGatesIconPath;
+        QString mShowGatesIconStyle;
+        QString mHideGatesIconPath;
+        QString mHideGatesIconStyle;
+
         QString mSearchIconPath;
         QString mSearchIconStyle;
         QString mSearchActiveIconStyle;
 
         QAction* mFilterAction;
-
-        QSortFilterProxyModel* mCurrentModel;
 
         QList<QRegExp*> mRegexps;
 
@@ -198,6 +243,12 @@ namespace hal
         QShortcut* mShortCutDeleteItem;
 
         void openModuleInView(const QModelIndex& index);
+
+        void openGateInView(const QModelIndex& index);
+
+        void changeGateName(const QModelIndex& index);
+
+        void changeNetName(const QModelIndex& index);
 
         ModuleItem* getModuleItemFromIndex(const QModelIndex& index);
 

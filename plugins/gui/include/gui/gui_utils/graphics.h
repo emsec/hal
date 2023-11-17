@@ -80,14 +80,5 @@ namespace hal
          * @return The (perhabs styled) icon.
          */
         extern QIcon getStyledSvgIcon(const QString& from_to_colors, const QString& svg_path);
-
-        /**
-         * Returns a somewhat random color through a funny method (should be the same order
-         * of colors each time the program starts). This brilliant piece of code MUST NEVER
-         * BE REMOVED, PURE COMEDY!
-         *
-         * @return The "random" color.
-         */
-        extern QColor getRandomColor();
     }
 }

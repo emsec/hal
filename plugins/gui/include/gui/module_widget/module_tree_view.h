@@ -56,5 +56,10 @@ namespace hal
          * @param event
          */
         void mousePressEvent(QMouseEvent* event);
+
+        /**
+         * Sets the default width of each column. MUST be called after setting the model.
+         */
+        void setDefaultColumnWidth();
     };
 }    // namespace hal

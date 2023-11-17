@@ -1,20 +1,20 @@
 // MIT License
-// 
+//
 // Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
 // Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
 // Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
 // Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,16 +28,17 @@
 #include "hal_core/defines.h"
 #include "gui/gui_utils/sort.h"
 #include "hal_core/netlist/module.h"
+#include "gui/module_model/module_item.h"
+
 
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
-#include <QColor>
 #include <set>
+#include <array>
 
 namespace hal
 {
-    class ModuleItem;
 
     /**
      * @ingroup gui
@@ -45,7 +46,7 @@ namespace hal
      *
      * The ModuleModel is the item model that represents the modules and their hierarchy in the netlist.
      */
-    class ModuleModel : public QAbstractItemModel
+    class ModuleModel : public BaseTreeModel
     {
         Q_OBJECT
 
@@ -60,41 +61,6 @@ namespace hal
         explicit ModuleModel(QObject* parent = nullptr);
 
         // === Pure Virtual ===
-        /**
-         * Returns the index of the item in the model specified by the given row, column and parent index.
-         *
-         * @param row - The row of the item
-         * @param column - The column of the item
-         * @param parent - the index of the parent of the item
-         * @returns the index at the specified position
-         */
-        QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
-
-        /**
-         * Returns the parent of the model item with the given index. If the item has no parent (i.e. index is
-         * invalid or module is the top module), and invalid QModelIndex is returned.
-         *
-         * @param index - The index to find the parent for
-         * @returns the model index of the parent
-         */
-        QModelIndex parent(const QModelIndex& index) const override;
-
-        /**
-         * Returns the number of rows under the given parent (i.e. the number of children of the parent).
-         *
-         * @param parent - The model index of the parent
-         * @returns the number of rows under the given parent
-         */
-        int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-
-        /**
-         * Returns the number of columns for the children of the given parent. Since the module model only contains
-         * one column this function returns always 1.
-         *
-         * @param parent - The model index of the parent
-         * @returns the number of columns for the children of the given parent. Always 1.
-         */
-        int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
         /**
          * Returns the data stored under the given role for the item referred to by the index.
@@ -114,42 +80,32 @@ namespace hal
          */
         Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-        /**
-         * Returns the data for the given role and section in the header with the specified orientation.
-         * Since the model has not headers, an empty QVariant is always returned.
-         *
-         * @param section - The section
-         * @param orientation - The orientation
-         * @param role - The role
-         * @returns the header data. Always empty.
-         */
-        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-
         // === Others ===
 
         /**
          * Returns the ModuleItem stored under the specified model index.
          *
-         * @param index - The model index to get the module item from
+         * @param index - The model index to get the ModuleItem from
          * @returns the module item at the specified index
          */
         ModuleItem* getItem(const QModelIndex& index) const;
 
         /**
-         * Returns the module index where the specified ModuleItem can be found.
+         * Returns the index where the specified ModuleItem can be found.
          *
-         * @param item - The module item to search for in the item model
+         * @param item - The ModuleItem to search for in the item model
          * @returns the model index of the specified ModuleItem
          */
         QModelIndex getIndex(const ModuleItem* const item) const;
 
         /**
-         * Returns the ModuleItem for a specified module id.
+         * Returns the ModuleItem for a specified id and type.
          *
-         * @param module_id - The id of the module to get the ModuleItem for
-         * @returns the ModuleItem with the id module_id
+         * @param module_id - The id of the ModuleItem
+         * @param type - The type of the ModuleItem
+         * @returns the ModuleItem with the specified id and type.
          */
-        ModuleItem* getItem(const u32 module_id) const;
+        ModuleItem* getItem(const u32 id, ModuleItem::TreeItemType type = ModuleItem::TreeItemType::Module) const;
 
         /**
          * Initializes the item model using the global netlist object gNetlist.
@@ -157,7 +113,7 @@ namespace hal
         void init();
 
         /**
-         * Clears the item model.
+         * Clears the item model and deletes all ModuleItems.
          */
         void clear();
 
@@ -170,33 +126,105 @@ namespace hal
         void addModule(const u32 id, const u32 parent_module);
 
         /**
-         * Recursively adds all given modules with all their sub modules (and their submodules and so on...) to
-         * the item model.
+         * Add a gate to the item model. For the specified gate a new ModuleItem is created and stored.
          *
-         * @param modules - The list of modules which should be added to the item model together
-         *                  with all their submodules.
+         * @param id - The id of the gate to add.
+         * @param parent_module - The id of the parent module of the gate to add.
          */
-        void addRecursively(const std::vector<Module*>& modules);
+        void addGate(const u32 id, const u32 parent_module);
+
+        /**
+         * Add a net to the item model. For the specified net a new ModuleItem is created and stored.
+         *
+         * @param id - The id of the net to add.
+         * @param parent_module - The id of the parent module of the net to add.
+         */
+        void addNet(const u32 id, const u32 parent_module);
+
+        /**
+         * Recursively adds the given module with all of its submodules (and their submodules and so on...)
+         * and the gates those modules to the item model.
+         *
+         * @param module - The module which should be added to the item model together with all its
+         *                  submodules, gates and nets.
+         */
+        void addRecursively(const Module* module);
 
         /**
          * Removes a module from the item model. The specified module MUST be contained in the item model.
          *
-         * @param id - The id of the model to remove
+         * @param id - The id of the module to remove
          */
-        void remove_module(const u32 id);
+        void removeModule(const u32 id);
+
+        /**
+         * Removes a gate from the item model. The specified gate MUST be contained in the item model.
+         *
+         * @param id - The id of the gate to remove
+         */
+        void removeGate(const u32 id);
+
+        /**
+         * Removes a net from the item model.
+         *
+         * @param id - The id of the net to remove
+         */
+        void removeNet(const u32 id);
+
+        /**
+         * Moves the ModuleItem corresponding to the module under it's new parent ModuleItem.
+         * The items for all nets, that have at least one source or one destination within the module, 
+         * will be updated afterwards.
+         * 
+         * @param module The module whose parent has changed.
+        */
+        void handleModuleParentChanged(const Module* module);
+
+        /**
+         * Handles the assigment of gates to modules. 
+         * If the gate does not yet exist in the item model, a new one is created.
+         * All nets, that are connected to the gate, will be updated.
+        */
+        void handleModuleGateAssinged(const u32 id, const u32 parent_module);
+
+        /**
+         * Updates the position of a net in the ModuleTree. 
+         * The net will be placed under the deepest module, that contains all sources and destinations of the net.
+         * If no suitable parent could be found, then the net will instead be placed under the top module.
+         * If the net does not exist in the item model (e.g. it's a global net), then nothing is updated.
+         * 
+         * @param net The net whose source or destination might have changed.
+        */
+        void updateNet(const Net* net);
+
+        /**
+         * Reattaches the ModuleItem corresponding to the specified module to a new parent item.
+         * The new parent must already be set in the Module object.
+         *
+         * @param module - The module whose ModuleItem will be reattached to a new parent in the item model.
+        */
+        void updateModuleParent(const Module* module);
 
         /**
          * Updates the ModuleItem for the specified module. The specified module MUST be contained in the item model.
          *
          * @param id - The id of the module to update
          */
-        void updateModule(const u32 id);
+        void updateModuleName(const u32 id);
 
-//        void addModule(u32 id, u32 parent_module);
-//        void addRecursively(const std::vector<Module*>& modules);
-//        void remove_module(u32 id);
-//        void updateModule(u32 id);
+        /**
+         * Updates the ModuleItem for the specified gate. The specified gate MUST be contained in the item model.
+         *
+         * @param id - The id of the gate to update
+         */
+        void updateGateName(const u32 id);
 
+        /**
+         * Updates the ModuleItem for the specified net. The specified gate MUST be contained in the item model.
+         *
+         * @param id - The id of the net to update
+         */
+        void updateNetName(const u32 id);
 
         /**
          * Returns <b>true</b> if the item model is currently changed/updated. This is the case while adding and
@@ -207,43 +235,22 @@ namespace hal
          */
         bool isModifying();
 
-        /**
-         * Gets the module color of a module of a specific id.
-         *
-         * @param id - The module id of the module to get the color for
-         * @returns the color of the module
-         */
-        QColor moduleColor(u32 id) const;
-
-        /**
-         * Changes the color of a module.
-         *
-         * @param id - The id of the module
-         * @param col - The new color
-         * @returns the old color of the module (used to create an undo action easier)
-         */
-        QColor setModuleColor(u32 id, const QColor& col);
-
-        /**
-         * Changes the color of a module to a random color.
-         *
-         * @param id - The id of the module
-         * @returns the old color of the module (used to create an undo action easier)
-         */
-        QColor setRandomColor(u32 id);
-
-        /**
-         * Removes the color that belongs to the given id.
-         *
-         * @param id - The module id for which to remove the color.
-         */
-        void removeColor(u32 id);
-
     private:
-        ModuleItem* mTopModuleItem;
+        /**
+         * Searches for a new parent module, such that it is the deepest module in the hierarchy, that contains all
+         * sources and destinations of the net. 
+         * 
+         * @param net The net for which a new parent should be searched.
+         * 
+         * @return The new parent module, that contains all sources and destinations of net. If no such parent could be found 
+         * (e.g. net has no sources or destinations), nullptr is returned instead.
+        */
+        Module* findNetParent(const Net* net);
 
-        QMap<u32, ModuleItem*> mModuleItems;
-        QMap<u32, QColor> mModuleColors;
+        QMap<u32, ModuleItem*> mModuleMap;
+        QMap<u32, ModuleItem*> mGateMap;
+        QMap<u32, ModuleItem*> mNetMap;
+        std::array<QMap<u32, ModuleItem*>*, 3> mModuleItemMaps = {&mModuleMap, &mGateMap, &mNetMap};;
 
         bool mIsModifying;
     };
