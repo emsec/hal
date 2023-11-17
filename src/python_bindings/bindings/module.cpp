@@ -263,20 +263,20 @@ namespace hal
         )");
 
         py_module.def_property_readonly("input_nets", &Module::get_input_nets, R"(
-            A list of all nets that are either a global input to the netlist or have at least one source outside of the module.
+            A set of all nets that are either a global input to the netlist or have at least one source outside of the module.
 
-            :type: list[hal_py.Net]
+            :type: set[hal_py.Net]
         )");
 
         py_module.def("get_input_nets", &Module::get_input_nets, R"(
             Get all nets that are either a global input to the netlist or have at least one source outside of the module.
 
-            :returns: A list of input nets.
-            :rtype: list[hal_py.Net]
+            :returns: A set of input nets.
+            :rtype: set[hal_py.Net]
         )");
 
         py_module.def_property_readonly("output_nets", &Module::get_output_nets, R"(
-            A list of all nets that are either a global output to the netlist or have at least one destination outside of the module.
+            A set of all nets that are either a global output to the netlist or have at least one destination outside of the module.
 
             :type: set[hal_py.Net]
         )");
@@ -284,21 +284,21 @@ namespace hal
         py_module.def("get_output_nets", &Module::get_output_nets, R"(
             Get all nets that are either a global output to the netlist or have at least one destination outside of the module.
 
-            :returns: A list of output nets.
-            :rtype: list[hal_py.Net]
+            :returns: A set of output nets.
+            :rtype: set[hal_py.Net]
         )");
 
         py_module.def_property_readonly("internal_nets", &Module::get_internal_nets, R"(
-            A list of all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
+            A set of all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
 
-            :type: list[hal_py.Net]
+            :type: set[hal_py.Net]
         )");
 
         py_module.def("get_internal_nets", &Module::get_internal_nets, R"(
             Get all nets that have at least one source and one destination within the module, including its submodules. The result may contain nets that are also regarded as input or output nets.
 
-            :returns: A list of internal nets.
-            :rtype: list[hal_py.Net]
+            :returns: A set of internal nets.
+            :rtype: set[hal_py.Net]
         )");
 
         py_module.def("is_input_net", &Module::is_input_net, py::arg("net"), R"(

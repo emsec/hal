@@ -1,21 +1,85 @@
+#include "gui/graph_widget/layouters/net_layout_junction.h"
+#ifdef JUNCTION_DEBUG
+#include <QGraphicsScene>
 #include <QGraphicsEllipseItem>
 #include <QGraphicsLineItem>
-#include <QGraphicsScene>
+#endif
 #include <QBrush>
 #include <QPen>
 #include <QSet>
-#include <QDir>
 #include <QMultiMap>
 #include <stdlib.h>
 #include <QDebug>
 #include <QPoint>
-#include "gui/graph_widget/layouters/net_layout_junction.h"
+#include <QDir>
+#include <QDateTime>
+#include "hal_core/netlist/project_manager.h"
+
+#ifdef JUNCTION_DEBUG
+QMap<u32,QColor> debugColorMap;
 
 QColor colorFromId(u32 netId)
 {
-    int hue = (netId-1) * 25;
-    return QColor::fromHsv(hue,255,255);
+    QColor retval = debugColorMap.value(netId);
+    if (!retval.isValid())
+        return QColor("white");
+    return retval;
 }
+
+void setColorMap(const hal::NetLayoutJunctionEntries& entries)
+{
+    debugColorMap.clear();
+
+    QMap<u32,int> pattern;
+    for (int i=0; i<4; i++)
+    {
+        int mask = 1 << i;
+        for (u32 id : entries.mEntries[i])
+            pattern[id] |= mask;
+    }
+    QSet<int> danglingWire = { 1, 2, 4, 8};
+    int count = 0;
+
+    for (auto it = pattern.begin(); it != pattern.end(); ++it)
+    {
+        if (danglingWire.contains(it.value()))
+        {
+            debugColorMap[it.key()] = QColor::fromRgb(23,25,29);
+            continue;
+        }
+
+        int hue = count++ * 25;
+        if (hue > 255)
+        {
+            int cc = (count-10)%20;
+            int cd = (count-10)/20;
+            int h = cc * 10;
+            int s = 80 - cd*40;
+            int v = 255;
+            qDebug() << cc << cd << h << s << v;
+            if (s <= 0)
+            {
+                int g = (20*count) % 128 + 128;
+                debugColorMap[it.key()] = QColor::fromRgb(g,g,g);
+            }
+            else
+                debugColorMap[it.key()] = QColor::fromHsv(h,s,v);
+        }
+        else
+            debugColorMap[it.key()] = QColor::fromHsv(hue,255,255);
+    }
+}
+
+QGraphicsEllipseItem* getEllipse(QPoint p, u32 netId)
+{
+    float dd = DELTA / 2.;
+    float x0 = FIRST + p.x() * DELTA - dd/2;
+    float y0 = FIRST + p.y() * DELTA - dd/2;
+    QGraphicsEllipseItem* retval = new QGraphicsEllipseItem(x0,y0,dd,dd);
+    retval->setBrush(colorFromId(netId));
+    return retval;
+}
+#endif
 
 namespace hal {
 
@@ -26,20 +90,21 @@ namespace hal {
         for (NetLayoutDirection dir(0); !dir.isMax(); ++dir)
         {
             int iHoriz = dir.iHorizontal();
-            int n = mEntries.size(dir);
+            int n = mEntries.mEntries[dir.index()].size();
             if (n>maxRoad[iHoriz]) maxRoad[iHoriz] = n;
             for (int i=0; i<n; i++)
             {
-                u32 entryId = mEntries.id(dir,i);
-                if (entryId)
-                mNetsInput[entryId].addEntry(dir,i);
+//                qDebug() << "entry***" << i << n << dir.index() << mEntries.id(dir,i);
+                mNets[mEntries.id(dir,i)].addEntry(dir,i);
             }
         }
         routeAllStraight(0,1);
         routeAllStraight(2,3);
-        for (auto netIt=mNetsInput.begin(); netIt!=mNetsInput.end(); ++netIt)
+        /*
+        for (auto netIt=mNets.begin(); netIt!=mNets.end(); ++netIt)
             if (netIt.value().numberEntries()==4)
                 fourWayJunctions(netIt);
+                */
         routeT();
         routeAllCorner(0,2);
         routeAllCorner(0,3);
@@ -47,9 +112,29 @@ namespace hal {
         routeAllCorner(1,3);
         routeAllMultiPin(0);
         routeAllMultiPin(1);
+        findJunctions();
         calculateRect();
+
     }
 
+    void NetLayoutJunction::findJunctions()
+    {
+        for (auto it = mNets.begin(); it!= mNets.end(); ++it)
+        {
+            QList<NetLayoutJunctionWire> hNets, vNets;
+            for (const NetLayoutJunctionWire& nljw : it->mWires )
+                if (nljw.mIndex.hvIndex() == LaneIndex::Horizontal)
+                    hNets.append(nljw);
+                else
+                    vNets.append(nljw);
+
+            for (const NetLayoutJunctionWire& hn : hNets)
+                for (const NetLayoutJunctionWire& vn : vNets)
+                    if ((hn.mRange.innerPos(vn.mIndex.laneIndex()) && vn.mRange.contains(hn.mIndex.laneIndex())) ||
+                            (hn.mRange.contains(vn.mIndex.laneIndex()) && vn.mRange.innerPos(hn.mIndex.laneIndex())))
+                        it->mKnots.append(QPoint(vn.mIndex.laneIndex(),hn.mIndex.laneIndex()));
+        }
+    }
 
     void NetLayoutJunction::routeAllMultiPin(NetLayoutDirection leftOrRight)
     {
@@ -59,28 +144,33 @@ namespace hal {
 
         for (int iroad=0; iroad<nEntries; iroad++)
         {
+            LaneIndex rinx(LaneIndex::Horizontal,iroad);
             bool isRouted = false;
             u32 id = mEntries.mEntries[leftOrRight.index()].at(iroad);
-            if (!id) continue; // pin not connected to any net
+            auto itNet = mNets.find(id);
+            Q_ASSERT(itNet != mNets.end());
 
-            auto itNet = mNetsInput.find(id);
-            Q_ASSERT(itNet != mNetsInput.end());
-
-            // pin is a global input or output and not connected with anything
-            if (itNet.value().pattern() == (1 << leftOrRight.index() ))
-                continue;
-
-            for (const NetLayoutJunctionRange& rng : mOccupied[0].value(iroad))
+            if (itNet.value().pattern() == (u32) (1 << leftOrRight.index() ))
             {
-                if (rng.isEntry(leftOrRight.index()))
+                /// dangling wire
+                isRouted = true;
+            }
+            else
+            {
+                /// nets should be routed to junction entry by now ...
+                for (const NetLayoutJunctionRange& rng : mOccupied.value(rinx))
                 {
-                    isRouted = true;
-                    break;
+                    if (rng.isEntry(leftOrRight.index()))
+                    {
+                        isRouted = true;
+                        break;
+                    }
+                    // ... unless in the multipin case (isRouted=false)
                 }
             }
 
             if (isRouted)
-                multiPinHash[id].setRoad(iroad);
+                multiPinHash[id].mLane = iroad;
             else
                 multiPinHash[id].mConnector.append(iroad);
         }
@@ -88,6 +178,7 @@ namespace hal {
         for (auto it = multiPinHash.begin(); it!= multiPinHash.end(); ++it)
         {
             if (it.value().mConnector.isEmpty()) continue;
+//            qDebug() << leftOrRight.index() << "MultiPin" << it.key() << it.value().mRoad << it.value().mConnector;
             routeSingleMultiPin(it.key(), leftOrRight, it.value());
         }
 
@@ -96,8 +187,8 @@ namespace hal {
 
     void NetLayoutJunction::routeSingleMultiPin(u32 netId, NetLayoutDirection leftOrRight, const NetLayoutJunctionMultiPin& nmpin)
     {
-        int ymin = nmpin.mRoad;
-        int ymax = nmpin.mRoad;
+        int ymin = nmpin.mLane;
+        int ymax = nmpin.mLane;
         for (int iroad : nmpin.mConnector)
         {
             if (iroad < ymin) ymin = iroad;
@@ -108,13 +199,13 @@ namespace hal {
         if (leftOrRight.isLeft())
         {
             x0 = -1;
-            x1 = NetLayoutJunctionRange::sMinInf;
+            x1 = NetLayoutJunctionRange::MinInf;
             dx = -1;
         }
         else
         {
             x0 = maxRoad[NetLayoutDirection::Right];
-            x1 = NetLayoutJunctionRange::sMaxInf;
+            x1 = NetLayoutJunctionRange::MaxInf;
             dx = 1;
         }
 
@@ -133,9 +224,11 @@ namespace hal {
                     rngs.append(NetLayoutJunctionRange(netId,x,x1));
             }
             bool hasConflict = false;
+
+            // store connecting vertical road at i=0
             for (int i=0; i<roads.size();i++)
             {
-                if (conflict(i?0:1,roads.at(i),rngs.at(i)))
+                if (conflict(LaneIndex(i?LaneIndex::Horizontal:LaneIndex::Vertical,roads.at(i)),rngs.at(i)))
                 {
                     hasConflict = true;
                     break;
@@ -144,7 +237,7 @@ namespace hal {
             if (!hasConflict)
             {
                 for (int i=0; i<roads.size();i++)
-                    place(i?0:1,roads.at(i),rngs.at(i));
+                    place(LaneIndex(i?LaneIndex::Horizontal:LaneIndex::Vertical,roads.at(i)),rngs.at(i));
                 break;
             }
         }
@@ -154,91 +247,168 @@ namespace hal {
     {
         int x0, y0, x1, y1;
         x0 = y0 = x1 = y1 = 0;
-        if (!mOccupied[0].isEmpty())
+        int x,y;
+
+        for (LaneIndex ri : mOccupied.keys())
         {
-            for (int y : mOccupied[0].keys())
+            switch (ri.hvIndex())
             {
+            case LaneIndex::Horizontal:
+                y = ri.laneIndex();
                 if (y<y0)   y0 = y;
                 if (y+1>y1) y1 = y+1;
-            }
-        }
-        if (!mOccupied[1].isEmpty())
-        {
-            for (int x : mOccupied[1].keys())
-            {
+                break;
+            case LaneIndex::Vertical:
+                x = ri.laneIndex();
                 if (x<x0)   x0 = x;
                 if (x+1>x1) x1 = x+1;
+                break;
             }
         }
+
+        // empty junction has size 1
         if (y1<=0) y1 = 1;
         if (x1<=0) x1 = 1;
         mRect = QRect(x0,y0,x1-x0,y1-y0);
 
-        for (int ihoriz = 0; ihoriz<2; ihoriz++)
-            for (auto itOcc = mOccupied[ihoriz].constBegin(); itOcc!=mOccupied[ihoriz].constEnd(); ++itOcc)
-            {
-                 int iroad = itOcc.key();
-                 for (const NetLayoutJunctionRange& rng : itOcc.value())
-                 {
-                     NetLayoutJunctionWire w = rng.toWire(ihoriz,iroad);
-                     if (w.mFirst == NetLayoutJunctionRange::sMinInf)
-                     {
-                         if (w.mHorizontal==0)
-                             w.mFirst = x0-1;
-                         else
-                             w.mFirst = y0-1;
-                     }
-                     if (w.mLast == NetLayoutJunctionRange::sMaxInf)
-                     {
-                         if (w.mHorizontal==0)
-                             w.mLast = x1;
-                         else
-                             w.mLast = y1;
-                     }
-                     mNetsOutput[rng.netId()].addWire(w);
-                 }
-            }
-    }
-
-    void NetLayoutJunction::fourWayJunctions(QHash<u32, NetLayoutJunctionNet>::iterator& netIt)
-    {
-        QList<NetLayoutJunctionWire> wires[2];
-        for (const NetLayoutJunctionWire& w : netIt.value().mWires)
-            wires[w.mHorizontal].append(w);
-
-        for (const NetLayoutJunctionWire& hw : wires[0])
+        //TODO: truncate nets to rect might be range function
+        for (auto itNet = mNets.begin(); itNet != mNets.end(); ++itNet)
         {
-            if (!hw.isEntry()) continue;
-            for (const NetLayoutJunctionWire& vw: wires[1])
+            auto itWire = itNet->mWires.begin();
+            while (itWire != itNet->mWires.end())
             {
-                if (!vw.isEntry()) continue;
-                NetLayoutJunctionWireIntersection pnt = hw.intersection(vw);
-                if (pnt.isValid())
+                if (itWire->mRange.first() == NetLayoutJunctionRange::MinInf)
                 {
-                    netIt->setJunctionPoint(pnt);
-                    return;
+                    if (itWire->mIndex.hvIndex()==LaneIndex::Horizontal)
+                        itWire->mRange.setFirst(x0);
+                    else
+                        itWire->mRange.setFirst(y0);
                 }
+                if (itWire->mRange.last() == NetLayoutJunctionRange::MaxInf)
+                {
+                    if (itWire->mIndex.hvIndex()==LaneIndex::Horizontal)
+                        itWire->mRange.setLast(x1-1);
+                    else
+                        itWire->mRange.setLast(y1-1);
+                }
+                if (itWire->mRange.length() <=0)
+                    itWire = itNet->mWires.erase(itWire);
+                else
+                    ++itWire;
             }
         }
     }
 
-    void NetLayoutJunction::dump() const
+#ifdef JUNCTION_DEBUG
+    void NetLayoutJunction::toScene(QGraphicsScene* scene) const
     {
-        qDebug() << "-net-";
-        for (u32 id : mNetsInput.keys() )
+        scene->setBackgroundBrush(QBrush(QColor::fromRgb(80,80,80)));
+        QRectF bg(FIRST + (mRect.x() - 0.5) * DELTA,
+                  FIRST + (mRect.y() - 0.5) * DELTA,
+                  mRect.width() * DELTA,
+                  mRect.height() * DELTA);
+
+        float xscene0 = bg.left() < 100 ? bg.left() - 100 : 0;
+        float xscene1 = bg.right() > 900 ? bg.right() + 100 : 1000;
+        float yscene0 = bg.top() < 100 ? bg.top() - 100 : 0;
+        float yscene1 = bg.bottom() > 900 ? bg.bottom() + 100 : 1000;
+        scene->setSceneRect(xscene0,yscene0,xscene1,yscene1);
+
+        QGraphicsRectItem* item = new QGraphicsRectItem(bg);
+        item->setBrush(QBrush(Qt::black));
+        scene->addItem(item);
+
+        for (auto netIt = mNets.constBegin(); netIt != mNets.constEnd(); ++netIt)
         {
-            qDebug() << id << mNetsInput.value(id).toString();
+            for(QPoint jp : netIt.value().junctionPoints())
+            {
+                QGraphicsEllipseItem* item = getEllipse(jp,netIt.key());
+                scene->addItem(item);
+            }
         }
-        qDebug() << mEntries.dump();
+
+
+        for (NetLayoutDirection dir(0); !dir.isMax(); ++dir)
+        {
+            int nEntries = mEntries.mEntries[dir.index()].size();
+            for (int ientry=0; ientry<nEntries; ientry++)
+            {
+                u32 id = mEntries.mEntries[dir.index()].at(ientry);
+                QColor col = colorFromId(id);
+                float qEntry = FIRST + ientry * DELTA;
+                if (id==0) continue;
+
+                QGraphicsLineItem* item = nullptr;
+                switch (dir.direction()) {
+                case NetLayoutDirection::Left:
+                    item = new QGraphicsLineItem(xscene0, qEntry, bg.left(), qEntry);
+                    break;
+                case NetLayoutDirection::Right:
+                    item = new QGraphicsLineItem(bg.right(), qEntry,xscene1, qEntry);
+                    break;
+                case NetLayoutDirection::Up:
+                    item = new QGraphicsLineItem(qEntry, yscene0, qEntry, bg.top());
+                    break;
+                case NetLayoutDirection::Down:
+                    item = new QGraphicsLineItem(qEntry, bg.bottom(), qEntry, yscene1);
+                    break;
+                default:
+                    break;
+                }
+                item->setPen(QPen(QBrush(col),3.));
+                scene->addItem(item);
+            }
+        }        
     }
+
+    void NetLayoutJunction::toSceneStep(QGraphicsScene* scene, int istep)
+    {
+        if (istep >= mOccupied.mHistory.size()) return;
+
+        QRectF bg(FIRST + (mRect.x() - 0.5) * DELTA,
+                  FIRST + (mRect.y() - 0.5) * DELTA,
+                  mRect.width() * DELTA,
+                  mRect.height() * DELTA);
+
+        const QPair<u32,NetLayoutJunctionWire>& pw = mOccupied.mHistory.at(istep);
+        QColor col = colorFromId(pw.first);
+
+        float x0, x1, y0, y1;
+
+        const LaneIndex& ri = pw.second.mIndex;
+        const NetLayoutJunctionRange& rng = pw.second.mRange;
+        if (ri.hvIndex()==LaneIndex::Horizontal)
+        {
+            y0 = y1 = FIRST + ri.laneIndex() * DELTA;
+            x0 = FIRST + rng.first() * DELTA;
+            if (x0 < bg.left()) x0 = bg.left();
+            x1 = FIRST + rng.last() * DELTA;
+            if (x1 > bg.right()) x1 = bg.right();
+            qDebug() << "---" << ri.laneIndex() << rng.first() << rng.last();
+        }
+        else
+        {
+            x0 = x1 = FIRST + ri.laneIndex() * DELTA;
+            y0 = FIRST + rng.first() * DELTA;
+            if (y0 < bg.top()) y0 = bg.top();
+         y1 = FIRST + rng.last() * DELTA;
+            if (y1 > bg.bottom()) y1 = bg.bottom();
+            qDebug() << " | " << ri.laneIndex() << rng.first() << rng.last();
+        }
+        QGraphicsLineItem* item = new QGraphicsLineItem(x0,y0,x1,y1);
+        item->setPen(QPen(QBrush(col),3.));
+        scene->addItem(item);
+    }
+#endif
 
     void NetLayoutJunction::routeT()
     {
-        for (auto itNet=mNetsInput.begin(); itNet!=mNetsInput.end();++itNet)
+        for (auto itNet=mNets.begin(); itNet!=mNets.end();++itNet)
         {
-            if (itNet.value().numberEntries() == 3)
+            if (itNet.value().numberEntries() >= 3)
             {
-                int i0, i1, ilink, ihoriz;
+                int i0, i1, ilink;
+                LaneIndex::HVIndex itravers, imaindir;
                 u32 reducedPattern;
                 switch (itNet.value().pattern())
                 {
@@ -246,71 +416,63 @@ namespace hal {
                     i0 = 0;
                     i1 = 1;
                     ilink = 2;
-                    ihoriz = 1;
-                    reducedPattern = itNet.value().roadNumber(i1) > itNet.value().roadNumber(i0) ? 5 : 6;
+                    itravers = LaneIndex::Vertical;
+                    reducedPattern = itNet.value().laneIndex(i1) > itNet.value().laneIndex(i0) ? 5 : 6;
                     break;
                 case 11:    // L D R
                     i0 = 0;
                     i1 = 1;
                     ilink = 3;
-                    ihoriz = 1;
-                    reducedPattern = itNet.value().roadNumber(i1) > itNet.value().roadNumber(i0) ? 10 : 9;
+                    itravers = LaneIndex::Vertical;
+                    reducedPattern = itNet.value().laneIndex(i1) > itNet.value().laneIndex(i0) ? 10 : 9;
                     break;
                 case 13:   //  U L D
                     i0 = 2;
                     i1 = 3;
                     ilink = 0;
-                    ihoriz = 0;
-                    reducedPattern = itNet.value().roadNumber(i1) > itNet.value().roadNumber(i0) ? 5 : 9;
+                    itravers = LaneIndex::Horizontal;
+                    reducedPattern = itNet.value().laneIndex(i1) > itNet.value().laneIndex(i0) ? 5 : 9;
                     break;
                 case 14:   //  U R D
                     i0 = 2;
                     i1 = 3;
                     ilink = 1;
-                    ihoriz = 0;
-                    reducedPattern = itNet.value().roadNumber(i1) > itNet.value().roadNumber(i0) ? 10 : 6;
+                    itravers = LaneIndex::Horizontal;
+                    reducedPattern = itNet.value().laneIndex(i1) > itNet.value().laneIndex(i0) ? 10 : 6;
                     break;
                 default:
-                    return;
+                    continue;
                 }
 
-                int road0 = itNet.value().roadNumber(i0);
-                int road1 = itNet.value().roadNumber(i1);
-                int roadLink = itNet.value().roadNumber(ilink);
-                int jhoriz = 1-ihoriz;
-                int roadj;
-                if (canJoin(jhoriz,road0,itNet.key(),roadLink))
-                    roadj = road0;
-                else if (canJoin(jhoriz,road1,itNet.key(),roadLink))
-                    roadj = road1;
-                else
+                int roadLink = itNet.value().laneIndex(ilink);
+                imaindir = (itravers == LaneIndex::Horizontal ? LaneIndex::Vertical : LaneIndex::Horizontal);
+                QList<NetLayoutJunctionWire> mainWires = itNet.value().wireAtPos(roadLink,imaindir);
+                if (mainWires.isEmpty())
                 {
-                    int* roadPtr = canJoinAny(jhoriz,itNet.key(),roadLink);
-                    if (roadPtr)
+                    qDebug() << "T-join not found";
+                    continue;
+                }
+
+                int minlen = 0;
+                NetLayoutJunctionRange rngT = NetLayoutJunctionRange::entryRange(ilink,0,itNet.key());
+
+                for (const NetLayoutJunctionWire& nljw : mainWires)
+                {
+                    NetLayoutJunctionRange rng =
+                        NetLayoutJunctionRange::entryRange(ilink,nljw.mIndex.laneIndex(),itNet.key());
+                    if (!minlen || rng.length() < rngT.length())
                     {
-                        roadj = *roadPtr;
-                        delete roadPtr;
-                    }
-                    else
-                    {
-                        qDebug() << "T-join not found";
-                        return;
+                        rngT = rng;
+                        minlen = rng.length();
                     }
                 }
 
-                NetLayoutJunctionRange rngT =
-                        NetLayoutJunctionRange::entryRange(ilink,roadj,itNet.key());
-                if (conflict(ihoriz,roadLink,rngT))
+                if (conflict(LaneIndex(itravers,roadLink),rngT))
                     itNet->setPattern(reducedPattern);
                 else
                 {
-                    place(ihoriz,roadLink,rngT);
+                    place(LaneIndex(itravers,roadLink),rngT);
                     itNet->setPlaced();
-                    itNet->setJunctionPoint(
-                                NetLayoutJunctionWireIntersection(
-                                    true,
-                                    ihoriz?roadLink:roadj,
-                                    ihoriz?roadj:roadLink));
                 }
             }
         }
@@ -323,8 +485,7 @@ namespace hal {
             for (auto it = mEntries.mEntries[dirHoriz.index()].begin();
                  it != mEntries.mEntries[dirHoriz.index()].end(); ++it)
             {
-                if (*it == 0) continue;
-                NetLayoutJunctionNet net = mNetsInput.value(*it);
+                NetLayoutJunctionNet net = mNets.value(*it);
                 if (net.hasPattern(searchPattern) && !net.isPlaced())
                     routeSingleCorner(*it,dirHoriz,dirVertic);
             }
@@ -332,8 +493,7 @@ namespace hal {
             for (auto it = mEntries.mEntries[dirHoriz.index()].rbegin();
                  it != mEntries.mEntries[dirHoriz.index()].rend(); ++it)
             {
-                if (*it == 0) continue;
-                NetLayoutJunctionNet net = mNetsInput.value(*it);
+                NetLayoutJunctionNet net = mNets.value(*it);
                 if (net.hasPattern(searchPattern) && !net.isPlaced())
                     routeSingleCorner(*it,dirHoriz,dirVertic);
             }
@@ -341,135 +501,124 @@ namespace hal {
 
     void NetLayoutJunction::routeAllStraight(NetLayoutDirection dirFrom, NetLayoutDirection dirTo)
     {
-        QHash<int,int> straightConnected;
+        QMap<int,int> straightConnected;
         u32 searchPattern = dirFrom.toPattern() | dirTo.toPattern();
-
-        QSet<int> connectedInput, connectedOutput;
-        QList<u32> detourIds;
 
         for (u32 netId : mEntries.mEntries[dirFrom.index()])
         {
-            if (netId==0) continue;
-            auto itNet = mNetsInput.find(netId);
-            Q_ASSERT(itNet != mNetsInput.end());
+            auto itNet = mNets.find(netId);
+            Q_ASSERT(itNet != mNets.end());
+//            qDebug () << "straight" << searchPattern << netId << itNet.value().hasPattern(searchPattern) << itNet.value().pattern();
             if (itNet.value().hasPattern(searchPattern))
             {
-                int iroadIn  = itNet.value().roadNumber(dirFrom);
-                int iroadOut = itNet.value().roadNumber(dirTo);
-                if (connectedInput.contains(iroadOut) && connectedOutput.contains(iroadIn))
-                {
-                    // swap detected, cannot route directly
-                    detourIds.append(netId);
-                    continue;
-                }
-                routeSingleStraight(netId, (searchPattern==3?0:1), iroadIn, iroadOut);
-                straightConnected[iroadIn] = iroadOut;
+                int iroadIn  = itNet.value().laneIndex(dirFrom);
+                int iroadOut = itNet.value().laneIndex(dirTo);
+                if (straightConnected.contains(iroadIn) && straightConnected.contains(iroadOut))
+                    routeSingleSwap(netId, (searchPattern==3?0:1), iroadIn, iroadOut);
+                else
+                    routeSingleStraight(netId, (searchPattern==3?0:1), iroadIn, iroadOut);
+                ++straightConnected[iroadIn];
+                ++straightConnected[iroadOut];
                 if (itNet.value().numberEntries() % 2 ==0)
                     itNet->setPlaced();
-                connectedInput.insert(iroadIn);
-                connectedOutput.insert(iroadOut);
             }
-        }
-
-        for (u32 netId : detourIds)
-        {
-            auto itNet = mNetsInput.find(netId);
-            Q_ASSERT(itNet != mNetsInput.end());
-            int iroadIn  = itNet.value().roadNumber(dirFrom);
-            int iroadOut = itNet.value().roadNumber(dirTo);
-            routeSingleDetour(netId, (searchPattern==3?0:1), iroadIn, iroadOut);
-            straightConnected[iroadIn] = iroadOut;
-            if (itNet.value().numberEntries() % 2 ==0)
-                itNet->setPlaced();
         }
     }
 
-    bool NetLayoutJunction::conflict(int ihoriz, int iroad, const NetLayoutJunctionRange& testRng) const
+    bool NetLayoutJunction::conflict(const LaneIndex&ri, const NetLayoutJunctionRange& testRng) const
     {
-         auto itConflict = mOccupied[ihoriz].find(iroad);
-         if (itConflict == mOccupied[ihoriz].end()) return false;
+         auto itConflict = mOccupied.find(ri);
+         if (itConflict == mOccupied.end()) return false;
          return itConflict.value().conflict(testRng);
     }
 
-    bool NetLayoutJunction::canJoin(int ihoriz, int iroad, u32 netId, int pos) const
+    bool NetLayoutJunction::canJoin(const LaneIndex &ri, u32 netId, int pos) const
     {
-        auto itJoin = mOccupied[ihoriz].find(iroad);
-        if (itJoin == mOccupied[ihoriz].end()) return false;
+        auto itJoin = mOccupied.find(ri);
+        if (itJoin == mOccupied.end()) return false;
         return itJoin.value().canJoin(netId,pos);
     }
 
-    int* NetLayoutJunction::canJoinAny(int ihoriz, u32 netId, int pos) const
+    void NetLayoutJunction::place(const LaneIndex &ri, const NetLayoutJunctionRange &range)
     {
-        for (auto itTry = mOccupied[ihoriz].constBegin(); itTry != mOccupied[ihoriz].constEnd(); ++itTry)
+        NetLayoutJunctionOccupiedHash::AddOrMerge aom = mOccupied.addOrMerge(ri,range);
+
+        auto netIt = mNets.find(range.netId());
+        Q_ASSERT(netIt!=mNets.end());
+        switch (aom.mType )
         {
-            if (itTry.value().canJoin(netId,pos))
-            {
-                int* retval = new int;
-                *retval = itTry.key();
-                return retval;
-            }
+        case NetLayoutJunctionOccupiedHash::AddOrMerge::Added:
+        {
+            NetLayoutJunctionWire nljw(range,ri);
+            netIt->addWire(nljw);
+            break;
         }
-        return nullptr;
+        case NetLayoutJunctionOccupiedHash::AddOrMerge::Merged:
+        {
+            NetLayoutJunctionWire nljw(*aom.mNewRange,ri);
+            netIt->replaceWire(*aom.mOldRange,nljw);
+            break;
+        }
+        default:
+            break;
+        }
     }
 
-    void NetLayoutJunction::place(int ihoriz, int iroad, const NetLayoutJunctionRange &range)
-    {
-        mOccupied[ihoriz][iroad].append(range);
-        auto netIt = mNetsInput.find(range.netId());
-        Q_ASSERT(netIt!=mNetsInput.end());
-        netIt->addWire(NetLayoutJunctionWire(ihoriz,iroad,
-                                             range.endPosition(0),
-                                             range.endPosition(1)));
-    }
-
-    void NetLayoutJunction::routeSingleDetour(u32 netId, int iMain, int iroadIn, int iroadOut)
+    void NetLayoutJunction::routeSingleSwap(u32 netId, int iMain, int iroadIn, int iroadOut)
     {
         int iJump = 1-iMain;
         int iroadJump0 = -1;
         int iroadJump1 = maxRoad[iJump];
         int iroadDetour = maxRoad[iMain];
-        int maxSearch = std::max(2*(maxRoad[0]+maxRoad[1]),12)*3;
-        int count = 0;
-        while (count++ < maxSearch) // break when route found
+
+        LaneIndex riDetour(iMain?LaneIndex::Vertical:LaneIndex::Horizontal,iroadDetour);
+        LaneIndex riJump0(iJump?LaneIndex::Vertical:LaneIndex::Horizontal,iroadJump0);
+        LaneIndex riJump1(iJump?LaneIndex::Vertical:LaneIndex::Horizontal,iroadJump1);
+        LaneIndex riMainIn(iMain?LaneIndex::Vertical:LaneIndex::Horizontal,iroadIn);
+        LaneIndex riMainOut(iMain?LaneIndex::Vertical:LaneIndex::Horizontal,iroadOut);
+
+        for (;;) // break when route found
         {
-            NetLayoutJunctionRange rngIn(netId, NetLayoutJunctionRange::sMinInf, iroadJump0);
-            NetLayoutJunctionRange rngJ0(netId, iroadIn, iroadDetour);
-            NetLayoutJunctionRange rngDt(netId, iroadJump0, iroadJump1);
-            NetLayoutJunctionRange rngJ1(netId, iroadOut, iroadDetour);
-            NetLayoutJunctionRange rngOut(netId, iroadJump1, NetLayoutJunctionRange::sMaxInf);
-            if (conflict(iMain,iroadDetour,rngDt))
+            NetLayoutJunctionRange rngIn(netId, NetLayoutJunctionRange::MinInf, riJump0.laneIndex());
+            NetLayoutJunctionRange rngJ0(netId, iroadIn, riDetour.laneIndex());
+            NetLayoutJunctionRange rngDt(netId, riJump0.laneIndex(), riJump1.laneIndex());
+            NetLayoutJunctionRange rngJ1(netId, iroadOut, riDetour.laneIndex());
+            NetLayoutJunctionRange rngOut(netId, riJump1.laneIndex(), NetLayoutJunctionRange::MaxInf);
+
+
+            if (conflict(riDetour,rngDt))
             {
-                iroadDetour ++;
+                ++riDetour;
                 continue;
             }
-            if (conflict(iJump,iroadJump1,rngJ1) ||
-                    conflict(iMain,iroadOut,rngOut))
+            if (conflict(riJump1,rngJ1) ||
+                    conflict(riMainOut,rngOut))
             {
-                iroadJump1 ++;
+                ++riJump1;
                 continue;
             }
-            if (conflict(iJump,iroadJump0,rngJ0) ||
-                    conflict(iMain,iroadIn,rngIn))
+            if (conflict(riJump0,rngJ0) ||
+                    conflict(riMainIn,rngIn))
             {
-                iroadJump0 --;
+                --riJump0;
                 continue;
             }
-            place(iMain,iroadIn,rngIn);
-            place(iJump,iroadJump0,rngJ0);
-            place(iMain,iroadDetour,rngDt);
-            place(iJump,iroadJump1,rngJ1);
-            place(iMain,iroadOut,rngOut);
+            place(riMainIn,rngIn);
+            place(riJump0,rngJ0);
+            place(riDetour,rngDt);
+            place(riJump1,rngJ1);
+            place(riMainOut,rngOut);
             break;
         }
     }
 
     void NetLayoutJunction::routeSingleStraight(u32 netId, int iMain, int iroadIn, int iroadOut)
-    {
+    {   
         int iJump = 1-iMain;
         if (iroadIn == iroadOut)
         {
-            NetLayoutJunctionRange rng(netId,NetLayoutJunctionRange::sMinInf, NetLayoutJunctionRange::sMaxInf);
-            place(iMain,iroadIn,rng);
+            NetLayoutJunctionRange rng(netId,NetLayoutJunctionRange::MinInf, NetLayoutJunctionRange::MaxInf);
+            place(LaneIndex(iMain?LaneIndex::Vertical:LaneIndex::Horizontal,iroadIn),rng);
             return;
         }
         int iroadLo = iroadIn;
@@ -483,67 +632,102 @@ namespace hal {
             iroadJump = maxRoad[iJump];
             isearchIncr = 1;
         }
-        int maxSearch = std::max(2*(maxRoad[0]+maxRoad[1]),12);
         for (;;iroadJump+=isearchIncr)
         {
-            if (iroadJump <= -maxSearch ||
-                    iroadJump >= maxSearch)
+            if (iroadJump <= NetLayoutJunctionRange::MinInf ||
+                    iroadJump >= NetLayoutJunctionRange::MaxInf)
             {
-                mError = StraightRouteError;
+                qDebug() << "cannot route straight" << (iMain ? "vertical" : "horizontal")
+                         << netId << iroadIn << iroadOut;
                 return;
             }
             NetLayoutJunctionRange rngIn(netId,
-                                                 NetLayoutJunctionRange::sMinInf,
+                                                 NetLayoutJunctionRange::MinInf,
                                                  iroadJump);
             NetLayoutJunctionRange rngJump(netId, iroadLo, iroadHi);
             NetLayoutJunctionRange rngOut(netId,
                                                   iroadJump,
-                                                  NetLayoutJunctionRange::sMaxInf);
+                                                  NetLayoutJunctionRange::MaxInf);
 
-            if (!conflict(iJump,iroadJump,rngJump) &&
-                    !conflict(iMain,iroadOut,rngOut) &&
-                    !conflict(iMain,iroadIn,rngIn))
+            LaneIndex riJump(iJump?LaneIndex::Vertical:LaneIndex::Horizontal,iroadJump);
+            LaneIndex riMainIn(iMain?LaneIndex::Vertical:LaneIndex::Horizontal,iroadIn);
+            LaneIndex riMainOut(iMain?LaneIndex::Vertical:LaneIndex::Horizontal,iroadOut);
+            if (!conflict(riJump,rngJump) &&
+                    !conflict(riMainOut,rngOut) &&
+                    !conflict(riMainIn,rngIn))
             {
-                place(iJump,iroadJump,rngJump);
-                place(iMain,iroadIn,rngIn);
-                place(iMain,iroadOut,rngOut);
+                place(riJump,rngJump);
+                place(riMainIn,rngIn);
+                place(riMainOut,rngOut);
                 break;
             }
         }
     }
 
+    NetLayoutJunctionOccupiedHash::AddOrMerge NetLayoutJunctionOccupiedHash::addOrMerge(const LaneIndex& ri, const NetLayoutJunctionRange &rng)
+    {
+        // operator will create entry if not existing
+        NetLayoutJunctionOccupied& nljo = this->operator[](ri);
+
+        AddOrMerge retval;
+
+        for (auto it = nljo.begin(); it!= nljo.end(); ++it)
+        {
+            if (*it == rng)
+            {
+                retval.mType = AddOrMerge::AlreadyExisting;
+                break;
+            }
+            if (it->canJoin(rng))
+            {
+                retval.mOldRange = new NetLayoutJunctionRange(*it);
+                it->expand(rng);
+                retval.mNewRange = new NetLayoutJunctionRange(*it);
+                retval.mType = AddOrMerge::Merged;
+                break;
+            }
+        }
+
+        if (retval.mType == AddOrMerge::Added)
+            nljo.append(rng);
+
+#ifdef JUNCTION_DEBUG
+        mHistory.append(qMakePair(rng.netId(),NetLayoutJunctionWire(rng,ri)));
+#endif
+        return retval;
+    }
+
     void NetLayoutJunction::routeSingleCorner(u32 netId, NetLayoutDirection dirHoriz, NetLayoutDirection dirVertic)
     {
-        auto netIt = mNetsInput.find(netId);
-        Q_ASSERT(netIt != mNetsInput.end());
+        auto netIt = mNets.find(netId);
+        Q_ASSERT(netIt != mNets.end());
 
-        int iroadHoriz = netIt.value().roadNumber(dirHoriz);
-        int iroadVertic = netIt.value().roadNumber(dirVertic);
+        int iroadHoriz = netIt.value().laneIndex(dirHoriz);
+        int iroadVertic = netIt.value().laneIndex(dirVertic);
 
+        // Try to connect straight lines directly without detour
         NetLayoutJunctionRange rngH =
                 NetLayoutJunctionRange::entryRange(dirHoriz,iroadVertic,netId);
         NetLayoutJunctionRange rngV =
                 NetLayoutJunctionRange::entryRange(dirVertic,iroadHoriz,netId);
-        if (!conflict(0,iroadHoriz,rngH) && !conflict(1,iroadVertic,rngV))
+        if (!conflict(LaneIndex::horizontal(iroadHoriz),rngH) && !conflict(LaneIndex::vertical(iroadVertic),rngV))
         {
-            netIt->setJunctionPoint(
-                        NetLayoutJunctionWireIntersection(
-                            true,
-                            iroadVertic,
-                            iroadHoriz),
-                        NetLayoutJunctionWireIntersection::Endpoint);
-            mOccupied[0][iroadHoriz].append(rngH);
-            mOccupied[1][iroadVertic].append(rngV);
+            place(LaneIndex::horizontal(iroadHoriz),rngH);
+            place(LaneIndex::vertical(iroadVertic),rngV);
             netIt->setPlaced();
             return;
         }
 
+        // OK, we need around corner detour
         int hcroad = dirVertic.isUp()  ? -1 : mEntries.mEntries[dirHoriz.index()].size();
         int hstep  = dirVertic.isUp()  ? -1 : 1;
         int vcroad = dirHoriz.isLeft() ? -1 : mEntries.mEntries[dirVertic.index()].size();
         int vstep  = dirHoriz.isLeft() ? -1 : 1;
 
         int icount = 0;
+        int tryMax = 2 * mOccupied.size();
+        for (int i=0; i<4; i++)
+            tryMax += 2* mEntries.mEntries[i].size();
         for(;;)
         {
             NetLayoutJunctionRange rngVc(netId,iroadHoriz,hcroad);
@@ -553,51 +737,30 @@ namespace hal {
             NetLayoutJunctionRange rngVe =
                     NetLayoutJunctionRange::entryRange(dirVertic,hcroad,netId);
 
-            if (++icount > 12 && icount > 2*(maxRoad[0]+maxRoad[1]))
+            if (++icount > tryMax)
             {
+                qDebug() << "giving up";
                 mError = CornerRouteError;
                 return;
             }
 
 //            qDebug() << "try" << netId << iroadHoriz << iroadVertic << hcroad << vcroad;
 
-            if (conflict(0,hcroad,rngHc) || conflict(1,iroadVertic,rngVe))
+            if (conflict(LaneIndex::horizontal(hcroad),rngHc) || conflict(LaneIndex::vertical(iroadVertic),rngVe))
                 hcroad += hstep;
-            else if (conflict(1,vcroad,rngVc) || conflict(0,iroadHoriz,rngHe))
+            else if (conflict(LaneIndex::vertical(vcroad),rngVc) || conflict(LaneIndex::horizontal(iroadHoriz),rngHe))
                 vcroad += vstep;
             else
             {
-                if(netIt->numberEntries()==3)
-                {
-                    netIt->setJunctionPoint(
-                                NetLayoutJunctionWireIntersection(
-                                    true,
-                                    vcroad,
-                                    iroadHoriz),
-                                NetLayoutJunctionWireIntersection::Verify);
-                    netIt->setJunctionPoint(
-                                NetLayoutJunctionWireIntersection(
-                                    true,
-                                    iroadVertic,
-                                    hcroad),
-                                NetLayoutJunctionWireIntersection::Verify);
-                }
-                place(0,hcroad,rngHc);
-                place(1,vcroad,rngVc);
-                place(0,iroadHoriz,rngHe);
-                place(1,iroadVertic,rngVe);
-                mOccupied[1][vcroad].append(rngVc);
-                mOccupied[0][iroadHoriz].append(rngHe);
-                mOccupied[1][iroadVertic].append(rngVe);
+                place(LaneIndex::horizontal(hcroad),rngHc);
+                place(LaneIndex::vertical(vcroad),rngVc);
+
+                place(LaneIndex::horizontal(iroadHoriz),rngHe);
+                place(LaneIndex::vertical(iroadVertic),rngVe);
                 netIt->setPlaced();
                 break;
             }
         }
-    }
-
-    NetLayoutJunctionHash::~NetLayoutJunctionHash()
-    {
-        clearAll();
     }
 
     void NetLayoutJunctionHash::clearAll()
@@ -607,17 +770,18 @@ namespace hal {
         clear();
     }
 
+
     NetLayoutJunctionNet::NetLayoutJunctionNet()
         : mPattern(0), mEntries(0), mPlaced(false)
     {
         for (NetLayoutDirection dir(0); !dir.isMax(); ++dir)
-            mRoadNumber[dir.index()] = -1;
+            mLaneIndex[dir.index()] = -1;
     }
 
-    void NetLayoutJunctionNet::addEntry(NetLayoutDirection dir, int roadNo)
+    void NetLayoutJunctionNet::addEntry(NetLayoutDirection dir, int laneInx)
     {
         mPattern |= dir.toPattern();
-        mRoadNumber[dir.index()] = roadNo;
+        mLaneIndex[dir.index()] = laneInx;
         ++mEntries;
     }
 
@@ -626,49 +790,24 @@ namespace hal {
         return (mPattern & searchPattern) == searchPattern;
     }
 
-    void NetLayoutJunctionNet::setJunctionPoint(const NetLayoutJunctionWireIntersection& jp,
-            NetLayoutJunctionWireIntersection::PlacementType placement)
+    void NetLayoutJunctionNet::replaceWire(const NetLayoutJunctionRange &rng, const NetLayoutJunctionWire &wire)
     {
-        bool found = false;
-
-        switch (placement)
-        {
-        case NetLayoutJunctionWireIntersection::Verify:
-            for (const NetLayoutJunctionWire& wire : mWires)
+        for (auto it = mWires.begin(); it!= mWires.end(); ++it)
+            if (rng == *it)
             {
-                if (wire.isEntry() &&
-                        ((wire.mRoad == jp.x() && wire.mHorizontal == 1) ||
-                         (wire.mRoad == jp.y() && wire.mHorizontal == 0))
-                        )
-                {
-                    found = true;
-                    break;
-                }
+                *it = wire;
+                return;
             }
-            if (!found) return;
-            mJunction = jp;
-            break;
-        case NetLayoutJunctionWireIntersection::Endpoint:
-            for (const NetLayoutJunctionWire& wire : mWires)
-            {
-                if (wire.isEntry() && wire.mRoad == jp.x() && wire.mHorizontal==1)
-                {
-                    mJunction = NetLayoutJunctionWireIntersection(true, jp.x(), wire.centralEnd());
-                    return;
-                }
-                if (wire.isEntry() && wire.mRoad == jp.y() && wire.mHorizontal==0)
-                {
-                    mJunction = NetLayoutJunctionWireIntersection(true, wire.centralEnd(), jp.y());
-                    return;
-                }
-            }
-            break;
-        default:
-            mJunction = jp;
-            break;
-        }
     }
 
+    QList<NetLayoutJunctionWire> NetLayoutJunctionNet::wireAtPos(int pos, LaneIndex::HVIndex hvi)
+    {
+        QList<NetLayoutJunctionWire> retval;
+        for (auto it = mWires.begin(); it!= mWires.end(); ++it)
+            if (it->mIndex.hvIndex() == hvi && it->mRange.contains(pos))
+                retval.append(*it);
+        return retval;
+    }
 
     QString NetLayoutJunctionNet::toString() const
     {
@@ -679,43 +818,27 @@ namespace hal {
             if (mPattern & dir.toPattern())
             {
                 if (!retval.isEmpty()) retval += ":";
-                retval += QString("%1%2").arg(dirChar[dir.index()]).arg(mRoadNumber[dir.index()]);
+                retval += QString("%1%2").arg(dirChar[dir.index()]).arg(mLaneIndex[dir.index()]);
             }
         }
         return retval;
     }
 
-    QGraphicsEllipseItem* NetLayoutJunctionWireIntersection::graphicsFactory(u32 netId) const
-    {
-        float dd = NetLayoutJunctionRange::sSceneDelta / 2.;
-        float x0 = NetLayoutJunctionRange::sSceneFirst + x() * NetLayoutJunctionRange::sSceneDelta - dd/2;
-        float y0 = NetLayoutJunctionRange::sSceneFirst + y() * NetLayoutJunctionRange::sSceneDelta - dd/2;
-        QGraphicsEllipseItem* retval = new QGraphicsEllipseItem(x0,y0,dd,dd);
-        retval->setBrush(colorFromId(netId));
-        return retval;
-    }
-
-
     NetLayoutJunctionRange::NetLayoutJunctionRange(u32 netId_, int first, int last)
         : mNetId(netId_), mFirst(first), mLast(last)
     {
-        if (last<first)
+        if (last < first)
         {
             mFirst = last;
             mLast  = first;
         }
     }
 
-    NetLayoutJunctionRange NetLayoutJunctionRange::entryRange(NetLayoutDirection dir, int iroad, u32 netId)
+    NetLayoutJunctionRange NetLayoutJunctionRange::entryRange(NetLayoutDirection dir, int ilane, u32 netId)
     {
-        const int first[4] = { sMinInf, iroad, sMinInf, iroad };
-        const int last[4]  = { iroad, sMaxInf, iroad, sMaxInf };
+        const int first[4] = { MinInf, ilane, MinInf, ilane };
+        const int last[4]  = { ilane, MaxInf, ilane, MaxInf };
         return NetLayoutJunctionRange(netId, first[dir.index()], last[dir.index()]);
-    }
-
-    NetLayoutJunctionWire NetLayoutJunctionRange::toWire(int hor, int rd) const
-    {
-        return NetLayoutJunctionWire(hor, rd, mFirst, mLast);
     }
 
     bool NetLayoutJunctionRange::canJoin(const NetLayoutJunctionRange& other) const
@@ -726,30 +849,18 @@ namespace hal {
         return true;
     }
 
-    bool NetLayoutJunctionRange::canJoin(u32 netId, int pos) const
-    {
-        if (netId != mNetId) return false;
-        return mFirst <= pos && pos <= mLast;
-    }
-
-    int NetLayoutJunctionRange::graphFirst() const
-    {
-        if (mFirst == sMinInf) return sSceneFirst - sSceneGap;
-        return mFirst * sSceneDelta + sSceneFirst;
-    }
-
-    int NetLayoutJunctionRange::graphLast() const
-    {
-        if (mLast == sMaxInf) return 1000 + sSceneGap - sSceneFirst;
-        return mLast * sSceneDelta + sSceneFirst;
-    }
-
     bool NetLayoutJunctionRange::operator==(const NetLayoutJunctionRange& other) const
     {
         return (mNetId == other.mNetId &&
                 mFirst == other.mFirst &&
                 mLast  == other.mLast);
     }
+
+    bool NetLayoutJunctionRange::operator==(const NetLayoutJunctionWire& wire) const
+    {
+        return (mFirst == wire.mRange.mFirst && mLast == wire.mRange.mLast);
+    }
+
 
     bool NetLayoutJunctionRange::conflict(const NetLayoutJunctionRange& other) const
     {
@@ -758,16 +869,16 @@ namespace hal {
         return true;
     }
 
-    int NetLayoutJunctionRange::endPosition(int inx) const
+    int NetLayoutJunctionRange::endPosition(int iGetLast) const
     {
-        if (!inx) return mFirst;
+        if (!iGetLast) return mFirst;
         return mLast;
     }
 
-    bool NetLayoutJunctionRange::isEntry(int inx) const
+    bool NetLayoutJunctionRange::isEntry(int iTestMax) const
     {
-        if (inx) return (mLast == sMaxInf);
-        return         (mFirst == sMinInf);
+        if (iTestMax) return (mLast == MaxInf);
+        return              (mFirst == MinInf);
     }
 
     void NetLayoutJunctionRange::expand(const NetLayoutJunctionRange &other)
@@ -776,21 +887,13 @@ namespace hal {
         if (other.mLast  > mLast)  mLast  = other.mLast;
     }
 
-    void NetLayoutJunctionOccupied::add(const NetLayoutJunctionRange& rng)
-    {
-        for (auto it = begin(); it!= end(); ++it)
-            if (it->canJoin(rng))
-            {
-                it->expand(rng);
-                return;
-            }
-        append(rng);
-    }
-
     bool NetLayoutJunctionOccupied::canJoin(u32 netId, int pos) const
     {
         for (const NetLayoutJunctionRange& r : *this)
-            if (r.canJoin(netId, pos)) return true;
+        {
+            if (r.netId() != netId) continue;
+            if (r.contains(pos)) return true;
+        }
         return false;
     }
 
@@ -801,32 +904,43 @@ namespace hal {
         return false;
     }
 
-    int NetLayoutJunctionWire::centralEnd() const
-    {
-        if (mFirst==NetLayoutJunctionRange::sMinInf)
-            return mLast;
-        return mFirst;
-    }
-
     bool NetLayoutJunctionWire::isEntry() const
     {
-        return mFirst == NetLayoutJunctionRange::sMinInf
-                || mLast == NetLayoutJunctionRange::sMaxInf;
+        return mRange.isEntry(0) || mRange.isEntry(1);
     }
 
-    NetLayoutJunctionWireIntersection NetLayoutJunctionWire::intersection(const NetLayoutJunctionWire &other) const
+    bool NetLayoutJunctionEntries::isTrivial() const
     {
-        if (other.mFirst <= mRoad && mRoad <= other.mLast &&
-                mFirst <= other.mRoad && other.mRoad <= mLast)
-        {
-            if (mHorizontal)
-                return NetLayoutJunctionWireIntersection(true,mRoad,other.mRoad);
-            return NetLayoutJunctionWireIntersection(true,other.mRoad,mRoad);
-        }
-        return NetLayoutJunctionWireIntersection();
+        if (mEntries[NetLayoutDirection::Left].isEmpty() && mEntries[NetLayoutDirection::Right].isEmpty())
+            return mEntries[NetLayoutDirection::Up] == mEntries[NetLayoutDirection::Down];
+        if (mEntries[NetLayoutDirection::Up].isEmpty() && mEntries[NetLayoutDirection::Down].isEmpty())
+            return mEntries[NetLayoutDirection::Left] == mEntries[NetLayoutDirection::Right];
+        return false;
     }
 
-    QString NetLayoutJunctionEntries::dump() const
+    void NetLayoutJunctionEntries::dumpToFile(const QPoint &pnt) const
+    {
+        QFile ff(QString::fromStdString(ProjectManager::instance()->get_project_directory().get_filename("junction_data.txt").string()));
+        if (!ff.open(QIODevice::WriteOnly | QIODevice::Append)) return;
+        QTextStream xout(&ff);
+        xout << "(" << pnt.x() << "," << pnt.y() << ")\n";
+        for (NetLayoutDirection dir(0); !dir.isMax(); ++dir)
+        {
+            for (u32 id : mEntries[dir.index()])
+                xout << " " << id;
+            xout << "\n";
+        }
+        xout.flush();
+    }
+
+    void NetLayoutJunctionEntries::resetFile()
+    {
+        QFile ff(QString::fromStdString(ProjectManager::instance()->get_project_directory().get_filename("junction_data.txt").string()));
+        if (!ff.open(QIODevice::WriteOnly)) return;
+        ff.write(QDateTime::currentDateTime().toLocalTime().toString("--- dd.MM.yyyy hh:mm:ss ---\n").toUtf8());
+    }
+
+    QString NetLayoutJunctionEntries::toString() const
     {
         QString retval;
         for (NetLayoutDirection dir(0); !dir.isMax(); ++dir)
@@ -839,38 +953,5 @@ namespace hal {
         return retval;
     }
 
-    void NetLayoutJunctionEntries::dumpFile(const NetLayoutPoint& pnt) const
-    {
-        QString filename("/tmp/junction");
-        QDir().mkpath(filename);
-        QString columnStr;
-        int ix = pnt.x();
-        if (ix < 0)
-        {
-            columnStr += "_";
-            ix = -ix;
-        }
-        if (ix >= 26) columnStr += QString("%1").arg((char)('A'+ ix/26 - 1));
-        columnStr += QString("%1").arg((char)('A'+ ix%26));
-        int iy = pnt.y();
-        if (iy < 0)
-        {
-            columnStr += "_";
-            iy = -iy;
-        }
-        filename += "/" + columnStr + QString("%1.jjj").arg(iy);
-        QFile ff(filename);
-        if (!ff.open(QIODevice::WriteOnly)) return;
-        for (NetLayoutDirection dir(0); !dir.isMax(); ++dir)
-        {
-            for (u32 id : mEntries[dir.index()])
-                ff.write(" " + QByteArray::number(id));
-            ff.write("\n");
-        }
-    }
-
-    void NetLayoutJunctionEntries::setEntries(NetLayoutDirection dir, const QList<u32>& entries_)
-    {
-        mEntries[dir.index()] = entries_;
-    }
+    uint qHash(const LaneIndex& ri) { return ri.mIndex; }
 } // namespace hal

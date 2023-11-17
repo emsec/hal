@@ -43,6 +43,7 @@
 #include <QRect>
 #include <QSet>
 #include <QVector>
+#include <QThread>
 
 namespace hal
 {
@@ -59,6 +60,8 @@ namespace hal
     class NetLayoutJunctionEntries;
     class CommentSpeechBubble;
     class CommentEntry;
+    class JunctionThread;
+    class DrawNetThread;
 
     /**
      * @ingroup graph-layouter
@@ -74,6 +77,8 @@ namespace hal
     class GraphLayouter : public QObject
     {
         Q_OBJECT
+
+        friend class DrawNetThread;
 
         class SceneCoordinate
         {
@@ -113,6 +118,16 @@ namespace hal
                 return lanePosition(maxLane - 1);
             }
             float xBoxOffset() const;
+        };
+
+        class SceneCoordinateArray
+        {
+            float* mArray;
+            int mFirstIndex;
+        public:
+            SceneCoordinateArray(const QMap<int,SceneCoordinate>& inputMap);
+            ~SceneCoordinateArray();
+            float lanePosition(int igrid, int ilane) const;
         };
 
         class EndpointCoordinate
@@ -203,48 +218,10 @@ namespace hal
             unsigned int mLanes = 0;
         };
 
-        struct Junction
-        {
-            Junction(const int x_coordinate, const int y_coordinate)
-                : x(x_coordinate), y(y_coordinate), mHLanes(0), mVLanes(0), mCloseLeftLaneChanges(0), mCloseRightLaneChanges(0), mCloseTopLaneChanges(0), mCloseBottomLaneChanges(0),
-                  mFarLeftLaneChanges(0), mFarRightLaneChanges(0), mFarTopLaneChanges(0), mFarBottomLaneChanges(0)
-            {
-            }
-
-            int x;
-            int y;
-
-            unsigned int mHLanes = 0;
-            unsigned int mVLanes = 0;
-
-            unsigned int mCloseLeftLaneChanges   = 0;
-            unsigned int mCloseRightLaneChanges  = 0;
-            unsigned int mCloseTopLaneChanges    = 0;
-            unsigned int mCloseBottomLaneChanges = 0;
-
-            unsigned int mFarLeftLaneChanges   = 0;
-            unsigned int mFarRightLaneChanges  = 0;
-            unsigned int mFarTopLaneChanges    = 0;
-            unsigned int mFarBottomLaneChanges = 0;
-        };
-
         struct UsedPaths
         {
             QSet<Road*> mHRoads;
             QSet<Road*> mVRoads;
-
-            QSet<Junction*> mHJunctions;
-            QSet<Junction*> mVJunctions;
-
-            QSet<Junction*> mCloseLeftJunctions;
-            QSet<Junction*> mCloseRightJunctions;
-            QSet<Junction*> mCloseTopJunctions;
-            QSet<Junction*> mCloseBottomJunctions;
-
-            QSet<Junction*> mFarLeftJunctions;
-            QSet<Junction*> mFarRightJunctions;
-            QSet<Junction*> mFarTopJunctions;
-            QSet<Junction*> mFarBottomJunctions;
         };
 
     public:
@@ -309,8 +286,8 @@ namespace hal
 
         bool done() const;
 
-        bool optimizeNetLayoutEnabled();
-        void setOptimizeNetLayoutEnabled(bool enbabled);
+        bool dumpJunctionEnabled();
+        void setDumpJunctionEnabled(bool enabled);
 
         QVector<qreal> xValues() const;
         QVector<qreal> yValues() const;
@@ -340,27 +317,22 @@ namespace hal
         QMap<QPoint, Node> mPositionToNodeMap;
         QMap<Node, QPoint> mNodeToPositionRollback;
 
+    private Q_SLOTS:
+        void handleDrawNetThreadFinished();
+        void handleJunctionThreadFinished();
+
     private:
         void clearLayoutData();
         void clearComments();
         void createBoxes();
-        void calculateNets();
         void getWireHash();
         void findMaxBoxDimensions();
-        void alternateMaxChannelLanes();
         void findMaxChannelLanes();
-        void calculateMaxChannelDimensions();
         void calculateJunctionMinDistance();
-        void alternateGateOffsets();
         void calculateGateOffsets();
-        void alternatePlaceGates();
         void placeGates();
-        void resetRoadsAndJunctions();
         void drawNets();
-        void alternateDrawNets();
         void drawComments();
-        void drawNetsJunction(StandardGraphicsNet::Lines& lines, u32 id);
-        void drawNetsEndpoint(StandardGraphicsNet::Lines& lines, u32 id);
         void drawNetsIsolated(u32 id, Net* n, const EndpointList& epl);
         void updateSceneRect();
         static bool verifyModulePort(Net* n, const Node& modNode, bool isModInput);
@@ -375,71 +347,18 @@ namespace hal
         bool vRoadJumpPossible(const int x1, const int x2, const int y) const;
         bool vRoadJumpPossible(const Road* const r1, const Road* const r2) const;
 
-        Road* getHRoad(const int x, const int y);
-        Road* getVRoad(const int x, const int y);
-        Junction* getJunction(const int x, const int y);
-
         qreal hRoadHeight(const unsigned int mLanes) const;
         qreal vRoadWidth(const unsigned int mLanes) const;
 
-        qreal sceneYForHChannelLane(const int y, const unsigned int lane) const;
-        qreal sceneXForVChannelLane(const int x, const unsigned int lane) const;
-
-        qreal sceneXForCloseLeftLaneChange(const int channel_x, unsigned int lane_change) const;
-        qreal sceneXForFarLeftLaneChange(const int channel_x, unsigned int lane_change) const;
-
-        qreal sceneXForCloseRightLaneChange(const int channel_x, unsigned int lane_change) const;
-        qreal sceneXForFarRightLaneChange(const int channel_x, unsigned int lane_change) const;
-
-        qreal sceneYForCloseTopLaneChange(const int channel_y, unsigned int lane_change) const;
-        qreal sceneYForFarTopLaneChange(const int channel_y, unsigned int lane_change) const;
-
-        qreal sceneYForCloseBottomLaneChange(const int channel_y, unsigned int lane_change) const;
-        qreal sceneYForFarBottomLaneChange(const int channel_y, unsigned int lane_change) const;
-
-        qreal sceneXForCloseLeftLaneChange(const Junction* const j) const;
-        qreal sceneXForFarLeftLaneChange(const Junction* const j) const;
-
-        qreal sceneXForCloseRightLaneChange(const Junction* const j) const;
-        qreal sceneXForFarRightLaneChange(const Junction* const j) const;
-
-        qreal sceneYForCloseTopLaneChange(const Junction* const j) const;
-        qreal sceneYForFarTopLaneChange(const Junction* const j) const;
-
-        qreal sceneYForCloseBottomLaneChange(const Junction* const j) const;
-        qreal sceneYForFarBottomLaneChange(const Junction* const j) const;
-
-        void commitUsedPaths(const UsedPaths& used);
         static bool isConstNet(const Net* n);
 
         NodeBoxes mBoxes;
 
-        QHash<QPoint, Road*> mHRoads;
-        QHash<QPoint, Road*> mVRoads;
-        QHash<QPoint, Junction*> mJunctions;
-
         QMap<int, qreal> mMaxNodeWidthForX;
         QMap<int, qreal> mMaxNodeHeightForY;
 
-        QMap<int, unsigned int> mMaxVChannelLanesForX;
-        QMap<int, unsigned int> mMaxHChannelLanesForY;
-
-        QMap<int, qreal> mMaxVChannelLeftSpacingForX;
-        QMap<int, qreal> mMaxVChannelRightSpacingForX;
-        QMap<int, qreal> mMaxHChannelTopSpacingForY;
-        QMap<int, qreal> mMaxHChannelBottomSpacingForY;
-
-        QMap<int, qreal> mMaxVChannelWidthForX;
-        QMap<int, qreal> mMaxHChannelHeightForY;
-
         QMap<int, qreal> mNodeOffsetForX;
         QMap<int, qreal> mNodeOffsetForY;
-
-        QMap<int, qreal> mMaxLeftJunctionSpacingForX;
-        QMap<int, qreal> mMaxRightJunctionSpacingForX;
-
-        QMap<int, qreal> mMaxTopJunctionSpacingForY;
-        QMap<int, qreal> mMaxBottomJunctionSpacingForY;
 
         QMap<int, qreal> mMaxLeftIoPaddingForChannelX;
         QMap<int, qreal> mMaxRightIoPaddingForChannelX;
@@ -477,7 +396,42 @@ namespace hal
         QHash<u32, int> mGlobalInputHash;
         QHash<u32, int> mGlobalOutputHash;
 
-        bool mOptimizeNetLayout;
+        bool mDumpJunctions;
         QList<CommentSpeechBubble*> mCommentBubbles;
+        QSet<u32> mNetsToDraw;
+        QSet<u32>::const_iterator mNetIterator;
+        QList<DrawNetThread*> mDrawNetThreads;
+        QList<JunctionThread*> mJunctionThreads;
+        QHash<u32, QHash<NetLayoutWire, int>> mLaneMap;
+
+        SceneCoordinateArray* mCoordArrayX;
+        SceneCoordinateArray* mCoordArrayY;
+    };
+
+    class DrawNetThread : public QThread
+    {
+        Q_OBJECT
+        u32 mId;
+        GraphLayouter* mLayouter;
+        void drawJunction();
+        void drawEndpoint();
+    public:
+        StandardGraphicsNet::Lines mLines;
+        QList<QPointF> mKnots;
+        DrawNetThread(u32 id, GraphLayouter* parent) : QThread(parent), mId(id), mLayouter(parent) {;}
+        u32 id() const { return mId; }
+        void run() override;
+    };
+
+    class JunctionThread : public QThread
+    {
+        Q_OBJECT
+    public:
+        NetLayoutPoint mNetLayoutPoint;
+        NetLayoutJunctionEntries mEntries;
+        NetLayoutJunction* mJunction;
+        JunctionThread(const NetLayoutPoint& nlp, const NetLayoutJunctionEntries& entr)
+            : mNetLayoutPoint(nlp), mEntries(entr), mJunction(nullptr) {;}
+        void run() override;
     };
 }    // namespace hal
