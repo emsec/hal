@@ -98,7 +98,7 @@ Collaboration diagram for hal::NetLayoutJunctionEntries:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_net_layout_junction_entries__coll__graph.png" border="0" usemap="#hal_1_1_net_layout_junction_entries_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_net_layout_junction_entries_coll__map" id="hal_1_1_net_layout_junction_entries_coll__map">
-<area shape="rect" title=" " alt="" coords="5,336,220,457"/>
+<area shape="rect" title=" " alt="" coords="5,336,220,487"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qlist.html" title=" " alt="" coords="21,5,204,273"/>
 </map>
 </div>
@@ -111,11 +111,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9b8f6afefd74c4ed6dec18583c250a01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9f530bfce5f82d22d170a0865d15e3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_entries.html#af9f530bfce5f82d22d170a0865d15e3f">dumpToFile</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> &amp;pnt) const</td></tr>
 <tr class="separator:af9f530bfce5f82d22d170a0865d15e3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c283ca91b37fd8688685f955611af29"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_entries.html#a3c283ca91b37fd8688685f955611af29">isTrivial</a> () const</td></tr>
+<tr class="separator:a3c283ca91b37fd8688685f955611af29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a1a1d621292d5d8ba1b3cfba79fdfdace"><td class="memItemLeft" align="right" valign="top">static <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_entries.html#a1a1d621292d5d8ba1b3cfba79fdfdace">gridPointName</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> &amp;p)</td></tr>
 <tr class="separator:a1a1d621292d5d8ba1b3cfba79fdfdace"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a797c03fec6cf8df4923eecdb4361638d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_net_layout_junction_entries.html#a797c03fec6cf8df4923eecdb4361638d">resetFile</a> ()</td></tr>
+<tr class="separator:a797c03fec6cf8df4923eecdb4361638d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -149,7 +153,7 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00911">911</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00921">921</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::Append</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtextstream.html#flush">QTextStream::flush()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="net__layout__junction_8h_source.html#l00274">id()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00037">hal::ProjectManager::instance()</a>, <a class="el" href="net__layout__point_8h_source.html#l00065">hal::NetLayoutDirection::isMax()</a>, <a class="el" href="net__layout__junction_8h_source.html#l00266">mEntries</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::WriteOnly</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#x">QPoint::x()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html#y">QPoint::y()</a>.</p>
 
@@ -227,7 +231,61 @@ Public Attributes</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#at">QList::at()</a>, <a class="el" href="net__layout__point_8h_source.html#l00062">hal::NetLayoutDirection::index()</a>, and <a class="el" href="net__layout__junction_8h_source.html#l00266">mEntries</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00911">dumpToFile()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00085">hal::NetLayoutJunction::NetLayoutJunction()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00921">dumpToFile()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00086">hal::NetLayoutJunction::NetLayoutJunction()</a>.</p>
+
+</div>
+</div>
+<a id="a3c283ca91b37fd8688685f955611af29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c283ca91b37fd8688685f955611af29">&#9670;&nbsp;</a></span>isTrivial()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::NetLayoutJunctionEntries::isTrivial </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns whether a junction is trivial and can be omitted </p><dl class="section return"><dt>Returns</dt><dd>true if only one direction and inputs identical to outputs, false otherwise </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00912">912</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="net__layout__point_8h_source.html#l00050">hal::NetLayoutDirection::Down</a>, <a class="el" href="net__layout__point_8h_source.html#l00050">hal::NetLayoutDirection::Left</a>, <a class="el" href="net__layout__junction_8h_source.html#l00266">mEntries</a>, <a class="el" href="net__layout__point_8h_source.html#l00050">hal::NetLayoutDirection::Right</a>, and <a class="el" href="net__layout__point_8h_source.html#l00050">hal::NetLayoutDirection::Up</a>.</p>
+
+</div>
+</div>
+<a id="a797c03fec6cf8df4923eecdb4361638d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a797c03fec6cf8df4923eecdb4361638d">&#9670;&nbsp;</a></span>resetFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::NetLayoutJunctionEntries::resetFile </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Reset dump junction file, initialize file with timestamp </p>
+
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00936">936</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdatetime.html#currentDateTime">QDateTime::currentDateTime()</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00037">hal::ProjectManager::instance()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00943">toString()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::WriteOnly</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00214">hal::GraphLayouter::layout()</a>.</p>
 
 </div>
 </div>
@@ -247,9 +305,11 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>String output for debugging purpose </p>
 
-<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00926">926</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="net__layout__junction_8cpp_source.html#l00943">943</a> of file <a class="el" href="net__layout__junction_8cpp_source.html">net_layout_junction.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#arg-1">QString::arg()</a>, <a class="el" href="net__layout__point_8h_source.html#l00065">hal::NetLayoutDirection::isMax()</a>, and <a class="el" href="net__layout__junction_8h_source.html#l00266">mEntries</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00936">resetFile()</a>.</p>
 
 </div>
 </div>
@@ -269,7 +329,7 @@ Public Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="net__layout__junction_8h_source.html#l00266">266</a> of file <a class="el" href="net__layout__junction_8h_source.html">net_layout_junction.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00911">dumpToFile()</a>, <a class="el" href="net__layout__junction_8h_source.html#l00274">id()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00085">hal::NetLayoutJunction::NetLayoutJunction()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00926">toString()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__layout__junction_8cpp_source.html#l00921">dumpToFile()</a>, <a class="el" href="net__layout__junction_8h_source.html#l00274">id()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00912">isTrivial()</a>, <a class="el" href="net__layout__junction_8cpp_source.html#l00086">hal::NetLayoutJunction::NetLayoutJunction()</a>, and <a class="el" href="net__layout__junction_8cpp_source.html#l00943">toString()</a>.</p>
 
 </div>
 </div>
@@ -283,7 +343,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_net_layout_junction_entries.html">NetLayoutJunctionEntries</a></li>
-    <li class="footer">Generated on Mon Nov 13 2023 19:18:42 for HAL by
+    <li class="footer">Generated on Fri Nov 17 2023 13:26:46 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

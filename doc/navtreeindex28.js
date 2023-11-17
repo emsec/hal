@@ -1,5 +1,6 @@
 var NAVTREEINDEX28 =
 {
+"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#aac880cdffea5d42f94b5582c92d644c3":[7,0,1,3,0,0,25,3,0],
 "plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#ab18ab45d5471bc18531142eba0744767":[7,0,1,3,0,0,25,3,2],
 "plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#ad51f27ed983b775629326cdfc3052fe5":[7,0,1,3,0,0,25,3,3],
 "plugins_2gui_2include_2gui_2gui__utils_2netlist_8h_source.html":[7,0,1,3,0,0,25,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX28 =
 "recent__files__widget_8cpp.html":[7,0,1,3,2,48,4],
 "recent__files__widget_8cpp_source.html":[7,0,1,3,2,48,4],
 "recent__files__widget_8h.html":[7,0,1,3,0,0,51,4],
-"recent__files__widget_8h_source.html":[7,0,1,3,0,0,51,4],
-"register__stage__identification_8cpp.html":[7,0,1,1,3,3,1]
+"recent__files__widget_8h_source.html":[7,0,1,3,0,0,51,4]
 };

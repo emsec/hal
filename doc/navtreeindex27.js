@@ -1,5 +1,6 @@
 var NAVTREEINDEX27 =
 {
+"new__project__dialog_8cpp.html#abc9b27e1fa553c3966121c0f430557c1":[7,0,1,3,2,13,2,0],
 "new__project__dialog_8cpp_source.html":[7,0,1,3,2,13,2],
 "new__project__dialog_8h.html":[7,0,1,3,0,0,14,2],
 "new__project__dialog_8h_source.html":[7,0,1,3,0,0,14,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX27 =
 "plugins_2gui_2include_2gui_2doxy__groups_8h.html":[7,0,1,3,0,0,53],
 "plugins_2gui_2include_2gui_2doxy__groups_8h_source.html":[7,0,1,3,0,0,53],
 "plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html":[7,0,1,3,0,0,25,3],
-"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#a3706ba37634242a317cc5abe4acd919f":[7,0,1,3,0,0,25,3,1],
-"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#aac880cdffea5d42f94b5582c92d644c3":[7,0,1,3,0,0,25,3,0]
+"plugins_2gui_2include_2gui_2gui__utils_2netlist_8h.html#a3706ba37634242a317cc5abe4acd919f":[7,0,1,3,0,0,25,3,1]
 };

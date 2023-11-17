@@ -1,5 +1,6 @@
 var NAVTREEINDEX26 =
 {
+"namespacemembers_q.html":[5,1,0,15],
 "namespacemembers_r.html":[5,1,0,16],
 "namespacemembers_s.html":[5,1,0,17],
 "namespacemembers_t.html":[5,1,0,18],
@@ -248,6 +249,5 @@ var NAVTREEINDEX26 =
 "netlist__writer__manager_8h.html#ada281488258c1fb92351e44a9d8ff60c":[7,0,0,0,1,5,1,3],
 "netlist__writer__manager_8h_source.html":[7,0,0,0,1,5,1],
 "new__project__dialog_8cpp.html":[7,0,1,3,2,13,2],
-"new__project__dialog_8cpp.html#a691d8699a6b31a63463c65c7daf8a2bd":[7,0,1,3,2,13,2,1],
-"new__project__dialog_8cpp.html#abc9b27e1fa553c3966121c0f430557c1":[7,0,1,3,2,13,2,0]
+"new__project__dialog_8cpp.html#a691d8699a6b31a63463c65c7daf8a2bd":[7,0,1,3,2,13,2,1]
 };
