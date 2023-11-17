@@ -10,5 +10,7 @@ var dir_d2e4e54da30ebce6aa0f44e5dbbf2c5c =
     ] ],
     [ "lut_table_model.h", "lut__table__model_8h.html", null ],
     [ "lut_table_widget.h", "lut__table__widget_8h.html", null ],
-    [ "pin_tree_model.h", "pin__tree__model_8h.html", null ]
+    [ "pin_tree_model.h", "pin__tree__model_8h.html", [
+      [ "PinTreeItem", "classhal_1_1_pin_tree_item.html", "classhal_1_1_pin_tree_item" ]
+    ] ]
 ];

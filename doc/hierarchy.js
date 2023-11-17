@@ -48,6 +48,14 @@ var hierarchy =
       [ "hal::VerilogWriterPlugin", "classhal_1_1_verilog_writer_plugin.html", null ],
       [ "hal::VHDLParserPlugin", "classhal_1_1_v_h_d_l_parser_plugin.html", null ]
     ] ],
+    [ "hal::BaseTreeItem", "classhal_1_1_base_tree_item.html", [
+      [ "hal::ModuleItem", "classhal_1_1_module_item.html", null ],
+      [ "hal::ModuleTreeitem", "classhal_1_1_module_treeitem.html", null ],
+      [ "hal::NetlistElementsTreeitem", "classhal_1_1_netlist_elements_treeitem.html", null ],
+      [ "hal::PinTreeItem", "classhal_1_1_pin_tree_item.html", null ],
+      [ "hal::PortTreeItem", "classhal_1_1_port_tree_item.html", null ],
+      [ "hal::RootTreeItem", "classhal_1_1_root_tree_item.html", null ]
+    ] ],
     [ "hal::BooleanFunction", "classhal_1_1_boolean_function.html", null ],
     [ "hal::BooleanFunctionDecorator", "classhal_1_1_boolean_function_decorator.html", null ],
     [ "hal::BooleanFunctionNetDecorator", "classhal_1_1_boolean_function_net_decorator.html", null ],
@@ -155,7 +163,6 @@ var hierarchy =
     [ "hal::SMT::Model", "structhal_1_1_s_m_t_1_1_model.html", null ],
     [ "hal::ModuleEvent", "classhal_1_1_module_event.html", null ],
     [ "hal::GuiApiClasses::View::ModuleGateIdPair", "structhal_1_1_gui_api_classes_1_1_view_1_1_module_gate_id_pair.html", null ],
-    [ "hal::ModuleItem", "classhal_1_1_module_item.html", null ],
     [ "hal::GraphicsModule::ModulePin", "structhal_1_1_graphics_module_1_1_module_pin.html", null ],
     [ "hal::ModuleSelectEntry", "classhal_1_1_module_select_entry.html", null ],
     [ "hal::ModuleSelectExclude", "classhal_1_1_module_select_exclude.html", null ],
@@ -308,6 +315,7 @@ var hierarchy =
       ] ],
       [ "hal::GuiApi", "classhal_1_1_gui_api.html", null ],
       [ "hal::LoggerMarshall", "classhal_1_1_logger_marshall.html", null ],
+      [ "hal::ModuleColorManager", "classhal_1_1_module_color_manager.html", null ],
       [ "hal::ModuleSelectPicker", "classhal_1_1_module_select_picker.html", null ],
       [ "hal::ModuleSelectReceiver", "classhal_1_1_module_select_receiver.html", [
         [ "hal::AddToModuleReceiver", "classhal_1_1_add_to_module_receiver.html", null ],
@@ -342,11 +350,11 @@ var hierarchy =
       [ "QAbstractItemModel", "https://doc.qt.io/qt-5/qabstractitemmodel.html", [
         [ "hal::BaseTreeModel", "classhal_1_1_base_tree_model.html", [
           [ "hal::GatePinsTreeModel", "classhal_1_1_gate_pins_tree_model.html", null ],
+          [ "hal::ModuleModel", "classhal_1_1_module_model.html", null ],
           [ "hal::ModulePinsTreeModel", "classhal_1_1_module_pins_tree_model.html", null ],
           [ "hal::ModuleTreeModel", "classhal_1_1_module_tree_model.html", null ],
           [ "hal::NetlistElementsTreeModel", "classhal_1_1_netlist_elements_tree_model.html", null ]
         ] ],
-        [ "hal::ModuleModel", "classhal_1_1_module_model.html", null ],
         [ "hal::SelectionTreeModel", "classhal_1_1_selection_tree_model.html", null ],
         [ "QAbstractProxyModel", "https://doc.qt.io/qt-5/qabstractproxymodel.html", [
           [ "QSortFilterProxyModel", "https://doc.qt.io/qt-5/qsortfilterproxymodel.html", [
@@ -595,10 +603,10 @@ var hierarchy =
       [ "hal::NodeBoxes", "classhal_1_1_node_boxes.html", null ]
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
-    [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
-    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "hal::Result< T >", "classhal_1_1_result.html", null ],
+    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
+    [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
     [ "hal::RuntimeLibrary", "classhal_1_1_runtime_library.html", null ],
     [ "hal::SelectionTreeItem", "classhal_1_1_selection_tree_item.html", [
       [ "hal::SelectionTreeItemGate", "classhal_1_1_selection_tree_item_gate.html", null ],
@@ -621,13 +629,12 @@ var hierarchy =
       [ "hal::VerilogWriterTest", "classhal_1_1_verilog_writer_test.html", null ],
       [ "hal::VHDLParserTest", "classhal_1_1_v_h_d_l_parser_test.html", null ]
     ] ],
-    [ "hal::Token< T >", "structhal_1_1_token.html", null ],
     [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
+    [ "hal::Token< T >", "structhal_1_1_token.html", null ],
     [ "hal::TokenStream< T >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< ci_string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< std::string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< T >::TokenStreamException", "structhal_1_1_token_stream_1_1_token_stream_exception.html", null ],
-    [ "hal::TreeItem", "classhal_1_1_tree_item.html", null ],
     [ "hal::UserAction", "classhal_1_1_user_action.html", [
       [ "hal::ActionAddBooleanFunction", "classhal_1_1_action_add_boolean_function.html", null ],
       [ "hal::ActionAddItemsToObject", "classhal_1_1_action_add_items_to_object.html", null ],
@@ -677,8 +684,8 @@ var hierarchy =
     [ "Vec_Ptr_t_", "struct_vec___ptr__t__.html", null ],
     [ "Vec_Vec_t_", "struct_vec___vec__t__.html", null ],
     [ "hal::GuiApiClasses::View", "classhal_1_1_gui_api_classes_1_1_view.html", null ],
-    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
+    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
     [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ]
 ];

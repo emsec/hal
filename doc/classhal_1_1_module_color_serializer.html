@@ -90,7 +90,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_module_color_serializer.h
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="grouping__color__serializer_8h_source.html">grouping_color_serializer.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="module__color__manager_8h_source.html">module_color_manager.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hal::ModuleColorSerializer:</div>
 <div class="dyncontent">
@@ -118,8 +118,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8ec06d2ff4fabbffe625e9d9ce49e2ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a769c749c1208ab2a0e3f584091b208ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_color_serializer.html#a769c749c1208ab2a0e3f584091b208ee">deserialize</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *netlist, const std::filesystem::path &amp;loaddir) override</td></tr>
 <tr class="separator:a769c749c1208ab2a0e3f584091b208ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae74f5b568fddcce455106a48b2a9536f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_color_serializer.html#ae74f5b568fddcce455106a48b2a9536f">restore</a> (<a class="el" href="classhal_1_1_module_model.html">ModuleModel</a> *mm)</td></tr>
-<tr class="separator:ae74f5b568fddcce455106a48b2a9536f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3051d869aa3bf78f2243c5861428bc5b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_color_serializer.html#a3051d869aa3bf78f2243c5861428bc5b">restore</a> (<a class="el" href="classhal_1_1_module_color_manager.html">ModuleColorManager</a> *mcm)</td></tr>
+<tr class="separator:a3051d869aa3bf78f2243c5861428bc5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhal_1_1_project_serializer"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhal_1_1_project_serializer')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhal_1_1_project_serializer.html">hal::ProjectSerializer</a></td></tr>
 <tr class="memitem:a6f96199fe6c278154cf4e6d4cab9c920 inherit pub_methods_classhal_1_1_project_serializer"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_project_serializer.html#a6f96199fe6c278154cf4e6d4cab9c920">ProjectSerializer</a> (const std::string &amp;<a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)</td></tr>
 <tr class="separator:a6f96199fe6c278154cf4e6d4cab9c920 inherit pub_methods_classhal_1_1_project_serializer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -133,8 +133,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a3530c29f02a63a9edcf608e95f2d60db inherit pro_attribs_classhal_1_1_project_serializer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="grouping__color__serializer_8h_source.html#l00048">48</a> of file <a class="el" href="grouping__color__serializer_8h_source.html">grouping_color_serializer.h</a>.</p>
+<div class="textblock"><p>Persist module color settings to file and restore module color assignment from previous session </p>
+
+<p class="definition">Definition at line <a class="el" href="module__color__manager_8h_source.html#l00112">112</a> of file <a class="el" href="module__color__manager_8h_source.html">module_color_manager.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac7475c9432559b46369852adb664cf4d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac7475c9432559b46369852adb664cf4d">&#9670;&nbsp;</a></span>ModuleColorSerializer()</h2>
@@ -151,7 +152,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="grouping__color__serializer_8cpp_source.html#l00109">109</a> of file <a class="el" href="grouping__color__serializer_8cpp_source.html">grouping_color_serializer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__color__manager_8cpp_source.html#l00072">72</a> of file <a class="el" href="module__color__manager_8cpp_source.html">module_color_manager.cpp</a>.</p>
 
 </div>
 </div>
@@ -199,14 +200,14 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classhal_1_1_project_serializer.html#aa4d120f4d6bf0e5576faba87632dc174">hal::ProjectSerializer</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="grouping__color__serializer_8cpp_source.html#l00161">161</a> of file <a class="el" href="grouping__color__serializer_8cpp_source.html">grouping_color_serializer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__color__manager_8cpp_source.html#l00121">121</a> of file <a class="el" href="module__color__manager_8cpp_source.html">module_color_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2project__manager_8cpp_source.html#l00061">hal::ProjectManager::get_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00037">hal::ProjectManager::instance()</a>, <a class="el" href="project__serializer_8h_source.html#l00039">hal::ProjectSerializer::m_name</a>, and <a class="el" href="test__multiple_8py_source.html#l00029">test_multiple::netlist</a>.</p>
 
 </div>
 </div>
-<a id="ae74f5b568fddcce455106a48b2a9536f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae74f5b568fddcce455106a48b2a9536f">&#9670;&nbsp;</a></span>restore()</h2>
+<a id="a3051d869aa3bf78f2243c5861428bc5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3051d869aa3bf78f2243c5861428bc5b">&#9670;&nbsp;</a></span>restore()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -214,18 +215,18 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">void hal::ModuleColorSerializer::restore </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classhal_1_1_module_model.html">ModuleModel</a> *&#160;</td>
-          <td class="paramname"><em>mm</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_module_color_manager.html">ModuleColorManager</a> *&#160;</td>
+          <td class="paramname"><em>mcm</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="grouping__color__serializer_8cpp_source.html#l00113">113</a> of file <a class="el" href="grouping__color__serializer_8cpp_source.html">grouping_color_serializer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__color__manager_8cpp_source.html#l00076">76</a> of file <a class="el" href="module__color__manager_8cpp_source.html">module_color_manager.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2project__manager_8cpp_source.html#l00061">hal::ProjectManager::get_filename()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00091">hal::ProjectManager::get_project_directory()</a>, <a class="el" href="netlist_2project__manager_8cpp_source.html#l00037">hal::ProjectManager::instance()</a>, and <a class="el" href="project__serializer_8h_source.html#l00039">hal::ProjectSerializer::m_name</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00670">hal::NetlistRelay::debugHandleFileOpened()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist__relay_8cpp_source.html#l00684">hal::NetlistRelay::debugHandleFileOpened()</a>.</p>
 
 </div>
 </div>
@@ -280,15 +281,15 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classhal_1_1_project_serializer.html#a81e3f3b9bef7f115924e1b22fffd7ab0">hal::ProjectSerializer</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="grouping__color__serializer_8cpp_source.html#l00137">137</a> of file <a class="el" href="grouping__color__serializer_8cpp_source.html">grouping_color_serializer.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__color__manager_8cpp_source.html#l00097">97</a> of file <a class="el" href="module__color__manager_8cpp_source.html">module_color_manager.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsondocument.html#JsonFormat-enum">QJsonDocument::Compact</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00087">hal::NetlistRelay::getModuleModel()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00081">hal::gNetlistRelay</a>, <a class="el" href="test__multiple_8py_source.html#l00029">test_multiple::netlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfile.html#open">QFile::open()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#write">QIODevice::write()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::WriteOnly</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qdir.html#absoluteFilePath">QDir::absoluteFilePath()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qjsondocument.html#JsonFormat-enum">QJsonDocument::Compact</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="netlist__relay_8cpp_source.html#l00093">hal::NetlistRelay::getModuleColorManager()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00081">hal::gNetlistRelay</a>, <a class="el" href="test__multiple_8py_source.html#l00029">test_multiple::netlist</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qfile.html#open">QFile::open()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#write">QIODevice::write()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum">QIODevice::WriteOnly</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/hal/hal/plugins/gui/include/gui/grouping/<a class="el" href="grouping__color__serializer_8h_source.html">grouping_color_serializer.h</a></li>
-<li>/home/runner/work/hal/hal/plugins/gui/src/grouping/<a class="el" href="grouping__color__serializer_8cpp_source.html">grouping_color_serializer.cpp</a></li>
+<li>/home/runner/work/hal/hal/plugins/gui/include/gui/module_model/<a class="el" href="module__color__manager_8h_source.html">module_color_manager.h</a></li>
+<li>/home/runner/work/hal/hal/plugins/gui/src/module_model/<a class="el" href="module__color__manager_8cpp_source.html">module_color_manager.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -296,7 +297,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_module_color_serializer.html">ModuleColorSerializer</a></li>
-    <li class="footer">Generated on Fri Nov 17 2023 17:35:59 for HAL by
+    <li class="footer">Generated on Fri Nov 17 2023 21:38:50 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

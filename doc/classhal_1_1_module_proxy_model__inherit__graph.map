@@ -1,5 +1,5 @@
 <map id="hal::ModuleProxyModel" name="hal::ModuleProxyModel">
-<area shape="rect" id="node1" title="Enables filtering in the ModuleModel." alt="" coords="20,564,195,700"/>
+<area shape="rect" id="node1" title="Enables filtering in the ModuleModel." alt="" coords="20,564,195,729"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qsortfilterproxymodel.html" title=" " alt="" coords="5,219,209,516"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractproxymodel.html" title=" " alt="" coords="8,5,207,171"/>
 </map>

@@ -88,36 +88,49 @@ $(document).ready(function(){initNavTree('module__tree__view_8cpp_source.html','
 <div class="contents">
 <a href="module__tree__view_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="module__tree__view_8h.html">gui/module_widget/module_tree_view.h</a>&quot;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &lt;QMouseEvent&gt;</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;{</div>
-<div class="line"><a name="l00006"></a><span class="lineno"><a class="line" href="classhal_1_1_module_tree_view.html#a34b392438456d6d36146d3fc77ab6306">    6</a></span>&#160;    <a class="code" href="classhal_1_1_module_tree_view.html#a34b392438456d6d36146d3fc77ab6306">ModuleTreeView::ModuleTreeView</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *parent) : <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html">QTreeView</a>(parent)</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    {</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    }</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="classhal_1_1_module_tree_view.html#a4d8fed564e05bb961fd84307e1d9cfbf">   10</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_tree_view.html#a4d8fed564e05bb961fd84307e1d9cfbf">ModuleTreeView::mousePressEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a> *event)</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    {</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keywordflow">if</span>(<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#event">event</a>-&gt;button() != <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#MouseButton-enum">Qt::RightButton</a>)</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#mousePressEvent">QTreeView::mousePressEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#event">event</a>);</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    }</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;}</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;QHeaderView&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
+<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="classhal_1_1_module_tree_view.html#a34b392438456d6d36146d3fc77ab6306">    7</a></span>&#160;    <a class="code" href="classhal_1_1_module_tree_view.html#a34b392438456d6d36146d3fc77ab6306">ModuleTreeView::ModuleTreeView</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *parent) : <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html">QTreeView</a>(parent)</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    {</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    }</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classhal_1_1_module_tree_view.html#abc53dfc9b0fd822d4240946203fce3a5">   11</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_tree_view.html#abc53dfc9b0fd822d4240946203fce3a5">ModuleTreeView::setDefaultColumnWidth</a>()</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    {</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#setColumnWidth">setColumnWidth</a>(0, 240);</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#setColumnWidth">setColumnWidth</a>(1, 40);</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#setColumnWidth">setColumnWidth</a>(2, 80);</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#header">header</a>()-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qheaderview.html#stretchLastSection-prop">setStretchLastSection</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    }</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classhal_1_1_module_tree_view.html#a4d8fed564e05bb961fd84307e1d9cfbf">   19</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_tree_view.html#a4d8fed564e05bb961fd84307e1d9cfbf">ModuleTreeView::mousePressEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a> *event)</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    {</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keywordflow">if</span>(<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#event">event</a>-&gt;button() != <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#MouseButton-enum">Qt::RightButton</a>)</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#mousePressEvent">QTreeView::mousePressEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#event">event</a>);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    }</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="aqheaderview_html_stretchLastSection-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qheaderview.html#stretchLastSection-prop">QHeaderView::setStretchLastSection</a></div><div class="ttdeci">void setStretchLastSection(bool stretch)</div></div>
 <div class="ttc" id="aqwidget_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="aqabstractitemview_html_event"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemview.html#event">QAbstractItemView::event</a></div><div class="ttdeci">virtual bool event(QEvent *event) override</div></div>
 <div class="ttc" id="aqt_html_MouseButton-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qt.html#MouseButton-enum">Qt::RightButton</a></div><div class="ttdeci">RightButton</div></div>
 <div class="ttc" id="aqmouseevent_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a></div></div>
-<div class="ttc" id="aclasshal_1_1_module_tree_view_html_a4d8fed564e05bb961fd84307e1d9cfbf"><div class="ttname"><a href="classhal_1_1_module_tree_view.html#a4d8fed564e05bb961fd84307e1d9cfbf">hal::ModuleTreeView::mousePressEvent</a></div><div class="ttdeci">void mousePressEvent(QMouseEvent *event)</div><div class="ttdef"><b>Definition:</b> <a href="module__tree__view_8cpp_source.html#l00010">module_tree_view.cpp:10</a></div></div>
+<div class="ttc" id="aqtreeview_html_header"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtreeview.html#header">QTreeView::header</a></div><div class="ttdeci">QHeaderView * header() const const</div></div>
+<div class="ttc" id="aqtreeview_html_setColumnWidth"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtreeview.html#setColumnWidth">QTreeView::setColumnWidth</a></div><div class="ttdeci">void setColumnWidth(int column, int width)</div></div>
+<div class="ttc" id="aclasshal_1_1_module_tree_view_html_a4d8fed564e05bb961fd84307e1d9cfbf"><div class="ttname"><a href="classhal_1_1_module_tree_view.html#a4d8fed564e05bb961fd84307e1d9cfbf">hal::ModuleTreeView::mousePressEvent</a></div><div class="ttdeci">void mousePressEvent(QMouseEvent *event)</div><div class="ttdef"><b>Definition:</b> <a href="module__tree__view_8cpp_source.html#l00019">module_tree_view.cpp:19</a></div></div>
 <div class="ttc" id="amodule__tree__view_8h_html"><div class="ttname"><a href="module__tree__view_8h.html">module_tree_view.h</a></div></div>
 <div class="ttc" id="aqtreeview_html_mousePressEvent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtreeview.html#mousePressEvent">QTreeView::mousePressEvent</a></div><div class="ttdeci">virtual void mousePressEvent(QMouseEvent *event) override</div></div>
+<div class="ttc" id="aclasshal_1_1_module_tree_view_html_abc53dfc9b0fd822d4240946203fce3a5"><div class="ttname"><a href="classhal_1_1_module_tree_view.html#abc53dfc9b0fd822d4240946203fce3a5">hal::ModuleTreeView::setDefaultColumnWidth</a></div><div class="ttdeci">void setDefaultColumnWidth()</div><div class="ttdef"><b>Definition:</b> <a href="module__tree__view_8cpp_source.html#l00011">module_tree_view.cpp:11</a></div></div>
 <div class="ttc" id="aqtreeview_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtreeview.html">QTreeView</a></div></div>
-<div class="ttc" id="aclasshal_1_1_module_tree_view_html_a34b392438456d6d36146d3fc77ab6306"><div class="ttname"><a href="classhal_1_1_module_tree_view.html#a34b392438456d6d36146d3fc77ab6306">hal::ModuleTreeView::ModuleTreeView</a></div><div class="ttdeci">ModuleTreeView(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="module__tree__view_8cpp_source.html#l00006">module_tree_view.cpp:6</a></div></div>
+<div class="ttc" id="aclasshal_1_1_module_tree_view_html_a34b392438456d6d36146d3fc77ab6306"><div class="ttname"><a href="classhal_1_1_module_tree_view.html#a34b392438456d6d36146d3fc77ab6306">hal::ModuleTreeView::ModuleTreeView</a></div><div class="ttdeci">ModuleTreeView(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="module__tree__view_8cpp_source.html#l00007">module_tree_view.cpp:7</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_9931ff14da9bf21a4a9836e435fa5a59.html">module_widget</a></li><li class="navelem"><a class="el" href="module__tree__view_8cpp.html">module_tree_view.cpp</a></li>
-    <li class="footer">Generated on Fri Nov 17 2023 17:35:56 for HAL by
+    <li class="footer">Generated on Fri Nov 17 2023 21:38:47 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -6,7 +6,7 @@
 <area shape="rect" id="node7" href="$classhal_1_1_graph_widget.html" title="Wraps a GraphContext and a GraphGraphicsView." alt="" coords="714,1415,922,1595"/>
 <area shape="rect" id="node8" href="$classhal_1_1_grouping_manager_widget.html" title="User interface for Groupings." alt="" coords="947,1159,1209,1852"/>
 <area shape="rect" id="node9" href="$classhal_1_1_logger_widget.html" title="Displays the logs in the gui." alt="" coords="1233,1379,1480,1632"/>
-<area shape="rect" id="node10" href="$classhal_1_1_module_widget.html" title="Shows the modules of the netlist hierarchical in a tree view." alt="" coords="1503,1283,1738,1727"/>
+<area shape="rect" id="node10" href="$classhal_1_1_module_widget.html" title="Shows the modules of the netlist hierarchical in a tree view." alt="" coords="1503,1173,1738,1837"/>
 <area shape="rect" id="node11" href="$classhal_1_1_python_console_widget.html" title="Wraps the PythonConsole." alt="" coords="1763,1452,1956,1559"/>
 <area shape="rect" id="node12" href="$classhal_1_1_python_editor.html" title="Main widget that combines all neccessary functionality to develop in python (for hal)." alt="" coords="1981,1349,2133,1661"/>
 <area shape="rect" id="node13" href="$classhal_1_1_selection_details_widget.html" title="Container for all specific details widgets." alt="" coords="2157,1291,2409,1720"/>

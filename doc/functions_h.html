@@ -397,6 +397,8 @@ $(document).ready(function(){initNavTree('functions_h.html',''); initResizable()
 </li>
 <li>handleModuleColorChanged()
 : <a class="el" href="classhal_1_1_graph_context_manager.html#ab5546cc5c20f48688571d94ad3529a7b">hal::GraphContextManager</a>
+, <a class="el" href="classhal_1_1_selection_details_icon_provider.html#ab296625b14f3038f60bcc239e55aa470">hal::SelectionDetailsIconProvider</a>
+, <a class="el" href="classhal_1_1_selection_tree_view.html#a03e180010458d0b85f22f0523c1e72cb">hal::SelectionTreeView</a>
 </li>
 <li>handleModuleCreated()
 : <a class="el" href="classhal_1_1_graph_context_manager.html#aa5f7923ad5eabf744e927fd3ada8c559">hal::GraphContextManager</a>
@@ -406,6 +408,9 @@ $(document).ready(function(){initNavTree('functions_h.html',''); initResizable()
 </li>
 <li>handleModuleGateAssigned()
 : <a class="el" href="classhal_1_1_graph_context_manager.html#a74346611f1400e03bdc2d20bc6ca938d">hal::GraphContextManager</a>
+</li>
+<li>handleModuleGateAssinged()
+: <a class="el" href="classhal_1_1_module_model.html#a0dd0bcff2ccbb3419d80432278f2b17b">hal::ModuleModel</a>
 </li>
 <li>handleModuleGateRemoved()
 : <a class="el" href="classhal_1_1_graph_context_manager.html#aaf9534247eddb32c49610a8de46794b2">hal::GraphContextManager</a>
@@ -418,6 +423,9 @@ $(document).ready(function(){initNavTree('functions_h.html',''); initResizable()
 </li>
 <li>handleModuleNameChanged()
 : <a class="el" href="classhal_1_1_graph_context_manager.html#a08d4ceee844a31a2d026281b6271b527">hal::GraphContextManager</a>
+</li>
+<li>handleModuleParentChanged()
+: <a class="el" href="classhal_1_1_module_model.html#ac792511542ecf18cc31e13b6529c7fec">hal::ModuleModel</a>
 </li>
 <li>handleModulePortsChanged()
 : <a class="el" href="classhal_1_1_graph_context_manager.html#a6701e53face1b7ce9acc0cc0d5a57e99">hal::GraphContextManager</a>
@@ -659,8 +667,8 @@ $(document).ready(function(){initNavTree('functions_h.html',''); initResizable()
 : <a class="el" href="classhal_1_1_gate_type.html#a8d82155a77dd05bcef90cb791a95d84f">hal::GateType</a>
 </li>
 <li>has_constant_value()
-: <a class="el" href="classhal_1_1_boolean_function.html#a4e4fcd20a4cf6c5bf096d8eb26bc6e22">hal::BooleanFunction</a>
-, <a class="el" href="structhal_1_1_boolean_function_1_1_node.html#a97b6ae858cdf17345e4c667b1fe41791">hal::BooleanFunction::Node</a>
+: <a class="el" href="classhal_1_1_boolean_function.html#a61f8794b299f01d101d07bc3dee80990">hal::BooleanFunction</a>
+, <a class="el" href="structhal_1_1_boolean_function_1_1_node.html#a2864ba0bac7f292a2202f538b86c3cbe">hal::BooleanFunction::Node</a>
 </li>
 <li>has_data()
 : <a class="el" href="classhal_1_1_data_container.html#acd955fb78b54c430d54666c3883220da">hal::DataContainer</a>
@@ -722,7 +730,6 @@ $(document).ready(function(){initNavTree('functions_h.html',''); initResizable()
 , <a class="el" href="classhal_1_1_grouping_table_model.html#a2fd3d2d951b665d5a4531ccc752c25a3">hal::GroupingTableModel</a>
 , <a class="el" href="classhal_1_1_gui_plugin_table.html#a7c3bd292448bb9a8b9c35fc8efdc519b">hal::GuiPluginTable</a>
 , <a class="el" href="classhal_1_1_l_u_t_table_model.html#a31b482efe29467001651549e1f09c2ea">hal::LUTTableModel</a>
-, <a class="el" href="classhal_1_1_module_model.html#a3315c1c54603fef342744ee23cbd4d8f">hal::ModuleModel</a>
 , <a class="el" href="classhal_1_1_module_select_model.html#a92770b10bbcf66a8deeaed9b77717303">hal::ModuleSelectModel</a>
 , <a class="el" href="classhal_1_1_module_table_model.html#acc59a4a351f12b8fee77584a98b284d9">hal::ModuleTableModel</a>
 , <a class="el" href="classhal_1_1_selection_tree_model.html#a782e9fcc8a32fbb287b6f34341f965c9">hal::SelectionTreeModel</a>
@@ -763,17 +770,29 @@ $(document).ready(function(){initNavTree('functions_h.html',''); initResizable()
 <li>hideEvent()
 : <a class="el" href="classhal_1_1_searchbar.html#a5089d9adb1321f88167f6dd14394e31a">hal::Searchbar</a>
 </li>
+<li>hideGatesIconPath
+: <a class="el" href="classhal_1_1_module_widget.html#ae268b3b85e5df11a9b2504290c8999f8">hal::ModuleWidget</a>
+</li>
+<li>hideGatesIconStyle
+: <a class="el" href="classhal_1_1_module_widget.html#a5d7fc0376c5104d0073b5f6a7d422b08">hal::ModuleWidget</a>
+</li>
+<li>hideNetsIconPath()
+: <a class="el" href="classhal_1_1_module_widget.html#a6bc03dc8b07261a0f6578d733e576d67">hal::ModuleWidget</a>
+</li>
+<li>hideNetsIconStyle
+: <a class="el" href="classhal_1_1_module_widget.html#a27c8d3764ed226d4a98376a17850d198">hal::ModuleWidget</a>
+</li>
 <li>highlightBlock()
 : <a class="el" href="classhal_1_1_python_syntax_highlighter.html#abfdc072d1d4c233871df0854ab9e35f7">hal::PythonSyntaxHighlighter</a>
 </li>
 <li>highlighted()
 : <a class="el" href="classhal_1_1_module_item.html#ac56874de778f62c292e41bf4400d0a5a">hal::ModuleItem</a>
 </li>
-<li>hilightBackgroundColor
-: <a class="el" href="classhal_1_1_gui_plugin_manager.html#a582a3ef613f43bb19d42987148cda267">hal::GuiPluginManager</a>
+<li>hilightBackgroundColor()
+: <a class="el" href="classhal_1_1_gui_plugin_manager.html#a5c4d833932cb060780d5312e96c9dee1">hal::GuiPluginManager</a>
 </li>
-<li>hilightTextColor()
-: <a class="el" href="classhal_1_1_gui_plugin_manager.html#a2f41f5d4063cfbb1b9ed8b034c5b468e">hal::GuiPluginManager</a>
+<li>hilightTextColor
+: <a class="el" href="classhal_1_1_gui_plugin_manager.html#a988edcf6f1147348cc13e5f4442e6094">hal::GuiPluginManager</a>
 </li>
 <li>Horizontal
 : <a class="el" href="classhal_1_1_lane_index.html#a3ddf12df6e59c4a3578340fb0bc085c5a8d137d1292c32d5eb3ba1ae8d00b0037">hal::LaneIndex</a>
@@ -781,13 +800,13 @@ $(document).ready(function(){initNavTree('functions_h.html',''); initResizable()
 <li>horizontal()
 : <a class="el" href="classhal_1_1_lane_index.html#a6652a0562da350a1eade8510bf5fb153">hal::LaneIndex</a>
 </li>
-<li>hover
-: <a class="el" href="classhal_1_1_expanding_list_button.html#aadee1ae499cc2e50f598d96220a39611">hal::ExpandingListButton</a>
+<li>hover()
+: <a class="el" href="classhal_1_1_expanding_list_button.html#a62fb01130a3156c5eafc382639016072">hal::ExpandingListButton</a>
 , <a class="el" href="classhal_1_1_get_in_touch_item.html#a8cc6cb92fe52b822d7f0537028ff3f93">hal::GetInTouchItem</a>
-, <a class="el" href="classhal_1_1_recent_file_item.html#a08911388b5df507deee4910102a667b8">hal::RecentFileItem</a>
+, <a class="el" href="classhal_1_1_recent_file_item.html#a125ef965f5fd2bbd61da7313c65caf23">hal::RecentFileItem</a>
 </li>
-<li>hoverColor
-: <a class="el" href="classhal_1_1_dock_button.html#a191bd3dafe877d763dfbfcee0874fc48">hal::DockButton</a>
+<li>hoverColor()
+: <a class="el" href="classhal_1_1_dock_button.html#a797d6718839ba71592f3938dc43abc0a">hal::DockButton</a>
 </li>
 <li>hoverEnterEvent()
 : <a class="el" href="classhal_1_1_comment_speech_bubble.html#abfc9589d3e042245f6e2695eaf85e07c">hal::CommentSpeechBubble</a>
@@ -798,11 +817,11 @@ $(document).ready(function(){initNavTree('functions_h.html',''); initResizable()
 <li>Hst
 : <a class="el" href="struct_abc___frame__t__.html#a5c942d7a24333b97287fc8b3693fa1e5">Abc_Frame_t_</a>
 </li>
-<li>HVIndex
-: <a class="el" href="classhal_1_1_lane_index.html#a3ddf12df6e59c4a3578340fb0bc085c5">hal::LaneIndex</a>
-</li>
 <li>hvIndex()
 : <a class="el" href="classhal_1_1_lane_index.html#afd8de638d05990538fc5dfe459af1a94">hal::LaneIndex</a>
+</li>
+<li>HVIndex
+: <a class="el" href="classhal_1_1_lane_index.html#a3ddf12df6e59c4a3578340fb0bc085c5">hal::LaneIndex</a>
 </li>
 </ul>
 </div><!-- contents -->
@@ -810,7 +829,7 @@ $(document).ready(function(){initNavTree('functions_h.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Nov 17 2023 17:36:01 for HAL by
+    <li class="footer">Generated on Fri Nov 17 2023 21:38:51 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

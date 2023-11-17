@@ -100,7 +100,7 @@ Inheritance diagram for hal::ModuleProxyModel:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_module_proxy_model__inherit__graph.png" border="0" usemap="#hal_1_1_module_proxy_model_inherit__map" alt="Inheritance graph"/></div>
 <map name="hal_1_1_module_proxy_model_inherit__map" id="hal_1_1_module_proxy_model_inherit__map">
-<area shape="rect" title="Enables filtering in the ModuleModel." alt="" coords="20,564,195,700"/>
+<area shape="rect" title="Enables filtering in the ModuleModel." alt="" coords="20,564,195,729"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html" title=" " alt="" coords="5,219,209,516"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qabstractproxymodel.html" title=" " alt="" coords="8,5,207,171"/>
 </map>
@@ -110,7 +110,7 @@ Collaboration diagram for hal::ModuleProxyModel:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_module_proxy_model__coll__graph.png" border="0" usemap="#hal_1_1_module_proxy_model_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_module_proxy_model_coll__map" id="hal_1_1_module_proxy_model_coll__map">
-<area shape="rect" title="Enables filtering in the ModuleModel." alt="" coords="20,564,195,700"/>
+<area shape="rect" title="Enables filtering in the ModuleModel." alt="" coords="20,564,195,729"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html" title=" " alt="" coords="5,219,209,516"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qabstractproxymodel.html" title=" " alt="" coords="8,5,207,171"/>
 </map>
@@ -124,6 +124,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac9816e975b5ff9693cf9cbe0bc67dd19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a84b3c3da406a5a94c7af74fc22c68de5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_proxy_model.html#a84b3c3da406a5a94c7af74fc22c68de5">setSortMechanism</a> (<a class="el" href="namespacehal_1_1gui__utility.html#a6fda9608ea4fedbaf83dc3e15dc6dd95">gui_utility::mSortMechanism</a> <a class="el" href="classhal_1_1_module_proxy_model.html#ac9816e975b5ff9693cf9cbe0bc67dd19">sortMechanism</a>)</td></tr>
 <tr class="separator:a84b3c3da406a5a94c7af74fc22c68de5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc284aa99667fd0355807ef098b2c83d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_proxy_model.html#adc284aa99667fd0355807ef098b2c83d">toggleFilterNets</a> ()</td></tr>
+<tr class="separator:adc284aa99667fd0355807ef098b2c83d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adaa88e45446b0c9c0519e080b883d285"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_proxy_model.html#adaa88e45446b0c9c0519e080b883d285">toggleFilterGates</a> ()</td></tr>
+<tr class="separator:adaa88e45446b0c9c0519e080b883d285"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_qsortfilterproxymodel"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_qsortfilterproxymodel')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html">QSortFilterProxyModel</a></td></tr>
 <tr class="memitem:QSortFilterProxyModel inherit pub_methods_qsortfilterproxymodel"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#QSortFilterProxyModel">QSortFilterProxyModel</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#parent">parent</a>)</td></tr>
 <tr class="separator:QSortFilterProxyModel inherit pub_methods_qsortfilterproxymodel"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -709,7 +713,7 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Overrides <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#filterAcceptsRow">QSortFilterProxyModel::filterAcceptsRow</a> to implement the filter logic based on the regular expression stored by setFilterRegularExpression.<br  />
+<p>Overrides <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#filterAcceptsRow">QSortFilterProxyModel::filterAcceptsRow</a> to implement the filter logic based on the regular expression stored by setFilterRegularExpression. Also filters nets or gates, depending on the state of the toggle buttons.<br  />
  Returns <b>true</b> if the item in the row indicated by <em>sourceRow</em> and <em>sourceParent</em> should be included in the model. TODO: Filtering seems to be broken. Can't search for submodules. Works only for the topmodule.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -722,9 +726,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#filterAcceptsRow">QSortFilterProxyModel</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="module__proxy__model_8cpp_source.html#l00017">17</a> of file <a class="el" href="module__proxy__model_8cpp_source.html">module_proxy_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__proxy__model_8cpp_source.html#l00031">31</a> of file <a class="el" href="module__proxy__model_8cpp_source.html">module_proxy_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#filterRegularExpression-prop">QSortFilterProxyModel::filterRegularExpression</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#filterRole-prop">QSortFilterProxyModel::filterRole</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractproxymodel.html#sourceModel-prop">QAbstractProxyModel::sourceModel</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#filterRegularExpression-prop">QSortFilterProxyModel::filterRegularExpression</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#filterRole-prop">QSortFilterProxyModel::filterRole</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">hal::ModuleItem::Gate</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42a5012af45088eb8e999bb8350077b12ca">hal::ModuleItem::Net</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractproxymodel.html#sourceModel-prop">QAbstractProxyModel::sourceModel</a>.</p>
 
 </div>
 </div>
@@ -761,7 +765,7 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Implements a comparison operator used for sorting. In this case it is based on the module names.</p>
+<p>Implements a comparison operator used for sorting. In this case it is based on the <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> names and types.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">source_left</td><td>- The model index of the left element </td></tr>
@@ -773,9 +777,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#lessThan">QSortFilterProxyModel</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="module__proxy__model_8cpp_source.html#l00041">41</a> of file <a class="el" href="module__proxy__model_8cpp_source.html">module_proxy_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__proxy__model_8cpp_source.html#l00059">59</a> of file <a class="el" href="module__proxy__model_8cpp_source.html">module_proxy_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#CaseSensitivity-enum">Qt::CaseInsensitive</a>, <a class="el" href="sort_8cpp_source.html#l00153">hal::gui_utility::compare()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#data">QModelIndex::data()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#sortCaseSensitivity-prop">QSortFilterProxyModel::sortCaseSensitivity</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toLower">QString::toLower()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">QVariant::toString()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#CaseSensitivity-enum">Qt::CaseInsensitive</a>, <a class="el" href="sort_8cpp_source.html#l00153">hal::gui_utility::compare()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#data">QModelIndex::data()</a>, <a class="el" href="module__item_8cpp_source.html#l00143">hal::ModuleItem::getType()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#sortCaseSensitivity-prop">QSortFilterProxyModel::sortCaseSensitivity</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toLower">QString::toLower()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html#toString">QVariant::toString()</a>.</p>
 
 </div>
 </div>
@@ -802,9 +806,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__proxy__model_8cpp_source.html#l00059">59</a> of file <a class="el" href="module__proxy__model_8cpp_source.html">module_proxy_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__proxy__model_8cpp_source.html#l00082">82</a> of file <a class="el" href="module__proxy__model_8cpp_source.html">module_proxy_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#invalidate">QSortFilterProxyModel::invalidate()</a>, and <a class="el" href="module__proxy__model_8cpp_source.html#l00054">sortMechanism()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#invalidate">QSortFilterProxyModel::invalidate()</a>, and <a class="el" href="module__proxy__model_8cpp_source.html#l00077">sortMechanism()</a>.</p>
 
 </div>
 </div>
@@ -825,9 +829,53 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets the mSortMechanism that should be applied to sort modules (by their name).</p>
 <dl class="section return"><dt>Returns</dt><dd>the currently configured sorting mechanism </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="module__proxy__model_8cpp_source.html#l00054">54</a> of file <a class="el" href="module__proxy__model_8cpp_source.html">module_proxy_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__proxy__model_8cpp_source.html#l00077">77</a> of file <a class="el" href="module__proxy__model_8cpp_source.html">module_proxy_model.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__proxy__model_8cpp_source.html#l00059">setSortMechanism()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__proxy__model_8cpp_source.html#l00082">setSortMechanism()</a>.</p>
+
+</div>
+</div>
+<a id="adaa88e45446b0c9c0519e080b883d285"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adaa88e45446b0c9c0519e080b883d285">&#9670;&nbsp;</a></span>toggleFilterGates()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::ModuleProxyModel::toggleFilterGates </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Toggles whether or not gates are accepted by the filter. </p><dl class="section return"><dt>Returns</dt><dd><b>true</b> if gates are filtered out now. <b>false</b> if not. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="module__proxy__model_8cpp_source.html#l00024">24</a> of file <a class="el" href="module__proxy__model_8cpp_source.html">module_proxy_model.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#invalidateFilter">QSortFilterProxyModel::invalidateFilter()</a>.</p>
+
+</div>
+</div>
+<a id="adc284aa99667fd0355807ef098b2c83d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc284aa99667fd0355807ef098b2c83d">&#9670;&nbsp;</a></span>toggleFilterNets()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::ModuleProxyModel::toggleFilterNets </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Toggles whether or not nets are accepted by the filter. </p><dl class="section return"><dt>Returns</dt><dd><b>true</b> if nets are filtered out now. <b>false</b> if not. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="module__proxy__model_8cpp_source.html#l00017">17</a> of file <a class="el" href="module__proxy__model_8cpp_source.html">module_proxy_model.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#invalidateFilter">QSortFilterProxyModel::invalidateFilter()</a>.</p>
 
 </div>
 </div>
@@ -841,7 +889,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_module_proxy_model.html">ModuleProxyModel</a></li>
-    <li class="footer">Generated on Fri Nov 17 2023 17:35:59 for HAL by
+    <li class="footer">Generated on Fri Nov 17 2023 21:38:50 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

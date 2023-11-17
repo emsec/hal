@@ -83,6 +83,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_module_item.html',''); in
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classhal_1_1_module_item-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -95,67 +96,135 @@ $(document).ready(function(){initNavTree('classhal_1_1_module_item.html',''); in
 
 <p><code>#include &lt;<a class="el" href="module__item_8h_source.html">module_item.h</a>&gt;</code></p>
 <div class="dynheader">
+Inheritance diagram for hal::ModuleItem:</div>
+<div class="dyncontent">
+<div class="center"><img src="classhal_1_1_module_item__inherit__graph.png" border="0" usemap="#hal_1_1_module_item_inherit__map" alt="Inheritance graph"/></div>
+<map name="hal_1_1_module_item_inherit__map" id="hal_1_1_module_item_inherit__map">
+<area shape="rect" title="An item in the ModuleModel." alt="" coords="5,204,161,355"/>
+<area shape="rect" href="classhal_1_1_base_tree_item.html" title="(Future) Base class for all tree models related to the details widget." alt="" coords="10,5,157,156"/>
+</map>
+</div>
+<div class="dynheader">
 Collaboration diagram for hal::ModuleItem:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_module_item__coll__graph.png" border="0" usemap="#hal_1_1_module_item_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_module_item_coll__map" id="hal_1_1_module_item_coll__map">
-<area shape="rect" title="An item in the ModuleModel." alt="" coords="5,5,220,156"/>
+<area shape="rect" title="An item in the ModuleModel." alt="" coords="5,204,161,355"/>
+<area shape="rect" href="classhal_1_1_base_tree_item.html" title="(Future) Base class for all tree models related to the details widget." alt="" coords="10,5,157,156"/>
 </map>
 </div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:adbacf40a93cae0f07b72c07da9bb9f42"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42">TreeItemType</a> { <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42">TreeItemType::Module</a>, 
+<a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">TreeItemType::Gate</a>, 
+<a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42a5012af45088eb8e999bb8350077b12ca">TreeItemType::Net</a>
+ }</td></tr>
+<tr class="separator:adbacf40a93cae0f07b72c07da9bb9f42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3654b10c3e9528ec375775e9d1c6a483"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a3654b10c3e9528ec375775e9d1c6a483">ModuleItem</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="classhal_1_1_module_item.html#aa8eb05d41577f125ff7f03cf0e9a6dad">id</a>)</td></tr>
-<tr class="separator:a3654b10c3e9528ec375775e9d1c6a483"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cb25c343257edc6a57d5c0950319a9e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a4cb25c343257edc6a57d5c0950319a9e">insertChild</a> (int <a class="el" href="classhal_1_1_module_item.html#a6d96895a06a09860e1787e279e6d0867">row</a>, <a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> *<a class="el" href="classhal_1_1_module_item.html#a5a8baffec5c366eaa5bdebe148dba1df">child</a>)</td></tr>
-<tr class="separator:a4cb25c343257edc6a57d5c0950319a9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1969e0fba8f7638e276169da7f6276e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a1969e0fba8f7638e276169da7f6276e0">removeChild</a> (<a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> *<a class="el" href="classhal_1_1_module_item.html#a5a8baffec5c366eaa5bdebe148dba1df">child</a>)</td></tr>
-<tr class="separator:a1969e0fba8f7638e276169da7f6276e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa17cf6efdb60af58e385604f49360330"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#aa17cf6efdb60af58e385604f49360330">appendChild</a> (<a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> *<a class="el" href="classhal_1_1_module_item.html#a5a8baffec5c366eaa5bdebe148dba1df">child</a>)</td></tr>
-<tr class="separator:aa17cf6efdb60af58e385604f49360330"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a414fb66f33e15959aadc21d0113c0d18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a414fb66f33e15959aadc21d0113c0d18">setData</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> &gt; data) override</td></tr>
+<tr class="separator:a414fb66f33e15959aadc21d0113c0d18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a030a4d5fdbff4f218db0c2db86dd8460"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a030a4d5fdbff4f218db0c2db86dd8460">setDataAtIndex</a> (int index, <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> &amp;data) override</td></tr>
+<tr class="separator:a030a4d5fdbff4f218db0c2db86dd8460"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97b2cf4a8f36aba02dcc402b1d186881"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a97b2cf4a8f36aba02dcc402b1d186881">appendData</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> data) override</td></tr>
+<tr class="separator:a97b2cf4a8f36aba02dcc402b1d186881"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92bfd214ea29198702a1df25ed36f288"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a92bfd214ea29198702a1df25ed36f288">getColumnCount</a> () const override</td></tr>
+<tr class="separator:a92bfd214ea29198702a1df25ed36f288"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ac714a2c1cce8d63a205ec85e1a5d7a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a6ac714a2c1cce8d63a205ec85e1a5d7a">ModuleItem</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="classhal_1_1_module_item.html#aa8eb05d41577f125ff7f03cf0e9a6dad">id</a>, const <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42">TreeItemType</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7">type</a>=<a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42">TreeItemType::Module</a>)</td></tr>
+<tr class="separator:a6ac714a2c1cce8d63a205ec85e1a5d7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2378322995e661d6d0538d4007652b3c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a2378322995e661d6d0538d4007652b3c">appendExistingChildIfAny</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html">QMap</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, <a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> * &gt; &amp;moduleMap)</td></tr>
 <tr class="separator:a2378322995e661d6d0538d4007652b3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fe2ccdfa54cc71669cd310d7b22e57e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a4fe2ccdfa54cc71669cd310d7b22e57e">prependChild</a> (<a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> *<a class="el" href="classhal_1_1_module_item.html#a5a8baffec5c366eaa5bdebe148dba1df">child</a>)</td></tr>
-<tr class="separator:a4fe2ccdfa54cc71669cd310d7b22e57e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afbcc7d4240aae4644bddf7b41fdb298f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#afbcc7d4240aae4644bddf7b41fdb298f">parent</a> ()</td></tr>
-<tr class="separator:afbcc7d4240aae4644bddf7b41fdb298f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a8baffec5c366eaa5bdebe148dba1df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a5a8baffec5c366eaa5bdebe148dba1df">child</a> (int <a class="el" href="classhal_1_1_module_item.html#a6d96895a06a09860e1787e279e6d0867">row</a>)</td></tr>
-<tr class="separator:a5a8baffec5c366eaa5bdebe148dba1df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a00354ec6e0f3af46a39029a41d4d34"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a9a00354ec6e0f3af46a39029a41d4d34">constParent</a> () const</td></tr>
-<tr class="separator:a9a00354ec6e0f3af46a39029a41d4d34"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b04a9d4ff759bfaa02a4e8e1b34c109"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a9b04a9d4ff759bfaa02a4e8e1b34c109">constChild</a> (int <a class="el" href="classhal_1_1_module_item.html#a6d96895a06a09860e1787e279e6d0867">row</a>) const</td></tr>
-<tr class="separator:a9b04a9d4ff759bfaa02a4e8e1b34c109"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2cc3488245b18030073b5ae9c7e330b8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a2cc3488245b18030073b5ae9c7e330b8">childCount</a> () const</td></tr>
-<tr class="separator:a2cc3488245b18030073b5ae9c7e330b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a788ab1a6697bfb4686a4b12f163e95c0"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a788ab1a6697bfb4686a4b12f163e95c0">data</a> (int column) const</td></tr>
-<tr class="separator:a788ab1a6697bfb4686a4b12f163e95c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d68308899092dfe13c50d6ed679fc45"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a0d68308899092dfe13c50d6ed679fc45">getData</a> (int column) const override</td></tr>
+<tr class="separator:a0d68308899092dfe13c50d6ed679fc45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d96895a06a09860e1787e279e6d0867"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a6d96895a06a09860e1787e279e6d0867">row</a> () const</td></tr>
 <tr class="separator:a6d96895a06a09860e1787e279e6d0867"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9b0899e7859e368d169da839a352ece"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#aa9b0899e7859e368d169da839a352ece">name</a> () const</td></tr>
 <tr class="separator:aa9b0899e7859e368d169da839a352ece"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8eb05d41577f125ff7f03cf0e9a6dad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#aa8eb05d41577f125ff7f03cf0e9a6dad">id</a> () const</td></tr>
 <tr class="separator:aa8eb05d41577f125ff7f03cf0e9a6dad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0af554a544b405b5980f3898f2031fd9"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a0af554a544b405b5980f3898f2031fd9">color</a> () const</td></tr>
-<tr class="separator:a0af554a544b405b5980f3898f2031fd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac56874de778f62c292e41bf4400d0a5a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#ac56874de778f62c292e41bf4400d0a5a">highlighted</a> () const</td></tr>
 <tr class="separator:ac56874de778f62c292e41bf4400d0a5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab25f5d265d6ac6cc6e171ae528ee2b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#aab25f5d265d6ac6cc6e171ae528ee2b1">setParent</a> (<a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> *<a class="el" href="classhal_1_1_module_item.html#afbcc7d4240aae4644bddf7b41fdb298f">parent</a>)</td></tr>
-<tr class="separator:aab25f5d265d6ac6cc6e171ae528ee2b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59812537a298ad9a48d00fbde2b0d120"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a59812537a298ad9a48d00fbde2b0d120">set_name</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="classhal_1_1_module_item.html#aa9b0899e7859e368d169da839a352ece">name</a>)</td></tr>
-<tr class="separator:a59812537a298ad9a48d00fbde2b0d120"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ea9a110766ab4aeff8d096b0ce324d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a5ea9a110766ab4aeff8d096b0ce324d2">setColor</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> &amp;<a class="el" href="classhal_1_1_module_item.html#a0af554a544b405b5980f3898f2031fd9">color</a>)</td></tr>
-<tr class="separator:a5ea9a110766ab4aeff8d096b0ce324d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1c733dabb051c19f527c25e8d586b01"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42">TreeItemType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#ae1c733dabb051c19f527c25e8d586b01">getType</a> () const</td></tr>
+<tr class="separator:ae1c733dabb051c19f527c25e8d586b01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a7b4c3f14ce92c7801560df822a5060"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a9a7b4c3f14ce92c7801560df822a5060">setName</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;<a class="el" href="classhal_1_1_module_item.html#aa9b0899e7859e368d169da839a352ece">name</a>)</td></tr>
+<tr class="separator:a9a7b4c3f14ce92c7801560df822a5060"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a412ccb69f5b0198e097ba37b609de924"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_module_item.html#a412ccb69f5b0198e097ba37b609de924">setHighlighted</a> (const bool <a class="el" href="classhal_1_1_module_item.html#ac56874de778f62c292e41bf4400d0a5a">highlighted</a>)</td></tr>
 <tr class="separator:a412ccb69f5b0198e097ba37b609de924"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classhal_1_1_base_tree_item"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhal_1_1_base_tree_item')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhal_1_1_base_tree_item.html">hal::BaseTreeItem</a></td></tr>
+<tr class="memitem:ae657927c6407f685d09daf7409f0e980 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#ae657927c6407f685d09daf7409f0e980">BaseTreeItem</a> ()</td></tr>
+<tr class="separator:ae657927c6407f685d09daf7409f0e980 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa47f8b46c9bc7c47fff51895dffb1bb inherit pub_methods_classhal_1_1_base_tree_item"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#aaa47f8b46c9bc7c47fff51895dffb1bb">BaseTreeItem</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> &gt; columnData)</td></tr>
+<tr class="separator:aaa47f8b46c9bc7c47fff51895dffb1bb inherit pub_methods_classhal_1_1_base_tree_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8e4518a37505b8d0d26f2cbc2aeb861 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#aa8e4518a37505b8d0d26f2cbc2aeb861">~BaseTreeItem</a> ()</td></tr>
+<tr class="separator:aa8e4518a37505b8d0d26f2cbc2aeb861 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13503386a6e07012046b4d173a345b5f inherit pub_methods_classhal_1_1_base_tree_item"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#a13503386a6e07012046b4d173a345b5f">getParent</a> () const</td></tr>
+<tr class="separator:a13503386a6e07012046b4d173a345b5f inherit pub_methods_classhal_1_1_base_tree_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a822d876a5ce069f3c0599ac680283065 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#a822d876a5ce069f3c0599ac680283065">setParent</a> (<a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *parent)</td></tr>
+<tr class="separator:a822d876a5ce069f3c0599ac680283065 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5e935a4a1e93b70cea71ee1e71c42df inherit pub_methods_classhal_1_1_base_tree_item"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#ac5e935a4a1e93b70cea71ee1e71c42df">getChild</a> (int row) const</td></tr>
+<tr class="separator:ac5e935a4a1e93b70cea71ee1e71c42df inherit pub_methods_classhal_1_1_base_tree_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0472eac3818f3d2ae12a97fc0c61f1a5 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#a0472eac3818f3d2ae12a97fc0c61f1a5">getChildren</a> () const</td></tr>
+<tr class="separator:a0472eac3818f3d2ae12a97fc0c61f1a5 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48496a62ce615523139d8c5327e631bc inherit pub_methods_classhal_1_1_base_tree_item"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#a48496a62ce615523139d8c5327e631bc">appendChild</a> (<a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *child)</td></tr>
+<tr class="separator:a48496a62ce615523139d8c5327e631bc inherit pub_methods_classhal_1_1_base_tree_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa653ce250f516cf4bf767191721080a4 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#aa653ce250f516cf4bf767191721080a4">insertChild</a> (int index, <a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *child)</td></tr>
+<tr class="separator:aa653ce250f516cf4bf767191721080a4 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c2cffc3bda3bce36ce7ae795252aff6 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#a6c2cffc3bda3bce36ce7ae795252aff6">removeChildAtPos</a> (int row)</td></tr>
+<tr class="separator:a6c2cffc3bda3bce36ce7ae795252aff6 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e2aa3dd3bf54f6a1c9339eb26b4f122 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#a0e2aa3dd3bf54f6a1c9339eb26b4f122">removeChild</a> (<a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *child)</td></tr>
+<tr class="separator:a0e2aa3dd3bf54f6a1c9339eb26b4f122 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d8acb06aac9fab1f781fecd0ce021ee inherit pub_methods_classhal_1_1_base_tree_item"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#a1d8acb06aac9fab1f781fecd0ce021ee">getChildCount</a> () const</td></tr>
+<tr class="separator:a1d8acb06aac9fab1f781fecd0ce021ee inherit pub_methods_classhal_1_1_base_tree_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a011563224a55c86cc45741c6e278518a inherit pub_methods_classhal_1_1_base_tree_item"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#a011563224a55c86cc45741c6e278518a">getRowForChild</a> (const <a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *child) const</td></tr>
+<tr class="separator:a011563224a55c86cc45741c6e278518a inherit pub_methods_classhal_1_1_base_tree_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e2cf91642c7d88838da658b09bb1d48 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#a9e2cf91642c7d88838da658b09bb1d48">getOwnRow</a> ()</td></tr>
+<tr class="separator:a9e2cf91642c7d88838da658b09bb1d48 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8d22b767a52cc17f77a081c7e4d3916 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#aa8d22b767a52cc17f77a081c7e4d3916">setAdditionalData</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> key, <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> data)</td></tr>
+<tr class="separator:aa8d22b767a52cc17f77a081c7e4d3916 inherit pub_methods_classhal_1_1_base_tree_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee318897bcc4977436dfd20e50e3499e inherit pub_methods_classhal_1_1_base_tree_item"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_item.html#aee318897bcc4977436dfd20e50e3499e">getAdditionalData</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> key) const</td></tr>
+<tr class="separator:aee318897bcc4977436dfd20e50e3499e inherit pub_methods_classhal_1_1_base_tree_item"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An item in the <a class="el" href="classhal_1_1_module_model.html" title="Represents the netlist module&#39;s hierarchy.">ModuleModel</a>. </p>
-<p>The <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> is one item in the <a class="el" href="classhal_1_1_module_model.html" title="Represents the netlist module&#39;s hierarchy.">ModuleModel</a> item model. It represents one module of the netlist. </p>
+<p>The <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> is one item in the <a class="el" href="classhal_1_1_module_model.html" title="Represents the netlist module&#39;s hierarchy.">ModuleModel</a> item model. It represents either a module, a gate or a net of the netlist. </p>
 
-<p class="definition">Definition at line <a class="el" href="module__item_8h_source.html#l00043">43</a> of file <a class="el" href="module__item_8h_source.html">module_item.h</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a3654b10c3e9528ec375775e9d1c6a483"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3654b10c3e9528ec375775e9d1c6a483">&#9670;&nbsp;</a></span>ModuleItem()</h2>
+<p class="definition">Definition at line <a class="el" href="module__item_8h_source.html#l00045">45</a> of file <a class="el" href="module__item_8h_source.html">module_item.h</a>.</p>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="adbacf40a93cae0f07b72c07da9bb9f42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbacf40a93cae0f07b72c07da9bb9f42">&#9670;&nbsp;</a></span>TreeItemType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42">hal::ModuleItem::TreeItemType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The possible types that a <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> in the <a class="el" href="classhal_1_1_module_model.html" title="Represents the netlist module&#39;s hierarchy.">ModuleModel</a> can have. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42"></a>Module&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16"></a>Gate&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="adbacf40a93cae0f07b72c07da9bb9f42a5012af45088eb8e999bb8350077b12ca"></a>Net&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="module__item_8h_source.html#l00051">51</a> of file <a class="el" href="module__item_8h_source.html">module_item.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a6ac714a2c1cce8d63a205ec85e1a5d7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ac714a2c1cce8d63a205ec85e1a5d7a">&#9670;&nbsp;</a></span>ModuleItem()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -164,52 +233,71 @@ Public Member Functions</h2></td></tr>
           <td class="memname">hal::ModuleItem::ModuleItem </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
-          <td class="paramname"><em>id</em></td><td>)</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42">TreeItemType</a>&#160;</td>
+          <td class="paramname"><em>type</em> = <code><a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42">TreeItemType::Module</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Constructor.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">id</td><td>- The id of the module this item represents </td></tr>
+    <tr><td class="paramname">id</td><td>- The id of the netlist item this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> represents </td></tr>
+    <tr><td class="paramname">type</td><td>- The type of the netlist item </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00010">10</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00011">11</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2net_8cpp_source.html#l00098">hal::Net::get_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00105">hal::Gate::get_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00087">hal::Module::get_name()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00353">hal::Netlist::get_net_by_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42">Module</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42a5012af45088eb8e999bb8350077b12ca">Net</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00059">type</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aa17cf6efdb60af58e385604f49360330"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa17cf6efdb60af58e385604f49360330">&#9670;&nbsp;</a></span>appendChild()</h2>
+<a id="a97b2cf4a8f36aba02dcc402b1d186881"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97b2cf4a8f36aba02dcc402b1d186881">&#9670;&nbsp;</a></span>appendData()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void hal::ModuleItem::appendChild </td>
+          <td class="memname">void hal::ModuleItem::appendData </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> *&#160;</td>
-          <td class="paramname"><em>child</em></td><td>)</td>
+          <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td>
+          <td class="paramname"><em>data</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-<p>Inserts a child <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> at the end of the children list of this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a>.</p>
+<p>Appends a new column to the item.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">child</td><td>- The child to be appended </td></tr>
+    <tr><td class="paramname">data</td><td>- The data of the new column. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00028">28</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
+<p>Implements <a class="el" href="classhal_1_1_base_tree_item.html#aae8a38ca73dedc23c82debf56de1009c">hal::BaseTreeItem</a>.</p>
 
-<p class="reference">References <a class="el" href="module__item_8cpp_source.html#l00060">child()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="module__item_8cpp_source.html#l00033">appendExistingChildIfAny()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00162">162</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
 
 </div>
 </div>
@@ -236,159 +324,65 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00033">33</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00039">39</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="module__item_8cpp_source.html#l00028">appendChild()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#constEnd">QMap::constEnd()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#find">QMap::find()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00259">hal::Module::get_submodules()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, and <a class="el" href="module__item_8cpp_source.html#l00116">setParent()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00231">hal::ModuleModel::addModule()</a>.</p>
+<p class="reference">References <a class="el" href="base__tree__item_8cpp_source.html#l00039">hal::BaseTreeItem::appendChild()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#constEnd">QMap::constEnd()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html#find">QMap::find()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00259">hal::Module::get_submodules()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42">Module</a>, and <a class="el" href="base__tree__item_8cpp_source.html#l00024">hal::BaseTreeItem::setParent()</a>.</p>
 
 </div>
 </div>
-<a id="a5a8baffec5c366eaa5bdebe148dba1df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a8baffec5c366eaa5bdebe148dba1df">&#9670;&nbsp;</a></span>child()</h2>
+<a id="a92bfd214ea29198702a1df25ed36f288"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92bfd214ea29198702a1df25ed36f288">&#9670;&nbsp;</a></span>getColumnCount()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> * hal::ModuleItem::child </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>row</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Get the child <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> at a certain position in the children list of this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">row</td><td>- The position in the children list of this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>then children <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> at the specified position in the children list </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00060">60</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="module__item_8cpp_source.html#l00080">row()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="module__item_8cpp_source.html#l00028">appendChild()</a>, <a class="el" href="module__item_8cpp_source.html#l00018">insertChild()</a>, <a class="el" href="module__item_8cpp_source.html#l00049">prependChild()</a>, and <a class="el" href="module__item_8cpp_source.html#l00023">removeChild()</a>.</p>
-
-</div>
-</div>
-<a id="a2cc3488245b18030073b5ae9c7e330b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2cc3488245b18030073b5ae9c7e330b8">&#9670;&nbsp;</a></span>childCount()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int hal::ModuleItem::childCount </td>
+          <td class="memname">int hal::ModuleItem::getColumnCount </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-<p>Gets the current amount of children of this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a></p>
-<dl class="section return"><dt>Returns</dt><dd>the amount of children </dd></dl>
+<p>Get the number of currently stored column data.</p>
+<dl class="section return"><dt>Returns</dt><dd>The column count. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00075">75</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
+<p>Implements <a class="el" href="classhal_1_1_base_tree_item.html#adeab80a9fa281e763053bf6b5ec4d3d7">hal::BaseTreeItem</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00084">hal::ModuleModel::rowCount()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00157">157</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a0af554a544b405b5980f3898f2031fd9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0af554a544b405b5980f3898f2031fd9">&#9670;&nbsp;</a></span>color()</h2>
+<a id="a0d68308899092dfe13c50d6ed679fc45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d68308899092dfe13c50d6ed679fc45">&#9670;&nbsp;</a></span>getData()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> hal::ModuleItem::color </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Gets the color of the module this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> represents.</p>
-<dl class="section return"><dt>Returns</dt><dd>the module color </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00106">106</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00104">hal::ModuleModel::data()</a>, and <a class="el" href="module__item_8cpp_source.html#l00126">setColor()</a>.</p>
-
-</div>
-</div>
-<a id="a9b04a9d4ff759bfaa02a4e8e1b34c109"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b04a9d4ff759bfaa02a4e8e1b34c109">&#9670;&nbsp;</a></span>constChild()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> * hal::ModuleItem::constChild </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>row</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Get the child <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> at a certain position in the children list of this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">row</td><td>- The position in the children list of this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>then children <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> at the specified position in the children list. Returns a constant <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> pointer </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00070">70</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="module__item_8cpp_source.html#l00080">row()</a>.</p>
-
-</div>
-</div>
-<a id="a9a00354ec6e0f3af46a39029a41d4d34"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9a00354ec6e0f3af46a39029a41d4d34">&#9670;&nbsp;</a></span>constParent()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> * hal::ModuleItem::constParent </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Gets the parent <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> of this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a>.</p>
-<dl class="section return"><dt>Returns</dt><dd>the parent <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a>. Returns a constant <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> pointer </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00065">65</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00169">hal::ModuleModel::getIndex()</a>.</p>
-
-</div>
-</div>
-<a id="a788ab1a6697bfb4686a4b12f163e95c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a788ab1a6697bfb4686a4b12f163e95c0">&#9670;&nbsp;</a></span>data()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> hal::ModuleItem::data </td>
+          <td class="memname"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> hal::ModuleItem::getData </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>column</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>Gets the data of this item model item i.e. the name of this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> if column=1.</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -399,9 +393,36 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the data in the specified column of this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00088">88</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
+<p>Implements <a class="el" href="classhal_1_1_base_tree_item.html#aa97e392edd168532523c61756e7c3d9c">hal::BaseTreeItem</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00104">hal::ModuleModel::data()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00058">58</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00059">hal::GateType::get_name()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00125">hal::Gate::get_type()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00106">hal::Module::get_type()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42">Module</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00976">hal::ShortestPath::module()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00018">hal::ModuleModel::data()</a>.</p>
+
+</div>
+</div>
+<a id="ae1c733dabb051c19f527c25e8d586b01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1c733dabb051c19f527c25e8d586b01">&#9670;&nbsp;</a></span>getType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42">ModuleItem::TreeItemType</a> hal::ModuleItem::getType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the type of the netlist item this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> represents.</p>
+<dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> type </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00143">143</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00018">hal::ModuleModel::data()</a>, <a class="el" href="module__widget_8cpp_source.html#l00362">hal::ModuleWidget::handleTreeSelectionChanged()</a>, <a class="el" href="module__widget_8cpp_source.html#l00174">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>, and <a class="el" href="module__proxy__model_8cpp_source.html#l00059">hal::ModuleProxyModel::lessThan()</a>.</p>
 
 </div>
 </div>
@@ -420,11 +441,11 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Checks if this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> is currently highlighted.</p>
-<dl class="section return"><dt>Returns</dt><dd><b>true</b> iff this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> is currently highlighted. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><b>true</b> if this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> is currently highlighted. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00111">111</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00138">138</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00104">hal::ModuleModel::data()</a>, and <a class="el" href="module__item_8cpp_source.html#l00131">setHighlighted()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00018">hal::ModuleModel::data()</a>, and <a class="el" href="module__item_8cpp_source.html#l00152">setHighlighted()</a>.</p>
 
 </div>
 </div>
@@ -442,52 +463,12 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Gets the id of the module this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> represents.</p>
+<p>Gets the id of the netlist item this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> represents.</p>
 <dl class="section return"><dt>Returns</dt><dd>the module id </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00101">101</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00133">133</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__widget_8cpp_source.html#l00203">hal::ModuleWidget::handleTreeSelectionChanged()</a>, and <a class="el" href="module__widget_8cpp_source.html#l00132">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>.</p>
-
-</div>
-</div>
-<a id="a4cb25c343257edc6a57d5c0950319a9e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4cb25c343257edc6a57d5c0950319a9e">&#9670;&nbsp;</a></span>insertChild()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::ModuleItem::insertChild </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>row</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> *&#160;</td>
-          <td class="paramname"><em>child</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Appends a child <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> to this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">row</td><td>- The index of the childs of this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> the new child should be moved to </td></tr>
-    <tr><td class="paramname">child</td><td>- The new child to be inserted </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00018">18</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="module__item_8cpp_source.html#l00060">child()</a>, and <a class="el" href="module__item_8cpp_source.html#l00080">row()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00018">hal::ModuleModel::data()</a>, <a class="el" href="module__widget_8cpp_source.html#l00362">hal::ModuleWidget::handleTreeSelectionChanged()</a>, <a class="el" href="module__widget_8cpp_source.html#l00174">hal::ModuleWidget::handleTreeViewContextMenuRequested()</a>, <a class="el" href="module__model_8cpp_source.html#l00339">hal::ModuleModel::updateModuleParent()</a>, and <a class="el" href="module__model_8cpp_source.html#l00307">hal::ModuleModel::updateNet()</a>.</p>
 
 </div>
 </div>
@@ -505,93 +486,12 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Gets the name of the module this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> represents.</p>
-<dl class="section return"><dt>Returns</dt><dd>the modules name </dd></dl>
+<p>Gets the name of the netlist item this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> represents.</p>
+<dl class="section return"><dt>Returns</dt><dd>the netlist items name </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00096">96</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00128">128</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__item_8cpp_source.html#l00121">set_name()</a>.</p>
-
-</div>
-</div>
-<a id="afbcc7d4240aae4644bddf7b41fdb298f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afbcc7d4240aae4644bddf7b41fdb298f">&#9670;&nbsp;</a></span>parent()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> * hal::ModuleItem::parent </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Gets the parent <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> of this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a>.</p>
-<dl class="section return"><dt>Returns</dt><dd>the parent <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00055">55</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00059">hal::ModuleModel::parent()</a>, <a class="el" href="module__model_8cpp_source.html#l00264">hal::ModuleModel::remove_module()</a>, and <a class="el" href="module__item_8cpp_source.html#l00116">setParent()</a>.</p>
-
-</div>
-</div>
-<a id="a4fe2ccdfa54cc71669cd310d7b22e57e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4fe2ccdfa54cc71669cd310d7b22e57e">&#9670;&nbsp;</a></span>prependChild()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::ModuleItem::prependChild </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> *&#160;</td>
-          <td class="paramname"><em>child</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Inserts a child <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> at the beginning of the children list of this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">child</td><td>- The child to be prepended </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00049">49</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="module__item_8cpp_source.html#l00060">child()</a>.</p>
-
-</div>
-</div>
-<a id="a1969e0fba8f7638e276169da7f6276e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1969e0fba8f7638e276169da7f6276e0">&#9670;&nbsp;</a></span>removeChild()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::ModuleItem::removeChild </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> *&#160;</td>
-          <td class="paramname"><em>child</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Removes a child <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> from this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">child</td><td>- The child to remove </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00023">23</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="module__item_8cpp_source.html#l00060">child()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__item_8cpp_source.html#l00147">setName()</a>.</p>
 
 </div>
 </div>
@@ -612,71 +512,100 @@ Public Member Functions</h2></td></tr>
 <p>Gets the index of this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> in the list of children ModuleItems of its parent.</p>
 <dl class="section return"><dt>Returns</dt><dd>the index in the parents <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> children list </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00080">80</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00031">31</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__item_8cpp_source.html#l00060">child()</a>, <a class="el" href="module__item_8cpp_source.html#l00070">constChild()</a>, <a class="el" href="module__model_8cpp_source.html#l00169">hal::ModuleModel::getIndex()</a>, <a class="el" href="module__item_8cpp_source.html#l00018">insertChild()</a>, <a class="el" href="module__model_8cpp_source.html#l00059">hal::ModuleModel::parent()</a>, and <a class="el" href="module__model_8cpp_source.html#l00264">hal::ModuleModel::remove_module()</a>.</p>
+<p class="reference">References <a class="el" href="base__tree__item_8cpp_source.html#l00019">hal::BaseTreeItem::getParent()</a>, and <a class="el" href="base__tree__item_8cpp_source.html#l00080">hal::BaseTreeItem::getRowForChild()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00078">hal::ModuleModel::getIndex()</a>, <a class="el" href="module__model_8cpp_source.html#l00234">hal::ModuleModel::removeGate()</a>, <a class="el" href="module__model_8cpp_source.html#l00209">hal::ModuleModel::removeModule()</a>, <a class="el" href="module__model_8cpp_source.html#l00258">hal::ModuleModel::removeNet()</a>, <a class="el" href="module__model_8cpp_source.html#l00339">hal::ModuleModel::updateModuleParent()</a>, and <a class="el" href="module__model_8cpp_source.html#l00307">hal::ModuleModel::updateNet()</a>.</p>
 
 </div>
 </div>
-<a id="a59812537a298ad9a48d00fbde2b0d120"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a59812537a298ad9a48d00fbde2b0d120">&#9670;&nbsp;</a></span>set_name()</h2>
+<a id="a414fb66f33e15959aadc21d0113c0d18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a414fb66f33e15959aadc21d0113c0d18">&#9670;&nbsp;</a></span>setData()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void hal::ModuleItem::set_name </td>
+          <td class="memname">void hal::ModuleItem::setData </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
+          <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> &gt;&#160;</td>
+          <td class="paramname"><em>data</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-<p>Sets the name of this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> (not the underlying module).</p>
+<p>Sets the data for all columns.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">name</td><td>- The new name </td></tr>
+    <tr><td class="paramname">data</td><td>- Each entry in the list represents one column. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00121">121</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
+<p>Implements <a class="el" href="classhal_1_1_base_tree_item.html#aeaa705372e25642a718cebc1afef3dde">hal::BaseTreeItem</a>.</p>
 
-<p class="reference">References <a class="el" href="module__item_8cpp_source.html#l00096">name()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00086">86</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00289">hal::ModuleModel::updateModule()</a>.</p>
+<p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">hal::data</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42">Module</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00976">hal::ShortestPath::module()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00111">hal::Module::set_type()</a>, and <a class="el" href="module__item_8cpp_source.html#l00147">setName()</a>.</p>
 
 </div>
 </div>
-<a id="a5ea9a110766ab4aeff8d096b0ce324d2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ea9a110766ab4aeff8d096b0ce324d2">&#9670;&nbsp;</a></span>setColor()</h2>
+<a id="a030a4d5fdbff4f218db0c2db86dd8460"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a030a4d5fdbff4f218db0c2db86dd8460">&#9670;&nbsp;</a></span>setDataAtIndex()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void hal::ModuleItem::setColor </td>
+          <td class="memname">void hal::ModuleItem::setDataAtIndex </td>
           <td>(</td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> &amp;&#160;</td>
-          <td class="paramname"><em>color</em></td><td>)</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> &amp;&#160;</td>
+          <td class="paramname"><em>data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-<p>Sets the color of the module this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> represents.</p>
+<p>Sets the data for a specified column. The index must be within already existing boundaries (for example, add dummy data beforehand).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">color</td><td>- The new color </td></tr>
+    <tr><td class="paramname">index</td><td>- The column to set the new data. </td></tr>
+    <tr><td class="paramname">data</td><td>- The new column data. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00126">126</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
+<p>Implements <a class="el" href="classhal_1_1_base_tree_item.html#ae1d5d4723997d5cc2c39596e1aa8bf2e">hal::BaseTreeItem</a>.</p>
 
-<p class="reference">References <a class="el" href="module__item_8cpp_source.html#l00106">color()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00103">103</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00289">hal::ModuleModel::updateModule()</a>.</p>
+<p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba8d777f385d3dfec8815d20f7496026dc">hal::data</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16">Gate</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ae55f75a29310d7b60f7ac1d390c8ae42">Module</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00976">hal::ShortestPath::module()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00111">hal::Module::set_type()</a>, and <a class="el" href="module__item_8cpp_source.html#l00147">setName()</a>.</p>
 
 </div>
 </div>
@@ -703,40 +632,40 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00131">131</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00152">152</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="module__item_8cpp_source.html#l00111">highlighted()</a>.</p>
+<p class="reference">References <a class="el" href="module__item_8cpp_source.html#l00138">highlighted()</a>.</p>
 
 </div>
 </div>
-<a id="aab25f5d265d6ac6cc6e171ae528ee2b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aab25f5d265d6ac6cc6e171ae528ee2b1">&#9670;&nbsp;</a></span>setParent()</h2>
+<a id="a9a7b4c3f14ce92c7801560df822a5060"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a7b4c3f14ce92c7801560df822a5060">&#9670;&nbsp;</a></span>setName()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void hal::ModuleItem::setParent </td>
+          <td class="memname">void hal::ModuleItem::setName </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classhal_1_1_module_item.html">ModuleItem</a> *&#160;</td>
-          <td class="paramname"><em>parent</em></td><td>)</td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the parent <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> of this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a>.</p>
+<p>Sets the name of this <a class="el" href="classhal_1_1_module_item.html" title="An item in the ModuleModel.">ModuleItem</a> (not the underlying module).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">parent</td><td>- The new parent </td></tr>
+    <tr><td class="paramname">name</td><td>- The new name </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00116">116</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="module__item_8cpp_source.html#l00147">147</a> of file <a class="el" href="module__item_8cpp_source.html">module_item.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="module__item_8cpp_source.html#l00055">parent()</a>.</p>
+<p class="reference">References <a class="el" href="module__item_8cpp_source.html#l00128">name()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00231">hal::ModuleModel::addModule()</a>, and <a class="el" href="module__item_8cpp_source.html#l00033">appendExistingChildIfAny()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="module__item_8cpp_source.html#l00086">setData()</a>, <a class="el" href="module__item_8cpp_source.html#l00103">setDataAtIndex()</a>, <a class="el" href="module__model_8cpp_source.html#l00381">hal::ModuleModel::updateGateName()</a>, <a class="el" href="module__model_8cpp_source.html#l00367">hal::ModuleModel::updateModuleName()</a>, and <a class="el" href="module__model_8cpp_source.html#l00395">hal::ModuleModel::updateNetName()</a>.</p>
 
 </div>
 </div>
@@ -750,7 +679,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_module_item.html">ModuleItem</a></li>
-    <li class="footer">Generated on Fri Nov 17 2023 17:35:59 for HAL by
+    <li class="footer">Generated on Fri Nov 17 2023 21:38:50 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

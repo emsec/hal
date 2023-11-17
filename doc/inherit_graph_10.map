@@ -1,3 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhal_1_1_boolean_function.html" title=" " alt="" coords="5,5,164,32"/>
+<area shape="rect" id="node1" href="$classhal_1_1_base_tree_item.html" title="(Future) Base class for all tree models related to the details widget." alt="" coords="5,132,144,159"/>
+<area shape="rect" id="node2" href="$classhal_1_1_module_item.html" title="An item in the ModuleModel." alt="" coords="233,5,361,32"/>
+<area shape="rect" id="node3" href="$classhal_1_1_module_treeitem.html" title=" " alt="" coords="220,56,375,83"/>
+<area shape="rect" id="node4" href="$classhal_1_1_netlist_elements_treeitem.html" title=" " alt="" coords="192,107,403,133"/>
+<area shape="rect" id="node5" href="$classhal_1_1_pin_tree_item.html" title=" " alt="" coords="234,157,361,184"/>
+<area shape="rect" id="node6" href="$classhal_1_1_port_tree_item.html" title=" " alt="" coords="231,208,364,235"/>
+<area shape="rect" id="node7" href="$classhal_1_1_root_tree_item.html" title=" " alt="" coords="229,259,366,285"/>
 </map>

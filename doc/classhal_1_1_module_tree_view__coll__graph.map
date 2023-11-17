@@ -1,5 +1,5 @@
 <map id="hal::ModuleTreeView" name="hal::ModuleTreeView">
-<area shape="rect" id="node1" title="Wraps the QTreeView used for the ModuleWidget." alt="" coords="29,813,191,905"/>
+<area shape="rect" id="node1" title="Wraps the QTreeView used for the ModuleWidget." alt="" coords="9,813,211,920"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qtreeview.html" title=" " alt="" coords="15,453,205,765"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qabstractitemview.html" title=" " alt="" coords="5,5,215,405"/>
 </map>

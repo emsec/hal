@@ -605,311 +605,312 @@ $(document).ready(function(){initNavTree('src_2python__bindings_2bindings_2netli
 <div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;delete_module&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a68c1b5ea177438f4a6fadeed0b82ab44">Netlist::delete_module</a>, py::arg(<span class="stringliteral">&quot;module&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;<span class="stringliteral">            Remove a module from the netlist.</span></div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;<span class="stringliteral">            :param module: The module.</span></div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;<span class="stringliteral">            :type module: hal_py.Module</span></div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;<span class="stringliteral">            :returns: True on success, false otherwise.</span></div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;is_module_in_netlist&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ac322b3605d50992b76b8afa8dfd6fb11">Netlist::is_module_in_netlist</a>, py::arg(<span class="stringliteral">&quot;module&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;<span class="stringliteral">            Check whether a module is registered in the netlist.</span></div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;<span class="stringliteral">            :param hal_py.Module module: The module to check.</span></div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;<span class="stringliteral">            :returns: True if the module is in the netlist, false otherwise.</span></div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_module_by_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">Netlist::get_module_by_id</a>, py::arg(<span class="stringliteral">&quot;module_id&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;<span class="stringliteral">            Get the module specified by the given ID.</span></div>
-<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;<span class="stringliteral">            :param int module_id: The unique ID of the module.</span></div>
-<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;<span class="stringliteral">            :returns: The module on success, None otherwise.</span></div>
-<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;<span class="stringliteral">            :rtype: hal_py.Module</span></div>
-<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;<span class="stringliteral">        py_netlist.def_property_readonly(</span><span class="stringliteral">&quot;modules&quot;</span>, py::overload_cast&lt;&gt;(&amp;<a class="code" href="classhal_1_1_netlist.html#a7eb17e617d1b20d05fdd146ad63c138b">Netlist::get_modules</a>, py::const_), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;<span class="stringliteral">            All modules contained within the netlist, including the top module.</span></div>
-<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;<span class="stringliteral">            :type: list[hal_py.Module]</span></div>
-<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_modules&quot;</span>, py::overload_cast&lt;&gt;(&amp;<a class="code" href="classhal_1_1_netlist.html#a7eb17e617d1b20d05fdd146ad63c138b">Netlist::get_modules</a>, py::const_), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;<span class="stringliteral">            Get all modules contained within the netlist, including the top module.</span></div>
-<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;<span class="stringliteral">            :returns: A list of modules.</span></div>
-<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.Module]</span></div>
-<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_modules&quot;</span>, py::overload_cast&lt;<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_module.html">Module</a>*)&gt;&amp;&gt;(&amp;<a class="code" href="classhal_1_1_netlist.html#a7eb17e617d1b20d05fdd146ad63c138b">Netlist::get_modules</a>, py::const_), py::arg(<span class="stringliteral">&quot;filter&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;<span class="stringliteral">            Get all modules contained within the netlist, including the top module.</span></div>
-<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;<span class="stringliteral">            The filter is evaluated on every module such that the result only contains modules matching the specified condition.</span></div>
-<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;<span class="stringliteral">            :param lambda filter: Filter function to be evaluated on each module.</span></div>
-<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;<span class="stringliteral">            :returns: A list of modules.</span></div>
-<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.Module]</span></div>
-<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;<span class="stringliteral">        py_netlist.def_property_readonly(</span><span class="stringliteral">&quot;top_module&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a0b4333d865d8813103a495745a30c817">Netlist::get_top_module</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;<span class="stringliteral">            The top module of the netlist.</span></div>
-<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;<span class="stringliteral">            :type: hal_py.Module</span></div>
-<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_top_module&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a0b4333d865d8813103a495745a30c817">Netlist::get_top_module</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;<span class="stringliteral">            Get the top module of the netlist.</span></div>
-<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;<span class="stringliteral">            :returns: The top module.</span></div>
-<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;<span class="stringliteral">            :rtype: hal_py.Module</span></div>
-<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_unique_grouping_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a1a8945e5b0d05d28b0bb50f1e053e08c">Netlist::get_unique_grouping_id</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;<span class="stringliteral">            Get a spare and unique grouping ID.</span></div>
-<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;<span class="stringliteral">            The value of 0 is reserved and represents an invalid ID.</span></div>
-<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;<span class="stringliteral">            :returns: The grouping ID.</span></div>
-<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;<span class="stringliteral">            :rtype: int</span></div>
-<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;create_grouping&quot;</span>,</div>
-<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;                       py::overload_cast&lt;const u32, const std::string&amp;&gt;(&amp;<a class="code" href="classhal_1_1_netlist.html#a1eb73283bdde41c3117ee2363c128963">Netlist::create_grouping</a>),</div>
-<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;                       py::arg(<span class="stringliteral">&quot;grouping_id&quot;</span>),</div>
-<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;                       py::arg(<span class="stringliteral">&quot;name&quot;</span>),</div>
-<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;                       R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;<span class="stringliteral">            Create a new grouping and add it to the netlist.</span></div>
-<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;<span class="stringliteral">            :param int grouping_id: The unique ID of the grouping.</span></div>
-<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;<span class="stringliteral">            :param str name: The name of the grouping.</span></div>
-<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;<span class="stringliteral">            :returns: The new grouping on success, None otherwise.</span></div>
-<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;<span class="stringliteral">            :rtype: hal_py.Grouping or None</span></div>
-<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;create_grouping&quot;</span>,</div>
-<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;                       py::overload_cast&lt;const std::string&amp;&gt;(&amp;<a class="code" href="classhal_1_1_netlist.html#a1eb73283bdde41c3117ee2363c128963">Netlist::create_grouping</a>),</div>
-<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;                       py::arg(<span class="stringliteral">&quot;name&quot;</span>),</div>
-<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;                       R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;<span class="stringliteral">            Create a new grouping and add it to the netlist.</span></div>
-<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;<span class="stringliteral">            The ID of the grouping is set automatically.</span></div>
-<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;<span class="stringliteral">            :param str name: The name of the grouping.</span></div>
-<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;<span class="stringliteral">            :returns: The new grouping on success, None otherwise.</span></div>
-<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;<span class="stringliteral">            :rtype: hal_py.Grouping or None</span></div>
-<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;delete_grouping&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a2aabcc2400d7af7788cbbe22397c1c8d">Netlist::delete_grouping</a>, py::arg(<span class="stringliteral">&quot;grouping&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;<span class="stringliteral">            Remove a grouping from the netlist.</span></div>
-<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;<span class="stringliteral">            :param hal_py.Grouping grouping: The grouping.</span></div>
-<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;<span class="stringliteral">            :returns: True on success, false otherwise.</span></div>
-<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
-<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;is_grouping_in_netlist&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a864fc657cbaad83a16f9dcdd75663fb8">Netlist::is_grouping_in_netlist</a>, py::arg(<span class="stringliteral">&quot;grouping&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;<span class="stringliteral">            Check whether the grouping is registered in the netlist.</span></div>
-<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;<span class="stringliteral">            :param hal_py.Module grouping: The grouping to check.</span></div>
-<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;<span class="stringliteral">            :returns: True on success, false otherwise.</span></div>
-<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
-<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_grouping_by_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ae41916880e2d766ab5367d26ee6cb2b3">Netlist::get_grouping_by_id</a>, py::arg(<span class="stringliteral">&quot;grouping_id&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;<span class="stringliteral">            Get the grouping specified by the given ID.</span></div>
-<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;<span class="stringliteral">            :param int grouping_id: The unique ID of the grouping.</span></div>
-<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;<span class="stringliteral">            :returns: The grouping on success, nullptr otherwise.</span></div>
-<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;<span class="stringliteral">            :rtype: hal_py.Grouping</span></div>
-<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;<span class="stringliteral">        py_netlist.def_property_readonly(</span><span class="stringliteral">&quot;groupings&quot;</span>, py::overload_cast&lt;&gt;(&amp;<a class="code" href="classhal_1_1_netlist.html#ac96d937d85d8fbd7182ab4bcc3e579cb">Netlist::get_groupings</a>, py::const_), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;<span class="stringliteral">            All groupings contained within the netlist.</span></div>
-<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;<span class="stringliteral">            :type: list[hal_py.Grouping]</span></div>
-<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_groupings&quot;</span>, py::overload_cast&lt;&gt;(&amp;<a class="code" href="classhal_1_1_netlist.html#ac96d937d85d8fbd7182ab4bcc3e579cb">Netlist::get_groupings</a>, py::const_), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;<span class="stringliteral">            Get all groupings contained within the netlist.</span></div>
-<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;<span class="stringliteral">            :returns: A list of groupings.</span></div>
-<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.Grouping]</span></div>
-<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_groupings&quot;</span>, py::overload_cast&lt;<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_grouping.html">Grouping</a>*)&gt;&amp;&gt;(&amp;<a class="code" href="classhal_1_1_netlist.html#ac96d937d85d8fbd7182ab4bcc3e579cb">Netlist::get_groupings</a>, py::const_), py::arg(<span class="stringliteral">&quot;filter&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;<span class="stringliteral">            Get all groupings contained within the netlist.</span></div>
-<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;<span class="stringliteral">            The filter is evaluated on every grouping such that the result only contains groupings matching the specified condition.</span></div>
-<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;<span class="stringliteral">            :param lambda filter: Filter function to be evaluated on each grouping.</span></div>
-<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;<span class="stringliteral">            :returns: A list of groupings.</span></div>
-<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.Grouping]</span></div>
-<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_next_gate_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ad4152742f2e30b4694ffb6b0632e6675">Netlist::get_next_gate_id</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;<span class="stringliteral">            Get the gate ID following the highest currently used ID.</span></div>
-<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;<span class="stringliteral">            :returns: The next gate ID.</span></div>
-<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;<span class="stringliteral">            :rtype: int</span></div>
-<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_next_gate_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a5c3928f77d98147ce5577f2b6defb65f">Netlist::set_next_gate_id</a>, py::arg(<span class="stringliteral">&quot;id&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;<span class="stringliteral">            Set the gate ID following the highest currently used ID.</span></div>
-<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;<span class="stringliteral">            :param int id: The next gate ID.</span></div>
-<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_used_gate_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a88bc7f3434b6fd4e08a97bccc141e0e2">Netlist::get_used_gate_ids</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;<span class="stringliteral">            Get a set of all currently used gate IDs.</span></div>
-<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;<span class="stringliteral">            :returns: All used gate IDs.</span></div>
-<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;<span class="stringliteral">            :rtype: set[int]</span></div>
-<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_used_gate_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a16914d7332760bcbf7fd663a7dd537d5">Netlist::set_used_gate_ids</a>, py::arg(<span class="stringliteral">&quot;ids&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;<span class="stringliteral">            Set a set of all currently used gate IDs.</span></div>
-<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;<span class="stringliteral">            :param set[int] ids: All used gate IDs.</span></div>
-<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_free_gate_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a5f7900676fda58ddebf01044f10a7312">Netlist::get_free_gate_ids</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;<span class="stringliteral">            Get a set of all gate IDs that have previously been used but been freed ever since.</span></div>
-<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;<span class="stringliteral">            :returns: All freed gate IDs.</span></div>
-<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;<span class="stringliteral">            :rtype: set[int]</span></div>
-<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_free_gate_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ab501f50d05fdd684b7a5185c183c0e9d">Netlist::set_free_gate_ids</a>, py::arg(<span class="stringliteral">&quot;ids&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;<span class="stringliteral">            Set a set of all gate IDs that have previously been used but been freed ever since.</span></div>
-<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;<span class="stringliteral">            :param set[int] ids: All freed gate IDs.</span></div>
-<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_next_net_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a730c75bae75323000569ced56870e395">Netlist::get_next_net_id</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;<span class="stringliteral">            Get the net ID following the highest currently used ID.</span></div>
-<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;<span class="stringliteral">            :returns: The next net ID.</span></div>
-<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;<span class="stringliteral">            :rtype: int</span></div>
-<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_next_net_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ace12a9ca88fa9e93e65ec01e5d477317">Netlist::set_next_net_id</a>, py::arg(<span class="stringliteral">&quot;id&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;<span class="stringliteral">            Set the net ID following the highest currently used ID.</span></div>
-<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;<span class="stringliteral">            :param int id: The next net ID.</span></div>
-<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_used_net_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a507df53724c277efd4aacfb512906d82">Netlist::get_used_net_ids</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;<span class="stringliteral">            Get a set of all currently used net IDs.</span></div>
-<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;<span class="stringliteral">            :returns: All used net IDs.</span></div>
-<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;<span class="stringliteral">            :rtype: set[int]</span></div>
-<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_used_net_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a1aa7685dac8e78db0d6cfb96ad9b053d">Netlist::set_used_net_ids</a>, py::arg(<span class="stringliteral">&quot;ids&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;<span class="stringliteral">            Set a set of all currently used net IDs.</span></div>
-<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;<span class="stringliteral">            :param set[int] ids: All used net IDs.</span></div>
-<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_free_net_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ae4e985be054eb29cf3a218edbe23f390">Netlist::get_free_net_ids</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;<span class="stringliteral">            Get a set of all net IDs that have previously been used but been freed ever since.</span></div>
-<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;<span class="stringliteral">            :returns: All freed net IDs.</span></div>
-<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;<span class="stringliteral">            :rtype: set[int]</span></div>
-<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_free_net_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a904bed7669e36ad72c6531fb205f2f76">Netlist::set_free_net_ids</a>, py::arg(<span class="stringliteral">&quot;ids&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;<span class="stringliteral">            Set a set of all net IDs that have previously been used but been freed ever since.</span></div>
-<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;<span class="stringliteral">            :param set[int] ids: All freed net IDs.</span></div>
-<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_next_module_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a7e2dfd8c4fa7be87c0a307eb643bdd06">Netlist::get_next_module_id</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;<span class="stringliteral">            Get the module ID following the highest currently used ID.</span></div>
-<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;<span class="stringliteral">            :returns: The next module ID.</span></div>
-<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;<span class="stringliteral">            :rtype: int</span></div>
-<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_next_module_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a9af17a9e3eb966f7093a6ff66f92dd1c">Netlist::set_next_module_id</a>, py::arg(<span class="stringliteral">&quot;id&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;<span class="stringliteral">            Set the module ID following the highest currently used ID.</span></div>
-<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;<span class="stringliteral">            :param int id: The next module ID.</span></div>
-<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_used_module_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#aa33a445d0c41a8087e36068cf7cf8544">Netlist::get_used_module_ids</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;<span class="stringliteral">            Get a set of all currently used module IDs.</span></div>
-<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;<span class="stringliteral">            :returns: All used module IDs.</span></div>
-<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;<span class="stringliteral">            :rtype: set[int]</span></div>
-<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_used_module_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ad0968fba28731bc4ed56e9a2f9b42816">Netlist::set_used_module_ids</a>, py::arg(<span class="stringliteral">&quot;ids&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;<span class="stringliteral">            Set a set of all currently used module IDs.</span></div>
-<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;<span class="stringliteral">            :param set[int] ids: All used module IDs.</span></div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_free_module_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a349e8a245c3c36d2ce27196958dcd824">Netlist::get_free_module_ids</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;<span class="stringliteral">            Get a set of all module IDs that have previously been used but been freed ever since.</span></div>
-<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;<span class="stringliteral">            :returns: All freed module IDs.</span></div>
-<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;<span class="stringliteral">            :rtype: set[int]</span></div>
-<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_free_module_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a5ccd60af2c23cff09dc2440dd26be1c1">Netlist::set_free_module_ids</a>, py::arg(<span class="stringliteral">&quot;ids&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;<span class="stringliteral">            Set a set of all module IDs that have previously been used but been freed ever since.</span></div>
-<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;<span class="stringliteral">            :param set[int] ids: All freed module IDs.</span></div>
-<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_next_grouping_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ad0c4a5818446c1036802ef588bf18d4f">Netlist::get_next_grouping_id</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;<span class="stringliteral">            Get the grouping ID following the highest currently used ID.</span></div>
-<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;<span class="stringliteral">            :returns: The next grouping ID.</span></div>
-<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;<span class="stringliteral">            :rtype: int</span></div>
-<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_next_grouping_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ab54b519ce01ac34e41a9bc9e0916df0f">Netlist::set_next_grouping_id</a>, py::arg(<span class="stringliteral">&quot;id&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;<span class="stringliteral">            Set the grouping ID following the highest currently used ID.</span></div>
-<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;<span class="stringliteral">            :param int id: The next grouping ID.</span></div>
-<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_used_grouping_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a6263f727eaa5a5c498025aa2abc11176">Netlist::get_used_grouping_ids</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;<span class="stringliteral">            Get a set of all currently used grouping IDs.</span></div>
-<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;<span class="stringliteral">            :returns: All used grouping IDs.</span></div>
-<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;<span class="stringliteral">            :rtype: set[int]</span></div>
-<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_used_grouping_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#abf2a126190fdc755281a54b70f9113b0">Netlist::set_used_grouping_ids</a>, py::arg(<span class="stringliteral">&quot;ids&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;<span class="stringliteral">            Set a set of all currently used grouping IDs.</span></div>
-<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;<span class="stringliteral">            :param set[int] ids: All used grouping IDs.</span></div>
-<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_free_grouping_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ab6f2ca6f0f49b95d39b3637d30849a9a">Netlist::get_free_grouping_ids</a>, R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;<span class="stringliteral">            Get a set of all grouping IDs that have previously been used but been freed ever since.</span></div>
-<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;<span class="stringliteral">            :returns: All freed grouping IDs.</span></div>
-<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;<span class="stringliteral">            :rtype: set[int]</span></div>
-<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_free_grouping_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a317676a3e9d5961ae27e3fd221cb0a87">Netlist::set_free_grouping_ids</a>, py::arg(<span class="stringliteral">&quot;ids&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;<span class="stringliteral">            Set a set of all grouping IDs that have previously been used but been freed ever since.</span></div>
-<div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160;<span class="stringliteral">            :param set[int] ids: All freed grouping IDs.</span></div>
-<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;<span class="stringliteral">        py_netlist.def(</span></div>
-<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;load_gate_locations_from_data&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a2f4fbe600e19dc28c5bddf40b38ac0cf">Netlist::load_gate_locations_from_data</a>, py::arg(<span class="stringliteral">&quot;data_category&quot;</span>) = std::string(), py::arg(<span class="stringliteral">&quot;data_identifiers&quot;</span>) = std::pair&lt;std::string, std::string&gt;(), R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160;<span class="stringliteral">            Load the locations of the gates in the netlist from their associated data using the specified category and identifier.</span></div>
-<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;<span class="stringliteral">            If no parameter is given, the data is querried using the default category and identifier stored with the gate library.</span></div>
-<div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;<span class="stringliteral">            :param str data_category: The data category.</span></div>
-<div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160;<span class="stringliteral">            :param tuple(str,str) data_identifiers: The data identifiers for the x- and y-coordinates.</span></div>
-<div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;<span class="stringliteral">            :returns: True on success, False otherwise.</span></div>
-<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
-<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
-<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;<span class="stringliteral">    }</span></div>
-<div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160;<span class="stringliteral">}    </span><span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;<span class="stringliteral">            Submodules, gates and nets under this module will be moved to the parent of this module.</span></div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;<span class="stringliteral">            :param module: The module.</span></div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;<span class="stringliteral">            :type module: hal_py.Module</span></div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;<span class="stringliteral">            :returns: True on success, false otherwise.</span></div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;is_module_in_netlist&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ac322b3605d50992b76b8afa8dfd6fb11">Netlist::is_module_in_netlist</a>, py::arg(<span class="stringliteral">&quot;module&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;<span class="stringliteral">            Check whether a module is registered in the netlist.</span></div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;<span class="stringliteral">            :param hal_py.Module module: The module to check.</span></div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;<span class="stringliteral">            :returns: True if the module is in the netlist, false otherwise.</span></div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_module_by_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">Netlist::get_module_by_id</a>, py::arg(<span class="stringliteral">&quot;module_id&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;<span class="stringliteral">            Get the module specified by the given ID.</span></div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;<span class="stringliteral">            :param int module_id: The unique ID of the module.</span></div>
+<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;<span class="stringliteral">            :returns: The module on success, None otherwise.</span></div>
+<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;<span class="stringliteral">            :rtype: hal_py.Module</span></div>
+<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;<span class="stringliteral">        py_netlist.def_property_readonly(</span><span class="stringliteral">&quot;modules&quot;</span>, py::overload_cast&lt;&gt;(&amp;<a class="code" href="classhal_1_1_netlist.html#a7eb17e617d1b20d05fdd146ad63c138b">Netlist::get_modules</a>, py::const_), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;<span class="stringliteral">            All modules contained within the netlist, including the top module.</span></div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;<span class="stringliteral">            :type: list[hal_py.Module]</span></div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_modules&quot;</span>, py::overload_cast&lt;&gt;(&amp;<a class="code" href="classhal_1_1_netlist.html#a7eb17e617d1b20d05fdd146ad63c138b">Netlist::get_modules</a>, py::const_), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;<span class="stringliteral">            Get all modules contained within the netlist, including the top module.</span></div>
+<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;<span class="stringliteral">            :returns: A list of modules.</span></div>
+<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.Module]</span></div>
+<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_modules&quot;</span>, py::overload_cast&lt;<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_module.html">Module</a>*)&gt;&amp;&gt;(&amp;<a class="code" href="classhal_1_1_netlist.html#a7eb17e617d1b20d05fdd146ad63c138b">Netlist::get_modules</a>, py::const_), py::arg(<span class="stringliteral">&quot;filter&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;<span class="stringliteral">            Get all modules contained within the netlist, including the top module.</span></div>
+<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;<span class="stringliteral">            The filter is evaluated on every module such that the result only contains modules matching the specified condition.</span></div>
+<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;<span class="stringliteral">            :param lambda filter: Filter function to be evaluated on each module.</span></div>
+<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;<span class="stringliteral">            :returns: A list of modules.</span></div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.Module]</span></div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;<span class="stringliteral">        py_netlist.def_property_readonly(</span><span class="stringliteral">&quot;top_module&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a0b4333d865d8813103a495745a30c817">Netlist::get_top_module</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;<span class="stringliteral">            The top module of the netlist.</span></div>
+<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;<span class="stringliteral">            :type: hal_py.Module</span></div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_top_module&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a0b4333d865d8813103a495745a30c817">Netlist::get_top_module</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;<span class="stringliteral">            Get the top module of the netlist.</span></div>
+<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;<span class="stringliteral">            :returns: The top module.</span></div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;<span class="stringliteral">            :rtype: hal_py.Module</span></div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_unique_grouping_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a1a8945e5b0d05d28b0bb50f1e053e08c">Netlist::get_unique_grouping_id</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;<span class="stringliteral">            Get a spare and unique grouping ID.</span></div>
+<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;<span class="stringliteral">            The value of 0 is reserved and represents an invalid ID.</span></div>
+<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;<span class="stringliteral">            :returns: The grouping ID.</span></div>
+<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;<span class="stringliteral">            :rtype: int</span></div>
+<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;create_grouping&quot;</span>,</div>
+<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;                       py::overload_cast&lt;const u32, const std::string&amp;&gt;(&amp;<a class="code" href="classhal_1_1_netlist.html#a1eb73283bdde41c3117ee2363c128963">Netlist::create_grouping</a>),</div>
+<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;                       py::arg(<span class="stringliteral">&quot;grouping_id&quot;</span>),</div>
+<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;                       py::arg(<span class="stringliteral">&quot;name&quot;</span>),</div>
+<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;                       R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;<span class="stringliteral">            Create a new grouping and add it to the netlist.</span></div>
+<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;<span class="stringliteral">            :param int grouping_id: The unique ID of the grouping.</span></div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;<span class="stringliteral">            :param str name: The name of the grouping.</span></div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;<span class="stringliteral">            :returns: The new grouping on success, None otherwise.</span></div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;<span class="stringliteral">            :rtype: hal_py.Grouping or None</span></div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;create_grouping&quot;</span>,</div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;                       py::overload_cast&lt;const std::string&amp;&gt;(&amp;<a class="code" href="classhal_1_1_netlist.html#a1eb73283bdde41c3117ee2363c128963">Netlist::create_grouping</a>),</div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;                       py::arg(<span class="stringliteral">&quot;name&quot;</span>),</div>
+<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;                       R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;<span class="stringliteral">            Create a new grouping and add it to the netlist.</span></div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;<span class="stringliteral">            The ID of the grouping is set automatically.</span></div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;<span class="stringliteral">            :param str name: The name of the grouping.</span></div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;<span class="stringliteral">            :returns: The new grouping on success, None otherwise.</span></div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;<span class="stringliteral">            :rtype: hal_py.Grouping or None</span></div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;delete_grouping&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a2aabcc2400d7af7788cbbe22397c1c8d">Netlist::delete_grouping</a>, py::arg(<span class="stringliteral">&quot;grouping&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;<span class="stringliteral">            Remove a grouping from the netlist.</span></div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;<span class="stringliteral">            :param hal_py.Grouping grouping: The grouping.</span></div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;<span class="stringliteral">            :returns: True on success, false otherwise.</span></div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;is_grouping_in_netlist&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a864fc657cbaad83a16f9dcdd75663fb8">Netlist::is_grouping_in_netlist</a>, py::arg(<span class="stringliteral">&quot;grouping&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;<span class="stringliteral">            Check whether the grouping is registered in the netlist.</span></div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;<span class="stringliteral">            :param hal_py.Module grouping: The grouping to check.</span></div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;<span class="stringliteral">            :returns: True on success, false otherwise.</span></div>
+<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_grouping_by_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ae41916880e2d766ab5367d26ee6cb2b3">Netlist::get_grouping_by_id</a>, py::arg(<span class="stringliteral">&quot;grouping_id&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;<span class="stringliteral">            Get the grouping specified by the given ID.</span></div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;<span class="stringliteral">            :param int grouping_id: The unique ID of the grouping.</span></div>
+<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;<span class="stringliteral">            :returns: The grouping on success, nullptr otherwise.</span></div>
+<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;<span class="stringliteral">            :rtype: hal_py.Grouping</span></div>
+<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;<span class="stringliteral">        py_netlist.def_property_readonly(</span><span class="stringliteral">&quot;groupings&quot;</span>, py::overload_cast&lt;&gt;(&amp;<a class="code" href="classhal_1_1_netlist.html#ac96d937d85d8fbd7182ab4bcc3e579cb">Netlist::get_groupings</a>, py::const_), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;<span class="stringliteral">            All groupings contained within the netlist.</span></div>
+<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;<span class="stringliteral">            :type: list[hal_py.Grouping]</span></div>
+<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_groupings&quot;</span>, py::overload_cast&lt;&gt;(&amp;<a class="code" href="classhal_1_1_netlist.html#ac96d937d85d8fbd7182ab4bcc3e579cb">Netlist::get_groupings</a>, py::const_), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;<span class="stringliteral">            Get all groupings contained within the netlist.</span></div>
+<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;<span class="stringliteral">            :returns: A list of groupings.</span></div>
+<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.Grouping]</span></div>
+<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_groupings&quot;</span>, py::overload_cast&lt;<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_grouping.html">Grouping</a>*)&gt;&amp;&gt;(&amp;<a class="code" href="classhal_1_1_netlist.html#ac96d937d85d8fbd7182ab4bcc3e579cb">Netlist::get_groupings</a>, py::const_), py::arg(<span class="stringliteral">&quot;filter&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;<span class="stringliteral">            Get all groupings contained within the netlist.</span></div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;<span class="stringliteral">            The filter is evaluated on every grouping such that the result only contains groupings matching the specified condition.</span></div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;<span class="stringliteral">            :param lambda filter: Filter function to be evaluated on each grouping.</span></div>
+<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;<span class="stringliteral">            :returns: A list of groupings.</span></div>
+<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;<span class="stringliteral">            :rtype: list[hal_py.Grouping]</span></div>
+<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_next_gate_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ad4152742f2e30b4694ffb6b0632e6675">Netlist::get_next_gate_id</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;<span class="stringliteral">            Get the gate ID following the highest currently used ID.</span></div>
+<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;<span class="stringliteral">            :returns: The next gate ID.</span></div>
+<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;<span class="stringliteral">            :rtype: int</span></div>
+<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_next_gate_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a5c3928f77d98147ce5577f2b6defb65f">Netlist::set_next_gate_id</a>, py::arg(<span class="stringliteral">&quot;id&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;<span class="stringliteral">            Set the gate ID following the highest currently used ID.</span></div>
+<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;<span class="stringliteral">            :param int id: The next gate ID.</span></div>
+<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_used_gate_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a88bc7f3434b6fd4e08a97bccc141e0e2">Netlist::get_used_gate_ids</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;<span class="stringliteral">            Get a set of all currently used gate IDs.</span></div>
+<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;<span class="stringliteral">            :returns: All used gate IDs.</span></div>
+<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;<span class="stringliteral">            :rtype: set[int]</span></div>
+<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_used_gate_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a16914d7332760bcbf7fd663a7dd537d5">Netlist::set_used_gate_ids</a>, py::arg(<span class="stringliteral">&quot;ids&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;<span class="stringliteral">            Set a set of all currently used gate IDs.</span></div>
+<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;<span class="stringliteral">            :param set[int] ids: All used gate IDs.</span></div>
+<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_free_gate_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a5f7900676fda58ddebf01044f10a7312">Netlist::get_free_gate_ids</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;<span class="stringliteral">            Get a set of all gate IDs that have previously been used but been freed ever since.</span></div>
+<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;<span class="stringliteral">            :returns: All freed gate IDs.</span></div>
+<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;<span class="stringliteral">            :rtype: set[int]</span></div>
+<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_free_gate_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ab501f50d05fdd684b7a5185c183c0e9d">Netlist::set_free_gate_ids</a>, py::arg(<span class="stringliteral">&quot;ids&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;<span class="stringliteral">            Set a set of all gate IDs that have previously been used but been freed ever since.</span></div>
+<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;<span class="stringliteral">            :param set[int] ids: All freed gate IDs.</span></div>
+<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_next_net_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a730c75bae75323000569ced56870e395">Netlist::get_next_net_id</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;<span class="stringliteral">            Get the net ID following the highest currently used ID.</span></div>
+<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;<span class="stringliteral">            :returns: The next net ID.</span></div>
+<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;<span class="stringliteral">            :rtype: int</span></div>
+<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_next_net_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ace12a9ca88fa9e93e65ec01e5d477317">Netlist::set_next_net_id</a>, py::arg(<span class="stringliteral">&quot;id&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;<span class="stringliteral">            Set the net ID following the highest currently used ID.</span></div>
+<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;<span class="stringliteral">            :param int id: The next net ID.</span></div>
+<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_used_net_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a507df53724c277efd4aacfb512906d82">Netlist::get_used_net_ids</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;<span class="stringliteral">            Get a set of all currently used net IDs.</span></div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;<span class="stringliteral">            :returns: All used net IDs.</span></div>
+<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;<span class="stringliteral">            :rtype: set[int]</span></div>
+<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_used_net_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a1aa7685dac8e78db0d6cfb96ad9b053d">Netlist::set_used_net_ids</a>, py::arg(<span class="stringliteral">&quot;ids&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;<span class="stringliteral">            Set a set of all currently used net IDs.</span></div>
+<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;<span class="stringliteral">            :param set[int] ids: All used net IDs.</span></div>
+<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_free_net_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ae4e985be054eb29cf3a218edbe23f390">Netlist::get_free_net_ids</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;<span class="stringliteral">            Get a set of all net IDs that have previously been used but been freed ever since.</span></div>
+<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;<span class="stringliteral">            :returns: All freed net IDs.</span></div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;<span class="stringliteral">            :rtype: set[int]</span></div>
+<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_free_net_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a904bed7669e36ad72c6531fb205f2f76">Netlist::set_free_net_ids</a>, py::arg(<span class="stringliteral">&quot;ids&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;<span class="stringliteral">            Set a set of all net IDs that have previously been used but been freed ever since.</span></div>
+<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;<span class="stringliteral">            :param set[int] ids: All freed net IDs.</span></div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_next_module_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a7e2dfd8c4fa7be87c0a307eb643bdd06">Netlist::get_next_module_id</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;<span class="stringliteral">            Get the module ID following the highest currently used ID.</span></div>
+<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;<span class="stringliteral">            :returns: The next module ID.</span></div>
+<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;<span class="stringliteral">            :rtype: int</span></div>
+<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_next_module_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a9af17a9e3eb966f7093a6ff66f92dd1c">Netlist::set_next_module_id</a>, py::arg(<span class="stringliteral">&quot;id&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;<span class="stringliteral">            Set the module ID following the highest currently used ID.</span></div>
+<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;<span class="stringliteral">            :param int id: The next module ID.</span></div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_used_module_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#aa33a445d0c41a8087e36068cf7cf8544">Netlist::get_used_module_ids</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;<span class="stringliteral">            Get a set of all currently used module IDs.</span></div>
+<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;<span class="stringliteral">            :returns: All used module IDs.</span></div>
+<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;<span class="stringliteral">            :rtype: set[int]</span></div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_used_module_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ad0968fba28731bc4ed56e9a2f9b42816">Netlist::set_used_module_ids</a>, py::arg(<span class="stringliteral">&quot;ids&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;<span class="stringliteral">            Set a set of all currently used module IDs.</span></div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;<span class="stringliteral">            :param set[int] ids: All used module IDs.</span></div>
+<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_free_module_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a349e8a245c3c36d2ce27196958dcd824">Netlist::get_free_module_ids</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;<span class="stringliteral">            Get a set of all module IDs that have previously been used but been freed ever since.</span></div>
+<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;<span class="stringliteral">            :returns: All freed module IDs.</span></div>
+<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;<span class="stringliteral">            :rtype: set[int]</span></div>
+<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_free_module_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a5ccd60af2c23cff09dc2440dd26be1c1">Netlist::set_free_module_ids</a>, py::arg(<span class="stringliteral">&quot;ids&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;<span class="stringliteral">            Set a set of all module IDs that have previously been used but been freed ever since.</span></div>
+<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;<span class="stringliteral">            :param set[int] ids: All freed module IDs.</span></div>
+<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_next_grouping_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ad0c4a5818446c1036802ef588bf18d4f">Netlist::get_next_grouping_id</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;<span class="stringliteral">            Get the grouping ID following the highest currently used ID.</span></div>
+<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;<span class="stringliteral">            :returns: The next grouping ID.</span></div>
+<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;<span class="stringliteral">            :rtype: int</span></div>
+<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_next_grouping_id&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ab54b519ce01ac34e41a9bc9e0916df0f">Netlist::set_next_grouping_id</a>, py::arg(<span class="stringliteral">&quot;id&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;<span class="stringliteral">            Set the grouping ID following the highest currently used ID.</span></div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;<span class="stringliteral">            :param int id: The next grouping ID.</span></div>
+<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_used_grouping_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a6263f727eaa5a5c498025aa2abc11176">Netlist::get_used_grouping_ids</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;<span class="stringliteral">            Get a set of all currently used grouping IDs.</span></div>
+<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;<span class="stringliteral">            :returns: All used grouping IDs.</span></div>
+<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;<span class="stringliteral">            :rtype: set[int]</span></div>
+<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_used_grouping_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#abf2a126190fdc755281a54b70f9113b0">Netlist::set_used_grouping_ids</a>, py::arg(<span class="stringliteral">&quot;ids&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;<span class="stringliteral">            Set a set of all currently used grouping IDs.</span></div>
+<div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;<span class="stringliteral">            :param set[int] ids: All used grouping IDs.</span></div>
+<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;get_free_grouping_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#ab6f2ca6f0f49b95d39b3637d30849a9a">Netlist::get_free_grouping_ids</a>, R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;<span class="stringliteral">            Get a set of all grouping IDs that have previously been used but been freed ever since.</span></div>
+<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;<span class="stringliteral">            :returns: All freed grouping IDs.</span></div>
+<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;<span class="stringliteral">            :rtype: set[int]</span></div>
+<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;<span class="stringliteral">        py_netlist.def(</span><span class="stringliteral">&quot;set_free_grouping_ids&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a317676a3e9d5961ae27e3fd221cb0a87">Netlist::set_free_grouping_ids</a>, py::arg(<span class="stringliteral">&quot;ids&quot;</span>), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160;<span class="stringliteral">            Set a set of all grouping IDs that have previously been used but been freed ever since.</span></div>
+<div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;<span class="stringliteral">            :param set[int] ids: All freed grouping IDs.</span></div>
+<div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;<span class="stringliteral">        py_netlist.def(</span></div>
+<div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160;<span class="stringliteral">            </span><span class="stringliteral">&quot;load_gate_locations_from_data&quot;</span>, &amp;<a class="code" href="classhal_1_1_netlist.html#a2f4fbe600e19dc28c5bddf40b38ac0cf">Netlist::load_gate_locations_from_data</a>, py::arg(<span class="stringliteral">&quot;data_category&quot;</span>) = std::string(), py::arg(<span class="stringliteral">&quot;data_identifiers&quot;</span>) = std::pair&lt;std::string, std::string&gt;(), R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;<span class="stringliteral">            Load the locations of the gates in the netlist from their associated data using the specified category and identifier.</span></div>
+<div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160;<span class="stringliteral">            If no parameter is given, the data is querried using the default category and identifier stored with the gate library.</span></div>
+<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160;<span class="stringliteral">            :param str data_category: The data category.</span></div>
+<div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;<span class="stringliteral">            :param tuple(str,str) data_identifiers: The data identifiers for the x- and y-coordinates.</span></div>
+<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;<span class="stringliteral">            :returns: True on success, False otherwise.</span></div>
+<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160;<span class="stringliteral">            :rtype: bool</span></div>
+<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;<span class="stringliteral">        )&quot;);</span></div>
+<div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160;<span class="stringliteral">    }</span></div>
+<div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;<span class="stringliteral">}    </span><span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_netlist_html_a0d6c2c4b712ac8964253627e7adf3266"><div class="ttname"><a href="classhal_1_1_netlist.html#a0d6c2c4b712ac8964253627e7adf3266">hal::Netlist::get_gates</a></div><div class="ttdeci">const std::vector&lt; Gate * &gt; &amp; get_gates() const</div><div class="ttdef"><b>Definition:</b> <a href="src_2netlist_2netlist_8cpp_source.html#l00204">netlist.cpp:204</a></div></div>
@@ -1006,7 +1007,7 @@ $(document).ready(function(){initNavTree('src_2python__bindings_2bindings_2netli
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2089f1c86a5c695e25bdd8ee7b7d2080.html">python_bindings</a></li><li class="navelem"><a class="el" href="dir_ded422ec9f163017e5e46b66204ec4a3.html">bindings</a></li><li class="navelem"><a class="el" href="src_2python__bindings_2bindings_2netlist_8cpp.html">netlist.cpp</a></li>
-    <li class="footer">Generated on Fri Nov 17 2023 17:35:57 for HAL by
+    <li class="footer">Generated on Fri Nov 17 2023 21:38:48 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

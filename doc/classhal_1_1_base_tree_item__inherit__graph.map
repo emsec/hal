@@ -1,0 +1,9 @@
+<map id="hal::BaseTreeItem" name="hal::BaseTreeItem">
+<area shape="rect" id="node1" title="(Future) Base class for all tree models related to the details widget." alt="" coords="502,5,649,156"/>
+<area shape="rect" id="node2" href="$classhal_1_1_module_item.html" title="An item in the ModuleModel." alt="" coords="5,211,161,362"/>
+<area shape="rect" id="node3" href="$classhal_1_1_module_treeitem.html" title=" " alt="" coords="185,211,341,362"/>
+<area shape="rect" id="node4" href="$classhal_1_1_netlist_elements_treeitem.html" title=" " alt="" coords="366,211,577,362"/>
+<area shape="rect" id="node5" href="$classhal_1_1_pin_tree_item.html" title=" " alt="" coords="601,204,757,369"/>
+<area shape="rect" id="node6" href="$classhal_1_1_port_tree_item.html" title=" " alt="" coords="781,204,937,369"/>
+<area shape="rect" id="node7" href="$classhal_1_1_root_tree_item.html" title=" " alt="" coords="961,211,1117,362"/>
+</map>

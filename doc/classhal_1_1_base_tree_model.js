@@ -5,14 +5,14 @@ var classhal_1_1_base_tree_model =
     [ "columnCount", "classhal_1_1_base_tree_model.html#a1609dc24552c4cba992c972635fd2e90", null ],
     [ "data", "classhal_1_1_base_tree_model.html#aac6235e965fcc2fb3af1efb842edeaf6", null ],
     [ "flags", "classhal_1_1_base_tree_model.html#a83493fadd018c82da176da0952ae07ce", null ],
-    [ "getIndexFromItem", "classhal_1_1_base_tree_model.html#aba03bbb5da24d1cbc23bbc34e07458e8", null ],
-    [ "getItemFromIndex", "classhal_1_1_base_tree_model.html#a64847c202485e2983e7129a3e641dc76", null ],
-    [ "getRootItem", "classhal_1_1_base_tree_model.html#aea07846e0ffe591e3ce82608ec5c6975", null ],
+    [ "getIndexFromItem", "classhal_1_1_base_tree_model.html#a0c0375f46d675d30f44f12c170b27006", null ],
+    [ "getItemFromIndex", "classhal_1_1_base_tree_model.html#ab5007e8f297014b1e49a08138fda4f45", null ],
+    [ "getRootItem", "classhal_1_1_base_tree_model.html#aad1c0bb30462fadbdb45ba048823f4f5", null ],
     [ "headerData", "classhal_1_1_base_tree_model.html#a7ac73226f6f7640b74950a82fd4c2c2a", null ],
     [ "index", "classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a", null ],
     [ "parent", "classhal_1_1_base_tree_model.html#a1b76d0eea8c5a6f0d52d8025ddda6813", null ],
     [ "rowCount", "classhal_1_1_base_tree_model.html#afceba1b11b5bd81fc4017ba85b46ab1e", null ],
-    [ "setContent", "classhal_1_1_base_tree_model.html#a8a1cb230a6a37ca7d2f57ed0b0af838f", null ],
-    [ "setHeaderLabels", "classhal_1_1_base_tree_model.html#aee85a904236791128d23dd8de5415a7c", null ],
-    [ "mRootItem", "classhal_1_1_base_tree_model.html#ac788cf49960622718a22ed371a347476", null ]
+    [ "setContent", "classhal_1_1_base_tree_model.html#aab12e1a0bb24f8c155c69676aff8f259", null ],
+    [ "setHeaderLabels", "classhal_1_1_base_tree_model.html#aaf15cf12eb98fff6201d6127a4df380f", null ],
+    [ "mRootItem", "classhal_1_1_base_tree_model.html#a1d8199ee880ee7c4d9a4c9d0c6731eee", null ]
 ];

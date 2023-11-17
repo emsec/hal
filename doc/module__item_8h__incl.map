@@ -1,12 +1,15 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/include/gui/module_model/module_item.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/module_model/module_item.h">
-<area shape="rect" id="node1" title=" " alt="" coords="307,5,557,61"/>
-<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,109,289,136"/>
-<area shape="rect" id="node7" title=" " alt="" coords="313,109,380,136"/>
-<area shape="rect" id="node8" title=" " alt="" coords="405,109,459,136"/>
-<area shape="rect" id="node9" title=" " alt="" coords="483,109,554,136"/>
-<area shape="rect" id="node10" title=" " alt="" coords="578,109,657,136"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,184,96,211"/>
-<area shape="rect" id="node4" title=" " alt="" coords="121,184,207,211"/>
-<area shape="rect" id="node5" title=" " alt="" coords="231,184,318,211"/>
-<area shape="rect" id="node6" title=" " alt="" coords="342,184,413,211"/>
+<area shape="rect" id="node1" title=" " alt="" coords="657,5,906,61"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="205,117,345,143"/>
+<area shape="rect" id="node7" href="$base__tree__model_8h.html" title=" " alt="" coords="642,109,803,151"/>
+<area shape="rect" id="node10" title=" " alt="" coords="573,273,627,300"/>
+<area shape="rect" id="node11" title=" " alt="" coords="749,273,827,300"/>
+<area shape="rect" id="node12" title=" " alt="" coords="879,117,945,143"/>
+<area shape="rect" id="node13" title=" " alt="" coords="970,117,1041,143"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,199,96,225"/>
+<area shape="rect" id="node4" title=" " alt="" coords="121,199,207,225"/>
+<area shape="rect" id="node5" title=" " alt="" coords="231,199,318,225"/>
+<area shape="rect" id="node6" title=" " alt="" coords="342,199,413,225"/>
+<area shape="rect" id="node8" title=" " alt="" coords="489,199,645,225"/>
+<area shape="rect" id="node9" href="$base__tree__item_8h.html" title=" " alt="" coords="669,199,803,225"/>
 </map>

@@ -1,11 +1,12 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/include/gui/selection_details_widget/details_tab_widget.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/selection_details_widget/details_tab_widget.h">
-<area shape="rect" id="node1" title=" " alt="" coords="338,5,549,76"/>
-<area shape="rect" id="node2" title=" " alt="" coords="309,139,409,165"/>
-<area shape="rect" id="node3" href="$selection__details__icon__provider_8h.html" title=" " alt="" coords="434,124,621,180"/>
+<area shape="rect" id="node1" title=" " alt="" coords="405,5,615,76"/>
+<area shape="rect" id="node2" title=" " alt="" coords="376,139,476,165"/>
+<area shape="rect" id="node3" href="$selection__details__icon__provider_8h.html" title=" " alt="" coords="501,124,687,180"/>
 <area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="5,243,145,269"/>
 <area shape="rect" id="node5" href="$gate__type__property_8h.html" title=" " alt="" coords="169,228,357,284"/>
 <area shape="rect" id="node6" href="$settings__item__dropdown_8h.html" title=" " alt="" coords="381,228,540,284"/>
 <area shape="rect" id="node7" title=" " alt="" coords="565,243,623,269"/>
 <area shape="rect" id="node8" title=" " alt="" coords="648,243,713,269"/>
 <area shape="rect" id="node9" title=" " alt="" coords="738,243,813,269"/>
+<area shape="rect" id="node10" title=" " alt="" coords="837,243,892,269"/>
 </map>

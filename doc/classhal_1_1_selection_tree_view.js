@@ -4,6 +4,7 @@ var classhal_1_1_selection_tree_view =
     [ "currentChanged", "classhal_1_1_selection_tree_view.html#a4b2c31d0cc60ab474ccb1c17109f467c", null ],
     [ "focusItemClicked", "classhal_1_1_selection_tree_view.html#a8eeca3ab47eea84731688109c2ff3d60", null ],
     [ "handleFilterTextChanged", "classhal_1_1_selection_tree_view.html#ab123472a7403baf5cccaef718f8347ca", null ],
+    [ "handleModuleColorChanged", "classhal_1_1_selection_tree_view.html#a03e180010458d0b85f22f0523c1e72cb", null ],
     [ "itemDoubleClicked", "classhal_1_1_selection_tree_view.html#a7d2993e7658a9c191d212e55c0cafb3a", null ],
     [ "itemFromIndex", "classhal_1_1_selection_tree_view.html#aeccd713447b14d8c26c5d5d3b53db2da", null ],
     [ "mouseDoubleClickEvent", "classhal_1_1_selection_tree_view.html#a01f646cadd86a82126b679012f9a1c0f", null ],

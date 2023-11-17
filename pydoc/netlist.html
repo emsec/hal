@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist &mdash; hal_py v4.2.0-145-g4efe0a62e documentation</title>
+  <title>Netlist &mdash; hal_py v4.2.0-188-g0cec8c1eb documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-145-g4efe0a62e
+                v4.2.0-188-g0cec8c1eb
               </div>
             
           
@@ -465,7 +465,8 @@ The ID of the net is set automatically.</p>
 <dl class="method">
 <dt id="hal_py.Netlist.delete_module">
 <code class="descname">delete_module</code><span class="sig-paren">(</span><em>self: hal_py.Netlist</em>, <em>module: hal::Module</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.Netlist.delete_module" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove a module from the netlist.</p>
+<dd><p>Remove a module from the netlist.
+Submodules, gates and nets under this module will be moved to the parent of this module.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

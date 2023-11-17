@@ -1,7 +1,7 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/src/selection_details_widget/module_details_widget/port_tree_model.cpp" name="/home/runner/work/hal/hal/plugins/gui/src/selection_details_widget/module_details_widget/port_tree_model.cpp">
 <area shape="rect" id="node1" title=" " alt="" coords="1240,5,1447,91"/>
 <area shape="rect" id="node2" href="$port__tree__model_8h.html" title=" " alt="" coords="55,139,251,195"/>
-<area shape="rect" id="node4" href="$tree__item_8h.html" title=" " alt="" coords="240,339,337,366"/>
+<area shape="rect" id="node4" href="$base__tree__item_8h.html" title=" " alt="" coords="221,339,356,366"/>
 <area shape="rect" id="node7" href="$gui__globals_8h.html" title=" " alt="" coords="327,153,459,180"/>
 <area shape="rect" id="node8" href="$input__dialog_8h.html" title=" " alt="" coords="483,146,646,187"/>
 <area shape="rect" id="node9" href="$action__add__items__to__object_8h.html" title=" " alt="" coords="670,146,846,187"/>
