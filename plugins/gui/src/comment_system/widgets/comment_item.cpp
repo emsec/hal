@@ -1,6 +1,7 @@
 #include "gui/comment_system/widgets/comment_item.h"
 #include "gui/comment_system/comment_entry.h"
 #include "gui/comment_system/widgets/comment_dialog.h"
+#include "gui/searchbar/searchable_label.h"
 #include "gui/gui_globals.h"
 
 #include <QToolBar>
@@ -11,6 +12,11 @@
 #include <QToolButton>
 #include <QDebug>
 #include "gui/gui_utils/graphics.h"
+#if QT_VERSION >= QT_VERSION_CHECK(5,13,0)
+   #include <QRegularExpression>
+#else
+   #include <QRegExp>
+#endif
 
 namespace hal
 {
@@ -45,23 +51,59 @@ namespace hal
         //setFixedHeight(mTopWidget->height()+mText->height());
     }
 
-    bool CommentItem::search(const QString &string, QTextDocument::FindFlags options)
+    bool CommentItem::search(const QString &string, SearchOptions searchOpts)
     {
-        bool found = false;
+        mHeader->handleSearchChanged(string,searchOpts.toInt());
+        if (string.isEmpty())
+        {
+            mTextEdit->setExtraSelections(QList<QTextEdit::ExtraSelection>());
+            // reset find marker
+            mTextEdit->moveCursor(QTextCursor::Start);
+            return false;
+        }
+        bool found = mHeader->hasMatch();
         QList<QTextEdit::ExtraSelection> extraSelections;
 
         mTextEdit->moveCursor(QTextCursor::Start);
         QColor color            = QColor(12, 15, 19);
         QColor mBackgroundColor = QColor(255, 255, 0);
 
-        while (mTextEdit->find(string, options))
+        QTextDocument::FindFlags options = QTextDocument::FindFlags();
+        options.setFlag(QTextDocument::FindCaseSensitively, searchOpts.isCaseSensitive());
+        options.setFlag(QTextDocument::FindWholeWords, searchOpts.isExactMatch());
+        qInfo() << "search in commets";
+        if(searchOpts.isRegularExpression())
         {
-            found = true; // just return if something is found, position doesnt matter
-            QTextEdit::ExtraSelection extra;
-            extra.format.setForeground(QBrush(color));
-            extra.format.setBackground(mBackgroundColor);
-            extra.cursor = mTextEdit->textCursor();
-            extraSelections.append(extra);
+            qInfo() << "is regex";
+#if QT_VERSION >= QT_VERSION_CHECK(5,13,0)
+            QRegularExpression regExp(string, searchOpts.isCaseSensitive() ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
+#else
+            QRegExp regExp(string, searchOpts.isCaseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive);
+#endif
+
+            while (mTextEdit->find(regExp, options))
+            {
+                found = true; // just return if something is found, position doesnt matter
+                QTextEdit::ExtraSelection extra;
+                extra.format.setForeground(QBrush(color));
+                extra.format.setBackground(mBackgroundColor);
+                extra.cursor = mTextEdit->textCursor();
+                extraSelections.append(extra);
+            }
+        }
+        else
+        {
+            while (mTextEdit->find(string, options))
+            {
+
+                qInfo() << "found";
+                found = true; // just return if something is found, position doesnt matter
+                QTextEdit::ExtraSelection extra;
+                extra.format.setForeground(QBrush(color));
+                extra.format.setBackground(mBackgroundColor);
+                extra.cursor = mTextEdit->textCursor();
+                extraSelections.append(extra);
+            }
         }
         mTextEdit->setExtraSelections(extraSelections);
         return found;
@@ -92,7 +134,7 @@ namespace hal
         mTopLayout->setSpacing(0);
         mTopLayout->setMargin(0);
 
-        mHeader = new QLabel(this);
+        mHeader = new SearchableLabel(this);
         mHeader->setStyleSheet("font-weight: bold;");
         mCreationDate = new QLabel(this);
         mCreationDate->setStyleSheet("font-size: 12px;");

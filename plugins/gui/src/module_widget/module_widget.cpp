@@ -39,6 +39,7 @@ namespace hal
           mSearchbar(new Searchbar(this)),
           mToggleNetsAction(new QAction(this)),
           mToggleGatesAction(new QAction(this)),
+          mDeleteAction(new QAction(this)),
           mModuleProxyModel(new ModuleProxyModel(this))
 
     {
@@ -50,15 +51,16 @@ namespace hal
         mToggleGatesAction->setIcon(gui_utility::getStyledSvgIcon(mHideGatesIconStyle, mHideGatesIconPath));
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
 
-        mToggleNetsAction->setToolTip("Toggle Net Visibility");
-        mToggleGatesAction->setToolTip("Toggle Gate Visibility");
+        mToggleNetsAction->setToolTip("Toggle net visibility");
+        mToggleGatesAction->setToolTip("Toggle gate visibility");
+        mDeleteAction->setToolTip("Delete module");
         mSearchAction->setToolTip("Search");
 
-        mModuleProxyModel->setFilterKeyColumn(-1);
-        mModuleProxyModel->setDynamicSortFilter(true);
+        mDeleteAction->setText("Delete module");
+
+
         mModuleProxyModel->setSourceModel(gNetlistRelay->getModuleModel());
-        //mModuleProxyModel->setRecursiveFilteringEnabled(true);
-        mModuleProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+
         mTreeView->setModel(mModuleProxyModel);
         mTreeView->setDefaultColumnWidth();
         mTreeView->setSortingEnabled(true);
@@ -68,36 +70,50 @@ namespace hal
         mTreeView->setFrameStyle(QFrame::NoFrame);
         //mTreeView->header()->close();
         mTreeView->setExpandsOnDoubleClick(false);
-        mTreeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        mTreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
+        mTreeView->setSelectionMode(QAbstractItemView::SingleSelection);
         mTreeView->expandAll();
         mContentLayout->addWidget(mTreeView);
+
+        mSearchbar->setColumnNames(gNetlistRelay->getModuleModel()->headerLabels());
         mContentLayout->addWidget(mSearchbar);
         mSearchbar->hide();
 
+        enableDeleteAction(false); // enable upon selected module
         mIgnoreSelectionChange = false;
 
         gSelectionRelay->registerSender(this, name());
 
-        connect(mSearchbar, &Searchbar::textEdited, this, &ModuleWidget::filter);
+        //connect(mSearchbar, &Searchbar::textEdited, this, &ModuleWidget::filter);
         connect(mTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ModuleWidget::handleTreeSelectionChanged);
+        connect(mTreeView->selectionModel(), &QItemSelectionModel::currentChanged, this, &ModuleWidget::handleCurrentChanged);
         connect(mTreeView, &ModuleTreeView::doubleClicked, this, &ModuleWidget::handleItemDoubleClicked);
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &ModuleWidget::handleSelectionChanged);
         connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleRemoved, this, &ModuleWidget::handleModuleRemoved);
 
         connect(mSearchAction, &QAction::triggered, this, &ModuleWidget::toggleSearchbar);
-        connect(mSearchbar, &Searchbar::textEdited, this, &ModuleWidget::updateSearchIcon);
 
+        connect(mSearchbar, &Searchbar::triggerNewSearch, this, &ModuleWidget::updateSearchIcon);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mModuleProxyModel, &ModuleProxyModel::startSearch);
+		
         mShortCutDeleteItem = new QShortcut(ContentManager::sSettingDeleteItem->value().toString(), this);
         mShortCutDeleteItem->setEnabled(false);
 
         connect(ContentManager::sSettingDeleteItem, &SettingsItemKeybind::keySequenceChanged, mShortCutDeleteItem, &QShortcut::setKey);
         connect(mShortCutDeleteItem, &QShortcut::activated, this, &ModuleWidget::deleteSelectedItem);
+        connect(mDeleteAction, &QAction::triggered, this, &ModuleWidget::deleteSelectedItem);
 
         connect(qApp, &QApplication::focusChanged, this, &ModuleWidget::handleDeleteShortcutOnFocusChanged);
 
 
         connect(mToggleNetsAction, &QAction::triggered, this, &ModuleWidget::handleToggleNetsClicked);
         connect(mToggleGatesAction, &QAction::triggered, this, &ModuleWidget::handleToggleGatesClicked);
+    }
+
+    void ModuleWidget::enableDeleteAction(bool enable)
+    {
+        mDeleteAction->setEnabled(enable);
+        mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(enable?mDeleteIconStyle:mDisabledIconStyle, mDeleteIconPath));
     }
 
     void ModuleWidget::handleToggleNetsClicked()
@@ -128,6 +144,7 @@ namespace hal
     {
         toolbar->addAction(mToggleNetsAction);
         toolbar->addAction(mToggleGatesAction);
+        toolbar->addAction(mDeleteAction);
         toolbar->addAction(mSearchAction);
     }
 
@@ -302,8 +319,10 @@ namespace hal
         {
             switch(type)
             {
-                case ModuleItem::TreeItemType::Module: openModuleInView(index); break;
-                case ModuleItem::TreeItemType::Gate: openGateInView(index); break;
+            case ModuleItem::TreeItemType::Module: openModuleInView(index); break;
+            case ModuleItem::TreeItemType::Gate: openGateInView(index); break;
+            default:
+                break;
             }
         }
 
@@ -359,6 +378,16 @@ namespace hal
         mIgnoreSelectionChange = true;
     }
 
+    void ModuleWidget::handleCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
+    {
+        Q_UNUSED(previous);
+        ModuleItem* mi = getModuleItemFromIndex(current);
+        if (!mi)
+            enableDeleteAction(false);
+        else
+            enableDeleteAction(mi->getType() == ModuleItem::TreeItemType::Module);
+    }
+
     void ModuleWidget::handleTreeSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
     {
         Q_UNUSED(selected)
@@ -371,21 +400,39 @@ namespace hal
 
         QModelIndexList current_selection = mTreeView->selectionModel()->selectedIndexes();
 
+        QSet<int> selectedMods;
+        QSet<int> selectedGats;
         for (const auto& index : current_selection)
         {
             ModuleItem* mi = getModuleItemFromIndex(index);
-            if(mi->getType() == ModuleItem::TreeItemType::Module)
+            switch (mi->getType()) {
+            case ModuleItem::TreeItemType::Module:
+                selectedMods.insert(mi->id());
                 gSelectionRelay->addModule(mi->id());
-            else if(mi->getType() == ModuleItem::TreeItemType::Gate)
+                break;
+            case ModuleItem::TreeItemType::Gate:
+                selectedGats.insert(mi->id());
                 gSelectionRelay->addGate(mi->id());
-            else if(mi->getType() == ModuleItem::TreeItemType::Net)
+                break;
+            case ModuleItem::TreeItemType::Net:
                 gSelectionRelay->addNet(mi->id());
+                break;
+            }
         }
 
-        if (current_selection.size() == 1)
+        if (selectedMods.size() == 1)
         {
-            gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,
-                gNetlistRelay->getModuleModel()->getItem(mModuleProxyModel->mapToSource(current_selection.first()))->id());
+            gSelectionRelay->setFocus(SelectionRelay::ItemType::Module, *selectedMods.begin());
+            enableDeleteAction(true);
+        }
+        else if (selectedGats.size() == 1)
+        {
+            gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate, *selectedGats.begin());
+            enableDeleteAction(false);
+        }
+        else
+        {
+            enableDeleteAction(false);
         }
 
         gSelectionRelay->relaySelectionChanged(this);
@@ -509,6 +556,11 @@ namespace hal
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
     }
 
+    QString ModuleWidget::disabledIconStyle() const
+    {
+        return mDisabledIconStyle;
+    }
+
     ModuleProxyModel* ModuleWidget::proxyModel()
     {
         return mModuleProxyModel;
@@ -569,6 +621,21 @@ namespace hal
         return mSearchActiveIconStyle;
     }
 
+    QString ModuleWidget::deleteIconPath() const
+    {
+        return mDeleteIconPath;
+    }
+
+    QString ModuleWidget::deleteIconStyle() const
+    {
+        return mDeleteIconStyle;
+    }
+
+    void ModuleWidget::setDisabledIconStyle(const QString& style)
+    {
+        mDisabledIconStyle = style;
+    }
+
     void ModuleWidget::setShowNetsIconPath(const QString& path)
     {
         mShowNetsIconPath = path;
@@ -624,6 +691,16 @@ namespace hal
         mSearchActiveIconStyle = style;
     }
 
+    void ModuleWidget::setDeleteIconPath(const QString& path)
+    {
+        mDeleteIconPath = path;
+    }
+
+    void ModuleWidget::setDeleteIconStyle(const QString& style)
+    {
+        mDeleteIconStyle = style;
+    }
+
     void ModuleWidget::deleteSelectedItem()
     {
         if(!mTreeView->currentIndex().isValid())
@@ -634,24 +711,18 @@ namespace hal
         ModuleItem* selectedItem = getModuleItemFromIndex(mTreeView->currentIndex());
         if(selectedItem->getParent() != nullptr)
         {
-            switch(getModuleItemFromIndex(mTreeView->currentIndex())->getType())
+            if (getModuleItemFromIndex(mTreeView->currentIndex())->getType() == ModuleItem::TreeItemType::Module)
             {
-                case ModuleItem::TreeItemType::Module: {
-                    auto module = gNetlist->get_module_by_id(selectedItem->id());
-                    if((module == gNetlist->get_top_module()))
-                        break;
+                auto module = gNetlist->get_module_by_id(selectedItem->id());
+                if(!module->is_top_module())
                     gNetlistRelay->deleteModule(getModuleItemFromIndex(mTreeView->currentIndex())->id());
-                    break;
-                    }
-                case ModuleItem::TreeItemType::Gate: break;
-                case ModuleItem::TreeItemType::Net: break;
-
             }
         }
     }
 
     void ModuleWidget::handleDeleteShortcutOnFocusChanged(QWidget* oldWidget, QWidget* newWidget)
     {
+        Q_UNUSED(oldWidget);
         if(!newWidget) return;
         if(newWidget->parent() == this)
         {

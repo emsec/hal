@@ -79,7 +79,7 @@ namespace hal
         // connections / logic
         connect(mSearchButton, &QAbstractButton::clicked, this, &CommentWidget::handleSearchbarTriggered);
         connect(mSearchbar, &Searchbar::searchIconClicked, this, &CommentWidget::handleSearchbarTriggered);
-        connect(mSearchbar, &Searchbar::textEdited, this, &CommentWidget::handleSearchbarTextEdited);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, this, &CommentWidget::handleSearchbarTextEdited);
         connect(mNewCommentButton, &QAbstractButton::clicked, this, &CommentWidget::handleNewCommentTriggered);
         connect(gCommentManager, &CommentManager::entryAboutToBeDeleted, this, &CommentWidget::handleCommentAboutToBeDeleted);
         connect(gCommentManager, &CommentManager::entryAdded, this, &CommentWidget::handleCommentAdded);
@@ -210,11 +210,11 @@ namespace hal
 //        layout->insertWidget(0, item);
     }
 
-    void CommentWidget::handleSearchbarTextEdited(const QString &text)
+    void CommentWidget::handleSearchbarTextEdited(const QString &text, SearchOptions opts)
     {
         for(const auto &item : mEntryItems)
         {
-            if(item->search(text))
+            if(item->search(text, opts))
             {
                 // jump to last location
                 // if one wants to jump to the first location and cicle through the hits with the enter-key,

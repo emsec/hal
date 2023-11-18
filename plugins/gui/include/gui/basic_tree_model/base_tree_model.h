@@ -115,6 +115,12 @@ namespace hal
          */
         void setHeaderLabels(const QStringList& label);
 
+        /**
+         * Getter for header labels stored in root element
+         * @return List of header labels
+         */
+        QStringList headerLabels() const;
+
         // important converter methods
         /**
          * Helper method to convert between the item and its index.

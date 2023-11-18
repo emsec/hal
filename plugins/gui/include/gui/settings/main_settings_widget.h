@@ -26,6 +26,7 @@
 #pragma once
 
 #include "gui/expanding_list/expanding_list_button.h"
+#include "gui/searchbar/searchoptions.h"
 #include <QList>
 #include <QMap>
 #include <QWidget>
@@ -192,7 +193,8 @@ namespace hal
          *
          * @param needle - The string to filter by.
          */
-        void searchSettings(const QString& needle);
+        void searchSettings(const QString& needle, SearchOptions searchOpts);
+        bool isMatching(QString searchString, QString stringToCheck);
 
     private:
         void initWidgets();
@@ -208,6 +210,7 @@ namespace hal
         QFrame* mSearchbarContainer;
         QHBoxLayout* mSearchbarLayout;
         Searchbar* mSearchbar;
+        SearchOptions mSearchOptions;
 
         QScrollArea* mScrollArea;
         QFrame* mContent;

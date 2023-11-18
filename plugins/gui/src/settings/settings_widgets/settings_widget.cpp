@@ -77,6 +77,11 @@ namespace hal
         return QRegularExpression(needle).match(mSettingsItem->label()).hasMatch();
     }
 
+    QString SettingsWidget::getLabel()
+    {
+        return mSettingsItem->label();
+    }
+
     void SettingsWidget::trigger_setting_updated()
     {
 

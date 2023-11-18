@@ -98,6 +98,15 @@ namespace hal
         endResetModel();
     }
 
+    QStringList BaseTreeModel::headerLabels() const
+    {
+        QStringList retval;
+        int ncol = columnCount();
+        for (int icol = 0; icol < ncol; icol++)
+            retval.append(headerData(icol,Qt::Horizontal,Qt::DisplayRole).toString());
+        return retval;
+    }
+
     void BaseTreeModel::setHeaderLabels(const QStringList& labels)
     {
         if(!mRootItem)

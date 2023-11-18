@@ -74,13 +74,27 @@ namespace hal
 
         QVBoxLayout* containerLayout = new QVBoxLayout(treeViewContainer);
 
+
+
+
+
         mSelectionTreeView  = new SelectionTreeView(treeViewContainer);
+
+        mSelectionTreeModel = new SelectionTreeModel(this);
+        mSelectionTreeProxyModel = new SelectionTreeProxyModel(this);
+        mSelectionTreeProxyModel->setSourceModel(mSelectionTreeModel);
+        mSelectionTreeView->setModel(mSelectionTreeProxyModel);
+
+        //mSelectionTreeProxyModel->setSourceModel(mSelectionTreeView->model());
+        //mSelectionTreeView->setModel(mSelectionTreeProxyModel);
+
         mSelectionTreeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         mSelectionTreeView->setMinimumWidth(280);
         mSelectionTreeView->hide();
 
         mSearchbar = new Searchbar(treeViewContainer);
         mSearchbar->hide();
+        mSearchbar->setColumnNames(mSelectionTreeProxyModel->getColumnNames());
 
         containerLayout->addWidget(mSelectionTreeView);
         containerLayout->addWidget(mSearchbar);
@@ -139,11 +153,12 @@ namespace hal
         connect(mSearchAction, &QAction::triggered, this, &SelectionDetailsWidget::toggleSearchbar);
         connect(mSelectionTreeView, &SelectionTreeView::triggerSelection, this, &SelectionDetailsWidget::handleTreeSelection);
         connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &SelectionDetailsWidget::handleSelectionUpdate);
-        connect(mSearchbar, &Searchbar::textEdited, mSelectionTreeView, &SelectionTreeView::handleFilterTextChanged);
-        connect(mSearchbar, &Searchbar::textEdited, this, &SelectionDetailsWidget::updateSearchIcon);
+
         connect(mSelectionTreeView, &SelectionTreeView::itemDoubleClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
         connect(mSelectionTreeView, &SelectionTreeView::focusItemClicked, this, &SelectionDetailsWidget::handleTreeViewItemFocusClicked);
 
+        connect(mSearchbar, &Searchbar::triggerNewSearch, this, &SelectionDetailsWidget::updateSearchIcon);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mSelectionTreeProxyModel, &SelectionTreeProxyModel::startSearch);
     }
 
     void SelectionDetailsWidget::selectionToModuleMenu()
@@ -275,9 +290,41 @@ namespace hal
             UserAction* act = groupingUnassignActionFactory(obj);
             if (act) compound->addAction(act);
         }
-        ActionAddItemsToObject* act = new ActionAddItemsToObject(gSelectionRelay->selectedModules(),
-                                                                 gSelectionRelay->selectedGates(),
-                                                                 gSelectionRelay->selectedNets());
+
+        //get selected items from Model
+        QSet<u32> mods = {};
+        QSet<u32> gates = {};
+        QSet<u32> nets = {};
+        auto* sourceModel = static_cast<SelectionTreeModel*>(mSelectionTreeProxyModel->sourceModel());
+
+        //check each row for its Itemtype and append the ID to the corresponding QSet {mods, gates, nets}
+        for(int i = 0; i < mSelectionTreeProxyModel->rowCount(); i++){
+
+                QModelIndex sourceModelIndex = mSelectionTreeProxyModel->mapToSource(mSelectionTreeProxyModel->index(i,0));
+                SelectionTreeItem* item              = sourceModel->itemFromIndex(sourceModelIndex);
+                SelectionTreeItem::TreeItemType type = item->itemType();
+                switch (type)
+                {
+                    case SelectionTreeItem::TreeItemType::ModuleItem:
+                        mods.insert(item->id());
+                        break;
+
+                    case SelectionTreeItem::TreeItemType::GateItem:
+                        gates.insert(item->id());
+                        break;
+
+                    case SelectionTreeItem::TreeItemType::NetItem:
+                        nets.insert(item->id());
+                        break;
+                    default:
+                        break;
+                }          
+        }
+        ActionAddItemsToObject* act = new ActionAddItemsToObject(mods,
+                                                                 gates,
+                                                                 nets);
+
+
         act->setObject(UserActionObject(grpId,UserActionObjectType::Grouping));
         compound->addAction(act);
         compound->addAction(new ActionSetSelectionFocus);
@@ -314,10 +361,10 @@ namespace hal
         {
             return;
         }
-
+        
         SelectionTreeProxyModel* proxy = static_cast<SelectionTreeProxyModel*>(mSelectionTreeView->model());
+        mSelectionTreeView->setModel(mSelectionTreeProxyModel);
         if (proxy->isGraphicsBusy()) return;
-
         if (!mSearchbar->getCurrentText().isEmpty())
         {
             mSearchbar->clear();

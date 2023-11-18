@@ -115,7 +115,7 @@ namespace hal
         /**
          * Clears the item model and deletes all ModuleItems.
          */
-        void clear();
+        void clear() override;
 
         /**
          * Add a module to the item model. For the specified module a new ModuleItem is created and stored.

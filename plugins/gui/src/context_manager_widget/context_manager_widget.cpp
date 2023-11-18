@@ -72,7 +72,7 @@ namespace hal
 
         mContextTableModel = gGraphContextManager->getContextTableModel();
 
-        mContextTableProxyModel = new ContextTableProxyModel();
+        mContextTableProxyModel = new ContextTableProxyModel(this);
         mContextTableProxyModel->setSourceModel(mContextTableModel);
         mContextTableProxyModel->setSortRole(Qt::UserRole);
 
@@ -94,6 +94,7 @@ namespace hal
         mContentLayout->addWidget(mSearchbar);
 
         mSearchbar->hide();
+        mSearchbar->setColumnNames(mContextTableProxyModel->getColumnNames());
         enableSearchbar(mContextTableProxyModel->rowCount() > 0);
 
         connect(mOpenAction, &QAction::triggered, this, &ContextManagerWidget::handleOpenContextClicked);
@@ -109,8 +110,8 @@ namespace hal
         connect(mContextTableModel, &ContextTableModel::rowsRemoved, this, &ContextManagerWidget::handleDataChanged);
         connect(mContextTableModel, &ContextTableModel::rowsInserted, this, &ContextManagerWidget::handleDataChanged);
 
-        connect(mSearchbar, &Searchbar::textEdited, mContextTableProxyModel, &ContextTableProxyModel::handleFilterTextChanged);
-        connect(mSearchbar, &Searchbar::textEdited, this, &ContextManagerWidget::updateSearchIcon);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, this, &ContextManagerWidget::updateSearchIcon);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mContextTableProxyModel, &ContextTableProxyModel::startSearch);
 
         mShortCutDeleteItem = new QShortcut(ContentManager::sSettingDeleteItem->value().toString(), this);
         mShortCutDeleteItem->setEnabled(false);
