@@ -155,23 +155,10 @@ namespace hal
 
         bool getEmitTextWithFlags();
 
-        bool eventFilter(QObject *object, QEvent *event);
+        bool eventFilter(QObject *object, QEvent *event) override;
 
 
     Q_SIGNALS:
-        /** TODO : remove textEdited signal
-         * textEdited should be handled internally
-         * If incremental search is switched off a new search will be issued if user presses Enter or clicks "Search" in Dialog
-         * If incremental search is switched on a new search will be issued if search text has sufficient length
-         *
-         *
-         *
-         * has been changed.
-         *
-         * @param text
-         */
-        void textEdited(const QString& text);
-
         /**
          * Q_SIGNAL that is emitted whenever the Proxy should be updated or a new search should be issued
          * @param text - The new search string

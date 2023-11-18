@@ -61,7 +61,7 @@ namespace hal
         if(!clickedIndex.isValid())
             return;
 
-        TreeItem* clickedItem = mModel->getItemFromIndex(clickedIndex);
+        BaseTreeItem* clickedItem = mModel->getItemFromIndex(clickedIndex);
         int id = clickedItem->getData(ModuleTreeModel::sIdColumn).toInt();
         ModuleTreeModel::itemType type = mModel->getTypeOfItem(clickedItem);
         QMenu menu;

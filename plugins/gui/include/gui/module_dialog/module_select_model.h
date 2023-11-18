@@ -131,9 +131,8 @@ namespace hal {
 
     public Q_SLOTS:
         void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
-        void searchTextChanged(const QString& txt);
         void startSearch(QString text, int options) override;
-         bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
+        bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
 
     protected:
         static bool lessThan(const QColor& a, const QColor& b);

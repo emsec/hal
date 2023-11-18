@@ -79,6 +79,12 @@ namespace hal
          * @param filter_text -The text to filter the model.
          */
         void handleFilterTextChanged(const QString& filter_text);
+
+        /**
+         * Might have to change icon color if module selected, thus updating view upon this event
+         * @param id - unused
+         */
+        void handleModuleColorChanged(u32 id);
  
     protected:
         /**

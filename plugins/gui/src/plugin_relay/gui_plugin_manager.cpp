@@ -772,7 +772,6 @@ namespace hal {
         settings->setValue("name", mName);
         settings->setValue("version", mVersion);
         settings->setValue("description", mDescription);
-        settings->setValue("file_path", mFilePath);
         settings->setValue("file_modified", mFileModified);
         settings->setValue("dependencies", mDependencies);
         settings->setValue("feature_code", (int) mFeature);
@@ -788,7 +787,6 @@ namespace hal {
         mName             = settings->value("name").toString();
         mVersion          = settings->value("version").toString();
         mDescription      = settings->value("description").toString();
-        mFilePath         = settings->value("file_path").toString();
         mFileModified     = settings->value("file_modified").toDateTime();
         mDependencies     = settings->value("dependencies").toStringList();
         mFeature = (FacExtensionInterface::Feature) settings->value("feature_code").toInt();
@@ -796,6 +794,7 @@ namespace hal {
         mUserInterface    = settings->value("user_interface").toBool();
         mGuiExtensions    = settings->value("extends_gui").toBool();
         mCliOptions    = settings->value("cli_options").toString();
+        mFilePath = QString::fromStdString(plugin_manager::get_plugin_path(mName.toStdString()).string());
     }
 
     void GuiPluginEntry::updateFromLoaded(const BasePluginInterface *bpif, bool isUser, const QDateTime& modified)

@@ -517,6 +517,7 @@ namespace hal
 
         py_netlist.def("delete_module", &Netlist::delete_module, py::arg("module"), R"(
             Remove a module from the netlist.
+            Submodules, gates and nets under this module will be moved to the parent of this module.
 
             :param module: The module.
             :type module: hal_py.Module

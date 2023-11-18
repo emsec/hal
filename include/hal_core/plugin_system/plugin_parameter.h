@@ -32,7 +32,7 @@ namespace hal
     class PluginParameter
     {
     public:
-        enum ParameterType { Absent, Boolean, Color, Dictionary, ExistingDir, Float, Integer, NewFile, PushButton, String, TabName };
+        enum ParameterType { Absent, Boolean, Color, ComboBox, Dictionary, ExistingDir, Float, Gate, Integer, Module, NewFile, PushButton, String, TabName };
     private:
         ParameterType m_type;
         std::string m_tagname;

@@ -32,6 +32,8 @@
 #include "gui/selection_relay/selection_relay.h"
 #include "gui/module_widget/module_tree_view.h"
 #include "hal_core/netlist/module.h"
+#include "gui/settings/settings_items/settings_item_keybind.h"
+
 
 #include <QAction>
 #include <QItemSelection>
@@ -55,9 +57,20 @@ namespace hal
     class ModuleWidget : public ContentWidget
     {
         Q_OBJECT
+        Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
+        Q_PROPERTY(QString showNetsIconPath READ showNetsIconPath WRITE setShowNetsIconPath)
+        Q_PROPERTY(QString showNetsIconStyle READ showNetsIconStyle WRITE setShowNetsIconStyle)
+        Q_PROPERTY(QString hideNetsIconPath READ hideNetsIconPath WRITE setHideNetsIconPath)
+        Q_PROPERTY(QString hideNetsIconStyle READ hideNetsIconStyle WRITE setHideNetsIconStyle)
+        Q_PROPERTY(QString showGatesIconPath READ showGatesIconPath WRITE setShowGatesIconPath)
+        Q_PROPERTY(QString showGatesIconStyle READ showGatesIconStyle WRITE setShowGatesIconStyle)
+        Q_PROPERTY(QString hideGatesIconPath READ hideGatesIconPath WRITE setHideGatesIconPath)
+        Q_PROPERTY(QString hideGatesIconStyle READ hideGatesIconStyle WRITE setHideGatesIconStyle)
         Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
         Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
+        Q_PROPERTY(QString deleteIconPath READ deleteIconPath WRITE setDeleteIconPath)
+        Q_PROPERTY(QString deleteIconStyle READ deleteIconStyle WRITE setDeleteIconStyle)
 
     public:
         /**
@@ -100,17 +113,39 @@ namespace hal
         /** @name Q_PROPERTY READ Functions
          */
         ///@{
+        QString disabledIconStyle() const;
+        QString showNetsIconPath() const;
+        QString showNetsIconStyle() const;
+        QString hideNetsIconPath() const;
+        QString hideNetsIconStyle() const;
+        QString showGatesIconPath() const;
+        QString showGatesIconStyle() const;
+        QString hideGatesIconPath() const;
+        QString hideGatesIconStyle() const;
         QString searchIconPath() const;
         QString searchIconStyle() const;
         QString searchActiveIconStyle() const;
+        QString deleteIconPath() const;
+        QString deleteIconStyle() const;
         ///@}
 
         /** @name Q_PROPERTY WRITE Functions
          */
         ///@{
+        void setDisabledIconStyle(const QString& style);
+        void setShowNetsIconPath(const QString &path);
+        void setShowNetsIconStyle(const QString &path);
+        void setHideNetsIconPath(const QString &path);
+        void setHideNetsIconStyle(const QString &path);
+        void setShowGatesIconPath(const QString &path);
+        void setShowGatesIconStyle(const QString &path);
+        void setHideGatesIconPath(const QString &path);
+        void setHideGatesIconStyle(const QString &path);
         void setSearchIconPath(const QString &path);
         void setSearchIconStyle(const QString &style);
         void setSearchActiveIconStyle(const QString &style);
+        void setDeleteIconPath(const QString& path);
+        void setDeleteIconStyle(const QString& style);
         ///@}
 
     public Q_SLOTS:
@@ -148,6 +183,14 @@ namespace hal
         void handleTreeSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
         /**
+         * Q_SLOT to handle tree view navigation
+         *
+         * @param current - The current index
+         * @param previous - The previous index (unused)
+         */
+        void handleCurrentChanged(const QModelIndex& current, const QModelIndex& previous = QModelIndex());
+
+        /**
          * Q_SLOT to handle a double-click on a module of the ModuleWidget.
          *
          * @param index - The module index of the item that has been double clicked.
@@ -169,10 +212,43 @@ namespace hal
          */
         void handleModuleRemoved(Module* module, u32 module_id);
 
+    private Q_SLOTS:
+        /**
+         * Q_SLOT to toggle the visibility of nets in the module widget. Called when the 'Toggle Net Visibility'-buttons was clicked.
+         */
+        void handleToggleNetsClicked();
+
+        /**
+         * Q_SLOT to toggle the visibility of gates in the module widget. Called when the 'Toggle Gate Visibility'-buttons was clicked.
+         */
+        void handleToggleGatesClicked();
+
+
+    private Q_SLOTS:
+        void handleDeleteShortcutOnFocusChanged(QWidget *oldWidget, QWidget *newWidget);
+
+        void deleteSelectedItem();
 
     private:
         ModuleTreeView* mTreeView;
         Searchbar* mSearchbar;
+
+        QAction* mToggleNetsAction;
+        QAction* mToggleGatesAction;
+        QAction* mDeleteAction;
+
+        QString mDisabledIconStyle;
+        QString mShowNetsIconPath;
+        QString mShowNetsIconStyle;
+        QString mHideNetsIconPath;
+        QString mHideNetsIconStyle;
+
+        QString mShowGatesIconPath;
+        QString mShowGatesIconStyle;
+        QString mHideGatesIconPath;
+        QString mHideGatesIconStyle;
+        QString mDeleteIconPath;
+        QString mDeleteIconStyle;
 
         QString mSearchIconPath;
         QString mSearchIconStyle;
@@ -180,16 +256,25 @@ namespace hal
 
         QAction* mFilterAction;
 
-        QSortFilterProxyModel* mCurrentModel;
-
         QList<QRegExp*> mRegexps;
 
         bool mIgnoreSelectionChange;
 
         ModuleProxyModel* mModuleProxyModel;
 
+        QShortcut* mShortCutDeleteItem;
+
         void openModuleInView(const QModelIndex& index);
 
+        void openGateInView(const QModelIndex& index);
+
+        void changeGateName(const QModelIndex& index);
+
+        void changeNetName(const QModelIndex& index);
+
+        void enableDeleteAction(bool enable);
+
         ModuleItem* getModuleItemFromIndex(const QModelIndex& index);
+
     };
 }    // namespace hal

@@ -4,13 +4,15 @@
 namespace hal {
     SearchProxyModel::SearchProxyModel(QObject* parent): QSortFilterProxyModel(parent)
     {
-        mSearchOptions = SearchOptions(8);
+        mSearchOptions = SearchOptions(8); // ? search only first column ?
     }
 
     void SearchProxyModel::startSearch(QString text, int options)
     {
+        mSearchString  = text;
         mSearchOptions = SearchOptions(options);
     }
+
     bool SearchProxyModel::isMatching(const QString searchString, const QString stringToCheck) const
     {
         if(!mSearchOptions.isExactMatch() && !mSearchOptions.isRegularExpression()){
@@ -29,6 +31,7 @@ namespace hal {
         }
         return false;
     }
+
     QList<QString> SearchProxyModel::getColumnNames()
     {
         QList<QString> list = QList<QString>();
@@ -39,6 +42,21 @@ namespace hal {
             }
         }
         return list;
+    }
+
+    bool SearchProxyModel::checkRowRecursion(int sourceRow, const QModelIndex &sourceParent,
+                                             int startIndex, int endIndex, int offset) const
+    {
+        if (checkRow(sourceRow, sourceParent, startIndex, endIndex, offset))
+            return true;
+        QModelIndex currentIndex = sourceModel()->index(sourceRow, 0, sourceParent);
+        int nrows = sourceModel()->rowCount(currentIndex);
+        for (int irow = 0; irow < nrows; irow++)
+        {
+            if (checkRowRecursion(irow, currentIndex, startIndex, endIndex, offset))
+                return true;
+        }
+        return false;
     }
 
     bool SearchProxyModel::checkRow(int sourceRow, const QModelIndex& sourceParent, int startIndex, int endIndex, int offset) const
@@ -54,7 +72,8 @@ namespace hal {
                 }
             }
             return false;
-        }else
+        }
+        else
         {
             for(int index : columns)
             {

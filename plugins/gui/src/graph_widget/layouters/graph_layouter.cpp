@@ -36,14 +36,13 @@ namespace hal
     }
 
     const static qreal sLaneSpacing           = 10;
-    const static qreal sJunctionPadding       = 10;
     const static qreal sHRoadPadding          = 10;
     const static qreal sVRoadPadding          = 10;
     const static qreal sMinimumVChannelWidth  = 20;
     const static qreal sMinimumHChannelHeight = 20;
 
     GraphLayouter::GraphLayouter(GraphContext* context, QObject* parent)
-        : QObject(parent), mScene(new GraphicsScene(this)), mParentContext(context), mDone(false), mRollbackStatus(0), mOptimizeNetLayout(true)
+        : QObject(parent), mScene(new GraphicsScene(this)), mParentContext(context), mDone(false), mRollbackStatus(0), mDumpJunctions(false)
     {
         SelectionDetailsWidget* details = gContentManager->getSelectionDetailsWidget();
         if (details)
@@ -212,24 +211,37 @@ namespace hal
         return mYValues.last() + (inx - mYValues.size() - 1) * defaultGridHeight();
     }
 
-    void GraphLayouter::alternateLayout()
+    void GraphLayouter::layout()
     {
+        if (mDumpJunctions)
+            NetLayoutJunctionEntries::resetFile();
+        QElapsedTimer timer;
+        timer.start();
+        mParentContext->layoutProgress(0);
+        mScene->deleteAllItems();
+        clearLayoutData();
+
+        createBoxes();
+
         mParentContext->layoutProgress(1);
         getWireHash();
 
         mParentContext->layoutProgress(2);
         findMaxBoxDimensions();
         mParentContext->layoutProgress(3);
-        alternateMaxChannelLanes();
+        findMaxChannelLanes();
         mParentContext->layoutProgress(4);
         calculateJunctionMinDistance();
         mParentContext->layoutProgress(5);
-        alternateGateOffsets();
+        calculateGateOffsets();
         mParentContext->layoutProgress(6);
-        alternatePlaceGates();
+
+        mCoordArrayX = new SceneCoordinateArray(mCoordX);
+        mCoordArrayY = new SceneCoordinateArray(mCoordY);
+
+        placeGates();
         mParentContext->layoutProgress(7);
-        mDone = true;
-        alternateDrawNets();
+        drawNets();
         drawComments();
         updateSceneRect();
 
@@ -240,42 +252,12 @@ namespace hal
         mScene->debugSetLayouterGrid(xValues(), yValues(), defaultGridHeight(), defaultGridWidth());
 #endif
         mRollbackStatus = 0;
-    }
 
-    void GraphLayouter::layout()
-    {
-        QElapsedTimer timer;
-        timer.start();
-        mParentContext->layoutProgress(0);
-        mScene->deleteAllItems();
-        clearLayoutData();
+        qDebug() << "elapsed time (experimental new) layout [ms]" << timer.elapsed();
 
-        createBoxes();
-        if (mOptimizeNetLayout)
-        {
-            alternateLayout();
-            qDebug() << "elapsed time (experimental new) layout [ms]" << timer.elapsed();
-            return;
-        }
-        calculateNets();
-        findMaxBoxDimensions();
-        findMaxChannelLanes();
-        resetRoadsAndJunctions();
-        calculateMaxChannelDimensions();
-        calculateGateOffsets();
-        placeGates();
+        delete mCoordArrayX;
+        delete mCoordArrayY;
         mDone = true;
-        drawNets();
-        updateSceneRect();
-
-        mScene->moveNetsToBackground();
-        mScene->handleExternSelectionChanged(nullptr);
-
-#ifdef GUI_DEBUG_GRID
-        mScene->debugSetLayouterGrid(xValues(), yValues(), defaultGridHeight(), defaultGridWidth());
-#endif
-        mRollbackStatus = 0;
-        qDebug() << "elapsed time (classic) layout [ms]" << timer.elapsed();
     }
 
     void GraphLayouter::prepareRollback()
@@ -319,40 +301,11 @@ namespace hal
         mBoxes.clearBoxes();
         clearComments();
 
-        for (const GraphLayouter::Road* r : mHRoads.values())
-            delete r;
-        mHRoads.clear();
-
-        for (const GraphLayouter::Road* r : mVRoads.values())
-            delete r;
-        mVRoads.clear();
-
-        for (const GraphLayouter::Junction* j : mJunctions.values())
-            delete j;
-        mJunctions.clear();
-
         mMaxNodeWidthForX.clear();
         mMaxNodeHeightForY.clear();
 
-        mMaxVChannelLanesForX.clear();
-        mMaxHChannelLanesForY.clear();
-
-        mMaxVChannelLeftSpacingForX.clear();
-        mMaxVChannelRightSpacingForX.clear();
-        mMaxHChannelTopSpacingForY.clear();
-        mMaxHChannelBottomSpacingForY.clear();
-
-        mMaxVChannelWidthForX.clear();
-        mMaxHChannelHeightForY.clear();
-
         mNodeOffsetForX.clear();
         mNodeOffsetForY.clear();
-
-        mMaxLeftJunctionSpacingForX.clear();
-        mMaxRightJunctionSpacingForX.clear();
-
-        mMaxTopJunctionSpacingForY.clear();
-        mMaxBottomJunctionSpacingForY.clear();
 
         mMaxLeftIoPaddingForChannelX.clear();
         mMaxRightIoPaddingForChannelX.clear();
@@ -384,6 +337,8 @@ namespace hal
         mNodeBoundingBox = QRect();
         mViewInput.clear();
         mViewOutput.clear();
+
+        mLaneMap.clear();
     }
 
     void GraphLayouter::createBoxes()
@@ -593,7 +548,7 @@ namespace hal
                 // iend == 0 =>  horizontal wire: right endpoint   junction: left entry
                 NetLayoutPoint pnt = iend ? it.key().endPoint(NetLayoutWire::SourcePoint) : it.key().endPoint(NetLayoutWire::DestinationPoint);
                 int idirBase       = it.key().isHorizontal() ? NetLayoutDirection::Left : NetLayoutDirection::Up;
-                mJunctionEntries[pnt].setEntries(idirBase + iend, it.value());
+                mJunctionEntries[pnt].mEntries[idirBase + iend] = it.value();
             }
         }
 
@@ -602,10 +557,10 @@ namespace hal
         {
             NetLayoutPoint inPnt(nbox->x(), nbox->y() * 2);
             QList<u32> inpNets = nbox->item()->inputNets();
-            mJunctionEntries[inPnt].setEntries(NetLayoutDirection::Right, nbox->item()->inputNets());
+            mJunctionEntries[inPnt].mEntries[NetLayoutDirection::Right] = nbox->item()->inputNets();
             mEndpointHash[inPnt].setInputPins(nbox->item()->inputNets(), nbox->item()->yTopPinDistance(), nbox->item()->yEndpointDistance());
             NetLayoutPoint outPnt(nbox->x() + 1, nbox->y() * 2);
-            mJunctionEntries[outPnt].setEntries(NetLayoutDirection::Left, nbox->item()->outputNets());
+            mJunctionEntries[outPnt].mEntries[NetLayoutDirection::Left] = nbox->item()->outputNets();
             mEndpointHash[outPnt].setOutputPins(nbox->item()->outputNets(), nbox->item()->yTopPinDistance(), nbox->item()->yEndpointDistance());
         }
 
@@ -614,7 +569,7 @@ namespace hal
             QList<u32> netIds;
             netIds.append(itGlInp.key());
             NetLayoutPoint pnt(mNodeBoundingBox.left(), 2 * itGlInp.value());
-            mJunctionEntries[pnt].setEntries(NetLayoutDirection::Left, netIds);
+            mJunctionEntries[pnt].mEntries[NetLayoutDirection::Left] = netIds;
             if (!mEndpointHash.contains(pnt))
                 mEndpointHash[pnt].setOutputPins(netIds, 0, 0);
         }
@@ -624,293 +579,28 @@ namespace hal
             QList<u32> netIds;
             netIds.append(itGlOut.key());
             NetLayoutPoint pnt(mNodeBoundingBox.right() + 1, 2 * itGlOut.value());
-            mJunctionEntries[pnt].setEntries(NetLayoutDirection::Right, netIds);
+            mJunctionEntries[pnt].mEntries[NetLayoutDirection::Right] = netIds;
             if (!mEndpointHash.contains(pnt))
                 mEndpointHash[pnt].setInputPins(netIds, 0, 0);
         }
 
-        for (auto it = mJunctionEntries.constBegin(); it != mJunctionEntries.constEnd(); ++it)
+        auto it = mJunctionEntries.constBegin();
+        while (it != mJunctionEntries.constEnd() || !mJunctionThreads.isEmpty())
         {
-            //            it.value().dumpFile(it.key());
-            //            qDebug() << "Junction at" << it.key().x() << it.key().y();
-            NetLayoutJunction* nlj = new NetLayoutJunction(it.value());
-            if (nlj->lastError() != NetLayoutJunction::Ok)
-                qDebug() << "Junction route error" << nlj->lastError() << it.key();
-            mJunctionHash.insert(it.key(), nlj);
-        }
-    }
-
-    void GraphLayouter::calculateNets()
-    {
-        for (const u32 id : mParentContext->nets())
-        {
-            Net* n = gNetlist->get_net_by_id(id);
-            assert(n);
-
-            if (n->is_unrouted())
-                continue;
-
-            UsedPaths used;
-
-            for (Endpoint* src : n->get_sources())
+            if (it != mJunctionEntries.constEnd() && mJunctionThreads.size() < QThread::idealThreadCount())
             {
-                // FIND SRC BOX
-                Node node = mParentContext->nodeForGate(src->get_gate()->get_id());
-
-                if (node.isNull())
-                    continue;
-
-                NodeBox* src_box = mBoxes.boxForNode(node);
-                assert(src_box);
-
-                // FOR EVERY DST
-                for (Endpoint* dst : n->get_destinations())
+                if (!it.value().isTrivial())
                 {
-                    // FIND DST BOX
-                    node = mParentContext->nodeForGate(dst->get_gate()->get_id());
-                    if (node.isNull())
-                        continue;
-
-                    NodeBox* dst_box = mBoxes.boxForNode(node);
-                    assert(dst_box);
-
-                    // ROAD BASED DISTANCE (x_distance - 1)
-                    const int x_distance = dst_box->x() - src_box->x() - 1;
-                    const int y_distance = dst_box->y() - src_box->y();
-
-                    if (!y_distance && vRoadJumpPossible(src_box->x() + 1, dst_box->x(), src_box->y()))
-                    {
-                        // SPECIAL CASE INDIRECT HORIZONTAL NEIGHBORS
-                        Road* dst_v_road = getVRoad(dst_box->x(), dst_box->y());
-                        used.mVRoads.insert(dst_v_road);
-                        continue;
-                    }
-
-                    Road* src_v_road = getVRoad(src_box->x() + 1, src_box->y());
-
-                    if (!(x_distance || y_distance))
-                    {
-                        // SPECIAL CASE DIRECT HORIZONTAL NEIGHBORS
-                        used.mVRoads.insert(src_v_road);
-                        continue;
-                    }
-
-                    // NORMAL CASE
-                    // CONNECT SRC TO V ROAD, TRAVEL X DISTANCE, TRAVEL Y DISTANCE, CONNECT V ROAD TO DST
-                    used.mVRoads.insert(src_v_road);
-
-                    Junction* initial_junction = nullptr;
-                    int remaining_y_distance   = y_distance;
-
-                    if (y_distance < 0)
-                    {
-                        // TRAVEL UP
-                        initial_junction = getJunction(src_v_road->x, src_v_road->y);
-
-                        if (src_v_road->mLanes != initial_junction->mVLanes)
-                        {
-                            if (src_v_road->mLanes < initial_junction->mVLanes)
-                                used.mCloseBottomJunctions.insert(initial_junction);
-                            else
-                                used.mFarBottomJunctions.insert(initial_junction);
-                        }
-                    }
-                    else
-                    {
-                        // TRAVEL DOWN
-                        initial_junction = getJunction(src_v_road->x, src_v_road->y + 1);
-
-                        if (src_v_road->mLanes != initial_junction->mVLanes)
-                        {
-                            if (src_v_road->mLanes < initial_junction->mVLanes)
-                                used.mCloseTopJunctions.insert(initial_junction);
-                            else
-                                used.mFarTopJunctions.insert(initial_junction);
-                        }
-
-                        if (!y_distance)
-                            remaining_y_distance = -1;
-                    }
-
-                    used.mVJunctions.insert(initial_junction);
-
-                    Junction* last_junction = initial_junction;
-
-                    if (x_distance)
-                    {
-                        used.mHJunctions.insert(initial_junction);
-
-                        int remaining_x_distance = x_distance;
-
-                        // TRAVEL REMAINING X DISTANCE
-                        while (remaining_x_distance)
-                        {
-                            Road* r     = nullptr;
-                            Junction* j = nullptr;
-
-                            if (x_distance > 0)
-                            {
-                                // TRAVEL RIGHT
-                                r = getHRoad(last_junction->x, last_junction->y);
-
-                                if (last_junction->mHLanes != r->mLanes)
-                                {
-                                    if (last_junction->mHLanes < r->mLanes)
-                                        used.mFarRightJunctions.insert(last_junction);
-                                    else
-                                        used.mCloseRightJunctions.insert(last_junction);
-                                }
-
-                                j = getJunction(last_junction->x + 1, last_junction->y);
-
-                                if (r->mLanes != j->mHLanes)
-                                {
-                                    if (r->mLanes < j->mHLanes)
-                                        used.mCloseLeftJunctions.insert(j);
-                                    else
-                                        used.mFarLeftJunctions.insert(j);
-                                }
-
-                                --remaining_x_distance;
-                            }
-                            else
-                            {
-                                // TRAVEL LEFT
-                                r = getHRoad(last_junction->x - 1, last_junction->y);
-
-                                if (last_junction->mHLanes != r->mLanes)
-                                {
-                                    if (last_junction->mHLanes < r->mLanes)
-                                        used.mFarLeftJunctions.insert(last_junction);
-                                    else
-                                        used.mCloseLeftJunctions.insert(last_junction);
-                                }
-
-                                j = getJunction(last_junction->x - 1, last_junction->y);
-
-                                if (r->mLanes != j->mHLanes)
-                                {
-                                    if (r->mLanes < j->mHLanes)
-                                        used.mCloseRightJunctions.insert(j);
-                                    else
-                                        used.mFarRightJunctions.insert(j);
-                                }
-
-                                ++remaining_x_distance;
-                            }
-
-                            used.mHRoads.insert(r);
-                            used.mHJunctions.insert(j);
-
-                            last_junction = j;
-                        }
-
-                        used.mVJunctions.insert(last_junction);
-                    }
-
-                    // TRAVEL REMAINING Y DISTANCE
-                    if (remaining_y_distance > 0)
-                    {
-                        while (remaining_y_distance != 1)
-                        {
-                            // TRAVEL DOWN
-                            Road* r = getVRoad(last_junction->x, last_junction->y);
-
-                            if (last_junction->mVLanes != r->mLanes)
-                            {
-                                if (last_junction->mVLanes < r->mLanes)
-                                    used.mFarBottomJunctions.insert(last_junction);
-                                else
-                                    used.mCloseBottomJunctions.insert(last_junction);
-                            }
-
-                            Junction* j = getJunction(last_junction->x, last_junction->y + 1);
-
-                            if (r->mLanes != j->mVLanes)
-                            {
-                                if (r->mLanes < j->mVLanes)
-                                    used.mCloseTopJunctions.insert(j);
-                                else
-                                    used.mFarTopJunctions.insert(j);
-                            }
-
-                            used.mVRoads.insert(r);
-                            used.mVJunctions.insert(j);
-
-                            last_junction = j;
-
-                            --remaining_y_distance;
-                        }
-                    }
-                    else
-                    {
-                        while (remaining_y_distance != -1)
-                        {
-                            // TRAVEL UP
-                            Road* r = getVRoad(last_junction->x, last_junction->y - 1);
-
-                            if (last_junction->mVLanes != r->mLanes)
-                            {
-                                if (last_junction->mVLanes < r->mLanes)
-                                    used.mFarTopJunctions.insert(last_junction);
-                                else
-                                    used.mCloseTopJunctions.insert(last_junction);
-                            }
-
-                            Junction* j = getJunction(last_junction->x, last_junction->y - 1);
-
-                            if (r->mLanes != j->mVLanes)
-                            {
-                                if (r->mLanes < j->mVLanes)
-                                    used.mCloseBottomJunctions.insert(j);
-                                else
-                                    used.mFarBottomJunctions.insert(j);
-                            }
-
-                            used.mVRoads.insert(r);
-                            used.mVJunctions.insert(j);
-
-                            last_junction = j;
-
-                            ++remaining_y_distance;
-                        }
-                    }
-
-                    Road* dst_road = nullptr;
-
-                    if (y_distance > 0)
-                    {
-                        // TRAVEL DOWN
-                        dst_road = getVRoad(last_junction->x, last_junction->y);
-
-                        if (last_junction->mVLanes != dst_road->mLanes)
-                        {
-                            if (last_junction->mVLanes < dst_road->mLanes)
-                                used.mFarBottomJunctions.insert(last_junction);
-                            else
-                                used.mCloseBottomJunctions.insert(last_junction);
-                        }
-                    }
-                    else
-                    {
-                        // TRAVEL UP
-                        dst_road = getVRoad(last_junction->x, last_junction->y - 1);
-
-                        if (last_junction->mVLanes != dst_road->mLanes)
-                        {
-                            if (last_junction->mVLanes < dst_road->mLanes)
-                                used.mFarTopJunctions.insert(last_junction);
-                            else
-                                used.mCloseTopJunctions.insert(last_junction);
-                        }
-                    }
-
-                    used.mVJunctions.insert(last_junction);
-                    used.mVRoads.insert(dst_road);
+                    if (mDumpJunctions)
+                        it.value().dumpToFile(it.key());
+                    JunctionThread* jt = new JunctionThread(it.key(), it.value());
+                    connect(jt,&QThread::finished,this,&GraphLayouter::handleJunctionThreadFinished);
+                    mJunctionThreads.append(jt);
+                    jt->start();
                 }
+                ++it;
             }
-
-            commitUsedPaths(used);
+            qApp->processEvents();
         }
     }
 
@@ -942,7 +632,7 @@ namespace hal
         }
     }
 
-    void GraphLayouter::alternateMaxChannelLanes()
+    void GraphLayouter::findMaxChannelLanes()
     {
         // maximum parallel wires for atomic network
         for (auto it = mWireHash.constBegin(); it != mWireHash.constEnd(); ++it)
@@ -989,123 +679,6 @@ namespace hal
         }
     }
 
-    void GraphLayouter::findMaxChannelLanes()
-    {
-        for (const Road* r : mVRoads.values())
-            storeMax(mMaxVChannelLanesForX, r->x, r->mLanes);
-
-        for (const Road* r : mHRoads.values())
-            storeMax(mMaxHChannelLanesForY, r->y, r->mLanes);
-
-        for (const Junction* j : mJunctions.values())
-        {
-            storeMax(mMaxVChannelLanesForX, j->x, j->mVLanes);
-            storeMax(mMaxHChannelLanesForY, j->y, j->mHLanes);
-        }
-    }
-
-    void GraphLayouter::resetRoadsAndJunctions()
-    {
-        for (Road* r : mHRoads.values())
-            r->mLanes = 0;
-
-        for (Road* r : mVRoads.values())
-            r->mLanes = 0;
-
-        for (Junction* j : mJunctions.values())
-        {
-            // LEFT
-            unsigned int combined_lane_changes = j->mCloseLeftLaneChanges + j->mFarLeftLaneChanges;
-            qreal spacing                      = 0;
-
-            if (combined_lane_changes)
-                spacing = (combined_lane_changes - 1) * sLaneSpacing + sJunctionPadding;
-
-            storeMax(mMaxLeftJunctionSpacingForX, j->x, spacing);
-
-            // RIGHT
-            combined_lane_changes = j->mCloseRightLaneChanges + j->mFarRightLaneChanges;
-            spacing               = 0;
-
-            if (combined_lane_changes)
-                spacing = (combined_lane_changes - 1) * sLaneSpacing + sJunctionPadding;
-
-            storeMax(mMaxRightJunctionSpacingForX, j->x, spacing);
-
-            // TOP
-            combined_lane_changes = j->mCloseTopLaneChanges + j->mFarTopLaneChanges;
-            spacing               = 0;
-
-            if (combined_lane_changes)
-                spacing = (combined_lane_changes - 1) * sLaneSpacing + sJunctionPadding;
-
-            storeMax(mMaxTopJunctionSpacingForY, j->y, spacing);
-
-            // BOTTOM
-            combined_lane_changes = j->mCloseBottomLaneChanges + j->mFarBottomLaneChanges;
-            spacing               = 0;
-
-            if (combined_lane_changes)
-                spacing = (combined_lane_changes - 1) * sLaneSpacing + sJunctionPadding;
-
-            storeMax(mMaxBottomJunctionSpacingForY, j->y, spacing);
-
-            j->mHLanes = 0;
-            j->mVLanes = 0;
-
-            j->mCloseLeftLaneChanges   = 0;
-            j->mCloseRightLaneChanges  = 0;
-            j->mCloseTopLaneChanges    = 0;
-            j->mCloseBottomLaneChanges = 0;
-
-            j->mFarLeftLaneChanges   = 0;
-            j->mFarRightLaneChanges  = 0;
-            j->mFarTopLaneChanges    = 0;
-            j->mFarBottomLaneChanges = 0;
-        }
-    }
-
-    void GraphLayouter::calculateMaxChannelDimensions()
-    {
-        auto i = mMaxVChannelLanesForX.constBegin();
-        while (i != mMaxVChannelLanesForX.constEnd())
-        {
-            qreal left_spacing = std::max(sVRoadPadding + mMaxLeftIoPaddingForChannelX.value(i.key()), mMaxLeftJunctionSpacingForX.value(i.key()));
-            mMaxVChannelLeftSpacingForX.insert(i.key(), left_spacing);
-
-            qreal right_spacing = std::max(sVRoadPadding + mMaxRightIoPaddingForChannelX.value(i.key()), mMaxRightJunctionSpacingForX.value(i.key()));
-            mMaxVChannelRightSpacingForX.insert(i.key(), right_spacing);
-
-            qreal width = left_spacing + right_spacing;
-
-            if (i.value())
-                width += (i.value() - 1) * sLaneSpacing;
-
-            mMaxVChannelWidthForX.insert(i.key(), std::max(width, sMinimumVChannelWidth));
-
-            ++i;
-        }
-
-        i = mMaxHChannelLanesForY.constBegin();
-        while (i != mMaxHChannelLanesForY.constEnd())
-        {
-            qreal top_spacing = std::max(sHRoadPadding, mMaxTopJunctionSpacingForY.value(i.key()));
-            mMaxHChannelTopSpacingForY.insert(i.key(), top_spacing);
-
-            qreal bottom_spacing = std::max(sHRoadPadding, mMaxBottomJunctionSpacingForY.value(i.key()));
-            mMaxHChannelBottomSpacingForY.insert(i.key(), bottom_spacing);
-
-            qreal height = top_spacing + bottom_spacing;
-
-            if (i.value())
-                height += (i.value() - 1) * sLaneSpacing;
-
-            mMaxHChannelHeightForY.insert(i.key(), std::max(height, sMinimumHChannelHeight));
-
-            ++i;
-        }
-    }
-
     void GraphLayouter::calculateJunctionMinDistance()
     {
         for (auto itJun = mJunctionHash.constBegin(); itJun != mJunctionHash.constEnd(); ++itJun)
@@ -1136,7 +709,7 @@ namespace hal
         }
     }
 
-    void GraphLayouter::alternateGateOffsets()
+    void GraphLayouter::calculateGateOffsets()
     {
         QHash<int, float> xInputPadding;
         QHash<int, float> xOutputPadding;
@@ -1212,48 +785,7 @@ namespace hal
         }
     }
 
-    void GraphLayouter::calculateGateOffsets()
-    {
-        mNodeOffsetForX.insert(0, 0);
-        mNodeOffsetForY.insert(0, 0);
-
-        mXValues.append(0);
-        mYValues.append(0);
-
-        if (mMaxXIndex)
-            for (int i = 1; i <= mMaxXIndex; ++i)
-            {
-                qreal offset = mNodeOffsetForX.value(i - 1) + mMaxNodeWidthForX.value(i - 1) + std::max(mMaxVChannelWidthForX.value(i), sMinimumVChannelWidth);
-                mNodeOffsetForX.insert(i, offset);
-                mXValues.append(offset);
-            }
-
-        if (mMinXIndex)
-            for (int i = -1; i >= mMinXIndex; --i)
-            {
-                qreal offset = mNodeOffsetForX.value(i + 1) - mMaxNodeWidthForX.value(i) - std::max(mMaxVChannelWidthForX.value(i + 1), sMinimumVChannelWidth);
-                mNodeOffsetForX.insert(i, offset);
-                mXValues.prepend(offset);
-            }
-
-        if (mMaxYIndex)
-            for (int i = 1; i <= mMaxYIndex; ++i)
-            {
-                qreal offset = mNodeOffsetForY.value(i - 1) + mMaxNodeHeightForY.value(i - 1) + std::max(mMaxHChannelHeightForY.value(i), sMinimumHChannelHeight);
-                mNodeOffsetForY.insert(i, offset);
-                mYValues.append(offset);
-            }
-
-        if (mMinYIndex)
-            for (int i = -1; i >= mMinYIndex; --i)
-            {
-                qreal offset = mNodeOffsetForY.value(i + 1) - mMaxNodeHeightForY.value(i) - std::max(mMaxHChannelHeightForY.value(i + 1), sMinimumHChannelHeight);
-                mNodeOffsetForY.insert(i, offset);
-                mYValues.prepend(offset);
-            }
-    }
-
-    void GraphLayouter::alternatePlaceGates()
+    void GraphLayouter::placeGates()
     {
         for (const NodeBox* box : mBoxes)
         {
@@ -1281,15 +813,6 @@ namespace hal
         }
     }
 
-    void GraphLayouter::placeGates()
-    {
-        for (NodeBox* box : mBoxes)
-        {
-            box->setItemPosition(mNodeOffsetForX.value(box->x()), mNodeOffsetForY.value(box->y()));
-            mScene->addGraphItem(box->item());
-        }
-    }
-
     void GraphLayouter::drawComments()
     {
         for (NodeBox* box : mBoxes)
@@ -1305,32 +828,55 @@ namespace hal
         }
     }
 
-    void GraphLayouter::alternateDrawNets()
+    void GraphLayouter::drawNets()
     {
         // lane for given wire and net id
-        QHash<u32, QHash<NetLayoutWire, int>> laneMap;
 
         for (auto it = mWireHash.constBegin(); it != mWireHash.constEnd(); ++it)
         {
             int ilane = 0;
             for (u32 id : it.value())
-                laneMap[id].insert(it.key(), ilane++);
+                mLaneMap[id].insert(it.key(), ilane++);
         }
 
         int netCount     = mParentContext->nets().size();
         int percentCount = netCount / 93;
         int doneCount    = 0;
 
-        for (const u32 id : mParentContext->nets())
+        mNetsToDraw = mParentContext->nets();
+        mNetIterator = mNetsToDraw.constBegin();
+
+
+
+        enum LoopState { LoopInit, CanStartThread, WaitForSlot, WaitForLastThread, LoopDone } loopState = LoopInit;
+        while (loopState != LoopDone)
         {
-            ++doneCount;
-            if (percentCount)
+            if (mNetIterator != mNetsToDraw.constEnd())
             {
-                if (doneCount % percentCount == 0)
-                    mParentContext->layoutProgress(7 + doneCount / percentCount);
+                if  (mDrawNetThreads.size() < QThread::idealThreadCount())
+                    loopState = CanStartThread;
+                else
+                    loopState = WaitForSlot;
             }
             else
-                mParentContext->layoutProgress(7 + (int)floor(92. * doneCount / netCount));
+            {
+                if (mDrawNetThreads.isEmpty())
+                    loopState = LoopDone;
+                else
+                    loopState = WaitForLastThread;
+            }
+
+            if (loopState == LoopDone)
+                break;
+
+            if (loopState == WaitForLastThread || loopState == WaitForSlot)
+            {
+                qApp->processEvents();
+                continue;
+            }
+
+            Q_ASSERT(loopState == CanStartThread);
+            u32 id = *(mNetIterator++);
 
             Net* n = gNetlist->get_net_by_id(id);
             if (!n)
@@ -1342,10 +888,12 @@ namespace hal
             switch (epl.netType())
             {
                 case EndpointList::NoEndpoint:
+                    ++doneCount;
                     break;
                 case EndpointList::SingleSource:
                 case EndpointList::SingleDestination:
                 case EndpointList::ConstantLevel:
+                    ++doneCount;
                     drawNetsIsolated(id, n, epl);
                     break;
                     ;
@@ -1357,98 +905,78 @@ namespace hal
             if (!regularNet)
                 continue;
 
-            StandardGraphicsNet::Lines lines;
-
-            const QHash<NetLayoutWire, int>& wMap = laneMap.value(id);
-            for (auto it = wMap.constBegin(); it != wMap.constEnd(); ++it)
+            ++doneCount;
+            if (percentCount)
             {
-                NetLayoutPoint wFromPoint = it.key().endPoint(NetLayoutWire::SourcePoint);
-                NetLayoutPoint wToPoint   = it.key().endPoint(NetLayoutWire::DestinationPoint);
-                NetLayoutJunction* j0     = mJunctionHash.value(wFromPoint);
-                NetLayoutJunction* j1     = mJunctionHash.value(wToPoint);
-                int ilane                 = it.value();
-                int ix0                   = wFromPoint.x();
-                int iy0                   = wFromPoint.y();
-                int ix1                   = wToPoint.x();
-                int iy1                   = wToPoint.y();
-
-                if (it.key().isHorizontal())
-                {
-                    float x0 = j0 ? mCoordX[ix0].lanePosition(j0->rect().right()) : mCoordX[ix0].junctionExit();
-                    float x1 = j1 ? mCoordX[ix1].lanePosition(j1->rect().left()) : mCoordX[ix1].junctionEntry();
-                    float yy = mCoordY[iy0].lanePosition(ilane);
-                    lines.appendHLine(x0, x1, yy);
-                }
-                else
-                {
-                    float y0, y1;
-                    float xx = mCoordX[ix0].lanePosition(ilane);
-                    if (wToPoint.isEndpoint())
-                    {
-                        // netjunction -> endpoint
-                        auto itEpc = mEndpointHash.find(wToPoint);
-                        y0         = j0 ? mCoordY[iy0].lanePosition(j0->rect().bottom()) : mCoordY[iy0].junctionExit();
-                        y1         = itEpc != mEndpointHash.constEnd() ? itEpc.value().lanePosition(j1->rect().top(), true) : mCoordY[iy1].junctionEntry();
-                        //                        if (itEpc==mEndpointHash.constEnd())
-                        //                            qDebug() << "xxx to endp" << wToPoint.x() << wToPoint.y() << y0 << y1;
-                    }
-                    else
-                    {
-                        // endpoint -> netjunction
-                        auto itEpc = mEndpointHash.find(wFromPoint);
-                        y0         = itEpc != mEndpointHash.constEnd() ? itEpc.value().lanePosition(j0->rect().bottom(), true) : mCoordY[iy0].junctionExit();
-                        y1         = j1 ? mCoordY[iy1].lanePosition(j1->rect().top()) : mCoordY[iy1].junctionEntry();
-                        //                        if (itEpc==mEndpointHash.constEnd())
-                        //                            qDebug() << "xxx fr endp" << wFromPoint.x() << wFromPoint.y() << y0 << y1;
-                    }
-                    if (y1 > y0)
-                        lines.appendVLine(xx, y0, y1);
-                }
+                if (doneCount % percentCount == 0)
+                    mParentContext->layoutProgress(7 + doneCount / percentCount);
             }
-            drawNetsJunction(lines, id);
-            drawNetsEndpoint(lines, id);
+            else
+                mParentContext->layoutProgress(7 + (int)floor(92. * doneCount / netCount));
 
-            lines.mergeLines();
-
-            GraphicsNet* graphicsNet = nullptr;
-            switch (epl.netType())
-            {
-                case EndpointList::HasGlobalEndpoint:
-                    if (epl.hasInputArrow())
-                    {
-                        StandardArrowNet* san = new StandardArrowNet(n, lines);
-                        graphicsNet           = san;
-                        int yGridPos          = mGlobalInputHash.value(id, -1);
-                        Q_ASSERT(yGridPos >= 0);
-                        const EndpointCoordinate& epc = mEndpointHash.value(QPoint(mNodeBoundingBox.left(), yGridPos * 2));
-                        san->setInputPosition(QPointF(mCoordX.value(mNodeBoundingBox.left()).lanePosition(-1), epc.lanePosition(0, true)));
-                    }
-                    if (epl.hasOutputArrow())
-                    {
-                        if (graphicsNet) mScene->addGraphItem(graphicsNet);
-                        StandardArrowNet* san = new StandardArrowNet(n, lines);
-                        graphicsNet           = san;
-                        int yGridPos          = mGlobalOutputHash.value(id, -1);
-                        Q_ASSERT(yGridPos >= 0);
-                        QPoint pnt(mNodeBoundingBox.right() + 1, yGridPos * 2);
-                        const EndpointCoordinate& epc = mEndpointHash.value(pnt);
-                        const NetLayoutJunction* nlj  = mJunctionHash.value(pnt);
-                        Q_ASSERT(nlj);
-                        san->setOutputPosition(QPointF(mCoordX.value(pnt.x()).lanePosition(nlj->rect().right() + 1), epc.lanePosition(0, true)));
-                    }
-                    break;
-                case EndpointList::SourceAndDestination:
-                    if (lines.nLines() > 0)
-                        graphicsNet = new StandardGraphicsNet(n, lines);
-                    break;
-                default:
-                    Q_ASSERT(0 > 1);    // should never occur
-                    break;
-            }
-
-            if (graphicsNet)
-                mScene->addGraphItem(graphicsNet);
+            DrawNetThread* dnt = new DrawNetThread(id,this);
+            connect(dnt,&QThread::finished,this,&GraphLayouter::handleDrawNetThreadFinished);
+            mDrawNetThreads.append(dnt);
+            dnt->start();
         }
+    }
+
+    void GraphLayouter::handleJunctionThreadFinished()
+    {
+        JunctionThread* jt = static_cast<JunctionThread*>(sender());
+        mJunctionHash.insert(jt->mNetLayoutPoint,jt->mJunction);
+        mJunctionThreads.removeAll(jt);
+        jt->deleteLater();
+    }
+
+    void GraphLayouter::handleDrawNetThreadFinished()
+    {
+        DrawNetThread* dnt = static_cast<DrawNetThread*>(sender());
+        Net* n = gNetlist->get_net_by_id(dnt->id());
+        const EndpointList& epl = mWireEndpoint.value(dnt->id());
+
+        GraphicsNet* graphicsNet = nullptr;
+        switch (epl.netType())
+        {
+            case EndpointList::HasGlobalEndpoint:
+                if (epl.hasInputArrow())
+                {
+                    StandardArrowNet* san = new StandardArrowNet(n, dnt->mLines, dnt->mKnots);
+                    graphicsNet           = san;
+                    int yGridPos          = mGlobalInputHash.value(dnt->id(), -1);
+                    Q_ASSERT(yGridPos >= 0);
+                    QPoint pnt(mNodeBoundingBox.left(), yGridPos * 2);
+                    const EndpointCoordinate& epc = mEndpointHash.value(pnt);
+                    const NetLayoutJunction* nlj  = mJunctionHash.value(pnt);
+                    san->setInputPosition(QPointF(mCoordArrayX->lanePosition(mNodeBoundingBox.left(),nlj?nlj->rect().left():0), epc.lanePosition(0, true)));
+                }
+                if (epl.hasOutputArrow())
+                {
+                    if (graphicsNet) mScene->addGraphItem(graphicsNet);
+                    StandardArrowNet* san = new StandardArrowNet(n, dnt->mLines, dnt->mKnots);
+                    graphicsNet           = san;
+                    int yGridPos          = mGlobalOutputHash.value(dnt->id(), -1);
+                    Q_ASSERT(yGridPos >= 0);
+                    QPoint pnt(mNodeBoundingBox.right() + 1, yGridPos * 2);
+                    const EndpointCoordinate& epc = mEndpointHash.value(pnt);
+                    const NetLayoutJunction* nlj  = mJunctionHash.value(pnt);
+                    san->setOutputPosition(QPointF(mCoordArrayX->lanePosition(pnt.x(),nlj?nlj->rect().right():0), epc.lanePosition(0, true)));
+                }
+                break;
+            case EndpointList::SourceAndDestination:
+                if (dnt->mLines.nLines() > 0)
+                    graphicsNet = new StandardGraphicsNet(n, dnt->mLines, dnt->mKnots);
+                break;
+            default:
+                Q_ASSERT(0 > 1);    // should never occur
+                break;
+        }
+
+        if (graphicsNet)
+            mScene->addGraphItem(graphicsNet);
+
+        mDrawNetThreads.removeAll(dnt);
+        dnt->deleteLater();
     }
 
     void GraphLayouter::drawNetsIsolated(u32 id, Net* n, const EndpointList& epl)
@@ -1488,870 +1016,6 @@ namespace hal
         }
         net_item->finalize();
         mScene->addGraphItem(net_item);
-    }
-
-    void GraphLayouter::drawNetsEndpoint(StandardGraphicsNet::Lines& lines, u32 id)
-    {
-        for (auto it = mEndpointHash.constBegin(); it != mEndpointHash.constEnd(); ++it)
-        {
-            const EndpointCoordinate& epc = it.value();
-
-            QList<int> inputsById  = epc.inputPinIndex(id);
-            QList<int> outputsById = epc.outputPinIndex(id);
-            if (inputsById.isEmpty() && outputsById.isEmpty())
-                continue;
-
-            const NetLayoutJunction* nlj     = mJunctionHash.value(it.key());
-            const SceneCoordinate& xScenePos = mCoordX.value(it.key().x());
-            float xjLeft                     = xScenePos.lanePosition(nlj->rect().left());
-            float xjRight                    = xScenePos.lanePosition(nlj->rect().right());
-            Q_ASSERT(nlj);
-
-            for (int inpInx : inputsById)
-            {
-                if (xjRight >= epc.xInput())
-                {
-                    // don't complain if "input" is in fact global output pin
-                    auto ityOut = mGlobalOutputHash.find(id);
-                    if (ityOut == mGlobalOutputHash.constEnd() || QPoint(mNodeBoundingBox.right() + 1, 2 * ityOut.value()) != it.key())
-                        qDebug() << "cannot connect input pin" << id << it.key().x() << it.key().y() / 2 << xjRight << epc.xInput();
-                }
-                else
-                    lines.appendHLine(xjRight, epc.xInput(), epc.lanePosition(inpInx, true));
-            }
-            for (int outInx : outputsById)
-            {
-                if (epc.xOutput() >= xjLeft)
-                    qDebug() << "cannot connect output pin" << id << it.key().x() << it.key().y() / 2 << xjLeft << epc.xOutput();
-                else
-                    lines.appendHLine(epc.xOutput(), xjLeft, epc.lanePosition(outInx, true));
-            }
-        }
-    }
-
-    void GraphLayouter::drawNetsJunction(StandardGraphicsNet::Lines& lines, u32 id)
-    {
-        for (auto jt = mJunctionHash.constBegin(); jt != mJunctionHash.constEnd(); ++jt)
-        {
-            auto epcIt      = mEndpointHash.find(jt.key());
-            int x           = jt.key().x();
-            int y           = jt.key().y();
-            bool isEndpoint = (y % 2 == 0);
-
-            for (const NetLayoutJunctionWire& jw : jt.value()->netById(id).mWires)
-            {
-                if (jw.mHorizontal == 0)
-                {
-                    Q_ASSERT(epcIt != mEndpointHash.constEnd() || !isEndpoint);
-                    float x0 = mCoordX.value(x).lanePosition(jw.mFirst);
-                    float x1 = mCoordX.value(x).lanePosition(jw.mLast);
-                    float yy = isEndpoint ? epcIt.value().lanePosition(jw.mRoad, true) : mCoordY.value(y).lanePosition(jw.mRoad);
-                    lines.appendHLine(x0, x1, yy);
-                }
-                else
-                {
-                    float y0, y1;
-                    if (!isEndpoint)
-                    {
-                        y0 = mCoordY.value(y).lanePosition(jw.mFirst);
-                        y1 = mCoordY.value(y).lanePosition(jw.mLast);
-                    }
-                    else if (epcIt != mEndpointHash.constEnd())
-                    {
-                        y0 = epcIt.value().lanePosition(jw.mFirst, true);
-                        y1 = epcIt.value().lanePosition(jw.mLast, true);
-                    }
-                    else
-                    {
-                        y0 = mCoordY.value(y).junctionEntry();
-                        y1 = mCoordY.value(y).junctionExit();
-                        if (y1 <= y0)
-                            y1 = y0 + 1;
-                    }
-                    float xx = mCoordX.value(x).lanePosition(jw.mRoad);
-                    lines.appendVLine(xx, y0, y1);
-                }
-            }
-        }
-    }
-
-    void GraphLayouter::drawNets()
-    {
-        // ROADS AND JUNCTIONS FILLED LEFT TO RIGHT, TOP TO BOTTOM
-        for (const u32 id : mParentContext->nets())
-        {
-            Net* n = gNetlist->get_net_by_id(id);
-            assert(n);
-
-            QSet<const NodeBox*> outputAssigned;
-
-            if (n->is_unrouted())
-            {
-                // HANDLE GLOBAL NETS
-                ArrowSeparatedNet* net_item = new ArrowSeparatedNet(n);
-
-                for (Endpoint* src : n->get_sources())
-                {
-                    if (src->get_gate())
-                    {
-                        Node node = mParentContext->nodeForGate(src->get_gate()->get_id());
-
-                        if (node.isNull())
-                            continue;
-
-                        const NodeBox* nb = mBoxes.boxForNode(node);
-                        if (nb && !outputAssigned.contains(nb))
-                        {
-                            net_item->addOutput(nb->item()->getOutputScenePosition(n->get_id(), QString::fromStdString(src->get_pin()->get_name())));
-                            outputAssigned.insert(nb);
-                        }
-                    }
-                }
-
-                QSet<const NodeBox*> inputAssigned;
-
-                for (Endpoint* dst : n->get_destinations())
-                {
-                    if (dst->get_gate())
-                    {
-                        Node node = mParentContext->nodeForGate(dst->get_gate()->get_id());
-
-                        if (node.isNull())
-                            continue;
-
-                        const NodeBox* nb = mBoxes.boxForNode(node);
-                        if (nb && !inputAssigned.contains(nb))
-                        {
-                            net_item->addInput(nb->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin()->get_name())));
-                            inputAssigned.insert(nb);
-                        }
-                    }
-                }
-
-                net_item->finalize();
-                mScene->addGraphItem(net_item);
-                continue;
-            }
-
-            bool use_label = isConstNet(n);
-
-            if (use_label)
-            {
-                LabeledSeparatedNet* net_item = new LabeledSeparatedNet(n, QString::fromStdString(n->get_name()));
-
-                for (Endpoint* src : n->get_sources())
-                {
-                    Node node = mParentContext->nodeForGate(src->get_gate()->get_id());
-
-                    if (!node.isNull())
-                    {
-                        const NodeBox* nb = mBoxes.boxForNode(node);
-                        if (nb)
-                            net_item->addOutput(nb->item()->getOutputScenePosition(n->get_id(), QString::fromStdString(src->get_pin()->get_name())));
-                    }
-                }
-
-                for (Endpoint* dst : n->get_destinations())
-                {
-                    Node node = mParentContext->nodeForGate(dst->get_gate()->get_id());
-
-                    if (node.isNull())
-                        continue;
-
-                    const NodeBox* nb = mBoxes.boxForNode(node);
-                    if (nb)
-                        net_item->addInput(nb->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin()->get_name())));
-                }
-
-                net_item->finalize();
-                mScene->addGraphItem(net_item);
-
-                continue;
-            }
-
-            // incomplete_net: existing destination or source of net not visible
-            // bool incomplete_net = false;
-
-            bool src_found = false;
-            bool dst_found = false;
-
-            for (Endpoint* src : n->get_sources())
-            {
-                Node node = mParentContext->nodeForGate(src->get_gate()->get_id());
-
-                if (!node.isNull())
-                    src_found = true;
-                //   else incomplete_net = true;
-            }
-
-            for (Endpoint* dst : n->get_destinations())
-            {
-                Node node = mParentContext->nodeForGate(dst->get_gate()->get_id());
-
-                if (!node.isNull())
-                    dst_found = true;
-                //    else incomplete_net = true;
-            }
-
-            if (src_found && !dst_found)
-            {
-                ArrowSeparatedNet* net_item = new ArrowSeparatedNet(n);
-
-                for (Endpoint* src : n->get_sources())
-                {
-                    Node node = mParentContext->nodeForGate(src->get_gate()->get_id());
-
-                    if (node.isNull())
-                        continue;
-
-                    const NodeBox* nb = mBoxes.boxForNode(node);
-                    if (nb)
-                        net_item->addOutput(nb->item()->getOutputScenePosition(n->get_id(), QString::fromStdString(src->get_pin()->get_name())));
-                }
-
-                net_item->finalize();
-                mScene->addGraphItem(net_item);
-
-                continue;
-            }
-
-            if (!src_found && dst_found)
-            {
-                ArrowSeparatedNet* net_item = new ArrowSeparatedNet(n);
-
-                for (Endpoint* dst : n->get_destinations())
-                {
-                    Node node = mParentContext->nodeForGate(dst->get_gate()->get_id());
-
-                    if (node.isNull())
-                        continue;
-
-                    const NodeBox* nb = mBoxes.boxForNode(node);
-                    if (nb)
-                        net_item->addInput(nb->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin()->get_name())));
-                }
-
-                net_item->finalize();
-                mScene->addGraphItem(net_item);
-
-                continue;
-            }
-
-            // HANDLE NORMAL NETS
-            UsedPaths used;
-            StandardGraphicsNet::Lines lines;
-
-            // FOR EVERY SRC
-            for (Endpoint* src : n->get_sources())
-            {
-                // FIND SRC BOX
-                const NodeBox* src_box = nullptr;
-                {
-                    Node node = mParentContext->nodeForGate(src->get_gate()->get_id());
-
-                    if (node.isNull())
-                        continue;
-
-                    const NodeBox* nb = mBoxes.boxForNode(node);
-                    if (nb)
-                        src_box = nb;
-                }
-                assert(src_box);
-
-                const QPointF src_pin_position = src_box->item()->getOutputScenePosition(n->get_id(), QString::fromStdString(src->get_pin()->get_name()));
-
-                // FOR EVERY DST
-                for (Endpoint* dst : n->get_destinations())
-                {
-                    // FIND DST BOX
-                    const NodeBox* dst_box = nullptr;
-
-                    Node node = mParentContext->nodeForGate(dst->get_gate()->get_id());
-
-                    if (node.isNull())
-                        continue;
-
-                    const NodeBox* nb = mBoxes.boxForNode(node);
-                    if (nb)
-                        dst_box = nb;
-
-                    assert(dst_box);
-
-                    // don't attempt to loop back a module output into its input
-                    // (if this triggers, we found the net because it also has
-                    // destinations outside the module)
-                    if (src_box == dst_box && src_box->type() == Node::Module)
-                        continue;
-
-                    QPointF dst_pin_position = dst_box->item()->getInputScenePosition(n->get_id(), QString::fromStdString(dst->get_pin()->get_name()));
-
-                    // ROAD BASED DISTANCE (x_distance - 1)
-                    const int x_distance = dst_box->x() - src_box->x() - 1;
-                    const int y_distance = dst_box->y() - src_box->y();
-
-                    if (!y_distance && vRoadJumpPossible(src_box->x() + 1, dst_box->x(), src_box->y()))
-                    {
-                        // SPECIAL CASE INDIRECT HORIZONTAL NEIGHBORS
-                        Road* dst_v_road = getVRoad(dst_box->x(), dst_box->y());
-
-                        qreal x = sceneXForVChannelLane(dst_v_road->x, dst_v_road->mLanes);
-
-                        lines.appendHLine(src_pin_position.x(), x, src_pin_position.y());
-
-                        if (src_pin_position.y() < dst_pin_position.y())
-                            lines.appendVLine(x, src_pin_position.y(), dst_pin_position.y());
-                        else if (src_pin_position.y() > dst_pin_position.y())
-                            lines.appendVLine(x, dst_pin_position.y(), src_pin_position.y());
-
-                        lines.appendHLine(x, dst_pin_position.x(), dst_pin_position.y());
-
-                        used.mVRoads.insert(dst_v_road);
-                        continue;
-                    }
-
-                    Road* src_v_road = getVRoad(src_box->x() + 1, src_box->y());
-
-                    if (!(x_distance || y_distance))
-                    {
-                        // SPECIAL CASE DIRECT HORIZONTAL NEIGHBORS
-                        qreal x = sceneXForVChannelLane(src_v_road->x, src_v_road->mLanes);
-
-                        lines.appendHLine(src_pin_position.x(), x, src_pin_position.y());
-
-                        if (src_pin_position.y() < dst_pin_position.y())
-                            lines.appendVLine(x, src_pin_position.y(), dst_pin_position.y());
-                        else if (src_pin_position.y() > dst_pin_position.y())
-                            lines.appendVLine(x, dst_pin_position.y(), src_pin_position.y());
-
-                        lines.appendHLine(x, dst_pin_position.x(), dst_pin_position.y());
-
-                        used.mVRoads.insert(src_v_road);
-                        continue;
-                    }
-
-                    // NORMAL CASE
-                    // CONNECT SRC TO V ROAD, TRAVEL X DISTANCE, TRAVEL Y DISTANCE, CONNECT V ROAD TO DST
-                    QPointF current_position(src_pin_position);
-                    current_position.setX(sceneXForVChannelLane(src_v_road->x, src_v_road->mLanes));
-                    lines.appendHLine(src_pin_position.x(), current_position.x(), src_pin_position.y());
-                    used.mVRoads.insert(src_v_road);
-
-                    Junction* initial_junction = nullptr;
-                    int remaining_y_distance   = y_distance;
-
-                    if (y_distance < 0)
-                    {
-                        // TRAVEL UP
-                        initial_junction = getJunction(src_v_road->x, src_v_road->y);
-
-                        if (src_v_road->mLanes != initial_junction->mVLanes)
-                        {
-                            // R -> J
-                            if (src_v_road->mLanes < initial_junction->mVLanes)
-                            {
-                                // POS
-                                qreal y = sceneYForCloseBottomLaneChange(initial_junction->y, initial_junction->mCloseBottomLaneChanges);
-                                lines.appendVLine(current_position.x(), y, current_position.y());
-                                current_position.setY(y);
-                                used.mCloseBottomJunctions.insert(initial_junction);
-                            }
-                            else
-                            {
-                                // NEG
-                                qreal y = sceneYForFarBottomLaneChange(initial_junction->y, initial_junction->mFarBottomLaneChanges);
-                                lines.appendVLine(current_position.x(), y, current_position.y());
-                                current_position.setY(y);
-                                used.mFarBottomJunctions.insert(initial_junction);
-                            }
-
-                            qreal x = sceneXForVChannelLane(initial_junction->x, initial_junction->mVLanes);
-
-                            if (current_position.x() < x)
-                                lines.appendHLine(current_position.x(), x, current_position.y());
-                            else
-                                lines.appendHLine(x, current_position.x(), current_position.y());
-
-                            current_position.setX(x);
-                        }
-                    }
-                    else
-                    {
-                        // TRAVEL DOWN
-                        initial_junction = getJunction(src_v_road->x, src_v_road->y + 1);
-
-                        if (src_v_road->mLanes != initial_junction->mVLanes)
-                        {
-                            // R -> J
-                            if (src_v_road->mLanes < initial_junction->mVLanes)
-                            {
-                                // POS
-                                qreal y = sceneYForCloseTopLaneChange(initial_junction->y, initial_junction->mCloseTopLaneChanges);
-                                lines.appendVLine(current_position.x(), current_position.y(), y);
-                                current_position.setY(y);
-                                used.mCloseTopJunctions.insert(initial_junction);
-                            }
-                            else
-                            {
-                                // NEG
-                                qreal y = sceneYForFarTopLaneChange(initial_junction->y, initial_junction->mFarTopLaneChanges);
-                                lines.appendVLine(current_position.x(), current_position.y(), y);
-                                current_position.setY(y);
-                                used.mFarTopJunctions.insert(initial_junction);
-                            }
-
-                            qreal x = sceneXForVChannelLane(initial_junction->x, initial_junction->mVLanes);
-
-                            if (current_position.x() < x)
-                                lines.appendHLine(current_position.x(), x, current_position.y());
-                            else
-                                lines.appendHLine(x, current_position.x(), current_position.y());
-
-                            current_position.setX(x);
-                        }
-
-                        if (!y_distance)
-                            remaining_y_distance = -1;
-                    }
-
-                    used.mVJunctions.insert(initial_junction);
-
-                    Junction* last_junction = initial_junction;
-
-                    if (x_distance)
-                    {
-                        {
-                            qreal y = sceneYForHChannelLane(initial_junction->y, initial_junction->mHLanes);
-
-                            if (current_position.y() < y)
-                                lines.appendVLine(current_position.x(), current_position.y(), y);
-                            else
-                                lines.appendVLine(current_position.x(), y, current_position.y());
-
-                            current_position.setY(y);
-                            used.mHJunctions.insert(initial_junction);
-                        }
-
-                        int remaining_x_distance = x_distance;
-
-                        // TRAVEL REMAINING X DISTANCE
-                        while (remaining_x_distance)
-                        {
-                            Road* r     = nullptr;
-                            Junction* j = nullptr;
-
-                            if (x_distance > 0)
-                            {
-                                // TRAVEL RIGHT
-                                r = getHRoad(last_junction->x, last_junction->y);
-
-                                if (last_junction->mHLanes != r->mLanes)
-                                {
-                                    // J -> R
-                                    if (last_junction->mHLanes < r->mLanes)
-                                    {
-                                        // POS
-                                        qreal x = sceneXForFarRightLaneChange(last_junction->x, last_junction->mFarRightLaneChanges);
-                                        lines.appendHLine(current_position.x(), x, current_position.y());
-                                        current_position.setX(x);
-                                        used.mFarRightJunctions.insert(last_junction);
-                                    }
-                                    else
-                                    {
-                                        // NEG
-                                        qreal x = sceneXForCloseRightLaneChange(last_junction->x, last_junction->mCloseRightLaneChanges);
-                                        lines.appendHLine(current_position.x(), x, current_position.y());
-                                        current_position.setX(x);
-                                        used.mCloseRightJunctions.insert(last_junction);
-                                    }
-
-                                    qreal y = sceneYForHChannelLane(r->y, r->mLanes);
-
-                                    if (current_position.y() < y)
-                                        lines.appendVLine(current_position.x(), current_position.y(), y);
-                                    else
-                                        lines.appendVLine(current_position.x(), y, current_position.y());
-
-                                    current_position.setY(y);
-                                }
-
-                                j = getJunction(last_junction->x + 1, last_junction->y);
-
-                                if (r->mLanes != j->mHLanes)
-                                {
-                                    // R -> J
-                                    if (r->mLanes < j->mHLanes)
-                                    {
-                                        // POS
-                                        qreal x = sceneXForCloseLeftLaneChange(j->x, j->mCloseLeftLaneChanges);
-                                        lines.appendHLine(current_position.x(), x, current_position.y());
-                                        current_position.setX(x);
-                                        used.mCloseLeftJunctions.insert(j);
-                                    }
-                                    else
-                                    {
-                                        // NEG
-                                        qreal x = sceneXForFarLeftLaneChange(j->x, j->mFarLeftLaneChanges);
-                                        lines.appendHLine(current_position.x(), x, current_position.y());
-                                        current_position.setX(x);
-                                        used.mFarLeftJunctions.insert(j);
-                                    }
-
-                                    qreal y = sceneYForHChannelLane(j->y, j->mHLanes);
-
-                                    // DUPLICATE CODE ?
-                                    if (current_position.y() < y)
-                                        lines.appendVLine(current_position.x(), current_position.y(), y);
-                                    else
-                                        lines.appendVLine(current_position.x(), y, current_position.y());
-
-                                    current_position.setY(y);
-                                }
-
-                                --remaining_x_distance;
-                            }
-                            else
-                            {
-                                // TRAVEL LEFT
-                                r = getHRoad(last_junction->x - 1, last_junction->y);
-
-                                if (last_junction->mHLanes != r->mLanes)
-                                {
-                                    // J -> R
-                                    if (last_junction->mHLanes < r->mLanes)
-                                    {
-                                        // POS
-                                        qreal x = sceneXForFarLeftLaneChange(last_junction->x, last_junction->mFarLeftLaneChanges);
-                                        lines.appendHLine(x, current_position.x(), current_position.y());
-                                        current_position.setX(x);
-                                        used.mFarLeftJunctions.insert(last_junction);
-                                    }
-                                    else
-                                    {
-                                        // NEG
-                                        qreal x = sceneXForCloseLeftLaneChange(last_junction->x, last_junction->mCloseLeftLaneChanges);
-                                        lines.appendHLine(x, current_position.x(), current_position.y());
-                                        current_position.setX(x);
-                                        used.mCloseLeftJunctions.insert(last_junction);
-                                    }
-
-                                    qreal y = sceneYForHChannelLane(r->y, r->mLanes);
-
-                                    // DUPLICATE CODE ?
-                                    if (current_position.y() < y)
-                                        lines.appendVLine(current_position.x(), current_position.y(), y);
-                                    else
-                                        lines.appendVLine(current_position.x(), y, current_position.y());
-
-                                    current_position.setY(y);
-                                }
-
-                                j = getJunction(last_junction->x - 1, last_junction->y);
-
-                                if (r->mLanes != j->mHLanes)
-                                {
-                                    // R -> J
-                                    if (r->mLanes < j->mHLanes)
-                                    {
-                                        // POS
-                                        qreal x = sceneXForCloseRightLaneChange(j->x, j->mCloseRightLaneChanges);
-                                        lines.appendHLine(x, current_position.x(), current_position.y());
-                                        current_position.setX(x);
-                                        used.mCloseRightJunctions.insert(j);
-                                    }
-                                    else
-                                    {
-                                        // NEG
-                                        qreal x = sceneXForFarRightLaneChange(j->x, j->mFarRightLaneChanges);
-                                        lines.appendHLine(x, current_position.x(), current_position.y());
-                                        current_position.setX(x);
-                                        used.mFarRightJunctions.insert(j);
-                                    }
-
-                                    qreal y = sceneYForHChannelLane(j->y, j->mHLanes);
-
-                                    // DUPLICATE CODE ?
-                                    if (current_position.y() < y)
-                                        lines.appendVLine(current_position.x(), current_position.y(), y);
-                                    else
-                                        lines.appendVLine(current_position.x(), y, current_position.y());
-
-                                    current_position.setY(y);
-                                }
-
-                                ++remaining_x_distance;
-                            }
-
-                            used.mHRoads.insert(r);
-                            used.mHJunctions.insert(j);
-
-                            last_junction = j;
-                        }
-
-                        qreal x = sceneXForVChannelLane(last_junction->x, last_junction->mVLanes);
-
-                        if (current_position.x() < x)
-                            lines.appendHLine(current_position.x(), x, current_position.y());
-                        else
-                            lines.appendHLine(x, current_position.x(), current_position.y());
-
-                        current_position.setX(x);
-                        used.mVJunctions.insert(last_junction);
-                    }
-
-                    // TRAVEL REMAINING Y DISTANCE
-                    if (remaining_y_distance > 0)
-                    {
-                        while (remaining_y_distance != 1)
-                        {
-                            // TRAVEL DOWN
-                            Road* r = getVRoad(last_junction->x, last_junction->y);
-
-                            if (last_junction->mVLanes != r->mLanes)
-                            {
-                                // J -> R
-                                if (last_junction->mVLanes < r->mLanes)
-                                {
-                                    // POS
-                                    qreal y = sceneYForFarBottomLaneChange(last_junction->y, last_junction->mFarBottomLaneChanges);
-                                    lines.appendVLine(current_position.x(), current_position.y(), y);
-                                    current_position.setY(y);
-                                    used.mFarBottomJunctions.insert(last_junction);
-                                }
-                                else
-                                {
-                                    // NEG
-                                    qreal y = sceneYForCloseBottomLaneChange(last_junction->y, last_junction->mCloseBottomLaneChanges);
-                                    lines.appendVLine(current_position.x(), current_position.y(), y);
-                                    current_position.setY(y);
-                                    used.mCloseBottomJunctions.insert(last_junction);
-                                }
-
-                                qreal x = sceneXForVChannelLane(r->x, r->mLanes);
-
-                                if (current_position.x() < x)
-                                    lines.appendHLine(current_position.x(), x, current_position.y());
-                                else
-                                    lines.appendHLine(x, current_position.x(), current_position.y());
-
-                                current_position.setX(x);
-                            }
-
-                            Junction* j = getJunction(last_junction->x, last_junction->y + 1);
-
-                            if (r->mLanes != j->mVLanes)
-                            {
-                                // R -> J
-                                if (r->mLanes < j->mVLanes)
-                                {
-                                    // POS
-                                    qreal y = sceneYForCloseTopLaneChange(j->y, j->mCloseTopLaneChanges);
-                                    lines.appendVLine(current_position.x(), current_position.y(), y);
-                                    current_position.setY(y);
-                                    used.mCloseTopJunctions.insert(j);
-                                }
-                                else
-                                {
-                                    // NEG
-                                    qreal y = sceneYForFarTopLaneChange(j->y, j->mFarTopLaneChanges);
-                                    lines.appendVLine(current_position.x(), current_position.y(), y);
-                                    current_position.setY(y);
-                                    used.mFarTopJunctions.insert(j);
-                                }
-
-                                qreal x = sceneXForVChannelLane(j->x, j->mVLanes);
-
-                                if (current_position.x() < x)
-                                    lines.appendHLine(current_position.x(), x, current_position.y());
-                                else
-                                    lines.appendHLine(x, current_position.x(), current_position.y());
-
-                                current_position.setX(x);
-                            }
-
-                            used.mVRoads.insert(r);
-                            used.mVJunctions.insert(j);
-
-                            last_junction = j;
-
-                            --remaining_y_distance;
-                        }
-                    }
-                    else
-                    {
-                        while (remaining_y_distance != -1)
-                        {
-                            // TRAVEL UP
-                            Road* r = getVRoad(last_junction->x, last_junction->y - 1);
-
-                            if (last_junction->mVLanes != r->mLanes)
-                            {
-                                // J -> R
-                                if (last_junction->mVLanes < r->mLanes)
-                                {
-                                    // POS
-                                    qreal y = sceneYForFarTopLaneChange(last_junction->y, last_junction->mFarTopLaneChanges);
-                                    lines.appendVLine(current_position.x(), y, current_position.y());
-                                    current_position.setY(y);
-                                    used.mFarTopJunctions.insert(last_junction);
-                                }
-                                else
-                                {
-                                    // NEG
-                                    qreal y = sceneYForCloseTopLaneChange(last_junction->y, last_junction->mCloseTopLaneChanges);
-                                    lines.appendVLine(current_position.x(), y, current_position.y());
-                                    current_position.setY(y);
-                                    used.mCloseTopJunctions.insert(last_junction);
-                                }
-
-                                qreal x = sceneXForVChannelLane(r->x, r->mLanes);
-
-                                if (current_position.x() < x)
-                                    lines.appendHLine(current_position.x(), x, current_position.y());
-                                else
-                                    lines.appendHLine(x, current_position.x(), current_position.y());
-
-                                current_position.setX(x);
-                            }
-
-                            Junction* j = getJunction(last_junction->x, last_junction->y - 1);
-
-                            if (r->mLanes != j->mVLanes)
-                            {
-                                // R -> J
-                                if (r->mLanes < j->mVLanes)
-                                {
-                                    // POS
-                                    qreal y = sceneYForCloseBottomLaneChange(j->y, j->mCloseBottomLaneChanges);
-                                    lines.appendVLine(current_position.x(), y, current_position.y());
-                                    current_position.setY(y);
-                                    used.mCloseBottomJunctions.insert(j);
-                                }
-                                else
-                                {
-                                    // NEG
-                                    qreal y = sceneYForFarBottomLaneChange(j->y, j->mFarBottomLaneChanges);
-                                    lines.appendVLine(current_position.x(), y, current_position.y());
-                                    current_position.setY(y);
-                                    used.mFarBottomJunctions.insert(j);
-                                }
-
-                                qreal x = sceneXForVChannelLane(j->x, j->mVLanes);
-
-                                if (current_position.x() < x)
-                                    lines.appendHLine(current_position.x(), x, current_position.y());
-                                else
-                                    lines.appendHLine(x, current_position.x(), current_position.y());
-
-                                current_position.setX(x);
-                            }
-
-                            used.mVRoads.insert(r);
-                            used.mVJunctions.insert(j);
-
-                            last_junction = j;
-
-                            ++remaining_y_distance;
-                        }
-                    }
-
-                    Road* dst_road = nullptr;
-
-                    if (y_distance > 0)
-                    {
-                        // TRAVEL DOWN
-                        dst_road = getVRoad(last_junction->x, last_junction->y);
-
-                        if (last_junction->mVLanes != dst_road->mLanes)
-                        {
-                            // J -> R
-                            if (last_junction->mVLanes < dst_road->mLanes)
-                            {
-                                // POS
-                                qreal y = sceneYForFarBottomLaneChange(last_junction->y, last_junction->mFarBottomLaneChanges);
-                                lines.appendVLine(current_position.x(), current_position.y(), y);
-                                current_position.setY(y);
-                                used.mFarBottomJunctions.insert(last_junction);
-                            }
-                            else
-                            {
-                                // NEG
-                                qreal y = sceneYForCloseBottomLaneChange(last_junction->y, last_junction->mCloseBottomLaneChanges);
-                                lines.appendVLine(current_position.x(), current_position.y(), y);
-                                current_position.setY(y);
-                                used.mCloseBottomJunctions.insert(last_junction);
-                            }
-
-                            qreal x = sceneXForVChannelLane(dst_road->x, dst_road->mLanes);
-
-                            if (current_position.x() < x)
-                                lines.appendHLine(current_position.x(), x, current_position.y());
-                            else
-                                lines.appendHLine(x, current_position.x(), current_position.y());
-
-                            current_position.setX(x);
-                        }
-                    }
-                    else
-                    {
-                        // TRAVEL UP
-                        dst_road = getVRoad(last_junction->x, last_junction->y - 1);
-
-                        if (last_junction->mVLanes != dst_road->mLanes)
-                        {
-                            // J -> R
-                            if (last_junction->mVLanes < dst_road->mLanes)
-                            {
-                                // POS
-                                qreal y = sceneYForFarTopLaneChange(last_junction->y, last_junction->mFarTopLaneChanges);
-                                lines.appendVLine(current_position.x(), y, current_position.y());
-                                current_position.setY(y);
-                                used.mFarTopJunctions.insert(last_junction);
-                            }
-                            else
-                            {
-                                // NEG
-                                qreal y = sceneYForCloseTopLaneChange(last_junction->y, last_junction->mCloseTopLaneChanges);
-                                lines.appendVLine(current_position.x(), y, current_position.y());
-                                current_position.setY(y);
-                                used.mCloseTopJunctions.insert(last_junction);
-                            }
-
-                            qreal x = sceneXForVChannelLane(dst_road->x, dst_road->mLanes);
-
-                            if (current_position.x() < x)
-                                lines.appendHLine(current_position.x(), x, current_position.y());
-                            else
-                                lines.appendHLine(x, current_position.x(), current_position.y());
-
-                            current_position.setX(x);
-                        }
-                    }
-
-                    used.mVJunctions.insert(last_junction);
-
-                    if (current_position.y() < dst_pin_position.y())
-                        lines.appendVLine(current_position.x(), current_position.y(), dst_pin_position.y());
-                    else
-                        lines.appendVLine(current_position.x(), dst_pin_position.y(), current_position.y());
-
-                    current_position.setY(dst_pin_position.y());
-
-                    used.mVRoads.insert(dst_road);
-
-                    lines.appendHLine(current_position.x(), dst_pin_position.x(), current_position.y());
-
-                    current_position = src_pin_position;
-                }
-            }
-
-            lines.mergeLines();
-            if (lines.nLines() > 0)
-            {
-                StandardGraphicsNet* GraphicsNet = new StandardGraphicsNet(n, lines);
-                mScene->addGraphItem(GraphicsNet);
-            }
-            commitUsedPaths(used);
-        }
     }
 
     void GraphLayouter::updateSceneRect()
@@ -2437,44 +1101,6 @@ namespace hal
         return vRoadJumpPossible(r1->x, r2->x, r1->y);
     }
 
-    GraphLayouter::Road* GraphLayouter::getHRoad(const int x, const int y)
-    {
-        QPoint p(x, y);
-        auto it = mHRoads.find(p);
-        if (it != mHRoads.end())
-            return it.value();
-
-        GraphLayouter::Road* r = new Road(x, y);
-        mHRoads.insert(p, r);
-        return r;
-    }
-
-    GraphLayouter::Road* GraphLayouter::getVRoad(const int x, const int y)
-    {
-        QPoint p(x, y);
-        auto it = mVRoads.find(p);
-        if (it != mVRoads.end())
-            return it.value();
-
-        GraphLayouter::Road* r = new Road(x, y);
-        mVRoads.insert(p, r);
-        return r;
-    }
-
-    GraphLayouter::Junction* GraphLayouter::getJunction(const int x, const int y)
-    {
-        QPoint p(x, y);
-        auto it = mJunctions.find(p);
-        if (it != mJunctions.end())
-        {
-            return it.value();
-        }
-
-        GraphLayouter::Junction* j = new Junction(x, y);
-        mJunctions.insert(p, j);
-        return j;
-    }
-
     qreal GraphLayouter::hRoadHeight(const unsigned int mLanes) const
     {
         // LANES COUNTED FROM 1
@@ -2495,223 +1121,6 @@ namespace hal
             width += (mLanes - 1) * sLaneSpacing;
 
         return width;
-    }
-
-    qreal GraphLayouter::sceneYForHChannelLane(const int y, const unsigned int lane) const
-    {
-        // LINES NUMBERED FROM 0
-        assert(mNodeOffsetForY.contains(y) || mNodeOffsetForY.contains(y - 1));
-
-        const qreal offset = lane * sLaneSpacing;
-
-        if (y == 0)
-            return mNodeOffsetForY.value(y) - mMaxHChannelHeightForY.value(y) + mMaxHChannelTopSpacingForY.value(y) + offset;
-        else
-            return mNodeOffsetForY.value(y - 1) + mMaxNodeHeightForY.value(y - 1) + mMaxHChannelTopSpacingForY.value(y) + offset;
-    }
-
-    qreal GraphLayouter::sceneXForVChannelLane(const int x, const unsigned int lane) const
-    {
-        // LINES NUMBERED FROM 0
-        assert(mNodeOffsetForX.contains(x) || mNodeOffsetForX.contains(x - 1));
-
-        const qreal offset = lane * sLaneSpacing;
-
-        if (mNodeOffsetForX.contains(x))
-            return mNodeOffsetForX.value(x) - mMaxVChannelWidthForX.value(x) + mMaxVChannelLeftSpacingForX.value(x) + offset;
-        else
-            return mNodeOffsetForX.value(x - 1) + mMaxNodeWidthForX.value(x - 1) + mMaxVChannelLeftSpacingForX.value(x) + offset;
-    }
-
-    qreal GraphLayouter::sceneXForCloseLeftLaneChange(const int channel_x, unsigned int lane_change) const
-    {
-        // LANE CHANGES COUNTED FROM 0
-        assert(mNodeOffsetForX.contains(channel_x) || mNodeOffsetForX.contains(channel_x - 1));
-
-        if (mNodeOffsetForX.contains(channel_x))
-            return mNodeOffsetForX.value(channel_x) - mMaxVChannelWidthForX.value(channel_x) + mMaxVChannelLeftSpacingForX.value(channel_x) - sJunctionPadding - lane_change * sLaneSpacing;
-        else
-            return mNodeOffsetForX.value(channel_x - 1) + mMaxNodeWidthForX.value(channel_x - 1) + mMaxVChannelLeftSpacingForX.value(channel_x) - sJunctionPadding - lane_change * sLaneSpacing;
-    }
-
-    qreal GraphLayouter::sceneXForFarLeftLaneChange(const int channel_x, unsigned int lane_change) const
-    {
-        // LANE CHANGES COUNTED FROM 0
-        assert(mNodeOffsetForX.contains(channel_x) || mNodeOffsetForX.contains(channel_x - 1));
-
-        if (mNodeOffsetForX.contains(channel_x))
-            return mNodeOffsetForX.value(channel_x) - mMaxVChannelWidthForX.value(channel_x) + mMaxVChannelLeftSpacingForX.value(channel_x) - mMaxLeftJunctionSpacingForX.value(channel_x)
-                   + lane_change * sLaneSpacing;
-        else
-            return mNodeOffsetForX.value(channel_x - 1) + mMaxNodeWidthForX.value(channel_x - 1) + mMaxVChannelLeftSpacingForX.value(channel_x) - mMaxLeftJunctionSpacingForX.value(channel_x)
-                   + lane_change * sLaneSpacing;
-    }
-
-    qreal GraphLayouter::sceneXForCloseRightLaneChange(const int channel_x, unsigned int lane_change) const
-    {
-        // LANE CHANGES COUNTED FROM 0
-        assert(mNodeOffsetForX.contains(channel_x) || mNodeOffsetForX.contains(channel_x - 1));
-
-        if (mNodeOffsetForX.contains(channel_x))
-            return mNodeOffsetForX.value(channel_x) - mMaxVChannelRightSpacingForX.value(channel_x) + sJunctionPadding + lane_change * sLaneSpacing;
-        else
-            return mNodeOffsetForX.value(channel_x - 1) + mMaxNodeWidthForX.value(channel_x - 1) + mMaxVChannelWidthForX.value(channel_x) - mMaxVChannelRightSpacingForX.value(channel_x)
-                   + sJunctionPadding + lane_change * sLaneSpacing;
-    }
-
-    qreal GraphLayouter::sceneXForFarRightLaneChange(const int channel_x, unsigned int lane_change) const
-    {
-        // LANE CHANGES COUNTED FROM 0
-        assert(mNodeOffsetForX.contains(channel_x) || mNodeOffsetForX.contains(channel_x - 1));
-
-        if (mNodeOffsetForX.contains(channel_x))
-            return mNodeOffsetForX.value(channel_x) - mMaxVChannelRightSpacingForX.value(channel_x) + mMaxRightJunctionSpacingForX.value(channel_x) - lane_change * sLaneSpacing;
-        else
-            return mNodeOffsetForX.value(channel_x - 1) + mMaxNodeWidthForX.value(channel_x - 1) + mMaxVChannelWidthForX.value(channel_x) - mMaxVChannelRightSpacingForX.value(channel_x)
-                   + mMaxRightJunctionSpacingForX.value(channel_x) - lane_change * sLaneSpacing;
-    }
-
-    qreal GraphLayouter::sceneYForCloseTopLaneChange(const int channel_y, unsigned int lane_change) const
-    {
-        // LANE CHANGES COUNTED FROM 0
-        if (channel_y == 0)
-            return mNodeOffsetForY.value(channel_y) - mMaxHChannelHeightForY.value(channel_y) + mMaxHChannelTopSpacingForY.value(channel_y) - sJunctionPadding - lane_change * sLaneSpacing;
-        else
-            return mNodeOffsetForY.value(channel_y - 1) + mMaxNodeHeightForY.value(channel_y - 1) + mMaxHChannelTopSpacingForY.value(channel_y) - sJunctionPadding - lane_change * sLaneSpacing;
-    }
-
-    qreal GraphLayouter::sceneYForFarTopLaneChange(const int channel_y, unsigned int lane_change) const
-    {
-        // LANE CHANGES COUNTED FROM 0
-        if (channel_y == 0)
-            return mNodeOffsetForY.value(channel_y) - mMaxHChannelHeightForY.value(channel_y) + mMaxHChannelTopSpacingForY.value(channel_y) - mMaxTopJunctionSpacingForY.value(channel_y)
-                   + lane_change * sLaneSpacing;
-        else
-            return mNodeOffsetForY.value(channel_y - 1) + mMaxNodeHeightForY.value(channel_y - 1) + mMaxHChannelTopSpacingForY.value(channel_y) - mMaxTopJunctionSpacingForY.value(channel_y)
-                   + lane_change * sLaneSpacing;
-    }
-
-    qreal GraphLayouter::sceneYForCloseBottomLaneChange(const int channel_y, unsigned int lane_change) const
-    {
-        // LANE CHANGES COUNTED FROM 0
-        if (channel_y == 0)
-            return mNodeOffsetForY.value(channel_y) - mMaxHChannelBottomSpacingForY.value(channel_y) + sJunctionPadding + lane_change * sLaneSpacing;
-        else
-            return mNodeOffsetForY.value(channel_y - 1) + mMaxNodeHeightForY.value(channel_y - 1) + mMaxHChannelHeightForY.value(channel_y) - mMaxHChannelBottomSpacingForY.value(channel_y)
-                   + sJunctionPadding + lane_change * sLaneSpacing;
-    }
-
-    qreal GraphLayouter::sceneYForFarBottomLaneChange(const int channel_y, unsigned int lane_change) const
-    {
-        // LANE CHANGES COUNTED FROM 0
-        if (channel_y == 0)
-            return mNodeOffsetForY.value(channel_y) - mMaxHChannelBottomSpacingForY.value(channel_y) + mMaxBottomJunctionSpacingForY.value(channel_y) - lane_change * sLaneSpacing;
-        else
-            return mNodeOffsetForY.value(channel_y - 1) + mMaxNodeHeightForY.value(channel_y - 1) + mMaxHChannelHeightForY.value(channel_y) - mMaxHChannelBottomSpacingForY.value(channel_y)
-                   + mMaxBottomJunctionSpacingForY.value(channel_y) - lane_change * sLaneSpacing;
-    }
-
-    qreal GraphLayouter::sceneXForCloseLeftLaneChange(const Junction* const j) const
-    {
-        // CONVENIENCE METHOD
-        assert(j);
-
-        return sceneXForCloseLeftLaneChange(j->x, j->mCloseLeftLaneChanges);
-    }
-
-    qreal GraphLayouter::sceneXForFarLeftLaneChange(const GraphLayouter::Junction* const j) const
-    {
-        // CONVENIENCE METHOD
-        assert(j);
-
-        return sceneXForFarLeftLaneChange(j->x, j->mFarLeftLaneChanges);
-    }
-
-    qreal GraphLayouter::sceneXForCloseRightLaneChange(const Junction* const j) const
-    {
-        // CONVENIENCE METHOD
-        assert(j);
-
-        return sceneXForCloseRightLaneChange(j->x, j->mCloseRightLaneChanges);
-    }
-
-    qreal GraphLayouter::sceneXForFarRightLaneChange(const GraphLayouter::Junction* const j) const
-    {
-        // CONVENIENCE METHOD
-        assert(j);
-
-        return sceneXForFarRightLaneChange(j->x, j->mFarRightLaneChanges);
-    }
-
-    qreal GraphLayouter::sceneYForCloseTopLaneChange(const Junction* const j) const
-    {
-        // CONVENIENCE METHOD
-        assert(j);
-
-        return sceneYForCloseTopLaneChange(j->y, j->mCloseTopLaneChanges);
-    }
-
-    qreal GraphLayouter::sceneYForFarTopLaneChange(const GraphLayouter::Junction* const j) const
-    {
-        // CONVENIENCE METHOD
-        assert(j);
-
-        return sceneYForFarTopLaneChange(j->y, j->mFarTopLaneChanges);
-    }
-
-    qreal GraphLayouter::sceneYForCloseBottomLaneChange(const Junction* const j) const
-    {
-        // CONVENIENCE METHOD
-        assert(j);
-
-        return sceneYForCloseBottomLaneChange(j->y, j->mCloseBottomLaneChanges);
-    }
-
-    qreal GraphLayouter::sceneYForFarBottomLaneChange(const GraphLayouter::Junction* const j) const
-    {
-        // CONVENIENCE METHOD
-        assert(j);
-
-        return sceneYForFarBottomLaneChange(j->y, j->mFarBottomLaneChanges);
-    }
-
-    void GraphLayouter::commitUsedPaths(const UsedPaths& used)
-    {
-        for (Road* r : used.mHRoads)
-            r->mLanes += 1;
-
-        for (Road* r : used.mVRoads)
-            r->mLanes += 1;
-
-        for (Junction* j : used.mHJunctions)
-            j->mHLanes += 1;
-
-        for (Junction* j : used.mVJunctions)
-            j->mVLanes += 1;
-
-        for (Junction* j : used.mCloseLeftJunctions)
-            j->mCloseLeftLaneChanges += 1;
-
-        for (Junction* j : used.mCloseRightJunctions)
-            j->mCloseRightLaneChanges += 1;
-
-        for (Junction* j : used.mCloseTopJunctions)
-            j->mCloseTopLaneChanges += 1;
-
-        for (Junction* j : used.mCloseBottomJunctions)
-            j->mCloseBottomLaneChanges += 1;
-
-        for (Junction* j : used.mFarLeftJunctions)
-            j->mFarLeftLaneChanges += 1;
-
-        for (Junction* j : used.mFarRightJunctions)
-            j->mFarRightLaneChanges += 1;
-
-        for (Junction* j : used.mFarTopJunctions)
-            j->mFarTopLaneChanges += 1;
-
-        for (Junction* j : used.mFarBottomJunctions)
-            j->mFarBottomLaneChanges += 1;
     }
 
     void GraphLayouter::SceneCoordinate::testMinMax(int ilane)
@@ -2757,6 +1166,31 @@ namespace hal
     float GraphLayouter::SceneCoordinate::xBoxOffset() const
     {
         return junctionExit() + sHRoadPadding + mPadding;
+    }
+
+    GraphLayouter::SceneCoordinateArray::SceneCoordinateArray(const QMap<int,SceneCoordinate>& inputMap)
+        : mArray(nullptr), mFirstIndex(0)
+    {
+        if (!inputMap.isEmpty())
+        {
+            mArray = new float[inputMap.size()];
+            auto it = inputMap.constBegin();
+            mFirstIndex = it.key();
+            for (int i = 0; it != inputMap.constEnd(); ++it)
+            {
+                mArray[i++] = it.value().lanePosition(0);
+            }
+        }
+    }
+
+    GraphLayouter::SceneCoordinateArray::~SceneCoordinateArray()
+    {
+        if (mArray) delete [] mArray;
+    }
+
+    float GraphLayouter::SceneCoordinateArray::lanePosition(int igrid, int ilane) const
+    {
+        return mArray[igrid-mFirstIndex] + ilane * sLaneSpacing;
     }
 
     float GraphLayouter::EndpointCoordinate::lanePosition(int ilane, bool absolute) const
@@ -2878,13 +1312,164 @@ namespace hal
         return false;
     }
 
-    bool GraphLayouter::optimizeNetLayoutEnabled()
+    bool GraphLayouter::dumpJunctionEnabled()
     {
-        return mOptimizeNetLayout;
+        return mDumpJunctions;
     }
 
-    void GraphLayouter::setOptimizeNetLayoutEnabled(bool enabled)
+    void GraphLayouter::setDumpJunctionEnabled(bool enabled)
     {
-        mOptimizeNetLayout = enabled;
+        mDumpJunctions = enabled;
+    }
+
+    void JunctionThread::run()
+    {
+        mJunction = new NetLayoutJunction(mEntries);
+    }
+
+    void DrawNetThread::run()
+    {
+        Net* n = gNetlist->get_net_by_id(mId);
+        if (!n)
+            return;
+
+        const QHash<NetLayoutWire, int>& wMap = mLayouter->mLaneMap.value(mId);
+        for (auto it = wMap.constBegin(); it != wMap.constEnd(); ++it)
+        {
+            NetLayoutPoint wFromPoint = it.key().endPoint(NetLayoutWire::SourcePoint);
+            NetLayoutPoint wToPoint   = it.key().endPoint(NetLayoutWire::DestinationPoint);
+            NetLayoutJunction* j0     = mLayouter->mJunctionHash.value(wFromPoint);
+            NetLayoutJunction* j1     = mLayouter->mJunctionHash.value(wToPoint);
+            int ilane                 = it.value();
+            int ix0                   = wFromPoint.x();
+            int iy0                   = wFromPoint.y();
+            int ix1                   = wToPoint.x();
+            int iy1                   = wToPoint.y();
+
+            if (it.key().isHorizontal())
+            {
+                float x0 = mLayouter->mCoordArrayX->lanePosition(ix0,j0? j0->rect().right() : 0);
+                float x1 = mLayouter->mCoordArrayX->lanePosition(ix1,j1? j1->rect().left()  : 0);
+                float yy = mLayouter->mCoordArrayY->lanePosition(iy0,ilane);
+                mLines.appendHLine(x0, x1, yy);
+            }
+            else
+            {
+                float y0, y1;
+                float xx = mLayouter->mCoordArrayX->lanePosition(ix0,ilane);
+                if (wToPoint.isEndpoint())
+                {
+                    // netjunction -> endpoint
+                    auto itEpc = mLayouter->mEndpointHash.find(wToPoint);
+                    y0         = mLayouter->mCoordArrayY->lanePosition(iy0, j0? j0->rect().bottom() : 0);
+                    y1         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j1->rect().top(), true)
+                                                                              : mLayouter->mCoordArrayY->lanePosition(iy1,0);
+                }
+                else
+                {
+                    // endpoint -> netjunction
+                    auto itEpc = mLayouter->mEndpointHash.find(wFromPoint);
+                    y0         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j0->rect().bottom(), true)
+                                                                              : mLayouter->mCoordArrayY->lanePosition(iy0,0);
+                    y1         = mLayouter->mCoordArrayY->lanePosition(iy1, j1? j1->rect().top() : 0);
+                }
+                if (y1 > y0)
+                    mLines.appendVLine(xx, y0, y1);
+            }
+        }
+        drawJunction();
+        drawEndpoint();
+    }
+
+    void DrawNetThread::drawJunction()
+    {
+        for (auto jt = mLayouter->mJunctionHash.constBegin(); jt != mLayouter->mJunctionHash.constEnd(); ++jt)
+        {
+            auto epcIt      = mLayouter->mEndpointHash.find(jt.key());
+            int x           = jt.key().x();
+            int y           = jt.key().y();
+            bool isEndpoint = (y % 2 == 0);
+
+            for (const NetLayoutJunctionWire& jw : jt.value()->netById(mId).mWires)
+            {
+                int li = jw.mIndex.laneIndex();
+                if (jw.mIndex.isHorizontal())
+                {
+                    Q_ASSERT(epcIt != mLayouter->mEndpointHash.constEnd() || !isEndpoint);
+                    float x0 = mLayouter->mCoordArrayX->lanePosition(x,jw.mRange.first());
+                    float x1 = mLayouter->mCoordArrayX->lanePosition(x,jw.mRange.last());
+                    float yy = isEndpoint ? epcIt.value().lanePosition(li, true) : mLayouter->mCoordArrayY->lanePosition(y,li);
+                    mLines.appendHLine(x0, x1, yy);
+                }
+                else
+                {
+                    float y0, y1;
+                    if (!isEndpoint)
+                    {
+                        y0 = mLayouter->mCoordArrayY->lanePosition(y,jw.mRange.first());
+                        y1 = mLayouter->mCoordArrayY->lanePosition(y,jw.mRange.last());
+                    }
+                    else if (epcIt != mLayouter->mEndpointHash.constEnd())
+                    {
+                        y0 = epcIt.value().lanePosition(jw.mRange.first(), true);
+                        y1 = epcIt.value().lanePosition(jw.mRange.last(), true);
+                    }
+                    else
+                    {
+                        y0 = mLayouter->mCoordY.value(y).junctionEntry();
+                        y1 = mLayouter->mCoordY.value(y).junctionExit();
+                        if (y1 <= y0)
+                            y1 = y0 + 1;
+                    }
+                    float xx = mLayouter->mCoordArrayX->lanePosition(x,li);
+                    mLines.appendVLine(xx, y0, y1);
+                }
+            }
+
+            for (const QPoint& pnt : jt.value()->netById(mId).mKnots)
+            {
+                float xp = mLayouter->mCoordArrayX->lanePosition(x,pnt.x());
+                float yp = isEndpoint ? epcIt.value().lanePosition(pnt.y(), true) : mLayouter->mCoordArrayY->lanePosition(y,pnt.y());
+                mKnots.append(QPointF(xp,yp));
+            }
+        }
+    }
+
+    void DrawNetThread::drawEndpoint()
+    {
+        for (auto it = mLayouter->mEndpointHash.constBegin(); it != mLayouter->mEndpointHash.constEnd(); ++it)
+        {
+            const GraphLayouter::EndpointCoordinate& epc = it.value();
+
+            QList<int> inputsById  = epc.inputPinIndex(mId);
+            QList<int> outputsById = epc.outputPinIndex(mId);
+            if (inputsById.isEmpty() && outputsById.isEmpty())
+                continue;
+
+            const NetLayoutJunction* nlj     = mLayouter->mJunctionHash.value(it.key());
+            int ix = it.key().x();
+            float xjLeft                     = mLayouter->mCoordArrayX->lanePosition(ix,nlj?nlj->rect().left():0);
+            float xjRight                    = mLayouter->mCoordArrayX->lanePosition(ix,nlj?nlj->rect().right():0);
+
+            for (int inpInx : inputsById)
+            {
+                if (xjRight >= epc.xInput())
+                {
+                    // don't complain if "input" is in fact global output pin
+                    auto ityOut = mLayouter->mGlobalOutputHash.find(mId);
+                    if (ityOut == mLayouter->mGlobalOutputHash.constEnd() || QPoint(mLayouter->mNodeBoundingBox.right() + 1, 2 * ityOut.value()) != it.key())
+                        qDebug() << "cannot connect input pin" << mId << it.key().x() << it.key().y() / 2 << xjRight << epc.xInput();
+                }
+                else
+                    mLines.appendHLine(xjRight, epc.xInput(), epc.lanePosition(inpInx, true));
+            }
+            for (int outInx : outputsById)
+            {
+                if (epc.xOutput() >= xjLeft)
+                    qDebug() << "cannot connect output pin" << mId << it.key().x() << it.key().y() / 2 << xjLeft << epc.xOutput();
+                else
+                    mLines.appendHLine(epc.xOutput(), xjLeft, epc.lanePosition(outInx, true));
+            }
+        }
     }
 }    // namespace hal

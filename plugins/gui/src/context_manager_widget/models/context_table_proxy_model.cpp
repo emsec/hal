@@ -13,8 +13,6 @@ namespace hal
 
     bool ContextTableProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
     {
-
-        //TODO  somehow the program crashes with segfault if this method ever returns a false at the initial start
         return checkRow(source_row, source_parent, 0, 1);
     }
 

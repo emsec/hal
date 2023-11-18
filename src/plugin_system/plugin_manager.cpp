@@ -51,17 +51,6 @@ namespace hal
             // stores name of plugin while loading
             std::string m_current_loading;
 
-            std::filesystem::path get_plugin_path(std::string plugin_name)
-            {
-                std::filesystem::path retval;
-                if (plugin_name.empty()) return retval;
-                std::string file_name = plugin_name + "." + LIBRARY_FILE_EXTENSION;
-                retval = utils::get_file(file_name, m_plugin_folders);
-                if (!retval.empty() || !strlen(ALTERNATE_LIBRARY_FILE_EXTENSION)) return retval;
-                file_name = plugin_name + "." + ALTERNATE_LIBRARY_FILE_EXTENSION;
-                return utils::get_file(file_name, m_plugin_folders);
-            }
-
             bool solve_dependencies(std::string plugin_name, std::set<std::string> dep_file_name)
             {
                 if (plugin_name.empty())
@@ -99,6 +88,17 @@ namespace hal
             }
 
         }    // namespace
+
+        std::filesystem::path get_plugin_path(std::string plugin_name)
+        {
+            std::filesystem::path retval;
+            if (plugin_name.empty()) return retval;
+            std::string file_name = plugin_name + "." + LIBRARY_FILE_EXTENSION;
+            retval = utils::get_file(file_name, m_plugin_folders);
+            if (!retval.empty() || !strlen(ALTERNATE_LIBRARY_FILE_EXTENSION)) return retval;
+            file_name = plugin_name + "." + ALTERNATE_LIBRARY_FILE_EXTENSION;
+            return utils::get_file(file_name, m_plugin_folders);
+        }
 
         bool has_valid_file_extension(std::filesystem::path file_name)
         {

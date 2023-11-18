@@ -109,7 +109,7 @@ namespace hal {
 
         connect(mTabWidget, &QTabWidget::currentChanged, this, &ModuleDialog::handleCurrentTabChanged);
         connect(mToggleSearchbar, &QAction::triggered, this, &ModuleDialog::handleToggleSearchbar);
-        connect(mSearchbar, &Searchbar::textEdited, this, &ModuleDialog::filter);
+// TODO textEdited        connect(mSearchbar, &Searchbar::textEdited, this, &ModuleDialog::filter);
         connect(ContentManager::sSettingSearch, &SettingsItemKeybind::keySequenceChanged, this, &ModuleDialog::keybindToggleSearchbar);
         connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
@@ -246,16 +246,6 @@ namespace hal {
     void ModuleDialog::keybindToggleSearchbar(const QKeySequence& seq)
     {
         mToggleSearchbar->setShortcut(seq);
-    }
-
-    void ModuleDialog::filter(const QString& text)
-    {
-        mModuleTreeProxyModel->setFilterRegularExpression(text);
-        static_cast<ModuleSelectProxy*>(mTableView->model())->setFilterRegularExpression(text);
-        if (mLastUsed)
-            static_cast<ModuleSelectProxy*>(mLastUsed->model())->setFilterRegularExpression(text);
-        QString output = "navigation regular expression '" + text + "' entered.";
-        log_info("user", output.toStdString());
     }
 }
 

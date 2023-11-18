@@ -195,11 +195,6 @@ namespace hal
         return gui_utility::compare(mSortMechanism, sLeft, sRight);
     }
 
-    void ModuleSelectProxy::searchTextChanged(const QString& txt)
-    {
-        setFilterKeyColumn(-1);
-        setFilterRegularExpression(txt);
-    }
     void ModuleSelectProxy::startSearch(QString text, int options)
     {      
         mSearchString = text;
@@ -324,7 +319,7 @@ namespace hal
         setSelectionMode(QAbstractItemView::SingleSelection);
 
         ModuleSelectProxy* prox = new ModuleSelectProxy(this);
-        connect(sbar, &Searchbar::textEdited, prox, &ModuleSelectProxy::searchTextChanged);
+        connect(sbar, &Searchbar::triggerNewSearch, prox, &ModuleSelectProxy::startSearch);
 
         ModuleSelectModel* modl = new ModuleSelectModel(this);
 

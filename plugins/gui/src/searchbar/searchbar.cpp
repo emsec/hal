@@ -155,7 +155,7 @@ namespace hal
 
     void Searchbar::hideEvent(QHideEvent *)
     {
-        Q_EMIT textEdited(QString());
+        Q_EMIT triggerNewSearch(QString(),SearchOptions().toInt());
     }
 
     void Searchbar::showEvent(QShowEvent *)

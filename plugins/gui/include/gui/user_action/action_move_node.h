@@ -44,7 +44,7 @@ namespace hal
         u32 mContextId;
         QPoint mTo;
         bool mSwap;
-
+        Node mTargetNode;
         GridPlacement mGridPlacement;
 
         static QPoint parseFromString(const QString& s);
