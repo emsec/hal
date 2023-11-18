@@ -358,13 +358,15 @@ var hierarchy =
         [ "hal::SelectionTreeModel", "classhal_1_1_selection_tree_model.html", null ],
         [ "QAbstractProxyModel", "https://doc.qt.io/qt-5/qabstractproxymodel.html", [
           [ "QSortFilterProxyModel", "https://doc.qt.io/qt-5/qsortfilterproxymodel.html", [
-            [ "hal::ContextTableProxyModel", "classhal_1_1_context_table_proxy_model.html", null ],
-            [ "hal::GatelibraryProxyModel", "classhal_1_1_gatelibrary_proxy_model.html", null ],
-            [ "hal::GateSelectProxy", "classhal_1_1_gate_select_proxy.html", null ],
-            [ "hal::GroupingProxyModel", "classhal_1_1_grouping_proxy_model.html", null ],
-            [ "hal::ModuleProxyModel", "classhal_1_1_module_proxy_model.html", null ],
-            [ "hal::ModuleSelectProxy", "classhal_1_1_module_select_proxy.html", null ],
-            [ "hal::SelectionTreeProxyModel", "classhal_1_1_selection_tree_proxy_model.html", null ]
+            [ "hal::SearchProxyModel", "classhal_1_1_search_proxy_model.html", [
+              [ "hal::ContextTableProxyModel", "classhal_1_1_context_table_proxy_model.html", null ],
+              [ "hal::GatelibraryProxyModel", "classhal_1_1_gatelibrary_proxy_model.html", null ],
+              [ "hal::GateSelectProxy", "classhal_1_1_gate_select_proxy.html", null ],
+              [ "hal::GroupingProxyModel", "classhal_1_1_grouping_proxy_model.html", null ],
+              [ "hal::ModuleProxyModel", "classhal_1_1_module_proxy_model.html", null ],
+              [ "hal::ModuleSelectProxy", "classhal_1_1_module_select_proxy.html", null ],
+              [ "hal::SelectionTreeProxyModel", "classhal_1_1_selection_tree_proxy_model.html", null ]
+            ] ]
           ] ]
         ] ],
         [ "QAbstractTableModel", "https://doc.qt.io/qt-5/qabstracttablemodel.html", [
@@ -477,6 +479,8 @@ var hierarchy =
           [ "hal::NewProjectDialog", "classhal_1_1_new_project_dialog.html", null ],
           [ "hal::PluginParameterDialog", "classhal_1_1_plugin_parameter_dialog.html", null ],
           [ "hal::PythonEditorCodeCompletionDialog", "classhal_1_1_python_editor_code_completion_dialog.html", null ],
+          [ "hal::SearchColumnDialog", "classhal_1_1_search_column_dialog.html", null ],
+          [ "hal::SearchOptionsDialog", "classhal_1_1_search_options_dialog.html", null ],
           [ "QFileDialog", "https://doc.qt.io/qt-5/qfiledialog.html", [
             [ "hal::ExportProjectDialog", "classhal_1_1_export_project_dialog.html", null ],
             [ "hal::ProjectDirDialog", "classhal_1_1_project_dir_dialog.html", null ]
@@ -567,7 +571,8 @@ var hierarchy =
             ] ]
           ] ],
           [ "QLabel", "https://doc.qt.io/qt-5/qlabel.html", [
-            [ "hal::LabelButton", "classhal_1_1_label_button.html", null ]
+            [ "hal::LabelButton", "classhal_1_1_label_button.html", null ],
+            [ "hal::SearchableLabel", "classhal_1_1_searchable_label.html", null ]
           ] ],
           [ "QSplitter", "https://doc.qt.io/qt-5/qsplitter.html", [
             [ "hal::Splitter", "classhal_1_1_splitter.html", null ]
@@ -603,11 +608,12 @@ var hierarchy =
       [ "hal::NodeBoxes", "classhal_1_1_node_boxes.html", null ]
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
-    [ "hal::Result< T >", "classhal_1_1_result.html", null ],
+    [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
     [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
-    [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
+    [ "hal::Result< T >", "classhal_1_1_result.html", null ],
     [ "hal::RuntimeLibrary", "classhal_1_1_runtime_library.html", null ],
+    [ "hal::SearchOptions", "classhal_1_1_search_options.html", null ],
     [ "hal::SelectionTreeItem", "classhal_1_1_selection_tree_item.html", [
       [ "hal::SelectionTreeItemGate", "classhal_1_1_selection_tree_item_gate.html", null ],
       [ "hal::SelectionTreeItemModule", "classhal_1_1_selection_tree_item_module.html", [
@@ -629,8 +635,8 @@ var hierarchy =
       [ "hal::VerilogWriterTest", "classhal_1_1_verilog_writer_test.html", null ],
       [ "hal::VHDLParserTest", "classhal_1_1_v_h_d_l_parser_test.html", null ]
     ] ],
-    [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
     [ "hal::Token< T >", "structhal_1_1_token.html", null ],
+    [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
     [ "hal::TokenStream< T >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< ci_string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< std::string >", "classhal_1_1_token_stream.html", null ],

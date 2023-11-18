@@ -1,5 +1,5 @@
 <map id="hal::BaseTreeModel" name="hal::BaseTreeModel">
-<area shape="rect" id="node1" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="117,771,283,1141"/>
+<area shape="rect" id="node1" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="122,771,278,1127"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractitemmodel.html" title=" " alt="" coords="5,396,197,708"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="18,5,185,347"/>
 <area shape="rect" id="node4" href="$classhal_1_1_root_tree_item.html" title=" " alt="" coords="222,477,378,627"/>

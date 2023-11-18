@@ -1,8 +1,9 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/include/gui/settings/main_settings_widget.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/settings/main_settings_widget.h">
-<area shape="rect" id="node1" title=" " alt="" coords="180,5,379,76"/>
+<area shape="rect" id="node1" title=" " alt="" coords="368,5,567,76"/>
 <area shape="rect" id="node2" href="$expanding__list__button_8h.html" title=" " alt="" coords="5,124,188,165"/>
-<area shape="rect" id="node4" title=" " alt="" coords="212,131,267,158"/>
-<area shape="rect" id="node5" title=" " alt="" coords="291,131,351,158"/>
-<area shape="rect" id="node6" title=" " alt="" coords="375,131,453,158"/>
+<area shape="rect" id="node4" href="$searchoptions_8h.html" title=" " alt="" coords="212,131,429,158"/>
+<area shape="rect" id="node5" title=" " alt="" coords="367,213,421,240"/>
+<area shape="rect" id="node6" title=" " alt="" coords="505,131,565,158"/>
+<area shape="rect" id="node7" title=" " alt="" coords="589,131,668,158"/>
 <area shape="rect" id="node3" title=" " alt="" coords="60,213,133,240"/>
 </map>

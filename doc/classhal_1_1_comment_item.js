@@ -9,7 +9,7 @@ var classhal_1_1_comment_item =
     [ "getEntry", "classhal_1_1_comment_item.html#a2837ae35cf6661f36ddc1ed649ec8828", null ],
     [ "modifyCommentIconPath", "classhal_1_1_comment_item.html#a89a051c95b52a153d6f8b12ec852c0bd", null ],
     [ "modifyCommentIconStyle", "classhal_1_1_comment_item.html#a84cba16b4ea150c4b338e3b1e135f045", null ],
-    [ "search", "classhal_1_1_comment_item.html#a27563508984bf2e683c77961fd3abdbc", null ],
+    [ "search", "classhal_1_1_comment_item.html#a13471fa20a565b9538582b7eabfe758d", null ],
     [ "setComment", "classhal_1_1_comment_item.html#a0f3a4aed03dc40044e197c32fb4a385e", null ],
     [ "setDeleteCommentIconPath", "classhal_1_1_comment_item.html#a61fe31cad6842e23d776a8a3d7ff69d4", null ],
     [ "setDeleteCommentIconStyle", "classhal_1_1_comment_item.html#aded12e1e8621b6c77c120f9ed33c2361", null ],

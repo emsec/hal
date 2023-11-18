@@ -1,10 +1,11 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/src/code_editor/line_number_area.cpp" name="/home/runner/work/hal/hal/plugins/gui/src/code_editor/line_number_area.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="237,5,423,76"/>
+<area shape="rect" id="node1" title=" " alt="" coords="342,5,529,76"/>
 <area shape="rect" id="node2" href="$line__number__area_8h.html" title=" " alt="" coords="5,213,156,255"/>
-<area shape="rect" id="node4" href="$code__editor_8h.html" title=" " alt="" coords="181,124,338,165"/>
-<area shape="rect" id="node7" title=" " alt="" coords="362,131,439,158"/>
-<area shape="rect" id="node8" title=" " alt="" coords="464,131,572,158"/>
+<area shape="rect" id="node4" href="$code__editor_8h.html" title=" " alt="" coords="286,124,443,165"/>
+<area shape="rect" id="node8" title=" " alt="" coords="467,131,545,158"/>
+<area shape="rect" id="node9" title=" " alt="" coords="569,131,677,158"/>
 <area shape="rect" id="node3" title=" " alt="" coords="131,303,209,329"/>
 <area shape="rect" id="node5" href="$code__editor__minimap_8h.html" title=" " alt="" coords="181,213,338,255"/>
-<area shape="rect" id="node6" title=" " alt="" coords="363,221,479,247"/>
+<area shape="rect" id="node6" href="$searchoptions_8h.html" title=" " alt="" coords="363,221,580,247"/>
+<area shape="rect" id="node7" title=" " alt="" coords="604,221,720,247"/>
 </map>

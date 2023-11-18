@@ -17,7 +17,7 @@ var classhal_1_1_code_editor =
     [ "minimapPaintEvent", "classhal_1_1_code_editor.html#aeec7f9f0c16e418ce9a29ecb8fc80fc6", null ],
     [ "minimapWidth", "classhal_1_1_code_editor.html#af003d5938793bc402c1636eb62fcc7f0", null ],
     [ "resizeEvent", "classhal_1_1_code_editor.html#a07a5fa5278b3fb0fbbba8d35ef4cd376", null ],
-    [ "search", "classhal_1_1_code_editor.html#a89f9bc1c41bb9e2f51d54ee1491a5ab8", null ],
+    [ "search", "classhal_1_1_code_editor.html#ae0878112c75049a0aa75e062d7281ff4", null ],
     [ "setCurrentLineBackground", "classhal_1_1_code_editor.html#af9dd77ec3cafe318730dbec62ce44545", null ],
     [ "setFontSize", "classhal_1_1_code_editor.html#a208bec50a58f994e735cf01465945985", null ],
     [ "setHighlightCurrentLineEnabled", "classhal_1_1_code_editor.html#a10bb611c5c531f288d45cd9cf343e43a", null ],

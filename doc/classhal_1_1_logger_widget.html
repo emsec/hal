@@ -131,14 +131,16 @@ Public Slots</h2></td></tr>
 <tr class="separator:a2789a2c8783b3cd4400c7e1be55fab18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae67dd1675ad13565b2e6f742fd02f0b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#ae67dd1675ad13565b2e6f742fd02f0b9">handleSeverityChanged</a> (bool state)</td></tr>
 <tr class="separator:ae67dd1675ad13565b2e6f742fd02f0b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3fadfe78fa64cf31b3f9291b3728510e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#a3fadfe78fa64cf31b3f9291b3728510e">handleSearchChanged</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> filter)</td></tr>
-<tr class="separator:a3fadfe78fa64cf31b3f9291b3728510e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7997d613c43ed187a39cd0128c233f08"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#a7997d613c43ed187a39cd0128c233f08">handleSearchChanged</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> filter, int <a class="el" href="classhal_1_1_search_options.html">SearchOptions</a>)</td></tr>
+<tr class="separator:a7997d613c43ed187a39cd0128c233f08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa5fdc8d77116eb9e852ca961beb1b1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#aaa5fdc8d77116eb9e852ca961beb1b1f">handleFirstUserInteraction</a> (int value)</td></tr>
 <tr class="separator:aaa5fdc8d77116eb9e852ca961beb1b1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb839a9a480878b1e19a91ec255b67d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#abb839a9a480878b1e19a91ec255b67d8">handleCustomChannel</a> ()</td></tr>
 <tr class="separator:abb839a9a480878b1e19a91ec255b67d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5ea16846a7d99ae3fd7fdca9bca1901"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#ad5ea16846a7d99ae3fd7fdca9bca1901">toggleSearchbar</a> ()</td></tr>
 <tr class="separator:ad5ea16846a7d99ae3fd7fdca9bca1901"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac62121225b846354b127d31a400f05c1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_logger_widget.html#ac62121225b846354b127d31a400f05c1">isMatching</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> searchString, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> stringToCheck)</td></tr>
+<tr class="separator:ac62121225b846354b127d31a400f05c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_slots_classhal_1_1_content_widget"><td colspan="2" onclick="javascript:toggleInherit('pub_slots_classhal_1_1_content_widget')"><img src="closed.png" alt="-"/>&#160;Public Slots inherited from <a class="el" href="classhal_1_1_content_widget.html">hal::ContentWidget</a></td></tr>
 <tr class="memitem:a710c4f22b31bec0e46b1183fbd8b5778 inherit pub_slots_classhal_1_1_content_widget"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_content_widget.html#a710c4f22b31bec0e46b1183fbd8b5778">remove</a> ()</td></tr>
 <tr class="separator:a710c4f22b31bec0e46b1183fbd8b5778 inherit pub_slots_classhal_1_1_content_widget"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1210,7 +1212,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="textblock"><p>Displays the logs in the gui. </p>
 <p>The <a class="el" href="classhal_1_1_logger_widget.html" title="Displays the logs in the gui.">LoggerWidget</a> is the content widget that displays the current hal log. </p>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8h_source.html#l00055">55</a> of file <a class="el" href="logger__widget_8h_source.html">logger_widget.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8h_source.html#l00056">56</a> of file <a class="el" href="logger__widget_8h_source.html">logger_widget.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aec19d96bb1c86b27de6a0b7cfc745f18"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aec19d96bb1c86b27de6a0b7cfc745f18">&#9670;&nbsp;</a></span>LoggerWidget()</h2>
@@ -1235,9 +1237,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00025">25</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00026">26</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractslider.html#actionTriggered">QAbstractSlider::actionTriggered()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">QBoxLayout::addWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ContextMenuPolicy-enum">Qt::CustomContextMenu</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#ensurePolished">QWidget::ensurePolished()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00138">handleChannelUpdated()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00282">handleFirstUserInteraction()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">QWidget::hide()</a>, <a class="el" href="channel__model_8cpp_source.html#l00024">hal::ChannelModel::instance()</a>, <a class="el" href="content__widget_8h_source.html#l00247">hal::ContentWidget::mContentLayout</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#Shape-enum">QFrame::NoFrame</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#contextMenuPolicy-prop">QWidget::setContextMenuPolicy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#setFrameStyle">QFrame::setFrameStyle()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#readOnly-prop">QPlainTextEdit::setReadOnly()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#verticalScrollBar">QAbstractScrollArea::verticalScrollBar()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractslider.html#actionTriggered">QAbstractSlider::actionTriggered()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qboxlayout.html#addWidget">QBoxLayout::addWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ContextMenuPolicy-enum">Qt::CustomContextMenu</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#ensurePolished">QWidget::ensurePolished()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00140">handleChannelUpdated()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00304">handleFirstUserInteraction()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">QWidget::hide()</a>, <a class="el" href="channel__model_8cpp_source.html#l00024">hal::ChannelModel::instance()</a>, <a class="el" href="content__widget_8h_source.html#l00247">hal::ContentWidget::mContentLayout</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#Shape-enum">QFrame::NoFrame</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#contextMenuPolicy-prop">QWidget::setContextMenuPolicy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qframe.html#setFrameStyle">QFrame::setFrameStyle()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#readOnly-prop">QPlainTextEdit::setReadOnly()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractscrollarea.html#verticalScrollBar">QAbstractScrollArea::verticalScrollBar()</a>.</p>
 
 </div>
 </div>
@@ -1264,7 +1266,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00055">55</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00057">57</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
 </div>
 </div>
@@ -1286,7 +1288,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets the underlying (read only) <a class="elRef" href="https://doc.qt.io/qt-5/qplaintextedit.html">QPlainTextEdit</a> object this <a class="el" href="classhal_1_1_logger_widget.html" title="Displays the logs in the gui.">LoggerWidget</a> uses to display the log.</p>
 <dl class="section return"><dt>Returns</dt><dd>the underlying <a class="elRef" href="https://doc.qt.io/qt-5/qplaintextedit.html">QPlainTextEdit</a> object </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00128">128</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00130">130</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
 </div>
 </div>
@@ -1339,11 +1341,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00138">138</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00140">140</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="logger__marshall_8cpp_source.html#l00018">hal::LoggerMarshall::appendLog()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, and <a class="el" href="logger__widget_8cpp_source.html#l00171">handleCurrentFilterChanged()</a>.</p>
+<p class="reference">References <a class="el" href="logger__marshall_8cpp_source.html#l00018">hal::LoggerMarshall::appendLog()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, and <a class="el" href="logger__widget_8cpp_source.html#l00192">handleCurrentFilterChanged()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00025">LoggerWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00026">LoggerWidget()</a>.</p>
 
 </div>
 </div>
@@ -1389,7 +1391,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00133">133</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00135">135</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="logger__marshall_8cpp_source.html#l00018">hal::LoggerMarshall::appendLog()</a>.</p>
 
@@ -1426,11 +1428,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00171">171</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00192">192</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="logger__marshall_8cpp_source.html#l00018">hal::LoggerMarshall::appendLog()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#clear">QPlainTextEdit::clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="channel__item_8cpp_source.html#l00017">hal::ChannelItem::getEntries()</a>, <a class="el" href="channel__item_8cpp_source.html#l00022">hal::ChannelItem::getLock()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qregularexpressionmatch.html#hasMatch">QRegularExpressionMatch::hasMatch()</a>, <a class="el" href="channel__model_8cpp_source.html#l00063">hal::ChannelModel::index()</a>, <a class="el" href="channel__model_8cpp_source.html#l00024">hal::ChannelModel::instance()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qregularexpression.html#match">QRegularExpression::match()</a>, <a class="el" href="channel__item_8cpp_source.html#l00012">hal::ChannelItem::name()</a>, <a class="el" href="channel__model_8cpp_source.html#l00086">hal::ChannelModel::rowCount()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">QObject::sender()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#currentText-prop">QComboBox::setCurrentText()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlabel.html#text-prop">QLabel::setText()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
+<p class="reference">References <a class="el" href="logger__marshall_8cpp_source.html#l00018">hal::LoggerMarshall::appendLog()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qplaintextedit.html#clear">QPlainTextEdit::clear()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString()</a>, <a class="el" href="channel__item_8cpp_source.html#l00017">hal::ChannelItem::getEntries()</a>, <a class="el" href="channel__item_8cpp_source.html#l00022">hal::ChannelItem::getLock()</a>, <a class="el" href="channel__model_8cpp_source.html#l00063">hal::ChannelModel::index()</a>, <a class="el" href="channel__model_8cpp_source.html#l00024">hal::ChannelModel::instance()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00173">isMatching()</a>, <a class="el" href="channel__item_8cpp_source.html#l00012">hal::ChannelItem::name()</a>, <a class="el" href="channel__model_8cpp_source.html#l00086">hal::ChannelModel::rowCount()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">QObject::sender()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#currentText-prop">QComboBox::setCurrentText()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlabel.html#text-prop">QLabel::setText()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00138">handleChannelUpdated()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00275">handleSearchChanged()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00231">handleSeverityChanged()</a>, and <a class="el" href="logger__widget_8cpp_source.html#l00060">setupToolbar()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00140">handleChannelUpdated()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00296">handleSearchChanged()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00252">handleSeverityChanged()</a>, and <a class="el" href="logger__widget_8cpp_source.html#l00062">setupToolbar()</a>.</p>
 
 </div>
 </div>
@@ -1458,11 +1460,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Q_SLOT to handle that a new channel has been added to the <a class="el" href="classhal_1_1_channel_selector.html" title="A combobox for selecting a logger channel.">ChannelSelector</a> combobox. </p>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00290">290</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00312">312</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="channel__model_8cpp_source.html#l00131">hal::ChannelModel::handleLogmanagerCallback()</a>, <a class="el" href="channel__model_8cpp_source.html#l00024">hal::ChannelModel::instance()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#isEmpty">QString::isEmpty()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#lineEdit">QComboBox::lineEdit()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlineedit.html#text-prop">QLineEdit::text</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#toStdString">QString::toStdString()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00060">setupToolbar()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00062">setupToolbar()</a>.</p>
 
 </div>
 </div>
@@ -1497,14 +1499,14 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00282">282</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00304">304</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00025">LoggerWidget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00026">LoggerWidget()</a>.</p>
 
 </div>
 </div>
-<a id="a3fadfe78fa64cf31b3f9291b3728510e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3fadfe78fa64cf31b3f9291b3728510e">&#9670;&nbsp;</a></span>handleSearchChanged</h2>
+<a id="a7997d613c43ed187a39cd0128c233f08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7997d613c43ed187a39cd0128c233f08">&#9670;&nbsp;</a></span>handleSearchChanged</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1516,8 +1518,18 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">void hal::LoggerWidget::handleSearchChanged </td>
           <td>(</td>
           <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td>
-          <td class="paramname"><em>filter</em></td><td>)</td>
+          <td class="paramname"><em>filter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>SearchOptions</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -1534,11 +1546,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00275">275</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00296">296</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="logger__widget_8cpp_source.html#l00171">handleCurrentFilterChanged()</a>.</p>
+<p class="reference">References <a class="el" href="logger__widget_8cpp_source.html#l00192">handleCurrentFilterChanged()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00060">setupToolbar()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00062">setupToolbar()</a>.</p>
 
 </div>
 </div>
@@ -1573,11 +1585,53 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00231">231</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00252">252</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="logger__widget_8cpp_source.html#l00171">handleCurrentFilterChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">QObject::sender()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#checked-prop">QAbstractButton::setChecked()</a>, and <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::state</a>.</p>
+<p class="reference">References <a class="el" href="logger__widget_8cpp_source.html#l00192">handleCurrentFilterChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">QObject::sender()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#checked-prop">QAbstractButton::setChecked()</a>, and <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9ed39e2ea931586b6a985a6942ef573e">hal::state</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00060">setupToolbar()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00062">setupToolbar()</a>.</p>
+
+</div>
+</div>
+<a id="ac62121225b846354b127d31a400f05c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac62121225b846354b127d31a400f05c1">&#9670;&nbsp;</a></span>isMatching</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::LoggerWidget::isMatching </td>
+          <td>(</td>
+          <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td>
+          <td class="paramname"><em>searchString</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td>
+          <td class="paramname"><em>stringToCheck</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00173">173</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#CaseSensitivity-enum">Qt::CaseInsensitive</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qregularexpression.html#PatternOption-enum">QRegularExpression::CaseInsensitiveOption</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#CaseSensitivity-enum">Qt::CaseSensitive</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#compare-1">QString::compare()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html#contains-1">QString::contains()</a>, <a class="el" href="searchoptions_8cpp_source.html#l00084">hal::SearchOptions::isCaseSensitive()</a>, <a class="el" href="searchoptions_8cpp_source.html#l00079">hal::SearchOptions::isExactMatch()</a>, <a class="el" href="searchoptions_8cpp_source.html#l00089">hal::SearchOptions::isRegularExpression()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qregularexpression.html#PatternOption-enum">QRegularExpression::NoPatternOption</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00192">handleCurrentFilterChanged()</a>.</p>
 
 </div>
 </div>
@@ -1614,7 +1668,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#resizeEvent">QWidget</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00299">299</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00321">321</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#event">QWidget::event()</a>.</p>
 
@@ -1681,7 +1735,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00351">351</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00373">373</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
 </div>
 </div>
@@ -1708,7 +1762,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00356">356</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00378">378</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#style">QWidget::style()</a>.</p>
 
@@ -1747,9 +1801,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classhal_1_1_content_widget.html#a08d76ceb8080776f6b87af4a3bd6e6d8">hal::ContentWidget</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00060">60</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00062">62</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qtoolbar.html#addAction">QToolBar::addAction()</a>, <a class="el" href="toolbar_8cpp_source.html#l00011">hal::Toolbar::addSpacer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtoolbar.html#addWidget">QToolBar::addWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#SizeAdjustPolicy-enum">QComboBox::AdjustToContentsOnFirstShow</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="graphics_8cpp_source.html#l00037">hal::gui_utility::getStyledSvgIcon()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00171">handleCurrentFilterChanged()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00290">handleCustomChannel()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00275">handleSearchChanged()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00231">handleSeverityChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#lineEdit">QComboBox::lineEdit()</a>, <a class="el" href="toolbar_8cpp_source.html#l00019">hal::Toolbar::repolish()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#checkable-prop">QAbstractButton::setCheckable()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#checked-prop">QAbstractButton::setChecked()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#editable-prop">QComboBox::setEditable()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qaction.html#icon-prop">QAction::setIcon()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#sizeAdjustPolicy-prop">QComboBox::setSizeAdjustPolicy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlabel.html#text-prop">QLabel::setText()</a>, and <a class="el" href="logger__widget_8cpp_source.html#l00327">toggleSearchbar()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qtoolbar.html#addAction">QToolBar::addAction()</a>, <a class="el" href="toolbar_8cpp_source.html#l00011">hal::Toolbar::addSpacer()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qtoolbar.html#addWidget">QToolBar::addWidget()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#SizeAdjustPolicy-enum">QComboBox::AdjustToContentsOnFirstShow</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="graphics_8cpp_source.html#l00037">hal::gui_utility::getStyledSvgIcon()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00192">handleCurrentFilterChanged()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00312">handleCustomChannel()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00296">handleSearchChanged()</a>, <a class="el" href="logger__widget_8cpp_source.html#l00252">handleSeverityChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#lineEdit">QComboBox::lineEdit()</a>, <a class="el" href="toolbar_8cpp_source.html#l00019">hal::Toolbar::repolish()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#checkable-prop">QAbstractButton::setCheckable()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractbutton.html#checked-prop">QAbstractButton::setChecked()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#editable-prop">QComboBox::setEditable()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qaction.html#icon-prop">QAction::setIcon()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qcombobox.html#sizeAdjustPolicy-prop">QComboBox::setSizeAdjustPolicy()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qlabel.html#text-prop">QLabel::setText()</a>, and <a class="el" href="logger__widget_8cpp_source.html#l00349">toggleSearchbar()</a>.</p>
 
 </div>
 </div>
@@ -1777,11 +1831,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Toggles the visibiliy of the searchbar. </p>
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00327">327</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8cpp_source.html#l00349">349</a> of file <a class="el" href="logger__widget_8cpp_source.html">logger_widget.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#hide">QWidget::hide()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#isHidden">QWidget::isHidden()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#setFocus-1">QWidget::setFocus()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qwidget.html#show">QWidget::show()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00060">setupToolbar()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="logger__widget_8cpp_source.html#l00062">setupToolbar()</a>.</p>
 
 </div>
 </div>
@@ -1806,7 +1860,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8h_source.html#l00058">58</a> of file <a class="el" href="logger__widget_8h_source.html">logger_widget.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8h_source.html#l00059">59</a> of file <a class="el" href="logger__widget_8h_source.html">logger_widget.h</a>.</p>
 
 </div>
 </div>
@@ -1830,7 +1884,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="logger__widget_8h_source.html#l00059">59</a> of file <a class="el" href="logger__widget_8h_source.html">logger_widget.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="logger__widget_8h_source.html#l00060">60</a> of file <a class="el" href="logger__widget_8h_source.html">logger_widget.h</a>.</p>
 
 </div>
 </div>
@@ -1844,7 +1898,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_logger_widget.html">LoggerWidget</a></li>
-    <li class="footer">Generated on Fri Nov 17 2023 21:38:50 for HAL by
+    <li class="footer">Generated on Sat Nov 18 2023 22:03:03 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

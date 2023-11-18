@@ -5,7 +5,7 @@ var classhal_1_1_module_model =
     [ "addModule", "classhal_1_1_module_model.html#ae4c245ae75ad13e4564f867eb605ccfd", null ],
     [ "addNet", "classhal_1_1_module_model.html#a03b75fc926f78594a8a25b2aebff3a04", null ],
     [ "addRecursively", "classhal_1_1_module_model.html#a8b8b13880d569a37ec76ddf5e1e4a731", null ],
-    [ "clear", "classhal_1_1_module_model.html#ac5347860d3b3eaec3ff65f1237df4db4", null ],
+    [ "clear", "classhal_1_1_module_model.html#abc15230240d0186e45a8dd7ee5a25924", null ],
     [ "data", "classhal_1_1_module_model.html#a99479fd9bf082b812515289f4a2e3e59", null ],
     [ "flags", "classhal_1_1_module_model.html#a129509c2c741b517a0bbbfcc1b2f0a0f", null ],
     [ "getIndex", "classhal_1_1_module_model.html#a8cfa0483c12efe5c220a93e126a86a6c", null ],

@@ -284,6 +284,7 @@ var group__utility__widgets_selection__details =
       [ "headerData", "classhal_1_1_selection_tree_model.html#a782e9fcc8a32fbb287b6f34341f965c9", null ],
       [ "index", "classhal_1_1_selection_tree_model.html#acc35eaa7f604261a6f3eacce9010caba", null ],
       [ "indexFromItem", "classhal_1_1_selection_tree_model.html#a71d5294c577a3effa1da18111f59e7f1", null ],
+      [ "itemFromIndex", "classhal_1_1_selection_tree_model.html#a701530fd98c124b0c0ee34af19461ce4", null ],
       [ "parent", "classhal_1_1_selection_tree_model.html#a9e8d580aa80c80e72503b3f1ce01e072", null ],
       [ "rowCount", "classhal_1_1_selection_tree_model.html#af15f97f318fd282fc82056321fd42d12", null ],
       [ "suppressedByFilter", "classhal_1_1_selection_tree_model.html#a19010499ce631f4767f20e12cdc4b10c", null ]
@@ -300,7 +301,8 @@ var group__utility__widgets_selection__details =
       [ "isGraphicsBusy", "classhal_1_1_selection_tree_proxy_model.html#a82e6b262e43300ba06858c58ac39d04e", null ],
       [ "lessThan", "classhal_1_1_selection_tree_proxy_model.html#a8787bd5dbb3fc5384ec803639b43a7fa", null ],
       [ "setSortMechanism", "classhal_1_1_selection_tree_proxy_model.html#a3ee4f45a615e4985251a28e137820d46", null ],
-      [ "sortMechanism", "classhal_1_1_selection_tree_proxy_model.html#a7e31e0b535d124fcba45ef19c3324738", null ]
+      [ "sortMechanism", "classhal_1_1_selection_tree_proxy_model.html#a7e31e0b535d124fcba45ef19c3324738", null ],
+      [ "startSearch", "classhal_1_1_selection_tree_proxy_model.html#a71dc79aa04cdead1c6f2190aa3748de3", null ]
     ] ],
     [ "SelectionTreeView", "classhal_1_1_selection_tree_view.html", [
       [ "SelectionTreeView", "classhal_1_1_selection_tree_view.html#a6537e37433bc1b2118c57cb7b150ddcc", null ],

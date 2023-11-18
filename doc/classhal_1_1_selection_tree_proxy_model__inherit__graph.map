@@ -1,5 +1,5 @@
 <map id="hal::SelectionTreeProxyModel" name="hal::SelectionTreeProxyModel">
-<area shape="rect" id="node1" title="Enables filtering of the SelectionTreeModel." alt="" coords="5,564,220,744"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qsortfilterproxymodel.html" title=" " alt="" coords="11,219,215,516"/>
-<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractproxymodel.html" title=" " alt="" coords="13,5,212,171"/>
+<area shape="rect" id="node1" title="Enables filtering of the SelectionTreeModel." alt="" coords="5,564,220,759"/>
+<area shape="rect" id="node2" href="$classhal_1_1_search_proxy_model.html" title=" " alt="" coords="24,351,201,516"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qsortfilterproxymodel.html" title=" " alt="" coords="11,5,215,303"/>
 </map>

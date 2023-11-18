@@ -1,5 +1,5 @@
 <map id="hal::GatelibraryProxyModel" name="hal::GatelibraryProxyModel">
-<area shape="rect" id="node1" title="Helper model to make filtering available." alt="" coords="7,564,207,700"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qsortfilterproxymodel.html" title=" " alt="" coords="5,219,209,516"/>
-<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractproxymodel.html" title=" " alt="" coords="8,5,207,171"/>
+<area shape="rect" id="node1" title="Helper model to make filtering available." alt="" coords="7,564,207,715"/>
+<area shape="rect" id="node2" href="$classhal_1_1_search_proxy_model.html" title=" " alt="" coords="19,351,196,516"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qsortfilterproxymodel.html" title=" " alt="" coords="5,5,209,303"/>
 </map>

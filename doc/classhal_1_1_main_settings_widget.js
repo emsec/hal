@@ -10,6 +10,7 @@ var classhal_1_1_main_settings_widget =
     [ "handleOkClicked", "classhal_1_1_main_settings_widget.html#ac6394f0a1c1d2cb9e0ce18c9e644a8a0", null ],
     [ "handleRestoreDefaultsClicked", "classhal_1_1_main_settings_widget.html#ae45a9e40e80928f231e0d6aee557b9bd", null ],
     [ "handleWidgetRemove", "classhal_1_1_main_settings_widget.html#a96a54ed1c3f8e0ef3332b08f1e2c5ebb", null ],
-    [ "searchSettings", "classhal_1_1_main_settings_widget.html#a1e897055ae0591dfe20fa9038e7ff3f8", null ],
+    [ "isMatching", "classhal_1_1_main_settings_widget.html#a6eb62aab5ef998d2972569ded4c8ccf2", null ],
+    [ "searchSettings", "classhal_1_1_main_settings_widget.html#a4a4939eac8a220f2d200bf3d0ca19273", null ],
     [ "showAllSettings", "classhal_1_1_main_settings_widget.html#a6393f5cf945d93e51272b17101fddbac", null ]
 ];

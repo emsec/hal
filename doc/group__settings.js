@@ -197,6 +197,7 @@ var group__settings =
       [ "clearEditor", "classhal_1_1_settings_widget.html#a738429c120b9413f143ae1359fb10383", null ],
       [ "dirty", "classhal_1_1_settings_widget.html#a36a748182fbada1567c30a9caa083b5a", null ],
       [ "enterEvent", "classhal_1_1_settings_widget.html#a79a1427162e26fc692bac65e045530c3", null ],
+      [ "getLabel", "classhal_1_1_settings_widget.html#ab678e95bff568bb4482c681767818e6c", null ],
       [ "handleItemDestroyed", "classhal_1_1_settings_widget.html#a69fe328a195ad4b2fd3fdad789281461", null ],
       [ "handleRevertModification", "classhal_1_1_settings_widget.html#adf6d3ccc9d55033e4686103f9c7bbaee", null ],
       [ "handleSetDefaultValue", "classhal_1_1_settings_widget.html#a96d0fd0c08efb4ecbb0a6e34f6c7f403", null ],

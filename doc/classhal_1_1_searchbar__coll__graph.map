@@ -1,5 +1,5 @@
 <map id="hal::Searchbar" name="hal::Searchbar">
-<area shape="rect" id="node1" title="A QFrame with a QLineEdit that can be used to input a substring to search for." alt="" coords="11,916,206,1536"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qframe.html" title=" " alt="" coords="37,497,181,868"/>
-<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="5,5,212,449"/>
+<area shape="rect" id="node1" title="A QFrame with a QLineEdit that can be used to input a substring to search for." alt="" coords="5,916,232,1595"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qframe.html" title=" " alt="" coords="47,497,191,868"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="15,5,222,449"/>
 </map>

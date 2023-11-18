@@ -101,9 +101,9 @@ Inheritance diagram for hal::GateSelectProxy:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_gate_select_proxy__inherit__graph.png" border="0" usemap="#hal_1_1_gate_select_proxy_inherit__map" alt="Inheritance graph"/></div>
 <map name="hal_1_1_gate_select_proxy_inherit__map" id="hal_1_1_gate_select_proxy_inherit__map">
-<area shape="rect" title="The GateSelectProxy class allows sorting and filtering of module tables." alt="" coords="20,564,195,685"/>
-<area shape="rect" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html" title=" " alt="" coords="5,219,209,516"/>
-<area shape="rect" href="https://doc.qt.io/qt-5/qabstractproxymodel.html" title=" " alt="" coords="8,5,207,171"/>
+<area shape="rect" title="The GateSelectProxy class allows sorting and filtering of module tables." alt="" coords="20,564,195,715"/>
+<area shape="rect" href="classhal_1_1_search_proxy_model.html" title=" " alt="" coords="19,351,196,516"/>
+<area shape="rect" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html" title=" " alt="" coords="5,5,209,303"/>
 </map>
 </div>
 <div class="dynheader">
@@ -111,9 +111,11 @@ Collaboration diagram for hal::GateSelectProxy:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_gate_select_proxy__coll__graph.png" border="0" usemap="#hal_1_1_gate_select_proxy_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1_gate_select_proxy_coll__map" id="hal_1_1_gate_select_proxy_coll__map">
-<area shape="rect" title="The GateSelectProxy class allows sorting and filtering of module tables." alt="" coords="20,564,195,685"/>
-<area shape="rect" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html" title=" " alt="" coords="5,219,209,516"/>
-<area shape="rect" href="https://doc.qt.io/qt-5/qabstractproxymodel.html" title=" " alt="" coords="8,5,207,171"/>
+<area shape="rect" title="The GateSelectProxy class allows sorting and filtering of module tables." alt="" coords="216,580,391,731"/>
+<area shape="rect" href="classhal_1_1_search_proxy_model.html" title=" " alt="" coords="215,380,392,531"/>
+<area shape="rect" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html" title=" " alt="" coords="5,13,209,310"/>
+<area shape="rect" href="https://doc.qt.io/qt-5/qstring.html" title=" " alt="" coords="234,5,373,317"/>
+<area shape="rect" href="classhal_1_1_search_options.html" title=" " alt="" coords="397,79,541,244"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -123,11 +125,23 @@ Public Slots</h2></td></tr>
 <tr class="separator:a9d8703ace90a546b66063632e953a328"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae362483a81ed5b7a85f5dc065a9ac8cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_select_proxy.html#ae362483a81ed5b7a85f5dc065a9ac8cf">searchTextChanged</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &amp;txt)</td></tr>
 <tr class="separator:ae362483a81ed5b7a85f5dc065a9ac8cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22e259df13f602f3f0669f89de9e20a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_select_proxy.html#a22e259df13f602f3f0669f89de9e20a1">startSearch</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> text, int options)</td></tr>
+<tr class="separator:a22e259df13f602f3f0669f89de9e20a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07ea466df44dacc7fdb8cade0704546b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_select_proxy.html#a07ea466df44dacc7fdb8cade0704546b">filterAcceptsRow</a> (int source_row, const <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;source_parent) const</td></tr>
+<tr class="separator:a07ea466df44dacc7fdb8cade0704546b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_slots_classhal_1_1_search_proxy_model"><td colspan="2" onclick="javascript:toggleInherit('pub_slots_classhal_1_1_search_proxy_model')"><img src="closed.png" alt="-"/>&#160;Public Slots inherited from <a class="el" href="classhal_1_1_search_proxy_model.html">hal::SearchProxyModel</a></td></tr>
+<tr class="memitem:a43edeeee93a80ab6748d8940daa51311 inherit pub_slots_classhal_1_1_search_proxy_model"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_search_proxy_model.html#a43edeeee93a80ab6748d8940daa51311">startSearch</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> text, int options)=0</td></tr>
+<tr class="separator:a43edeeee93a80ab6748d8940daa51311 inherit pub_slots_classhal_1_1_search_proxy_model"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a5942907cbfc55bd7c9f35bb8f7c42d78"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_select_proxy.html#a5942907cbfc55bd7c9f35bb8f7c42d78">GateSelectProxy</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#parent">parent</a>=nullptr)</td></tr>
 <tr class="separator:a5942907cbfc55bd7c9f35bb8f7c42d78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classhal_1_1_search_proxy_model"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhal_1_1_search_proxy_model')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhal_1_1_search_proxy_model.html">hal::SearchProxyModel</a></td></tr>
+<tr class="memitem:ab1a5eea7d31a5802201131d59750347e inherit pub_methods_classhal_1_1_search_proxy_model"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_search_proxy_model.html#ab1a5eea7d31a5802201131d59750347e">SearchProxyModel</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#parent">parent</a>=nullptr)</td></tr>
+<tr class="separator:ab1a5eea7d31a5802201131d59750347e inherit pub_methods_classhal_1_1_search_proxy_model"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae585077c0238687217dbdddd4d3aa685 inherit pub_methods_classhal_1_1_search_proxy_model"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_search_proxy_model.html#ae585077c0238687217dbdddd4d3aa685">getColumnNames</a> ()</td></tr>
+<tr class="separator:ae585077c0238687217dbdddd4d3aa685 inherit pub_methods_classhal_1_1_search_proxy_model"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_qsortfilterproxymodel"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_qsortfilterproxymodel')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html">QSortFilterProxyModel</a></td></tr>
 <tr class="memitem:QSortFilterProxyModel inherit pub_methods_qsortfilterproxymodel"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#QSortFilterProxyModel">QSortFilterProxyModel</a> (<a class="elRef" href="https://doc.qt.io/qt-5/qobject.html">QObject</a> *<a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#parent">parent</a>)</td></tr>
 <tr class="separator:QSortFilterProxyModel inherit pub_methods_qsortfilterproxymodel"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -491,6 +505,15 @@ Public Member Functions</h2></td></tr>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:aeba438ce717b356584e16ef9d5becefa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gate_select_proxy.html#aeba438ce717b356584e16ef9d5becefa">lessThan</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;sourceLeft, const <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;sourceRight) const override</td></tr>
 <tr class="separator:aeba438ce717b356584e16ef9d5becefa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classhal_1_1_search_proxy_model"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classhal_1_1_search_proxy_model')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classhal_1_1_search_proxy_model.html">hal::SearchProxyModel</a></td></tr>
+<tr class="memitem:ac970b374ca1f6a7a5955d792d151e1c1 inherit pro_methods_classhal_1_1_search_proxy_model"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_search_proxy_model.html#ac970b374ca1f6a7a5955d792d151e1c1">isMatching</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> searchString, const <a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> stringToCheck) const</td></tr>
+<tr class="memdesc:ac970b374ca1f6a7a5955d792d151e1c1 inherit pro_methods_classhal_1_1_search_proxy_model"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a string matches the <a class="el" href="classhal_1_1_search_options.html">SearchOptions</a>.  <a href="classhal_1_1_search_proxy_model.html#ac970b374ca1f6a7a5955d792d151e1c1">More...</a><br /></td></tr>
+<tr class="separator:ac970b374ca1f6a7a5955d792d151e1c1 inherit pro_methods_classhal_1_1_search_proxy_model"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6540c40ef5ecb48298f6a6db7900d0fd inherit pro_methods_classhal_1_1_search_proxy_model"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_search_proxy_model.html#a6540c40ef5ecb48298f6a6db7900d0fd">checkRow</a> (int sourceRow, const <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;sourceParent, int startIndex, int endIndex, int offset=0) const</td></tr>
+<tr class="memdesc:a6540c40ef5ecb48298f6a6db7900d0fd inherit pro_methods_classhal_1_1_search_proxy_model"><td class="mdescLeft">&#160;</td><td class="mdescRight">Should be called inside filterAcceptsRow function and returns true if the source_row, source_parent matches given <a class="el" href="classhal_1_1_search_options.html">SearchOptions</a>.  <a href="classhal_1_1_search_proxy_model.html#a6540c40ef5ecb48298f6a6db7900d0fd">More...</a><br /></td></tr>
+<tr class="separator:a6540c40ef5ecb48298f6a6db7900d0fd inherit pro_methods_classhal_1_1_search_proxy_model"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f34e9cbf45cfe2bee2d037f76b67a30 inherit pro_methods_classhal_1_1_search_proxy_model"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_search_proxy_model.html#a7f34e9cbf45cfe2bee2d037f76b67a30">checkRowRecursion</a> (int sourceRow, const <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;sourceParent, int startIndex, int endIndex, int offset=0) const</td></tr>
+<tr class="separator:a7f34e9cbf45cfe2bee2d037f76b67a30 inherit pro_methods_classhal_1_1_search_proxy_model"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_qsortfilterproxymodel"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_qsortfilterproxymodel')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html">QSortFilterProxyModel</a></td></tr>
 <tr class="memitem:filterAcceptsRow inherit pro_methods_qsortfilterproxymodel"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#filterAcceptsRow">filterAcceptsRow</a> (int source_row, const <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;source_parent) const const</td></tr>
 <tr class="separator:filterAcceptsRow inherit pro_methods_qsortfilterproxymodel"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -618,6 +641,11 @@ Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_attribs_qobject"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_qobject')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el"  href="https://doc.qt.io/qt-5/qobject.html">QObject</a></td></tr>
 <tr class="memitem:QObjectList-typedef inherit pub_attribs_qobject"><td class="memItemLeft" align="right" valign="top">typedef&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#QObjectList-typedef">QObjectList</a></td></tr>
 <tr class="separator:QObjectList-typedef inherit pub_attribs_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classhal_1_1_search_proxy_model"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classhal_1_1_search_proxy_model')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classhal_1_1_search_proxy_model.html">hal::SearchProxyModel</a></td></tr>
+<tr class="memitem:a14510cc419122522cda80a87bb6a9dc5 inherit pro_attribs_classhal_1_1_search_proxy_model"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_search_options.html">SearchOptions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_search_proxy_model.html#a14510cc419122522cda80a87bb6a9dc5">mSearchOptions</a></td></tr>
+<tr class="separator:a14510cc419122522cda80a87bb6a9dc5 inherit pro_attribs_classhal_1_1_search_proxy_model"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a969db3fea17da9071bd7e0d2b8344e44 inherit pro_attribs_classhal_1_1_search_proxy_model"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_search_proxy_model.html#a969db3fea17da9071bd7e0d2b8344e44">mSearchString</a></td></tr>
+<tr class="separator:a969db3fea17da9071bd7e0d2b8344e44 inherit pro_attribs_classhal_1_1_search_proxy_model"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header properties_qsortfilterproxymodel"><td colspan="2" onclick="javascript:toggleInherit('properties_qsortfilterproxymodel')"><img src="closed.png" alt="-"/>&#160;Properties inherited from <a class="el"  href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html">QSortFilterProxyModel</a></td></tr>
 <tr class="memitem:filterRegExp-prop inherit properties_qsortfilterproxymodel"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#filterRegExp-prop">filterRegExp</a></td></tr>
 <tr class="separator:filterRegExp-prop inherit properties_qsortfilterproxymodel"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -649,7 +677,7 @@ Additional Inherited Members</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classhal_1_1_gate_select_proxy.html" title="The GateSelectProxy class allows sorting and filtering of module tables.">GateSelectProxy</a> class allows sorting and filtering of module tables. </p>
 
-<p class="definition">Definition at line <a class="el" href="gate__select__model_8h_source.html#l00093">93</a> of file <a class="el" href="gate__select__model_8h_source.html">gate_select_model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gate__select__model_8h_source.html#l00094">94</a> of file <a class="el" href="gate__select__model_8h_source.html">gate_select_model.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a5942907cbfc55bd7c9f35bb8f7c42d78"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5942907cbfc55bd7c9f35bb8f7c42d78">&#9670;&nbsp;</a></span>GateSelectProxy()</h2>
@@ -667,11 +695,51 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gate__select__model_8cpp_source.html#l00133">133</a> of file <a class="el" href="gate__select__model_8cpp_source.html">gate_select_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gate__select__model_8cpp_source.html#l00134">134</a> of file <a class="el" href="gate__select__model_8cpp_source.html">gate_select_model.cpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a07ea466df44dacc7fdb8cade0704546b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07ea466df44dacc7fdb8cade0704546b">&#9670;&nbsp;</a></span>filterAcceptsRow</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::GateSelectProxy::filterAcceptsRow </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>source_row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;&#160;</td>
+          <td class="paramname"><em>source_parent</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="gate__select__model_8cpp_source.html#l00167">167</a> of file <a class="el" href="gate__select__model_8cpp_source.html">gate_select_model.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="search__proxy__model_8cpp_source.html#l00062">hal::SearchProxyModel::checkRow()</a>.</p>
+
+</div>
+</div>
 <a id="aeba438ce717b356584e16ef9d5becefa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aeba438ce717b356584e16ef9d5becefa">&#9670;&nbsp;</a></span>lessThan()</h2>
 
@@ -708,7 +776,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#lessThan">QSortFilterProxyModel</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="gate__select__model_8cpp_source.html#l00143">143</a> of file <a class="el" href="gate__select__model_8cpp_source.html">gate_select_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gate__select__model_8cpp_source.html#l00144">144</a> of file <a class="el" href="gate__select__model_8cpp_source.html">gate_select_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#column">QModelIndex::column()</a>, <a class="el" href="sort_8cpp_source.html#l00153">hal::gui_utility::compare()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractproxymodel.html#sourceModel-prop">QAbstractProxyModel::sourceModel</a>.</p>
 
@@ -738,11 +806,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gate__select__model_8cpp_source.html#l00153">153</a> of file <a class="el" href="gate__select__model_8cpp_source.html">gate_select_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gate__select__model_8cpp_source.html#l00154">154</a> of file <a class="el" href="gate__select__model_8cpp_source.html">gate_select_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#filterKeyColumn-prop">QSortFilterProxyModel::setFilterKeyColumn()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#setFilterRegularExpression">QSortFilterProxyModel::setFilterRegularExpression()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="gate__select__model_8cpp_source.html#l00227">hal::GateSelectView::GateSelectView()</a>.</p>
 
 </div>
 </div>
@@ -770,7 +836,49 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="gate__select__model_8cpp_source.html#l00138">138</a> of file <a class="el" href="gate__select__model_8cpp_source.html">gate_select_model.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gate__select__model_8cpp_source.html#l00139">139</a> of file <a class="el" href="gate__select__model_8cpp_source.html">gate_select_model.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a22e259df13f602f3f0669f89de9e20a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22e259df13f602f3f0669f89de9e20a1">&#9670;&nbsp;</a></span>startSearch</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::GateSelectProxy::startSearch </td>
+          <td>(</td>
+          <td class="paramtype"><a class="elRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&#160;</td>
+          <td class="paramname"><em>text</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>options</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="gate__select__model_8cpp_source.html#l00160">160</a> of file <a class="el" href="gate__select__model_8cpp_source.html">gate_select_model.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#invalidateFilter">QSortFilterProxyModel::invalidateFilter()</a>, <a class="el" href="search__proxy__model_8h_source.html#l00080">hal::SearchProxyModel::mSearchOptions</a>, and <a class="el" href="search__proxy__model_8h_source.html#l00081">hal::SearchProxyModel::mSearchString</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="gate__dialog_8cpp_source.html#l00021">hal::GateDialog::GateDialog()</a>.</p>
 
 </div>
 </div>
@@ -784,7 +892,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_gate_select_proxy.html">GateSelectProxy</a></li>
-    <li class="footer">Generated on Fri Nov 17 2023 21:38:49 for HAL by
+    <li class="footer">Generated on Sat Nov 18 2023 22:03:03 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

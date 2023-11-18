@@ -9,6 +9,7 @@ var classhal_1_1_base_tree_model =
     [ "getItemFromIndex", "classhal_1_1_base_tree_model.html#ab5007e8f297014b1e49a08138fda4f45", null ],
     [ "getRootItem", "classhal_1_1_base_tree_model.html#aad1c0bb30462fadbdb45ba048823f4f5", null ],
     [ "headerData", "classhal_1_1_base_tree_model.html#a7ac73226f6f7640b74950a82fd4c2c2a", null ],
+    [ "headerLabels", "classhal_1_1_base_tree_model.html#a53d320efba2c5cebf7bacc4c679161aa", null ],
     [ "index", "classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a", null ],
     [ "parent", "classhal_1_1_base_tree_model.html#a1b76d0eea8c5a6f0d52d8025ddda6813", null ],
     [ "rowCount", "classhal_1_1_base_tree_model.html#afceba1b11b5bd81fc4017ba85b46ab1e", null ],

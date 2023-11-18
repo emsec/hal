@@ -11,6 +11,7 @@ var classhal_1_1_selection_tree_model =
     [ "headerData", "classhal_1_1_selection_tree_model.html#a782e9fcc8a32fbb287b6f34341f965c9", null ],
     [ "index", "classhal_1_1_selection_tree_model.html#acc35eaa7f604261a6f3eacce9010caba", null ],
     [ "indexFromItem", "classhal_1_1_selection_tree_model.html#a71d5294c577a3effa1da18111f59e7f1", null ],
+    [ "itemFromIndex", "classhal_1_1_selection_tree_model.html#a701530fd98c124b0c0ee34af19461ce4", null ],
     [ "parent", "classhal_1_1_selection_tree_model.html#a9e8d580aa80c80e72503b3f1ce01e072", null ],
     [ "rowCount", "classhal_1_1_selection_tree_model.html#af15f97f318fd282fc82056321fd42d12", null ],
     [ "suppressedByFilter", "classhal_1_1_selection_tree_model.html#a19010499ce631f4767f20e12cdc4b10c", null ]

@@ -1,6 +1,6 @@
 <map id="hal::ModuleModel" name="hal::ModuleModel">
-<area shape="rect" id="node1" title="Represents the netlist module&#39;s hierarchy." alt="" coords="131,800,269,951"/>
-<area shape="rect" id="node2" href="$classhal_1_1_base_tree_model.html" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="117,380,283,751"/>
+<area shape="rect" id="node1" title="Represents the netlist module&#39;s hierarchy." alt="" coords="131,785,269,936"/>
+<area shape="rect" id="node2" href="$classhal_1_1_base_tree_model.html" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="122,380,278,736"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractitemmodel.html" title=" " alt="" coords="5,5,197,317"/>
 <area shape="rect" id="node4" href="$classhal_1_1_root_tree_item.html" title=" " alt="" coords="222,86,378,237"/>
 </map>

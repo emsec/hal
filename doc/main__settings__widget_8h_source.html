@@ -114,114 +114,117 @@ $(document).ready(function(){initNavTree('main__settings__widget_8h_source.html'
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="expanding__list__button_8h.html">gui/expanding_list/expanding_list_button.h</a>&quot;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;QList&gt;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;QMap&gt;</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;QWidget&gt;</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html">QFrame</a>;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qscrollarea.html">QScrollArea</a>;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qscrollbar.html">QScrollBar</a>;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qtextedit.html">QTextEdit</a>;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;{</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">class </span>ExpandingListButton;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">class </span>ExpandingListWidget;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">class </span>SettingsDisplay;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">class </span>SettingsWidget;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">class </span>SettingsItem;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">class </span>Searchbar;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classhal_1_1_main_settings_list.html">   57</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_main_settings_list.html">MainSettingsList</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt;SettingsWidget*&gt;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    {</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html">QMap&lt;QString,QList&lt;SettingsWidget*&gt;</a> &gt; mSectionMap;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <a class="code" href="classhal_1_1_main_settings_list.html#ae305c09147ac8fe6a5e993acbddc04db">~MainSettingsList</a>();</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_list.html#a2f88206f410f004a467b1c414cc09212">registerWidget</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; sectionName, <a class="code" href="classhal_1_1_settings_widget.html">SettingsWidget</a>* widget);</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_list.html#afbd9e21f1dfe873dee300b529b71f544">unregisterWidget</a>(<a class="code" href="classhal_1_1_settings_widget.html">SettingsWidget</a>* widget);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="classhal_1_1_main_settings_list.html#a1f1562d42beea5c1a11907c4218a0dc8">   87</a></span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;SettingsWidget*&gt;</a> <a class="code" href="classhal_1_1_main_settings_list.html#a1f1562d42beea5c1a11907c4218a0dc8">section</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; s)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mSectionMap.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#value">value</a>(s); }</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;const SettingsItem *&gt;</a> <a class="code" href="classhal_1_1_main_settings_list.html#abc7924b7ef507b3660ef0e0b734a8c0f">getItems</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstringlist.html">QStringList</a> <a class="code" href="classhal_1_1_main_settings_list.html#abef29510f4b1c37e53a849845f81c356">emptySections</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_list.html#a75b5cb8e094b32e87fe5e3dd2e77467b">clearAll</a>();</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    };</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
-<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="classhal_1_1_main_settings_widget.html">  115</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_main_settings_widget.html">MainSettingsWidget</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    {</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a2b214cb4fb645aa08d7eade4d5c7425c">MainSettingsWidget</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a39117310c14e151f0873b533d8e6eadb">handleAboutToClose</a>();</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a862a01a42c01ca778baa18f7bf0cdf29">activate</a>();</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a6393f5cf945d93e51272b17101fddbac">showAllSettings</a>();</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SIGNALS">Q_SIGNALS</a>:</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#abd4625abb27d18f19a03bcf0b39ca0be">close</a>();</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#ae45a9e40e80928f231e0d6aee557b9bd">handleRestoreDefaultsClicked</a>();</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a2338d59f9fe56f01823fb0fc9477293d">handleCancelClicked</a>();</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#ac6394f0a1c1d2cb9e0ce18c9e644a8a0">handleOkClicked</a>();</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a4c83fa68228c0ffbc4146b8208575a33">handleButtonSelected</a>(<a class="code" href="classhal_1_1_expanding_list_button.html">ExpandingListButton</a>* button);</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a52df89045dbd0f800960e15b75150829">handleDescriptionUpdate</a>(<a class="code" href="classhal_1_1_settings_item.html">SettingsItem</a>* activeSettingsItem);</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a96a54ed1c3f8e0ef3332b08f1e2c5ebb">handleWidgetRemove</a>(<a class="code" href="classhal_1_1_settings_widget.html">SettingsWidget</a>* widget);</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a1e897055ae0591dfe20fa9038e7ff3f8">searchSettings</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; needle);</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        <span class="keywordtype">void</span> initWidgets();</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        <span class="keywordtype">void</span> makeSection(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; label);</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordtype">void</span> hideAllSettings();</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        <span class="keywordtype">bool</span> saveSettings();</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mLayout;</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        <a class="code" href="classhal_1_1_expanding_list_widget.html">ExpandingListWidget</a>* mExpandingListWidget;</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>* mVerticalLayout;</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qscrollbar.html">QScrollBar</a>* mScrollbar;</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html">QFrame</a>* mSearchbarContainer;</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mSearchbarLayout;</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <a class="code" href="classhal_1_1_searchbar.html">Searchbar</a>* mSearchbar;</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qscrollarea.html">QScrollArea</a>* mScrollArea;</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html">QFrame</a>* mContent;</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mContentLayout;</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html">QFrame</a>* mSettingsContainer;</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>* mContainerLayout;</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160; </div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mButtonLayout;</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtextedit.html">QTextEdit</a>* mDescriptionText;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="searchoptions_8h.html">gui/searchbar/searchoptions.h</a>&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;QList&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;QMap&gt;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;QWidget&gt;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html">QFrame</a>;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qscrollarea.html">QScrollArea</a>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qscrollbar.html">QScrollBar</a>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">class </span><a class="codeRef" href="https://doc.qt.io/qt-5/qtextedit.html">QTextEdit</a>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;{</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">class </span>ExpandingListButton;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">class </span>ExpandingListWidget;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">class </span>SettingsDisplay;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">class </span>SettingsWidget;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">class </span>SettingsItem;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">class </span>Searchbar;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classhal_1_1_main_settings_list.html">   58</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_main_settings_list.html">MainSettingsList</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt;SettingsWidget*&gt;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    {</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html">QMap&lt;QString,QList&lt;SettingsWidget*&gt;</a> &gt; mSectionMap;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <a class="code" href="classhal_1_1_main_settings_list.html#ae305c09147ac8fe6a5e993acbddc04db">~MainSettingsList</a>();</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_list.html#a2f88206f410f004a467b1c414cc09212">registerWidget</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; sectionName, <a class="code" href="classhal_1_1_settings_widget.html">SettingsWidget</a>* widget);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_list.html#afbd9e21f1dfe873dee300b529b71f544">unregisterWidget</a>(<a class="code" href="classhal_1_1_settings_widget.html">SettingsWidget</a>* widget);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="classhal_1_1_main_settings_list.html#a1f1562d42beea5c1a11907c4218a0dc8">   88</a></span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;SettingsWidget*&gt;</a> <a class="code" href="classhal_1_1_main_settings_list.html#a1f1562d42beea5c1a11907c4218a0dc8">section</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; s)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mSectionMap.<a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html#value">value</a>(s); }</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;const SettingsItem *&gt;</a> <a class="code" href="classhal_1_1_main_settings_list.html#abc7924b7ef507b3660ef0e0b734a8c0f">getItems</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstringlist.html">QStringList</a> <a class="code" href="classhal_1_1_main_settings_list.html#abef29510f4b1c37e53a849845f81c356">emptySections</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_list.html#a75b5cb8e094b32e87fe5e3dd2e77467b">clearAll</a>();</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    };</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno"><a class="line" href="classhal_1_1_main_settings_widget.html">  116</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_main_settings_widget.html">MainSettingsWidget</a> : <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    {</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">Q_OBJECT</a></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a2b214cb4fb645aa08d7eade4d5c7425c">MainSettingsWidget</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#parent">parent</a> = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a39117310c14e151f0873b533d8e6eadb">handleAboutToClose</a>();</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a862a01a42c01ca778baa18f7bf0cdf29">activate</a>();</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a6393f5cf945d93e51272b17101fddbac">showAllSettings</a>();</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SIGNALS">Q_SIGNALS</a>:</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#abd4625abb27d18f19a03bcf0b39ca0be">close</a>();</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#ae45a9e40e80928f231e0d6aee557b9bd">handleRestoreDefaultsClicked</a>();</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a2338d59f9fe56f01823fb0fc9477293d">handleCancelClicked</a>();</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#ac6394f0a1c1d2cb9e0ce18c9e644a8a0">handleOkClicked</a>();</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a4c83fa68228c0ffbc4146b8208575a33">handleButtonSelected</a>(<a class="code" href="classhal_1_1_expanding_list_button.html">ExpandingListButton</a>* button);</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a52df89045dbd0f800960e15b75150829">handleDescriptionUpdate</a>(<a class="code" href="classhal_1_1_settings_item.html">SettingsItem</a>* activeSettingsItem);</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a96a54ed1c3f8e0ef3332b08f1e2c5ebb">handleWidgetRemove</a>(<a class="code" href="classhal_1_1_settings_widget.html">SettingsWidget</a>* widget);</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a4a4939eac8a220f2d200bf3d0ca19273">searchSettings</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; needle, <a class="code" href="classhal_1_1_search_options.html">SearchOptions</a> searchOpts);</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_main_settings_widget.html#a6eb62aab5ef998d2972569ded4c8ccf2">isMatching</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> searchString, <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> stringToCheck);</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordtype">void</span> initWidgets();</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        <span class="keywordtype">void</span> makeSection(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a>&amp; label);</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        <span class="keywordtype">void</span> hideAllSettings();</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        <span class="keywordtype">bool</span> saveSettings();</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; </div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mLayout;</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        <a class="code" href="classhal_1_1_expanding_list_widget.html">ExpandingListWidget</a>* mExpandingListWidget;</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>* mVerticalLayout;</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qscrollbar.html">QScrollBar</a>* mScrollbar;</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html">QFrame</a>* mSearchbarContainer;</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mSearchbarLayout;</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <a class="code" href="classhal_1_1_searchbar.html">Searchbar</a>* mSearchbar;</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        <a class="code" href="classhal_1_1_search_options.html">SearchOptions</a> mSearchOptions;</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160; </div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qscrollarea.html">QScrollArea</a>* mScrollArea;</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html">QFrame</a>* mContent;</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mContentLayout;</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qframe.html">QFrame</a>* mSettingsContainer;</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>* mContainerLayout;</div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mRestoreDefaults;</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mCancel;</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mOk;</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html">QMap&lt;ExpandingListButton*,QString&gt;</a> mSectionNames;</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> mActiveSection;</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mButtonLayout;</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtextedit.html">QTextEdit</a>* mDescriptionText;</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mRestoreDefaults;</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mCancel;</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a>* mOk;</div>
 <div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        <a class="code" href="classhal_1_1_main_settings_list.html">MainSettingsList</a> mSettingsList;</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        <span class="keywordtype">bool</span> mResetToFirstElement;</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    };</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;}</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qmap.html">QMap&lt;ExpandingListButton*,QString&gt;</a> mSectionNames;</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html">QString</a> mActiveSection;</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <a class="code" href="classhal_1_1_main_settings_list.html">MainSettingsList</a> mSettingsList;</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160; </div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        <span class="keywordtype">bool</span> mResetToFirstElement;</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    };</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
@@ -240,6 +243,7 @@ $(document).ready(function(){initNavTree('main__settings__widget_8h_source.html'
 <div class="ttc" id="aqlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html">QList</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_settings_widget_html_a96a54ed1c3f8e0ef3332b08f1e2c5ebb"><div class="ttname"><a href="classhal_1_1_main_settings_widget.html#a96a54ed1c3f8e0ef3332b08f1e2c5ebb">hal::MainSettingsWidget::handleWidgetRemove</a></div><div class="ttdeci">void handleWidgetRemove(SettingsWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8cpp_source.html#l00239">main_settings_widget.cpp:239</a></div></div>
 <div class="ttc" id="aclasshal_1_1_settings_item_html"><div class="ttname"><a href="classhal_1_1_settings_item.html">hal::SettingsItem</a></div><div class="ttdoc">The interface for the logical part of a setting.</div><div class="ttdef"><b>Definition:</b> <a href="settings__item_8h_source.html#l00045">settings_item.h:45</a></div></div>
+<div class="ttc" id="asearchoptions_8h_html"><div class="ttname"><a href="searchoptions_8h.html">searchoptions.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_settings_list_html_a2f88206f410f004a467b1c414cc09212"><div class="ttname"><a href="classhal_1_1_main_settings_list.html#a2f88206f410f004a467b1c414cc09212">hal::MainSettingsList::registerWidget</a></div><div class="ttdeci">void registerWidget(const QString &amp;sectionName, SettingsWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8cpp_source.html#l00034">main_settings_widget.cpp:34</a></div></div>
 <div class="ttc" id="aqpushbutton_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpushbutton.html">QPushButton</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_settings_list_html_abef29510f4b1c37e53a849845f81c356"><div class="ttname"><a href="classhal_1_1_main_settings_list.html#abef29510f4b1c37e53a849845f81c356">hal::MainSettingsList::emptySections</a></div><div class="ttdeci">QStringList emptySections() const</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8cpp_source.html#l00073">main_settings_widget.cpp:73</a></div></div>
@@ -248,13 +252,14 @@ $(document).ready(function(){initNavTree('main__settings__widget_8h_source.html'
 <div class="ttc" id="aclasshal_1_1_main_settings_widget_html_abd4625abb27d18f19a03bcf0b39ca0be"><div class="ttname"><a href="classhal_1_1_main_settings_widget.html#abd4625abb27d18f19a03bcf0b39ca0be">hal::MainSettingsWidget::close</a></div><div class="ttdeci">void close()</div></div>
 <div class="ttc" id="aqscrollarea_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qscrollarea.html">QScrollArea</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_settings_widget_html_a52df89045dbd0f800960e15b75150829"><div class="ttname"><a href="classhal_1_1_main_settings_widget.html#a52df89045dbd0f800960e15b75150829">hal::MainSettingsWidget::handleDescriptionUpdate</a></div><div class="ttdeci">void handleDescriptionUpdate(SettingsItem *activeSettingsItem)</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8cpp_source.html#l00304">main_settings_widget.cpp:304</a></div></div>
-<div class="ttc" id="aclasshal_1_1_main_settings_widget_html_a1e897055ae0591dfe20fa9038e7ff3f8"><div class="ttname"><a href="classhal_1_1_main_settings_widget.html#a1e897055ae0591dfe20fa9038e7ff3f8">hal::MainSettingsWidget::searchSettings</a></div><div class="ttdeci">void searchSettings(const QString &amp;needle)</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8cpp_source.html#l00351">main_settings_widget.cpp:351</a></div></div>
 <div class="ttc" id="aclasshal_1_1_expanding_list_widget_html"><div class="ttname"><a href="classhal_1_1_expanding_list_widget.html">hal::ExpandingListWidget</a></div><div class="ttdoc">A selection menu with a hierarchic structure.</div><div class="ttdef"><b>Definition:</b> <a href="expanding__list__widget_8h_source.html#l00073">expanding_list_widget.h:73</a></div></div>
+<div class="ttc" id="aclasshal_1_1_search_options_html"><div class="ttname"><a href="classhal_1_1_search_options.html">hal::SearchOptions</a></div><div class="ttdef"><b>Definition:</b> <a href="searchoptions_8h_source.html#l00031">searchoptions.h:31</a></div></div>
 <div class="ttc" id="aqobject_html_Q_SIGNALS"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_SIGNALS">QObject::Q_SIGNALS</a></div><div class="ttdeci">Q_SIGNALSQ_SIGNALS</div></div>
 <div class="ttc" id="aclasshal_1_1_main_settings_widget_html_a2b214cb4fb645aa08d7eade4d5c7425c"><div class="ttname"><a href="classhal_1_1_main_settings_widget.html#a2b214cb4fb645aa08d7eade4d5c7425c">hal::MainSettingsWidget::MainSettingsWidget</a></div><div class="ttdeci">MainSettingsWidget(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8cpp_source.html#l00082">main_settings_widget.cpp:82</a></div></div>
 <div class="ttc" id="aqmap_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmap.html">QMap</a></div></div>
-<div class="ttc" id="aclasshal_1_1_main_settings_widget_html"><div class="ttname"><a href="classhal_1_1_main_settings_widget.html">hal::MainSettingsWidget</a></div><div class="ttdoc">The top-level widget that displays all settings.</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8h_source.html#l00115">main_settings_widget.h:115</a></div></div>
-<div class="ttc" id="aclasshal_1_1_searchbar_html"><div class="ttname"><a href="classhal_1_1_searchbar.html">hal::Searchbar</a></div><div class="ttdoc">A QFrame with a QLineEdit that can be used to input a substring to search for.</div><div class="ttdef"><b>Definition:</b> <a href="searchbar_8h_source.html#l00046">searchbar.h:46</a></div></div>
+<div class="ttc" id="aclasshal_1_1_main_settings_widget_html"><div class="ttname"><a href="classhal_1_1_main_settings_widget.html">hal::MainSettingsWidget</a></div><div class="ttdoc">The top-level widget that displays all settings.</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8h_source.html#l00116">main_settings_widget.h:116</a></div></div>
+<div class="ttc" id="aclasshal_1_1_main_settings_widget_html_a6eb62aab5ef998d2972569ded4c8ccf2"><div class="ttname"><a href="classhal_1_1_main_settings_widget.html#a6eb62aab5ef998d2972569ded4c8ccf2">hal::MainSettingsWidget::isMatching</a></div><div class="ttdeci">bool isMatching(QString searchString, QString stringToCheck)</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8cpp_source.html#l00388">main_settings_widget.cpp:388</a></div></div>
+<div class="ttc" id="aclasshal_1_1_searchbar_html"><div class="ttname"><a href="classhal_1_1_searchbar.html">hal::Searchbar</a></div><div class="ttdoc">A QFrame with a QLineEdit that can be used to input a substring to search for.</div><div class="ttdef"><b>Definition:</b> <a href="searchbar_8h_source.html#l00047">searchbar.h:47</a></div></div>
 <div class="ttc" id="aqhboxlayout_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_settings_widget_html_a6393f5cf945d93e51272b17101fddbac"><div class="ttname"><a href="classhal_1_1_main_settings_widget.html#a6393f5cf945d93e51272b17101fddbac">hal::MainSettingsWidget::showAllSettings</a></div><div class="ttdeci">void showAllSettings()</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8cpp_source.html#l00343">main_settings_widget.cpp:343</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_settings_widget_html_a4c83fa68228c0ffbc4146b8208575a33"><div class="ttname"><a href="classhal_1_1_main_settings_widget.html#a4c83fa68228c0ffbc4146b8208575a33">hal::MainSettingsWidget::handleButtonSelected</a></div><div class="ttdeci">void handleButtonSelected(ExpandingListButton *button)</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8cpp_source.html#l00316">main_settings_widget.cpp:316</a></div></div>
@@ -264,16 +269,17 @@ $(document).ready(function(){initNavTree('main__settings__widget_8h_source.html'
 <div class="ttc" id="aclasshal_1_1_main_settings_list_html_ae305c09147ac8fe6a5e993acbddc04db"><div class="ttname"><a href="classhal_1_1_main_settings_list.html#ae305c09147ac8fe6a5e993acbddc04db">hal::MainSettingsList::~MainSettingsList</a></div><div class="ttdeci">~MainSettingsList()</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8cpp_source.html#l00028">main_settings_widget.cpp:28</a></div></div>
 <div class="ttc" id="aclasshal_1_1_expanding_list_button_html"><div class="ttname"><a href="classhal_1_1_expanding_list_button.html">hal::ExpandingListButton</a></div><div class="ttdoc">One button of the ExpandingListWidget.</div><div class="ttdef"><b>Definition:</b> <a href="expanding__list__button_8h_source.html#l00044">expanding_list_button.h:44</a></div></div>
 <div class="ttc" id="aqobject_html_parent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent</a></div><div class="ttdeci">QObject * parent() const const</div></div>
-<div class="ttc" id="aclasshal_1_1_main_settings_list_html"><div class="ttname"><a href="classhal_1_1_main_settings_list.html">hal::MainSettingsList</a></div><div class="ttdoc">List that contains all SettingsWidgets.</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8h_source.html#l00057">main_settings_widget.h:57</a></div></div>
+<div class="ttc" id="aclasshal_1_1_main_settings_list_html"><div class="ttname"><a href="classhal_1_1_main_settings_list.html">hal::MainSettingsList</a></div><div class="ttdoc">List that contains all SettingsWidgets.</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8h_source.html#l00058">main_settings_widget.h:58</a></div></div>
 <div class="ttc" id="aqstringlist_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstringlist.html">QStringList</a></div></div>
 <div class="ttc" id="aclasshal_1_1_settings_widget_html"><div class="ttname"><a href="classhal_1_1_settings_widget.html">hal::SettingsWidget</a></div><div class="ttdoc">The base class for all specific SettingsWidgets.</div><div class="ttdef"><b>Definition:</b> <a href="settings__widget_8h_source.html#l00052">settings_widget.h:52</a></div></div>
 <div class="ttc" id="aclasshal_1_1_main_settings_widget_html_a862a01a42c01ca778baa18f7bf0cdf29"><div class="ttname"><a href="classhal_1_1_main_settings_widget.html#a862a01a42c01ca778baa18f7bf0cdf29">hal::MainSettingsWidget::activate</a></div><div class="ttdeci">void activate()</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8cpp_source.html#l00288">main_settings_widget.cpp:288</a></div></div>
-<div class="ttc" id="aclasshal_1_1_main_settings_list_html_a1f1562d42beea5c1a11907c4218a0dc8"><div class="ttname"><a href="classhal_1_1_main_settings_list.html#a1f1562d42beea5c1a11907c4218a0dc8">hal::MainSettingsList::section</a></div><div class="ttdeci">QList&lt; SettingsWidget * &gt; section(const QString &amp;s) const</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8h_source.html#l00087">main_settings_widget.h:87</a></div></div>
+<div class="ttc" id="aclasshal_1_1_main_settings_list_html_a1f1562d42beea5c1a11907c4218a0dc8"><div class="ttname"><a href="classhal_1_1_main_settings_list.html#a1f1562d42beea5c1a11907c4218a0dc8">hal::MainSettingsList::section</a></div><div class="ttdeci">QList&lt; SettingsWidget * &gt; section(const QString &amp;s) const</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8h_source.html#l00088">main_settings_widget.h:88</a></div></div>
+<div class="ttc" id="aclasshal_1_1_main_settings_widget_html_a4a4939eac8a220f2d200bf3d0ca19273"><div class="ttname"><a href="classhal_1_1_main_settings_widget.html#a4a4939eac8a220f2d200bf3d0ca19273">hal::MainSettingsWidget::searchSettings</a></div><div class="ttdeci">void searchSettings(const QString &amp;needle, SearchOptions searchOpts)</div><div class="ttdef"><b>Definition:</b> <a href="main__settings__widget_8cpp_source.html#l00351">main_settings_widget.cpp:351</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_ae31024ca3bf9085b405ec0cfca8203c.html">settings</a></li><li class="navelem"><a class="el" href="main__settings__widget_8h.html">main_settings_widget.h</a></li>
-    <li class="footer">Generated on Fri Nov 17 2023 21:38:46 for HAL by
+    <li class="footer">Generated on Sat Nov 18 2023 22:03:00 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
