@@ -34,6 +34,25 @@ namespace hal
 
     class Gate;
 
+    class PinTreeItem : public BaseTreeItem
+    {
+
+        private:
+            std::string mPinName;
+            QString mPinDirection;
+            QString mPinType;
+            QString mNetName;
+        public:
+
+            PinTreeItem(const std::string& pinName, QString pinDirection, QString pinTypee, QString netName);
+            PinTreeItem();
+            QVariant getData(int column) const override;
+            void setData(QList<QVariant> data) override;
+            void setDataAtIndex(int index, QVariant& data) override;
+            void appendData(QVariant data) override;
+            int getColumnCount() const override;
+    };
+
 /**
  * @ingroup gui
  * @brief A model to display the pins of a gate.
@@ -87,7 +106,7 @@ public:
      * @param item - The treeitem from which to get the connected nets.
      * @return A list of net ids.
      */
-    QList<int> getNetIDsOfTreeItem(TreeItem* item);
+    QList<int> getNetIDsOfTreeItem(BaseTreeItem* item);
 
     /**
      * Get the type (enum) of a given item.
@@ -95,7 +114,7 @@ public:
      * @param item - The item for which the type is requested.
      * @return The item's type.
      */
-    itemType getTypeOfItem(TreeItem* item);
+    itemType getTypeOfItem(BaseTreeItem* item);
 
     /**
      * Get the number of displayed pins (the number of pins of all types).
@@ -117,7 +136,7 @@ public:
 
 private:
     int mGateId;
-    QMap<std::string, TreeItem*> mPinGroupingToTreeItem;
+    QMap<std::string, BaseTreeItem*> mPinGroupingToTreeItem;
 
 };
 

@@ -1,3 +1,4 @@
+
 #include "gui/module_dialog/gate_dialog.h"
 #include "gui/module_dialog/module_select_model.h"
 #include "gui/gui_globals.h"
@@ -35,13 +36,14 @@ namespace hal {
 //        mTreeView  = new QTreeView(mTabWidget);
 //        mTabWidget->addTab(mTreeView, "Gate tree");
 
-        mTableView = new GateSelectView(false,mSearchbar,selectable,mTabWidget);
+        mTableView = new GateSelectView(false,selectable,mTabWidget);
+        mGateTableProxyModel = static_cast<GateSelectProxy*>(mTableView->model());
         connect(mTableView,&GateSelectView::gateSelected,this,&GateDialog::handleTableSelection);
         mTabWidget->addTab(mTableView, "Gate list");
 
         if (!GateSelectHistory::instance()->isEmpty())
         {
-            mLastUsed = new GateSelectView(true,mSearchbar,selectable,mTabWidget);
+            mLastUsed = new GateSelectView(true,selectable,mTabWidget);
             if (mLastUsed->model()->rowCount())
             {
                 connect(mLastUsed,&GateSelectView::gateSelected,this,&GateDialog::handleTableSelection);
@@ -75,10 +77,13 @@ namespace hal {
         mTabWidget->setCurrentIndex(1);
         enableButtons();
 
+        mSearchbar->setColumnNames(mGateTableProxyModel->getColumnNames());
+
         connect(mToggleSearchbar,&QAction::triggered,this,&GateDialog::handleToggleSearchbar);
         connect(ContentManager::sSettingSearch,&SettingsItemKeybind::keySequenceChanged,this,&GateDialog::keybindToggleSearchbar);
         connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mGateTableProxyModel, &GateSelectProxy::startSearch);
 //        connect(mTreeView->selectionModel(),&QItemSelectionModel::currentChanged,this,&GateDialog::handleTreeSelectionChanged);
         if (receiver == nullptr)
         {

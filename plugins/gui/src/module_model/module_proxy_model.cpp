@@ -5,7 +5,7 @@
 
 namespace hal
 {
-    ModuleProxyModel::ModuleProxyModel(QObject* parent) : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical)
+    ModuleProxyModel::ModuleProxyModel(QObject* parent) : SearchProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical), mFilterNets(true), mFilterGates(true)
     {
         // QTS PROXY MODELS ARE DUMB, IMPLEMENT CUSTOM SOLUTION OR SWITCH TO A DIFFERENT FILTER METHOD
 
@@ -14,32 +14,42 @@ namespace hal
         // STYLED DELEGATES USE THAT DATA STRUCTURE TO DRAW THEMSELVES
     }
 
+    bool ModuleProxyModel::toggleFilterNets()
+    {
+        mFilterNets = !mFilterNets;
+        invalidateFilter();
+        return mFilterNets;
+    }
+
+    bool ModuleProxyModel::toggleFilterGates()
+    {
+        mFilterGates = !mFilterGates;
+        invalidateFilter();
+        return mFilterGates;
+    }
+
     bool ModuleProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
     {
-        if(filterRegularExpression().pattern().isEmpty())
-            return true;
-
         QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
-        if(sourceIndex.isValid())
-        {
-            auto item = static_cast<ModuleItem*>(sourceIndex.internalPointer());
-            if(item->childCount() == 0)
-                return sourceModel()->data(sourceIndex, filterRole()).toString().contains(filterRegularExpression());
+        if(!sourceIndex.isValid())
+            return true;
+        auto item = static_cast<ModuleItem*>(sourceIndex.internalPointer());
 
-            bool shouldBeDisplayed = sourceModel()->data(sourceIndex, filterRole()).toString().contains(filterRegularExpression());;
-            //go through all children and return the check of itself and the check of the children
-            for(int i = 0; i < item->childCount(); i++)
-            {
-                shouldBeDisplayed = shouldBeDisplayed || filterAcceptsRow(i, sourceIndex);
-            }
+        if(mFilterGates && item->getType() == ModuleItem::TreeItemType::Gate)
+            return false;
+        if(mFilterNets && item->getType() == ModuleItem::TreeItemType::Net)
+            return false;
 
-            return shouldBeDisplayed;
-        }
-        return true;
+        return checkRowRecursion(sourceRow, sourceParent, 0, 2);
     }
 
     bool ModuleProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
     {
+        ModuleItem* item_left = static_cast<ModuleItem*>(source_left.internalPointer());
+        ModuleItem* item_right = static_cast<ModuleItem*>(source_right.internalPointer());
+        if(item_left->getType() != item_right->getType())
+            return item_left->getType() < item_right->getType();
+
         QString name_left = source_left.data().toString();
         QString name_right = source_right.data().toString();
         if (sortCaseSensitivity() == Qt::CaseInsensitive)
@@ -60,5 +70,11 @@ namespace hal
     {
         mSortMechanism = sortMechanism;
         invalidate();
+    }
+    void ModuleProxyModel::startSearch(QString text, int options)
+    {
+        mSearchString = text;
+        mSearchOptions = SearchOptions(options);
+        invalidateFilter();
     }
 }

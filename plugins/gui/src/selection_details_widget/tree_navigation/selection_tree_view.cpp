@@ -19,10 +19,6 @@ namespace hal
     SelectionTreeView::SelectionTreeView(QWidget* parent, bool isGrouping) : QTreeView(parent)
     {
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        mSelectionTreeModel      = new SelectionTreeModel(this);
-        mSelectionTreeProxyModel = new SelectionTreeProxyModel(this);
-        mSelectionTreeProxyModel->setSourceModel(mSelectionTreeModel);
-        setModel(mSelectionTreeProxyModel);
         setDefaultColumnWidth();
         header()->setDefaultAlignment(Qt::AlignHCenter | Qt::AlignCenter);
 
@@ -33,6 +29,7 @@ namespace hal
 
         connect(this, &SelectionTreeView::itemDoubleClicked, this, &SelectionTreeView::handleTreeViewItemFocusClicked);
         connect(this, &SelectionTreeView::focusItemClicked, this, &SelectionTreeView::handleTreeViewItemFocusClicked);
+        connect(gNetlistRelay->getModuleColorManager(),&ModuleColorManager::moduleColorChanged,this,&SelectionTreeView::handleModuleColorChanged);
     }
 
     void SelectionTreeView::setDefaultColumnWidth()
@@ -68,14 +65,23 @@ namespace hal
 
     SelectionTreeItem* SelectionTreeView::itemFromIndex(const QModelIndex& index) const
     {
+        SelectionTreeProxyModel* treeProxy = dynamic_cast<SelectionTreeProxyModel*>(model());
+        if (!treeProxy) return nullptr;
+
         // topmost element if no valid index given
-        QModelIndex proxyIndex = index.isValid() ? index : mSelectionTreeProxyModel->index(0, 0, rootIndex());
+        QModelIndex proxyIndex = index.isValid() ? index : treeProxy->index(0, 0, rootIndex());
 
         if (!proxyIndex.isValid())
             return nullptr;
 
-        QModelIndex modelIndex = mSelectionTreeProxyModel->mapToSource(proxyIndex);
+        QModelIndex modelIndex = treeProxy->mapToSource(proxyIndex);
         return static_cast<SelectionTreeItem*>(modelIndex.internalPointer());
+    }
+
+    void SelectionTreeView::handleModuleColorChanged(u32 id)
+    {
+        Q_UNUSED(id);
+        update();
     }
 
     void SelectionTreeView::handleCustomContextMenuRequested(const QPoint& point)
@@ -235,16 +241,21 @@ namespace hal
 
     void SelectionTreeView::populate(bool mVisible, u32 groupingId)
     {
-        if (mSelectionTreeProxyModel->isGraphicsBusy())
+        SelectionTreeProxyModel* treeProxy = dynamic_cast<SelectionTreeProxyModel*>(model());
+        if (!treeProxy) return;
+        SelectionTreeModel* treeModel = dynamic_cast<SelectionTreeModel*>(treeProxy->sourceModel());
+        if (!treeModel) return;
+
+        if (treeProxy->isGraphicsBusy())
             return;
         setSelectionMode(QAbstractItemView::NoSelection);
         selectionModel()->clear();
-        mSelectionTreeModel->fetchSelection(mVisible, groupingId);
+        treeModel->fetchSelection(mVisible, groupingId);
         if (mVisible)
         {
             show();
             setSelectionMode(QAbstractItemView::SingleSelection);
-            QModelIndex defaultSel = mSelectionTreeProxyModel->index(0, 0, rootIndex());
+            QModelIndex defaultSel = treeProxy->index(0, 0, rootIndex());
             if (defaultSel.isValid())
                 selectionModel()->setCurrentIndex(defaultSel, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
         }
@@ -254,16 +265,18 @@ namespace hal
 
     void SelectionTreeView::handleFilterTextChanged(const QString& filter_text)
     {
-        mSelectionTreeProxyModel->handleFilterTextChanged(filter_text);
+        SelectionTreeProxyModel* treeProxy = dynamic_cast<SelectionTreeProxyModel*>(model());
+        if (!treeProxy) return;
+        treeProxy->handleFilterTextChanged(filter_text);
         expandAll();
-        QModelIndex defaultSel = mSelectionTreeProxyModel->index(0, 0, rootIndex());
+        QModelIndex defaultSel = treeProxy->index(0, 0, rootIndex());
         if (defaultSel.isValid())
             selectionModel()->setCurrentIndex(defaultSel, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     }
 
     SelectionTreeProxyModel* SelectionTreeView::proxyModel()
     {
-        return mSelectionTreeProxyModel;
+        return dynamic_cast<SelectionTreeProxyModel*>(model());
     }
 
     void SelectionTreeView::handleTreeViewItemFocusClicked(const SelectionTreeItem* sti)

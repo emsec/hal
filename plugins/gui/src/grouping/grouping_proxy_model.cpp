@@ -1,28 +1,21 @@
+
+
+
+
 #include "gui/grouping/grouping_proxy_model.h"
 
 #include "gui/gui_globals.h"
 
 namespace hal
 {
-    GroupingProxyModel::GroupingProxyModel(QObject* parent) : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::natural)
+    GroupingProxyModel::GroupingProxyModel(QObject* parent) : SearchProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::natural)
     {
+
     }
 
     bool GroupingProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
     {
-        if(filterRegularExpression().pattern().isEmpty())
-            return true;
-
-        QModelIndex source_index = sourceModel()->index(sourceRow, filterKeyColumn(), sourceParent);
-        if(source_index.isValid())
-        {
-            if (sourceModel()->data(source_index, filterRole()).toString().contains(filterRegularExpression()))
-                return true;
-            else
-                return false;
-        }
-
-        return true;
+        return checkRow(sourceRow, sourceParent, 0, 2);
     }
 
     bool GroupingProxyModel::lessThan(const QModelIndex& source_left, const QModelIndex& source_right) const
@@ -56,5 +49,11 @@ namespace hal
     {
         mSortMechanism = sortMechanism;
         invalidate();
+    }
+    void GroupingProxyModel::startSearch(QString text, int options)
+    {
+        mSearchString = text;
+        mSearchOptions = SearchOptions(options);
+        invalidateFilter();
     }
 }

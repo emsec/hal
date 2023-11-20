@@ -147,6 +147,8 @@ namespace hal {
                 return gte.name();
             case 1:
                 return gte.id();
+            case 2:
+                return gte.color().name();
             }
         default:
             break;

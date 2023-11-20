@@ -26,6 +26,7 @@
 #pragma once
 
 #include "gui/gui_utils/sort.h"
+#include "gui/searchbar/search_proxy_model.h"
 
 #include <QSortFilterProxyModel>
 #include <QRegularExpression>
@@ -39,7 +40,7 @@ namespace hal
      * A proxy model to filter the SelectionTreeModel. This allows to search efficiently through the
      * model and the results can be displayed within the view in a tree-styled fashion.
      */
-    class SelectionTreeProxyModel : public QSortFilterProxyModel
+    class SelectionTreeProxyModel : public SearchProxyModel
     {
         Q_OBJECT
     public:
@@ -78,6 +79,7 @@ namespace hal
          * @param sortMechanism - The new mechanism.
          */
         void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
+        void startSearch(QString text, int options) override;
 
     protected:
 

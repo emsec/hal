@@ -285,6 +285,17 @@ namespace hal {
         void dumpToFile(const QPoint& pnt) const;
 
         static QString gridPointName(const QPoint& p);
+
+        /**
+         * Returns whether a junction is trivial and can be omitted
+         * @return true if only one direction and inputs identical to outputs, false otherwise
+         */
+        bool isTrivial() const;
+
+        /**
+         * Reset dump junction file, initialize file with timestamp
+         */
+        static void resetFile();
     };
 
     /**

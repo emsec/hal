@@ -67,8 +67,6 @@ namespace hal
         Q_PROPERTY(QString renameGroupingIconStyle READ renameGroupingIconStyle WRITE setRenameGroupingIconStyle)
         Q_PROPERTY(QString deleteIconPath READ deleteIconPath WRITE setDeleteIconPath)
         Q_PROPERTY(QString deleteIconStyle READ deleteIconStyle WRITE setDeleteIconStyle)
-        // Q_PROPERTY(QString openIconPath READ openIconPath WRITE setOpenIconPath)
-        // Q_PROPERTY(QString openIconStyle READ openIconStyle WRITE setOpenIconStyle)
         Q_PROPERTY(QString colorSelectIconPath READ colorSelectIconPath WRITE setColorSelectIconPath)
         Q_PROPERTY(QString colorSelectIconStyle READ colorSelectIconStyle WRITE setColorSelectIconStyle)
         Q_PROPERTY(QString toSelectionIconPath READ toSelectionIconPath WRITE setToSelectionIconPath)
@@ -113,8 +111,6 @@ namespace hal
         QString renameGroupingIconStyle() const;
         QString deleteIconPath() const;
         QString deleteIconStyle() const;
-        // QString openIconPath() const;
-        // QString openIconStyle() const;
         QString colorSelectIconPath() const;
         QString colorSelectIconStyle() const;
         QString toSelectionIconPath() const;
@@ -140,8 +136,6 @@ namespace hal
         void setRenameGroupingIconStyle(const QString& style);
         void setDeleteIconPath(const QString& path);
         void setDeleteIconStyle(const QString& style);
-        // void setOpenIconPath(const QString& path);
-        // void setOpenIconStyle(const QString& style);
         void setColorSelectIconPath(const QString& path);
         void setColorSelectIconStyle(const QString& style);
         void setToSelectionIconPath(const QString& path);

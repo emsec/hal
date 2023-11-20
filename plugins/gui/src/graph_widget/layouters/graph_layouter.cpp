@@ -42,7 +42,7 @@ namespace hal
     const static qreal sMinimumHChannelHeight = 20;
 
     GraphLayouter::GraphLayouter(GraphContext* context, QObject* parent)
-        : QObject(parent), mScene(new GraphicsScene(this)), mParentContext(context), mDone(false), mRollbackStatus(0), mDumpJunctions(true)
+        : QObject(parent), mScene(new GraphicsScene(this)), mParentContext(context), mDone(false), mRollbackStatus(0), mDumpJunctions(false)
     {
         SelectionDetailsWidget* details = gContentManager->getSelectionDetailsWidget();
         if (details)
@@ -213,6 +213,8 @@ namespace hal
 
     void GraphLayouter::layout()
     {
+        if (mDumpJunctions)
+            NetLayoutJunctionEntries::resetFile();
         QElapsedTimer timer;
         timer.start();
         mParentContext->layoutProgress(0);
@@ -587,12 +589,15 @@ namespace hal
         {
             if (it != mJunctionEntries.constEnd() && mJunctionThreads.size() < QThread::idealThreadCount())
             {
-                if (mDumpJunctions)
-                    it.value().dumpToFile(it.key());
-                JunctionThread* jt = new JunctionThread(it.key(), it.value());
-                connect(jt,&QThread::finished,this,&GraphLayouter::handleJunctionThreadFinished);
-                mJunctionThreads.append(jt);
-                jt->start();
+                if (!it.value().isTrivial())
+                {
+                    if (mDumpJunctions)
+                        it.value().dumpToFile(it.key());
+                    JunctionThread* jt = new JunctionThread(it.key(), it.value());
+                    connect(jt,&QThread::finished,this,&GraphLayouter::handleJunctionThreadFinished);
+                    mJunctionThreads.append(jt);
+                    jt->start();
+                }
                 ++it;
             }
             qApp->processEvents();
@@ -940,8 +945,10 @@ namespace hal
                     graphicsNet           = san;
                     int yGridPos          = mGlobalInputHash.value(dnt->id(), -1);
                     Q_ASSERT(yGridPos >= 0);
-                    const EndpointCoordinate& epc = mEndpointHash.value(QPoint(mNodeBoundingBox.left(), yGridPos * 2));
-                    san->setInputPosition(QPointF(mCoordArrayX->lanePosition(mNodeBoundingBox.left(),0), epc.lanePosition(0, true)));
+                    QPoint pnt(mNodeBoundingBox.left(), yGridPos * 2);
+                    const EndpointCoordinate& epc = mEndpointHash.value(pnt);
+                    const NetLayoutJunction* nlj  = mJunctionHash.value(pnt);
+                    san->setInputPosition(QPointF(mCoordArrayX->lanePosition(mNodeBoundingBox.left(),nlj?nlj->rect().left():0), epc.lanePosition(0, true)));
                 }
                 if (epl.hasOutputArrow())
                 {
@@ -953,8 +960,7 @@ namespace hal
                     QPoint pnt(mNodeBoundingBox.right() + 1, yGridPos * 2);
                     const EndpointCoordinate& epc = mEndpointHash.value(pnt);
                     const NetLayoutJunction* nlj  = mJunctionHash.value(pnt);
-                    Q_ASSERT(nlj);
-                    san->setOutputPosition(QPointF(mCoordArrayX->lanePosition(pnt.x(),nlj->rect().right()), epc.lanePosition(0, true)));
+                    san->setOutputPosition(QPointF(mCoordArrayX->lanePosition(pnt.x(),nlj?nlj->rect().right():0), epc.lanePosition(0, true)));
                 }
                 break;
             case EndpointList::SourceAndDestination:
@@ -1342,8 +1348,8 @@ namespace hal
 
             if (it.key().isHorizontal())
             {
-                float x0 = j0 ? mLayouter->mCoordArrayX->lanePosition(ix0,j0->rect().right()) : mLayouter->mCoordX[ix0].junctionExit();
-                float x1 = j1 ? mLayouter->mCoordArrayX->lanePosition(ix1,j1->rect().left()) : mLayouter->mCoordX[ix1].junctionEntry();
+                float x0 = mLayouter->mCoordArrayX->lanePosition(ix0,j0? j0->rect().right() : 0);
+                float x1 = mLayouter->mCoordArrayX->lanePosition(ix1,j1? j1->rect().left()  : 0);
                 float yy = mLayouter->mCoordArrayY->lanePosition(iy0,ilane);
                 mLines.appendHLine(x0, x1, yy);
             }
@@ -1355,19 +1361,17 @@ namespace hal
                 {
                     // netjunction -> endpoint
                     auto itEpc = mLayouter->mEndpointHash.find(wToPoint);
-                    y0         = j0 ? mLayouter->mCoordArrayY->lanePosition(iy0,j0->rect().bottom()) : mLayouter->mCoordY[iy0].junctionExit();
-                    y1         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j1->rect().top(), true) : mLayouter->mCoordY[iy1].junctionEntry();
-                    //                        if (itEpc==mEndpointHash.constEnd())
-                    //                            qDebug() << "xxx to endp" << wToPoint.x() << wToPoint.y() << y0 << y1;
+                    y0         = mLayouter->mCoordArrayY->lanePosition(iy0, j0? j0->rect().bottom() : 0);
+                    y1         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j1->rect().top(), true)
+                                                                              : mLayouter->mCoordArrayY->lanePosition(iy1,0);
                 }
                 else
                 {
                     // endpoint -> netjunction
                     auto itEpc = mLayouter->mEndpointHash.find(wFromPoint);
-                    y0         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j0->rect().bottom(), true) : mLayouter->mCoordY[iy0].junctionExit();
-                    y1         = j1 ? mLayouter->mCoordArrayY->lanePosition(iy1,j1->rect().top()) : mLayouter->mCoordY[iy1].junctionEntry();
-                    //                        if (itEpc==mEndpointHash.constEnd())
-                    //                            qDebug() << "xxx fr endp" << wFromPoint.x() << wFromPoint.y() << y0 << y1;
+                    y0         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j0->rect().bottom(), true)
+                                                                              : mLayouter->mCoordArrayY->lanePosition(iy0,0);
+                    y1         = mLayouter->mCoordArrayY->lanePosition(iy1, j1? j1->rect().top() : 0);
                 }
                 if (y1 > y0)
                     mLines.appendVLine(xx, y0, y1);
@@ -1444,9 +1448,8 @@ namespace hal
 
             const NetLayoutJunction* nlj     = mLayouter->mJunctionHash.value(it.key());
             int ix = it.key().x();
-            float xjLeft                     = mLayouter->mCoordArrayX->lanePosition(ix,nlj->rect().left());
-            float xjRight                    = mLayouter->mCoordArrayX->lanePosition(ix,nlj->rect().right());
-            Q_ASSERT(nlj);
+            float xjLeft                     = mLayouter->mCoordArrayX->lanePosition(ix,nlj?nlj->rect().left():0);
+            float xjRight                    = mLayouter->mCoordArrayX->lanePosition(ix,nlj?nlj->rect().right():0);
 
             for (int inpInx : inputsById)
             {

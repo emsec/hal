@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "gui/searchbar/searchoptions.h"
 #include <QFrame>
 
 class QLabel;
@@ -50,10 +51,8 @@ namespace hal
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
         Q_PROPERTY(QString clearIcon READ clearIcon WRITE setClearIcon)
         Q_PROPERTY(QString clearIconStyle READ clearIconStyle WRITE setClearIconStyle)
-        Q_PROPERTY(QString caseSensitivityIcon READ caseSensitivityIcon WRITE setCaseSensitivityIcon)
-        Q_PROPERTY(QString caseSensitivityIconStyle READ caseSensitivityIconStyle WRITE setCaseSensitivityIconStyle)
-        Q_PROPERTY(QString exactMatchIcon READ exactMatchIcon WRITE setExactMatchIcon)
-        Q_PROPERTY(QString exactMatchIconStyle READ exactMatchIconStyle WRITE setExactMatchIconStyle)
+        Q_PROPERTY(QString optionDialogIcon READ optionDialogIcon WRITE setOptionDialogIcon)
+        Q_PROPERTY(QString optionDialogIconStyle READ optionDialogIconStyle WRITE setOptionDialogIconStyle)
 
     public:
         /**
@@ -69,10 +68,8 @@ namespace hal
         QString searchIconStyle() const;
         QString clearIcon() const;
         QString clearIconStyle() const;
-        QString caseSensitivityIcon() const;
-        QString caseSensitivityIconStyle() const;
-        QString exactMatchIcon() const;
-        QString exactMatchIconStyle() const;
+        QString optionDialogIcon() const;
+        QString optionDialogIconStyle() const;
         ///@}
 
         /// @name Q_PROPERTY WRITE Functions
@@ -81,10 +78,9 @@ namespace hal
         void setSearchIconStyle(const QString& style);
         void setClearIcon(const QString& icon);
         void setClearIconStyle(const QString& style);
-        void setCaseSensitivityIcon(const QString& icon);
-        void setCaseSensitivityIconStyle(const QString& style);
-        void setExactMatchIcon(const QString& icon);
-        void setExactMatchIconStyle(const QString& style);
+        void setColumnNames(QList<QString> list);
+        void setOptionDialogIcon(const QString& icon);
+        void setOptionDialogIconStyle(const QString& style);
         ///@}
 
         /**
@@ -136,15 +132,16 @@ namespace hal
          */
         void repolish();
 
+        SearchOptions getSearchOptions() const;
         /**
          * @return mExactMatch->isChecked()
          */
-        bool exactMatchChecked();
+        // bool exactMatchChecked();
 
         /**
          * @return mCaseSensitive->isChecked()
          */
-        bool caseSensitiveChecked();
+        // bool caseSensitiveChecked();
 
         /**
          * A filter is applied when the searchbar contains text or (at least) one of the flags
@@ -158,16 +155,16 @@ namespace hal
 
         bool getEmitTextWithFlags();
 
-        bool eventFilter(QObject *object, QEvent *event);
+        bool eventFilter(QObject *object, QEvent *event) override;
+
 
     Q_SIGNALS:
         /**
-         * Q_SIGNAL that is emitted whenever the search string (i.e. the string withing the Searchbar's QLineEdit)
-         * has been changed.
-         *
+         * Q_SIGNAL that is emitted whenever the Proxy should be updated or a new search should be issued
          * @param text - The new search string
+         * @param searchOptions - Search options encoded as int (use  SearchOptions(int) constructor to get settings)
          */
-        void textEdited(const QString& text);
+        void triggerNewSearch(const QString& text, int searchOptions);
 
         /**
          * Q_SIGNAL that is emitted whenever the Return/Enter key has been pressed.
@@ -179,9 +176,9 @@ namespace hal
 
     public Q_SLOTS:
         /**
-         * Emits textEdited with respect to mEmitTextWithFlags.
+         * Handle textEdited signal, might emit triggerNewSearch with respect to mEmitTextWithFlags.
          */
-        void emitTextEdited();
+        void handleTextEdited();
 
         /**
          * Handles Return/Enter key pressed. Emits the signal returnPressed.
@@ -193,6 +190,10 @@ namespace hal
          */
         void handleClearClicked();
 
+        void handleSearchOptionsDialog();
+
+        void updateSearchHistory(QString entry);
+
     private:
         QHBoxLayout* mLayout;
 
@@ -202,21 +203,28 @@ namespace hal
 
         QToolButton* mDownButton;
         QToolButton* mUpButton;
-        QToolButton* mCaseSensitiveButton;
-        QToolButton* mExactMatchButton;
+        //QToolButton* mCaseSensitiveButton;
+        QToolButton* mSearchOptionsButton;
         QToolButton* mClearButton;
 
         QString mSearchIcon;
         QString mSearchIconStyle;
         QString mClearIcon;
         QString mClearIconStyle;
-        QString mCaseSensitivityIcon;
-        QString mCaseSensitivityIconStyle;
-        QString mExactMatchIcon;
-        QString mExactMatchIconStyle;
+        QString mOptionDialogIcon;
+        QString mOptionDialogIconStyle;
+
+        QList<QString> mColumnNames;
+
 
         // One can decide wether to receive the text (emitted by textEdited) with or without regex modifier
         // If set to false, one has to manually implement 'Exact Match'/'Case Sensitive' functionality
         bool mEmitTextWithFlags = true;
+
+        SearchOptions* mCurrentOptions;
+        bool mIncrementalSearch = true;
+        int mMinCharsToStartIncSearch = 3;
+
+        QStringList mSearchHistory;
     };
 }

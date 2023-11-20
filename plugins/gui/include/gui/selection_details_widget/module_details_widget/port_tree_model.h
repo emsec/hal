@@ -35,6 +35,25 @@ namespace hal
     class Net;
 
 
+    class PortTreeItem : public BaseTreeItem
+    {
+
+        private:
+            QString mPinName;
+            QString mPinDirection;
+            QString mPinType;
+            QString mNetName;
+        public:
+
+            PortTreeItem(QString pinName, QString pinDirection, QString pinType, QString netName);
+            PortTreeItem();
+            QVariant getData(int column) const override;
+            void setData(QList<QVariant> data) override;
+            void setDataAtIndex(int index, QVariant& data) override;
+            void appendData(QVariant data) override;
+            int getColumnCount() const override;
+    };
+
     /**
      * @brief A model to represent the ports of a module.
      */
@@ -87,7 +106,7 @@ namespace hal
          * @param item - The (port) item.
          * @return The net or nullptr.
          */
-        Net* getNetFromItem(TreeItem* item);
+        Net* getNetFromItem(PortTreeItem* item);
 
         /**
          * Get the id of the module that is currently represented.
@@ -103,7 +122,7 @@ namespace hal
          * @param item - The item for which the type is requested.
          * @return The item's type.
          */
-        itemType getTypeOfItem(TreeItem* item) const;
+        itemType getTypeOfItem(PortTreeItem* item) const;
 
         /**
          * Returns the pin-id if the item represents a pin or the pingroup-id
@@ -112,7 +131,7 @@ namespace hal
          * @param item - The item.
          * @return The pin- or pingroup-id.
          */
-        int getIdOfItem(TreeItem* item) const;
+        int getIdOfItem(BaseTreeItem* item) const;
 
         /** @name Event Handler Functions
          */
@@ -143,20 +162,20 @@ namespace hal
         int mModuleId; // perhaps remove?
         Module* mModule;
         //name is (hopefully) enough to identify
-        QMap<QString, TreeItem*> mNameToTreeItem;
-        QMap<int, TreeItem*> mIdToPinItem;
-        QMap<int, TreeItem*> mIdToGroupItem;
+        QMap<QString, BaseTreeItem*> mNameToTreeItem;
+        QMap<int, BaseTreeItem*> mIdToPinItem;
+        QMap<int, BaseTreeItem*> mIdToGroupItem;
         bool mIgnoreEventsFlag;
 
-        void insertItem(TreeItem* item, TreeItem* parent, int index);
-        void removeItem(TreeItem* item);
+        void insertItem(PortTreeItem* item, BaseTreeItem* parent, int index);
+        void removeItem(PortTreeItem* item);
 
         // helper functions for dnd for more clarity
-        void dndGroupOnGroup(TreeItem* droppedGroup, TreeItem* onDroppedGroup);
-        void dndGroupBetweenGroup(TreeItem* droppedGroup, int row);
-        void dndPinOnGroup(TreeItem* droppedPin, TreeItem* onDroppedGroup);
-        void dndPinBetweenPin(TreeItem* droppedPin, TreeItem* onDroppedParent, int row);
-        void dndPinBetweenGroup(TreeItem* droppedPin, int row);
+        void dndGroupOnGroup(BaseTreeItem* droppedGroup, BaseTreeItem* onDroppedGroup);
+        void dndGroupBetweenGroup(PortTreeItem* droppedGroup, int row);
+        void dndPinOnGroup(PortTreeItem* droppedPin, BaseTreeItem* onDroppedGroup);
+        void dndPinBetweenPin(PortTreeItem* droppedPin, BaseTreeItem* onDroppedParent, int row);
+        void dndPinBetweenGroup(PortTreeItem* droppedPin, int row);
     };
 }
 

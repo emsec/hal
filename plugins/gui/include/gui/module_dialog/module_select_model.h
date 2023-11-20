@@ -25,14 +25,16 @@
 
 #pragma once
 
-#include "hal_core/defines.h"
 #include "gui/gui_utils/sort.h"
+#include "hal_core/defines.h"
+
 #include <QAbstractTableModel>
+#include <QColor>
+#include <QDebug>
+#include <QList>
 #include <QSortFilterProxyModel>
 #include <QTableView>
-#include <QColor>
-#include <QList>
-#include <QDebug>
+#include <gui/searchbar/search_proxy_model.h>
 
 namespace hal {
 
@@ -120,7 +122,7 @@ namespace hal {
     /**
      * @brief The ModuleSelectProxy class allows sorting and filtering of module tables
      */
-    class ModuleSelectProxy : public QSortFilterProxyModel
+    class ModuleSelectProxy : public SearchProxyModel
     {
         Q_OBJECT
 
@@ -129,11 +131,13 @@ namespace hal {
 
     public Q_SLOTS:
         void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
-        void searchTextChanged(const QString& txt);
+        void startSearch(QString text, int options) override;
+        bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
 
     protected:
         static bool lessThan(const QColor& a, const QColor& b);
         bool lessThan(const QModelIndex &sourceLeft, const QModelIndex &sourceRight) const override;
+
 
     private:
         gui_utility::mSortMechanism mSortMechanism;

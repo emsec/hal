@@ -2,11 +2,27 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+* refactored module widget
+  * added option to show gate content for each module
+  * added option to show interior nets for each module
+  * added delete module action and shortcut
+  * added entries for context menu
+* refactored search bar
+  * changed appearance of search bar to be more intuitive
+  * added menu for extended options - e.g. option to search in selected columns only
+  * added search history
+  * added filter proxy class for trees and tables increasing the search performance
+* refactored layouter module
+  * switched to multithreaded algorithm
+  * boosted performance by using classes with faster memory access
+  * removed layouter code used prior to version 3.1.0 - thus removing the setting option to use that code
+  * added setting option to dump junction layout input data for experts to debug in case of layout errors
 * miscellaneous
+  * added functions to Python GUI API to create, modifiy and delete views
   * added GUI PluginParameter type `ComboBox` for parameters that can be requested from plugin
   * added GUI PluginParameter types `Module` and `Gated` for parameters that can be requested from plugin
   * added `Show content` button to `Groupings` widget to show content of grouping as a list
-  * added flag which python editor tab is active when serializing project
+  * added flag which Python editor tab is active when serializing project
   * added `GateType::delete_pin_group` and `GateType::assign_pin_to_group` to enable more operations on pin groups of gate pins
   * added extended gate library picker when importing a netlist
   * added keyboard shortcut for delete-item action from toolbar
@@ -31,12 +47,6 @@ All notable changes to this project will be documented in this file.
   * fixed no scrollbar shown in `Data` tab of `Selection Details` widget
   * fixed problems in GUI plugin management caused by addressing plugins by absolute path
   * fixed several bugs related to moving node boxes in GUI by drag'n'drop
-
-* refactored layouter module
-  * switched to multithreaded algorithm
-  * boosted performance by using classes with faster memory access
-  * removed layouter code used prior to version 3.1.0 - thus removing the setting option to use that code
-  * added setting option to dump junction layout input data for experts to debug in case of layout errors
 
 ## [4.2.0](v4.2.0) - 2023-05-24 10:02:04-07:00 (urgency: medium)
 * GUI plugin manager

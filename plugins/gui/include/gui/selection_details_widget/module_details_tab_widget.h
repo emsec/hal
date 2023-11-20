@@ -71,6 +71,9 @@ namespace hal
          */
         void clear();
 
+    private Q_SLOTS:
+        void handleModuleColorChanged(u32 id);
+
     private:
 
         //general tab
@@ -96,5 +99,7 @@ namespace hal
         //comment tab
         CommentWidget* mCommentWidget;
 
+        //store module id
+        u32 mModuleId;
     };
 }

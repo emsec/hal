@@ -5,6 +5,7 @@
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/gui_globals.h"
 #include "gui/module_model/module_model.h"
+#include "gui/module_model/module_color_manager.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_set_object_color.h"
@@ -74,7 +75,7 @@ namespace hal
                     actCreate->setParentId(mod->get_parent_module()->get_id());
                     act->addAction(actCreate);
                     act->addAction(new ActionSetObjectType(QString::fromStdString(mod->get_type())));
-                    act->addAction(new ActionSetObjectColor(gNetlistRelay->getModuleModel()->moduleColor(mod->get_id())));
+                    act->addAction(new ActionSetObjectColor(gNetlistRelay->getModuleColorManager()->moduleColor(mod->get_id())));
                     QSet<u32> mods, gats;
                     for (Gate* g : mod->get_gates())
                         gats.insert(g->get_id());
