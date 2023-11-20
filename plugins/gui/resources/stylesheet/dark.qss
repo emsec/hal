@@ -1197,25 +1197,22 @@ hal--Toolbar QPushButton:checked:hover {
 }
 
 hal--ModuleWidget {
-    qproperty-showNetsIconStyle: "all->#e8e8e8";
-    qproperty-showNetsIconPath: ":/icons/ne_net";
-
-    qproperty-hideNetsIconStyle: "all->#e8e8e8";
-    qproperty-hideNetsIconPath: ":/icons/ne_no_net";
-
-    qproperty-showGatesIconStyle: "all->#e8e8e8";
-    qproperty-showGatesIconPath: ":/icons/ne_gate";
-
-    qproperty-hideGatesIconStyle: "all->#e8e8e8";
-    qproperty-hideGatesIconPath: ":/icons/ne_no_gate";
-
-    qproperty-deleteIconStyle: "all->#e8e8e8";
-    qproperty-deleteIconPath: ":/icons/trashcan";
     qproperty-disabledIconStyle: "all->#515050";
+    qproperty-activeIconStyle: "all->#e8e8e8";
+
+    qproperty-showNetsIconPath: ":/icons/ne_net";
+    qproperty-hideNetsIconPath: ":/icons/ne_no_net";
+    qproperty-showGatesIconPath: ":/icons/ne_gate";
+    qproperty-hideGatesIconPath: ":/icons/ne_no_gate";
 
     qproperty-searchActiveIconStyle: "all->#30ac4f";
     qproperty-searchIconStyle: "all->#e8e8e8";
     qproperty-searchIconPath: ":/icons/search";
+
+    qproperty-renameIconPath: ":/icons/pen";
+    qproperty-deleteIconPath: ":/icons/trashcan";
+    qproperty-expandedIconPath: ":/icons/tree-expanded";
+    qproperty-collapsedIconPath: ":/icons/tree-collapsed";
 }
 
 hal--MainWindow

@@ -42,6 +42,14 @@ namespace hal
     class ModuleTreeView : public QTreeView
     {
         Q_OBJECT
+
+        bool mToggleStateExpanded;
+
+    public Q_SLOTS:
+        void expandAllModules();
+
+        void collapseAllModules();
+
     public:
         /**
          * Constructor.
@@ -61,5 +69,10 @@ namespace hal
          * Sets the default width of each column. MUST be called after setting the model.
          */
         void setDefaultColumnWidth();
+
+        /**
+         * Returns whether last toggle action was 'expand all' or 'collapse all'
+         */
+        bool toggleStateExpanded() const;
     };
 }    // namespace hal

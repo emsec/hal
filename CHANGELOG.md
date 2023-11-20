@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 * refactored module widget
   * added option to show gate content for each module
   * added option to show interior nets for each module
+  * added button to expand or collapse all tree items
   * added delete module action and shortcut
   * added entries for context menu
 * refactored search bar
