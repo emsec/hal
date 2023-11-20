@@ -228,7 +228,8 @@ var menudata={children:[
 {text:"x",url:"functions_eval.html#index_x"},
 {text:"z",url:"functions_eval.html#index_z"}]},
 {text:"Properties",url:"functions_prop.html",children:[
-{text:"b",url:"functions_prop.html#index_b"},
+{text:"a",url:"functions_prop.html#index_a"},
+{text:"b",url:"functions_prop_b.html#index_b"},
 {text:"c",url:"functions_prop_c.html#index_c"},
 {text:"d",url:"functions_prop_d.html#index_d"},
 {text:"e",url:"functions_prop_e.html#index_e"},

@@ -1,5 +1,6 @@
 var NAVTREEINDEX30 =
 {
+"settings__manager_8h.html":[7,0,1,3,0,0,42,6],
 "settings__manager_8h_source.html":[7,0,1,3,0,0,42,6],
 "settings__widget_8cpp.html":[7,0,1,3,2,40,1,0],
 "settings__widget_8cpp_source.html":[7,0,1,3,2,40,1,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX30 =
 "strongly__connected__components_8cpp_source.html":[7,0,1,2,2,1,1],
 "struct_abc___frame__t__.html":[6,0,2],
 "struct_abc___frame__t__.html#a0ba0c299744fd8fd8112d0ba7bea06c8":[6,0,2,78],
-"struct_abc___frame__t__.html#a0c42ff2250cb0b81c7f226019fc8335c":[6,0,2,64],
-"struct_abc___frame__t__.html#a0f4b0d72494c94d09867e260e0e30143":[6,0,2,1]
+"struct_abc___frame__t__.html#a0c42ff2250cb0b81c7f226019fc8335c":[6,0,2,64]
 };

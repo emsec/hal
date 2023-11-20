@@ -92,27 +92,48 @@ $(document).ready(function(){initNavTree('module__tree__view_8cpp_source.html','
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
-<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="classhal_1_1_module_tree_view.html#a34b392438456d6d36146d3fc77ab6306">    7</a></span>&#160;    <a class="code" href="classhal_1_1_module_tree_view.html#a34b392438456d6d36146d3fc77ab6306">ModuleTreeView::ModuleTreeView</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *parent) : <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html">QTreeView</a>(parent)</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    {</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    }</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classhal_1_1_module_tree_view.html#abc53dfc9b0fd822d4240946203fce3a5">   11</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_tree_view.html#abc53dfc9b0fd822d4240946203fce3a5">ModuleTreeView::setDefaultColumnWidth</a>()</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    {</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#setColumnWidth">setColumnWidth</a>(0, 240);</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#setColumnWidth">setColumnWidth</a>(1, 40);</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#setColumnWidth">setColumnWidth</a>(2, 80);</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#header">header</a>()-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qheaderview.html#stretchLastSection-prop">setStretchLastSection</a>(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    }</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classhal_1_1_module_tree_view.html#a4d8fed564e05bb961fd84307e1d9cfbf">   19</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_tree_view.html#a4d8fed564e05bb961fd84307e1d9cfbf">ModuleTreeView::mousePressEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a> *event)</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    {</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keywordflow">if</span>(<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#event">event</a>-&gt;button() != <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#MouseButton-enum">Qt::RightButton</a>)</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#mousePressEvent">QTreeView::mousePressEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#event">event</a>);</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    }</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;}</div>
+<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="classhal_1_1_module_tree_view.html#a34b392438456d6d36146d3fc77ab6306">    7</a></span>&#160;    <a class="code" href="classhal_1_1_module_tree_view.html#a34b392438456d6d36146d3fc77ab6306">ModuleTreeView::ModuleTreeView</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a> *parent)</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;        : <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html">QTreeView</a>(parent), mToggleStateExpanded(true)</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    {</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    }</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="classhal_1_1_module_tree_view.html#a91f409a179e80576659c09cd190779f7">   12</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_tree_view.html#a91f409a179e80576659c09cd190779f7">ModuleTreeView::expandAllModules</a>()</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    {</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        mToggleStateExpanded = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#expandAll">expandAll</a>();</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    }</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classhal_1_1_module_tree_view.html#a88e11224e26d6f87d1316e2653746be2">   18</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_tree_view.html#a88e11224e26d6f87d1316e2653746be2">ModuleTreeView::collapseAllModules</a>()</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    {</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        mToggleStateExpanded = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#collapseAll">collapseAll</a>();</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    }</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classhal_1_1_module_tree_view.html#ab6106cf4d22c163d4262636b5da8bdf9">   24</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_module_tree_view.html#ab6106cf4d22c163d4262636b5da8bdf9">ModuleTreeView::toggleStateExpanded</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keywordflow">return</span> mToggleStateExpanded;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    }</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classhal_1_1_module_tree_view.html#abc53dfc9b0fd822d4240946203fce3a5">   29</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_tree_view.html#abc53dfc9b0fd822d4240946203fce3a5">ModuleTreeView::setDefaultColumnWidth</a>()</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#setColumnWidth">setColumnWidth</a>(0, 240);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#setColumnWidth">setColumnWidth</a>(1, 40);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#setColumnWidth">setColumnWidth</a>(2, 80);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#header">header</a>()-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qheaderview.html#stretchLastSection-prop">setStretchLastSection</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    }</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classhal_1_1_module_tree_view.html#a4d8fed564e05bb961fd84307e1d9cfbf">   37</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_tree_view.html#a4d8fed564e05bb961fd84307e1d9cfbf">ModuleTreeView::mousePressEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a> *event)</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">if</span>(<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#event">event</a>-&gt;button() != <a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#MouseButton-enum">Qt::RightButton</a>)</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qtreeview.html#mousePressEvent">QTreeView::mousePressEvent</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemview.html#event">event</a>);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="aclasshal_1_1_module_tree_view_html_ab6106cf4d22c163d4262636b5da8bdf9"><div class="ttname"><a href="classhal_1_1_module_tree_view.html#ab6106cf4d22c163d4262636b5da8bdf9">hal::ModuleTreeView::toggleStateExpanded</a></div><div class="ttdeci">bool toggleStateExpanded() const</div><div class="ttdef"><b>Definition:</b> <a href="module__tree__view_8cpp_source.html#l00024">module_tree_view.cpp:24</a></div></div>
+<div class="ttc" id="aclasshal_1_1_module_tree_view_html_a88e11224e26d6f87d1316e2653746be2"><div class="ttname"><a href="classhal_1_1_module_tree_view.html#a88e11224e26d6f87d1316e2653746be2">hal::ModuleTreeView::collapseAllModules</a></div><div class="ttdeci">void collapseAllModules()</div><div class="ttdef"><b>Definition:</b> <a href="module__tree__view_8cpp_source.html#l00018">module_tree_view.cpp:18</a></div></div>
 <div class="ttc" id="aqheaderview_html_stretchLastSection-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qheaderview.html#stretchLastSection-prop">QHeaderView::setStretchLastSection</a></div><div class="ttdeci">void setStretchLastSection(bool stretch)</div></div>
+<div class="ttc" id="aclasshal_1_1_module_tree_view_html_a91f409a179e80576659c09cd190779f7"><div class="ttname"><a href="classhal_1_1_module_tree_view.html#a91f409a179e80576659c09cd190779f7">hal::ModuleTreeView::expandAllModules</a></div><div class="ttdeci">void expandAllModules()</div><div class="ttdef"><b>Definition:</b> <a href="module__tree__view_8cpp_source.html#l00012">module_tree_view.cpp:12</a></div></div>
 <div class="ttc" id="aqwidget_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
 <div class="ttc" id="aqabstractitemview_html_event"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemview.html#event">QAbstractItemView::event</a></div><div class="ttdeci">virtual bool event(QEvent *event) override</div></div>
@@ -120,17 +141,19 @@ $(document).ready(function(){initNavTree('module__tree__view_8cpp_source.html','
 <div class="ttc" id="aqmouseevent_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmouseevent.html">QMouseEvent</a></div></div>
 <div class="ttc" id="aqtreeview_html_header"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtreeview.html#header">QTreeView::header</a></div><div class="ttdeci">QHeaderView * header() const const</div></div>
 <div class="ttc" id="aqtreeview_html_setColumnWidth"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtreeview.html#setColumnWidth">QTreeView::setColumnWidth</a></div><div class="ttdeci">void setColumnWidth(int column, int width)</div></div>
-<div class="ttc" id="aclasshal_1_1_module_tree_view_html_a4d8fed564e05bb961fd84307e1d9cfbf"><div class="ttname"><a href="classhal_1_1_module_tree_view.html#a4d8fed564e05bb961fd84307e1d9cfbf">hal::ModuleTreeView::mousePressEvent</a></div><div class="ttdeci">void mousePressEvent(QMouseEvent *event)</div><div class="ttdef"><b>Definition:</b> <a href="module__tree__view_8cpp_source.html#l00019">module_tree_view.cpp:19</a></div></div>
+<div class="ttc" id="aqtreeview_html_expandAll"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtreeview.html#expandAll">QTreeView::expandAll</a></div><div class="ttdeci">void expandAll()</div></div>
+<div class="ttc" id="aclasshal_1_1_module_tree_view_html_a4d8fed564e05bb961fd84307e1d9cfbf"><div class="ttname"><a href="classhal_1_1_module_tree_view.html#a4d8fed564e05bb961fd84307e1d9cfbf">hal::ModuleTreeView::mousePressEvent</a></div><div class="ttdeci">void mousePressEvent(QMouseEvent *event)</div><div class="ttdef"><b>Definition:</b> <a href="module__tree__view_8cpp_source.html#l00037">module_tree_view.cpp:37</a></div></div>
 <div class="ttc" id="amodule__tree__view_8h_html"><div class="ttname"><a href="module__tree__view_8h.html">module_tree_view.h</a></div></div>
 <div class="ttc" id="aqtreeview_html_mousePressEvent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtreeview.html#mousePressEvent">QTreeView::mousePressEvent</a></div><div class="ttdeci">virtual void mousePressEvent(QMouseEvent *event) override</div></div>
-<div class="ttc" id="aclasshal_1_1_module_tree_view_html_abc53dfc9b0fd822d4240946203fce3a5"><div class="ttname"><a href="classhal_1_1_module_tree_view.html#abc53dfc9b0fd822d4240946203fce3a5">hal::ModuleTreeView::setDefaultColumnWidth</a></div><div class="ttdeci">void setDefaultColumnWidth()</div><div class="ttdef"><b>Definition:</b> <a href="module__tree__view_8cpp_source.html#l00011">module_tree_view.cpp:11</a></div></div>
+<div class="ttc" id="aqtreeview_html_collapseAll"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtreeview.html#collapseAll">QTreeView::collapseAll</a></div><div class="ttdeci">void collapseAll()</div></div>
+<div class="ttc" id="aclasshal_1_1_module_tree_view_html_abc53dfc9b0fd822d4240946203fce3a5"><div class="ttname"><a href="classhal_1_1_module_tree_view.html#abc53dfc9b0fd822d4240946203fce3a5">hal::ModuleTreeView::setDefaultColumnWidth</a></div><div class="ttdeci">void setDefaultColumnWidth()</div><div class="ttdef"><b>Definition:</b> <a href="module__tree__view_8cpp_source.html#l00029">module_tree_view.cpp:29</a></div></div>
 <div class="ttc" id="aqtreeview_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtreeview.html">QTreeView</a></div></div>
 <div class="ttc" id="aclasshal_1_1_module_tree_view_html_a34b392438456d6d36146d3fc77ab6306"><div class="ttname"><a href="classhal_1_1_module_tree_view.html#a34b392438456d6d36146d3fc77ab6306">hal::ModuleTreeView::ModuleTreeView</a></div><div class="ttdeci">ModuleTreeView(QWidget *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> <a href="module__tree__view_8cpp_source.html#l00007">module_tree_view.cpp:7</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_9931ff14da9bf21a4a9836e435fa5a59.html">module_widget</a></li><li class="navelem"><a class="el" href="module__tree__view_8cpp.html">module_tree_view.cpp</a></li>
-    <li class="footer">Generated on Sun Nov 19 2023 11:45:55 for HAL by
+    <li class="footer">Generated on Mon Nov 20 2023 18:25:05 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
