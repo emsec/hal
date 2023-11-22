@@ -141,14 +141,15 @@ $(document).ready(function(){initNavTree('module__proxy__model_8h_source.html','
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_module_proxy_model.html#a651e2358c2f80095d0d5e63f62288fbd">filterAcceptsRow</a>(<span class="keywordtype">int</span> sourceRow, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>&amp; sourceParent) <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_module_proxy_model.html#a31a431cf273f280ca90fc78b336b49cf">lessThan</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;source_left, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;source_right) <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <a class="code" href="namespacehal_1_1gui__utility.html#a6fda9608ea4fedbaf83dc3e15dc6dd95">gui_utility::mSortMechanism</a> mSortMechanism;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="keywordtype">bool</span> mFilterNets;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keywordtype">bool</span> mFilterGates;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    };</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;}</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_module_proxy_model.html#a3fda705483f0d2ab353489ea6b5990d2">checkRowRecursion</a>(<span class="keywordtype">int</span> sourceRow, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a>&amp; sourceParent, <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span> endIndex, <span class="keywordtype">int</span> offset = 0) <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <a class="code" href="namespacehal_1_1gui__utility.html#a6fda9608ea4fedbaf83dc3e15dc6dd95">gui_utility::mSortMechanism</a> mSortMechanism;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keywordtype">bool</span> mFilterNets;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordtype">bool</span> mFilterGates;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    };</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
@@ -168,13 +169,14 @@ $(document).ready(function(){initNavTree('module__proxy__model_8h_source.html','
 <div class="ttc" id="asearch__proxy__model_8h_html"><div class="ttname"><a href="search__proxy__model_8h.html">search_proxy_model.h</a></div></div>
 <div class="ttc" id="aqmodelindex_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a></div></div>
 <div class="ttc" id="aclasshal_1_1_module_proxy_model_html_a84b3c3da406a5a94c7af74fc22c68de5"><div class="ttname"><a href="classhal_1_1_module_proxy_model.html#a84b3c3da406a5a94c7af74fc22c68de5">hal::ModuleProxyModel::setSortMechanism</a></div><div class="ttdeci">void setSortMechanism(gui_utility::mSortMechanism sortMechanism)</div><div class="ttdef"><b>Definition:</b> <a href="module__proxy__model_8cpp_source.html#l00069">module_proxy_model.cpp:69</a></div></div>
+<div class="ttc" id="aclasshal_1_1_module_proxy_model_html_a3fda705483f0d2ab353489ea6b5990d2"><div class="ttname"><a href="classhal_1_1_module_proxy_model.html#a3fda705483f0d2ab353489ea6b5990d2">hal::ModuleProxyModel::checkRowRecursion</a></div><div class="ttdeci">bool checkRowRecursion(int sourceRow, const QModelIndex &amp;sourceParent, int startIndex, int endIndex, int offset=0) const override</div><div class="ttdef"><b>Definition:</b> <a href="module__proxy__model_8cpp_source.html#l00080">module_proxy_model.cpp:80</a></div></div>
 <div class="ttc" id="aqobject_html_parent"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent</a></div><div class="ttdeci">QObject * parent() const const</div></div>
 <div class="ttc" id="aclasshal_1_1_search_proxy_model_html"><div class="ttname"><a href="classhal_1_1_search_proxy_model.html">hal::SearchProxyModel</a></div><div class="ttdef"><b>Definition:</b> <a href="search__proxy__model_8h_source.html#l00032">search_proxy_model.h:32</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_5dcb373bbc43d48bf653854ce72972b3.html">module_model</a></li><li class="navelem"><a class="el" href="module__proxy__model_8h.html">module_proxy_model.h</a></li>
-    <li class="footer">Generated on Mon Nov 20 2023 18:25:04 for HAL by
+    <li class="footer">Generated on Wed Nov 22 2023 20:01:28 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

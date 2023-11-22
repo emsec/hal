@@ -104,9 +104,9 @@ Inheritance diagram for hal::SearchProxyModel:</div>
 <area shape="rect" href="classhal_1_1_gatelibrary_proxy_model.html" title="Helper model to make filtering available." alt="" coords="241,799,441,950"/>
 <area shape="rect" href="classhal_1_1_gate_select_proxy.html" title="The GateSelectProxy class allows sorting and filtering of module tables." alt="" coords="465,799,640,950"/>
 <area shape="rect" href="classhal_1_1_grouping_proxy_model.html" title="Helper model to make filtering available." alt="" coords="665,799,851,950"/>
-<area shape="rect" href="classhal_1_1_module_proxy_model.html" title="Enables filtering in the ModuleModel." alt="" coords="876,785,1051,965"/>
-<area shape="rect" href="classhal_1_1_module_select_proxy.html" title="The ModuleSelectProxy class allows sorting and filtering of module tables." alt="" coords="1075,799,1249,950"/>
-<area shape="rect" href="classhal_1_1_selection_tree_proxy_model.html" title="Enables filtering of the SelectionTreeModel." alt="" coords="1273,777,1488,972"/>
+<area shape="rect" href="classhal_1_1_module_proxy_model.html" title="Enables filtering in the ModuleModel." alt="" coords="876,777,1053,972"/>
+<area shape="rect" href="classhal_1_1_module_select_proxy.html" title="The ModuleSelectProxy class allows sorting and filtering of module tables." alt="" coords="1077,799,1252,950"/>
+<area shape="rect" href="classhal_1_1_selection_tree_proxy_model.html" title="Enables filtering of the SelectionTreeModel." alt="" coords="1276,777,1491,972"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html" title=" " alt="" coords="656,219,860,516"/>
 <area shape="rect" href="https://doc.qt.io/qt-5/qabstractproxymodel.html" title=" " alt="" coords="659,5,857,171"/>
 </map>
@@ -502,7 +502,7 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a6540c40ef5ecb48298f6a6db7900d0fd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_search_proxy_model.html#a6540c40ef5ecb48298f6a6db7900d0fd">checkRow</a> (int sourceRow, const <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;sourceParent, int startIndex, int endIndex, int offset=0) const</td></tr>
 <tr class="memdesc:a6540c40ef5ecb48298f6a6db7900d0fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Should be called inside filterAcceptsRow function and returns true if the source_row, source_parent matches given <a class="el" href="classhal_1_1_search_options.html">SearchOptions</a>.  <a href="classhal_1_1_search_proxy_model.html#a6540c40ef5ecb48298f6a6db7900d0fd">More...</a><br /></td></tr>
 <tr class="separator:a6540c40ef5ecb48298f6a6db7900d0fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f34e9cbf45cfe2bee2d037f76b67a30"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_search_proxy_model.html#a7f34e9cbf45cfe2bee2d037f76b67a30">checkRowRecursion</a> (int sourceRow, const <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;sourceParent, int startIndex, int endIndex, int offset=0) const</td></tr>
+<tr class="memitem:a7f34e9cbf45cfe2bee2d037f76b67a30"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_search_proxy_model.html#a7f34e9cbf45cfe2bee2d037f76b67a30">checkRowRecursion</a> (int sourceRow, const <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;sourceParent, int startIndex, int endIndex, int offset=0) const</td></tr>
 <tr class="separator:a7f34e9cbf45cfe2bee2d037f76b67a30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_qsortfilterproxymodel"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_qsortfilterproxymodel')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html">QSortFilterProxyModel</a></td></tr>
 <tr class="memitem:filterAcceptsRow inherit pro_methods_qsortfilterproxymodel"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#filterAcceptsRow">filterAcceptsRow</a> (int source_row, const <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;source_parent) const const</td></tr>
@@ -765,7 +765,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#empty">QList::empty()</a>, <a class="el" href="searchoptions_8cpp_source.html#l00094">hal::SearchOptions::getColumns()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qsortfilterproxymodel.html#index">QSortFilterProxyModel::index()</a>, <a class="el" href="search__proxy__model_8cpp_source.html#l00016">isMatching()</a>, <a class="el" href="search__proxy__model_8h_source.html#l00080">mSearchOptions</a>, <a class="el" href="search__proxy__model_8h_source.html#l00081">mSearchString</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractproxymodel.html#sourceModel-prop">QAbstractProxyModel::sourceModel</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="search__proxy__model_8cpp_source.html#l00047">checkRowRecursion()</a>, <a class="el" href="context__table__proxy__model_8cpp_source.html#l00014">hal::ContextTableProxyModel::filterAcceptsRow()</a>, <a class="el" href="grouping__proxy__model_8cpp_source.html#l00016">hal::GroupingProxyModel::filterAcceptsRow()</a>, <a class="el" href="selection__tree__proxy_8cpp_source.html#l00015">hal::SelectionTreeProxyModel::filterAcceptsRow()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00167">hal::GateSelectProxy::filterAcceptsRow()</a>, and <a class="el" href="module__select__model_8cpp_source.html#l00205">hal::ModuleSelectProxy::filterAcceptsRow()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="search__proxy__model_8cpp_source.html#l00047">checkRowRecursion()</a>, <a class="el" href="module__proxy__model_8cpp_source.html#l00080">hal::ModuleProxyModel::checkRowRecursion()</a>, <a class="el" href="context__table__proxy__model_8cpp_source.html#l00014">hal::ContextTableProxyModel::filterAcceptsRow()</a>, <a class="el" href="grouping__proxy__model_8cpp_source.html#l00016">hal::GroupingProxyModel::filterAcceptsRow()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00167">hal::GateSelectProxy::filterAcceptsRow()</a>, and <a class="el" href="module__select__model_8cpp_source.html#l00205">hal::ModuleSelectProxy::filterAcceptsRow()</a>.</p>
 
 </div>
 </div>
@@ -816,17 +816,19 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 <p>Convenience method for tree model </p>
 
+<p>Reimplemented in <a class="el" href="classhal_1_1_module_proxy_model.html#a3fda705483f0d2ab353489ea6b5990d2">hal::ModuleProxyModel</a>.</p>
+
 <p class="definition">Definition at line <a class="el" href="search__proxy__model_8cpp_source.html#l00047">47</a> of file <a class="el" href="search__proxy__model_8cpp_source.html">search_proxy_model.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="search__proxy__model_8cpp_source.html#l00062">checkRow()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qabstractproxymodel.html#sourceModel-prop">QAbstractProxyModel::sourceModel</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__proxy__model_8cpp_source.html#l00031">hal::ModuleProxyModel::filterAcceptsRow()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="selection__tree__proxy_8cpp_source.html#l00015">hal::SelectionTreeProxyModel::filterAcceptsRow()</a>.</p>
 
 </div>
 </div>
@@ -1020,7 +1022,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_search_proxy_model.html">SearchProxyModel</a></li>
-    <li class="footer">Generated on Mon Nov 20 2023 18:25:09 for HAL by
+    <li class="footer">Generated on Wed Nov 22 2023 20:01:33 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
