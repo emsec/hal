@@ -61,6 +61,7 @@ namespace hal
         mLayout->addWidget(mCloseBtn, 7, 1);
         mLayout->setHorizontalSpacing(20);
 
+
         connect(mCloseBtn, &QPushButton::clicked, this, &SearchOptionsDialog::close);
         connect(mSearchBtn, &QPushButton::clicked, this, &SearchOptionsDialog::emitStartSearch);
         connect(mSelectColumnsBtn, &QPushButton::clicked, this, &SearchOptionsDialog::selectColumns);
@@ -160,6 +161,7 @@ namespace hal
             mSelectColumnsBtn->setText(formatColumnButtonText(scd.selectedColumnNames()));
             mSelectedColumns = scd.selectedColumns();
         }
+        this->adjustSize();
     }
 
     QString SearchOptionsDialog::formatColumnButtonText(QString text)
