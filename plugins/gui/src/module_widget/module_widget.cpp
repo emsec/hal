@@ -39,7 +39,9 @@ namespace hal
           mSearchbar(new Searchbar(this)),
           mToggleNetsAction(new QAction(this)),
           mToggleGatesAction(new QAction(this)),
+          mRenameAction(new QAction(this)),
           mDeleteAction(new QAction(this)),
+          mToggleExpandTreeAction(new QAction(this)),
           mModuleProxyModel(new ModuleProxyModel(this))
 
     {
@@ -47,17 +49,18 @@ namespace hal
 
         connect(mTreeView, &QTreeView::customContextMenuRequested, this, &ModuleWidget::handleTreeViewContextMenuRequested);
 
-        mToggleNetsAction->setIcon(gui_utility::getStyledSvgIcon(mHideNetsIconStyle, mHideNetsIconPath));
-        mToggleGatesAction->setIcon(gui_utility::getStyledSvgIcon(mHideGatesIconStyle, mHideGatesIconPath));
+        mToggleNetsAction->setIcon(gui_utility::getStyledSvgIcon(mActiveIconStyle, mHideNetsIconPath));
+        mToggleGatesAction->setIcon(gui_utility::getStyledSvgIcon(mActiveIconStyle, mHideGatesIconPath));
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+        mRenameAction->setIcon(gui_utility::getStyledSvgIcon(mActiveIconStyle, mRenameIconPath));
+        mToggleExpandTreeAction->setIcon(gui_utility::getStyledSvgIcon(mActiveIconStyle, mExpandedIconPath));
 
         mToggleNetsAction->setToolTip("Toggle net visibility");
         mToggleGatesAction->setToolTip("Toggle gate visibility");
         mDeleteAction->setToolTip("Delete module");
         mSearchAction->setToolTip("Search");
-
-        mDeleteAction->setText("Delete module");
-
+        mRenameAction->setToolTip("Rename");
+        mToggleExpandTreeAction->setToolTip("Toggle expand all / collapse all");
 
         mModuleProxyModel->setSourceModel(gNetlistRelay->getModuleModel());
 
@@ -72,7 +75,7 @@ namespace hal
         mTreeView->setExpandsOnDoubleClick(false);
         mTreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
         mTreeView->setSelectionMode(QAbstractItemView::SingleSelection);
-        mTreeView->expandAll();
+        mTreeView->expandAllModules();
         mContentLayout->addWidget(mTreeView);
 
         mSearchbar->setColumnNames(gNetlistRelay->getModuleModel()->headerLabels());
@@ -108,23 +111,25 @@ namespace hal
 
         connect(mToggleNetsAction, &QAction::triggered, this, &ModuleWidget::handleToggleNetsClicked);
         connect(mToggleGatesAction, &QAction::triggered, this, &ModuleWidget::handleToggleGatesClicked);
+        connect(mToggleExpandTreeAction, &QAction::triggered, this, &ModuleWidget::handleToggleExpandTreeClicked);
+        connect(mRenameAction, &QAction::triggered, this, &ModuleWidget::handleRenameClicked);
     }
 
     void ModuleWidget::enableDeleteAction(bool enable)
     {
         mDeleteAction->setEnabled(enable);
-        mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(enable?mDeleteIconStyle:mDisabledIconStyle, mDeleteIconPath));
+        mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(enable?mActiveIconStyle:mDisabledIconStyle, mDeleteIconPath));
     }
 
     void ModuleWidget::handleToggleNetsClicked()
     {
         if(mModuleProxyModel->toggleFilterNets())
         {
-            mToggleNetsAction->setIcon(gui_utility::getStyledSvgIcon(mHideNetsIconStyle, mHideNetsIconPath));
+            mToggleNetsAction->setIcon(gui_utility::getStyledSvgIcon(mActiveIconStyle, mHideNetsIconPath));
         }
         else
         {
-            mToggleNetsAction->setIcon(gui_utility::getStyledSvgIcon(mShowNetsIconStyle, mShowNetsIconPath));
+            mToggleNetsAction->setIcon(gui_utility::getStyledSvgIcon(mActiveIconStyle, mShowNetsIconPath));
         }
     }
 
@@ -132,11 +137,38 @@ namespace hal
     {
         if(mModuleProxyModel->toggleFilterGates())
         {
-            mToggleGatesAction->setIcon(gui_utility::getStyledSvgIcon(mHideGatesIconStyle, mHideGatesIconPath));
+            mToggleGatesAction->setIcon(gui_utility::getStyledSvgIcon(mActiveIconStyle, mHideGatesIconPath));
         }
         else
         {
-            mToggleGatesAction->setIcon(gui_utility::getStyledSvgIcon(mShowGatesIconStyle, mShowGatesIconPath));
+            mToggleGatesAction->setIcon(gui_utility::getStyledSvgIcon(mActiveIconStyle, mShowGatesIconPath));
+        }
+    }
+
+    void ModuleWidget::handleToggleExpandTreeClicked()
+    {
+        if (mTreeView->toggleStateExpanded())
+        {
+            mTreeView->collapseAllModules();
+            mToggleExpandTreeAction->setIcon(gui_utility::getStyledSvgIcon(mActiveIconStyle, mCollapsedIconPath));
+        }
+        else
+        {
+            mTreeView->expandAllModules();
+            mToggleExpandTreeAction->setIcon(gui_utility::getStyledSvgIcon(mActiveIconStyle, mExpandedIconPath));
+        }
+    }
+
+    void ModuleWidget::handleRenameClicked()
+    {
+        QModelIndex index = mTreeView->currentIndex();
+        ModuleItem::TreeItemType type = getModuleItemFromIndex(index)->getType();
+
+        switch(type)
+        {
+            case ModuleItem::TreeItemType::Module: gNetlistRelay->changeModuleName(getModuleItemFromIndex(index)->id()); break;
+            case ModuleItem::TreeItemType::Gate: changeGateName(index); break;
+            case ModuleItem::TreeItemType::Net: changeNetName(index); break;
         }
     }
 
@@ -144,8 +176,10 @@ namespace hal
     {
         toolbar->addAction(mToggleNetsAction);
         toolbar->addAction(mToggleGatesAction);
+        toolbar->addAction(mRenameAction);
         toolbar->addAction(mDeleteAction);
         toolbar->addAction(mSearchAction);
+        toolbar->addAction(mToggleExpandTreeAction);
     }
 
     QList<QShortcut*> ModuleWidget::createShortcuts()
@@ -182,7 +216,7 @@ namespace hal
         if (regex->isValid())
         {
             mModuleProxyModel->setFilterRegularExpression(*regex);
-            mTreeView->expandAll();
+            mTreeView->expandAllModules();
             QString output = "navigation regular expression '" + text + "' entered.";
             log_info("user", output.toStdString());
         }
@@ -561,6 +595,11 @@ namespace hal
         return mDisabledIconStyle;
     }
 
+    QString ModuleWidget::activeIconStyle() const
+    {
+        return mActiveIconStyle;
+    }
+
     ModuleProxyModel* ModuleWidget::proxyModel()
     {
         return mModuleProxyModel;
@@ -571,19 +610,9 @@ namespace hal
         return mShowNetsIconPath;
     }
 
-    QString ModuleWidget::showNetsIconStyle() const
-    {
-        return mShowNetsIconStyle;
-    }
-
     QString ModuleWidget::hideNetsIconPath() const
     {
         return mHideNetsIconPath;
-    }
-
-    QString ModuleWidget::hideNetsIconStyle() const
-    {
-        return mHideNetsIconStyle;
     }
 
     QString ModuleWidget::showGatesIconPath() const
@@ -591,19 +620,9 @@ namespace hal
         return mShowGatesIconPath;
     }
 
-    QString ModuleWidget::showGatesIconStyle() const
-    {
-        return mShowGatesIconStyle;
-    }
-
     QString ModuleWidget::hideGatesIconPath() const
     {
         return mHideGatesIconPath;
-    }
-
-    QString ModuleWidget::hideGatesIconStyle() const
-    {
-        return mHideGatesIconStyle;
     }
 
     QString ModuleWidget::searchIconPath() const
@@ -626,9 +645,19 @@ namespace hal
         return mDeleteIconPath;
     }
 
-    QString ModuleWidget::deleteIconStyle() const
+    QString ModuleWidget::renameIconPath() const
     {
-        return mDeleteIconStyle;
+        return  mRenameIconPath;
+    }
+
+    QString ModuleWidget::expandedIconPath() const
+    {
+        return  mExpandedIconPath;
+    }
+
+    QString ModuleWidget::collapsedIconPath() const
+    {
+        return mCollapsedIconPath;
     }
 
     void ModuleWidget::setDisabledIconStyle(const QString& style)
@@ -636,14 +665,14 @@ namespace hal
         mDisabledIconStyle = style;
     }
 
+    void ModuleWidget::setActiveIconStyle(const QString& style)
+    {
+        mActiveIconStyle = style;
+    }
+
     void ModuleWidget::setShowNetsIconPath(const QString& path)
     {
         mShowNetsIconPath = path;
-    }
-
-    void ModuleWidget::setShowNetsIconStyle(const QString& path)
-    {
-        mShowNetsIconStyle = path;
     }
 
     void ModuleWidget::setHideNetsIconPath(const QString& path)
@@ -651,29 +680,14 @@ namespace hal
         mHideNetsIconPath = path;
     }
 
-    void ModuleWidget::setHideNetsIconStyle(const QString& path)
-    {
-        mHideNetsIconStyle = path;
-    }
-
     void ModuleWidget::setShowGatesIconPath(const QString& path)
     {
         mShowGatesIconPath = path;
     }
 
-    void ModuleWidget::setShowGatesIconStyle(const QString& path)
-    {
-        mShowGatesIconStyle = path;
-    }
-
     void ModuleWidget::setHideGatesIconPath(const QString& path)
     {
         mHideGatesIconPath = path;
-    }
-
-    void ModuleWidget::setHideGatesIconStyle(const QString& path)
-    {
-        mHideGatesIconStyle = path;
     }
 
     void ModuleWidget::setSearchIconPath(const QString& path)
@@ -696,9 +710,19 @@ namespace hal
         mDeleteIconPath = path;
     }
 
-    void ModuleWidget::setDeleteIconStyle(const QString& style)
+    void ModuleWidget::setRenameIconPath(const QString& path)
     {
-        mDeleteIconStyle = style;
+        mRenameIconPath = path;
+    }
+
+    void ModuleWidget::setExpandedIconPath(const QString& path)
+    {
+        mExpandedIconPath = path;
+    }
+
+    void ModuleWidget::setCollapsedIconPath(const QString& path)
+    {
+        mCollapsedIconPath = path;
     }
 
     void ModuleWidget::deleteSelectedItem()

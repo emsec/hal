@@ -58,19 +58,18 @@ namespace hal
     {
         Q_OBJECT
         Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
+        Q_PROPERTY(QString activeIconStyle READ activeIconStyle WRITE setActiveIconStyle)
         Q_PROPERTY(QString showNetsIconPath READ showNetsIconPath WRITE setShowNetsIconPath)
-        Q_PROPERTY(QString showNetsIconStyle READ showNetsIconStyle WRITE setShowNetsIconStyle)
         Q_PROPERTY(QString hideNetsIconPath READ hideNetsIconPath WRITE setHideNetsIconPath)
-        Q_PROPERTY(QString hideNetsIconStyle READ hideNetsIconStyle WRITE setHideNetsIconStyle)
         Q_PROPERTY(QString showGatesIconPath READ showGatesIconPath WRITE setShowGatesIconPath)
-        Q_PROPERTY(QString showGatesIconStyle READ showGatesIconStyle WRITE setShowGatesIconStyle)
         Q_PROPERTY(QString hideGatesIconPath READ hideGatesIconPath WRITE setHideGatesIconPath)
-        Q_PROPERTY(QString hideGatesIconStyle READ hideGatesIconStyle WRITE setHideGatesIconStyle)
         Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
         Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
+        Q_PROPERTY(QString renameIconPath READ renameIconPath WRITE setRenameIconPath)
         Q_PROPERTY(QString deleteIconPath READ deleteIconPath WRITE setDeleteIconPath)
-        Q_PROPERTY(QString deleteIconStyle READ deleteIconStyle WRITE setDeleteIconStyle)
+        Q_PROPERTY(QString expandedIconPath READ expandedIconPath WRITE setExpandedIconPath)
+        Q_PROPERTY(QString collapsedIconPath READ collapsedIconPath WRITE setCollapsedIconPath)
 
     public:
         /**
@@ -114,38 +113,37 @@ namespace hal
          */
         ///@{
         QString disabledIconStyle() const;
+        QString activeIconStyle() const;
         QString showNetsIconPath() const;
-        QString showNetsIconStyle() const;
         QString hideNetsIconPath() const;
-        QString hideNetsIconStyle() const;
         QString showGatesIconPath() const;
-        QString showGatesIconStyle() const;
         QString hideGatesIconPath() const;
-        QString hideGatesIconStyle() const;
         QString searchIconPath() const;
         QString searchIconStyle() const;
         QString searchActiveIconStyle() const;
         QString deleteIconPath() const;
-        QString deleteIconStyle() const;
+        QString renameIconPath() const;
+        QString expandedIconPath() const;
+        QString collapsedIconPath() const;
+
         ///@}
 
         /** @name Q_PROPERTY WRITE Functions
          */
         ///@{
         void setDisabledIconStyle(const QString& style);
+        void setActiveIconStyle(const QString& style);
         void setShowNetsIconPath(const QString &path);
-        void setShowNetsIconStyle(const QString &path);
         void setHideNetsIconPath(const QString &path);
-        void setHideNetsIconStyle(const QString &path);
         void setShowGatesIconPath(const QString &path);
-        void setShowGatesIconStyle(const QString &path);
         void setHideGatesIconPath(const QString &path);
-        void setHideGatesIconStyle(const QString &path);
         void setSearchIconPath(const QString &path);
         void setSearchIconStyle(const QString &style);
         void setSearchActiveIconStyle(const QString &style);
         void setDeleteIconPath(const QString& path);
-        void setDeleteIconStyle(const QString& style);
+        void setRenameIconPath(const QString& path);
+        void setExpandedIconPath(const QString& path);
+        void setCollapsedIconPath(const QString& path);
         ///@}
 
     public Q_SLOTS:
@@ -223,6 +221,15 @@ namespace hal
          */
         void handleToggleGatesClicked();
 
+        /**
+         * Q_SLOT to toggle whether the tree is entirely expanded or collapsed
+         */
+        void handleToggleExpandTreeClicked();
+
+        /**
+         * Q_SLOT to handle rename button
+         */
+        void handleRenameClicked();
 
     private Q_SLOTS:
         void handleDeleteShortcutOnFocusChanged(QWidget *oldWidget, QWidget *newWidget);
@@ -235,24 +242,25 @@ namespace hal
 
         QAction* mToggleNetsAction;
         QAction* mToggleGatesAction;
+        QAction* mRenameAction;
         QAction* mDeleteAction;
+        QAction* mToggleExpandTreeAction;
 
         QString mDisabledIconStyle;
-        QString mShowNetsIconPath;
-        QString mShowNetsIconStyle;
-        QString mHideNetsIconPath;
-        QString mHideNetsIconStyle;
+        QString mActiveIconStyle;
 
+        QString mShowNetsIconPath;
+        QString mHideNetsIconPath;
         QString mShowGatesIconPath;
-        QString mShowGatesIconStyle;
         QString mHideGatesIconPath;
-        QString mHideGatesIconStyle;
         QString mDeleteIconPath;
-        QString mDeleteIconStyle;
 
         QString mSearchIconPath;
         QString mSearchIconStyle;
         QString mSearchActiveIconStyle;
+        QString mRenameIconPath;
+        QString mExpandedIconPath;
+        QString mCollapsedIconPath;
 
         QAction* mFilterAction;
 
