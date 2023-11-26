@@ -38,6 +38,7 @@
 #include <QSplitter>
 #include <QStackedWidget>
 #include <QToolBar>
+#include <gui/gatelibrary_management/gatelibrary_manager.h>
 
 namespace hal
 {
@@ -603,6 +604,7 @@ namespace hal
         MainSettingsWidget* mSettings;
         GuiPluginManager* mPluginManager;
         WelcomeScreen* mWelcomeScreen;
+        GateLibraryManager* mGateLibraryManager;
         QHBoxLayout* mToolBarLayout;
         QToolBar* mLeftToolBar;
         QToolBar* mRightToolBar;
@@ -613,7 +615,7 @@ namespace hal
         Action* mActionImportNetlist;
         Action* mActionSave;
         Action* mActionSaveAs;
-//        Action* mActionGateLibraryManager;
+        Action* mActionGateLibraryManager;
         Action* mActionAbout;
         Action* mActionStartRecording;
         Action* mActionStopRecording;
@@ -665,7 +667,7 @@ namespace hal
    		QString mUndoIconPath;
         QString mUndoIconStyle;
 
-       QString mDisabledIconStyle;
+        QString mDisabledIconStyle;
  
         SettingsItemKeybind* mSettingCreateFile;
         SettingsItemKeybind* mSettingOpenFile;

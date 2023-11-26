@@ -44,7 +44,6 @@
 #include <QDesktopWidget>
 #include <QDir>
 #include <QFileDialog>
-#include <QFuture>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
@@ -52,6 +51,7 @@
 #include <QShortcut>
 #include <QStringList>
 #include <QtConcurrent>
+
 
 namespace hal
 {
@@ -131,6 +131,9 @@ namespace hal
 
         mWelcomeScreen = new WelcomeScreen();
         mStackedWidget->addWidget(mWelcomeScreen);
+        mGateLibraryManager = new GateLibraryManager();
+        mStackedWidget->addWidget(mGateLibraryManager);
+
         mStackedWidget->setCurrentWidget(mWelcomeScreen);
 
         setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
@@ -142,7 +145,7 @@ namespace hal
         mActionSaveAs             = new Action(this);
         mActionExportProject      = new Action(this);
         mActionImportProject      = new Action(this);
-//        mActionGateLibraryManager = new Action(this);
+        mActionGateLibraryManager = new Action(this);
         mActionAbout              = new Action(this);
 
         mActionStartRecording     = new Action(this);
@@ -188,7 +191,7 @@ namespace hal
         mActionSaveAs->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
         mActionClose->setIcon(gui_utility::getStyledSvgIcon(mCloseIconStyle, mCloseIconPath));
         mActionQuit->setIcon(gui_utility::getStyledSvgIcon(mQuitIconStyle, mQuitIconPath));
-//        mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
+        mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
         mActionUndo->setIcon(gui_utility::getStyledSvgIcon(mUndoIconStyle, mUndoIconPath));
         mActionSettings->setIcon(gui_utility::getStyledSvgIcon(mSettingsIconStyle, mSettingsIconPath));
         mActionPlugins->setIcon(gui_utility::getStyledSvgIcon(mPluginsIconStyle, mPluginsIconPath));
@@ -207,7 +210,7 @@ namespace hal
         mMenuFile->addAction(mActionClose);
         mMenuFile->addAction(mActionSave);
         mMenuFile->addAction(mActionSaveAs);
-//        mMenuFile->addAction(mActionGateLibraryManager);
+        mMenuFile->addAction(mActionGateLibraryManager);
 
         QMenu* menuImport = new QMenu("Import …", this);
         menuImport->addAction(mActionImportNetlist);
@@ -272,6 +275,7 @@ namespace hal
         mLeftToolBar->addAction(mActionUndo);
         mRightToolBar->addAction(mActionPlugins);
         mRightToolBar->addAction(mActionSettings);
+        mRightToolBar->addAction(mActionGateLibraryManager);
 
         mActionStartRecording->setText("Start recording");
         mActionStopRecording->setText("Stop recording");
@@ -289,7 +293,7 @@ namespace hal
         mActionImportNetlist->setText("Import Netlist");
         mActionImportProject->setText("Import Project");
         mActionExportProject->setText("Export Project");
-//        mActionGateLibraryManager->setText("Gate Library Manager");
+        mActionGateLibraryManager->setText("Gate Library Manager");
         mActionUndo->setText("Undo");
         mActionAbout->setText("About");
         mActionSettings->setText("Settings");
@@ -342,7 +346,7 @@ namespace hal
         connect(mActionSaveAs, &Action::triggered, this, &MainWindow::handleSaveAsTriggered);
         connect(mActionExportProject, &Action::triggered, this, &MainWindow::handleExportProjectTriggered);
         connect(mActionImportProject, &Action::triggered, this, &MainWindow::handleImportProjectTriggered);
-//        connect(mActionGateLibraryManager, &Action::triggered, this, &MainWindow::handleActionGatelibraryManager);
+        connect(mActionGateLibraryManager, &Action::triggered, this, &MainWindow::handleActionGatelibraryManager);
         connect(mActionClose, &Action::triggered, this, &MainWindow::handleActionCloseFile);
         connect(mActionQuit, &Action::triggered, this, &MainWindow::onActionQuitTriggered);
 
@@ -639,7 +643,7 @@ namespace hal
     void MainWindow::openSettings()
     {
         if (mStackedWidget->currentWidget() == mSettings)
-            return; //nothing todo, already open
+            return; //nothing todo, already fetchGateLibrary
 
         mSettings->activate();
         mStackedWidget->setCurrentWidget(mSettings);
@@ -659,7 +663,7 @@ namespace hal
     {
         mPluginManager->repolish();
         if (mStackedWidget->currentWidget() == mPluginManager)
-            return; //nothing todo, already open
+            return; //nothing todo, already fetchGateLibrary
 
         if (mStackedWidget->currentWidget() == mSettings)
         {
@@ -806,8 +810,19 @@ namespace hal
 
     void MainWindow::handleActionGatelibraryManager()
     {
-        GatelibraryManagementDialog dialog;
-        dialog.exec();
+        /**
+         * TODO
+         *      check if netlist is already loaded
+         *          if yes then skip file dialog and fetchGateLibrary GateLibraryManager in read-only mode
+         *          else open file-dialog and search for suitable files and then fetchGateLibrary GateLibraryManager
+         */
+
+        if(mGateLibraryManager->initialize())
+            mStackedWidget->setCurrentWidget(mGateLibraryManager);
+        /*previous reference code*/
+
+        //GatelibraryManagementDialog dialog;
+        //dialog.exec();
     }
 
     void MainWindow::handleImportProjectTriggered()
@@ -825,7 +840,7 @@ namespace hal
                 QMessageBox::warning(this,
                                      "Import Project Failed",
                                      "Failed to extract a HAL project from selected archive file.\n"
-                                     "You might want to uncompress the archive manually and try to open the project.");
+                                     "You might want to uncompress the archive manually and try to fetchGateLibrary the project.");
         }
     }
 
