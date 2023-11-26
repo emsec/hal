@@ -58,9 +58,7 @@ namespace hal
         context->scene()->setDebugGridEnabled(mSettingDebugGrid->value().toBool());
         connect(mSettingDebugGrid, &SettingsItemCheckbox::boolChanged, context->scene(), &GraphicsScene::setDebugGridEnabled);
 
-        mContextTableModel->beginInsertContext(context);
         mContextTableModel->addContext(context);
-        mContextTableModel->endInsertContext();
 
         Q_EMIT contextCreated(context);
 
@@ -89,9 +87,7 @@ namespace hal
     {
         Q_EMIT deletingContext(ctx);
 
-        mContextTableModel->beginRemoveContext(ctx);
         mContextTableModel->removeContext(ctx);
-        mContextTableModel->endRemoveContext();
 
         delete ctx;
     }

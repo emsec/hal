@@ -27,11 +27,28 @@
 
 #include "hal_core/defines.h"
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/basic_tree_model/base_tree_model.h"
 
-#include <QAbstractTableModel>
+
 
 namespace hal
 {
+    class ContextTreeItem : public BaseTreeItem
+    {
+
+        private:
+            GraphContext* mContext;
+        public:
+
+            ContextTreeItem(GraphContext* context);
+            QVariant getData(int column) const override;
+            void setData(QList<QVariant> data) override;
+            void setDataAtIndex(int index, QVariant& data) override;
+            void appendData(QVariant data) override;
+            int getColumnCount() const override;
+            int row() const;
+    };
+
     /**
      * @ingroup utility_widgets-context
      * @brief Base model for the ContextManagerWidget to manage GraphContext%s.
@@ -41,7 +58,7 @@ namespace hal
      * the ContextManagerWidget to store and display the data. For specific information on how to
      * implement a table model, refer to qt's QAbstractTableModel class and its examples.
      */
-    class ContextTableModel : public QAbstractTableModel
+    class ContextTableModel : public BaseTreeModel
     {
         Q_OBJECT
 
@@ -57,17 +74,16 @@ namespace hal
          */
         ///@{
         int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-        int columnCount(const QModelIndex& parent = QModelIndex()) const override;
         QVariant data(const QModelIndex& inddex, int role = Qt::DisplayRole) const override;
-        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
         ///@}
 
         /**
          * Adds a given GraphContext to the model.
          *
          * @param context - The context to add.
+         * @param parent - The Parent of the context.
          */
-        void addContext(GraphContext* context);
+        void addContext(GraphContext* context, BaseTreeItem* parent);
 
         /**
          * Removes a given GraphContext from the model.
@@ -93,28 +109,12 @@ namespace hal
         QModelIndex getIndex(GraphContext* context) const;
 
         /**
-         * Begins a row insert operation. Parameter is not used.
+         * Returns the index where the specified ContextTreeitem can be found.
          *
-         * @param context - Not used.
+         * @param item - The ContextTreeitem to search for in the item model
+         * @returns the model index of the specified ContextTreeitem
          */
-        void beginInsertContext(GraphContext* context);
-
-        /**
-         * Ends a row insert operation.
-         */
-        void endInsertContext();
-
-        /**
-         * Begins a remove row operation. The given context is removed.
-         *
-         * @param context - The context to remove.
-         */
-        void beginRemoveContext(GraphContext* context);
-
-        /**
-         * Ends a remove row operation.
-         */
-        void endRemoveContext();
+        QModelIndex getIndex(const BaseTreeItem * const item) const;
 
         /**
          * Resets the model (removes all GraphContext%s).
@@ -126,11 +126,11 @@ namespace hal
          *
          * @return A vector of all GraphContext%s.
          */
-        const QVector<GraphContext*>& list() const { return mContextList; }
+        const QVector<GraphContext*>& list() const;
     private Q_SLOTS:
         void handleDataChanged();
 
     private:
-        QVector<GraphContext*> mContextList;
+        std::map<GraphContext *, ContextTreeItem *> mContextMap;
     };
 }    // namespace hal
