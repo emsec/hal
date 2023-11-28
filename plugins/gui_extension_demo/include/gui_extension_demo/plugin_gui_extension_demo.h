@@ -65,11 +65,14 @@ namespace hal
 
         void set_parameter(const std::vector<PluginParameter>& params) override;
 
-        void add_module_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label);
+        void add_module_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label,
+                                ContextMenuContribution::ContributionType cmtype = ContextMenuContribution::Action);
 
-        void add_gate_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label);
+        void add_gate_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label,
+                              ContextMenuContribution::ContributionType cmtype = ContextMenuContribution::Action);
 
-        void add_net_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label);
+        void add_net_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label,
+                             ContextMenuContribution::ContributionType cmtype = ContextMenuContribution::Action);
 
         void add_main_menu(GuiExtensionPythonBase* plug, const std::vector<PluginParameter>& params);
 

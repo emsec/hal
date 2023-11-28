@@ -120,21 +120,24 @@ namespace hal
         m_parameter = params;
     }
 
-    void GuiExtensionContext::add_module_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label)
+    void GuiExtensionContext::add_module_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label,
+                                                 ContextMenuContribution::ContributionType cmtype)
     {
-        m_module_context_contribution.push_back({this,tagname,label});
+        m_module_context_contribution.push_back({this,tagname,label,cmtype});
         m_python_plugins.insert(std::make_pair(tagname,plug));
     }
 
-    void GuiExtensionContext::add_gate_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label)
+    void GuiExtensionContext::add_gate_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label,
+                                               ContextMenuContribution::ContributionType cmtype)
     {
-        m_gate_context_contribution.push_back({this,tagname,label});
+        m_gate_context_contribution.push_back({this,tagname,label,cmtype});
         m_python_plugins.insert(std::make_pair(tagname,plug));
     }
 
-    void GuiExtensionContext::add_net_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label)
+    void GuiExtensionContext::add_net_context(GuiExtensionPythonBase* plug, const std::string tagname, const std::string label,
+                                              ContextMenuContribution::ContributionType cmtype)
     {
-        m_net_context_contribution.push_back({this,tagname,label});
+        m_net_context_contribution.push_back({this,tagname,label,cmtype});
         m_python_plugins.insert(std::make_pair(tagname,plug));
     }
 

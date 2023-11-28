@@ -24,27 +24,30 @@ namespace hal {
         }
     }
 
-    void GuiExtensionPythonBase::add_module_context(const std::string tagname, const std::string label)
+    void GuiExtensionPythonBase::add_module_context(const std::string tagname, const std::string label,
+                                                    ContextMenuContribution::ContributionType cmtype)
     {
         if (GuiExtensionContext::sInstance)
         {
-            GuiExtensionContext::sInstance->add_module_context(this,tagname,label);
+            GuiExtensionContext::sInstance->add_module_context(this,tagname,label,cmtype);
         }
     }
 
-    void GuiExtensionPythonBase::add_gate_context(const std::string tagname, const std::string label)
+    void GuiExtensionPythonBase::add_gate_context(const std::string tagname, const std::string label,
+                                                  ContextMenuContribution::ContributionType cmtype)
     {
         if (GuiExtensionContext::sInstance)
         {
-            GuiExtensionContext::sInstance->add_gate_context(this,tagname,label);
+            GuiExtensionContext::sInstance->add_gate_context(this,tagname,label,cmtype);
         }
     }
 
-    void GuiExtensionPythonBase::add_net_context(const std::string tagname, const std::string label)
+    void GuiExtensionPythonBase::add_net_context(const std::string tagname, const std::string label,
+                                                 ContextMenuContribution::ContributionType cmtype)
     {
         if (GuiExtensionContext::sInstance)
         {
-            GuiExtensionContext::sInstance->add_net_context(this,tagname,label);
+            GuiExtensionContext::sInstance->add_net_context(this,tagname,label,cmtype);
         }
     }
 

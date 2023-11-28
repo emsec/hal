@@ -29,6 +29,7 @@
 #include <mutex>
 #include "hal_core/defines.h"
 #include "hal_core/plugin_system/plugin_parameter.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
 
 namespace hal {
     class GuiExtensionPythonBase
@@ -51,11 +52,14 @@ namespace hal {
 
         std::vector<PluginParameter> get_parameter() const;
 
-        virtual void add_module_context(const std::string tagname, const std::string label);
+        virtual void add_module_context(const std::string tagname, const std::string label,
+                                        ContextMenuContribution::ContributionType cmtype = ContextMenuContribution::Action);
 
-        virtual void add_gate_context(const std::string tagname, const std::string label);
+        virtual void add_gate_context(const std::string tagname, const std::string label,
+                                      ContextMenuContribution::ContributionType cmtype = ContextMenuContribution::Action);
 
-        virtual void add_net_context(const std::string tagname, const std::string label);
+        virtual void add_net_context(const std::string tagname, const std::string label,
+                                     ContextMenuContribution::ContributionType cmtype = ContextMenuContribution::Action);
 
         virtual void add_main_menu(const std::vector<PluginParameter>& params);
 

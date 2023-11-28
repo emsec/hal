@@ -897,12 +897,61 @@ namespace hal
         }
 
         if (mPluginContribution.isEmpty()) return;
+
         contextMenu->addSeparator();
+        QMap<QString,QMenu*> pluginSubmenus;
+
         for (ContextMenuContribution& cmc : mPluginContribution)
         {
-            QAction* act = contextMenu->addAction(QString::fromStdString(cmc.mEntry));
-            act->setData(QVariant::fromValue<void*>(&cmc));
-            connect(act,&QAction::triggered,this,&GraphGraphicsView::handlePluginContextContributionTriggered);
+            QStringList tagList = QString::fromStdString(cmc.mTagname).split('/');
+            if (!tagList.isEmpty()) tagList.removeLast();
+            QString parentTag = tagList.join('/');
+
+            switch (cmc.mType)
+            {
+            case ContextMenuContribution::Action:
+            {
+                QAction* act = nullptr;
+                if (parentTag.isEmpty())
+                    act = contextMenu->addAction(QString::fromStdString(cmc.mEntry));
+                else
+                {
+                    QMenu* subm = pluginSubmenus.value(parentTag);
+                    if (!subm)
+                    {
+                        log_warning("gui", "Submenu '{}' not found for action '{}' with tagname '{}",
+                                    parentTag.toStdString(), cmc.mEntry, cmc.mTagname);
+                        continue;
+                    }
+                    act = subm->addAction(QString::fromStdString(cmc.mEntry));
+                }
+                act->setData(QVariant::fromValue<void*>(&cmc));
+                connect(act,&QAction::triggered,this,&GraphGraphicsView::handlePluginContextContributionTriggered);
+                break;
+            }
+            case ContextMenuContribution::Submenu:
+                {
+                    QMenu* subm = new QMenu(QString::fromStdString(cmc.mEntry),contextMenu);
+                    pluginSubmenus.insert(QString::fromStdString(cmc.mTagname),subm);
+                    if (parentTag.isEmpty())
+                        contextMenu->addMenu(subm);
+                    else
+                    {
+                        QMenu* parentMenu = pluginSubmenus.value(parentTag);
+                        if (!parentMenu)
+                        {
+                            log_warning("gui", "Submenu '{}' not found for sub-submenu '{}' with tagname '{}",
+                                        parentTag.toStdString(), cmc.mEntry, cmc.mTagname);
+                            continue;
+                        }
+                        parentMenu->addMenu(subm);
+                    }
+                }
+                break;
+            case ContextMenuContribution::Separator:
+                contextMenu->addSeparator();
+                break;
+            }
         }
     }
 

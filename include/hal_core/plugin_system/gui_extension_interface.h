@@ -41,6 +41,7 @@ namespace hal
         GuiExtensionInterface* mContributer;
         std::string mTagname;
         std::string mEntry;
+        enum ContributionType { Action, Submenu, Separator } mType = Action;
     };
 
     class GuiExtensionInterface : public AbstractExtensionInterface

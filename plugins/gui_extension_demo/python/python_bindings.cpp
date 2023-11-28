@@ -64,6 +64,14 @@ namespace hal
                 .value("TabName",     PluginParameter::TabName,     R"(Tab name for structuring other elements.)")
                 .export_values();
 
+        py::enum_<ContextMenuContribution::ContributionType>(m, "ContributionType", R"(
+                 Defines the type of contribution to context menu
+                 )")
+                .value("Action",    ContextMenuContribution::Action,    R"(Contribution is an action)")
+                .value("Submenu",   ContextMenuContribution::Submenu,   R"(Contribution is a submenu)")
+                .value("Separator", ContextMenuContribution::Separator, R"(Menu separator)")
+                .export_values();
+
         py::class_<PluginParameter>(m,"PluginParameter")
             .def(py::init<PluginParameter::ParameterType,std::string,std::string,std::string>())
             .def("get_tagname", &PluginParameter::get_tagname, R"(
@@ -106,20 +114,23 @@ namespace hal
                  Add form to main menu comprising parameter and push button (special parameter).
                  :param list[hal_py.PluginParameter] params: Parameter to be added.
             )")
-            .def("add_module_context", &GuiExtensionPythonBase::add_module_context, py::arg("tagname"), py::arg("label"), R"(
+            .def("add_module_context", &GuiExtensionPythonBase::add_module_context, py::arg("tagname"), py::arg("label"), py::arg("cmtype"), R"(
                  Add context extension if single module selected.
                  :param str tagname: Tagname of function called from context menu.
                  :param str label: Entry for context menu.
+                 :param cmtype ContributionType: Type of contribution.
             )")
-            .def("add_gate_context", &GuiExtensionPythonBase::add_gate_context, py::arg("tagname"), py::arg("label"), R"(
+            .def("add_gate_context", &GuiExtensionPythonBase::add_gate_context, py::arg("tagname"), py::arg("label"), py::arg("cmtype"), R"(
                  Add context extension if single gate selected.
                  :param str tagname: Tagname of function called from context menu.
                  :param str label: Entry for context menu.
+                 :param cmtype ContributionType: Type of contribution.
             )")
-            .def("add_net_context", &GuiExtensionPythonBase::add_net_context, py::arg("tagname"), py::arg("label"), R"(
+            .def("add_net_context", &GuiExtensionPythonBase::add_net_context, py::arg("tagname"), py::arg("label"), py::arg("cmtype"), R"(
                  Add context extension if single net selected.
                  :param str tagname: Tagname of function called from context menu.
                  :param str label: Entry for context menu.
+                 :param cmtype ContributionType: Type of contribution.
             )")
             .def("get_parameter", &GuiExtensionPythonBase::get_parameter, R"(
                  Get parameter list.
