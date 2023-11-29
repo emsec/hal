@@ -14,22 +14,49 @@
 #include <QFileDialog>
 #include <QHeaderView>
 
-#include <gui/gui_globals.h>
-
-#include <QTableWidget>
 namespace hal
 {
     GateLibraryManager::GateLibraryManager(QWidget* parent)
         : QFrame(parent), mLayout(new QGridLayout())
     {
         //TODO create layout and widgets
+
+        mLayout->setSpacing(20);
+
         mTableView = new QTableView(this);
         mTableModel = new GatelibraryTableModel(this);
         mTableView->verticalHeader()->setVisible(false);
 
-        mTableView->setModel(mTableModel);
-        mLayout->addWidget(mTableView);
 
+        auto* generalPage = createGeneralWidget();
+        auto* pinPage = createPinWidget();
+        auto* flipFlopPage = createFlipFlopWidget();
+        auto* booleanFunctionPage = createBooleanFunctionWidget();
+
+
+        mEditBtn = new QPushButton("Edit", this);
+        mAddBtn = new QPushButton("Add", this);
+
+        mTabWidget = new QTabWidget(this);
+        mTabWidget->addTab(generalPage, "General");
+        mTabWidget->addTab(pinPage, "Pins");
+        mTabWidget->addTab(flipFlopPage, "Flip Flops");
+        mTabWidget->addTab(booleanFunctionPage, "Boolean Functions");
+
+        mTableView->setModel(mTableModel);
+
+        mEditBtn->setText("Edit");
+        mAddBtn->setText("Add");
+        
+        
+        // Add widgets to the layout
+        mLayout->addWidget(mTableView,0,0,1,2);
+        mLayout->addWidget(mEditBtn,1,0);
+        mLayout->addWidget(mAddBtn,1,1);
+        mLayout->addWidget(mTabWidget,0,2);
+
+
+        setLayout(mLayout);
 
         repolish();    // CALL FROM PARENT
     }
@@ -78,8 +105,29 @@ namespace hal
                 mGateLibrary = gateLibrary;
             }
             mTableModel->loadFile(mGateLibrary);
-
+            mEditBtn->setEnabled(!mReadOnly);
+            mAddBtn->setEnabled(!mReadOnly);
         }
         return true;
     }
+    QWidget* GateLibraryManager::createGeneralWidget()
+    {
+        return new QWidget(this);
+    }
+
+    QWidget* GateLibraryManager::createPinWidget()
+    {
+        return new QWidget(this);
+    }
+
+    QWidget* GateLibraryManager::createFlipFlopWidget()
+    {
+        return new QWidget(this);
+    }
+
+    QWidget* GateLibraryManager::createBooleanFunctionWidget()
+    {
+        return new QWidget(this);
+    }
+
 }
