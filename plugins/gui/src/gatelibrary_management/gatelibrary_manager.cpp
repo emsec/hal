@@ -17,11 +17,14 @@
 namespace hal
 {
     GateLibraryManager::GateLibraryManager(QWidget* parent)
-        : QFrame(parent), mLayout(new QGridLayout()), mTableView(new QTableView())
+        : QFrame(parent), mLayout(new QGridLayout())
     {
         //TODO create layout and widgets
+        mTableView = new QTableView(this);
+        mTableModel = new GatelibraryTableModel(this);
 
-
+        mTableView->setModel(mTableModel);
+        mLayout->addWidget(mTableView);
 
 
         repolish();    // CALL FROM PARENT
@@ -56,12 +59,16 @@ namespace hal
             qInfo() << "selected file: " << fileName;
 
             auto gateLibrary = gate_library_manager::load(std::filesystem::path(fileName.toStdString()));
+
             for (auto elem : gateLibrary->get_gate_types())
             {
                 qInfo() << QString::fromStdString(elem.second->get_name());
             }
+
+            mGateLibrary = gateLibrary;
+            mTableModel->loadFile(fileName);
+
         }
-        mGateLibrary = gateLibrary;
         return true;
     }
 }

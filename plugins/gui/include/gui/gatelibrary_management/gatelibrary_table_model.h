@@ -50,10 +50,7 @@ private:
     struct Entry
     {
         QString name;
-        u32 gatecount;
-        std::filesystem::path path;
-        QString timestring;
-        qint64 timevalue;
+        u32 id;
     };
 
 public:
@@ -105,26 +102,6 @@ public:
      */
     void clear();
 
-    /**
-     * Setup the model.
-     */
-    void setup();
-
-    /**
-     * Get the name of the gatelibrary at the index. Index has to be valid.
-     *
-     * @param index - The index in the table
-     * @return The gatelibrary name.
-     */
-    QString getNameFromIndex(const QModelIndex& index);
-
-    /**
-     * Get the gatecount of the gatelibrary at the index. Index has to be valid.
-     *
-     * @param index - The index in the table
-     * @return The gatecount.
-     */
-    u32 getGatecountFromIndex(const QModelIndex& index);
 
     /**
      * Try to load a gate library from file.
@@ -133,19 +110,6 @@ public:
      */
     void loadFile(const QString& path);
 
-    /**
-     * Reload the gatelibrary at the index. Index has to be valid.
-     *
-     * @param index - The index in the table
-     */
-    void reloadIndex(const QModelIndex& index);
-
-    /**
-     * Remove the gatelibrary at the index. Index has to be valid.
-     *
-     * @param index - The index in the table
-     */
-    void removeIndex(const QModelIndex& index);
 
 private:
     QList<Entry> mEntries;

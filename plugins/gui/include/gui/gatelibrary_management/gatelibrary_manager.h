@@ -26,6 +26,7 @@
 #pragma once
 
 #include "hal_core/netlist/gate_library/gate_library.h"
+#include "gatelibrary_table_model.h"
 
 #include <QFrame>
 #include <QGridLayout>
@@ -59,6 +60,7 @@ namespace hal
         QGridLayout* mLayout;
 
         QTableView* mTableView;
+        GatelibraryTableModel* mTableModel;
 
         GateLibrary* mGateLibrary;
     };
