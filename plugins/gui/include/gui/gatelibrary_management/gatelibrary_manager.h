@@ -32,6 +32,8 @@
 #include <QFrame>
 #include <QGridLayout>
 #include <QTableView>
+#include <QPushButton>
+#include <QTabWidget>
 
 namespace hal
 {
@@ -61,11 +63,19 @@ namespace hal
 
 
     private:
+        QWidget* createGeneralWidget();
+        QWidget* createPinWidget();
+        QWidget* createFlipFlopWidget();
+        QWidget* createBooleanFunctionWidget();
+        QTabWidget* mTabWidget;
         QGridLayout* mLayout;
-
+        QPushButton* mEditBtn;
+        QPushButton* mAddBtn;
         QTableView* mTableView;
         GatelibraryTableModel* mTableModel;
 
-        GateLibrary* mGateLibrary;
+        const GateLibrary* mGateLibrary;
+
+        bool mReadOnly = false;
     };
 }

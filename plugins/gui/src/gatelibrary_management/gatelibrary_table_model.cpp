@@ -85,17 +85,11 @@ namespace hal
     }
 
 
-    void GatelibraryTableModel::loadFile(const QString& path)
+    void GatelibraryTableModel::loadFile(const GateLibrary* g)
     {
-        if (gPluginRelay->mGuiPluginTable)
-            gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser);
-
-        std::filesystem::path stdPath = path.toStdString();
-        GateLibrary* g = gate_library_manager::load(stdPath, false);
 
         if (!g)
             return;
-        qInfo() << "adding gate:";
         beginResetModel();
 
         for (auto elem : g->get_gate_types())

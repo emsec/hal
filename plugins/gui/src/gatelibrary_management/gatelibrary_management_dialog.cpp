@@ -172,7 +172,7 @@ namespace hal
 
         if (!fileName.isNull())
         {
-            mTableModel->loadFile(fileName);
+            //mTableModel->loadFile(fileName);
         }
     }
 
