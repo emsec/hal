@@ -381,11 +381,8 @@ namespace hal
         if(dynamic_cast<CommentSpeechBubble*>(itemAt(event->pos())))
             return;
 
-        if (event->modifiers() == mPanModifier)
-        {
-            if (event->button() == Qt::LeftButton)
-                mMovePosition = event->pos();
-        }
+        if ((event->modifiers() == mPanModifier && event->button() == Qt::LeftButton) || event->button() == Qt::MidButton)
+            mMovePosition = event->pos();
         else if (event->button() == Qt::LeftButton)
         {
             GraphicsItem* item = static_cast<GraphicsItem*>(itemAt(event->pos()));
@@ -435,32 +432,29 @@ namespace hal
             mTargetScenePos    = mapToScene(event->pos());
         }
 
-        if (event->buttons().testFlag(Qt::LeftButton))
+        if ((event->buttons().testFlag(Qt::LeftButton) && event->modifiers() == mPanModifier) || event->buttons().testFlag(Qt::MidButton))
         {
-            if (event->modifiers() == mPanModifier)
+            QScrollBar* hBar  = horizontalScrollBar();
+            QScrollBar* vBar  = verticalScrollBar();
+            QPoint delta_move = event->pos() - mMovePosition;
+            mMovePosition   = event->pos();
+            hBar->setValue(hBar->value() + (isRightToLeft() ? delta_move.x() : -delta_move.x()));
+            vBar->setValue(vBar->value() - delta_move.y());
+        }
+        else if (event->buttons().testFlag(Qt::LeftButton))
+        {
+            if (mDragItem && (event->pos() - mDragMousedownPosition).manhattanLength() >= QApplication::startDragDistance())
             {
-                QScrollBar* hBar  = horizontalScrollBar();
-                QScrollBar* vBar  = verticalScrollBar();
-                QPoint delta_move = event->pos() - mMovePosition;
-                mMovePosition   = event->pos();
-                hBar->setValue(hBar->value() + (isRightToLeft() ? delta_move.x() : -delta_move.x()));
-                vBar->setValue(vBar->value() - delta_move.y());
-            }
-            else
-            {
-                if (mDragItem && (event->pos() - mDragMousedownPosition).manhattanLength() >= QApplication::startDragDistance())
-                {
-                    QDrag* drag         = new QDrag(this);
-                    QMimeData* mimeData = new QMimeData;
+                QDrag* drag         = new QDrag(this);
+                QMimeData* mimeData = new QMimeData;
 
-                    // TODO set MIME type and icon
-                    mimeData->setText("dragTest");
-                    drag->setMimeData(mimeData);
-                    // drag->setPixmap(iconPixmap);
+                // TODO set MIME type and icon
+                mimeData->setText("dragTest");
+                drag->setMimeData(mimeData);
+                // drag->setPixmap(iconPixmap);
 
-                    // enable DragMoveEvents until mouse released
-                    drag->exec(Qt::MoveAction);
-                }
+                // enable DragMoveEvents until mouse released
+                drag->exec(Qt::MoveAction);
             }
         }
 #ifdef GUI_DEBUG_GRID
