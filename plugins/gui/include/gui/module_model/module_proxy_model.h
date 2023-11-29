@@ -26,6 +26,8 @@
 #pragma once
 
 #include "gui/gui_utils/sort.h"
+#include "gui/searchbar/search_proxy_model.h"
+
 
 #include <QSortFilterProxyModel>
 
@@ -38,7 +40,7 @@ namespace hal
      * The ModuleProxyModel is the QSortFilterProxyModel between the ModuleModel (source model) and the tree view
      * of the ModuleWidget. Its filtering possibilities are needed to provide a searchbar in the module widget.
      */
-    class ModuleProxyModel : public QSortFilterProxyModel
+    class ModuleProxyModel : public SearchProxyModel
     {
         Q_OBJECT
 
@@ -63,6 +65,7 @@ namespace hal
          * @param sortMechanism - The new sorting mechanism
          */
         void setSortMechanism(gui_utility::mSortMechanism sortMechanism);
+        void startSearch(QString text, int options) override;
 
         /**
          * Toggles whether or not nets are accepted by the filter.
@@ -78,12 +81,11 @@ namespace hal
 
     protected:
         /**
-         * Overrides QSortFilterProxyModel::filterAcceptsRow to implement the filter logic based on the regular
-         * expression stored by setFilterRegularExpression. Also filters nets or gates, depending on the state
-         * of the toggle buttons.<br>
-         * Returns <b>true</b> if the item in the row indicated by <i>sourceRow</i> and <i>sourceParent</i> should be included
-         * in the model.
-         * TODO: Filtering seems to be broken. Can't search for submodules. Works only for the topmodule.
+         * Overrides QSortFilterProxyModel::filterAcceptsRow to implement the filter logic. The first layer
+         * checks whether gates and/or nets should be excluded from view. The second layer is provided by
+         * base class based on search string and search options.<br>
+         * Returns <b>true</b> if the item in the row indicated by <i>sourceRow</i> and <i>sourceParent</i>
+         * should be included in the model.
          *
          * @param sourceRow - The row in the source model
          * @param sourceParent - the source parent
@@ -100,6 +102,7 @@ namespace hal
          * @returns <b>true</b> if the element at source_left is considered less than the element at source_right
          */
         bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
+        bool checkRowRecursion(int sourceRow, const QModelIndex& sourceParent, int startIndex, int endIndex, int offset = 0) const override;
 
     private:
         gui_utility::mSortMechanism mSortMechanism;

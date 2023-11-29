@@ -155,7 +155,7 @@ namespace hal
         int id;
         QByteArray encItem = data->data("pintreemodel/item");
         QDataStream dataStream(&encItem, QIODevice::ReadOnly);
-        qDebug() << "dropMimeData" << encItem << row << column;
+// debug pingroup        qDebug() << "dropMimeData" << encItem << row << column;
         dataStream >> type >> id;
 
         auto droppedItem = (type == "group") ?  static_cast<PortTreeItem*>(mIdToGroupItem.value(id)) :  static_cast<PortTreeItem*>(mIdToPinItem.value(id));
@@ -174,12 +174,12 @@ namespace hal
         {
             if(!parentItem)
             {
-                qDebug() << "group was dropped between groups... with row: " << row; //check in canDropMine if its not an adjacent row?
+// debug pingroup                qDebug() << "group was dropped between groups... with row: " << row; //check in canDropMine if its not an adjacent row?
                 dndGroupBetweenGroup(droppedItem, row);
             }
             else
             {
-                qDebug() << "group was dropped on a group?";
+// debug pingroup                qDebug() << "group was dropped on a group?";
                 dndGroupOnGroup(droppedItem, parentItem);
             }
         }
@@ -187,17 +187,17 @@ namespace hal
         {
             if(!parentItem)
             {
-                qDebug() << "pin was dropped between groups on row " << row;
+// debug pingroup                qDebug() << "pin was dropped between groups on row " << row;
                 dndPinBetweenGroup(droppedItem, row);
             }
             else if(row != -1)
             {
-                qDebug() << "pin was dropped between pins";
+// debug pingroup                qDebug() << "pin was dropped between pins";
                 dndPinBetweenPin(droppedItem, parentItem, row);
             }
             else
             {
-                qDebug() << "pin was dropped on a group...";
+// debug pingroup                qDebug() << "pin was dropped on a group...";
                 dndPinOnGroup(droppedItem, parentItem);
             }
         }
@@ -517,7 +517,7 @@ namespace hal
         Q_UNUSED(pgid);
         if ((int)m->get_id() != mModuleId) return;
 
-        log_info("gui", "Handle pin_changed event {} ID={}", enum_to_string<PinEvent>(pev), pgid);
+        // debug pingroups  log_info("gui", "Handle pin_changed event {} ID={}", enum_to_string<PinEvent>(pev), pgid);
         PortTreeItem* ptiPin = nullptr;
         PortTreeItem* ptiGroup = nullptr;
         const PinGroup<ModulePin>* pgroup = nullptr;

@@ -40,6 +40,7 @@ namespace hal
             return qvNetName;
             break;}
         }
+        return QVariant();
     }
 
     void PinTreeItem::setData(QList<QVariant> data)
@@ -71,10 +72,7 @@ namespace hal
 
     }
 
-    void PinTreeItem::appendData(QVariant data)
-    {
-
-    }
+    void PinTreeItem::appendData(QVariant data) {}
 
     int PinTreeItem::getColumnCount() const
     {

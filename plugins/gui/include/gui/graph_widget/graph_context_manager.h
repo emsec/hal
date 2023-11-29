@@ -395,7 +395,7 @@ namespace hal
         u32 mMaxContextId;
         void dump(const QString& title, u32 mid, u32 xid) const;
         SettingsItemCheckbox* mSettingDebugGrid;
-        SettingsItemCheckbox* mSettingNetLayout;
+        SettingsItemCheckbox* mSettingDumpJunction;
         SettingsItemCheckbox* mSettingParseLayout;
         SettingsItemCheckbox* mSettingLayoutBoxes;
     };

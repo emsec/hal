@@ -15,6 +15,7 @@
 #include <QSpacerItem>
 #include <QLineEdit>
 #include <QAction>
+#include <QDebug>
 
 #include <string>
 #include <QRegularExpression>
@@ -45,6 +46,7 @@ namespace hal
         mSearchbar = new Searchbar(mPlainTextEdit);
         mSearchbar->hide();
         mContentLayout->addWidget(mSearchbar);
+        mSearchOptions = 8;
 
         connect(mPlainTextEditScrollbar, &QScrollBar::actionTriggered, this, &LoggerWidget::handleFirstUserInteraction);
 
@@ -114,7 +116,7 @@ namespace hal
         toolbar->addWidget(mVerboseButton);
 
         connect(mSearchAction, SIGNAL(triggered()), this, SLOT(toggleSearchbar()));
-        connect(mSearchbar, SIGNAL(textEdited(QString)), this, SLOT(handleSearchChanged(QString)));
+        connect(mSearchbar, SIGNAL(triggerNewSearch(QString, int)), this, SLOT(handleSearchChanged(QString, int)));
         connect(mDebugButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         connect(mInfoButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
         connect(mWarningButton, SIGNAL(toggled(bool)), this, SLOT(handleSeverityChanged(bool)));
@@ -168,6 +170,25 @@ namespace hal
         }
     }
 
+    bool LoggerWidget::isMatching(QString searchString, QString stringToCheck)
+    {
+        if(!mSearchOptions.isExactMatch() && !mSearchOptions.isRegularExpression()){
+            //check if stringToCheck contains the searchString
+            return stringToCheck.contains(searchString, mSearchOptions.isCaseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive);
+        }
+        else if(mSearchOptions.isExactMatch()){
+            //check if the stringToCheck is the same as the searchString   - also checks CaseSensitivity
+
+            return 0 == QString::compare(searchString, stringToCheck, mSearchOptions.isCaseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive);
+        }
+        else if(mSearchOptions.isRegularExpression()){
+            //checks if the stringToCheck matches the regEx given by searchString
+            auto regEx = QRegularExpression(searchString, mSearchOptions.isCaseSensitive() ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
+            return regEx.match(stringToCheck).hasMatch();
+        }
+        return false;
+    }
+
     void LoggerWidget::handleCurrentFilterChanged(int p)
     {
         ChannelModel* model = ChannelModel::instance();
@@ -199,8 +220,8 @@ namespace hal
         {
             bool filter = false;
             // If entry msg matches with search string
-            QRegularExpression re(mSearchFilter);
-            if (re.match(QString::fromStdString(entry->mMsg)).hasMatch())
+            //QRegularExpression re(mSearchFilter);
+            if (isMatching(mSearchFilter, QString::fromStdString(entry->mMsg)))
             {
                 // If entry severity matches the choosen severitys
                 if ((entry->mMsgType == spdlog::level::level_enum::info) && mInfoSeverity) {
@@ -272,10 +293,11 @@ namespace hal
         saveSettings();
     }
 
-    void LoggerWidget::handleSearchChanged(QString filter)
+    void LoggerWidget::handleSearchChanged(QString filter, int searchOptions)
     {
         mSearchFilter = filter;
         std::cout << mSearchFilter.QString::toStdString() << std::endl;
+        mSearchOptions = SearchOptions(searchOptions);
         handleCurrentFilterChanged(1);
     }
 

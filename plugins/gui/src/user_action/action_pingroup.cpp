@@ -397,7 +397,7 @@ namespace hal
                     qDebug() << "assign_pin_to_group failed";
                     return false;
                 }
-                dumpPingroups();
+                // dumpPingroups();
                 break;
             case PinActionType::PinRename:
                 addUndoAction(PinActionType::PinRename,aa.mId, QString::fromStdString(pin->get_name()));
@@ -418,7 +418,7 @@ namespace hal
                     qDebug() << "move_pin_within_group failed";
                     return false;
                 }
-                dumpPingroups();
+                // dumpPingroups();
                 break;
             default:
                 break;

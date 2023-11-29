@@ -4,12 +4,20 @@
 #include "gui/code_editor/line_number_area.h"
 #include "gui/code_editor/minimap_scrollbar.h"
 
+#include "gui/searchbar/searchoptions.h"
+
 #include "gui/gui_globals.h"
 
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QTextBlock>
 #include <QDebug>
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,13,0)
+   #include <QRegularExpression>
+#else
+   #include <QRegExp>
+#endif
 
 namespace hal
 {
@@ -196,22 +204,47 @@ namespace hal
         mMinimap->update();
     }
 
-    void CodeEditor::search(const QString& string, QTextDocument::FindFlags options)
+    void CodeEditor::search(const QString& string, SearchOptions searchOpts)
     {
         QList<QTextEdit::ExtraSelection> extraSelections;
 
         moveCursor(QTextCursor::Start);
         QColor color            = QColor(12, 15, 19);
         QColor mBackgroundColor = QColor(255, 255, 0);
+        QTextDocument::FindFlags options = QTextDocument::FindFlags();
 
-        while (find(string, options))
+        options.setFlag(QTextDocument::FindCaseSensitively, searchOpts.isCaseSensitive());
+        options.setFlag(QTextDocument::FindWholeWords, searchOpts.isExactMatch());
+
+        if(searchOpts.isRegularExpression())
         {
-            QTextEdit::ExtraSelection extra;
-            extra.format.setForeground(QBrush(color));
-            extra.format.setBackground(mBackgroundColor);
-            extra.cursor = textCursor();
-            extraSelections.append(extra);
+#if QT_VERSION >= QT_VERSION_CHECK(5,13,0)
+            QRegularExpression regExp(string, searchOpts.isCaseSensitive() ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
+#else
+            QRegExp regExp(string, searchOpts.isCaseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive);
+#endif
+            while (find(regExp, options))
+            {
+                QTextEdit::ExtraSelection extra;
+                extra.format.setForeground(QBrush(color));
+                extra.format.setBackground(mBackgroundColor);
+                extra.cursor = textCursor();
+                extraSelections.append(extra);
+            }
         }
+        else
+        {
+
+            while (find(string, options))
+            {
+                QTextEdit::ExtraSelection extra;
+                extra.format.setForeground(QBrush(color));
+                extra.format.setBackground(mBackgroundColor);
+                extra.cursor = textCursor();
+                extraSelections.append(extra);
+            }
+        }
+
         setExtraSelections(extraSelections);
     }
 

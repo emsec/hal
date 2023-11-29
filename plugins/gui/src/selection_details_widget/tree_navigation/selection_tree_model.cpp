@@ -136,6 +136,7 @@ namespace hal
         SelectionTreeItem* item = parent.isValid()
                 ? itemFromIndex(parent)
                 : mRootItem;
+
         return item->childCount();
     }
 

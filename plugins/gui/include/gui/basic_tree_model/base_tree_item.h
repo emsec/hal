@@ -179,7 +179,7 @@ namespace hal
          * @param child - The child for which the row is requested.
          * @return The row if the item is a child, -1 otherwise.
          */
-        virtual int getRowForChild(BaseTreeItem* child) const;
+        virtual int getRowForChild(const BaseTreeItem* child) const;
 
         /**
          * Convenience method to get the row of this item within

@@ -5,7 +5,7 @@
 
 namespace hal
 {
-    ModuleProxyModel::ModuleProxyModel(QObject* parent) : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical), mFilterNets(false), mFilterGates(false)
+    ModuleProxyModel::ModuleProxyModel(QObject* parent) : SearchProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::lexical), mFilterNets(true), mFilterGates(true)
     {
         // QTS PROXY MODELS ARE DUMB, IMPLEMENT CUSTOM SOLUTION OR SWITCH TO A DIFFERENT FILTER METHOD
 
@@ -40,20 +40,7 @@ namespace hal
         if(mFilterNets && item->getType() == ModuleItem::TreeItemType::Net)
             return false;
 
-        if(filterRegularExpression().pattern().isEmpty())
-            return true;
-
-        if(item->childCount() == 0)
-            return sourceModel()->data(sourceIndex, filterRole()).toString().contains(filterRegularExpression());
-
-        bool shouldBeDisplayed = sourceModel()->data(sourceIndex, filterRole()).toString().contains(filterRegularExpression());;
-        //go through all children and return the check of itself and the check of the children
-        for(int i = 0; i < item->childCount(); i++)
-        {
-            shouldBeDisplayed = shouldBeDisplayed || filterAcceptsRow(i, sourceIndex);
-        }
-
-        return shouldBeDisplayed;
+        return checkRowRecursion(sourceRow, sourceParent, 0, 2);
     }
 
     bool ModuleProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
@@ -83,5 +70,39 @@ namespace hal
     {
         mSortMechanism = sortMechanism;
         invalidate();
+    }
+    void ModuleProxyModel::startSearch(QString text, int options)
+    {
+        mSearchString = text;
+        mSearchOptions = SearchOptions(options);
+        invalidateFilter();
+    }
+    bool ModuleProxyModel::checkRowRecursion(int sourceRow, const QModelIndex& sourceParent, int startIndex, int endIndex, int offset) const
+    {
+        QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
+        if(!sourceIndex.isValid())
+            return true;
+        auto item = static_cast<ModuleItem*>(sourceIndex.internalPointer());
+        QModelIndex currentIndex = sourceModel()->index(sourceRow, 0, sourceParent);
+
+        if(mFilterGates && item->getType() == ModuleItem::TreeItemType::Gate)
+        {
+            return false;
+        }
+        if(mFilterNets && item->getType() == ModuleItem::TreeItemType::Net)
+        {
+            return false;
+        }
+
+        if (checkRow(sourceRow, sourceParent, startIndex, endIndex, offset))
+            return true;
+
+        int nrows = sourceModel()->rowCount(currentIndex);
+        for (int irow = 0; irow < nrows; irow++)
+        {
+            if (checkRowRecursion(irow, currentIndex, startIndex, endIndex, offset))
+                return true;
+        }
+        return false;
     }
 }

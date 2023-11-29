@@ -26,6 +26,7 @@
 #pragma once
 
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/searchbar/search_proxy_model.h"
 
 #include <QRegularExpression>
 #include <QSortFilterProxyModel>
@@ -36,7 +37,7 @@ namespace hal
      * @ingroup utility_widgets-context
      * @brief A proxy model to filter the ContextTableModel by a given string.
      */
-    class ContextTableProxyModel : public QSortFilterProxyModel
+    class ContextTableProxyModel : public SearchProxyModel
     {
         Q_OBJECT
 
@@ -62,11 +63,13 @@ namespace hal
     public Q_SLOTS:
 
         /**
-         * Sets the proxy model's filter to the given string.
+         * Sets the proxy model's filter to the given string
+         * and sets the searchOptions.
          *
          * @param filter_text - The new filter string.
+         * @param SearchOptions_bitmask - SearchOptions.
          */
-        void handleFilterTextChanged(const QString& filter_text);
+        void startSearch(QString text, int options) override;
 
     protected:
 
@@ -79,7 +82,5 @@ namespace hal
          */
         bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
 
-    private:
-        QRegularExpression mFilterExpression;
     };
 }    // namespace hal

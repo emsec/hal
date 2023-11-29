@@ -29,6 +29,7 @@
 #include "gui/content_widget/content_widget.h"
 #include "hal_core/utilities/log.h"
 #include "gui/gui_utils/graphics.h"
+#include "gui/searchbar/searchoptions.h"
 
 #include <QLabel>
 #include <QMenu>
@@ -156,7 +157,7 @@ namespace hal
          *
          * @param filter - Search string to filter
          */
-        void handleSearchChanged(QString filter);
+        void handleSearchChanged(QString filter, int SearchOptions);
 
         /**
          * Q_SLOT to handle interactions with the scrollbar. After the first scrollbar interaction the scrollbar wont
@@ -175,9 +176,11 @@ namespace hal
          * Toggles the visibiliy of the searchbar.
          */
         void toggleSearchbar();
+        bool isMatching(QString searchString, QString stringToCheck);
 
     private:
         Searchbar* mSearchbar;
+        SearchOptions mSearchOptions;
         QAction* mSearchAction;
 
         QString mSearchIconPath;

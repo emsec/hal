@@ -7,8 +7,9 @@
 
 namespace hal
 {
-    ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
-        mParent(nullptr),
+
+ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
+        BaseTreeItem(),
         mId(id),
         mType(type),
         mHighlighted(false)
@@ -17,7 +18,6 @@ namespace hal
         {
         case TreeItemType::Module:
             mName = QString::fromStdString(gNetlist->get_module_by_id(id)->get_name());
-            mColor = gNetlistRelay->getModuleColor(id);
             break;
         case TreeItemType::Gate:
             mName = QString::fromStdString(gNetlist->get_gate_by_id(id)->get_name());
@@ -28,20 +28,13 @@ namespace hal
         }
     }
 
-    void ModuleItem::insertChild(int row, ModuleItem* child)
+    int ModuleItem::row() const
     {
-        mChildItems.insert(row, child);
+        BaseTreeItem* parent = getParent();
+        if (!parent) return 0;
+        return parent->getRowForChild(this);
     }
 
-    void ModuleItem::removeChild(ModuleItem* child)
-    {
-        mChildItems.removeOne(child);
-    }
-
-    void ModuleItem::appendChild(ModuleItem* child)
-    {
-        mChildItems.append(child);
-    }
 
     void ModuleItem::appendExistingChildIfAny(const QMap<u32,ModuleItem*>& moduleMap)
     {
@@ -62,46 +55,7 @@ namespace hal
         }
     }
 
-    void ModuleItem::prependChild(ModuleItem* child)
-    {
-        // PROBABLY OBSOLETE
-        mChildItems.prepend(child);
-    }
-
-    ModuleItem* ModuleItem::parent()
-    {
-        return mParent;
-    }
-
-    ModuleItem* ModuleItem::child(int row)
-    {
-        return mChildItems.value(row);
-    }
-
-    const ModuleItem* ModuleItem::constParent() const
-    {
-        return mParent;
-    }
-
-    const ModuleItem* ModuleItem::constChild(int row) const
-    {
-        return mChildItems.value(row);
-    }
-
-    int ModuleItem::childCount() const
-    {
-        return mChildItems.count();
-    }
-
-    int ModuleItem::row() const
-    {
-        if (mParent)
-            return mParent->mChildItems.indexOf(const_cast<ModuleItem*>(this));
-        else
-            return 0;
-    }
-
-    QVariant ModuleItem::data(int column) const
+    QVariant ModuleItem::getData(int column) const
     {
         // DEBUG CODE, USE STYLED DELEGATES OR SOMETHING
         if(column == 0)
@@ -129,6 +83,48 @@ namespace hal
         return QVariant();
     }
 
+    void ModuleItem::setData(QList<QVariant> data)
+    {
+        setName(data[0].toString());
+        switch(mType)
+        {
+            case TreeItemType::Module:
+            {
+                Module* module = gNetlist->get_module_by_id(mId);
+                if(!module)
+                    return;
+                module->set_type(data[3].toString().toStdString());
+            }
+            case TreeItemType::Gate:
+                return;
+        }
+    }
+
+    void ModuleItem::setDataAtIndex(int index, QVariant &data)
+    {
+        if(index == 0) {
+            setName(data.toString());
+            return;
+        }
+        else if (index == 1)
+            return;
+        else if(index == 2)
+        {
+            switch(mType)
+            {
+                case TreeItemType::Module:
+                {
+                    Module* module = gNetlist->get_module_by_id(mId);
+                    if(!module)
+                        return;
+                    module->set_type(data.toString().toStdString());
+                }
+                case TreeItemType::Gate:
+                    return;
+            }
+        }
+    }
+
     QString ModuleItem::name() const
     {
         return mName;
@@ -137,11 +133,6 @@ namespace hal
     u32 ModuleItem::id() const
     {
         return mId;
-    }
-
-    QColor ModuleItem::color() const
-    {
-        return mColor;
     }
 
     bool ModuleItem::highlighted() const
@@ -153,23 +144,20 @@ namespace hal
         return mType;
     }
 
-    void ModuleItem::setParent(ModuleItem* parent)
-    {
-        mParent = parent;
-    }
-
     void ModuleItem::setName(const QString& name)
     {
         mName = name;
-    }
-
-    void ModuleItem::setColor(const QColor& color)
-    {
-        mColor = color;
     }
 
     void ModuleItem::setHighlighted(const bool highlighted)
     {
         mHighlighted = highlighted;
     }
+
+    int ModuleItem::getColumnCount() const
+    {
+        return 3;
+    }
+
+    void ModuleItem::appendData(QVariant data) {}
 }

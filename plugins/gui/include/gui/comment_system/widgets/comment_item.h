@@ -26,6 +26,8 @@
 #include <QFrame>
 #include <QTextEdit>
 
+#include "gui/searchbar/searchoptions.h"
+
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -37,6 +39,7 @@ class QToolButton;
 namespace hal
 {
     class CommentEntry;
+    class SearchableLabel;
 
     class CommentItem : public QFrame
     {
@@ -52,7 +55,7 @@ namespace hal
 
         void setComment(CommentEntry* entry);
         void updateCurrentEntry();
-        bool search(const QString& string, QTextDocument::FindFlags options = QTextDocument::FindFlags());
+        bool search(const QString& string, SearchOptions searchOpts);
 
         CommentEntry* getEntry();
 
@@ -84,7 +87,7 @@ namespace hal
 
         // header part (perhaps no toolbar but a layout with toolbuttons instead of actions?)
         QToolBar* mTopToolbar;
-        QLabel* mHeader;
+        SearchableLabel* mHeader;
         QLabel* mCreationDate;
         QAction* mModifyAction;
         QAction* mDeleteAction;

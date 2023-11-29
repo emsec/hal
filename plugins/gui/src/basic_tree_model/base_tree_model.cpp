@@ -27,7 +27,7 @@ namespace hal
 
     QVariant BaseTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
     {
-        if(role == Qt::DisplayRole && orientation == Qt::Horizontal && section < mRootItem->getColumnCount())
+        if(role == Qt::DisplayRole && orientation == Qt::Horizontal && section < mRootItem->getColumnCount() && section >= 0)
             return mRootItem->getData(section);
         else
             return QVariant();
@@ -96,6 +96,15 @@ namespace hal
             delete tmp;
         }
         endResetModel();
+    }
+
+    QStringList BaseTreeModel::headerLabels() const
+    {
+        QStringList retval;
+        int ncol = columnCount();
+        for (int icol = 0; icol < ncol; icol++)
+            retval.append(headerData(icol,Qt::Horizontal,Qt::DisplayRole).toString());
+        return retval;
     }
 
     void BaseTreeModel::setHeaderLabels(const QStringList& labels)

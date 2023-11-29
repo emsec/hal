@@ -7,10 +7,14 @@
 #include "gui/comment_system/widgets/comment_widget.h"
 
 #include "hal_core/netlist/module.h"
+#include "gui/gui_globals.h"
+#include "gui/module_model/module_model.h"
+#include "gui/module_model/module_color_manager.h"
 
 namespace hal
 {
-    ModuleDetailsTabWidget::ModuleDetailsTabWidget(QWidget* parent) : DetailsTabWidget(parent)
+    ModuleDetailsTabWidget::ModuleDetailsTabWidget(QWidget* parent)
+        : DetailsTabWidget(parent), mModuleId(0)
     {
         setIcon(SelectionDetailsIconProvider::ModuleIcon);
 
@@ -48,11 +52,24 @@ namespace hal
         mCommentWidget = new CommentWidget(this);
         QTabWidget::addTab(mCommentWidget, "Comments");
 
+        connect(gNetlistRelay->getModuleColorManager(),&ModuleColorManager::moduleColorChanged,this,&ModuleDetailsTabWidget::handleModuleColorChanged);
     }
  
+    void ModuleDetailsTabWidget::handleModuleColorChanged(u32 id)
+    {
+        if (!mModuleId || mModuleId != id) return;
+        setIcon(SelectionDetailsIconProvider::ModuleIcon,mModuleId);
+    }
+
     void ModuleDetailsTabWidget::setModule(Module* module)
     {
-        if (module) setIcon(SelectionDetailsIconProvider::ModuleIcon, module->get_id());
+        if (module)
+        {
+            setIcon(SelectionDetailsIconProvider::ModuleIcon, module->get_id());
+            mModuleId = module->get_id();
+        }
+        else
+            mModuleId = 0;
         //pass module or other stuff to widgets
         mModuleInfoTable->setModule(module);
         mPinsTree->setModule(module);

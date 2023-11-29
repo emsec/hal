@@ -38,6 +38,7 @@
 
 namespace hal
 {
+
     ExternalContent* ExternalContent::inst = nullptr;
 
     ExternalContent* ExternalContent::instance()
@@ -60,6 +61,7 @@ namespace hal
 
     SettingsItemDropdown* ContentManager::sSettingSortMechanism;
     SettingsItemKeybind* ContentManager::sSettingSearch;
+    SettingsItemKeybind* ContentManager::sSettingDeleteItem;
     bool ContentManager::sSettingsInitialized = initializeSettings();
     bool ContentManager::initializeSettings()
     {
@@ -74,12 +76,21 @@ namespace hal
                                     "Keybindings:Global",
                                     "Keybind for toggeling the searchbar in widgets where available (Selection Details Widget, Modules Widget, Python Editor, Views Widget, Grouping Widget).");
 
+
+        sSettingDeleteItem =
+            new SettingsItemKeybind("Delete Item",
+                                    "keybinds/item_delete",
+                                    QKeySequence("Del"),
+                                    "Keybindings:Global",
+                                    "Keybind for deleting the focused Item.");
         return true;
     }
 
     ContentManager::ContentManager(MainWindow* parent) : QObject(parent), mMainWindow(parent),
         mExternalIndex(0), mContextSerializer(nullptr)
     {
+
+
         // has to be created this early in order to receive deserialization by the core signals
         mPythonWidget = new PythonEditor();
 
