@@ -44,6 +44,7 @@ namespace hal
             return qvNetName;
             break;}
         }
+        return QVariant();
     }
 
     void PortTreeItem::setData(QList<QVariant> data)
