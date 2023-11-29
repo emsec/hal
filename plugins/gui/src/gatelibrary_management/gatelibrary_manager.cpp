@@ -11,6 +11,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QHeaderView>
+#include <QPushButton>
 
 #include <gui/gui_globals.h>
 
@@ -25,10 +26,15 @@ namespace hal
         mTableModel = new GatelibraryTableModel(this);
         mTableView->verticalHeader()->setVisible(false);
 
+        QPushButton* btn = new QPushButton("Call wizard", this);
+
+        connect(btn, &QPushButton::clicked, this, &GateLibraryManager::handleCallWizard);
+
         mTableView->setModel(mTableModel);
-        mLayout->addWidget(mTableView);
+        mLayout->addWidget(mTableView, 0, 0);
+        mLayout->addWidget(btn, 1, 0);
 
-
+        setLayout(mLayout);
         repolish();    // CALL FROM PARENT
     }
 
@@ -74,5 +80,11 @@ namespace hal
 
         }
         return true;
+    }
+
+    void GateLibraryManager::handleCallWizard()
+    {
+        GateLibraryWizard wiz;
+        wiz.exec();
     }
 }

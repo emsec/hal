@@ -25,24 +25,11 @@
 
 #pragma once
 
-#include "gui/gatelibrary_management/gatelibrary_pages/generalinfo_wizardpage.h"
-#include "gui/gatelibrary_management/gatelibrary_pages/pins_wizardpage.h"
-#include "gui/gatelibrary_management/gatelibrary_pages/flipflop_wizardpage.h"
-#include "gui/gatelibrary_management/gatelibrary_pages/bool_wizardpage.h"
-
-#include <QWizard>
 #include <QWizardPage>
 
-namespace hal
-{
-    class GateLibraryWizard : public QWizard
-    {
+namespace hal {
+    class PinsWizardPage:public QWizardPage{
     public:
-        GateLibraryWizard(QWidget* parent = nullptr);
-    private:
-        GeneralInfoWizardPage* generalInfoPage;
-        PinsWizardPage* pinsPage;
-        FlipFlopWizardPage* ffPage;
-        BoolWizardPage* boolPage;
+        PinsWizardPage(QWidget* parent = nullptr);
     };
 }

@@ -26,6 +26,7 @@
 #pragma once
 
 #include "hal_core/netlist/gate_library/gate_library.h"
+#include "gui/gatelibrary_management/gatelibrary_wizard.h"
 #include "gatelibrary_table_model.h"
 
 #include <QFrame>
@@ -54,6 +55,9 @@ namespace hal
         void repolish();
 
         bool initialize(GateLibrary* gateLibrary = nullptr);
+
+    public Q_SLOTS:
+        void handleCallWizard();
 
 
     private:
