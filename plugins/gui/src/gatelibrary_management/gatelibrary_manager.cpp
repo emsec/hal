@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QFileDialog>
+#include <QHeaderView>
 
 #include <gui/gui_globals.h>
 
@@ -22,6 +23,7 @@ namespace hal
         //TODO create layout and widgets
         mTableView = new QTableView(this);
         mTableModel = new GatelibraryTableModel(this);
+        mTableView->verticalHeader()->setVisible(false);
 
         mTableView->setModel(mTableModel);
         mLayout->addWidget(mTableView);
@@ -48,6 +50,8 @@ namespace hal
             QString title = "Load gate library";
             QString text  = "HAL Gate Library (*.hgl *.lib)";
             QString path  = QDir::currentPath();
+
+
 
             //TODO fileDialog throws bad window error
             QString fileName = QFileDialog::getOpenFileName(nullptr, title, path, text, nullptr);

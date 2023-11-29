@@ -37,8 +37,8 @@ namespace hal
             {
                 switch (index.column())
                 {
-                case 0: return mEntries[index.row()].id;
-                case 1: return mEntries[index.row()].name;
+                case 0: return mEntries[index.row()].name;
+                case 1: return mEntries[index.row()].id;
 
                 }
             }
@@ -68,8 +68,8 @@ namespace hal
         {
             switch(section)
             {
-            case 0: return "ID";
-            case 1: return "Name";
+            case 0: return "Name";
+            case 1: return "ID";
             default: return QVariant();
             }
         }
@@ -107,6 +107,10 @@ namespace hal
 
             mEntries.append(newEntry);
         }
+        std::sort(mEntries.begin(), mEntries.end(), [](Entry a, Entry b)
+        {
+            return a.name < b.name;
+        });
         endResetModel();
     }
 }

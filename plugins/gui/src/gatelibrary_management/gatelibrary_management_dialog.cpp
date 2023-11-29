@@ -27,7 +27,7 @@ namespace hal
         mSearchbar = new Searchbar(this);
         mTableModel = new GatelibraryTableModel(this);
         mProxyModel = new GatelibraryProxyModel(this);
-        mTableModel->setup();
+        //mTableModel->setup();
         mTableView = new GatelibraryTableView(this);
         mHLayout = new QHBoxLayout();
         mLoadButton = new QPushButton(" Load", this);
@@ -181,7 +181,7 @@ namespace hal
         if (mTableView->selectionModel()->hasSelection())
         {
             QModelIndex selected = mTableView->selectionModel()->selectedRows().first();
-            mTableModel->reloadIndex(mProxyModel->mapToSource(selected));
+            //mTableModel->reloadIndex(mProxyModel->mapToSource(selected));
         }
     }
 
@@ -190,7 +190,7 @@ namespace hal
         if (mTableView->selectionModel()->hasSelection())
         {
             QModelIndex selected = mTableView->selectionModel()->selectedRows().first();
-            mTableModel->removeIndex(mProxyModel->mapToSource(selected));
+            //mTableModel->removeIndex(mProxyModel->mapToSource(selected));
         }
     }
 
