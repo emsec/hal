@@ -77,4 +77,32 @@ namespace hal
         mSearchOptions = SearchOptions(options);
         invalidateFilter();
     }
+    bool ModuleProxyModel::checkRowRecursion(int sourceRow, const QModelIndex& sourceParent, int startIndex, int endIndex, int offset) const
+    {
+        QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
+        if(!sourceIndex.isValid())
+            return true;
+        auto item = static_cast<ModuleItem*>(sourceIndex.internalPointer());
+        QModelIndex currentIndex = sourceModel()->index(sourceRow, 0, sourceParent);
+
+        if(mFilterGates && item->getType() == ModuleItem::TreeItemType::Gate)
+        {
+            return false;
+        }
+        if(mFilterNets && item->getType() == ModuleItem::TreeItemType::Net)
+        {
+            return false;
+        }
+
+        if (checkRow(sourceRow, sourceParent, startIndex, endIndex, offset))
+            return true;
+
+        int nrows = sourceModel()->rowCount(currentIndex);
+        for (int irow = 0; irow < nrows; irow++)
+        {
+            if (checkRowRecursion(irow, currentIndex, startIndex, endIndex, offset))
+                return true;
+        }
+        return false;
+    }
 }

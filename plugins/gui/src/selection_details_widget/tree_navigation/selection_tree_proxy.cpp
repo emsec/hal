@@ -14,7 +14,7 @@ namespace hal
 
     bool SelectionTreeProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
     {
-        return checkRow(source_row, source_parent, 0, 2);
+        return checkRowRecursion(source_row, source_parent, 0, 2);
     }
 
     bool SelectionTreeProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const

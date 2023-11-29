@@ -76,7 +76,7 @@ namespace hal
         /**
          * Convenience method for tree model
          */
-        bool checkRowRecursion(int sourceRow, const QModelIndex& sourceParent, int startIndex, int endIndex, int offset = 0) const;
+        virtual bool checkRowRecursion(int sourceRow, const QModelIndex& sourceParent, int startIndex, int endIndex, int offset = 0) const;
         SearchOptions mSearchOptions;
         QString mSearchString;
     };
