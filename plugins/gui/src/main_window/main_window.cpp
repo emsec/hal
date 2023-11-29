@@ -814,7 +814,7 @@ namespace hal
          * TODO
          *      check if netlist is already loaded
          *          if yes then skip file dialog and fetchGateLibrary GateLibraryManager in read-only mode
-         *          else open file-dialog and search for suitable files and then fetchGateLibrary GateLibraryManager
+         *          else open file-dialog and search for suitable files and then open GateLibraryManager
          */
 
         if(mGateLibraryManager->initialize())
