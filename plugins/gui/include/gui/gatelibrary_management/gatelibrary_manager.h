@@ -62,6 +62,8 @@ namespace hal
         QTableView* mTableView;
         GatelibraryTableModel* mTableModel;
 
-        GateLibrary* mGateLibrary;
+        const GateLibrary* mGateLibrary;
+
+        bool mReadOnly = false;
     };
 }

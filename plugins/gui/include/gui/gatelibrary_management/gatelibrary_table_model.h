@@ -26,12 +26,11 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
 
 #include <QAbstractTableModel>
 #include <QList>
-
 #include <filesystem>
-
 
 namespace hal
 {
@@ -108,7 +107,7 @@ public:
      *
      * @param path - The file path
      */
-    void loadFile(const QString& path);
+    void loadFile(const GateLibrary* g);
 
 
 private:

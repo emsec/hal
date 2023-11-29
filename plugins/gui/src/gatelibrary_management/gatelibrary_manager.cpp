@@ -6,6 +6,8 @@
 #include "gui/welcome_screen/open_file_widget.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/plugin_system/fac_extension_interface.h"
+#include "gui/gui_globals.h"
+
 
 #include <QDebug>
 #include <QDir>
@@ -41,36 +43,41 @@ namespace hal
     }
     bool GateLibraryManager::initialize(GateLibrary* gateLibrary)
     {
+
         if(!gateLibrary)
         {
-            //TODO Check if a gate library is already in use
-            // if yes then open it in read-only mode
-            // else open file dialog and select one to parse
-
-            QString title = "Load gate library";
-            QString text  = "HAL Gate Library (*.hgl *.lib)";
-            QString path  = QDir::currentPath();
-
-
-
-            //TODO fileDialog throws bad window error
-            QString fileName = QFileDialog::getOpenFileName(nullptr, title, path, text, nullptr);
-            if(fileName == nullptr)
-                return false;
-
-            if (gPluginRelay->mGuiPluginTable)
-                gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser);
-            qInfo() << "selected file: " << fileName;
-
-            auto gateLibrary = gate_library_manager::load(std::filesystem::path(fileName.toStdString()));
-
-            for (auto elem : gateLibrary->get_gate_types())
+            if(gNetlist && gNetlist->get_gate_library())
             {
-                qInfo() << QString::fromStdString(elem.second->get_name());
+                mGateLibrary = gNetlist->get_gate_library();
+                mReadOnly = true;
             }
+            else
+            {
+                QString title = "Load gate library";
+                QString text  = "HAL Gate Library (*.hgl *.lib)";
+                QString path  = QDir::currentPath();
 
-            mGateLibrary = gateLibrary;
-            mTableModel->loadFile(fileName);
+
+
+                //TODO fileDialog throws bad window error
+                QString fileName = QFileDialog::getOpenFileName(nullptr, title, path, text, nullptr);
+                if (fileName == nullptr)
+                    return false;
+
+                if (gPluginRelay->mGuiPluginTable)
+                    gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser);
+                qInfo() << "selected file: " << fileName;
+
+                auto gateLibrary = gate_library_manager::load(std::filesystem::path(fileName.toStdString()));
+
+                for (auto elem : gateLibrary->get_gate_types())
+                {
+                    qInfo() << QString::fromStdString(elem.second->get_name());
+                }
+
+                mGateLibrary = gateLibrary;
+            }
+            mTableModel->loadFile(mGateLibrary);
 
         }
         return true;
