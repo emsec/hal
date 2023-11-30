@@ -67,6 +67,7 @@ namespace hal
         QWidget* createPinWidget();
         QWidget* createFlipFlopWidget();
         QWidget* createBooleanFunctionWidget();
+
         QTabWidget* mTabWidget;
         QGridLayout* mLayout;
         QPushButton* mEditBtn;
