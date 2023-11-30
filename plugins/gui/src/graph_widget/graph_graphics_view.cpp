@@ -15,6 +15,7 @@
 #include "gui/content_manager/content_manager.h"
 #include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
+#include "gui/graph_widget/graph_context_manager.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/grouping_dialog/grouping_dialog.h"
@@ -38,6 +39,7 @@
 #include "gui/module_dialog/module_dialog.h"
 #include "gui/module_dialog/gate_dialog.h"
 #include "gui/comment_system/widgets/comment_dialog.h"
+#include "gui/settings/settings_items/settings_item_checkbox.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -381,8 +383,11 @@ namespace hal
         if(dynamic_cast<CommentSpeechBubble*>(itemAt(event->pos())))
             return;
 
-        if ((event->modifiers() == mPanModifier && event->button() == Qt::LeftButton) || event->button() == Qt::MidButton)
+        if ((event->modifiers() == mPanModifier && event->button() == Qt::LeftButton) ||
+                (event->button() == Qt::MidButton && gGraphContextManager->sSettingPanOnMiddleButton->value().toBool()))
+        {
             mMovePosition = event->pos();
+        }
         else if (event->button() == Qt::LeftButton)
         {
             GraphicsItem* item = static_cast<GraphicsItem*>(itemAt(event->pos()));
@@ -432,7 +437,8 @@ namespace hal
             mTargetScenePos    = mapToScene(event->pos());
         }
 
-        if ((event->buttons().testFlag(Qt::LeftButton) && event->modifiers() == mPanModifier) || event->buttons().testFlag(Qt::MidButton))
+        if ((event->buttons().testFlag(Qt::LeftButton) && event->modifiers() == mPanModifier) ||
+                (event->buttons().testFlag(Qt::MidButton) && gGraphContextManager->sSettingPanOnMiddleButton->value().toBool()))
         {
             QScrollBar* hBar  = horizontalScrollBar();
             QScrollBar* vBar  = verticalScrollBar();
