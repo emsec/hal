@@ -457,6 +457,11 @@ namespace hal
         void closeSettings();
 
         /**
+         * Q_SLOT to close the Gatelibrary menu.
+         */
+        void closeGateLibraryManager();
+
+        /**
          * Q_SLOT to open (toggle to the) PluginManager menu.
          */
         void openPluginManager();

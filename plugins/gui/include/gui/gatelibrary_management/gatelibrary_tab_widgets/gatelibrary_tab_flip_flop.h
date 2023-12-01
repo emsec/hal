@@ -34,6 +34,9 @@
 
 namespace hal
 {
+    /**
+     * Widget which shows information about the flip flop properties of a given gate
+     */
     class GateLibraryTabFlipFlop : public QWidget, public GateLibraryTabInterface
     {
         Q_OBJECT

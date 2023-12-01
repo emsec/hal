@@ -342,6 +342,7 @@ namespace hal
         connect(mActionSettings, &Action::triggered, this, &MainWindow::openSettings);
         connect(mActionPlugins, &Action::triggered, this, &MainWindow::openPluginManager);
         connect(mSettings, &MainSettingsWidget::close, this, &MainWindow::closeSettings);
+        connect(mGateLibraryManager, &GateLibraryManager::close, this, &MainWindow::closeGateLibraryManager);
         connect(mActionSave, &Action::triggered, this, &MainWindow::handleSaveTriggered);
         connect(mActionSaveAs, &Action::triggered, this, &MainWindow::handleSaveAsTriggered);
         connect(mActionExportProject, &Action::triggered, this, &MainWindow::handleExportProjectTriggered);
@@ -659,6 +660,15 @@ namespace hal
             mStackedWidget->setCurrentWidget(mWelcomeScreen);
     }
 
+    void MainWindow::closeGateLibraryManager()
+    {
+        bool isFileOpen = FileManager::get_instance()->fileOpen();
+        if(isFileOpen)
+            mStackedWidget->setCurrentWidget(mLayoutArea);
+        else
+            mStackedWidget->setCurrentWidget(mWelcomeScreen);
+    }
+
     void MainWindow::openPluginManager()
     {
         mPluginManager->repolish();
@@ -810,19 +820,9 @@ namespace hal
 
     void MainWindow::handleActionGatelibraryManager()
     {
-        /**
-         * TODO
-         *      check if netlist is already loaded
-         *          if yes then skip file dialog and fetchGateLibrary GateLibraryManager in read-only mode
-         *          else open file-dialog and search for suitable files and then open GateLibraryManager
-         */
 
         if(mGateLibraryManager->initialize())
             mStackedWidget->setCurrentWidget(mGateLibraryManager);
-        /*previous reference code*/
-
-        //GatelibraryManagementDialog dialog;
-        //dialog.exec();
     }
 
     void MainWindow::handleImportProjectTriggered()

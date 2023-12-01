@@ -25,17 +25,17 @@
 
 #pragma once
 
-#include "hal_core/netlist/gate_library/gate_library.h"
-#include "gui/gatelibrary_management/gatelibrary_wizard.h"
-#include "gatelibrary_table_model.h"
 #include "gatelibrary_tab_widgets/gatelibrary_tab_flip_flop.h"
-
+#include "gatelibrary_table_model.h"
+#include "gui/gatelibrary_management/gatelibrary_wizard.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
 
 #include <QFrame>
 #include <QGridLayout>
-#include <QTableView>
 #include <QPushButton>
 #include <QTabWidget>
+#include <QTableView>
+#include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_general.h>
 
 namespace hal
 {
@@ -61,20 +61,43 @@ namespace hal
         bool initialize(GateLibrary* gateLibrary = nullptr);
 
     public Q_SLOTS:
+        /**
+         * Opens the Wizard to edit or add a new gate
+         */
         void handleCallWizard();
+
+        /**
+         * Updates widgets based on the selected item from the TableView
+         * @param index
+         */
         void handleSelectionChanged(const QModelIndex& index);
+
+        /**
+         * Emits close() and closes the widget.
+         */
+        void handleCancelClicked();
+
+    Q_SIGNALS:
+        /**
+         * Q_SIGNAL that is emitted when either the Save or Cancel button is clicked.
+         */
+        void close();
 
 
     private:
 
         QTabWidget* mTabWidget;
         QGridLayout* mLayout;
-        QPushButton* mEditBtn;
-        QPushButton* mAddBtn;
         QTableView* mTableView;
         GatelibraryTableModel* mTableModel;
 
+        QPushButton* mEditBtn;
+        QPushButton* mAddBtn;
+        QPushButton* mCancelBtn;
+
+
         GateLibraryTabFlipFlop* mFlipFlopTab;
+        GateLibraryTabGeneral* mGeneralTab;
 
         const GateLibrary* mGateLibrary;
 

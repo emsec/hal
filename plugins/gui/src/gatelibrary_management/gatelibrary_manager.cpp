@@ -32,7 +32,7 @@ namespace hal
         mTableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
         //pages for the tab widget
-        auto* generalPage = new QWidget(this);
+        mGeneralTab = new GateLibraryTabGeneral(this);
         auto* pinPage = new QWidget(this);
         mFlipFlopTab = new GateLibraryTabFlipFlop(this);
         auto* booleanFunctionPage = new QWidget(this);
@@ -41,11 +41,12 @@ namespace hal
         //buttons
         mEditBtn = new QPushButton("Edit", this);
         mAddBtn = new QPushButton("Add", this);
+        mCancelBtn = new QPushButton("Cancel", this);
 
 
         //adding pages to the tab widget
         mTabWidget = new QTabWidget(this);
-        mTabWidget->addTab(generalPage, "General");
+        mTabWidget->addTab(mGeneralTab, "General");
         mTabWidget->addTab(pinPage, "Pins");
         mTabWidget->addTab(mFlipFlopTab, "Flip Flops");
         mTabWidget->addTab(booleanFunctionPage, "Boolean Functions");
@@ -56,11 +57,13 @@ namespace hal
         mLayout->addWidget(mEditBtn,1,0);
         mLayout->addWidget(mAddBtn,1,1);
         mLayout->addWidget(mTabWidget,0,2);
+        mLayout->addWidget(mCancelBtn, 1, 2);
 
 
         //signal - slots
         connect(mAddBtn, &QPushButton::clicked, this, &GateLibraryManager::handleCallWizard);
         connect(mTableView, &QTableView::clicked, this, &GateLibraryManager::handleSelectionChanged);
+        connect(mCancelBtn, &QPushButton::clicked, this, &GateLibraryManager::handleCancelClicked);
 
         setLayout(mLayout);
         repolish();    // CALL FROM PARENT
@@ -122,6 +125,7 @@ namespace hal
         GateLibraryWizard wiz;
         wiz.exec();
     }
+
     void GateLibraryManager::handleSelectionChanged(const QModelIndex& index)
     {
         GateType* gate;
@@ -131,6 +135,12 @@ namespace hal
 
         //update tabs
         mFlipFlopTab->update(gate);
+        mGeneralTab->update(gate);
+    }
+
+    void GateLibraryManager::handleCancelClicked()
+    {
+        Q_EMIT close();
     }
 
 }
