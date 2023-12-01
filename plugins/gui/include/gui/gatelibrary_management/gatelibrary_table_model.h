@@ -45,12 +45,7 @@ class GatelibraryTableModel : public QAbstractTableModel
 {
     Q_OBJECT
 
-private:
-    struct Entry
-    {
-        QString name;
-        u32 id;
-    };
+
 
 public:
     /**
@@ -109,9 +104,15 @@ public:
      */
     void loadFile(const GateLibrary* g);
 
+    /**
+     *
+     * @param index
+     * @return - The GateType at the given index
+     */
+    GateType* getGateTypeAtIndex(int index);
 
 private:
-    QList<Entry> mEntries;
+    QList<GateType*> mEntries;
 };
 
 }

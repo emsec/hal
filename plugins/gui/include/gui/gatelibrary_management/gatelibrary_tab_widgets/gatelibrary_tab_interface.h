@@ -25,59 +25,20 @@
 
 #pragma once
 
+#include "hal_core/defines.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
-#include "gui/gatelibrary_management/gatelibrary_wizard.h"
-#include "gatelibrary_table_model.h"
-#include "gatelibrary_tab_widgets/gatelibrary_tab_flip_flop.h"
 
-
-#include <QFrame>
-#include <QGridLayout>
-#include <QTableView>
-#include <QPushButton>
-#include <QTabWidget>
 
 namespace hal
 {
 
 
-    class GateLibraryManager : public QFrame
+    class GateLibraryTabInterface
     {
-        Q_OBJECT
 
     public:
-        /**
-         * Constructor.
-         *
-         * @param parent - the parent widget
-         */
-        explicit GateLibraryManager(QWidget* parent = nullptr);
 
-        /**
-         * Reinitializes the appearance of the widget and its children.
-         */
-        void repolish();
-
-        bool initialize(GateLibrary* gateLibrary = nullptr);
-
-    public Q_SLOTS:
-        void handleCallWizard();
-        void handleSelectionChanged(const QModelIndex& index);
-
-
-    private:
-
-        QTabWidget* mTabWidget;
-        QGridLayout* mLayout;
-        QPushButton* mEditBtn;
-        QPushButton* mAddBtn;
-        QTableView* mTableView;
-        GatelibraryTableModel* mTableModel;
-
-        GateLibraryTabFlipFlop* mFlipFlopTab;
-
-        const GateLibrary* mGateLibrary;
-
-        bool mReadOnly = false;
+        virtual void update(GateType* gate) = 0;
     };
+
 }

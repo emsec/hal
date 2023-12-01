@@ -1,9 +1,8 @@
 #include "gui/gatelibrary_management/gatelibrary_manager.h"
 
-#include "gui/frames/labeled_frame.h"
 #include "gui/graphics_effects/shadow_effect.h"
 #include "gui/plugin_relay/gui_plugin_manager.h"
-#include "gui/welcome_screen/open_file_widget.h"
+#include <gui/gui_globals.h>
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/plugin_system/fac_extension_interface.h"
 
@@ -12,14 +11,14 @@
 #include <QFileDialog>
 #include <QHeaderView>
 #include <QPushButton>
+#include <QLabel>
 
-#include <gui/gui_globals.h>
 
 #include <QTableWidget>
 namespace hal
 {
     GateLibraryManager::GateLibraryManager(QWidget* parent)
-        : QFrame(parent), mLayout(new QGridLayout())
+        : QFrame(parent), mLayout(new QGridLayout()), mGateLibrary(nullptr)
     {
         //TODO create layout and widgets
         mLayout->setSpacing(20);
@@ -29,11 +28,14 @@ namespace hal
         mTableView->setModel(mTableModel);
         mTableView->verticalHeader()->setVisible(false);
 
+        mTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+        mTableView->setSelectionMode(QAbstractItemView::SingleSelection);
+
         //pages for the tab widget
-        auto* generalPage = createGeneralWidget();
-        auto* pinPage = createPinWidget();
-        auto* flipFlopPage = createFlipFlopWidget();
-        auto* booleanFunctionPage = createBooleanFunctionWidget();
+        auto* generalPage = new QWidget(this);
+        auto* pinPage = new QWidget(this);
+        mFlipFlopTab = new GateLibraryTabFlipFlop(this);
+        auto* booleanFunctionPage = new QWidget(this);
 
 
         //buttons
@@ -45,7 +47,7 @@ namespace hal
         mTabWidget = new QTabWidget(this);
         mTabWidget->addTab(generalPage, "General");
         mTabWidget->addTab(pinPage, "Pins");
-        mTabWidget->addTab(flipFlopPage, "Flip Flops");
+        mTabWidget->addTab(mFlipFlopTab, "Flip Flops");
         mTabWidget->addTab(booleanFunctionPage, "Boolean Functions");
 
 
@@ -58,6 +60,7 @@ namespace hal
 
         //signal - slots
         connect(mAddBtn, &QPushButton::clicked, this, &GateLibraryManager::handleCallWizard);
+        connect(mTableView, &QTableView::clicked, this, &GateLibraryManager::handleSelectionChanged);
 
         setLayout(mLayout);
         repolish();    // CALL FROM PARENT
@@ -96,7 +99,7 @@ namespace hal
 
                 auto gateLibrary = gate_library_manager::load(std::filesystem::path(fileName.toStdString()));
 
-                for (auto elem : gateLibrary->get_gate_types())
+                for (auto const elem : gateLibrary->get_gate_types())
                 {
                     qInfo() << QString::fromStdString(elem.second->get_name());
                 }
@@ -119,37 +122,15 @@ namespace hal
         GateLibraryWizard wiz;
         wiz.exec();
     }
-
-    QWidget* GateLibraryManager::createGeneralWidget()
+    void GateLibraryManager::handleSelectionChanged(const QModelIndex& index)
     {
-        QWidget* widget = new QWidget(this);
+        GateType* gate;
+        //get selected gate
+        gate = mTableModel->getGateTypeAtIndex(index.row());
+        qInfo() << "selected " << QString::fromStdString(gate->get_name());
 
-
-        return widget;
+        //update tabs
+        mFlipFlopTab->update(gate);
     }
 
-    QWidget* GateLibraryManager::createPinWidget()
-    {
-        QWidget* widget = new QWidget(this);
-
-
-        return widget;
-    }
-
-    QWidget* GateLibraryManager::createFlipFlopWidget()
-    {
-        QWidget* widget = new QWidget(this);
-
-
-        return widget;
-    }
-
-    QWidget* GateLibraryManager::createBooleanFunctionWidget()
-    {
-        QWidget* widget = new QWidget(this);
-
-
-
-        return widget;
-    }
 }

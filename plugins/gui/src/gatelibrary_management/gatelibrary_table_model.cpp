@@ -37,8 +37,8 @@ namespace hal
             {
                 switch (index.column())
                 {
-                case 0: return mEntries[index.row()].name;
-                case 1: return mEntries[index.row()].id;
+                    case 0: return QString::fromStdString(mEntries[index.row()]->get_name());
+                    case 1: return mEntries[index.row()]->get_id();
 
                 }
             }
@@ -91,20 +91,25 @@ namespace hal
         if (!g)
             return;
         beginResetModel();
-        mEntries = {};
+
         for (auto elem : g->get_gate_types())
         {
-            Entry newEntry;
-
-            newEntry.name = QString::fromStdString(elem.second->get_name());
-            newEntry.id = elem.second->get_id();
-
-            mEntries.append(newEntry);
+            mEntries.append(elem.second);
         }
-        std::sort(mEntries.begin(), mEntries.end(), [](Entry a, Entry b)
+
+        std::sort(mEntries.begin(), mEntries.end(), [](GateType* a, GateType* b)
         {
-            return a.name < b.name;
+            return a->get_name() < b->get_name();
         });
+
         endResetModel();
+    }
+
+    GateType* GatelibraryTableModel::getGateTypeAtIndex(int index)
+    {
+        if(index >= mEntries.size())
+            return nullptr;
+
+        return mEntries[index];
     }
 }
