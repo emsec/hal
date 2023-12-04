@@ -41,15 +41,14 @@ namespace hal
         hide();
 
         setAcceptedMouseButtons(0);
-        mWidth = 100;
-        mHeight = 100;
+        mNodeShapes.append(QRectF(0,0,100,100));
     }
 
     void NodeDragShadow::start(const QPointF& posF, const QSizeF& sizeF)
     {
         setPos(posF);
-        setWidth(sizeF.width());
-        setHeight(sizeF.height());
+        mNodeShapes.clear();
+        mNodeShapes.append(QRectF(QPointF(0,0),sizeF));
         setZValue(1);
         show();
     }
@@ -59,6 +58,7 @@ namespace hal
         hide();
     }
 
+    /*
     qreal NodeDragShadow::width() const
     {
         return mWidth;
@@ -83,6 +83,7 @@ namespace hal
     {
         mHeight = height;
     }
+*/
 
     void NodeDragShadow::setLod(const qreal lod)
     {
@@ -106,27 +107,40 @@ namespace hal
         sPen.setColor(sColorPen[color_index]);
         painter->setPen(sPen);
 
-        if (sLod < 0.5)
+        for (const QRectF& rect : mNodeShapes)
         {
-            painter->fillRect(QRectF(0, 0, mWidth, mHeight), sColorSolid[color_index]);
-        }
-        else
-        {
-            QRectF rect = QRectF(0, 0, mWidth, mHeight);
-            painter->drawRect(rect);
-            painter->fillRect(rect, sColorTranslucent[color_index]);
+            if (sLod < 0.5)
+            {
+
+                painter->fillRect(rect, sColorSolid[color_index]);
+            }
+            else
+            {
+                painter->drawRect(rect);
+                painter->fillRect(rect, sColorTranslucent[color_index]);
+            }
         }
     }
 
     QRectF NodeDragShadow::boundingRect() const
     {
-        return QRectF(0, 0, mWidth, mHeight);
+        QRectF retval;
+        if (mNodeShapes.isEmpty()) return retval;
+        for (const QRectF& rect : mNodeShapes)
+        {
+            if (retval.isNull())
+                retval = rect;
+            else
+                retval = retval.united(rect);
+        }
+        return retval;
     }
 
     QPainterPath NodeDragShadow::shape() const
     {
         QPainterPath path;
-        path.addRect(QRectF(0, 0, mWidth, mHeight));
+        for (const QRectF& rect : mNodeShapes)
+            path.addRect(rect);
         return path;
     }
 }
