@@ -176,7 +176,7 @@ namespace hal
         GraphTabWidget* mTabView;
 
         QTableView* mContextTableView;
-        ContextTableModel* mContextTableModel;
+        ContextTreeModel* mContextTableModel;
         ContextTableProxyModel* mContextTableProxyModel;
 
         Searchbar* mSearchbar;

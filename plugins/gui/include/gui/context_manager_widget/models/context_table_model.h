@@ -33,11 +33,24 @@
 
 namespace hal
 {
+
+    class ContextDirectory
+    {
+        private:
+            u32 mId;
+            QString mName;
+
+        public:
+            ContextDirectory(u32 id, QString name):mId(id), mName(name){}
+
+    };
+
     class ContextTreeItem : public BaseTreeItem
     {
 
         private:
             GraphContext* mContext;
+            ContextDirectory* mDirectory;
         public:
 
             ContextTreeItem(GraphContext* context);
@@ -47,6 +60,7 @@ namespace hal
             void appendData(QVariant data) override;
             int getColumnCount() const override;
             int row() const;
+            bool isDirectory() const;
     };
 
     /**
@@ -58,7 +72,7 @@ namespace hal
      * the ContextManagerWidget to store and display the data. For specific information on how to
      * implement a table model, refer to qt's QAbstractTableModel class and its examples.
      */
-    class ContextTableModel : public BaseTreeModel
+    class ContextTreeModel : public BaseTreeModel
     {
         Q_OBJECT
 
@@ -68,12 +82,12 @@ namespace hal
          *
          * @param parent - The widget's parent.
          */
-        ContextTableModel(QObject* parent = nullptr);
+        ContextTreeModel(QObject* parent = nullptr);
 
         /** @name Overwritten model functions
          */
         ///@{
-        int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+        //int rowCount(const QModelIndex& parent = QModelIndex()) const override;
         QVariant data(const QModelIndex& inddex, int role = Qt::DisplayRole) const override;
         ///@}
 
@@ -83,7 +97,7 @@ namespace hal
          * @param context - The context to add.
          * @param parent - The Parent of the context.
          */
-        void addContext(GraphContext* context, BaseTreeItem* parent);
+        void addContext(GraphContext* context, BaseTreeItem* parent = nullptr);
 
         /**
          * Removes a given GraphContext from the model.
@@ -114,7 +128,7 @@ namespace hal
          * @param item - The ContextTreeitem to search for in the item model
          * @returns the model index of the specified ContextTreeitem
          */
-        QModelIndex getIndex(const BaseTreeItem * const item) const;
+        //QModelIndex getIndex(const BaseTreeItem * const item) const;
 
         /**
          * Resets the model (removes all GraphContext%s).
@@ -131,6 +145,7 @@ namespace hal
         void handleDataChanged();
 
     private:
+        ContextTreeItem *mCurrentDirectory;
         std::map<GraphContext *, ContextTreeItem *> mContextMap;
     };
 }    // namespace hal

@@ -30,7 +30,7 @@ namespace hal
                                                                                                     "Appearance:Graph View",
                                                                                                     "If set net grouping colors are also applied to input and output pins of gates");
 
-    GraphContextManager::GraphContextManager() : mContextTableModel(new ContextTableModel()), mMaxContextId(0)
+    GraphContextManager::GraphContextManager() : mContextTableModel(new ContextTreeModel()), mMaxContextId(0)
     {
         mSettingDebugGrid = new SettingsItemCheckbox("GUI Debug Grid",
                                                      "debug/grid",
@@ -528,7 +528,7 @@ namespace hal
         return new ModuleShader(context);
     }
 
-    ContextTableModel* GraphContextManager::getContextTableModel() const
+    ContextTreeModel* GraphContextManager::getContextTableModel() const
     {
         return mContextTableModel;
     }
@@ -599,9 +599,7 @@ namespace hal
                         continue;
                     }
 
-                    mContextTableModel->beginInsertContext(context);
                     mContextTableModel->addContext(context);
-                    mContextTableModel->endInsertContext();
                     if (visibleFlag)
                         Q_EMIT contextCreated(context);
                 }

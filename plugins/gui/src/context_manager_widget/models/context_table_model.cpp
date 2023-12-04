@@ -55,20 +55,25 @@ namespace hal
         return parent->getRowForChild(this);
     }
 
-    ContextTableModel::ContextTableModel(QObject* parent) : BaseTreeModel(parent)
+    bool ContextTreeItem::isDirectory() const
+    {
+        return mDirectory != nullptr;
+    }
+
+    ContextTreeModel::ContextTreeModel(QObject* parent) : BaseTreeModel(parent), mCurrentDirectory(nullptr)
     {
         setHeaderLabels(QStringList() << "View Name" << "Timestamp");
     }
 
-    int ContextTableModel::rowCount(const QModelIndex& parent) const
+    /*int ContextTreeModel::rowCount(const QModelIndex& parent) const
     {
         Q_UNUSED(parent)
 
         return mContextMap.size();
-    }
+    }*/
 
 
-    QVariant ContextTableModel::data(const QModelIndex& index, int role) const
+    QVariant ContextTreeModel::data(const QModelIndex& index, int role) const
     {
         if (!index.isValid())
             return QVariant();
@@ -91,7 +96,7 @@ namespace hal
         return QVariant();
     }
 
-    void ContextTableModel::clear()
+    void ContextTreeModel::clear()
     {
         beginResetModel();
 
@@ -101,13 +106,19 @@ namespace hal
         endResetModel();
     }
 
-    void ContextTableModel::addContext(GraphContext* context, BaseTreeItem* parent)
+    void ContextTreeModel::addContext(GraphContext* context, BaseTreeItem* parent)
     {
         ContextTreeItem* item   = new ContextTreeItem(context);
 
-        item->setParent(parent);
+        if (parent)
+            item->setParent(parent);
+        else if(mCurrentDirectory)
+            item->setParent(mCurrentDirectory);
+        else
+            item->setParent(mRootItem);
 
-        QModelIndex index = getIndex(parent);
+
+        QModelIndex index = getIndexFromItem(parent);
 
         int row = parent->getChildCount();
         beginInsertRows(index, row, row);
@@ -118,18 +129,18 @@ namespace hal
 
         //connect(context,&GraphContext::dataChanged,this,&ContextTableModel::handleDataChanged);
         connect(context, &GraphContext::dataChanged, this, [item, this]() {
-            Q_EMIT dataChanged(getIndex(item), getIndex(item));
+            Q_EMIT dataChanged(getIndexFromItem(item), getIndexFromItem(item));
         });
     }
 
-    void ContextTableModel::removeContext(GraphContext *context)
+    void ContextTreeModel::removeContext(GraphContext *context)
     {
         ContextTreeItem* item   = mContextMap.find(context)->second;
         ContextTreeItem* parent = static_cast<ContextTreeItem*>(item->getParent());
         assert(item);
         assert(parent);
 
-        QModelIndex index = getIndex(parent);
+        QModelIndex index = getIndexFromItem(parent);
 
         int row = item->row();
 
@@ -165,7 +176,7 @@ namespace hal
         return (mContextList)[index.row()];
     }*/
 
-    QModelIndex ContextTableModel::getIndex(const BaseTreeItem* const item) const
+   /* QModelIndex ContextTableModel::getIndex(const BaseTreeItem* const item) const
     {
         assert(item);
 
@@ -184,9 +195,9 @@ namespace hal
             model_index = index(*i, 0, model_index);
 
         return model_index;
-    }
+    }*/
 
-    const QVector<GraphContext *> &ContextTableModel::list() const
+    const QVector<GraphContext *> &ContextTreeModel::list() const
     {
         QVector<GraphContext *> key;
         for (auto it = mContextMap.begin(); it != mContextMap.end(); ++it) {

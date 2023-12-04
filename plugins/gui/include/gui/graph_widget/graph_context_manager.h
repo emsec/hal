@@ -42,7 +42,7 @@ namespace hal
     class GraphShader;
     class GraphContext;
 
-    class ContextTableModel;
+    class ContextTreeModel;
     class SettingsItemCheckbox;
 
     /**
@@ -342,7 +342,7 @@ namespace hal
          *
          * @returns the context table model
          */
-        ContextTableModel* getContextTableModel() const;
+        ContextTreeModel* getContextTableModel() const;
 
         /**
          * Deletes all contexts.
@@ -390,7 +390,7 @@ namespace hal
     private:
         //        QVector<GraphContext*> mGraphContexts;
 
-        ContextTableModel* mContextTableModel;
+        ContextTreeModel* mContextTableModel;
         u32 mMaxContextId;
         void dump(const QString& title, u32 mid, u32 xid) const;
         SettingsItemCheckbox* mSettingDebugGrid;

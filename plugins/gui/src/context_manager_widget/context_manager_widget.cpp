@@ -107,8 +107,8 @@ namespace hal
         connect(mContextTableView, &QTableView::customContextMenuRequested, this, &ContextManagerWidget::handleContextMenuRequest);
         connect(mContextTableView, &QTableView::doubleClicked, this, &ContextManagerWidget::handleOpenContextClicked);
         connect(mContextTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ContextManagerWidget::handleSelectionChanged);
-        connect(mContextTableModel, &ContextTableModel::rowsRemoved, this, &ContextManagerWidget::handleDataChanged);
-        connect(mContextTableModel, &ContextTableModel::rowsInserted, this, &ContextManagerWidget::handleDataChanged);
+        connect(mContextTableModel, &ContextTreeModel::rowsRemoved, this, &ContextManagerWidget::handleDataChanged);
+        connect(mContextTableModel, &ContextTreeModel::rowsInserted, this, &ContextManagerWidget::handleDataChanged);
 
         connect(mSearchbar, &Searchbar::triggerNewSearch, this, &ContextManagerWidget::updateSearchIcon);
         connect(mSearchbar, &Searchbar::triggerNewSearch, mContextTableProxyModel, &ContextTableProxyModel::startSearch);
