@@ -478,8 +478,7 @@ namespace hal
         switch(mi->getType()){
             case ModuleItem::TreeItemType::Module: openModuleInView(index); break;
             case ModuleItem::TreeItemType::Gate: openGateInView(index); break;
-            case ModuleItem::TreeItemType::Net: //openNetEndpointsInView(index); 
-                break;
+            case ModuleItem::TreeItemType::Net: openNetEndpointsInView(index); break;
         }
     }
 
@@ -501,6 +500,25 @@ namespace hal
         act->setUseCreatedObject();
         act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
         act->addAction(new ActionAddItemsToObject(moduleId, gateId));
+        act->exec();
+    }
+
+    void ModuleWidget::openNetEndpointsInView(const QModelIndex &index){
+        QSet<u32> gates;
+
+        Net* net = gNetlist->get_net_by_id(getModuleItemFromIndex(index)->id());
+        for(auto endpoint : net->get_sources()) 
+            gates.insert(endpoint->get_gate()->get_id());
+        for(auto endpoint : net->get_destinations()) 
+            gates.insert(endpoint->get_gate()->get_id());
+
+        QString name = gGraphContextManager->nextViewName("Isolated View");
+        
+        UserActionCompound* act = new UserActionCompound;
+        act->setUseCreatedObject();
+        act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+        act->addAction(new ActionAddItemsToObject({}, gates));
+        //Add placement hints
         act->exec();
     }
 
