@@ -504,21 +504,32 @@ namespace hal
     }
 
     void ModuleWidget::openNetEndpointsInView(const QModelIndex &index){
-        QSet<u32> gates;
+        QSet<u32> allGates;
 
         Net* net = gNetlist->get_net_by_id(getModuleItemFromIndex(index)->id());
-        for(auto endpoint : net->get_sources()) 
-            gates.insert(endpoint->get_gate()->get_id());
-        for(auto endpoint : net->get_destinations()) 
-            gates.insert(endpoint->get_gate()->get_id());
+
+        PlacementHint plc(PlacementHint::PlacementModeType::GridPosition);
+        int currentY = -(int)(net->get_num_of_sources()/2);
+        for(auto endpoint : net->get_sources()) {
+            u32 id = endpoint->get_gate()->get_id();
+            allGates.insert(id);
+            plc.addGridPosition(Node(id, Node::NodeType::Gate), {0, currentY++});
+        }
+        currentY = -(int)(net->get_num_of_destinations()/2);
+        for(auto endpoint : net->get_destinations()) {
+            u32 id = endpoint->get_gate()->get_id();
+            allGates.insert(id);
+            plc.addGridPosition(Node(id, Node::NodeType::Gate), {1, currentY++});
+        }
 
         QString name = gGraphContextManager->nextViewName("Isolated View");
-        
+
         UserActionCompound* act = new UserActionCompound;
         act->setUseCreatedObject();
         act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
-        act->addAction(new ActionAddItemsToObject({}, gates));
-        //Add placement hints
+        auto actionAITO = new ActionAddItemsToObject({}, allGates);
+        actionAITO->setPlacementHint(plc);
+        act->addAction(actionAITO);
         act->exec();
     }
 
