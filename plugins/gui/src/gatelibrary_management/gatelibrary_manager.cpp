@@ -2,7 +2,6 @@
 
 #include "gui/graphics_effects/shadow_effect.h"
 #include "gui/plugin_relay/gui_plugin_manager.h"
-#include <gui/gui_globals.h>
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/plugin_system/fac_extension_interface.h"
 
@@ -10,11 +9,10 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QHeaderView>
-#include <QPushButton>
 #include <QLabel>
-
-
+#include <QPushButton>
 #include <QTableWidget>
+#include <gui/gui_globals.h>
 namespace hal
 {
     GateLibraryManager::GateLibraryManager(QWidget* parent)
@@ -35,7 +33,7 @@ namespace hal
         mGeneralTab = new GateLibraryTabGeneral(this);
         auto* pinPage = new QWidget(this);
         mFlipFlopTab = new GateLibraryTabFlipFlop(this);
-        auto* booleanFunctionPage = new QWidget(this);
+        mBooleanFunctionTab = new GateLibraryTabBooleanFunction(this);
 
 
         //buttons
@@ -49,7 +47,7 @@ namespace hal
         mTabWidget->addTab(mGeneralTab, "General");
         mTabWidget->addTab(pinPage, "Pins");
         mTabWidget->addTab(mFlipFlopTab, "Flip Flops");
-        mTabWidget->addTab(booleanFunctionPage, "Boolean Functions");
+        mTabWidget->addTab(mBooleanFunctionTab, "Boolean Functions");
 
 
         // Add widgets to the layout
@@ -136,6 +134,7 @@ namespace hal
         //update tabs
         mFlipFlopTab->update(gate);
         mGeneralTab->update(gate);
+        mBooleanFunctionTab->update(gate);
     }
 
     void GateLibraryManager::handleCancelClicked()

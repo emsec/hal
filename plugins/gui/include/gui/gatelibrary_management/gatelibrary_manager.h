@@ -35,6 +35,7 @@
 #include <QPushButton>
 #include <QTabWidget>
 #include <QTableView>
+#include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_boolean_function.h>
 #include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_general.h>
 
 namespace hal
@@ -98,6 +99,7 @@ namespace hal
 
         GateLibraryTabFlipFlop* mFlipFlopTab;
         GateLibraryTabGeneral* mGeneralTab;
+        GateLibraryTabBooleanFunction* mBooleanFunctionTab;
 
         const GateLibrary* mGateLibrary;
 
