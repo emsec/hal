@@ -474,7 +474,13 @@ namespace hal
 
     void ModuleWidget::handleItemDoubleClicked(const QModelIndex& index)
     {
-        openModuleInView(index);
+        ModuleItem* mi = getModuleItemFromIndex(index);
+        switch(mi->getType()){
+            case ModuleItem::TreeItemType::Module: openModuleInView(index); break;
+            case ModuleItem::TreeItemType::Gate: openGateInView(index); break;
+            case ModuleItem::TreeItemType::Net: //openNetEndpointsInView(index); 
+                break;
+        }
     }
 
     void ModuleWidget::openModuleInView(const QModelIndex& index)

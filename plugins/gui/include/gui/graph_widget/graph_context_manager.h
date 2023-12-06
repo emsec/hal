@@ -116,7 +116,7 @@ namespace hal
         bool contextWithNameExists(const QString& name) const;
 
         /**
-         * Generate next view with given prefix
+         * Generate next view name with given prefix
          * @param prefix
          * @return the view name which does not exist so far
          */
