@@ -54,6 +54,7 @@ namespace hal
         public:
 
             ContextTreeItem(GraphContext* context);
+            ContextTreeItem(ContextDirectory* directory);
             QVariant getData(int column) const override;
             void setData(QList<QVariant> data) override;
             void setDataAtIndex(int index, QVariant& data) override;
@@ -61,6 +62,7 @@ namespace hal
             int getColumnCount() const override;
             int row() const;
             bool isDirectory() const;
+            bool isContext() const;
     };
 
     /**
@@ -92,6 +94,14 @@ namespace hal
         ///@}
 
         /**
+         * Adds a directory to the model.
+         *
+         * @param name - The name to the directory.
+         * @param parent - The Parent of the directory.
+         */
+        void addDirectory(QString name, BaseTreeItem* parent = nullptr);
+
+        /**
          * Adds a given GraphContext to the model.
          *
          * @param context - The context to add.
@@ -120,15 +130,7 @@ namespace hal
          * @param context - The context to convert.
          * @return The resulting index.
          */
-        QModelIndex getIndex(GraphContext* context) const;
-
-        /**
-         * Returns the index where the specified ContextTreeitem can be found.
-         *
-         * @param item - The ContextTreeitem to search for in the item model
-         * @returns the model index of the specified ContextTreeitem
-         */
-        //QModelIndex getIndex(const BaseTreeItem * const item) const;
+        QModelIndex getIndexFromContext(GraphContext* context) const;
 
         /**
          * Resets the model (removes all GraphContext%s).
@@ -140,12 +142,14 @@ namespace hal
          *
          * @return A vector of all GraphContext%s.
          */
-        const QVector<GraphContext*>& list() const;
+        const QVector<GraphContext*>& list();
     private Q_SLOTS:
         void handleDataChanged();
 
     private:
         ContextTreeItem *mCurrentDirectory;
         std::map<GraphContext *, ContextTreeItem *> mContextMap;
+        QVector<GraphContext*> mContextList;
+        u32 mMinDirectoryId;
     };
 }    // namespace hal

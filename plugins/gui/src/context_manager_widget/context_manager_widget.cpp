@@ -76,37 +76,37 @@ namespace hal
         mContextTableProxyModel->setSourceModel(mContextTableModel);
         mContextTableProxyModel->setSortRole(Qt::UserRole);
 
-        mContextTableView = new QTableView(this);
-        mContextTableView->setModel(mContextTableProxyModel);
-        mContextTableView->setSortingEnabled(true);
-        mContextTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-        mContextTableView->setSelectionMode(QAbstractItemView::SingleSelection); // ERROR ???
-        mContextTableView->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
-        mContextTableView->sortByColumn(1, Qt::SortOrder::DescendingOrder);
-        mContextTableView->verticalHeader()->hide();
-        mContextTableView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        mContextTreeView = new QTreeView(this);
+        mContextTreeView->setModel(mContextTableProxyModel);
+        mContextTreeView->setSortingEnabled(true);
+        mContextTreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
+        mContextTreeView->setSelectionMode(QAbstractItemView::SingleSelection); // ERROR ???
+        mContextTreeView->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+        mContextTreeView->sortByColumn(1, Qt::SortOrder::DescendingOrder);
+        //mContextTreeView->verticalHeader()->hide();
+        mContextTreeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-        mContextTableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-        mContextTableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+        //mContextTreeView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+        //mContextTreeView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 
 
-        mContentLayout->addWidget(mContextTableView);
+        mContentLayout->addWidget(mContextTreeView);
         mContentLayout->addWidget(mSearchbar);
 
         mSearchbar->hide();
         mSearchbar->setColumnNames(mContextTableProxyModel->getColumnNames());
         enableSearchbar(mContextTableProxyModel->rowCount() > 0);
 
-        connect(mOpenAction, &QAction::triggered, this, &ContextManagerWidget::handleOpenContextClicked);
+        connect(mOpenAction, &QAction::triggered, this, &ContextManagerWidget::handleOpenContextClicked);        
         connect(mNewViewAction, &QAction::triggered, this, &ContextManagerWidget::handleCreateContextClicked);
         connect(mRenameAction, &QAction::triggered, this, &ContextManagerWidget::handleRenameContextClicked);
         connect(mDuplicateAction, &QAction::triggered, this, &ContextManagerWidget::handleDuplicateContextClicked);
         connect(mDeleteAction, &QAction::triggered, this, &ContextManagerWidget::handleDeleteContextClicked);
         connect(mSearchAction, &QAction::triggered, this, &ContextManagerWidget::toggleSearchbar);
 
-        connect(mContextTableView, &QTableView::customContextMenuRequested, this, &ContextManagerWidget::handleContextMenuRequest);
-        connect(mContextTableView, &QTableView::doubleClicked, this, &ContextManagerWidget::handleOpenContextClicked);
-        connect(mContextTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ContextManagerWidget::handleSelectionChanged);
+        connect(mContextTreeView, &QTableView::customContextMenuRequested, this, &ContextManagerWidget::handleContextMenuRequest);
+        connect(mContextTreeView, &QTableView::doubleClicked, this, &ContextManagerWidget::handleOpenContextClicked);
+        connect(mContextTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ContextManagerWidget::handleSelectionChanged);
         connect(mContextTableModel, &ContextTreeModel::rowsRemoved, this, &ContextManagerWidget::handleDataChanged);
         connect(mContextTableModel, &ContextTreeModel::rowsInserted, this, &ContextManagerWidget::handleDataChanged);
 
@@ -120,6 +120,45 @@ namespace hal
         connect(mShortCutDeleteItem, &QShortcut::activated, this, &ContextManagerWidget::handleDeleteContextClicked);
 
         connect(qApp, &QApplication::focusChanged, this, &ContextManagerWidget::handleDeleteShortcutOnFocusChanged);
+    }
+
+
+    void ContextManagerWidget::handleCreateClicked(const QPoint& point)
+    {
+        QModelIndex index = mContextTreeView->indexAt(point);
+
+        if (!index.isValid())
+            return;
+
+        QMenu context_menu;
+
+        QAction create_context;
+        QAction create_directory;
+
+        create_context.setText("Create new view");
+        create_context.setParent(&context_menu);
+
+        create_directory.setText("Create new directory");
+        create_directory.setParent(&context_menu);
+
+        context_menu.addAction(&create_context);
+        context_menu.addAction(&create_directory);
+
+        QAction* clicked = context_menu.exec(mContextTreeView->viewport()->mapToGlobal(point));
+
+        if (!clicked)
+            return;
+
+        if (clicked == &create_context)
+        {
+
+        }
+
+        if (clicked == &create_directory)
+        {
+
+        }
+
     }
 
     void ContextManagerWidget::handleCreateContextClicked()
@@ -177,7 +216,7 @@ namespace hal
 
     void ContextManagerWidget::handleDeleteContextClicked()
     {
-        QModelIndex current     = mContextTableView->currentIndex();
+        QModelIndex current     = mContextTreeView->currentIndex();
         if (!current.isValid()) return;
         GraphContext* clicked_context = getCurrentContext();
         ActionDeleteObject* act = new ActionDeleteObject;
@@ -197,7 +236,7 @@ namespace hal
 
     void ContextManagerWidget::handleContextMenuRequest(const QPoint& point)
     {
-        const QModelIndex clicked_index = mContextTableView->indexAt(point);
+        const QModelIndex clicked_index = mContextTreeView->indexAt(point);
 
         QMenu context_menu;
 
@@ -211,7 +250,7 @@ namespace hal
             context_menu.addAction(mDeleteAction);
         }
 
-        context_menu.exec(mContextTableView->viewport()->mapToGlobal(point));
+        context_menu.exec(mContextTreeView->viewport()->mapToGlobal(point));
     }
 
     void ContextManagerWidget::handleDataChanged()
@@ -229,18 +268,18 @@ namespace hal
 
     void ContextManagerWidget::selectViewContext(GraphContext* context)
     {
-        const QModelIndex source_model_index = mContextTableModel->getIndex(context);
+        const QModelIndex source_model_index = mContextTableModel->getIndexFromContext(context);
         const QModelIndex proxy_model_index = mContextTableProxyModel->mapFromSource(source_model_index);
 
         if(proxy_model_index.isValid())
-            mContextTableView->setCurrentIndex(proxy_model_index);
+            mContextTreeView->setCurrentIndex(proxy_model_index);
         else
-            mContextTableView->clearSelection();
+            mContextTreeView->clearSelection();
     }
 
     GraphContext* ContextManagerWidget::getCurrentContext()
     {
-        QModelIndex proxy_model_index = mContextTableView->currentIndex();
+        QModelIndex proxy_model_index = mContextTreeView->currentIndex();
         QModelIndex source_model_index = mContextTableProxyModel->mapToSource(proxy_model_index);
 
         return mContextTableModel->getContext(source_model_index);

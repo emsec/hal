@@ -40,6 +40,8 @@
 #include <QTableView>
 #include <QPushButton>
 #include <QMenu>
+#include <QTreeView>
+
 
 
 namespace hal
@@ -84,7 +86,7 @@ namespace hal
         ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent = nullptr);
 
         /**
-         * Selects the given context if possible (if it is indeed in the widget's ContextTableModel).
+         * Selects the given context if possible (if it is indeed in the widget's ContextTreeModel).
          *
          * @param context - The context to select.
          */
@@ -175,7 +177,7 @@ namespace hal
     private:
         GraphTabWidget* mTabView;
 
-        QTableView* mContextTableView;
+        QTreeView* mContextTreeView;
         ContextTreeModel* mContextTableModel;
         ContextTableProxyModel* mContextTableProxyModel;
 
@@ -209,6 +211,7 @@ namespace hal
 
         QShortcut* mShortCutDeleteItem;
 
+        void handleCreateClicked(const QPoint& point);
         void handleCreateContextClicked();
         void handleRenameContextClicked();
         void handleDuplicateContextClicked();

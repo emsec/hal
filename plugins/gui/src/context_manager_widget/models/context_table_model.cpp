@@ -2,12 +2,20 @@
 
 #include "gui/gui_globals.h"
 
+#include <limits>
+
 namespace hal
 {
 
     ContextTreeItem::ContextTreeItem(GraphContext *context) :
         BaseTreeItem(),
         mContext(context)
+    {
+    }
+
+    ContextTreeItem::ContextTreeItem(ContextDirectory *directory) :
+        BaseTreeItem(),
+        mDirectory(directory)
     {
     }
 
@@ -60,7 +68,12 @@ namespace hal
         return mDirectory != nullptr;
     }
 
-    ContextTreeModel::ContextTreeModel(QObject* parent) : BaseTreeModel(parent), mCurrentDirectory(nullptr)
+    bool ContextTreeItem::isContext() const
+    {
+        return mContext != nullptr;
+    }
+
+    ContextTreeModel::ContextTreeModel(QObject* parent) : BaseTreeModel(parent), mCurrentDirectory(nullptr), mMinDirectoryId(std::numeric_limits<u32>::max())
     {
         setHeaderLabels(QStringList() << "View Name" << "Timestamp");
     }
@@ -96,6 +109,34 @@ namespace hal
         return QVariant();
     }
 
+    void ContextTreeModel::addDirectory(QString name, BaseTreeItem *parent)
+    {
+        ContextDirectory* directory = new ContextDirectory(--mMinDirectoryId, name);
+
+        ContextTreeItem* item   = new ContextTreeItem(directory);
+
+        if (parent)
+            item->setParent(parent);
+        else if(mCurrentDirectory)
+            item->setParent(mCurrentDirectory);
+        else
+            item->setParent(mRootItem);
+
+
+        QModelIndex index = getIndexFromItem(item->getParent());
+
+        int row = item->getParent()->getChildCount();
+        beginInsertRows(index, row, row);
+        item->getParent()->appendChild(item);
+        endInsertRows();
+
+
+        //connect(context,&GraphContext::dataChanged,this,&ContextTableModel::handleDataChanged);
+        /*connect(context, &GraphContext::dataChanged, this, [item, this]() {
+            Q_EMIT dataChanged(getIndexFromItem(item), getIndexFromItem(item));
+        });*/
+    }
+
     void ContextTreeModel::clear()
     {
         beginResetModel();
@@ -118,11 +159,11 @@ namespace hal
             item->setParent(mRootItem);
 
 
-        QModelIndex index = getIndexFromItem(parent);
+        QModelIndex index = getIndexFromItem(item->getParent());
 
-        int row = parent->getChildCount();
+        int row = item->getParent()->getChildCount();
         beginInsertRows(index, row, row);
-        parent->appendChild(item);
+        item->getParent()->appendChild(item);
         endInsertRows();
 
         mContextMap.insert({context, item});
@@ -151,8 +192,13 @@ namespace hal
         delete item;
 
         std::map<GraphContext *,ContextTreeItem *>::iterator it;
-        it = mContextMap.find (context);
-        mContextMap.erase (it);
+        it = mContextMap.find(context);
+        mContextMap.erase(it);
+    }
+
+    QModelIndex ContextTreeModel::getIndexFromContext(GraphContext *context) const
+    {
+        return getIndexFromItem(mContextMap.find(context)->second);
     }
 
     /*void ContextTableModel::handleDataChanged()
@@ -169,12 +215,21 @@ namespace hal
                 return;
             }
         }
-    }
-
-    GraphContext* ContextTableModel::getContext(const QModelIndex& index) const
-    {
-        return (mContextList)[index.row()];
     }*/
+
+    GraphContext* ContextTreeModel::getContext(const QModelIndex& index) const
+    {
+        BaseTreeItem* item = getItemFromIndex(index);
+
+        GraphContext* context;
+        for (auto &i : mContextMap) {
+           if (i.second == item) {
+              context = i.first;
+              break;
+           }
+        }
+        return context;
+    }
 
    /* QModelIndex ContextTableModel::getIndex(const BaseTreeItem* const item) const
     {
@@ -197,12 +252,12 @@ namespace hal
         return model_index;
     }*/
 
-    const QVector<GraphContext *> &ContextTreeModel::list() const
+    const QVector<GraphContext *> &ContextTreeModel::list()
     {
-        QVector<GraphContext *> key;
+        mContextList.clear();
         for (auto it = mContextMap.begin(); it != mContextMap.end(); ++it) {
-          key.push_back(it->first);
+          mContextList.push_back(it->first);
         }
-        return key;
+        return mContextList;
     }
 }
