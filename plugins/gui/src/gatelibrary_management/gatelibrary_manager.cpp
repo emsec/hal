@@ -31,7 +31,7 @@ namespace hal
 
         //pages for the tab widget
         mGeneralTab = new GateLibraryTabGeneral(this);
-        auto* pinPage = new QWidget(this);
+        mPinTab = new GateLibraryTabPin(this);
         mFlipFlopTab = new GateLibraryTabFlipFlop(this);
         mBooleanFunctionTab = new GateLibraryTabBooleanFunction(this);
 
@@ -45,7 +45,7 @@ namespace hal
         //adding pages to the tab widget
         mTabWidget = new QTabWidget(this);
         mTabWidget->addTab(mGeneralTab, "General");
-        mTabWidget->addTab(pinPage, "Pins");
+        mTabWidget->addTab(mPinTab, "Pins");
         mTabWidget->addTab(mFlipFlopTab, "Flip Flops");
         mTabWidget->addTab(mBooleanFunctionTab, "Boolean Functions");
 
@@ -135,6 +135,7 @@ namespace hal
         mFlipFlopTab->update(gate);
         mGeneralTab->update(gate);
         mBooleanFunctionTab->update(gate);
+        mPinTab->update(gate);
     }
 
     void GateLibraryManager::handleCancelClicked()
