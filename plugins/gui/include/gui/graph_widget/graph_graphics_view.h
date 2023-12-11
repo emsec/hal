@@ -40,6 +40,7 @@ namespace hal
 {
     class GraphicsItem;
     class GraphWidget;
+    class DragController;
 
     namespace graph_widget_constants
     {
@@ -233,13 +234,7 @@ namespace hal
         bool mGridClustersEnabled;
         GraphicsScene::GridType mGridType;
 
-        QPoint mDragMousedownPosition;
-        QPoint mDragStartGridpos;
-        GraphicsGate* mDragItem;
-        QPoint mDragCurrentGridpos;
-        bool mDragCurrentModifier;
-        bool mDropAllowed;
-
+        DragController* mDragController;
         Qt::KeyboardModifier mDragModifier;
 
         QPoint mMovePosition;

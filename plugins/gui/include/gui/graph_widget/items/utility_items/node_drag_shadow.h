@@ -62,6 +62,7 @@ namespace hal
 */
 
         void setVisualCue(const DragCue cue);
+        QList<QPoint> multiMoveGridPositions() const;
 
         static void setLod(const qreal lod);
         static void loadSettings();
@@ -79,7 +80,6 @@ namespace hal
         static QColor sColorTranslucent[];
 
         DragCue mCue;
-
-        QList<QRectF> mNodeShapes;
+        QRectF mRect;
     };
 }    // namespace hal

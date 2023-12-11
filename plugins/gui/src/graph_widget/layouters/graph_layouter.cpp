@@ -68,6 +68,23 @@ namespace hal
         return mNodeToPositionMap;
     }
 
+    QHash<Node, QPoint> GraphLayouter::nodeToPositionHash() const
+    {
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+        QHash<Node, QPoint> retval(mNodeToPositionMap.constBegin(),mNodeToPositionMap.constEnd());
+#else
+        QHash<Node, QPoint> retval;
+        for (auto it=mNodeToPositionMap.constBegin(); it!=mNodeToPositionMap.constEnd(); ++it)
+            retval.insert(it.key(),it.value());
+#endif
+        return retval;
+    }
+
+    Node GraphLayouter::nodeAtPosition(const QPoint& p) const
+    {
+        return mPositionToNodeMap.value(p);
+    }
+
     NetLayoutPoint GraphLayouter::positonForNode(const Node& nd) const
     {
         if (nd.isNull()) return NetLayoutPoint();

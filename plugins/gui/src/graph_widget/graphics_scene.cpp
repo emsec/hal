@@ -74,7 +74,7 @@ namespace hal
     }
 
     GraphicsScene::GraphicsScene(QObject* parent) : QGraphicsScene(parent),
-        mDragShadowGate(new NodeDragShadow()), mDebugGridEnable(false),
+        mDebugGridEnable(false),
         mSelectionStatus(NotPressed)
     {
         // FIND OUT IF MANUAL CHANGE TO DEPTH IS NECESSARY / INCREASES PERFORMANCE
@@ -84,7 +84,6 @@ namespace hal
         gSelectionRelay->registerSender(this, "GraphView");
         connectAll();
 
-        QGraphicsScene::addItem(mDragShadowGate);
         connect(gGraphContextManager->sSettingNetGroupingToPins,&SettingsItem::valueChanged,this,&GraphicsScene::updateAllItems);
     }
 
@@ -96,28 +95,6 @@ namespace hal
             removeItem(gi);
             delete gi;
         }
-    }
-
-    void GraphicsScene::startDragShadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::DragCue cue)
-    {
-        mDragShadowGate->setVisualCue(cue);
-        mDragShadowGate->start(posF, sizeF);
-    }
-
-    void GraphicsScene::moveDragShadow(const QPointF& posF, const NodeDragShadow::DragCue cue)
-    {
-        mDragShadowGate->setPos(posF);
-        mDragShadowGate->setVisualCue(cue);
-    }
-
-    void GraphicsScene::stopDragShadow()
-    {
-        mDragShadowGate->stop();
-    }
-
-    QPointF GraphicsScene::dropTarget()
-    {
-        return mDragShadowGate->pos();
     }
 
     void GraphicsScene::addGraphItem(GraphicsItem* item)
@@ -336,10 +313,7 @@ namespace hal
         // TODO check performance hit
         for (auto item : items())
         {
-            if (item != mDragShadowGate)
-            {
-                removeItem(item);
-            }
+            removeItem(item);
         }
 
         mModuleItems.clear();

@@ -36,26 +36,18 @@ namespace hal
         sPen.setJoinStyle(Qt::MiterJoin);
     }
 
-    NodeDragShadow::NodeDragShadow() : QGraphicsObject()
+    NodeDragShadow::NodeDragShadow()
+        : QGraphicsObject(), mRect(0,0,100,100)
     {
-        hide();
-
         setAcceptedMouseButtons(0);
-        mNodeShapes.append(QRectF(0,0,100,100));
     }
 
     void NodeDragShadow::start(const QPointF& posF, const QSizeF& sizeF)
     {
+        mRect = QRectF(QPointF(0,0),sizeF);
         setPos(posF);
-        mNodeShapes.clear();
-        mNodeShapes.append(QRectF(QPointF(0,0),sizeF));
         setZValue(1);
         show();
-    }
-
-    void NodeDragShadow::stop()
-    {
-        hide();
     }
 
     /*
@@ -107,40 +99,27 @@ namespace hal
         sPen.setColor(sColorPen[color_index]);
         painter->setPen(sPen);
 
-        for (const QRectF& rect : mNodeShapes)
+        if (sLod < 0.5)
         {
-            if (sLod < 0.5)
-            {
 
-                painter->fillRect(rect, sColorSolid[color_index]);
-            }
-            else
-            {
-                painter->drawRect(rect);
-                painter->fillRect(rect, sColorTranslucent[color_index]);
-            }
+            painter->fillRect(mRect, sColorSolid[color_index]);
+        }
+        else
+        {
+            painter->drawRect(mRect);
+            painter->fillRect(mRect, sColorTranslucent[color_index]);
         }
     }
 
     QRectF NodeDragShadow::boundingRect() const
     {
-        QRectF retval;
-        if (mNodeShapes.isEmpty()) return retval;
-        for (const QRectF& rect : mNodeShapes)
-        {
-            if (retval.isNull())
-                retval = rect;
-            else
-                retval = retval.united(rect);
-        }
-        return retval;
+        return mRect;
     }
 
     QPainterPath NodeDragShadow::shape() const
     {
         QPainterPath path;
-        for (const QRectF& rect : mNodeShapes)
-            path.addRect(rect);
+        path.addRect(mRect);
         return path;
     }
 }
