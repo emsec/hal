@@ -9,7 +9,8 @@ namespace hal
 
     GateLibraryTabFlipFlop::GateLibraryTabFlipFlop(QWidget* parent) : QWidget(parent)
     {
-        mGridLayout = new QGridLayout(parent);
+        mFormLayout = new QFormLayout(parent);
+
         mClockLabel = new QLabel("Clock", parent);
         mNextStateLabel = new QLabel("Next state", parent);
         mAsynchronousResetLabel = new QLabel("Asynchronous reset", parent);
@@ -22,19 +23,13 @@ namespace hal
         mInternalStatePropertyLabel = new QLabel(" - ", parent);
         mNegatedInternalStatePropertyLabel = new QLabel(" - ", parent);
 
-        mGridLayout->addWidget(mClockLabel, 0, 0);
-        mGridLayout->addWidget(mClockPropertyLabel, 0, 1, Qt::AlignLeft);
-        mGridLayout->addWidget(mNextStateLabel, 1, 0);
-        mGridLayout->addWidget(mNextStatePropertyLabel, 1, 1, Qt::AlignLeft);
-        mGridLayout->addWidget(mAsynchronousResetLabel, 2, 0);
-        mGridLayout->addWidget(mAsynchronousResetPropertyLabel, 2, 1, Qt::AlignLeft);
-        mGridLayout->addWidget(mInternalStateLabel, 3, 0);
-        mGridLayout->addWidget(mInternalStatePropertyLabel, 3, 1, Qt::AlignLeft);
-        mGridLayout->addWidget(mNegatedInternalStateLabel, 4, 0);
-        mGridLayout->addWidget(mNegatedInternalStatePropertyLabel, 4, 1, Qt::AlignLeft);
+        mFormLayout->addRow(mClockLabel, mClockPropertyLabel);
+        mFormLayout->addRow( mNextStateLabel, mNextStatePropertyLabel);
+        mFormLayout->addRow(mAsynchronousResetLabel, mAsynchronousResetPropertyLabel);
+        mFormLayout->addRow(mInternalStateLabel, mInternalStatePropertyLabel);
+        mFormLayout->addRow(mNegatedInternalStateLabel, mNegatedInternalStatePropertyLabel);
 
-
-        setLayout(mGridLayout);
+        setLayout(mFormLayout);
 
     }
 

@@ -25,9 +25,11 @@
 
 #pragma once
 
-#include "hal_core/defines.h"
 #include "gui/basic_tree_model/base_tree_model.h"
-
+#include "hal_core/defines.h"
+#include "hal_core/netlist/gate_library/enums/pin_direction.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
+#include "hal_core/netlist/pins/gate_pin.h"
 
 #include <QColor>
 #include <QList>
@@ -45,7 +47,7 @@ namespace hal
     class PinItem : public BaseTreeItem
     {
     public:
-        enum class TreeItemType {PinGroup, Pin, GroupCreator, PinCreator};
+        enum class TreeItemType {PinGroup, Pin, GroupCreator, PinCreator, InvalidPin};
 
         void setData(QList<QVariant> data) override;
         void setDataAtIndex(int index, QVariant& data) override;
@@ -58,20 +60,16 @@ namespace hal
          */
         PinItem(TreeItemType type);
 
-
-
-
         QVariant getData(int column) const override;
 
-
         int row() const;
-
-
 
         u32 id() const;
 
 
         QString getName() const;
+
+        TreeItemType getItemType() const;
 
         /**
          * Sets the name of this PinItem
@@ -80,11 +78,15 @@ namespace hal
          */
         void setName(const QString& name);
 
+        void setFields(GatePin* pin);
+        void setFields(const QString& name, u32 id, PinDirection direction, PinType type);
+        void setItemType(TreeItemType type);
 
-    public:
-        TreeItemType getItemType() const;
 
     private:
+        void setDirection(PinDirection direction);
+        void setType(PinType type);
+
         TreeItemType mItemType;
         u32 mId;
         QString mName;

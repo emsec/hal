@@ -9,7 +9,7 @@ namespace hal
 
     GateLibraryTabGeneral::GateLibraryTabGeneral(QWidget* parent) : QWidget(parent)
     {
-        mGridLayout = new QGridLayout(parent);
+        mFormLayout = new QFormLayout(parent);
 
         mNameLabel = new QLabel("Name", parent);
         mIdLabel = new QLabel("ID", parent);
@@ -23,18 +23,12 @@ namespace hal
         mBooleanFunctionPropertyLabel = new QLabel(" - ", parent);
         mPinPropertyLabel = new QLabel(" - ", parent);
 
-        mGridLayout->addWidget(mIdLabel, 0, 0);
-        mGridLayout->addWidget(mIdPropertyLabel, 0, 1, Qt::AlignLeft);
-        mGridLayout->addWidget(mNameLabel, 1, 0);
-        mGridLayout->addWidget(mNamePropertyLabel, 1, 1, Qt::AlignLeft);
-        mGridLayout->addWidget(mComponentLabel, 2, 0);
-        mGridLayout->addWidget(mComponentPropertyLabel, 2, 1, Qt::AlignLeft);
-        mGridLayout->addWidget(mBooleanFunctionLabel, 3, 0);
-        mGridLayout->addWidget(mBooleanFunctionPropertyLabel, 3, 1, Qt::AlignLeft);
-        mGridLayout->addWidget(mPinLabel, 4, 0);
-        mGridLayout->addWidget(mPinPropertyLabel, 4, 1, Qt::AlignLeft);
-
-        setLayout(mGridLayout);
+        mFormLayout->addRow(mNameLabel, mNamePropertyLabel);
+        mFormLayout->addRow(mIdLabel, mIdPropertyLabel);
+        mFormLayout->addRow(mComponentLabel, mComponentPropertyLabel);
+        mFormLayout->addRow(mBooleanFunctionLabel, mBooleanFunctionPropertyLabel);
+        mFormLayout->addRow(mPinLabel, mPinPropertyLabel);
+        setLayout(mFormLayout);
 
     }
 
@@ -46,8 +40,6 @@ namespace hal
             mNamePropertyLabel->setText("-");
             mIdPropertyLabel->setText("-");
             mComponentPropertyLabel->setText("-");
-            mBooleanFunctionPropertyLabel->setText("-");
-            mPinPropertyLabel->setText("-");
 
             return;
         }

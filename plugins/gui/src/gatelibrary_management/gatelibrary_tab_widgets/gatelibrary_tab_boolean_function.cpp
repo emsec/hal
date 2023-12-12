@@ -9,7 +9,7 @@ namespace hal
 
     GateLibraryTabBooleanFunction::GateLibraryTabBooleanFunction(QWidget* parent) : QWidget(parent)
     {
-        mGridLayout = new QGridLayout(parent);
+        mFormLayout = new QFormLayout(parent);
 
         mPlaceholderLabel1 = new QLabel("Func 1", parent);
         mPlaceholderLabel2 = new QLabel("Func 2", parent);
@@ -23,18 +23,13 @@ namespace hal
         mPlaceholderPropertyLabel4 = new QLabel(" - ", parent);
         mPlaceholderPropertyLabel5 = new QLabel(" - ", parent);
 
-        mGridLayout->addWidget(mPlaceholderLabel2, 0, 0);
-        mGridLayout->addWidget(mPlaceholderPropertyLabel2, 0, 1, Qt::AlignLeft);
-        mGridLayout->addWidget(mPlaceholderLabel1, 1, 0);
-        mGridLayout->addWidget(mPlaceholderPropertyLabel1, 1, 1, Qt::AlignLeft);
-        mGridLayout->addWidget(mPlaceholderLabel3, 2, 0);
-        mGridLayout->addWidget(mPlaceholderPropertyLabel3, 2, 1, Qt::AlignLeft);
-        mGridLayout->addWidget(mPlaceholderLabel4, 3, 0);
-        mGridLayout->addWidget(mPlaceholderPropertyLabel4, 3, 1, Qt::AlignLeft);
-        mGridLayout->addWidget(mPlaceholderLabel5, 4, 0);
-        mGridLayout->addWidget(mPlaceholderPropertyLabel5, 4, 1, Qt::AlignLeft);
+        mFormLayout->addRow(mPlaceholderLabel1, mPlaceholderPropertyLabel1);
+        mFormLayout->addRow(mPlaceholderLabel2, mPlaceholderPropertyLabel2);
+        mFormLayout->addRow(mPlaceholderLabel3, mPlaceholderPropertyLabel3);
+        mFormLayout->addRow(mPlaceholderLabel4, mPlaceholderPropertyLabel4);
+        mFormLayout->addRow(mPlaceholderLabel5, mPlaceholderPropertyLabel5);
 
-        setLayout(mGridLayout);
+        setLayout(mFormLayout);
 
     }
 

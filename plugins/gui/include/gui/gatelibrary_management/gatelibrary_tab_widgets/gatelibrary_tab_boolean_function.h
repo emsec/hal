@@ -29,7 +29,7 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 
-#include <QGridLayout>
+#include <QFormLayout>
 #include <QLabel>
 
 namespace hal
@@ -50,7 +50,7 @@ namespace hal
 
     private:
 
-        QGridLayout* mGridLayout;
+        QFormLayout* mFormLayout;
 
         QLabel* mPlaceholderLabel1;
         QLabel* mPlaceholderLabel2;

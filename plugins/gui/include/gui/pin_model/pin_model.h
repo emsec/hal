@@ -27,8 +27,9 @@
 
 #include "hal_core/defines.h"
 #include "gui/gui_utils/sort.h"
-#include "hal_core/netlist/module.h"
-#include "gui/module_model/module_item.h"
+#include "gui/pin_model/pin_model.h"
+#include "gui/pin_model/pin_item.h"
+#include "gui/gui_globals.h"
 
 
 #include <QAbstractItemModel>
@@ -63,12 +64,29 @@ namespace hal
          */
         void setGate(GateType* gate);
 
-        void addPin();
+        Result<GatePin*> createPin(const QString& name);
 
-        void addPinGroup(QString groupName);
+        Result<PinGroup<GatePin>*> createPinGroup(const QString& name);
+
         void addPinToPinGroup(u32 pinId, u32 groupId);
 
-        void handleEdit(QModelIndex index, QString input);
+        bool renamePin(u32 pinId, const QString& newName) const;
+
+        bool renamePinGroup(u32 pinGroupId, const QString& newName) const;
+
+        void handleEditName(QModelIndex index, QString input);
+
+        void handleEditDirection(QModelIndex index, QString direction);
+
+        void handleEditType(QModelIndex index, QString type);
+
+
+
+    private:
+
+        u32 getNewUniqueId(PinItem::TreeItemType type);
+
+        bool isNameAvailable(const QString& name, PinItem::TreeItemType type) const;
 
         GateType* mGate;
 
