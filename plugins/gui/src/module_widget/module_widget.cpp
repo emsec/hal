@@ -295,6 +295,9 @@ namespace hal
                 extractPythonAction.setText("Extract Net as python code (copy to clipboard)");
                 extractPythonAction.setParent(&context_menu);
 
+                isolate_action.setText("Isolate in new view");
+                isolate_action.setParent(&context_menu);
+
                 change_name_action.setText("Change Net name");
                 change_name_action.setParent(&context_menu);
 
@@ -325,6 +328,7 @@ namespace hal
 
         if (type == ModuleItem::TreeItemType::Net){
             context_menu.addAction(&extractPythonAction);
+            context_menu.addAction(&isolate_action);
             context_menu.addAction(&change_name_action);
             context_menu.addAction(&focus_in_view);
         }
@@ -355,6 +359,7 @@ namespace hal
             {
             case ModuleItem::TreeItemType::Module: openModuleInView(index); break;
             case ModuleItem::TreeItemType::Gate: openGateInView(index); break;
+            case ModuleItem::TreeItemType::Net: openNetEndpointsInView(index); break;
             default:
                 break;
             }
