@@ -47,7 +47,7 @@ namespace hal
     class PinItem : public BaseTreeItem
     {
     public:
-        enum class TreeItemType {PinGroup, Pin, GroupCreator, PinCreator, InvalidPin};
+        enum class TreeItemType {PinGroup, Pin, GroupCreator, PinCreator, InvalidPinGroup, InvalidPin};
 
         void setData(QList<QVariant> data) override;
         void setDataAtIndex(int index, QVariant& data) override;
@@ -65,9 +65,9 @@ namespace hal
         int row() const;
 
         u32 id() const;
-
-
         QString getName() const;
+        QString getType() const;
+        QString getDirection() const;
 
         TreeItemType getItemType() const;
 
@@ -77,6 +77,8 @@ namespace hal
          * @param name - The new name
          */
         void setName(const QString& name);
+        void setDirection(const QString& direction);
+        void setType(const QString& type);
 
         void setFields(GatePin* pin);
         void setFields(const QString& name, u32 id, PinDirection direction, PinType type);

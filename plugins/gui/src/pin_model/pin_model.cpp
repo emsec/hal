@@ -1,7 +1,4 @@
 #include "gui/selection_details_widget/selection_details_icon_provider.h"
-#include "hal_core/netlist/gate.h"
-#include "hal_core/netlist/net.h"
-
 #include <gui/pin_model/pin_model.h>
 
 namespace hal
@@ -31,12 +28,11 @@ namespace hal
 
             for (auto pin : group->get_pins())
             {
+                //TODO check
                 auto pinItem = new PinItem(PinItem::TreeItemType::Pin);
 
                 //get all infos for that pin
-                const std::string& grouping = pin->get_group().first->get_name();
-                PinDirection direction      = pin->get_direction();
-                QString pinDirection        = QString::fromStdString(enum_to_string(direction));
+                QString pinDirection        = QString::fromStdString(enum_to_string(pin->get_direction()));
                 QString pinType             = QString::fromStdString(enum_to_string(pin->get_type()));
 
                 pinItem->setData(QList<QVariant>() << pin->get_id() << QString::fromStdString(pin->get_name()) << pinDirection << pinType);
@@ -57,7 +53,7 @@ namespace hal
         endResetModel();
     }
 
-    void PinModel::handleEditName(QModelIndex index, QString input)
+    void PinModel::handleEditName(QModelIndex index, const QString& input)
     {
         //TODO handle text edited from PinDelegate
         auto pinItem = static_cast<PinItem*>(index.internalPointer());
@@ -99,17 +95,17 @@ namespace hal
                 break;
             }
             case PinItem::TreeItemType::InvalidPin:{
-                //TODO validate if pin is now valid and if so then create it via gate->create_pin(...)
                 qInfo() << "was InvalidPin: " << pinItem->getName();
-                pinItem->setName(input);
+                if(renamePin(0, input))
+                    pinItem->setName(input);
                 break;
             }
         }
     }
 
-    void PinModel::handleEditDirection(QModelIndex index, QString direction)
+    void PinModel::handleEditDirection(QModelIndex index, const QString& direction)
     {
-        //TODO handle text edited from PinDelegate
+        //TODO handle direction edited from PinDelegate
         auto pinItem = static_cast<PinItem*>(index.internalPointer());
         auto itemType = pinItem->getItemType();
 
@@ -135,27 +131,58 @@ namespace hal
                 break;
             }
             case PinItem::TreeItemType::InvalidPin:{
+                pinItem->setDirection(direction);
+                handleInvalidPinUpdate(pinItem);
                 break;
             }
         }
     }
 
-    Result<GatePin*> PinModel::createPin(const QString& name)
+    void PinModel::handleEditType(QModelIndex index, const QString& type)
     {
-        //TODO errorhandling
+        //TODO handle type edited from PinDelegate
+        auto pinItem  = static_cast<PinItem*>(index.internalPointer());
+        auto itemType = pinItem->getItemType();
 
-        return mGate-> create_pin(name.toStdString(), PinDirection::none, PinType::none, false);
+        switch (itemType)
+        {
+            case PinItem::TreeItemType::PinGroup: {
+                qInfo() << "was Group: " << pinItem->getName();
+
+                break;
+            }
+            case PinItem::TreeItemType::Pin: {
+                qInfo() << "was Pin: " << pinItem->getName();
+
+                break;
+            }
+            case PinItem::TreeItemType::GroupCreator: {
+                qInfo() << "was GroupCreator: " << pinItem->getName();
+
+                break;
+            }
+            case PinItem::TreeItemType::PinCreator: {
+                qInfo() << "was PinCreator: " << pinItem->getName();
+
+                break;
+            }
+            case PinItem::TreeItemType::InvalidPin: {
+                pinItem->setType(type);
+                handleInvalidPinUpdate(pinItem);
+                break;
+            }
+        }
     }
 
-    Result<PinGroup<GatePin>*> PinModel::createPinGroup(const QString& name)
+    Result<GatePin*> PinModel::createPin(PinItem* pinItem, bool addToGroup)
     {
-        //TODO errorhandling
-
-        Result<GatePin*> pinResult = createPin(name);
-        GatePin* pin = pinResult.get();
-
-        return mGate->create_pin_group(name.toStdString(), {pin}, PinDirection::none, PinType::none);
+        return mGate-> create_pin(
+            pinItem->getName().toStdString(),
+            enum_from_string<PinDirection>(pinItem->getDirection().toStdString()),
+            enum_from_string<PinType>(pinItem->getType().toStdString()),
+            false);
     }
+
 
     void PinModel::addPinToPinGroup(u32 pinId, u32 groupId)
     {
@@ -171,6 +198,8 @@ namespace hal
         //Check if name is already in use
         if(!isNameAvailable(newName, PinItem::TreeItemType::Pin))
             return false;
+
+        if(pinId == 0) return true;
 
         //rename if not in use
         auto pin = mGate->get_pin_by_id(pinId);
@@ -221,6 +250,7 @@ namespace hal
 
     bool PinModel::isNameAvailable(const QString& name, PinItem::TreeItemType type) const
     {
+        //TODO also check invalid pins for the name - maybe use a list
         switch(type){
             case PinItem::TreeItemType::PinGroup:{
                 for(auto group : mGate->get_pin_groups()){
@@ -238,6 +268,28 @@ namespace hal
             }
         }
         return true;
+    }
+
+    void PinModel::handleInvalidPinUpdate(PinItem* pinItem)
+    {
+        //TODO dont check PinType
+        if(!isNameAvailable(pinItem->getName(), PinItem::TreeItemType::Pin)
+            || enum_from_string<PinDirection>(pinItem->getDirection().toStdString()) == PinDirection::none
+            ||enum_from_string<PinType>(pinItem->getType().toStdString()) == PinType::none)
+            return;  // Pin is not valid
+
+        //pin is valid
+        pinItem->setItemType(PinItem::TreeItemType::Pin);
+        auto result = createPin(pinItem);
+        if(result.is_error()){
+            qInfo() << "Could not create pin: " << QString::fromStdString(result.get_error().get());
+            return;
+        }
+        //get corresponding group
+        GatePin* pin = result.get();
+        auto groupItem = static_cast<PinItem*>(pinItem->getParent());
+        u32 pinGroupId = groupItem->id();
+        addPinToPinGroup(pin->get_id(),pinGroupId);
     }
 
 

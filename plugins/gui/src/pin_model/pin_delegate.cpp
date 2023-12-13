@@ -22,15 +22,17 @@ namespace hal
     {
         PinItem::TreeItemType itemType = static_cast<PinItem*>(index.internalPointer())->getItemType();
         //TODO create editors
+
+        // Column 0: Name, Column 1: Type, Column 2: Direction
         switch(index.column()){
             case 0:{
-                QLineEdit* lineEdit = new QLineEdit(parent);
+                auto lineEdit = new QLineEdit(parent);
                 return lineEdit;
             }
             case 1: {
-                if(itemType != PinItem::TreeItemType::Pin)
+                if(itemType != PinItem::TreeItemType::Pin && itemType != PinItem::TreeItemType::InvalidPin)
                     return new QWidget(parent);
-                QComboBox* comboBox = new QComboBox(parent);
+                auto comboBox = new QComboBox(parent);
                 //TODO provide enum to string method
                 comboBox->addItem("input");
                 comboBox->addItem("output");
@@ -41,8 +43,9 @@ namespace hal
             case 2:{
                 if(itemType != PinItem::TreeItemType::Pin)
                     return new QWidget(parent);
-                QComboBox* comboBox = new QComboBox(parent);
+                auto comboBox = new QComboBox(parent);
                 //TODO provide enum to string method
+                comboBox->addItem("none");
                 comboBox->addItem("power");
                 comboBox->addItem("ground");
                 comboBox->addItem("lut");
@@ -77,12 +80,26 @@ namespace hal
     {
         //TODO cast editor to corresponding column
 
-        if(index.column() == 0)
-        {
-            auto lineEdit = static_cast<QLineEdit*>(editor);
-            QString text  = lineEdit->text();
-            if (!text.isEmpty())
-                static_cast<PinModel*>(model)->handleEditName(index, text);
+        switch(index.column()){
+            case 0: {
+                auto lineEdit = static_cast<QLineEdit*>(editor);
+                QString text  = lineEdit->text();
+                if (!text.isEmpty())
+                    static_cast<PinModel*>(model)->handleEditName(index, text);
+                break;
+            }
+            case 1:{
+                auto comboBox = static_cast<QComboBox*>(editor);
+                QString text = comboBox->currentText();
+                if(!text.isEmpty())
+                    static_cast<PinModel*>(model)->handleEditDirection(index, text);
+            }
+            case 2:{
+                auto comboBox = static_cast<QComboBox*>(editor);
+                QString text = comboBox->currentText();
+                if(!text.isEmpty())
+                    static_cast<PinModel*>(model)->handleEditType(index, text);
+            }
         }
     }
 

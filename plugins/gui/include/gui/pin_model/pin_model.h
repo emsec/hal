@@ -26,6 +26,8 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/net.h"
 #include "gui/gui_utils/sort.h"
 #include "gui/pin_model/pin_model.h"
 #include "gui/pin_model/pin_item.h"
@@ -64,9 +66,9 @@ namespace hal
          */
         void setGate(GateType* gate);
 
-        Result<GatePin*> createPin(const QString& name);
+        Result<GatePin*> createPin(PinItem* pinItem, bool addToGroup = false);
 
-        Result<PinGroup<GatePin>*> createPinGroup(const QString& name);
+        void handleInvalidPinUpdate(PinItem* pinItem);
 
         void addPinToPinGroup(u32 pinId, u32 groupId);
 
@@ -74,11 +76,11 @@ namespace hal
 
         bool renamePinGroup(u32 pinGroupId, const QString& newName) const;
 
-        void handleEditName(QModelIndex index, QString input);
+        void handleEditName(QModelIndex index, const QString& input);
 
-        void handleEditDirection(QModelIndex index, QString direction);
+        void handleEditDirection(QModelIndex index, const QString& direction);
 
-        void handleEditType(QModelIndex index, QString type);
+        void handleEditType(QModelIndex index, const QString& type);
 
 
 

@@ -73,6 +73,16 @@ namespace hal
         return mName;
     }
 
+    QString PinItem::getType() const
+    {
+        return mType;
+    }
+
+    QString PinItem::getDirection() const
+    {
+        return mDirection;
+    }
+
     u32 PinItem::id() const
     {
         return mId;
@@ -81,6 +91,15 @@ namespace hal
     void PinItem::setName(const QString& name)
     {
         mName = name;
+    }
+
+    void PinItem::setDirection(const QString& direction)
+    {
+        mDirection = direction;
+    }
+
+    void PinItem::setType(const QString& type){
+        mType = type;
     }
 
     int PinItem::getColumnCount() const
@@ -98,100 +117,12 @@ namespace hal
 
     void PinItem::setDirection(PinDirection direction)
     {
-        //TODO provide enum to string method
-        switch(direction){
-            case PinDirection::none:{
-                mDirection = "none";
-                break;
-            }
-            case PinDirection::input:{
-                mDirection = "input";
-                break;
-            }
-            case PinDirection::inout:{
-                mDirection = "inout";
-                break;
-            }
-            case PinDirection::internal:{
-                mDirection = "internal";
-                break;
-            }
-            case PinDirection::output:{
-                mDirection = "output";
-                break;
-            }
-        }
+        mDirection = QString::fromStdString(enum_to_string(direction));
     }
 
     void PinItem::setType(PinType type)
     {
-        //TODO provide enum to string method
-        switch(type){
-            case PinType::none:{
-                mType = "none";
-                break;
-            }
-            case PinType::power:{
-                mType = "power";
-                break;
-            }
-            case PinType::ground:{
-                mType = "ground";
-                break;
-            }
-            case PinType::lut:{
-                mType = "lut";
-                break;
-            }
-            case PinType::state:{
-                mType = "state";
-                break;
-            }
-            case PinType::neg_state:{
-                mType = "neg_state";
-                break;
-            }
-            case PinType::clock:{
-                mType = "clock";
-                break;
-            }
-            case PinType::enable:{
-                mType = "enable";
-                break;
-            }
-            case PinType::set:{
-                mType = "set";
-                break;
-            }
-            case PinType::reset:{
-                mType = "reset";
-                break;
-            }
-            case PinType::data:{
-                mType = "data";
-                break;
-            }
-            case PinType::address:{
-                mType = "address";
-                break;
-            }
-            case PinType::io_pad:{
-                mType = "io_pad";
-                break;
-            }
-            case PinType::select:{
-                mType = "select";
-                break;
-            }
-            case PinType::carry:{
-                mType = "carry";
-                break;
-            }
-            case PinType::sum:{
-                mType = "sum";
-                break;
-            }
-        }
+        mType = QString::fromStdString(enum_to_string(type));
     }
 
     void PinItem::setFields(GatePin* pin){
