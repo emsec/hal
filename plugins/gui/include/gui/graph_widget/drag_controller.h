@@ -37,6 +37,7 @@ namespace hal {
     class GraphicsNode;
     class NodeBox;
     class NodeDragShadow;
+    class GraphicsScene;
 
     class DragController : public QObject
     {
@@ -49,6 +50,7 @@ namespace hal {
         QPoint mCurrentGridpos;
         QSet<NodeBox*> mAdditionalBoxes;
         QHash<const NodeBox*,NodeDragShadow*> mShadows;
+        GraphicsScene* mShadowScene;
 
         void setSwapIntent(bool wantSwap);
         void addShadow(const NodeBox* nb);
@@ -75,8 +77,8 @@ namespace hal {
          */
         void move(const QPoint& eventPos, bool wantSwap, const QPoint& gridPos);
         bool hasDragged(const QPoint& eventPos);
-        int isDropAllowed() const;
-        QHash<Node,QPoint> finalNodePositions() const;
+        bool isDropAllowed() const;
+        GridPlacement* finalGridPlacement() const;
         NodeDragShadow::DragCue dragCue() const;
     };
 }

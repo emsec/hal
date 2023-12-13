@@ -490,6 +490,26 @@ namespace hal
         mDragController->clear();
     }
 
+    void GraphGraphicsView::dragPan(float dpx, float dpy)
+    {
+        if (dpx != 0)
+        {
+            QScrollBar* hBar  = horizontalScrollBar();
+            int hValue = hBar->value() + 10*dpx;
+            if (hValue < hBar->minimum()) hBar->setMinimum(hValue);
+            if (hValue > hBar->maximum()) hBar->setMaximum(hValue);
+            hBar->setValue(hValue);
+        }
+        if (dpy != 0)
+        {
+            QScrollBar* vBar  = verticalScrollBar();
+            int vValue = vBar->value() + 10*dpy;
+            if (vValue < vBar->minimum()) vBar->setMinimum(vValue);
+            if (vValue > vBar->maximum()) vBar->setMaximum(vValue);
+            vBar->setValue(vValue);
+        }
+    }
+
     void GraphGraphicsView::dragMoveEvent(QDragMoveEvent* event)
     {
         if (event->source() == this && event->proposedAction() == Qt::MoveAction)
@@ -497,6 +517,19 @@ namespace hal
             QPair<QPoint,QPointF> snap = closestLayouterPos(mapToScene(event->pos()));
 
             mDragController->move(event->pos(),event->keyboardModifiers() == mDragModifier,snap.first);
+
+            QPoint p = event->pos() - viewport()->geometry().topLeft();
+            float rx = 100. * p.x() / viewport()->geometry().width();
+            float ry = 100. * p.y() / viewport()->geometry().height();
+//            qDebug() << "move it" << event->pos() << viewport()->geometry() << rx << ry;
+            float dpx = 0;
+            float dpy = 0;
+            if (rx < 10) dpx = -10+rx;
+            if (rx > 90) dpx =  rx-90;
+            if (ry < 10) dpy = -10+ry;
+            if (ry > 90) dpy =  ry-90;
+            if (dpx !=0 || dpy != 0)
+                dragPan(dpx, dpy);
         }
     }
 
@@ -505,34 +538,17 @@ namespace hal
         if (event->source() == this && event->proposedAction() == Qt::MoveAction)
         {
             event->acceptProposedAction();
-            int alow;
-            if ((alow=mDragController->isDropAllowed()) == 0)
+            if (mDragController->isDropAllowed())
             {
-                /*
-                auto context            = mGraphWidget->getContext();
+                GridPlacement* plc = mDragController->finalGridPlacement();
+                GraphContext* context = mGraphWidget->getContext();
                 GraphLayouter* layouter = context->getLayouter();
                 assert(layouter->done());    // ensure grid stable
-
-                // convert scene coordinates into layouter grid coordinates
-                QPointF targetPos        = s->dropTarget();
-                QPoint targetLayouterPos = closestLayouterPos(targetPos).first;
-                QPoint sourceLayouterPos = layouter->gridPointByItem(mDragItem);
-
-                if (targetLayouterPos == sourceLayouterPos)
-                {
-                    qDebug() << "Attempted to drop gate onto itself, this should never happen!";
-                    return;
-                }
-                // assert(targetLayouterPos != sourceLayouterPos);
-
-                bool modifierPressed = event->keyboardModifiers() == mDragModifier;
-                ActionMoveNode* act = new ActionMoveNode(context->id(), sourceLayouterPos, targetLayouterPos, modifierPressed);
+                ActionMoveNode* act = new ActionMoveNode(context->id(),plc);
                 if (act->exec())
                     context->setDirty(true);
-                    */
+                delete plc;
             }
-            else
-                qDebug() << "drop not allowed" << alow;
         }
         else
         {

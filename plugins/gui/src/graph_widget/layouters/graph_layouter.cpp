@@ -68,15 +68,11 @@ namespace hal
         return mNodeToPositionMap;
     }
 
-    QHash<Node, QPoint> GraphLayouter::nodeToPositionHash() const
+    GridPlacement *GraphLayouter::gridPlacementFactory() const
     {
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
-        QHash<Node, QPoint> retval(mNodeToPositionMap.constBegin(),mNodeToPositionMap.constEnd());
-#else
-        QHash<Node, QPoint> retval;
+        GridPlacement* retval = new GridPlacement();
         for (auto it=mNodeToPositionMap.constBegin(); it!=mNodeToPositionMap.constEnd(); ++it)
-            retval.insert(it.key(),it.value());
-#endif
+            retval->insert(it.key(),it.value());
         return retval;
     }
 
@@ -211,10 +207,10 @@ namespace hal
         Q_ASSERT(!mXValues.isEmpty());
         int inx = ix - mMinXIndex;
         if (inx < 0)
-            return mXValues[0] - inx * defaultGridWidth();
+            return mXValues[0] + inx * defaultGridWidth();
         if (inx < mXValues.size())
             return mXValues[inx];
-        return mXValues.last() + (inx - mXValues.size() - 1) * defaultGridWidth();
+        return mXValues.last() + (inx - mXValues.size() + 1) * defaultGridWidth();
     }
 
     qreal GraphLayouter::gridYposition(int iy) const
@@ -222,10 +218,10 @@ namespace hal
         Q_ASSERT(!mYValues.isEmpty());
         int inx = iy - mMinYIndex;
         if (inx < 0)
-            return mYValues[0] - inx * defaultGridHeight();
+            return mYValues[0] + inx * defaultGridHeight();
         if (inx < mYValues.size())
             return mYValues[inx];
-        return mYValues.last() + (inx - mYValues.size() - 1) * defaultGridHeight();
+        return mYValues.last() + (inx - mYValues.size() + 1) * defaultGridHeight();
     }
 
     void GraphLayouter::layout()

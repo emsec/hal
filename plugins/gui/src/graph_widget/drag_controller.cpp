@@ -3,11 +3,10 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include <QApplication>
-#include <QDebug>
 
 namespace hal {
     DragController::DragController(GraphWidget* gw, QObject *parent)
-        : QObject(parent), mGraphWidget(gw), mDragNodeBox(nullptr)
+        : QObject(parent), mGraphWidget(gw), mDragNodeBox(nullptr), mShadowScene(nullptr)
     {;}
 
     void DragController::clear()
@@ -17,10 +16,14 @@ namespace hal {
         mDropAllowed = false;
         mWantSwap = false;
         GraphicsScene* sc = mGraphWidget->getContext()->getLayouter()->scene();
-        for (NodeDragShadow* nds : mShadows.values())
+        if (sc && sc == mShadowScene)
         {
-            if (sc) sc->removeItem(nds);
-            delete nds;
+            // otherwise (if old scene deleted) items owned by scene already removed
+            for (NodeDragShadow* nds : mShadows.values())
+            {
+                sc->removeItem(nds);
+                delete nds;
+            }
         }
         mShadows.clear();
     }
@@ -37,13 +40,26 @@ namespace hal {
     void DragController::set(GraphicsNode *drgItem, const QPoint &eventPos)
     {
         clear();
+        if (!drgItem) return;
         // TODO: swap modifier -> deselect all but current
 
-        QList<Node> nodesToMove;
+        QSet<Node> nodesToMove;
+        switch (drgItem->itemType())
+        {
+        case ItemType::Module:
+            nodesToMove.insert(Node(drgItem->id(),Node::Module));
+            break;
+        case ItemType::Gate:
+            nodesToMove.insert(Node(drgItem->id(),Node::Gate));
+            break;
+        default:
+            break;
+        }
+
         for (u32 mid : gSelectionRelay->selectedModules())
-            nodesToMove.append(Node(mid,Node::Module));
+            nodesToMove.insert(Node(mid,Node::Module));
         for (u32 gid : gSelectionRelay->selectedGates())
-            nodesToMove.append(Node(gid,Node::Gate));
+            nodesToMove.insert(Node(gid,Node::Gate));
 
         auto context            = mGraphWidget->getContext();
         const GraphLayouter* layouter = context->getLayouter();
@@ -62,13 +78,29 @@ namespace hal {
         }
 
         if (!mAdditionalBoxes.isEmpty()) mWantSwap = false;
-        qDebug() << "drag set  " << (mDragNodeBox ? mDragNodeBox->id() : -1) << mAdditionalBoxes.size();
     }
 
     void DragController::setSwapIntent(bool wantSwap)
     {
         if (wantSwap == mWantSwap) return;
-        if (wantSwap) mAdditionalBoxes.clear();
+        if (wantSwap)
+        {
+            GraphicsScene* sc = mGraphWidget->getContext()->getLayouter()->scene();
+            if (sc && sc == mShadowScene)
+            {
+                for (NodeBox* nb : mAdditionalBoxes)
+                {
+                    NodeDragShadow* nds = mShadows.value(nb);
+                    if (nds)
+                    {
+                        sc->removeItem(nds);
+                        mShadows.remove(nb);
+                        delete nds;
+                    }
+                }
+            }
+            mAdditionalBoxes.clear();
+        }
         mWantSwap = wantSwap;
     }
 
@@ -77,14 +109,18 @@ namespace hal {
         NodeDragShadow* nds = new NodeDragShadow;
         nds->setVisualCue(dragCue());
         nds->start(nb->item()->pos(), nb->item()->boundingRect().size());
-        GraphicsScene* sc = mGraphWidget->getContext()->getLayouter()->scene();
-        if (sc) sc->addItem(nds);
-        mShadows.insert(nb,nds);
+        mShadowScene = mGraphWidget->getContext()->getLayouter()->scene();
+        if (mShadowScene)
+        {
+            mShadowScene->addItem(nds);
+            mShadows.insert(nb,nds);
+        }
+        else
+            delete nds;
     }
 
     void DragController::enterDrag(bool wantSwap)
     {
-        qDebug() << "drag enter" << (mDragNodeBox ? mDragNodeBox->id() : -1) << mAdditionalBoxes.size();
         if (!mDragNodeBox) return;
         setSwapIntent(wantSwap);
         mCurrentGridpos = mDragNodeBox->gridPosition();
@@ -100,9 +136,8 @@ namespace hal {
         if (!mDragNodeBox || (wantSwap == mWantSwap && gridPos == mCurrentGridpos)) return;
 
         setSwapIntent(wantSwap);
-        qDebug() << "drag set" << (mDragNodeBox ? mDragNodeBox->id() : -1) << mAdditionalBoxes.size();
         mCurrentGridpos = gridPos;
-        mDropAllowed = (isDropAllowed()==0);
+        mDropAllowed = isDropAllowed();
 
         QPoint delta = mCurrentGridpos - mDragNodeBox->gridPosition();
         for (auto it = mShadows.constBegin(); it != mShadows.constEnd(); ++it)
@@ -121,17 +156,15 @@ namespace hal {
         return (eventPos - mMousedownPosition).manhattanLength() >= QApplication::startDragDistance();
     }
 
-    int DragController::isDropAllowed() const
+    bool DragController::isDropAllowed() const
     {
-        if (!mDragNodeBox) return -1;
-        if (mDragNodeBox->gridPosition() == mCurrentGridpos) return -2;
+        if (!mDragNodeBox) return false;
+        if (mDragNodeBox->gridPosition() == mCurrentGridpos) return false;
         const NodeBoxes& boxes = mGraphWidget->getContext()->getLayouter()->boxes();
 
         if (mWantSwap)
         {
-            if (boxes.boxForPoint(mCurrentGridpos) != nullptr)
-                return 0;
-            return -3;
+            return (boxes.boxForPoint(mCurrentGridpos) != nullptr);
         }
 
         QList<QPoint> pointsToCheck;
@@ -149,79 +182,20 @@ namespace hal {
         for (const QPoint& p : pointsToCheck)
         {
             if (freedPositions.contains(p)) continue;
-            if (boxes.boxForPoint(p) != nullptr) return -4;
+            if (boxes.boxForPoint(p) != nullptr) return false;
         }
-        return 0;
+        return true;
     }
-    /*
 
-            auto context            = mGraphWidget->getContext();
-            const GraphLayouter* layouter = context->getLayouter();
-            assert(layouter->done());    // ensure grid stable
-
-            QMap<QPoint, Node>::const_iterator node_iter = layouter->positionToNodeMap().find(mDragCurrentGridpos);
-
-            NodeDragShadow::DragCue cue = NodeDragShadow::DragCue::Rejected;
-            // disallow dropping an item on itself
-            if (mDragCurrentGridpos != mDragStartGridpos)
-            {
-                if (swapModifier)
-                {
-                    if (node_iter != layouter->positionToNodeMap().end())
-                    {
-                        // allow move only on empty cells
-                        cue = NodeDragShadow::DragCue::Swappable;
-                    }
-                }
-                else
-                {
-                    if (mDragAdditionalGridpos.isEmpty())
-                    {
-                        // move single node
-                        if (node_iter == layouter->positionToNodeMap().end())
-                        {
-                            // allow move only on empty cells
-                            cue = NodeDragShadow::DragCue::Movable;
-                        }
-                    }
-                    else
-                    {
-                        // move multi nodes
-                        if (node_iter == layouter->positionToNodeMap().end() || mDragAdditionalGridpos.contains(mDragCurrentGridpos) )
-                        {
-                            cue = NodeDragShadow::DragCue::Movable;
-                            for (QPoint p : mDragAdditionalGridpos)
-                            {
-                                p += mDragCurrentGridpos - mDragStartGridpos;
-                                if (p != mDragStartGridpos && !mDragAdditionalGridpos.contains(p))
-                                {
-                                    if (layouter->positionToNodeMap().find(p) != layouter->positionToNodeMap().end())
-                                    {
-                                        cue = NodeDragShadow::DragCue::Rejected;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                }
-            }
-            mDropAllowed = (cue != NodeDragShadow::DragCue::Rejected);
-
-            static_cast<GraphicsScene*>(scene())->moveDragShadow(snap.second, cue);
-            */
-
-
-    QHash<Node,QPoint> DragController::finalNodePositions() const
+    GridPlacement *DragController::finalGridPlacement() const
     {
-        QHash<Node,QPoint> retval = mGraphWidget->getContext()->getLayouter()->nodeToPositionHash();
-        retval[mDragNodeBox->getNode()] = mCurrentGridpos;
+        GridPlacement* retval = mGraphWidget->getContext()->getLayouter()->gridPlacementFactory();
+        retval->operator[](mDragNodeBox->getNode()) = mCurrentGridpos;
         if (mWantSwap)
         {
             Node targetNode = mGraphWidget->getContext()->getLayouter()->nodeAtPosition(mCurrentGridpos);
             if (!targetNode.isNull())
-                retval[targetNode] = mDragNodeBox->gridPosition();
+                retval->operator[](targetNode) = mDragNodeBox->gridPosition();
             return retval;
         }
         if (!mAdditionalBoxes.isEmpty())
@@ -229,7 +203,7 @@ namespace hal {
             QPoint delta = mCurrentGridpos - mDragNodeBox->gridPosition();
             for (const NodeBox* nb : mAdditionalBoxes)
             {
-                retval[nb->getNode()] = nb->gridPosition() + delta;
+                retval->operator[](nb->getNode()) = nb->gridPosition() + delta;
             }
         }
         return retval;

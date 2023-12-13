@@ -203,6 +203,8 @@ namespace hal
         void addSuccessorToView(int maxLevel, bool succ);
         void addCommonSuccessorToView(int maxLevel, bool succ);
 
+        void dragPan(float dpx, float dpy);
+
         GraphWidget* mGraphWidget;
 
         QSet<u32> getSelectableGates();
