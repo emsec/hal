@@ -24,6 +24,7 @@
 // SOFTWARE.
 
 #pragma once
+#include "hal_core/netlist/gate_library/gate_type.h"
 
 #include "gui/gatelibrary_management/gatelibrary_pages/generalinfo_wizardpage.h"
 #include "gui/gatelibrary_management/gatelibrary_pages/pins_wizardpage.h"
@@ -39,7 +40,15 @@ namespace hal
     {
     public:
         GateLibraryWizard(QWidget* parent = nullptr);
+        GateLibraryWizard(const GateLibrary* gateLibrary, GateType* gateType, QWidget* parent = nullptr);
+
+        void editGate(GateType* gt);
+        void addGate();
+        void setData(const GateLibrary* gateLibrary, GateType* gateType);
     private:
+        const GateLibrary* mGateLibrary;
+        GateType* mGateType;
+
         GeneralInfoWizardPage* generalInfoPage;
         PinsWizardPage* pinsPage;
         FlipFlopWizardPage* ffPage;

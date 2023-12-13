@@ -25,11 +25,28 @@
 
 #pragma once
 
+#include "hal_core/netlist/gate_library/enums/gate_type_property.h"
+
 #include <QWizardPage>
+#include <QGridLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QListWidget>
+#include <QComboBox>
 
 namespace hal {
     class GeneralInfoWizardPage:public QWizardPage{
     public:
         GeneralInfoWizardPage(QWidget* parent = nullptr);
+        void setData(QString name, QStringList properties);
+    private:
+        QGridLayout* mLayout;
+        QLabel* mLabelName;
+        QLabel* mLabelProperties;
+        QLabel* mLabelAddProperty;
+
+        QLineEdit* mName;
+        QListWidget* mProperties;
+        QComboBox* mAddProperty;
     };
 }

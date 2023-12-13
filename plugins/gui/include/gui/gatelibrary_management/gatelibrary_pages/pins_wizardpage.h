@@ -26,10 +26,23 @@
 #pragma once
 
 #include <QWizardPage>
+#include <QGridLayout>
+#include <QPushButton>
+#include <QTreeView>
+
+#include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_boolean_function.h>
+#include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_general.h>
+#include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_pin.h>
 
 namespace hal {
     class PinsWizardPage:public QWizardPage{
     public:
         PinsWizardPage(QWidget* parent = nullptr);
+    private:
+        QGridLayout* mLayout;
+        //QTreeView* mPinsTreeView;
+        GateLibraryTabPin* mPinTab;
+        QPushButton* mDelBtn;
+        QPushButton* mAddBtn;
     };
 }

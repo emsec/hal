@@ -59,9 +59,11 @@ namespace hal
 
 
         //signal - slots
-        connect(mAddBtn, &QPushButton::clicked, this, &GateLibraryManager::handleCallWizard);
+        connect(mAddBtn, &QPushButton::clicked, this, &GateLibraryManager::handleAddWizard);
+        //connect(mEditBtn, &QPushButton::clicked, this, &GateLibraryManager::handleEditWizard);
         connect(mTableView, &QTableView::clicked, this, &GateLibraryManager::handleSelectionChanged);
         connect(mCancelBtn, &QPushButton::clicked, this, &GateLibraryManager::handleCancelClicked);
+        connect(mTableView, &QTableView::doubleClicked, this, &GateLibraryManager::handleEditWizard);
 
         setLayout(mLayout);
         repolish();    // CALL FROM PARENT
@@ -115,10 +117,13 @@ namespace hal
         return true;
     }
 
+    void GateLibraryManager::handleEditWizard(const QModelIndex& gate)
+    {
+        GateLibraryWizard wiz(mGateLibrary, mTableModel->getGateTypeAtIndex(gate.row()));
+        wiz.exec();
+    }
 
-
-
-    void GateLibraryManager::handleCallWizard()
+    void GateLibraryManager::handleAddWizard()
     {
         GateLibraryWizard wiz;
         wiz.exec();

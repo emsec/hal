@@ -91,6 +91,7 @@ namespace hal
         if (!g)
             return;
         beginResetModel();
+        mEntries.clear();
 
         for (auto elem : g->get_gate_types())
         {

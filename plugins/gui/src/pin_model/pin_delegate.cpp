@@ -61,7 +61,7 @@ namespace hal
                 return comboBox;
             }
         }
-
+        return new QWidget(parent);
 
 
     }
