@@ -300,7 +300,7 @@ var searchData=
   ['tristandacunha_37218',['TristanDaCunha',['https://doc.qt.io/qt-5/qlocale.html#Country-enum',1,'QLocale']]],
   ['true_37219',['True',['https://doc.qt.io/qt-5/qcborvalue.html#Type-enum',1,'QCborValue']]],
   ['truesunset_37220',['TrueSunset',['https://doc.qt.io/qt-5/qgradient.html#Preset-enum',1,'QGradient']]],
-  ['truncate_37221',['Truncate',['https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum',1,'QIODevice::Truncate()'],['../structhal_1_1_log_manager_1_1log__sink.html#a3a09ddb29a0af4fec0ad93a7cb76a498',1,'hal::LogManager::log_sink::truncate()']]],
+  ['truncate_37221',['truncate',['../structhal_1_1_log_manager_1_1log__sink.html#a3a09ddb29a0af4fec0ad93a7cb76a498',1,'hal::LogManager::log_sink::truncate()'],['https://doc.qt.io/qt-5/qiodevice.html#OpenModeFlag-enum',1,'QIODevice::Truncate()']]],
   ['tsonga_37222',['Tsonga',['https://doc.qt.io/qt-5/qlocale.html#Language-enum',1,'QLocale']]],
   ['tswana_37223',['Tswana',['https://doc.qt.io/qt-5/qlocale.html#Language-enum',1,'QLocale']]],
   ['tuesday_37224',['Tuesday',['https://doc.qt.io/qt-5/qt.html#DayOfWeek-enum',1,'Qt']]],
