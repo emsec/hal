@@ -4,6 +4,7 @@ if(PL_GATE_LIBRARIES OR BUILD_ALL_PLUGINS)
     # Add the include directory to the include search path
     file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/share/hal/gate_libraries/)
     file(GLOB_RECURSE GATE_LIBS ${CMAKE_CURRENT_SOURCE_DIR}/definitions/*)
+    set_property(GLOBAL PROPERTY GATE_LIBS_DEFINITIONS "${CMAKE_CURRENT_SOURCE_DIR}/definitions")
     message(STATUS "GATE_LIBS: ${GATE_LIBS}")
     foreach(file ${GATE_LIBS})
         get_filename_component(f ${file} NAME)

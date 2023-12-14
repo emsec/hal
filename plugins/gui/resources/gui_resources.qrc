@@ -13,6 +13,9 @@
         <file alias="SourceCodePro-Black">fonts/Source Code Pro/SourceCodePro-Black.ttf</file>
         <file alias="DroidSansMono">fonts/Droid Sans Mono/DroidSansMono.ttf</file>
     </qresource>
+    <qresource prefix="/path">
+        <file alias="gate_library_definitions">path/gate_library_definitions.txt</file>
+    </qresource>
     <qresource prefix="/style">
         <file alias="dark">stylesheet/dark.qss</file>
         <file alias="light">stylesheet/light.qss</file>

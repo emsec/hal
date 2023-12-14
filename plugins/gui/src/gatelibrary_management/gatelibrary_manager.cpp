@@ -90,6 +90,9 @@ namespace hal
                 QString title = "Load gate library";
                 QString text  = "HAL Gate Library (*.hgl *.lib)";
                 QString path  = QDir::currentPath();
+                QFile gldpath(":/path/gate_library_definitions");
+                if (gldpath.open(QIODevice::ReadOnly))
+                    path = QString::fromUtf8(gldpath.readAll());
 
                 //TODO fileDialog throws bad window error
                 QString fileName = QFileDialog::getOpenFileName(nullptr, title, path, text, nullptr);
