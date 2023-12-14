@@ -295,6 +295,9 @@ namespace hal
                 extractPythonAction.setText("Extract Net as python code (copy to clipboard)");
                 extractPythonAction.setParent(&context_menu);
 
+                isolate_action.setText("Isolate in new view");
+                isolate_action.setParent(&context_menu);
+
                 change_name_action.setText("Change Net name");
                 change_name_action.setParent(&context_menu);
 
@@ -325,6 +328,7 @@ namespace hal
 
         if (type == ModuleItem::TreeItemType::Net){
             context_menu.addAction(&extractPythonAction);
+            context_menu.addAction(&isolate_action);
             context_menu.addAction(&change_name_action);
             context_menu.addAction(&focus_in_view);
         }
@@ -355,6 +359,7 @@ namespace hal
             {
             case ModuleItem::TreeItemType::Module: openModuleInView(index); break;
             case ModuleItem::TreeItemType::Gate: openGateInView(index); break;
+            case ModuleItem::TreeItemType::Net: openNetEndpointsInView(index); break;
             default:
                 break;
             }
@@ -474,7 +479,12 @@ namespace hal
 
     void ModuleWidget::handleItemDoubleClicked(const QModelIndex& index)
     {
-        openModuleInView(index);
+        ModuleItem* mi = getModuleItemFromIndex(index);
+        switch(mi->getType()){
+            case ModuleItem::TreeItemType::Module: openModuleInView(index); break;
+            case ModuleItem::TreeItemType::Gate: openGateInView(index); break;
+            case ModuleItem::TreeItemType::Net: openNetEndpointsInView(index); break;
+        }
     }
 
     void ModuleWidget::openModuleInView(const QModelIndex& index)
@@ -495,6 +505,36 @@ namespace hal
         act->setUseCreatedObject();
         act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
         act->addAction(new ActionAddItemsToObject(moduleId, gateId));
+        act->exec();
+    }
+
+    void ModuleWidget::openNetEndpointsInView(const QModelIndex &index){
+        QSet<u32> allGates;
+
+        Net* net = gNetlist->get_net_by_id(getModuleItemFromIndex(index)->id());
+
+        PlacementHint plc(PlacementHint::PlacementModeType::GridPosition);
+        int currentY = -(int)(net->get_num_of_sources()/2);
+        for(auto endpoint : net->get_sources()) {
+            u32 id = endpoint->get_gate()->get_id();
+            allGates.insert(id);
+            plc.addGridPosition(Node(id, Node::NodeType::Gate), {0, currentY++});
+        }
+        currentY = -(int)(net->get_num_of_destinations()/2);
+        for(auto endpoint : net->get_destinations()) {
+            u32 id = endpoint->get_gate()->get_id();
+            allGates.insert(id);
+            plc.addGridPosition(Node(id, Node::NodeType::Gate), {1, currentY++});
+        }
+
+        QString name = gGraphContextManager->nextViewName("Isolated View");
+
+        UserActionCompound* act = new UserActionCompound;
+        act->setUseCreatedObject();
+        act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+        auto actionAITO = new ActionAddItemsToObject({}, allGates);
+        actionAITO->setPlacementHint(plc);
+        act->addAction(actionAITO);
         act->exec();
     }
 
