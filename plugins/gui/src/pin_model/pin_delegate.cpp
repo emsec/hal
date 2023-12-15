@@ -30,6 +30,7 @@ namespace hal
                 return lineEdit;
             }
             case 1: {
+                //dont create a widget for dummyEntries
                 if(itemType != PinItem::TreeItemType::Pin && itemType != PinItem::TreeItemType::InvalidPin)
                     return new QWidget(parent);
                 auto comboBox = new QComboBox(parent);
@@ -38,11 +39,14 @@ namespace hal
                 comboBox->addItem("output");
                 comboBox->addItem("inout");
                 comboBox->addItem("internal");
+
                 return comboBox;
             }
             case 2:{
-                if(itemType != PinItem::TreeItemType::Pin)
+                //dont create a widget for dummyEntries
+                if(itemType == PinItem::TreeItemType::GroupCreator || itemType == PinItem::TreeItemType::PinCreator)
                     return new QWidget(parent);
+
                 auto comboBox = new QComboBox(parent);
                 //TODO provide enum to string method
                 comboBox->addItem("none");
@@ -73,15 +77,45 @@ namespace hal
     {
         //TODO set editor data if direction or type is selected
         qInfo() << "Editing row: " << index.row() << "  column: " << index.column();
+        auto pinItem = static_cast<PinItem*>(index.internalPointer());
+        PinItem::TreeItemType itemType = pinItem->getItemType();
+        switch(index.column()){
+            case 0: {
+                //name editor
+                auto lineEdit = static_cast<QLineEdit*>(editor);
+                if(itemType != PinItem::TreeItemType::PinCreator && itemType != PinItem::TreeItemType::GroupCreator){
+                    lineEdit->setText(pinItem->getName());
+                }
+                break;
+            }
+            case 1: {
+                //direction editor
+                if(itemType != PinItem::TreeItemType::Pin && itemType != PinItem::TreeItemType::InvalidPin)
+                    break;
+                auto comboBox = static_cast<QComboBox*>(editor);
+                comboBox->setCurrentText(pinItem->getDirection());
+                break;
+            }
+            case 2: {
+                //type editor
+                if(itemType == PinItem::TreeItemType::PinCreator || itemType == PinItem::TreeItemType::GroupCreator)
+                    break;
+                auto comboBox = static_cast<QComboBox*>(editor);
+                comboBox->setCurrentText(pinItem->getType());
+                break;
+            }
+        }
 
     }
 
     void PinDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
     {
         //TODO cast editor to corresponding column
+        PinItem::TreeItemType itemType = static_cast<PinItem*>(index.internalPointer())->getItemType();
 
         switch(index.column()){
             case 0: {
+                //name column
                 auto lineEdit = static_cast<QLineEdit*>(editor);
                 QString text  = lineEdit->text();
                 if (!text.isEmpty())
@@ -89,16 +123,24 @@ namespace hal
                 break;
             }
             case 1:{
+                //direction column
+                if(itemType != PinItem::TreeItemType::Pin && itemType != PinItem::TreeItemType::InvalidPin)
+                    return;
                 auto comboBox = static_cast<QComboBox*>(editor);
                 QString text = comboBox->currentText();
                 if(!text.isEmpty())
                     static_cast<PinModel*>(model)->handleEditDirection(index, text);
+                break;
             }
             case 2:{
+                //type column
+                if(itemType == PinItem::TreeItemType::GroupCreator || itemType == PinItem::TreeItemType::PinCreator)
+                    return;
                 auto comboBox = static_cast<QComboBox*>(editor);
                 QString text = comboBox->currentText();
                 if(!text.isEmpty())
                     static_cast<PinModel*>(model)->handleEditType(index, text);
+                break;
             }
         }
     }
@@ -115,7 +157,7 @@ namespace hal
         //TODO colorize dummy entries and invalid pins
 
         PinItem::TreeItemType itemType = static_cast<PinItem*>(index.internalPointer())->getItemType();
-        if(itemType == PinItem::TreeItemType::InvalidPin){
+        if(itemType == PinItem::TreeItemType::InvalidPin || itemType == PinItem::TreeItemType::InvalidPinGroup){
             painter->fillRect(option.rect, Qt::darkRed);
         }
         QStyledItemDelegate::paint(painter, option, index);

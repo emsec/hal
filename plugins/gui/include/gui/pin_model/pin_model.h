@@ -66,29 +66,44 @@ namespace hal
          */
         void setGate(GateType* gate);
 
-        Result<GatePin*> createPin(PinItem* pinItem, bool addToGroup = false);
-
-        void handleInvalidPinUpdate(PinItem* pinItem);
-
-        void addPinToPinGroup(u32 pinId, u32 groupId);
-
-        bool renamePin(u32 pinId, const QString& newName) const;
-
-        bool renamePinGroup(u32 pinGroupId, const QString& newName) const;
-
+        /**
+         * should be called when the items name is changed via the delegate
+         * @param index index of the PinItem
+         * @param input new name
+         */
         void handleEditName(QModelIndex index, const QString& input);
 
+        /**
+         * should be called when the items direction is changed via the delegate
+         * @param index index of the PinItem
+         * @param direction new direction
+         */
         void handleEditDirection(QModelIndex index, const QString& direction);
 
+        /**
+         * should be called when the items type is changed via the delegate
+         * @param index index of the PinItem
+         * @param type new type
+         */
         void handleEditType(QModelIndex index, const QString& type);
 
 
 
+
+
     private:
+        QList<PinItem*> mInvalidPins = QList<PinItem*>();
+        QList<PinItem*> mInvalidGroups = QList<PinItem*>();
 
-        u32 getNewUniqueId(PinItem::TreeItemType type);
+        bool isNameAvailable(const QString& name, PinItem* pinItem) const;
+        void handleInvalidPinUpdate(PinItem* pinItem);
+        void handleInvalidGroupUpdate(PinItem* groupItem);
+        bool renamePin(PinItem* pinItem, const QString& newName) const;
+        bool renamePinGroup(PinItem* groupItem, const QString& newName) const;
+        void addPinToPinGroup(u32 pinId, u32 groupId);
+        Result<GatePin*> createPin(PinItem* pinItem, bool addToGroup = false);
 
-        bool isNameAvailable(const QString& name, PinItem::TreeItemType type) const;
+
 
         GateType* mGate;
 

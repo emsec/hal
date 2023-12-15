@@ -37,14 +37,8 @@ namespace hal
     {
         //TODO initialize
         switch(mItemType){
-            case TreeItemType::PinGroup:{
-                mId = data[0].toInt();
-                mName = data[1].toString();
-                mDirection = "";
-                mType = "";
-                break;
-            }
-            case TreeItemType::Pin:{
+            case TreeItemType::PinGroup:
+            case TreeItemType::Pin: {
                 mId = data[0].toInt();
                 mName = data[1].toString();
                 mDirection = data[2].toString();
