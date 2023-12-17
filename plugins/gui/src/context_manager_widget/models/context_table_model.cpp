@@ -9,29 +9,50 @@ namespace hal
 
     ContextTreeItem::ContextTreeItem(GraphContext *context) :
         BaseTreeItem(),
-        mContext(context)
+        mContext(context),
+        mDirectory(nullptr)
     {
     }
 
     ContextTreeItem::ContextTreeItem(ContextDirectory *directory) :
         BaseTreeItem(),
-        mDirectory(directory)
+        mDirectory(directory),
+        mContext(nullptr)
     {
     }
 
     QVariant ContextTreeItem::getData(int column) const
     {
-        switch(column)
+        if(isDirectory())
         {
-            case 0:
+            switch(column)
             {
-                return mContext->getNameWithDirtyState();
-                break;
+                case 0:
+                {
+                    return mDirectory->getName();
+                    break;
+                }
+                case 1:
+                {
+                    return "";
+                    break;
+                }
             }
-            case 1:
+        }
+        if(isContext())
+        {
+            switch(column)
             {
-                return mContext->getTimestamp().toString(Qt::SystemLocaleShortDate);
-                break;
+                case 0:
+                {
+                    return mContext->getNameWithDirtyState();
+                    break;
+                }
+                case 1:
+                {
+                    return mContext->getTimestamp().toString(Qt::SystemLocaleShortDate);
+                    break;
+                }
             }
         }
     }
@@ -78,14 +99,6 @@ namespace hal
         setHeaderLabels(QStringList() << "View Name" << "Timestamp");
     }
 
-    /*int ContextTreeModel::rowCount(const QModelIndex& parent) const
-    {
-        Q_UNUSED(parent)
-
-        return mContextMap.size();
-    }*/
-
-
     QVariant ContextTreeModel::data(const QModelIndex& index, int role) const
     {
         if (!index.isValid())
@@ -98,12 +111,14 @@ namespace hal
 
         if(role == Qt::DisplayRole)
         {
+
             switch(index.column())
             {
                 case 0: return item->getData(0); break;
                 case 1: return item->getData(1); break;
                 default: return QVariant();
             }
+
         }
 
         return QVariant();
@@ -201,26 +216,11 @@ namespace hal
         return getIndexFromItem(mContextMap.find(context)->second);
     }
 
-    /*void ContextTableModel::handleDataChanged()
-    {
-        GraphContext* gc = static_cast<GraphContext*>(sender());
-        if (!gc) return;
-        for (int irow = 0; irow < mContextList.size(); ++irow)
-        {
-            if (gc == mContextList.at(irow))
-            {
-                QModelIndex inx0 = index(irow,0);
-                QModelIndex inx1 = index(irow,1);
-                Q_EMIT dataChanged(inx0,inx1);
-                return;
-            }
-        }
-    }*/
-
     GraphContext* ContextTreeModel::getContext(const QModelIndex& index) const
     {
         BaseTreeItem* item = getItemFromIndex(index);
 
+        if (static_cast<ContextTreeItem*>(item)->isDirectory()) return nullptr;
         GraphContext* context;
         for (auto &i : mContextMap) {
            if (i.second == item) {
@@ -230,27 +230,6 @@ namespace hal
         }
         return context;
     }
-
-   /* QModelIndex ContextTableModel::getIndex(const BaseTreeItem* const item) const
-    {
-        assert(item);
-
-        QVector<int> row_numbers;
-        const BaseTreeItem* current_item = item;
-
-        while (current_item != mRootItem)
-        {
-            row_numbers.append(static_cast<const ContextTreeItem*>(current_item)->row());
-            current_item = current_item->getParent();
-        }
-
-        QModelIndex model_index = index(0, 0, QModelIndex());
-
-        for (QVector<int>::const_reverse_iterator i = row_numbers.crbegin(); i != row_numbers.crend(); ++i)
-            model_index = index(*i, 0, model_index);
-
-        return model_index;
-    }*/
 
     const QVector<GraphContext *> &ContextTreeModel::list()
     {

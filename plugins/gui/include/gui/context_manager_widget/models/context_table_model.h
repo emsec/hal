@@ -42,6 +42,7 @@ namespace hal
 
         public:
             ContextDirectory(u32 id, QString name):mId(id), mName(name){}
+            QString getName() { return mName; }
 
     };
 

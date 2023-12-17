@@ -33,11 +33,12 @@
 #include "gui/user_action/user_action_compound.h"
 #include <QShortcut>
 #include <QApplication>
+#include <QInputDialog>
 
 namespace hal
 {
     ContextManagerWidget::ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent)
-        : ContentWidget("Views", parent), mSearchbar(new Searchbar(this)), mNewViewAction(new QAction(this)), mRenameAction(new QAction(this)), mDuplicateAction(new QAction(this)),
+        : ContentWidget("Views", parent), mSearchbar(new Searchbar(this)), mNewDirectoryAction(new QAction(this)), mNewViewAction(new QAction(this)), mRenameAction(new QAction(this)), mDuplicateAction(new QAction(this)),
           mDeleteAction(new QAction(this)), mOpenAction(new QAction(this))
     {
         //needed to load the properties
@@ -46,13 +47,15 @@ namespace hal
 
         mOpenAction->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
         mNewViewAction->setIcon(gui_utility::getStyledSvgIcon(mNewViewIconStyle, mNewViewIconPath));
+        mNewDirectoryAction->setIcon(gui_utility::getStyledSvgIcon(mNewViewIconStyle, mNewViewIconPath));
         mRenameAction->setIcon(gui_utility::getStyledSvgIcon(mRenameIconStyle, mRenameIconPath));
         mDuplicateAction->setIcon(gui_utility::getStyledSvgIcon(mDuplicateIconStyle, mDuplicateIconPath));
         mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
 
         mOpenAction->setToolTip("Open");
-        mNewViewAction->setToolTip("New");
+        mNewViewAction->setToolTip("New View");
+        mNewDirectoryAction->setToolTip("New Directory");
         mRenameAction->setToolTip("Rename");
         mDuplicateAction->setToolTip("Duplicate");
         mDeleteAction->setToolTip("Delete");
@@ -60,6 +63,7 @@ namespace hal
 
         mOpenAction->setText("Open view");
         mNewViewAction->setText("Create new view");
+        mNewDirectoryAction->setText("Create new Directory");
         mRenameAction->setText("Rename view");
         mDuplicateAction->setText("Duplicate view");
         mDeleteAction->setText("Delete view");
@@ -70,10 +74,10 @@ namespace hal
         //mDuplicateAction->setEnabled(false);
         //mDeleteAction->setEnabled(false);
 
-        mContextTableModel = gGraphContextManager->getContextTableModel();
+        mContextTreeModel = gGraphContextManager->getContextTableModel();
 
         mContextTableProxyModel = new ContextTableProxyModel(this);
-        mContextTableProxyModel->setSourceModel(mContextTableModel);
+        mContextTableProxyModel->setSourceModel(mContextTreeModel);
         mContextTableProxyModel->setSortRole(Qt::UserRole);
 
         mContextTreeView = new QTreeView(this);
@@ -99,6 +103,7 @@ namespace hal
 
         connect(mOpenAction, &QAction::triggered, this, &ContextManagerWidget::handleOpenContextClicked);        
         connect(mNewViewAction, &QAction::triggered, this, &ContextManagerWidget::handleCreateContextClicked);
+        connect(mNewDirectoryAction, &QAction::triggered, this, &ContextManagerWidget::handleCreateDirectoryClicked);
         connect(mRenameAction, &QAction::triggered, this, &ContextManagerWidget::handleRenameContextClicked);
         connect(mDuplicateAction, &QAction::triggered, this, &ContextManagerWidget::handleDuplicateContextClicked);
         connect(mDeleteAction, &QAction::triggered, this, &ContextManagerWidget::handleDeleteContextClicked);
@@ -107,8 +112,8 @@ namespace hal
         connect(mContextTreeView, &QTableView::customContextMenuRequested, this, &ContextManagerWidget::handleContextMenuRequest);
         connect(mContextTreeView, &QTableView::doubleClicked, this, &ContextManagerWidget::handleOpenContextClicked);
         connect(mContextTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ContextManagerWidget::handleSelectionChanged);
-        connect(mContextTableModel, &ContextTreeModel::rowsRemoved, this, &ContextManagerWidget::handleDataChanged);
-        connect(mContextTableModel, &ContextTreeModel::rowsInserted, this, &ContextManagerWidget::handleDataChanged);
+        connect(mContextTreeModel, &ContextTreeModel::rowsRemoved, this, &ContextManagerWidget::handleDataChanged);
+        connect(mContextTreeModel, &ContextTreeModel::rowsInserted, this, &ContextManagerWidget::handleDataChanged);
 
         connect(mSearchbar, &Searchbar::triggerNewSearch, this, &ContextManagerWidget::updateSearchIcon);
         connect(mSearchbar, &Searchbar::triggerNewSearch, mContextTableProxyModel, &ContextTableProxyModel::startSearch);
@@ -122,45 +127,6 @@ namespace hal
         connect(qApp, &QApplication::focusChanged, this, &ContextManagerWidget::handleDeleteShortcutOnFocusChanged);
     }
 
-
-    void ContextManagerWidget::handleCreateClicked(const QPoint& point)
-    {
-        QModelIndex index = mContextTreeView->indexAt(point);
-
-        if (!index.isValid())
-            return;
-
-        QMenu context_menu;
-
-        QAction create_context;
-        QAction create_directory;
-
-        create_context.setText("Create new view");
-        create_context.setParent(&context_menu);
-
-        create_directory.setText("Create new directory");
-        create_directory.setParent(&context_menu);
-
-        context_menu.addAction(&create_context);
-        context_menu.addAction(&create_directory);
-
-        QAction* clicked = context_menu.exec(mContextTreeView->viewport()->mapToGlobal(point));
-
-        if (!clicked)
-            return;
-
-        if (clicked == &create_context)
-        {
-
-        }
-
-        if (clicked == &create_directory)
-        {
-
-        }
-
-    }
-
     void ContextManagerWidget::handleCreateContextClicked()
     {
         UserActionCompound* act = new UserActionCompound;
@@ -171,15 +137,32 @@ namespace hal
         act->exec();
     }
 
+    void ContextManagerWidget::handleCreateDirectoryClicked()
+    {
+        bool confirm;
+        QString newName = QInputDialog::getText(this, "Directory name", "name:", QLineEdit::Normal, "", &confirm);
+
+        if (confirm && !newName.isEmpty())
+        {
+            mContextTreeModel->addDirectory(newName);
+        }
+
+    }
+
     void ContextManagerWidget::handleOpenContextClicked()
     {
         GraphContext* clicked_context = getCurrentContext();
+
+        if (!clicked_context) return;
+
         mTabView->showContext(clicked_context);
     }
 
     void ContextManagerWidget::handleRenameContextClicked()
     {
         GraphContext* clicked_context = getCurrentContext();
+
+        if (!clicked_context) return;
 
         QStringList used_context_names;
         for (const auto& context : gGraphContextManager->getContexts())
@@ -207,6 +190,9 @@ namespace hal
     void ContextManagerWidget::handleDuplicateContextClicked()
     {
         GraphContext* clicked_context = getCurrentContext();
+
+        if (!clicked_context) return;
+
         UserActionCompound* act = new UserActionCompound;
         act->setUseCreatedObject();
         act->addAction(new ActionCreateObject(UserActionObjectType::Context,clicked_context->name() + " (Copy)"));
@@ -218,7 +204,11 @@ namespace hal
     {
         QModelIndex current     = mContextTreeView->currentIndex();
         if (!current.isValid()) return;
+
         GraphContext* clicked_context = getCurrentContext();
+
+        if (!clicked_context) return;
+
         ActionDeleteObject* act = new ActionDeleteObject;
         act->setObject(UserActionObject(clicked_context->id(),UserActionObjectType::Context));
         act->exec();
@@ -241,6 +231,14 @@ namespace hal
         QMenu context_menu;
 
         context_menu.addAction(mNewViewAction);
+        context_menu.addAction(mNewDirectoryAction);
+
+        GraphContext* clicked_context = getCurrentContext();
+
+        if (!clicked_context) {
+            context_menu.exec(mContextTreeView->viewport()->mapToGlobal(point));
+            return;
+        }
 
         if (clicked_index.isValid())
         {
@@ -268,7 +266,7 @@ namespace hal
 
     void ContextManagerWidget::selectViewContext(GraphContext* context)
     {
-        const QModelIndex source_model_index = mContextTableModel->getIndexFromContext(context);
+        const QModelIndex source_model_index = mContextTreeModel->getIndexFromContext(context);
         const QModelIndex proxy_model_index = mContextTableProxyModel->mapFromSource(source_model_index);
 
         if(proxy_model_index.isValid())
@@ -282,11 +280,12 @@ namespace hal
         QModelIndex proxy_model_index = mContextTreeView->currentIndex();
         QModelIndex source_model_index = mContextTableProxyModel->mapToSource(proxy_model_index);
 
-        return mContextTableModel->getContext(source_model_index);
+        return mContextTreeModel->getContext(source_model_index);
     }
 
     void ContextManagerWidget::setupToolbar(Toolbar* toolbar)
     {
+        toolbar->addAction(mNewDirectoryAction);
         toolbar->addAction(mNewViewAction);
         toolbar->addAction(mOpenAction);
         toolbar->addAction(mDuplicateAction);

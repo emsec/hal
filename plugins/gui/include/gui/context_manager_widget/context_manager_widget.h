@@ -178,12 +178,14 @@ namespace hal
         GraphTabWidget* mTabView;
 
         QTreeView* mContextTreeView;
-        ContextTreeModel* mContextTableModel;
+        ContextTreeModel* mContextTreeModel;
         ContextTableProxyModel* mContextTableProxyModel;
 
         Searchbar* mSearchbar;
 
         QString mDisabledIconStyle;
+
+        QAction* mNewDirectoryAction;
 
         QAction* mNewViewAction;
         QString mNewViewIconPath;
@@ -211,8 +213,9 @@ namespace hal
 
         QShortcut* mShortCutDeleteItem;
 
-        void handleCreateClicked(const QPoint& point);
+        void handleCreateClicked();
         void handleCreateContextClicked();
+        void handleCreateDirectoryClicked();
         void handleRenameContextClicked();
         void handleDuplicateContextClicked();
         void handleDeleteContextClicked();
