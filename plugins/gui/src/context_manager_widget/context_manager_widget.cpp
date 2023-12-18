@@ -87,11 +87,8 @@ namespace hal
         mContextTreeView->setSelectionMode(QAbstractItemView::SingleSelection); // ERROR ???
         mContextTreeView->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         mContextTreeView->sortByColumn(1, Qt::SortOrder::DescendingOrder);
-        //mContextTreeView->verticalHeader()->hide();
         mContextTreeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-        //mContextTreeView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-        //mContextTreeView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 
 
         mContentLayout->addWidget(mContextTreeView);
@@ -124,7 +121,7 @@ namespace hal
         connect(ContentManager::sSettingDeleteItem, &SettingsItemKeybind::keySequenceChanged, mShortCutDeleteItem, &QShortcut::setKey);
         connect(mShortCutDeleteItem, &QShortcut::activated, this, &ContextManagerWidget::handleDeleteContextClicked);
 
-        connect(qApp, &QApplication::focusChanged, this, &ContextManagerWidget::handleDeleteShortcutOnFocusChanged);
+        connect(qApp, &QApplication::focusChanged, this, &ContextManagerWidget::handleDeleteShortcutOnFocusChanged);    
     }
 
     void ContextManagerWidget::handleCreateContextClicked()

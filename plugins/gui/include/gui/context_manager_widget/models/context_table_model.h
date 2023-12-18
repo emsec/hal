@@ -48,7 +48,6 @@ namespace hal
 
     class ContextTreeItem : public BaseTreeItem
     {
-
         private:
             GraphContext* mContext;
             ContextDirectory* mDirectory;
@@ -143,9 +142,12 @@ namespace hal
          *
          * @return A vector of all GraphContext%s.
          */
-        const QVector<GraphContext*>& list();
+        const QVector<GraphContext*>& list();        
+
     private Q_SLOTS:
         void handleDataChanged();
+        void itemFocusChanged(const QModelIndex &newIndex);
+
 
     private:
         ContextTreeItem *mCurrentDirectory;

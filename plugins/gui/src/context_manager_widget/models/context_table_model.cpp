@@ -1,8 +1,11 @@
 #include "gui/context_manager_widget/models/context_table_model.h"
 
 #include "gui/gui_globals.h"
+#include "gui/gui_utils/graphics.h"
 
 #include <limits>
+#include <QApplication>
+
 
 namespace hal
 {
@@ -97,6 +100,8 @@ namespace hal
     ContextTreeModel::ContextTreeModel(QObject* parent) : BaseTreeModel(parent), mCurrentDirectory(nullptr), mMinDirectoryId(std::numeric_limits<u32>::max())
     {
         setHeaderLabels(QStringList() << "View Name" << "Timestamp");
+        //connect(qApp, &QApplication::focusChanged, this, &ContextTreeModel::itemFocusChanged);
+
     }
 
     QVariant ContextTreeModel::data(const QModelIndex& index, int role) const
@@ -109,16 +114,30 @@ namespace hal
         if (!item)
             return QVariant();
 
-        if(role == Qt::DisplayRole)
+        switch (role)
         {
-
-            switch(index.column())
+            case Qt::DecorationRole:
             {
-                case 0: return item->getData(0); break;
-                case 1: return item->getData(1); break;
-                default: return QVariant();
+                break;
             }
-
+            case Qt::DisplayRole:
+            {
+                switch(index.column())
+                {
+                    case 0: return item->getData(0); break;
+                    case 1: return item->getData(1); break;
+                    default: return QVariant();
+                }
+                break;
+            }
+            case Qt::BackgroundRole:
+            {
+                if (item->isDirectory())
+                    return QColor(QColor( 32, 32, 32));
+                break;
+            }
+            default:
+                return QVariant();
         }
 
         return QVariant();
@@ -139,6 +158,8 @@ namespace hal
 
 
         QModelIndex index = getIndexFromItem(item->getParent());
+
+        mCurrentDirectory = item;
 
         int row = item->getParent()->getChildCount();
         beginInsertRows(index, row, row);
@@ -238,5 +259,12 @@ namespace hal
           mContextList.push_back(it->first);
         }
         return mContextList;
+    }
+
+    void ContextTreeModel::itemFocusChanged(const QModelIndex &newIndex)
+    {
+        BaseTreeItem* currentItem = getItemFromIndex(newIndex);
+        if(currentItem != mRootItem && static_cast<ContextTreeItem*>(currentItem)->isDirectory())
+            mCurrentDirectory = static_cast<ContextTreeItem*>(currentItem);
     }
 }
