@@ -64,6 +64,7 @@
         <file alias="new-file">icons/new-file.svg</file>
         <file alias="pen">icons/pen.svg</file>
         <file alias="plus">icons/plus.svg</file>
+        <file alias="plusdir">icons/plusdir.svg</file>
         <file alias="trashcan">icons/trashcan.svg</file>
         <file alias="graph">icons/0189-tree.svg</file>
         <file alias="keyboard">icons/0086-keyboard.svg</file>

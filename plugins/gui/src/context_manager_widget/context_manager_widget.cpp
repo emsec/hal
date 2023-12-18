@@ -47,7 +47,7 @@ namespace hal
 
         mOpenAction->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
         mNewViewAction->setIcon(gui_utility::getStyledSvgIcon(mNewViewIconStyle, mNewViewIconPath));
-        mNewDirectoryAction->setIcon(gui_utility::getStyledSvgIcon(mNewViewIconStyle, mNewViewIconPath));
+        mNewDirectoryAction->setIcon(gui_utility::getStyledSvgIcon(mNewViewIconStyle, mNewDirIconPath));
         mRenameAction->setIcon(gui_utility::getStyledSvgIcon(mRenameIconStyle, mRenameIconPath));
         mDuplicateAction->setIcon(gui_utility::getStyledSvgIcon(mDuplicateIconStyle, mDuplicateIconPath));
         mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
@@ -364,6 +364,11 @@ namespace hal
         return mNewViewIconPath;
     }
 
+    QString ContextManagerWidget::newDirIconPath() const
+    {
+        return mNewDirIconPath;
+    }
+
     QString ContextManagerWidget::newViewIconStyle() const
     {
         return mNewViewIconStyle;
@@ -432,6 +437,11 @@ namespace hal
     void ContextManagerWidget::setNewViewIconPath(const QString& path)
     {
         mNewViewIconPath = path;
+    }
+
+    void ContextManagerWidget::setNewDirIconPath(const QString& path)
+    {
+        mNewDirIconPath = path;
     }
 
     void ContextManagerWidget::setNewViewIconStyle(const QString& style)

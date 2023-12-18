@@ -62,6 +62,7 @@ namespace hal
         Q_OBJECT
         Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
         Q_PROPERTY(QString newViewIconPath READ newViewIconPath WRITE setNewViewIconPath)
+        Q_PROPERTY(QString newDirIconPath READ newDirIconPath WRITE setNewDirIconPath)
         Q_PROPERTY(QString newViewIconStyle READ newViewIconStyle WRITE setNewViewIconStyle)
         Q_PROPERTY(QString renameIconPath READ renameIconPath WRITE setRenameIconPath)
         Q_PROPERTY(QString renameIconStyle READ renameIconStyle WRITE setRenameIconStyle)
@@ -121,6 +122,7 @@ namespace hal
         ///@{
         QString disabledIconStyle() const;
         QString newViewIconPath() const;
+        QString newDirIconPath() const;
         QString newViewIconStyle() const;
         QString renameIconPath() const;
         QString renameIconStyle() const;
@@ -140,6 +142,7 @@ namespace hal
         ///@{
         void setDisabledIconStyle(const QString &path);
         void setNewViewIconPath(const QString &path);
+        void setNewDirIconPath(const QString &path);
         void setNewViewIconStyle(const QString &style);
         void setRenameIconPath(const QString &path);
         void setRenameIconStyle(const QString &style);
@@ -189,6 +192,7 @@ namespace hal
 
         QAction* mNewViewAction;
         QString mNewViewIconPath;
+        QString mNewDirIconPath;
         QString mNewViewIconStyle;
 
         QAction* mRenameAction;
