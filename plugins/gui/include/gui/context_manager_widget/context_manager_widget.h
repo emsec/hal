@@ -62,7 +62,6 @@ namespace hal
         Q_OBJECT
         Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
         Q_PROPERTY(QString newViewIconPath READ newViewIconPath WRITE setNewViewIconPath)
-        Q_PROPERTY(QString newDirIconPath READ newDirIconPath WRITE setNewDirIconPath)
         Q_PROPERTY(QString newViewIconStyle READ newViewIconStyle WRITE setNewViewIconStyle)
         Q_PROPERTY(QString renameIconPath READ renameIconPath WRITE setRenameIconPath)
         Q_PROPERTY(QString renameIconStyle READ renameIconStyle WRITE setRenameIconStyle)
@@ -101,6 +100,13 @@ namespace hal
         GraphContext* getCurrentContext();
 
         /**
+         * Get the currently selected directory in the table.
+         *
+         * @return The ContextTreeItem.
+         */
+        ContextTreeItem* getCurrentItem();
+
+        /**
          * Opens the currently selected GraphContext in hal's GraphTabWidget
          */
         void handleOpenContextClicked();
@@ -122,7 +128,6 @@ namespace hal
         ///@{
         QString disabledIconStyle() const;
         QString newViewIconPath() const;
-        QString newDirIconPath() const;
         QString newViewIconStyle() const;
         QString renameIconPath() const;
         QString renameIconStyle() const;
@@ -142,7 +147,6 @@ namespace hal
         ///@{
         void setDisabledIconStyle(const QString &path);
         void setNewViewIconPath(const QString &path);
-        void setNewDirIconPath(const QString &path);
         void setNewViewIconStyle(const QString &style);
         void setRenameIconPath(const QString &path);
         void setRenameIconStyle(const QString &style);
@@ -174,7 +178,7 @@ namespace hal
 
     private Q_SLOTS:
 
-        void handleDeleteShortcutOnFocusChanged(QWidget* oldWidget, QWidget* newWidget);
+        void handleFocusChanged(QWidget* oldWidget, QWidget* newWidget);
 
 
     private:
@@ -182,7 +186,7 @@ namespace hal
 
         QTreeView* mContextTreeView;
         ContextTreeModel* mContextTreeModel;
-        ContextTableProxyModel* mContextTableProxyModel;
+        ContextTableProxyModel* mContextTreeProxyModel;
 
         Searchbar* mSearchbar;
 
@@ -192,7 +196,6 @@ namespace hal
 
         QAction* mNewViewAction;
         QString mNewViewIconPath;
-        QString mNewDirIconPath;
         QString mNewViewIconStyle;
 
         QAction* mRenameAction;
