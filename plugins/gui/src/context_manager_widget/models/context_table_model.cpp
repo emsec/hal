@@ -102,7 +102,6 @@ namespace hal
     ContextTreeModel::ContextTreeModel(QObject* parent) : BaseTreeModel(parent), mCurrentDirectory(nullptr), mMinDirectoryId(std::numeric_limits<u32>::max())
     {
         setHeaderLabels(QStringList() << "View Name" << "Timestamp");
-        //connect(qApp, &QApplication::focusChanged, this, &ContextTreeModel::itemFocusChanged);
 
     }
 
@@ -243,7 +242,7 @@ namespace hal
         BaseTreeItem* item = getItemFromIndex(index);
 
         if (static_cast<ContextTreeItem*>(item)->isDirectory()) return nullptr;
-        GraphContext* context;
+        GraphContext* context = nullptr;
         for (auto &i : mContextMap) {
            if (i.second == item) {
               context = i.first;
@@ -262,10 +261,12 @@ namespace hal
         return mContextList;
     }
 
-    void ContextTreeModel::itemFocusChanged(const QModelIndex &newIndex)
+    void ContextTreeModel::setCurrentDirectory(ContextTreeItem* currentItem)
     {
-        BaseTreeItem* currentItem = getItemFromIndex(newIndex);
-        if(currentItem != mRootItem && static_cast<ContextTreeItem*>(currentItem)->isDirectory())
-            mCurrentDirectory = static_cast<ContextTreeItem*>(currentItem);
+        if(currentItem->isContext())
+            mCurrentDirectory = (currentItem->getParent() == mRootItem) ? nullptr : static_cast<ContextTreeItem*>(currentItem->getParent());
+
+        else if (currentItem->isDirectory())
+            mCurrentDirectory = currentItem;
     }
 }

@@ -143,11 +143,17 @@ namespace hal
          *
          * @return A vector of all GraphContext%s.
          */
-        const QVector<GraphContext*>& list();        
+        const QVector<GraphContext*>& list();
+
+        /**
+         * Sets the CurrentDirectory.
+         *
+         * @param ContextTreeItem - The Currently focused Item.
+         */
+        void setCurrentDirectory(ContextTreeItem* currentItem);
 
     private Q_SLOTS:
         void handleDataChanged();
-        void itemFocusChanged(const QModelIndex &newIndex);
 
 
     private:

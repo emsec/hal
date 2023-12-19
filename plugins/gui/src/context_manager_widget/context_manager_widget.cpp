@@ -47,7 +47,7 @@ namespace hal
 
         mOpenAction->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
         mNewViewAction->setIcon(gui_utility::getStyledSvgIcon(mNewViewIconStyle, mNewViewIconPath));
-        mNewDirectoryAction->setIcon(gui_utility::getStyledSvgIcon(mNewViewIconStyle, mNewDirIconPath));
+        mNewDirectoryAction->setIcon(gui_utility::getStyledSvgIcon(mNewViewIconStyle, mNewViewIconPath));
         mRenameAction->setIcon(gui_utility::getStyledSvgIcon(mRenameIconStyle, mRenameIconPath));
         mDuplicateAction->setIcon(gui_utility::getStyledSvgIcon(mDuplicateIconStyle, mDuplicateIconPath));
         mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
@@ -76,12 +76,12 @@ namespace hal
 
         mContextTreeModel = gGraphContextManager->getContextTableModel();
 
-        mContextTableProxyModel = new ContextTableProxyModel(this);
-        mContextTableProxyModel->setSourceModel(mContextTreeModel);
-        mContextTableProxyModel->setSortRole(Qt::UserRole);
+        mContextTreeProxyModel = new ContextTableProxyModel(this);
+        mContextTreeProxyModel->setSourceModel(mContextTreeModel);
+        mContextTreeProxyModel->setSortRole(Qt::UserRole);
 
         mContextTreeView = new QTreeView(this);
-        mContextTreeView->setModel(mContextTableProxyModel);
+        mContextTreeView->setModel(mContextTreeProxyModel);
         mContextTreeView->setSortingEnabled(true);
         mContextTreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
         mContextTreeView->setSelectionMode(QAbstractItemView::SingleSelection); // ERROR ???
@@ -95,8 +95,8 @@ namespace hal
         mContentLayout->addWidget(mSearchbar);
 
         mSearchbar->hide();
-        mSearchbar->setColumnNames(mContextTableProxyModel->getColumnNames());
-        enableSearchbar(mContextTableProxyModel->rowCount() > 0);
+        mSearchbar->setColumnNames(mContextTreeProxyModel->getColumnNames());
+        enableSearchbar(mContextTreeProxyModel->rowCount() > 0);
 
         connect(mOpenAction, &QAction::triggered, this, &ContextManagerWidget::handleOpenContextClicked);        
         connect(mNewViewAction, &QAction::triggered, this, &ContextManagerWidget::handleCreateContextClicked);
@@ -113,7 +113,7 @@ namespace hal
         connect(mContextTreeModel, &ContextTreeModel::rowsInserted, this, &ContextManagerWidget::handleDataChanged);
 
         connect(mSearchbar, &Searchbar::triggerNewSearch, this, &ContextManagerWidget::updateSearchIcon);
-        connect(mSearchbar, &Searchbar::triggerNewSearch, mContextTableProxyModel, &ContextTableProxyModel::startSearch);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mContextTreeProxyModel, &ContextTableProxyModel::startSearch);
 
         mShortCutDeleteItem = new QShortcut(ContentManager::sSettingDeleteItem->value().toString(), this);
         mShortCutDeleteItem->setEnabled(false);
@@ -121,7 +121,7 @@ namespace hal
         connect(ContentManager::sSettingDeleteItem, &SettingsItemKeybind::keySequenceChanged, mShortCutDeleteItem, &QShortcut::setKey);
         connect(mShortCutDeleteItem, &QShortcut::activated, this, &ContextManagerWidget::handleDeleteContextClicked);
 
-        connect(qApp, &QApplication::focusChanged, this, &ContextManagerWidget::handleDeleteShortcutOnFocusChanged);    
+        connect(qApp, &QApplication::focusChanged, this, &ContextManagerWidget::handleFocusChanged);
     }
 
     void ContextManagerWidget::handleCreateContextClicked()
@@ -250,7 +250,7 @@ namespace hal
 
     void ContextManagerWidget::handleDataChanged()
     {
-        enableSearchbar(mContextTableProxyModel->rowCount() > 0);
+        enableSearchbar(mContextTreeProxyModel->rowCount() > 0);
     }
 
     void ContextManagerWidget::updateSearchIcon()
@@ -264,7 +264,7 @@ namespace hal
     void ContextManagerWidget::selectViewContext(GraphContext* context)
     {
         const QModelIndex source_model_index = mContextTreeModel->getIndexFromContext(context);
-        const QModelIndex proxy_model_index = mContextTableProxyModel->mapFromSource(source_model_index);
+        const QModelIndex proxy_model_index = mContextTreeProxyModel->mapFromSource(source_model_index);
 
         if(proxy_model_index.isValid())
             mContextTreeView->setCurrentIndex(proxy_model_index);
@@ -275,9 +275,21 @@ namespace hal
     GraphContext* ContextManagerWidget::getCurrentContext()
     {
         QModelIndex proxy_model_index = mContextTreeView->currentIndex();
-        QModelIndex source_model_index = mContextTableProxyModel->mapToSource(proxy_model_index);
+        QModelIndex source_model_index = mContextTreeProxyModel->mapToSource(proxy_model_index);
 
         return mContextTreeModel->getContext(source_model_index);
+    }
+
+    ContextTreeItem *ContextManagerWidget::getCurrentItem()
+    {
+        QModelIndex proxy_model_index = mContextTreeView->currentIndex();
+        QModelIndex source_model_index = mContextTreeProxyModel->mapToSource(proxy_model_index);
+
+        BaseTreeItem* currentItem = mContextTreeModel->getItemFromIndex(source_model_index);
+        if (currentItem != mContextTreeModel->getRootItem())
+            return static_cast<ContextTreeItem*>(currentItem);
+
+        return nullptr;
     }
 
     void ContextManagerWidget::setupToolbar(Toolbar* toolbar)
@@ -364,11 +376,6 @@ namespace hal
         return mNewViewIconPath;
     }
 
-    QString ContextManagerWidget::newDirIconPath() const
-    {
-        return mNewDirIconPath;
-    }
-
     QString ContextManagerWidget::newViewIconStyle() const
     {
         return mNewViewIconStyle;
@@ -439,11 +446,6 @@ namespace hal
         mNewViewIconPath = path;
     }
 
-    void ContextManagerWidget::setNewDirIconPath(const QString& path)
-    {
-        mNewDirIconPath = path;
-    }
-
     void ContextManagerWidget::setNewViewIconStyle(const QString& style)
     {
         mNewViewIconStyle = style;
@@ -504,8 +506,10 @@ namespace hal
         mSearchActiveIconStyle = style;
     }
 
-    void ContextManagerWidget::handleDeleteShortcutOnFocusChanged(QWidget* oldWidget, QWidget* newWidget)
+    void ContextManagerWidget::handleFocusChanged(QWidget* oldWidget, QWidget* newWidget)
     {
+        mContextTreeModel->setCurrentDirectory(getCurrentItem());
+
         if(!newWidget) return;
         if(newWidget->parent() == this)
         {
