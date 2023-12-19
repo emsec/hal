@@ -105,6 +105,8 @@
         <file alias="invoke-gui">icons/0503-invoke-gui.svg</file>
 	<file alias="tree-collapsed">icons/tree-collapsed.svg</file>
 	<file alias="tree-expanded">icons/tree-expanded.svg</file>
+        <file alias="view-ctx">icons/view-ctx.svg</file>
+        <file alias="view-dir">icons/view-dir.svg</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="spinner">images/oval.svg</file>

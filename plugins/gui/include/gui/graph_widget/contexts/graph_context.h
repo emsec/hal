@@ -411,7 +411,7 @@ namespace hal
          *
          * @return The exclusive module id.
          */
-        u32 getExclusiveModuleId()
+        u32 getExclusiveModuleId() const
         {
             return mExclusiveModuleId;
         }

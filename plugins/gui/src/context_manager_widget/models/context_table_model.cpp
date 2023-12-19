@@ -1,5 +1,5 @@
 #include "gui/context_manager_widget/models/context_table_model.h"
-
+#include "gui/selection_details_widget/selection_details_icon_provider.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
 
@@ -19,8 +19,8 @@ namespace hal
 
     ContextTreeItem::ContextTreeItem(ContextDirectory *directory) :
         BaseTreeItem(),
-        mDirectory(directory),
-        mContext(nullptr)
+        mContext(nullptr),
+        mDirectory(directory)
     {
     }
 
@@ -33,12 +33,10 @@ namespace hal
                 case 0:
                 {
                     return mDirectory->getName();
-                    break;
                 }
                 case 1:
                 {
                     return "";
-                    break;
                 }
             }
         }
@@ -49,15 +47,19 @@ namespace hal
                 case 0:
                 {
                     return mContext->getNameWithDirtyState();
-                    break;
                 }
                 case 1:
                 {
                     return mContext->getTimestamp().toString(Qt::SystemLocaleShortDate);
-                    break;
                 }
             }
         }
+        return QVariant();
+    }
+
+    const GraphContext* ContextTreeItem::context() const
+    {
+        return mContext;
     }
 
     void ContextTreeItem::setData(QList<QVariant> data)
@@ -118,24 +120,23 @@ namespace hal
         {
             case Qt::DecorationRole:
             {
-                break;
-            }
-            case Qt::DisplayRole:
-            {
-                switch(index.column())
-                {
-                    case 0: return item->getData(0); break;
-                    case 1: return item->getData(1); break;
-                    default: return QVariant();
-                }
-                break;
-            }
-            case Qt::BackgroundRole:
-            {
+                if (index.column()) return QVariant(); // decorator only for first column
                 if (item->isDirectory())
-                    return QColor(QColor( 32, 32, 32));
-                break;
+                    return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::ViewDir,0));
+                const GraphContext* ctx = item->context();
+                u32 mid = 0;
+                if (ctx && (mid=ctx->getExclusiveModuleId()) != 0)
+                    return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::ModuleIcon,mid));
+                return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::ViewCtx,0));
             }
+
+            case Qt::DisplayRole:
+                return item->getData(index.column());
+
+            case Qt::BackgroundRole:
+                // must declare color in dark/light style
+                return QVariant();
+
             default:
                 return QVariant();
         }
