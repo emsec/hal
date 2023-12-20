@@ -98,7 +98,7 @@ namespace hal
         mSearchbar->setColumnNames(mContextTreeProxyModel->getColumnNames());
         enableSearchbar(mContextTreeProxyModel->rowCount() > 0);
 
-        connect(mOpenAction, &QAction::triggered, this, &ContextManagerWidget::handleOpenContextClicked);        
+        connect(mOpenAction, &QAction::triggered, this, &ContextManagerWidget::handleOpenContextClicked);
         connect(mNewViewAction, &QAction::triggered, this, &ContextManagerWidget::handleCreateContextClicked);
         connect(mNewDirectoryAction, &QAction::triggered, this, &ContextManagerWidget::handleCreateDirectoryClicked);
         connect(mRenameAction, &QAction::triggered, this, &ContextManagerWidget::handleRenameContextClicked);
@@ -106,8 +106,8 @@ namespace hal
         connect(mDeleteAction, &QAction::triggered, this, &ContextManagerWidget::handleDeleteContextClicked);
         connect(mSearchAction, &QAction::triggered, this, &ContextManagerWidget::toggleSearchbar);
 
-        connect(mContextTreeView, &QTableView::customContextMenuRequested, this, &ContextManagerWidget::handleContextMenuRequest);
-        connect(mContextTreeView, &QTableView::doubleClicked, this, &ContextManagerWidget::handleOpenContextClicked);
+        connect(mContextTreeView, &QTreeView::customContextMenuRequested, this, &ContextManagerWidget::handleContextMenuRequest);
+        connect(mContextTreeView, &QTreeView::doubleClicked, this, &ContextManagerWidget::handleItemDoubleClicked);
         connect(mContextTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ContextManagerWidget::handleSelectionChanged);
         connect(mContextTreeModel, &ContextTreeModel::rowsRemoved, this, &ContextManagerWidget::handleDataChanged);
         connect(mContextTreeModel, &ContextTreeModel::rowsInserted, this, &ContextManagerWidget::handleDataChanged);
@@ -148,11 +148,25 @@ namespace hal
 
     void ContextManagerWidget::handleOpenContextClicked()
     {
-        GraphContext* clicked_context = getCurrentContext();
+        GraphContext* defaultContext = getCurrentContext();
+        if (!defaultContext) return;
+        mTabView->showContext(defaultContext);
+    }
 
-        if (!clicked_context) return;
+    void ContextManagerWidget::handleItemDoubleClicked(const QModelIndex &index)
+    {
+        ContextTreeItem* item = static_cast<ContextTreeItem*>(mContextTreeModel->getItemFromIndex(index));
+        if (item->isDirectory()){
+            mContextTreeModel->setCurrentDirectory(item);
+        }
+        else {
 
-        mTabView->showContext(clicked_context);
+            GraphContext* clickedContext = item->context();
+
+            if (!clickedContext) return;
+
+            mTabView->showContext(clickedContext);
+        }
     }
 
     void ContextManagerWidget::handleRenameContextClicked()
@@ -518,8 +532,6 @@ namespace hal
 
     void ContextManagerWidget::handleFocusChanged(QWidget* oldWidget, QWidget* newWidget)
     {
-        mContextTreeModel->setCurrentDirectory(getCurrentItem());
-
         if(!newWidget) return;
         if(newWidget->parent() == this)
         {

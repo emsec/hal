@@ -57,7 +57,7 @@ namespace hal
         return QVariant();
     }
 
-    const GraphContext* ContextTreeItem::context() const
+    GraphContext *ContextTreeItem::context() const
     {
         return mContext;
     }
@@ -149,21 +149,21 @@ namespace hal
 
         ContextTreeItem* item   = new ContextTreeItem(directory);
 
-        if (parent)
-            item->setParent(parent);
-        else if(mCurrentDirectory)
-            item->setParent(mCurrentDirectory);
-        else
-            item->setParent(mRootItem);
+        BaseTreeItem* parentItem = parent;
+
+        if (!parentItem)
+            parentItem = mCurrentDirectory;
+        if (!parentItem)
+            parentItem = mRootItem;
 
 
-        QModelIndex index = getIndexFromItem(item->getParent());
+        QModelIndex index = getIndexFromItem(parentItem);
 
         mCurrentDirectory = item;
 
-        int row = item->getParent()->getChildCount();
+        int row = parentItem->getChildCount();
         beginInsertRows(index, row, row);
-        item->getParent()->appendChild(item);
+        parentItem->appendChild(item);
         endInsertRows();
 
 

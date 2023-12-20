@@ -63,7 +63,7 @@ namespace hal
             int row() const;
             bool isDirectory() const;
             bool isContext() const;
-            const GraphContext* context() const;
+            GraphContext* context() const;
     };
 
     /**

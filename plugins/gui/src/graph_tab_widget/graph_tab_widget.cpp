@@ -322,7 +322,7 @@ namespace hal
         return 0;
     }
 
-    int GraphTabWidget::getContextTabIndex(GraphContext* context) const
+    int GraphTabWidget::getContextTabIndex(const GraphContext* context) const
     {
         for (int i = 0; i < mTabWidget->count(); i++)
         {
