@@ -31,6 +31,8 @@ namespace hal
             return qvType;
             break;}
         }
+
+        return QVariant(QVariant::Type::Invalid);
     }
 
     void NetlistElementsTreeitem::setData(QList<QVariant> data)

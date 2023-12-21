@@ -1029,6 +1029,21 @@ namespace hal
         std::unordered_map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, Net*>>, boost::hash<std::pair<MPG, Net*>>> connectivity_inwards;
         std::unordered_map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, Net*>>, boost::hash<std::pair<MPG, Net*>>> connectivity_outwards;
 
+#ifdef PRINT_GENERAL
+        std::cout << "Known bitorders [" << known_bitorders.size() << "]:" << std::endl;
+        for (const auto& [mpg, _] : known_bitorders)
+        {
+            std::cout << "\t" << mpg.first->get_name() << " - " << mpg.second->get_name() << std::endl;
+        }
+
+        std::cout << "Unknown bitorders [" << known_bitorders.size() << "]:" << std::endl;
+        for (const auto& [m, pg] : unknown_bitorders)
+        {
+            std::cout << "\t" << m->get_name() << " - " << pg->get_name() << std::endl;
+        }
+
+#endif
+
         std::set<MPG> relevant_pin_groups = unknown_bitorders;
         for (const auto& [kb, _] : known_bitorders)
         {
@@ -1265,7 +1280,7 @@ namespace hal
                     }
                 }
 
-#ifdef PRINT_GENERAL
+#ifdef PRINT_CONFLICT
                 std::cout << "Extract for " << m->get_id() << " / " << m->get_name() << " - " << pg->get_name() << ": (INWARDS) " << std::endl;
 #endif
 
@@ -1276,7 +1291,7 @@ namespace hal
                     continue;
                 }
 
-#ifdef PRINT_GENERAL
+#ifdef PRINT_CONFLICT
                 std::cout << "Extract for " << m->get_id() << " / " << m->get_name() << " - " << pg->get_name() << ": (OUTWARDS) " << std::endl;
 #endif
                 const auto newly_wellformed_outwards = extract_well_formed_bitorder({m, pg}, collected_outwards, strict_consens_finding);
@@ -1286,7 +1301,7 @@ namespace hal
                     continue;
                 }
 
-#ifdef PRINT_GENERAL
+#ifdef PRINT_CONFLICT
                 std::cout << "Extract for " << m->get_id() << " / " << m->get_name() << " - " << pg->get_name() << ": (COMBINED) " << std::endl;
 #endif
                 const auto newly_wellformed_combined = extract_well_formed_bitorder({m, pg}, collected_combined, strict_consens_finding);

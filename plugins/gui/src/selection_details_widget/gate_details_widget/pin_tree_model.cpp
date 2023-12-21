@@ -40,6 +40,8 @@ namespace hal
             return qvNetName;
             break;}
         }
+
+        return QVariant(QVariant::Type::Invalid);
     }
 
     void PinTreeItem::setData(QList<QVariant> data)
