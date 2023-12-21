@@ -4,8 +4,26 @@
 
 namespace hal
 {
-    ModuleTreeView::ModuleTreeView(QWidget *parent) : QTreeView(parent)
+    ModuleTreeView::ModuleTreeView(QWidget *parent)
+        : QTreeView(parent), mToggleStateExpanded(true)
     {
+    }
+
+    void ModuleTreeView::expandAllModules()
+    {
+        mToggleStateExpanded = true;
+        expandAll();
+    }
+
+    void ModuleTreeView::collapseAllModules()
+    {
+        mToggleStateExpanded = false;
+        collapseAll();
+    }
+
+    bool ModuleTreeView::toggleStateExpanded() const
+    {
+        return mToggleStateExpanded;
     }
 
     void ModuleTreeView::setDefaultColumnWidth()

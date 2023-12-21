@@ -102,6 +102,7 @@ namespace hal
          * @returns <b>true</b> if the element at source_left is considered less than the element at source_right
          */
         bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
+        bool checkRowRecursion(int sourceRow, const QModelIndex& sourceParent, int startIndex, int endIndex, int offset = 0) const override;
 
     private:
         gui_utility::mSortMechanism mSortMechanism;
