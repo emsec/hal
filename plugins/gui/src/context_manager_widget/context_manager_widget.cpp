@@ -76,7 +76,7 @@ namespace hal
 
         mContextTreeModel = gGraphContextManager->getContextTableModel();
 
-        mContextTreeProxyModel = new ContextTableProxyModel(this);
+        mContextTreeProxyModel = new ContextProxyModel(this);
         mContextTreeProxyModel->setSourceModel(mContextTreeModel);
         mContextTreeProxyModel->setSortRole(Qt::UserRole);
 
@@ -113,7 +113,7 @@ namespace hal
         connect(mContextTreeModel, &ContextTreeModel::rowsInserted, this, &ContextManagerWidget::handleDataChanged);
 
         connect(mSearchbar, &Searchbar::triggerNewSearch, this, &ContextManagerWidget::updateSearchIcon);
-        connect(mSearchbar, &Searchbar::triggerNewSearch, mContextTreeProxyModel, &ContextTableProxyModel::startSearch);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mContextTreeProxyModel, &ContextProxyModel::startSearch);
 
         mShortCutDeleteItem = new QShortcut(ContentManager::sSettingDeleteItem->value().toString(), this);
         mShortCutDeleteItem->setEnabled(false);
@@ -153,9 +153,10 @@ namespace hal
         mTabView->showContext(defaultContext);
     }
 
-    void ContextManagerWidget::handleItemDoubleClicked(const QModelIndex &index)
+    void ContextManagerWidget::handleItemDoubleClicked(const QModelIndex &proxyIndex)
     {
-        ContextTreeItem* item = static_cast<ContextTreeItem*>(mContextTreeModel->getItemFromIndex(index));
+        QModelIndex sourceIndex = mContextTreeProxyModel->mapToSource(proxyIndex);
+        ContextTreeItem* item = static_cast<ContextTreeItem*>(mContextTreeModel->getItemFromIndex(sourceIndex));
         if (item->isDirectory()){
             mContextTreeModel->setCurrentDirectory(item);
         }

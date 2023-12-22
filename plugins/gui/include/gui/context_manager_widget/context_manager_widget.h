@@ -30,8 +30,8 @@
 #include "hal_core/defines.h"
 
 #include "gui/graph_widget/contexts/graph_context.h"
-#include "gui/context_manager_widget/models/context_table_model.h"
-#include "gui/context_manager_widget/models/context_table_proxy_model.h"
+#include "gui/context_manager_widget/models/context_tree_model.h"
+#include "gui/context_manager_widget/models/context_proxy_model.h"
 #include "gui/searchbar/searchbar.h"
 #include "gui/settings/settings_items/settings_item_keybind.h"
 
@@ -115,7 +115,7 @@ namespace hal
         /**
          * Handle double clicked
          */
-        void handleItemDoubleClicked(const QModelIndex &index);
+        void handleItemDoubleClicked(const QModelIndex &proxyIndex);
 
         /**
          * Initializes the Toolbar of the ContextManagerWidget.
@@ -194,7 +194,7 @@ namespace hal
 
         QTreeView* mContextTreeView;
         ContextTreeModel* mContextTreeModel;
-        ContextTableProxyModel* mContextTreeProxyModel;
+        ContextProxyModel* mContextTreeProxyModel;
 
         Searchbar* mSearchbar;
 

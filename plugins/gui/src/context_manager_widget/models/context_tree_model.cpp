@@ -1,4 +1,4 @@
-#include "gui/context_manager_widget/models/context_table_model.h"
+#include "gui/context_manager_widget/models/context_tree_model.h"
 #include "gui/selection_details_widget/selection_details_icon_provider.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"

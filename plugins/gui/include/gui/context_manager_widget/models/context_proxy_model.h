@@ -37,7 +37,7 @@ namespace hal
      * @ingroup utility_widgets-context
      * @brief A proxy model to filter the ContextTableModel by a given string.
      */
-    class ContextTableProxyModel : public SearchProxyModel
+    class ContextProxyModel : public SearchProxyModel
     {
         Q_OBJECT
 
@@ -47,7 +47,7 @@ namespace hal
          *
          * @param parent - The widget's parent.
          */
-        ContextTableProxyModel(QObject* parent = nullptr);
+        ContextProxyModel(QObject* parent = nullptr);
 
         /**
          * Determines if the index specified by the row and its parent should be displayed

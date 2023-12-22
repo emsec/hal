@@ -1,6 +1,6 @@
 #include "gui/graph_widget/graph_context_manager.h"
 
-#include "gui/context_manager_widget/models/context_table_model.h"
+#include "gui/context_manager_widget/models/context_tree_model.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graphics_scene.h"

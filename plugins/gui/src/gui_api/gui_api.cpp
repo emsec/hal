@@ -14,7 +14,7 @@
 #include "gui/user_action/action_unfold_module.h"
 #include "gui/user_action/action_move_node.h"
 #include "gui/graph_widget/graph_context_manager.h"
-#include "gui/context_manager_widget/models/context_table_model.h"
+#include "gui/context_manager_widget/models/context_tree_model.h"
 #include "hal_core/utilities/log.h"
 
 #include <algorithm>

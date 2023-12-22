@@ -1,4 +1,4 @@
-#include "gui/context_manager_widget/models/context_table_proxy_model.h"
+#include "gui/context_manager_widget/models/context_proxy_model.h"
 
 #include "gui/gui_utils/sort.h"
 
@@ -6,17 +6,17 @@
 
 namespace hal
 {
-    ContextTableProxyModel::ContextTableProxyModel(QObject* parent) : SearchProxyModel(parent)
+    ContextProxyModel::ContextProxyModel(QObject* parent) : SearchProxyModel(parent)
     {
 
     }
 
-    bool ContextTableProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
+    bool ContextProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
     {
         return checkRow(source_row, source_parent, 0, 1);
     }
 
-    bool ContextTableProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
+    bool ContextProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
     {
         QVariant leftData = sourceModel()->data(left, Qt::UserRole);
         QVariant rightData = sourceModel()->data(right, Qt::UserRole);
@@ -27,7 +27,7 @@ namespace hal
             return !(gui_utility::compare(gui_utility::mSortMechanism::natural, leftData.toString(), rightData.toString()));
     }
 
-    void ContextTableProxyModel::startSearch(QString text, int options)
+    void ContextProxyModel::startSearch(QString text, int options)
     {
         mSearchString = text;
         mSearchOptions = SearchOptions(options);
