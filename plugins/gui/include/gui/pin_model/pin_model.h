@@ -99,11 +99,18 @@ namespace hal
         QList<PinItem*> mInvalidPins = QList<PinItem*>();
         QList<PinItem*> mInvalidGroups = QList<PinItem*>();
 
-        bool isNameAvailable(const QString& name, PinItem* pinItem) const;
+        /**
+         * checks if the name is available and if assign flag is set the checked name is marked as assigned
+         * @param name the new name which has to be checked
+         * @param pinItem pinItem for which the name should be checked
+         * @param assign whether the new name should be marked as assigned
+         * @return true if name is available to be taken - otherwise false
+         */
+        bool isNameAvailable(const QString& name, PinItem* pinItem, bool assign = false);
         void handleInvalidPinUpdate(PinItem* pinItem);
         void handleInvalidGroupUpdate(PinItem* groupItem);
-        bool renamePin(PinItem* pinItem, const QString& newName) const;
-        bool renamePinGroup(PinItem* groupItem, const QString& newName) const;
+        bool renamePin(PinItem* pinItem, const QString& newName);
+        bool renamePinGroup(PinItem* groupItem, const QString& newName);
         void addPinToPinGroup(u32 pinId, u32 groupId);
         void handleGroupDirectionUpdate(PinItem* groupItem ,PinDirection direction = PinDirection::none);
 
@@ -112,6 +119,7 @@ namespace hal
 
 
         GateType* mGate;
+        QSet<QString> mAssignedNames;
 
     };
 }   // namespace hal

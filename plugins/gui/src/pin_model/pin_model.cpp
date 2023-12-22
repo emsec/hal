@@ -7,6 +7,7 @@ namespace hal
     {
         // use root item to store header information
         setHeaderLabels(QStringList() << "Name" << "Direction" << "Type" << "TODO");
+        mAssignedNames = QSet<QString>();
     }
 
     Qt::ItemFlags PinModel::flags(const QModelIndex& index) const
@@ -42,6 +43,9 @@ namespace hal
                 pinItem->setData(QList<QVariant>() << pin->get_id() << QString::fromStdString(pin->get_name()) << pinDirection << pinType);
 
                 groupItem->appendChild(pinItem);
+
+                //add pinItem to the mapped name
+                mAssignedNames.insert(pinItem->getName());
             }
 
             //add dummy to each group
@@ -49,6 +53,10 @@ namespace hal
             dummyPin->setData(QList<QVariant>() << "create new pin ...");
             groupItem->appendChild(dummyPin);
             mRootItem->appendChild(groupItem);
+
+            //add groupItem to mapped name
+            //add pinItem to the mapped name
+            mAssignedNames.insert(groupItem->getName());
         }
         //create dummy for the group creator
         auto dummyGroup = new PinItem(PinItem::TreeItemType::GroupCreator);
@@ -87,6 +95,9 @@ namespace hal
                     qInfo() << "Could not create pingroup: " << QString::fromStdString(result.get_error().get());
                     return;
                 }
+                if(!isNameAvailable(input, pinItem, true))
+                    return;
+
                 auto group = result.get();
                 pinItem->setFields(QString::fromStdString(group->get_name()), group->get_id(), group->get_direction(), group->get_type());
                 pinItem->setItemType(PinItem::TreeItemType::InvalidPinGroup);
@@ -115,7 +126,7 @@ namespace hal
             case PinItem::TreeItemType::PinCreator:{
                 qInfo() << "was PinCreator: " << pinItem->getName();
                 // creates a new pin which is not valid until now nor created via gate->create_pin()
-                if(!isNameAvailable(input, pinItem))
+                if(!isNameAvailable(input, pinItem, true))
                     break;
                 pinItem->setFields(input, 0, PinDirection::none, PinType::none);
                 pinItem->setItemType(PinItem::TreeItemType::InvalidPin);
@@ -252,10 +263,10 @@ namespace hal
     }
 
 
-    bool PinModel::renamePin(PinItem* pinItem, const QString& newName) const
+    bool PinModel::renamePin(PinItem* pinItem, const QString& newName)
     {
         //Check if name is already in use
-        if(!isNameAvailable(newName, pinItem))
+        if(!isNameAvailable(newName, pinItem, true))
             return false;
 
         if(pinItem->id() == 0) return true;
@@ -269,10 +280,10 @@ namespace hal
         return true;
     }
 
-    bool PinModel::renamePinGroup(PinItem* groupItem, const QString& newName) const
+    bool PinModel::renamePinGroup(PinItem* groupItem, const QString& newName)
     {
         //Check if name is already in use
-        if(!isNameAvailable(newName, groupItem))
+        if(!isNameAvailable(newName, groupItem, true))
             return false;
 
         if(groupItem->id() == 0) return true;
@@ -285,49 +296,48 @@ namespace hal
         return true;
     }
 
-    bool PinModel::isNameAvailable(const QString& name, PinItem* pinItem) const
+    bool PinModel::isNameAvailable(const QString& name, PinItem* pinItem, bool assign)
     {
-        switch(pinItem->getItemType()){
-            case PinItem::TreeItemType::PinGroup:
-            case PinItem::TreeItemType::InvalidPinGroup:
-            case PinItem::TreeItemType::GroupCreator:{
-                for(auto group : mGate->get_pin_groups()){
-                    //dont check the name for itself
+        //if the new name is the same as the old one then accept
+        if(name == pinItem->getName())
+        {
+            if(assign)
+                mAssignedNames.insert(name);
+            return true;
+        }
 
-                    if(pinItem->id() == group->get_id())
-                        continue;
-                    if( group->get_name() == name.toStdString())
-                        return false;
-                }
-                //traverse groups that are not yet created
-                for(auto group : mInvalidGroups){
-                    if(pinItem == group)
-                        continue;
-                    if(group->getName() == name)
-                        return false;
-                }
-                break;
-            }
-            case PinItem::TreeItemType::Pin:
-            case PinItem::TreeItemType::InvalidPin:
-            case PinItem::TreeItemType::PinCreator:{
-                for(auto pin : mGate->get_pins()){
-                    //dont check the name for itself
-                    if(pinItem->id() == pin->get_id())
-                        continue;
-                    if(pin->get_name() == name.toStdString())
-                        return false;
-                }
-                //traverse pins that are not yet created
-                for(auto pin : mInvalidPins){
-                    if(pinItem == pin)
-                        continue;
-                    if(pin->getName() == name)
-                        return false;
-                }
-                break;
+        //check if the name is in the assigned names
+        if(!mAssignedNames.contains(name))
+        {
+            if(assign)
+                mAssignedNames.insert(name);
+            return true;
+        }
+
+        PinItem::TreeItemType type = pinItem->getItemType();
+        bool isGroup = (type == PinItem::TreeItemType::PinGroup || type == PinItem::TreeItemType::InvalidPinGroup || type == PinItem::TreeItemType::GroupCreator);
+
+        //get the name of the corresponding group item
+        QString groupName = isGroup ? pinItem->getName() : static_cast<PinItem*>(pinItem->getParent())->getName();
+
+        //if it is a group and the name is already taken then return false - or if the pin tries to take a taken name which is not the groupname
+        if(isGroup || groupName != name)
+            return false;
+
+        //it is not a group item so check if pin can take the name
+        PinItem* groupItem = static_cast<PinItem*>(pinItem->getParent());
+        //iterate over each child
+        for(auto basePin : groupItem->getChildren()){
+            auto pin = static_cast<PinItem*>(basePin);
+            //check each pin if it already has the name
+            if(pin != pinItem){
+                if(pin->getName() == name)
+                    return false;
             }
         }
+
+        if(assign)
+            mAssignedNames.insert(name);
         return true;
     }
 
