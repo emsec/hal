@@ -87,8 +87,12 @@ namespace hal
          */
         void handleEditType(QModelIndex index, const QString& type);
 
-
-
+        /**
+         * Checks whether a Pin or a Group does exist in the Gate
+         * @param item the PinItem which should be checked
+         * @return true if the pinItem or pinGroup has a corresponding item within the gate - false otherwise
+         */
+        bool assertionTestForEntry(PinItem* item);
 
 
     private:
@@ -101,6 +105,8 @@ namespace hal
         bool renamePin(PinItem* pinItem, const QString& newName) const;
         bool renamePinGroup(PinItem* groupItem, const QString& newName) const;
         void addPinToPinGroup(u32 pinId, u32 groupId);
+        void handleGroupDirectionUpdate(PinItem* groupItem ,PinDirection direction = PinDirection::none);
+
         Result<GatePin*> createPin(PinItem* pinItem, bool addToGroup = false);
 
 

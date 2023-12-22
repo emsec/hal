@@ -77,6 +77,8 @@ namespace hal
                 break;
             }
             case PinItem::TreeItemType::GroupCreator:{
+                //TODO also check pin names when a group is created - otherwise a group with e.g name I1 will create a pin with the same name but this one isnt checked
+
                 qInfo() << "was GroupCreator: " << pinItem->getName();
                 // creates a new pingroup with a pin which is not valid until edited
 
@@ -148,13 +150,24 @@ namespace hal
         auto itemType = pinItem->getItemType();
 
         switch(itemType){
-            case PinItem::TreeItemType::PinGroup: {
+            case PinItem::TreeItemType::PinGroup:
+            case PinItem::TreeItemType::InvalidPinGroup:{
                 qInfo() << "was Group: " << pinItem->getName();
+                handleGroupDirectionUpdate(pinItem, enum_from_string<PinDirection>(direction.toStdString()));
                 //TODO
                 break;
             }
             case PinItem::TreeItemType::Pin:{
                 qInfo() << "was Pin: " << pinItem->getName();
+                GatePin* pin = mGate->get_pin_by_id(pinItem->id());
+                if(!pin)
+                    break;
+                pin->set_direction(enum_from_string<PinDirection>(direction.toStdString()));
+                pinItem->setDirection(direction);
+                //get the groupItem and update it
+                auto groupItem = static_cast<PinItem*>(pinItem->getParent());
+                handleGroupDirectionUpdate(groupItem);
+
                 //TODO
                 break;
             }
@@ -274,7 +287,6 @@ namespace hal
 
     bool PinModel::isNameAvailable(const QString& name, PinItem* pinItem) const
     {
-        //TODO also check invalid pins for the name - maybe use a list
         switch(pinItem->getItemType()){
             case PinItem::TreeItemType::PinGroup:
             case PinItem::TreeItemType::InvalidPinGroup:
@@ -339,16 +351,25 @@ namespace hal
             qInfo() << "Could not create pin: " << QString::fromStdString(result.get_error().get());
             return;
         }
+
         //get corresponding group
         GatePin* pin = result.get();
         auto groupItem = static_cast<PinItem*>(pinItem->getParent());
         u32 pinGroupId = groupItem->id();
+        //set pinId to new Id
+        pinItem->setId(pin->get_id());
+
+        //add pin to group
         addPinToPinGroup(pin->get_id(),pinGroupId);
     }
 
     void PinModel::handleInvalidGroupUpdate(PinItem* groupItem){
         //TODO implement logic
         bool isValid = true;
+
+        //calculate new direction
+        handleGroupDirectionUpdate(groupItem);
+
         //check each pin in the group if its valid or not
         for(auto baseTreeItem : groupItem->getChildren()){
             auto childPin = static_cast<PinItem*>(baseTreeItem);
@@ -364,5 +385,84 @@ namespace hal
         }
     }
 
+    void PinModel::handleGroupDirectionUpdate(PinItem* groupItem ,PinDirection direction){
+        if(direction != PinDirection::none){
+            //direction was chosen manually
+            auto group = mGate->get_pin_group_by_id(groupItem->id());
+            if(!group)
+                return;
+            group->set_direction(direction);
+            groupItem->setDirection(QString::fromStdString(enum_to_string(direction)));
+            return;
+        }
 
+        //direction has to be calculated based on contained pins
+
+        //bitmask with inout = 2³, out = 2², in = 2¹, internal = 2⁰
+        int directionMask = 0;
+
+        for(BaseTreeItem* pin : groupItem->getChildren()){
+            QString dir = static_cast<PinItem*>(pin)->getDirection();
+            if(dir.toStdString() == enum_to_string(PinDirection::inout))
+                directionMask = directionMask | (1 << 3);
+            else if(dir.toStdString() == enum_to_string(PinDirection::output))
+                directionMask = directionMask | (1 << 2);
+            else if(dir.toStdString() == enum_to_string(PinDirection::input))
+                    directionMask = directionMask | 1 << 1;
+            else if(dir.toStdString() == enum_to_string(PinDirection::internal))
+                directionMask = directionMask | 1;
+
+            //if all bits are set then break
+            if(directionMask >= (1 << 4) - 1)
+                break;
+        }
+
+        auto group = mGate->get_pin_group_by_id(groupItem->id());
+        if(!group)
+            return;
+        PinDirection calcDir = group->get_direction();
+        //inout or  in and out was set
+        if(directionMask >= (1 << 3) || (directionMask & (1<<2) && directionMask & (1<<1))){
+            calcDir = PinDirection::inout;
+        }
+        //inout is not set and in and out are not set simultaneously
+        else if(directionMask >= 1<<2){
+            calcDir = PinDirection::output;
+        }
+        else if(directionMask > 1){
+            calcDir = PinDirection::input;
+        }
+        else if(directionMask > 0){
+            calcDir = PinDirection::internal;
+        }
+
+        //else it should stay to what it was before
+
+        //set calculated direction
+        group->set_direction(calcDir);
+        groupItem->setDirection(QString::fromStdString(enum_to_string(calcDir)));
+    }
+
+    bool PinModel::assertionTestForEntry(PinItem* item){
+        //TODO remove function after verification
+        // tests if a pin or group which is valid does exist in the Gate aswell
+
+        if(item->getItemType() == PinItem::TreeItemType::PinGroup){
+            //check if id is present and if so check the names
+            auto group = mGate->get_pin_group_by_id(item->id());
+            if(!group)
+                return false;
+            return (group->get_name() == item->getName().toStdString());
+        }
+        else if(item->getItemType() == PinItem::TreeItemType::Pin){
+            //check if id is present and if so check the names
+            auto pin = mGate->get_pin_by_id(item->id());
+            if(!pin)
+                return false;
+
+            return (pin->get_name() == item->getName().toStdString());
+        }
+
+        return true;
+    }
 }

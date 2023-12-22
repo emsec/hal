@@ -78,6 +78,7 @@ namespace hal
          */
         void setName(const QString& name);
         void setDirection(const QString& direction);
+        void setId(u32 newId);
         void setType(const QString& type);
 
         void setFields(GatePin* pin);

@@ -79,6 +79,7 @@ namespace hal
         qInfo() << "Editing row: " << index.row() << "  column: " << index.column();
         auto pinItem = static_cast<PinItem*>(index.internalPointer());
         PinItem::TreeItemType itemType = pinItem->getItemType();
+
         switch(index.column()){
             case 0: {
                 //name editor
@@ -112,6 +113,7 @@ namespace hal
     {
         //TODO cast editor to corresponding column
         PinItem::TreeItemType itemType = static_cast<PinItem*>(index.internalPointer())->getItemType();
+        auto pinModel = static_cast<PinModel*>(model);
 
         switch(index.column()){
             case 0: {
@@ -119,30 +121,34 @@ namespace hal
                 auto lineEdit = static_cast<QLineEdit*>(editor);
                 QString text  = lineEdit->text();
                 if (!text.isEmpty())
-                    static_cast<PinModel*>(model)->handleEditName(index, text);
+                    pinModel->handleEditName(index, text);
                 break;
             }
             case 1:{
                 //direction column
                 if(itemType != PinItem::TreeItemType::Pin && itemType != PinItem::TreeItemType::InvalidPin)
-                    return;
+                    break;
                 auto comboBox = static_cast<QComboBox*>(editor);
                 QString text = comboBox->currentText();
                 if(!text.isEmpty())
-                    static_cast<PinModel*>(model)->handleEditDirection(index, text);
+                    pinModel->handleEditDirection(index, text);
                 break;
             }
             case 2:{
                 //type column
                 if(itemType == PinItem::TreeItemType::GroupCreator || itemType == PinItem::TreeItemType::PinCreator)
-                    return;
+                    break;
                 auto comboBox = static_cast<QComboBox*>(editor);
                 QString text = comboBox->currentText();
                 if(!text.isEmpty())
-                    static_cast<PinModel*>(model)->handleEditType(index, text);
+                    pinModel->handleEditType(index, text);
                 break;
             }
         }
+
+        //TODO remove assertion after verification
+        qInfo() << "Assert that item exist in Gate";
+        assert(pinModel->assertionTestForEntry(static_cast<PinItem*>(index.internalPointer())));
     }
 
 

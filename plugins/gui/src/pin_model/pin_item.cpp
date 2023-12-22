@@ -57,6 +57,10 @@ namespace hal
         }
     }
 
+    void PinItem::setId(u32 newId){
+        mId = newId;
+    }
+
     void PinItem::setDataAtIndex(int index, QVariant &data)
     {
 
