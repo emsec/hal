@@ -100,10 +100,11 @@ namespace hal
         QList<PinItem*> mInvalidGroups = QList<PinItem*>();
 
         /**
-         * checks if the name is available and if assign flag is set the checked name is marked as assigned
+         * checks if the name is available and if assign flag is set the checked name is marked as assigned and the old
+         * name is marked as available again
          * @param name the new name which has to be checked
          * @param pinItem pinItem for which the name should be checked
-         * @param assign whether the new name should be marked as assigned
+         * @param assign whether the new name should be marked as assigned and the old one should be available again
          * @return true if name is available to be taken - otherwise false
          */
         bool isNameAvailable(const QString& name, PinItem* pinItem, bool assign = false);

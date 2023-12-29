@@ -310,7 +310,10 @@ namespace hal
         if(!mAssignedNames.contains(name))
         {
             if(assign)
+            {
                 mAssignedNames.insert(name);
+                mAssignedNames.remove(pinItem->getName());
+            }
             return true;
         }
 
@@ -337,7 +340,10 @@ namespace hal
         }
 
         if(assign)
+        {
             mAssignedNames.insert(name);
+            mAssignedNames.remove(pinItem->getName());
+        }
         return true;
     }
 
