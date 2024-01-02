@@ -31,13 +31,16 @@
 #include "hal_core/netlist/gate_library/gate_library.h"
 
 #include <QFrame>
-#include <QGridLayout>
-#include <QPushButton>
-#include <QTabWidget>
-#include <QTableView>
 #include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_boolean_function.h>
 #include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_general.h>
 #include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_pin.h>
+
+class QGridLayout;
+class QPushButton;
+class QTabWidget;
+class QTableView;
+class QGraphicsView;
+
 
 namespace hal
 {
@@ -93,6 +96,7 @@ namespace hal
         QGridLayout* mLayout;
         QTableView* mTableView;
         GatelibraryTableModel* mTableModel;
+        QGraphicsView* mGraphicsView;
 
         QPushButton* mEditBtn;
         QPushButton* mAddBtn;
@@ -105,6 +109,7 @@ namespace hal
         GateLibraryTabPin* mPinTab;
 
         const GateLibrary* mGateLibrary;
+        std::unique_ptr<Netlist> mDemoNetlist;
 
         bool mReadOnly = false;
     };

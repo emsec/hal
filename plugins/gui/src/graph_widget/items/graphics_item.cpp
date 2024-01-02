@@ -54,6 +54,7 @@ namespace hal
 
     QColor GraphicsItem::groupingColor() const
     {
+        if (!gContentManager->getGroupingManagerWidget()) return QColor();
         return gContentManager->getGroupingManagerWidget()->getModel()->colorForItem(mItemType,mId);
     }
 

@@ -87,7 +87,16 @@ namespace hal
     }
 
     ContentManager::ContentManager(MainWindow* parent) : QObject(parent), mMainWindow(parent),
-        mExternalIndex(0), mContextSerializer(nullptr)
+        mExternalIndex(0),
+        mPythonConsoleWidget(nullptr),
+        mPythonWidget(nullptr),
+        mGraphTabWidget(nullptr),
+        mModuleWidget(nullptr),
+        mContextManagerWidget(nullptr),
+        mGroupingManagerWidget(nullptr),
+        mSelectionDetailsWidget(nullptr),
+        mLoggerWidget(nullptr),
+        mContextSerializer(nullptr)
     {
 
 
@@ -112,9 +121,13 @@ namespace hal
         //m_python_widget = nullptr; DONT DO THIS PYTHON_WIDGET IS CREATED IN THE CONSTRUCTOR FOR SOME REASON
 
         mPythonConsoleWidget    = nullptr;
+        mPythonWidget           = nullptr;
         mGraphTabWidget         = nullptr;
+        mModuleWidget           = nullptr;
         mContextManagerWidget   = nullptr;
+        mGroupingManagerWidget  = nullptr;
         mSelectionDetailsWidget = nullptr;
+        mLoggerWidget           = nullptr;
         if (mContextSerializer) delete mContextSerializer;
     }
 

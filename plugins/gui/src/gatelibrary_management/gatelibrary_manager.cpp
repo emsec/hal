@@ -2,8 +2,15 @@
 
 #include "gui/graphics_effects/shadow_effect.h"
 #include "gui/plugin_relay/gui_plugin_manager.h"
+#include "gui/graph_widget/graphics_factory.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
+#include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/plugin_system/fac_extension_interface.h"
+
+#include <QGridLayout>
+#include <QGraphicsView>
+#include <QTabWidget>
+#include <QTableView>
 
 #include <QDebug>
 #include <QDir>
@@ -49,6 +56,10 @@ namespace hal
         mTabWidget->addTab(mFlipFlopTab, "Flip Flops");
         mTabWidget->addTab(mBooleanFunctionTab, "Boolean Functions");
 
+        mGraphicsView = new QGraphicsView(this);
+        QGraphicsScene* sc = new QGraphicsScene(mGraphicsView);
+        sc->setSceneRect(0,0,300,1200);
+        mGraphicsView->setScene(sc);
 
         // Add widgets to the layout
         mLayout->addWidget(mTableView,0,0,1,2);
@@ -56,6 +67,7 @@ namespace hal
         mLayout->addWidget(mAddBtn,1,1);
         mLayout->addWidget(mTabWidget,0,2);
         mLayout->addWidget(mCancelBtn, 1, 2);
+        mLayout->addWidget(mGraphicsView,0,3);
 
 
         //signal - slots
@@ -111,6 +123,7 @@ namespace hal
                 }
 
                 mGateLibrary = gateLibrary;
+                mDemoNetlist = netlist_factory::create_netlist(gateLibrary);
             }
             mTableModel->loadFile(mGateLibrary);
             mEditBtn->setEnabled(!mReadOnly);
@@ -134,16 +147,24 @@ namespace hal
 
     void GateLibraryManager::handleSelectionChanged(const QModelIndex& index)
     {
-        GateType* gate;
+        GateType* gateType;
         //get selected gate
-        gate = mTableModel->getGateTypeAtIndex(index.row());
-        qInfo() << "selected " << QString::fromStdString(gate->get_name());
+        gateType = mTableModel->getGateTypeAtIndex(index.row());
+        qInfo() << "selected " << QString::fromStdString(gateType->get_name());
 
         //update tabs
-        mFlipFlopTab->update(gate);
-        mGeneralTab->update(gate);
-        mBooleanFunctionTab->update(gate);
-        mPinTab->update(gate);
+        mFlipFlopTab->update(gateType);
+        mGeneralTab->update(gateType);
+        mBooleanFunctionTab->update(gateType);
+        mPinTab->update(gateType);
+        if (mDemoNetlist)
+        {
+            Gate* g = mDemoNetlist->get_gate_by_id(1);
+            if (g) mDemoNetlist->delete_gate(g);
+            g = mDemoNetlist.get()->create_gate(1,gateType,"Instance of");
+            GraphicsGate* gg = GraphicsFactory::createGraphicsGate(g,0);
+            mGraphicsView->scene()->addItem(gg);
+        }
     }
 
     void GateLibraryManager::handleCancelClicked()
