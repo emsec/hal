@@ -4,8 +4,10 @@
 #include "gui/gui_utils/graphics.h"
 
 #include <QComboBox>
+#include <QApplication>
 #include <QLineEdit>
 #include <QPainter>
+#include <QPushButton>
 #include <QSpinBox>
 #include <gui/pin_model/pin_item.h>
 #include <gui/pin_model/pin_model.h>
@@ -23,29 +25,30 @@ namespace hal
         PinItem::TreeItemType itemType = static_cast<PinItem*>(index.internalPointer())->getItemType();
         //TODO create editors
 
-        // Column 0: Name, Column 1: Type, Column 2: Direction
+        // Column 0: Name, Column 1: Type, Column 2: Direction, Column 3: Delete button
         switch(index.column()){
             case 0:{
                 auto lineEdit = new QLineEdit(parent);
+                lineEdit->setFocusPolicy(Qt::StrongFocus);
                 return lineEdit;
             }
             case 1: {
                 //dont create a widget for dummyEntries
                 if(itemType != PinItem::TreeItemType::Pin && itemType != PinItem::TreeItemType::InvalidPin)
-                    return new QWidget(parent);
+                    return nullptr;
                 auto comboBox = new QComboBox(parent);
                 //TODO provide enum to string method
                 comboBox->addItem("input");
                 comboBox->addItem("output");
                 comboBox->addItem("inout");
                 comboBox->addItem("internal");
-
+                comboBox->setFocusPolicy(Qt::StrongFocus);
                 return comboBox;
             }
             case 2:{
                 //dont create a widget for dummyEntries
                 if(itemType == PinItem::TreeItemType::GroupCreator || itemType == PinItem::TreeItemType::PinCreator)
-                    return new QWidget(parent);
+                    return nullptr;
 
                 auto comboBox = new QComboBox(parent);
                 //TODO provide enum to string method
@@ -65,12 +68,16 @@ namespace hal
                 comboBox->addItem("select");
                 comboBox->addItem("carry");
                 comboBox->addItem("sum");
+                comboBox->setFocusPolicy(Qt::StrongFocus);
                 return comboBox;
             }
+            case 3:{
+                qInfo() << "create editor for 3";
+            }
         }
-        return new QWidget(parent);
 
 
+        return nullptr;
     }
 
     void PinDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
@@ -91,6 +98,7 @@ namespace hal
             }
             case 1: {
                 //direction editor
+                //TODO currently only pins can change the direction while groups does not allow modification
                 if(itemType != PinItem::TreeItemType::Pin && itemType != PinItem::TreeItemType::InvalidPin)
                     break;
                 auto comboBox = static_cast<QComboBox*>(editor);
@@ -126,6 +134,7 @@ namespace hal
             }
             case 1:{
                 //direction column
+                //TODO currently only pins can change the direction while groups does not allow modification
                 if(itemType != PinItem::TreeItemType::Pin && itemType != PinItem::TreeItemType::InvalidPin)
                     break;
                 auto comboBox = static_cast<QComboBox*>(editor);
@@ -147,7 +156,6 @@ namespace hal
         }
 
         //TODO remove assertion after verification
-        qInfo() << "Assert that item exist in Gate";
         assert(pinModel->assertionTestForEntry(static_cast<PinItem*>(index.internalPointer())));
     }
 

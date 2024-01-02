@@ -6,12 +6,24 @@ namespace hal
     PinModel::PinModel(QObject* parent) : BaseTreeModel(parent)
     {
         // use root item to store header information
-        setHeaderLabels(QStringList() << "Name" << "Direction" << "Type" << "TODO");
+        setHeaderLabels(QStringList() << "Name" << "Direction" << "Type" << "");
         mAssignedNames = QSet<QString>();
+        mEditable = false;
+    }
+
+    PinModel::PinModel(QObject* parent, bool editable) : BaseTreeModel(parent)
+    {
+        // use root item to store header information
+        setHeaderLabels(QStringList() << "Name" << "Direction" << "Type" << (mEditable ? "DELETE (RENAME ME)" : ""));
+        mAssignedNames = QSet<QString>();
+        mEditable = editable;
     }
 
     Qt::ItemFlags PinModel::flags(const QModelIndex& index) const
     {
+        if(!mEditable)
+            return BaseTreeModel::flags(index);
+
         return Qt::ItemIsEditable | BaseTreeModel::flags(index);
     }
 
@@ -48,20 +60,29 @@ namespace hal
                 mAssignedNames.insert(pinItem->getName());
             }
 
-            //add dummy to each group
-            auto dummyPin = new PinItem(PinItem::TreeItemType::PinCreator);
-            dummyPin->setData(QList<QVariant>() << "create new pin ...");
-            groupItem->appendChild(dummyPin);
+            //add dummy to each group if model is editable
+            if(mEditable)
+            {
+                auto dummyPin = new PinItem(PinItem::TreeItemType::PinCreator);
+                dummyPin->setData(QList<QVariant>() << "create new pin ...");
+                groupItem->appendChild(dummyPin);
+            }
+
             mRootItem->appendChild(groupItem);
 
             //add groupItem to mapped name
             //add pinItem to the mapped name
             mAssignedNames.insert(groupItem->getName());
         }
-        //create dummy for the group creator
-        auto dummyGroup = new PinItem(PinItem::TreeItemType::GroupCreator);
-        dummyGroup->setData(QList<QVariant>() << "create new pingroup ...");
-        mRootItem->appendChild(dummyGroup);
+
+        //create dummy for the group creator if model is editable
+        if(mEditable)
+        {
+            auto dummyGroup = new PinItem(PinItem::TreeItemType::GroupCreator);
+            dummyGroup->setData(QList<QVariant>() << "create new pingroup ...");
+            mRootItem->appendChild(dummyGroup);
+        }
+
         endResetModel();
     }
 
@@ -152,6 +173,7 @@ namespace hal
                 break;
             }
         }
+        printGateMember();
     }
 
     void PinModel::handleEditDirection(QModelIndex index, const QString& direction)
@@ -163,13 +185,10 @@ namespace hal
         switch(itemType){
             case PinItem::TreeItemType::PinGroup:
             case PinItem::TreeItemType::InvalidPinGroup:{
-                qInfo() << "was Group: " << pinItem->getName();
                 handleGroupDirectionUpdate(pinItem, enum_from_string<PinDirection>(direction.toStdString()));
-                //TODO
                 break;
             }
             case PinItem::TreeItemType::Pin:{
-                qInfo() << "was Pin: " << pinItem->getName();
                 GatePin* pin = mGate->get_pin_by_id(pinItem->id());
                 if(!pin)
                     break;
@@ -182,22 +201,13 @@ namespace hal
                 //TODO
                 break;
             }
-            case PinItem::TreeItemType::GroupCreator:{
-                qInfo() << "was GroupCreator: " << pinItem->getName();
-                //TODO
-                break;
-            }
-            case PinItem::TreeItemType::PinCreator:{
-                qInfo() << "was PinCreator: " << pinItem->getName();
-                //TODO
-                break;
-            }
             case PinItem::TreeItemType::InvalidPin:{
                 pinItem->setDirection(direction);
                 handleInvalidPinUpdate(pinItem);
                 break;
             }
         }
+        printGateMember();
     }
 
     void PinModel::handleEditType(QModelIndex index, const QString& type)
@@ -242,6 +252,7 @@ namespace hal
                 break;
             }
         }
+        printGateMember();
     }
 
     Result<GatePin*> PinModel::createPin(PinItem* pinItem, bool addToGroup)
@@ -265,6 +276,7 @@ namespace hal
 
     bool PinModel::renamePin(PinItem* pinItem, const QString& newName)
     {
+        //TODO change pinItems name within function and not after its call
         //Check if name is already in use
         if(!isNameAvailable(newName, pinItem, true))
             return false;
@@ -282,6 +294,7 @@ namespace hal
 
     bool PinModel::renamePinGroup(PinItem* groupItem, const QString& newName)
     {
+        //TODO change pinItems name within function and not after its call
         //Check if name is already in use
         if(!isNameAvailable(newName, groupItem, true))
             return false;
@@ -480,5 +493,17 @@ namespace hal
         }
 
         return true;
+    }
+    void PinModel::printGateMember()
+    {
+        qInfo() << "Printing gate members";
+        for(auto group : mGate->get_pin_groups()){
+            qInfo() << "Group: " << QString::fromStdString(group->get_name()) << "  id: " << group->get_id();
+
+            for(auto pin : group->get_pins()){
+                qInfo() << "   Pin: " << QString::fromStdString(pin->get_name()) << "  id: " << pin->get_id();
+            }
+        }
+        qInfo() << "Done\n";
     }
 }

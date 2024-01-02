@@ -43,6 +43,7 @@ namespace hal
                 prop.append(QString::fromStdString(enum_to_string(p)));
             }
             generalInfoPage->setData(QString::fromStdString(mGateType->get_name()), prop);
+            pinsPage->setGateType(mGateType);
         }
     }
 

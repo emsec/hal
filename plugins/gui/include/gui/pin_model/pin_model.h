@@ -51,6 +51,7 @@ namespace hal
     public:
 
         explicit PinModel(QObject* parent = nullptr);
+        explicit PinModel(QObject* parent, bool editable);
 
         /**
          * Returns the item flags for the given index.
@@ -115,12 +116,18 @@ namespace hal
         void addPinToPinGroup(u32 pinId, u32 groupId);
         void handleGroupDirectionUpdate(PinItem* groupItem ,PinDirection direction = PinDirection::none);
 
+        //TODO delete  -  only for testing
+        void printGateMember();
+
+
+
         Result<GatePin*> createPin(PinItem* pinItem, bool addToGroup = false);
 
 
 
         GateType* mGate;
         QSet<QString> mAssignedNames;
+        bool mEditable;
 
     };
 }   // namespace hal

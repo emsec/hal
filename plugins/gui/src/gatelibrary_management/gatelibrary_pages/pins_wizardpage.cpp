@@ -1,5 +1,8 @@
 #include "gui/gatelibrary_management/gatelibrary_pages/pins_wizardpage.h"
 
+#include <gui/gatelibrary_management/gatelibrary_wizard.h>
+#include <gui/pin_model/pin_delegate.h>
+
 namespace hal
 {
     PinsWizardPage::PinsWizardPage(QWidget* parent) : QWizardPage(parent)
@@ -7,8 +10,8 @@ namespace hal
         setTitle("Step 2: Pins and Pingroups");
         setSubTitle("Edit pins and pingroups");
         mLayout = new QGridLayout(this);
-        //mPinsTreeView = new QTreeView(this);
-        mPinTab = new GateLibraryTabPin(this);
+
+        mPinTab = new GateLibraryTabPin(this, true);
         mAddBtn = new QPushButton("Add", this);
         mDelBtn = new QPushButton("Del", this);
 
@@ -19,4 +22,10 @@ namespace hal
 
         setLayout(mLayout);
     }
+
+    void PinsWizardPage::setGateType(GateType* gate)
+    {
+        mPinTab->update(gate);
+    }
+
 }
