@@ -10,11 +10,12 @@ namespace hal
         setTitle("Step 2: Pins and Pingroups");
         setSubTitle("Edit pins and pingroups");
         mLayout = new QGridLayout(this);
+        mPinModel = new PinModel(this, true);
+        //mPinModel->setGate(new GateType());
 
         mPinTab = new GateLibraryTabPin(this, true);
         mAddBtn = new QPushButton("Add", this);
-        mDelBtn = new QPushButton("Del", this);
-
+        mDelBtn = new QPushButton("Delete", this);
 
         mLayout->addWidget(mPinTab, 0, 0, 1, 2);
         mLayout->addWidget(mDelBtn, 1, 0);

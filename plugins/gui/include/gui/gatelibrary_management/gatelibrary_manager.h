@@ -29,6 +29,7 @@
 #include "gatelibrary_table_model.h"
 #include "gui/gatelibrary_management/gatelibrary_wizard.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 
 #include <QFrame>
 #include <QGridLayout>
@@ -60,7 +61,8 @@ namespace hal
          */
         void repolish();
 
-        bool initialize(GateLibrary* gateLibrary = nullptr);
+        bool initialize(const GateLibrary* gateLibrary = nullptr);
+        u32 getNextGateId();
 
     public Q_SLOTS:
         /**

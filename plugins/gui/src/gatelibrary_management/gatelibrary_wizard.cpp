@@ -5,28 +5,12 @@
 
 namespace hal
 {
-    GateLibraryWizard::GateLibraryWizard(QWidget* parent) : QWizard(parent)
-    {
-        generalInfoPage = new GeneralInfoWizardPage(parent);
-        pinsPage = new PinsWizardPage(parent);
-        ffPage = new FlipFlopWizardPage(parent);
-        boolPage = new BoolWizardPage(parent);
-        ffPage->setTitle("Step 3: Flip Flop");
-        boolPage->setTitle("Step 4: Boolean functions");
-
-        this->addPage(generalInfoPage);
-        this->addPage(pinsPage);
-        this->addPage(ffPage);
-        this->addPage(boolPage);
-    }
-
     GateLibraryWizard::GateLibraryWizard(const GateLibrary *gateLibrary, GateType *gateType, QWidget* parent): QWizard(parent)
     {
-        generalInfoPage = new GeneralInfoWizardPage(parent);
+        generalInfoPage = new GeneralInfoWizardPage(gateLibrary, parent);
         pinsPage = new PinsWizardPage(parent);
         ffPage = new FlipFlopWizardPage(parent);
         boolPage = new BoolWizardPage(parent);
-        ffPage->setTitle("Step 3: Flip Flop");
         boolPage->setTitle("Step 4: Boolean functions");
 
         this->addPage(generalInfoPage);
@@ -57,7 +41,7 @@ namespace hal
 
     }
 
-    void GateLibraryWizard::setData(const GateLibrary *gateLibrary, GateType* gateType)
+    void GateLibraryWizard::setData(GateLibrary *gateLibrary, GateType* gateType)
     {
         mGateLibrary = gateLibrary;
         mGateType = gateType;

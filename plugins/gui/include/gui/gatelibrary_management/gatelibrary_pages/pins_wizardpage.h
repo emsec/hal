@@ -43,6 +43,7 @@ namespace hal {
         QGridLayout* mLayout;
         PinModel* mPinModel;
         QTreeView* mPinsTreeView;
+        GateLibrary* mGateLibrary;
 
         GateLibraryTabPin* mPinTab;
         QPushButton* mDelBtn;

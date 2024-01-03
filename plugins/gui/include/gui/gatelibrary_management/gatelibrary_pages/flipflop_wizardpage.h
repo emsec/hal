@@ -24,12 +24,36 @@
 // SOFTWARE.
 
 #pragma once
+//#include "gui/src/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_flip_flop.cpp"
+#include "gui/gatelibrary_management/gatelibrary_pages/generalinfo_wizardpage.h"
+
 
 #include <QWizardPage>
+#include <QGridLayout>
+#include <QTabWidget>
+#include <QLineEdit>
+#include <QLabel>
 
 namespace hal {
     class FlipFlopWizardPage:public QWizardPage{
     public:
         FlipFlopWizardPage(QWidget* parent = nullptr);
+        void initializePage() override;
+    private:
+        QGridLayout* mLayout;
+        QTabWidget* mTabWidget;
+        //GateLibraryTabFlipFlop* mFlipFlopTab;
+
+        QLineEdit* mClock;
+        QLineEdit* mNextState;
+        QLineEdit* mAReset;
+        QLineEdit* mIntState;
+        QLineEdit* mNegIntState;
+
+        QLabel* mLabClock;
+        QLabel* mLabNextState;
+        QLabel* mLabAReset;
+        QLabel* mLabIntState;
+        QLabel* mLabNegIntState;
     };
 }

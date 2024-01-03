@@ -77,7 +77,7 @@ namespace hal
         s->polish(this);
     }
 
-    bool GateLibraryManager::initialize(GateLibrary* gateLibrary)
+    bool GateLibraryManager::initialize(const GateLibrary* gateLibrary)
     {
         if(!gateLibrary)
         {
@@ -128,8 +128,24 @@ namespace hal
 
     void GateLibraryManager::handleAddWizard()
     {
-        GateLibraryWizard wiz;
-        wiz.exec();
+        //TODO: create an empty Gate
+
+        //GateLibraryWizard wiz(mGateLibrary, );
+        //wiz.exec();
+    }
+
+    u32 GateLibraryManager::getNextGateId()
+    {
+        QSet<u32>* occupiedIds = new QSet<u32>;
+        u32 freeId = 1;
+        for (auto gt : mGateLibrary->get_gate_types()) {
+            occupiedIds->insert(gt.second->get_id());
+        }
+        while(occupiedIds->contains(freeId))
+        {
+            freeId++;
+        }
+        return freeId;
     }
 
     void GateLibraryManager::handleSelectionChanged(const QModelIndex& index)
