@@ -81,6 +81,7 @@ namespace hal
         // module functions
         Module* create_module(u32 id, Module* parent, const std::string& name);
         bool delete_module(Module* module);
+        bool module_set_parent(Module* module, Module* new_parent);
         bool module_assign_gate(Module* m, Gate* g);
         bool module_assign_gates(Module* module, const std::vector<Gate*>& gates);
         bool module_check_net(Module* module, Net* net, bool recursive = false);

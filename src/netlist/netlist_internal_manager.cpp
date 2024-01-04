@@ -140,14 +140,14 @@ namespace hal
         for (const Module* module : nl->m_modules)
         {
             // ignore top_module
-            if (module->m_parent == nullptr)
+            if (module->is_top_module())
             {
                 continue;
             }
 
             // find parent and child module in the copied netlist by id
             const u32 module_id = module->m_id;
-            const u32 parent_id = module->m_parent->m_id;
+            const u32 parent_id = module->m_parents.front()->m_id;
             Module* c_module    = c_netlist->get_module_by_id(module_id);
             Module* c_parent    = c_netlist->get_module_by_id(parent_id);
 
@@ -540,15 +540,17 @@ namespace hal
         // update internal nets and port nets
         if (m_net_checks_enabled)
         {
-            if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
+            auto* mod = gate->get_module();
+            if (const auto res = mod->check_net(net, true); res.is_error())
             {
                 log_error("net", "{}", res.get_error().get());
                 return nullptr;
             }
 
-            for (Endpoint* ep : net->get_destinations())
+            for (Endpoint* dst : net->get_destinations())
             {
-                if (const auto res = ep->get_gate()->get_module()->check_net(net, true); res.is_error())
+                auto* dst_mod = dst->get_gate()->get_module();
+                if (const auto res = dst_mod->check_net(net, true); res.is_error())
                 {
                     log_error("net", "{}", res.get_error().get());
                     return nullptr;
@@ -603,7 +605,8 @@ namespace hal
             // update internal nets and port nets
             if (m_net_checks_enabled)
             {
-                if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
+                auto* mod = gate->get_module();
+                if (const auto res = mod->check_net(net, true); res.is_error())
                 {
                     log_error("net", "{}", res.get_error().get());
                     return false;
@@ -611,7 +614,8 @@ namespace hal
 
                 for (Endpoint* dst : net->get_destinations())
                 {
-                    if (const auto res = dst->get_gate()->get_module()->check_net(net, true); res.is_error())
+                    auto* dst_mod = dst->get_gate()->get_module();
+                    if (const auto res = dst_mod->check_net(net, true); res.is_error())
                     {
                         log_error("net", "{}", res.get_error().get());
                         return false;
@@ -678,15 +682,17 @@ namespace hal
         // update internal nets and port nets
         if (m_net_checks_enabled)
         {
-            if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
+            auto* mod = gate->get_module();
+            if (const auto res = mod->check_net(net, true); res.is_error())
             {
                 log_error("net", "{}", res.get_error().get());
                 return nullptr;
             }
 
-            for (Endpoint* ep : net->get_sources())
+            for (Endpoint* src : net->get_sources())
             {
-                if (const auto res = ep->get_gate()->get_module()->check_net(net, true); res.is_error())
+                auto* src_mod = src->get_gate()->get_module();
+                if (const auto res = src_mod->check_net(net, true); res.is_error())
                 {
                     log_error("net", "{}", res.get_error().get());
                     return nullptr;
@@ -739,7 +745,8 @@ namespace hal
         {    // update internal nets and port nets
             if (m_net_checks_enabled)
             {
-                if (const auto res = gate->get_module()->check_net(net, true); res.is_error())
+                auto* mod = gate->get_module();
+                if (const auto res = mod->check_net(net, true); res.is_error())
                 {
                     log_error("net", "{}", res.get_error().get());
                     return false;
@@ -747,7 +754,8 @@ namespace hal
 
                 for (Endpoint* src : net->get_sources())
                 {
-                    if (const auto res = src->get_gate()->get_module()->check_net(net, true); res.is_error())
+                    auto* src_mod = src->get_gate()->get_module();
+                    if (const auto res = src_mod->check_net(net, true); res.is_error())
                     {
                         log_error("net", "{}", res.get_error().get());
                         return false;
@@ -829,7 +837,7 @@ namespace hal
             return false;
         }
 
-        if (to_remove == m_netlist->m_top_module)
+        if (to_remove->is_top_module())
         {
             return false;
         }
@@ -844,26 +852,19 @@ namespace hal
 
         // move gates and nets to parent, work on a copy since assign_gate will modify m_gates
         std::vector<Gate*> gates_copy = to_remove->m_gates;
-        to_remove->m_parent->assign_gates(gates_copy);
+        auto* parent                  = to_remove->m_parents.front();
+        parent->assign_gates(gates_copy);
 
         // move all submodules to parent
         for (auto sm : to_remove->m_submodules)
         {
-            to_remove->m_parent->m_submodules_map[sm->get_id()] = sm;
-            to_remove->m_parent->m_submodules.push_back(sm);
-
-            m_event_handler->notify(ModuleEvent::event::submodule_removed, sm->get_parent_module(), sm->get_id());
-
-            sm->m_parent = to_remove->m_parent;
-
-            m_event_handler->notify(ModuleEvent::event::parent_changed, sm, 0);
-            m_event_handler->notify(ModuleEvent::event::submodule_added, to_remove->m_parent, sm->get_id());
+            sm->set_parent_module(parent);
         }
 
         // remove module from parent
-        to_remove->m_parent->m_submodules_map.erase(to_remove->get_id());
-        utils::unordered_vector_erase(to_remove->m_parent->m_submodules, to_remove);
-        m_event_handler->notify(ModuleEvent::event::submodule_removed, to_remove->m_parent, to_remove->get_id());
+        parent->m_submodules_map.erase(to_remove->get_id());
+        utils::unordered_vector_erase(parent->m_submodules, to_remove);
+        m_event_handler->notify(ModuleEvent::event::submodule_removed, parent, to_remove->get_id());
 
         auto it  = m_netlist->m_modules_map.find(to_remove->get_id());
         auto ptr = std::move(it->second);
@@ -875,6 +876,113 @@ namespace hal
         m_netlist->m_used_module_ids.erase(to_remove->get_id());
 
         m_event_handler->notify(ModuleEvent::event::removed, to_remove);
+        return true;
+    }
+
+    bool NetlistInternalManager::module_set_parent(Module* module, Module* new_parent)
+    {
+        if (new_parent == module)
+        {
+            log_error("module", "module '{}' with ID {} in netlist with ID {} cannot be its own parent module.", module->get_name(), module->get_id(), m_netlist->get_id());
+            return false;
+        }
+
+        if (module->is_top_module())
+        {
+            log_error("module", "no parent module can be assigned to top module '{}' with ID {} in netlist with ID {}.", module->get_name(), module->get_id(), m_netlist->get_id());
+            return false;
+        }
+
+        if (new_parent == nullptr)
+        {
+            log_error("module", "module '{}' with ID {} in netlist with ID {} cannot be assigned to be the top module.", module->get_name(), module->get_id(), m_netlist->get_id());
+            return false;
+        }
+
+        if (!m_netlist->is_module_in_netlist(new_parent))
+        {
+            log_error("module", "module '{}' with ID {} is not contained in netlist with ID {}.", new_parent->get_name(), new_parent->get_id(), m_netlist->get_id());
+            return false;
+        }
+
+        // if 'new_parent' is a child of 'module', make 'new_parent' a submodule of the current parent of 'module'
+        auto children = module->get_submodules(nullptr, true);
+        if (std::find(children.begin(), children.end(), new_parent) != children.end())
+        {
+            new_parent->set_parent_module(module->get_parent_module());
+        }
+
+        auto* parent = module->m_parents.front();
+
+        // remove 'module' from the submodules of its current parent
+        parent->m_submodules_map.erase(module->get_id());
+        parent->m_submodules.erase(std::find(parent->m_submodules.begin(), parent->m_submodules.end(), module));
+
+        if (m_net_checks_enabled)
+        {
+            for (Net* net : module->get_nets(nullptr, true))
+            {
+                if (const auto res = parent->check_net(net, true); res.is_error())
+                {
+                    log_error("module", "{}", res.get_error().get());
+                }
+            }
+        }
+
+        m_event_handler->notify(ModuleEvent::event::submodule_removed, parent, module->get_id());
+
+        // update parent modules of 'module' and all of its submodules
+        std::vector<Module*> stack = {module};
+
+        auto tmp_parents = new_parent->get_parent_modules();
+        std::list<Module*> current_parents(tmp_parents.begin(), tmp_parents.end());
+        current_parents.push_front(new_parent);
+
+        while (!stack.empty())
+        {
+            auto* cur_mod = stack.back();
+
+            if (cur_mod == current_parents.front())
+            {
+                stack.pop_back();
+                current_parents.pop_front();
+                continue;
+            }
+
+            cur_mod->m_parents = current_parents;
+
+            if (!cur_mod->m_submodules.empty())
+            {
+                current_parents.push_front(cur_mod);
+                for (auto* c : cur_mod->m_submodules)
+                {
+                    stack.push_back(c);
+                }
+            }
+            else
+            {
+                stack.pop_back();
+            }
+        }
+
+        // update submodules of 'new_parent'
+        new_parent->m_submodules_map[module->get_id()] = module;
+        new_parent->m_submodules.push_back(module);
+
+        if (m_net_checks_enabled)
+        {
+            for (Net* net : module->get_nets(nullptr, true))
+            {
+                if (auto res = new_parent->check_net(net, true); res.is_error())
+                {
+                    log_error("module", "{}", res.get_error().get());
+                }
+            }
+        }
+
+        m_event_handler->notify(ModuleEvent::event::parent_changed, module);
+        m_event_handler->notify(ModuleEvent::event::submodule_added, new_parent, module->m_id);
+
         return true;
     }
 

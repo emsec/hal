@@ -194,7 +194,7 @@ namespace hal
 
         if (recursive)
         {
-            std::vector<Module*> more = m_module->get_parent_modules(filter, true);
+            std::vector<Module*> more = m_module->get_parent_modules(filter);
             res.reserve(res.size() + more.size());
             res.insert(res.end(), more.begin(), more.end());
         }

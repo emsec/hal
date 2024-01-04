@@ -132,9 +132,9 @@ namespace hal
         Grouping* get_grouping() const;
 
         /**
-         * Get the depth of the module within the module hierarchie (0 = top module, 1 = direct child of top module, ...).
+         * Get the depth of the module within the module hierarchy (0 = top module, 1 = direct child of top module, ...).
          * 
-         * @returns The depth within the module hierarchie.
+         * @returns The depth within the module hierarchy.
          */
         int get_submodule_depth() const;
 
@@ -147,15 +147,13 @@ namespace hal
         Module* get_parent_module() const;
 
         /**
-         * Get all parents of this module.<br>
-         * If `recursive` is set to true, all indirect parents are also included.<br>
+         * Get all parents of this module, including all indirect parents.<br>
          * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
          * @param[in] filter - An optional filter.
-         * @param[in] recursive - Set `true` to include indirect parents as well, `false` otherwise.
          * @returns A vector of parent modules.
          */
-        std::vector<Module*> get_parent_modules(const std::function<bool(Module*)>& filter = nullptr, bool recursive = true) const;
+        std::vector<Module*> get_parent_modules(const std::function<bool(Module*)>& filter = nullptr) const;
 
         /**
          * Set a new parent for this module.<br>
@@ -168,12 +166,12 @@ namespace hal
 
         /**
          * Check if the module is a parent of the specified module.
+         * Includes indirect parent modules.
          * 
          * @param[in] module - The module.
-         * @param[in] recursive - Set `true` to check recursively, `false` otherwise.
          * @returns `true` if the module is a parent of the specified module, `false` otherwise.
          */
-        bool is_parent_module_of(const Module* module, bool recursive = false) const;
+        bool is_parent_module_of(const Module* module) const;
 
         /**
          * Get all direct submodules of this module.<br>
@@ -188,22 +186,12 @@ namespace hal
 
         /**
          * Check if the module is a submodule of the specified module.
+         * Includes indirect submodules.
          * 
          * @param[in] module - The module.
-         * @param[in] recursive - Set `true` to check recursively, `false` otherwise.
          * @returns `true` if the module is a submodule of the specified module, `false` otherwise.
          */
-        bool is_submodule_of(const Module* module, bool recursive = false) const;
-
-        /**
-         * Checks whether another module is a submodule of this module.<br>
-         * If \p recursive is set to true, all indirect submodules are also included.
-         *
-         * @param[in] other - Other module to check for.
-         * @param[in] recursive - Set `true` to include indirect submodules as well, `false` otherwise.
-         * @returns `true` if the other module is a submodule, `false` otherwise.
-         */
-        bool contains_module(const Module* other, bool recursive = false) const;
+        bool is_submodule_of(const Module* module) const;
 
         /**
          * Returns true only if the module is the top module of the netlist.
@@ -704,7 +692,7 @@ namespace hal
         /* grouping */
         Grouping* m_grouping = nullptr;
 
-        Module* m_parent;
+        std::list<Module*> m_parents;
         std::unordered_map<u32, Module*> m_submodules_map;
         std::vector<Module*> m_submodules;
 

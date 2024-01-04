@@ -33,6 +33,8 @@ All notable changes to this project will be documented in this file.
   * changed behavior of import netlist dialog, suggest only non-existing directory names and loop until an acceptable name was entered
   * changed appearance and behavior of import project dialog, make sure existing hal projects don't get overwritten
   * changed installation script policy to install Python packages (omit 'pip install' which would need virtual environment)
+  * removed `Module::contains_module`, use `Module::is_top_module_of` instead
+  * removed `recursive` parameter from `Module::get_parent_modules`, `Module::is_parent_module_of`, and `Module::is_submodule_of`
 * bugfixes
   * fixed colors in Python Console when switching between color schemes
   * fixed pybind of `Module::get_gates`

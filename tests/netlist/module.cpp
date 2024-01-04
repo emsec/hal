@@ -281,23 +281,25 @@ namespace hal {
                 EXPECT_EQ(dummy_module_1->get_parent_modules(), std::vector<Module*>({top_module}));
                 EXPECT_EQ(dummy_module_2->get_parent_modules(), std::vector<Module*>({top_module}));
                 EXPECT_EQ(dummy_module_3->get_parent_modules(), std::vector<Module*>({dummy_module_1, top_module}));
-                EXPECT_EQ(dummy_module_3->get_parent_modules(nullptr, false), std::vector<Module*>({dummy_module_1}));
                 EXPECT_EQ(dummy_module_4->get_parent_modules(), std::vector<Module*>({dummy_module_1, top_module}));
-                EXPECT_EQ(dummy_module_4->get_parent_modules(nullptr, false), std::vector<Module*>({dummy_module_1}));
 
                 EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_1));
+                EXPECT_FALSE(dummy_module_1->is_parent_module_of(dummy_module_1));
                 EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_2));
-                EXPECT_FALSE(top_module->is_parent_module_of(dummy_module_3));
-                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_3, true));
-                EXPECT_FALSE(top_module->is_parent_module_of(dummy_module_4));
-                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_4, true));
+                EXPECT_FALSE(dummy_module_1->is_parent_module_of(dummy_module_2));
+                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_3));
+                EXPECT_TRUE(dummy_module_1->is_parent_module_of(dummy_module_3));
+                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_4));
+                EXPECT_TRUE(dummy_module_1->is_parent_module_of(dummy_module_4));
 
                 EXPECT_TRUE(dummy_module_1->is_submodule_of(top_module));
+                EXPECT_FALSE(dummy_module_1->is_submodule_of(dummy_module_1));
                 EXPECT_TRUE(dummy_module_2->is_submodule_of(top_module));
-                EXPECT_FALSE(dummy_module_3->is_submodule_of(top_module));
-                EXPECT_TRUE(dummy_module_3->is_submodule_of(top_module, true));
-                EXPECT_FALSE(dummy_module_4->is_submodule_of(top_module));
-                EXPECT_TRUE(dummy_module_4->is_submodule_of(top_module, true));
+                EXPECT_FALSE(dummy_module_2->is_submodule_of(dummy_module_1));
+                EXPECT_TRUE(dummy_module_3->is_submodule_of(top_module));
+                EXPECT_TRUE(dummy_module_3->is_submodule_of(dummy_module_1));
+                EXPECT_TRUE(dummy_module_4->is_submodule_of(top_module));
+                EXPECT_TRUE(dummy_module_4->is_submodule_of(dummy_module_1));
 
                 dummy_module_1->set_parent_module(dummy_module_2);
                 EXPECT_EQ(dummy_module_1->get_parent_module(), dummy_module_2);
@@ -313,28 +315,34 @@ namespace hal {
 
                 EXPECT_EQ(top_module->get_parent_modules(), std::vector<Module*>());
                 EXPECT_EQ(dummy_module_1->get_parent_modules(), std::vector<Module*>({dummy_module_2, top_module}));
-                EXPECT_EQ(dummy_module_1->get_parent_modules(nullptr, false), std::vector<Module*>({dummy_module_2}));
                 EXPECT_EQ(dummy_module_2->get_parent_modules(), std::vector<Module*>({top_module}));
                 EXPECT_EQ(dummy_module_3->get_parent_modules(), std::vector<Module*>({dummy_module_1, dummy_module_2, top_module}));
-                EXPECT_EQ(dummy_module_3->get_parent_modules(nullptr, false), std::vector<Module*>({dummy_module_1}));
                 EXPECT_EQ(dummy_module_4->get_parent_modules(), std::vector<Module*>({dummy_module_1, dummy_module_2, top_module}));
-                EXPECT_EQ(dummy_module_4->get_parent_modules(nullptr, false), std::vector<Module*>({dummy_module_1}));
 
-                EXPECT_FALSE(top_module->is_parent_module_of(dummy_module_1));
-                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_1, true));
+                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_1));
+                EXPECT_FALSE(dummy_module_1->is_parent_module_of(dummy_module_1));
+                EXPECT_TRUE(dummy_module_2->is_parent_module_of(dummy_module_1));
                 EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_2));
-                EXPECT_FALSE(top_module->is_parent_module_of(dummy_module_3));
-                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_3, true));
-                EXPECT_FALSE(top_module->is_parent_module_of(dummy_module_4));
-                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_4, true));
+                EXPECT_FALSE(dummy_module_1->is_parent_module_of(dummy_module_2));
+                EXPECT_FALSE(dummy_module_2->is_parent_module_of(dummy_module_2));
+                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_3));
+                EXPECT_TRUE(dummy_module_1->is_parent_module_of(dummy_module_3));
+                EXPECT_TRUE(dummy_module_2->is_parent_module_of(dummy_module_3));
+                EXPECT_TRUE(top_module->is_parent_module_of(dummy_module_4));
+                EXPECT_TRUE(dummy_module_1->is_parent_module_of(dummy_module_4));
+                EXPECT_TRUE(dummy_module_2->is_parent_module_of(dummy_module_4));
 
-                EXPECT_FALSE(dummy_module_1->is_submodule_of(top_module));
-                EXPECT_TRUE(dummy_module_1->is_submodule_of(top_module, true));
+                EXPECT_TRUE(dummy_module_1->is_submodule_of(top_module));
+                EXPECT_FALSE(dummy_module_1->is_submodule_of(dummy_module_1));
                 EXPECT_TRUE(dummy_module_2->is_submodule_of(top_module));
-                EXPECT_FALSE(dummy_module_3->is_submodule_of(top_module));
-                EXPECT_TRUE(dummy_module_3->is_submodule_of(top_module, true));
-                EXPECT_FALSE(dummy_module_4->is_submodule_of(top_module));
-                EXPECT_TRUE(dummy_module_4->is_submodule_of(top_module, true));
+                EXPECT_FALSE(dummy_module_2->is_submodule_of(dummy_module_1));
+                EXPECT_TRUE(dummy_module_1->is_submodule_of(dummy_module_2));
+                EXPECT_TRUE(dummy_module_3->is_submodule_of(top_module));
+                EXPECT_TRUE(dummy_module_3->is_submodule_of(dummy_module_1));
+                EXPECT_TRUE(dummy_module_3->is_submodule_of(dummy_module_2));
+                EXPECT_TRUE(dummy_module_4->is_submodule_of(top_module));
+                EXPECT_TRUE(dummy_module_4->is_submodule_of(dummy_module_1));
+                EXPECT_TRUE(dummy_module_4->is_submodule_of(dummy_module_2));
             }
             {
                 /*  Hang m_0 to one of its childs (m_1). m_1 should be connected to the top_module afterwards
@@ -638,7 +646,7 @@ namespace hal {
      *
      *   (Remark: MODULE_0 and MODULE_2 are both named "even_module", while MODULE_1 and MODULE_3 are named "odd_module")
      *
-     * Functions: get_submodules, contains_module
+     * Functions: get_submodules, is_parent_module_of
      */
     TEST_F(ModuleTest, check_get_submodules) {
         TEST_START
@@ -660,10 +668,10 @@ namespace hal {
                     // Submodules of TOP_MODULE;
                     std::vector<Module*> exp_result = {m_0, m_1};
                     EXPECT_EQ(tm->get_submodules(nullptr, false), exp_result);
-                    EXPECT_TRUE(tm->contains_module(m_0, false));
-                    EXPECT_TRUE(tm->contains_module(m_1, false));
-                    EXPECT_FALSE(tm->contains_module(m_2, false));
-                    EXPECT_FALSE(tm->contains_module(m_3, false));
+                    EXPECT_TRUE(tm->is_parent_module_of(m_0));
+                    EXPECT_TRUE(tm->is_parent_module_of(m_1));
+                    EXPECT_TRUE(tm->is_parent_module_of(m_2));
+                    EXPECT_TRUE(tm->is_parent_module_of(m_3));
                 }
                 {
                     // Submodules of MODULE_1;
@@ -700,10 +708,10 @@ namespace hal {
                     // Submodules of TOP_MODULE;
                     std::vector<Module*> exp_result = {m_0, m_1, m_2, m_3};
                     EXPECT_EQ(tm->get_submodules(nullptr, true), exp_result);
-                    EXPECT_TRUE(tm->contains_module(m_0, true));
-                    EXPECT_TRUE(tm->contains_module(m_1, true));
-                    EXPECT_TRUE(tm->contains_module(m_2, true));
-                    EXPECT_TRUE(tm->contains_module(m_3, true));
+                    EXPECT_TRUE(tm->is_parent_module_of(m_0));
+                    EXPECT_TRUE(tm->is_parent_module_of(m_1));
+                    EXPECT_TRUE(tm->is_parent_module_of(m_2));
+                    EXPECT_TRUE(tm->is_parent_module_of(m_3));
                 }
                 {
                     // Submodules of TOP_MODULE (with module_name_filter);
@@ -717,14 +725,14 @@ namespace hal {
                 }
             }
             {
-                // Testing edge cases of contains_module
+                // Testing edge cases of is_parent_module_of
 
                 // -- the passed Module is a nullptr
-                EXPECT_FALSE(tm->contains_module(nullptr, false));
+                EXPECT_FALSE(tm->is_parent_module_of(nullptr));
                 // -- the calling Module is a leave
-                EXPECT_FALSE(m_2->contains_module(tm, false));
+                EXPECT_FALSE(m_2->is_parent_module_of(tm));
                 // -- the passed Module is the same as the calling one
-                EXPECT_FALSE(m_2->contains_module(m_2, false));
+                EXPECT_FALSE(m_2->is_parent_module_of(m_2));
             }
         TEST_END
     }
