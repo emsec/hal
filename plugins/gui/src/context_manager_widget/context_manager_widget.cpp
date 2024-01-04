@@ -108,6 +108,7 @@ namespace hal
 
         connect(mContextTreeView, &QTreeView::customContextMenuRequested, this, &ContextManagerWidget::handleContextMenuRequest);
         connect(mContextTreeView, &QTreeView::doubleClicked, this, &ContextManagerWidget::handleItemDoubleClicked);
+        connect(mContextTreeView, &QTreeView::clicked, this, &ContextManagerWidget::handleItemClicked);
         connect(mContextTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ContextManagerWidget::handleSelectionChanged);
         connect(mContextTreeModel, &ContextTreeModel::rowsRemoved, this, &ContextManagerWidget::handleDataChanged);
         connect(mContextTreeModel, &ContextTreeModel::rowsInserted, this, &ContextManagerWidget::handleDataChanged);
@@ -157,10 +158,10 @@ namespace hal
     {
         QModelIndex sourceIndex = mContextTreeProxyModel->mapToSource(proxyIndex);
         ContextTreeItem* item = static_cast<ContextTreeItem*>(mContextTreeModel->getItemFromIndex(sourceIndex));
-        if (item->isDirectory()){
-            mContextTreeModel->setCurrentDirectory(item);
-        }
-        else {
+
+        mContextTreeModel->setCurrentDirectory(item);
+
+        if (item->isContext()) {
 
             GraphContext* clickedContext = item->context();
 
@@ -168,6 +169,15 @@ namespace hal
 
             mTabView->showContext(clickedContext);
         }
+    }
+
+    void ContextManagerWidget::handleItemClicked(const QModelIndex &proxyIndex)
+    {
+        QModelIndex sourceIndex = mContextTreeProxyModel->mapToSource(proxyIndex);
+        ContextTreeItem* item = static_cast<ContextTreeItem*>(mContextTreeModel->getItemFromIndex(sourceIndex));
+
+        mContextTreeModel->setCurrentDirectory(item);
+
     }
 
     void ContextManagerWidget::handleRenameContextClicked()

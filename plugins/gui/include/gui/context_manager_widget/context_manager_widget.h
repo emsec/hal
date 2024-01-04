@@ -118,6 +118,11 @@ namespace hal
         void handleItemDoubleClicked(const QModelIndex &proxyIndex);
 
         /**
+         * Handle clicked
+         */
+        void handleItemClicked(const QModelIndex &proxyIndex);
+
+        /**
          * Initializes the Toolbar of the ContextManagerWidget.
          *
          * @param toolbar - The ContextManagerWidget's Toolbar
