@@ -1,5 +1,6 @@
 var NAVTREEINDEX20 =
 {
+"classhal_1_1_user_action_compound_factory.html#a5083008180156775c2f27886849f0ca6":[4,0,5,29,1],
 "classhal_1_1_user_action_compound_factory.html#ad07f83a8369e2a7510b5e258d1057388":[4,0,5,29,0],
 "classhal_1_1_user_action_factory.html":[4,0,5,27],
 "classhal_1_1_user_action_factory.html#a218bcaeabde2d8e8eb6266aea7607452":[4,0,5,27,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX20 =
 "content__anchor_8h.html":[7,0,1,3,0,0,5,0],
 "content__anchor_8h_source.html":[7,0,1,3,0,0,5,0],
 "content__drag__relay_8cpp.html":[7,0,1,3,2,10,0],
-"content__drag__relay_8cpp_source.html":[7,0,1,3,2,10,0],
-"content__drag__relay_8h.html":[7,0,1,3,0,0,11,0]
+"content__drag__relay_8cpp_source.html":[7,0,1,3,2,10,0]
 };

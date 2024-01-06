@@ -1,5 +1,6 @@
 var NAVTREEINDEX11 =
 {
+"classhal_1_1_main_settings_list.html#a75b5cb8e094b32e87fe5e3dd2e77467b":[4,0,4,6,1],
 "classhal_1_1_main_settings_list.html#abc7924b7ef507b3660ef0e0b734a8c0f":[4,0,4,6,3],
 "classhal_1_1_main_settings_list.html#abef29510f4b1c37e53a849845f81c356":[4,0,4,6,2],
 "classhal_1_1_main_settings_list.html#ae305c09147ac8fe6a5e993acbddc04db":[4,0,4,6,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX11 =
 "classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa5bf6888f7204acd17fd29978733807dd":[6,0,0,257,0,12],
 "classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa630acdba2edff17c07b41d79be77d39e":[6,0,0,257,0,13],
 "classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa82d919bd772ab56d1f06bf9d8c4bc32c":[6,0,0,257,0,6],
-"classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa87249d8954401fed6417be3ba64c684c":[6,0,0,257,0,7],
-"classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa9c410f2c52cd3e25dd33f33eca8d8c4b":[6,0,0,257,0,3]
+"classhal_1_1_module_event.html#ac760774ea38bdeb7c7fc7f9f9e96c53fa87249d8954401fed6417be3ba64c684c":[6,0,0,257,0,7]
 };

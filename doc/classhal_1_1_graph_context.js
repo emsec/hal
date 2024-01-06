@@ -25,6 +25,7 @@ var classhal_1_1_graph_context =
     [ "isGateUnfolded", "classhal_1_1_graph_context.html#a0219fc146717ebddc0a45c8091985c6c", null ],
     [ "isModuleUnfolded", "classhal_1_1_graph_context.html#a00ae714ff83079561b0d3987189754f4", null ],
     [ "isScheduledRemove", "classhal_1_1_graph_context.html#a8d6c8ba76c1dcb72d667d4a98b2c497a", null ],
+    [ "isShowingFoldedTopModule", "classhal_1_1_graph_context.html#a5a8f4ada859fda102cd5cb92fa5460b2", null ],
     [ "isShowingModule", "classhal_1_1_graph_context.html#a626a035c9c81932ed90f3400293f217a", null ],
     [ "isShowingModule", "classhal_1_1_graph_context.html#a806b1fe7afef46e9a0f7186880f70cc6", null ],
     [ "isShowingModuleExclusively", "classhal_1_1_graph_context.html#a4c90b9becca87c6e744a9d391d561c26", null ],

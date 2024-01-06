@@ -1,5 +1,6 @@
 var NAVTREEINDEX9 =
 {
+"classhal_1_1_gui_api.html#a882772f78421f33676e83b34b33ef412":[4,0,21,46],
 "classhal_1_1_gui_api.html#a88474b1c5bd6a605ba56b953fdb2306a":[4,0,21,34],
 "classhal_1_1_gui_api.html#a8b99127cadfa881522186c3c33b86450":[4,0,21,31],
 "classhal_1_1_gui_api.html#a92830fb74d5e3d0ce61027fc052c8d47":[4,0,21,44],
@@ -248,6 +249,5 @@ var NAVTREEINDEX9 =
 "classhal_1_1_json_write_data.html#ab2575cf709e0f650926c207b90395b2a":[6,0,0,218,9],
 "classhal_1_1_json_write_data.html#ab3cb43f0bcf7a604f94ee5afd0d96c6c":[6,0,0,218,1],
 "classhal_1_1_json_write_data.html#abffaab0f8e493ffcf3c7c3e09e948556":[6,0,0,218,2],
-"classhal_1_1_json_write_document.html":[6,0,0,219],
-"classhal_1_1_json_write_document.html#a164b2a703fdcd6611aa2beebced6c2af":[6,0,0,219,8]
+"classhal_1_1_json_write_document.html":[6,0,0,219]
 };

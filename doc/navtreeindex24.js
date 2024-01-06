@@ -1,5 +1,6 @@
 var NAVTREEINDEX24 =
 {
+"globals_w.html":[7,1,0,23],
 "graph__context_8cpp.html":[7,0,1,3,2,19,0,0],
 "graph__context_8cpp_source.html":[7,0,1,3,2,19,0,0],
 "graph__context_8h.html":[7,0,1,3,0,0,20,0,0],
@@ -145,8 +146,8 @@ var NAVTREEINDEX24 =
 "group__graph-visuals.html":[4,0,0,0],
 "group__graph.html":[4,0,0],
 "group__gui.html":[4,0],
-"group__gui.html#ga077e1c5730ec712b6b5e2328edd17c56":[4,0,58],
 "group__gui.html#ga077e1c5730ec712b6b5e2328edd17c56":[7,0,1,3,0,0,56,0],
+"group__gui.html#ga077e1c5730ec712b6b5e2328edd17c56":[4,0,58],
 "group__gui.html#ga284a43cae48443fa22ac672a8b6ea8a0":[4,0,57],
 "group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1":[4,0,56],
 "group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca":[4,0,56,3],
@@ -206,10 +207,10 @@ var NAVTREEINDEX24 =
 "group__utilities.html#ga2258fcb2d8e5c8f15437e9c4dea3483d":[7,0,0,0,4,4,2],
 "group__utilities.html#ga522d6d0c8a408128993be37c86656280":[7,0,0,0,4,4,7],
 "group__utilities.html#ga522d6d0c8a408128993be37c86656280":[4,1,3,11],
-"group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466":[7,0,0,0,4,4,6],
 "group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466":[4,1,3,10],
-"group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2":[4,1,3,12],
+"group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466":[7,0,0,0,4,4,6],
 "group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2":[7,0,0,0,4,4,8],
+"group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2":[4,1,3,12],
 "group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce":[4,1,3,9],
 "group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce":[7,0,0,0,4,4,5],
 "group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[7,0,0,0,4,4,10],
@@ -248,6 +249,5 @@ var NAVTREEINDEX24 =
 "grouping__table__model_8cpp.html":[7,0,1,3,2,21,4],
 "grouping__table__model_8cpp.html#ad6d3755ac1791435e2f25fb4647fe895":[7,0,1,3,2,21,4,0],
 "grouping__table__model_8cpp_source.html":[7,0,1,3,2,21,4],
-"grouping__table__model_8h.html":[7,0,1,3,0,0,22,4],
-"grouping__table__model_8h_source.html":[7,0,1,3,0,0,22,4]
+"grouping__table__model_8h.html":[7,0,1,3,0,0,22,4]
 };

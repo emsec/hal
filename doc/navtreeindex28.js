@@ -1,5 +1,6 @@
 var NAVTREEINDEX28 =
 {
+"pingroup__selector__dialog_8cpp.html":[7,0,1,3,2,25,2],
 "pingroup__selector__dialog_8cpp_source.html":[7,0,1,3,2,25,2],
 "pingroup__selector__dialog_8h.html":[7,0,1,3,0,0,27,2],
 "pingroup__selector__dialog_8h_source.html":[7,0,1,3,0,0,27,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX28 =
 "python__bindings_2bindings_2gate__pin_8cpp.html#ga545c84ed3add4bda012c247a063b50ce":[7,0,2,2,0,10,0],
 "python__bindings_2bindings_2gate__pin_8cpp_source.html":[7,0,2,2,0,10],
 "python__bindings_2bindings_2gate__type_8cpp.html":[7,0,2,2,0,12],
-"python__bindings_2bindings_2gate__type_8cpp.html#gad09c61daaa174b451b0519d0f54a2382":[7,0,2,2,0,12,0],
-"python__bindings_2bindings_2gate__type_8cpp_source.html":[7,0,2,2,0,12]
+"python__bindings_2bindings_2gate__type_8cpp.html#gad09c61daaa174b451b0519d0f54a2382":[7,0,2,2,0,12,0]
 };
