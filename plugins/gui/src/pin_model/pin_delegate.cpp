@@ -154,9 +154,6 @@ namespace hal
                 break;
             }
         }
-
-        //TODO remove assertion after verification
-        assert(pinModel->assertionTestForEntry(static_cast<PinItem*>(index.internalPointer())));
     }
 
 

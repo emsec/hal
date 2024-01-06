@@ -42,18 +42,10 @@ namespace hal
     void GateLibraryTabPin::update(GateType* gate)
     {
 
-        if(!gate){
-            //TODO make default look
-
-            return;
-        }
-
         mPinModel->setGate(gate);
 
         //TODO resize to see children columns
         mTreeView->resizeColumnToContents(0);
-
-
     }
 
 
