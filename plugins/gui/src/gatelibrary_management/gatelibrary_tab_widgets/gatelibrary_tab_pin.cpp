@@ -14,12 +14,25 @@ namespace hal
     {
         mGridLayout = new QGridLayout(parent);
 
-        auto pinDelegate = new PinDelegate(parent);
         mTreeView   = new QTreeView(parent);
         mPinModel = new PinModel(parent);
 
         mTreeView->setModel(mPinModel);
+
+        mGridLayout->addWidget(mTreeView);
+
+        setLayout(mGridLayout);
+    }
+
+    GateLibraryTabPin::GateLibraryTabPin(QWidget* parent, bool editable)
+    {
+        mGridLayout = new QGridLayout(parent);
+
+        mTreeView   = new QTreeView(parent);
+        mPinModel = new PinModel(parent, editable);
+        auto pinDelegate = new PinDelegate(parent);
         mTreeView->setItemDelegate(pinDelegate);
+        mTreeView->setModel(mPinModel);
 
         mGridLayout->addWidget(mTreeView);
 
@@ -29,15 +42,10 @@ namespace hal
     void GateLibraryTabPin::update(GateType* gate)
     {
 
-        if(!gate){
-            //TODO make default look
-
-            return;
-        }
-
         mPinModel->setGate(gate);
-        mTreeView->resizeColumnToContents(0);
 
+        //TODO resize to see children columns
+        mTreeView->resizeColumnToContents(0);
     }
 
 

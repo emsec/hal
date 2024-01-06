@@ -38,9 +38,13 @@ namespace hal {
     class PinsWizardPage:public QWizardPage{
     public:
         PinsWizardPage(QWidget* parent = nullptr);
+        void setGateType(GateType* gate);
     private:
         QGridLayout* mLayout;
-        //QTreeView* mPinsTreeView;
+        PinModel* mPinModel;
+        QTreeView* mPinsTreeView;
+        GateLibrary* mGateLibrary;
+
         GateLibraryTabPin* mPinTab;
         QPushButton* mDelBtn;
         QPushButton* mAddBtn;

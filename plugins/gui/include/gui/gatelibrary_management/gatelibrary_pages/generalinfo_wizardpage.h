@@ -26,6 +26,7 @@
 #pragma once
 
 #include "hal_core/netlist/gate_library/enums/gate_type_property.h"
+#include "hal_core/netlist/gate_library/gate_library.h"
 
 #include <QWizardPage>
 #include <QGridLayout>
@@ -33,12 +34,18 @@
 #include <QLineEdit>
 #include <QListWidget>
 #include <QComboBox>
+#include <QPushButton>
 
 namespace hal {
     class GeneralInfoWizardPage:public QWizardPage{
+        Q_OBJECT
     public:
-        GeneralInfoWizardPage(QWidget* parent = nullptr);
+        GeneralInfoWizardPage(const GateLibrary* gt, QWidget* parent = nullptr);
         void setData(QString name, QStringList properties);
+        bool validatePage() override;
+    public Q_SLOTS:
+        void addProperty();
+        void deleteProperty();
     private:
         QGridLayout* mLayout;
         QLabel* mLabelName;
@@ -48,5 +55,10 @@ namespace hal {
         QLineEdit* mName;
         QListWidget* mProperties;
         QComboBox* mAddProperty;
+
+        QPushButton* mDelBtn;
+        QPushButton* mAddBtn;
+
+        const GateLibrary* mGateLibrary;
     };
 }

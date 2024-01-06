@@ -25,20 +25,19 @@
 
 #pragma once
 
+#include "gui/gui_globals.h"
+#include "gui/gui_utils/sort.h"
+#include "gui/pin_model/pin_item.h"
+#include "gui/pin_model/pin_model.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
-#include "gui/gui_utils/sort.h"
-#include "gui/pin_model/pin_model.h"
-#include "gui/pin_model/pin_item.h"
-#include "gui/gui_globals.h"
-
 
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
-#include <set>
 #include <array>
+#include <set>
 
 namespace hal
 {
@@ -49,8 +48,25 @@ namespace hal
         Q_OBJECT
 
     public:
+        struct PIN {
+            QString name;
+            PinDirection direction;
+            PinType type;
+            u32 id;
+        };
+
+        struct PINGROUP {
+            QString name;
+            PinDirection direction;
+            PinType type;
+            u32 id;
+            QList<PIN*> pins;
+        };
 
         explicit PinModel(QObject* parent = nullptr);
+        explicit PinModel(QObject* parent, bool editable);
+
+        ~PinModel();
 
         /**
          * Returns the item flags for the given index.
@@ -62,7 +78,7 @@ namespace hal
 
         /**
          * sets the gate from which the pins are to be displayed
-         * @param gate - The gate from which the pins are to be displayed
+         * @param gate that have to be displayed
          */
         void setGate(GateType* gate);
 
@@ -87,13 +103,7 @@ namespace hal
          */
         void handleEditType(QModelIndex index, const QString& type);
 
-        /**
-         * Checks whether a Pin or a Group does exist in the Gate
-         * @param item the PinItem which should be checked
-         * @return true if the pinItem or pinGroup has a corresponding item within the gate - false otherwise
-         */
-        bool assertionTestForEntry(PinItem* item);
-
+        QList<PINGROUP*> getPinGroups();
 
     private:
         QList<PinItem*> mInvalidPins = QList<PinItem*>();
@@ -112,15 +122,16 @@ namespace hal
         void handleInvalidGroupUpdate(PinItem* groupItem);
         bool renamePin(PinItem* pinItem, const QString& newName);
         bool renamePinGroup(PinItem* groupItem, const QString& newName);
-        void addPinToPinGroup(u32 pinId, u32 groupId);
+        void addPinToPinGroup(PinItem* pinItem, PinItem* groupItem);
         void handleGroupDirectionUpdate(PinItem* groupItem ,PinDirection direction = PinDirection::none);
+        u32 getNextId(PinItem::TreeItemType type);
+        //TODO delete  -  only for testing
+        void printGateMember();
 
-        Result<GatePin*> createPin(PinItem* pinItem, bool addToGroup = false);
 
-
-
-        GateType* mGate;
         QSet<QString> mAssignedNames;
+        QList<PINGROUP*> mPinGroups;
+        bool mEditable;
 
     };
 }   // namespace hal

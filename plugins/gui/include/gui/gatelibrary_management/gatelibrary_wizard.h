@@ -39,12 +39,11 @@ namespace hal
     class GateLibraryWizard : public QWizard
     {
     public:
-        GateLibraryWizard(QWidget* parent = nullptr);
         GateLibraryWizard(const GateLibrary* gateLibrary, GateType* gateType, QWidget* parent = nullptr);
 
         void editGate(GateType* gt);
         void addGate();
-        void setData(const GateLibrary* gateLibrary, GateType* gateType);
+        void setData(GateLibrary* gateLibrary, GateType* gateType);
     private:
         const GateLibrary* mGateLibrary;
         GateType* mGateType;
