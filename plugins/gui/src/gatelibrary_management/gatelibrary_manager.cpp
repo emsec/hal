@@ -128,10 +128,8 @@ namespace hal
 
     void GateLibraryManager::handleAddWizard()
     {
-        //TODO: create an empty Gate
-
-        //GateLibraryWizard wiz(mGateLibrary, );
-        //wiz.exec();
+        GateLibraryWizard wiz(mGateLibrary);
+        wiz.exec();
     }
 
     u32 GateLibraryManager::getNextGateId()

@@ -26,11 +26,14 @@
 #pragma once
 
 #include <QWizardPage>
+#include <QGridLayout>
 
 namespace hal {
     class BoolWizardPage:public QWizardPage
     {
     public:
         BoolWizardPage(QWidget* parent = nullptr);
+    private:
+        QGridLayout* mLayout;
     };
 }
