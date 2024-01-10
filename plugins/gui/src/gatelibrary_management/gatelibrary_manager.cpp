@@ -146,7 +146,9 @@ namespace hal
 
     void GateLibraryManager::handleAddWizard()
     {
-        //TODO: gather all information needed to create a new gate type upon finish using GateLibrary::create_gate_type()
+        //TODO: create an empty Gate
+        GateLibraryWizard wiz(mGateLibrary);
+        wiz.exec();
     }
 
     u32 GateLibraryManager::getNextGateId()

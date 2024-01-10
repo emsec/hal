@@ -103,6 +103,12 @@ namespace hal
          */
         void handleEditType(QModelIndex index, const QString& type);
 
+        void handleDeleteItem(QModelIndex index);
+
+        /**
+         * Returns a List of PinGroup structures representing the pingroups of a GateType
+         * @return List of PinGroup structures representing the pingroups of a GateType
+         */
         QList<PINGROUP*> getPinGroups();
 
     private:
@@ -125,6 +131,7 @@ namespace hal
         void addPinToPinGroup(PinItem* pinItem, PinItem* groupItem);
         void handleGroupDirectionUpdate(PinItem* groupItem ,PinDirection direction = PinDirection::none);
         u32 getNextId(PinItem::TreeItemType type);
+        void handleItemRemoved(PinItem* item);
         //TODO delete  -  only for testing
         void printGateMember();
 

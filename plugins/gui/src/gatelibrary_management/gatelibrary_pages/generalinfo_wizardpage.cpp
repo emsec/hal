@@ -1,5 +1,8 @@
 #include "gui/gatelibrary_management/gatelibrary_pages/generalinfo_wizardpage.h"
 
+#include <QDebug>
+#include <gui/gatelibrary_management/gatelibrary_wizard.h>
+
 namespace hal
 {
     GeneralInfoWizardPage::GeneralInfoWizardPage(const GateLibrary* gt, QWidget* parent) : QWizardPage(parent)
@@ -34,16 +37,66 @@ namespace hal
         registerField("properties", mProperties);
 
         //TODO: fetch data from enum GateTypeProperty
-        mAddProperty->addItems(QStringList{"combinational", "sequential"});
+        mAddProperty->addItems(QStringList{
+                                   "combinational",
+                                   "sequential",
+                                   "tristate",
+                                   "power",
+                                   "ground",
+                                   "ff",
+                                   "latch",
+                                   "ram",
+                                   "io",
+                                   "dsp",
+                                   "pll",
+                                   "oscillator",
+                                   "scan",
+                                   "c_buffer",
+                                   "c_inverter",
+                                   "c_and",
+                                   "c_nand",
+                                   "c_or",
+                                   "c_nor",
+                                   "c_xor",
+                                   "c_xnor",
+                                   "c_aoi",
+                                   "c_oai",
+                                   "c_mux",
+                                   "c_carry",
+                                   "c_half_adder",
+                                   "c_full_adder",
+                                   "c_lut"
+                               });
         connect(mAddBtn, &QPushButton::clicked, this, &GeneralInfoWizardPage::addProperty);
         connect(mDelBtn, &QPushButton::clicked, this, &GeneralInfoWizardPage::deleteProperty);
 
+    }
+
+    void GeneralInfoWizardPage::setMode(bool edit)
+    {
+        mIsEdit = edit;
     }
 
     void GeneralInfoWizardPage::setData(QString name, QStringList properties)
     {
         mName->setText(name);
         mProperties->addItems(properties);
+        if(gateInit == "") gateInit = name;
+    }
+
+    QString GeneralInfoWizardPage::getName()
+    {
+        return mName->text();
+    }
+
+    QStringList GeneralInfoWizardPage::getProperties()
+    {
+        QStringList res;
+        for (int i = 0; i < mProperties->count(); i++) {
+            qInfo()<<mProperties->item(i)->text();
+            res.append(mProperties->item(i)->text());
+        }
+        return res;
     }
 
     void GeneralInfoWizardPage::addProperty()
@@ -61,8 +114,16 @@ namespace hal
     bool GeneralInfoWizardPage::validatePage()
     {
         for (auto it : mGateLibrary->get_gate_types()) {
-            if(QString::fromStdString(it.first) == mName->text() || mProperties->count() == 0) return false;
+            if(!mIsEdit & (QString::fromStdString(it.first) == mName->text() || mProperties->count() == 0)) return false;
+            else if (mIsEdit & mName->text() != gateInit & (QString::fromStdString(it.first) == mName->text() || mProperties->count() == 0)) return false;
         }
         return true;
+    }
+    int GeneralInfoWizardPage::nextId() const
+    {
+        auto parentWizard = wizard();
+        if(!parentWizard)
+            return -1;
+        return static_cast<GateLibraryWizard*>(parentWizard)->getNextPageId(GateLibraryWizard::GeneralInfo);
     }
 }

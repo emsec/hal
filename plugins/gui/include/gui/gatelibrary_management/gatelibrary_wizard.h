@@ -39,18 +39,35 @@ namespace hal
     class GateLibraryWizard : public QWizard
     {
     public:
+        enum PAGE
+        {
+            GeneralInfo = 0,
+            Pin = 1,
+            FlipFlop = 2,
+            BooleanFunction = 3,
+            None = -1
+        };
+
         GateLibraryWizard(const GateLibrary* gateLibrary, GateType* gateType, QWidget* parent = nullptr);
+        GateLibraryWizard(const GateLibrary* gateLibrary, QWidget* parent = nullptr);
 
         void editGate(GateType* gt);
         void addGate();
         void setData(GateLibrary* gateLibrary, GateType* gateType);
+        void accept() override;
+
+        int getNextPageId(PAGE page);
+        void setPageOrder();
     private:
         const GateLibrary* mGateLibrary;
         GateType* mGateType;
-
+        QMap<PAGE, PAGE>  mPageLookupTable;
         GeneralInfoWizardPage* generalInfoPage;
         PinsWizardPage* pinsPage;
         FlipFlopWizardPage* ffPage;
         BoolWizardPage* boolPage;
+
+        QString mName;
+        QStringList mProperties;
     };
 }

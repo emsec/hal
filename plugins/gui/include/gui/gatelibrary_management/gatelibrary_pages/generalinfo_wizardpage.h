@@ -42,7 +42,11 @@ namespace hal {
     public:
         GeneralInfoWizardPage(const GateLibrary* gt, QWidget* parent = nullptr);
         void setData(QString name, QStringList properties);
+        QString getName();
+        QStringList getProperties();
+        void setMode(bool edit);
         bool validatePage() override;
+        int nextId() const override;
     public Q_SLOTS:
         void addProperty();
         void deleteProperty();
@@ -60,5 +64,7 @@ namespace hal {
         QPushButton* mAddBtn;
 
         const GateLibrary* mGateLibrary;
+        bool mIsEdit;
+        QString gateInit;
     };
 }

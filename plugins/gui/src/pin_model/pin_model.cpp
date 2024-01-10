@@ -575,4 +575,80 @@ namespace hal
         return mPinGroups;
     }
 
+    void PinModel::handleDeleteItem(QModelIndex index)
+    {
+        //get item from index
+        auto item = static_cast<PinItem*>(getItemFromIndex(index));
+
+        if(!item)
+            return;
+
+        //remove item from the PINGROUP list
+
+        //check the type of the item
+        PinItem::TreeItemType type = item->getItemType();
+        if(type == PinItem::TreeItemType::PinGroup || type == PinItem::TreeItemType::InvalidPinGroup){
+            //handle group deletion
+            for(auto group : mPinGroups){
+                //delete all pins from the group and free group afterward
+                if(group->id == item->id()){
+                    for(auto pin : group->pins){
+                        delete(pin);
+                    }
+                    mPinGroups.removeAll(group);
+                    delete(group);
+                    break;
+                }
+            }
+            //remove actual modelItem
+            beginRemoveRows(index, 0, 0);
+            getRootItem()->removeChild(item);
+            endRemoveRows();
+            handleItemRemoved(item);
+
+        }
+        else if(type == PinItem::TreeItemType::Pin || type == PinItem::TreeItemType::InvalidPin){
+            //handle pin deletion
+
+            //get the parent group of the pin
+            auto parentGroup = static_cast<PinItem*>(item->getParent());
+            for(auto group : mPinGroups){
+                if(group->id == parentGroup->id()){
+                    //delete pin from the group
+                    for(auto pin : group->pins){
+                        if(pin->id == item->id()){
+                          group->pins.removeAll(pin);
+                          delete(pin);
+                          break;
+                        }
+                    }
+                    break;
+                }
+            }
+            //remove actual modelItem
+            beginRemoveRows(index, 0, 0);
+            parentGroup->removeChild(item);
+            endRemoveRows();
+            handleItemRemoved(item);
+            qInfo() << "name was " << item->getName();
+        }
+    }
+
+    void PinModel::handleItemRemoved(PinItem* item)
+    {
+
+        //TODO reorganize name handling
+        //remove name from assigned list
+        if(item->getItemType() == PinItem::TreeItemType::PinGroup || item->getItemType() == PinItem::TreeItemType::InvalidPinGroup){
+            //name should be unique amongst pingroups so this can be deleted
+            mAssignedNames.remove(item->getName());
+        }
+        else{
+            //item was a pin so we have to check if the parent group is assigned to that name,  otherwise it can be freed
+            auto parent = static_cast<PinItem*>(item->getParent());
+            if(parent->getName() != item->getName())
+                mAssignedNames.remove(item->getName());
+        }
+    }
+
 }

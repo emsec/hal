@@ -48,5 +48,14 @@ namespace hal
         mTreeView->resizeColumnToContents(0);
     }
 
+    QTreeView* GateLibraryTabPin::getTreeView()
+    {
+        return mTreeView;
+    }
+
+    PinModel* GateLibraryTabPin::getPinModel()
+    {
+        return mPinModel;
+    }
 
 }
