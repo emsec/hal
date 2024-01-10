@@ -19,7 +19,7 @@ namespace hal
 
         mLayout->addWidget(mPinTab, 0, 0, 1, 2);
         mLayout->addWidget(mDelBtn, 1, 0);
-        mLayout->addWidget(mAddBtn, 1, 1);
+        //mLayout->addWidget(mAddBtn, 1, 1);
 
         connect(mDelBtn, &QPushButton::clicked, this, &PinsWizardPage::handleDeleteClicked);
 
