@@ -33,6 +33,8 @@ namespace hal {
     {
     public:
         BoolWizardPage(QWidget* parent = nullptr);
+        int nextId() const override;
+
     private:
         QGridLayout* mLayout;
     };

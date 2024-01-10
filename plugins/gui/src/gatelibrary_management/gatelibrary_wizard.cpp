@@ -30,6 +30,7 @@ namespace hal
             generalInfoPage->setData(QString::fromStdString(mGateType->get_name()), prop);
             pinsPage->setGateType(mGateType);
         }
+        setPageOrder();
     }
 
     GateLibraryWizard::GateLibraryWizard(const GateLibrary *gateLibrary, QWidget* parent): QWizard(parent)
@@ -45,6 +46,7 @@ namespace hal
         this->addPage(boolPage);
         mGateLibrary = gateLibrary;
         generalInfoPage->setMode(false);
+        setPageOrder();
     }
 
     void GateLibraryWizard::editGate(GateType* gt)
@@ -70,5 +72,31 @@ namespace hal
         mName = generalInfoPage->getName();
         mProperties = generalInfoPage->getProperties();
         this->close();
+    }
+
+    int GateLibraryWizard::getNextPageId(PAGE page)
+    {
+        if(!mPageLookupTable.contains(page))
+            return -1;
+
+        //TODO logic to check if stateless gate is selected
+        if(page == Pin){
+            if(mProperties.contains("ff"))
+            {
+                qInfo() << "skip the next page";
+                return mPageLookupTable.value(mPageLookupTable.value(page));
+            }
+        }
+        return mPageLookupTable.value(page);
+    }
+
+    void GateLibraryWizard::setPageOrder()
+    {
+        mPageLookupTable = QMap<PAGE, PAGE>();
+        mPageLookupTable.insert(GeneralInfo, Pin);
+        mPageLookupTable.insert(Pin, FlipFlop);
+        mPageLookupTable.insert(FlipFlop, BooleanFunction);
+        mPageLookupTable.insert(BooleanFunction, None);
+        mPageLookupTable.insert(None, None);
     }
 }

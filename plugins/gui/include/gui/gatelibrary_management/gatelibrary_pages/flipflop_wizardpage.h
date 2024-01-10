@@ -39,6 +39,8 @@ namespace hal {
     public:
         FlipFlopWizardPage(QWidget* parent = nullptr);
         void initializePage() override;
+        int nextId() const override;
+
     private:
         QGridLayout* mLayout;
         QTabWidget* mTabWidget;

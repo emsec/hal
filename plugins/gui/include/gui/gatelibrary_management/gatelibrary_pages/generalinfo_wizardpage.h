@@ -46,6 +46,7 @@ namespace hal {
         QStringList getProperties();
         void setMode(bool edit);
         bool validatePage() override;
+        int nextId() const override;
     public Q_SLOTS:
         void addProperty();
         void deleteProperty();

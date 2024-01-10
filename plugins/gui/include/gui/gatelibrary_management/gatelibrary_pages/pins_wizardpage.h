@@ -40,6 +40,7 @@ namespace hal {
     public:
         PinsWizardPage(QWidget* parent = nullptr);
         void setGateType(GateType* gate);
+        int nextId() const override;
 
     public Q_SLOTS:
         void handleDeleteClicked();

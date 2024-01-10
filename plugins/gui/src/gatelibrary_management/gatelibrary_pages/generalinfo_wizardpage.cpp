@@ -1,6 +1,7 @@
 #include "gui/gatelibrary_management/gatelibrary_pages/generalinfo_wizardpage.h"
 
 #include <QDebug>
+#include <gui/gatelibrary_management/gatelibrary_wizard.h>
 
 namespace hal
 {
@@ -117,5 +118,12 @@ namespace hal
             else if (mIsEdit & mName->text() != gateInit & (QString::fromStdString(it.first) == mName->text() || mProperties->count() == 0)) return false;
         }
         return true;
+    }
+    int GeneralInfoWizardPage::nextId() const
+    {
+        auto parentWizard = wizard();
+        if(!parentWizard)
+            return -1;
+        return static_cast<GateLibraryWizard*>(parentWizard)->getNextPageId(GateLibraryWizard::GeneralInfo);
     }
 }
