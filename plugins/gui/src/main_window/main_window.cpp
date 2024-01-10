@@ -8,7 +8,6 @@
 #include "gui/export/import_project_dialog.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/file_manager/project_dir_dialog.h"
-#include "gui/gatelibrary_management/gatelibrary_management_dialog.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/gui_def.h"
 #include "gui/gui_globals.h"
@@ -131,7 +130,7 @@ namespace hal
 
         mWelcomeScreen = new WelcomeScreen();
         mStackedWidget->addWidget(mWelcomeScreen);
-        mGateLibraryManager = new GateLibraryManager();
+        mGateLibraryManager = new GateLibraryManager(this);
         mStackedWidget->addWidget(mGateLibraryManager);
 
         mStackedWidget->setCurrentWidget(mWelcomeScreen);

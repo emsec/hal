@@ -902,6 +902,17 @@ hal--GateLibrarySelection QLabel#warningMsg
     color: yellow;
 }
 
+hal--GatelibraryContentWidget
+{
+    qproperty-disabledIconStyle:    "all->#515050";
+    qproperty-enabledIconStyle:     "all->#e8e8e8";
+    qproperty-addTypeIconPath:      ":/icons/plus";
+    qproperty-editTypeIconPath:     ":/icons/pen";
+    qproperty-searchIconPath:       ":/icons/search";
+    qproperty-searchIconStyle:       "all->#e8e8e8";
+    qproperty-searchActiveIconStyle: "all->#30ac4f";
+}
+
 hal--ImportNetlistDialog
 {
     qproperty-saveIconStyle: "all->#3192C5";

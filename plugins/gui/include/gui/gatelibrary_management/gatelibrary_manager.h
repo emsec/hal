@@ -28,6 +28,7 @@
 #include "gatelibrary_tab_widgets/gatelibrary_tab_flip_flop.h"
 #include "gatelibrary_table_model.h"
 #include "gui/gatelibrary_management/gatelibrary_wizard.h"
+#include "gui/gatelibrary_management/gatelibrary_content_widget.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
 
@@ -39,13 +40,10 @@
 class QGridLayout;
 class QPushButton;
 class QTabWidget;
-class QTableView;
-class QGraphicsView;
-
 
 namespace hal
 {
-
+    class GatelibraryGraphicsView;
 
     class GateLibraryManager : public QFrame
     {
@@ -57,7 +55,7 @@ namespace hal
          *
          * @param parent - the parent widget
          */
-        explicit GateLibraryManager(QWidget* parent = nullptr);
+        explicit GateLibraryManager(MainWindow* parent);
 
         /**
          * Reinitializes the appearance of the widget and its children.
@@ -78,7 +76,7 @@ namespace hal
          * Updates widgets based on the selected item from the TableView
          * @param index
          */
-        void handleSelectionChanged(const QModelIndex& index);
+        void handleSelectionChanged(const QModelIndex& index, const QModelIndex& prevIndex);
 
         /**
          * Emits close() and closes the widget.
@@ -96,14 +94,12 @@ namespace hal
 
         QTabWidget* mTabWidget;
         QGridLayout* mLayout;
-        QTableView* mTableView;
+        GatelibraryContentWidget* mContentWidget;
         GatelibraryTableModel* mTableModel;
-        QGraphicsView* mGraphicsView;
+        GatelibraryGraphicsView* mGraphicsView;
 
-        QPushButton* mEditBtn;
-        QPushButton* mAddBtn;
+        QPushButton* mOkBtn;
         QPushButton* mCancelBtn;
-
 
         GateLibraryTabFlipFlop* mFlipFlopTab;
         GateLibraryTabGeneral* mGeneralTab;

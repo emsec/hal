@@ -25,43 +25,20 @@
 
 #pragma once
 
-#include "gatelibrary_tab_interface.h"
-#include "hal_core/defines.h"
-#include "hal_core/netlist/gate_library/gate_type.h"
-
-#include <QFormLayout>
-#include <QLabel>
+#include<QGraphicsView>
+#include <QWheelEvent>
 
 namespace hal
 {
-    /**
-     * Widget which shows general information of a given gate
-     */
-    class GateLibraryTabGeneral : public QWidget, public GateLibraryTabInterface
+    class Gate;
+
+    class GatelibraryGraphicsView : public QGraphicsView
     {
         Q_OBJECT
-
+    protected:
+        void wheelEvent(QWheelEvent *event) override;
     public:
-        GateLibraryTabGeneral(QWidget* parent = nullptr);
-
-
-        void update(GateType* gate) override;
-
-
-    private:
-
-        QFormLayout* mFormLayout;
-
-        QLabel* mNameLabel;
-        QLabel* mIdLabel;
-        QLabel* mComponentLabel;
-        QLabel* mBooleanFunctionLabel;
-
-        QLabel* mNamePropertyLabel;
-        QLabel* mIdPropertyLabel;
-        QLabel* mComponentPropertyLabel;
-        QLabel* mBooleanFunctionPropertyLabel;
-
+        GatelibraryGraphicsView(QWidget* parent = nullptr);
+        void showGate(Gate* g);
     };
-
 }

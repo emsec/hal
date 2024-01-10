@@ -15,19 +15,16 @@ namespace hal
         mIdLabel = new QLabel("ID", parent);
         mComponentLabel = new QLabel("Component", parent);
         mBooleanFunctionLabel = new QLabel("Boolean function", parent);
-        mPinLabel = new QLabel("Pins", parent);
 
         mNamePropertyLabel = new QLabel(" - ", parent);
         mIdPropertyLabel = new QLabel(" - ", parent);
         mComponentPropertyLabel = new QLabel(" - ", parent);
         mBooleanFunctionPropertyLabel = new QLabel(" - ", parent);
-        mPinPropertyLabel = new QLabel(" - ", parent);
 
         mFormLayout->addRow(mNameLabel, mNamePropertyLabel);
         mFormLayout->addRow(mIdLabel, mIdPropertyLabel);
         mFormLayout->addRow(mComponentLabel, mComponentPropertyLabel);
         mFormLayout->addRow(mBooleanFunctionLabel, mBooleanFunctionPropertyLabel);
-        mFormLayout->addRow(mPinLabel, mPinPropertyLabel);
         setLayout(mFormLayout);
 
     }
@@ -60,12 +57,6 @@ namespace hal
         for(auto const& pin : gate->get_output_pin_names()){
             out += QString::fromStdString(pin) + "\n  ";
         }
-
-        mPinPropertyLabel->setText("In:\n" + in + "\nOut:\n" + out);
-
-
-
-
 
     }
 

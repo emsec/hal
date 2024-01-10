@@ -44,15 +44,15 @@ namespace hal
             }
             else if (role == Qt::TextAlignmentRole)
             {
-                if (index.column() == 0 || index.column() == 1)
+                switch (index.column())
                 {
-                    Qt::Alignment a;
-                    a.setFlag(Qt::AlignLeft);
-                    a.setFlag(Qt::AlignVCenter);
-                    return QVariant(a);
+                case 0:
+                    return QVariant(Qt::AlignLeft | Qt::AlignVCenter);
+                case 1:
+                    return QVariant(Qt::AlignRight | Qt::AlignVCenter);
+                default:
+                    return QVariant(Qt::AlignCenter);
                 }
-                else
-                    return Qt::AlignCenter;
             }
         }
 

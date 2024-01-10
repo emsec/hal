@@ -1,13 +1,16 @@
 #include "gui/gatelibrary_management/gatelibrary_manager.h"
 
+#include "gui/gatelibrary_management/gatelibrary_graphics_view.h"
 #include "gui/graphics_effects/shadow_effect.h"
 #include "gui/plugin_relay/gui_plugin_manager.h"
-#include "gui/graph_widget/graphics_factory.h"
+#include "gui/main_window/main_window.h"
 #include "hal_core/netlist/gate_library/gate_library_manager.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/plugin_system/fac_extension_interface.h"
 
 #include <QGridLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QGraphicsView>
 #include <QTabWidget>
 #include <QTableView>
@@ -19,22 +22,22 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QTableWidget>
+#include <QSplitter>
+#include <QDialogButtonBox>
 #include <gui/gui_globals.h>
+
 namespace hal
 {
-    GateLibraryManager::GateLibraryManager(QWidget* parent)
+    GateLibraryManager::GateLibraryManager(MainWindow *parent)
         : QFrame(parent), mLayout(new QGridLayout()), mGateLibrary(nullptr)
     {
-        //TODO create layout and widgets
-        mLayout->setSpacing(20);
+        QSplitter* split = new QSplitter(this);
+        QWidget* rightWindow = new QWidget(split);
+        QGridLayout* rlay = new QGridLayout(rightWindow);
+        QDialogButtonBox* bbox = new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Ok, Qt::Horizontal, rightWindow);
 
-        mTableView = new QTableView(this);
         mTableModel = new GatelibraryTableModel(this);
-        mTableView->setModel(mTableModel);
-        mTableView->verticalHeader()->setVisible(false);
-
-        mTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-        mTableView->setSelectionMode(QAbstractItemView::SingleSelection);
+        mContentWidget = new GatelibraryContentWidget(mTableModel,split);
 
         //pages for the tab widget
         mGeneralTab = new GateLibraryTabGeneral(this);
@@ -44,10 +47,10 @@ namespace hal
 
 
         //buttons
-        mEditBtn = new QPushButton("Edit", this);
-        mAddBtn = new QPushButton("Add", this);
-        mCancelBtn = new QPushButton("Cancel", this);
-
+        mOkBtn = bbox->button(QDialogButtonBox::Ok);
+        mOkBtn->setDisabled(true);
+        mCancelBtn = bbox->button(QDialogButtonBox::Cancel);
+        mCancelBtn->setEnabled(true);
 
         //adding pages to the tab widget
         mTabWidget = new QTabWidget(this);
@@ -56,27 +59,30 @@ namespace hal
         mTabWidget->addTab(mFlipFlopTab, "Flip Flops");
         mTabWidget->addTab(mBooleanFunctionTab, "Boolean Functions");
 
-        mGraphicsView = new QGraphicsView(this);
+        mGraphicsView = new GatelibraryGraphicsView(this);
         QGraphicsScene* sc = new QGraphicsScene(mGraphicsView);
         sc->setSceneRect(0,0,300,1200);
         mGraphicsView->setScene(sc);
 
-        // Add widgets to the layout
-        mLayout->addWidget(mTableView,0,0,1,2);
-        mLayout->addWidget(mEditBtn,1,0);
-        mLayout->addWidget(mAddBtn,1,1);
-        mLayout->addWidget(mTabWidget,0,2);
-        mLayout->addWidget(mCancelBtn, 1, 2);
-        mLayout->addWidget(mGraphicsView,0,3);
+        rlay->addWidget(mTabWidget,0,0);
+        rlay->addWidget(mGraphicsView,0,1);
+        rlay->addWidget(bbox,1,0,1,2);
 
+        // Add widgets to the layout
+        split->addWidget(mContentWidget);
+        split->addWidget(rightWindow);
+
+        mLayout->addWidget(split);
 
         //signal - slots
-        connect(mAddBtn, &QPushButton::clicked, this, &GateLibraryManager::handleAddWizard);
+//        connect(mAddBtn, &QPushButton::clicked, this, &GateLibraryManager::handleAddWizard);
         //connect(mEditBtn, &QPushButton::clicked, this, &GateLibraryManager::handleEditWizard);
-        connect(mTableView, &QTableView::clicked, this, &GateLibraryManager::handleSelectionChanged);
+ //       connect(mTableView, &QTableView::clicked, this, &GateLibraryManager::handleSelectionChanged);
         connect(mCancelBtn, &QPushButton::clicked, this, &GateLibraryManager::handleCancelClicked);
-        connect(mTableView, &QTableView::doubleClicked, this, &GateLibraryManager::handleEditWizard);
-
+        connect(mContentWidget->mTableView, &QTableView::doubleClicked, this, &GateLibraryManager::handleEditWizard);
+        connect(mContentWidget->mTableView->selectionModel(), &QItemSelectionModel::currentChanged, this, &GateLibraryManager::handleSelectionChanged);
+        connect(mContentWidget->mAddAction, &QAction::triggered, this, &GateLibraryManager::handleAddWizard);
+        connect(mContentWidget, &GatelibraryContentWidget::triggerEditType, this, &GateLibraryManager::handleEditWizard);
         setLayout(mLayout);
         repolish();    // CALL FROM PARENT
     }
@@ -87,6 +93,7 @@ namespace hal
 
         s->unpolish(this);
         s->polish(this);
+
     }
 
     bool GateLibraryManager::initialize(const GateLibrary* gateLibrary)
@@ -126,10 +133,8 @@ namespace hal
                 mDemoNetlist = netlist_factory::create_netlist(gateLibrary);
             }
             mTableModel->loadFile(mGateLibrary);
-            mEditBtn->setEnabled(!mReadOnly);
-            mAddBtn->setEnabled(!mReadOnly);
-
         }
+        mContentWidget->activate();
         return true;
     }
 
@@ -141,10 +146,7 @@ namespace hal
 
     void GateLibraryManager::handleAddWizard()
     {
-        //TODO: create an empty Gate
-
-        //GateLibraryWizard wiz(mGateLibrary, );
-        //wiz.exec();
+        //TODO: gather all information needed to create a new gate type upon finish using GateLibrary::create_gate_type()
     }
 
     u32 GateLibraryManager::getNextGateId()
@@ -161,8 +163,9 @@ namespace hal
         return freeId;
     }
 
-    void GateLibraryManager::handleSelectionChanged(const QModelIndex& index)
+    void GateLibraryManager::handleSelectionChanged(const QModelIndex& index, const QModelIndex &prevIndex)
     {
+        Q_UNUSED(prevIndex);
         GateType* gateType;
         //get selected gate
         gateType = mTableModel->getGateTypeAtIndex(index.row());
@@ -178,8 +181,7 @@ namespace hal
             Gate* g = mDemoNetlist->get_gate_by_id(1);
             if (g) mDemoNetlist->delete_gate(g);
             g = mDemoNetlist.get()->create_gate(1,gateType,"Instance of");
-            GraphicsGate* gg = GraphicsFactory::createGraphicsGate(g,0);
-            mGraphicsView->scene()->addItem(gg);
+            mGraphicsView->showGate(g);
         }
     }
 
