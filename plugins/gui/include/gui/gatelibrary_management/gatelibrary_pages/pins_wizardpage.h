@@ -36,9 +36,13 @@
 
 namespace hal {
     class PinsWizardPage:public QWizardPage{
+        Q_OBJECT
     public:
         PinsWizardPage(QWidget* parent = nullptr);
         void setGateType(GateType* gate);
+
+    public Q_SLOTS:
+        void handleDeleteClicked();
     private:
         QGridLayout* mLayout;
         PinModel* mPinModel;

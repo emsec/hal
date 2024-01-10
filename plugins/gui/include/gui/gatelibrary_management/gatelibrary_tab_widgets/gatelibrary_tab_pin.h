@@ -47,7 +47,8 @@ namespace hal
     public:
         GateLibraryTabPin(QWidget* parent = nullptr);
         GateLibraryTabPin(QWidget* parent, bool editable);
-
+        QTreeView* getTreeView();
+        PinModel* getPinModel();
 
         void update(GateType* gate) override;
 
