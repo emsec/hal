@@ -4,6 +4,8 @@ namespace hal
 {
     BoolWizardPage::BoolWizardPage(QWidget* parent) : QWizardPage(parent)
     {
-
+        setTitle("Step 4: Boolean functions");
+        setSubTitle("TODO: subtitle");
+        mLayout = new QGridLayout(this);
     }
 }

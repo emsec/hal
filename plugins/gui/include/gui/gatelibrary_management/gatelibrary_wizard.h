@@ -40,10 +40,12 @@ namespace hal
     {
     public:
         GateLibraryWizard(const GateLibrary* gateLibrary, GateType* gateType, QWidget* parent = nullptr);
+        GateLibraryWizard(const GateLibrary* gateLibrary, QWidget* parent = nullptr);
 
         void editGate(GateType* gt);
         void addGate();
         void setData(GateLibrary* gateLibrary, GateType* gateType);
+        void accept() override;
     private:
         const GateLibrary* mGateLibrary;
         GateType* mGateType;
@@ -52,5 +54,8 @@ namespace hal
         PinsWizardPage* pinsPage;
         FlipFlopWizardPage* ffPage;
         BoolWizardPage* boolPage;
+
+        QString mName;
+        QStringList mProperties;
     };
 }
