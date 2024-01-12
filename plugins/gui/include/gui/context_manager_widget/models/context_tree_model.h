@@ -152,6 +152,9 @@ namespace hal
          */
         void setCurrentDirectory(ContextTreeItem* currentItem);
 
+    Q_SIGNALS:
+        void directoryCreatedSignal(ContextTreeItem* item);
+
     private Q_SLOTS:
         void handleDataChanged();
 

@@ -123,6 +123,8 @@ namespace hal
         connect(mShortCutDeleteItem, &QShortcut::activated, this, &ContextManagerWidget::handleDeleteContextClicked);
 
         connect(qApp, &QApplication::focusChanged, this, &ContextManagerWidget::handleFocusChanged);
+
+        connect(mContextTreeModel, &ContextTreeModel::directoryCreatedSignal, this, &ContextManagerWidget::selectDirectory);
     }
 
     void ContextManagerWidget::handleCreateContextClicked()
@@ -284,6 +286,17 @@ namespace hal
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
         else
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+    }
+
+    void ContextManagerWidget::selectDirectory(ContextTreeItem* item)
+    {
+        const QModelIndex source_model_index = mContextTreeModel->getIndexFromItem(static_cast<BaseTreeItem*>(item));
+        const QModelIndex proxy_model_index = mContextTreeProxyModel->mapFromSource(source_model_index);
+
+        if(proxy_model_index.isValid())
+            mContextTreeView->setCurrentIndex(proxy_model_index);
+        else
+            mContextTreeView->clearSelection();
     }
 
     void ContextManagerWidget::selectViewContext(GraphContext* context)

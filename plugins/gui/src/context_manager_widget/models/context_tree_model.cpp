@@ -166,11 +166,8 @@ namespace hal
         parentItem->appendChild(item);
         endInsertRows();
 
+        Q_EMIT directoryCreatedSignal(item);
 
-        //connect(context,&GraphContext::dataChanged,this,&ContextTableModel::handleDataChanged);
-        /*connect(context, &GraphContext::dataChanged, this, [item, this]() {
-            Q_EMIT dataChanged(getIndexFromItem(item), getIndexFromItem(item));
-        });*/
     }
 
     void ContextTreeModel::clear()

@@ -189,6 +189,11 @@ namespace hal
          */
         void updateSearchIcon();
 
+        /**
+         * Q_SLOT to select the Directory.
+         */
+        void selectDirectory(ContextTreeItem* item);
+
     private Q_SLOTS:
 
         void handleFocusChanged(QWidget* oldWidget, QWidget* newWidget);
