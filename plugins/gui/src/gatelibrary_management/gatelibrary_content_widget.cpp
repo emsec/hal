@@ -21,7 +21,9 @@ namespace hal
         mSearchbar = new Searchbar(this);
 
         mTableView = new QTableView(this);
-        mTableView->setModel(model);
+        mPinProxyModel = new PinProxyModel(this);
+        mPinProxyModel->setSourceModel(model);
+        mTableView->setModel(mPinProxyModel);
         mTableView->setContextMenuPolicy(Qt::CustomContextMenu);
         mTableView->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
         mTableView->horizontalHeader()->setSectionResizeMode(0,QHeaderView::Stretch);
@@ -45,7 +47,7 @@ namespace hal
         connect(mTableView, &QTableView::customContextMenuRequested, this, &GatelibraryContentWidget::handleContextMenuRequested);
         connect(mSearchAction, &QAction::triggered, this, &GatelibraryContentWidget::toggleSearchbar);
         connect(mEditAction, &QAction::triggered, this, &GatelibraryContentWidget::handleEditAction);
-        //  TODO connect(mSearchbar, &Searchbar::triggerNewSearch, this, ...);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mPinProxyModel, &SearchProxyModel::startSearch);
 
         mToolbar->addAction(mAddAction);
         mToolbar->addAction(mEditAction);

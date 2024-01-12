@@ -27,9 +27,10 @@
 
 #include "hal_core/defines.h"
 
-#include <QTableView>
 #include <QAction>
 #include <QFrame>
+#include <QTableView>
+#include <gui/pin_model/pin_proxy_model.h>
 
 namespace hal
 {
@@ -52,6 +53,7 @@ namespace hal
         friend class GateLibraryManager;
 
         QTableView* mTableView;
+        PinProxyModel* mPinProxyModel;
         Searchbar* mSearchbar;
         Toolbar* mToolbar;
         QAction* mAddAction;
