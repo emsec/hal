@@ -503,6 +503,11 @@ namespace hal
 
         // Replace InputDialog with SelectionTreeView
         SelectionTreeView* selectionTreeView = new SelectionTreeView(&dialog, true);
+        SelectionTreeModel* selectionTreeModel = new SelectionTreeModel(this); // Need to fully initialise SelectionTreeView with a model
+        SelectionTreeProxyModel* selectionTreeProxyModel = new SelectionTreeProxyModel(this);
+        selectionTreeProxyModel->setSourceModel(selectionTreeModel);
+        selectionTreeView->setModel(selectionTreeProxyModel);
+
         selectionTreeView->populate(true, grpId);
 
         QPushButton* closeButton = new QPushButton("Close", &dialog);

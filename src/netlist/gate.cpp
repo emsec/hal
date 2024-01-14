@@ -413,6 +413,16 @@ namespace hal
                       config_str);
             return BooleanFunction();
         }
+        catch (std::out_of_range& ex)
+        {
+            log_error("gate",
+                      "LUT gate '{}' with ID {} in netlist with ID {} has invalid configuration string of '{}', which has to many hex digits.",
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id(),
+                      config_str);
+            return BooleanFunction();
+        }
 
         u32 max_config_size = 1 << inputs.size();
 
