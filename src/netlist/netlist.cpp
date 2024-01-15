@@ -7,6 +7,7 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_internal_manager.h"
 #include "hal_core/utilities/log.h"
+#include <valgrind/callgrind.h>
 
 namespace hal
 {
@@ -564,6 +565,15 @@ namespace hal
     Module* Netlist::create_module(const std::string& name, Module* parent, const std::vector<Gate*>& gates)
     {
         return create_module(get_unique_module_id(), name, parent, gates);
+    }
+
+    Module* Netlist::create_module_python(const std::string &name, Module *parent, const std::vector<Gate *> &gates)
+    {
+        CALLGRIND_START_INSTRUMENTATION;
+        CALLGRIND_TOGGLE_COLLECT;
+        return create_module(get_unique_module_id(), name, parent, gates);
+        CALLGRIND_TOGGLE_COLLECT;
+        CALLGRIND_STOP_INSTRUMENTATION;
     }
 
     bool Netlist::delete_module(Module* module)
