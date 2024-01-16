@@ -492,6 +492,20 @@ namespace hal
         return mUndoIconStyle;
     }
 
+    QString MainWindow::neGateIconPath() const
+    {
+        return mNeGateIconPath;
+    }
+    QString MainWindow::neGateIconStyle() const
+    {
+        return mNeGateIconStyle;
+    }
+
+    QString MainWindow::disabledIconStyle() const
+    {
+        return mDisabledIconStyle;
+    }
+
     void MainWindow::setHalIconPath(const QString& path)
     {
         mHalIconPath = path;
@@ -602,9 +616,13 @@ namespace hal
         mUndoIconStyle = style;
     }
 
-    QString MainWindow::disabledIconStyle() const
+    void MainWindow::setNeGateIconPath(const QString& path)
     {
-        return mDisabledIconStyle;
+        mNeGateIconPath = path;
+    }
+    void MainWindow::setNeGateIconStyle(const QString& style)
+    {
+        mNeGateIconStyle = style;
     }
 
     void MainWindow::setDisabledIconStyle(const QString& style)
@@ -1090,21 +1108,6 @@ namespace hal
     {
         SettingsManager::instance()->mainWindowSaveGeometry(pos(), size());
     }
-    void MainWindow::setNeGateIconPath(const QString& path)
-    {
-        mNeGateIconPath = path;
-    }
-    void MainWindow::setNeGateIconStyle(const QString& style)
-    {
-        mNeGateIconStyle = style;
-    }
-    QString MainWindow::neGateIconPath() const
-    {
-        return mNeGateIconPath;
-    }
-    QString MainWindow::neGateIconStyle() const
-    {
-        return mNeGateIconStyle;
-    }
+
 
 }    // namespace hal

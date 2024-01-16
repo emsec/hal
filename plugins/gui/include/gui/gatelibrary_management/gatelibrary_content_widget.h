@@ -49,6 +49,8 @@ namespace hal
         Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
         Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
+        Q_PROPERTY(QString deleteIconPath READ deleteIconPath WRITE setDeleteIconPath);
+        Q_PROPERTY(QString deleteIconStyle READ deleteIconStyle WRITE setDeleteIconStyle);
 
         friend class GateLibraryManager;
 
@@ -59,6 +61,7 @@ namespace hal
         QAction* mAddAction;
         QAction* mEditAction;
         QAction* mSearchAction;
+        QAction* mDeleteAction;
 
         QString mDisabledIconStyle;
         QString mEnabledIconStyle;
@@ -67,6 +70,8 @@ namespace hal
         QString mSearchIconPath;
         QString mSearchIconStyle;
         QString mSearchActiveIconStyle;
+        QString mDeleteIconPath;
+        QString mDeleteIconStyle;
 
     Q_SIGNALS:
         void triggerEditType(QModelIndex index);
@@ -74,6 +79,7 @@ namespace hal
     private Q_SLOTS:
         void toggleSearchbar();
         void handleEditAction();
+        void handleDeleteAction();
 
     public:
         GatelibraryContentWidget(GatelibraryTableModel* model, QWidget* parent = nullptr);
@@ -96,6 +102,10 @@ namespace hal
 
         QString searchActiveIconStyle() const;
 
+        QString deleteIconPath() const;
+
+        QString deleteIconStyle() const;
+
         void setDisabledIconStyle(const QString& s);
 
         void setEnabledIconStyle(const QString& s);
@@ -109,6 +119,10 @@ namespace hal
         void setSearchIconStyle(const QString& s);
 
         void setSearchActiveIconStyle(const QString& s);
+
+        void setDeleteIconPath(const QString& s);
+
+        void setDeleteIconStyle(const QString& s);
     };
 
 }

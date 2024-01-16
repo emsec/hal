@@ -938,6 +938,8 @@ hal--GatelibraryContentWidget
     qproperty-searchIconPath:       ":/icons/search";
     qproperty-searchIconStyle:       "all->#FFFFFF";
     qproperty-searchActiveIconStyle: "all->#30ac4f";
+    qproperty-deleteIconStyle:       "all->#FFFFFF";
+    qproperty-deleteIconPath:        ":/icons/trashcan";
 }
 
 hal--ImportNetlistDialog

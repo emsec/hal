@@ -41,16 +41,19 @@ namespace hal
 
         mAddAction = new QAction("Add gate type", this);
         mEditAction = new QAction("Edit gate type", this);
+        mDeleteAction = new QAction("Delete gate type", this);
         mSearchAction = new QAction("Search", this);
 
         //connections
         connect(mTableView, &QTableView::customContextMenuRequested, this, &GatelibraryContentWidget::handleContextMenuRequested);
         connect(mSearchAction, &QAction::triggered, this, &GatelibraryContentWidget::toggleSearchbar);
         connect(mEditAction, &QAction::triggered, this, &GatelibraryContentWidget::handleEditAction);
+        connect(mDeleteAction, &QAction::triggered, this, &GatelibraryContentWidget::handleDeleteAction);
         connect(mSearchbar, &Searchbar::triggerNewSearch, mPinProxyModel, &SearchProxyModel::startSearch);
 
         mToolbar->addAction(mAddAction);
         mToolbar->addAction(mEditAction);
+        mToolbar->addAction(mDeleteAction);
         mToolbar->addAction(mSearchAction);
 
 
@@ -82,6 +85,11 @@ namespace hal
             Q_EMIT triggerEditType(inx);
     }
 
+    void GatelibraryContentWidget::handleDeleteAction()
+    {
+        //TODO
+    }
+
     void GatelibraryContentWidget::toggleSearchbar()
     {
         if (!mSearchAction->isEnabled())
@@ -108,6 +116,7 @@ namespace hal
 
         mAddAction->setIcon(gui_utility::getStyledSvgIcon(mEnabledIconStyle,mAddTypeIconPath));
         mEditAction->setIcon(gui_utility::getStyledSvgIcon(mEnabledIconStyle,mEditTypeIconPath));
+        mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mEnabledIconStyle,mSearchIconPath));
     }
 
@@ -146,6 +155,16 @@ namespace hal
         return mSearchActiveIconStyle;
     }
 
+    QString GatelibraryContentWidget::deleteIconPath() const
+    {
+        return mDeleteIconPath;
+    }
+
+    QString GatelibraryContentWidget::deleteIconStyle() const
+    {
+        return mDeleteIconStyle;
+    }
+
     void GatelibraryContentWidget::setDisabledIconStyle(const QString& s)
     {
         mDisabledIconStyle = s;
@@ -180,4 +199,16 @@ namespace hal
     {
         mSearchActiveIconStyle = s;
     }
+
+    void GatelibraryContentWidget::setDeleteIconPath(const QString& s)
+    {
+        mDeleteIconPath = s;
+    }
+
+    void GatelibraryContentWidget::setDeleteIconStyle(const QString& s)
+    {
+        mDeleteIconStyle = s;
+    }
+
+
 }
