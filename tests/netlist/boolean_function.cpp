@@ -1664,12 +1664,12 @@ namespace hal {
         auto s_call = SMT::SolverCall::Library;
         config.with_solver(s_type).with_call(s_call);
         auto result = s.with_constraint(SMT::Constraint(constraint.get().clone())).query(config);
+        
 
 
         ASSERT_TRUE(result.is_ok());
         // auto solver_result = result.get();
         // EXPECT_EQ(solver_result.type, SMT::SolverResultType::Sat);
-        // }
     }
 #endif
 
