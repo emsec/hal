@@ -73,20 +73,31 @@ namespace hal
         QString mDeleteIconPath;
         QString mDeleteIconStyle;
 
+        bool mReadOnly = false;
+
     Q_SIGNALS:
         void triggerEditType(QModelIndex index);
+        void triggerDeleteType(QModelIndex index);
+        void triggerCurrentSelectionChanged(QModelIndex index, QModelIndex prevIndex);
+        void triggerDoubleClicked(QModelIndex index);
 
     private Q_SLOTS:
         void toggleSearchbar();
         void handleEditAction();
         void handleDeleteAction();
+        void handleCurrentSelectionChanged(QModelIndex prevIndex);
+        void handleDoubleClicked(QModelIndex index);
+
 
     public:
         GatelibraryContentWidget(GatelibraryTableModel* model, QWidget* parent = nullptr);
 
         void handleContextMenuRequested(const QPoint& pos);
 
-        void activate();
+        void activate(bool readOnly = false);
+
+        void toggleReadOnlyMode(bool readOnly);
+
 
         QString disabledIconStyle() const;
 

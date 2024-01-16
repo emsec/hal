@@ -31,6 +31,9 @@ namespace hal
     GateLibraryManager::GateLibraryManager(MainWindow *parent)
         : QFrame(parent), mLayout(new QGridLayout()), mGateLibrary(nullptr)
     {
+
+        //TODO: GateLibrarymanager will stay in readOnly mode even if closing project and opening a new gateLibrary
+        //TODO: after switching from editable-GateLibrary to  read-only the on doubleclick will crash hal
         QSplitter* split = new QSplitter(this);
         QWidget* rightWindow = new QWidget(split);
         QGridLayout* rlay = new QGridLayout(rightWindow);
@@ -79,10 +82,15 @@ namespace hal
         //connect(mEditBtn, &QPushButton::clicked, this, &GateLibraryManager::handleEditWizard);
  //       connect(mTableView, &QTableView::clicked, this, &GateLibraryManager::handleSelectionChanged);
         connect(mCancelBtn, &QPushButton::clicked, this, &GateLibraryManager::handleCancelClicked);
-        connect(mContentWidget->mTableView, &QTableView::doubleClicked, this, &GateLibraryManager::handleEditWizard);
-        connect(mContentWidget->mTableView->selectionModel(), &QItemSelectionModel::currentChanged, this, &GateLibraryManager::handleSelectionChanged);
+        connect(mContentWidget, &GatelibraryContentWidget::triggerCurrentSelectionChanged, this, &GateLibraryManager::handleSelectionChanged);
         connect(mContentWidget->mAddAction, &QAction::triggered, this, &GateLibraryManager::handleAddWizard);
         connect(mContentWidget, &GatelibraryContentWidget::triggerEditType, this, &GateLibraryManager::handleEditWizard);
+        connect(mContentWidget, &GatelibraryContentWidget::triggerDeleteType, this, &GateLibraryManager::handleDeleteType);
+        connect(mContentWidget, &GatelibraryContentWidget::triggerDoubleClicked, this, &GateLibraryManager::handleEditWizard);
+
+
+
+
         setLayout(mLayout);
         repolish();    // CALL FROM PARENT
     }
@@ -103,6 +111,7 @@ namespace hal
             if(gNetlist && gNetlist->get_gate_library()){
                 mGateLibrary = gNetlist->get_gate_library();
                 mReadOnly = true;
+
             }
             else
             {
@@ -134,15 +143,15 @@ namespace hal
             }
             mTableModel->loadFile(mGateLibrary);
         }
-        mContentWidget->activate();
+        mContentWidget->activate(mReadOnly);
         return true;
     }
 
-    void GateLibraryManager::handleEditWizard(const QModelIndex& gate)
+    void GateLibraryManager::handleEditWizard(const QModelIndex& index)
     {
-        Q_UNUSED(gate);
-
-        GateLibraryWizard wiz(mGateLibrary, getSelectedGate());
+        if(mReadOnly)
+            return;
+        GateLibraryWizard wiz(mGateLibrary, mTableModel->getGateTypeAtIndex(index.row()));
         wiz.exec();
     }
 
@@ -151,6 +160,13 @@ namespace hal
         //TODO: create an empty Gate
         GateLibraryWizard wiz(mGateLibrary);
         wiz.exec();
+    }
+
+    void GateLibraryManager::handleDeleteType(QModelIndex index)
+    {
+        //TODO delete the selected gate
+        GateType* gate = mTableModel->getGateTypeAtIndex(index.row());
+        qInfo() << "handleDeleteType " << QString::fromStdString(gate->get_name()) << ":" << gate->get_id();
     }
 
     u32 GateLibraryManager::getNextGateId()
@@ -172,7 +188,7 @@ namespace hal
         Q_UNUSED(prevIndex);
         GateType* gateType;
         //get selected gate
-        gateType = getSelectedGate();
+        gateType = mTableModel->getGateTypeAtIndex(index.row());
         qInfo() << "selected " << QString::fromStdString(gateType->get_name());
 
         //update tabs

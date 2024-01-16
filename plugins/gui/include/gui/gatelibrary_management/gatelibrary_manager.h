@@ -69,8 +69,9 @@ namespace hal
         /**
          * Opens the Wizard to edit or add a new gate
          */
-        void handleEditWizard(const QModelIndex& gate);
+        void handleEditWizard(const QModelIndex& index);
         void handleAddWizard();
+        void handleDeleteType(QModelIndex index);
 
         /**
          * Updates widgets based on the selected item from the TableView

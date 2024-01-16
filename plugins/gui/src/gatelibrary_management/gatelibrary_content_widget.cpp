@@ -46,6 +46,8 @@ namespace hal
 
         //connections
         connect(mTableView, &QTableView::customContextMenuRequested, this, &GatelibraryContentWidget::handleContextMenuRequested);
+        connect(mTableView, &QTableView::doubleClicked, this, &GatelibraryContentWidget::handleDoubleClicked);
+        connect(mTableView->selectionModel(), &QItemSelectionModel::currentChanged, this, &GatelibraryContentWidget::handleCurrentSelectionChanged);
         connect(mSearchAction, &QAction::triggered, this, &GatelibraryContentWidget::toggleSearchbar);
         connect(mEditAction, &QAction::triggered, this, &GatelibraryContentWidget::handleEditAction);
         connect(mDeleteAction, &QAction::triggered, this, &GatelibraryContentWidget::handleDeleteAction);
@@ -80,15 +82,31 @@ namespace hal
 
     void GatelibraryContentWidget::handleEditAction()
     {
-        QModelIndex inx = mTableView->currentIndex();
+        QModelIndex inx = mPinProxyModel->mapToSource(mTableView->currentIndex());
         if (inx.isValid())
             Q_EMIT triggerEditType(inx);
     }
 
     void GatelibraryContentWidget::handleDeleteAction()
     {
-        //TODO
+        QModelIndex inx = mPinProxyModel->mapToSource(mTableView->currentIndex());
+        if (inx.isValid())
+            Q_EMIT triggerDeleteType(inx);
     }
+
+    void GatelibraryContentWidget::handleCurrentSelectionChanged(QModelIndex prevIndex){
+        QModelIndex inx = mPinProxyModel->mapToSource(mTableView->currentIndex());
+        if (inx.isValid())
+            Q_EMIT triggerCurrentSelectionChanged(inx, prevIndex);
+    }
+
+    void GatelibraryContentWidget::handleDoubleClicked(QModelIndex index)
+    {
+        QModelIndex inx = mPinProxyModel->mapToSource(index);
+        if (inx.isValid())
+            Q_EMIT triggerDoubleClicked(inx);
+    }
+
 
     void GatelibraryContentWidget::toggleSearchbar()
     {
@@ -107,17 +125,31 @@ namespace hal
         }
     }
 
-    void GatelibraryContentWidget::activate()
+    void GatelibraryContentWidget::activate(bool readOnly)
     {
         QStyle* s = style();
 
         s->unpolish(this);
         s->polish(this);
 
-        mAddAction->setIcon(gui_utility::getStyledSvgIcon(mEnabledIconStyle,mAddTypeIconPath));
-        mEditAction->setIcon(gui_utility::getStyledSvgIcon(mEnabledIconStyle,mEditTypeIconPath));
-        mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
+        mReadOnly = readOnly;
+        toggleReadOnlyMode(readOnly);
+
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mEnabledIconStyle,mSearchIconPath));
+
+    }
+
+    void GatelibraryContentWidget::toggleReadOnlyMode(bool readOnly)
+    {
+        mReadOnly = readOnly;
+        mDeleteAction->setEnabled(!readOnly);
+        mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(readOnly ? mDisabledIconStyle : mEnabledIconStyle, mDeleteIconPath));
+
+        mAddAction->setEnabled(!readOnly);
+        mAddAction->setIcon(gui_utility::getStyledSvgIcon(readOnly ? mDisabledIconStyle : mEnabledIconStyle,mAddTypeIconPath));
+
+        mEditAction->setEnabled(!readOnly);
+        mEditAction->setIcon(gui_utility::getStyledSvgIcon(readOnly ? mDisabledIconStyle : mEnabledIconStyle,mEditTypeIconPath));
     }
 
     QString GatelibraryContentWidget::disabledIconStyle() const
