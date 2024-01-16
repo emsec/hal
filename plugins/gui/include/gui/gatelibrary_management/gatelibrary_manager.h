@@ -92,6 +92,8 @@ namespace hal
 
     private:
 
+        GateType* getSelectedGate();
+
         QTabWidget* mTabWidget;
         QGridLayout* mLayout;
         GatelibraryContentWidget* mContentWidget;

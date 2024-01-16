@@ -140,7 +140,9 @@ namespace hal
 
     void GateLibraryManager::handleEditWizard(const QModelIndex& gate)
     {
-        GateLibraryWizard wiz(mGateLibrary, mTableModel->getGateTypeAtIndex(gate.row()));
+        Q_UNUSED(gate);
+
+        GateLibraryWizard wiz(mGateLibrary, getSelectedGate());
         wiz.exec();
     }
 
@@ -170,7 +172,7 @@ namespace hal
         Q_UNUSED(prevIndex);
         GateType* gateType;
         //get selected gate
-        gateType = mTableModel->getGateTypeAtIndex(index.row());
+        gateType = getSelectedGate();
         qInfo() << "selected " << QString::fromStdString(gateType->get_name());
 
         //update tabs
@@ -190,6 +192,15 @@ namespace hal
     void GateLibraryManager::handleCancelClicked()
     {
         Q_EMIT close();
+    }
+
+    GateType* GateLibraryManager::getSelectedGate()
+    {
+        PinProxyModel* proxyModel = mContentWidget->mPinProxyModel;
+        QModelIndex index = mContentWidget->mTableView->currentIndex();
+        QModelIndex sourceIndex = proxyModel->mapToSource(index);
+
+        return mTableModel->getGateTypeAtIndex(sourceIndex.row());
     }
 
 }
