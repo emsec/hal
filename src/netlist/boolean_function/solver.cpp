@@ -263,7 +263,7 @@ namespace hal
 
                 bitwuzla::parser::Parser parser(options, "VIRTUAL_FILE", in_stream, "smt2", &output_stream);
                 // Now parse the input file.
-                std::string err_msg = parser.parse(true);
+                std::string err_msg = parser.parse(false);
 
                 if (!err_msg.empty())
                 {
@@ -273,8 +273,8 @@ namespace hal
                 fclose(in_stream);
 
                 std::string output(result_string.str());
-                std::cout << "output" << std::endl;
-                std::cout << output << std::endl;
+                // std::cout << "output" << std::endl;
+                // std::cout << output << std::endl;
                 return OK({false, output});
 #else
                 return ERR("Bitwuzla Library not linked!");

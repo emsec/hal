@@ -1662,14 +1662,14 @@ namespace hal {
         auto config = SMT::QueryConfig();
         auto s_type = SMT::SolverType::Bitwuzla;
         auto s_call = SMT::SolverCall::Library;
-        config.with_solver(s_type).with_call(s_call);
+        config.with_solver(s_type).with_call(s_call).with_model_generation();
         auto result = s.with_constraint(SMT::Constraint(constraint.get().clone())).query(config);
-        
+
 
 
         ASSERT_TRUE(result.is_ok());
-        // auto solver_result = result.get();
-        // EXPECT_EQ(solver_result.type, SMT::SolverResultType::Sat);
+        auto solver_result = result.get();
+        EXPECT_EQ(solver_result.type, SMT::SolverResultType::Sat);
     }
 #endif
 
