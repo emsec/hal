@@ -87,6 +87,8 @@ namespace hal
         Q_PROPERTY(QString undoIconPath READ undoIconPath WRITE setUndoIconPath)
         Q_PROPERTY(QString undoIconStyle READ undoIconStyle WRITE setUndoIconStyle)
         Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
+        Q_PROPERTY(QString neGateIconPath READ neGateIconPath WRITE setNeGateIconPath)
+        Q_PROPERTY(QString neGateIconStyle READ neGateIconStyle WRITE setNeGateIconStyle)
 
     public:
         enum StyleSheetOption {Dark, Light};
@@ -240,6 +242,8 @@ namespace hal
         QString undoIconPath() const;
         QString undoIconStyle() const;
         QString disabledIconStyle() const;
+        QString neGateIconPath() const;
+        QString neGateIconStyle() const;
 
         /**
          * Q_PROPERTY WRITE function for the hal icon path.
@@ -413,6 +417,8 @@ namespace hal
         void setUndoIconPath(const QString& path);
         void setUndoIconStyle(const QString& style);
         void setDisabledIconStyle(const QString &style);
+        void setNeGateIconPath(const QString &path);
+        void setNeGateIconStyle(const QString &style);
 
         /**
          * Add a content widget to the layout area.
@@ -673,7 +679,10 @@ namespace hal
         QString mUndoIconStyle;
 
         QString mDisabledIconStyle;
- 
+
+        QString mNeGateIconPath;
+        QString mNeGateIconStyle;
+
         SettingsItemKeybind* mSettingCreateFile;
         SettingsItemKeybind* mSettingOpenFile;
         SettingsItemKeybind* mSettingSaveFile;

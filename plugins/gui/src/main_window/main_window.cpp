@@ -190,7 +190,7 @@ namespace hal
         mActionSaveAs->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
         mActionClose->setIcon(gui_utility::getStyledSvgIcon(mCloseIconStyle, mCloseIconPath));
         mActionQuit->setIcon(gui_utility::getStyledSvgIcon(mQuitIconStyle, mQuitIconPath));
-        mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mSaveAsIconStyle, mSaveAsIconPath));
+        mActionGateLibraryManager->setIcon(gui_utility::getStyledSvgIcon(mNeGateIconStyle, mNeGateIconPath));
         mActionUndo->setIcon(gui_utility::getStyledSvgIcon(mUndoIconStyle, mUndoIconPath));
         mActionSettings->setIcon(gui_utility::getStyledSvgIcon(mSettingsIconStyle, mSettingsIconPath));
         mActionPlugins->setIcon(gui_utility::getStyledSvgIcon(mPluginsIconStyle, mPluginsIconPath));
@@ -1089,6 +1089,22 @@ namespace hal
     void MainWindow::saveState()
     {
         SettingsManager::instance()->mainWindowSaveGeometry(pos(), size());
+    }
+    void MainWindow::setNeGateIconPath(const QString& path)
+    {
+        mNeGateIconPath = path;
+    }
+    void MainWindow::setNeGateIconStyle(const QString& style)
+    {
+        mNeGateIconStyle = style;
+    }
+    QString MainWindow::neGateIconPath() const
+    {
+        return mNeGateIconPath;
+    }
+    QString MainWindow::neGateIconStyle() const
+    {
+        return mNeGateIconStyle;
     }
 
 }    // namespace hal

@@ -1262,6 +1262,9 @@ hal--MainWindow
     qproperty-undoIconPath: ":/icons/undo2";
 
     qproperty-disabledIconStyle: "all->#515050";
+
+    qproperty-neGateIconStyle: "all->#AFB1B3";
+    qproperty-neGateIconPath: ":/icons/ne_gate";
 }
 
 hal--PythonQssAdapter

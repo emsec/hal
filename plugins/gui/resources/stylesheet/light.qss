@@ -1286,6 +1286,9 @@ hal--MainWindow
     qproperty-undoIconPath: ":/icons/undo2";
 
     qproperty-disabledIconStyle: "all->#515050";
+
+    qproperty-neGateIconStyle: "all->#FFFFFF";
+    qproperty-neGateIconPath: ":/icons/ne_gate";
 }
 
 hal--MainWindow QMenu
