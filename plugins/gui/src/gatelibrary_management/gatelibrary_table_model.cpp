@@ -113,4 +113,5 @@ namespace hal
 
         return mEntries[index];
     }
+
 }

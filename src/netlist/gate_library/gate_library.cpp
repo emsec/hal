@@ -168,4 +168,17 @@ namespace hal
     {
         return m_next_gate_type_id++;
     }
+
+    void GateLibrary::remove_gate_type(const std::string& name)
+    {
+        if (m_gate_type_map.find(name) == m_gate_type_map.end())
+        {
+            log_error("gate_library", "could not remove gate type with name '{}' as a gate type with this name does not exist within gate library '{}'.", name, m_name);
+        }
+        else
+        {
+            auto it = m_gate_type_map.find(name);
+            m_gate_type_map.erase(it);
+        }
+    }
 }    // namespace hal

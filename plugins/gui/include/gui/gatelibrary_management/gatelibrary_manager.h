@@ -62,7 +62,7 @@ namespace hal
          */
         void repolish();
 
-        bool initialize(const GateLibrary* gateLibrary = nullptr);
+        bool initialize(GateLibrary* gateLibrary = nullptr, bool readOnly = false);
         u32 getNextGateId();
 
     public Q_SLOTS:
@@ -109,7 +109,8 @@ namespace hal
         GateLibraryTabBooleanFunction* mBooleanFunctionTab;
         GateLibraryTabPin* mPinTab;
 
-        const GateLibrary* mGateLibrary;
+        const GateLibrary* mNonEditableGateLibrary;
+        GateLibrary* mEditableGatelibrary;
         std::unique_ptr<Netlist> mDemoNetlist;
 
         bool mReadOnly = false;

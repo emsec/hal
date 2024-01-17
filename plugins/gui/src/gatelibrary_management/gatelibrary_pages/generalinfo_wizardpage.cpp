@@ -103,6 +103,7 @@ namespace hal
     {
         QList<QListWidgetItem*> items = mProperties->findItems(mAddProperty->currentText(), Qt::MatchExactly);
         if(items.size() == 0) mProperties->addItem(mAddProperty->currentText());
+
     }
 
     void GeneralInfoWizardPage::deleteProperty()

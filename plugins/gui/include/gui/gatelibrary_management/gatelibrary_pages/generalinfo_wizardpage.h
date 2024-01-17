@@ -51,6 +51,7 @@ namespace hal {
         void addProperty();
         void deleteProperty();
     private:
+        QWizard* mWizard;
         QGridLayout* mLayout;
         QLabel* mLabelName;
         QLabel* mLabelProperties;
@@ -66,5 +67,6 @@ namespace hal {
         const GateLibrary* mGateLibrary;
         bool mIsEdit;
         QString gateInit;
+        //QStringList mPropertiesList;
     };
 }

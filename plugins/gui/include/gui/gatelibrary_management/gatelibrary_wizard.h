@@ -54,6 +54,7 @@ namespace hal
         void editGate(GateType* gt);
         void addGate();
         void setData(GateLibrary* gateLibrary, GateType* gateType);
+        QStringList getProperties();
         void accept() override;
 
         int getNextPageId(PAGE page);

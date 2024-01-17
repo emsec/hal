@@ -29,7 +29,7 @@
 namespace hal
 {
     GateLibraryManager::GateLibraryManager(MainWindow *parent)
-        : QFrame(parent), mLayout(new QGridLayout()), mGateLibrary(nullptr)
+        : QFrame(parent), mLayout(new QGridLayout()), mNonEditableGateLibrary(nullptr), mEditableGatelibrary(nullptr)
     {
 
         //TODO: GateLibrarymanager will stay in readOnly mode even if closing project and opening a new gateLibrary
@@ -104,12 +104,13 @@ namespace hal
 
     }
 
-    bool GateLibraryManager::initialize(const GateLibrary* gateLibrary)
+    bool GateLibraryManager::initialize(GateLibrary* gateLibrary, bool readOnly)
     {
         if(!gateLibrary)
         {
             if(gNetlist && gNetlist->get_gate_library()){
-                mGateLibrary = gNetlist->get_gate_library();
+                //TODO find better way to handle const/not const gateLibrary
+                mNonEditableGateLibrary = gNetlist->get_gate_library();
                 mReadOnly = true;
 
             }
@@ -138,11 +139,26 @@ namespace hal
                     qInfo() << QString::fromStdString(elem.second->get_name());
                 }
 
-                mGateLibrary = gateLibrary;
-                mDemoNetlist = netlist_factory::create_netlist(gateLibrary);
+                mEditableGatelibrary = gateLibrary;
+                mReadOnly = false;
             }
-            mTableModel->loadFile(mGateLibrary);
+
         }
+        else
+        {
+            mReadOnly = readOnly;
+            if(mReadOnly)
+            {
+                mDemoNetlist = netlist_factory::create_netlist(mNonEditableGateLibrary);
+                mNonEditableGateLibrary = gateLibrary;
+            }
+            else
+            {
+                mDemoNetlist = netlist_factory::create_netlist(mEditableGatelibrary);
+                mEditableGatelibrary = gateLibrary;
+            }
+        }
+        mTableModel->loadFile(mReadOnly ? mNonEditableGateLibrary : mEditableGatelibrary);
         mContentWidget->activate(mReadOnly);
         return true;
     }
@@ -151,14 +167,13 @@ namespace hal
     {
         if(mReadOnly)
             return;
-        GateLibraryWizard wiz(mGateLibrary, mTableModel->getGateTypeAtIndex(index.row()));
+        GateLibraryWizard wiz(mEditableGatelibrary, mTableModel->getGateTypeAtIndex(index.row()));
         wiz.exec();
     }
 
     void GateLibraryManager::handleAddWizard()
     {
-        //TODO: create an empty Gate
-        GateLibraryWizard wiz(mGateLibrary);
+        GateLibraryWizard wiz(mEditableGatelibrary);
         wiz.exec();
     }
 
@@ -166,6 +181,8 @@ namespace hal
     {
         //TODO delete the selected gate
         GateType* gate = mTableModel->getGateTypeAtIndex(index.row());
+        mEditableGatelibrary->remove_gate_type(gate->get_name());
+        initialize(mEditableGatelibrary);
         qInfo() << "handleDeleteType " << QString::fromStdString(gate->get_name()) << ":" << gate->get_id();
     }
 
@@ -173,7 +190,7 @@ namespace hal
     {
         QSet<u32>* occupiedIds = new QSet<u32>;
         u32 freeId = 1;
-        for (auto gt : mGateLibrary->get_gate_types()) {
+        for (auto gt : mEditableGatelibrary->get_gate_types()) {
             occupiedIds->insert(gt.second->get_id());
         }
         while(occupiedIds->contains(freeId))

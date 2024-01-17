@@ -837,7 +837,6 @@ namespace hal
 
     void MainWindow::handleActionGatelibraryManager()
     {
-
         if(mGateLibraryManager->initialize())
             mStackedWidget->setCurrentWidget(mGateLibraryManager);
     }

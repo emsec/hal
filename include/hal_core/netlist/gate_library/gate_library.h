@@ -182,6 +182,8 @@ namespace hal
          */
         std::vector<std::string> get_includes() const;
 
+        void remove_gate_type(const std::string& name);
+
     private:
         std::string m_name;
         std::filesystem::path m_path;

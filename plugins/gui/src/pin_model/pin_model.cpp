@@ -42,7 +42,6 @@ namespace hal
 
         //TODO change font of dummy entries
         clear();
-
         //free old allocated memory of structs
         for(auto pinGroup : mPinGroups){
             for(auto pin : pinGroup->pins){
@@ -115,7 +114,7 @@ namespace hal
         }
 
         //create dummy for the group creator if model is editable
-        if(mEditable)
+        if(true)
         {
             auto dummyGroup = new PinItem(PinItem::TreeItemType::GroupCreator);
             dummyGroup->setData(QList<QVariant>() << "create new pingroup ...");

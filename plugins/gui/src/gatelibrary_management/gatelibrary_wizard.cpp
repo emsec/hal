@@ -44,6 +44,7 @@ namespace hal
         this->addPage(pinsPage);
         this->addPage(ffPage);
         this->addPage(boolPage);
+        pinsPage->setGateType(nullptr);
         mGateLibrary = gateLibrary;
         generalInfoPage->setMode(false);
         setPageOrder();
@@ -76,6 +77,7 @@ namespace hal
 
     int GateLibraryWizard::getNextPageId(PAGE page)
     {
+        mProperties = generalInfoPage->getProperties();
         if(!mPageLookupTable.contains(page))
             return -1;
 
@@ -83,7 +85,7 @@ namespace hal
         if(page == Pin){
             if(mProperties.contains("ff"))
             {
-                qInfo() << "skip the next page";
+                //qInfo() << "skip the next page";
                 return mPageLookupTable.value(mPageLookupTable.value(page));
             }
         }
@@ -98,5 +100,10 @@ namespace hal
         mPageLookupTable.insert(FlipFlop, BooleanFunction);
         mPageLookupTable.insert(BooleanFunction, None);
         mPageLookupTable.insert(None, None);
+    }
+
+    QStringList GateLibraryWizard::getProperties()
+    {
+        return mProperties;
     }
 }
