@@ -172,15 +172,6 @@ namespace hal
         void removeNet(const u32 id);
 
         /**
-         * Moves the ModuleItem corresponding to the module under it's new parent ModuleItem.
-         * The items for all nets, that have at least one source or one destination within the module, 
-         * will be updated afterwards.
-         * 
-         * @param module The module whose parent has changed.
-        */
-        void handleModuleParentChanged(const Module* module);
-
-        /**
          * Handles the assigment of gates to modules. 
          * If the gate does not yet exist in the item model, a new one is created.
          * All nets, that are connected to the gate, will be updated.
@@ -195,7 +186,7 @@ namespace hal
          * 
          * @param net The net whose source or destination might have changed.
         */
-        void updateNet(const Net* net);
+        void updateNet(const Net* net, const QHash<const Net*,ModuleItem*>* parentAssignment = nullptr);
 
         /**
          * Reattaches the ModuleItem corresponding to the specified module to a new parent item.
@@ -235,6 +226,41 @@ namespace hal
          */
         bool isModifying();
 
+        void debugDump() const;
+
+    private Q_SLOTS:
+        void handleModuleNameChanged(Module* mod);
+
+        void handleModuleRemoved(Module* mod);
+
+        void handleModuleCreated(Module* mod);
+
+        /**
+         * Moves the ModuleItem corresponding to the module under it's new parent ModuleItem.
+         * The items for all nets, that have at least one source or one destination within the module,
+         * will be updated afterwards.
+         *
+         * @param module The module whose parent has changed.
+        */
+        void handleModuleParentChanged(const Module* module);
+
+        void handleModuleGateAssigned(Module* mod, u32 gateId);
+
+        void handleModuleGateRemoved(Module* mod, u32 gateId);
+
+        void handleModuleGatesAssignBegin(Module* mod, u32 numberGates);
+
+        void handleModuleGatesAssignEnd(Module* mod, u32 numberGates);
+
+        void handleGateNameChanged(Gate* gat);
+
+        void handleNetCreated(Net* net);
+
+        void handleNetRemoved(Net* net);
+
+        void handleNetNameChanged(Net* net);
+
+        void handleNetUpdated(Net* net, u32 data);
     private:
         /**
          * Searches for a new parent module, such that it is the deepest module in the hierarchy, that contains all
@@ -246,6 +272,8 @@ namespace hal
          * (e.g. net has no sources or destinations), nullptr is returned instead.
         */
         Module* findNetParent(const Net* net);
+        void updateAllNets();
+        void findNetParentRecursion(BaseTreeItem* parent, QHash<const Net*,ModuleItem*>& parentAssignment, std::unordered_set<Net*>& assignedNets) const;
 
         QMap<u32, ModuleItem*> mModuleMap;
         QMap<u32, ModuleItem*> mGateMap;

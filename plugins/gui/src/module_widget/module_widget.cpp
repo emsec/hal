@@ -62,7 +62,8 @@ namespace hal
         mRenameAction->setToolTip("Rename");
         mToggleExpandTreeAction->setToolTip("Toggle expand all / collapse all");
 
-        mModuleProxyModel->setSourceModel(gNetlistRelay->getModuleModel());
+        mModuleModel = new ModuleModel(this);
+        mModuleProxyModel->setSourceModel(mModuleModel);
 
         mTreeView->setModel(mModuleProxyModel);
         mTreeView->setDefaultColumnWidth();
@@ -78,7 +79,7 @@ namespace hal
         mTreeView->expandAllModules();
         mContentLayout->addWidget(mTreeView);
 
-        mSearchbar->setColumnNames(gNetlistRelay->getModuleModel()->headerLabels());
+        mSearchbar->setColumnNames(mModuleModel->headerLabels());
         mContentLayout->addWidget(mSearchbar);
         mSearchbar->hide();
 
@@ -91,7 +92,7 @@ namespace hal
         connect(mTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ModuleWidget::handleTreeSelectionChanged);
         connect(mTreeView->selectionModel(), &QItemSelectionModel::currentChanged, this, &ModuleWidget::handleCurrentChanged);
         connect(mTreeView, &ModuleTreeView::doubleClicked, this, &ModuleWidget::handleItemDoubleClicked);
-        connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &ModuleWidget::handleSelectionChanged);
+        connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &ModuleWidget::handleSelectionChanged, Qt::QueuedConnection);
         connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleRemoved, this, &ModuleWidget::handleModuleRemoved);
 
         connect(mSearchAction, &QAction::triggered, this, &ModuleWidget::toggleSearchbar);
@@ -113,6 +114,8 @@ namespace hal
         connect(mToggleGatesAction, &QAction::triggered, this, &ModuleWidget::handleToggleGatesClicked);
         connect(mToggleExpandTreeAction, &QAction::triggered, this, &ModuleWidget::handleToggleExpandTreeClicked);
         connect(mRenameAction, &QAction::triggered, this, &ModuleWidget::handleRenameClicked);
+
+        mModuleModel->init();
     }
 
     void ModuleWidget::enableDeleteAction(bool enable)
@@ -242,6 +245,10 @@ namespace hal
         QAction delete_action;
         QAction extractPythonAction;
         QAction focus_in_view;
+        QAction debug_dump;
+        debug_dump.setText("Debug dump");
+        debug_dump.setParent(&context_menu);
+        context_menu.addAction(&debug_dump);
 
         switch(type) {
 
@@ -384,6 +391,9 @@ namespace hal
             }
         }
 
+        if (clicked == &debug_dump)
+            mModuleModel->debugDump();
+
         if (clicked == &change_type_action)
             gNetlistRelay->changeModuleType(getModuleItemFromIndex(index)->id());
 
@@ -432,7 +442,7 @@ namespace hal
         Q_UNUSED(selected)
         Q_UNUSED(deselected)
 
-        if (mIgnoreSelectionChange || gNetlistRelay->getModuleModel()->isModifying())
+        if (mIgnoreSelectionChange || mModuleModel->isModifying())
             return;
 
         gSelectionRelay->clear();
@@ -608,7 +618,7 @@ namespace hal
 
         for (auto module_id : gSelectionRelay->selectedModulesList())
         {
-            QModelIndex index = mModuleProxyModel->mapFromSource(gNetlistRelay->getModuleModel()->getIndex(gNetlistRelay->getModuleModel()->getItem(module_id)));
+            QModelIndex index = mModuleProxyModel->mapFromSource(mModuleModel->getIndex(mModuleModel->getItem(module_id)));
             module_selection.select(index, index);
         }
 
@@ -619,7 +629,7 @@ namespace hal
 
     ModuleItem* ModuleWidget::getModuleItemFromIndex(const QModelIndex& index)
     {
-        return gNetlistRelay->getModuleModel()->getItem(mModuleProxyModel->mapToSource(index));
+        return mModuleModel->getItem(mModuleProxyModel->mapToSource(index));
     }
 
     void ModuleWidget::updateSearchIcon()
@@ -628,6 +638,11 @@ namespace hal
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
         else
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+    }
+
+    ModuleModel* ModuleWidget::getModuleModel() const
+    {
+        return mModuleModel;
     }
 
     QString ModuleWidget::disabledIconStyle() const

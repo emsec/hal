@@ -13,6 +13,22 @@ namespace hal
     {
         // use root item to store header information
         setHeaderLabels(QStringList() << "Name" << "ID" << "Type");
+        connect(gNetlistRelay, &NetlistRelay::moduleCreated,          this, &ModuleModel::handleModuleCreated);
+        connect(gNetlistRelay, &NetlistRelay::moduleNameChanged,      this, &ModuleModel::handleModuleNameChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleParentChanged,    this, &ModuleModel::handleModuleParentChanged);
+        connect(gNetlistRelay, &NetlistRelay::moduleGateAssigned,     this, &ModuleModel::handleModuleGateAssigned);
+        connect(gNetlistRelay, &NetlistRelay::moduleGatesAssignBegin, this, &ModuleModel::handleModuleGatesAssignBegin);
+        connect(gNetlistRelay, &NetlistRelay::moduleGatesAssignEnd,   this, &ModuleModel::handleModuleGatesAssignEnd);
+        connect(gNetlistRelay, &NetlistRelay::moduleGateRemoved,      this, &ModuleModel::handleModuleGateRemoved);
+        connect(gNetlistRelay, &NetlistRelay::moduleRemoved,          this, &ModuleModel::handleModuleRemoved);
+        connect(gNetlistRelay, &NetlistRelay::gateNameChanged,        this, &ModuleModel::handleGateNameChanged);
+        connect(gNetlistRelay, &NetlistRelay::netCreated,             this, &ModuleModel::handleNetCreated);
+        connect(gNetlistRelay, &NetlistRelay::netRemoved,             this, &ModuleModel::handleNetRemoved);
+        connect(gNetlistRelay, &NetlistRelay::netNameChanged,         this, &ModuleModel::handleNetNameChanged);
+        connect(gNetlistRelay, &NetlistRelay::netSourceAdded,         this, &ModuleModel::handleNetUpdated);
+        connect(gNetlistRelay, &NetlistRelay::netSourceRemoved,       this, &ModuleModel::handleNetUpdated);
+        connect(gNetlistRelay, &NetlistRelay::netDestinationAdded,    this, &ModuleModel::handleNetUpdated);
+        connect(gNetlistRelay, &NetlistRelay::netDestinationRemoved,  this, &ModuleModel::handleNetUpdated);
     }
 
     QVariant ModuleModel::data(const QModelIndex& index, int role) const
@@ -255,6 +271,71 @@ namespace hal
         delete item;
     }
 
+    void ModuleModel::handleModuleNameChanged(Module* mod)
+    {
+        updateModuleName(mod->get_id());
+    }
+
+    void ModuleModel::handleModuleRemoved(Module* mod)
+    {
+        removeModule(mod->get_id());
+    }
+
+    void ModuleModel::handleModuleCreated(Module* mod)
+    {
+        if (mod->get_parent_module() == nullptr) return;
+        addModule(mod->get_id(), mod->get_parent_module()->get_id());
+    }
+
+    void ModuleModel::handleModuleGateAssigned(Module* mod, u32 gateId)
+    {
+        handleModuleGateAssinged(gateId, mod->get_id());
+    }
+
+    void ModuleModel::handleModuleGateRemoved(Module* mod, u32 gateId)
+    {
+        Q_UNUSED(mod);
+        removeGate(gateId);
+    }
+
+    void ModuleModel::handleModuleGatesAssignBegin(Module* mod, u32 numberGates)
+    {
+        Q_UNUSED(mod);
+        Q_UNUSED(numberGates);
+    }
+
+    void ModuleModel::handleModuleGatesAssignEnd(Module* mod, u32 numberGates)
+    {
+        Q_UNUSED(mod);
+        Q_UNUSED(numberGates);
+    }
+
+    void ModuleModel::handleGateNameChanged(Gate* gat)
+    {
+        updateGateName(gat->get_id());
+    }
+
+    void ModuleModel::handleNetCreated(Net* net)
+    {
+        addNet(net->get_id(), gNetlist->get_top_module()->get_id());
+    }
+
+    void ModuleModel::handleNetRemoved(Net* net)
+    {
+        removeNet(net->get_id());
+    }
+
+    void ModuleModel::handleNetNameChanged(Net* net)
+    {
+        updateNetName(net->get_id());
+    }
+
+    void ModuleModel::handleNetUpdated(Net* net, u32 data)
+    {
+        Q_UNUSED(data);
+        updateNet(net);
+    }
+
     void ModuleModel::removeNet(const u32 id)
     {
         //assert(gNetlist->get_net_by_id(id));
@@ -289,6 +370,54 @@ namespace hal
             updateNet(net);
     }
 
+    void ModuleModel::findNetParentRecursion(BaseTreeItem* parent, QHash<const Net *, ModuleItem *> &parentAssignment, std::unordered_set<Net*>& assignedNets) const
+    {
+        for (BaseTreeItem* bti : parent->getChildren())
+        {
+            ModuleItem* item = dynamic_cast<ModuleItem*>(bti);
+            if (!item || item->getType() != ModuleItem::TreeItemType::Module) continue;
+            findNetParentRecursion(item, parentAssignment, assignedNets);
+            Module* m = gNetlist->get_module_by_id(item->id());
+            Q_ASSERT(m);
+            std::unordered_set<Net*> internalNets = m->get_internal_nets();
+            if (!internalNets.empty())
+            {
+                for (Net* n : assignedNets)
+                    internalNets.erase(n);
+                for (Net* n : m->get_input_nets())
+                    internalNets.erase(n);
+                for (Net* n : m->get_output_nets())
+                    internalNets.erase(n);
+            }
+            for (Net* n : internalNets)
+            {
+                parentAssignment[n] = item;
+                assignedNets.insert(n);
+            }
+        }
+    }
+
+    void ModuleModel::debugDump() const
+    {
+        QHash<const Net*,ModuleItem*> parentAssignment;
+        std::unordered_set<Net*> assignedNets;
+        findNetParentRecursion(mRootItem, parentAssignment, assignedNets);
+
+        QTextStream xout(stdout, QIODevice::WriteOnly);
+        for (auto it = mModuleMap.begin(); it != mModuleMap.end(); ++it)
+        {
+            xout << it.value()->id() << " " << it.value()->name() << " ";
+
+            for (auto jt = parentAssignment.constBegin(); jt != parentAssignment.constEnd(); ++jt)
+            {
+                if (it.value() != jt.value()) continue;
+                xout << " <" << jt.key()->get_id() << ">";
+            }
+            xout << "\n";
+        }
+        xout.flush();
+    }
+
     void ModuleModel::handleModuleGateAssinged(const u32 id, const u32 parent_module)
     {
         // Don't need new function handleModuleGateRemoved(), because the GateAssinged event always follows GateRemoved
@@ -296,15 +425,19 @@ namespace hal
 
         if(!mGateMap.contains(id))
             addGate(id, parent_module);
-            
+
+        QHash<const Net*,ModuleItem*> parentAssignment;
+        std::unordered_set<Net*> assignedNets;
+        findNetParentRecursion(mRootItem, parentAssignment, assignedNets);
+
         Gate* gate = gNetlist->get_gate_by_id(id);
         for(Net* in_net : gate->get_fan_in_nets())
-            updateNet(in_net);
+            updateNet(in_net, &parentAssignment);
         for(Net* in_net : gate->get_fan_out_nets())
-            updateNet(in_net);
+            updateNet(in_net, &parentAssignment);
     }
 
-    void ModuleModel::updateNet(const Net* net)
+    void ModuleModel::updateNet(const Net* net, const QHash<const Net *, ModuleItem *> *parentAssignment)
     {
         assert(net);
         u32 id = net->get_id();
@@ -316,14 +449,28 @@ namespace hal
         ModuleItem* oldParentItem = static_cast<ModuleItem*>(item->getParent());
         assert(oldParentItem);
 
-        Module* newParentModule = findNetParent(net);
-        if(newParentModule == nullptr)
-            newParentModule = gNetlist->get_top_module();
-        if(newParentModule->get_id() == oldParentItem->id())
+        ModuleItem* newParentItem = nullptr;
+        if (parentAssignment)
+            newParentItem = parentAssignment->value(net);
+        else
+        {
+            Module* newParentModule = findNetParent(net);
+            if(newParentModule == nullptr)
+                newParentModule = gNetlist->get_top_module();
+            newParentItem = mModuleMap[newParentModule->get_id()];
+        }
+
+        if (!newParentItem)
+        {
+            mIsModifying = true;
+            oldParentItem->removeChild(item);
+            mIsModifying = false;
+            return;
+        }
+
+        if(newParentItem->id() == oldParentItem->id())
             return;
 
-        assert(mModuleMap.contains(newParentModule->get_id()));
-        ModuleItem* newParentItem = mModuleMap[newParentModule->get_id()];
         QModelIndex newIndex = getIndex(newParentItem);
         QModelIndex oldIndex = getIndex(oldParentItem);
         int row = item->row();

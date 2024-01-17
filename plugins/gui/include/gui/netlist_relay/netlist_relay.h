@@ -35,7 +35,6 @@
 namespace hal
 {
     class ModuleItem;
-    class ModuleModel;
     class ModuleColorManager;
     class ModuleColorSerializer;
     class Module;
@@ -86,13 +85,6 @@ namespace hal
          * @returns the color of the specified module
          */
         QColor getModuleColor(const u32 id);
-
-        /**
-         * Accesses the module model.
-         *
-         * @returns the module model
-         */
-        ModuleModel* getModuleModel() const;
 
         /**
          * Accesses the module color manager
@@ -620,7 +612,6 @@ namespace hal
         bool mNotified;
 
         QMap<u32, QColor> mModuleColors;
-        ModuleModel* mModuleModel;
         ModuleColorManager* mModuleColorManager;
         ModuleColorSerializer mColorSerializer;
         enum ThreadEventType { TetNetlist, TetModule, TetGate, TetNet, TetGrouping };
