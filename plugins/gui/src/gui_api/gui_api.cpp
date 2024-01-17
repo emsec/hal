@@ -503,7 +503,7 @@ namespace hal
 
         UserActionCompound* act = new UserActionCompound;
         act->setUseCreatedObject();
-        act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+        act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, name));
         act->addAction(new ActionAddItemsToObject(moduleIds, gateIds));
         UserActionManager::instance()->executeActionBlockThread(act);
 
@@ -524,7 +524,7 @@ namespace hal
         }
 
         ActionDeleteObject* act = new ActionDeleteObject();
-        act->setObject(UserActionObject(id, UserActionObjectType::Context));
+        act->setObject(UserActionObject(id, UserActionObjectType::ContextView));
         UserActionManager::instance()->executeActionBlockThread(act);
         return true;
     }
@@ -564,7 +564,7 @@ namespace hal
         QSet<u32> gateIds = pair.gateIds;
 
         ActionAddItemsToObject* act = new ActionAddItemsToObject(moduleIds,gateIds);
-        act->setObject(UserActionObject(id,UserActionObjectType::Context));
+        act->setObject(UserActionObject(id,UserActionObjectType::ContextView));
         UserActionManager::instance()->executeActionBlockThread(act);
         return true;
     }
@@ -601,7 +601,7 @@ namespace hal
             gateIds.insert(gate->get_id());
 
         ActionRemoveItemsFromObject* act = new ActionRemoveItemsFromObject(moduleIds,gateIds);
-        act->setObject(UserActionObject(id,UserActionObjectType::Context));
+        act->setObject(UserActionObject(id,UserActionObjectType::ContextView));
         UserActionManager::instance()->executeActionBlockThread(act);
         return true;
     }
@@ -620,7 +620,7 @@ namespace hal
 
         //get context matching id and rename it
         ActionRenameObject* act = new ActionRenameObject(QString::fromStdString(name));
-        act->setObject(UserActionObject(id,UserActionObjectType::Context));
+        act->setObject(UserActionObject(id,UserActionObjectType::ContextView));
         UserActionManager::instance()->executeActionBlockThread(act);
         return true;
     }

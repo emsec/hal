@@ -148,7 +148,7 @@ namespace hal
                 else
                     return false;
                 break;
-            case UserActionObjectType::Context:
+            case UserActionObjectType::ContextView:
                 ctx = gGraphContextManager->getContextById(mObject.id());
                 if (ctx)
                 {

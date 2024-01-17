@@ -99,7 +99,7 @@ namespace hal
         return mContext != nullptr;
     }
 
-    ContextTreeModel::ContextTreeModel(QObject* parent) : BaseTreeModel(parent), mCurrentDirectory(nullptr), mMinDirectoryId(std::numeric_limits<u32>::max())
+    ContextTreeModel::ContextTreeModel(QObject* parent) : BaseTreeModel(parent), mCurrentDirectory(nullptr)
     {
         setHeaderLabels(QStringList() << "View Name" << "Timestamp");
 
@@ -145,7 +145,7 @@ namespace hal
 
     void ContextTreeModel::addDirectory(QString name, BaseTreeItem *parent)
     {
-        ContextDirectory* directory = new ContextDirectory(--mMinDirectoryId, name);
+        ContextDirectory* directory = new ContextDirectory(name);
 
         ContextTreeItem* item   = new ContextTreeItem(directory);
 

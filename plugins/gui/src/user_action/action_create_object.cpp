@@ -117,14 +117,26 @@ namespace hal
             standardUndo = true;
         }
             break;
-        case UserActionObjectType::Context:
+        case UserActionObjectType::ContextView:
         {
             QString contextName = mObjectName.isEmpty()
                     ? gGraphContextManager->nextDefaultName()
                     : mObjectName;
             GraphContext* ctx = gGraphContextManager->createNewContext(contextName);
             if (mObject.id() > 0) gGraphContextManager->setContextId(ctx,mObject.id());
-            setObject(UserActionObject(ctx->id(),UserActionObjectType::Context));
+            setObject(UserActionObject(ctx->id(),UserActionObjectType::ContextView));
+            standardUndo = true;
+        }
+            break;
+        case UserActionObjectType::ContextDir:
+        {
+            QString contextName = mObjectName.isEmpty()
+                    ? gGraphContextManager->nextDefaultName()
+                    : mObjectName;
+
+            //ContextDirectory* directory = new ContextDirectory(--mMinDirectoryId, name);
+
+            //setObject(UserActionObject(ctx->id(),UserActionObjectType::ContextDir));
             standardUndo = true;
         }
             break;

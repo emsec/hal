@@ -39,9 +39,12 @@ namespace hal
         private:
             u32 mId;
             QString mName;
+            u32 mMinDirectoryId;
 
         public:
-            ContextDirectory(u32 id, QString name):mId(id), mName(name){}
+            ContextDirectory(QString name):mName(name), mMinDirectoryId(std::numeric_limits<u32>::max()){
+                mId = --mMinDirectoryId;
+            }
             QString getName() { return mName; }
 
     };
@@ -163,6 +166,5 @@ namespace hal
         ContextTreeItem *mCurrentDirectory;
         std::map<GraphContext *, ContextTreeItem *> mContextMap;
         QVector<GraphContext*> mContextList;
-        u32 mMinDirectoryId;
     };
 }    // namespace hal

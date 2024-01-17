@@ -74,7 +74,7 @@ namespace hal
         Grouping* grp;
         switch (mObject.type())
         {
-            case UserActionObjectType::Context:
+            case UserActionObjectType::ContextView:
                 ctx = gGraphContextManager->getContextById(mObject.id());
                 if (ctx)
                 {

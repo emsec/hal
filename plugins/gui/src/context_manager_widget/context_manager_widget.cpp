@@ -131,7 +131,7 @@ namespace hal
     {
         UserActionCompound* act = new UserActionCompound;
         act->setUseCreatedObject();
-        act->addAction(new ActionCreateObject(UserActionObjectType::Context,
+        act->addAction(new ActionCreateObject(UserActionObjectType::ContextView,
                   QString::fromStdString(gNetlist->get_top_module()->get_name())));
         act->addAction(new ActionAddItemsToObject({gNetlist->get_top_module()->get_id()}, {}));
         act->exec();
@@ -205,7 +205,7 @@ namespace hal
         if (ipd.exec() == QDialog::Accepted)
         {
             ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
-            act->setObject(UserActionObject(clicked_context->id(),UserActionObjectType::Context));
+            act->setObject(UserActionObject(clicked_context->id(),UserActionObjectType::ContextView));
             act->exec();
             clicked_context->setExclusiveModuleId(0, false);
         }
@@ -219,7 +219,7 @@ namespace hal
 
         UserActionCompound* act = new UserActionCompound;
         act->setUseCreatedObject();
-        act->addAction(new ActionCreateObject(UserActionObjectType::Context,clicked_context->name() + " (Copy)"));
+        act->addAction(new ActionCreateObject(UserActionObjectType::ContextView,clicked_context->name() + " (Copy)"));
         act->addAction(new ActionAddItemsToObject(clicked_context->modules(),clicked_context->gates()));
         act->exec();
     }
@@ -234,7 +234,7 @@ namespace hal
         if (!clicked_context) return;
 
         ActionDeleteObject* act = new ActionDeleteObject;
-        act->setObject(UserActionObject(clicked_context->id(),UserActionObjectType::Context));
+        act->setObject(UserActionObject(clicked_context->id(),UserActionObjectType::ContextView));
         act->exec();
     }
 

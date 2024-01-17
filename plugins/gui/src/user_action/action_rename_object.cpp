@@ -92,7 +92,7 @@ namespace hal
             case UserActionObjectType::Grouping:
                 oldName = gContentManager->getGroupingManagerWidget()->getModel()->renameGrouping(mObject.id(), mNewName);
                 break;
-            case UserActionObjectType::Context:
+            case UserActionObjectType::ContextView:
                 ctx = gGraphContextManager->getContextById(mObject.id());
                 if (ctx)
                 {

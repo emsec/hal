@@ -53,7 +53,8 @@ namespace hal
             Net,
             Grouping,
             Netlist,
-            Context,
+            ContextView,
+            ContextDir,
             Pin,
             PinGroup,
             MaxObjectType
