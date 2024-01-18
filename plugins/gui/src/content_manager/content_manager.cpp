@@ -121,7 +121,7 @@ namespace hal
         //m_python_widget = nullptr; DONT DO THIS PYTHON_WIDGET IS CREATED IN THE CONSTRUCTOR FOR SOME REASON
 
         mPythonConsoleWidget    = nullptr;
-        mPythonWidget           = nullptr;
+//        mPythonWidget           = nullptr;
         mGraphTabWidget         = nullptr;
         mModuleWidget           = nullptr;
         mContextManagerWidget   = nullptr;
