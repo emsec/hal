@@ -16,13 +16,16 @@
 #include "bitwuzla/cpp/bitwuzla.h"
 #include "bitwuzla/cpp/parser.h"
 #endif
+
+#include "z3++.h"
+
 namespace hal
 {
     namespace SMT
     {
         namespace Z3
         {
-            bool is_linked = false;
+            bool is_linked = true;
 
             /// Checks whether a Z3 binary is available on the system.
             Result<std::string> query_binary_path()
@@ -102,9 +105,26 @@ namespace hal
 			 */
             Result<std::tuple<bool, std::string>> query_library(std::string& input, const QueryConfig& config)
             {
-                UNUSED(input);
-                UNUSED(config);
-                return ERR("could not call Z3 solver library: Library call not implemented");
+                z3::context ctx;
+
+                z3::solver s = {ctx};
+                s.from_string(input.c_str());
+
+                const auto res = s.check();
+
+                if (res == z3::unknown)
+                {
+                    return OK({true, "unknown"});
+                }
+
+                if (res == z3::unsat)
+                {
+                    return OK({false, "unsat"});
+                }
+
+                std::cout << s.get_model().to_string() << std::endl;
+
+                return OK({false, s.get_model().to_string()});
             }
         }    // namespace Z3
 
