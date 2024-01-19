@@ -3,15 +3,18 @@
 #include "hal_core/netlist/boolean_function/translator.h"
 #include "hal_core/netlist/boolean_function/types.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/utilities/utils.h"
 #include "subprocess/process.h"
 
 #include <boost/thread.hpp>
 #include <ctime>
+#include <fstream>
 #include <numeric>
 #include <set>
 
 #ifdef BITWUZLA_LIBRARY
-#include "bitwuzla/bitwuzla.h"
+#include "bitwuzla/cpp/bitwuzla.h"
+#include "bitwuzla/cpp/parser.h"
 #endif
 namespace hal
 {
@@ -253,39 +256,42 @@ namespace hal
             Result<std::tuple<bool, std::string>> query_library(std::string& input, const QueryConfig& config)
             {
 #ifdef BITWUZLA_LIBRARY
-                auto bzla = bitwuzla_new();
 
+                // First, create a Bitwuzla options instance.
+                bitwuzla::Options options;
+                // We will parse example file `smt2/quickstart.smt2`.
+                // Create parser instance.
+                // We expect no error to occur.
                 const char* smt2_char_string = input.c_str();
 
-                char* out;
-                size_t out_len = {};
+                auto in_stream = fmemopen((void*)smt2_char_string, strlen(smt2_char_string), "r");
+                std::stringbuf result_string;
+                std::ostream output_stream(&result_string);
 
-                auto in_stream  = fmemopen((void*)smt2_char_string, strlen(smt2_char_string), "r");
-                auto out_stream = open_memstream(&out, &out_len);
-
-                BitwuzlaResult _r;
-                char* error;
+                std::vector<bitwuzla::Term> all_vars;
 
                 if (config.generate_model)
                 {
-                    bitwuzla_set_option(bzla, BITWUZLA_OPT_PRODUCE_MODELS, 1);
+                    options.set(bitwuzla::Option::PRODUCE_MODELS, true);
                 }
 
-                auto res = bitwuzla_parse_format(bzla, "smt2", in_stream, "VIRTUAL FILE", out_stream, &error, &_r);
-                fflush(out_stream);
+                // std::filesystem::path tmp_path = utils::get_unique_temp_directory().get();
+                // std::string output_file        = std::string(tmp_path) + "/out.smt2";
 
-                if (error != nullptr)
+                bitwuzla::parser::Parser parser(options, "VIRTUAL_FILE", in_stream, "smt2", &output_stream);
+                // Now parse the input file.
+                std::string err_msg = parser.parse(false);
+
+                if (!err_msg.empty())
                 {
-                    return ERR("failed to solve provided smt2 solver with bitwuzla: " + std::string(error));
+                    return ERR("failed to parse input file: " + err_msg);
                 }
 
                 fclose(in_stream);
-                fclose(out_stream);
 
-                bitwuzla_delete(bzla);
-
-                std::string output(out);
-
+                std::string output(result_string.str());
+                // std::cout << "output" << std::endl;
+                // std::cout << output << std::endl;
                 return OK({false, output});
 #else
                 return ERR("Bitwuzla Library not linked!");

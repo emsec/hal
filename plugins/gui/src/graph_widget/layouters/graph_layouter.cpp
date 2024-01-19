@@ -1362,14 +1362,14 @@ namespace hal
                     // netjunction -> endpoint
                     auto itEpc = mLayouter->mEndpointHash.find(wToPoint);
                     y0         = mLayouter->mCoordArrayY->lanePosition(iy0, j0? j0->rect().bottom() : 0);
-                    y1         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j1->rect().top(), true)
+                    y1         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j1 ? j1->rect().top() : 0, true)
                                                                               : mLayouter->mCoordArrayY->lanePosition(iy1,0);
                 }
                 else
                 {
                     // endpoint -> netjunction
                     auto itEpc = mLayouter->mEndpointHash.find(wFromPoint);
-                    y0         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j0->rect().bottom(), true)
+                    y0         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j0 ? j0->rect().bottom() : 0, true)
                                                                               : mLayouter->mCoordArrayY->lanePosition(iy0,0);
                     y1         = mLayouter->mCoordArrayY->lanePosition(iy1, j1? j1->rect().top() : 0);
                 }

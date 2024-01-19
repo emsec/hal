@@ -30,6 +30,13 @@ namespace hal
                                                                                                     "Appearance:Graph View",
                                                                                                     "If set net grouping colors are also applied to input and output pins of gates");
 
+    SettingsItemCheckbox* GraphContextManager::sSettingPanOnMiddleButton = new SettingsItemCheckbox("Pan with Middle Mouse Button",
+                                                                                                    "graph_view/pan_middle_button",
+                                                                                                    false,
+                                                                                                    "Graph View",
+                                                                                                    "If enabled middle mouse button will pan the graphics.\n"
+                                                                                                    "If disabled middle mouse button can be used for rubber band selection.");
+
     GraphContextManager::GraphContextManager() : mContextTableModel(new ContextTableModel()), mMaxContextId(0)
     {
         mSettingDebugGrid = new SettingsItemCheckbox("GUI Debug Grid",
@@ -226,6 +233,7 @@ namespace hal
 
         for (GraphContext* context : mContextTableModel->list())
         {
+            if (context->isShowingFoldedTopModule()) continue;
             if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}) && !context->isShowingModule(added_module, {}, {}, {}, {}))
                 context->add({added_module}, {});
             else
@@ -260,6 +268,7 @@ namespace hal
 
         for (GraphContext* context : mContextTableModel->list())
         {
+            if (context->isShowingFoldedTopModule()) continue;
             if (context->isScheduledRemove(Node(removed_module,Node::Module)) ||
                     context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}))
                 context->remove({removed_module}, {});
@@ -286,6 +295,7 @@ namespace hal
 
         for (GraphContext* context : mContextTableModel->list())
         {
+            if (context->isShowingFoldedTopModule()) continue;
             if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}))
                 context->add({}, {inserted_gate});
             else
@@ -310,6 +320,7 @@ namespace hal
         //        dump("ModuleGateRemoved", m->get_id(), removed_gate);
         for (GraphContext* context : mContextTableModel->list())
         {
+            if (context->isShowingFoldedTopModule()) continue;
             if (context->isScheduledRemove(Node(removed_gate,Node::Gate)) ||
                     context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate}))
             {
