@@ -11,20 +11,34 @@ namespace hal
 ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
         BaseTreeItem(),
         mId(id),
-        mType(type),
+        mItemType(type),
         mHighlighted(false)
     {
         switch(type)
         {
         case TreeItemType::Module:
-            mName = QString::fromStdString(gNetlist->get_module_by_id(id)->get_name());
+        {
+            const Module* m = gNetlist->get_module_by_id(id);
+            Q_ASSERT(m);
+            mName       = QString::fromStdString(m->get_name());
+            mModuleType = QString::fromStdString(m->get_type());
             break;
+        }
         case TreeItemType::Gate:
-            mName = QString::fromStdString(gNetlist->get_gate_by_id(id)->get_name());
+        {
+            const Gate* g = gNetlist->get_gate_by_id(id);
+            Q_ASSERT(g);
+            mName       = QString::fromStdString(g->get_name());
+            mModuleType = QString::fromStdString(g->get_type()->get_name());
             break;
+        }
         case TreeItemType::Net:
-            mName = QString::fromStdString(gNetlist->get_net_by_id(id)->get_name());
+        {
+            const Net* n = gNetlist->get_net_by_id(id);
+            Q_ASSERT(n);
+            mName = QString::fromStdString(n->get_name());
             break;
+        }
         }
     }
 
@@ -38,7 +52,7 @@ ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
 
     void ModuleItem::appendExistingChildIfAny(const QMap<u32,ModuleItem*>& moduleMap)
     {
-        if(mType != TreeItemType::Module) // only module can have children
+        if(mItemType != TreeItemType::Module) // only module can have children
             return;
 
         Module* m = gNetlist->get_module_by_id(mId);
@@ -55,30 +69,25 @@ ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
         }
     }
 
+    void ModuleItem::setModuleType(const QString &moduleType)
+    {
+        if (mItemType != TreeItemType::Module) return;
+        Module* module = gNetlist->get_module_by_id(mId);
+        if (!module) return;
+        module->set_type(moduleType.toStdString());
+        mModuleType = moduleType;
+    }
+
     QVariant ModuleItem::getData(int column) const
     {
         // DEBUG CODE, USE STYLED DELEGATES OR SOMETHING
-        if(column == 0)
+        switch (column) {
+        case 0:
             return mName;
-        else if (column == 1)
+        case 1:
             return mId;
-        else if(column == 2)
-        {
-            switch(mType)
-            {
-                case TreeItemType::Module:
-                {
-                    Module* module = gNetlist->get_module_by_id(mId);
-                    if(!module) 
-                        return QVariant();
-                    return QString::fromStdString(module->get_type());
-                }
-                case TreeItemType::Gate:
-                    Gate* gate = gNetlist->get_gate_by_id(mId);
-                    if(!gate) 
-                        return QVariant();
-                    return QString::fromStdString(gate->get_type()->get_name());
-            }
+        case 2:
+            return mModuleType;
         }
         return QVariant();
     }
@@ -86,42 +95,21 @@ ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
     void ModuleItem::setData(QList<QVariant> data)
     {
         setName(data[0].toString());
-        switch(mType)
-        {
-            case TreeItemType::Module:
-            {
-                Module* module = gNetlist->get_module_by_id(mId);
-                if(!module)
-                    return;
-                module->set_type(data[3].toString().toStdString());
-            }
-            case TreeItemType::Gate:
-                return;
-        }
+        if (mItemType == TreeItemType::Module)
+            setModuleType(data.at(2).toString());
     }
 
     void ModuleItem::setDataAtIndex(int index, QVariant &data)
     {
-        if(index == 0) {
+        switch (index) {
+        case 0:
             setName(data.toString());
             return;
-        }
-        else if (index == 1)
+        case 1:
             return;
-        else if(index == 2)
-        {
-            switch(mType)
-            {
-                case TreeItemType::Module:
-                {
-                    Module* module = gNetlist->get_module_by_id(mId);
-                    if(!module)
-                        return;
-                    module->set_type(data.toString().toStdString());
-                }
-                case TreeItemType::Gate:
-                    return;
-            }
+        case 2:
+            setModuleType(data.toString());
+            return;
         }
     }
 
@@ -140,8 +128,14 @@ ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
         return mHighlighted;
     }
 
+    bool ModuleItem::isToplevelItem() const
+    {
+        if (dynamic_cast<RootTreeItem*>(mParent)) return true;
+        return false;
+    }
+
     ModuleItem::TreeItemType ModuleItem::getType() const{
-        return mType;
+        return mItemType;
     }
 
     void ModuleItem::setName(const QString& name)
@@ -159,5 +153,8 @@ ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
         return 3;
     }
 
-    void ModuleItem::appendData(QVariant data) {}
+    void ModuleItem::appendData(QVariant data)
+    {
+        Q_UNUSED(data);
+    }
 }

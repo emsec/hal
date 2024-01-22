@@ -245,10 +245,6 @@ namespace hal
         QAction delete_action;
         QAction extractPythonAction;
         QAction focus_in_view;
-        QAction debug_dump;
-        debug_dump.setText("Debug dump");
-        debug_dump.setParent(&context_menu);
-        context_menu.addAction(&debug_dump);
 
         switch(type) {
 
@@ -390,9 +386,6 @@ namespace hal
                 case ModuleItem::TreeItemType::Net: changeNetName(index); break;
             }
         }
-
-        if (clicked == &debug_dump)
-            mModuleModel->debugDump();
 
         if (clicked == &change_type_action)
             gNetlistRelay->changeModuleType(getModuleItemFromIndex(index)->id());
@@ -618,7 +611,7 @@ namespace hal
 
         for (auto module_id : gSelectionRelay->selectedModulesList())
         {
-            QModelIndex index = mModuleProxyModel->mapFromSource(mModuleModel->getIndex(mModuleModel->getItem(module_id)));
+            QModelIndex index = mModuleProxyModel->mapFromSource(mModuleModel->getIndexFromItem(mModuleModel->getItem(module_id)));
             module_selection.select(index, index);
         }
 

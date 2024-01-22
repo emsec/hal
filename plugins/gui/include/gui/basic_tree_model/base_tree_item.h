@@ -189,7 +189,7 @@ namespace hal
          */
         virtual int getOwnRow();
 
-    private:
+    protected:
         BaseTreeItem* mParent;
         QList<BaseTreeItem*> mChildren;
     };
