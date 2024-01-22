@@ -111,6 +111,7 @@ namespace hal
             if(gNetlist && gNetlist->get_gate_library()){
                 //TODO find better way to handle const/not const gateLibrary
                 mNonEditableGateLibrary = gNetlist->get_gate_library();
+                mDemoNetlist = netlist_factory::create_netlist(mNonEditableGateLibrary);
                 mReadOnly = true;
 
             }
@@ -140,6 +141,7 @@ namespace hal
                 }
 
                 mEditableGatelibrary = gateLibrary;
+                mDemoNetlist = netlist_factory::create_netlist(mEditableGatelibrary);
                 mReadOnly = false;
             }
 
