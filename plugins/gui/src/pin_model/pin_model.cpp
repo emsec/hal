@@ -6,7 +6,7 @@ namespace hal
     PinModel::PinModel(QObject* parent) : BaseTreeModel(parent)
     {
         // use root item to store header information
-        setHeaderLabels(QStringList() << "Name" << "Direction" << "Type" << "");
+        setHeaderLabels(QStringList() << "Name" << "Direction" << "Type");
         mAssignedNames = QSet<QString>();
         mEditable = false;
     }
@@ -14,7 +14,7 @@ namespace hal
     PinModel::PinModel(QObject* parent, bool editable) : BaseTreeModel(parent)
     {
         // use root item to store header information
-        setHeaderLabels(QStringList() << "Name" << "Direction" << "Type" << (mEditable ? "DELETE (RENAME ME)" : ""));
+        setHeaderLabels(QStringList() << "Name" << "Direction" << "Type");
         mAssignedNames = QSet<QString>();
         mEditable = editable;
     }
@@ -114,7 +114,7 @@ namespace hal
         }
 
         //create dummy for the group creator if model is editable
-        if(true)
+        if(mEditable)
         {
             auto dummyGroup = new PinItem(PinItem::TreeItemType::GroupCreator);
             dummyGroup->setData(QList<QVariant>() << "create new pingroup ...");
