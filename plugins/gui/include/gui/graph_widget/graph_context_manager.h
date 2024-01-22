@@ -41,6 +41,7 @@ namespace hal
     class GraphLayouter;
     class GraphShader;
     class GraphContext;
+    class ContextDirectory;
 
     class ContextTreeModel;
     class SettingsItemCheckbox;
@@ -72,7 +73,10 @@ namespace hal
          * @param name - The name of the new context. Names don't have to be unique.
          * @returns the created GraphContext
          */
-        GraphContext* createNewContext(const QString& name);
+        GraphContext* createNewContext(const QString& name, u32 parentId = 0);
+
+
+        ContextDirectory* createNewDirectory(const QString &name, u32 parentId = 0);
 
         /**
          * Renames a GraphContext. <br>
@@ -390,7 +394,7 @@ namespace hal
     private:
         //        QVector<GraphContext*> mGraphContexts;
 
-        ContextTreeModel* mContextTableModel;
+        ContextTreeModel* mContextTreeModel;
         u32 mMaxContextId;
         void dump(const QString& title, u32 mid, u32 xid) const;
         SettingsItemCheckbox* mSettingDebugGrid;

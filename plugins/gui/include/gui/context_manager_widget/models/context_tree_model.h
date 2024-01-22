@@ -45,8 +45,9 @@ namespace hal
             ContextDirectory(QString name):mName(name), mMinDirectoryId(std::numeric_limits<u32>::max()){
                 mId = --mMinDirectoryId;
             }
-            QString getName() { return mName; }
-
+            QString name() const { return mName; }
+            u32 id() const { return mId; }
+            void setId(u32 id_) { mId = id_; }
     };
 
     class ContextTreeItem : public BaseTreeItem
@@ -66,6 +67,7 @@ namespace hal
             int row() const;
             bool isDirectory() const;
             bool isContext() const;
+            u32 getId() const;
             GraphContext* context() const;
     };
 
@@ -103,7 +105,9 @@ namespace hal
          * @param name - The name to the directory.
          * @param parent - The Parent of the directory.
          */
-        void addDirectory(QString name, BaseTreeItem* parent = nullptr);
+        ContextDirectory* addDirectory(QString name, BaseTreeItem* parent = nullptr);
+
+        BaseTreeItem* getParentDirectory(u32 directoryId) const;
 
         /**
          * Adds a given GraphContext to the model.
@@ -163,6 +167,7 @@ namespace hal
 
 
     private:
+        BaseTreeItem* getParentDirectoryInternal(BaseTreeItem* parentItem, u32 directoryId) const;
         ContextTreeItem *mCurrentDirectory;
         std::map<GraphContext *, ContextTreeItem *> mContextMap;
         QVector<GraphContext*> mContextList;

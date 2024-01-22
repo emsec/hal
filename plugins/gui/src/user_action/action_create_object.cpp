@@ -4,6 +4,7 @@
 #include "hal_core/netlist/grouping.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/context_manager_widget/models/context_tree_model.h"
 
 namespace hal
 {
@@ -122,21 +123,21 @@ namespace hal
             QString contextName = mObjectName.isEmpty()
                     ? gGraphContextManager->nextDefaultName()
                     : mObjectName;
-            GraphContext* ctx = gGraphContextManager->createNewContext(contextName);
-            if (mObject.id() > 0) gGraphContextManager->setContextId(ctx,mObject.id());
-            setObject(UserActionObject(ctx->id(),UserActionObjectType::ContextView));
+            GraphContext* ctxView = gGraphContextManager->createNewContext(contextName, mParentId);
+            if (mObject.id() > 0) gGraphContextManager->setContextId(ctxView,mObject.id());
+            setObject(UserActionObject(ctxView->id(),UserActionObjectType::ContextView));
             standardUndo = true;
         }
             break;
         case UserActionObjectType::ContextDir:
         {
-            QString contextName = mObjectName.isEmpty()
+            QString directoryName = mObjectName.isEmpty()
                     ? gGraphContextManager->nextDefaultName()
                     : mObjectName;
 
-            //ContextDirectory* directory = new ContextDirectory(--mMinDirectoryId, name);
-
-            //setObject(UserActionObject(ctx->id(),UserActionObjectType::ContextDir));
+            ContextDirectory* ctxDir = gGraphContextManager->createNewDirectory(directoryName, mParentId);
+            if (mObject.id() > 0) ctxDir->setId(mObject.id());
+            setObject(UserActionObject(ctxDir->id(),UserActionObjectType::ContextDir));
             standardUndo = true;
         }
             break;

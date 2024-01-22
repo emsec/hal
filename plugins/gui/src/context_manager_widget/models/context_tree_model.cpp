@@ -24,6 +24,13 @@ namespace hal
     {
     }
 
+    u32 ContextTreeItem::getId() const
+    {
+        if (mDirectory) return mDirectory->id();
+        if (mContext) return mContext->id();
+        return 0;
+    }
+
     QVariant ContextTreeItem::getData(int column) const
     {
         if(isDirectory())
@@ -32,7 +39,7 @@ namespace hal
             {
                 case 0:
                 {
-                    return mDirectory->getName();
+                    return mDirectory->name();
                 }
                 case 1:
                 {
@@ -143,7 +150,29 @@ namespace hal
         return QVariant();
     }
 
-    void ContextTreeModel::addDirectory(QString name, BaseTreeItem *parent)
+    BaseTreeItem* ContextTreeModel::getParentDirectory(u32 directoryId) const
+    {
+        return getParentDirectoryInternal(mRootItem, directoryId);
+    }
+
+    BaseTreeItem* ContextTreeModel::getParentDirectoryInternal(BaseTreeItem *parentItem, u32 directoryId) const
+    {
+        for (BaseTreeItem* childItem : parentItem->getChildren())
+        {
+            ContextTreeItem* ctxItem = static_cast<ContextTreeItem*>(childItem);
+            if (ctxItem->isDirectory())
+            {
+                if (ctxItem->getId() == directoryId)
+                    return ctxItem;
+                BaseTreeItem* bti = getParentDirectoryInternal(childItem, directoryId);
+                if (bti)
+                    return bti;
+            }
+        }
+        return nullptr;
+    }
+
+    ContextDirectory* ContextTreeModel::addDirectory(QString name, BaseTreeItem *parent)
     {
         ContextDirectory* directory = new ContextDirectory(name);
 
@@ -168,6 +197,7 @@ namespace hal
 
         Q_EMIT directoryCreatedSignal(item);
 
+        return directory;
     }
 
     void ContextTreeModel::clear()
@@ -184,19 +214,20 @@ namespace hal
     {
         ContextTreeItem* item   = new ContextTreeItem(context);
 
+        BaseTreeItem* finalParent;
         if (parent)
-            item->setParent(parent);
+            finalParent = parent;
         else if(mCurrentDirectory)
-            item->setParent(mCurrentDirectory);
+            finalParent = mCurrentDirectory;
         else
-            item->setParent(mRootItem);
+            finalParent = mRootItem;
 
 
-        QModelIndex index = getIndexFromItem(item->getParent());
+        QModelIndex index = getIndexFromItem(finalParent);
 
-        int row = item->getParent()->getChildCount();
+        int row = finalParent->getChildCount();
         beginInsertRows(index, row, row);
-        item->getParent()->appendChild(item);
+        finalParent->appendChild(item);
         endInsertRows();
 
         mContextMap.insert({context, item});
