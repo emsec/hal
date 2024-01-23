@@ -276,6 +276,8 @@ namespace hal
 
         void openGateInView(const QModelIndex& index);
 
+        void openNetEndpointsInView(const QModelIndex &index);
+
         void changeGateName(const QModelIndex& index);
 
         void changeNetName(const QModelIndex& index);

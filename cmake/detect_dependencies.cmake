@@ -27,11 +27,22 @@ find_package(Sanitizers REQUIRED)
 # ###############################
 # ####   Bitwuzla
 # ###############################
-find_package(Bitwuzla)
+pkg_check_modules(BITWUZLA bitwuzla)
 
-if(Bitwuzla_FOUND)
-    set(BITWUZLA_LIBRARY Bitwuzla::bitwuzla)
-endif()
+# find_package(Bitwuzla)
+
+if(BITWUZLA_FOUND)
+    message(STATUS "Found BITWUZLA")
+    message(STATUS "    BITWUZLA_LIBRARIES: ${BITWUZLA_LIBRARIES}")
+    message(STATUS "    BITWUZLA_LINK_LIBRARIES: ${BITWUZLA_LINK_LIBRARIES}")
+    message(STATUS "    BITWUZLA_INCLUDE_DIRS: ${BITWUZLA_INCLUDE_DIRS}")
+else()
+    set(BITWUZLA_LIBRARY "")
+    set(BITWUZLA_INCLUDE_DIRS "")
+    
+    message(STATUS "Bitwuzla not found, but this is optional...")
+endif(BITWUZLA_FOUND)
+
 
 # ###############################
 # ####   OpenMP
@@ -109,23 +120,19 @@ endif()
 # ###############################
 find_package(Filesystem REQUIRED Final Experimental)
 
+
 # ###############################
 # ####   RapidJSON
 # ###############################
-find_package(RapidJSON REQUIRED)
-message(STATUS "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
+message(STATUS "using rapidjson from deps")
+add_library(RapidJSON::RapidJSON INTERFACE IMPORTED)
+set_target_properties(RapidJSON::RapidJSON PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/rapidjson"
+)
+set(RAPIDJSON_INCLUDEDIR "${CMAKE_SOURCE_DIR}/deps/rapidjson")
+message(STATUS "Set rapidjson successully: ${RAPIDJSON_INCLUDEDIR}")
 
-if(RapidJSON_FOUND AND NOT TARGET RapidJSON::RapidJSON)
-    if(NOT RAPIDJSON_INCLUDEDIR)
-        set(RAPIDJSON_INCLUDEDIR ${RAPIDJSON_INCLUDE_DIRS})
-    endif()
 
-    add_library(RapidJSON::RapidJSON INTERFACE IMPORTED)
-    set_target_properties(RapidJSON::RapidJSON PROPERTIES
-        INTERFACE_INCLUDE_DIRECTORIES "${RAPIDJSON_INCLUDEDIR}"
-    )
-    message(STATUS "Set rapidjson successully: ${RAPIDJSON_INCLUDEDIR}")
-endif()
 
 # ###############################
 # ####   pybind11

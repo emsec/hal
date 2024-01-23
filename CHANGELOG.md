@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 * refactored module widget
   * added option to show gate content for each module
   * added option to show interior nets for each module
+  * added `Isolate in new view` feature for nets
   * added button to expand or collapse all tree items
   * added delete module action and shortcut
   * added entries for context menu
@@ -28,6 +29,7 @@ All notable changes to this project will be documented in this file.
   * added extended gate library picker when importing a netlist
   * added keyboard shortcut for delete-item action from toolbar
   * added parameter `force_name` to enforce pin (group) renaming to `Module::set_pin_name`, `Module::set_pin_group_name`, `Module::create_pin`, and `Module::create_pin_group`
+  * added Python bindings for `GateLibrary::create_gate_type` (cannot handle `GateTypeComponent` parameter as pybind cannot accept `std::unique_ptr` as parameter)
   * changed supported input file formats for import from hard coded list to list provided by loadable parser plugins
   * changed behavior of import netlist dialog, suggest only non-existing directory names and loop until an acceptable name was entered
   * changed appearance and behavior of import project dialog, make sure existing hal projects don't get overwritten
