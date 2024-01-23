@@ -139,7 +139,6 @@ namespace hal
             return OK(origin_offset_matrix);
         }
 
-        // TODO add caching!
         /*
          * This function gathers the connected neighboring pingroups for a net by propagating to the neighboring gates and searches for module pin groups.
          */
@@ -148,8 +147,15 @@ namespace hal
                                                                           bool successors,
                                                                           const std::set<MPG>& relevant_pin_groups,
                                                                           const bool guarantee_propagation,
-                                                                          const Module* inwards_module)
+                                                                          const Module* inwards_module,
+                                                                          std::map<std::tuple<Net*, const bool, const Module*>, std::map<MPG, std::set<Net*>>>& cache)
         {
+            std::tuple<Net*, const bool, const Module*> t = {n, guarantee_propagation, inwards_module};
+            if (auto it = cache.find(t); it != cache.end())
+            {
+                return OK(it->second);
+            }
+
             std::map<MPG, std::set<Net*>> connected_neighbors;
 
 #ifdef PRINT_CONNECTIVITY_BUILDING
@@ -295,7 +301,7 @@ namespace hal
                         continue;
                     }
 
-                    auto res = gather_conntected_neighbors(next_ep->get_net(), visited, successors, relevant_pin_groups, false, nullptr);
+                    auto res = gather_conntected_neighbors(next_ep->get_net(), visited, successors, relevant_pin_groups, false, nullptr, cache);
                     if (res.is_error())
                     {
                         return res;
@@ -308,6 +314,7 @@ namespace hal
                 }
             }
 
+            cache[t] = connected_neighbors;
             return OK(connected_neighbors);
         }
 
@@ -701,8 +708,6 @@ namespace hal
                                                                 const std::map<hal::Net*, POSSIBLE_BITINDICES>& reduced_indices,
                                                                 const bool only_allow_consecutive_bitorders)
         {
-            std::map<Net*, i32> consensus_bitindices;
-
             // 1st iteration
             const auto first_majority_indices = conduct_majority_vote(reduced_indices);
 
@@ -717,24 +722,24 @@ namespace hal
             auto relaxed_reduced_indices = reduce_indices(unfound_indices);
 
             // 2nd iteration
-            const auto second_majority_indices = conduct_majority_vote(reduced_indices);
+            const auto second_majority_indices = conduct_majority_vote(relaxed_reduced_indices);
 
 #ifdef PRINT_CONFLICT
             std::cout << "Found majority bitorder: " << std::endl;
-            for (const auto& [net, index] : consensus_bitindices)
+            for (const auto& [net, index] : second_majority_indices)
             {
                 std::cout << net->get_id() << ": " << index << std::endl;
             }
 #endif
 
-            const auto is_complete_pin_group_bitorder = check_completeness(mpg, consensus_bitindices);
+            const auto is_complete_pin_group_bitorder = check_completeness(mpg, second_majority_indices);
 
             if (!is_complete_pin_group_bitorder)
             {
                 return {};
             }
 
-            const auto aligned_indices = align_indices(consensus_bitindices, only_allow_consecutive_bitorders);
+            const auto aligned_indices = align_indices(second_majority_indices, only_allow_consecutive_bitorders);
 
             return aligned_indices;
         }
@@ -814,6 +819,8 @@ namespace hal
         }
 
         // Build connectivity
+        std::map<std::tuple<Net*, const bool, const Module*>, std::map<MPG, std::set<Net*>>> outwards_cache;
+        std::map<std::tuple<Net*, const bool, const Module*>, std::map<MPG, std::set<Net*>>> inwards_cache;
         for (const auto& [m, pg] : unknown_bitorders)
         {
             bool successors = pg->get_direction() == PinDirection::output;
@@ -823,7 +830,7 @@ namespace hal
                 const auto starting_net = p->get_net();
 
                 std::unordered_set<Endpoint*> visited_outwards;
-                const auto res_outwards = gather_conntected_neighbors(starting_net, visited_outwards, successors, relevant_pin_groups, false, nullptr);
+                const auto res_outwards = gather_conntected_neighbors(starting_net, visited_outwards, successors, relevant_pin_groups, false, nullptr, outwards_cache);
                 if (res_outwards.is_error())
                 {
                     return ERR_APPEND(res_outwards.get_error(),
@@ -834,7 +841,7 @@ namespace hal
 
                 std::unordered_set<Endpoint*> visited_inwards;
                 // NOTE when propagating inwards we guarantee the first propagation since otherwise we would stop at our starting pingroup
-                const auto res_inwards = gather_conntected_neighbors(starting_net, visited_inwards, !successors, relevant_pin_groups, true, m);
+                const auto res_inwards = gather_conntected_neighbors(starting_net, visited_inwards, !successors, relevant_pin_groups, true, m, inwards_cache);
                 if (res_inwards.is_error())
                 {
                     return ERR_APPEND(res_inwards.get_error(),
