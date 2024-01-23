@@ -123,7 +123,7 @@ namespace hal
          * @param assign whether the new name should be marked as assigned and the old one should be available again
          * @return true if name is available to be taken - otherwise false
          */
-        bool isNameAvailable(const QString& name, PinItem* pinItem, bool assign = false);
+        bool isNameAvailable(const QString& newName, PinItem* treeItem);
         void handleInvalidPinUpdate(PinItem* pinItem);
         void handleInvalidGroupUpdate(PinItem* groupItem);
         bool renamePin(PinItem* pinItem, const QString& newName);
@@ -137,6 +137,8 @@ namespace hal
 
 
         QSet<QString> mAssignedNames;
+        QSet<QString> mAssignedPinNames;
+        QSet<QString> mAssignedGroupNames;
         QList<PINGROUP*> mPinGroups;
         bool mEditable;
 
