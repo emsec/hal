@@ -139,7 +139,6 @@ namespace hal
             return OK(origin_offset_matrix);
         }
 
-        // TODO add caching!
         /*
          * This function gathers the connected neighboring pingroups for a net by propagating to the neighboring gates and searches for module pin groups.
          */
@@ -148,8 +147,15 @@ namespace hal
                                                                           bool successors,
                                                                           const std::set<MPG>& relevant_pin_groups,
                                                                           const bool guarantee_propagation,
-                                                                          const Module* inwards_module)
+                                                                          const Module* inwards_module,
+                                                                          std::map<std::tuple<Net*, const bool, const Module*>, std::map<MPG, std::set<Net*>>>& cache)
         {
+            std::tuple<Net*, const bool, const Module*> t = {n, guarantee_propagation, inwards_module};
+            if (auto it = cache.find(t); it != cache.end())
+            {
+                return OK(it->second);
+            }
+
             std::map<MPG, std::set<Net*>> connected_neighbors;
 
 #ifdef PRINT_CONNECTIVITY_BUILDING
@@ -295,7 +301,7 @@ namespace hal
                         continue;
                     }
 
-                    auto res = gather_conntected_neighbors(next_ep->get_net(), visited, successors, relevant_pin_groups, false, nullptr);
+                    auto res = gather_conntected_neighbors(next_ep->get_net(), visited, successors, relevant_pin_groups, false, nullptr, cache);
                     if (res.is_error())
                     {
                         return res;
@@ -308,11 +314,15 @@ namespace hal
                 }
             }
 
+            cache[t] = connected_neighbors;
             return OK(connected_neighbors);
         }
 
         /*
-         * 
+         * Reduces a collection of bit indices by deleting invalid indices.
+         * Indices are considered invalid when:
+         *  - a module/pin group  origin annotates different indices for the same pin
+         *  - a module/pin group annotates the same index to different pins
          */
         const std::map<Net*, POSSIBLE_BITINDICES> reduce_indices(const std::map<Net*, POSSIBLE_BITINDICES>& collected_bitindices)
         {
@@ -338,11 +348,6 @@ namespace hal
                 std::cout << "\t\tORIGINS: [" << origins << "]" << std::endl;
             }
 #endif
-
-            // delete non-valid possible indices
-            // indices are considered non valid when:
-            //  - a pingroup annotates different indices for the same pin
-            //  - a pingroup annotates the same index to different pins
 
             // 1)  Checks whether a net has multiple indices annotated from the same origin mpg
             auto reduced_collected_indices = collected_bitindices;
@@ -444,11 +449,99 @@ namespace hal
         }
 
         /*
+         * Checks whether every net of a module pin group got assigned a valid index
+         */
+        const bool check_completeness(const MPG& mpg, const std::map<Net*, i32>& consensus_bitindices)
+        {
+            bool is_complete_pin_group_bitorder = true;
+
+            for (auto& pin : mpg.second->get_pins())
+            {
+                Net* net = pin->get_net();
+                if (consensus_bitindices.find(net) == consensus_bitindices.end())
+                {
+                    is_complete_pin_group_bitorder = false;
+
+                    // TODO remove
+                    // std::cout << "Missing in net " << in_net->get_id() << " for complete bitorder." << std::endl;
+
+                    break;
+                }
+            }
+
+#ifdef PRINT_CONFLICT
+            if (is_complete_pin_group_bitorder)
+            {
+                // TODO remove
+                std::cout << "Found complete bitorder for pingroup " << mpg.second->get_name() << std::endl;
+                for (const auto& [net, index] : complete_consensus)
+                {
+                    std::cout << net->get_id() << ": " << index << std::endl;
+                }
+            }
+#endif
+
+            return is_complete_pin_group_bitorder;
+        }
+
+        /*
+         * Aligns gathered bit index consensus from m:m+n to 0:n
+         * If the flag is set this also checks whether the indices actually form a consecutive range.
+         * This always checks whether there the range is steadidly increasing (all indices are unique), otherwise we can not determine a order if an index duplicates.
          * 
          */
-        std::map<Net*, u32> find_consens_via_offset(const MPG& mpg, const std::map<hal::Net*, POSSIBLE_BITINDICES>& indices, const bool only_allow_consecutive_bitorders)
+        const std::map<Net*, u32> align_indices(const std::map<Net*, i32>& consensus_bitindices, const bool only_allow_consecutive_bitorders)
         {
-            std::map<Net*, i32> consens_bitindices;
+            std::map<Net*, u32> aligned_consensus;
+
+            std::set<i32> unique_indices;
+            for (const auto& [_n, index] : consensus_bitindices)
+            {
+                unique_indices.insert(index);
+            }
+
+            if (unique_indices.empty())
+            {
+                return {};
+            }
+
+            const i32 min_index = *(unique_indices.begin());
+            const i32 max_index = *(unique_indices.rbegin());
+
+            // when the range is larger than pin group size there are holes in the bitorder
+            if (only_allow_consecutive_bitorders && ((max_index - min_index) > (i32(consensus_bitindices.size()) - 1)))
+            {
+                return {};
+            }
+
+            // when there are less unique indices in the range than nets, there are duplicates
+            if (unique_indices.size() < consensus_bitindices.size())
+            {
+                return {};
+            }
+
+            std::map<i32, Net*> index_to_net;
+            for (const auto& [net, index] : consensus_bitindices)
+            {
+                index_to_net[index] = net;
+            }
+
+            u32 index_counter = 0;
+            for (const auto& [_unaligned_index, net] : index_to_net)
+            {
+                aligned_consensus[net] = index_counter++;
+            }
+
+            return aligned_consensus;
+        }
+
+        /*
+         * Trys to find consensus by searching for a pairwise offset between all different module/pin group origins that holds for all nets that are annotated by the same origins.
+         * This offset propagates so when A and B share an offset p and B and C share an offset q then the offset between A and C should be p + q.
+         */
+        std::map<Net*, u32> find_consensus_via_offset(const MPG& mpg, const std::map<hal::Net*, POSSIBLE_BITINDICES>& indices, const bool only_allow_consecutive_bitorders)
+        {
+            std::map<Net*, i32> consensus_bitindices;
 
             auto offset_matrix_res = build_offset_matrix(indices);
             if (offset_matrix_res.is_error())
@@ -460,6 +553,7 @@ namespace hal
             }
             auto offset_matrix = offset_matrix_res.get();
 
+            // select a pseudo random base line and gather the offsets between the base line and all other possible module/pin group origins
             auto base_line = offset_matrix.begin()->first;
 
             // TODO remove
@@ -491,7 +585,7 @@ namespace hal
                     {
                         // if there cannot be found any valid offset to the baseline, but there is just one possible index annotated, we still allow it
                         // -> this wont break anything, since this only allows for bitorders that we otherwise would have discarded because of a missing net
-                        consens_bitindices[net] = org_index;
+                        consensus_bitindices[net] = org_index;
                     }
                     else
                     {
@@ -503,123 +597,45 @@ namespace hal
                 else
                 {
                     i32 offset              = offset_res.get();
-                    consens_bitindices[net] = org_index + offset;
+                    consensus_bitindices[net] = org_index + offset;
                     //std::cout << "Org Index: " << org_index << " Offset: " << offset << std::endl;
                 }
             }
 
 #ifdef PRINT_CONFLICT
             std::cout << "Found offset bitorder: " << std::endl;
-            for (const auto& [net, index] : consens_bitindices)
+            for (const auto& [net, index] : consensus_bitindices)
             {
                 std::cout << net->get_id() << ": " << index << std::endl;
             }
 #endif
 
             // ############################################################## //
-            // ############### CONSENS FINDING - COMPLETENESS ############### //
+            // ############### CONSENSUS FINDING - COMPLETENESS ############### //
             // ############################################################## //
 
-            bool complete_pin_group_bitorder = true;
-            std::map<Net*, i32> complete_consens;
+            const auto is_complete_pin_group_bitorder = check_completeness(mpg, consensus_bitindices);
 
-            for (auto& pin : mpg.second->get_pins())
-            {
-                Net* net = pin->get_net();
-                // Currently also ignoring power/gnd nets but a more optimal approach would be to optimize them away where they are not needed (but we only got LUT4)
-                // -> maybe not, we would destroy 16 bit muxes if the top most MUX
-                if (net->is_gnd_net() || net->is_vcc_net())
-                {
-                    continue;
-                }
-
-                if (consens_bitindices.find(net) == consens_bitindices.end())
-                {
-                    complete_pin_group_bitorder = false;
-
-                    // TODO remove
-                    // std::cout << "Missing in net " << in_net->get_id() << " for complete bitorder." << std::endl;
-
-                    break;
-                }
-                else
-                {
-                    complete_consens[net] = consens_bitindices.at(net);
-                }
-            }
-
-            if (!complete_pin_group_bitorder)
+            if (!is_complete_pin_group_bitorder)
             {
                 return {};
             }
-
-            // TODO remove
-#ifdef PRINT_CONFLICT
-            std::cout << "Found complete bitorder for pingroup " << mpg.second->get_name() << std::endl;
-            for (const auto& [net, index] : complete_consens)
-            {
-                std::cout << net->get_id() << ": " << index << std::endl;
-            }
-#endif
 
             // ########################################################### //
-            // ############### CONSENS FINDING - ALIGNMENT ############### //
+            // ############### CONSENSUS FINDING - ALIGNMENT ############### //
             // ########################################################### //
 
-            std::map<Net*, u32> aligned_consens;
+            const auto aligned_indices = align_indices(consensus_bitindices, only_allow_consecutive_bitorders);
 
-            // align consens from m:m+n to 0:n
-            i32 max_index = 0x80000000;
-            i32 min_index = 0x7fffffff;
-            std::set<i32> unique_indices;
-            for (const auto& [_n, index] : complete_consens)
-            {
-                unique_indices.insert(index);
-
-                if (index > max_index)
-                {
-                    max_index = index;
-                }
-
-                if (index < min_index)
-                {
-                    min_index = index;
-                }
-            }
-
-            // when the range is larger than pin group size there are holes in the bitorder
-            if (only_allow_consecutive_bitorders && ((max_index - min_index) > (i32(complete_consens.size()) - 1)))
-            {
-                return {};
-            }
-
-            // when there are less unique indices in the range than nets, there are duplicates
-            if (unique_indices.size() < complete_consens.size())
-            {
-                return {};
-            }
-
-            std::map<i32, Net*> index_to_net;
-            for (const auto& [net, index] : complete_consens)
-            {
-                index_to_net[index] = net;
-            }
-
-            u32 index_counter = 0;
-            for (const auto& [_unaligned_index, net] : index_to_net)
-            {
-                aligned_consens[net] = index_counter++;
-            }
-
-            return aligned_consens;
+            return aligned_indices;
         }
 
         /*
-         * 
+         * Finds the most common annotated index from a set of possible bit indices for all nets where this is possible.
          */
-        std::map<Net*, u32> find_consens_via_majority(const MPG& mpg, const std::map<hal::Net*, POSSIBLE_BITINDICES>& indices, const bool only_allow_consecutive_bitorders)
+        const std::map<Net*, i32> conduct_majority_vote(const std::map<hal::Net*, POSSIBLE_BITINDICES>& indices)
         {
-            std::map<Net*, i32> consens_bitindices;
+            std::map<Net*, i32> majority_indices;
 
             for (const auto& [net, possible_indices] : indices)
             {
@@ -635,7 +651,7 @@ namespace hal
                 // if there is only one index use this one
                 if (index_to_count.size() == 1)
                 {
-                    consens_bitindices.insert({net, index_to_count.begin()->first});
+                    majority_indices.insert({net, index_to_count.begin()->first});
                     continue;
                 }
 
@@ -645,167 +661,59 @@ namespace hal
 
                 if (index_counts.at(0).second > index_counts.at(1).second)
                 {
-                    consens_bitindices.insert({net, index_counts.at(0).first});
-                    continue;
-                }
-
-#ifdef PRINT_CONFLICT
-                std::cout << "Cannot find consens by majority: failed to find majority for net " << net->get_name() << " with ID " << net->get_id() << std::endl;
-#endif
-
-                // if we do not find a index for one of the nets we return no consens
-                return {};
-            }
-
-#ifdef PRINT_CONFLICT
-            std::cout << "Found majority bitorder: " << std::endl;
-            for (const auto& [net, index] : consens_bitindices)
-            {
-                std::cout << net->get_id() << ": " << index << std::endl;
-            }
-#endif
-
-            // ############################################################## //
-            // ############### CONSENS FINDING - COMPLETENESS ############### //
-            // ############################################################## //
-
-            bool complete_pin_group_bitorder = true;
-            std::map<Net*, i32> complete_consens;
-
-            for (auto& pin : mpg.second->get_pins())
-            {
-                Net* net = pin->get_net();
-                // Currently also ignoring power/gnd nets but a more optimal approach would be to optimize them away where they are not needed (but we only got LUT4)
-                // -> maybe not, we would destroy 16 bit muxes if the top most MUX
-                if (net->is_gnd_net() || net->is_vcc_net())
-                {
-                    continue;
-                }
-
-                if (consens_bitindices.find(net) == consens_bitindices.end())
-                {
-                    complete_pin_group_bitorder = false;
-
-#ifdef PRINT_CONFLICT
-                    std::cout << "Missing in net " << net->get_id() << " for complete bitorder." << std::endl;
-#endif
-
-                    break;
-                }
-                else
-                {
-                    complete_consens[net] = consens_bitindices.at(net);
+                    majority_indices.insert({net, index_counts.at(0).first});
                 }
             }
 
-            if (!complete_pin_group_bitorder)
-            {
-                return {};
-            }
-
-            // TODO remove
-#ifdef PRINT_CONFLICT
-            std::cout << "Found complete bitorder for pingroup " << mpg.second->get_name() << std::endl;
-            for (const auto& [net, index] : complete_consens)
-            {
-                std::cout << net->get_id() << ": " << index << std::endl;
-            }
-#endif
-
-            // ########################################################### //
-            // ############### CONSENS FINDING - ALIGNMENT ############### //
-            // ########################################################### //
-
-            std::map<Net*, u32> aligned_consens;
-
-            // align consens from m:m+n to 0:n
-            i32 max_index = 0x80000000;
-            i32 min_index = 0x7fffffff;
-            std::set<i32> unique_indices;
-            for (const auto& [_n, index] : complete_consens)
-            {
-                unique_indices.insert(index);
-
-                if (index > max_index)
-                {
-                    max_index = index;
-                }
-
-                if (index < min_index)
-                {
-                    min_index = index;
-                }
-            }
-
-            // when the range is larger than pin group size there are holes in the bitorder
-            if (only_allow_consecutive_bitorders && ((max_index - min_index) > (i32(complete_consens.size()) - 1)))
-            {
-                return {};
-            }
-
-            // when there are less unique indices in the range than nets, there are duplicates
-            if (unique_indices.size() < complete_consens.size())
-            {
-                return {};
-            }
-
-            std::map<i32, Net*> index_to_net;
-            for (const auto& [net, index] : complete_consens)
-            {
-                index_to_net[index] = net;
-            }
-
-            u32 index_counter = 0;
-            for (const auto& [_unaligned_index, net] : index_to_net)
-            {
-                aligned_consens[net] = index_counter++;
-            }
-
-            return aligned_consens;
+            return majority_indices;
         }
 
         /*
-         * 
+         * Trys to find a consensus by conducting a majority vote on each net of the pin group and only keeping the index with the most votes.
          */
-        std::map<Net*, u32> find_consens_via_majority_relaxed(const MPG& mpg,
-                                                              const std::map<hal::Net*, POSSIBLE_BITINDICES>& all_indices,
-                                                              const std::map<hal::Net*, POSSIBLE_BITINDICES>& reduced_indices,
-                                                              const bool only_allow_consecutive_bitorders)
+        std::map<Net*, u32> find_consensus_via_majority(const MPG& mpg, const std::map<hal::Net*, POSSIBLE_BITINDICES>& indices, const bool only_allow_consecutive_bitorders)
         {
-            std::map<Net*, i32> consens_bitindices;
+            const auto majority_indices = conduct_majority_vote(indices);
 
-            // 1st iteration
-            for (const auto& [net, possible_indices] : reduced_indices)
+#ifdef PRINT_CONFLICT
+            std::cout << "Found majority bitorder: " << std::endl;
+            for (const auto& [net, index] : consensus_bitindices)
             {
-                std::map<u32, u32> index_to_count;
-                for (const auto& [_org, org_indices] : possible_indices)
-                {
-                    for (const auto& index : org_indices)
-                    {
-                        index_to_count[index]++;
-                    }
-                }
+                std::cout << net->get_id() << ": " << index << std::endl;
+            }
+#endif
 
-                // if there is only one index use this one
-                if (index_to_count.size() == 1)
-                {
-                    consens_bitindices.insert({net, index_to_count.begin()->first});
-                    continue;
-                }
+            const auto is_complete_pin_group_bitorder = check_completeness(mpg, majority_indices);
 
-                // sort possible indices by how often they occur and afterwards check whether there is a clear majority
-                std::vector<std::pair<u32, u32>> index_counts = {index_to_count.begin(), index_to_count.end()};
-                std::sort(index_counts.begin(), index_counts.end(), [](const auto& p1, const auto& p2) { return p1.second > p2.second; });
-
-                if (index_counts.at(0).second > index_counts.at(1).second)
-                {
-                    consens_bitindices.insert({net, index_counts.at(0).first});
-                    continue;
-                }
+            if (!is_complete_pin_group_bitorder)
+            {
+                return {};
             }
 
+            const auto aligned_indices = align_indices(majority_indices, only_allow_consecutive_bitorders);
+
+            return aligned_indices;
+        }
+
+        /*
+         * Trys to find a consensus by applying two iterative majority votes.
+         * The first is just a simple majority vote on the already reduced bit indices.
+         * For the second vote all nets that already got an index annotated by the first majority vote are disregarded from the set of ALL (unreduced) bit indices.
+         * Afterwards the smaller set is then reduced and a second majority vote is conducted.
+         * 
+         * The idea is that conflicts that were previously present when considering all nets might disappear when disregarding nets already indexed.
+         */
+        std::map<Net*, u32> find_consensus_via_majority_relaxed(const MPG& mpg,
+                                                                const std::map<hal::Net*, POSSIBLE_BITINDICES>& all_indices,
+                                                                const std::map<hal::Net*, POSSIBLE_BITINDICES>& reduced_indices,
+                                                                const bool only_allow_consecutive_bitorders)
+        {
+            // 1st iteration
+            const auto first_majority_indices = conduct_majority_vote(reduced_indices);
+
+            // take ALL colltected net indices and delete the ones already indexed in the first itereation
             auto unfound_indices = all_indices;
-            for (const auto& [net, _] : consens_bitindices)
+            for (const auto& [net, _] : first_majority_indices)
             {
                 unfound_indices.erase(net);
             }
@@ -814,160 +722,36 @@ namespace hal
             auto relaxed_reduced_indices = reduce_indices(unfound_indices);
 
             // 2nd iteration
-            for (const auto& [net, possible_indices] : relaxed_reduced_indices)
-            {
-                std::map<u32, u32> index_to_count;
-                for (const auto& [_org, org_indices] : possible_indices)
-                {
-                    for (const auto& index : org_indices)
-                    {
-                        index_to_count[index]++;
-                    }
-                }
-
-                // if there is only one index use this one
-                if (index_to_count.size() == 1)
-                {
-                    consens_bitindices.insert({net, index_to_count.begin()->first});
-                    continue;
-                }
-
-                // sort possible indices by how often they occur and afterwards check whether there is a clear majority
-                std::vector<std::pair<u32, u32>> index_counts = {index_to_count.begin(), index_to_count.end()};
-                std::sort(index_counts.begin(), index_counts.end(), [](const auto& p1, const auto& p2) { return p1.second > p2.second; });
-
-                if (index_counts.at(0).second > index_counts.at(1).second)
-                {
-                    consens_bitindices.insert({net, index_counts.at(0).first});
-                    continue;
-                }
-
-#ifdef PRINT_CONFLICT
-                std::cout << "Cannot find consens by majority: failed to find majority for net " << net->get_name() << " with ID " << net->get_id() << std::endl;
-#endif
-
-                // if we do not find a index for one of the nets we return no consens
-                return {};
-            }
+            const auto second_majority_indices = conduct_majority_vote(relaxed_reduced_indices);
 
 #ifdef PRINT_CONFLICT
             std::cout << "Found majority bitorder: " << std::endl;
-            for (const auto& [net, index] : consens_bitindices)
+            for (const auto& [net, index] : second_majority_indices)
             {
                 std::cout << net->get_id() << ": " << index << std::endl;
             }
 #endif
 
-            // ############################################################## //
-            // ############### CONSENS FINDING - COMPLETENESS ############### //
-            // ############################################################## //
+            const auto is_complete_pin_group_bitorder = check_completeness(mpg, second_majority_indices);
 
-            bool complete_pin_group_bitorder = true;
-            std::map<Net*, i32> complete_consens;
-
-            for (auto& pin : mpg.second->get_pins())
-            {
-                Net* net = pin->get_net();
-                // Currently also ignoring power/gnd nets but a more optimal approach would be to optimize them away where they are not needed (but we only got LUT4)
-                // -> maybe not, we would destroy 16 bit muxes if the top most MUX
-                if (net->is_gnd_net() || net->is_vcc_net())
-                {
-                    continue;
-                }
-
-                if (consens_bitindices.find(net) == consens_bitindices.end())
-                {
-                    complete_pin_group_bitorder = false;
-
-#ifdef PRINT_CONFLICT
-                    std::cout << "Missing in net " << net->get_id() << " for complete bitorder." << std::endl;
-#endif
-
-                    break;
-                }
-                else
-                {
-                    complete_consens[net] = consens_bitindices.at(net);
-                }
-            }
-
-            if (!complete_pin_group_bitorder)
+            if (!is_complete_pin_group_bitorder)
             {
                 return {};
             }
 
-            // TODO remove
-#ifdef PRINT_CONFLICT
-            std::cout << "Found complete bitorder for pingroup " << mpg.second->get_name() << std::endl;
-            for (const auto& [net, index] : complete_consens)
-            {
-                std::cout << net->get_id() << ": " << index << std::endl;
-            }
-#endif
+            const auto aligned_indices = align_indices(second_majority_indices, only_allow_consecutive_bitorders);
 
-            // ########################################################### //
-            // ############### CONSENS FINDING - ALIGNMENT ############### //
-            // ########################################################### //
-
-            std::map<Net*, u32> aligned_consens;
-
-            // align consens from m:m+n to 0:n
-            i32 max_index = 0x80000000;
-            i32 min_index = 0x7fffffff;
-            std::set<i32> unique_indices;
-            for (const auto& [_n, index] : complete_consens)
-            {
-                unique_indices.insert(index);
-
-                if (index > max_index)
-                {
-                    max_index = index;
-                }
-
-                if (index < min_index)
-                {
-                    min_index = index;
-                }
-            }
-
-            // when the range is larger than pin group size there are holes in the bitorder
-            if (only_allow_consecutive_bitorders && ((max_index - min_index) > (i32(complete_consens.size()) - 1)))
-            {
-                return {};
-            }
-
-            // when there are less unique indices in the range than nets, there are duplicates
-            if (unique_indices.size() < complete_consens.size())
-            {
-                return {};
-            }
-
-            std::map<i32, Net*> index_to_net;
-            for (const auto& [net, index] : complete_consens)
-            {
-                index_to_net[index] = net;
-            }
-
-            u32 index_counter = 0;
-            for (const auto& [_unaligned_index, net] : index_to_net)
-            {
-                aligned_consens[net] = index_counter++;
-            }
-
-            return aligned_consens;
+            return aligned_indices;
         }
 
         /*
          * This function tries to extract valid bit orders from the bit index information that was gathered during the propagation step.
-         * First conflicting information is deleted, second offsets between different information origins are calculated and lastly the resulting bitorder is validated in terms of continuity and completeness.
+         * First conflicting information is deleted, second different strategies for building a consenus are applied. 
+         * The resulting bitorder consensus is validated in terms of continuity and completeness.
          * The Validation strictness can be tweaked with the parameter 'only_allow_consecutive_bitorders'.
          */
         std::map<Net*, u32> extract_well_formed_bitorder(const MPG& mpg, const std::map<Net*, POSSIBLE_BITINDICES>& collected_bitindices, bool only_allow_consecutive_bitorders = true)
         {
-            // ############################################### //
-            // ############### CONFLICT FINDING ############## //
-            // ############################################### //
-
             auto reduced_collected_indices = reduce_indices(collected_bitindices);
 
             if (reduced_collected_indices.empty())
@@ -975,56 +759,40 @@ namespace hal
                 return {};
             }
 
-            // End debug printing
+            auto aligned_consensus = find_consensus_via_offset(mpg, reduced_collected_indices, only_allow_consecutive_bitorders);
 
-            // ######################################################## //
-            // ############### CONSENS FINDING - OFFSET ############### //
-            // ######################################################## //
-
-            auto aligned_consens = find_consens_via_offset(mpg, reduced_collected_indices, only_allow_consecutive_bitorders);
-
-            // ######################################################## //
-            // ############### CONSENS FINDING - MAJORITY ############# //
-            // ######################################################## //
-
-            if (aligned_consens.empty())
+            if (aligned_consensus.empty())
             {
-                aligned_consens = find_consens_via_majority(mpg, reduced_collected_indices, only_allow_consecutive_bitorders);
+                aligned_consensus = find_consensus_via_majority(mpg, reduced_collected_indices, only_allow_consecutive_bitorders);
             }
 
-            // ######################################################## //
-            // ########### CONSENS FINDING - MAJORITY RELAXED ######### //
-            // ######################################################## //
-
-            if (aligned_consens.empty())
+            if (aligned_consensus.empty())
             {
-                aligned_consens = find_consens_via_majority_relaxed(mpg, collected_bitindices, reduced_collected_indices, only_allow_consecutive_bitorders);
+                aligned_consensus = find_consensus_via_majority_relaxed(mpg, collected_bitindices, reduced_collected_indices, only_allow_consecutive_bitorders);
             }
 
-            if (aligned_consens.empty())
+            if (aligned_consensus.empty())
             {
                 return {};
             }
 
-            // try to find a consens between the different possible indices
-
             // TODO remove
 #ifdef PRINT_CONFLICT
             std::cout << "Found valid input bitorder for pingroup " << mpg.second->get_name() << std::endl;
-            for (const auto& [net, index] : aligned_consens)
+            for (const auto& [net, index] : aligned_consensus)
             {
                 std::cout << net->get_id() << ": " << index << std::endl;
             }
 #endif
 
-            return aligned_consens;
+            return aligned_consensus;
         }
 
     }    // namespace
 
     Result<std::map<MPG, std::map<Net*, u32>>> BitorderPropagationPlugin::propagate_module_pingroup_bitorder(const std::map<MPG, std::map<Net*, u32>>& known_bitorders,
                                                                                                              const std::set<MPG>& unknown_bitorders,
-                                                                                                             const bool strict_consens_finding)
+                                                                                                             const bool strict_consensus_finding)
     {
         std::unordered_map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, Net*>>, boost::hash<std::pair<MPG, Net*>>> connectivity_inwards;
         std::unordered_map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, Net*>>, boost::hash<std::pair<MPG, Net*>>> connectivity_outwards;
@@ -1051,6 +819,8 @@ namespace hal
         }
 
         // Build connectivity
+        std::map<std::tuple<Net*, const bool, const Module*>, std::map<MPG, std::set<Net*>>> outwards_cache;
+        std::map<std::tuple<Net*, const bool, const Module*>, std::map<MPG, std::set<Net*>>> inwards_cache;
         for (const auto& [m, pg] : unknown_bitorders)
         {
             bool successors = pg->get_direction() == PinDirection::output;
@@ -1060,7 +830,7 @@ namespace hal
                 const auto starting_net = p->get_net();
 
                 std::unordered_set<Endpoint*> visited_outwards;
-                const auto res_outwards = gather_conntected_neighbors(starting_net, visited_outwards, successors, relevant_pin_groups, false, nullptr);
+                const auto res_outwards = gather_conntected_neighbors(starting_net, visited_outwards, successors, relevant_pin_groups, false, nullptr, outwards_cache);
                 if (res_outwards.is_error())
                 {
                     return ERR_APPEND(res_outwards.get_error(),
@@ -1071,7 +841,7 @@ namespace hal
 
                 std::unordered_set<Endpoint*> visited_inwards;
                 // NOTE when propagating inwards we guarantee the first propagation since otherwise we would stop at our starting pingroup
-                const auto res_inwards = gather_conntected_neighbors(starting_net, visited_inwards, !successors, relevant_pin_groups, true, m);
+                const auto res_inwards = gather_conntected_neighbors(starting_net, visited_inwards, !successors, relevant_pin_groups, true, m, inwards_cache);
                 if (res_inwards.is_error())
                 {
                     return ERR_APPEND(res_inwards.get_error(),
@@ -1158,7 +928,7 @@ namespace hal
                 break;
             }
 
-            log_info("bitorder_propagation", "Starting {}bitorder propagation iteration {}.", (strict_consens_finding ? "strict " : ""), iteration_ctr);
+            log_info("bitorder_propagation", "Starting {}bitorder propagation iteration {}.", (strict_consensus_finding ? "strict " : ""), iteration_ctr);
 
             std::map<MPG, std::map<Net*, u32>> new_wellformed_module_pin_groups = {};
 
@@ -1284,7 +1054,7 @@ namespace hal
                 std::cout << "Extract for " << m->get_id() << " / " << m->get_name() << " - " << pg->get_name() << ": (INWARDS) " << std::endl;
 #endif
 
-                const auto newly_wellformed_inwards = extract_well_formed_bitorder({m, pg}, collected_inwards, strict_consens_finding);
+                const auto newly_wellformed_inwards = extract_well_formed_bitorder({m, pg}, collected_inwards, strict_consensus_finding);
                 if (!newly_wellformed_inwards.empty())
                 {
                     new_wellformed_module_pin_groups[{m, pg}] = newly_wellformed_inwards;
@@ -1294,7 +1064,7 @@ namespace hal
 #ifdef PRINT_CONFLICT
                 std::cout << "Extract for " << m->get_id() << " / " << m->get_name() << " - " << pg->get_name() << ": (OUTWARDS) " << std::endl;
 #endif
-                const auto newly_wellformed_outwards = extract_well_formed_bitorder({m, pg}, collected_outwards, strict_consens_finding);
+                const auto newly_wellformed_outwards = extract_well_formed_bitorder({m, pg}, collected_outwards, strict_consensus_finding);
                 if (!newly_wellformed_outwards.empty())
                 {
                     new_wellformed_module_pin_groups[{m, pg}] = newly_wellformed_outwards;
@@ -1304,7 +1074,7 @@ namespace hal
 #ifdef PRINT_CONFLICT
                 std::cout << "Extract for " << m->get_id() << " / " << m->get_name() << " - " << pg->get_name() << ": (COMBINED) " << std::endl;
 #endif
-                const auto newly_wellformed_combined = extract_well_formed_bitorder({m, pg}, collected_combined, strict_consens_finding);
+                const auto newly_wellformed_combined = extract_well_formed_bitorder({m, pg}, collected_combined, strict_consensus_finding);
                 if (!newly_wellformed_combined.empty())
                 {
                     new_wellformed_module_pin_groups[{m, pg}] = newly_wellformed_combined;
