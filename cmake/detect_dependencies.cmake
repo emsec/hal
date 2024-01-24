@@ -29,8 +29,6 @@ find_package(Sanitizers REQUIRED)
 # ###############################
 pkg_check_modules(BITWUZLA bitwuzla)
 
-# find_package(Bitwuzla)
-
 if(BITWUZLA_FOUND)
     message(STATUS "Found BITWUZLA")
     message(STATUS "    BITWUZLA_LIBRARIES: ${BITWUZLA_LIBRARIES}")
@@ -39,7 +37,6 @@ if(BITWUZLA_FOUND)
 else()
     set(BITWUZLA_LIBRARY "")
     set(BITWUZLA_INCLUDE_DIRS "")
-
     message(STATUS "Bitwuzla not found, but this is optional...")
 endif(BITWUZLA_FOUND)
 
@@ -120,23 +117,31 @@ endif()
 # ###############################
 find_package(Filesystem REQUIRED Final Experimental)
 
+
 # ###############################
 # ####   RapidJSON
 # ###############################
 find_package(RapidJSON REQUIRED)
-message(STATUS "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
-
 if(RapidJSON_FOUND AND NOT TARGET RapidJSON::RapidJSON)
     if(NOT RAPIDJSON_INCLUDEDIR)
         set(RAPIDJSON_INCLUDEDIR ${RAPIDJSON_INCLUDE_DIRS})
     endif()
 
+    # fix for macOS if most recent version
+    if(NOT RAPIDJSON_INCLUDEDIR)
+        set(RAPIDJSON_INCLUDEDIR ${RapidJSON_INCLUDE_DIRS})
+    endif()
+
+
     add_library(RapidJSON::RapidJSON INTERFACE IMPORTED)
     set_target_properties(RapidJSON::RapidJSON PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES "${RAPIDJSON_INCLUDEDIR}"
     )
-    message(STATUS "Set rapidjson successully: ${RAPIDJSON_INCLUDEDIR}")
+    message(STATUS "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
+    message(STATUS "Set rapidjson path successully: ${RAPIDJSON_INCLUDEDIR}")
 endif()
+
+
 
 # ###############################
 # ####   pybind11
@@ -254,7 +259,7 @@ endif(Z3_FOUND)
 # ###############################
 # ####   igraph
 # ###############################
-set (IGRAPH_SUBDIR "${CMAKE_SOURCE_DIR}/deps/igraph-0.9.10")
+set(IGRAPH_SUBDIR "${CMAKE_SOURCE_DIR}/deps/igraph-0.9.10")
 add_subdirectory(${IGRAPH_SUBDIR})
 get_directory_property(IGRAPH_INCLUDES DIRECTORY ${IGRAPH_SUBDIR} DEFINITION IGRAPH_INCLUDES)
-get_directory_property(IGRAPH_LIB      DIRECTORY ${IGRAPH_SUBDIR} DEFINITION IGRAPH_LIB)
+get_directory_property(IGRAPH_LIB DIRECTORY ${IGRAPH_SUBDIR} DEFINITION IGRAPH_LIB)
