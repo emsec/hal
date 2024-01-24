@@ -274,16 +274,19 @@ namespace hal
                         }
                         return bf_res;
                     }
-                    // case bitwuzla::Kind::BV_EXTRACT: {
-                    //     if (num_args != 1)
-                    //     {
-                    //         return ERR("operation 'SLICE' must have arity 1");
-                    //     }
+                    case bitwuzla::Kind::BV_EXTRACT: {
+                        if (num_args != 1)
+                        {
+                            return ERR("operation 'SLICE' must have arity 1");
+                        }
 
-                    //     const u32 operand_size = args.at(0).size();
+                        const u32 operand_size = args.at(0).size();
 
-                    //     return BooleanFunction::Slice(std::move(args.at(0)), BooleanFunction::Index(t.lo(), operand_size), BooleanFunction::Index(t.hi(), operand_size), size);
-                    // }
+                        const u32 start = t.indices().at(0);
+                        const u32 end   = t.indices().at(1);
+
+                        return BooleanFunction::Slice(std::move(args.at(0)), BooleanFunction::Index(start, operand_size), BooleanFunction::Index(end, operand_size), size);
+                    }
                     case bitwuzla::Kind::BV_ZERO_EXTEND: {
                         if (num_args != 1)
                         {
@@ -305,31 +308,62 @@ namespace hal
                         {
                             return ERR("operation 'SHL' must have arity 2");
                         }
-                        return BooleanFunction::Shl(std::move(args.at(0)), BooleanFunction::Index((u16)args.at(1).get_constant_value_u64().get(), size), size);
-                    // case bitwuzla::Kind::BV_LSHR:
-                    //     if (num_args != 2)
-                    //     {
-                    //         return ERR("operation 'LSHR' must have arity 2");
-                    //     }
-                    //     return BooleanFunction::Lshr(std::move(args.at(0)), BooleanFunction::Index((u16)args.at(1).get_constant_value_u64().get(), size), size);
+
+                        if (!args.at(1).is_index())
+                        {
+                            return ERR("cannot translate to hal Boolean function: failed to extract index value");
+                        }
+
+                        return BooleanFunction::Shl(std::move(args.at(0)), BooleanFunction::Index(args.at(1).get_index_value().get(), size), size);
+                    case bitwuzla::Kind::BV_SHR:
+                        if (num_args != 2)
+                        {
+                            return ERR("operation 'ASHR' must have arity 2");
+                        }
+
+                        if (!args.at(1).is_index())
+                        {
+                            return ERR("cannot translate to hal Boolean function: failed to extract index value");
+                        }
+
+                        return BooleanFunction::Lshr(std::move(args.at(0)), BooleanFunction::Index(args.at(1).get_index_value().get(), size), size);
+
                     case bitwuzla::Kind::BV_ASHR:
                         if (num_args != 2)
                         {
                             return ERR("operation 'ASHR' must have arity 2");
                         }
-                        return BooleanFunction::Ashr(std::move(args.at(0)), BooleanFunction::Index((u16)args.at(1).get_constant_value_u64().get(), size), size);
-                    // case bitwuzla::Kind::BV_ROL:
-                    //     if (num_args != 1)
-                    //     {
-                    //         return ERR("operation 'ROL' must have arity 1");
-                    //     }
-                    //     return BooleanFunction::Rol(std::move(args.at(0)), BooleanFunction::Index((u16)Z3_get_decl_int_parameter(Z3_context(t.ctx()), Z3_func_decl(t.decl()), 0), size), size);
-                    // case bitwuzla::Kind::BV_ROR:
-                    //     if (num_args != 1)
-                    //     {
-                    //         return ERR("operation 'ROR' must have arity 1");
-                    //     }
-                    //     return BooleanFunction::Ror(std::move(args.at(0)), BooleanFunction::Index((u16)Z3_get_decl_int_parameter(Z3_context(t.ctx()), Z3_func_decl(t.decl()), 0), size), size);
+
+                        if (!args.at(1).is_index())
+                        {
+                            return ERR("cannot translate to hal Boolean function: failed to extract index value");
+                        }
+
+                        return BooleanFunction::Ashr(std::move(args.at(0)), BooleanFunction::Index(args.at(1).get_index_value().get(), size), size);
+                    case bitwuzla::Kind::BV_ROL:
+                        if (num_args != 2)
+                        {
+                            return ERR("operation 'ROL' must have arity 1");
+                        }
+
+                        if (!args.at(1).is_index())
+                        {
+                            return ERR("cannot translate to hal Boolean function: failed to extract index value");
+                        }
+
+                        return BooleanFunction::Rol(std::move(args.at(0)), BooleanFunction::Index(args.at(1).get_index_value().get(), size), size);
+                    case bitwuzla::Kind::BV_ROR:
+                        if (num_args != 2)
+                        {
+                            return ERR("operation 'ROR' must have arity 1");
+                        }
+
+                        if (!args.at(1).is_index())
+                        {
+                            return ERR("cannot translate to hal Boolean function: failed to extract index value");
+                        }
+
+                        return BooleanFunction::Ror(std::move(args.at(0)), BooleanFunction::Index(args.at(1).get_index_value().get(), size), size);
                     case bitwuzla::Kind::EQUAL:
                         if (num_args != 2)
                         {
