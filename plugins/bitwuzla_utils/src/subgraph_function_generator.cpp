@@ -97,9 +97,16 @@ namespace hal
                     input_to_term.insert({in_net_str, in_bf});
                 }
 
-                bitwuzla::Term ret = bitwuzla_utils::from_bf(bf, input_to_term);
-                net_cache.insert({net->get_id(), ret});
+                const auto res = bitwuzla_utils::from_bf(bf, input_to_term);
+                if (res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(),
+                                      "cannot get Boolean bitwuzla function of net " + net->get_name() + " with ID " + std::to_string(net->get_id())
+                                          + ": failed to translate gate function to bitwuzla term");
+                }
 
+                const auto ret = res.get();
+                net_cache.insert({net->get_id(), ret});
                 return OK(ret);
             }
 

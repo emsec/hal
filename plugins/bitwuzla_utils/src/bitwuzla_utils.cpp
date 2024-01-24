@@ -17,26 +17,26 @@ namespace hal
                 }
                 switch (node.type)
                 {
-                    // case BooleanFunction::NodeType::Index:
-                    //     return expr(node.index);    
-                    // case BooleanFunction::NodeType::Constant: {
-                    //     // since our constants are defined as arbitrary bit-vectors,
-                    //     // we have to concat each bit just to be on the safe side
-                    //     auto const = context.bw_const(node.constant.front());
-                    //     for (u32 i = 1; i < node.constant.size(); i++)
-                    //     {
-                    //         const auto bit = node.constant.at(i);
-                    //         constant       = bw::concat(context.bv_val(bit, 1), constant);
-                    //     }
-                    //     return OK(constant);
-                    // }
-                    // case BooleanFunction::NodeType::Variable: {
-                    //     if (auto it = var2term.find(node.variable); it != var2term.end())
-                    //     {
-                    //         return OK(it->second);
-                    //     }
-                    //     return OK(context.bv_const(node.variable.c_str(), node.size));
-                    // }
+                    case BooleanFunction::NodeType::Index:
+                        return OK(bitwuzla::mk_bv_value_uint64(bitwuzla::mk_bv_sort(node.size), node.index));
+                    case BooleanFunction::NodeType::Constant: {
+                        // since our constants are defined as arbitrary bit-vectors,
+                        // we have to concat each bit just to be on the safe side
+                        auto constant = (node.constant.front() == BooleanFunction::Value::ONE) ? bitwuzla::mk_bv_one(bitwuzla::mk_bv_sort(1)) : bitwuzla::mk_bv_zero(bitwuzla::mk_bv_sort(1));
+                        for (u32 i = 1; i < node.constant.size(); i++)
+                        {
+                            const auto bit = (node.constant.at(i) == BooleanFunction::Value::ONE) ? bitwuzla::mk_bv_one(bitwuzla::mk_bv_sort(1)) : bitwuzla::mk_bv_zero(bitwuzla::mk_bv_sort(1));
+                            constant       = bitwuzla::mk_term(bitwuzla::Kind::BV_CONCAT, {bit, constant});
+                        }
+                        return OK(constant);
+                    }
+                    case BooleanFunction::NodeType::Variable: {
+                        if (auto it = var2term.find(node.variable); it != var2term.end())
+                        {
+                            return OK(it->second);
+                        }
+                        return OK(bitwuzla::mk_const(bitwuzla::mk_bv_sort(node.size), node.variable));
+                    }
                     case BooleanFunction::NodeType::And:
                         return OK(bitwuzla::mk_term(bitwuzla::Kind::AND, {p[0], p[1]}));
                     case BooleanFunction::NodeType::Or:
@@ -62,11 +62,11 @@ namespace hal
                     case BooleanFunction::NodeType::Concat:
                         return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_CONCAT, {p[0], p[1]}));
                     // case BooleanFunction::NodeType::Slice:
-                    //     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_EXTRACT, {p[0]}, std::vector<u64>{p[2].get_numeral_uint(), p[1].get_numeral_uint()}));
+                    //     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_EXTRACT, {p[0]}, std::vector<u64>{p[2].value(), p[1].value()}));
                     // case BooleanFunction::NodeType::Zext:
-                    //     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ZERO_EXTEND, {p[0]}, {p[1].get_numeral_uint() - p[0].get_sort().bv_size()}));
+                    //     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ZERO_EXTEND, {p[0]}, {p[1].value() - p[0].get_sort().bv_size()}));
                     // case BooleanFunction::NodeType::Sext:
-                    //     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_SIGN_EXTEND, {p[0]}, {p[1].get_numeral_uint() - p[0].get_sort().bv_size()}));
+                    //     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_SIGN_EXTEND, {p[0]}, {p[1].value() - p[0].get_sort().bv_size()}));
                     case BooleanFunction::NodeType::Shl:
                         return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_SHL, {p[0], p[1]}));
                     case BooleanFunction::NodeType::Lshr:
@@ -74,9 +74,9 @@ namespace hal
                     case BooleanFunction::NodeType::Ashr:
                         return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ASHR, {p[0], p[1]}));
                     case BooleanFunction::NodeType::Rol:
-                    //     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ROL, {p[0]}, {p[1].get_numeral_uint()}));
+                    //     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ROL, {p[0]}, {p[1].value()}));
                     // case BooleanFunction::NodeType::Ror:
-                    //     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ROR, {p[0]}, {p[1].get_numeral_uint()}));
+                    //     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ROR, {p[0]}, {p[1].value()}));
                     case BooleanFunction::NodeType::Eq:
                         return OK(bitwuzla::mk_term(bitwuzla::Kind::EQUAL, {p[0], p[1]}));
                     case BooleanFunction::NodeType::Sle:

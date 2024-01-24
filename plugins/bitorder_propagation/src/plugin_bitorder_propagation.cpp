@@ -143,11 +143,11 @@ namespace hal
          * This function gathers the connected neighboring pingroups for a net by propagating to the neighboring gates and searches for module pin groups.
          */
         Result<std::map<MPG, std::set<Net*>>> gather_conntected_neighbors(Net* n,
-                                                                          std::unordered_set<Endpoint*>& visited,
                                                                           bool successors,
                                                                           const std::set<MPG>& relevant_pin_groups,
                                                                           const bool guarantee_propagation,
                                                                           const Module* inwards_module,
+                                                                          std::set<std::tuple<Endpoint*, const bool, const Module*>>& visited,
                                                                           std::map<std::tuple<Net*, const bool, const Module*>, std::map<MPG, std::set<Net*>>>& cache)
         {
             std::tuple<Net*, const bool, const Module*> t = {n, guarantee_propagation, inwards_module};
@@ -189,11 +189,12 @@ namespace hal
             const auto neighbors = successors ? n->get_destinations() : n->get_sources();
             for (const auto& ep : neighbors)
             {
-                if (visited.find(ep) != visited.end())
+                std::tuple<Endpoint*, const bool, const Module*> t_ep = {ep, guarantee_propagation, inwards_module};
+                if (visited.find(t_ep) != visited.end())
                 {
                     continue;
                 }
-                visited.insert(ep);
+                visited.insert(t_ep);
 
                 Gate* g = ep->get_gate();
 
@@ -301,7 +302,7 @@ namespace hal
                         continue;
                     }
 
-                    auto res = gather_conntected_neighbors(next_ep->get_net(), visited, successors, relevant_pin_groups, false, nullptr, cache);
+                    auto res = gather_conntected_neighbors(next_ep->get_net(), successors, relevant_pin_groups, false, nullptr, visited, cache);
                     if (res.is_error())
                     {
                         return res;
@@ -310,6 +311,37 @@ namespace hal
                     for (auto& [org_mpg, nets] : res.get())
                     {
                         connected_neighbors[org_mpg].insert(nets.begin(), nets.end());
+                    }
+                }
+            }
+
+            if (auto it = cache.find(t); it != cache.end())
+            {
+                if (it->second != connected_neighbors)
+                {
+                    std::cout << "Found different results for: " << std::endl
+                              << "Net: " << n->get_id() << std::endl
+                              << "Guarantee Propagation: " << guarantee_propagation << std::endl
+                              << "Parent Module: " << (inwards_module ? inwards_module->get_id() : 0) << std::endl;
+
+                    std::cout << "NEW: " << std::endl;
+                    for (const auto& [mpg, nets] : connected_neighbors)
+                    {
+                        std::cout << mpg.first->get_name() << " - " << mpg.second->get_name() << std::endl;
+                        for (const auto& net : nets)
+                        {
+                            std::cout << "\t" << net->get_name() << std::endl;
+                        }
+                    }
+
+                    std::cout << "OLD: " << std::endl;
+                    for (const auto& [mpg, nets] : it->second)
+                    {
+                        std::cout << mpg.first->get_name() << " - " << mpg.second->get_name() << std::endl;
+                        for (const auto& net : nets)
+                        {
+                            std::cout << "\t" << net->get_name() << std::endl;
+                        }
                     }
                 }
             }
@@ -819,18 +851,19 @@ namespace hal
         }
 
         // Build connectivity
-        std::map<std::tuple<Net*, const bool, const Module*>, std::map<MPG, std::set<Net*>>> outwards_cache;
-        std::map<std::tuple<Net*, const bool, const Module*>, std::map<MPG, std::set<Net*>>> inwards_cache;
         for (const auto& [m, pg] : unknown_bitorders)
         {
             bool successors = pg->get_direction() == PinDirection::output;
 
             for (const auto& p : pg->get_pins())
             {
+                std::map<std::tuple<Net*, const bool, const Module*>, std::map<MPG, std::set<Net*>>> cache_outwards;
+                std::map<std::tuple<Net*, const bool, const Module*>, std::map<MPG, std::set<Net*>>> cache_inwards;
+
                 const auto starting_net = p->get_net();
 
-                std::unordered_set<Endpoint*> visited_outwards;
-                const auto res_outwards = gather_conntected_neighbors(starting_net, visited_outwards, successors, relevant_pin_groups, false, nullptr, outwards_cache);
+                std::set<std::tuple<Endpoint*, const bool, const Module*>> visited_outwards;
+                const auto res_outwards = gather_conntected_neighbors(starting_net, successors, relevant_pin_groups, false, nullptr, visited_outwards, cache_outwards);
                 if (res_outwards.is_error())
                 {
                     return ERR_APPEND(res_outwards.get_error(),
@@ -839,9 +872,9 @@ namespace hal
                 }
                 const auto connected_outwards = res_outwards.get();
 
-                std::unordered_set<Endpoint*> visited_inwards;
+                std::set<std::tuple<Endpoint*, const bool, const Module*>> visited_inwards;
                 // NOTE when propagating inwards we guarantee the first propagation since otherwise we would stop at our starting pingroup
-                const auto res_inwards = gather_conntected_neighbors(starting_net, visited_inwards, !successors, relevant_pin_groups, true, m, inwards_cache);
+                const auto res_inwards = gather_conntected_neighbors(starting_net, !successors, relevant_pin_groups, true, m, visited_inwards, cache_inwards);
                 if (res_inwards.is_error())
                 {
                     return ERR_APPEND(res_inwards.get_error(),

@@ -118,10 +118,12 @@ namespace hal
                 // {
                 //     return OK({false, "unsat"});
                 // }
+                // std::cout << s.get_model().to_string() << std::endl;
 
                 // // std::cout << s.get_model().to_string() << std::endl;
-                return OK({false, "unsat"});
                 // return OK({false, s.get_model().to_string()});
+                
+                return ERR("Not implemented reached");
             }
         }    // namespace Z3
 
