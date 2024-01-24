@@ -683,11 +683,11 @@ permanent authorization for you to choose that version for the Library.
 )";
         }
 
-        Result<u64> wrapped_stoull(const std::string& s)
+        Result<u64> wrapped_stoull(const std::string& s, const u32 base)
         {
             try
             {
-                return OK(std::stoull(s));
+                return OK(std::stoull(s, nullptr, base));
             }
             catch (const std::invalid_argument& e)
             {
@@ -701,11 +701,11 @@ permanent authorization for you to choose that version for the Library.
             return ERR("encountered unknown error");
         }
 
-        Result<u32> wrapped_stoul(const std::string& s)
+        Result<u32> wrapped_stoul(const std::string& s, const u32 base)
         {
             try
             {
-                return OK((u32)std::stoul(s));
+                return OK((u32)std::stoul(s, nullptr, base));
             }
             catch (const std::invalid_argument& e)
             {
