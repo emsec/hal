@@ -4,6 +4,9 @@
 
 namespace hal
 {
+    class Gate;
+    class Net;
+
     namespace bitwuzla_utils
     {
         // namespace bw
