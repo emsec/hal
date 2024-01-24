@@ -7,7 +7,6 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist_internal_manager.h"
 #include "hal_core/utilities/log.h"
-#include <valgrind/callgrind.h>
 
 namespace hal
 {

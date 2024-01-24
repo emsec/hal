@@ -473,7 +473,6 @@ namespace hal
          * @returns The new module on success, nullptr otherwise.
          */
         Module* create_module(const std::string& name, Module* parent, const std::vector<Gate*>& gates = {});
-        Module* create_module_python(const std::string& name, Module* parent, const std::vector<Gate*>& gates = {});
 
         /**
          * Remove a module from the netlist.
