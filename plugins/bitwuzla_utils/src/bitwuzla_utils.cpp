@@ -40,13 +40,13 @@ namespace hal
                         return OK(bitwuzla::mk_const(bitwuzla::mk_bv_sort(node.size), node.variable));
                     }
                     case BooleanFunction::NodeType::And:
-                        return OK(bitwuzla::mk_term(bitwuzla::Kind::AND, {p[0], p[1]}));
+                        return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_AND, {p[0], p[1]}));
                     case BooleanFunction::NodeType::Or:
-                        return OK(bitwuzla::mk_term(bitwuzla::Kind::OR, {p[0], p[1]}));
+                        return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_OR, {p[0], p[1]}));
                     case BooleanFunction::NodeType::Not:
-                        return OK(bitwuzla::mk_term(bitwuzla::Kind::NOT, {p[0], p[1]}));
+                        return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_NOT, {p[0]}));
                     case BooleanFunction::NodeType::Xor:
-                        return OK(bitwuzla::mk_term(bitwuzla::Kind::XOR, {p[0], p[1]}));
+                        return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_XOR, {p[0], p[1]}));
                     case BooleanFunction::NodeType::Add:
                         return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ADD, {p[0], p[1]}));
                     case BooleanFunction::NodeType::Sub:
