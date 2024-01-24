@@ -18,7 +18,7 @@ namespace hal
                 switch (node.type)
                 {
                     // case BooleanFunction::NodeType::Index:
-                    //     return expr(node.index);    
+                    //     return expr(node.index);
                     // case BooleanFunction::NodeType::Constant: {
                     //     // since our constants are defined as arbitrary bit-vectors,
                     //     // we have to concat each bit just to be on the safe side
@@ -96,6 +96,7 @@ namespace hal
             };
 
         }    // namespace
+
         Result<bitwuzla::Term> from_bf(const BooleanFunction& bf, const std::map<std::string, bitwuzla::Term>& var2term)
         {
             std::vector<bitwuzla::Term> stack;
@@ -124,6 +125,235 @@ namespace hal
                     return ERR("all nodes somehow didnt get finished");
             }
         }
+
+        Result<BooleanFunction> to_bf(const bitwuzla::Term& t)
+        {
+            u64 size;
+            // if (t.is_bv())
+            // {
+            //     size = t.get_sort().bv_size();
+
+            //     if (size > 64)
+            //     {
+            //         return ERR("can only translate bit vector sizes < 64, but input bit vector has size " + std::to_string(size));
+            //     }
+
+            //     if (t.is_numeral())
+            //     {
+            //         return OK(BooleanFunction::Const(t.get_numeral_uint64(), size));
+            //     }
+            //     else if (t.is_const())
+            //     {
+            //         return OK(BooleanFunction::Var(t.to_string(), size));
+            //     }
+            // }
+
+            return ERR("todo");
+
+            // const auto op = t.decl().decl_kind();
+            // auto num_args = t.num_args();
+            // std::vector<BooleanFunction> args;
+
+            // for (u32 i = 0; i < t.num_args(); i++)
+            // {
+            //     const auto arg = t.arg(i);
+            //     if (const auto res = to_bf(arg); res.is_ok())
+            //     {
+            //         args.push_back(std::move(res.get()));
+            //     }
+            //     else
+            //     {
+            //         return ERR(res.get_error());
+            //     }
+            // }
+
+            // switch (op)
+            // {
+            //     case Z3_OP_BAND: {
+            //         auto bf_res = BooleanFunction::And(std::move(args.at(0)), std::move(args.at(1)), size);
+            //         for (u64 i = 2; i < num_args; i++)
+            //         {
+            //             bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::And(std::move(bf), std::move(arg), size); });
+            //         }
+            //         return bf_res;
+            //     }
+            //     case Z3_OP_BOR: {
+            //         auto bf_res = BooleanFunction::Or(std::move(args.at(0)), std::move(args.at(1)), size);
+            //         for (u64 i = 2; i < num_args; i++)
+            //         {
+            //             bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Or(std::move(bf), std::move(arg), size); });
+            //         }
+            //         return bf_res;
+            //     }
+            //     case Z3_OP_BNOT: {
+            //         if (num_args != 1)
+            //         {
+            //             return ERR("operation 'NOT' must have arity 1");
+            //         }
+            //         return BooleanFunction::Not(std::move(args.at(0)), size);
+            //     }
+            //     case Z3_OP_BXOR: {
+            //         auto bf_res = BooleanFunction::Xor(std::move(args.at(0)), std::move(args.at(1)), size);
+            //         for (u64 i = 2; i < num_args; i++)
+            //         {
+            //             bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Xor(std::move(bf), std::move(arg), size); });
+            //         }
+            //         return bf_res;
+            //     }
+            //     case Z3_OP_BADD: {
+            //         auto bf_res = BooleanFunction::Add(std::move(args.at(0)), std::move(args.at(1)), size);
+            //         for (u64 i = 2; i < num_args; i++)
+            //         {
+            //             bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Add(std::move(bf), std::move(arg), size); });
+            //         }
+            //         return bf_res;
+            //     }
+            //     case Z3_OP_BSUB: {
+            //         auto bf_res = BooleanFunction::Sub(std::move(args.at(0)), std::move(args.at(1)), size);
+            //         for (u64 i = 2; i < num_args; i++)
+            //         {
+            //             bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Sub(std::move(bf), std::move(arg), size); });
+            //         }
+            //         return bf_res;
+            //     }
+            //     case Z3_OP_BMUL: {
+            //         auto bf_res = BooleanFunction::Mul(std::move(args.at(0)), std::move(args.at(1)), size);
+            //         for (u64 i = 2; i < num_args; i++)
+            //         {
+            //             bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Mul(std::move(bf), std::move(arg), size); });
+            //         }
+            //         return bf_res;
+            //     }
+            //     case Z3_OP_BSDIV:
+            //         if (num_args != 2)
+            //         {
+            //             return ERR("operation 'SDIV' must have arity 2");
+            //         }
+            //         return BooleanFunction::Sdiv(std::move(args.at(0)), std::move(args.at(1)), size);
+            //     case Z3_OP_BUDIV:
+            //         if (num_args != 2)
+            //         {
+            //             return ERR("operation 'UDIV' must have arity 2");
+            //         }
+            //         return BooleanFunction::Udiv(std::move(args.at(0)), std::move(args.at(1)), size);
+            //     case Z3_OP_BSREM:
+            //         if (num_args != 2)
+            //         {
+            //             return ERR("operation 'SREM' must have arity 2");
+            //         }
+            //         return BooleanFunction::Srem(std::move(args.at(0)), std::move(args.at(1)), size);
+            //     case Z3_OP_BUREM:
+            //         if (num_args != 2)
+            //         {
+            //             return ERR("operation 'UREM' must have arity 2");
+            //         }
+            //         return BooleanFunction::Urem(std::move(args.at(0)), std::move(args.at(1)), size);
+            //     case Z3_OP_CONCAT: {
+            //         auto bf_res = BooleanFunction::Concat(std::move(args.at(0)), std::move(args.at(1)), size);
+            //         for (u64 i = 2; i < num_args; i++)
+            //         {
+            //             bf_res =
+            //                 bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Concat(std::move(bf), std::move(arg), size); });
+            //         }
+            //         return bf_res;
+            //     }
+            //     case Z3_OP_EXTRACT: {
+            //         if (num_args != 1)
+            //         {
+            //             return ERR("operation 'SLICE' must have arity 1");
+            //         }
+
+            //         const u32 operand_size = args.at(0).size();
+
+            //         return BooleanFunction::Slice(std::move(args.at(0)), BooleanFunction::Index(t.lo(), operand_size), BooleanFunction::Index(t.hi(), operand_size), size);
+            //     }
+            //     case Z3_OP_ZERO_EXT: {
+            //         if (num_args != 1)
+            //         {
+            //             return ERR("operation 'ZEXT' must have arity 1");
+            //         }
+
+            //         return BooleanFunction::Zext(std::move(args.at(0)), BooleanFunction::Index(size, size), size);
+            //     }
+            //     case Z3_OP_SIGN_EXT: {
+            //         if (num_args != 1)
+            //         {
+            //             return ERR("operation 'SEXT' must have arity 1");
+            //         }
+
+            //         return BooleanFunction::Sext(std::move(args.at(0)), BooleanFunction::Index(size, size), size);
+            //     }
+            //     case Z3_OP_BSHL:
+            //         if (num_args != 2)
+            //         {
+            //             return ERR("operation 'SHL' must have arity 2");
+            //         }
+            //         return BooleanFunction::Shl(std::move(args.at(0)), BooleanFunction::Index((u16)args.at(1).get_constant_value_u64().get(), size), size);
+            //     case Z3_OP_BLSHR:
+            //         if (num_args != 2)
+            //         {
+            //             return ERR("operation 'LSHR' must have arity 2");
+            //         }
+            //         return BooleanFunction::Lshr(std::move(args.at(0)), BooleanFunction::Index((u16)args.at(1).get_constant_value_u64().get(), size), size);
+            //     case Z3_OP_BASHR:
+            //         if (num_args != 2)
+            //         {
+            //             return ERR("operation 'ASHR' must have arity 2");
+            //         }
+            //         return BooleanFunction::Ashr(std::move(args.at(0)), BooleanFunction::Index((u16)args.at(1).get_constant_value_u64().get(), size), size);
+            //     case Z3_OP_ROTATE_LEFT:
+            //         if (num_args != 1)
+            //         {
+            //             return ERR("operation 'ROL' must have arity 1");
+            //         }
+            //         return BooleanFunction::Rol(std::move(args.at(0)), BooleanFunction::Index((u16)Z3_get_decl_int_parameter(Z3_context(t.ctx()), Z3_func_decl(t.decl()), 0), size), size);
+            //     case Z3_OP_ROTATE_RIGHT:
+            //         if (num_args != 1)
+            //         {
+            //             return ERR("operation 'ROR' must have arity 1");
+            //         }
+            //         return BooleanFunction::Ror(std::move(args.at(0)), BooleanFunction::Index((u16)Z3_get_decl_int_parameter(Z3_context(t.ctx()), Z3_func_decl(t.decl()), 0), size), size);
+            //     case Z3_OP_EQ:
+            //         if (num_args != 2)
+            //         {
+            //             return ERR("operation 'EQ' must have arity 2");
+            //         }
+            //         return BooleanFunction::Eq(std::move(args.at(0)), std::move(args.at(1)), 1);
+            //     case Z3_OP_SLEQ:
+            //         if (num_args != 2)
+            //         {
+            //             return ERR("operation 'SLE' must have arity 2");
+            //         }
+            //         return BooleanFunction::Sle(std::move(args.at(0)), std::move(args.at(1)), 1);
+            //     case Z3_OP_SLT:
+            //         if (num_args != 2)
+            //         {
+            //             return ERR("operation 'SLT' must have arity 2");
+            //         }
+            //         return BooleanFunction::Slt(std::move(args.at(0)), std::move(args.at(1)), 1);
+            //     case Z3_OP_ULEQ:
+            //         if (num_args != 2)
+            //         {
+            //             return ERR("operation 'ULE' must have arity 2");
+            //         }
+            //         return BooleanFunction::Ule(std::move(args.at(0)), std::move(args.at(1)), 1);
+            //     case Z3_OP_ULT:
+            //         if (num_args != 2)
+            //         {
+            //             return ERR("operation 'ULT' must have arity 2");
+            //         }
+            //         return BooleanFunction::Ult(std::move(args.at(0)), std::move(args.at(1)), 1);
+            //     case Z3_OP_ITE:
+            //         if (num_args != 3)
+            //         {
+            //             return ERR("operation 'ITE' must have arity 3");
+            //         }
+            //         return BooleanFunction::Ite(std::move(args.at(0)), std::move(args.at(1)), std::move(args.at(2)), size);
+            //     default:
+            //         return ERR("operation '" + t.decl().name().str() + "' with arity " + std::to_string(num_args) + " is not yet implemented");
+            // }
+        }
+
     }    // namespace bitwuzla_utils
 }    // namespace hal
 
