@@ -64,6 +64,7 @@ namespace hal
 
         bool initialize(GateLibrary* gateLibrary = nullptr, bool readOnly = false);
         u32 getNextGateId();
+        void updateTabs(GateType* gateType);
 
     public Q_SLOTS:
         /**

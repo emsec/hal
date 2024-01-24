@@ -70,5 +70,8 @@ namespace hal
 
         QString mName;
         QStringList mProperties;
+        QList<PinModel::PINGROUP*> mPingroups;
+
+        bool isDirty;
     };
 }

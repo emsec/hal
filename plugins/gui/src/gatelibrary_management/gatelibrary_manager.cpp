@@ -33,7 +33,6 @@ namespace hal
     {
 
         //TODO: GateLibrarymanager will stay in readOnly mode even if closing project and opening a new gateLibrary
-        //TODO: after switching from editable-GateLibrary to  read-only the on doubleclick will crash hal
         QSplitter* split = new QSplitter(this);
         QWidget* rightWindow = new QWidget(split);
         QGridLayout* rlay = new QGridLayout(rightWindow);
@@ -88,9 +87,6 @@ namespace hal
         connect(mContentWidget, &GatelibraryContentWidget::triggerDeleteType, this, &GateLibraryManager::handleDeleteType);
         connect(mContentWidget, &GatelibraryContentWidget::triggerDoubleClicked, this, &GateLibraryManager::handleEditWizard);
 
-
-
-
         setLayout(mLayout);
         repolish();    // CALL FROM PARENT
     }
@@ -131,14 +127,14 @@ namespace hal
 
                 if (gPluginRelay->mGuiPluginTable)
                     gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser);
-                qInfo() << "selected file: " << fileName;
+                //qInfo() << "selected file: " << fileName;
 
                 auto gateLibrary = gate_library_manager::load(std::filesystem::path(fileName.toStdString()));
 
-                for (auto const elem : gateLibrary->get_gate_types())
+                /*for (auto const elem : gateLibrary->get_gate_types())
                 {
                     qInfo() << QString::fromStdString(elem.second->get_name());
-                }
+                }*/
 
                 mEditableGatelibrary = gateLibrary;
                 mDemoNetlist = netlist_factory::create_netlist(mEditableGatelibrary);
@@ -160,8 +156,12 @@ namespace hal
                 mEditableGatelibrary = gateLibrary;
             }
         }
+        mGraphicsView->showGate(nullptr);
+        updateTabs(nullptr);
         mTableModel->loadFile(mReadOnly ? mNonEditableGateLibrary : mEditableGatelibrary);
         mContentWidget->activate(mReadOnly);
+
+        mContentWidget->toggleSelection(false);
         return true;
     }
 
@@ -181,11 +181,10 @@ namespace hal
 
     void GateLibraryManager::handleDeleteType(QModelIndex index)
     {
-        //TODO delete the selected gate
         GateType* gate = mTableModel->getGateTypeAtIndex(index.row());
         mEditableGatelibrary->remove_gate_type(gate->get_name());
         initialize(mEditableGatelibrary);
-        qInfo() << "handleDeleteType " << QString::fromStdString(gate->get_name()) << ":" << gate->get_id();
+        //qInfo() << "handleDeleteType " << QString::fromStdString(gate->get_name()) << ":" << gate->get_id();
     }
 
     u32 GateLibraryManager::getNextGateId()
@@ -210,11 +209,9 @@ namespace hal
         gateType = mTableModel->getGateTypeAtIndex(index.row());
         qInfo() << "selected " << QString::fromStdString(gateType->get_name());
 
+        if(!mReadOnly) mContentWidget->toggleSelection(true);
         //update tabs
-        mFlipFlopTab->update(gateType);
-        mGeneralTab->update(gateType);
-        mBooleanFunctionTab->update(gateType);
-        mPinTab->update(gateType);
+        updateTabs(gateType);
         if (mDemoNetlist)
         {
             Gate* g = mDemoNetlist->get_gate_by_id(1);
@@ -238,4 +235,11 @@ namespace hal
         return mTableModel->getGateTypeAtIndex(sourceIndex.row());
     }
 
+    void GateLibraryManager::updateTabs(GateType* gateType)
+    {
+        mFlipFlopTab->update(gateType);
+        mGeneralTab->update(gateType);
+        mBooleanFunctionTab->update(gateType);
+        mPinTab->update(gateType);
+    }
 }

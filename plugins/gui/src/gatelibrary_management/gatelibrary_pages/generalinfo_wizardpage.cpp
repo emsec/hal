@@ -93,7 +93,7 @@ namespace hal
     {
         QStringList res;
         for (int i = 0; i < mProperties->count(); i++) {
-            qInfo()<<mProperties->item(i)->text();
+            //qInfo()<<mProperties->item(i)->text();
             res.append(mProperties->item(i)->text());
         }
         return res;

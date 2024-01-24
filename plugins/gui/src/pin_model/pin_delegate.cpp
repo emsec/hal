@@ -83,7 +83,7 @@ namespace hal
     void PinDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
     {
         //TODO set editor data if direction or type is selected
-        qInfo() << "Editing row: " << index.row() << "  column: " << index.column();
+        //qInfo() << "Editing row: " << index.row() << "  column: " << index.column();
         auto pinItem = static_cast<PinItem*>(index.internalPointer());
         PinItem::TreeItemType itemType = pinItem->getItemType();
 

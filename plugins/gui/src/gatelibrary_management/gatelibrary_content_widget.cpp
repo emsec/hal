@@ -34,6 +34,9 @@ namespace hal
         mTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
         mTableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
+        mTableView->setSortingEnabled(true);
+        mTableView->sortByColumn(0, Qt::AscendingOrder);
+
 
         mToolbar = new Toolbar;
         mToolbar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
@@ -76,6 +79,9 @@ namespace hal
 
         QMenu menu;
 
+        menu.addAction(mEditAction);
+        menu.addAction(mDeleteAction);
+
         menu.move(mapToGlobal(pos));
         menu.exec();
     }
@@ -92,6 +98,7 @@ namespace hal
         QModelIndex inx = mPinProxyModel->mapToSource(mTableView->currentIndex());
         if (inx.isValid())
             Q_EMIT triggerDeleteType(inx);
+
     }
 
     void GatelibraryContentWidget::handleCurrentSelectionChanged(QModelIndex prevIndex){
@@ -144,12 +151,19 @@ namespace hal
         mReadOnly = readOnly;
         mDeleteAction->setEnabled(!readOnly);
         mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(readOnly ? mDisabledIconStyle : mEnabledIconStyle, mDeleteIconPath));
+        mEditAction->setEnabled(!readOnly);
+        mEditAction->setIcon(gui_utility::getStyledSvgIcon(readOnly ? mDisabledIconStyle : mEnabledIconStyle,mEditTypeIconPath));
 
         mAddAction->setEnabled(!readOnly);
         mAddAction->setIcon(gui_utility::getStyledSvgIcon(readOnly ? mDisabledIconStyle : mEnabledIconStyle,mAddTypeIconPath));
+    }
 
-        mEditAction->setEnabled(!readOnly);
-        mEditAction->setIcon(gui_utility::getStyledSvgIcon(readOnly ? mDisabledIconStyle : mEnabledIconStyle,mEditTypeIconPath));
+    void GatelibraryContentWidget::toggleSelection(bool selected)
+    {
+        mDeleteAction->setEnabled(selected);
+        mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(selected ? mEnabledIconStyle : mDisabledIconStyle, mDeleteIconPath));
+        mEditAction->setEnabled(selected);
+        mEditAction->setIcon(gui_utility::getStyledSvgIcon(selected ? mEnabledIconStyle : mDisabledIconStyle,mEditTypeIconPath));
     }
 
     QString GatelibraryContentWidget::disabledIconStyle() const

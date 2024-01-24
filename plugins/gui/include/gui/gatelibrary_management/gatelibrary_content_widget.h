@@ -98,6 +98,8 @@ namespace hal
 
         void toggleReadOnlyMode(bool readOnly);
 
+        void toggleSelection(bool selected);
+
 
         QString disabledIconStyle() const;
 

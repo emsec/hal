@@ -72,6 +72,8 @@ namespace hal
 
         mName = generalInfoPage->getName();
         mProperties = generalInfoPage->getProperties();
+        mPingroups = pinsPage->getPingroups();
+
         this->close();
     }
 

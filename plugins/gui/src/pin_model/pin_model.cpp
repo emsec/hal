@@ -133,14 +133,14 @@ namespace hal
 
         switch(itemType){
             case PinItem::TreeItemType::PinGroup: {
-                qInfo() << "was Group: " << pinItem->getName();
+                //qInfo() << "was Group: " << pinItem->getName();
                 if (renamePinGroup(pinItem, input))
                     pinItem->setName(input);
 
                 break;
             }
             case PinItem::TreeItemType::Pin:{
-                qInfo() << "was Pin: " << pinItem->getName();
+                //qInfo() << "was Pin: " << pinItem->getName();
                 if(renamePin(pinItem, input))
                     pinItem->setName(input);
                 break;
@@ -148,7 +148,7 @@ namespace hal
             case PinItem::TreeItemType::GroupCreator:{
                 //TODO also check pin names when a group is created - otherwise a group with e.g name I1 will create a pin with the same name but this one isnt checked
 
-                qInfo() << "was GroupCreator: " << pinItem->getName();
+                //qInfo() << "was GroupCreator: " << pinItem->getName();
                 // creates a new pingroup with a pin which is not valid until edited
 
                 if(!renamePinGroup(pinItem, input))
@@ -192,7 +192,7 @@ namespace hal
                 break;
             }
             case PinItem::TreeItemType::PinCreator:{
-                qInfo() << "was PinCreator: " << pinItem->getName();
+                //qInfo() << "was PinCreator: " << pinItem->getName();
                 // creates a new pin which is not valid until now nor created via gate->create_pin()
                 if(!renamePin(pinItem, input))
                     break;
@@ -214,17 +214,11 @@ namespace hal
                 break;
             }
             case PinItem::TreeItemType::InvalidPin:{
-                qInfo() << "was InvalidPin: " << pinItem->getName();
                 if(renamePin(pinItem, input))
                     pinItem->setName(input);
                 break;
             }
-            case PinItem::TreeItemType::InvalidPinGroup:{
-                //TODO
-                break;
-            }
         }
-        printGateMember();
     }
 
     void PinModel::handleEditDirection(QModelIndex index, const QString& direction)
@@ -252,47 +246,26 @@ namespace hal
                 break;
             }
         }
-        printGateMember();
+        //printGateMember();
     }
 
     void PinModel::handleEditType(QModelIndex index, const QString& type)
     {
-        //TODO handle type edited from PinDelegate
         auto pinItem  = static_cast<PinItem*>(index.internalPointer());
         auto itemType = pinItem->getItemType();
 
         switch (itemType)
         {
-            case PinItem::TreeItemType::PinGroup: {
-                qInfo() << "was Group: " << pinItem->getName();
-                //TODO
-                break;
-            }
             case PinItem::TreeItemType::Pin: {
-                qInfo() << "was Pin: " << pinItem->getName();
-
-                //update pin items type in the model
                 pinItem->setType(type);
                 break;
             }
-            case PinItem::TreeItemType::GroupCreator: {
-                qInfo() << "was GroupCreator: " << pinItem->getName();
-                //TODO
-                break;
-            }
-            case PinItem::TreeItemType::PinCreator: {
-                qInfo() << "was PinCreator: " << pinItem->getName();
-                //TODO
-                break;
-            }
             case PinItem::TreeItemType::InvalidPin: {
-                //update the invalid pins type and handle the update
                 pinItem->setType(type);
                 handleInvalidPinUpdate(pinItem);
                 break;
             }
         }
-        printGateMember();
     }
 
 

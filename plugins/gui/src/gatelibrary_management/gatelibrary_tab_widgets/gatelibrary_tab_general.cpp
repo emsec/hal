@@ -37,6 +37,7 @@ namespace hal
             mNamePropertyLabel->setText("-");
             mIdPropertyLabel->setText("-");
             mComponentPropertyLabel->setText("-");
+            mBooleanFunctionPropertyLabel->setText("-");
 
             return;
         }

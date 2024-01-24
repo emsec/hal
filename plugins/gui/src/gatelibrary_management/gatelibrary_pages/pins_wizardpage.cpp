@@ -47,4 +47,8 @@ namespace hal
         return static_cast<GateLibraryWizard*>(parentWizard)->getNextPageId(GateLibraryWizard::Pin);
     }
 
+    QList<PinModel::PINGROUP*> PinsWizardPage::getPingroups(){
+        return mPinModel->getPinGroups();
+    }
+
 }

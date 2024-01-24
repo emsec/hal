@@ -23,13 +23,19 @@ namespace hal
 
     void GatelibraryGraphicsView::showGate(Gate *g)
     {
-        GraphicsGate* gg = GraphicsFactory::createGraphicsGate(g,0);
-        gg->setLod(1.0);
-        QRectF rect = gg->boundingRect();
-        scene()->clear();
-        scene()->addItem(gg);
-        rect.setTopLeft(rect.topLeft() + QPointF(-50,-50));
-        rect.setBottomRight(rect.bottomRight() + QPointF(50,50));
-        scene()->setSceneRect(rect);
+        if(g){
+            GraphicsGate* gg = GraphicsFactory::createGraphicsGate(g,0);
+            gg->setLod(1.0);
+            QRectF rect = gg->boundingRect();
+            scene()->clear();
+            scene()->addItem(gg);
+            rect.setTopLeft(rect.topLeft() + QPointF(-50,-50));
+            rect.setBottomRight(rect.bottomRight() + QPointF(50,50));
+            scene()->setSceneRect(rect);
+        }
+        else
+        {
+            scene()->clear();
+        }
     }
 }
