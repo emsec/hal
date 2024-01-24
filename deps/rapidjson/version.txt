@@ -1,5 +1,0 @@
-Source:
-https://github.com/Tencent/rapidjson
-
-Git tag: 
-6089180

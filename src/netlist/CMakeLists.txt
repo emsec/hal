@@ -18,7 +18,7 @@ target_include_directories(netlist
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                            ${Z3_INCLUDE_DIRS}
                            ${BITWUZLA_INCLUDE_DIRS}
-                           $<BUILD_INTERFACE:${RAPIDJSON_INCLUDEDIR}>
+                           ${RAPIDJSON_INCLUDEDIR}
                            )
 
 target_compile_options(netlist
