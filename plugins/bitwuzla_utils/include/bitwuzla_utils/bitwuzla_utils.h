@@ -1,9 +1,13 @@
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/utilities/result.h"
 
 #include <bitwuzla/cpp/bitwuzla.h>
 
 namespace hal
 {
+    class Gate;
+    class Net;
+
     namespace bitwuzla_utils
     {
         // namespace bw
@@ -36,7 +40,7 @@ namespace hal
          * @param[in] var2term - Optional replacements for variables.
          * @returns A bitwuzla term equivalent to the Boolean function.
          */
-        bitwuzla::Term from_bf(const BooleanFunction& bf, const std::map<std::string, bitwuzla::Term>& var2term = {});
+        Result<bitwuzla::Term> from_bf(const BooleanFunction& bf, const std::map<std::string, bitwuzla::Term>& var2term = {});
 
         /**
          * Translates a bitwuzla term into an equivalent hal Boolean function.

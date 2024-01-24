@@ -102,26 +102,26 @@ namespace hal
 			 */
             Result<std::tuple<bool, std::string>> query_library(std::string& input, const QueryConfig& config)
             {
-                z3::context ctx;
+                // z3::context ctx;
 
-                z3::solver s = {ctx};
-                s.from_string(input.c_str());
+                // z3::solver s = {ctx};
+                // s.from_string(input.c_str());
 
-                const auto res = s.check();
+                // const auto res = s.check();
 
-                if (res == z3::unknown)
-                {
-                    return OK({true, "unknown"});
-                }
+                // if (res == z3::unknown)
+                // {
+                //     return OK({true, "unknown"});
+                // }
 
-                if (res == z3::unsat)
-                {
-                    return OK({false, "unsat"});
-                }
+                // if (res == z3::unsat)
+                // {
+                //     return OK({false, "unsat"});
+                // }
 
-                std::cout << s.get_model().to_string() << std::endl;
-
-                return OK({false, s.get_model().to_string()});
+                // // std::cout << s.get_model().to_string() << std::endl;
+                return OK({false, "unsat"});
+                // return OK({false, s.get_model().to_string()});
             }
         }    // namespace Z3
 
