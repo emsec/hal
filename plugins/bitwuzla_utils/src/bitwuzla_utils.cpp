@@ -15,6 +15,7 @@ namespace hal
                 {
                     return ERR("trying to append two nodes of unequal size");
                 }
+
                 switch (node.type)
                 {
                     case BooleanFunction::NodeType::Index:
@@ -61,12 +62,13 @@ namespace hal
                         return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_UREM, {p[0], p[1]}));
                     case BooleanFunction::NodeType::Concat:
                         return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_CONCAT, {p[0], p[1]}));
-                    // case BooleanFunction::NodeType::Slice:
-                    //     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_EXTRACT, {p[0]}, std::vector<u64>{p[2].value(), p[1].value()}));
-                    // case BooleanFunction::NodeType::Zext:
-                    //     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ZERO_EXTEND, {p[0]}, {p[1].value() - p[0].get_sort().bv_size()}));
-                    // case BooleanFunction::NodeType::Sext:
-                    //     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_SIGN_EXTEND, {p[0]}, {p[1].value() - p[0].get_sort().bv_size()}));
+                    case BooleanFunction::NodeType::Slice:
+                        return OK(bitwuzla::mk_term(
+                            bitwuzla::Kind::BV_EXTRACT, {p[0]}, std::vector<u64>{u64(std::stoi(p[2].value<std::string>(), nullptr, 2)), u64(std::stoi(p[1].value<std::string>(), nullptr, 2))}));
+                    case BooleanFunction::NodeType::Zext:
+                        return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ZERO_EXTEND, {p[0]}, {u64(std::stoi(p[1].value<std::string>(), nullptr, 2)) - p[0].sort().bv_size()}));
+                    case BooleanFunction::NodeType::Sext:
+                        return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_SIGN_EXTEND, {p[0]}, {u64(std::stoi(p[1].value<std::string>(), nullptr, 2)) - p[0].sort().bv_size()}));
                     case BooleanFunction::NodeType::Shl:
                         return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_SHL, {p[0], p[1]}));
                     case BooleanFunction::NodeType::Lshr:
@@ -74,9 +76,9 @@ namespace hal
                     case BooleanFunction::NodeType::Ashr:
                         return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ASHR, {p[0], p[1]}));
                     case BooleanFunction::NodeType::Rol:
-                    //     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ROL, {p[0]}, {p[1].value()}));
-                    // case BooleanFunction::NodeType::Ror:
-                    //     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ROR, {p[0]}, {p[1].value()}));
+                        return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ROL, {p[0]}, {u64(std::stoi(p[1].value<std::string>(), nullptr, 2))}));
+                    case BooleanFunction::NodeType::Ror:
+                        return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ROR, {p[0]}, {u64(std::stoi(p[1].value<std::string>(), nullptr, 2))}));
                     case BooleanFunction::NodeType::Eq:
                         return OK(bitwuzla::mk_term(bitwuzla::Kind::EQUAL, {p[0], p[1]}));
                     case BooleanFunction::NodeType::Sle:
