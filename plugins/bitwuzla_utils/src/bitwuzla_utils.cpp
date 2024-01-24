@@ -41,23 +41,34 @@
 //                         case BooleanFunction::NodeType::And:
 //                             return OK(AND(p[0], p[1]));
 //                         case BooleanFunction::NodeType::Or:
-//                             return OK(OR(p[0], p[1])) case BooleanFunction::NodeType::Not : return OK(NOT(p[0], p[1])) case BooleanFunction::NodeType::Xor
-//                                 : return OK(XOR(p[0], p[1])) case BooleanFunction::NodeType::Add : return OK(ADD(p[0], p[1])) case BooleanFunction::NodeType::Sub
-//                                 : return OK(SUB(p[0], p[1])) case BooleanFunction::NodeType::Mul : return OK(MUL(p[0], p[1])) case BooleanFunction::NodeType::Sdiv
-//                                 : return OK(SDIV(p[0], p[1])) case BooleanFunction::NodeType::Udiv : return OK(UDIV(p[0], p[1])) case BooleanFunction::NodeType::Srem
-//                                 : return OK(SREM(p[0], p[1])) case BooleanFunction::NodeType::Urem : return OK(UREM(p[0], p[1])) case BooleanFunction::NodeType::Concat
-//                                 : return OK(CONCAT(p[0], p[1])) case BooleanFunction::NodeType::Slice : return OK(SLICE(p[0], p[2].get_value(), p[1].get_value()));
+//                         return OK(OR(p[0], p[1])) case BooleanFunction::NodeType::Not:
+//                         return OK(NOT(p[0], p[1])) case BooleanFunction::NodeType::Xor:
+//                         return OK(XOR(p[0], p[1])) case BooleanFunction::NodeType::Add:
+//                         return OK(ADD(p[0], p[1])) case BooleanFunction::NodeType::Sub:
+//                         return OK(SUB(p[0], p[1])) case BooleanFunction::NodeType::Mul:
+//                         return OK(MUL(p[0], p[1])) case BooleanFunction::NodeType::Sdiv:
+//                         return OK(SDIV(p[0], p[1])) case BooleanFunction::NodeType::Udiv:
+//                         return OK(UDIV(p[0], p[1])) case BooleanFunction::NodeType::Srem:
+//                         return OK(SREM(p[0], p[1])) case BooleanFunction::NodeType::Urem:
+//                         return OK(UREM(p[0], p[1])) case BooleanFunction::NodeType::Concat:
+//                         return OK(CONCAT(p[0], p[1])) case BooleanFunction::NodeType::Slice:
+//                             return OK(SLICE(p[0], p[2].get_value(), p[1].get_value()));
 //                         case BooleanFunction::NodeType::Zext:
 //                             return OK(ZEXT(p[0], p[1].get_value() - p[0].bv_size()));
 //                         case BooleanFunction::NodeType::Sext:
 //                             return OK(SEXT(p[0], p[1].get_value() - p[0].bv_size()));
 //                         case BooleanFunction::NodeType::Shl:
-//                             return OK(SHL(p[0], p[1])) case BooleanFunction::NodeType::Lshr : return OK(LSHR(p[0], p[1])) case BooleanFunction::NodeType::Ashr
-//                                 : return OK(ASHR(p[0], p[1])) case BooleanFunction::NodeType::Rol : return OK(ROL(p[0], p[1].get_value())) case BooleanFunction::NodeType::Ror
-//                                 : return OK(ROR(p[0], p[1].get_value())) case BooleanFunction::NodeType::Eq : return OK(EQ(p[0], p[1])) case BooleanFunction::NodeType::Sle
-//                                 : return OK(SLE(p[0], p[1])) case BooleanFunction::NodeType::Slt : return OK(SLT(p[0], p[1])) case BooleanFunction::NodeType::Ule
-//                                 : return OK(ULE(p[0], p[1])) case BooleanFunction::NodeType::Ult : return OK(ULT(p[0], p[1])) case BooleanFunction::NodeType::Ite
-//                                 : return OK(ITE(p[0], p[1], p[2])) default : return ERR("netlist", "Not implemented reached for nodetype {} in bw conversion", node.type);
+//                         return OK(SHL(p[0], p[1])) case BooleanFunction::NodeType::Lshr:
+//                         return OK(LSHR(p[0], p[1])) case BooleanFunction::NodeType::Ashr:
+//                         return OK(ASHR(p[0], p[1])) case BooleanFunction::NodeType::Rol:
+//                         return OK(ROL(p[0], p[1].get_value())) case BooleanFunction::NodeType::Ror:
+//                         return OK(ROR(p[0], p[1].get_value())) case BooleanFunction::NodeType::Eq:
+//                         return OK(EQ(p[0], p[1])) case BooleanFunction::NodeType::Sle:
+//                         return OK(SLE(p[0], p[1])) case BooleanFunction::NodeType::Slt:
+//                         return OK(SLT(p[0], p[1])) case BooleanFunction::NodeType::Ule:
+//                         return OK(ULE(p[0], p[1])) case BooleanFunction::NodeType::Ult:
+//                         return OK(ULT(p[0], p[1])) case BooleanFunction::NodeType::Ite:
+//                             return OK(ITE(p[0], p[1], p[2])) default : return ERR("netlist", "Not implemented reached for nodetype {} in bw conversion", node.type);
 //                     }
 //                 };
 

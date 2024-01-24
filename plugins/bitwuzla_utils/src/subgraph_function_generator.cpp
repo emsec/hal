@@ -12,11 +12,11 @@
 //     {
 //         namespace
 //         {
-//             Result<bw::expr> get_function_of_net(const std::vector<Gate*>& subgraph_gates,
-//                                                  const Net* net,
-//                                                  bw::Config& config,
-//                                                  std::map<u32, bw::expr>& net_cache,
-//                                                  std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache)
+//             Result<bitwuzla::Term> get_function_of_net(const std::vector<Gate*>& subgraph_gates,
+//                                                        const Net* net,
+//                                                        bw::Config& config,
+//                                                        std::map<u32, bitwuzla::Term>& net_cache,
+//                                                        std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache)
 //             {
 //                 if (const auto it = net_cache.find(net->get_id()); it != net_cache.end())
 //                 {
@@ -34,7 +34,7 @@
 //                 // net has no source
 //                 if (sources.empty())
 //                 {
-//                     bw::expr ret = config.bw_const(BooleanFunctionNetDecorator(*net).get_boolean_variable_name());
+//                     bitwuzla::Term ret = config.bw_const(BooleanFunctionNetDecorator(*net).get_boolean_variable_name());
 //                     net_cache.insert({net->get_id(), ret});
 //                     return OK(ret);
 //                 }
@@ -51,7 +51,7 @@
 //                 // source is not in subgraph gates
 //                 if (std::find(subgraph_gates.begin(), subgraph_gates.end(), src) == subgraph_gates.end())
 //                 {
-//                     bw::expr ret = config.bw_const(BooleanFunctionNetDecorator(*net).get_boolean_variable_name());
+//                     bitwuzla::Term ret = config.bw_const(BooleanFunctionNetDecorator(*net).get_boolean_variable_name());
 //                     net_cache.insert({net->get_id(), ret});
 //                     return OK(ret);
 //                 }
@@ -74,7 +74,7 @@
 //                     bf = it->second;
 //                 }
 
-//                 std::map<std::string, bw::expr> input_to_expr;
+//                 std::map<std::string, bitwuzla::Term> input_to_expr;
 
 //                 for (const std::string& in_net_str : bf.get_variable_names())
 //                 {
@@ -98,17 +98,17 @@
 //                     input_to_expr.insert({in_net_str, in_bf});
 //                 }
 
-//                 bw::expr ret = bitwuzla_utils::from_bf(bf, config, input_to_expr).simplify();
+//                 bitwuzla::Term ret = bitwuzla_utils::from_bf(bf, config, input_to_expr).simplify();
 //                 net_cache.insert({net->get_id(), ret});
 
 //                 return OK(ret);
 //             }
 
-//             Result<bw::expr> get_subgraph_bw_function_internal(const std::vector<Gate*>& subgraph_gates,
-//                                                                const Net* net,
-//                                                                bw::Config& config,
-//                                                                std::map<u32, bw::expr>& net_cache,
-//                                                                std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache)
+//             Result<bitwuzla::Term> get_subgraph_bw_function_internal(const std::vector<Gate*>& subgraph_gates,
+//                                                                      const Net* net,
+//                                                                      bw::Config& config,
+//                                                                      std::map<u32, bitwuzla::Term>& net_cache,
+//                                                                      std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache)
 //             {
 //                 // check validity of subgraph_gates
 //                 if (subgraph_gates.empty())
@@ -142,20 +142,20 @@
 
 //         }    // namespace
 
-//         Result<bw::expr> get_subgraph_bw_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output, bw::Config& config)
+//         Result<bitwuzla::Term> get_subgraph_bw_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output, bw::Config& config)
 //         {
-//             std::map<u32, bw::expr> net_cache;
+//             std::map<u32, bitwuzla::Term> net_cache;
 //             std::map<std::pair<u32, const GatePin*>, BooleanFunction> gate_cache;
 
 //             return get_subgraph_bw_function_internal(subgraph_gates, subgraph_output, config, net_cache, gate_cache);
 //         }
 
-//         Result<std::vector<bw::expr>> get_subgraph_bw_functions(const std::vector<Gate*>& subgraph_gates, const std::vector<Net*> subgraph_outputs, bw::Config& config)
+//         Result<std::vector<bitwuzla::Term>> get_subgraph_bw_functions(const std::vector<Gate*>& subgraph_gates, const std::vector<Net*> subgraph_outputs, bw::Config& config)
 //         {
-//             std::map<u32, bw::expr> net_cache;
+//             std::map<u32, bitwuzla::Term> net_cache;
 //             std::map<std::pair<u32, const GatePin*>, BooleanFunction> gate_cache;
 
-//             std::vector<bw::expr> results;
+//             std::vector<bitwuzla::Term> results;
 
 //             for (const auto& net : subgraph_outputs)
 //             {

@@ -111,20 +111,19 @@
 //                 bitwuzla::Term term = bitwuzla::mk_term(bitwuzla::Kind::BV_UREM, {expr1.m_term, expr2.m_term});
 //                 return expr(term);
 //             }
-//             expr expr::SLICE(expr expr, u64 start, u64 end)
+//             expr expr::SLICE(expr expr1, u64 start, u64 end)
 //             {
-//                 bitwuzla::Term term = bitwuzla::mk_term(bitwuzla::Kind::BV_EXTRACT, {expr.m_term}, {start, end});
+//                 bitwuzla::Term term = bitwuzla::mk_term(bitwuzla::Kind::BV_EXTRACT, {expr1.m_term}, std::vector<u64>{start, end});
 //                 return expr(term);
 //             }
-
-//             expr expr::ZEXT(expr expr, u64 size)
+//             expr expr::ZEXT(expr expr1, u64 size)
 //             {
-//                 bitwuzla::Term term = bitwuzla::mk_term(bitwuzla::Kind::BV_ZERO_EXTEND, {expr.m_term}, {size});
+//                 bitwuzla::Term term = bitwuzla::mk_term(bitwuzla::Kind::BV_ZERO_EXTEND, {expr1.m_term}, {size});
 //                 return expr(term);
 //             }
-//             expr expr::SEXT(expr expr, u64 size)
+//             expr expr::SEXT(expr expr1, u64 size)
 //             {
-//                 bitwuzla::Term term = bitwuzla::mk_term(bitwuzla::Kind::BV_SIGN_EXTEND, {expr.m_term}, {size});
+//                 bitwuzla::Term term = bitwuzla::mk_term(bitwuzla::Kind::BV_SIGN_EXTEND, {expr1.m_term}, {size});
 //                 return expr(term);
 //             }
 //             expr expr::SHL(expr expr1, expr expr2)
@@ -142,14 +141,14 @@
 //                 bitwuzla::Term term = bitwuzla::mk_term(bitwuzla::Kind::BV_ASHR, {expr1.m_term, expr2.m_term});
 //                 return expr(term);
 //             }
-//             expr expr::ROR(expr expr, u64 amount)
+//             expr expr::ROR(expr expr1, u64 amount)
 //             {
-//                 bitwuzla::Term term = bitwuzla::mk_term(bitwuzla::Kind::BV_ROR, {expr.m_term}, {amount});
+//                 bitwuzla::Term term = bitwuzla::mk_term(bitwuzla::Kind::BV_ROR, {expr1.m_term}, {amount});
 //                 return expr(term);
 //             }
-//             expr expr::ROL(expr expr, u64 amount)
+//             expr expr::ROL(expr expr1, u64 amount)
 //             {
-//                 bitwuzla::Term term = bitwuzla::mk_term(bitwuzla::Kind::BV_ROL, {expr.m_term}, {amount});
+//                 bitwuzla::Term term = bitwuzla::mk_term(bitwuzla::Kind::BV_ROL, {expr1.m_term}, {amount});
 //                 return expr(term);
 //             }
 //             expr expr::EQ(expr expr1, expr expr2)
