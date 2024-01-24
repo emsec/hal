@@ -9,7 +9,7 @@ target_include_directories(utilities
                            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
                            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-                           $<BUILD_INTERFACE:${RAPIDJSON_INCLUDEDIR}>
+                           ${RAPIDJSON_INCLUDEDIR}
                            )
 target_compile_options(utilities
                        PUBLIC ${COMPILE_OPTIONS_PUBLIC}

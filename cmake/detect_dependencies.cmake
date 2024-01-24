@@ -29,8 +29,6 @@ find_package(Sanitizers REQUIRED)
 # ###############################
 pkg_check_modules(BITWUZLA bitwuzla)
 
-# find_package(Bitwuzla)
-
 if(BITWUZLA_FOUND)
     message(STATUS "Found BITWUZLA")
     message(STATUS "    BITWUZLA_LIBRARIES: ${BITWUZLA_LIBRARIES}")
@@ -39,7 +37,6 @@ if(BITWUZLA_FOUND)
 else()
     set(BITWUZLA_LIBRARY "")
     set(BITWUZLA_INCLUDE_DIRS "")
-    
     message(STATUS "Bitwuzla not found, but this is optional...")
 endif(BITWUZLA_FOUND)
 
@@ -124,13 +121,25 @@ find_package(Filesystem REQUIRED Final Experimental)
 # ###############################
 # ####   RapidJSON
 # ###############################
-message(STATUS "using rapidjson from deps")
-add_library(RapidJSON::RapidJSON INTERFACE IMPORTED)
-set_target_properties(RapidJSON::RapidJSON PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/rapidjson"
-)
-set(RAPIDJSON_INCLUDEDIR "${CMAKE_SOURCE_DIR}/deps/rapidjson")
-message(STATUS "Set rapidjson successully: ${RAPIDJSON_INCLUDEDIR}")
+find_package(RapidJSON REQUIRED)
+if(RapidJSON_FOUND AND NOT TARGET RapidJSON::RapidJSON)
+    if(NOT RAPIDJSON_INCLUDEDIR)
+        set(RAPIDJSON_INCLUDEDIR ${RAPIDJSON_INCLUDE_DIRS})
+    endif()
+
+    # fix for macOS if most recent version
+    if(NOT RAPIDJSON_INCLUDEDIR)
+        set(RAPIDJSON_INCLUDEDIR ${RapidJSON_INCLUDE_DIRS})
+    endif()
+
+
+    add_library(RapidJSON::RapidJSON INTERFACE IMPORTED)
+    set_target_properties(RapidJSON::RapidJSON PROPERTIES
+        INTERFACE_INCLUDE_DIRECTORIES "${RAPIDJSON_INCLUDEDIR}"
+    )
+    message(STATUS "Found rapidjson ${RAPIDJSON_INCLUDEDIR}")
+    message(STATUS "Set rapidjson path successully: ${RAPIDJSON_INCLUDEDIR}")
+endif()
 
 
 
