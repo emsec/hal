@@ -204,6 +204,21 @@ namespace hal
         Q_ASSERT(itemToRemove);
         Q_ASSERT(parentItem);
 
+        while (itemToRemove->getChildCount())
+        {
+            ModuleItem* childItem = static_cast<ModuleItem*>(itemToRemove->getChildren().at(0));
+            int ityp = static_cast<int>(childItem->getType());
+            auto it = mModuleItemMaps[ityp]->lowerBound(childItem->id());
+            while (it != mModuleItemMaps[ityp]->upperBound(childItem->id()))
+            {
+                if (it.value() == childItem)
+                    it = mModuleItemMaps[ityp]->erase(it);
+                else
+                    ++it;
+            }
+            removeChildItem(childItem,itemToRemove);
+        }
+
         QModelIndex index = getIndexFromItem(parentItem);
 
         int row = itemToRemove->row();
@@ -550,6 +565,9 @@ namespace hal
 
     void ModuleModel::updateModuleParent(const Module* module)
     {
+        ModuleItem* moduleItemToBeMoved = nullptr;
+        bool moduleItemReassigned = false;
+
         Q_ASSERT(module);
         u32 id = module->get_id();
         Q_ASSERT(id != 1);
@@ -568,8 +586,27 @@ namespace hal
 
             if (oldParentItem->id() != parentId)
             {
-                removeChildItem(submItem,oldParentItem);
-                itSubm = mModuleMap.erase(itSubm);
+                if (moduleItemToBeMoved)
+                {
+                    // remove tree item recursively
+                    removeChildItem(submItem,oldParentItem);
+                    itSubm = mModuleMap.erase(itSubm);
+                }
+                else
+                {
+                    // save tree item for reassignment
+                    moduleItemToBeMoved = submItem;
+                    QModelIndex index = getIndexFromItem(oldParentItem);
+
+                    int row = submItem->row();
+
+                    mIsModifying = true;
+                    beginRemoveRows(index, row, row);
+                    oldParentItem->removeChild(submItem);
+                    endRemoveRows();
+                    mIsModifying = false;
+                    ++itSubm;
+                }
             }
             else
             {
@@ -583,8 +620,37 @@ namespace hal
         {
             ModuleItem* parentItem = itMod.value();
             if (parentsHandled.contains(parentItem)) continue;
-            addRecursively(module, parentItem);
+            if (moduleItemToBeMoved && !moduleItemReassigned)
+            {
+                QModelIndex index = getIndexFromItem(parentItem);
+                int row = parentItem->getChildCount();
+                mIsModifying = true;
+                beginInsertRows(index, row, row);
+                parentItem->appendChild(moduleItemToBeMoved);
+                endInsertRows();
+                mIsModifying = false;
+                moduleItemReassigned = true;
+            }
+            else
+            {
+                addRecursively(module, parentItem);
+            }
         }
+
+        if (moduleItemToBeMoved && !moduleItemReassigned)
+        {
+            // stored item could not be reassigned, delete it
+            auto it = mModuleMap.lowerBound(id);
+            while (it != mModuleMap.upperBound(id))
+            {
+                if (it.value() == moduleItemToBeMoved)
+                    it = mModuleMap.erase(it);
+                else
+                    ++it;
+            }
+            delete moduleItemToBeMoved;
+        }
+
     }
 
     void ModuleModel::updateModuleName(u32 id)

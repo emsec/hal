@@ -734,6 +734,7 @@ namespace hal
         std::unordered_map<u32, PinGroup<ModulePin>*> m_pin_groups_map;
         std::unordered_map<std::string, PinGroup<ModulePin>*> m_pin_group_names_map;
         std::list<PinGroup<ModulePin>*> m_pin_groups_ordered;
+        u32 m_pin_number[4] = { 0, 0, 0, 0 };
 
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;
@@ -748,7 +749,7 @@ namespace hal
 
         NetConnectivity check_net_endpoints(const Net* net) const;
         Result<std::monostate> check_net(Net* net, bool recursive = false);
-        Result<ModulePin*> assign_pin_net(const u32 pin_id, Net* net, PinDirection direction, const std::string& name = "", PinType type = PinType::none);
+        bool assign_pin_net(const u32 pin_id, Net* net, PinDirection direction);
         bool remove_pin_net(Net* net);
         Result<ModulePin*> create_pin_internal(const u32 id, const std::string& name, Net* net, PinDirection direction, PinType type, bool force_name);
         bool delete_pin_internal(ModulePin* pin);

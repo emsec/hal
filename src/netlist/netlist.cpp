@@ -567,15 +567,6 @@ namespace hal
         return create_module(get_unique_module_id(), name, parent, gates);
     }
 
-    Module* Netlist::create_module_python(const std::string &name, Module *parent, const std::vector<Gate *> &gates)
-    {
-        CALLGRIND_START_INSTRUMENTATION;
-        CALLGRIND_TOGGLE_COLLECT;
-        return create_module(get_unique_module_id(), name, parent, gates);
-        CALLGRIND_TOGGLE_COLLECT;
-        CALLGRIND_STOP_INSTRUMENTATION;
-    }
-
     bool Netlist::delete_module(Module* module)
     {
         return m_manager->delete_module(module);

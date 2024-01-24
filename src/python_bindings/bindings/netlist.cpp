@@ -500,7 +500,7 @@ namespace hal
         )");
 
         py_netlist.def("create_module",
-                       &Netlist::create_module_python,
+                       py::overload_cast<const std::string&, Module*, const std::vector<Gate*>&>(&Netlist::create_module),
                        py::arg("name"),
                        py::arg("parent"),
                        py::arg("gates") = std::vector<Gate*>(),

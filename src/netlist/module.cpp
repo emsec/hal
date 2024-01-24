@@ -671,9 +671,9 @@ namespace hal
             }
             else
             {
-                if (auto res = assign_pin_net(get_unique_pin_id(), net, PinDirection::inout); res.is_error())
+                if (!assign_pin_net(get_unique_pin_id(), net, PinDirection::inout))
                 {
-                    return ERR(res.get_error());
+                    return ERR("could not assign inout pin to net ID " + std::to_string(net->get_id())+ ": failed to create pin");
                 }
             }
         }
@@ -693,9 +693,9 @@ namespace hal
             else
             {
                 m_input_nets.insert(net);
-                if (auto res = assign_pin_net(get_unique_pin_id(), net, PinDirection::input); res.is_error())
+                if (!assign_pin_net(get_unique_pin_id(), net, PinDirection::input))
                 {
-                    return ERR(res.get_error());
+                    return ERR("could not assign input pin to net ID " + std::to_string(net->get_id())+ ": failed to create pin");
                 }
             }
         }
@@ -715,9 +715,9 @@ namespace hal
             else
             {
                 m_output_nets.insert(net);
-                if (auto res = assign_pin_net(get_unique_pin_id(), net, PinDirection::output); res.is_error())
+                if (!assign_pin_net(get_unique_pin_id(), net, PinDirection::output))
                 {
-                    return ERR(res.get_error());
+                    return ERR("could not assign output pin to net ID " + std::to_string(net->get_id())+ ": failed to create pin");
                 }
             }
         }
@@ -1546,44 +1546,34 @@ namespace hal
         return true;
     }
 
-    Result<ModulePin*> Module::assign_pin_net(const u32 pin_id, Net* net, PinDirection direction, const std::string& name, PinType type)
+    bool Module::assign_pin_net(const u32 pin_id, Net* net, PinDirection direction)
     {
-        std::string name_internal;
+        std::string port_prefix;
 
-        if (!name.empty())
+        switch (direction)
         {
-            name_internal = name;
+        case PinDirection::input:
+            port_prefix = "I";
+            break;
+        case PinDirection::inout:
+            port_prefix = "IO";
+            break;
+        case PinDirection::output:
+            port_prefix = "O";
+            break;
+        default:
+            log_warning("module", "could not assign pin to net ID {}: invalid pin direction '{}'", net->get_id(), enum_to_string(direction));
+            return false;
         }
-        else
-        {
-            std::string port_prefix;
-            u32 ctr = 0;
-            switch (direction)
-            {
-                case PinDirection::input:
-                    port_prefix = "I";
-                    break;
-                case PinDirection::inout:
-                    port_prefix = "IO";
-                    break;
-                case PinDirection::output:
-                    port_prefix = "O";
-                    break;
-                default:
-                    return ERR("could not assign pin '" + name_internal + "' to net: invalid pin direction '" + enum_to_string(direction) + "'");
-            }
-            do
-            {
-                name_internal = port_prefix + "(" + std::to_string(ctr) + ")";
-                ctr++;
-            } while (m_pin_names_map.find(name_internal) != m_pin_names_map.end() || m_pin_group_names_map.find(name_internal) != m_pin_group_names_map.end());
-        }
+
+        std::string name_internal = port_prefix + "(" + std::to_string(m_pin_number[(int)direction]) + ")";
 
         // create pin
         ModulePin* pin;
-        if (auto res = create_pin_internal(pin_id, name_internal, net, direction, type, false); res.is_error())
+        if (auto res = create_pin_internal(pin_id, name_internal, net, direction, PinType::none, false); res.is_error())
         {
-            return ERR_APPEND(res.get_error(), "could not assign pin '" + name_internal + "' to net: failed to create pin");
+            log_warning("module", "could not assign pin '{}' to net: failed to create pin", name_internal);
+            return false;
         }
         else
         {
@@ -1592,18 +1582,20 @@ namespace hal
 
         if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name_internal, pin->get_direction(), pin->get_type(), true, 0, false); group_res.is_error())
         {
-            return ERR_APPEND(group_res.get_error(), "could not assign pin '" + name_internal + "' to net: failed to create pin group");
+            log_warning("module", "could not assign pin '{}' to net: failed to create pin group", name_internal);
+            return false;
         }
         else
         {
             if (!group_res.get()->assign_pin(pin))
             {
-                return ERR("could not assign pin '" + name_internal + "' to net: failed to assign pin to pin group");
+                log_warning("module", "could not assign pin '{}' to net: failed to assign pin to pin group", name_internal);
+                return false;
             }
         }
 
         PinChangedEvent(this,PinEvent::GroupCreate,pin->get_group().first->get_id()).send();
-        return OK(pin);
+        return true;
     }
 
     bool Module::remove_pin_net(Net* net)
@@ -1690,6 +1682,7 @@ namespace hal
         m_pins.push_back(std::move(pin_owner));
         m_pins_map[id]        = pin;
         m_pin_names_map[name] = pin;
+        ++m_pin_number[(int)direction];
 
         // mark pin ID as used
         if (auto free_id_it = m_free_pin_ids.find(id); free_id_it != m_free_pin_ids.end())
