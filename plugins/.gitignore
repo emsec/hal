@@ -3,6 +3,8 @@
 !bitorder_propagation/**/*
 !boolean_influence*
 !boolean_influence/**/*
+!bitwuzla_utils*
+!bitwuzla_utils/**/*
 !dataflow_analysis*
 !dataflow_analysis/**/*
 !edif_parser*
