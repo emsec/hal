@@ -384,14 +384,14 @@ namespace hal
             std::istringstream iss(smt);
             for (std::string line; std::getline(iss, line);)
             {
-                if (line.find("declare-fun") != std::string::npos)
+                if (line.find("declare-const") != std::string::npos)
                 {
                     auto start_index = line.find_first_of(' ') + 1;    // variable name starts after the first space
                     auto end_index   = line.find_first_of(' ', start_index);
 
                     if (start_index == std::string::npos + 1 || end_index == std::string::npos)
                     {
-                        log_error("z3_utils", "Some variables in line '{}' do not seem to fit in our handled format!", line);
+                        log_error("bitwuzla_utils", "Some variables in line '{}' do not seem to fit in our handled format!", line);
                         continue;
                     }
 
@@ -406,11 +406,12 @@ namespace hal
         std::string to_smt2(const bitwuzla::Term& t)
         {
             auto bw = bitwuzla::Bitwuzla();
-            bw.assert_formula(t);
-            auto stat = bw.statistics();
-            std::stringstream smt2;
-            smt2 << t.str();
-            return smt2.str();
+            bw.assert_formula(bitwuzla::mk_term(bitwuzla::Kind::EQUAL, {t, bitwuzla::mk_bv_one(bitwuzla::mk_bv_sort(t.sort().bv_size()))}));
+            std::stringbuf result_string;
+            std::ostream output_stream(&result_string);
+            bw.print_formula(output_stream, "smt2");
+            std::string output(result_string.str());
+            return output;
         }
 
     }    // namespace bitwuzla_utils
