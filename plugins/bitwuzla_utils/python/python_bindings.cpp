@@ -32,7 +32,6 @@ namespace hal
         py_bitwuzla_utils.def("get_name", &BitwuzlaUtilsPlugin::get_name);
         py_bitwuzla_utils.def_property_readonly("version", &BitwuzlaUtilsPlugin::get_version);
         py_bitwuzla_utils.def("get_version", &BitwuzlaUtilsPlugin::get_version);
-        py_bitwuzla_utils.def("get_subgraph_function", &BitwuzlaUtilsPlugin::get_subgraph_function_py);
 
         py_bitwuzla_utils.def_static(
             "test_on_net",

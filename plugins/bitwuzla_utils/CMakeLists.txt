@@ -8,7 +8,7 @@ if(PL_BITWUZLA_UTILS OR BUILD_ALL_PLUGINS)
                    SHARED
                    HEADER ${BITWUZLA_UTILS_INC}
                    SOURCES ${BITWUZLA_UTILS_SRC} ${BITWUZLA_UTILS_PYTHON_SRC}
-                   LINK_LIBRARIES PUBLIC ${BITWUZLA_LIBRARIES} OpenMP::OpenMP_CXX
+                   LINK_LIBRARIES PUBLIC ${BITWUZLA_LINK_LIBRARIES} OpenMP::OpenMP_CXX
                    )
     
     add_subdirectory(test)
