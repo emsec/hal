@@ -407,6 +407,45 @@ namespace hal
 
             return ERR("failed to translate term to hal Boolean function: term is of unhandeld sort : " + t.sort().str());
         }
+        std::set<std::string> get_variable_names(const bitwuzla::Term& t)
+        {
+            std::set<std::string> var_names;
+
+            // get inputs from smt2 string, much faster than iterating over z3 things
+            const auto smt = to_smt2(t);
+            std::cout << smt << std::endl;
+
+            std::istringstream iss(smt);
+            for (std::string line; std::getline(iss, line);)
+            {
+                if (line.find("declare-fun") != std::string::npos)
+                {
+                    auto start_index = line.find_first_of(' ') + 1;    // variable name starts after the first space
+                    auto end_index   = line.find_first_of(' ', start_index);
+
+                    if (start_index == std::string::npos + 1 || end_index == std::string::npos)
+                    {
+                        log_error("z3_utils", "Some variables in line '{}' do not seem to fit in our handled format!", line);
+                        continue;
+                    }
+
+                    auto var_name = line.substr(start_index, end_index - start_index);
+                    var_names.insert(var_name);
+                }
+            }
+
+            return var_names;
+        }
+
+        std::string to_smt2(const bitwuzla::Term& t)
+        {
+            auto bw = bitwuzla::Bitwuzla();
+            bw.assert_formula(t);
+            auto stat = bw.statistics();
+            std::stringstream smt2;
+            smt2 << t.str();
+            return smt2.str();
+        }
 
     }    // namespace bitwuzla_utils
 }    // namespace hal
@@ -508,11 +547,6 @@ namespace hal
 //                     default:
 //                         return ERR("all nodes somehow didnt get finished");
 //                 }
-//             }
-
-//             std::set<std::string> get_variable_names(const bw::expr& e)
-//             {
-//                 auto map = e.m_term.statistics();
 //             }
 
 //         }    // namespace bw

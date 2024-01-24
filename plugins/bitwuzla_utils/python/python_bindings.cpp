@@ -46,6 +46,12 @@ namespace hal
 
                 const auto bf = bf_res.get();
 
+                auto vars = bitwuzla_utils::get_variable_names(bf);
+                std::cout << "vars:" << std::endl;
+                for (const auto& var : vars)
+                {
+                    std::cout << "\t" << var << std::endl;
+                }
                 std::cout << "BF: " << bf << std::endl;
             },
 
