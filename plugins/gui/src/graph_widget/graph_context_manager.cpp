@@ -233,6 +233,7 @@ namespace hal
 
         for (GraphContext* context : mContextTableModel->list())
         {
+            if (context->isShowingFoldedTopModule()) continue;
             if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}) && !context->isShowingModule(added_module, {}, {}, {}, {}))
                 context->add({added_module}, {});
             else
@@ -267,6 +268,7 @@ namespace hal
 
         for (GraphContext* context : mContextTableModel->list())
         {
+            if (context->isShowingFoldedTopModule()) continue;
             if (context->isScheduledRemove(Node(removed_module,Node::Module)) ||
                     context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}))
                 context->remove({removed_module}, {});
@@ -293,6 +295,7 @@ namespace hal
 
         for (GraphContext* context : mContextTableModel->list())
         {
+            if (context->isShowingFoldedTopModule()) continue;
             if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}))
                 context->add({}, {inserted_gate});
             else
@@ -317,6 +320,7 @@ namespace hal
         //        dump("ModuleGateRemoved", m->get_id(), removed_gate);
         for (GraphContext* context : mContextTableModel->list())
         {
+            if (context->isShowingFoldedTopModule()) continue;
             if (context->isScheduledRemove(Node(removed_gate,Node::Gate)) ||
                     context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate}))
             {
