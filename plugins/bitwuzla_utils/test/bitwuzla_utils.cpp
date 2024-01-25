@@ -14,7 +14,7 @@ namespace hal
     protected:
         virtual void SetUp()
         {
-            NO_COUT_BLOCK;
+            // NO_COUT_BLOCK;
             test_utils::init_log_channels();
             test_utils::create_sandbox_directory();
         }
@@ -36,7 +36,7 @@ namespace hal
                 auto a    = BooleanFunction::Var("A", bits);
                 auto b    = BooleanFunction::Var("B", bits);
                 auto c    = BooleanFunction::Var("C", bits);
-                auto cond = BooleanFunction::Var("cond", 1);
+                auto cond = BooleanFunction::Eq(a.clone(), b.clone(), 1).get();
 
                 auto bf_not_res = BooleanFunction::Not(a.clone(), bits);
                 ASSERT_TRUE(bf_not_res.is_ok());
@@ -225,20 +225,19 @@ namespace hal
                 auto bft_ult = bft_ult_res.get();
                 EXPECT_EQ(bf_ult, bft_ult);
 
-                // auto bf_ite_res = BooleanFunction::Ite(cond.clone(), b.clone(), c.clone(), bits);
-                // ASSERT_TRUE(bf_ite_res.is_ok());
-                // auto bf_ite      = bf_ite_res.get();
-                // auto bff_ite_res = bitwuzla_utils::from_bf(bf_ite);
-                // ASSERT_TRUE(bff_ite_res.is_ok());    //
-                // auto bitwuzla_ite = bff_ite_res.get();
-                // auto bft_ite_res = bitwuzla_utils::to_bf(bitwuzla_ite);
-                // ASSERT_TRUE(bft_ite_res.is_ok());
-                // auto bft_ite = bft_ite_res.get();
-                // EXPECT_EQ(bf_ite, bft_ite);
+                auto bf_ite_res = BooleanFunction::Ite(cond.clone(), b.clone(), c.clone(), bits);
+                ASSERT_TRUE(bf_ite_res.is_ok());
+                auto bf_ite      = bf_ite_res.get();
+                auto bff_ite_res = bitwuzla_utils::from_bf(bf_ite);
+                ASSERT_TRUE(bff_ite_res.is_ok());    //
+                auto bitwuzla_ite = bff_ite_res.get();
+                auto bft_ite_res  = bitwuzla_utils::to_bf(bitwuzla_ite);
+                ASSERT_TRUE(bft_ite_res.is_ok());
+                auto bft_ite = bft_ite_res.get();
+                EXPECT_EQ(bf_ite, bft_ite);
             }
         }
         {
-            auto ctx = z3::context();
             auto a   = BooleanFunction::Var("A", 16);
             auto i0  = BooleanFunction::Index(3, 16);
             auto i1  = BooleanFunction::Index(6, 16);
@@ -255,7 +254,6 @@ namespace hal
             EXPECT_EQ(bf_slice, bft_slice);
         }
         {
-            // auto ctx      = z3::context();
             auto a        = BooleanFunction::Var("A", 5);
             auto ext_size = BooleanFunction::Index(16, 16);
 
@@ -282,7 +280,6 @@ namespace hal
             EXPECT_EQ(bf_sext, bft_sext);
         }
         {
-            // auto ctx      = z3::context();
             auto a        = BooleanFunction::Var("A", 16);
             auto num_bits = BooleanFunction::Index(5, 16);
 
