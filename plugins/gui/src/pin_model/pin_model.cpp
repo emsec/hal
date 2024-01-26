@@ -44,15 +44,18 @@ namespace hal
 
         //TODO change font of dummy entries
         clear();
+
         //free old allocated memory of structs
         for(auto pinGroup : mPinGroups){
             for(auto pin : pinGroup->pins){
                 delete(pin);
             }
             delete(pinGroup);
-            mPinGroups.clear();
         }
+        mPinGroups.clear();
 
+
+        //get all pins of a given gate if it exists
         if(gate){
             for (auto pinGroup : gate->get_pin_groups())
             {
