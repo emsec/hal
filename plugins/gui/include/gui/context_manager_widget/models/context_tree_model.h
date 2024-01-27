@@ -69,6 +69,7 @@ namespace hal
             bool isContext() const;
             u32 getId() const;
             GraphContext* context() const;
+            ContextDirectory* directory() const;
     };
 
     /**
@@ -107,7 +108,7 @@ namespace hal
          */
         ContextDirectory* addDirectory(QString name, BaseTreeItem* parent = nullptr);
 
-        BaseTreeItem* getParentDirectory(u32 directoryId) const;
+        BaseTreeItem* getDirectory(u32 directoryId) const;
 
         /**
          * Adds a given GraphContext to the model.
@@ -123,6 +124,13 @@ namespace hal
          * @param context - The context to remove.
          */
         void removeContext(GraphContext* context);
+
+        /**
+         * Removes a given contextDirectory from the model.
+         *
+         * @param directory - The directory to remove.
+         */
+        void removeDirectory(ContextDirectory* directory);
 
         /**
          * Get the GraphContext from a given index.
@@ -167,7 +175,7 @@ namespace hal
 
 
     private:
-        BaseTreeItem* getParentDirectoryInternal(BaseTreeItem* parentItem, u32 directoryId) const;
+        BaseTreeItem* getDirectoryInternal(BaseTreeItem* parentItem, u32 directoryId) const;
         ContextTreeItem *mCurrentDirectory;
         std::map<GraphContext *, ContextTreeItem *> mContextMap;
         QVector<GraphContext*> mContextList;

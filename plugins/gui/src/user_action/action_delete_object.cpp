@@ -37,6 +37,7 @@ namespace hal
         Gate* gat;
         Net* net;
         GraphContext* ctx;
+        ContextDirectory* ctxDir;
 
         LayoutLocker llock;
 
@@ -141,6 +142,16 @@ namespace hal
                 {
                     // TODO : Undo action
                     gGraphContextManager->deleteGraphContext(ctx);
+                }
+                else
+                    return false;
+                break;
+            case UserActionObjectType::ContextDir:
+                ctxDir = gGraphContextManager->getDirectoryById(mObject.id());
+                if (ctxDir)
+                {
+                    // TODO : Undo action
+                    gGraphContextManager->deleteContextDirectory(ctxDir);
                 }
                 else
                     return false;

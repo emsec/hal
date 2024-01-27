@@ -51,7 +51,7 @@ namespace hal
 
     ContextDirectory* GraphContextManager::createNewDirectory(const QString& name, u32 parentId)
     {
-        ContextDirectory* contextDir = mContextTreeModel->addDirectory(name, mContextTreeModel->getParentDirectory(parentId));
+        ContextDirectory* contextDir = mContextTreeModel->addDirectory(name, mContextTreeModel->getDirectory(parentId));
         return contextDir;
     }
 
@@ -65,7 +65,7 @@ namespace hal
         context->scene()->setDebugGridEnabled(mSettingDebugGrid->value().toBool());
         connect(mSettingDebugGrid, &SettingsItemCheckbox::boolChanged, context->scene(), &GraphicsScene::setDebugGridEnabled);
 
-        mContextTreeModel->addContext(context, mContextTreeModel->getParentDirectory(parentId));
+        mContextTreeModel->addContext(context, mContextTreeModel->getDirectory(parentId));
 
         Q_EMIT contextCreated(context);
 
@@ -99,6 +99,13 @@ namespace hal
         delete ctx;
     }
 
+    void GraphContextManager::deleteContextDirectory(ContextDirectory *ctxDir)
+    {
+        mContextTreeModel->removeDirectory(ctxDir);
+
+        delete ctxDir;
+    }
+
     QVector<GraphContext*> GraphContextManager::getContexts() const
     {
         return mContextTreeModel->list();
@@ -111,6 +118,14 @@ namespace hal
             if (ctx->id() == id)
                 return ctx;
         }
+        return nullptr;
+    }
+
+    ContextDirectory *GraphContextManager::getDirectoryById(u32 id) const
+    {
+        ContextDirectory * directory = static_cast<ContextTreeItem *>(mContextTreeModel->getDirectory(id))->directory();
+        if (directory) return directory;
+
         return nullptr;
     }
 

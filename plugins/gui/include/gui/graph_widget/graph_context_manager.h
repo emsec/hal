@@ -96,6 +96,13 @@ namespace hal
         void deleteGraphContext(GraphContext* ctx);
 
         /**
+         * Removes and deletes the given ContextDiretory. The passed pointer will be a <i>nullptr</i> afterwards.<br>
+         *
+         * @param ctxDir - The ContextDirectory to delete.
+         */
+        void deleteContextDirectory(ContextDirectory* ctxDir);
+
+        /**
          * Gets a list of all current GraphContext%s.
          *
          * @returns a list of all GraphContext%s.
@@ -103,6 +110,9 @@ namespace hal
         QVector<GraphContext*> getContexts() const;
         GraphContext* getCleanContext(const QString& name) const;
         GraphContext* getContextById(u32 id) const;
+
+
+        ContextDirectory* getDirectoryById(u32 id) const;
 
         /**
          * Gets the context which is exclusively showing the module with the id module_id.
@@ -390,6 +400,7 @@ namespace hal
          * @param context - The context that is about to be deleted
          */
         void deletingContext(GraphContext* context);
+
 
     private:
         //        QVector<GraphContext*> mGraphContexts;

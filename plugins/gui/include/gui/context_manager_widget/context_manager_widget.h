@@ -229,6 +229,8 @@ namespace hal
         QString mDeleteIconPath;
         QString mDeleteIconStyle;
 
+        QAction* mDeleteDirectoryAction;
+
         QAction* mOpenAction;
         QString mOpenIconPath;
         QString mOpenIconStyle;
@@ -245,6 +247,8 @@ namespace hal
         void handleRenameContextClicked();
         void handleDuplicateContextClicked();
         void handleDeleteContextClicked();
+        void handleDeleteDirectoryClicked();
+
 
         void handleContextMenuRequest(const QPoint& point);
         void handleSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);

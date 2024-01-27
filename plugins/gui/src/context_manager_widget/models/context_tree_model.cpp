@@ -69,6 +69,11 @@ namespace hal
         return mContext;
     }
 
+    ContextDirectory *ContextTreeItem::directory() const
+    {
+        return mDirectory;
+    }
+
     void ContextTreeItem::setData(QList<QVariant> data)
     {
 
@@ -150,12 +155,12 @@ namespace hal
         return QVariant();
     }
 
-    BaseTreeItem* ContextTreeModel::getParentDirectory(u32 directoryId) const
+    BaseTreeItem* ContextTreeModel::getDirectory(u32 directoryId) const
     {
-        return getParentDirectoryInternal(mRootItem, directoryId);
+        return getDirectoryInternal(mRootItem, directoryId);
     }
 
-    BaseTreeItem* ContextTreeModel::getParentDirectoryInternal(BaseTreeItem *parentItem, u32 directoryId) const
+    BaseTreeItem* ContextTreeModel::getDirectoryInternal(BaseTreeItem *parentItem, u32 directoryId) const
     {
         for (BaseTreeItem* childItem : parentItem->getChildren())
         {
@@ -164,7 +169,7 @@ namespace hal
             {
                 if (ctxItem->getId() == directoryId)
                     return ctxItem;
-                BaseTreeItem* bti = getParentDirectoryInternal(childItem, directoryId);
+                BaseTreeItem* bti = getDirectoryInternal(childItem, directoryId);
                 if (bti)
                     return bti;
             }
@@ -258,6 +263,24 @@ namespace hal
         std::map<GraphContext *,ContextTreeItem *>::iterator it;
         it = mContextMap.find(context);
         mContextMap.erase(it);
+    }
+
+    void ContextTreeModel::removeDirectory(ContextDirectory *directory)
+    {
+        ContextTreeItem* item   = static_cast<ContextTreeItem *>(getDirectory(directory->id()));
+        ContextTreeItem* parent = static_cast<ContextTreeItem*>(item->getParent());
+        assert(item);
+        assert(parent);
+
+        QModelIndex index = getIndexFromItem(parent);
+
+        int row = item->row();
+
+        beginRemoveRows(index, row, row);
+        parent->removeChild(item);
+        endRemoveRows();
+
+        delete item;
     }
 
     QModelIndex ContextTreeModel::getIndexFromContext(GraphContext *context) const

@@ -39,7 +39,7 @@ namespace hal
 {
     ContextManagerWidget::ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent)
         : ContentWidget("Views", parent), mSearchbar(new Searchbar(this)), mNewDirectoryAction(new QAction(this)), mNewViewAction(new QAction(this)), mRenameAction(new QAction(this)), mDuplicateAction(new QAction(this)),
-          mDeleteAction(new QAction(this)), mOpenAction(new QAction(this))
+          mDeleteAction(new QAction(this)), mDeleteDirectoryAction(new QAction(this)), mOpenAction(new QAction(this))
     {
         //needed to load the properties
         ensurePolished();
@@ -51,6 +51,7 @@ namespace hal
         mRenameAction->setIcon(gui_utility::getStyledSvgIcon(mRenameIconStyle, mRenameIconPath));
         mDuplicateAction->setIcon(gui_utility::getStyledSvgIcon(mDuplicateIconStyle, mDuplicateIconPath));
         mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
+        mDeleteDirectoryAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
 
         mOpenAction->setToolTip("Open");
@@ -59,6 +60,7 @@ namespace hal
         mRenameAction->setToolTip("Rename");
         mDuplicateAction->setToolTip("Duplicate");
         mDeleteAction->setToolTip("Delete");
+        mDeleteDirectoryAction->setToolTip("Delete Directory");
         mSearchAction->setToolTip("Search");
 
         mOpenAction->setText("Open view");
@@ -67,6 +69,7 @@ namespace hal
         mRenameAction->setText("Rename view");
         mDuplicateAction->setText("Duplicate view");
         mDeleteAction->setText("Delete view");
+        mDeleteDirectoryAction->setText("Delete directory");
         mSearchAction->setText("Search");
 
         //mOpenAction->setEnabled(false);
@@ -104,6 +107,7 @@ namespace hal
         connect(mRenameAction, &QAction::triggered, this, &ContextManagerWidget::handleRenameContextClicked);
         connect(mDuplicateAction, &QAction::triggered, this, &ContextManagerWidget::handleDuplicateContextClicked);
         connect(mDeleteAction, &QAction::triggered, this, &ContextManagerWidget::handleDeleteContextClicked);
+        connect(mDeleteDirectoryAction, &QAction::triggered, this, &ContextManagerWidget::handleDeleteDirectoryClicked);
         connect(mSearchAction, &QAction::triggered, this, &ContextManagerWidget::toggleSearchbar);
 
         connect(mContextTreeView, &QTreeView::customContextMenuRequested, this, &ContextManagerWidget::handleContextMenuRequest);
@@ -144,9 +148,12 @@ namespace hal
 
         if (confirm && !newName.isEmpty())
         {
-            mContextTreeModel->addDirectory(newName);
-        }
-
+            UserActionCompound* act = new UserActionCompound;
+            act->setUseCreatedObject();
+            act->addAction(new ActionCreateObject(UserActionObjectType::ContextDir,
+                      QString::fromStdString(gNetlist->get_top_module()->get_name())));
+            act->addAction(new ActionAddItemsToObject({gNetlist->get_top_module()->get_id()}, {}));
+            act->exec();        }
     }
 
     void ContextManagerWidget::handleOpenContextClicked()
@@ -238,6 +245,20 @@ namespace hal
         act->exec();
     }
 
+    void ContextManagerWidget::handleDeleteDirectoryClicked()
+    {
+        QModelIndex current     = mContextTreeView->currentIndex();
+        if (!current.isValid()) return;
+
+        ContextDirectory* clicked_directory = getCurrentItem()->directory();
+
+        if (!clicked_directory) return;
+
+        ActionDeleteObject* act = new ActionDeleteObject;
+        act->setObject(UserActionObject(clicked_directory->id(),UserActionObjectType::ContextDir));
+        act->exec();
+    }
+
     void ContextManagerWidget::handleSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
     {
         Q_UNUSED(deselected);
@@ -258,18 +279,24 @@ namespace hal
         context_menu.addAction(mNewDirectoryAction);
 
         GraphContext* clicked_context = getCurrentContext();
+        ContextDirectory* clicked_directory = getCurrentItem()->directory();
 
-        if (!clicked_context) {
+        if (!clicked_context && !clicked_directory) {
             context_menu.exec(mContextTreeView->viewport()->mapToGlobal(point));
             return;
         }
 
-        if (clicked_index.isValid())
+        if (clicked_index.isValid() && clicked_context)
         {
             context_menu.addAction(mOpenAction);
             context_menu.addAction(mDuplicateAction);
             context_menu.addAction(mRenameAction);
             context_menu.addAction(mDeleteAction);
+        }
+
+        if (clicked_index.isValid() && clicked_directory)
+        {
+            context_menu.addAction(mDeleteDirectoryAction);
         }
 
         context_menu.exec(mContextTreeView->viewport()->mapToGlobal(point));
