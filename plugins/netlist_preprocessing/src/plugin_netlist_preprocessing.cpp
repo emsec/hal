@@ -1942,24 +1942,46 @@ namespace hal
         return OK(all_modules);
     }
 
-    Result<u32> NetlistPreprocessingPlugin::unify_ff_outputs(Netlist* nl, const std::vector<Gate*>& ffs)
+    Result<u32> NetlistPreprocessingPlugin::unify_ff_outputs(Netlist* nl, const std::vector<Gate*>& ffs, GateType* inverter_type)
     {
         if (nl == nullptr)
         {
             return ERR("netlist is a nullptr");
         }
 
-        const auto* gl       = nl->get_gate_library();
-        const auto inv_types = gl->get_gate_types([](const GateType* gt) {
-            return gt->get_properties() == std::set<GateTypeProperty>({GateTypeProperty::c_inverter}) && gt->get_input_pins().size() == 1 && gt->get_output_pins().size() == 1;
-        });
-        if (inv_types.empty())
+        if (inverter_type == nullptr)
         {
-            return ERR("gate library " + gl->get_name() + " of netlist does not contain an inverter gate");
+            const auto* gl = nl->get_gate_library();
+            const auto inv_types =
+                gl->get_gate_types([](const GateType* gt) { return gt->has_property(GateTypeProperty::c_inverter) && gt->get_input_pins().size() == 1 && gt->get_output_pins().size() == 1; });
+            if (inv_types.empty())
+            {
+                return ERR("gate library '" + gl->get_name() + "' of netlist does not contain an inverter gate");
+            }
+            inverter_type = inv_types.begin()->second;
         }
-        auto* inv_gt     = inv_types.begin()->second;
-        auto inv_in_pin  = inv_gt->get_input_pins().front();
-        auto inv_out_pin = inv_gt->get_output_pins().front();
+        else
+        {
+            if (inverter_type->get_gate_library() != nl->get_gate_library())
+            {
+                return ERR("inverter gate type '" + inverter_type->get_name() + "' of gate library '" + inverter_type->get_gate_library()->get_name() + "' does not belong to gate library '"
+                           + nl->get_gate_library()->get_name() + "' of provided netlist");
+            }
+
+            if (!inverter_type->has_property(GateTypeProperty::c_inverter))
+            {
+                return ERR("gate type '" + inverter_type->get_name() + "' of gate library '" + inverter_type->get_gate_library()->get_name() + "' is not an inverter gate type");
+            }
+
+            if (inverter_type->get_input_pins().size() != 1 || inverter_type->get_output_pins().size() != 1)
+            {
+                return ERR("inverter gate type '" + inverter_type->get_name() + "' of gate library '" + inverter_type->get_gate_library()->get_name()
+                           + "' has an invalid number of input pins or output pins");
+            }
+        }
+
+        auto inv_in_pin  = inverter_type->get_input_pins().front();
+        auto inv_out_pin = inverter_type->get_output_pins().front();
 
         u32 ctr = 0;
 
@@ -2012,7 +2034,7 @@ namespace hal
             state_net->add_destination(inv, inv_in_pin);
             neg_state_net->remove_source(neg_state_ep);
             neg_state_net->add_source(inv, inv_out_pin);
-                ctr++;
+            ctr++;
         }
 
         return OK(ctr);

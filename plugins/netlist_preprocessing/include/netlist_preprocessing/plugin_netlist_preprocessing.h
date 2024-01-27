@@ -290,8 +290,9 @@ namespace hal
          * 
          * @param[in] nl - The netlist to operate on.
          * @param[in] ffs - The flip-flops to operate on. Defaults to an empty vector, in which case all flip-flops of the netlist are considered.
+         * @param[in] inverter_type - The inverter gate type to use. Defaults to a `nullptr`, in which case the first inverter type found in the gate library is used.
          * @returns OK() and the number of rerouted `neg_state` outputs on success, an error otherwise.
          */
-        static Result<u32> unify_ff_outputs(Netlist* nl, const std::vector<Gate*>& ffs = {});
+        static Result<u32> unify_ff_outputs(Netlist* nl, const std::vector<Gate*>& ffs = {}, GateType* inverter_type = nullptr);
     };
 }    // namespace hal
