@@ -100,7 +100,7 @@ namespace hal
                     case BooleanFunction::NodeType::Ult:
                         return {true, z3::ult(p[0], p[1])};
                     case BooleanFunction::NodeType::Ite:
-                        return {true, z3::ite(p[0] == context.bv_val(1, 1), p[1], p[2])};
+                        return {true, z3::ite(p[0], p[1], p[2])};
                     default:
                         log_error("netlist", "Not implemented reached for nodetype {} in z3 conversion", node.type);
                         return {false, z3::expr(context)};

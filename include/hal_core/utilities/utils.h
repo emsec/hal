@@ -759,18 +759,20 @@ namespace hal
          * A safe wrapper around the std::stoull function that provides a Result<> for error handling instead of exceptions.
          * 
          * @param[in] s - The string represntation of the number.
+         * @param[in] base - The base of the integer, defaults to 10.
          *
          * @returns OK and an integer on success, an ERROR otherwise.
          */
-        CORE_API Result<u64> wrapped_stoull(const std::string& s);
+        CORE_API Result<u64> wrapped_stoull(const std::string& s, const u32 base = 10);
 
         /**
          * A safe wrapper around the std::stoul function that provides a Result<> for error handling instead of exceptions.
          * 
          * @param[in] s - The string represntation of the number.
+         * @param[in] base - The base of the integer, defaults to 10.
          *
          * @returns OK and an integer on success, an ERROR otherwise.
          */
-        CORE_API Result<u32> wrapped_stoul(const std::string& s);
+        CORE_API Result<u32> wrapped_stoul(const std::string& s, const u32 base = 10);
     }    // namespace utils
 }    // namespace hal

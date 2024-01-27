@@ -143,19 +143,13 @@ namespace hal
          * This function gathers the connected neighboring pingroups for a net by propagating to the neighboring gates and searches for module pin groups.
          */
         Result<std::map<MPG, std::set<Net*>>> gather_conntected_neighbors(Net* n,
-                                                                          std::unordered_set<Endpoint*>& visited,
                                                                           bool successors,
                                                                           const std::set<MPG>& relevant_pin_groups,
                                                                           const bool guarantee_propagation,
                                                                           const Module* inwards_module,
-                                                                          std::map<std::tuple<Net*, const bool, const Module*>, std::map<MPG, std::set<Net*>>>& cache)
+                                                                          std::set<std::tuple<Endpoint*, const bool, const Module*>>& visited,
+                                                                          std::map<std::tuple<Endpoint*, const bool, const Module*>, std::map<MPG, std::set<Net*>>>& cache)
         {
-            std::tuple<Net*, const bool, const Module*> t = {n, guarantee_propagation, inwards_module};
-            if (auto it = cache.find(t); it != cache.end())
-            {
-                return OK(it->second);
-            }
-
             std::map<MPG, std::set<Net*>> connected_neighbors;
 
 #ifdef PRINT_CONNECTIVITY_BUILDING
@@ -189,11 +183,12 @@ namespace hal
             const auto neighbors = successors ? n->get_destinations() : n->get_sources();
             for (const auto& ep : neighbors)
             {
-                if (visited.find(ep) != visited.end())
+                std::tuple<Endpoint*, const bool, const Module*> t_ep = {ep, guarantee_propagation, inwards_module};
+                if (visited.find(t_ep) != visited.end())
                 {
                     continue;
                 }
-                visited.insert(ep);
+                visited.insert(t_ep);
 
                 Gate* g = ep->get_gate();
 
@@ -301,20 +296,65 @@ namespace hal
                         continue;
                     }
 
-                    auto res = gather_conntected_neighbors(next_ep->get_net(), visited, successors, relevant_pin_groups, false, nullptr, cache);
-                    if (res.is_error())
+                    std::map<MPG, std::set<hal::Net*>> connected;
+                    std::tuple<Endpoint*, const bool, const Module*> t = {next_ep, false, nullptr};
+                    if (auto it = cache.find(t); it != cache.end())
                     {
-                        return res;
+                        connected = it->second;
+                    }
+                    else
+                    {
+                        auto res = gather_conntected_neighbors(next_ep->get_net(), successors, relevant_pin_groups, false, nullptr, visited, cache);
+                        if (res.is_error())
+                        {
+                            return res;
+                        }
+                        connected = res.get();
                     }
 
-                    for (auto& [org_mpg, nets] : res.get())
+                    // if (auto it = cache.find(t); it != cache.end())
+                    // {
+                    //     if (it->second != connected)
+                    //     {
+                    //         std::cout << "Found different results for: " << std::endl
+                    //                   << "Net: " << n->get_id() << std::endl
+                    //                   << "Guarantee Propagation: " << guarantee_propagation << std::endl
+                    //                   << "Parent Module: " << (inwards_module ? inwards_module->get_id() : 0) << std::endl;
+
+                    //         std::cout << "NEW: " << std::endl;
+                    //         for (const auto& [mpg, nets] : connected)
+                    //         {
+                    //             std::cout << mpg.first->get_name() << " - " << mpg.second->get_name() << std::endl;
+                    //             for (const auto& net : nets)
+                    //             {
+                    //                 std::cout << "\t" << net->get_name() << std::endl;
+                    //             }
+                    //         }
+
+                    //         std::cout << "OLD: " << std::endl;
+                    //         for (const auto& [mpg, nets] : it->second)
+                    //         {
+                    //             std::cout << mpg.first->get_name() << " - " << mpg.second->get_name() << std::endl;
+                    //             for (const auto& net : nets)
+                    //             {
+                    //                 std::cout << "\t" << net->get_name() << std::endl;
+                    //             }
+                    //         }
+
+                    //         return ERR("TEST");
+                    //     }
+                    // }
+
+                    cache[t] = connected;
+
+                    for (auto& [org_mpg, nets] : connected)
                     {
                         connected_neighbors[org_mpg].insert(nets.begin(), nets.end());
                     }
                 }
             }
 
-            cache[t] = connected_neighbors;
+            // cache[t] = connected_neighbors;
             return OK(connected_neighbors);
         }
 
@@ -327,9 +367,10 @@ namespace hal
         const std::map<Net*, POSSIBLE_BITINDICES> reduce_indices(const std::map<Net*, POSSIBLE_BITINDICES>& collected_bitindices)
         {
 #ifdef PRINT_CONFLICT
+            std::cout << "\tVanilla indices: " << std::endl;
             for (const auto& [net, possible_bitindices] : collected_bitindices)
             {
-                std::cout << "\t\tNet " << net->get_id() << ": " << std::endl;
+                std::cout << "\t\tNet " << net->get_id() << " - " << net->get_name() << ": " << std::endl;
                 u32 origins = 0;
                 for (const auto& [org_mpg, indices] : possible_bitindices)
                 {
@@ -349,14 +390,50 @@ namespace hal
             }
 #endif
 
-            // 1)  Checks whether a net has multiple indices annotated from the same origin mpg
             auto reduced_collected_indices = collected_bitindices;
+
+            // 1) Checks whether the mpg has annotated the same index to different nets
+            std::set<std::pair<MPG, u32>> origin_indices;
+            std::set<std::pair<MPG, u32>> origin_indices_to_remove;
+
+            for (const auto& [net, possible_bitindices] : reduced_collected_indices)
+            {
+                for (const auto& [org_mpg, indices] : possible_bitindices)
+                {
+                    for (const auto& index : indices)
+                    {
+                        if (origin_indices.find({org_mpg, index}) != origin_indices.end())
+                        {
+                            origin_indices_to_remove.insert({org_mpg, index});
+                        }
+                        else
+                        {
+                            origin_indices.insert({org_mpg, index});
+                        }
+                    }
+                }
+            }
+
+#ifdef PRINT_CONFLICT
+            for (const auto& [org_mpg, index] : origin_indices_to_remove)
+            {
+                std::cout << "Found org " << org_mpg.first->get_id() << "-" << org_mpg.second->get_name() << " index " << index << " pair to remove!" << std::endl;
+            }
+#endif
 
             for (auto& [net, possible_bitindices] : collected_bitindices)
             {
                 for (auto& [org_mpg, indices] : possible_bitindices)
                 {
-                    if (indices.size() != 1)
+                    for (const auto& index : indices)
+                    {
+                        if (origin_indices_to_remove.find({org_mpg, index}) != origin_indices_to_remove.end())
+                        {
+                            reduced_collected_indices.at(net).at(org_mpg).erase(index);
+                        }
+                    }
+
+                    if (reduced_collected_indices.at(net).at(org_mpg).empty())
                     {
                         reduced_collected_indices.at(net).erase(org_mpg);
                     }
@@ -373,40 +450,13 @@ namespace hal
                 return {};
             }
 
-            // 2) Checks whether the mpg has annotated the same index to different nets
-            std::set<std::pair<MPG, u32>> origin_indices;
-            std::set<std::pair<MPG, u32>> origin_indices_to_remove;
-
-            for (auto& [net, possible_bitindices] : reduced_collected_indices)
-            {
-                for (auto& [org_mpg, indices] : possible_bitindices)
-                {
-                    u32 index = *(indices.begin());
-                    if (origin_indices.find({org_mpg, index}) != origin_indices.end())
-                    {
-                        origin_indices_to_remove.insert({org_mpg, index});
-                    }
-                    else
-                    {
-                        origin_indices.insert({org_mpg, index});
-                    }
-                }
-            }
-
-#ifdef PRINT_CONFLICT
-            for (const auto& [org_mpg, index] : origin_indices_to_remove)
-            {
-                std::cout << "Found org " << org_mpg.first->get_id() << "-" << org_mpg.second->get_name() << " index " << index << " pair to remove!" << std::endl;
-            }
-#endif
-
+            // 2)  Checks whether a net has multiple indices annotated from the same origin mpg
             auto further_reduced_collected_indices = reduced_collected_indices;
             for (auto& [net, possible_bitindices] : reduced_collected_indices)
             {
                 for (auto& [org_mpg, indices] : possible_bitindices)
                 {
-                    u32 index = *(indices.begin());
-                    if (origin_indices_to_remove.find({org_mpg, index}) != origin_indices_to_remove.end())
+                    if (indices.size() != 1)
                     {
                         further_reduced_collected_indices.at(net).erase(org_mpg);
                     }
@@ -462,9 +512,9 @@ namespace hal
                 {
                     is_complete_pin_group_bitorder = false;
 
-                    // TODO remove
-                    // std::cout << "Missing in net " << in_net->get_id() << " for complete bitorder." << std::endl;
-
+#ifdef PRINT_CONFLICT
+                    std::cout << "Missing net " << net->get_id() << " - " << net->get_name() << " for complete bitorder." << std::endl;
+#endif
                     break;
                 }
             }
@@ -474,7 +524,7 @@ namespace hal
             {
                 // TODO remove
                 std::cout << "Found complete bitorder for pingroup " << mpg.second->get_name() << std::endl;
-                for (const auto& [net, index] : complete_consensus)
+                for (const auto& [net, index] : consensus_bitindices)
                 {
                     std::cout << net->get_id() << ": " << index << std::endl;
                 }
@@ -677,7 +727,7 @@ namespace hal
 
 #ifdef PRINT_CONFLICT
             std::cout << "Found majority bitorder: " << std::endl;
-            for (const auto& [net, index] : consensus_bitindices)
+            for (const auto& [net, index] : majority_indices)
             {
                 std::cout << net->get_id() << ": " << index << std::endl;
             }
@@ -732,14 +782,20 @@ namespace hal
             }
 #endif
 
-            const auto is_complete_pin_group_bitorder = check_completeness(mpg, second_majority_indices);
+            std::map<Net*, i32> combined_indices = first_majority_indices;
+            for (const auto& p : second_majority_indices)
+            {
+                combined_indices.insert(p);
+            }
+
+            const auto is_complete_pin_group_bitorder = check_completeness(mpg, combined_indices);
 
             if (!is_complete_pin_group_bitorder)
             {
                 return {};
             }
 
-            const auto aligned_indices = align_indices(second_majority_indices, only_allow_consecutive_bitorders);
+            const auto aligned_indices = align_indices(combined_indices, only_allow_consecutive_bitorders);
 
             return aligned_indices;
         }
@@ -794,8 +850,11 @@ namespace hal
                                                                                                              const std::set<MPG>& unknown_bitorders,
                                                                                                              const bool strict_consensus_finding)
     {
-        std::unordered_map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, Net*>>, boost::hash<std::pair<MPG, Net*>>> connectivity_inwards;
-        std::unordered_map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, Net*>>, boost::hash<std::pair<MPG, Net*>>> connectivity_outwards;
+        // std::unordered_map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, std::set<Net*>>>, boost::hash<std::pair<MPG, std::set<Net*>>>> connectivity_inwards;
+        // std::unordered_map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, std::set<Net*>>>, boost::hash<std::pair<MPG, std::set<Net*>>>> connectivity_outwards;
+
+        std::map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, std::set<Net*>>>> connectivity_inwards;
+        std::map<std::pair<MPG, Net*>, std::vector<std::pair<MPG, std::set<Net*>>>> connectivity_outwards;
 
 #ifdef PRINT_GENERAL
         std::cout << "Known bitorders [" << known_bitorders.size() << "]:" << std::endl;
@@ -818,9 +877,10 @@ namespace hal
             relevant_pin_groups.insert(kb);
         }
 
+        std::map<std::tuple<Endpoint*, const bool, const Module*>, std::map<MPG, std::set<Net*>>> cache_outwards;
+        std::map<std::tuple<Endpoint*, const bool, const Module*>, std::map<MPG, std::set<Net*>>> cache_inwards;
+
         // Build connectivity
-        std::map<std::tuple<Net*, const bool, const Module*>, std::map<MPG, std::set<Net*>>> outwards_cache;
-        std::map<std::tuple<Net*, const bool, const Module*>, std::map<MPG, std::set<Net*>>> inwards_cache;
         for (const auto& [m, pg] : unknown_bitorders)
         {
             bool successors = pg->get_direction() == PinDirection::output;
@@ -829,8 +889,8 @@ namespace hal
             {
                 const auto starting_net = p->get_net();
 
-                std::unordered_set<Endpoint*> visited_outwards;
-                const auto res_outwards = gather_conntected_neighbors(starting_net, visited_outwards, successors, relevant_pin_groups, false, nullptr, outwards_cache);
+                std::set<std::tuple<Endpoint*, const bool, const Module*>> visited_outwards;
+                const auto res_outwards = gather_conntected_neighbors(starting_net, successors, relevant_pin_groups, false, nullptr, visited_outwards, cache_outwards);
                 if (res_outwards.is_error())
                 {
                     return ERR_APPEND(res_outwards.get_error(),
@@ -839,9 +899,9 @@ namespace hal
                 }
                 const auto connected_outwards = res_outwards.get();
 
-                std::unordered_set<Endpoint*> visited_inwards;
+                std::set<std::tuple<Endpoint*, const bool, const Module*>> visited_inwards;
                 // NOTE when propagating inwards we guarantee the first propagation since otherwise we would stop at our starting pingroup
-                const auto res_inwards = gather_conntected_neighbors(starting_net, visited_inwards, !successors, relevant_pin_groups, true, m, inwards_cache);
+                const auto res_inwards = gather_conntected_neighbors(starting_net, !successors, relevant_pin_groups, true, m, visited_inwards, cache_inwards);
                 if (res_inwards.is_error())
                 {
                     return ERR_APPEND(res_inwards.get_error(),
@@ -858,7 +918,7 @@ namespace hal
                     //     continue;
                     // }
 
-                    connectivity_outwards[{{m, pg}, starting_net}].push_back({org_mpg, *nets.begin()});
+                    connectivity_outwards[{{m, pg}, starting_net}].push_back({org_mpg, nets});
                 }
 
                 for (const auto& [org_mpg, nets] : connected_inwards)
@@ -869,7 +929,7 @@ namespace hal
                     //     continue;
                     // }
 
-                    connectivity_inwards[{{m, pg}, starting_net}].push_back({org_mpg, *nets.begin()});
+                    connectivity_inwards[{{m, pg}, starting_net}].push_back({org_mpg, nets});
                 }
             }
         }
@@ -880,18 +940,24 @@ namespace hal
         {
             std::cout << start.first.first->get_id() << " / " << start.first.first->get_name() << " - " << start.first.second->get_name() << " (OUTWARDS)@ " << start.second->get_id() << " / "
                       << start.second->get_name() << std::endl;
-            for (const auto& [mpg, net] : connected)
+            for (const auto& [mpg, nets] : connected)
             {
-                std::cout << "\t" << mpg.first->get_id() << " / " << mpg.first->get_name() << " - " << mpg.second->get_name() << ": " << net->get_id() << " / " << net->get_name() << std::endl;
+                for (const auto& net : nets)
+                {
+                    std::cout << "\t" << mpg.first->get_id() << " / " << mpg.first->get_name() << " - " << mpg.second->get_name() << ": " << net->get_id() << " / " << net->get_name() << std::endl;
+                }
             }
         }
         for (const auto& [start, connected] : connectivity_inwards)
         {
             std::cout << start.first.first->get_id() << " / " << start.first.first->get_name() << " - " << start.first.second->get_name() << " (INWARDS)@ " << start.second->get_id() << " / "
                       << start.second->get_name() << std::endl;
-            for (const auto& [mpg, net] : connected)
+            for (const auto& [mpg, nets] : connected)
             {
-                std::cout << "\t" << mpg.first->get_id() << " / " << mpg.first->get_name() << " - " << mpg.second->get_name() << ": " << net->get_id() << " / " << net->get_name() << std::endl;
+                for (const auto& net : nets)
+                {
+                    std::cout << "\t" << mpg.first->get_id() << " / " << mpg.first->get_name() << " - " << mpg.second->get_name() << ": " << net->get_id() << " / " << net->get_name() << std::endl;
+                }
             }
         }
 #endif
@@ -985,25 +1051,28 @@ namespace hal
 
                     const auto& connected_inwards = connectivity_inwards.at({{m, pg}, starting_net});
 
-                    for (const auto& [org_mpg, org_net] : connected_inwards)
+                    for (const auto& [org_mpg, org_nets] : connected_inwards)
                     {
                         if (auto mpg_it = wellformed_module_pin_groups.find(org_mpg); mpg_it != wellformed_module_pin_groups.end())
                         {
                             const auto& nets = mpg_it->second;
-                            if (auto net_it = nets.find(org_net); net_it != nets.end())
+                            for (const auto& org_net : org_nets)
                             {
-                                collected_inwards[starting_net][org_mpg].insert(net_it->second);
-                                collected_combined[starting_net][org_mpg].insert(net_it->second);
-                            }
-                            else
-                            {
-                                log_warning("bitorder_propagation",
-                                            "Module {} / {} and pin group {} are wellformed but are missing an index for net {} / {}!",
-                                            org_mpg.first->get_id(),
-                                            org_mpg.first->get_name(),
-                                            org_mpg.second->get_name(),
-                                            org_net->get_id(),
-                                            org_net->get_name());
+                                if (auto net_it = nets.find(org_net); net_it != nets.end())
+                                {
+                                    collected_inwards[starting_net][org_mpg].insert(net_it->second);
+                                    collected_combined[starting_net][org_mpg].insert(net_it->second);
+                                }
+                                else
+                                {
+                                    log_warning("bitorder_propagation",
+                                                "Module {} / {} and pin group {} are wellformed but are missing an index for net {} / {}!",
+                                                org_mpg.first->get_id(),
+                                                org_mpg.first->get_name(),
+                                                org_mpg.second->get_name(),
+                                                org_net->get_id(),
+                                                org_net->get_name());
+                                }
                             }
                         }
                     }
@@ -1026,25 +1095,28 @@ namespace hal
 
                     const auto& connected_outwards = connectivity_outwards.at({{m, pg}, starting_net});
 
-                    for (const auto& [org_mpg, org_net] : connected_outwards)
+                    for (const auto& [org_mpg, org_nets] : connected_outwards)
                     {
                         if (auto mpg_it = wellformed_module_pin_groups.find(org_mpg); mpg_it != wellformed_module_pin_groups.end())
                         {
                             const auto& nets = mpg_it->second;
-                            if (auto net_it = nets.find(org_net); net_it != nets.end())
+                            for (const auto& org_net : org_nets)
                             {
-                                collected_outwards[starting_net][org_mpg].insert(net_it->second);
-                                collected_combined[starting_net][org_mpg].insert(net_it->second);
-                            }
-                            else
-                            {
-                                log_warning("bitorder_propagation",
-                                            "Module {} / {} and pin group {} are wellformed but are missing an index for net {} / {}!",
-                                            org_mpg.first->get_id(),
-                                            org_mpg.first->get_name(),
-                                            org_mpg.second->get_name(),
-                                            org_net->get_id(),
-                                            org_net->get_name());
+                                if (auto net_it = nets.find(org_net); net_it != nets.end())
+                                {
+                                    collected_outwards[starting_net][org_mpg].insert(net_it->second);
+                                    collected_combined[starting_net][org_mpg].insert(net_it->second);
+                                }
+                                else
+                                {
+                                    log_warning("bitorder_propagation",
+                                                "Module {} / {} and pin group {} are wellformed but are missing an index for net {} / {}!",
+                                                org_mpg.first->get_id(),
+                                                org_mpg.first->get_name(),
+                                                org_mpg.second->get_name(),
+                                                org_net->get_id(),
+                                                org_net->get_name());
+                                }
                             }
                         }
                     }
