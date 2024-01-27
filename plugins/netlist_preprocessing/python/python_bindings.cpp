@@ -238,7 +238,7 @@ namespace hal
                 Calls remove_unconnected_gates / remove_unconnected_nets until there are no further changes.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
-                :returns: The total number of removed nets and gates on success, ``None`` otherwise.
+                :returns: The number of removed nets and gates on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");
 
@@ -261,12 +261,12 @@ namespace hal
             R"(
                 Apply manually implemented optimizations to the netlist centered around muxes.
                 Currently implemented optimizations include:
-                 - removing inverters incase there are inverter gates infront and behind every data input and output of the mux
+                 - removing inverters incase there are inverter gates in front and behind every data input and output of the mux
                  - optimizing and therefore unifying possible inverters preceding the select signals by resynthesizing
 
                 :param halp_py.Netlist nl: The netlist to operate on.
                 :param halp_py.GateLibrary mux_inv_gl: A gate library only containing mux and inverter gates used for resynthesis.
-                :returns: The difference in total gates caused by these optimizations.
+                :returns: The difference in the total number of gates caused by these optimizations.
                 :rtype: int or ``None``
             )");
 
@@ -289,7 +289,7 @@ namespace hal
                 Builds for all gate output nets the Boolean function and substitutes all variables connected to vcc/gnd nets with the respective boolean value.
                 If the function simplifies to a static boolean constant cut the connection to the nets destinations and directly connect it to vcc/gnd. 
 
-                :partam hal_py.Netlist nl: The netlist to operate on.
+                :param hal_py.Netlist nl: The netlist to operate on.
                 :returns: The number of rerouted nets on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");
@@ -426,8 +426,8 @@ namespace hal
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
                 :param hal_py.Gate g: The gate to resynthesize.
-                :param hal_py.GateLibrary target_lib: Gatelibrary containing the gates used for technology mapping.
-                :param path genlib_path: Path to file containg the target library in genlib format.
+                :param hal_py.GateLibrary target_lib: Gate library containing the gates used for technology mapping.
+                :param path genlib_path: Path to file containing the target library in genlib format.
                 :param bool delete_gate: Determines whether the original gate gets deleted by the function, defaults to true.
                 :returns: ``True`` on success, ``False`` otherwise.
                 :rtype: bool
@@ -435,16 +435,16 @@ namespace hal
 
         py_netlist_preprocessing.def_static(
             "resynthesize_gates",
-            [](Netlist* nl, const std::vector<Gate*>& gates, GateLibrary* target_lib) -> bool {
+            [](Netlist* nl, const std::vector<Gate*>& gates, GateLibrary* target_lib) -> std::optional<u32> {
                 auto res = NetlistPreprocessingPlugin::resynthesize_gates(nl, gates, target_lib);
                 if (res.is_ok())
                 {
-                    return true;
+                    return res.get();
                 }
                 else
                 {
                     log_error("python_context", "{}", res.get_error().get());
-                    return false;
+                    return std::nullopt;
                 }
             },
             py::arg("nl"),
@@ -456,9 +456,9 @@ namespace hal
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
                 :param hal_py.Gate g: The gates to resynthesize.
-                :param hal_py.GateLibrary target_lib: Gatelibrary containing the gates used for technology mapping.
-                :returns: ``True`` on success, ``False`` otherwise.
-                :rtype: bool
+                :param hal_py.GateLibrary target_lib: Gate library containing the gates used for technology mapping.
+                :returns: The number of resynthesized gates on success, ``None``otherwise.
+                :rtype: int or ``None``
             )");
 
         py_netlist_preprocessing.def_static(
@@ -484,7 +484,7 @@ namespace hal
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
                 :param list[hal_py.GateType] gate_types: The gate types specifying which gates should be resynthesized.
-                :param hal_py.GateLibrary target_lib: Gatelibrary containing the gates used for technology mapping.
+                :param hal_py.GateLibrary target_lib: Gate library containing the gates used for technology mapping.
                 :returns: The number of resynthesized gates on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");
@@ -512,7 +512,7 @@ namespace hal
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
                 :param list[hal_py.Gate] subgraph: The subgraph to be resynthesized.
-                :param hal_py.GateLibrary target_lib: Gatelibrary containing the gates used for technology mapping.
+                :param hal_py.GateLibrary target_lib: Gate library containing the gates used for technology mapping.
                 :returns: The number of resynthesized gates on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");
@@ -541,7 +541,7 @@ namespace hal
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
                 :param list[hal_py.GateType] gate_types: The gate types specifying which gates should be part of the subgraph.
-                :param hal_py.GateLibrary target_lib: Gatelibrary containing the gates used for technology mapping.
+                :param hal_py.GateLibrary target_lib: Gate library containing the gates used for technology mapping.
                 :returns: The number of resynthesized gates on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");
@@ -562,7 +562,7 @@ namespace hal
             },
             py::arg("nl"),
             R"(
-                Tries to reconstruct a name and index for each flip flop that was part of a multibit wire in the verilog code.
+                Tries to reconstruct a name and index for each flip flop that was part of a multi-bit wire in the verilog code.
                 This is NOT a general netlist reverse engineering algorithm and ONLY works on synthesized netlists with names annotated by the synthesizer.
                 This function mainly focuses netlists synthesized with yosys since yosys names the output wires of the flip flops but not the gate it self.
                 We try to reconstruct name and index for each flip flop based on the name of its output nets.
@@ -591,7 +591,7 @@ namespace hal
                 Tries to reconstruct top module pin groups via indexed pin names.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
-                :returns: The number of reconstructed pingroups on success, ``None`` otherwise.
+                :returns: The number of reconstructed pin groups on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");
 
@@ -623,8 +623,8 @@ namespace hal
 
         py_netlist_preprocessing.def_static(
             "create_multi_bit_gate_modules",
-            [](Netlist* nl, const std::map<std::string, std::map<std::string, std::vector<std::string>>>& concatinated_pin_groups) -> std::vector<Module*> {
-                auto res = NetlistPreprocessingPlugin::create_multi_bit_gate_modules(nl, concatinated_pin_groups);
+            [](Netlist* nl, const std::map<std::string, std::map<std::string, std::vector<std::string>>>& concatenated_pin_groups) -> std::vector<Module*> {
+                auto res = NetlistPreprocessingPlugin::create_multi_bit_gate_modules(nl, concatenated_pin_groups);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -636,12 +636,12 @@ namespace hal
                 }
             },
             py::arg("nl"),
-            py::arg("concatinated_pin_groups"),
+            py::arg("concatenated_pin_groups"),
             R"(
-                Create modules from large gates like RAMs and DSPs with the option to concat mutliple gate pingroups to larger consecutive pin groups.
+                Create modules from large gates like RAMs and DSPs with the option to concat multiple gate pin groups to larger consecutive pin groups.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
-                :param  concatinated_pin_groups: 
+                :param  concatenated_pin_groups: 
                 :returns: ``True`` on success, ``False`` otherwise.
                 :rtype: bool
             )");

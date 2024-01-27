@@ -617,14 +617,14 @@ namespace hal
 #ifdef BITWUZLA_LIBRARY
         auto s_type = hal::SMT::SolverType::Bitwuzla;
         auto s_call = hal::SMT::SolverCall::Library;
-        config = config.with_solver(s_type).with_call(s_call);
+        config      = config.with_solver(s_type).with_call(s_call);
 #endif
         struct GateFingerprint
         {
             const GateType* type;
             std::map<GatePin*, Net*> ordered_fan_in = {};
-            std::set<Net*> unordered_fan_in  = {};
-            u8 trust_table_hw                = 0;
+            std::set<Net*> unordered_fan_in         = {};
+            u8 trust_table_hw                       = 0;
 
             bool operator<(const GateFingerprint& other) const
             {
@@ -861,7 +861,7 @@ namespace hal
 #ifdef BITWUZLA_LIBRARY
         auto s_type = hal::SMT::SolverType::Bitwuzla;
         auto s_call = hal::SMT::SolverCall::Library;
-        config = config.with_solver(s_type).with_call(s_call);
+        config      = config.with_solver(s_type).with_call(s_call);
 #endif
 
         u32 num_gates = 0;
@@ -1874,10 +1874,10 @@ namespace hal
     }
 
     Result<std::vector<Module*>> NetlistPreprocessingPlugin::create_multi_bit_gate_modules(Netlist* nl,
-                                                                                           const std::map<std::string, std::map<std::string, std::vector<std::string>>>& concatinated_pin_groups)
+                                                                                           const std::map<std::string, std::map<std::string, std::vector<std::string>>>& concatenated_pin_groups)
     {
         std::vector<Module*> all_modules;
-        for (const auto& [gt_name, pin_groups] : concatinated_pin_groups)
+        for (const auto& [gt_name, pin_groups] : concatenated_pin_groups)
         {
             const auto& gt = nl->get_gate_library()->get_gate_type_by_name(gt_name);
             if (gt == nullptr)
@@ -1894,7 +1894,7 @@ namespace hal
                     std::vector<ModulePin*> module_pins;
                     for (const auto& gate_pg_name : gate_pg_names)
                     {
-                        const auto& gate_pg            = g->get_type()->get_pin_group_by_name(gate_pg_name);
+                        const auto& gate_pg = g->get_type()->get_pin_group_by_name(gate_pg_name);
 
                         if (gate_pg == nullptr)
                         {
