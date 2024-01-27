@@ -278,7 +278,16 @@ namespace hal
 
         /**
          * Create modules from large gates like RAMs and DSPs with the option to concat mutliple gate pingroups to larger consecutive pin groups
+
+        /**
+         * Iterates all flip-flops of the netlist or specified by the user.
+         * If a flip-flop has a `state` and a `neg_state` output, a new inverter gate is created and connected to the `state` output net as an additional destination.
+         * Finally, the `neg_state` output net is disconnected from the `neg_state` pin and re-connected to the new inverter gate's output. 
+         * 
+         * @param[in] nl - The netlist to operate on.
+         * @param[in] ffs - The flip-flops to operate on. Defaults to an empty vector, in which case all flip-flops of the netlist are considered.
+         * @returns OK() and the number of rerouted `neg_state` outputs on success, an error otherwise.
          */
-        static Result<std::vector<Module*>> create_multi_bit_gate_modules(Netlist* nl, const std::map<std::string, std::map<std::string, std::vector<std::string>>>& concatinated_pin_groups);
+        static Result<u32> unify_ff_outputs(Netlist* nl, const std::vector<Gate*>& ffs = {});
     };
 }    // namespace hal

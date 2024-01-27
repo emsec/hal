@@ -1942,4 +1942,66 @@ namespace hal
         return OK(all_modules);
     }
 
+    Result<u32> NetlistPreprocessingPlugin::unify_ff_outputs(Netlist* nl, const std::vector<Gate*>& ffs)
+    {
+        if (nl == nullptr)
+        {
+            return ERR("netlist is a nullptr");
+        }
+
+        const auto* gl       = nl->get_gate_library();
+        const auto inv_types = gl->get_gate_types([](const GateType* gt) {
+            return gt->get_properties() == std::set<GateTypeProperty>({GateTypeProperty::c_inverter}) && gt->get_input_pins().size() == 1 && gt->get_output_pins().size() == 1;
+        });
+        if (inv_types.empty())
+        {
+            return ERR("gate library " + gl->get_name() + " of netlist does not contain an inverter gate");
+        }
+        auto* inv_gt     = inv_types.begin()->second;
+        auto inv_in_pin  = inv_gt->get_input_pins().front();
+        auto inv_out_pin = inv_gt->get_output_pins().front();
+
+        u32 ctr = 0;
+
+        const std::vector<Gate*>& gates = ffs.empty() ? nl->get_gates() : ffs;
+
+        for (const auto* ff : gates)
+        {
+            if (!ff->get_type()->has_property(GateTypeProperty::ff))
+            {
+                continue;
+            }
+
+            auto out_eps = ff->get_fan_out_endpoints();
+
+            Endpoint* q_out  = nullptr;
+            Endpoint* qn_out = nullptr;
+
+            for (auto* ep : out_eps)
+            {
+                auto ep_type = ep->get_pin()->get_type();
+                if (ep_type == PinType::state)
+                {
+                    q_out = ep;
+                }
+                else if (ep_type == PinType::neg_state)
+                {
+                    qn_out = ep;
+                }
+            }
+
+            if (q_out != nullptr && qn_out != nullptr)
+            {
+                auto* inv = nl->create_gate(inv_gt, ff->get_name() + "_QN_INV");
+                q_out->get_net()->add_destination(inv, inv_in_pin);
+                auto* qn_net = qn_out->get_net();
+                qn_net->remove_source(qn_out);
+                qn_net->add_source(inv, inv_out_pin);
+                ctr++;
+            }
+        }
+
+        return OK(ctr);
+    }
+
 }    // namespace hal
