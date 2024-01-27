@@ -617,14 +617,14 @@ namespace hal
 #ifdef BITWUZLA_LIBRARY
         auto s_type = hal::SMT::SolverType::Bitwuzla;
         auto s_call = hal::SMT::SolverCall::Library;
-        config = config.with_solver(s_type).with_call(s_call);
+        config      = config.with_solver(s_type).with_call(s_call);
 #endif
         struct GateFingerprint
         {
             const GateType* type;
             std::map<GatePin*, Net*> ordered_fan_in = {};
-            std::set<Net*> unordered_fan_in  = {};
-            u8 trust_table_hw                = 0;
+            std::set<Net*> unordered_fan_in         = {};
+            u8 trust_table_hw                       = 0;
 
             bool operator<(const GateFingerprint& other) const
             {
@@ -861,7 +861,7 @@ namespace hal
 #ifdef BITWUZLA_LIBRARY
         auto s_type = hal::SMT::SolverType::Bitwuzla;
         auto s_call = hal::SMT::SolverCall::Library;
-        config = config.with_solver(s_type).with_call(s_call);
+        config      = config.with_solver(s_type).with_call(s_call);
 #endif
 
         u32 num_gates = 0;
@@ -1874,10 +1874,10 @@ namespace hal
     }
 
     Result<std::vector<Module*>> NetlistPreprocessingPlugin::create_multi_bit_gate_modules(Netlist* nl,
-                                                                                           const std::map<std::string, std::map<std::string, std::vector<std::string>>>& concatinated_pin_groups)
+                                                                                           const std::map<std::string, std::map<std::string, std::vector<std::string>>>& concatenated_pin_groups)
     {
         std::vector<Module*> all_modules;
-        for (const auto& [gt_name, pin_groups] : concatinated_pin_groups)
+        for (const auto& [gt_name, pin_groups] : concatenated_pin_groups)
         {
             const auto& gt = nl->get_gate_library()->get_gate_type_by_name(gt_name);
             if (gt == nullptr)
@@ -1894,7 +1894,7 @@ namespace hal
                     std::vector<ModulePin*> module_pins;
                     for (const auto& gate_pg_name : gate_pg_names)
                     {
-                        const auto& gate_pg            = g->get_type()->get_pin_group_by_name(gate_pg_name);
+                        const auto& gate_pg = g->get_type()->get_pin_group_by_name(gate_pg_name);
 
                         if (gate_pg == nullptr)
                         {
@@ -1940,6 +1940,68 @@ namespace hal
         }
 
         return OK(all_modules);
+    }
+
+    Result<u32> NetlistPreprocessingPlugin::unify_ff_outputs(Netlist* nl, const std::vector<Gate*>& ffs)
+    {
+        if (nl == nullptr)
+        {
+            return ERR("netlist is a nullptr");
+        }
+
+        const auto* gl       = nl->get_gate_library();
+        const auto inv_types = gl->get_gate_types([](const GateType* gt) {
+            return gt->get_properties() == std::set<GateTypeProperty>({GateTypeProperty::c_inverter}) && gt->get_input_pins().size() == 1 && gt->get_output_pins().size() == 1;
+        });
+        if (inv_types.empty())
+        {
+            return ERR("gate library " + gl->get_name() + " of netlist does not contain an inverter gate");
+        }
+        auto* inv_gt     = inv_types.begin()->second;
+        auto inv_in_pin  = inv_gt->get_input_pins().front();
+        auto inv_out_pin = inv_gt->get_output_pins().front();
+
+        u32 ctr = 0;
+
+        const std::vector<Gate*>& gates = ffs.empty() ? nl->get_gates() : ffs;
+
+        for (const auto* ff : gates)
+        {
+            if (!ff->get_type()->has_property(GateTypeProperty::ff))
+            {
+                continue;
+            }
+
+            auto out_eps = ff->get_fan_out_endpoints();
+
+            Endpoint* q_out  = nullptr;
+            Endpoint* qn_out = nullptr;
+
+            for (auto* ep : out_eps)
+            {
+                auto ep_type = ep->get_pin()->get_type();
+                if (ep_type == PinType::state)
+                {
+                    q_out = ep;
+                }
+                else if (ep_type == PinType::neg_state)
+                {
+                    qn_out = ep;
+                }
+            }
+
+            if (q_out != nullptr && qn_out != nullptr)
+            {
+                auto* inv = nl->create_gate(inv_gt, ff->get_name() + "_QN_INV");
+                q_out->get_net()->add_destination(inv, inv_in_pin);
+                auto* qn_net = qn_out->get_net();
+                qn_net->remove_source(qn_out);
+                qn_net->add_source(inv, inv_out_pin);
+                ctr++;
+            }
+        }
+
+        return OK(ctr);
     }
 
 }    // namespace hal

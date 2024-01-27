@@ -37,6 +37,7 @@ namespace hal
                         {
                             return OK(it->second);
                         }
+
                         return OK(bitwuzla::mk_const(bitwuzla::mk_bv_sort(node.size), node.variable));
                     }
                     case BooleanFunction::NodeType::And:
@@ -77,9 +78,9 @@ namespace hal
                     case BooleanFunction::NodeType::Ashr:
                         return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ASHR, {p[0], p[1]}));
                     case BooleanFunction::NodeType::Rol:
-                        return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ROL, {p[0]}, {u64(std::stoi(p[1].value<std::string>(), nullptr, 2))}));
+                        return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ROL, {p[0], p[1]}));
                     case BooleanFunction::NodeType::Ror:
-                        return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ROR, {p[0]}, {u64(std::stoi(p[1].value<std::string>(), nullptr, 2))}));
+                        return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ROR, {p[0], p[1]}));
                     case BooleanFunction::NodeType::Eq:
                         return OK(bitwuzla::mk_term(bitwuzla::Kind::EQUAL, {p[0], p[1]}));
                     case BooleanFunction::NodeType::Sle:
@@ -131,9 +132,10 @@ namespace hal
 
         Result<BooleanFunction> to_bf(const bitwuzla::Term& t)
         {
+            u64 size;
             if (t.sort().is_bv())
             {
-                u64 size = t.sort().bv_size();
+                size = t.sort().bv_size();
 
                 if (size > 64)
                 {
@@ -159,253 +161,249 @@ namespace hal
                     }
                     return OK(BooleanFunction::Var(name.value(), size));
                 }
+            }
+            // else
+            // {
+            //     return ERR("failed to translate term to hal Boolean function: term is of unhandeld sort : " + t.sort().str());
+            // }
 
-                const auto op                        = t.kind();            // TODO: const auto op = e.decl().decl_kind();
-                auto num_args                        = t.num_children();    // TODO auto num_args = e.num_args();
-                std::vector<bitwuzla::Term> children = t.children();
-                std::vector<BooleanFunction> args;
+            const auto op                        = t.kind();            // TODO: const auto op = e.decl().decl_kind();
+            auto num_args                        = t.num_children();    // TODO auto num_args = e.num_args();
+            std::vector<bitwuzla::Term> children = t.children();
+            std::vector<BooleanFunction> args;
 
-                for (const auto& child : children)    // TODO
+            for (const auto& child : children)    // TODO
+            {
+                const auto arg = child;
+                if (const auto res = to_bf(arg); res.is_ok())
                 {
-                    const auto arg = child;
-                    if (const auto res = to_bf(arg); res.is_ok())
-                    {
-                        args.push_back(std::move(res.get()));
-                    }
-                    else
-                    {
-                        return ERR(res.get_error());
-                    }
+                    args.push_back(std::move(res.get()));
                 }
-
-                switch (op)
+                else
                 {
-                    case bitwuzla::Kind::AND: {
-                        auto bf_res = BooleanFunction::And(std::move(args.at(0)), std::move(args.at(1)), size);
-                        for (u64 i = 2; i < num_args; i++)
-                        {
-                            bf_res =
-                                bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::And(std::move(bf), std::move(arg), size); });
-                        }
-                        return bf_res;
-                    }
-                    case bitwuzla::Kind::OR: {
-                        auto bf_res = BooleanFunction::Or(std::move(args.at(0)), std::move(args.at(1)), size);
-                        for (u64 i = 2; i < num_args; i++)
-                        {
-                            bf_res =
-                                bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Or(std::move(bf), std::move(arg), size); });
-                        }
-                        return bf_res;
-                    }
-                    case bitwuzla::Kind::NOT: {
-                        if (num_args != 1)
-                        {
-                            return ERR("operation 'NOT' must have arity 1");
-                        }
-                        return BooleanFunction::Not(std::move(args.at(0)), size);
-                    }
-                    case bitwuzla::Kind::XOR: {
-                        auto bf_res = BooleanFunction::Xor(std::move(args.at(0)), std::move(args.at(1)), size);
-                        for (u64 i = 2; i < num_args; i++)
-                        {
-                            bf_res =
-                                bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Xor(std::move(bf), std::move(arg), size); });
-                        }
-                        return bf_res;
-                    }
-                    case bitwuzla::Kind::BV_ADD: {
-                        auto bf_res = BooleanFunction::Add(std::move(args.at(0)), std::move(args.at(1)), size);
-                        for (u64 i = 2; i < num_args; i++)
-                        {
-                            bf_res =
-                                bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Add(std::move(bf), std::move(arg), size); });
-                        }
-                        return bf_res;
-                    }
-                    case bitwuzla::Kind::BV_SUB: {
-                        auto bf_res = BooleanFunction::Sub(std::move(args.at(0)), std::move(args.at(1)), size);
-                        for (u64 i = 2; i < num_args; i++)
-                        {
-                            bf_res =
-                                bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Sub(std::move(bf), std::move(arg), size); });
-                        }
-                        return bf_res;
-                    }
-                    case bitwuzla::Kind::BV_MUL: {
-                        auto bf_res = BooleanFunction::Mul(std::move(args.at(0)), std::move(args.at(1)), size);
-                        for (u64 i = 2; i < num_args; i++)
-                        {
-                            bf_res =
-                                bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Mul(std::move(bf), std::move(arg), size); });
-                        }
-                        return bf_res;
-                    }
-                    case bitwuzla::Kind::BV_SDIV:
-                        if (num_args != 2)
-                        {
-                            return ERR("operation 'SDIV' must have arity 2");
-                        }
-                        return BooleanFunction::Sdiv(std::move(args.at(0)), std::move(args.at(1)), size);
-                    case bitwuzla::Kind::BV_UDIV:
-                        if (num_args != 2)
-                        {
-                            return ERR("operation 'UDIV' must have arity 2");
-                        }
-                        return BooleanFunction::Udiv(std::move(args.at(0)), std::move(args.at(1)), size);
-                    case bitwuzla::Kind::BV_SREM:
-                        if (num_args != 2)
-                        {
-                            return ERR("operation 'SREM' must have arity 2");
-                        }
-                        return BooleanFunction::Srem(std::move(args.at(0)), std::move(args.at(1)), size);
-                    case bitwuzla::Kind::BV_UREM:
-                        if (num_args != 2)
-                        {
-                            return ERR("operation 'UREM' must have arity 2");
-                        }
-                        return BooleanFunction::Urem(std::move(args.at(0)), std::move(args.at(1)), size);
-                    case bitwuzla::Kind::BV_CONCAT: {
-                        auto bf_res = BooleanFunction::Concat(std::move(args.at(0)), std::move(args.at(1)), size);
-                        for (u64 i = 2; i < num_args; i++)
-                        {
-                            bf_res =
-                                bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Concat(std::move(bf), std::move(arg), size); });
-                        }
-                        return bf_res;
-                    }
-                    case bitwuzla::Kind::BV_EXTRACT: {
-                        if (num_args != 1)
-                        {
-                            return ERR("operation 'SLICE' must have arity 1");
-                        }
-
-                        const u32 operand_size = args.at(0).size();
-
-                        const u32 start = t.indices().at(0);
-                        const u32 end   = t.indices().at(1);
-
-                        return BooleanFunction::Slice(std::move(args.at(0)), BooleanFunction::Index(start, operand_size), BooleanFunction::Index(end, operand_size), size);
-                    }
-                    case bitwuzla::Kind::BV_ZERO_EXTEND: {
-                        if (num_args != 1)
-                        {
-                            return ERR("operation 'ZEXT' must have arity 1");
-                        }
-
-                        return BooleanFunction::Zext(std::move(args.at(0)), BooleanFunction::Index(size, size), size);
-                    }
-                    case bitwuzla::Kind::BV_SIGN_EXTEND: {
-                        if (num_args != 1)
-                        {
-                            return ERR("operation 'SEXT' must have arity 1");
-                        }
-
-                        return BooleanFunction::Sext(std::move(args.at(0)), BooleanFunction::Index(size, size), size);
-                    }
-                    case bitwuzla::Kind::BV_SHL:
-                        if (num_args != 2)
-                        {
-                            return ERR("operation 'SHL' must have arity 2");
-                        }
-
-                        if (!args.at(1).is_index())
-                        {
-                            return ERR("cannot translate to hal Boolean function: failed to extract index value");
-                        }
-
-                        return BooleanFunction::Shl(std::move(args.at(0)), BooleanFunction::Index(args.at(1).get_index_value().get(), size), size);
-                    case bitwuzla::Kind::BV_SHR:
-                        if (num_args != 2)
-                        {
-                            return ERR("operation 'ASHR' must have arity 2");
-                        }
-
-                        if (!args.at(1).is_index())
-                        {
-                            return ERR("cannot translate to hal Boolean function: failed to extract index value");
-                        }
-
-                        return BooleanFunction::Lshr(std::move(args.at(0)), BooleanFunction::Index(args.at(1).get_index_value().get(), size), size);
-
-                    case bitwuzla::Kind::BV_ASHR:
-                        if (num_args != 2)
-                        {
-                            return ERR("operation 'ASHR' must have arity 2");
-                        }
-
-                        if (!args.at(1).is_index())
-                        {
-                            return ERR("cannot translate to hal Boolean function: failed to extract index value");
-                        }
-
-                        return BooleanFunction::Ashr(std::move(args.at(0)), BooleanFunction::Index(args.at(1).get_index_value().get(), size), size);
-                    case bitwuzla::Kind::BV_ROL:
-                        if (num_args != 2)
-                        {
-                            return ERR("operation 'ROL' must have arity 1");
-                        }
-
-                        if (!args.at(1).is_index())
-                        {
-                            return ERR("cannot translate to hal Boolean function: failed to extract index value");
-                        }
-
-                        return BooleanFunction::Rol(std::move(args.at(0)), BooleanFunction::Index(args.at(1).get_index_value().get(), size), size);
-                    case bitwuzla::Kind::BV_ROR:
-                        if (num_args != 2)
-                        {
-                            return ERR("operation 'ROR' must have arity 1");
-                        }
-
-                        if (!args.at(1).is_index())
-                        {
-                            return ERR("cannot translate to hal Boolean function: failed to extract index value");
-                        }
-
-                        return BooleanFunction::Ror(std::move(args.at(0)), BooleanFunction::Index(args.at(1).get_index_value().get(), size), size);
-                    case bitwuzla::Kind::EQUAL:
-                        if (num_args != 2)
-                        {
-                            return ERR("operation 'EQ' must have arity 2");
-                        }
-                        return BooleanFunction::Eq(std::move(args.at(0)), std::move(args.at(1)), 1);
-                    case bitwuzla::Kind::BV_SLE:
-                        if (num_args != 2)
-                        {
-                            return ERR("operation 'SLE' must have arity 2");
-                        }
-                        return BooleanFunction::Sle(std::move(args.at(0)), std::move(args.at(1)), 1);
-                    case bitwuzla::Kind::BV_SLT:
-                        if (num_args != 2)
-                        {
-                            return ERR("operation 'SLT' must have arity 2");
-                        }
-                        return BooleanFunction::Slt(std::move(args.at(0)), std::move(args.at(1)), 1);
-                    case bitwuzla::Kind::BV_ULE:
-                        if (num_args != 2)
-                        {
-                            return ERR("operation 'ULE' must have arity 2");
-                        }
-                        return BooleanFunction::Ule(std::move(args.at(0)), std::move(args.at(1)), 1);
-                    case bitwuzla::Kind::BV_ULT:
-                        if (num_args != 2)
-                        {
-                            return ERR("operation 'ULT' must have arity 2");
-                        }
-                        return BooleanFunction::Ult(std::move(args.at(0)), std::move(args.at(1)), 1);
-                    case bitwuzla::Kind::ITE:
-                        if (num_args != 3)
-                        {
-                            return ERR("operation 'ITE' must have arity 3");
-                        }
-                        return BooleanFunction::Ite(std::move(args.at(0)), std::move(args.at(1)), std::move(args.at(2)), size);
-                    default:
-                        return ERR("operation '" + std::to_string(op) + "' with arity " + std::to_string(num_args) + " is not yet implemented");
+                    return ERR(res.get_error());
                 }
             }
 
-            return ERR("failed to translate term to hal Boolean function: term is of unhandeld sort : " + t.sort().str());
+            switch (op)
+            {
+                case bitwuzla::Kind::BV_AND: {
+                    auto bf_res = BooleanFunction::And(std::move(args.at(0)), std::move(args.at(1)), size);
+                    for (u64 i = 2; i < num_args; i++)
+                    {
+                        bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::And(std::move(bf), std::move(arg), size); });
+                    }
+                    return bf_res;
+                }
+                case bitwuzla::Kind::BV_OR: {
+                    auto bf_res = BooleanFunction::Or(std::move(args.at(0)), std::move(args.at(1)), size);
+                    for (u64 i = 2; i < num_args; i++)
+                    {
+                        bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Or(std::move(bf), std::move(arg), size); });
+                    }
+                    return bf_res;
+                }
+                case bitwuzla::Kind::BV_NOT: {
+                    if (num_args != 1)
+                    {
+                        return ERR("operation 'NOT' must have arity 1");
+                    }
+                    return BooleanFunction::Not(std::move(args.at(0)), size);
+                }
+                case bitwuzla::Kind::BV_XOR: {
+                    auto bf_res = BooleanFunction::Xor(std::move(args.at(0)), std::move(args.at(1)), size);
+                    for (u64 i = 2; i < num_args; i++)
+                    {
+                        bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Xor(std::move(bf), std::move(arg), size); });
+                    }
+                    return bf_res;
+                }
+                case bitwuzla::Kind::BV_ADD: {
+                    auto bf_res = BooleanFunction::Add(std::move(args.at(0)), std::move(args.at(1)), size);
+                    for (u64 i = 2; i < num_args; i++)
+                    {
+                        bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Add(std::move(bf), std::move(arg), size); });
+                    }
+                    return bf_res;
+                }
+                case bitwuzla::Kind::BV_SUB: {
+                    auto bf_res = BooleanFunction::Sub(std::move(args.at(0)), std::move(args.at(1)), size);
+                    for (u64 i = 2; i < num_args; i++)
+                    {
+                        bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Sub(std::move(bf), std::move(arg), size); });
+                    }
+                    return bf_res;
+                }
+                case bitwuzla::Kind::BV_MUL: {
+                    auto bf_res = BooleanFunction::Mul(std::move(args.at(0)), std::move(args.at(1)), size);
+                    for (u64 i = 2; i < num_args; i++)
+                    {
+                        bf_res = bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Mul(std::move(bf), std::move(arg), size); });
+                    }
+                    return bf_res;
+                }
+                case bitwuzla::Kind::BV_SDIV:
+                    if (num_args != 2)
+                    {
+                        return ERR("operation 'SDIV' must have arity 2");
+                    }
+                    return BooleanFunction::Sdiv(std::move(args.at(0)), std::move(args.at(1)), size);
+                case bitwuzla::Kind::BV_UDIV:
+                    if (num_args != 2)
+                    {
+                        return ERR("operation 'UDIV' must have arity 2");
+                    }
+                    return BooleanFunction::Udiv(std::move(args.at(0)), std::move(args.at(1)), size);
+                case bitwuzla::Kind::BV_SREM:
+                    if (num_args != 2)
+                    {
+                        return ERR("operation 'SREM' must have arity 2");
+                    }
+                    return BooleanFunction::Srem(std::move(args.at(0)), std::move(args.at(1)), size);
+                case bitwuzla::Kind::BV_UREM:
+                    if (num_args != 2)
+                    {
+                        return ERR("operation 'UREM' must have arity 2");
+                    }
+                    return BooleanFunction::Urem(std::move(args.at(0)), std::move(args.at(1)), size);
+                case bitwuzla::Kind::BV_CONCAT: {
+                    auto bf_res = BooleanFunction::Concat(std::move(args.at(0)), std::move(args.at(1)), size);
+                    for (u64 i = 2; i < num_args; i++)
+                    {
+                        bf_res =
+                            bf_res.map<BooleanFunction>([arg = std::move(args.at(i)), size](BooleanFunction&& bf) mutable { return BooleanFunction::Concat(std::move(bf), std::move(arg), size); });
+                    }
+                    return bf_res;
+                }
+                case bitwuzla::Kind::BV_EXTRACT: {
+                    if (num_args != 1)
+                    {
+                        return ERR("operation 'SLICE' must have arity 1");
+                    }
+
+                    const u32 operand_size = args.at(0).size();
+
+                    const u32 start = t.indices().at(0);
+                    const u32 end   = t.indices().at(1);
+
+                    return BooleanFunction::Slice(std::move(args.at(0)), BooleanFunction::Index(end, operand_size), BooleanFunction::Index(start, operand_size), size);
+                }
+                case bitwuzla::Kind::BV_ZERO_EXTEND: {
+                    if (num_args != 1)
+                    {
+                        return ERR("operation 'ZEXT' must have arity 1");
+                    }
+
+                    return BooleanFunction::Zext(std::move(args.at(0)), BooleanFunction::Index(size, size), size);
+                }
+                case bitwuzla::Kind::BV_SIGN_EXTEND: {
+                    if (num_args != 1)
+                    {
+                        return ERR("operation 'SEXT' must have arity 1");
+                    }
+
+                    return BooleanFunction::Sext(std::move(args.at(0)), BooleanFunction::Index(size, size), size);
+                }
+                case bitwuzla::Kind::BV_SHL:
+                    if (num_args != 2)
+                    {
+                        return ERR("operation 'SHL' must have arity 2");
+                    }
+
+                    if (!args.at(1).is_constant())
+                    {
+                        return ERR("cannot translate to hal Boolean function: failed to extract index value");
+                    }
+
+                    return BooleanFunction::Shl(std::move(args.at(0)), BooleanFunction::Index(args.at(1).get_constant_value_u64().get(), size), size);
+                case bitwuzla::Kind::BV_SHR:
+                    if (num_args != 2)
+                    {
+                        return ERR("operation 'LSHR' must have arity 2");
+                    }
+
+                    if (!args.at(1).is_constant())
+                    {
+                        return ERR("cannot translate to hal Boolean function: failed to extract index value");
+                    }
+
+                    return BooleanFunction::Lshr(std::move(args.at(0)), BooleanFunction::Index(args.at(1).get_constant_value_u64().get(), size), size);
+
+                case bitwuzla::Kind::BV_ASHR:
+                    if (num_args != 2)
+                    {
+                        return ERR("operation 'ASHR' must have arity 2");
+                    }
+
+                    if (!args.at(1).is_constant())
+                    {
+                        return ERR("cannot translate to hal Boolean function: failed to extract index value");
+                    }
+
+                    return BooleanFunction::Ashr(std::move(args.at(0)), BooleanFunction::Index(args.at(1).get_constant_value_u64().get(), size), size);
+                case bitwuzla::Kind::BV_ROL:
+                    if (num_args != 2)
+                    {
+                        return ERR("operation 'ROL' must have arity 1");
+                    }
+
+                    if (!args.at(1).is_constant())
+                    {
+                        return ERR("cannot translate to hal Boolean function: failed to extract index value");
+                    }
+
+                    return BooleanFunction::Rol(std::move(args.at(0)), BooleanFunction::Index(args.at(1).get_constant_value_u64().get(), size), size);
+                case bitwuzla::Kind::BV_ROR:
+                    if (num_args != 2)
+                    {
+                        return ERR("operation 'ROR' must have arity 2");
+                    }
+
+                    if (!args.at(1).is_constant())
+                    {
+                        return ERR("cannot translate to hal Boolean function: failed to extract index value");
+                    }
+
+                    return BooleanFunction::Ror(std::move(args.at(0)), BooleanFunction::Index(args.at(1).get_constant_value_u64().get(), size), size);
+                case bitwuzla::Kind::EQUAL:
+                    if (num_args != 2)
+                    {
+                        return ERR("operation 'EQ' must have arity 2");
+                    }
+                    return BooleanFunction::Eq(std::move(args.at(0)), std::move(args.at(1)), 1);
+                case bitwuzla::Kind::BV_SLE:
+                    if (num_args != 2)
+                    {
+                        return ERR("operation 'SLE' must have arity 2");
+                    }
+                    return BooleanFunction::Sle(std::move(args.at(0)), std::move(args.at(1)), 1);
+                case bitwuzla::Kind::BV_SLT:
+                    if (num_args != 2)
+                    {
+                        return ERR("operation 'SLT' must have arity 2");
+                    }
+                    return BooleanFunction::Slt(std::move(args.at(0)), std::move(args.at(1)), 1);
+                case bitwuzla::Kind::BV_ULE:
+                    if (num_args != 2)
+                    {
+                        return ERR("operation 'ULE' must have arity 2");
+                    }
+                    return BooleanFunction::Ule(std::move(args.at(0)), std::move(args.at(1)), 1);
+                case bitwuzla::Kind::BV_ULT:
+                    if (num_args != 2)
+                    {
+                        return ERR("operation 'ULT' must have arity 2");
+                    }
+                    return BooleanFunction::Ult(std::move(args.at(0)), std::move(args.at(1)), 1);
+                case bitwuzla::Kind::ITE:
+                    if (num_args != 3)
+                    {
+                        return ERR("operation 'ITE' must have arity 3");
+                    }
+                    return BooleanFunction::Ite(std::move(args.at(0)), std::move(args.at(1)), std::move(args.at(2)), size);
+                default:
+                    return ERR("operation '" + std::to_string(op) + "' with arity " + std::to_string(num_args) + " is not yet implemented");
+            }
         }
         std::set<std::string> get_variable_names(const bitwuzla::Term& t)
         {
