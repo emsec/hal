@@ -1965,40 +1965,54 @@ namespace hal
 
         const std::vector<Gate*>& gates = ffs.empty() ? nl->get_gates() : ffs;
 
-        for (const auto* ff : gates)
+        for (auto* ff : gates)
         {
-            if (!ff->get_type()->has_property(GateTypeProperty::ff))
+            auto* ff_type = ff->get_type();
+
+            if (!ff_type->has_property(GateTypeProperty::ff))
             {
                 continue;
             }
 
-            auto out_eps = ff->get_fan_out_endpoints();
+            GatePin* state_pin     = nullptr;
+            GatePin* neg_state_pin = nullptr;
 
-            Endpoint* q_out  = nullptr;
-            Endpoint* qn_out = nullptr;
-
-            for (auto* ep : out_eps)
+            for (auto* o_pin : ff_type->get_output_pins())
             {
-                auto ep_type = ep->get_pin()->get_type();
-                if (ep_type == PinType::state)
+                if (o_pin->get_type() == PinType::state)
                 {
-                    q_out = ep;
+                    state_pin = o_pin;
                 }
-                else if (ep_type == PinType::neg_state)
+                else if (o_pin->get_type() == PinType::neg_state)
                 {
-                    qn_out = ep;
+                    neg_state_pin = o_pin;
                 }
             }
 
-            if (q_out != nullptr && qn_out != nullptr)
+            if (neg_state_pin == nullptr)
             {
-                auto* inv = nl->create_gate(inv_gt, ff->get_name() + "_QN_INV");
-                q_out->get_net()->add_destination(inv, inv_in_pin);
-                auto* qn_net = qn_out->get_net();
-                qn_net->remove_source(qn_out);
-                qn_net->add_source(inv, inv_out_pin);
+                continue;
+            }
+
+            auto* neg_state_ep = ff->get_fan_out_endpoint(neg_state_pin);
+            if (neg_state_ep == nullptr)
+            {
+                continue;
+            }
+            auto* neg_state_net = neg_state_ep->get_net();
+
+            auto state_net = ff->get_fan_out_net(state_pin);
+            if (state_net == nullptr)
+            {
+                state_net = nl->create_net(ff->get_name() + "__STATE_NET__");
+                state_net->add_source(ff, state_pin);
+            }
+
+            auto* inv = nl->create_gate(inverter_type, ff->get_name() + "__NEG_STATE_INVERT__");
+            state_net->add_destination(inv, inv_in_pin);
+            neg_state_net->remove_source(neg_state_ep);
+            neg_state_net->add_source(inv, inv_out_pin);
                 ctr++;
-            }
         }
 
         return OK(ctr);
