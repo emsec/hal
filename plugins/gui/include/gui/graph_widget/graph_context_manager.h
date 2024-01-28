@@ -116,6 +116,13 @@ namespace hal
         bool contextWithNameExists(const QString& name) const;
 
         /**
+         * Generate next view name with given prefix
+         * @param prefix
+         * @return the view name which does not exist so far
+         */
+        QString nextViewName(const QString& prefix) const;
+
+        /**
          * Handler to be called after a module has been created. Used to apply the changes in the affected contexts.<br>
          *
          * @param m - The module that has been created
@@ -357,6 +364,8 @@ namespace hal
         }
 
         static SettingsItemCheckbox* sSettingNetGroupingToPins;
+
+        static SettingsItemCheckbox* sSettingPanOnMiddleButton;
     Q_SIGNALS:
         /**
          * Q_SIGNAL that notifies about the creation of a new context by the context manager.
@@ -387,7 +396,7 @@ namespace hal
         u32 mMaxContextId;
         void dump(const QString& title, u32 mid, u32 xid) const;
         SettingsItemCheckbox* mSettingDebugGrid;
-        SettingsItemCheckbox* mSettingNetLayout;
+        SettingsItemCheckbox* mSettingDumpJunction;
         SettingsItemCheckbox* mSettingParseLayout;
         SettingsItemCheckbox* mSettingLayoutBoxes;
     };

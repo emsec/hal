@@ -155,7 +155,7 @@ namespace hal
          * 
          * @returns The group and the index of the pin.
          */
-        const std::pair<PinGroup<T>*, u32>& get_group() const
+        const std::pair<PinGroup<T>*, i32>& get_group() const
         {
             return m_group;
         }
@@ -173,7 +173,7 @@ namespace hal
         std::string m_name;
         PinDirection m_direction;
         PinType m_type;
-        std::pair<PinGroup<T>*, u32> m_group = {nullptr, 0};
+        std::pair<PinGroup<T>*, i32> m_group = {nullptr, 0};
 
         /**
          * Construct a new pin from its name, direction, and type.

@@ -2,8 +2,55 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-* Graphics
+* refactored module widget
+  * added option to show gate content for each module
+  * added option to show interior nets for each module
+  * added `Isolate in new view` feature for nets
+  * added button to expand or collapse all tree items
+  * added delete module action and shortcut
+  * added entries for context menu
+* refactored search bar
+  * changed appearance of search bar to be more intuitive
+  * added menu for extended options - e.g. option to search in selected columns only
+  * added search history
+  * added filter proxy class for trees and tables increasing the search performance
+* refactored layouter module
+  * switched to multithreaded algorithm
+  * boosted performance by using classes with faster memory access
+  * removed layouter code used prior to version 3.1.0 - thus removing the setting option to use that code
+  * added setting option to dump junction layout input data for experts to debug in case of layout errors
+* miscellaneous
+  * added functions to Python GUI API to create, modifiy and delete views
+  * added GUI PluginParameter type `ComboBox` for parameters that can be requested from plugin
+  * added GUI PluginParameter types `Module` and `Gated` for parameters that can be requested from plugin
+  * added `Show content` button to `Groupings` widget to show content of grouping as a list
+  * added flag which Python editor tab is active when serializing project
+  * added `GateType::delete_pin_group` and `GateType::assign_pin_to_group` to enable more operations on pin groups of gate pins
+  * added extended gate library picker when importing a netlist
+  * added keyboard shortcut for delete-item action from toolbar
+  * added parameter `force_name` to enforce pin (group) renaming to `Module::set_pin_name`, `Module::set_pin_group_name`, `Module::create_pin`, and `Module::create_pin_group`
+  * changed supported input file formats for import from hard coded list to list provided by loadable parser plugins
+  * changed behavior of import netlist dialog, suggest only non-existing directory names and loop until an acceptable name was entered
+  * changed appearance and behavior of import project dialog, make sure existing hal projects don't get overwritten
+  * changed installation script policy to install Python packages (omit 'pip install' which would need virtual environment)
+* bugfixes
+  * fixed colors in Python Console when switching between color schemes
+  * fixed pybind of `Module::get_gates`
+  * fixed Python script execution abort button disappearing when switching tabs
+  * fixed Python interpreter crash due to release of GIL semaphore before cleanup is done
+  * fixed segfault when deleting a module for which an exclusive view exists
+  * fixed not loading all plugins if the GUI is not in control
+  * fixed Verilog writer not being a dependency of Verilator plugin
+  * fixed order of pins within pin groups not being properly handled for modules and gate types
+  * fixed netlist parsers assigning gate pins in wrong order (compensated by the bug above, imported netlists were still correct)
+  * fixed wrong order of pins within pin groups in provided gate libraries
+  * fixed format string handling of enums in log outputs
+  * fixed restoring user assigned module colors from project file
+  * fixed no scrollbar shown in `Data` tab of `Selection Details` widget
+  * fixed problems in GUI plugin management caused by addressing plugins by absolute path
+  * fixed several bugs related to moving node boxes in GUI by drag'n'drop
 
+## [4.2.0](v4.2.0) - 2023-05-24 10:02:04-07:00 (urgency: medium)
 * GUI plugin manager
   * **WARNING:** modified plugin core API - reduced number of base classes and instead added extension components
   * added overview of loaded plugins and their features
@@ -93,7 +140,7 @@ All notable changes to this project will be documented in this file.
   * fixed cmake failing to parse HAL version number from file
   * fixed pins and pin groups not being hashable in Python
 
-## [4.1.0] - 2023-03-08 16:57:06+01:00 (urgency: medium)
+## [4.1.0](v4.1.0) - 2023-03-08 16:57:06+01:00 (urgency: medium)
 * selection details widget
   * module icons reflect module color
   * gate icons shape according to gate type
@@ -154,7 +201,7 @@ All notable changes to this project will be documented in this file.
   * fixed netlist parser bug related to unconnected module pins that are being directly assigned to another wire/signal in the module/entity body
   * fixed `get_pins` returning pins in wrong order if no filter is specified
 
-## [4.0.1] - 2022-10-24 15:33:15+02:00 (urgency: medium)
+## [4.0.1](v4.0.1) - 2022-10-24 15:33:15+02:00 (urgency: medium)
 * **WARNING:** this release breaks multiple APIs, please make sure to adjust your code accordingly.
 * project manager
   * added keeping all data belonging to a netlist in a single project directory
@@ -213,7 +260,7 @@ All notable changes to this project will be documented in this file.
   * fixed parsing of Liberty gate library attribute `clock`
   * fixed description of flip-flops and latches in all FPGA gate libraries
 
-## [3.3.0] - 2021-10-13 16:20:00+02:00 (urgency: medium)
+## [3.3.0](v3.3.0)- 2021-10-13 16:20:00+02:00 (urgency: medium)
 * Serialize to and deserialize from hal project directory
   * Layouts from all views are saved and restored
   * Grouping names and colors are saved and restored

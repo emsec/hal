@@ -212,7 +212,7 @@ namespace hal
             int mIndex;
             qreal mPos;
         };
-        QVector<QPoint> closestLayouterPos(const QPointF& scene_pos) const;
+        QPair<QPoint, QPointF> closestLayouterPos(const QPointF& scene_pos) const;
         LayouterPoint closestLayouterPoint(qreal scene_pos, int default_spacing, int min_index, QVector<qreal> sections) const;
 
         #ifdef GUI_DEBUG_GRID

@@ -62,6 +62,7 @@ namespace hal
     {
         struct PythonEditorControlEntry {
             int tabInx;
+            bool active;
             std::string restore;
             std::string filename;
         };
@@ -586,7 +587,7 @@ namespace hal
         /**
          * Q_SLOT to handle changes in the searchbar text. Used to update the search logic.
          */
-        void handleSearchbarTextEdited(const QString& text);
+        void handleSearchbarTextEdited(const QString& text, SearchOptions opts);
 
         /**
          * Q_SLOT to handle that the user has selected another tab, so that the index of the current tab has changed.

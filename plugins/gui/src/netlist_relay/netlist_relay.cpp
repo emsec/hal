@@ -27,7 +27,8 @@
 
 namespace hal
 {
-    NetlistRelay::NetlistRelay(QObject* parent) : QObject(parent), mModuleModel(new ModuleModel(this))
+    NetlistRelay::NetlistRelay(QObject* parent)
+        : QObject(parent), mModuleModel(new ModuleModel(this)), mModuleColorManager(new ModuleColorManager(this))
     {
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &NetlistRelay::debugHandleFileOpened);    // DEBUG LINE
         connect(this, &NetlistRelay::signalThreadEvent, this, &NetlistRelay::handleThreadEvent, Qt::BlockingQueuedConnection);
@@ -81,12 +82,17 @@ namespace hal
 
     QColor NetlistRelay::getModuleColor(const u32 id)
     {
-        return mModuleModel->moduleColor(id);
+        return mModuleColorManager->moduleColor(id);
     }
 
-    ModuleModel* NetlistRelay::getModuleModel()
+    ModuleModel* NetlistRelay::getModuleModel() const
     {
         return mModuleModel;
+    }
+
+    ModuleColorManager* NetlistRelay::getModuleColorManager() const
+    {
+        return mModuleColorManager;
     }
 
     void NetlistRelay::changeModuleName(const u32 id)
@@ -140,8 +146,6 @@ namespace hal
         ActionSetObjectColor* act = new ActionSetObjectColor(color);
         act->setObject(UserActionObject(id, UserActionObjectType::Module));
         act->exec();
-
-        Q_EMIT moduleColorChanged(m);
     }
 
     void NetlistRelay::addSelectionToModule(const u32 id)
@@ -376,7 +380,8 @@ namespace hal
                 // suppress actions if we receive this for the top module
                 if (mod->get_parent_module() != nullptr)
                 {
-                    mModuleModel->setRandomColor(mod->get_id());
+                    mModuleModel->addModule(mod->get_id(), mod->get_parent_module()->get_id());
+                    mModuleColorManager->setRandomColor(mod->get_id());
                 }
 
                 gGraphContextManager->handleModuleCreated(mod);
@@ -387,7 +392,8 @@ namespace hal
             case ModuleEvent::event::removed: {
                 //< no associated_data
 
-                mModuleModel->removeColor(mod->get_id());
+                mModuleColorManager->removeColor(mod->get_id());
+                mModuleModel->removeModule(mod->get_id());
 
                 gGraphContextManager->handleModuleRemoved(mod);
                 gSelectionRelay->handleModuleRemoved(mod->get_id());
@@ -398,7 +404,7 @@ namespace hal
             case ModuleEvent::event::name_changed: {
                 //< no associated_data
 
-                mModuleModel->updateModule(mod->get_id());
+                mModuleModel->updateModuleName(mod->get_id());
 
                 gGraphContextManager->handleModuleNameChanged(mod);
 
@@ -408,13 +414,13 @@ namespace hal
             case ModuleEvent::event::parent_changed: {
                 //< no associated_data
 
+                mModuleModel->handleModuleParentChanged(mod);
+
                 Q_EMIT moduleParentChanged(mod);
                 break;
             }
             case ModuleEvent::event::submodule_added: {
                 //< associated_data = id of added module
-
-                mModuleModel->addModule(associated_data, mod->get_id());
 
                 gGraphContextManager->handleModuleSubmoduleAdded(mod, associated_data);
 
@@ -424,8 +430,6 @@ namespace hal
             case ModuleEvent::event::submodule_removed: {
                 //< associated_data = id of removed module
 
-                mModuleModel->remove_module(associated_data);
-
                 gGraphContextManager->handleModuleSubmoduleRemoved(mod, associated_data);
 
                 Q_EMIT moduleSubmoduleRemoved(mod, associated_data);
@@ -434,6 +438,7 @@ namespace hal
             case ModuleEvent::event::gate_assigned: {
                 //< associated_data = id of inserted gate
 
+                mModuleModel->handleModuleGateAssinged(associated_data, mod->get_id());
                 gGraphContextManager->handleModuleGateAssigned(mod, associated_data);
 
                 Q_EMIT moduleGateAssigned(mod, associated_data);
@@ -442,6 +447,7 @@ namespace hal
             case ModuleEvent::event::gate_removed: {
                 //< associated_data = id of removed gate
 
+                mModuleModel->removeGate(associated_data);
                 gGraphContextManager->handleModuleGateRemoved(mod, associated_data);
 
                 Q_EMIT moduleGateRemoved(mod, associated_data);
@@ -529,6 +535,7 @@ namespace hal
             case GateEvent::event::name_changed: {
                 //< no associated_data
 
+                mModuleModel->updateGateName(gat->get_id());
                 gGraphContextManager->handleGateNameChanged(gat);
 
                 Q_EMIT gateNameChanged(gat);
@@ -573,6 +580,7 @@ namespace hal
             case NetEvent::event::created: {
                 //< no associated_data
 
+                mModuleModel->addNet(net->get_id(), gNetlist->get_top_module()->get_id());
                 gGraphContextManager->handleNetCreated(net);
 
                 Q_EMIT netCreated(net);
@@ -581,6 +589,7 @@ namespace hal
             case NetEvent::event::removed: {
                 //< no associated_data
 
+                mModuleModel->removeNet(net->get_id());
                 gGraphContextManager->handleNetRemoved(net);
                 gSelectionRelay->handleNetRemoved(net->get_id());
 
@@ -590,6 +599,7 @@ namespace hal
             case NetEvent::event::name_changed: {
                 //< no associated_data
 
+                mModuleModel->updateNetName(net->get_id());
                 gGraphContextManager->handleNetNameChanged(net);
 
                 Q_EMIT netNameChanged(net);
@@ -608,6 +618,7 @@ namespace hal
             case NetEvent::event::src_added: {
                 //< associated_data = id of src gate
 
+                mModuleModel->updateNet(net);
                 gGraphContextManager->handleNetSourceAdded(net, associated_data);
 
                 Q_EMIT netSourceAdded(net, associated_data);
@@ -616,6 +627,7 @@ namespace hal
             case NetEvent::event::src_removed: {
                 //< associated_data = id of src gate
 
+                mModuleModel->updateNet(net);
                 gGraphContextManager->handleNetSourceRemoved(net, associated_data);
 
                 Q_EMIT netSourceRemoved(net, associated_data);
@@ -624,6 +636,7 @@ namespace hal
             case NetEvent::event::dst_added: {
                 //< associated_data = id of dst gate
 
+                mModuleModel->updateNet(net);
                 gGraphContextManager->handleNetDestinationAdded(net, associated_data);
 
                 Q_EMIT netDestinationAdded(net, associated_data);
@@ -632,6 +645,7 @@ namespace hal
             case NetEvent::event::dst_removed: {
                 //< associated_data = id of dst gate
 
+                mModuleModel->updateNet(net);
                 gGraphContextManager->handleNetDestinationRemoved(net, associated_data);
 
                 Q_EMIT netDestinationRemoved(net, associated_data);
@@ -670,9 +684,9 @@ namespace hal
     void NetlistRelay::debugHandleFileOpened()
     {
         for (Module* m : gNetlist->get_modules())
-            mModuleModel->setRandomColor(m->get_id());
+            mModuleColorManager->setRandomColor(m->get_id());
         mModuleModel->init();
-        mColorSerializer.restore(mModuleModel);
+        mColorSerializer.restore(mModuleColorManager);
     }
 
     void NetlistRelay::debugHandleFileClosed()

@@ -23,6 +23,13 @@ namespace hal
         return std::string("0.1");
     }
 
+    std::set<std::string> VerilatorSimulatorPlugin::get_dependencies() const
+    {
+        std::set<std::string> retval;
+        retval.insert("verilog_writer");
+        return retval;
+    }
+
     void VerilatorSimulatorPlugin::on_load()
     {
         // constructor will register with controller

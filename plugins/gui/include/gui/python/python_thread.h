@@ -35,6 +35,26 @@ namespace hal {
     class Module;
     class Gate;
 
+    /**
+     * Class to aquire and release GIL
+     *
+     * It is important that the GIL is not released before
+     * Python code has removed all objects created during
+     * execution. Therefore the GIL release is done at the
+     * very end when running out of scope and calling the
+     * destructor
+     */
+    class PythonMutex
+    {
+        int mState;
+    public:
+        /// Aquire GIL
+        PythonMutex();
+
+        /// Release GIL
+        ~PythonMutex();
+    };
+
     class PythonThread : public QThread, public PythonContextSubscriber
     {
     public:

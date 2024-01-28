@@ -316,10 +316,12 @@ hal--Searchbar
     border-width                : 6px;
     border-style                : solid;
     border-color                : black;
-    qproperty-searchIcon       : ":/icons/search";
-    qproperty-searchIconStyle : "all -> #000000";
-    qproperty-clearIcon        : ":/icons/cross";
-    qproperty-clearIconStyle  : "all -> #000000";
+    qproperty-searchIcon        : ":/icons/search";
+    qproperty-searchIconStyle   : "all -> #000000";
+    qproperty-clearIcon         : ":/icons/cross";
+    qproperty-clearIconStyle    : "all -> #000000";
+    qproperty-optionDialogIcon  : ":/icons/settings";
+    qproperty-optionDialogIconStyle : "all -> #000000";
 }
 
 hal--Searchbar QLabel
@@ -911,6 +913,22 @@ hal--OpenFileWidget #icon-label
     margin-top : 220px;
 }
 
+hal--GateLibrarySelection
+{
+    qproperty-saveIconStyle: "all->#3192C5";
+    qproperty-saveIconPath: ":/icons/folder-down";
+}
+
+hal--GateLibrarySelection QLabel
+{
+    background: white;
+}
+
+hal--GateLibrarySelection QLabel#warningMsg
+{
+    color: darkred;
+}
+
 hal--ImportNetlistDialog
 {
     qproperty-saveIconStyle: "all->#3192C5";
@@ -1124,6 +1142,9 @@ hal--GroupingManagerWidget
     qproperty-searchActiveIconStyle: "all->#30ac4f";
     qproperty-searchIconStyle: "all->#FFFFFF";
     qproperty-searchIconPath: ":/icons/search";
+
+    qproperty-tableIconStyle: "all->#FFFFFF";
+    qproperty-tableIconPath: ":/icons/list";
 }
 
 hal--ContextManagerWidget
@@ -1200,9 +1221,22 @@ hal--Toolbar QPushButton:checked:hover {
 }
 
 hal--ModuleWidget {
+    qproperty-disabledIconStyle: "all->#515050";
+    qproperty-activeIconStyle: "all->#FFFFFF";
+
+    qproperty-showNetsIconPath: ":/icons/ne_net";
+    qproperty-hideNetsIconPath: ":/icons/ne_no_net";
+    qproperty-showGatesIconPath: ":/icons/ne_gate";
+    qproperty-hideGatesIconPath: ":/icons/ne_no_gate";
+
     qproperty-searchActiveIconStyle: "all->#30ac4f";
     qproperty-searchIconStyle: "all->#FFFFFF";
     qproperty-searchIconPath: ":/icons/search";
+
+    qproperty-renameIconPath: ":/icons/pen";
+    qproperty-deleteIconPath: ":/icons/trashcan";
+    qproperty-expandedIconPath: ":/icons/tree-expanded";
+    qproperty-collapsedIconPath: ":/icons/tree-collapsed";
 }
 
 hal--MainWindow
@@ -1284,8 +1318,8 @@ hal--LoggerQssAdapter
 hal--PythonConsoleQssAdapter
 {
     qproperty-standardColor: #000000;
-    qproperty-errorColor: #000000;
-    qproperty-promtColor: #000000;
+    qproperty-errorColor: #600000;
+    qproperty-promtColor: #002040;
 }
 
 hal--table_selector_widget

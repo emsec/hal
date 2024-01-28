@@ -30,6 +30,13 @@ namespace hal
                                                                                                     "Appearance:Graph View",
                                                                                                     "If set net grouping colors are also applied to input and output pins of gates");
 
+    SettingsItemCheckbox* GraphContextManager::sSettingPanOnMiddleButton = new SettingsItemCheckbox("Pan with Middle Mouse Button",
+                                                                                                    "graph_view/pan_middle_button",
+                                                                                                    false,
+                                                                                                    "Graph View",
+                                                                                                    "If enabled middle mouse button will pan the graphics.\n"
+                                                                                                    "If disabled middle mouse button can be used for rubber band selection.");
+
     GraphContextManager::GraphContextManager() : mContextTableModel(new ContextTableModel()), mMaxContextId(0)
     {
         mSettingDebugGrid = new SettingsItemCheckbox("GUI Debug Grid",
@@ -38,7 +45,11 @@ namespace hal
                                                      "eXpert Settings:Debug",
                                                      "Specifies whether the debug grid is displayed in the Graph View. The gird represents the scene as the layouter interprets it.");
 
-        mSettingNetLayout = new SettingsItemCheckbox("Optimize Net Layout", "graph_view/layout_nets", true, "Graph View", "Net optimization - not fully tested yet.");
+        mSettingDumpJunction = new SettingsItemCheckbox("Dump Junction Data",
+                                                     "debug/junction",
+                                                     false,
+                                                     "eXpert Settings:Debug",
+                                                     "Dump input data from junction router to file 'junction_data.txt' for external debugging.");
 
         mSettingParseLayout = new SettingsItemCheckbox("Apply Parsed Position", "graph_view/layout_parse", true, "Graph View", "Use parsed verilog coordinates if available.");
 
@@ -127,6 +138,17 @@ namespace hal
         return nullptr;
     }
 
+    QString GraphContextManager::nextViewName(const QString& prefix) const
+    {
+        int cnt = 0;
+
+        for (;;)
+        {
+            QString name = QString("%1 %2").arg(prefix).arg(++cnt);
+            if (!contextWithNameExists(name)) return name;
+        }
+    }
+
     bool GraphContextManager::contextWithNameExists(const QString& name) const
     {
         for (GraphContext* ctx : mContextTableModel->list())
@@ -152,16 +174,20 @@ namespace hal
     void GraphContextManager::handleModuleRemoved(Module* m)
     {
         for (GraphContext* context : mContextTableModel->list())
-            if (context->modules().contains(m->get_id()))
+        {
+            if (context->getExclusiveModuleId() == m->get_id())
             {
-                if (context->getExclusiveModuleId() == m->get_id())
-                    context->setExclusiveModuleId(0, false);
-
+                context->setExclusiveModuleId(0, false);
+                deleteGraphContext(context);
+            }
+            else if (context->modules().contains(m->get_id()))
+            {
                 context->remove({m->get_id()}, {});
 
                 if (context->empty() || context->willBeEmptied())
                     deleteGraphContext(context);
             }
+        }
     }
 
     void GraphContextManager::handleModuleNameChanged(Module* m) const
@@ -207,6 +233,7 @@ namespace hal
 
         for (GraphContext* context : mContextTableModel->list())
         {
+            if (context->isShowingFoldedTopModule()) continue;
             if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}) && !context->isShowingModule(added_module, {}, {}, {}, {}))
                 context->add({added_module}, {});
             else
@@ -241,6 +268,7 @@ namespace hal
 
         for (GraphContext* context : mContextTableModel->list())
         {
+            if (context->isShowingFoldedTopModule()) continue;
             if (context->isScheduledRemove(Node(removed_module,Node::Module)) ||
                     context->isShowingModule(m->get_id(), {}, {}, {removed_module}, {}))
                 context->remove({removed_module}, {});
@@ -267,6 +295,7 @@ namespace hal
 
         for (GraphContext* context : mContextTableModel->list())
         {
+            if (context->isShowingFoldedTopModule()) continue;
             if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}))
                 context->add({}, {inserted_gate});
             else
@@ -291,6 +320,7 @@ namespace hal
         //        dump("ModuleGateRemoved", m->get_id(), removed_gate);
         for (GraphContext* context : mContextTableModel->list())
         {
+            if (context->isShowingFoldedTopModule()) continue;
             if (context->isScheduledRemove(Node(removed_gate,Node::Gate)) ||
                     context->isShowingModule(m->get_id(), {}, {}, {}, {removed_gate}))
             {
@@ -497,11 +527,11 @@ namespace hal
     GraphLayouter* GraphContextManager::getDefaultLayouter(GraphContext* const context) const
     {
         StandardGraphLayouter* layouter = new StandardGraphLayouter(context);
-        layouter->setOptimizeNetLayoutEnabled(mSettingNetLayout->value().toBool());
+        layouter->setDumpJunctionEnabled(mSettingDumpJunction->value().toBool());
         layouter->setParseLayoutEnabled(mSettingParseLayout->value().toBool());
         layouter->setLayoutBoxesEnabled(mSettingLayoutBoxes->value().toBool());
 
-        connect(mSettingNetLayout, &SettingsItemCheckbox::boolChanged, layouter, &GraphLayouter::setOptimizeNetLayoutEnabled);
+        connect(mSettingDumpJunction, &SettingsItemCheckbox::boolChanged, layouter, &GraphLayouter::setDumpJunctionEnabled);
         connect(mSettingParseLayout, &SettingsItemCheckbox::boolChanged, layouter, &StandardGraphLayouter::setParseLayoutEnabled);
         connect(mSettingLayoutBoxes, &SettingsItemCheckbox::boolChanged, layouter, &StandardGraphLayouter::setLayoutBoxesEnabled);
 

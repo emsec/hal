@@ -28,15 +28,45 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/module.h"
+#include "gui/include/gui/gui_def.h"
 
-
-#include <vector>
-#include <tuple>
 
 #include <QObject>
+#include <QSet>
+#include <tuple>
+#include <vector>
 
 namespace hal
 {
+    namespace GuiApiClasses {
+
+        class View{
+        public:
+            static int isolateInNew(const std::vector<Module*>, const std::vector<Gate*>);
+            static bool deleteView(int id);
+            static bool addTo(int id, const std::vector<Module*>, const std::vector<Gate*>);
+            static bool removeFrom(int id, const std::vector<Module*>, const std::vector<Gate*>);
+            static bool setName(int id, const std::string& name);
+            static int getId(const std::string& name);
+            static std::string getName(int id);
+            static std::vector<Module*> getModules(int id);
+            static std::vector<Gate*> getGates(int id);
+            static std::vector<u32> getIds(const std::vector<Module*> modules, const std::vector<Gate*> gates);
+            static bool foldModule(int view_id, Module* module);
+            static bool unfoldModule(int view_id, Module* module);
+
+            struct ModuleGateIdPair {
+                QSet<u32> moduleIds;
+                QSet<u32> gateIds;
+            };
+
+            static ModuleGateIdPair getValidObjects(int viewId, const std::vector<Module*>, const std::vector<Gate*>);
+            static GridPlacement* getGridPlacement(int viewId);
+            static bool setGridPlacement(int viewId, GridPlacement* gp);
+        };
+    }
+
+
     /**
      * @ingroup gui
      * @brief Interface to interact with the gui itself.
@@ -531,10 +561,12 @@ namespace hal
          */
         void deselect(const std::vector<Gate*>& gates, const std::vector<Net*>& nets, const std::vector<Module*>& modules);
 
+        int isolateInNewView(const std::vector<Module*>, const std::vector<Gate*>);
+
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted whenever the view should be moved to a new selection.
          */
         void navigationRequested();
-    };
+    };    
 }

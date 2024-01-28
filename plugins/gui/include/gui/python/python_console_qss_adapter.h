@@ -51,6 +51,8 @@ namespace hal
          */
         static PythonConsoleQssAdapter* instance();
 
+        QString updateStyle(const QString& oldText);
+
         /** @name Q_PROPERTY READ Functions
          */
         ///@{
@@ -78,5 +80,9 @@ namespace hal
         QColor mStandardColor;
         QColor mErrorColor;
         QColor mPromtColor;
+
+        QString mOldStdrd;
+        QString mOldError;
+        QString mOldPromt;
     };
 }    // namespace hal

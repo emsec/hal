@@ -116,6 +116,7 @@ namespace hal {
         QTabWidget* mTabWidget;
 
         GateProxyModel* mGateTreeProxyModel;
+        GateSelectProxy* mGateTableProxyModel;
         Searchbar* mSearchbar;
         QAction* mToggleSearchbar;
 

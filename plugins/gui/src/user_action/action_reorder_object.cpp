@@ -38,13 +38,16 @@ namespace hal
                     return false;
                 }
                 auto pinGroup = pin->get_group().first;
-                if (pinGroup && pinGroup->size() > 1)
+                if (pinGroup)
                 {
-                    oldIndex = pin->get_group().second;
-                    auto result   = mod->move_pin_within_group(pinGroup, pin, mNewIndex);
-                    if (result.is_error())
+                    if (pinGroup->size() > 1)
                     {
-                        return false;
+                        oldIndex = pin->get_group().second;
+                        auto result   = mod->move_pin_within_group(pinGroup, pin, mNewIndex);
+                        if (result.is_error())
+                        {
+                            return false;
+                        }
                     }
                 }
                 else
@@ -64,7 +67,7 @@ namespace hal
 
                 // todo: perhaps provide aa function that returns the index of a group within the module? Similar to pin-index within group
                 auto groups = mod->get_pin_groups();
-                for(int i = 0; i < groups.size(); i++)
+                for(size_t i = 0; i < groups.size(); i++)
                     if(pinGroup == groups.at(i))
                         oldIndex = i;
 

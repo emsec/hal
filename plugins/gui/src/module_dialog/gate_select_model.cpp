@@ -1,3 +1,4 @@
+
 #include "gui/module_dialog/gate_select_model.h"
 
 #include "gui/content_manager/content_manager.h"
@@ -130,7 +131,7 @@ namespace hal
     }
 
     //---------------- PROXY ------------------------------------------
-    GateSelectProxy::GateSelectProxy(QObject* parent) : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::numerated)
+    GateSelectProxy::GateSelectProxy(QObject* parent) : SearchProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::numerated)
     {
         ;
     }
@@ -154,6 +155,18 @@ namespace hal
     {
         setFilterKeyColumn(-1);
         setFilterRegularExpression(txt);
+    }
+
+    void GateSelectProxy::startSearch(QString text, int options)
+    {
+        mSearchString = text;
+        mSearchOptions = SearchOptions(options);
+        invalidateFilter();
+    }
+
+    bool GateSelectProxy::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
+    {
+        return checkRow(source_row, source_parent, 0, 2);
     }
 
     //---------------- PICKER -----------------------------------------
@@ -224,13 +237,12 @@ namespace hal
     }
 
     //---------------- VIEW -------------------------------------------
-    GateSelectView::GateSelectView(bool history, Searchbar* sbar, const QSet<u32> &selectable, QWidget* parent) : QTableView(parent)
+    GateSelectView::GateSelectView(bool history, const QSet<u32> &selectable, QWidget* parent) : QTableView(parent)
     {
         setSelectionBehavior(QAbstractItemView::SelectRows);
         setSelectionMode(QAbstractItemView::SingleSelection);
 
         GateSelectProxy* prox = new GateSelectProxy(this);
-        connect(sbar, &Searchbar::textEdited, prox, &GateSelectProxy::searchTextChanged);
 
         GateSelectModel* modl = new GateSelectModel(history, selectable, this);
         prox->setSourceModel(modl);

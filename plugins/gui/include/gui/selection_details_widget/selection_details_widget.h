@@ -27,7 +27,10 @@
 
 #include "gui/content_widget/content_widget.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_proxy.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
 #include "hal_core/defines.h"
+
 
 class QTableWidget;
 class QStackedWidget;
@@ -40,9 +43,6 @@ namespace hal
     class Grouping;
     class Searchbar;
     class SelectionTreeView;
-    class ModuleDetailsWidget;
-    class GateDetailsWidget;
-    class NetDetailsWidget;
     class UserAction;
     class UserActionObject;
     class SettingsItemCheckbox;
@@ -344,9 +344,6 @@ namespace hal
 
         QStackedWidget* mStackedWidget;
 
-        GateDetailsWidget* mGateDetails;
-        NetDetailsWidget* mNetDetails;
-        ModuleDetailsWidget* mModuleDetails;
         QLabel* mItemDeletedLabel;
         QLabel* mNoSelectionLabel;
 
@@ -377,5 +374,7 @@ namespace hal
         GateDetailsTabWidget* mGateDetailsTabs;
         NetDetailsTabWidget* mNetDetailsTabs;
         ModuleDetailsTabWidget* mModuleDetailsTabs;
+        SelectionTreeProxyModel* mSelectionTreeProxyModel;
+        SelectionTreeModel* mSelectionTreeModel;
     };
 }

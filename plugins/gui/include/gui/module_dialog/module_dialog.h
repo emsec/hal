@@ -123,13 +123,6 @@ namespace hal {
          */
         void keybindToggleSearchbar(const QKeySequence& seq);
 
-        /**
-         * Q_SLOT to overwrite the filter with the regular expression given in <i>text</i>.
-         *
-         * @param text - Contains the regular expression filter as a string
-         */
-        void filter(const QString& text);
-
     private:
         u32 mSelectedId;
         QSet<u32> mExcludeIds;

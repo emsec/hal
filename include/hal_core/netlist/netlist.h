@@ -476,6 +476,7 @@ namespace hal
 
         /**
          * Remove a module from the netlist.
+         * Submodules, gates and nets under this module will be moved to the parent of this module.
          *
          * @param[in] module - The module.
          * @returns True on success, false otherwise.

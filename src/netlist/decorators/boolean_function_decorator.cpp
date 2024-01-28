@@ -55,7 +55,7 @@ namespace hal
     }
 
     // TODO think about moving this to its own BooleanFunctionGate Decorator
-    Result<BooleanFunction> BooleanFunctionDecorator::substitute_power_ground_pins(const Netlist* nl, const Gate* g) const
+    Result<BooleanFunction> BooleanFunctionDecorator::substitute_power_ground_pins(const Gate* g) const
     {
         BooleanFunction tmp_bf = m_bf.clone();
 
@@ -64,7 +64,7 @@ namespace hal
             const Net* net = g->get_fan_in_net(var_name);
             if (net == nullptr)
             {
-                return ERR("Unable to replace pins connected to GND/VCC with constants for boolean function associated with gate " + g->get_name() + " with ID " + std::to_string(g->get_id())
+                return ERR("Unable to replace pins connected to GND/VCC with constants for Boolean function associated with gate " + g->get_name() + " with ID " + std::to_string(g->get_id())
                            + ": failed to find net connected to pin " + var_name);
             }
 
