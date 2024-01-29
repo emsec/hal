@@ -848,5 +848,7 @@ namespace hal
         SettingsItemKeybind* mSettingSaveFileAs;
         SettingsItemKeybind* mSettingRunFile;
         SettingsItemKeybind* mSettingCreateFile;
+
+        QList<u32> mBlockedContextIds;
     };
 }    // namespace hal
