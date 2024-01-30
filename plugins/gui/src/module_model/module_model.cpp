@@ -491,7 +491,8 @@ namespace hal
         if (gateIds.isEmpty())
         {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-            netsToAssign = QSet(parentAssignment.keys().begin(),parentAssignment.keys().end());
+            QList<const Net*> tempKeys = parentAssignment.keys();
+            netsToAssign = QSet(tempKeys.begin(),tempKeys.end());
 #else
             netsToAssign = parentAssignment.keys().toSet();
 #endif
