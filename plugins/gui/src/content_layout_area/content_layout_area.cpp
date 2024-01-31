@@ -110,11 +110,29 @@ namespace hal
 
     void ContentLayoutArea::addContent(ContentWidget* widget, int index, content_anchor anchor)
     {
-        if (index > mTabWidget->widgetCount())
+        int maxIndex = 0;
+        switch (anchor)
         {
-            log_warning("gui", "Cannot insert widget '{}' at index {}, moved to index {}", widget->name().toStdString(), index, mTabWidget->widgetCount());
-            index = mTabWidget->widgetCount();
+            case content_anchor::center:
+                maxIndex = mTabWidget->count();
+                break;
+            case content_anchor::left:
+                maxIndex = mLeftAnchor->count();
+                break;
+            case content_anchor::right:
+                maxIndex = mRightAnchor->count();
+                break;
+            case content_anchor::bottom:
+                maxIndex = mBottomAnchor->count();
+                break;
         }
+
+        if (index > maxIndex)
+        {
+            log_warning("gui", "Cannot insert widget '{}' at index {}, moved to index {}", widget->name().toStdString(), index, maxIndex);
+            index = maxIndex;
+        }
+
 
         switch (anchor)
         {

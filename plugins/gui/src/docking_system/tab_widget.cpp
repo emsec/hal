@@ -202,7 +202,7 @@ namespace hal
             hide();
     }
 
-    int TabWidget::widgetCount() const
+    int TabWidget::count() const
     {
         return mDockBar->count();
     }
