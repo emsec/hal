@@ -1,5 +1,6 @@
 #include "gui/content_layout_area/content_layout_area.h"
 
+#include "hal_core/utilities/log.h"
 #include "gui/docking_system/dock_bar.h"
 #include "gui/docking_system/splitter_anchor.h"
 #include "gui/docking_system/tab_widget.h"
@@ -109,6 +110,12 @@ namespace hal
 
     void ContentLayoutArea::addContent(ContentWidget* widget, int index, content_anchor anchor)
     {
+        if (index > mTabWidget->widgetCount())
+        {
+            log_warning("gui", "Cannot insert widget '{}' at index {}, moved to index {}", widget->name().toStdString(), index, mTabWidget->widgetCount());
+            index = mTabWidget->widgetCount();
+        }
+
         switch (anchor)
         {
             case content_anchor::center:

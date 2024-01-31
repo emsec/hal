@@ -117,6 +117,12 @@ namespace hal
         void handleNoCurrentWidget(int index);
 
         /**
+         * Returns the number of widgets / buttons as of mDockBar->count()
+         * @return - The number of widgets / buttons
+         */
+        int widgetCount() const;
+
+        /**
          * Removes all buttons from the dockbar and therefore the widgets from the area. The corresponding
          * widgets are not destroyed but hidden.
          */

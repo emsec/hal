@@ -153,7 +153,7 @@ namespace hal
         mExternalIndex = 6;
 
         mGraphTabWidget = new GraphTabWidget();
-        mMainWindow->addContent(mGraphTabWidget, 2, content_anchor::center);
+        mMainWindow->addContent(mGraphTabWidget, 0, content_anchor::center);
 
         mModuleWidget = new ModuleWidget();
         mMainWindow->addContent(mModuleWidget, 0, content_anchor::left);
