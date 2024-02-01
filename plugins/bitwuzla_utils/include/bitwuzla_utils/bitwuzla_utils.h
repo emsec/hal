@@ -6,6 +6,7 @@
 namespace hal
 {
     class Gate;
+    class GatePin;
     class Net;
 
     namespace bitwuzla_utils
@@ -110,6 +111,21 @@ namespace hal
         Result<bitwuzla::Term> get_subgraph_bitwuzla_function(const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output);
 
         /**
+         * Get the bitwuzla term representation of a combined Boolean function of a subgraph of combinational gates starting at the source of the provided subgraph output net.
+         * The variables of the resulting Boolean function are created from the subgraph input nets using `BooleanFunctionNetDecorator::get_boolean_variable`.
+         * 
+         * @param[in] subgraph_gates - The gates making up the subgraph to consider.
+         * @param[in] subgraph_output - The subgraph oputput net for which to generate the Boolean function.
+         * @param[in] net_cache - Cache holding the already visited nets and the generated Term.
+         * @param[in] gate_cache - Cache holding the resolved gate Boolean function of the gates already visited.
+         * @return The the bitwuzla term representation of combined Boolean function of the subgraph on success, an error otherwise.
+         */
+        Result<bitwuzla::Term> get_subgraph_bitwuzla_function(const std::vector<Gate*>& subgraph_gates,
+                                                              const Net* subgraph_output,
+                                                              std::map<u32, bitwuzla::Term>& net_cache,
+                                                              std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache);
+
+        /**
          * Get the bitwuzla term representations of combined Boolean functions of a subgraph of combinational gates starting at the sources of the provided subgraph output nets.
          * The variables of the resulting Boolean functions are created from the subgraph input nets using `BooleanFunctionNetDecorator::get_boolean_variable`.
          * 
@@ -118,6 +134,8 @@ namespace hal
          * @return The the bitwuzla term representations of combined Boolean functions of the subgraph on success, an error otherwise.
          */
         Result<std::vector<bitwuzla::Term>> get_subgraph_bitwuzla_functions(const std::vector<Gate*>& subgraph_gates, const std::vector<Net*>& subgraph_outputs);
+
+        Result<bitwuzla::Term> simplify(const bitwuzla::Term& t);
 
     }    // namespace bitwuzla_utils
 }    // namespace hal

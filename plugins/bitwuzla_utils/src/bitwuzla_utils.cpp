@@ -38,7 +38,7 @@ namespace hal
                             return OK(it->second);
                         }
 
-                        return OK(bitwuzla::mk_const(bitwuzla::mk_bv_sort(node.size), node.variable));
+                        return OK(bitwuzla::mk_var(bitwuzla::mk_bv_sort(node.size), node.variable));
                     }
                     case BooleanFunction::NodeType::And:
                         return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_AND, {p[0], p[1]}));
@@ -405,12 +405,14 @@ namespace hal
                     return ERR("operation '" + std::to_string(op) + "' with arity " + std::to_string(num_args) + " is not yet implemented");
             }
         }
+
         std::set<std::string> get_variable_names(const bitwuzla::Term& t)
         {
             std::set<std::string> var_names;
 
             // get inputs from smt2 string, much faster than iterating over z3 things
             const auto smt = to_smt2(t);
+
             std::cout << smt << std::endl;
 
             std::istringstream iss(smt);
@@ -444,6 +446,19 @@ namespace hal
             bw.print_formula(output_stream, "smt2");
             std::string output(result_string.str());
             return output;
+        }
+
+        Result<bitwuzla::Term> simplify(const bitwuzla::Term& t)
+        {
+            bitwuzla::Options options;
+            // options.set(bitwuzla::Option::PRODUCE_MODELS, true);
+            // options.set(bitwuzla::Option::SAT_SOLVER, "cadical");
+            bitwuzla::Bitwuzla bitwuzla(options);
+
+            bitwuzla.assert_formula(bitwuzla::mk_term(bitwuzla::Kind::EQUAL, {t, bitwuzla::mk_bv_ones(t.sort())}));
+            bitwuzla.simplify();
+
+            bitwuzla.print_formula(std::cout, "smt2");
         }
 
     }    // namespace bitwuzla_utils

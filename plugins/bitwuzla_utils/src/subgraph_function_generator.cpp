@@ -154,6 +154,14 @@ namespace hal
             return get_subgraph_bitwuzla_function_internal(subgraph_gates, subgraph_output, net_cache, gate_cache);
         }
 
+        Result<bitwuzla::Term> get_subgraph_bitwuzla_function(const std::vector<Gate*>& subgraph_gates,
+                                                              const Net* subgraph_output,
+                                                              std::map<u32, bitwuzla::Term>& net_cache,
+                                                              std::map<std::pair<u32, const GatePin*>, BooleanFunction>& gate_cache)
+        {
+            return get_subgraph_bitwuzla_function_internal(subgraph_gates, subgraph_output, net_cache, gate_cache);
+        }
+
         Result<std::vector<bitwuzla::Term>> get_subgraph_bitwuzla_functions(const std::vector<Gate*>& subgraph_gates, const std::vector<Net*>& subgraph_outputs)
         {
             std::map<u32, bitwuzla::Term> net_cache;
