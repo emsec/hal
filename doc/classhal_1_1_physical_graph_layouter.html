@@ -146,8 +146,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a62ea0b873099148db83fcb7320726adb inherit pub_methods_classhal_1_1_graph_layouter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5691840af28d6c8fd39fa1dccbff5ca2 inherit pub_methods_classhal_1_1_graph_layouter"><td class="memItemLeft" align="right" valign="top">const <a class="elRef" href="https://doc.qt.io/qt-5/qmap.html">QMap</a>&lt; <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>, <a class="el" href="classhal_1_1_node.html">Node</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_layouter.html#a5691840af28d6c8fd39fa1dccbff5ca2">positionToNodeMap</a> () const</td></tr>
 <tr class="separator:a5691840af28d6c8fd39fa1dccbff5ca2 inherit pub_methods_classhal_1_1_graph_layouter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a950db7401f5f1c2a5cb5cff0511ca0b7 inherit pub_methods_classhal_1_1_graph_layouter"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_grid_placement.html">GridPlacement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_layouter.html#a950db7401f5f1c2a5cb5cff0511ca0b7">gridPlacementFactory</a> () const</td></tr>
+<tr class="separator:a950db7401f5f1c2a5cb5cff0511ca0b7 inherit pub_methods_classhal_1_1_graph_layouter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56963777addc1aafb7c1d0bab5147fff inherit pub_methods_classhal_1_1_graph_layouter"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_net_layout_point.html">NetLayoutPoint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_layouter.html#a56963777addc1aafb7c1d0bab5147fff">positonForNode</a> (const <a class="el" href="classhal_1_1_node.html">Node</a> &amp;nd) const</td></tr>
 <tr class="separator:a56963777addc1aafb7c1d0bab5147fff inherit pub_methods_classhal_1_1_graph_layouter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82c78cbddcd47f6b5aa0208cd398f81e inherit pub_methods_classhal_1_1_graph_layouter"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_node.html">Node</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_layouter.html#a82c78cbddcd47f6b5aa0208cd398f81e">nodeAtPosition</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> &amp;p) const</td></tr>
+<tr class="separator:a82c78cbddcd47f6b5aa0208cd398f81e inherit pub_methods_classhal_1_1_graph_layouter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0a09a36d86d794d397d33bc3f2f52cc inherit pub_methods_classhal_1_1_graph_layouter"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_layouter.html#ac0a09a36d86d794d397d33bc3f2f52cc">gridPointByItem</a> (<a class="el" href="classhal_1_1_graphics_node.html">GraphicsNode</a> *item) const</td></tr>
 <tr class="separator:ac0a09a36d86d794d397d33bc3f2f52cc inherit pub_methods_classhal_1_1_graph_layouter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e128152ac90a4e92d5422555867f952 inherit pub_methods_classhal_1_1_graph_layouter"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graph_layouter.html#a5e128152ac90a4e92d5422555867f952">dumpNodePositions</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qpoint.html">QPoint</a> &amp;search) const</td></tr>
@@ -588,7 +592,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="physical__graph__layouter_8cpp_source.html#l00072">72</a> of file <a class="el" href="physical__graph__layouter_8cpp_source.html">physical_graph_layouter.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00126">hal::GraphLayouter::removeNodeFromMaps()</a>.</p>
+<p class="reference">References <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Gate</a>, <a class="el" href="gui__def_8h_source.html#l00063">hal::Node::Module</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00139">hal::GraphLayouter::removeNodeFromMaps()</a>.</p>
 
 </div>
 </div>
@@ -602,7 +606,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_physical_graph_layouter.html">PhysicalGraphLayouter</a></li>
-    <li class="footer">Generated on Mon Jan 29 2024 12:01:39 for HAL by
+    <li class="footer">Generated on Thu Feb 1 2024 15:55:30 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

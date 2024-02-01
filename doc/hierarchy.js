@@ -300,6 +300,7 @@ var hierarchy =
       [ "hal::CommentManager", "classhal_1_1_comment_manager.html", null ],
       [ "hal::ContentDragRelay", "classhal_1_1_content_drag_relay.html", null ],
       [ "hal::ContentManager", "classhal_1_1_content_manager.html", null ],
+      [ "hal::DragController", "classhal_1_1_drag_controller.html", null ],
       [ "hal::FileManager", "classhal_1_1_file_manager.html", null ],
       [ "hal::FileStatusManager", "classhal_1_1_file_status_manager.html", null ],
       [ "hal::GateSelectPicker", "classhal_1_1_gate_select_picker.html", null ],
@@ -609,8 +610,8 @@ var hierarchy =
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
     [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
-    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
+    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "hal::Result< T >", "classhal_1_1_result.html", null ],
     [ "hal::RuntimeLibrary", "classhal_1_1_runtime_library.html", null ],
     [ "hal::SearchOptions", "classhal_1_1_search_options.html", null ],
@@ -690,8 +691,8 @@ var hierarchy =
     [ "Vec_Ptr_t_", "struct_vec___ptr__t__.html", null ],
     [ "Vec_Vec_t_", "struct_vec___vec__t__.html", null ],
     [ "hal::GuiApiClasses::View", "classhal_1_1_gui_api_classes_1_1_view.html", null ],
-    [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
+    [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
     [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ]
 ];

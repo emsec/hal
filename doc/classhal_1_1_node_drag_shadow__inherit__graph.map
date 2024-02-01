@@ -1,5 +1,5 @@
 <map id="hal::NodeDragShadow" name="hal::NodeDragShadow">
-<area shape="rect" id="node1" title="An item that is drawn when a node is dragged through the scene." alt="" coords="101,696,268,920"/>
+<area shape="rect" id="node1" title="An item that is drawn when a node is dragged through the scene." alt="" coords="83,696,286,905"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicsobject.html" title=" " alt="" coords="101,395,268,648"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="5,5,172,347"/>
 <area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicsitem.html" title=" " alt="" coords="196,20,365,332"/>

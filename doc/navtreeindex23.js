@@ -1,5 +1,13 @@
 var NAVTREEINDEX23 =
 {
+"functions_func_q.html":[6,3,1,16],
+"functions_func_r.html":[6,3,1,17],
+"functions_func_s.html":[6,3,1,18],
+"functions_func_t.html":[6,3,1,19],
+"functions_func_u.html":[6,3,1,20],
+"functions_func_v.html":[6,3,1,21],
+"functions_func_w.html":[6,3,1,22],
+"functions_func_x.html":[6,3,1,23],
 "functions_func_y.html":[6,3,1,24],
 "functions_func_z.html":[6,3,1,25],
 "functions_func_~.html":[6,3,1,26],
@@ -13,8 +21,8 @@ var NAVTREEINDEX23 =
 "functions_n.html":[6,3,0,13],
 "functions_o.html":[6,3,0,14],
 "functions_p.html":[6,3,0,15],
-"functions_prop.html":[6,3,6,0],
 "functions_prop.html":[6,3,6],
+"functions_prop.html":[6,3,6,0],
 "functions_prop_b.html":[6,3,6,1],
 "functions_prop_c.html":[6,3,6,2],
 "functions_prop_d.html":[6,3,6,3],
@@ -220,8 +228,8 @@ var NAVTREEINDEX23 =
 "get__in__touch__widget_8cpp_source.html":[7,0,1,3,2,48,1],
 "get__in__touch__widget_8h.html":[7,0,1,3,0,0,51,1],
 "get__in__touch__widget_8h_source.html":[7,0,1,3,0,0,51,1],
-"globals.html":[7,1,0],
 "globals.html":[7,1,0,0],
+"globals.html":[7,1,0],
 "globals_a.html":[7,1,0,1],
 "globals_b.html":[7,1,0,2],
 "globals_c.html":[7,1,0,3],
@@ -241,13 +249,5 @@ var NAVTREEINDEX23 =
 "globals_m.html":[7,1,0,13],
 "globals_n.html":[7,1,0,14],
 "globals_o.html":[7,1,0,15],
-"globals_p.html":[7,1,0,16],
-"globals_q.html":[7,1,0,17],
-"globals_r.html":[7,1,0,18],
-"globals_s.html":[7,1,0,19],
-"globals_t.html":[7,1,0,20],
-"globals_type.html":[7,1,3],
-"globals_u.html":[7,1,0,21],
-"globals_v.html":[7,1,0,22],
-"globals_vars.html":[7,1,2]
+"globals_p.html":[7,1,0,16]
 };

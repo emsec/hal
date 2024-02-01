@@ -107,6 +107,7 @@ var namespacehal =
     [ "DockBar", "classhal_1_1_dock_bar.html", "classhal_1_1_dock_bar" ],
     [ "DockButton", "classhal_1_1_dock_button.html", "classhal_1_1_dock_button" ],
     [ "DockMimeData", "classhal_1_1_dock_mime_data.html", "classhal_1_1_dock_mime_data" ],
+    [ "DragController", "classhal_1_1_drag_controller.html", "classhal_1_1_drag_controller" ],
     [ "DrawNetThread", "classhal_1_1_draw_net_thread.html", "classhal_1_1_draw_net_thread" ],
     [ "EmptyStringValidator", "classhal_1_1_empty_string_validator.html", "classhal_1_1_empty_string_validator" ],
     [ "Endpoint", "classhal_1_1_endpoint.html", "classhal_1_1_endpoint" ],

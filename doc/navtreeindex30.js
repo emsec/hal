@@ -1,5 +1,13 @@
 var NAVTREEINDEX30 =
 {
+"settings__item__spinbox_8cpp.html":[7,0,1,3,2,40,0,4],
+"settings__item__spinbox_8cpp_source.html":[7,0,1,3,2,40,0,4],
+"settings__item__spinbox_8h.html":[7,0,1,3,0,0,42,0,5],
+"settings__item__spinbox_8h_source.html":[7,0,1,3,0,0,42,0,5],
+"settings__item__text_8cpp.html":[7,0,1,3,2,40,0,5],
+"settings__item__text_8cpp_source.html":[7,0,1,3,2,40,0,5],
+"settings__item__text_8h.html":[7,0,1,3,0,0,42,0,6],
+"settings__item__text_8h_source.html":[7,0,1,3,0,0,42,0,6],
 "settings__manager_8cpp.html":[7,0,1,3,2,40,5],
 "settings__manager_8cpp_source.html":[7,0,1,3,2,40,5],
 "settings__manager_8h.html":[7,0,1,3,0,0,42,6],
@@ -241,13 +249,5 @@ var NAVTREEINDEX30 =
 "standard__graphics__module_8h_source.html":[7,0,1,3,0,0,20,1,1,1,1],
 "standard__graphics__net_8cpp.html":[7,0,1,3,2,19,1,0,6],
 "standard__graphics__net_8cpp_source.html":[7,0,1,3,2,19,1,0,6],
-"standard__graphics__net_8h.html":[7,0,1,3,0,0,20,1,0,6],
-"standard__graphics__net_8h_source.html":[7,0,1,3,0,0,20,1,0,6],
-"state__component_8cpp.html":[7,0,2,0,3,3,8],
-"state__component_8cpp_source.html":[7,0,2,0,3,3,8],
-"state__component_8h.html":[7,0,0,0,1,3,3,8],
-"state__component_8h_source.html":[7,0,0,0,1,3,3,8],
-"strongly__connected__components_8cpp.html":[7,0,1,2,2,1,1],
-"strongly__connected__components_8cpp_source.html":[7,0,1,2,2,1,1],
-"struct_abc___frame__t__.html":[6,0,2]
+"standard__graphics__net_8h.html":[7,0,1,3,0,0,20,1,0,6]
 };
