@@ -271,7 +271,15 @@ namespace hal
 
         const QMap<Node, QPoint> nodeToPositionMap() const;
         const QMap<QPoint, Node> positionToNodeMap() const;
+
+        /**
+         * Creates a new GridPlacement instance (node to position hash) and returns the pointer
+         * The caller has the ownership and responsibility to delete that instance
+         */
+        GridPlacement* gridPlacementFactory() const;
+
         NetLayoutPoint positonForNode(const Node& nd) const;
+        Node nodeAtPosition(const QPoint& p) const;
 
         QPoint gridPointByItem(GraphicsNode* item) const;
 

@@ -36,29 +36,21 @@ namespace hal
         sPen.setJoinStyle(Qt::MiterJoin);
     }
 
-    NodeDragShadow::NodeDragShadow() : QGraphicsObject()
+    NodeDragShadow::NodeDragShadow()
+        : QGraphicsObject(), mRect(0,0,100,100)
     {
-        hide();
-
         setAcceptedMouseButtons(0);
-        mWidth = 100;
-        mHeight = 100;
     }
 
     void NodeDragShadow::start(const QPointF& posF, const QSizeF& sizeF)
     {
+        mRect = QRectF(QPointF(0,0),sizeF);
         setPos(posF);
-        setWidth(sizeF.width());
-        setHeight(sizeF.height());
         setZValue(1);
         show();
     }
 
-    void NodeDragShadow::stop()
-    {
-        hide();
-    }
-
+    /*
     qreal NodeDragShadow::width() const
     {
         return mWidth;
@@ -83,6 +75,7 @@ namespace hal
     {
         mHeight = height;
     }
+*/
 
     void NodeDragShadow::setLod(const qreal lod)
     {
@@ -108,25 +101,25 @@ namespace hal
 
         if (sLod < 0.5)
         {
-            painter->fillRect(QRectF(0, 0, mWidth, mHeight), sColorSolid[color_index]);
+
+            painter->fillRect(mRect, sColorSolid[color_index]);
         }
         else
         {
-            QRectF rect = QRectF(0, 0, mWidth, mHeight);
-            painter->drawRect(rect);
-            painter->fillRect(rect, sColorTranslucent[color_index]);
+            painter->drawRect(mRect);
+            painter->fillRect(mRect, sColorTranslucent[color_index]);
         }
     }
 
     QRectF NodeDragShadow::boundingRect() const
     {
-        return QRectF(0, 0, mWidth, mHeight);
+        return mRect;
     }
 
     QPainterPath NodeDragShadow::shape() const
     {
         QPainterPath path;
-        path.addRect(QRectF(0, 0, mWidth, mHeight));
+        path.addRect(mRect);
         return path;
     }
 }

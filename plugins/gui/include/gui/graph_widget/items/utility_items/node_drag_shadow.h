@@ -26,6 +26,8 @@
 #pragma once
 
 #include <QGraphicsObject>
+#include <QRectF>
+#include <QList>
 
 namespace hal
 {
@@ -50,14 +52,17 @@ namespace hal
         void start(const QPointF& posF, const QSizeF& sizeF);
         void stop();
 
+        /*
         qreal width() const;
         qreal height() const;
         QSizeF size() const;
 
         void setWidth(const qreal width);
         void setHeight(const qreal height);
+*/
 
         void setVisualCue(const DragCue cue);
+        QList<QPoint> multiMoveGridPositions() const;
 
         static void setLod(const qreal lod);
         static void loadSettings();
@@ -75,8 +80,6 @@ namespace hal
         static QColor sColorTranslucent[];
 
         DragCue mCue;
-
-        qreal mWidth;
-        qreal mHeight;
+        QRectF mRect;
     };
 }    // namespace hal
