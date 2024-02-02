@@ -112,7 +112,7 @@ namespace hal
                 if (ctxDir)
                 {
                     oldName = ctxDir->name();
-                    gGraphContextManager->renameGraphContextAction(ctx, mNewName);
+                    gGraphContextManager->renameContextDirectoryAction(ctxDir, mNewName);
                 }
                 else
                 {
