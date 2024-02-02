@@ -48,6 +48,8 @@ namespace hal
             QString name() const { return mName; }
             u32 id() const { return mId; }
             void setId(u32 id_) { mId = id_; }
+            void setName(QString name_) { mName = name_; }
+
     };
 
     class ContextTreeItem : public BaseTreeItem

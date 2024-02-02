@@ -38,8 +38,8 @@
 namespace hal
 {
     ContextManagerWidget::ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent)
-        : ContentWidget("Views", parent), mSearchbar(new Searchbar(this)), mNewDirectoryAction(new QAction(this)), mNewViewAction(new QAction(this)), mRenameAction(new QAction(this)), mDuplicateAction(new QAction(this)),
-          mDeleteAction(new QAction(this)), mDeleteDirectoryAction(new QAction(this)), mOpenAction(new QAction(this))
+        : ContentWidget("Views", parent), mSearchbar(new Searchbar(this)), mNewDirectoryAction(new QAction(this)), mNewViewAction(new QAction(this)), mRenameViewAction(new QAction(this)), mRenameDirectoryAction(new QAction(this)), mDuplicateAction(new QAction(this)),
+          mDeleteViewAction(new QAction(this)), mDeleteDirectoryAction(new QAction(this)), mOpenAction(new QAction(this))
     {
         //needed to load the properties
         ensurePolished();
@@ -48,27 +48,30 @@ namespace hal
         mOpenAction->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
         mNewViewAction->setIcon(gui_utility::getStyledSvgIcon(mNewViewIconStyle, mNewViewIconPath));
         mNewDirectoryAction->setIcon(gui_utility::getStyledSvgIcon(mNewViewIconStyle, mNewDirIconPath));
-        mRenameAction->setIcon(gui_utility::getStyledSvgIcon(mRenameIconStyle, mRenameIconPath));
+        mRenameViewAction->setIcon(gui_utility::getStyledSvgIcon(mRenameIconStyle, mRenameIconPath));
+        mRenameDirectoryAction->setIcon(gui_utility::getStyledSvgIcon(mRenameIconStyle, mRenameIconPath));
         mDuplicateAction->setIcon(gui_utility::getStyledSvgIcon(mDuplicateIconStyle, mDuplicateIconPath));
-        mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
+        mDeleteViewAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
         mDeleteDirectoryAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
 
         mOpenAction->setToolTip("Open");
         mNewViewAction->setToolTip("New View");
         mNewDirectoryAction->setToolTip("New Directory");
-        mRenameAction->setToolTip("Rename");
+        mRenameViewAction->setToolTip("Rename view");
+        mRenameDirectoryAction->setToolTip("Rename directory");
         mDuplicateAction->setToolTip("Duplicate");
-        mDeleteAction->setToolTip("Delete");
+        mDeleteViewAction->setToolTip("Delete");
         mDeleteDirectoryAction->setToolTip("Delete Directory");
         mSearchAction->setToolTip("Search");
 
         mOpenAction->setText("Open view");
         mNewViewAction->setText("Create new view");
         mNewDirectoryAction->setText("Create new Directory");
-        mRenameAction->setText("Rename view");
+        mRenameViewAction->setText("Rename view");
+        mRenameDirectoryAction->setText("Rename directory");
         mDuplicateAction->setText("Duplicate view");
-        mDeleteAction->setText("Delete view");
+        mDeleteViewAction->setText("Delete view");
         mDeleteDirectoryAction->setText("Delete directory");
         mSearchAction->setText("Search");
 
@@ -104,9 +107,10 @@ namespace hal
         connect(mOpenAction, &QAction::triggered, this, &ContextManagerWidget::handleOpenContextClicked);
         connect(mNewViewAction, &QAction::triggered, this, &ContextManagerWidget::handleCreateContextClicked);
         connect(mNewDirectoryAction, &QAction::triggered, this, &ContextManagerWidget::handleCreateDirectoryClicked);
-        connect(mRenameAction, &QAction::triggered, this, &ContextManagerWidget::handleRenameContextClicked);
+        connect(mRenameViewAction, &QAction::triggered, this, &ContextManagerWidget::handleRenameContextClicked);
+        connect(mRenameDirectoryAction, &QAction::triggered, this, &ContextManagerWidget::handleRenameDirectoryClicked);
         connect(mDuplicateAction, &QAction::triggered, this, &ContextManagerWidget::handleDuplicateContextClicked);
-        connect(mDeleteAction, &QAction::triggered, this, &ContextManagerWidget::handleDeleteContextClicked);
+        connect(mDeleteViewAction, &QAction::triggered, this, &ContextManagerWidget::handleDeleteContextClicked);
         connect(mDeleteDirectoryAction, &QAction::triggered, this, &ContextManagerWidget::handleDeleteDirectoryClicked);
         connect(mSearchAction, &QAction::triggered, this, &ContextManagerWidget::toggleSearchbar);
 
@@ -150,8 +154,7 @@ namespace hal
         {
             UserActionCompound* act = new UserActionCompound;
             act->setUseCreatedObject();
-            act->addAction(new ActionCreateObject(UserActionObjectType::ContextDir,
-                      QString::fromStdString(gNetlist->get_top_module()->get_name())));
+            act->addAction(new ActionCreateObject(UserActionObjectType::ContextDir, newName));
             act->addAction(new ActionAddItemsToObject({gNetlist->get_top_module()->get_id()}, {}));
             act->exec();        }
     }
@@ -215,6 +218,25 @@ namespace hal
             act->setObject(UserActionObject(clicked_context->id(),UserActionObjectType::ContextView));
             act->exec();
             clicked_context->setExclusiveModuleId(0, false);
+        }
+    }
+
+    void ContextManagerWidget::handleRenameDirectoryClicked()
+    {
+        ContextDirectory* clicked_directory = getCurrentItem()->directory();
+
+        if (!clicked_directory) return;
+
+        InputDialog ipd;
+        ipd.setWindowTitle("Rename directory");
+        ipd.setInfoText("Please select a new name for the directory.");
+        ipd.setInputText(clicked_directory->name());
+
+        if (ipd.exec() == QDialog::Accepted)
+        {
+            ActionRenameObject* act = new ActionRenameObject(ipd.textValue());
+            act->setObject(UserActionObject(clicked_directory->id(),UserActionObjectType::ContextDir));
+            act->exec();
         }
     }
 
@@ -290,13 +312,14 @@ namespace hal
         {
             context_menu.addAction(mOpenAction);
             context_menu.addAction(mDuplicateAction);
-            context_menu.addAction(mRenameAction);
-            context_menu.addAction(mDeleteAction);
+            context_menu.addAction(mRenameViewAction);
+            context_menu.addAction(mDeleteViewAction);
         }
 
         if (clicked_index.isValid() && clicked_directory)
         {
             context_menu.addAction(mDeleteDirectoryAction);
+            context_menu.addAction(mRenameDirectoryAction);
         }
 
         context_menu.exec(mContextTreeView->viewport()->mapToGlobal(point));
@@ -363,8 +386,10 @@ namespace hal
         toolbar->addAction(mNewViewAction);
         toolbar->addAction(mOpenAction);
         toolbar->addAction(mDuplicateAction);
-        toolbar->addAction(mRenameAction);
-        toolbar->addAction(mDeleteAction);
+        toolbar->addAction(mRenameViewAction);
+        toolbar->addAction(mRenameDirectoryAction);
+        toolbar->addAction(mDeleteViewAction);
+        toolbar->addAction(mDeleteDirectoryAction);
         toolbar->addAction(mSearchAction);
     }
 
@@ -383,23 +408,23 @@ namespace hal
     void ContextManagerWidget::setToolbarButtonsEnabled(bool enabled)
     {
         mOpenAction->setEnabled(enabled);
-        mRenameAction->setEnabled(enabled);
+        mRenameViewAction->setEnabled(enabled);
         mDuplicateAction->setEnabled(enabled);
-        mDeleteAction->setEnabled(enabled);
+        mDeleteViewAction->setEnabled(enabled);
 
         if(enabled)
         {
             mOpenAction->setIcon(gui_utility::getStyledSvgIcon(mOpenIconStyle, mOpenIconPath));
-            mRenameAction->setIcon(gui_utility::getStyledSvgIcon(mRenameIconStyle, mRenameIconPath));
+            mRenameViewAction->setIcon(gui_utility::getStyledSvgIcon(mRenameIconStyle, mRenameIconPath));
             mDuplicateAction->setIcon(gui_utility::getStyledSvgIcon(mDuplicateIconStyle, mDuplicateIconPath));
-            mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
+            mDeleteViewAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
         }
         else
         {
             mOpenAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle, mOpenIconPath));
-            mRenameAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle, mRenameIconPath));
+            mRenameViewAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle, mRenameIconPath));
             mDuplicateAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle, mDuplicateIconPath));
-            mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle, mDeleteIconPath));
+            mDeleteViewAction->setIcon(gui_utility::getStyledSvgIcon(mDisabledIconStyle, mDeleteIconPath));
         }
     }
 

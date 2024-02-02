@@ -90,6 +90,13 @@ namespace hal
         Q_EMIT contextRenamed(ctx);
     }
 
+    void GraphContextManager::renameContextDirectoryAction(ContextDirectory *ctxDir, const QString &newName)
+    {
+        ctxDir->setName(newName);
+
+        Q_EMIT directoryRenamed(ctxDir);
+    }
+
     void GraphContextManager::deleteGraphContext(GraphContext* ctx)
     {
         Q_EMIT deletingContext(ctx);
@@ -101,6 +108,8 @@ namespace hal
 
     void GraphContextManager::deleteContextDirectory(ContextDirectory *ctxDir)
     {
+        Q_EMIT deletingDirectory(ctxDir);
+
         mContextTreeModel->removeDirectory(ctxDir);
 
         delete ctxDir;

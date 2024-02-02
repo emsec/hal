@@ -217,15 +217,17 @@ namespace hal
         QString mNewDirIconPath;
         QString mNewViewIconStyle;
 
-        QAction* mRenameAction;
+        QAction* mRenameViewAction;
         QString mRenameIconPath;
         QString mRenameIconStyle;
+
+        QAction* mRenameDirectoryAction;
 
         QAction* mDuplicateAction;
         QString mDuplicateIconPath;
         QString mDuplicateIconStyle;
 
-        QAction* mDeleteAction;
+        QAction* mDeleteViewAction;
         QString mDeleteIconPath;
         QString mDeleteIconStyle;
 
@@ -245,6 +247,7 @@ namespace hal
         void handleCreateContextClicked();
         void handleCreateDirectoryClicked();
         void handleRenameContextClicked();
+        void handleRenameDirectoryClicked();
         void handleDuplicateContextClicked();
         void handleDeleteContextClicked();
         void handleDeleteDirectoryClicked();

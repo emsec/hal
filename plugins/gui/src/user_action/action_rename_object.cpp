@@ -1,5 +1,6 @@
 #include "gui/user_action/action_rename_object.h"
 
+#include "gui/context_manager_widget/models/context_tree_model.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
@@ -53,6 +54,8 @@ namespace hal
         Gate* gat;
         Net* net;
         GraphContext* ctx;
+        ContextDirectory* ctxDir;
+
         switch (mObject.type())
         {
             case UserActionObjectType::Module:
@@ -97,6 +100,18 @@ namespace hal
                 if (ctx)
                 {
                     oldName = ctx->name();
+                    gGraphContextManager->renameGraphContextAction(ctx, mNewName);
+                }
+                else
+                {
+                    return false;
+                }
+                break;
+            case UserActionObjectType::ContextDir:
+                ctxDir = gGraphContextManager->getDirectoryById(mObject.id());
+                if (ctxDir)
+                {
+                    oldName = ctxDir->name();
                     gGraphContextManager->renameGraphContextAction(ctx, mNewName);
                 }
                 else

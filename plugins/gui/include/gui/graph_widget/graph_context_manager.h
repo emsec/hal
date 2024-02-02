@@ -88,6 +88,16 @@ namespace hal
         void renameGraphContextAction(GraphContext* ctx, const QString& newName);
 
         /**
+         * Renames a contextDirectory. <br>
+         * Emits the signal directoryRenamed.
+         *
+         * @param ctxDir - The contextDirectory to rename. Must not be a <i>nullptr</i>.
+         * @param newName - The new name of the directory
+         */
+        void renameContextDirectoryAction(ContextDirectory* ctxDir, const QString& newName);
+
+
+        /**
          * Removes and deletes the given GraphContext. The passed pointer will be a <i>nullptr</i> afterwards.<br>
          * Emits deletingContext before the deletion.
          *
@@ -400,6 +410,22 @@ namespace hal
          * @param context - The context that is about to be deleted
          */
         void deletingContext(GraphContext* context);
+
+        /**
+         * Q_SIGNAL that notifies about the renaming of a directory by the context manager.
+         *
+         * @param directory - The renamed directory
+         */
+        void directoryRenamed(ContextDirectory* directory);
+
+        /**
+         * Q_SIGNAL that notifies that a directory is about to be deleted.
+         * This signal is emitted before the directory is deleted.
+         *
+         * @param directory - The directory that is about to be deleted
+         */
+        void deletingDirectory(ContextDirectory* directory);
+
 
 
     private:

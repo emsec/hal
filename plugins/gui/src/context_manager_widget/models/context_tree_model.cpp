@@ -114,7 +114,6 @@ namespace hal
     ContextTreeModel::ContextTreeModel(QObject* parent) : BaseTreeModel(parent), mCurrentDirectory(nullptr)
     {
         setHeaderLabels(QStringList() << "View Name" << "Timestamp");
-
     }
 
     QVariant ContextTreeModel::data(const QModelIndex& index, int role) const
@@ -268,6 +267,11 @@ namespace hal
     void ContextTreeModel::removeDirectory(ContextDirectory *directory)
     {
         ContextTreeItem* item   = static_cast<ContextTreeItem *>(getDirectory(directory->id()));
+
+        if(item == mCurrentDirectory) {
+            mCurrentDirectory = nullptr;
+        }
+
         ContextTreeItem* parent = static_cast<ContextTreeItem*>(item->getParent());
         assert(item);
         assert(parent);
@@ -320,4 +324,5 @@ namespace hal
         else if (currentItem->isDirectory())
             mCurrentDirectory = currentItem;
     }
+
 }
