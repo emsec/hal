@@ -610,7 +610,7 @@ namespace hal
         }
     }    // namespace
 
-    Result<u32> NetlistPreprocessingPlugin::remove_redundant_gates(Netlist* nl)
+    Result<u32> NetlistPreprocessingPlugin::remove_redundant_gates(Netlist* nl, const std::function<bool(const Gate*)>& filter)
     {
         auto config = hal::SMT::QueryConfig();
 
@@ -638,10 +638,22 @@ namespace hal
 
         u32 num_gates = 0;
         bool progress;
-        std::vector<Gate*> target_gates = nl->get_gates([](const Gate* g) {
-            const auto& type = g->get_type();
-            return type->has_property(GateTypeProperty::combinational) || type->has_property(GateTypeProperty::ff);
-        });
+
+        std::vector<Gate*> target_gates;
+        if (filter)
+        {
+            target_gates = nl->get_gates([filter](const Gate* g) {
+                const auto& type = g->get_type();
+                return (type->has_property(GateTypeProperty::combinational) || type->has_property(GateTypeProperty::ff)) && filter(g);
+            });
+        }
+        else
+        {
+            target_gates = nl->get_gates([](const Gate* g) {
+                const auto& type = g->get_type();
+                return type->has_property(GateTypeProperty::combinational) || type->has_property(GateTypeProperty::ff);
+            });
+        }
 
         auto ff_replacements = restore_ff_replacements(nl);
 

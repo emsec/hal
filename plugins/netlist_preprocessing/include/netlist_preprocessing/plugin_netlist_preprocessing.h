@@ -70,9 +70,10 @@ namespace hal
          * Removes redundant gates from the netlist, i.e., gates that are functionally equivalent and are connected to the same input nets.
          * 
          * @param[in] nl - The netlist to operate on. 
+         * @param[in] filter - Optional filter to fine-tune which gates are being replaced. Default to a `nullptr`.
          * @return OK() and the number of removed gates on success, an error otherwise.
          */
-        static Result<u32> remove_redundant_gates(Netlist* nl);
+        static Result<u32> remove_redundant_gates(Netlist* nl, const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
          * Removes redundant sequential feedback loops.

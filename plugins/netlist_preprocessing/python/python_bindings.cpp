@@ -101,8 +101,8 @@ namespace hal
 
         py_netlist_preprocessing.def_static(
             "remove_redundant_gates",
-            [](Netlist* nl) -> std::optional<u32> {
-                auto res = NetlistPreprocessingPlugin::remove_redundant_gates(nl);
+            [](Netlist* nl, const std::function<bool(const Gate*)>& filter = nullptr) -> std::optional<u32> {
+                auto res = NetlistPreprocessingPlugin::remove_redundant_gates(nl, filter);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -114,10 +114,12 @@ namespace hal
                 }
             },
             py::arg("nl"),
+            py::arg("filter") = nullptr,
             R"(
                 Removes redundant gates from the netlist, i.e., gates that are functionally equivalent and are connected to the same input nets.
 
                 :param hal_py.Netlist nl: The netlist to operate on. 
+                :param lambda filter: Optional filter to fine-tune which gates are being replaced. Default to a ``None``.
                 :returns: The number of removed gates on success, ``None`` otherwise.
                 :rtype: int or ``None``
             )");
