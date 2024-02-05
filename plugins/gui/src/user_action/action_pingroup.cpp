@@ -482,6 +482,60 @@ namespace hal
         return addPinsToNewGroup(m,name,pinIds, grpRow);
     }
 
+    ActionPingroup* ActionPingroup::deletePinGroup(const Module *m, u32 grpId)
+    {
+        ActionPingroup* retval = nullptr;
+
+        PinGroup<ModulePin>* groupToDelete = m->get_pin_group_by_id(grpId);
+        if (!groupToDelete) return retval;
+
+        QMap<QString,int> existingGroups;
+        for (PinGroup<ModulePin>* pgroup : m->get_pin_groups())
+            existingGroups.insert(QString::fromStdString(pgroup->get_name()),pgroup->get_id());
+
+        bool doNotDelete = false; // if there is a pin with the same name as the
+        int vid = -1;
+
+        for (ModulePin* pin : groupToDelete->get_pins())
+        {
+            if (pin->get_name() == groupToDelete->get_name())
+                doNotDelete = true;
+            else
+            {
+                QString pinName = QString::fromStdString(pin->get_name());
+                auto it = existingGroups.find(pinName);
+                if (it == existingGroups.end())
+                {
+                    if (retval)
+                        retval->mPinActions.append(AtomicAction(PinActionType::GroupCreate,vid,pinName));
+                    else
+                        retval = new ActionPingroup(PinActionType::GroupCreate,vid,pinName);
+                    retval->mPinActions.append(AtomicAction(PinActionType::PinAsignToGroup,pin->get_id(),"",vid));
+                    --vid;
+                }
+                else
+                {
+                    if (retval)
+                        retval->mPinActions.append(AtomicAction(PinActionType::PinAsignToGroup,pin->get_id(),"",it.value()));
+                    else
+                        retval = new ActionPingroup(PinActionType::PinAsignToGroup,pin->get_id(),"",it.value());
+                }
+            }
+
+        }
+
+        if (!doNotDelete)
+        {
+            if (retval)
+                retval->mPinActions.append(AtomicAction(PinActionType::GroupDelete,groupToDelete->get_id()));
+            else
+                retval = new ActionPingroup(PinActionType::GroupDelete,groupToDelete->get_id());
+        }
+
+        retval->setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
+        return retval;
+    }
+
     ActionPingroup* ActionPingroup::removePinsFromGroup(const Module* m, QList<u32> pinIds)
     {
         ActionPingroup* retval = nullptr;

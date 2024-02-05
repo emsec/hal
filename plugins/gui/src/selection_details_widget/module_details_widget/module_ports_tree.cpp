@@ -161,9 +161,8 @@ namespace hal
                 auto* pinGroup = mod->get_pin_group_by_id(itemId);
                 if (pinGroup != nullptr)
                 {
-                    ActionPingroup* act = new ActionPingroup(PinActionType::GroupDelete,(u32)itemId);
-                    act->setObject(UserActionObject(mod->get_id(), UserActionObjectType::Module));
-                    act->exec();
+                    ActionPingroup* act = ActionPingroup::deletePinGroup(mod,itemId);
+                    if (act) act->exec();
                 }
             });
 

@@ -1947,6 +1947,11 @@ namespace hal
             return {(u32)std::stoi(stream.consume().string)};
         }
 
+        if (stream.peek(0).string=="35" && stream.peek(2).string=="32")
+        {
+            std::cerr << "parser <" << stream.peek(-1).string << ">" << std::endl;
+        }
+
         // MSB to LSB
         const int end = std::stoi(stream.consume().string);
         stream.consume(":", true);
