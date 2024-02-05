@@ -40,11 +40,21 @@ namespace hal
             u32 mId;
             QString mName;
             u32 mMinDirectoryId;
+            u32 mParentId;
 
         public:
-            ContextDirectory(QString name):mName(name), mMinDirectoryId(std::numeric_limits<u32>::max()){
+            ContextDirectory(QString name, u32 parentId):mName(name), mMinDirectoryId(std::numeric_limits<u32>::max()){
                 mId = --mMinDirectoryId;
+                mParentId = parentId;
             }
+
+            /**
+             * Writes the directory to a given json object.
+             *
+             * @param json - The object to write to.
+             */
+            void writeToFile(QJsonObject& json);
+
             QString name() const { return mName; }
             u32 id() const { return mId; }
             void setId(u32 id_) { mId = id_; }
@@ -163,6 +173,13 @@ namespace hal
         const QVector<GraphContext*>& list();
 
         /**
+         * Get all ContextDirectories of the model.
+         *
+         * @return A vector of all ContextDirectories.
+         */
+        const QVector<ContextDirectory*>& directoryList();
+
+        /**
          * Sets the CurrentDirectory.
          *
          * @param ContextTreeItem - The Currently focused Item.
@@ -172,14 +189,12 @@ namespace hal
     Q_SIGNALS:
         void directoryCreatedSignal(ContextTreeItem* item);
 
-    private Q_SLOTS:
-        void handleDataChanged();
-
-
     private:
         BaseTreeItem* getDirectoryInternal(BaseTreeItem* parentItem, u32 directoryId) const;
         ContextTreeItem *mCurrentDirectory;
         std::map<GraphContext *, ContextTreeItem *> mContextMap;
         QVector<GraphContext*> mContextList;
+        QVector<ContextDirectory*> mDirectoryList;
+
     };
 }    // namespace hal

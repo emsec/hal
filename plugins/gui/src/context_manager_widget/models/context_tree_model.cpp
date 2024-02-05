@@ -2,6 +2,8 @@
 #include "gui/selection_details_widget/selection_details_icon_provider.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
+#include "gui/user_action/action_delete_object.h"
+
 
 #include <limits>
 #include <QApplication>
@@ -178,9 +180,6 @@ namespace hal
 
     ContextDirectory* ContextTreeModel::addDirectory(QString name, BaseTreeItem *parent)
     {
-        ContextDirectory* directory = new ContextDirectory(name);
-
-        ContextTreeItem* item   = new ContextTreeItem(directory);
 
         BaseTreeItem* parentItem = parent;
 
@@ -188,6 +187,10 @@ namespace hal
             parentItem = mCurrentDirectory;
         if (!parentItem)
             parentItem = mRootItem;
+
+        ContextDirectory* directory = new ContextDirectory(name, (parentItem != mRootItem) ? static_cast<ContextTreeItem*>(parentItem)->directory()->id() : 0);
+
+        ContextTreeItem* item   = new ContextTreeItem(directory);
 
 
         QModelIndex index = getIndexFromItem(parentItem);
@@ -198,6 +201,8 @@ namespace hal
         beginInsertRows(index, row, row);
         parentItem->appendChild(item);
         endInsertRows();
+
+        mDirectoryList.push_back(directory);
 
         Q_EMIT directoryCreatedSignal(item);
 
@@ -236,7 +241,6 @@ namespace hal
 
         mContextMap.insert({context, item});
 
-        //connect(context,&GraphContext::dataChanged,this,&ContextTableModel::handleDataChanged);
         connect(context, &GraphContext::dataChanged, this, [item, this]() {
             Q_EMIT dataChanged(getIndexFromItem(item), getIndexFromItem(item));
         });
@@ -272,6 +276,23 @@ namespace hal
             mCurrentDirectory = nullptr;
         }
 
+        QList<BaseTreeItem *> childCopy = item->getChildren();
+        for (int i = 0; i < childCopy.length(); i++) {
+            ContextTreeItem* child = static_cast<ContextTreeItem*>(childCopy[i]);
+
+            if (child->isContext()) {
+                ActionDeleteObject* act = new ActionDeleteObject;
+                act->setObject(UserActionObject(child->context()->id(),UserActionObjectType::ContextView));
+                act->exec();
+            }
+            else if (child->isDirectory()) {
+                ActionDeleteObject* act = new ActionDeleteObject;
+                act->setObject(UserActionObject(child->directory()->id(),UserActionObjectType::ContextDir));
+                act->exec();
+            }
+
+        }
+
         ContextTreeItem* parent = static_cast<ContextTreeItem*>(item->getParent());
         assert(item);
         assert(parent);
@@ -283,6 +304,11 @@ namespace hal
         beginRemoveRows(index, row, row);
         parent->removeChild(item);
         endRemoveRows();
+
+        auto it = std::find(mDirectoryList.begin(), mDirectoryList.end(), directory);
+        if (it != mDirectoryList.end()) {
+            mDirectoryList.erase(it);
+        }
 
         delete item;
     }
@@ -316,6 +342,12 @@ namespace hal
         return mContextList;
     }
 
+    const QVector<ContextDirectory *> &ContextTreeModel::directoryList()
+    {
+        return mDirectoryList;
+    }
+
+
     void ContextTreeModel::setCurrentDirectory(ContextTreeItem* currentItem)
     {
         if(currentItem->isContext())
@@ -323,6 +355,13 @@ namespace hal
 
         else if (currentItem->isDirectory())
             mCurrentDirectory = currentItem;
+    }
+
+    void ContextDirectory::writeToFile(QJsonObject &json)
+    {
+        json["patrentId"] = (int) mParentId;
+        json["id"] = (int) mId;
+        json["name"] = mName;
     }
 
 }

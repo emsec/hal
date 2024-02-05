@@ -665,6 +665,15 @@ namespace hal
                 jsonViews.append(jsonView);
             }
         json["views"] = jsonViews;
+
+        QJsonArray jsonDirectories;
+        for (ContextDirectory* directory : mContextTreeModel->directoryList())
+            {
+                QJsonObject jsonDirectory;
+                directory->writeToFile(jsonDirectory);
+                jsonViews.append(jsonDirectory);
+            }
+        json["directories"] = jsonDirectories;
         return (jsFile.write(QJsonDocument(json).toJson(QJsonDocument::Compact)) >= 0); // neg return value indicates error
     }
 }    // namespace hal
