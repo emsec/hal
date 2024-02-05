@@ -42,6 +42,7 @@ namespace hal
         NetlistTraversalDecorator(const Netlist& netlist);
 
         /**
+         * TODO deprecate
          * Starting from the given net, get the successor/predecessor gates for which the filter evaluates to `true`.
          * Does not continue traversal beyond gates fulfilling the filter condition, i.e., only the first layer of successors/predecessors is returned.
          * 
@@ -59,6 +60,7 @@ namespace hal
                                                          const std::set<PinType>& forbidden_pins = {}) const;
 
         /**
+         * TODO deprecate
          * Starting from the given gate, get the successor/predecessor gates for which the filter evaluates to `true`.
          * Does not continue traversal beyond gates fulfilling the filter condition, i.e., only the first layer of successors/predecessors is returned.
          * 
@@ -110,6 +112,26 @@ namespace hal
                                                      const std::function<bool(const Gate*)>& target_gate_filter,
                                                      const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                      const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        // TODO implement: get_subgraph_gates()
+
+        /**
+         * TODO document
+         */
+        Result<std::set<Net*>> get_subgraph_input_nets(const Net* net,
+                                                       bool successors,
+                                                       const std::function<bool(const Net*)>& target_net_filter,
+                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        /**
+         * TODO document
+         */
+        Result<std::set<Net*>> get_subgraph_input_nets(const Gate* gate,
+                                                       bool successors,
+                                                       const std::function<bool(const Net*)>& target_net_filter,
+                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
     private:
         const Netlist& m_netlist;

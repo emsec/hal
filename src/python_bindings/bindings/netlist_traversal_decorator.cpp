@@ -161,5 +161,59 @@ namespace hal
             :returns: The next gates fulfilling the target gate filter condition on success, ``None`` otherwise.
             :rtype: set[hal_py.Gate] or None
         )");
+
+        py_netlist_traversal_decorator.def(
+            "get_subgraph_input_nets",
+            [](NetlistTraversalDecorator& self,
+               const Net* net,
+               bool successors,
+               const std::function<bool(const Net*)>& target_net_filter,
+               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) -> std::optional<std::set<Net*>> {
+                auto res = self.get_subgraph_input_nets(net, successors, target_net_filter, exit_endpoint_filter, entry_endpoint_filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting subgraph inputs:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("net"),
+            py::arg("successors"),
+            py::arg("target_net_filter"),
+            py::arg("exit_endpoint_filter")  = nullptr,
+            py::arg("entry_endpoint_filter") = nullptr,
+            R"(TODO
+        )");
+
+        py_netlist_traversal_decorator.def(
+            "get_subgraph_input_nets",
+            [](NetlistTraversalDecorator& self,
+               const Gate* gate,
+               bool successors,
+               const std::function<bool(const Net*)>& target_net_filter,
+               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) -> std::optional<std::set<Net*>> {
+                auto res = self.get_subgraph_input_nets(gate, successors, target_net_filter, exit_endpoint_filter, entry_endpoint_filter);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting subgraph input nets:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("gate"),
+            py::arg("successors"),
+            py::arg("target_net_filter"),
+            py::arg("exit_endpoint_filter")  = nullptr,
+            py::arg("entry_endpoint_filter") = nullptr,
+            R"(TODO
+        )");
     }
 }    // namespace hal

@@ -252,4 +252,118 @@ namespace hal
         return OK(res);
     }
 
+    Result<std::set<Net*>> NetlistTraversalDecorator::get_subgraph_input_nets(const Net* net,
+                                                                              bool successors,
+                                                                              const std::function<bool(const Net*)>& target_net_filter,
+                                                                              const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
+                                                                              const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (net == nullptr)
+        {
+            return ERR("nullptr given as net");
+        }
+
+        if (!m_netlist.is_net_in_netlist(net))
+        {
+            return ERR("net does not belong to netlist");
+        }
+
+        std::set<Net*> res;
+        for (const auto* entry_ep : successors ? net->get_destinations() : net->get_sources())
+        {
+            if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, 0))
+            {
+                continue;
+            }
+
+            const auto next_res = this->get_subgraph_input_nets(entry_ep->get_gate(), successors, target_net_filter, exit_endpoint_filter, entry_endpoint_filter);
+            if (next_res.is_error())
+            {
+                return ERR(next_res.get_error());
+            }
+            auto next = next_res.get();
+            res.insert(next.begin(), next.end());
+        }
+        return OK(res);
+    }
+
+    Result<std::set<Net*>> NetlistTraversalDecorator::get_subgraph_input_nets(const Gate* gate,
+                                                                              bool successors,
+                                                                              const std::function<bool(const Net*)>& target_net_filter,
+                                                                              const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter,
+                                                                              const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter) const
+    {
+        if (gate == nullptr)
+        {
+            return ERR("nullptr given as gate");
+        }
+
+        if (!m_netlist.is_gate_in_netlist(gate))
+        {
+            return ERR("net does not belong to netlist");
+        }
+
+        std::unordered_set<const Gate*> visited;
+        std::vector<const Gate*> stack = {gate};
+        std::vector<const Gate*> previous;
+        std::set<Net*> res;
+        while (!stack.empty())
+        {
+            const Gate* current = stack.back();
+
+            if (!previous.empty() && current == previous.back())
+            {
+                stack.pop_back();
+                previous.pop_back();
+                continue;
+            }
+
+            visited.insert(current);
+
+            bool added = false;
+            for (const auto* exit_ep : successors ? current->get_fan_out_endpoints() : current->get_fan_in_endpoints())
+            {
+                if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, previous.size()))
+                {
+                    continue;
+                }
+
+                auto* n = exit_ep->get_net();
+
+                if (target_net_filter(n))
+                {
+                    res.insert(n);
+                }
+                else
+                {
+                    for (const auto* entry_ep : successors ? n->get_destinations() : n->get_sources())
+                    {
+                        if (entry_endpoint_filter != nullptr && !entry_endpoint_filter(entry_ep, previous.size() + 1))
+                        {
+                            continue;
+                        }
+
+                        const Gate* g = entry_ep->get_gate();
+                        if (visited.find(g) == visited.end())
+                        {
+                            stack.push_back(g);
+                            added = true;
+                        }
+                    }
+                }
+            }
+
+            if (added)
+            {
+                previous.push_back(current);
+            }
+            else
+            {
+                stack.pop_back();
+            }
+        }
+
+        return OK(res);
+    }
+
 }    // namespace hal

@@ -1,7 +1,7 @@
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 
-#include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/decorators/boolean_function_decorator.h"
+#include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
@@ -87,7 +87,6 @@ namespace hal
         {
             Net* net = m_netlist.get_net_by_id(c_net->get_id());
 
-
             if (outside_conncetions_as_global_io)
             {
                 // mark all nets as global input that either lost a source or were a global input originally
@@ -111,7 +110,7 @@ namespace hal
                 }
 
                 // mark all nets as global output that now have zero destinations but had at least one destination in the orginal netlist or were a global output originally
-                if ((net->get_num_of_destinations() != 0  && c_net->get_num_of_destinations() == 0)|| net->is_global_output_net())
+                if ((net->get_num_of_destinations() != 0 && c_net->get_num_of_destinations() == 0) || net->is_global_output_net())
                 {
                     c_netlist->mark_global_output_net(c_net);
                 }
