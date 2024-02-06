@@ -99,28 +99,29 @@ namespace hal
             []() {
                 // bitwuzla
                 {
-                    const bitwuzla::Term a = bitwuzla::mk_var(bitwuzla::mk_bv_sort(1), "a");
-                    const bitwuzla::Term b = bitwuzla::mk_var(bitwuzla::mk_bv_sort(1), "b");
+                    // TODO this requires modifications to bitwuzla
+                    // const bitwuzla::Term a = bitwuzla::mk_var(bitwuzla::mk_bv_sort(1), "a");
+                    // const bitwuzla::Term b = bitwuzla::mk_var(bitwuzla::mk_bv_sort(1), "b");
 
-                    const bitwuzla::Term bf = bitwuzla::mk_term(bitwuzla::Kind::BV_AND, {a, b});
+                    // const bitwuzla::Term bf = bitwuzla::mk_term(bitwuzla::Kind::BV_AND, {a, b});
 
-                    const std::unordered_map<std::string, bitwuzla::Term> sub_one_map  = {{"a", bitwuzla::mk_bv_one(bitwuzla::mk_bv_sort(1))}};
-                    const std::unordered_map<std::string, bitwuzla::Term> sub_zero_map = {{"a", bitwuzla::mk_bv_zero(bitwuzla::mk_bv_sort(1))}};
+                    // const std::unordered_map<std::string, bitwuzla::Term> sub_one_map  = {{"a", bitwuzla::mk_bv_one(bitwuzla::mk_bv_sort(1))}};
+                    // const std::unordered_map<std::string, bitwuzla::Term> sub_zero_map = {{"a", bitwuzla::mk_bv_zero(bitwuzla::mk_bv_sort(1))}};
 
-                    const auto bf_sub_one  = bitwuzla::substitute_term(bf, sub_one_map);
-                    const auto bf_sub_zero = bitwuzla::substitute_term(bf, sub_zero_map);
+                    // const auto bf_sub_one  = bitwuzla::substitute_term(bf, sub_one_map);
+                    // const auto bf_sub_zero = bitwuzla::substitute_term(bf, sub_zero_map);
 
-                    std::cout << "Vanilla: " << std::endl;
-                    std::cout << bf << std::endl;
-                    bitwuzla_utils::simplify(bf);
+                    // std::cout << "Vanilla: " << std::endl;
+                    // std::cout << bf << std::endl;
+                    // bitwuzla_utils::simplify(bf);
 
-                    std::cout << "Sub One: " << std::endl;
-                    std::cout << bf_sub_one << std::endl;
-                    bitwuzla_utils::simplify(bf_sub_one);
+                    // std::cout << "Sub One: " << std::endl;
+                    // std::cout << bf_sub_one << std::endl;
+                    // bitwuzla_utils::simplify(bf_sub_one);
 
-                    std::cout << "Sub Zero: " << std::endl;
-                    std::cout << bf_sub_zero << std::endl;
-                    bitwuzla_utils::simplify(bf_sub_zero);
+                    // std::cout << "Sub Zero: " << std::endl;
+                    // std::cout << bf_sub_zero << std::endl;
+                    // bitwuzla_utils::simplify(bf_sub_zero);
                 }
             },
             R"(

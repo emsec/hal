@@ -97,6 +97,8 @@ namespace hal
                         log_error("bitwuzla_utils", "Not implemented reached for nodetype {} in z3 conversion", node.type);
                         return ERR("Not implemented reached");
                 }
+
+                return ERR("Not implemented reached");
             };
 
         }    // namespace
@@ -459,6 +461,8 @@ namespace hal
             bitwuzla.simplify();
 
             bitwuzla.print_formula(std::cout, "smt2");
+
+            return ERR("Not implemented reached");
         }
 
     }    // namespace bitwuzla_utils
