@@ -90,17 +90,18 @@ namespace hal
                 :returns: A dict from community IDs to communities.
                 :rtype: dict[int,set[hal_py.get_gate()]]
                 )") */
-            .def("get_strongly_connected_components", &GraphAlgorithmPlugin::get_strongly_connected_components, py::arg("netlist"), R"(
+            .def("get_strongly_connected_components", py::overload_cast<Netlist*>(&GraphAlgorithmPlugin::get_strongly_connected_components), py::arg("netlist"), R"(
                 Get a list of strongly connected components (SCC) with each SSC being represented by a list of gates.
 
                 :param hal_py.Netlist netlist: The netlist to operate on.
                 :returns: A list of SCCs.
                 :rtype: list[list[hal_py.get_gate()]]
                 )")
-            .def("write_ff_dependency_graph", &GraphAlgorithmPlugin::write_ff_dependency_graph, 
-                py::arg("netlist"),
-                py::arg("output_file"),
-                R"(
+            .def("write_ff_dependency_graph",
+                 &GraphAlgorithmPlugin::write_ff_dependency_graph,
+                 py::arg("netlist"),
+                 py::arg("output_file"),
+                 R"(
                 Creates a graph edgelist file based on the current netlist with only the FF dependencies
 
                 :param hal_py.Netlist netlist: The netlist to operate on.
