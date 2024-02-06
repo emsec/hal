@@ -52,4 +52,45 @@ namespace hal
 
         return sccs;
     }
+
+    namespace graph_algorithm
+    {
+        std::set<std::set<u32>> get_strongly_connected_components(igraph_t* graph)
+        {
+            if (graph == nullptr)
+            {
+                log_error("graph_algorithm", "{}", "parameter 'graph' is nullptr");
+                return std::set<std::set<u32>>();
+            }
+
+            igraph_vector_t membership, csize;
+            igraph_integer_t number_of_clusters;
+            igraph_vector_init(&membership, 0);
+            igraph_vector_init(&csize, 0);
+
+            // run scc
+            igraph_clusters(graph, &membership, &csize, &number_of_clusters, IGRAPH_STRONG);
+
+            // map back to HAL structures
+            u32 num_vertices = (u32)igraph_vcount(graph);
+            std::map<u32, std::set<u32>> community_sets;
+
+            for (i32 i = 0; i < num_vertices; i++)
+            {
+                community_sets[VECTOR(membership)[i]].insert(i);
+            }
+
+            // convert to set
+            std::set<std::set<u32>> sccs;
+            for (auto& [_, members] : community_sets)
+            {
+                sccs.insert(std::move(members));
+            }
+
+            igraph_vector_destroy(&membership);
+            igraph_vector_destroy(&csize);
+
+            return sccs;
+        }
+    }    // namespace graph_algorithm
 }    // namespace hal

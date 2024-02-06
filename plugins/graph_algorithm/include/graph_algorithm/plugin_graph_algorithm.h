@@ -27,8 +27,8 @@
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
 
-#include <igraph/igraph.h>
 #include <filesystem>
+#include <igraph/igraph.h>
 
 namespace hal
 {
@@ -124,10 +124,10 @@ namespace hal
          * that for each global input and output dummy nodes are generated in the igraph representation.
          *
          * @param[in] netlist - The netlist to operate on.
-         * @param[in] igraph - igraph object
+         * @param[out] graph - The output igraph object.
          * @returns map from igraph node id to HAL gate ID, to be able to match back any graph operations.
          */
-        std::map<int, Gate*> get_igraph_directed(Netlist* const netlist, igraph_t* igraph);
+        std::map<int, Gate*> get_igraph_directed(Netlist* const netlist, igraph_t* graph);
 
         /**
          * Generates an directed graph based on the current netlist with only the dependency of the FFs.
@@ -172,4 +172,29 @@ namespace hal
          */
         bool write_ff_dependency_graph(Netlist* nl, const std::string& output_file);
     };
+
+    namespace graph_algorithm
+    {
+        /**
+         * TODO
+         *
+         * @param[out] igraph - The output igraph object.
+         */
+        void get_igraph_directed(const std::vector<std::pair<u32, u32>>& edges, igraph_t* graph);
+
+        /**
+         * TODO
+         *
+         * @param[out] igraph - The output igraph object.
+         */
+        void add_edges(const std::vector<std::pair<u32, u32>>& edges, igraph_t* graph);
+
+        /**
+         * Get a vector of strongly connected components (SCC) with each SSC being represented by a vector of gates.
+         *
+         * @param[in] graph - The igraph object to operate on.
+         * @returns A set of SCCs.
+         */
+        std::set<std::set<u32>> get_strongly_connected_components(igraph_t* graph);
+    }    // namespace graph_algorithm
 }    // namespace hal

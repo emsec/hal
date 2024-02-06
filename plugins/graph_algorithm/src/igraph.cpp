@@ -20,7 +20,7 @@ namespace hal
         u32 edge_counter = 0;
         for (auto net : nl->get_nets())
         {
-            if (net->get_sources().size() > 1)
+            if (net->get_num_of_sources() > 1)
             {
                 log_error("graph_algorithm", "multi-driven nets not yet supported! aborting");
                 return std::map<int, Gate*>();
@@ -28,7 +28,7 @@ namespace hal
 
             Gate* src_gate = nullptr;
 
-            if (net->get_sources().size() != 0)
+            if (net->get_num_of_sources() != 0)
             {
                 src_gate = net->get_sources().at(0)->get_gate();
             }
@@ -73,7 +73,7 @@ namespace hal
         {
             Gate* src_gate = nullptr;
 
-            if (net->get_sources().size() != 0)
+            if (net->get_num_of_sources() != 0)
             {
                 src_gate = net->get_sources().at(0)->get_gate();
             }
@@ -225,4 +225,38 @@ namespace hal
         }
         return community_sets;
     }
+
+    namespace graph_algorithm
+    {
+        void get_igraph_directed(const std::vector<std::pair<u32, u32>>& edges, igraph_t* graph)
+        {
+            igraph_vector_t igraph_edges;
+            igraph_vector_init(&igraph_edges, 2 * edges.size());
+
+            u32 ctr = 0;
+            for (const auto& [src, dst] : edges)
+            {
+                VECTOR(igraph_edges)[ctr++] = src;
+                VECTOR(igraph_edges)[ctr++] = dst;
+            }
+
+            igraph_create(graph, &igraph_edges, 0, IGRAPH_DIRECTED);
+            igraph_vector_destroy(&igraph_edges);
+        }
+
+        void add_edges(const std::vector<std::pair<u32, u32>>& edges, igraph_t* graph)
+        {
+            igraph_vector_t igraph_edges;
+            igraph_vector_init(&igraph_edges, 2 * edges.size());
+
+            u32 ctr = 0;
+            for (const auto& [src, dst] : edges)
+            {
+                VECTOR(igraph_edges)[ctr++] = src;
+                VECTOR(igraph_edges)[ctr++] = dst;
+            }
+            igraph_add_edges(graph, &igraph_edges, nullptr);
+            igraph_vector_destroy(&igraph_edges);
+        }
+    }    // namespace graph_algorithm
 }    // namespace hal
