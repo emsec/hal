@@ -451,10 +451,14 @@ namespace hal
 //            set_name("Selection Details");
             break;
         case SelectionTreeItem::ModuleItem:
-            mModuleDetailsTabs->setModule(gNetlist->get_module_by_id(sti->id()));
-            mStackedWidget->setCurrentWidget(mModuleDetailsTabs);
-//            if (mNumberSelectedItems==1) set_name("Module Details");
+            if (Module* m = gNetlist->get_module_by_id(sti->id()); m)
+            {
+                mModuleDetailsTabs->setModule(m);
+                mStackedWidget->setCurrentWidget(mModuleDetailsTabs);
+            }
+                //            if (mNumberSelectedItems==1) set_name("Module Details");
             break;
+
         case SelectionTreeItem::GateItem:
             if(mStackedWidget->currentWidget() == mModuleDetailsTabs)
                 mModuleDetailsTabs->clear();

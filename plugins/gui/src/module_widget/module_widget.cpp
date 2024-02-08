@@ -611,8 +611,12 @@ namespace hal
 
         for (auto module_id : gSelectionRelay->selectedModulesList())
         {
-            QModelIndex index = mModuleProxyModel->mapFromSource(mModuleModel->getIndexFromItem(mModuleModel->getItem(module_id)));
-            module_selection.select(index, index);
+            ModuleItem* item = mModuleModel->getItem(module_id);
+            if(item)
+            {
+                QModelIndex index = mModuleProxyModel->mapFromSource(mModuleModel->getIndexFromItem(item));
+                module_selection.select(index, index);
+            }
         }
 
         mTreeView->selectionModel()->select(module_selection, QItemSelectionModel::SelectionFlag::ClearAndSelect);
