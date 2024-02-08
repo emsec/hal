@@ -1592,7 +1592,8 @@ namespace hal
             for (const auto& expanded_name : signal->m_expanded_names)
             {
                 std::string unique_net_name = get_unique_alias(module->get_name(), expanded_name, m_net_name_occurences);
-                m_net_name_occurences[unique_net_name]++;
+                if (unique_net_name != expanded_name)
+                    m_net_name_occurences[unique_net_name]++;
                 signal_alias[expanded_name] = unique_net_name;
 
                 // create new net for the signal
