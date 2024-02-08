@@ -1236,6 +1236,7 @@ namespace hal
             for (const auto& expanded_port_identifier : port->m_expanded_identifiers)
             {
                 const auto signal_name = get_unique_alias("", expanded_port_identifier + "__GLOBAL_IO__", m_net_name_occurences);
+                m_net_name_occurences[signal_name]++;
 
                 Net* global_port_net = m_netlist->create_net(signal_name);
                 if (global_port_net == nullptr)
@@ -1590,7 +1591,10 @@ namespace hal
         {
             for (const auto& expanded_name : signal->m_expanded_names)
             {
-                signal_alias[expanded_name] = get_unique_alias(module->get_name(), expanded_name, m_net_name_occurences);
+                std::string unique_net_name = get_unique_alias(module->get_name(), expanded_name, m_net_name_occurences);
+                if (unique_net_name != expanded_name)
+                    m_net_name_occurences[unique_net_name]++;
+                signal_alias[expanded_name] = unique_net_name;
 
                 // create new net for the signal
                 Net* signal_net = m_netlist->create_net(signal_alias.at(expanded_name));
@@ -1730,7 +1734,6 @@ namespace hal
             {
                 // create the new gate
                 instance_alias[instance->m_name] = get_unique_alias(module->get_name(), instance->m_name, m_instance_name_occurences);
-
                 Gate* new_gate = m_netlist->create_gate(gate_type_it->second, instance_alias.at(instance->m_name));
                 if (new_gate == nullptr)
                 {
@@ -1931,9 +1934,22 @@ namespace hal
         if (!parent_name.empty())
         {
             // if there is no other instance with that name, we omit the name prefix
-            if (const auto instance_name_it = name_occurences.find(name); instance_name_it != name_occurences.end() && instance_name_it->second > 1)
+
+            auto instance_name_it = name_occurences.find(name);
+
+            int cnt = 0;
+
+            // it is OK if base name (first loop cnt=0) is already in name_occurences once
+            // unique_alias (cnt > 0) must not be in name_occurences
+            while (instance_name_it != name_occurences.end() && (cnt || instance_name_it->second > 1) )
             {
-                unique_alias = parent_name + instance_name_seperator + unique_alias;
+                std::string extension;
+                if (cnt++)
+                {
+                    extension = "_u" + std::to_string(cnt);
+                }
+                unique_alias = parent_name + instance_name_seperator + unique_alias + extension;
+                instance_name_it = name_occurences.find(unique_alias);
             }
         }
 
@@ -1945,11 +1961,6 @@ namespace hal
         if (stream.remaining() == 1)
         {
             return {(u32)std::stoi(stream.consume().string)};
-        }
-
-        if (stream.peek(0).string=="35" && stream.peek(2).string=="32")
-        {
-            std::cerr << "parser <" << stream.peek(-1).string << ">" << std::endl;
         }
 
         // MSB to LSB
