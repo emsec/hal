@@ -120,28 +120,6 @@ namespace hal
         ~GraphicsScene();
 
         /**
-         * Starts the dragging of a gate or module to show its shadow meanwhile.
-         *
-         * @param posF - The position of the shadow
-         * @param sizeF - The size of the shadow (i.e. the size of the dragged gate)
-         * @param cue - The cue of the current position
-         */
-        void startDragShadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::DragCue cue);
-
-        /**
-         * Moves the shadow that appears while dragging a gate or module.
-         *
-         * @param posF - The new position of the shadow
-         * @param cue - The cue of the current position
-         */
-        void moveDragShadow(const QPointF& posF, const NodeDragShadow::DragCue cue);
-
-        /**
-         * Removes the shadow that appears while dragging a gate or module (at the end of the drag action).
-         */
-        void stopDragShadow();
-
-        /**
          * Gets the position of the drag shadow.
          *
          * @returns the position of the drag shadow.
@@ -320,8 +298,6 @@ namespace hal
         using QGraphicsScene::clear;
 
         void drawBackground(QPainter* painter, const QRectF& rect) override;
-
-        NodeDragShadow* mDragShadowGate;
 
         QVector<GraphicsModule*> mModuleItems;
         QVector<GraphicsGate*> mGateItems;

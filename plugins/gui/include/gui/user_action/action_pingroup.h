@@ -160,6 +160,7 @@ namespace hal
         static ActionPingroup* addPinsToNewGroup(const Module* m, const QString& name, QList<u32> pinIds, int grpRow = -1);
         static ActionPingroup* addPinToNewGroup(const Module* m, const QString& name, u32 pinId, int grpRow = -1);
         static ActionPingroup* removePinsFromGroup(const Module* m, QList<u32> pinIds);
+        static ActionPingroup* deletePinGroup(const Module* m, u32 grpId);
     };
 
     /**
