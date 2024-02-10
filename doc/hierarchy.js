@@ -248,9 +248,7 @@ var hierarchy =
           ] ]
         ] ]
       ] ],
-      [ "QGraphicsObject", "https://doc.qt.io/qt-5/qgraphicsobject.html", [
-        [ "hal::NodeDragShadow", "classhal_1_1_node_drag_shadow.html", null ]
-      ] ]
+      [ "hal::NodeDragShadow", "classhal_1_1_node_drag_shadow.html", null ]
     ] ],
     [ "QHash< hal::Node, CoordinateFromData >", "https://doc.qt.io/qt-5/qhash.html", [
       [ "hal::CoordinateFromDataMap", "classhal_1_1_coordinate_from_data_map.html", null ]
@@ -393,7 +391,6 @@ var hierarchy =
       [ "QGraphicsEffect", "https://doc.qt.io/qt-5/qgraphicseffect.html", [
         [ "hal::ShadowEffect", "classhal_1_1_shadow_effect.html", null ]
       ] ],
-      [ "QGraphicsObject", "https://doc.qt.io/qt-5/qgraphicsobject.html", null ],
       [ "QGraphicsScene", "https://doc.qt.io/qt-5/qgraphicsscene.html", [
         [ "hal::GraphicsScene", "classhal_1_1_graphics_scene.html", null ]
       ] ],

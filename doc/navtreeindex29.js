@@ -1,5 +1,7 @@
 var NAVTREEINDEX29 =
 {
+"python__bindings_2bindings_2gate__library_8cpp.html#ga3e97835fd6fda5f038f92cefbcdcf57b":[7,0,2,2,0,8,0],
+"python__bindings_2bindings_2gate__library_8cpp_source.html":[7,0,2,2,0,8],
 "python__bindings_2bindings_2gate__library__manager_8cpp.html":[7,0,2,2,0,9],
 "python__bindings_2bindings_2gate__library__manager_8cpp.html#gacd94e2b9ac19cb0a128446c71673aabf":[7,0,2,2,0,9,0],
 "python__bindings_2bindings_2gate__library__manager_8cpp_source.html":[7,0,2,2,0,9],
@@ -247,7 +249,5 @@ var NAVTREEINDEX29 =
 "settings__item__keybind_8h.html":[7,0,1,3,0,0,42,0,3],
 "settings__item__keybind_8h_source.html":[7,0,1,3,0,0,42,0,3],
 "settings__item__slider_8cpp.html":[7,0,1,3,2,40,0,3],
-"settings__item__slider_8cpp_source.html":[7,0,1,3,2,40,0,3],
-"settings__item__slider_8h.html":[7,0,1,3,0,0,42,0,4],
-"settings__item__slider_8h_source.html":[7,0,1,3,0,0,42,0,4]
+"settings__item__slider_8cpp_source.html":[7,0,1,3,2,40,0,3]
 };

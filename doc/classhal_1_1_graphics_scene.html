@@ -152,6 +152,8 @@ Public Slots</h2></td></tr>
 <tr class="separator:a8aa989ce041eb8a60e047bb99488b966"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67b93e8efb90c600b222f438f040e066"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_scene.html#a67b93e8efb90c600b222f438f040e066">updateAllItems</a> ()</td></tr>
 <tr class="separator:a67b93e8efb90c600b222f438f040e066"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0c02fc2864dbed69490ed53bd2e19b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_graphics_scene.html#ad0c02fc2864dbed69490ed53bd2e19b5">setDragController</a> (<a class="el" href="classhal_1_1_drag_controller.html">DragController</a> *dc)</td></tr>
+<tr class="separator:ad0c02fc2864dbed69490ed53bd2e19b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -656,7 +658,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="textblock"><p>Container for a <a class="el" href="classhal_1_1_graph_graphics_view.html" title="A view to display the rendered graph (needs a GraphicsScene).">GraphGraphicsView</a> containing gates, nets, and modules. </p>
 <p>The <a class="el" href="classhal_1_1_graphics_scene.html" title="Container for a GraphGraphicsView containing gates, nets, and modules.">GraphicsScene</a> is the scene where the GraphicsItems of the gates, nets and modules are placed in by the layouter. Besides the functions that are provided by its parent class QGraphicScene, it offers functions to work on a grid, to support drag-and-drop on the grid, to access the contained GraphicItems and to handle certain events like changed selections and groupings. </p>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8h_source.html#l00057">57</a> of file <a class="el" href="graphics__scene_8h_source.html">graphics_scene.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8h_source.html#l00058">58</a> of file <a class="el" href="graphics__scene_8h_source.html">graphics_scene.h</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a389c6d75b6d7acbb83523ba1a62637fd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a389c6d75b6d7acbb83523ba1a62637fd">&#9670;&nbsp;</a></span>GridType</h2>
@@ -675,7 +677,7 @@ Additional Inherited Members</h2></td></tr>
 <tr><td class="fieldname"><a id="a389c6d75b6d7acbb83523ba1a62637fda2aa73a0ff86ea39309e7fea7b5e4327a"></a>Lines&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8h_source.html#l00062">62</a> of file <a class="el" href="graphics__scene_8h_source.html">graphics_scene.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8h_source.html#l00063">63</a> of file <a class="el" href="graphics__scene_8h_source.html">graphics_scene.h</a>.</p>
 
 </div>
 </div>
@@ -703,9 +705,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00076">76</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00077">77</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00276">connectAll()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gGraphContextManager</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="selection__relay_8cpp_source.html#l00161">hal::SelectionRelay::registerSender()</a>, <a class="el" href="graph__context__manager_8h_source.html#l00366">hal::GraphContextManager::sSettingNetGroupingToPins</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00474">updateAllItems()</a>, and <a class="el" href="classhal_1_1_settings_item.html#a5fa732b9d4d4d67e43736b5254cd9af0">hal::SettingsItem::valueChanged()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00284">connectAll()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00085">hal::gGraphContextManager</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="selection__relay_8cpp_source.html#l00161">hal::SelectionRelay::registerSender()</a>, <a class="el" href="graph__context__manager_8h_source.html#l00366">hal::GraphContextManager::sSettingNetGroupingToPins</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00485">updateAllItems()</a>, and <a class="el" href="classhal_1_1_settings_item.html#a5fa732b9d4d4d67e43736b5254cd9af0">hal::SettingsItem::valueChanged()</a>.</p>
 
 </div>
 </div>
@@ -725,9 +727,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Destructor. </p>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00090">90</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00091">91</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#disconnect">QObject::disconnect()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00365">handleInternSelectionChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#items">QGraphicsScene::items()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#removeItem">QGraphicsScene::removeItem()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#selectionChanged">QGraphicsScene::selectionChanged()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#disconnect">QObject::disconnect()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00376">handleInternSelectionChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#items">QGraphicsScene::items()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#removeItem">QGraphicsScene::removeItem()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#selectionChanged">QGraphicsScene::selectionChanged()</a>.</p>
 
 </div>
 </div>
@@ -755,7 +757,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00100">100</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00108">108</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#addItem">QGraphicsScene::addItem()</a>, <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16">hal::Gate</a>, <a class="el" href="graphics__item_8cpp_source.html#l00037">hal::GraphicsItem::id()</a>, <a class="el" href="graphics__item_8cpp_source.html#l00032">hal::GraphicsItem::itemType()</a>, <a class="el" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ae55f75a29310d7b60f7ac1d390c8ae42">hal::Module</a>, <a class="el" href="test_8py_source.html#l00008">test::n</a>, and <a class="el" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca">hal::Net</a>.</p>
 
@@ -777,11 +779,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Connects all necessary signals and slots. </p>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00276">276</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00284">284</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00078">hal::gContentManager</a>, <a class="el" href="content__manager_8cpp_source.html#l00136">hal::ContentManager::getGroupingManagerWidget()</a>, <a class="el" href="grouping__manager__widget_8h_source.html#l00156">hal::GroupingManagerWidget::getModel()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00081">hal::gNetlistRelay</a>, <a class="el" href="classhal_1_1_grouping_table_model.html#a879da62666d443facf2859a323ddba7e">hal::GroupingTableModel::groupingColorChanged()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#a467d0345f9225e4e7378bdb89122e11e">hal::NetlistRelay::groupingGateAssigned()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#af78c105c5f9968ca72b075403a5096e2">hal::NetlistRelay::groupingGateRemoved()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#a528ce60be4476595ea9c1ae14ced3f4e">hal::NetlistRelay::groupingModuleAssigned()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#a5f5cf98606d549502d25620ebf1d501b">hal::NetlistRelay::groupingModuleRemoved()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#a9b0774ad6b37baf5a55a2251d94c9758">hal::NetlistRelay::groupingNetAssigned()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#ac741f5a71cae24be21934c40b0ec257c">hal::NetlistRelay::groupingNetRemoved()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00500">handleExternSelectionChanged()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00551">handleExternSubfocusChanged()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00451">handleGroupingAssignGate()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00443">handleGroupingAssignModule()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00459">handleGroupingAssignNet()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00467">handleGroupingColorChanged()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00365">handleInternSelectionChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#selectionChanged">QGraphicsScene::selectionChanged()</a>, <a class="el" href="classhal_1_1_selection_relay.html#a2c60a03847a015475d7f3e5018ca1956">hal::SelectionRelay::selectionChanged()</a>, and <a class="el" href="classhal_1_1_selection_relay.html#ad43860216a9fd0d75aacdf2cf229d07b">hal::SelectionRelay::subfocusChanged()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#connect">QObject::connect()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00078">hal::gContentManager</a>, <a class="el" href="content__manager_8cpp_source.html#l00136">hal::ContentManager::getGroupingManagerWidget()</a>, <a class="el" href="grouping__manager__widget_8h_source.html#l00156">hal::GroupingManagerWidget::getModel()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00081">hal::gNetlistRelay</a>, <a class="el" href="classhal_1_1_grouping_table_model.html#a879da62666d443facf2859a323ddba7e">hal::GroupingTableModel::groupingColorChanged()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#a467d0345f9225e4e7378bdb89122e11e">hal::NetlistRelay::groupingGateAssigned()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#af78c105c5f9968ca72b075403a5096e2">hal::NetlistRelay::groupingGateRemoved()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#a528ce60be4476595ea9c1ae14ced3f4e">hal::NetlistRelay::groupingModuleAssigned()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#a5f5cf98606d549502d25620ebf1d501b">hal::NetlistRelay::groupingModuleRemoved()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#a9b0774ad6b37baf5a55a2251d94c9758">hal::NetlistRelay::groupingNetAssigned()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#ac741f5a71cae24be21934c40b0ec257c">hal::NetlistRelay::groupingNetRemoved()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00511">handleExternSelectionChanged()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00562">handleExternSubfocusChanged()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00462">handleGroupingAssignGate()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00454">handleGroupingAssignModule()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00470">handleGroupingAssignNet()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00478">handleGroupingColorChanged()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00376">handleInternSelectionChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#selectionChanged">QGraphicsScene::selectionChanged()</a>, <a class="el" href="classhal_1_1_selection_relay.html#a2c60a03847a015475d7f3e5018ca1956">hal::SelectionRelay::selectionChanged()</a>, and <a class="el" href="classhal_1_1_selection_relay.html#ad43860216a9fd0d75aacdf2cf229d07b">hal::SelectionRelay::subfocusChanged()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00076">GraphicsScene()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00077">GraphicsScene()</a>.</p>
 
 </div>
 </div>
@@ -801,7 +803,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Removes all GraphicsItems from the scene. </p>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00308">308</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00316">316</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="graphics__qss__adapter_8cpp_source.html#l00029">hal::GraphicsQssAdapter::instance()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#items">QGraphicsScene::items()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#removeItem">QGraphicsScene::removeItem()</a>, and <a class="el" href="graphics__qss__adapter_8cpp_source.html#l00035">hal::GraphicsQssAdapter::repolish()</a>.</p>
 
@@ -825,9 +827,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Disconnects all connected signals and slots. </p>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00292">292</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00300">300</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#disconnect">QObject::disconnect()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00078">hal::gContentManager</a>, <a class="el" href="content__manager_8cpp_source.html#l00136">hal::ContentManager::getGroupingManagerWidget()</a>, <a class="el" href="grouping__manager__widget_8h_source.html#l00156">hal::GroupingManagerWidget::getModel()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00081">hal::gNetlistRelay</a>, <a class="el" href="classhal_1_1_grouping_table_model.html#a879da62666d443facf2859a323ddba7e">hal::GroupingTableModel::groupingColorChanged()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#a467d0345f9225e4e7378bdb89122e11e">hal::NetlistRelay::groupingGateAssigned()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#af78c105c5f9968ca72b075403a5096e2">hal::NetlistRelay::groupingGateRemoved()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#a528ce60be4476595ea9c1ae14ced3f4e">hal::NetlistRelay::groupingModuleAssigned()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#a5f5cf98606d549502d25620ebf1d501b">hal::NetlistRelay::groupingModuleRemoved()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#a9b0774ad6b37baf5a55a2251d94c9758">hal::NetlistRelay::groupingNetAssigned()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#ac741f5a71cae24be21934c40b0ec257c">hal::NetlistRelay::groupingNetRemoved()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00500">handleExternSelectionChanged()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00551">handleExternSubfocusChanged()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00451">handleGroupingAssignGate()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00443">handleGroupingAssignModule()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00459">handleGroupingAssignNet()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00467">handleGroupingColorChanged()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00365">handleInternSelectionChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#selectionChanged">QGraphicsScene::selectionChanged()</a>, <a class="el" href="classhal_1_1_selection_relay.html#a2c60a03847a015475d7f3e5018ca1956">hal::SelectionRelay::selectionChanged()</a>, and <a class="el" href="classhal_1_1_selection_relay.html#ad43860216a9fd0d75aacdf2cf229d07b">hal::SelectionRelay::subfocusChanged()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#disconnect">QObject::disconnect()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00078">hal::gContentManager</a>, <a class="el" href="content__manager_8cpp_source.html#l00136">hal::ContentManager::getGroupingManagerWidget()</a>, <a class="el" href="grouping__manager__widget_8h_source.html#l00156">hal::GroupingManagerWidget::getModel()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00081">hal::gNetlistRelay</a>, <a class="el" href="classhal_1_1_grouping_table_model.html#a879da62666d443facf2859a323ddba7e">hal::GroupingTableModel::groupingColorChanged()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#a467d0345f9225e4e7378bdb89122e11e">hal::NetlistRelay::groupingGateAssigned()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#af78c105c5f9968ca72b075403a5096e2">hal::NetlistRelay::groupingGateRemoved()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#a528ce60be4476595ea9c1ae14ced3f4e">hal::NetlistRelay::groupingModuleAssigned()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#a5f5cf98606d549502d25620ebf1d501b">hal::NetlistRelay::groupingModuleRemoved()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#a9b0774ad6b37baf5a55a2251d94c9758">hal::NetlistRelay::groupingNetAssigned()</a>, <a class="el" href="classhal_1_1_netlist_relay.html#ac741f5a71cae24be21934c40b0ec257c">hal::NetlistRelay::groupingNetRemoved()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00511">handleExternSelectionChanged()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00562">handleExternSubfocusChanged()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00462">handleGroupingAssignGate()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00454">handleGroupingAssignModule()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00470">handleGroupingAssignNet()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00478">handleGroupingColorChanged()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00376">handleInternSelectionChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#selectionChanged">QGraphicsScene::selectionChanged()</a>, <a class="el" href="classhal_1_1_selection_relay.html#a2c60a03847a015475d7f3e5018ca1956">hal::SelectionRelay::selectionChanged()</a>, and <a class="el" href="classhal_1_1_selection_relay.html#ad43860216a9fd0d75aacdf2cf229d07b">hal::SelectionRelay::subfocusChanged()</a>.</p>
 
 </div>
 </div>
@@ -874,9 +876,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classhal_1_1_graphics_gate.html" title="Abstract base class for gates.">GraphicsGate</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00234">234</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00242">242</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00848">hal::GraphWidget::ensureSelectionVisible()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00953">hal::GraphWidget::focusGate()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00451">handleGroupingAssignGate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00848">hal::GraphWidget::ensureSelectionVisible()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00953">hal::GraphWidget::focusGate()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00462">handleGroupingAssignGate()</a>.</p>
 
 </div>
 </div>
@@ -904,9 +906,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classhal_1_1_graphics_module.html" title="Abstract base class for modules.">GraphicsModule</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00262">262</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00270">270</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00848">hal::GraphWidget::ensureSelectionVisible()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00975">hal::GraphWidget::focusModule()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00443">handleGroupingAssignModule()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00848">hal::GraphWidget::ensureSelectionVisible()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00975">hal::GraphWidget::focusModule()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00454">handleGroupingAssignModule()</a>.</p>
 
 </div>
 </div>
@@ -934,9 +936,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="classhal_1_1_graphics_net.html" title="The basic net class all other nets inherit from.">GraphicsNet</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00248">248</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00256">256</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00848">hal::GraphWidget::ensureSelectionVisible()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00964">hal::GraphWidget::focusNet()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00459">handleGroupingAssignNet()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00848">hal::GraphWidget::ensureSelectionVisible()</a>, <a class="el" href="graph__widget_8cpp_source.html#l00964">hal::GraphWidget::focusNet()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00470">handleGroupingAssignNet()</a>.</p>
 
 </div>
 </div>
@@ -971,11 +973,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00500">500</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00511">511</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#blockSignals">QObject::blockSignals()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#clearSelection">QGraphicsScene::clearSelection()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="selection__relay_8cpp_source.html#l00392">hal::SelectionRelay::isGateSelected()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00387">hal::SelectionRelay::isModuleSelected()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00397">hal::SelectionRelay::isNetSelected()</a>, <a class="el" href="selection__relay_8h_source.html#l00328">hal::SelectionRelay::numberSelectedGates()</a>, <a class="el" href="selection__relay_8h_source.html#l00348">hal::SelectionRelay::numberSelectedModules()</a>, <a class="el" href="selection__relay_8h_source.html#l00338">hal::SelectionRelay::numberSelectedNets()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">QObject::sender()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00276">connectAll()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00292">disconnectAll()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00227">hal::GraphLayouter::layout()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00284">connectAll()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00300">disconnectAll()</a>, and <a class="el" href="graph__layouter_8cpp_source.html#l00227">hal::GraphLayouter::layout()</a>.</p>
 
 </div>
 </div>
@@ -1010,11 +1012,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00551">551</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00562">562</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">QObject::sender()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00276">connectAll()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00292">disconnectAll()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00284">connectAll()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00300">disconnectAll()</a>.</p>
 
 </div>
 </div>
@@ -1060,11 +1062,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00451">451</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00462">462</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graphics__scene_8cpp_source.html#l00234">getGateItem()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#update">QGraphicsItem::update()</a>.</p>
+<p class="reference">References <a class="el" href="graphics__scene_8cpp_source.html#l00242">getGateItem()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#update">QGraphicsItem::update()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00276">connectAll()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00292">disconnectAll()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00284">connectAll()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00300">disconnectAll()</a>.</p>
 
 </div>
 </div>
@@ -1110,11 +1112,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00443">443</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00454">454</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graphics__scene_8cpp_source.html#l00262">getModuleItem()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#update">QGraphicsItem::update()</a>.</p>
+<p class="reference">References <a class="el" href="graphics__scene_8cpp_source.html#l00270">getModuleItem()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#update">QGraphicsItem::update()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00276">connectAll()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00292">disconnectAll()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00284">connectAll()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00300">disconnectAll()</a>.</p>
 
 </div>
 </div>
@@ -1160,11 +1162,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00459">459</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00470">470</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graphics__scene_8cpp_source.html#l00248">getNetItem()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#update">QGraphicsItem::update()</a>.</p>
+<p class="reference">References <a class="el" href="graphics__scene_8cpp_source.html#l00256">getNetItem()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#update">QGraphicsItem::update()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00276">connectAll()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00292">disconnectAll()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00284">connectAll()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00300">disconnectAll()</a>.</p>
 
 </div>
 </div>
@@ -1199,11 +1201,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00467">467</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00478">478</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graphics__scene_8cpp_source.html#l00474">updateAllItems()</a>.</p>
+<p class="reference">References <a class="el" href="graphics__scene_8cpp_source.html#l00485">updateAllItems()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00276">connectAll()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00292">disconnectAll()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00284">connectAll()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00300">disconnectAll()</a>.</p>
 
 </div>
 </div>
@@ -1238,7 +1240,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00484">484</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00495">495</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="selection__tree__item_8h_source.html#l00058">hal::SelectionTreeItem::GateItem</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="selection__tree__item_8h_source.html#l00058">hal::SelectionTreeItem::MaxItem</a>, <a class="el" href="selection__tree__item_8h_source.html#l00058">hal::SelectionTreeItem::ModuleItem</a>, and <a class="el" href="selection__tree__item_8h_source.html#l00058">hal::SelectionTreeItem::NetItem</a>.</p>
 
@@ -1270,11 +1272,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Q_SLOT to call when the selection has been changed. Used to keep track of the selected modules, gates and nets. </p>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00365">365</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00376">376</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#begin-1">QSet::begin()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00022">hal::SelectionRelay::clear()</a>, <a class="el" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16">hal::Gate</a>, <a class="el" href="classhal_1_1_selection_relay.html#ae8fbb1a1150eb6e68ba34cdb2f499c8aad25b4bd4c72aa2c07ee87adb10b59f16">hal::SelectionRelay::Gate</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#isEmpty">QSet::isEmpty()</a>, <a class="el" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ae55f75a29310d7b60f7ac1d390c8ae42">hal::Module</a>, <a class="el" href="classhal_1_1_selection_relay.html#ae8fbb1a1150eb6e68ba34cdb2f499c8aae55f75a29310d7b60f7ac1d390c8ae42">hal::SelectionRelay::Module</a>, <a class="el" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca">hal::Net</a>, <a class="el" href="classhal_1_1_selection_relay.html#ae8fbb1a1150eb6e68ba34cdb2f499c8aa5012af45088eb8e999bb8350077b12ca">hal::SelectionRelay::Net</a>, <a class="el" href="classhal_1_1_selection_relay.html#ae8fbb1a1150eb6e68ba34cdb2f499c8aa6adf97f83acf6453d4a6a4b1070f3754">hal::SelectionRelay::None</a>, <a class="el" href="selection__relay_8cpp_source.html#l00175">hal::SelectionRelay::relaySelectionChanged()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#selectedItems">QGraphicsScene::selectedItems()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00139">hal::SelectionRelay::setFocus()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00095">hal::SelectionRelay::setSelectedGates()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00107">hal::SelectionRelay::setSelectedModules()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00101">hal::SelectionRelay::setSelectedNets()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#size">QSet::size()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00276">connectAll()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00292">disconnectAll()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00349">setMousePressed()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00090">~GraphicsScene()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00284">connectAll()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00300">disconnectAll()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00355">setMousePressed()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00091">~GraphicsScene()</a>.</p>
 
 </div>
 </div>
@@ -1311,7 +1313,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#mousePressEvent">QGraphicsScene</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00556">556</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00567">567</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#event">QGraphicsScene::event()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#mousePressEvent">QGraphicsScene::mousePressEvent()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#MouseButton-enum">Qt::RightButton</a>.</p>
 
@@ -1333,7 +1335,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Moves all GraphicsNets to the background so that they do not overlap GraphicsGates. Helper function that can be used by the layouters. </p>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00343">343</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00349">349</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__layouter_8cpp_source.html#l00227">hal::GraphLayouter::layout()</a>.</p>
 
@@ -1380,9 +1382,45 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00158">158</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00166">166</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ad25b4bd4c72aa2c07ee87adb10b59f16">hal::Gate</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00056">id</a>, <a class="el" href="graphics__item_8cpp_source.html#l00037">hal::GraphicsItem::id()</a>, <a class="el" href="graphics__item_8cpp_source.html#l00032">hal::GraphicsItem::itemType()</a>, <a class="el" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1ae55f75a29310d7b60f7ac1d390c8ae42">hal::Module</a>, <a class="el" href="test_8py_source.html#l00008">test::n</a>, <a class="el" href="group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca">hal::Net</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qgraphicsscene.html#removeItem">QGraphicsScene::removeItem()</a>.</p>
+
+</div>
+</div>
+<a id="ad0c02fc2864dbed69490ed53bd2e19b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0c02fc2864dbed69490ed53bd2e19b5">&#9670;&nbsp;</a></span>setDragController</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::GraphicsScene::setDragController </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_drag_controller.html">DragController</a> *&#160;</td>
+          <td class="paramname"><em>dc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set reference pointer to drag controller on start drag, nullptr when drag ended </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dc</td><td>- Reference to drag controller </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00103">103</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="drag__controller_8cpp_source.html#l00023">hal::DragController::clearShadows()</a>.</p>
 
 </div>
 </div>
@@ -1417,7 +1455,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00059">59</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00060">60</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__graphics__view_8cpp_source.html#l00310">hal::GraphGraphicsView::paintEvent()</a>.</p>
 
@@ -1454,7 +1492,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00054">54</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00055">55</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__graphics__view_8cpp_source.html#l00310">hal::GraphGraphicsView::paintEvent()</a>.</p>
 
@@ -1491,7 +1529,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00064">64</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00065">65</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__graphics__view_8cpp_source.html#l00310">hal::GraphGraphicsView::paintEvent()</a>.</p>
 
@@ -1528,7 +1566,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00036">36</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00037">37</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="graphics__qss__adapter_8cpp_source.html#l00029">hal::GraphicsQssAdapter::instance()</a>, <a class="el" href="graphics__qss__adapter_8cpp_source.html#l00047">hal::GraphicsQssAdapter::setGridAlpha()</a>, and <a class="el" href="graphics__qss__adapter_8cpp_source.html#l00056">hal::GraphicsQssAdapter::setGridAlphaF()</a>.</p>
 
@@ -1558,9 +1596,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00349">349</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00355">355</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graphics__scene_8cpp_source.html#l00365">handleInternSelectionChanged()</a>.</p>
+<p class="reference">References <a class="el" href="graphics__scene_8cpp_source.html#l00376">handleInternSelectionChanged()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="graph__graphics__view_8cpp_source.html#l00420">hal::GraphGraphicsView::mouseReleaseEvent()</a>.</p>
 
@@ -1598,7 +1636,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the closest position on the grid </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00069">69</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00070">70</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html#x">QPointF::x()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qpointf.html#y">QPointF::y()</a>.</p>
 
@@ -1628,9 +1666,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>All items update </p>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00474">474</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00485">485</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00076">GraphicsScene()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00467">handleGroupingColorChanged()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00077">GraphicsScene()</a>, and <a class="el" href="graphics__scene_8cpp_source.html#l00478">handleGroupingColorChanged()</a>.</p>
 
 </div>
 </div>
@@ -1657,7 +1695,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00325">325</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="graphics__scene_8cpp_source.html#l00331">331</a> of file <a class="el" href="graphics__scene_8cpp_source.html">graphics_scene.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="graph__shader_8h_source.html#l00052">hal::GraphShader::Shading::mGateVisuals</a>, <a class="el" href="graph__shader_8h_source.html#l00053">hal::GraphShader::Shading::mNetVisuals</a>, and <a class="el" href="graph__shader_8h_source.html#l00051">hal::GraphShader::Shading::mOduleVisuals</a>.</p>
 
@@ -1673,7 +1711,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_graphics_scene.html">GraphicsScene</a></li>
-    <li class="footer">Generated on Thu Feb 8 2024 08:25:03 for HAL by
+    <li class="footer">Generated on Sat Feb 10 2024 18:24:38 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

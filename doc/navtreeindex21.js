@@ -1,5 +1,7 @@
 var NAVTREEINDEX21 =
 {
+"configuration_8py.html#af8b91841e8b69f378cfcfd63a4011fdc":[7,0,1,1,1,0,6],
+"configuration_8py_source.html":[7,0,1,1,1,0],
 "content__anchor_8h.html":[7,0,1,3,0,0,5,0],
 "content__anchor_8h_source.html":[7,0,1,3,0,0,5,0],
 "content__drag__relay_8cpp.html":[7,0,1,3,2,10,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX21 =
 "dir_8799f78bd7fed6d3c65cac53e3339b5f.html":[7,0,1,4,0],
 "dir_891860499eebd6e4fb852edf393abac6.html":[7,0,1,3,1],
 "dir_8b51047a26b3c61d3de57fe14342149a.html":[7,0,1,3,2,1],
-"dir_8b970151d598b4fae8bb0815b2681fca.html":[7,0,2,0,1],
-"dir_8bd0d6fdfbfc03158e31f85e897675cb.html":[7,0,1,3,2,9],
-"dir_8c534af0efd33d0349b6dc8ecd7847a6.html":[7,0,1,3,0,0,20,1,1,0]
+"dir_8b970151d598b4fae8bb0815b2681fca.html":[7,0,2,0,1]
 };

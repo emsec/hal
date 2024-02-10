@@ -96,126 +96,127 @@ $(document).ready(function(){initNavTree('node__drag__shadow_8cpp_source.html','
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;QPropertyAnimation&gt;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;QPainter&gt;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;QPaintEvent&gt;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;{</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qpen.html">QPen</a> NodeDragShadow::sPen;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    qreal NodeDragShadow::sLod;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> NodeDragShadow::sColorPen[3];</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> NodeDragShadow::sColorSolid[3];</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> NodeDragShadow::sColorTranslucent[3];</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classhal_1_1_node_drag_shadow.html#acda0455ffd371bbc3b5a36f1202e68f4">   21</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_node_drag_shadow.html#acda0455ffd371bbc3b5a36f1202e68f4">NodeDragShadow::loadSettings</a>()</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        sColorPen[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012bad37b1f6c0512e2118cee17fea015b699">DragCue::Rejected</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(166, 31, 31, 255);</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        sColorPen[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012ba7088d0affb208681b3cdbec3f72c59e3">DragCue::Movable</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(48, 172, 79, 255);</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        sColorPen[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012baed0c3d91d14f803ce7606df208aeae0f">DragCue::Swappable</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(37, 97, 176, 255);</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        sColorSolid[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012bad37b1f6c0512e2118cee17fea015b699">DragCue::Rejected</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(166, 31, 31, 200);</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        sColorSolid[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012ba7088d0affb208681b3cdbec3f72c59e3">DragCue::Movable</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(48, 172, 79, 200);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        sColorSolid[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012baed0c3d91d14f803ce7606df208aeae0f">DragCue::Swappable</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(37, 97, 176, 200);</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        sColorTranslucent[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012bad37b1f6c0512e2118cee17fea015b699">DragCue::Rejected</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(166, 31, 31, 150);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        sColorTranslucent[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012ba7088d0affb208681b3cdbec3f72c59e3">DragCue::Movable</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(48, 172, 79, 150);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        sColorTranslucent[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012baed0c3d91d14f803ce7606df208aeae0f">DragCue::Swappable</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(37, 97, 176, 150);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        sPen.<a class="codeRef" href="https://doc.qt.io/qt-5/qpen.html#setCosmetic">setCosmetic</a>(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        sPen.<a class="codeRef" href="https://doc.qt.io/qt-5/qpen.html#setJoinStyle">setJoinStyle</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#PenJoinStyle-enum">Qt::MiterJoin</a>);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    }</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classhal_1_1_node_drag_shadow.html#a5d6ec00a7e96d05a96ad9cd77d03ba92">   39</a></span>&#160;    <a class="code" href="classhal_1_1_node_drag_shadow.html#a5d6ec00a7e96d05a96ad9cd77d03ba92">NodeDragShadow::NodeDragShadow</a>()</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        : <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsobject.html">QGraphicsObject</a>(), mRect(0,0,100,100)</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#setAcceptedMouseButtons">setAcceptedMouseButtons</a>(0);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    }</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classhal_1_1_node_drag_shadow.html#a7e10262648f4fbfb59275cb2ccc3900e">   45</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_node_drag_shadow.html#a7e10262648f4fbfb59275cb2ccc3900e">NodeDragShadow::start</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>&amp; posF, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qsizef.html">QSizeF</a>&amp; sizeF)</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    {</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        mRect = <a class="codeRef" href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>(0,0),sizeF);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#setPos">setPos</a>(posF);</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#setZValue">setZValue</a>(1);</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#show">show</a>();</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    }</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">    qreal NodeDragShadow::width() const</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">    {</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">        return mWidth;</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">    }</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">    qreal NodeDragShadow::height() const</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">    {</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">        return mHeight;</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">    }</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment">    QSizeF NodeDragShadow::size() const</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">    {</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">        return QSizeF(mWidth, mHeight);</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">    }</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">    void NodeDragShadow::setWidth(const qreal width)</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">    {</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">        mWidth = width;</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment">    }</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="comment">    void NodeDragShadow::setHeight(const qreal height)</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment">    {</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment">        mHeight = height;</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment">    }</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="comment">*/</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="classhal_1_1_node_drag_shadow.html#af4365769dd11e981b6bba5189f2dddc4">   80</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_node_drag_shadow.html#af4365769dd11e981b6bba5189f2dddc4">NodeDragShadow::setLod</a>(<span class="keyword">const</span> qreal lod)</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    {</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        sLod = lod;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    }</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classhal_1_1_node_drag_shadow.html#a8584c27f248da9ca0563161c57a255ca">   85</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_node_drag_shadow.html#a8584c27f248da9ca0563161c57a255ca">NodeDragShadow::setVisualCue</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012b">DragCue</a> cue)</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    {</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        mCue = cue;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#update">update</a>();</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    }</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classhal_1_1_node_drag_shadow.html#a85231cf0a75c0475da2c636b5899cc9e">   91</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_node_drag_shadow.html#a85231cf0a75c0475da2c636b5899cc9e">NodeDragShadow::paint</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a>* painter, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstyleoptiongraphicsitem.html">QStyleOptionGraphicsItem</a>* <a class="code" href="plugins_2gui_2_c_make_lists_8txt.html#a9f23355343051b13de5c52ef9a13eb08">option</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* widget)</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    {</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        Q_UNUSED(<a class="code" href="plugins_2gui_2_c_make_lists_8txt.html#a9f23355343051b13de5c52ef9a13eb08">option</a>)</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        Q_UNUSED(widget)</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keywordtype">int</span> color_index = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(mCue);</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        assert(color_index &lt;= 3);</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        sPen.<a class="codeRef" href="https://doc.qt.io/qt-5/qpen.html#setColor">setColor</a>(sColorPen[color_index]);</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#setPen-1">setPen</a>(sPen);</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordflow">if</span> (sLod &lt; 0.5)</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        {</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#fillRect">fillRect</a>(mRect, sColorSolid[color_index]);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        }</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        {</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#drawRect">drawRect</a>(mRect);</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#fillRect">fillRect</a>(mRect, sColorTranslucent[color_index]);</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        }</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    }</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="classhal_1_1_node_drag_shadow.html#a6691e533a255ad3797e0649ea1c32fa3">  114</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a> <a class="code" href="classhal_1_1_node_drag_shadow.html#a6691e533a255ad3797e0649ea1c32fa3">NodeDragShadow::boundingRect</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        <span class="keywordflow">return</span> mRect;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    }</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
-<div class="line"><a name="l00119"></a><span class="lineno"><a class="line" href="classhal_1_1_node_drag_shadow.html#a8e293ebe5b692c08bf6c9bf97738c7dc">  119</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qpainterpath.html">QPainterPath</a> <a class="code" href="classhal_1_1_node_drag_shadow.html#a8e293ebe5b692c08bf6c9bf97738c7dc">NodeDragShadow::shape</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpainterpath.html">QPainterPath</a> path;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        path.<a class="codeRef" href="https://doc.qt.io/qt-5/qpainterpath.html#addRect">addRect</a>(mRect);</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keywordflow">return</span> path;</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    }</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;}</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;{</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qpen.html">QPen</a> NodeDragShadow::sPen;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    qreal NodeDragShadow::sLod;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> NodeDragShadow::sColorPen[3];</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> NodeDragShadow::sColorSolid[3];</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a> NodeDragShadow::sColorTranslucent[3];</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classhal_1_1_node_drag_shadow.html#acda0455ffd371bbc3b5a36f1202e68f4">   22</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_node_drag_shadow.html#acda0455ffd371bbc3b5a36f1202e68f4">NodeDragShadow::loadSettings</a>()</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        sColorPen[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012bad37b1f6c0512e2118cee17fea015b699">DragCue::Rejected</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(166, 31, 31, 255);</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        sColorPen[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012ba7088d0affb208681b3cdbec3f72c59e3">DragCue::Movable</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(48, 172, 79, 255);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        sColorPen[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012baed0c3d91d14f803ce7606df208aeae0f">DragCue::Swappable</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(37, 97, 176, 255);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        sColorSolid[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012bad37b1f6c0512e2118cee17fea015b699">DragCue::Rejected</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(166, 31, 31, 200);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        sColorSolid[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012ba7088d0affb208681b3cdbec3f72c59e3">DragCue::Movable</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(48, 172, 79, 200);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        sColorSolid[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012baed0c3d91d14f803ce7606df208aeae0f">DragCue::Swappable</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(37, 97, 176, 200);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        sColorTranslucent[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012bad37b1f6c0512e2118cee17fea015b699">DragCue::Rejected</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(166, 31, 31, 150);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        sColorTranslucent[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012ba7088d0affb208681b3cdbec3f72c59e3">DragCue::Movable</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(48, 172, 79, 150);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        sColorTranslucent[<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(<a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012baed0c3d91d14f803ce7606df208aeae0f">DragCue::Swappable</a>)] = <a class="codeRef" href="https://doc.qt.io/qt-5/qcolor.html">QColor</a>(37, 97, 176, 150);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        sPen.<a class="codeRef" href="https://doc.qt.io/qt-5/qpen.html#setCosmetic">setCosmetic</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        sPen.<a class="codeRef" href="https://doc.qt.io/qt-5/qpen.html#setJoinStyle">setJoinStyle</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qt.html#PenJoinStyle-enum">Qt::MiterJoin</a>);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    }</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classhal_1_1_node_drag_shadow.html#a5d6ec00a7e96d05a96ad9cd77d03ba92">   40</a></span>&#160;    <a class="code" href="classhal_1_1_node_drag_shadow.html#a5d6ec00a7e96d05a96ad9cd77d03ba92">NodeDragShadow::NodeDragShadow</a>()</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        : <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html">QGraphicsItem</a>(), mRect(0,0,100,100)</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    {</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#setAcceptedMouseButtons">setAcceptedMouseButtons</a>(0);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    }</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classhal_1_1_node_drag_shadow.html#a7e10262648f4fbfb59275cb2ccc3900e">   46</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_node_drag_shadow.html#a7e10262648f4fbfb59275cb2ccc3900e">NodeDragShadow::start</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>&amp; posF, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qsizef.html">QSizeF</a>&amp; sizeF)</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    {</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        mRect = <a class="codeRef" href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a>(0,0),sizeF);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#setPos">setPos</a>(posF);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#setZValue">setZValue</a>(1);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#show">show</a>();</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    }</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">    qreal NodeDragShadow::width() const</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">    {</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">        return mWidth;</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">    }</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">    qreal NodeDragShadow::height() const</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">    {</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">        return mHeight;</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">    }</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">    QSizeF NodeDragShadow::size() const</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">    {</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">        return QSizeF(mWidth, mHeight);</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment">    }</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">    void NodeDragShadow::setWidth(const qreal width)</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">    {</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment">        mWidth = width;</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment">    }</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment">    void NodeDragShadow::setHeight(const qreal height)</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment">    {</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment">        mHeight = height;</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="comment">    }</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classhal_1_1_node_drag_shadow.html#af4365769dd11e981b6bba5189f2dddc4">   81</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_node_drag_shadow.html#af4365769dd11e981b6bba5189f2dddc4">NodeDragShadow::setLod</a>(<span class="keyword">const</span> qreal lod)</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    {</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        sLod = lod;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    }</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="classhal_1_1_node_drag_shadow.html#a8584c27f248da9ca0563161c57a255ca">   86</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_node_drag_shadow.html#a8584c27f248da9ca0563161c57a255ca">NodeDragShadow::setVisualCue</a>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012b">DragCue</a> cue)</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    {</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        mCue = cue;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qgraphicsitem.html#update">update</a>();</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    }</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="classhal_1_1_node_drag_shadow.html#a85231cf0a75c0475da2c636b5899cc9e">   92</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_node_drag_shadow.html#a85231cf0a75c0475da2c636b5899cc9e">NodeDragShadow::paint</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a>* painter, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qstyleoptiongraphicsitem.html">QStyleOptionGraphicsItem</a>* <a class="code" href="plugins_2gui_2_c_make_lists_8txt.html#a9f23355343051b13de5c52ef9a13eb08">option</a>, <a class="codeRef" href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a>* widget)</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        Q_UNUSED(<a class="code" href="plugins_2gui_2_c_make_lists_8txt.html#a9f23355343051b13de5c52ef9a13eb08">option</a>)</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        Q_UNUSED(widget)</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordtype">int</span> color_index = <span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(mCue);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        assert(color_index &lt;= 3);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        sPen.<a class="codeRef" href="https://doc.qt.io/qt-5/qpen.html#setColor">setColor</a>(sColorPen[color_index]);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#setPen-1">setPen</a>(sPen);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordflow">if</span> (sLod &lt; 0.5)</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        {</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#fillRect">fillRect</a>(mRect, sColorSolid[color_index]);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        }</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        {</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#drawRect">drawRect</a>(mRect);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            painter-&gt;<a class="codeRef" href="https://doc.qt.io/qt-5/qpainter.html#fillRect">fillRect</a>(mRect, sColorTranslucent[color_index]);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        }</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    }</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="classhal_1_1_node_drag_shadow.html#a6691e533a255ad3797e0649ea1c32fa3">  115</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a> <a class="code" href="classhal_1_1_node_drag_shadow.html#a6691e533a255ad3797e0649ea1c32fa3">NodeDragShadow::boundingRect</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keywordflow">return</span> mRect;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    }</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno"><a class="line" href="classhal_1_1_node_drag_shadow.html#a8e293ebe5b692c08bf6c9bf97738c7dc">  120</a></span>&#160;    <a class="codeRef" href="https://doc.qt.io/qt-5/qpainterpath.html">QPainterPath</a> <a class="code" href="classhal_1_1_node_drag_shadow.html#a8e293ebe5b692c08bf6c9bf97738c7dc">NodeDragShadow::shape</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qpainterpath.html">QPainterPath</a> path;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        path.<a class="codeRef" href="https://doc.qt.io/qt-5/qpainterpath.html#addRect">addRect</a>(mRect);</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="keywordflow">return</span> path;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    }</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqgraphicsitem_html_setZValue"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsitem.html#setZValue">QGraphicsItem::setZValue</a></div><div class="ttdeci">void setZValue(qreal z)</div></div>
 <div class="ttc" id="aqcolor_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qcolor.html">QColor</a></div></div>
-<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_af4365769dd11e981b6bba5189f2dddc4"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#af4365769dd11e981b6bba5189f2dddc4">hal::NodeDragShadow::setLod</a></div><div class="ttdeci">static void setLod(const qreal lod)</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8cpp_source.html#l00080">node_drag_shadow.cpp:80</a></div></div>
+<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_af4365769dd11e981b6bba5189f2dddc4"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#af4365769dd11e981b6bba5189f2dddc4">hal::NodeDragShadow::setLod</a></div><div class="ttdeci">static void setLod(const qreal lod)</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8cpp_source.html#l00081">node_drag_shadow.cpp:81</a></div></div>
 <div class="ttc" id="aqpainter_html_setPen-1"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpainter.html#setPen-1">QPainter::setPen</a></div><div class="ttdeci">void setPen(const QColor &amp;color)</div></div>
 <div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_af4576f7402d28a68ff89b8fe0f00012bad37b1f6c0512e2118cee17fea015b699"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012bad37b1f6c0512e2118cee17fea015b699">hal::NodeDragShadow::DragCue::Rejected</a></div><div class="ttdeci">@ Rejected</div></div>
 <div class="ttc" id="aqt_html_PenJoinStyle-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qt.html#PenJoinStyle-enum">Qt::MiterJoin</a></div><div class="ttdeci">MiterJoin</div></div>
@@ -225,8 +226,8 @@ $(document).ready(function(){initNavTree('node__drag__shadow_8cpp_source.html','
 <div class="ttc" id="anode__drag__shadow_8h_html"><div class="ttname"><a href="node__drag__shadow_8h.html">node_drag_shadow.h</a></div></div>
 <div class="ttc" id="aqwidget_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qwidget.html">QWidget</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
-<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_a6691e533a255ad3797e0649ea1c32fa3"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#a6691e533a255ad3797e0649ea1c32fa3">hal::NodeDragShadow::boundingRect</a></div><div class="ttdeci">QRectF boundingRect() const override</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8cpp_source.html#l00114">node_drag_shadow.cpp:114</a></div></div>
-<div class="ttc" id="aqgraphicsobject_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsobject.html">QGraphicsObject</a></div></div>
+<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_a6691e533a255ad3797e0649ea1c32fa3"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#a6691e533a255ad3797e0649ea1c32fa3">hal::NodeDragShadow::boundingRect</a></div><div class="ttdeci">QRectF boundingRect() const override</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8cpp_source.html#l00115">node_drag_shadow.cpp:115</a></div></div>
+<div class="ttc" id="aqgraphicsitem_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsitem.html">QGraphicsItem</a></div></div>
 <div class="ttc" id="aqpainter_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpainter.html">QPainter</a></div></div>
 <div class="ttc" id="aqpointf_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpointf.html">QPointF</a></div></div>
 <div class="ttc" id="aqpainter_html_fillRect"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpainter.html#fillRect">QPainter::fillRect</a></div><div class="ttdeci">void fillRect(const QRectF &amp;rectangle, const QBrush &amp;brush)</div></div>
@@ -236,27 +237,27 @@ $(document).ready(function(){initNavTree('node__drag__shadow_8cpp_source.html','
 <div class="ttc" id="aqpen_html_setJoinStyle"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpen.html#setJoinStyle">QPen::setJoinStyle</a></div><div class="ttdeci">void setJoinStyle(Qt::PenJoinStyle style)</div></div>
 <div class="ttc" id="aqpen_html_setColor"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpen.html#setColor">QPen::setColor</a></div><div class="ttdeci">void setColor(const QColor &amp;color)</div></div>
 <div class="ttc" id="aqgraphicsitem_html_setPos"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsitem.html#setPos">QGraphicsItem::setPos</a></div><div class="ttdeci">void setPos(const QPointF &amp;pos)</div></div>
-<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_a8e293ebe5b692c08bf6c9bf97738c7dc"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#a8e293ebe5b692c08bf6c9bf97738c7dc">hal::NodeDragShadow::shape</a></div><div class="ttdeci">QPainterPath shape() const override</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8cpp_source.html#l00119">node_drag_shadow.cpp:119</a></div></div>
+<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_a8e293ebe5b692c08bf6c9bf97738c7dc"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#a8e293ebe5b692c08bf6c9bf97738c7dc">hal::NodeDragShadow::shape</a></div><div class="ttdeci">QPainterPath shape() const override</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8cpp_source.html#l00120">node_drag_shadow.cpp:120</a></div></div>
 <div class="ttc" id="agraphics__gate_8h_html"><div class="ttname"><a href="graphics__gate_8h.html">graphics_gate.h</a></div></div>
 <div class="ttc" id="aqgraphicsitem_html_show"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsitem.html#show">QGraphicsItem::show</a></div><div class="ttdeci">void show()</div></div>
 <div class="ttc" id="aqpainterpath_html_addRect"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpainterpath.html#addRect">QPainterPath::addRect</a></div><div class="ttdeci">void addRect(const QRectF &amp;rectangle)</div></div>
 <div class="ttc" id="aqstyleoptiongraphicsitem_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstyleoptiongraphicsitem.html">QStyleOptionGraphicsItem</a></div></div>
 <div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_af4576f7402d28a68ff89b8fe0f00012ba7088d0affb208681b3cdbec3f72c59e3"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012ba7088d0affb208681b3cdbec3f72c59e3">hal::NodeDragShadow::DragCue::Movable</a></div><div class="ttdeci">@ Movable</div></div>
-<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_a85231cf0a75c0475da2c636b5899cc9e"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#a85231cf0a75c0475da2c636b5899cc9e">hal::NodeDragShadow::paint</a></div><div class="ttdeci">void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget=nullptr) override</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8cpp_source.html#l00091">node_drag_shadow.cpp:91</a></div></div>
-<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_a7e10262648f4fbfb59275cb2ccc3900e"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#a7e10262648f4fbfb59275cb2ccc3900e">hal::NodeDragShadow::start</a></div><div class="ttdeci">void start(const QPointF &amp;posF, const QSizeF &amp;sizeF)</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8cpp_source.html#l00045">node_drag_shadow.cpp:45</a></div></div>
-<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_a5d6ec00a7e96d05a96ad9cd77d03ba92"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#a5d6ec00a7e96d05a96ad9cd77d03ba92">hal::NodeDragShadow::NodeDragShadow</a></div><div class="ttdeci">NodeDragShadow()</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8cpp_source.html#l00039">node_drag_shadow.cpp:39</a></div></div>
+<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_a85231cf0a75c0475da2c636b5899cc9e"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#a85231cf0a75c0475da2c636b5899cc9e">hal::NodeDragShadow::paint</a></div><div class="ttdeci">void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget=nullptr) override</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8cpp_source.html#l00092">node_drag_shadow.cpp:92</a></div></div>
+<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_a7e10262648f4fbfb59275cb2ccc3900e"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#a7e10262648f4fbfb59275cb2ccc3900e">hal::NodeDragShadow::start</a></div><div class="ttdeci">void start(const QPointF &amp;posF, const QSizeF &amp;sizeF)</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8cpp_source.html#l00046">node_drag_shadow.cpp:46</a></div></div>
+<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_a5d6ec00a7e96d05a96ad9cd77d03ba92"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#a5d6ec00a7e96d05a96ad9cd77d03ba92">hal::NodeDragShadow::NodeDragShadow</a></div><div class="ttdeci">NodeDragShadow()</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8cpp_source.html#l00040">node_drag_shadow.cpp:40</a></div></div>
 <div class="ttc" id="aqsizef_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qsizef.html">QSizeF</a></div></div>
-<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_af4576f7402d28a68ff89b8fe0f00012b"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012b">hal::NodeDragShadow::DragCue</a></div><div class="ttdeci">DragCue</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8h_source.html#l00043">node_drag_shadow.h:43</a></div></div>
+<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_af4576f7402d28a68ff89b8fe0f00012b"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#af4576f7402d28a68ff89b8fe0f00012b">hal::NodeDragShadow::DragCue</a></div><div class="ttdeci">DragCue</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8h_source.html#l00042">node_drag_shadow.h:42</a></div></div>
 <div class="ttc" id="aqpen_html_setCosmetic"><div class="ttname"><a href="https://doc.qt.io/qt-5/qpen.html#setCosmetic">QPen::setCosmetic</a></div><div class="ttdeci">void setCosmetic(bool cosmetic)</div></div>
 <div class="ttc" id="aqrectf_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qrectf.html">QRectF</a></div></div>
-<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_acda0455ffd371bbc3b5a36f1202e68f4"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#acda0455ffd371bbc3b5a36f1202e68f4">hal::NodeDragShadow::loadSettings</a></div><div class="ttdeci">static void loadSettings()</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8cpp_source.html#l00021">node_drag_shadow.cpp:21</a></div></div>
+<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_acda0455ffd371bbc3b5a36f1202e68f4"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#acda0455ffd371bbc3b5a36f1202e68f4">hal::NodeDragShadow::loadSettings</a></div><div class="ttdeci">static void loadSettings()</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8cpp_source.html#l00022">node_drag_shadow.cpp:22</a></div></div>
 <div class="ttc" id="aqgraphicsitem_html_setAcceptedMouseButtons"><div class="ttname"><a href="https://doc.qt.io/qt-5/qgraphicsitem.html#setAcceptedMouseButtons">QGraphicsItem::setAcceptedMouseButtons</a></div><div class="ttdeci">void setAcceptedMouseButtons(Qt::MouseButtons buttons)</div></div>
-<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_a8584c27f248da9ca0563161c57a255ca"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#a8584c27f248da9ca0563161c57a255ca">hal::NodeDragShadow::setVisualCue</a></div><div class="ttdeci">void setVisualCue(const DragCue cue)</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8cpp_source.html#l00085">node_drag_shadow.cpp:85</a></div></div>
+<div class="ttc" id="aclasshal_1_1_node_drag_shadow_html_a8584c27f248da9ca0563161c57a255ca"><div class="ttname"><a href="classhal_1_1_node_drag_shadow.html#a8584c27f248da9ca0563161c57a255ca">hal::NodeDragShadow::setVisualCue</a></div><div class="ttdeci">void setVisualCue(const DragCue cue)</div><div class="ttdef"><b>Definition:</b> <a href="node__drag__shadow_8cpp_source.html#l00086">node_drag_shadow.cpp:86</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_62580450d675343767dbe0503393e994.html">graph_widget</a></li><li class="navelem"><a class="el" href="dir_d567a330f572ed0886077de5e2105e8c.html">items</a></li><li class="navelem"><a class="el" href="dir_f3b316216cd99094902cc79bf27c2538.html">utility_items</a></li><li class="navelem"><a class="el" href="node__drag__shadow_8cpp.html">node_drag_shadow.cpp</a></li>
-    <li class="footer">Generated on Thu Feb 8 2024 08:25:00 for HAL by
+    <li class="footer">Generated on Sat Feb 10 2024 18:24:35 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

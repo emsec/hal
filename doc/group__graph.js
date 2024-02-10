@@ -137,6 +137,7 @@ var group__graph =
       [ "moveNetsToBackground", "classhal_1_1_graphics_scene.html#af1b953794af7656ee478baa25e4e4896", null ],
       [ "Q_ENUM", "classhal_1_1_graphics_scene.html#a57b158b86bf8ede19567c8be7116d75d", null ],
       [ "removeGraphItem", "classhal_1_1_graphics_scene.html#a0366a0f81bab584cfc078c39658bba76", null ],
+      [ "setDragController", "classhal_1_1_graphics_scene.html#ad0c02fc2864dbed69490ed53bd2e19b5", null ],
       [ "setMousePressed", "classhal_1_1_graphics_scene.html#a24e241c8c1cb88963a01fd4d60a86cb0", null ],
       [ "updateAllItems", "classhal_1_1_graphics_scene.html#a67b93e8efb90c600b222f438f040e066", null ],
       [ "updateVisuals", "classhal_1_1_graphics_scene.html#a10ff430e7ff392dff7418144c01e30c7", null ]
