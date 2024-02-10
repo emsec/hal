@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include <QGraphicsObject>
+#include <QGraphicsItem>
 #include <QRectF>
 #include <QList>
 
@@ -35,9 +35,8 @@ namespace hal
      * @ingroup graph-visuals
      * @brief An item that is drawn when a node is dragged through the scene.
      */
-    class NodeDragShadow : public QGraphicsObject
+    class NodeDragShadow : public QGraphicsItem
     {
-        Q_OBJECT
 
     public:
         enum class DragCue

@@ -76,6 +76,12 @@ namespace hal {
          * @param gridPos - The new grid position of the primary node
          */
         void move(const QPoint& eventPos, bool wantSwap, const QPoint& gridPos);
+
+        /**
+         * Remove all painted shadows from graphics scene
+         */
+        void clearShadows(GraphicsScene* sc);
+
         bool hasDragged(const QPoint& eventPos);
         bool isDropAllowed() const;
         GridPlacement* finalGridPlacement() const;
