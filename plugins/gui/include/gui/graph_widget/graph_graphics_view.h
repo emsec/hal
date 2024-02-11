@@ -40,6 +40,7 @@ namespace hal
 {
     class GraphicsItem;
     class GraphWidget;
+    class DragController;
 
     namespace graph_widget_constants
     {
@@ -202,6 +203,8 @@ namespace hal
         void addSuccessorToView(int maxLevel, bool succ);
         void addCommonSuccessorToView(int maxLevel, bool succ);
 
+        void dragPan(float dpx, float dpy);
+
         GraphWidget* mGraphWidget;
 
         QSet<u32> getSelectableGates();
@@ -233,13 +236,7 @@ namespace hal
         bool mGridClustersEnabled;
         GraphicsScene::GridType mGridType;
 
-        QPoint mDragMousedownPosition;
-        QPoint mDragStartGridpos;
-        GraphicsGate* mDragItem;
-        QPoint mDragCurrentGridpos;
-        bool mDragCurrentModifier;
-        bool mDropAllowed;
-
+        DragController* mDragController;
         Qt::KeyboardModifier mDragModifier;
 
         QPoint mMovePosition;

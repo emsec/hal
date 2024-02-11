@@ -852,8 +852,9 @@ namespace hal
         // Update snapshots when clicking on run
         this->updateSnapshots();
 
-        for (const auto& ctx : gGraphContextManager->getContexts())
+        for (GraphContext* ctx : gGraphContextManager->getContexts())
         {
+            mBlockedContextIds.append(ctx->id());
             ctx->beginChange();
         }
 
@@ -862,9 +863,10 @@ namespace hal
 
     void PythonEditor::handleThreadFinished()
     {
-        for (const auto& ctx : gGraphContextManager->getContexts())
+        for (u32 ctxId : mBlockedContextIds)
         {
-            ctx->endChange();
+            GraphContext* ctx = gGraphContextManager->getContextById(ctxId);
+            if (ctx) ctx->endChange();
         }
 
         mFileModifiedBar->setHidden(true);
