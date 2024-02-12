@@ -3,6 +3,7 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graphics_scene.h"
 #include <QApplication>
+#include <QDebug>
 
 namespace hal {
     DragController::DragController(GraphWidget* gw, QObject *parent)
@@ -16,6 +17,11 @@ namespace hal {
         mDropAllowed = false;
         mWantSwap = false;
         GraphicsScene* sc = mGraphWidget->getContext()->getLayouter()->scene();
+        clearShadows(sc);
+    }
+
+    void DragController::clearShadows(GraphicsScene *sc)
+    {
         if (sc && sc == mShadowScene)
         {
             // otherwise (if old scene deleted) items owned by scene already removed
@@ -24,8 +30,10 @@ namespace hal {
                 sc->removeItem(nds);
                 delete nds;
             }
+            mShadowScene->setDragController(nullptr);
         }
         mShadows.clear();
+        mShadowScene = nullptr;
     }
 
     NodeDragShadow::DragCue DragController::dragCue() const
@@ -44,22 +52,36 @@ namespace hal {
         // TODO: swap modifier -> deselect all but current
 
         QSet<Node> nodesToMove;
+        QSet<u32> selGats = gSelectionRelay->selectedGates();
+        QSet<u32> selMods = gSelectionRelay->selectedModules();
+        bool isAlreadySelected = false;
+
         switch (drgItem->itemType())
         {
         case ItemType::Module:
             nodesToMove.insert(Node(drgItem->id(),Node::Module));
+            if (selMods.contains(drgItem->id())) isAlreadySelected = true;
             break;
         case ItemType::Gate:
             nodesToMove.insert(Node(drgItem->id(),Node::Gate));
+            if (selGats.contains(drgItem->id())) isAlreadySelected = true;
             break;
         default:
             break;
         }
 
-        for (u32 mid : gSelectionRelay->selectedModules())
-            nodesToMove.insert(Node(mid,Node::Module));
-        for (u32 gid : gSelectionRelay->selectedGates())
-            nodesToMove.insert(Node(gid,Node::Gate));
+        if (isAlreadySelected)
+        {
+            // multi-select requires that drag node was already selected before
+            for (u32 mid : selMods)
+            {
+                nodesToMove.insert(Node(mid,Node::Module));
+            }
+            for (u32 gid : selGats)
+            {
+                nodesToMove.insert(Node(gid,Node::Gate));
+            }
+        }
 
         auto context            = mGraphWidget->getContext();
         const GraphLayouter* layouter = context->getLayouter();
@@ -112,6 +134,7 @@ namespace hal {
         mShadowScene = mGraphWidget->getContext()->getLayouter()->scene();
         if (mShadowScene)
         {
+            mShadowScene->setDragController(this);
             mShadowScene->addItem(nds);
             mShadows.insert(nb,nds);
         }

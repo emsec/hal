@@ -338,6 +338,8 @@ namespace hal
          */
         void selectionToModuleAction(int actionCode);
 
+        void showNoSelection();
+
         QSplitter*           mSplitter;
         SelectionTreeView*   mSelectionTreeView;
         unsigned int         mNumberSelectedItems;

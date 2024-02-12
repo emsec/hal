@@ -44,6 +44,7 @@ namespace hal
     class GraphicsItem;
     class GraphicsModule;
     class GraphicsNet;
+    class DragController;
 
     /**
      * @ingroup graph
@@ -275,6 +276,12 @@ namespace hal
          */
         void updateAllItems();
 
+        /**
+         * Set reference pointer to drag controller on start drag, nullptr when drag ended
+         * @param dc - Reference to drag controller
+         */
+        void setDragController(DragController* dc);
+
     protected:
         /**
          * Handles the mouse event. Used to intercept and ignore right-clicks.
@@ -310,6 +317,7 @@ namespace hal
         qreal mDebugDefaultWidth;
         qreal mDebugDefaultHeight;
         bool mDebugGridEnable;
+        DragController* mDragController;
         enum RubberBandSelectionStatus
         {
             NotPressed,

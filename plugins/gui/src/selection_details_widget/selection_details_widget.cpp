@@ -436,6 +436,13 @@ namespace hal
         Q_EMIT triggerHighlight(highlight);
     }
 
+    void SelectionDetailsWidget::showNoSelection()
+    {
+        if(mStackedWidget->currentWidget() == mModuleDetailsTabs)
+            mModuleDetailsTabs->clear();
+        mStackedWidget->setCurrentWidget(mNoSelectionLabel);
+    }
+
     void SelectionDetailsWidget::singleSelectionInternal(const SelectionTreeItem *sti)
     {
         SelectionTreeItem::TreeItemType tp = sti
@@ -444,34 +451,37 @@ namespace hal
 
         switch (tp) {
         case SelectionTreeItem::NullItem:
-            //mModuleDetails->update(0);
-            if(mStackedWidget->currentWidget() == mModuleDetailsTabs)
-                mModuleDetailsTabs->clear();
-            mStackedWidget->setCurrentWidget(mNoSelectionLabel);
-//            set_name("Selection Details");
+            showNoSelection();
             break;
         case SelectionTreeItem::ModuleItem:
             if (Module* m = gNetlist->get_module_by_id(sti->id()); m)
             {
                 mModuleDetailsTabs->setModule(m);
                 mStackedWidget->setCurrentWidget(mModuleDetailsTabs);
-            }
                 //            if (mNumberSelectedItems==1) set_name("Module Details");
+            }
+            else
+                showNoSelection();
+
             break;
 
         case SelectionTreeItem::GateItem:
-            if(mStackedWidget->currentWidget() == mModuleDetailsTabs)
-                mModuleDetailsTabs->clear();
-            mGateDetailsTabs->setGate(gNetlist->get_gate_by_id(sti->id()));
-            mStackedWidget->setCurrentWidget(mGateDetailsTabs);
-//            if (mNumberSelectedItems==1) set_name("Gate Details");
+            showNoSelection();
+            if (Gate* g = gNetlist->get_gate_by_id(sti->id()); g)
+            {
+                mGateDetailsTabs->setGate(g);
+                mStackedWidget->setCurrentWidget(mGateDetailsTabs);
+                //            if (mNumberSelectedItems==1) set_name("Gate Details");
+            }
             break;
         case SelectionTreeItem::NetItem:
-            if(mStackedWidget->currentWidget() == mModuleDetailsTabs)
-                mModuleDetailsTabs->clear();
-            mNetDetailsTabs->setNet(gNetlist->get_net_by_id(sti->id()));
-            mStackedWidget->setCurrentWidget(mNetDetailsTabs);
-//            if (mNumberSelectedItems==1) set_name("Net Details");
+            showNoSelection();
+            if (Net* n = gNetlist->get_net_by_id(sti->id()); n)
+            {
+                mNetDetailsTabs->setNet(n);
+                mStackedWidget->setCurrentWidget(mNetDetailsTabs);
+                //            if (mNumberSelectedItems==1) set_name("Net Details");
+            }
             break;
         default:
             break;

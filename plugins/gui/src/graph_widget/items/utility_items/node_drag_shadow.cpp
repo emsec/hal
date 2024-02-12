@@ -8,6 +8,7 @@
 #include <QPropertyAnimation>
 #include <QPainter>
 #include <QPaintEvent>
+#include <iostream>
 
 namespace hal
 {
@@ -37,7 +38,7 @@ namespace hal
     }
 
     NodeDragShadow::NodeDragShadow()
-        : QGraphicsObject(), mRect(0,0,100,100)
+        : QGraphicsItem(), mRect(0,0,100,100)
     {
         setAcceptedMouseButtons(0);
     }

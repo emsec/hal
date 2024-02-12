@@ -7,6 +7,7 @@
 
 #include "gui/graph_widget/graph_widget_constants.h"
 #include "gui/graph_widget/graphics_factory.h"
+#include "gui/graph_widget/drag_controller.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/items/graphics_item.h"
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
@@ -75,11 +76,11 @@ namespace hal
 
     GraphicsScene::GraphicsScene(QObject* parent) : QGraphicsScene(parent),
         mDebugGridEnable(false),
+        mDragController(nullptr),
         mSelectionStatus(NotPressed)
     {
         // FIND OUT IF MANUAL CHANGE TO DEPTH IS NECESSARY / INCREASES PERFORMANCE
         //mScene.setBspTreeDepth(10);
-
 
         gSelectionRelay->registerSender(this, "GraphView");
         connectAll();
@@ -90,11 +91,18 @@ namespace hal
     GraphicsScene::~GraphicsScene()
     {
         disconnect(this, &QGraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
+        if (mDragController) mDragController->clearShadows(this);
+
         for (QGraphicsItem* gi : items())
         {
             removeItem(gi);
             delete gi;
         }
+    }
+
+    void GraphicsScene::setDragController(DragController* dc)
+    {
+        mDragController = dc;
     }
 
     void GraphicsScene::addGraphItem(GraphicsItem* item)
@@ -307,10 +315,8 @@ namespace hal
 
     void GraphicsScene::deleteAllItems()
     {
-        // this breaks the mDragShadowGate
-        // clear();
-        // so we do this instead
-        // TODO check performance hit
+        if (mDragController) mDragController->clearShadows(this);
+
         for (auto item : items())
         {
             removeItem(item);
@@ -349,10 +355,14 @@ namespace hal
     void GraphicsScene::setMousePressed(bool isPressed)
     {
         if (isPressed)
-            mSelectionStatus = BeginPressed;
+        {
+            // internal selection changed event might fire before mouse pressed event
+            if (mSelectionStatus != SelectionChanged)
+                mSelectionStatus = BeginPressed;
+        }
         else
         {
-            // not pressed ...
+            // released ...
             if (mSelectionStatus == SelectionChanged)
             {
                 mSelectionStatus = EndPressed;
@@ -361,6 +371,7 @@ namespace hal
             mSelectionStatus = NotPressed;
         }
     }
+
 
     void GraphicsScene::handleInternSelectionChanged()
     {

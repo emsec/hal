@@ -117,7 +117,7 @@ namespace hal
 
         for (auto it = mModuleMap.lowerBound(parentId); it != mModuleMap.upperBound(parentId); ++it)
         {
-            ModuleItem* parentItem = mModuleMap.value(parentId);
+            ModuleItem* parentItem = it.value();
             createChildItem(id, ModuleItem::TreeItemType::Module, parentItem);
         }
     }
@@ -162,7 +162,7 @@ namespace hal
         auto it = mModuleMap.lowerBound(id);
         while (it != mModuleMap.upperBound(id))
         {
-            ModuleItem* item   = mModuleMap.value(id);
+            ModuleItem* item   = it.value();
             BaseTreeItem* parentItem = item->getParent();
 
             removeChildItem(item,parentItem);
@@ -691,13 +691,16 @@ namespace hal
         Q_ASSERT(gNetlist->get_net_by_id(id));
         Q_ASSERT(mNetMap.contains(id));
 
-        ModuleItem* item = mNetMap.value(id);
-        Q_ASSERT(item);
+        for (auto it = mNetMap.lowerBound(id); it != mNetMap.upperBound(id); ++it)
+        {
+            ModuleItem* item = it.value();
+            Q_ASSERT(item);
         
-        item->setName(QString::fromStdString(gNetlist->get_net_by_id(id)->get_name()));    // REMOVE & ADD AGAIN
+            item->setName(QString::fromStdString(gNetlist->get_net_by_id(id)->get_name()));    // REMOVE & ADD AGAIN
 
-        QModelIndex index = getIndexFromItem(item);
-        Q_EMIT dataChanged(index, index);
+            QModelIndex index = getIndexFromItem(item);
+            Q_EMIT dataChanged(index, index);
+        }
     }
 
     ModuleItem* ModuleModel::getItem(u32 id, ModuleItem::TreeItemType type) const

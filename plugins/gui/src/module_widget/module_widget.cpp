@@ -76,7 +76,6 @@ namespace hal
         mTreeView->setExpandsOnDoubleClick(false);
         mTreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
         mTreeView->setSelectionMode(QAbstractItemView::SingleSelection);
-        mTreeView->expandAllModules();
         mContentLayout->addWidget(mTreeView);
 
         mSearchbar->setColumnNames(mModuleModel->headerLabels());
@@ -116,6 +115,7 @@ namespace hal
         connect(mRenameAction, &QAction::triggered, this, &ModuleWidget::handleRenameClicked);
 
         mModuleModel->init();
+        mTreeView->expandAllModules();
     }
 
     void ModuleWidget::enableDeleteAction(bool enable)
