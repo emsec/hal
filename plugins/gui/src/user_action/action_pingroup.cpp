@@ -3,6 +3,7 @@
 #include "hal_core/netlist/grouping.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/graph_widget/layout_locker.h"
 #include <QMetaEnum>
 
 namespace hal
@@ -291,6 +292,7 @@ namespace hal
             return false;
 
         prepareUndoAction(); // create pingroups in case we are going to delete some while assigning
+        LayoutLocker llock;
 
         for (const AtomicAction& aa : mPinActions)
         {

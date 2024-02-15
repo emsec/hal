@@ -1548,8 +1548,9 @@ namespace hal
 
     bool Module::assign_pin_net(const u32 pin_id, Net* net, PinDirection direction)
     {
+        PinChangedEventScope scope(this);
         std::string port_prefix;
-
+		u32 ctr = 0;
         switch (direction)
         {
         case PinDirection::input:
@@ -1566,7 +1567,12 @@ namespace hal
             return false;
         }
 
-        std::string name_internal = port_prefix + "(" + std::to_string(m_pin_number[(int)direction]) + ")";
+        std::string name_internal;
+        do
+        {
+        	name_internal = port_prefix + "(" + std::to_string(ctr) + ")";
+            ctr++;
+        } while (m_pin_names_map.find(name_internal) != m_pin_names_map.end() || m_pin_group_names_map.find(name_internal) != m_pin_group_names_map.end());
 
         // create pin
         ModulePin* pin;
@@ -1578,6 +1584,7 @@ namespace hal
         else
         {
             pin = res.get();
+            PinChangedEvent(this,PinEvent::PinCreate,pin->get_id()).send();
         }
 
         if (const auto group_res = create_pin_group_internal(get_unique_pin_group_id(), name_internal, pin->get_direction(), pin->get_type(), true, 0, false); group_res.is_error())
@@ -1587,14 +1594,17 @@ namespace hal
         }
         else
         {
+            PinChangedEvent(this,PinEvent::GroupCreate,group_res.get()->get_id()).send();
             if (!group_res.get()->assign_pin(pin))
             {
                 log_warning("module", "could not assign pin '{}' to net: failed to assign pin to pin group", name_internal);
                 return false;
             }
+            else
+                PinChangedEvent(this,PinEvent::PinAssignToGroup,pin->get_id()).send();
         }
 
-        PinChangedEvent(this,PinEvent::GroupCreate,pin->get_group().first->get_id()).send();
+        scope.send_events();
         return true;
     }
 
@@ -1682,7 +1692,6 @@ namespace hal
         m_pins.push_back(std::move(pin_owner));
         m_pins_map[id]        = pin;
         m_pin_names_map[name] = pin;
-        ++m_pin_number[(int)direction];
 
         // mark pin ID as used
         if (auto free_id_it = m_free_pin_ids.find(id); free_id_it != m_free_pin_ids.end())

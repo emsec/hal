@@ -734,7 +734,6 @@ namespace hal
         std::unordered_map<u32, PinGroup<ModulePin>*> m_pin_groups_map;
         std::unordered_map<std::string, PinGroup<ModulePin>*> m_pin_group_names_map;
         std::list<PinGroup<ModulePin>*> m_pin_groups_ordered;
-        u32 m_pin_number[4] = { 0, 0, 0, 0 };
 
         /* stores gates sorted by id */
         std::unordered_map<u32, Gate*> m_gates_map;

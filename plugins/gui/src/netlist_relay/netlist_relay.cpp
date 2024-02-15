@@ -661,6 +661,15 @@ namespace hal
         }
     }
 
+    void NetlistRelay::dumpModuleRecursion(Module *m)
+    {
+        for (int i=0; i<m->get_submodule_depth(); i++)
+            std::cerr << "   ";
+        std::cerr << "Mod " << m->get_id() << " <" << m->get_name() << ">\n";
+        for (Module* sm : m->get_submodules())
+            dumpModuleRecursion(sm);
+    }
+
     void NetlistRelay::debugHandleFileOpened()
     {
         for (Module* m : gNetlist->get_modules())

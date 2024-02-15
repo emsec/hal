@@ -529,6 +529,11 @@ namespace hal
         {
             // group event
             ptiGroup = mIdToGroupItem.value(pgid);
+            if (pev != PinEvent::GroupCreate && !ptiGroup)
+            {
+                log_warning("gui", "Cannot handle event for pin group ID={}, tree item does not exist.", pgid);
+                return;
+            }
             if (pev != PinEvent::GroupDelete)
             {
                 pgroup = m->get_pin_group_by_id(pgid);
@@ -543,6 +548,11 @@ namespace hal
         {
             // pin event
             ptiPin = mIdToPinItem.value(pgid);
+            if (pev != PinEvent::PinCreate && !ptiPin)
+            {
+                log_warning("gui", "Cannot handle event for pin ID={}, tree item does not exist.", pgid);
+                return;
+            }
             if (pev != PinEvent::PinDelete)
             {
                 pin = m->get_pin_by_id(pgid);

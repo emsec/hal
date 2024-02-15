@@ -607,6 +607,7 @@ namespace hal
         void relayGateEvent(GateEvent::event ev, Gate* gat, u32 associated_data);
         void relayNetEvent(NetEvent::event ev, Net* net, u32 associated_data);
         void relayGroupingEvent(GroupingEvent::event ev, Grouping* grp, u32 associated_data);
+        static void dumpModuleRecursion(Module* m);
 
         void handleNetlistModified();
         bool mNotified;
