@@ -39,12 +39,11 @@ namespace hal
         private:
             u32 mId;
             QString mName;
-            u32 mMinDirectoryId;
             u32 mParentId;
 
         public:
-            ContextDirectory(QString name, u32 parentId):mName(name), mMinDirectoryId(std::numeric_limits<u32>::max()){
-                mId = --mMinDirectoryId;
+            ContextDirectory(QString name, u32 parentId, u32 id):mName(name){
+                mId = id;
                 mParentId = parentId;
             }
 
@@ -54,6 +53,7 @@ namespace hal
              * @param json - The object to write to.
              */
             void writeToFile(QJsonObject& json);
+
 
             QString name() const { return mName; }
             u32 id() const { return mId; }
@@ -118,7 +118,7 @@ namespace hal
          * @param name - The name to the directory.
          * @param parent - The Parent of the directory.
          */
-        ContextDirectory* addDirectory(QString name, BaseTreeItem* parent = nullptr);
+        ContextDirectory* addDirectory(QString name, BaseTreeItem* parent = nullptr, u32 id = 0);
 
         BaseTreeItem* getDirectory(u32 directoryId) const;
 
@@ -186,6 +186,21 @@ namespace hal
          */
         void setCurrentDirectory(ContextTreeItem* currentItem);
 
+        /**
+         * Sets the MinDirectoryId.
+         *
+         * @param u32 - id to set MinDirectoryId to.
+         */
+        void setMinDirectoryId(u32 id_) { mMinDirectoryId = id_; }
+
+        /**
+         * Get MinDirectoryId.
+         *
+         * @return MinDIrectoryId.
+         */
+        u32 minDirectoryId() const { return mMinDirectoryId; }
+
+
     Q_SIGNALS:
         void directoryCreatedSignal(ContextTreeItem* item);
 
@@ -195,6 +210,7 @@ namespace hal
         std::map<GraphContext *, ContextTreeItem *> mContextMap;
         QVector<GraphContext*> mContextList;
         QVector<ContextDirectory*> mDirectoryList;
+        u32 mMinDirectoryId;
 
     };
 }    // namespace hal

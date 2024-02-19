@@ -582,6 +582,32 @@ namespace hal
         GraphContext* firstContext = nullptr;
         GraphContext* selectedContext = nullptr;
 
+        if (json.contains("directories") && json["directories"].isArray())
+        {
+            QJsonArray jsonDirectories = json["directories"].toArray();
+            int ndir = jsonDirectories.size();
+            for (int idir = 0; idir < ndir; idir++)
+            {
+                QJsonObject jsondir = jsonDirectories.at(idir).toObject();
+                if (!jsondir.contains("id") || !jsondir["id"].isDouble())
+                    continue;
+                u32 dirId = jsondir["id"].toInt();
+                if (!jsondir.contains("name") || !jsondir["name"].isString())
+                    continue;
+                QString dirName = jsondir["name"].toString();
+                if (!jsondir.contains("parentId"))
+                    continue;
+                u32 dirParentId = jsondir["parentId"].toInt();
+
+                BaseTreeItem* dirParent = nullptr;
+
+                if (dirParentId != 0) {
+                    mContextTreeModel->getDirectory(dirParentId);
+                }
+
+                mContextTreeModel->addDirectory(dirName, dirParent, dirId);
+            }
+        }
         if (json.contains("views") && json["views"].isArray())
         {
             QJsonArray jsonViews = json["views"].toArray();
@@ -600,6 +626,16 @@ namespace hal
                 int visibleFlag = 1; // default to visible before flag was invented
                 if (jsonView.contains("visible"))
                     visibleFlag = jsonView["visible"].toInt();
+                if (!jsonView.contains("parentId"))
+                    continue;
+                u32 viewParentId = jsonView["parentId"].toInt();
+                BaseTreeItem* viewParent = nullptr;
+
+                if (viewParentId != 0) {
+                    mContextTreeModel->getDirectory(viewParentId);
+                }
+
+
                 GraphContext* context = gGraphContextManager->getContextById(viewId);
                 if (context)
                 {
@@ -630,7 +666,7 @@ namespace hal
                         continue;
                     }
 
-                    mContextTreeModel->addContext(context);
+                    mContextTreeModel->addContext(context, viewParent);
                     if (visibleFlag)
                         Q_EMIT contextCreated(context);
                 }

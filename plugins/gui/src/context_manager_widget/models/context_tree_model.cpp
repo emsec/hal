@@ -13,7 +13,7 @@ namespace hal
 {
     void ContextDirectory::writeToFile(QJsonObject &json)
     {
-        json["patrentId"] = (int) mParentId;
+        json["parentId"] = (int) mParentId;
         json["id"] = (int) mId;
         json["name"] = mName;
     }
@@ -119,7 +119,7 @@ namespace hal
         return mContext != nullptr;
     }
 
-    ContextTreeModel::ContextTreeModel(QObject* parent) : BaseTreeModel(parent), mCurrentDirectory(nullptr)
+    ContextTreeModel::ContextTreeModel(QObject* parent) : BaseTreeModel(parent), mCurrentDirectory(nullptr), mMinDirectoryId(std::numeric_limits<u32>::max())
     {
         setHeaderLabels(QStringList() << "View Name" << "Timestamp");
     }
@@ -184,8 +184,13 @@ namespace hal
         return nullptr;
     }
 
-    ContextDirectory* ContextTreeModel::addDirectory(QString name, BaseTreeItem *parent)
+    ContextDirectory* ContextTreeModel::addDirectory(QString name, BaseTreeItem *parent, u32 id)
     {
+
+        if(id == 0)
+            id = --mMinDirectoryId;
+        else if (id < mMinDirectoryId)
+            mMinDirectoryId = id;
 
         BaseTreeItem* parentItem = parent;
 
@@ -194,7 +199,7 @@ namespace hal
         if (!parentItem)
             parentItem = mRootItem;
 
-        ContextDirectory* directory = new ContextDirectory(name, (parentItem != mRootItem) ? static_cast<ContextTreeItem*>(parentItem)->directory()->id() : 0);
+        ContextDirectory* directory = new ContextDirectory(name, (parentItem != mRootItem) ? static_cast<ContextTreeItem*>(parentItem)->directory()->id() : 0, id);
 
         ContextTreeItem* item   = new ContextTreeItem(directory);
 
