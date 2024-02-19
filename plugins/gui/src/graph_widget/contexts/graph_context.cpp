@@ -808,14 +808,14 @@ namespace hal
         return true;
     }
 
-    void GraphContext::writeToFile(QJsonObject& json)
+    void GraphContext::writeToFile(QJsonObject& json, int parentId)
     {
         json["id"] = (int) mId;
         json["name"] = mName;
         json["timestamp"] = mTimestamp.toString();
         json["exclusiveModuleId"] = (int) mExclusiveModuleId;
         json["visible"] = gContentManager->getGraphTabWidget()->visibleStatus(this);
-
+        json["parentId"] = (int) parentId;
         /// modules
         QJsonArray jsonMods;
         for (u32 id : mModules)

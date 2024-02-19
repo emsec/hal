@@ -11,6 +11,12 @@
 
 namespace hal
 {
+    void ContextDirectory::writeToFile(QJsonObject &json)
+    {
+        json["patrentId"] = (int) mParentId;
+        json["id"] = (int) mId;
+        json["name"] = mName;
+    }
 
     ContextTreeItem::ContextTreeItem(GraphContext *context) :
         BaseTreeItem(),
@@ -355,13 +361,6 @@ namespace hal
 
         else if (currentItem->isDirectory())
             mCurrentDirectory = currentItem;
-    }
-
-    void ContextDirectory::writeToFile(QJsonObject &json)
-    {
-        json["patrentId"] = (int) mParentId;
-        json["id"] = (int) mId;
-        json["name"] = mName;
     }
 
 }

@@ -660,8 +660,13 @@ namespace hal
         QJsonArray jsonViews;
         for (GraphContext* context : mContextTreeModel->list())
             {
+                BaseTreeItem* parent = mContextTreeModel->getItemFromIndex(mContextTreeModel->getIndexFromContext(context))->getParent();
+                int parentId = 0;
+                if (parent != mContextTreeModel->getRootItem())
+                    parentId = static_cast<ContextTreeItem*>(parent)->directory()->id();
+
                 QJsonObject jsonView;
-                context->writeToFile(jsonView);
+                context->writeToFile(jsonView, parentId);
                 jsonViews.append(jsonView);
             }
         json["views"] = jsonViews;
@@ -671,7 +676,7 @@ namespace hal
             {
                 QJsonObject jsonDirectory;
                 directory->writeToFile(jsonDirectory);
-                jsonViews.append(jsonDirectory);
+                jsonDirectories.append(jsonDirectory);
             }
         json["directories"] = jsonDirectories;
         return (jsFile.write(QJsonDocument(json).toJson(QJsonDocument::Compact)) >= 0); // neg return value indicates error
