@@ -74,6 +74,7 @@ namespace hal
                     UserActionCompound* act = new UserActionCompound;
                     act->setUseCreatedObject();
                     ActionCreateObject* actCreate = new ActionCreateObject(UserActionObjectType::Module, QString::fromStdString(mod->get_name()));
+                    actCreate->setObject(mObject);
                     actCreate->setParentId(mod->get_parent_module()->get_id());
                     act->addAction(actCreate);
                     act->addAction(new ActionSetObjectType(QString::fromStdString(mod->get_type())));
