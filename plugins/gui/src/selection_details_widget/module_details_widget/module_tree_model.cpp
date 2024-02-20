@@ -30,6 +30,7 @@ namespace hal
             return qvType;
             break;}
         }
+        return QVariant();
     }
 
     void ModuleTreeitem::setData(QList<QVariant> data)

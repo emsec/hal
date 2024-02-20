@@ -68,6 +68,19 @@ namespace hal
         return mNodeToPositionMap;
     }
 
+    GridPlacement *GraphLayouter::gridPlacementFactory() const
+    {
+        GridPlacement* retval = new GridPlacement();
+        for (auto it=mNodeToPositionMap.constBegin(); it!=mNodeToPositionMap.constEnd(); ++it)
+            retval->insert(it.key(),it.value());
+        return retval;
+    }
+
+    Node GraphLayouter::nodeAtPosition(const QPoint& p) const
+    {
+        return mPositionToNodeMap.value(p);
+    }
+
     NetLayoutPoint GraphLayouter::positonForNode(const Node& nd) const
     {
         if (nd.isNull()) return NetLayoutPoint();
@@ -194,10 +207,10 @@ namespace hal
         Q_ASSERT(!mXValues.isEmpty());
         int inx = ix - mMinXIndex;
         if (inx < 0)
-            return mXValues[0] - inx * defaultGridWidth();
+            return mXValues[0] + inx * defaultGridWidth();
         if (inx < mXValues.size())
             return mXValues[inx];
-        return mXValues.last() + (inx - mXValues.size() - 1) * defaultGridWidth();
+        return mXValues.last() + (inx - mXValues.size() + 1) * defaultGridWidth();
     }
 
     qreal GraphLayouter::gridYposition(int iy) const
@@ -205,10 +218,10 @@ namespace hal
         Q_ASSERT(!mYValues.isEmpty());
         int inx = iy - mMinYIndex;
         if (inx < 0)
-            return mYValues[0] - inx * defaultGridHeight();
+            return mYValues[0] + inx * defaultGridHeight();
         if (inx < mYValues.size())
             return mYValues[inx];
-        return mYValues.last() + (inx - mYValues.size() - 1) * defaultGridHeight();
+        return mYValues.last() + (inx - mYValues.size() + 1) * defaultGridHeight();
     }
 
     void GraphLayouter::layout()
@@ -1362,14 +1375,14 @@ namespace hal
                     // netjunction -> endpoint
                     auto itEpc = mLayouter->mEndpointHash.find(wToPoint);
                     y0         = mLayouter->mCoordArrayY->lanePosition(iy0, j0? j0->rect().bottom() : 0);
-                    y1         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j1->rect().top(), true)
+                    y1         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j1 ? j1->rect().top() : 0, true)
                                                                               : mLayouter->mCoordArrayY->lanePosition(iy1,0);
                 }
                 else
                 {
                     // endpoint -> netjunction
                     auto itEpc = mLayouter->mEndpointHash.find(wFromPoint);
-                    y0         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j0->rect().bottom(), true)
+                    y0         = itEpc != mLayouter->mEndpointHash.constEnd() ? itEpc.value().lanePosition(j0 ? j0->rect().bottom() : 0, true)
                                                                               : mLayouter->mCoordArrayY->lanePosition(iy0,0);
                     y1         = mLayouter->mCoordArrayY->lanePosition(iy1, j1? j1->rect().top() : 0);
                 }

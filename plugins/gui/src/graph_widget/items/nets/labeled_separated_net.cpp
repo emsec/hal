@@ -32,6 +32,9 @@ namespace hal
     LabeledSeparatedNet::LabeledSeparatedNet(Net* n, const QString& text) : SeparatedGraphicsNet(n),
       mText(text)
     {
+        int ipos = mText.lastIndexOf('/');
+        if (ipos >= 0)
+            mText = mText.mid(ipos+1);
         QFontMetricsF fm(sFont);
         mTextWidth = fm.width(mText);
     }
