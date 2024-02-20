@@ -31,13 +31,26 @@
 
 #include <QFormLayout>
 #include <QLabel>
+#include <QFrame>
 
 namespace hal
 {
+    class GateLibraryLabel : public QLabel
+    {
+        Q_OBJECT
+
+        Q_PROPERTY(bool isValue READ isValue WRITE setValue)  // label or value
+        bool mValue;
+    public:
+        GateLibraryLabel(bool isVal, const QString& txt= QString(), QWidget* parent = nullptr);
+        bool isValue() const { return mValue; }
+        void setValue(bool isVal) { mValue = isVal; }
+    };
+
     /**
      * Widget which shows general information of a given gate
      */
-    class GateLibraryTabGeneral : public QWidget, public GateLibraryTabInterface
+    class GateLibraryTabGeneral : public GateLibraryTabInterface
     {
         Q_OBJECT
 
@@ -49,17 +62,20 @@ namespace hal
 
 
     private:
-
-        QFormLayout* mFormLayout;
-
-        QLabel* mNameLabel;
-        QLabel* mIdLabel;
-        QLabel* mComponentLabel;
-        QLabel* mBooleanFunctionLabel;
+        QFrame* mGeneralFrame;
+        QFrame* mBooleanFrame;
+        QFrame* mFlipflopFrame;
 
         QLabel* mNamePropertyLabel;
         QLabel* mIdPropertyLabel;
         QLabel* mComponentPropertyLabel;
+
+        QLabel* mClockPropertyLabel;
+        QLabel* mNextStatePropertyLabel;
+        QLabel* mAsynchronousResetPropertyLabel;
+        QLabel* mInternalStatePropertyLabel;
+        QLabel* mNegatedInternalStatePropertyLabel;
+
         QLabel* mBooleanFunctionPropertyLabel;
 
     };

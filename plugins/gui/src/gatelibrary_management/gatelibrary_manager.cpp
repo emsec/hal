@@ -56,10 +56,10 @@ namespace hal
 
         //adding pages to the tab widget
         mTabWidget = new QTabWidget(this);
-        mTabWidget->addTab(mGeneralTab, "General");
+        mTabWidget->addTab(mGeneralTab, "Gate Type");
         mTabWidget->addTab(mPinTab, "Pins");
-        mTabWidget->addTab(mFlipFlopTab, "Flip Flops");
-        mTabWidget->addTab(mBooleanFunctionTab, "Boolean Functions");
+//        mTabWidget->addTab(mFlipFlopTab, "Flip Flops");
+        mTabWidget->addTab(mBooleanFunctionTab, "Truth Table"); // TODO : implement truth table
 
         mGraphicsView = new GatelibraryGraphicsView(this);
         QGraphicsScene* sc = new QGraphicsScene(mGraphicsView);
@@ -97,7 +97,6 @@ namespace hal
 
         s->unpolish(this);
         s->polish(this);
-
     }
 
     bool GateLibraryManager::initialize(GateLibrary* gateLibrary, bool readOnly)

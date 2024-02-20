@@ -27,7 +27,7 @@
 
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
-
+#include <QWidget>
 
 namespace hal
 {
@@ -35,10 +35,12 @@ namespace hal
 /**
  * Interface class to provide methods for the GateLibrary's TabWidgets
  */
-    class GateLibraryTabInterface
+    class GateLibraryTabInterface : public QWidget
     {
+        Q_OBJECT
 
     public:
+        GateLibraryTabInterface(QWidget* parent = nullptr) : QWidget(parent) {;}
         /**
          * Updates the Widget based on the properties of the given gate or resets it if gate is null
          * @param gate

@@ -7,7 +7,7 @@
 namespace hal
 {
 
-    GateLibraryTabBooleanFunction::GateLibraryTabBooleanFunction(QWidget* parent) : QWidget(parent)
+    GateLibraryTabBooleanFunction::GateLibraryTabBooleanFunction(QWidget* parent) : GateLibraryTabInterface(parent)
     {
         mFormLayout = new QFormLayout(parent);
 

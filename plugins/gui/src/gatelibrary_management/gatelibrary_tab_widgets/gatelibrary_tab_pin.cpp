@@ -10,7 +10,7 @@
 namespace hal
 {
 
-    GateLibraryTabPin::GateLibraryTabPin(QWidget* parent) : QWidget(parent)
+    GateLibraryTabPin::GateLibraryTabPin(QWidget* parent) : GateLibraryTabInterface(parent)
     {
         mGridLayout = new QGridLayout(parent);
 

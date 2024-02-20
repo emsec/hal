@@ -886,6 +886,28 @@ hal--OpenFileWidget #icon-label
     margin-top : 220px;
 }
 
+hal--GateLibraryLabel
+{
+    background : black;
+}
+
+hal--GateLibraryLabel[isValue="false"]
+{
+    background : #171e22;
+    color : #909090;
+}
+
+hal--GateLibraryLabel[isValue="true"]
+{
+    background    : black;
+    color         : #E0F0FF;
+    font-family   : "Iosevka";
+    font-size     : 15px;
+    font-style    : "Heavy";
+    font-weight   : 700;
+}
+
+
 hal--GateLibrarySelection
 {
     qproperty-saveIconStyle: "all->#3192C5";

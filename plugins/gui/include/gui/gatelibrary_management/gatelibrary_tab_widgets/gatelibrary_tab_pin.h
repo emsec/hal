@@ -40,7 +40,7 @@ namespace hal
     /**
      * Widget which shows information of the boolean functions of a gate
      */
-    class GateLibraryTabPin : public QWidget, public GateLibraryTabInterface
+    class GateLibraryTabPin : public GateLibraryTabInterface
     {
         Q_OBJECT
 

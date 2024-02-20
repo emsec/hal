@@ -7,7 +7,7 @@
 namespace hal
 {
 
-    GateLibraryTabFlipFlop::GateLibraryTabFlipFlop(QWidget* parent) : QWidget(parent)
+    GateLibraryTabFlipFlop::GateLibraryTabFlipFlop(QWidget* parent) : GateLibraryTabInterface(parent)
     {
         mFormLayout = new QFormLayout(parent);
 
