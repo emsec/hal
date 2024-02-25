@@ -28,9 +28,12 @@
 #include "gatelibrary_tab_interface.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
+#include "hal_core/netlist/gate.h"
 
 #include <QFormLayout>
 #include <QLabel>
+#include <QTableWidget>
+#include <QHeaderView>
 
 namespace hal
 {
@@ -46,11 +49,13 @@ namespace hal
 
 
         void update(GateType* gate) override;
+        int getRowNumber(GateType* gate);
+        int getColumnNumber(GateType* gate);
 
 
     private:
 
-        QFormLayout* mFormLayout;
+        /*QFormLayout* mFormLayout;
 
         QLabel* mPlaceholderLabel1;
         QLabel* mPlaceholderLabel2;
@@ -62,7 +67,11 @@ namespace hal
         QLabel* mPlaceholderPropertyLabel2;
         QLabel* mPlaceholderPropertyLabel3;
         QLabel* mPlaceholderPropertyLabel4;
-        QLabel* mPlaceholderPropertyLabel5;
+        QLabel* mPlaceholderPropertyLabel5;*/
+
+        QGridLayout* mLayout;
+        QTableWidget* mTableWidget;
+        QHeaderView* mHeaderView;
 
     };
 

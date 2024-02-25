@@ -9,52 +9,105 @@ namespace hal
 
     GateLibraryTabBooleanFunction::GateLibraryTabBooleanFunction(QWidget* parent) : GateLibraryTabInterface(parent)
     {
-        mFormLayout = new QFormLayout(parent);
+        mLayout = new QGridLayout(parent);
+        mTableWidget = new QTableWidget();
 
-        mPlaceholderLabel1 = new QLabel("Func 1", parent);
-        mPlaceholderLabel2 = new QLabel("Func 2", parent);
-        mPlaceholderLabel3 = new QLabel("Func 3", parent);
-        mPlaceholderLabel4 = new QLabel("Func 4", parent);
-        mPlaceholderLabel5 = new QLabel("Func 5", parent);
+        mLayout->addWidget(mTableWidget);
 
-        mPlaceholderPropertyLabel1 = new QLabel(" - ", parent);
-        mPlaceholderPropertyLabel2 = new QLabel(" - ", parent);
-        mPlaceholderPropertyLabel3 = new QLabel(" - ", parent);
-        mPlaceholderPropertyLabel4 = new QLabel(" - ", parent);
-        mPlaceholderPropertyLabel5 = new QLabel(" - ", parent);
+        //mHeaderView = new QHeaderView(Qt::Horizontal);
+        //mTableWidget->setHorizontalHeader(mHeaderView);
 
-        mFormLayout->addRow(mPlaceholderLabel1, mPlaceholderPropertyLabel1);
-        mFormLayout->addRow(mPlaceholderLabel2, mPlaceholderPropertyLabel2);
-        mFormLayout->addRow(mPlaceholderLabel3, mPlaceholderPropertyLabel3);
-        mFormLayout->addRow(mPlaceholderLabel4, mPlaceholderPropertyLabel4);
-        mFormLayout->addRow(mPlaceholderLabel5, mPlaceholderPropertyLabel5);
 
-        setLayout(mFormLayout);
+        setLayout(mLayout);
 
     }
 
     void GateLibraryTabBooleanFunction::update(GateType* gate)
     {
+        if(gate)
+        {
 
-        if(!gate){
-            //TODO make default look
-            mPlaceholderPropertyLabel1->setText("-");
-            mPlaceholderPropertyLabel2->setText("-");
-            mPlaceholderPropertyLabel3->setText("-");
-            mPlaceholderPropertyLabel4->setText("-");
-            mPlaceholderPropertyLabel5->setText("-");
+            if (getColumnNumber(gate)-1 > 8)
+            {
+                mTableWidget->hide();
+                return;
+            }
 
-            return;
+            mTableWidget->show();
+
+            mTableWidget->setColumnCount(getColumnNumber(gate));
+            mTableWidget->setRowCount(getRowNumber(gate));
+            mTableWidget->verticalHeader()->hide();
+
+            BooleanFunction boolFunc = gate->get_boolean_function();
+            std::vector<std::string> inputs = gate->get_input_pin_names();
+            auto truthTable = boolFunc.compute_truth_table(inputs, false).get().at(0);
+
+            for (int column = 0; column < mTableWidget->columnCount()-1; column++) {
+
+                QTableWidgetItem* item = new QTableWidgetItem(QString::fromStdString(inputs[column]));
+                mTableWidget->setItem(0, column, item);
+            }
+
+             mTableWidget->setItem(0, mTableWidget->columnCount()-1, new QTableWidgetItem(QString::fromStdString(gate->get_output_pin_names()[0])));
+
+            for (int truthTableIdx = 0; truthTableIdx < truthTable.size(); truthTableIdx++)
+            {
+                //iterate from 0..0 to 1..1
+                for (int i = 0; i < gate->get_input_pins().size(); i++)
+                {
+                    u32 shift   = gate->get_input_pins().size() - i - 1;
+                    u8 inputBit = u8((truthTableIdx >> shift) & 1);
+                    if(inputBit == 0)
+                    {
+                        QTableWidgetItem* item = new QTableWidgetItem("L");
+                        mTableWidget->setItem(truthTableIdx+1, i, item);
+                    }
+                    else
+                    {
+                        QTableWidgetItem* item = new QTableWidgetItem("H");
+                        mTableWidget->setItem(truthTableIdx+1, i, item);
+                    }
+
+                }
+                //get output
+                BooleanFunction::Value val = truthTable[truthTableIdx];
+                if (val == BooleanFunction::Value::ZERO)
+                {
+                    QTableWidgetItem* item = new QTableWidgetItem("L");
+                    mTableWidget->setItem(truthTableIdx+1, mTableWidget->columnCount()-1, item);
+                }
+                else if (val == BooleanFunction::Value::ONE)
+                {
+                    QTableWidgetItem* item = new QTableWidgetItem("H");
+                    mTableWidget->setItem(truthTableIdx+1, mTableWidget->columnCount()-1, item);
+                }
+                else if (val == BooleanFunction::Value::Z)
+                {
+                    QTableWidgetItem* item = new QTableWidgetItem("Z");
+                    mTableWidget->setItem(truthTableIdx+1, mTableWidget->columnCount()-1, item);
+                }
+                else
+                {
+                    QTableWidgetItem* item = new QTableWidgetItem("X");
+                    mTableWidget->setItem(truthTableIdx+1, mTableWidget->columnCount()-1, item);
+                }
+            }
         }
-
-        QString str = "";
-        for(auto pair : gate->get_boolean_functions()){
-            str.append(QString::fromStdString(pair.first) + "   " + QString::fromStdString(pair.second.to_string()) + "\n");
-        }
-        mPlaceholderPropertyLabel1->setText(str);
-
-
     }
 
+    int GateLibraryTabBooleanFunction::getRowNumber(GateType* gate)
+    {
+        return pow(2, getColumnNumber(gate)-1)+1; //iterate from 0..0 to 2^n
+    }
+
+    int GateLibraryTabBooleanFunction::getColumnNumber(GateType* gate)
+    {
+        if(gate)
+        {
+            return gate->get_input_pins().size()+1;
+        }
+        return 0;
+    }
 
 }
