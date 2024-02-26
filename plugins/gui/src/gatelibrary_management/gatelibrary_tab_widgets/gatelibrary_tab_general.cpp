@@ -57,10 +57,9 @@ namespace hal
         mBooleanFrame->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
         mBooleanFrame->setFrameStyle(QFrame::Sunken | QFrame::Panel);
         mBooleanFrame->setLineWidth(2);
-        QFormLayout* booleanLayout = new QFormLayout(mBooleanFrame);
-        mBooleanFunctionPropertyLabel = new GateLibraryLabel(true, " - ", mBooleanFrame);
-        booleanLayout->addRow(new GateLibraryLabel(false, "Boolean Functions", mBooleanFrame));
-        booleanLayout->addRow(new GateLibraryLabel(false, "O:", mBooleanFrame), mBooleanFunctionPropertyLabel);
+        mBooleanLayout = new QFormLayout(mBooleanFrame);
+        mBooleanLayout->addRow(new GateLibraryLabel(false, "Boolean Functions", mBooleanFrame));
+        //mBooleanLayout->addRow(new GateLibraryLabel(false, "O:", mBooleanFrame), mBooleanFunctionPropertyLabel);
         layout->addWidget(mBooleanFrame);
         mBooleanFrame->hide();
     }
@@ -81,12 +80,42 @@ namespace hal
 
         mNamePropertyLabel->setText(QString::fromStdString(gate->get_name()));
         mIdPropertyLabel->setText(QString::number(gate->get_id()));
-        //TODO add component
-        mComponentPropertyLabel->setText("TODO");
 
+        // add properties
+        QString properties = "";
 
-        mBooleanFunctionPropertyLabel->setText(QString::fromStdString(gate->get_boolean_function().to_string()));
-        if (mBooleanFunctionPropertyLabel->text().isEmpty())
+        bool first = true;
+        for (GateTypeProperty p : gate->get_property_list()) {
+            //add \n before each property except the first
+            if(first)
+                first = false;
+            else
+                properties.append("\n");
+
+            properties.append(QString::fromStdString(enum_to_string(p)));
+        }
+        mComponentPropertyLabel->setText(properties);
+
+        // add boolean functions for each output
+
+        // Clear existing labels
+        QLayoutItem* item;
+        while ((item = mBooleanLayout->takeAt(0)) != nullptr)  {
+            delete item->widget();
+            delete item;
+        }
+        mBooleanLayout->insertRow(0, new GateLibraryLabel(false, "Boolean Functions", mBooleanFrame));
+
+        //add label and corresponding boolean function to the layout
+        auto boolFunctions = gate->get_boolean_functions();
+        auto list = QList<QPair<QString, BooleanFunction>>();
+
+        for(std::pair<const std::basic_string<char>, BooleanFunction> bf : boolFunctions){
+            GateLibraryLabel* label = new GateLibraryLabel(true, QString::fromStdString(bf.second.to_string()), mBooleanFrame);
+            mBooleanLayout->insertRow(1, new GateLibraryLabel(false, QString::fromStdString(bf.first), mBooleanFrame), label);
+        }
+
+        if (boolFunctions.empty())
             mBooleanFrame->hide();
         else
             mBooleanFrame->show();
@@ -129,6 +158,7 @@ namespace hal
         }
 
     }
+
 
 
 }
