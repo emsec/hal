@@ -44,6 +44,7 @@ namespace hal
     class GraphicsItem;
     class GraphicsModule;
     class GraphicsNet;
+    class DragController;
 
     /**
      * @ingroup graph
@@ -118,28 +119,6 @@ namespace hal
          *
          */
         ~GraphicsScene();
-
-        /**
-         * Starts the dragging of a gate or module to show its shadow meanwhile.
-         *
-         * @param posF - The position of the shadow
-         * @param sizeF - The size of the shadow (i.e. the size of the dragged gate)
-         * @param cue - The cue of the current position
-         */
-        void startDragShadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::DragCue cue);
-
-        /**
-         * Moves the shadow that appears while dragging a gate or module.
-         *
-         * @param posF - The new position of the shadow
-         * @param cue - The cue of the current position
-         */
-        void moveDragShadow(const QPointF& posF, const NodeDragShadow::DragCue cue);
-
-        /**
-         * Removes the shadow that appears while dragging a gate or module (at the end of the drag action).
-         */
-        void stopDragShadow();
 
         /**
          * Gets the position of the drag shadow.
@@ -297,6 +276,12 @@ namespace hal
          */
         void updateAllItems();
 
+        /**
+         * Set reference pointer to drag controller on start drag, nullptr when drag ended
+         * @param dc - Reference to drag controller
+         */
+        void setDragController(DragController* dc);
+
     protected:
         /**
          * Handles the mouse event. Used to intercept and ignore right-clicks.
@@ -321,8 +306,6 @@ namespace hal
 
         void drawBackground(QPainter* painter, const QRectF& rect) override;
 
-        NodeDragShadow* mDragShadowGate;
-
         QVector<GraphicsModule*> mModuleItems;
         QVector<GraphicsGate*> mGateItems;
         QVector<GraphicsNet*> mNetItems;
@@ -334,6 +317,7 @@ namespace hal
         qreal mDebugDefaultWidth;
         qreal mDebugDefaultHeight;
         bool mDebugGridEnable;
+        DragController* mDragController;
         enum RubberBandSelectionStatus
         {
             NotPressed,

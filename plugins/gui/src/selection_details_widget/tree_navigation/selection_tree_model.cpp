@@ -191,7 +191,6 @@ namespace hal
                 }
             }
         }
-
         beginResetModel();
 
         ++mDoNotDisturb;

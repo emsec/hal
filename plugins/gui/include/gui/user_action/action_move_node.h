@@ -66,7 +66,7 @@ namespace hal
          * @param from - The initial position of the node to move
          * @param to - The destination of the node
          */
-        ActionMoveNode(u32 ctxID, const QPoint& from, const QPoint& to, bool swap = false);
+       // ActionMoveNode(u32 ctxID, const QPoint& from, const QPoint& to, bool swap = false);
 
         /**
          * Action constructor.
