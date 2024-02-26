@@ -919,6 +919,22 @@ namespace hal
         return mSimulationInput->get_input_nets();
     }
 
+    const std::unordered_set<const Net*> NetlistSimulatorController::get_input_nets_except_clocks() const
+    {
+        std::unordered_set<const Net*> retval = mSimulationInput->get_input_nets();
+        std::vector<SimulationInput::Clock> clks = mSimulationInput->get_clocks();
+        if (clks.empty())
+            return retval;
+
+        for (const SimulationInput::Clock& clk : clks)
+        {
+            auto it = retval.find(clk.clock_net);
+            if (it != retval.end())
+                retval.erase(it);
+        }
+        return retval;
+    }
+
     const std::vector<const Net*>& NetlistSimulatorController::get_output_nets() const
     {
         return mSimulationInput->get_output_nets();

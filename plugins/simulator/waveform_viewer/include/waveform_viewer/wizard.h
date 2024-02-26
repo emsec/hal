@@ -24,6 +24,7 @@
 #include "wave_widget.h"
 #include "netlist_simulator_controller/simulation_settings.h"
 #include "netlist_simulator_controller/simulation_process.h"
+#include "waveform_viewer/wavedata_table_editor.h"
 
 namespace hal {
 
@@ -137,14 +138,21 @@ namespace hal {
         PageInputData(NetlistSimulatorController *controller, QWidget *parent=nullptr);
 
         virtual bool validatePage() override;
+        virtual void initializePage() override;
 
     private Q_SLOTS:
+        void handleRadioToggled(bool checked);
         void openFileBrowser();
         void updateSubtitle();
 
     private:
-        NetlistSimulatorController *mController;
-        QLineEdit *mEditFilename;
+        NetlistSimulatorController* mController;
+        QLineEdit* mEditFilename;
+        QPushButton* mButFiledialog;
+        QRadioButton* mRadFile;
+        QRadioButton* mRadEditor;
+        WavedataTableEditor* mTableEditor;
+        bool mDisableToggleHandler;
     };
 
     class SimulationProcessOutput : public SimulationLogReceiver

@@ -447,25 +447,78 @@ namespace hal {
 
 
     PageInputData::PageInputData(NetlistSimulatorController *controller, QWidget* parent)
-        : QWizardPage(parent), mController(controller)
+        : QWizardPage(parent), mController(controller), mDisableToggleHandler(false)
     {
         setTitle(tr("Step 4 : Simulation Input Data"));
         setSubTitle(tr("\nNo input data file selected so far"));
         setPixmap(QWizard::LogoPixmap, QPixmap(":/icons/sw_select_input","PNG").scaled(128,128));
 
-        QGridLayout* layout = new QGridLayout(this);
+
+        QVBoxLayout* layout = new QVBoxLayout(this);
+        QHBoxLayout* hlay = new QHBoxLayout;
+
+        mRadFile = new QRadioButton("Simulation input from file", this);
+        connect(mRadFile, &QRadioButton::toggled, this, &PageInputData::handleRadioToggled);
+        layout->addWidget(mRadFile);
 
         mEditFilename = new QLineEdit(this);
         connect(mEditFilename, &QLineEdit::textChanged, this, &PageInputData::updateSubtitle);
 
-        layout->addWidget(mEditFilename,0,0);
+        hlay->addWidget(mEditFilename);
 
-        QPushButton* but = new QPushButton(this);
-        but->setIcon(gui_utility::getStyledSvgIcon("all->#3192C5", ":/icons/folder"));
-        but->setIconSize(QSize(17, 17));
-        connect(but, &QPushButton::clicked, this, &PageInputData::openFileBrowser);
+        mButFiledialog = new QPushButton(this);
+        mButFiledialog->setIcon(gui_utility::getStyledSvgIcon("all->#3192C5", ":/icons/folder"));
+        mButFiledialog->setIconSize(QSize(17, 17));
+        connect(mButFiledialog, &QPushButton::clicked, this, &PageInputData::openFileBrowser);
 
-        layout->addWidget(but,0,1);
+        hlay->addWidget(mButFiledialog);
+        layout->addLayout(hlay);
+        layout->addSpacing(0);
+        mRadEditor = new QRadioButton("Enter simulation input manually", this);
+        connect(mRadEditor, &QRadioButton::toggled, this, &PageInputData::handleRadioToggled);
+        layout->addWidget(mRadEditor);
+        mTableEditor = new WavedataTableEditor(this);
+        connect(mTableEditor, &WavedataTableEditor::lineAdded, this, &PageInputData::updateSubtitle);
+        layout->addWidget(mTableEditor);
+        handleRadioToggled(true);
+    }
+
+    void PageInputData::initializePage()
+    {
+        if (mTableEditor->columnCount() < 2)
+        {
+            mTableEditor->setup(mController->get_input_nets_except_clocks());
+            handleRadioToggled(true);
+        }
+    }
+
+    void PageInputData::handleRadioToggled(bool checked)
+    {
+        if (mDisableToggleHandler) return;
+        bool setManualInput = false;
+        if (sender() == mRadEditor)
+            setManualInput = checked;
+        else
+            setManualInput = !checked;
+        mDisableToggleHandler = true;
+        if (setManualInput)
+        {
+            mRadEditor->setChecked(true);
+            mRadFile->setChecked(false);
+            mEditFilename->setEnabled(false);
+            mButFiledialog->setEnabled(false);
+            mTableEditor->setEnabled(true);
+        }
+        else
+        {
+            mRadEditor->setChecked(false);
+            mRadFile->setChecked(true);
+            mEditFilename->setEnabled(true);
+            mButFiledialog->setEnabled(true);
+            mTableEditor->setEnabled(false);
+        }
+        mDisableToggleHandler = false;
+        updateSubtitle();
     }
 
     void PageInputData::openFileBrowser()
@@ -487,62 +540,93 @@ namespace hal {
         QString fileName = mEditFilename->text();
         QString subtitle;
 
-        if (fileName.isEmpty())
+        if (mRadFile->isChecked())
         {
-            subtitle = "No input data file selected so far";
-        }
-        else
-        {
-            QFileInfo fileInfo(fileName);
-
-            if (!fileInfo.isFile() || !fileInfo.isReadable())
+            if (fileName.isEmpty())
             {
-                subtitle = "File '" + fileName + "' is not readable";
-            }
-            else if (!fileName.toLower().endsWith(".vcd") && !fileName.toLower().endsWith(".csv"))
-            {
-                subtitle = "Parsing input files with extension '." + fileInfo.suffix() + "' is not supported";
+                subtitle = "No input data file selected so far";
             }
             else
             {
-                subtitle = "Run simulation with data file '" + fileName + "'";
+                QFileInfo fileInfo(fileName);
+
+                if (!fileInfo.isFile() || !fileInfo.isReadable())
+                {
+                    subtitle = "File '" + fileName + "' is not readable";
+                }
+                else if (!fileName.toLower().endsWith(".vcd") && !fileName.toLower().endsWith(".csv"))
+                {
+                    subtitle = "Parsing input files with extension '." + fileInfo.suffix() + "' is not supported";
+                }
+                else
+                {
+                    subtitle = "Run simulation with data file '" + fileName + "'";
+                }
             }
+        }
+        else
+        {
+            int nLines = mTableEditor->validLines();
+            if (nLines < 2)
+                subtitle = "Please enter input data in table below";
+            else
+                subtitle = QString("%1 input events entered in table so far").arg(nLines);
         }
         setSubTitle(subtitle);
     }
 
     bool PageInputData::validatePage()
     {
-        QString fileName = mEditFilename->text();
-        if (fileName.isEmpty())
+        if (mRadFile->isChecked())
         {
-            QMessageBox::warning(this, "Error", "Please select a file to load.");
-            return false;
-        }
-
-        QFileInfo fileInfo(fileName);
-        if (!fileInfo.exists() || !fileInfo.isFile())
-        {
-            QMessageBox::warning(this, "Error", "Please select a valid file to load.");
-            return false;
-        }
-
-        if (fileName.endsWith(NetlistSimulatorController::sPersistFile))
-        {
-            NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
-            if (ctrlPlug)
+            QString fileName = mEditFilename->text();
+            if (fileName.isEmpty())
             {
-                std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->restore_simulator_controller(gNetlist, fileName.toStdString());
-                //mController->takeControllerOwnership(ctrlRef.get(), true); // save controller
+                QMessageBox::warning(this, "Error", "Please select a file to load.");
+                return false;
+            }
+
+            QFileInfo fileInfo(fileName);
+            if (!fileInfo.exists() || !fileInfo.isFile())
+            {
+                QMessageBox::warning(this, "Error", "Please select a valid file to load.");
+                return false;
+            }
+
+            if (fileName.endsWith(NetlistSimulatorController::sPersistFile))
+            {
+                NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
+                if (ctrlPlug)
+                {
+                    std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->restore_simulator_controller(gNetlist, fileName.toStdString());
+                    //mController->takeControllerOwnership(ctrlRef.get(), true); // save controller
+                }
+            }
+            else if (mController->can_import_data() && fileName.toLower().endsWith(".vcd"))
+                mController->import_vcd(fileName.toStdString(), NetlistSimulatorController::GlobalInputs);
+            else if (mController->can_import_data() && fileName.toLower().endsWith(".csv"))
+                mController->import_csv(fileName.toStdString(), NetlistSimulatorController::GlobalInputs);
+            else
+            {
+                QMessageBox::warning(this, "Error", "Please select a file ending with .vcd or .csv.");
+                log_warning(mController->get_name(), "Cannot parse file '{}' (unknown extension or wrong state).", fileName.toStdString());
+                return false;
             }
         }
-        else if (mController->can_import_data() && fileName.toLower().endsWith(".vcd"))
-            mController->import_vcd(fileName.toStdString(), NetlistSimulatorController::GlobalInputs);
-        else if (mController->can_import_data() && fileName.toLower().endsWith(".csv"))
-            mController->import_csv(fileName.toStdString(), NetlistSimulatorController::GlobalInputs);
         else
-            QMessageBox::warning(this, "Error", "Please select a vile ending with .vcd or .csv.");
-            log_warning(mController->get_name(), "Cannot parse file '{}' (unknown extension or wrong state).", fileName.toStdString());
+        {
+            if (mTableEditor->validLines() < 2)
+            {
+                QMessageBox::warning(this, "Error", "Not enough input data entered into table");
+                return false;
+            }
+            else
+            {
+                mTableEditor->generateSimulationInput(QString::fromStdString(mController->get_working_directory()));
+                mController->get_waves()->updateFromSaleae();
+                mController->simulate(mTableEditor->maxTime());
+            }
+        }
 
         return true;
     }
@@ -596,7 +680,12 @@ namespace hal {
         connect(mController,&NetlistSimulatorController::stateChanged,this,&PageRunSimulation::handleStateChanged);
         connect(mController,&NetlistSimulatorController::engineFinished,this,&PageRunSimulation::handleEngineFinished);
         mController->setLogReceiver(mProcessOutput);
-        mController->run_simulation();
+        if (!mController->run_simulation())
+        {
+            log_info(mController->get_name(),"Wizzard failed to start simulation");
+            mStart->setEnabled(true);
+            handleStateChanged(mController->get_state());
+        }
         log_info(mController->get_name(),"Simulation started ...");
         QString fname = QDir(QString::fromStdString(mController->get_working_directory())).absoluteFilePath(SimulationProcessLog::sLogFilename);
         mLogfile.setFileName(fname);

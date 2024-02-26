@@ -263,6 +263,11 @@ public:
     const std::unordered_set<const Net*>& get_input_nets() const;
 
     /**
+     * Convenience function to get only nets which are not listed as clock
+     */
+    const std::unordered_set<const Net*> get_input_nets_except_clocks() const;
+
+    /**
      * Shortcut to SimulationInput::get_output_nets
      */
     const std::vector<const Net*>& get_output_nets() const;
@@ -479,7 +484,6 @@ private:
     void setState(SimulationState stat);
     bool getResultsInternal();
 
-    bool isClockSet() const;
     bool isInputSet() const;
     void checkReadyState();
     void restoreComposed(const SaleaeDirectory& sd);
