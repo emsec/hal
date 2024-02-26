@@ -76,7 +76,7 @@ namespace hal
         QLabel* mInternalStatePropertyLabel;
         QLabel* mNegatedInternalStatePropertyLabel;
 
-        QLabel* mBooleanFunctionPropertyLabel;
+        QFormLayout* mBooleanLayout;
 
     };
 
