@@ -467,7 +467,13 @@ namespace hal {
         hlay->addWidget(mEditFilename);
 
         mButFiledialog = new QPushButton(this);
-        mButFiledialog->setIcon(gui_utility::getStyledSvgIcon("all->#3192C5", ":/icons/folder"));
+        QSize iconSize(17,17);
+        QIcon iconFdAct = gui_utility::getStyledSvgIcon("all->#3192C5", ":/icons/folder");
+        QIcon iconFdDis = gui_utility::getStyledSvgIcon("all->#515050", ":/icons/folder");
+        QIcon iconFd;
+        iconFd.addPixmap(iconFdAct.pixmap(iconSize),QIcon::Normal);
+        iconFd.addPixmap(iconFdDis.pixmap(iconSize),QIcon::Disabled);
+        mButFiledialog->setIcon(iconFd);
         mButFiledialog->setIconSize(QSize(17, 17));
         connect(mButFiledialog, &QPushButton::clicked, this, &PageInputData::openFileBrowser);
 
