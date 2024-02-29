@@ -140,12 +140,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af6dcfc8a11f2e2099066a2a84da0cfec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8227022a4666fb11edc922da8d675632"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_pin_group.html#a8227022a4666fb11edc922da8d675632">size</a> () const</td></tr>
 <tr class="separator:a8227022a4666fb11edc922da8d675632"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22cc6275e512ed0dc066c67257d31f29"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_pin_group.html#a22cc6275e512ed0dc066c67257d31f29">assign_pin</a> (T *pin)</td></tr>
-<tr class="separator:a22cc6275e512ed0dc066c67257d31f29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c73cbc250f9ff59f81b5441cca0704f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_pin_group.html#a1c73cbc250f9ff59f81b5441cca0704f">assign_pin</a> (T *pin)</td></tr>
+<tr class="separator:a1c73cbc250f9ff59f81b5441cca0704f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45f83847945f1e8d00de2dd7c32a797c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_pin_group.html#a45f83847945f1e8d00de2dd7c32a797c">move_pin</a> (T *pin, <a class="el" href="defines_8h.html#aec41e5f8e4b7aef2540e84268692fa84">i32</a> new_index)</td></tr>
 <tr class="separator:a45f83847945f1e8d00de2dd7c32a797c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26785e2ec6edefc199357e63dc720179"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_pin_group.html#a26785e2ec6edefc199357e63dc720179">remove_pin</a> (T *pin)</td></tr>
-<tr class="separator:a26785e2ec6edefc199357e63dc720179"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5640ea8e69852623eb2520d21f5863dc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_pin_group.html#a5640ea8e69852623eb2520d21f5863dc">remove_pin</a> (T *pin)</td></tr>
+<tr class="separator:a5640ea8e69852623eb2520d21f5863dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a479771519511c2aa3643cd4e12fa2558"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_pin_group.html#a479771519511c2aa3643cd4e12fa2558">contains_pin</a> (T *pin)</td></tr>
 <tr class="separator:a479771519511c2aa3643cd4e12fa2558"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -155,7 +155,7 @@ class hal::PinGroup&lt; T &gt;</h3>
 
 <p>A group of pins made up of a name, the pins, a pin order, and a start index. </p>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00047">47</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00048">48</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aec50c4d67f32b3d4d621bbc116a998e6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aec50c4d67f32b3d4d621bbc116a998e6">&#9670;&nbsp;</a></span>PinGroup()</h2>
@@ -229,7 +229,7 @@ template&lt;class T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00060">60</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00061">61</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
 </div>
 </div>
@@ -261,8 +261,8 @@ template&lt;class T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a22cc6275e512ed0dc066c67257d31f29"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a22cc6275e512ed0dc066c67257d31f29">&#9670;&nbsp;</a></span>assign_pin()</h2>
+<a id="a1c73cbc250f9ff59f81b5441cca0704f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c73cbc250f9ff59f81b5441cca0704f">&#9670;&nbsp;</a></span>assign_pin()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -273,7 +273,7 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::monostate&gt; <a class="el" href="classhal_1_1_pin_group.html">hal::PinGroup</a>&lt; T &gt;::assign_pin </td>
+          <td class="memname">bool <a class="el" href="classhal_1_1_pin_group.html">hal::PinGroup</a>&lt; T &gt;::assign_pin </td>
           <td>(</td>
           <td class="paramtype">T *&#160;</td>
           <td class="paramname"><em>pin</em></td><td>)</td>
@@ -293,13 +293,13 @@ template&lt;class T &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Ok on success, an error message otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00317">317</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00318">318</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00076">log_warning</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00461">hal::GateType::assign_pin_to_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01369">hal::Module::assign_pin_to_group()</a>, and <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00479">hal::GateType::assign_pin_to_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01404">hal::Module::assign_pin_to_group()</a>, and <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>.</p>
 
 </div>
 </div>
@@ -337,7 +337,7 @@ template&lt;class T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if the pin group contains the pin, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00454">454</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00485">485</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
 </div>
 </div>
@@ -368,7 +368,7 @@ template&lt;class T &gt; </div>
 <p>Check whether the pin group is empty, i.e., contains no pins.</p>
 <dl class="section return"><dt>Returns</dt><dd>True if the pin group is empty, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00296">296</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00297">297</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
 </div>
 </div>
@@ -399,9 +399,9 @@ template&lt;class T &gt; </div>
 <p>Get the direction of the pin group.</p>
 <dl class="section return"><dt>Returns</dt><dd>The direction of the pin group. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00186">186</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00187">187</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="pin__group_8h_source.html#l00073">hal::PinGroup&lt; T &gt;::operator==()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l01215">hal::Module::set_pin_group_direction()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="action__pingroup_8cpp_source.html#l00281">hal::ActionPingroup::exec()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00508">hal::ModulePinsTreeModel::handleModulePortsChanged()</a>, <a class="el" href="pin__group_8h_source.html#l00074">hal::PinGroup&lt; T &gt;::operator==()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l01224">hal::Module::set_pin_group_direction()</a>.</p>
 
 </div>
 </div>
@@ -432,7 +432,7 @@ template&lt;class T &gt; </div>
 <p>Hash function for python binding.</p>
 <dl class="section return"><dt>Returns</dt><dd>Pybind11 compatible hash. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00116">116</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00117">117</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
 </div>
 </div>
@@ -463,9 +463,9 @@ template&lt;class T &gt; </div>
 <p>Get the ID of the pin group. The ID is unique within an entity, e.g., a module or a gate type.</p>
 <dl class="section return"><dt>Returns</dt><dd>The ID of the pin group. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00126">126</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00127">127</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00461">hal::GateType::assign_pin_to_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01369">hal::Module::assign_pin_to_group()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00428">hal::GateType::delete_pin_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01292">hal::Module::delete_pin_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01329">hal::Module::move_pin_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01428">hal::Module::move_pin_within_group()</a>, <a class="el" href="pin__group_8h_source.html#l00073">hal::PinGroup&lt; T &gt;::operator==()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01464">hal::Module::remove_pin_from_group()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00649">hal::GateType::set_pin_group_direction()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01215">hal::Module::set_pin_group_direction()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00574">hal::GateType::set_pin_group_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01136">hal::Module::set_pin_group_name()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00626">hal::GateType::set_pin_group_type()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l01192">hal::Module::set_pin_group_type()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00479">hal::GateType::assign_pin_to_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01404">hal::Module::assign_pin_to_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01251">hal::Module::create_pin_group()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00444">hal::GateType::delete_pin_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01320">hal::Module::delete_pin_group()</a>, <a class="el" href="action__pingroup_8cpp_source.html#l00487">hal::ActionPingroup::deletePinGroup()</a>, <a class="el" href="action__pingroup_8cpp_source.html#l00281">hal::ActionPingroup::exec()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00508">hal::ModulePinsTreeModel::handleModulePortsChanged()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01361">hal::Module::move_pin_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01471">hal::Module::move_pin_within_group()</a>, <a class="el" href="pin__group_8h_source.html#l00074">hal::PinGroup&lt; T &gt;::operator==()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01514">hal::Module::remove_pin_from_group()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00664">hal::GateType::set_pin_group_direction()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01224">hal::Module::set_pin_group_direction()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00589">hal::GateType::set_pin_group_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01145">hal::Module::set_pin_group_name()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00641">hal::GateType::set_pin_group_type()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l01201">hal::Module::set_pin_group_type()</a>.</p>
 
 </div>
 </div>
@@ -503,7 +503,7 @@ template&lt;class T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The index of the pin on success, an error message otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00254">254</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00255">255</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
@@ -538,9 +538,9 @@ template&lt;class T &gt; </div>
 <p>Get the name of the pin group.</p>
 <dl class="section return"><dt>Returns</dt><dd>The name of the pin group. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00146">146</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00147">147</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00461">hal::GateType::assign_pin_to_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01369">hal::Module::assign_pin_to_group()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00428">hal::GateType::delete_pin_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01292">hal::Module::delete_pin_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01329">hal::Module::move_pin_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01428">hal::Module::move_pin_within_group()</a>, <a class="el" href="pin__group_8h_source.html#l00073">hal::PinGroup&lt; T &gt;::operator==()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01464">hal::Module::remove_pin_from_group()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00649">hal::GateType::set_pin_group_direction()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01215">hal::Module::set_pin_group_direction()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00574">hal::GateType::set_pin_group_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01136">hal::Module::set_pin_group_name()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00626">hal::GateType::set_pin_group_type()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l01192">hal::Module::set_pin_group_type()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00479">hal::GateType::assign_pin_to_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01404">hal::Module::assign_pin_to_group()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00444">hal::GateType::delete_pin_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01320">hal::Module::delete_pin_group()</a>, <a class="el" href="action__pingroup_8cpp_source.html#l00487">hal::ActionPingroup::deletePinGroup()</a>, <a class="el" href="action__pingroup_8cpp_source.html#l00281">hal::ActionPingroup::exec()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00508">hal::ModulePinsTreeModel::handleModulePortsChanged()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01361">hal::Module::move_pin_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01471">hal::Module::move_pin_within_group()</a>, <a class="el" href="pin__group_8h_source.html#l00074">hal::PinGroup&lt; T &gt;::operator==()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01514">hal::Module::remove_pin_from_group()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00664">hal::GateType::set_pin_group_direction()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01224">hal::Module::set_pin_group_direction()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00589">hal::GateType::set_pin_group_name()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01145">hal::Module::set_pin_group_name()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00641">hal::GateType::set_pin_group_type()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l01201">hal::Module::set_pin_group_type()</a>.</p>
 
 </div>
 </div>
@@ -578,7 +578,7 @@ template&lt;class T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The pin on success, an error message otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00224">224</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00225">225</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
 <p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
@@ -618,11 +618,11 @@ template&lt;class T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The ordered pins. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00198">198</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00199">199</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
 <p class="reference">References <a class="el" href="namespacehal.html#a01a9b9d05ed6e57b05942708d6ad1d83ab9ece18c950afbfa6b0fdbfa4ff731d3">hal::T</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00428">hal::GateType::delete_pin_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01292">hal::Module::delete_pin_group()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00219">hal::BooleanFunctionDecorator::get_boolean_function_from()</a>, and <a class="el" href="pin__group_8h_source.html#l00073">hal::PinGroup&lt; T &gt;::operator==()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00444">hal::GateType::delete_pin_group()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l01320">hal::Module::delete_pin_group()</a>, <a class="el" href="action__pingroup_8cpp_source.html#l00487">hal::ActionPingroup::deletePinGroup()</a>, <a class="el" href="netlist_2decorators_2boolean__function__decorator_8cpp_source.html#l00219">hal::BooleanFunctionDecorator::get_boolean_function_from()</a>, and <a class="el" href="pin__group_8h_source.html#l00074">hal::PinGroup&lt; T &gt;::operator==()</a>.</p>
 
 </div>
 </div>
@@ -653,9 +653,9 @@ template&lt;class T &gt; </div>
 <p>Get the start index of the pin group. Commonly, pin groups start at index 0, but this may not always be the case. Note that the start index for a pin group comprising n pins is 0 independent of whether it is ascending or descending.</p>
 <dl class="section return"><dt>Returns</dt><dd>The start index. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00286">286</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00287">287</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="pin__group_8h_source.html#l00073">hal::PinGroup&lt; T &gt;::operator==()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="action__pingroup_8cpp_source.html#l00281">hal::ActionPingroup::exec()</a>, and <a class="el" href="pin__group_8h_source.html#l00074">hal::PinGroup&lt; T &gt;::operator==()</a>.</p>
 
 </div>
 </div>
@@ -686,9 +686,9 @@ template&lt;class T &gt; </div>
 <p>Get the type of the pin group.</p>
 <dl class="section return"><dt>Returns</dt><dd>The type of the pin group. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00166">166</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00167">167</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="pin__group_8h_source.html#l00073">hal::PinGroup&lt; T &gt;::operator==()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l01192">hal::Module::set_pin_group_type()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="action__pingroup_8cpp_source.html#l00281">hal::ActionPingroup::exec()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00508">hal::ModulePinsTreeModel::handleModulePortsChanged()</a>, <a class="el" href="pin__group_8h_source.html#l00074">hal::PinGroup&lt; T &gt;::operator==()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l01201">hal::Module::set_pin_group_type()</a>.</p>
 
 </div>
 </div>
@@ -719,9 +719,9 @@ template&lt;class T &gt; </div>
 <p>Check whether the pin order of a pin group comprising n pins is ascending (from 0 to n-1) or descending (from n-1 to 0).</p>
 <dl class="section return"><dt>Returns</dt><dd>True for ascending bit order, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00274">274</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00275">275</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="pin__group_8h_source.html#l00073">hal::PinGroup&lt; T &gt;::operator==()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="action__pingroup_8cpp_source.html#l00281">hal::ActionPingroup::exec()</a>, and <a class="el" href="pin__group_8h_source.html#l00074">hal::PinGroup&lt; T &gt;::operator==()</a>.</p>
 
 </div>
 </div>
@@ -770,11 +770,11 @@ template&lt;class T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ok on success, an error message otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00337">337</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00358">358</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">direction</a>, <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l01428">hal::Module::move_pin_within_group()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2decorators_2netlist__modification__decorator_8cpp_source.html#l00192">hal::NetlistModificationDecorator::connect_nets()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l01471">hal::Module::move_pin_within_group()</a>.</p>
 
 </div>
 </div>
@@ -812,9 +812,9 @@ template&lt;class T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if both pin groups are unequal, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00106">106</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00107">107</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
-<p class="reference">References <a class="el" href="pin__group_8h_source.html#l00073">hal::PinGroup&lt; T &gt;::operator==()</a>.</p>
+<p class="reference">References <a class="el" href="pin__group_8h_source.html#l00074">hal::PinGroup&lt; T &gt;::operator==()</a>.</p>
 
 </div>
 </div>
@@ -852,16 +852,16 @@ template&lt;class T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if both pin groups are equal, <code>false</code> otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00073">73</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00074">74</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
-<p class="reference">References <a class="el" href="pin__group_8h_source.html#l00186">hal::PinGroup&lt; T &gt;::get_direction()</a>, <a class="el" href="pin__group_8h_source.html#l00126">hal::PinGroup&lt; T &gt;::get_id()</a>, <a class="el" href="pin__group_8h_source.html#l00146">hal::PinGroup&lt; T &gt;::get_name()</a>, <a class="el" href="pin__group_8h_source.html#l00198">hal::PinGroup&lt; T &gt;::get_pins()</a>, <a class="el" href="pin__group_8h_source.html#l00286">hal::PinGroup&lt; T &gt;::get_start_index()</a>, <a class="el" href="pin__group_8h_source.html#l00166">hal::PinGroup&lt; T &gt;::get_type()</a>, and <a class="el" href="pin__group_8h_source.html#l00274">hal::PinGroup&lt; T &gt;::is_ascending()</a>.</p>
+<p class="reference">References <a class="el" href="pin__group_8h_source.html#l00187">hal::PinGroup&lt; T &gt;::get_direction()</a>, <a class="el" href="pin__group_8h_source.html#l00127">hal::PinGroup&lt; T &gt;::get_id()</a>, <a class="el" href="pin__group_8h_source.html#l00147">hal::PinGroup&lt; T &gt;::get_name()</a>, <a class="el" href="pin__group_8h_source.html#l00199">hal::PinGroup&lt; T &gt;::get_pins()</a>, <a class="el" href="pin__group_8h_source.html#l00287">hal::PinGroup&lt; T &gt;::get_start_index()</a>, <a class="el" href="pin__group_8h_source.html#l00167">hal::PinGroup&lt; T &gt;::get_type()</a>, and <a class="el" href="pin__group_8h_source.html#l00275">hal::PinGroup&lt; T &gt;::is_ascending()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="pin__group_8h_source.html#l00106">hal::PinGroup&lt; T &gt;::operator!=()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="pin__group_8h_source.html#l00107">hal::PinGroup&lt; T &gt;::operator!=()</a>.</p>
 
 </div>
 </div>
-<a id="a26785e2ec6edefc199357e63dc720179"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a26785e2ec6edefc199357e63dc720179">&#9670;&nbsp;</a></span>remove_pin()</h2>
+<a id="a5640ea8e69852623eb2520d21f5863dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5640ea8e69852623eb2520d21f5863dc">&#9670;&nbsp;</a></span>remove_pin()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -872,7 +872,7 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhal_1_1_result.html">Result</a>&lt;std::monostate&gt; <a class="el" href="classhal_1_1_pin_group.html">hal::PinGroup</a>&lt; T &gt;::remove_pin </td>
+          <td class="memname">bool <a class="el" href="classhal_1_1_pin_group.html">hal::PinGroup</a>&lt; T &gt;::remove_pin </td>
           <td>(</td>
           <td class="paramtype">T *&#160;</td>
           <td class="paramname"><em>pin</em></td><td>)</td>
@@ -892,11 +892,11 @@ template&lt;class T &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Ok on success, an error message otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00410">410</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00431">431</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
-<p class="reference">References <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00053">ERR</a>, and <a class="el" href="include_2hal__core_2utilities_2result_8h_source.html#l00049">OK</a>.</p>
+<p class="reference">References <a class="el" href="log_8h_source.html#l00076">log_warning</a>.</p>
 
 </div>
 </div>
@@ -933,11 +933,11 @@ template&lt;class T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00176">176</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00177">177</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00064">direction</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00649">hal::GateType::set_pin_group_direction()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l01215">hal::Module::set_pin_group_direction()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00664">hal::GateType::set_pin_group_direction()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l01224">hal::Module::set_pin_group_direction()</a>.</p>
 
 </div>
 </div>
@@ -974,11 +974,11 @@ template&lt;class T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00136">136</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00137">137</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00058">name</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00574">hal::GateType::set_pin_group_name()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l01136">hal::Module::set_pin_group_name()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00589">hal::GateType::set_pin_group_name()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l01145">hal::Module::set_pin_group_name()</a>.</p>
 
 </div>
 </div>
@@ -1015,11 +1015,11 @@ template&lt;class T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00156">156</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00157">157</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00059">type</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00626">hal::GateType::set_pin_group_type()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l01192">hal::Module::set_pin_group_type()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00641">hal::GateType::set_pin_group_type()</a>, and <a class="el" href="netlist_2module_8cpp_source.html#l01201">hal::Module::set_pin_group_type()</a>.</p>
 
 </div>
 </div>
@@ -1050,7 +1050,7 @@ template&lt;class T &gt; </div>
 <p>Get the size, i.e., the number of pins, of the pin group.</p>
 <dl class="section return"><dt>Returns</dt><dd>The size of the pin group. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00306">306</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pin__group_8h_source.html#l00307">307</a> of file <a class="el" href="pin__group_8h_source.html">pin_group.h</a>.</p>
 
 </div>
 </div>
@@ -1063,7 +1063,7 @@ template&lt;class T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_pin_group.html">PinGroup</a></li>
-    <li class="footer">Generated on Thu Feb 29 2024 13:02:54 for HAL by
+    <li class="footer">Generated on Thu Feb 29 2024 17:00:12 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

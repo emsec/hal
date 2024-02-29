@@ -17,6 +17,7 @@ var group__utility__widgets_module =
       [ "disabledIconStyle", "classhal_1_1_module_widget.html#a64808e0c8a67d7e84423d5b9cc308009", null ],
       [ "expandedIconPath", "classhal_1_1_module_widget.html#a55fb9c20dea14aa431cc0575f129e4ec", null ],
       [ "filter", "classhal_1_1_module_widget.html#a4d9ab525fb3e4f0b0a5bb633b5f6972b", null ],
+      [ "getModuleModel", "classhal_1_1_module_widget.html#ada560463e3d056afce4061fadfb8b2c3", null ],
       [ "handleCurrentChanged", "classhal_1_1_module_widget.html#a9484088bf6cebd4b69c1868c7e36316c", null ],
       [ "handleItemDoubleClicked", "classhal_1_1_module_widget.html#a8c9c763bf4fd438ad6b33e7cb11c4e12", null ],
       [ "handleModuleRemoved", "classhal_1_1_module_widget.html#ab1bf1c2777df9a9a2294e86e6d15a27e", null ],

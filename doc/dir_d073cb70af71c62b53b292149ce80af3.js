@@ -9,6 +9,7 @@ var dir_d073cb70af71c62b53b292149ce80af3 =
     [ "action_fold_module.h", "action__fold__module_8h.html", null ],
     [ "action_move_node.h", "action__move__node_8h.html", null ],
     [ "action_open_netlist_file.h", "action__open__netlist__file_8h.html", null ],
+    [ "action_pingroup.h", "action__pingroup_8h.html", "action__pingroup_8h" ],
     [ "action_remove_items_from_object.h", "action__remove__items__from__object_8h.html", null ],
     [ "action_rename_object.h", "action__rename__object_8h.html", null ],
     [ "action_reorder_object.h", "action__reorder__object_8h.html", null ],

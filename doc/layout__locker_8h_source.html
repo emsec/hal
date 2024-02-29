@@ -114,53 +114,55 @@ $(document).ready(function(){initNavTree('layout__locker_8h_source.html',''); in
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;QSet&gt;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">class </span>GraphContext;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classhal_1_1_layout_locker_manager.html">   34</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_layout_locker_manager.html">LayoutLockerManager</a></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keyword">static</span> <a class="code" href="classhal_1_1_layout_locker_manager.html">LayoutLockerManager</a>* inst;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <a class="code" href="classhal_1_1_layout_locker_manager.html">LayoutLockerManager</a>();</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordtype">int</span> mLockCount;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;GraphContext*&gt;</a> mWaitingRoom;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">static</span> <a class="code" href="classhal_1_1_layout_locker_manager.html">LayoutLockerManager</a>* <a class="code" href="classhal_1_1_layout_locker_manager.html#a2f7e798154f08fcd6474fe7d1522dd1a">instance</a>();</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_layout_locker_manager.html#abe839185b222aef1a7a35cac0830e997">addLock</a>();</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_layout_locker_manager.html#a6f702c07fbd603ac96763a0ac277aa28">removeLock</a>();</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_layout_locker_manager.html#a8ce428056ba8b3a40af352faf7eec3a8">canUpdate</a>(<a class="code" href="classhal_1_1_graph_context.html">GraphContext</a>* ctx);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_layout_locker_manager.html#ad5c33fcc60e6b126b600248df2664411">removeWaitingContext</a>(<a class="code" href="classhal_1_1_graph_context.html">GraphContext</a>* ctx);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    };</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classhal_1_1_layout_locker.html">   50</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_layout_locker.html">LayoutLocker</a></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <a class="code" href="classhal_1_1_layout_locker.html#aeee09ad323fca90ebf0183f4ddf7084d">LayoutLocker</a>();</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <a class="code" href="classhal_1_1_layout_locker.html#a2ac7bd36924bece4bf2c8690621d845e">~LayoutLocker</a>();</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    };</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;}</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="defines_8h.html">hal_core/defines.h</a>&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;{</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">class </span>GraphContext;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classhal_1_1_layout_locker_manager.html">   35</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_layout_locker_manager.html">LayoutLockerManager</a></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keyword">static</span> <a class="code" href="classhal_1_1_layout_locker_manager.html">LayoutLockerManager</a>* inst;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <a class="code" href="classhal_1_1_layout_locker_manager.html">LayoutLockerManager</a>();</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordtype">int</span> mLockCount;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> mWaitingRoom;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">static</span> <a class="code" href="classhal_1_1_layout_locker_manager.html">LayoutLockerManager</a>* <a class="code" href="classhal_1_1_layout_locker_manager.html#a2f7e798154f08fcd6474fe7d1522dd1a">instance</a>();</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_layout_locker_manager.html#abe839185b222aef1a7a35cac0830e997">addLock</a>();</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_layout_locker_manager.html#a6f702c07fbd603ac96763a0ac277aa28">removeLock</a>();</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_layout_locker_manager.html#a8ce428056ba8b3a40af352faf7eec3a8">canUpdate</a>(<a class="code" href="classhal_1_1_graph_context.html">GraphContext</a>* ctx);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_layout_locker_manager.html#ad5c33fcc60e6b126b600248df2664411">removeWaitingContext</a>(<a class="code" href="classhal_1_1_graph_context.html">GraphContext</a>* ctx);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    };</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classhal_1_1_layout_locker.html">   51</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhal_1_1_layout_locker.html">LayoutLocker</a></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    {</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <a class="code" href="classhal_1_1_layout_locker.html#aeee09ad323fca90ebf0183f4ddf7084d">LayoutLocker</a>();</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <a class="code" href="classhal_1_1_layout_locker.html#a2ac7bd36924bece4bf2c8690621d845e">~LayoutLocker</a>();</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    };</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aqset_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html">QSet</a></div></div>
+<div class="ttc" id="aqset_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html">QSet&lt; u32 &gt;</a></div></div>
 <div class="ttc" id="aclasshal_1_1_graph_context_html"><div class="ttname"><a href="classhal_1_1_graph_context.html">hal::GraphContext</a></div><div class="ttdoc">Logical container for modules, gates, and nets.</div><div class="ttdef"><b>Definition:</b> <a href="graph__context_8h_source.html#l00053">graph_context.h:53</a></div></div>
-<div class="ttc" id="aclasshal_1_1_layout_locker_manager_html_abe839185b222aef1a7a35cac0830e997"><div class="ttname"><a href="classhal_1_1_layout_locker_manager.html#abe839185b222aef1a7a35cac0830e997">hal::LayoutLockerManager::addLock</a></div><div class="ttdeci">void addLock()</div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8cpp_source.html#l00017">layout_locker.cpp:17</a></div></div>
-<div class="ttc" id="aclasshal_1_1_layout_locker_manager_html_a8ce428056ba8b3a40af352faf7eec3a8"><div class="ttname"><a href="classhal_1_1_layout_locker_manager.html#a8ce428056ba8b3a40af352faf7eec3a8">hal::LayoutLockerManager::canUpdate</a></div><div class="ttdeci">bool canUpdate(GraphContext *ctx)</div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8cpp_source.html#l00033">layout_locker.cpp:33</a></div></div>
+<div class="ttc" id="aclasshal_1_1_layout_locker_manager_html_abe839185b222aef1a7a35cac0830e997"><div class="ttname"><a href="classhal_1_1_layout_locker_manager.html#abe839185b222aef1a7a35cac0830e997">hal::LayoutLockerManager::addLock</a></div><div class="ttdeci">void addLock()</div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8cpp_source.html#l00018">layout_locker.cpp:18</a></div></div>
+<div class="ttc" id="aclasshal_1_1_layout_locker_manager_html_a8ce428056ba8b3a40af352faf7eec3a8"><div class="ttname"><a href="classhal_1_1_layout_locker_manager.html#a8ce428056ba8b3a40af352faf7eec3a8">hal::LayoutLockerManager::canUpdate</a></div><div class="ttdeci">bool canUpdate(GraphContext *ctx)</div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8cpp_source.html#l00038">layout_locker.cpp:38</a></div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
-<div class="ttc" id="aclasshal_1_1_layout_locker_manager_html_a2f7e798154f08fcd6474fe7d1522dd1a"><div class="ttname"><a href="classhal_1_1_layout_locker_manager.html#a2f7e798154f08fcd6474fe7d1522dd1a">hal::LayoutLockerManager::instance</a></div><div class="ttdeci">static LayoutLockerManager * instance()</div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8cpp_source.html#l00011">layout_locker.cpp:11</a></div></div>
-<div class="ttc" id="aclasshal_1_1_layout_locker_manager_html_ad5c33fcc60e6b126b600248df2664411"><div class="ttname"><a href="classhal_1_1_layout_locker_manager.html#ad5c33fcc60e6b126b600248df2664411">hal::LayoutLockerManager::removeWaitingContext</a></div><div class="ttdeci">void removeWaitingContext(GraphContext *ctx)</div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8cpp_source.html#l00040">layout_locker.cpp:40</a></div></div>
-<div class="ttc" id="aclasshal_1_1_layout_locker_manager_html"><div class="ttname"><a href="classhal_1_1_layout_locker_manager.html">hal::LayoutLockerManager</a></div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8h_source.html#l00034">layout_locker.h:34</a></div></div>
-<div class="ttc" id="aclasshal_1_1_layout_locker_html"><div class="ttname"><a href="classhal_1_1_layout_locker.html">hal::LayoutLocker</a></div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8h_source.html#l00050">layout_locker.h:50</a></div></div>
-<div class="ttc" id="aclasshal_1_1_layout_locker_html_aeee09ad323fca90ebf0183f4ddf7084d"><div class="ttname"><a href="classhal_1_1_layout_locker.html#aeee09ad323fca90ebf0183f4ddf7084d">hal::LayoutLocker::LayoutLocker</a></div><div class="ttdeci">LayoutLocker()</div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8cpp_source.html#l00047">layout_locker.cpp:47</a></div></div>
-<div class="ttc" id="aclasshal_1_1_layout_locker_manager_html_a6f702c07fbd603ac96763a0ac277aa28"><div class="ttname"><a href="classhal_1_1_layout_locker_manager.html#a6f702c07fbd603ac96763a0ac277aa28">hal::LayoutLockerManager::removeLock</a></div><div class="ttdeci">void removeLock()</div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8cpp_source.html#l00022">layout_locker.cpp:22</a></div></div>
-<div class="ttc" id="aclasshal_1_1_layout_locker_html_a2ac7bd36924bece4bf2c8690621d845e"><div class="ttname"><a href="classhal_1_1_layout_locker.html#a2ac7bd36924bece4bf2c8690621d845e">hal::LayoutLocker::~LayoutLocker</a></div><div class="ttdeci">~LayoutLocker()</div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8cpp_source.html#l00052">layout_locker.cpp:52</a></div></div>
+<div class="ttc" id="adefines_8h_html"><div class="ttname"><a href="defines_8h.html">defines.h</a></div></div>
+<div class="ttc" id="aclasshal_1_1_layout_locker_manager_html_a2f7e798154f08fcd6474fe7d1522dd1a"><div class="ttname"><a href="classhal_1_1_layout_locker_manager.html#a2f7e798154f08fcd6474fe7d1522dd1a">hal::LayoutLockerManager::instance</a></div><div class="ttdeci">static LayoutLockerManager * instance()</div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8cpp_source.html#l00012">layout_locker.cpp:12</a></div></div>
+<div class="ttc" id="aclasshal_1_1_layout_locker_manager_html_ad5c33fcc60e6b126b600248df2664411"><div class="ttname"><a href="classhal_1_1_layout_locker_manager.html#ad5c33fcc60e6b126b600248df2664411">hal::LayoutLockerManager::removeWaitingContext</a></div><div class="ttdeci">void removeWaitingContext(GraphContext *ctx)</div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8cpp_source.html#l00046">layout_locker.cpp:46</a></div></div>
+<div class="ttc" id="aclasshal_1_1_layout_locker_manager_html"><div class="ttname"><a href="classhal_1_1_layout_locker_manager.html">hal::LayoutLockerManager</a></div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8h_source.html#l00035">layout_locker.h:35</a></div></div>
+<div class="ttc" id="aclasshal_1_1_layout_locker_html"><div class="ttname"><a href="classhal_1_1_layout_locker.html">hal::LayoutLocker</a></div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8h_source.html#l00051">layout_locker.h:51</a></div></div>
+<div class="ttc" id="aclasshal_1_1_layout_locker_html_aeee09ad323fca90ebf0183f4ddf7084d"><div class="ttname"><a href="classhal_1_1_layout_locker.html#aeee09ad323fca90ebf0183f4ddf7084d">hal::LayoutLocker::LayoutLocker</a></div><div class="ttdeci">LayoutLocker()</div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8cpp_source.html#l00053">layout_locker.cpp:53</a></div></div>
+<div class="ttc" id="aclasshal_1_1_layout_locker_manager_html_a6f702c07fbd603ac96763a0ac277aa28"><div class="ttname"><a href="classhal_1_1_layout_locker_manager.html#a6f702c07fbd603ac96763a0ac277aa28">hal::LayoutLockerManager::removeLock</a></div><div class="ttdeci">void removeLock()</div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8cpp_source.html#l00023">layout_locker.cpp:23</a></div></div>
+<div class="ttc" id="aclasshal_1_1_layout_locker_html_a2ac7bd36924bece4bf2c8690621d845e"><div class="ttname"><a href="classhal_1_1_layout_locker.html#a2ac7bd36924bece4bf2c8690621d845e">hal::LayoutLocker::~LayoutLocker</a></div><div class="ttdeci">~LayoutLocker()</div><div class="ttdef"><b>Definition:</b> <a href="layout__locker_8cpp_source.html#l00058">layout_locker.cpp:58</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_e6f210bccc64e8ff5ef57a64ae71bbf6.html">graph_widget</a></li><li class="navelem"><a class="el" href="layout__locker_8h.html">layout_locker.h</a></li>
-    <li class="footer">Generated on Thu Feb 29 2024 13:02:49 for HAL by
+    <li class="footer">Generated on Thu Feb 29 2024 17:00:08 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,10 +1,5 @@
 var classhal_1_1_netlist_elements_tree_model =
 [
-    [ "itemType", "classhal_1_1_netlist_elements_tree_model.html#ad734a4853262d638a6a29e46b6f1190a", [
-      [ "module", "classhal_1_1_netlist_elements_tree_model.html#ad734a4853262d638a6a29e46b6f1190aa22884db148f0ffb0d830ba431102b0b5", null ],
-      [ "gate", "classhal_1_1_netlist_elements_tree_model.html#ad734a4853262d638a6a29e46b6f1190aa63d721d24d2dde776e05e4b8c47f08a3", null ],
-      [ "net", "classhal_1_1_netlist_elements_tree_model.html#ad734a4853262d638a6a29e46b6f1190aa40fa73c9d0083043c6576dd2b40511e4", null ]
-    ] ],
     [ "NetlistElementsTreeModel", "classhal_1_1_netlist_elements_tree_model.html#afb9b2934b9192ec323630c56167eb1c6", null ],
     [ "~NetlistElementsTreeModel", "classhal_1_1_netlist_elements_tree_model.html#a79f4241587238298d19a663699e4a93f", null ],
     [ "clear", "classhal_1_1_netlist_elements_tree_model.html#a356e96e66483ff3a1e7bc243a8cd1f76", null ],
@@ -12,7 +7,6 @@ var classhal_1_1_netlist_elements_tree_model =
     [ "gateNameChanged", "classhal_1_1_netlist_elements_tree_model.html#ac287407533985cf34acf8ac76e7c9383", null ],
     [ "gateRemoved", "classhal_1_1_netlist_elements_tree_model.html#a3881516cf0419a5dfe8da055b87565eb", null ],
     [ "getRepresentedIdOfItem", "classhal_1_1_netlist_elements_tree_model.html#a2644c77459c5f73867e61b81582bf7f0", null ],
-    [ "getTypeOfItem", "classhal_1_1_netlist_elements_tree_model.html#a847f62d55c85a2e1260de2c32de9e06a", null ],
     [ "moduleGateAssigned", "classhal_1_1_netlist_elements_tree_model.html#af027054cef4fb0abfb2df75e53fc1110", null ],
     [ "moduleGateRemoved", "classhal_1_1_netlist_elements_tree_model.html#ad98ad5dbaeb8d8d3d075b164529b6221", null ],
     [ "moduleNameChanged", "classhal_1_1_netlist_elements_tree_model.html#a7def1d4fa385558be96d4d72222ef649", null ],

@@ -1,0 +1,4 @@
+<map id="hal::ActionPingroupFactory" name="hal::ActionPingroupFactory">
+<area shape="rect" id="node1" title="UserActionFactory for ActionPingroup." alt="" coords="5,160,200,252"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action_factory.html" title="The UserActionFactory is the abstract base class for registration." alt="" coords="19,5,187,112"/>
+</map>

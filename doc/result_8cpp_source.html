@@ -607,9 +607,9 @@ $(document).ready(function(){initNavTree('result_8cpp_source.html',''); initResi
 <div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;                            }</div>
 <div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;                            <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;                            {</div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;                                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = new_mod-&gt;assign_pin_to_group(data_in_group, pin); res.is_error())</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;                                <span class="keywordflow">if</span> (!new_mod-&gt;assign_pin_to_group(data_in_group, pin))</div>
 <div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;                                {</div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;                                    <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;dataflow&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;                                    <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;dataflow&quot;</span>, <span class="stringliteral">&quot;Assign pin to group failed.&quot;</span>);</div>
 <div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;                                }</div>
 <div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;                            }</div>
 <div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160; </div>
@@ -630,9 +630,9 @@ $(document).ready(function(){initNavTree('result_8cpp_source.html',''); initResi
 <div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;                            }</div>
 <div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;                            <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;                            {</div>
-<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;                                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = new_mod-&gt;assign_pin_to_group(data_out_group, pin); res.is_error())</div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;                                <span class="keywordflow">if</span> (!new_mod-&gt;assign_pin_to_group(data_out_group, pin))</div>
 <div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;                                {</div>
-<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;                                    <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;dataflow&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;                                    <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;dataflow&quot;</span>, <span class="stringliteral">&quot;Assign pin to group failed.&quot;</span>);</div>
 <div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;                                }</div>
 <div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;                            }</div>
 <div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160; </div>
@@ -676,9 +676,9 @@ $(document).ready(function(){initNavTree('result_8cpp_source.html',''); initResi
 <div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;                        }</div>
 <div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;                        <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;                        {</div>
-<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;                            <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> res = new_mod-&gt;assign_pin_to_group(pin_group, pin); res.is_error())</div>
+<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;                            <span class="keywordflow">if</span> (!new_mod-&gt;assign_pin_to_group(pin_group, pin))</div>
 <div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;                            {</div>
-<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;                                <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;dataflow&quot;</span>, <span class="stringliteral">&quot;{}&quot;</span>, res.get_error().get());</div>
+<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;                                <a class="code" href="group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735">log_warning</a>(<span class="stringliteral">&quot;dataflow&quot;</span>, <span class="stringliteral">&quot;Assign pin to group failed.&quot;</span>);</div>
 <div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;                            }</div>
 <div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;                        }</div>
 <div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160; </div>
@@ -940,9 +940,9 @@ $(document).ready(function(){initNavTree('result_8cpp_source.html',''); initResi
 <div class="ttc" id="anamespacehal_html_ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e"><div class="ttname"><a href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">hal::PinType::set</a></div><div class="ttdeci">@ set</div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_a7a96adfbbf2db4d4ff1676e634dccb80"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#a7a96adfbbf2db4d4ff1676e634dccb80">hal::dataflow::Result::get_gate_control_nets</a></div><div class="ttdeci">hal::Result&lt; std::unordered_set&lt; Net * &gt; &gt; get_gate_control_nets(const Gate *gate, const PinType type) const</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00201">result.cpp:201</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html_ab5e29819702448bdd0315d3282e2eaae"><div class="ttname"><a href="classhal_1_1_netlist.html#ab5e29819702448bdd0315d3282e2eaae">hal::Netlist::get_net_by_id</a></div><div class="ttdeci">Net * get_net_by_id(u32 net_id) const</div><div class="ttdef"><b>Definition:</b> <a href="src_2netlist_2netlist_8cpp_source.html#l00353">netlist.cpp:353</a></div></div>
-<div class="ttc" id="aclasshal_1_1_pin_group_html"><div class="ttname"><a href="classhal_1_1_pin_group.html">hal::PinGroup</a></div><div class="ttdef"><b>Definition:</b> <a href="pin__group_8h_source.html#l00047">pin_group.h:47</a></div></div>
+<div class="ttc" id="aclasshal_1_1_pin_group_html"><div class="ttname"><a href="classhal_1_1_pin_group.html">hal::PinGroup</a></div><div class="ttdef"><b>Definition:</b> <a href="pin__group_8h_source.html#l00048">pin_group.h:48</a></div></div>
 <div class="ttc" id="aclasshal_1_1_endpoint_html"><div class="ttname"><a href="classhal_1_1_endpoint.html">hal::Endpoint</a></div><div class="ttdef"><b>Definition:</b> <a href="endpoint_8h_source.html#l00042">endpoint.h:42</a></div></div>
-<div class="ttc" id="aclasshal_1_1_pin_group_html_a6270fefeb4736c5ca613b3ad0c017b51"><div class="ttname"><a href="classhal_1_1_pin_group.html#a6270fefeb4736c5ca613b3ad0c017b51">hal::PinGroup::get_index</a></div><div class="ttdeci">Result&lt; u32 &gt; get_index(const T *pin) const</div><div class="ttdef"><b>Definition:</b> <a href="pin__group_8h_source.html#l00254">pin_group.h:254</a></div></div>
+<div class="ttc" id="aclasshal_1_1_pin_group_html_a6270fefeb4736c5ca613b3ad0c017b51"><div class="ttname"><a href="classhal_1_1_pin_group.html#a6270fefeb4736c5ca613b3ad0c017b51">hal::PinGroup::get_index</a></div><div class="ttdeci">Result&lt; u32 &gt; get_index(const T *pin) const</div><div class="ttdef"><b>Definition:</b> <a href="pin__group_8h_source.html#l00255">pin_group.h:255</a></div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_a6f16ef3bfef86ba4b24f965dd8effee9"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#a6f16ef3bfef86ba4b24f965dd8effee9">hal::dataflow::Result::get_group_id_of_gate</a></div><div class="ttdeci">hal::Result&lt; u32 &gt; get_group_id_of_gate(const Gate *gate) const</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00165">result.cpp:165</a></div></div>
 <div class="ttc" id="alog_8h_html"><div class="ttname"><a href="log_8h.html">log.h</a></div></div>
 <div class="ttc" id="astructhal_1_1dataflow_1_1_result_html_ab236d02389418d77f1f11d646404dc80"><div class="ttname"><a href="structhal_1_1dataflow_1_1_result.html#ab236d02389418d77f1f11d646404dc80">hal::dataflow::Result::write_dot</a></div><div class="ttdeci">hal::Result&lt; std::monostate &gt; write_dot(const std::filesystem::path &amp;out_path, const std::unordered_set&lt; u32 &gt; &amp;group_ids={}) const</div><div class="ttdef"><b>Definition:</b> <a href="result_8cpp_source.html#l00280">result.cpp:280</a></div></div>
@@ -972,7 +972,7 @@ $(document).ready(function(){initNavTree('result_8cpp_source.html',''); initResi
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_383eef8607738589c737c0b430bde182.html">src</a></li><li class="navelem"><a class="el" href="dir_a5dae3dd54959ea009030bd29b6c9d80.html">api</a></li><li class="navelem"><a class="el" href="result_8cpp.html">result.cpp</a></li>
-    <li class="footer">Generated on Thu Feb 29 2024 13:02:49 for HAL by
+    <li class="footer">Generated on Thu Feb 29 2024 17:00:07 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

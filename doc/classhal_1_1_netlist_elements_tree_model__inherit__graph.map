@@ -1,5 +1,5 @@
 <map id="hal::NetlistElementsTreeModel" name="hal::NetlistElementsTreeModel">
-<area shape="rect" id="node1" title="A model to display arbitrary elements of the netlist." alt="" coords="5,769,235,1213"/>
+<area shape="rect" id="node1" title="A model to display arbitrary elements of the netlist." alt="" coords="5,769,235,1199"/>
 <area shape="rect" id="node2" href="$classhal_1_1_base_tree_model.html" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="42,365,198,721"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractitemmodel.html" title=" " alt="" coords="24,5,216,317"/>
 </map>

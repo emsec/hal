@@ -152,28 +152,30 @@ $(document).ready(function(){initNavTree('tab__widget_8h_source.html',''); initR
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tab_widget.html#a4ab3514a0cbfdd9b327959e1a5d48205">handleNoCurrentWidget</a>(<span class="keywordtype">int</span> index);</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tab_widget.html#a208648799f8927cd9d4cdd2670b91743">clear</a>();</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_tab_widget.html#abe27c6271b65a4fb7495205bb978f07d">count</a>() <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tab_widget.html#a18563303f9b1c45ffad958dc578bcde0">detachCurrentWidget</a>();</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tab_widget.html#a561969c197ed97474257c40ec7d35a79">handleDragStart</a>();</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tab_widget.html#a208648799f8927cd9d4cdd2670b91743">clear</a>();</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keyword">public</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_SLOTS">Q_SLOTS</a>:</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tab_widget.html#a18563303f9b1c45ffad958dc578bcde0">detachCurrentWidget</a>();</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tab_widget.html#aa54adb84139bdb5b80bc94563889df9f">handleDragEnd</a>();</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tab_widget.html#a561969c197ed97474257c40ec7d35a79">handleDragStart</a>();</div>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>* mVerticalLayout;</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mHorizontalLayout;</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        <a class="code" href="classhal_1_1_dock_bar.html">DockBar</a>* mDockBar;</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <a class="code" href="classhal_1_1_toolbar.html">Toolbar</a>* mLeftToolbar;</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        <a class="code" href="classhal_1_1_toolbar.html">Toolbar</a>* mRightToolbar;</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        <a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* mCurrentWidget;</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html">QAction</a>* mActionDetach;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;ContentFrame*&gt;</a> mDetachedFrames;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QShortcut*&gt;</a> mActiveShortcuts;</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    };</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;}</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_tab_widget.html#aa54adb84139bdb5b80bc94563889df9f">handleDragEnd</a>();</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qvboxlayout.html">QVBoxLayout</a>* mVerticalLayout;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qhboxlayout.html">QHBoxLayout</a>* mHorizontalLayout;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        <a class="code" href="classhal_1_1_dock_bar.html">DockBar</a>* mDockBar;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <a class="code" href="classhal_1_1_toolbar.html">Toolbar</a>* mLeftToolbar;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <a class="code" href="classhal_1_1_toolbar.html">Toolbar</a>* mRightToolbar;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <a class="code" href="classhal_1_1_content_widget.html">ContentWidget</a>* mCurrentWidget;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qaction.html">QAction</a>* mActionDetach;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;ContentFrame*&gt;</a> mDetachedFrames;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;QShortcut*&gt;</a> mActiveShortcuts;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    };</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqobject_html_Q_OBJECT"><div class="ttname"><a href="https://doc.qt.io/qt-5/qobject.html#Q_OBJECT">QObject::Q_OBJECT</a></div><div class="ttdeci">Q_OBJECTQ_OBJECT</div></div>
@@ -193,6 +195,7 @@ $(document).ready(function(){initNavTree('tab__widget_8h_source.html',''); initR
 <div class="ttc" id="aclasshal_1_1_dock_bar_html"><div class="ttname"><a href="classhal_1_1_dock_bar.html">hal::DockBar</a></div><div class="ttdoc">Contains and handles DockButtons.</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8h_source.html#l00047">dock_bar.h:47</a></div></div>
 <div class="ttc" id="atoolbar_8h_html"><div class="ttname"><a href="toolbar_8h.html">toolbar.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_anchor_html"><div class="ttname"><a href="classhal_1_1_content_anchor.html">hal::ContentAnchor</a></div><div class="ttdoc">An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )...</div><div class="ttdef"><b>Definition:</b> <a href="content__anchor_8h_source.html#l00037">content_anchor.h:37</a></div></div>
+<div class="ttc" id="aclasshal_1_1_tab_widget_html_abe27c6271b65a4fb7495205bb978f07d"><div class="ttname"><a href="classhal_1_1_tab_widget.html#abe27c6271b65a4fb7495205bb978f07d">hal::TabWidget::count</a></div><div class="ttdeci">int count() const override</div><div class="ttdef"><b>Definition:</b> <a href="tab__widget_8cpp_source.html#l00205">tab_widget.cpp:205</a></div></div>
 <div class="ttc" id="aclasshal_1_1_tab_widget_html"><div class="ttname"><a href="classhal_1_1_tab_widget.html">hal::TabWidget</a></div><div class="ttdoc">Adds specific ContentWidgets to HALs main content area.</div><div class="ttdef"><b>Definition:</b> <a href="tab__widget_8h_source.html#l00052">tab_widget.h:52</a></div></div>
 <div class="ttc" id="awidget_8h_html"><div class="ttname"><a href="widget_8h.html">widget.h</a></div></div>
 <div class="ttc" id="aclasshal_1_1_content_widget_html"><div class="ttname"><a href="classhal_1_1_content_widget.html">hal::ContentWidget</a></div><div class="ttdoc">Abstract class for Widgets within HAL's ContentArea.</div><div class="ttdef"><b>Definition:</b> <a href="content__widget_8h_source.html#l00049">content_widget.h:49</a></div></div>
@@ -212,7 +215,7 @@ $(document).ready(function(){initNavTree('tab__widget_8h_source.html',''); initR
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_57cefed6324eeec697d12746846e3873.html">include</a></li><li class="navelem"><a class="el" href="dir_6b8756a038d2bd8b7f4f32095327c07b.html">gui</a></li><li class="navelem"><a class="el" href="dir_5a37b91ad729d978f48b50fcc843fc3d.html">docking_system</a></li><li class="navelem"><a class="el" href="tab__widget_8h.html">tab_widget.h</a></li>
-    <li class="footer">Generated on Thu Feb 29 2024 13:02:49 for HAL by
+    <li class="footer">Generated on Thu Feb 29 2024 17:00:07 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -289,7 +289,12 @@ $(document).ready(function(){initNavTree('tab__widget_8cpp_source.html',''); ini
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        <span class="keywordflow">if</span> (mDockBar-&gt;<a class="code" href="classhal_1_1_dock_bar.html#ac692239114f6137af698f788f3a1a083">unused</a>())</div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            <a class="code" href="classhal_1_1_widget.html#a4c519723792aa2638567d9cc73121853">hide</a>();</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    }</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;}</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; </div>
+<div class="line"><a name="l00205"></a><span class="lineno"><a class="line" href="classhal_1_1_tab_widget.html#abe27c6271b65a4fb7495205bb978f07d">  205</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classhal_1_1_tab_widget.html#abe27c6271b65a4fb7495205bb978f07d">TabWidget::count</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        <span class="keywordflow">return</span> mDockBar-&gt;<a class="code" href="classhal_1_1_dock_bar.html#aba73ba2b60878f4b1f21fc601c539d78">count</a>();</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    }</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_content_drag_relay_html_a68407cc29b4a41b56741812a2c46aa71"><div class="ttname"><a href="classhal_1_1_content_drag_relay.html#a68407cc29b4a41b56741812a2c46aa71">hal::ContentDragRelay::dragStart</a></div><div class="ttdeci">void dragStart()</div></div>
@@ -329,6 +334,7 @@ $(document).ready(function(){initNavTree('tab__widget_8cpp_source.html',''); ini
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_aa459f3af6f385a73ae80d1441ef92437"><div class="ttname"><a href="classhal_1_1_dock_bar.html#aa459f3af6f385a73ae80d1441ef92437">hal::DockBar::uncheckButton</a></div><div class="ttdeci">void uncheckButton(ContentWidget *widget)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00441">dock_bar.cpp:441</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_af88b40845191433e2a8ef2c97c356900"><div class="ttname"><a href="classhal_1_1_dock_bar.html#af88b40845191433e2a8ef2c97c356900">hal::DockBar::addButton</a></div><div class="ttdeci">void addButton(ContentWidget *widget, int index)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00343">dock_bar.cpp:343</a></div></div>
 <div class="ttc" id="aclasshal_1_1_widget_html_a42086b09f344735dd189aa4f388e6246"><div class="ttname"><a href="classhal_1_1_widget.html#a42086b09f344735dd189aa4f388e6246">hal::Widget::setParent</a></div><div class="ttdeci">void setParent(QWidget *parent)</div><div class="ttdef"><b>Definition:</b> <a href="widget_8cpp_source.html#l00009">widget.cpp:9</a></div></div>
+<div class="ttc" id="aclasshal_1_1_tab_widget_html_abe27c6271b65a4fb7495205bb978f07d"><div class="ttname"><a href="classhal_1_1_tab_widget.html#abe27c6271b65a4fb7495205bb978f07d">hal::TabWidget::count</a></div><div class="ttdeci">int count() const override</div><div class="ttdef"><b>Definition:</b> <a href="tab__widget_8cpp_source.html#l00205">tab_widget.cpp:205</a></div></div>
 <div class="ttc" id="aclasshal_1_1_dock_bar_html_af9648756ec5da646c07e45994c654c70"><div class="ttname"><a href="classhal_1_1_dock_bar.html#af9648756ec5da646c07e45994c654c70">hal::DockBar::widgetAt</a></div><div class="ttdeci">ContentWidget * widgetAt(int index)</div><div class="ttdef"><b>Definition:</b> <a href="dock__bar_8cpp_source.html#l00453">dock_bar.cpp:453</a></div></div>
 <div class="ttc" id="aqtoolbar_html_iconSize-prop"><div class="ttname"><a href="https://doc.qt.io/qt-5/qtoolbar.html#iconSize-prop">QToolBar::setIconSize</a></div><div class="ttdeci">void setIconSize(const QSize &amp;iconSize)</div></div>
 <div class="ttc" id="aqt_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qt.html">Qt</a></div></div>
@@ -372,7 +378,7 @@ $(document).ready(function(){initNavTree('tab__widget_8cpp_source.html',''); ini
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_723f710d3e1503255229013675f4a73b.html">docking_system</a></li><li class="navelem"><a class="el" href="tab__widget_8cpp.html">tab_widget.cpp</a></li>
-    <li class="footer">Generated on Thu Feb 29 2024 13:02:50 for HAL by
+    <li class="footer">Generated on Thu Feb 29 2024 17:00:08 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

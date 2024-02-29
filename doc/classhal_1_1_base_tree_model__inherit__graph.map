@@ -1,10 +1,10 @@
 <map id="hal::BaseTreeModel" name="hal::BaseTreeModel">
-<area shape="rect" id="node1" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="415,755,571,1111"/>
-<area shape="rect" id="node4" href="$classhal_1_1_gate_pins_tree_model.html" title="A model to display the pins of a gate." alt="" coords="5,1269,192,1493"/>
-<area shape="rect" id="node5" href="$classhal_1_1_module_model.html" title="Represents the netlist module&#39;s hierarchy." alt="" coords="216,1305,355,1456"/>
-<area shape="rect" id="node6" href="$classhal_1_1_module_pins_tree_model.html" title="A model to represent the ports of a module." alt="" coords="379,1254,608,1507"/>
-<area shape="rect" id="node7" href="$classhal_1_1_module_tree_model.html" title=" " alt="" coords="632,1269,805,1493"/>
-<area shape="rect" id="node8" href="$classhal_1_1_netlist_elements_tree_model.html" title="A model to display arbitrary elements of the netlist." alt="" coords="829,1159,1059,1603"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractitemmodel.html" title=" " alt="" coords="397,395,589,707"/>
-<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="410,5,577,347"/>
+<area shape="rect" id="node1" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="455,755,611,1111"/>
+<area shape="rect" id="node4" href="$classhal_1_1_gate_pins_tree_model.html" title="A model to display the pins of a gate." alt="" coords="5,1276,232,1471"/>
+<area shape="rect" id="node5" href="$classhal_1_1_module_model.html" title="Represents the netlist module&#39;s hierarchy." alt="" coords="256,1298,395,1449"/>
+<area shape="rect" id="node6" href="$classhal_1_1_module_pins_tree_model.html" title="A model to represent the ports of a module." alt="" coords="419,1261,648,1485"/>
+<area shape="rect" id="node7" href="$classhal_1_1_module_tree_model.html" title=" " alt="" coords="672,1269,845,1478"/>
+<area shape="rect" id="node8" href="$classhal_1_1_netlist_elements_tree_model.html" title="A model to display arbitrary elements of the netlist." alt="" coords="869,1159,1099,1588"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractitemmodel.html" title=" " alt="" coords="437,395,629,707"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="450,5,617,347"/>
 </map>

@@ -33,7 +33,7 @@ var group__gate__lib =
       [ "create_pin", "classhal_1_1_gate_type.html#a017e8f1a87476a7a6ef339315f9d3b17", null ],
       [ "create_pin_group", "classhal_1_1_gate_type.html#a0568d70d4e02787381cfb6da28f6b768", null ],
       [ "create_pin_group", "classhal_1_1_gate_type.html#a93241b61de55fc1e436214f7faead3ba", null ],
-      [ "delete_pin_group", "classhal_1_1_gate_type.html#ab3e1c9de6aebc8a9c33817f118e05761", null ],
+      [ "delete_pin_group", "classhal_1_1_gate_type.html#a2a69cb567a7a80212de76a70daa28414", null ],
       [ "get_boolean_function", "classhal_1_1_gate_type.html#ab844cc0777899ae022db1e2cc30355b9", null ],
       [ "get_boolean_function", "classhal_1_1_gate_type.html#af14f2febe7d501c08291f38f68c97869", null ],
       [ "get_boolean_functions", "classhal_1_1_gate_type.html#af205511b9029e75c0c2300046a367b56", null ],

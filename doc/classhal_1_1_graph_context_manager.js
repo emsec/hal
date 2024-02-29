@@ -24,7 +24,7 @@ var classhal_1_1_graph_context_manager =
     [ "handleModuleGateAssigned", "classhal_1_1_graph_context_manager.html#a74346611f1400e03bdc2d20bc6ca938d", null ],
     [ "handleModuleGateRemoved", "classhal_1_1_graph_context_manager.html#aaf9534247eddb32c49610a8de46794b2", null ],
     [ "handleModuleNameChanged", "classhal_1_1_graph_context_manager.html#a08d4ceee844a31a2d026281b6271b527", null ],
-    [ "handleModulePortsChanged", "classhal_1_1_graph_context_manager.html#a6701e53face1b7ce9acc0cc0d5a57e99", null ],
+    [ "handleModulePortsChanged", "classhal_1_1_graph_context_manager.html#aa918138a4f19cb66232732d8a4bf407a", null ],
     [ "handleModuleRemoved", "classhal_1_1_graph_context_manager.html#aea77eca602b648beb3c42a89de25fe72", null ],
     [ "handleModuleSubmoduleAdded", "classhal_1_1_graph_context_manager.html#aa6bb29f1134155498fe94d00805dde2a", null ],
     [ "handleModuleSubmoduleRemoved", "classhal_1_1_graph_context_manager.html#ad0452a02f33a9c9088d6a9b8a74ecfbe", null ],

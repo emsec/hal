@@ -1,5 +1,5 @@
 <map id="hal::SplitterAnchor" name="hal::SplitterAnchor">
-<area shape="rect" id="node1" title="Adds specific ContentWidgets to HALs main content area." alt="" coords="109,395,252,545"/>
+<area shape="rect" id="node1" title="Adds specific ContentWidgets to HALs main content area." alt="" coords="108,395,251,545"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="5,5,172,347"/>
-<area shape="rect" id="node3" href="$classhal_1_1_content_anchor.html" title="An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )..." alt="" coords="197,93,351,259"/>
+<area shape="rect" id="node3" href="$classhal_1_1_content_anchor.html" title="An abstract class that provides the interface for specific anchors (see SplitterAnchor or TabWidget )..." alt="" coords="197,101,343,251"/>
 </map>

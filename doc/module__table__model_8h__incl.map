@@ -1,11 +1,15 @@
 <map id="/home/runner/work/hal/hal/plugins/gui/include/gui/selection_details_widget/net_details_widget/module_table_model.h" name="/home/runner/work/hal/hal/plugins/gui/include/gui/selection_details_widget/net_details_widget/module_table_model.h">
-<area shape="rect" id="node1" title=" " alt="" coords="307,5,610,76"/>
-<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,124,289,151"/>
-<area shape="rect" id="node7" title=" " alt="" coords="313,124,473,151"/>
-<area shape="rect" id="node8" title=" " alt="" coords="498,124,553,151"/>
-<area shape="rect" id="node9" title=" " alt="" coords="577,124,631,151"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,199,96,225"/>
-<area shape="rect" id="node4" title=" " alt="" coords="121,199,207,225"/>
-<area shape="rect" id="node5" title=" " alt="" coords="231,199,318,225"/>
-<area shape="rect" id="node6" title=" " alt="" coords="342,199,413,225"/>
+<area shape="rect" id="node1" title=" " alt="" coords="373,5,675,76"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,303,289,329"/>
+<area shape="rect" id="node7" href="$pin__event_8h.html" title=" " alt="" coords="222,124,421,165"/>
+<area shape="rect" id="node11" title=" " alt="" coords="444,131,604,158"/>
+<area shape="rect" id="node12" title=" " alt="" coords="629,131,683,158"/>
+<area shape="rect" id="node13" title=" " alt="" coords="708,131,761,158"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,377,96,404"/>
+<area shape="rect" id="node4" title=" " alt="" coords="121,377,207,404"/>
+<area shape="rect" id="node5" title=" " alt="" coords="231,377,318,404"/>
+<area shape="rect" id="node6" title=" " alt="" coords="342,377,413,404"/>
+<area shape="rect" id="node8" href="$enums_8h.html" title=" " alt="" coords="256,213,387,255"/>
+<area shape="rect" id="node9" title=" " alt="" coords="411,221,535,247"/>
+<area shape="rect" id="node10" title=" " alt="" coords="559,221,622,247"/>
 </map>

@@ -1,0 +1,4 @@
+<map id="hal::ActionPingroup" name="hal::ActionPingroup">
+<area shape="rect" id="node1" title="Pingroup user actions." alt="" coords="13,351,216,604"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,5,224,303"/>
+</map>

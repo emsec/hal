@@ -32,7 +32,7 @@ var group__pins =
     [ "PinGroup", "classhal_1_1_pin_group.html", [
       [ "PinGroup", "classhal_1_1_pin_group.html#aec50c4d67f32b3d4d621bbc116a998e6", null ],
       [ "~PinGroup", "classhal_1_1_pin_group.html#ac444df030e6ebf92a98fda0584577308", null ],
-      [ "assign_pin", "classhal_1_1_pin_group.html#a22cc6275e512ed0dc066c67257d31f29", null ],
+      [ "assign_pin", "classhal_1_1_pin_group.html#a1c73cbc250f9ff59f81b5441cca0704f", null ],
       [ "contains_pin", "classhal_1_1_pin_group.html#a479771519511c2aa3643cd4e12fa2558", null ],
       [ "empty", "classhal_1_1_pin_group.html#af6dcfc8a11f2e2099066a2a84da0cfec", null ],
       [ "get_direction", "classhal_1_1_pin_group.html#ac9b30b31956f5c9670d61f1163f737b7", null ],
@@ -48,7 +48,7 @@ var group__pins =
       [ "move_pin", "classhal_1_1_pin_group.html#a45f83847945f1e8d00de2dd7c32a797c", null ],
       [ "operator!=", "classhal_1_1_pin_group.html#afe6fbd0272dedbaee39d314bf192c818", null ],
       [ "operator==", "classhal_1_1_pin_group.html#a7f1d0919b8a47042e21299595ad82681", null ],
-      [ "remove_pin", "classhal_1_1_pin_group.html#a26785e2ec6edefc199357e63dc720179", null ],
+      [ "remove_pin", "classhal_1_1_pin_group.html#a5640ea8e69852623eb2520d21f5863dc", null ],
       [ "set_direction", "classhal_1_1_pin_group.html#a4711d3f3d1da8d2722a9b809c80dcddf", null ],
       [ "set_name", "classhal_1_1_pin_group.html#aa3b9f3e58afa3dc40115fb6a40bd923d", null ],
       [ "set_type", "classhal_1_1_pin_group.html#af40632d267c94720ea6d3139b9587223", null ],

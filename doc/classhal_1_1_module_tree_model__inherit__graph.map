@@ -1,5 +1,5 @@
 <map id="hal::ModuleTreeModel" name="hal::ModuleTreeModel">
-<area shape="rect" id="node1" title=" " alt="" coords="15,769,188,993"/>
+<area shape="rect" id="node1" title=" " alt="" coords="15,769,188,979"/>
 <area shape="rect" id="node2" href="$classhal_1_1_base_tree_model.html" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="23,365,179,721"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractitemmodel.html" title=" " alt="" coords="5,5,197,317"/>
 </map>

@@ -1,4 +1,4 @@
 <map id="hal::ModuleItem" name="hal::ModuleItem">
-<area shape="rect" id="node1" title="An item in the ModuleModel." alt="" coords="5,204,161,355"/>
-<area shape="rect" id="node2" href="$classhal_1_1_base_tree_item.html" title="(Future) Base class for all tree models related to the details widget." alt="" coords="10,5,157,156"/>
+<area shape="rect" id="node1" title="An item in the ModuleModel." alt="" coords="5,219,161,369"/>
+<area shape="rect" id="node2" href="$classhal_1_1_base_tree_item.html" title="(Future) Base class for all tree models related to the details widget." alt="" coords="10,5,157,171"/>
 </map>

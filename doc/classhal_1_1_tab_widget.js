@@ -4,6 +4,7 @@ var classhal_1_1_tab_widget =
     [ "add", "classhal_1_1_tab_widget.html#a9af97c04429797b0497f434001baaf6f", null ],
     [ "clear", "classhal_1_1_tab_widget.html#a208648799f8927cd9d4cdd2670b91743", null ],
     [ "close", "classhal_1_1_tab_widget.html#a30f23ce9feff8559abbbff432bfe124e", null ],
+    [ "count", "classhal_1_1_tab_widget.html#abe27c6271b65a4fb7495205bb978f07d", null ],
     [ "detach", "classhal_1_1_tab_widget.html#a78521bcdfd7d838219763496c36745eb", null ],
     [ "detachCurrentWidget", "classhal_1_1_tab_widget.html#a18563303f9b1c45ffad958dc578bcde0", null ],
     [ "handleDragEnd", "classhal_1_1_tab_widget.html#aa54adb84139bdb5b80bc94563889df9f", null ],

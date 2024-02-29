@@ -1,5 +1,5 @@
 <map id="hal::ModulePinsTreeModel" name="hal::ModulePinsTreeModel">
-<area shape="rect" id="node1" title="A model to represent the ports of a module." alt="" coords="5,769,235,1023"/>
+<area shape="rect" id="node1" title="A model to represent the ports of a module." alt="" coords="5,769,235,993"/>
 <area shape="rect" id="node2" href="$classhal_1_1_base_tree_model.html" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="42,365,198,721"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractitemmodel.html" title=" " alt="" coords="24,5,216,317"/>
 </map>
