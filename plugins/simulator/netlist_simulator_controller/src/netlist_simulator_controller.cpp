@@ -878,6 +878,29 @@ namespace hal
         checkReadyState();
     }
 
+    void NetlistSimulatorController::make_waveform_groups()
+    {
+        std::unordered_map<Module*,std::unordered_set<const Gate*>> containedModules;
+        for (const Gate* g: mSimulationInput->get_gates())
+        {
+            Module* m = g->get_module();
+            while (m)
+            {
+                auto it = containedModules.find(m);
+                if (it == containedModules.end())
+                {
+                    std::vector<Gate*> gats = m->get_gates(nullptr,true);
+                    containedModules.insert(std::make_pair(m,std::unordered_set<const Gate*>(gats.begin(),gats.end())));
+                    it = containedModules.find(m);
+                }
+                auto jt = it->second.find(g);
+                if (jt!=it->second.end())
+                    it->second.erase(jt);
+                m = m->get_parent_module();
+            }
+        }
+    }
+
     void NetlistSimulatorController::add_gates(const std::vector<Gate*>& gates)
     {
         if (mState != NoGatesSelected)

@@ -137,6 +137,8 @@ namespace hal {
             mController->get_waveform_by_net(inpNet);
         if (mController->get_gates().empty() || mController->get_input_nets().empty())
             return false;
+
+        mController->make_waveform_groups();
         return true;
     }
 

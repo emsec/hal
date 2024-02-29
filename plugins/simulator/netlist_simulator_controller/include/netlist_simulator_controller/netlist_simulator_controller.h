@@ -183,6 +183,8 @@ public:
      */
     void add_gates(const std::vector<Gate*>& gates);
 
+    void make_waveform_groups();
+
     /**
      * Set the signal for a specific wire to control input signals between simulation cycles.
      *
