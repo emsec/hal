@@ -54,4 +54,5 @@ namespace hal
 
     template<>
     std::map<PinType, std::string> EnumStrings<PinType>::data;
+
 }    // namespace hal

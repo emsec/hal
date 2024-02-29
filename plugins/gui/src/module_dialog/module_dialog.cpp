@@ -4,6 +4,7 @@
 #include "gui/module_model/module_model.h"
 #include "gui/module_model/module_proxy_model.h"
 #include "gui/module_model/module_item.h"
+#include "gui/module_widget/module_widget.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/searchbar/searchbar.h"
 #include "gui/content_manager/content_manager.h"
@@ -91,7 +92,7 @@ namespace hal {
         mModuleTreeProxyModel = new ModuleProxyModel(this);
         mModuleTreeProxyModel->setFilterKeyColumn(-1);
         mModuleTreeProxyModel->setDynamicSortFilter(true);
-        mModuleTreeProxyModel->setSourceModel(gNetlistRelay->getModuleModel());
+        mModuleTreeProxyModel->setSourceModel(gContentManager->getModuleWidget()->getModuleModel());
         mTreeView->setModel(mModuleTreeProxyModel);
         mTreeView->expandAll();
 

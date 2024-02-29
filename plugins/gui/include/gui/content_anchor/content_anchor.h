@@ -84,6 +84,11 @@ namespace hal
          * Destructor that has to be overriden.
          */
         virtual inline ~ContentAnchor() = 0;
+
+        /**
+         * Returns the number of widgets / buttons as of mDockBar->count()
+         */
+        virtual int count() const = 0;
     };
 
     ContentAnchor::~ContentAnchor()
