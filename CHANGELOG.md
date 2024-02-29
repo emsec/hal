@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
   * added specific GUI handler for every `pin_changed` event thus replacing the reload-entire-pingroup-tree policy
   * added class `ActionPingroup` so that UNDO function works for all pin / pin group actions issued from GUI
 * miscellaneous
+  * added INIT field declaration to FF-gate-types in example library
   * added drag'n drop feature allowing to move several nodes in graph view at same time
   * added functions to Python GUI API to create, modifiy and delete views
   * added GUI PluginParameter type `ComboBox` for parameters that can be requested from plugin
