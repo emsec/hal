@@ -2215,7 +2215,9 @@
                 "neg_state": "IQN",
                 "next_state": "(D & CE)",
                 "clocked_on": "C",
-                "clear_on": "R"
+                "clear_on": "R",
+                "data_category": "generic",
+                "data_identifier": "INIT"
             },
             "pin_groups": [
                 {
