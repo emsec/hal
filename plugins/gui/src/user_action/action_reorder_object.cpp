@@ -23,6 +23,7 @@ namespace hal
 
     bool ActionReorderObject::exec()
     {
+        /* TODO PIN
         int oldIndex = -1;
         switch (mObject.type())
         {
@@ -43,8 +44,7 @@ namespace hal
                     if (pinGroup->size() > 1)
                     {
                         oldIndex = pin->get_group().second;
-                        auto result   = mod->move_pin_within_group(pinGroup, pin, mNewIndex);
-                        if (result.is_error())
+                        if (!mod->move_pin_within_group(pinGroup, pin, mNewIndex))
                         {
                             return false;
                         }
@@ -86,6 +86,7 @@ namespace hal
             undo->setParentObject(mParentObject);
             mUndoAction = undo;
         }
+        */
         return UserAction::exec();
     }
 

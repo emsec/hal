@@ -29,6 +29,7 @@
 #include <QIcon>
 //#include "gui/new_selection_details_widget/models/base_tree_item.h"
 #include "gui/basic_tree_model/base_tree_model.h"
+#include "hal_core/defines.h"
 
 namespace hal
 {
@@ -39,19 +40,30 @@ namespace hal
 
     class NetlistElementsTreeitem : public BaseTreeItem
     {
+    public:
+        enum ItemType { None, Module, Gate, Net};
 
         private:
-            QString mType;
-            int mId;
+            ItemType mItemType;
+            u32 mId;
             QString mName;
+            QString mNodeType;
         public:
 
-            NetlistElementsTreeitem(const QString& name, int id, QString tp);
+            NetlistElementsTreeitem(ItemType itp, u32 id_, const QString& name, const QString& ntp = QString());
             QVariant getData(int column) const override;
             void setData(QList<QVariant> data) override;
             void setDataAtIndex(int index, QVariant& data) override;
             void appendData(QVariant data) override;
             int getColumnCount() const override;
+
+            u32 id() const { return mId; }
+            /**
+             * Get the type (enum) of a given item.
+             *
+             * @return The item's type.
+             */
+            ItemType itemType() const { return mItemType; }
     };
 
     /**
@@ -63,8 +75,6 @@ namespace hal
         Q_OBJECT
     public:
 
-        //metatype declaration at the end of file
-        enum class itemType {module = 0, gate = 1, net = 2};
 
         /**
          * The constructor.
@@ -120,14 +130,6 @@ namespace hal
          * @param displayModulesRecursive - True to show
          */
         void setModule(Module* mod, bool showGates = true, bool showNets = true, bool displayModulesRecursive = true);
-
-        /**
-         * Get the type (enum) of a given item.
-         *
-         * @param item - The item for which the type is requested.
-         * @return The item's type.
-         */
-        itemType getTypeOfItem(NetlistElementsTreeitem* item) const;
 
         /**
          * Get the module/gate/net id that the given item represents.
@@ -217,5 +219,3 @@ namespace hal
     };
 
 }
-
-Q_DECLARE_METATYPE(hal::NetlistElementsTreeModel::itemType)

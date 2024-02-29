@@ -104,6 +104,7 @@ namespace hal
                     return false;
                 }
                 break;
+                /* TODO PIN
             case UserActionObjectType::Pin: {
                 mod = gNetlist->get_module_by_id(mParentObject.id());
                 if (!mod)
@@ -138,15 +139,18 @@ namespace hal
                 mod->set_pin_group_name(pinGroup, mNewName.toStdString());
             }
             break;
+            */
             default:
                 return false;
         }
         ActionRenameObject* undo = new ActionRenameObject(oldName);
         undo->setObject(mObject);
+        /* TODO PIN
         if (mObject.type() == UserActionObjectType::Pin || mObject.type() == UserActionObjectType::PinGroup)
         {
             undo->setParentObject(mParentObject);
         }
+        */
         mUndoAction = undo;
         return UserAction::exec();
     }

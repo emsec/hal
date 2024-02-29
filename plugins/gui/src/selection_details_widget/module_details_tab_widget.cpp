@@ -67,16 +67,20 @@ namespace hal
         {
             setIcon(SelectionDetailsIconProvider::ModuleIcon, module->get_id());
             mModuleId = module->get_id();
+            //pass module or other stuff to widgets
+            mModuleInfoTable->setModule(module);
+            mPinsTree->setModule(module);
+            mElementsTree->setModule(module);
+            mGroupingsOfItemTable->setModule(module);
+            mDataTable->setModule(module);
+            mCommentWidget->nodeChanged(Node(module->get_id(), Node::NodeType::Module));
         }
         else
+        {
             mModuleId = 0;
-        //pass module or other stuff to widgets
-        mModuleInfoTable->setModule(module);
-        mPinsTree->setModule(module);
-        mElementsTree->setModule(module);
-        mGroupingsOfItemTable->setModule(module);
-        mDataTable->setModule(module);
-        mCommentWidget->nodeChanged(Node(module->get_id(), Node::NodeType::Module));
+            mElementsTree->removeContent();
+            mCommentWidget->nodeChanged(Node());
+        }
     }
 
     void ModuleDetailsTabWidget::clear()

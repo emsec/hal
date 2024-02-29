@@ -49,6 +49,7 @@ namespace hal
         Module* mod;
         switch (mObject.type())
         {
+            /* TODO PIN
             case UserActionObjectType::Pin:    //only possible to change module pin types
             {
                 //should also check if its a valid type? (enum_from_string default value doesnt help
@@ -74,6 +75,7 @@ namespace hal
                 }
             }
             break;
+            */
             case UserActionObjectType::Module:
                 mod = gNetlist->get_module_by_id(mObject.id());
                 if (mod != nullptr)

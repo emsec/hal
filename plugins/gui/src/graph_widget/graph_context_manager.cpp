@@ -378,8 +378,10 @@ namespace hal
         xout << "-------\n";
     }
 
-    void GraphContextManager::handleModulePortsChanged(Module* m)
+    void GraphContextManager::handleModulePortsChanged(Module* m, PinEvent pev, u32 pgid)
     {
+        Q_UNUSED(pev);
+        Q_UNUSED(pgid);
         for (GraphContext* context : mContextTableModel->list())
             if (context->modules().contains(m->get_id()))
             {

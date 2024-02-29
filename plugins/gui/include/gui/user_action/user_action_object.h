@@ -54,8 +54,6 @@ namespace hal
             Grouping,
             Netlist,
             Context,
-            Pin,
-            PinGroup,
             MaxObjectType
         };
         Q_ENUM(ObjectType)

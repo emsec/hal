@@ -19,6 +19,11 @@ All notable changes to this project will be documented in this file.
   * boosted performance by using classes with faster memory access
   * removed layouter code used prior to version 3.1.0 - thus removing the setting option to use that code
   * added setting option to dump junction layout input data for experts to debug in case of layout errors
+* module pins
+  * added qualifier for `pin_changed` core events telling receiver details about the recent modification
+  * added event scope and stacking classes so that `pin_changed` events can be collected and prioritized
+  * added specific GUI handler for every `pin_changed` event thus replacing the reload-entire-pingroup-tree policy
+  * added class `ActionPingroup` so that UNDO function works for all pin / pin group actions issued from GUI
 * miscellaneous
   * added INIT field declaration to FF-gate-types in example library
   * added drag'n drop feature allowing to move several nodes in graph view at same time

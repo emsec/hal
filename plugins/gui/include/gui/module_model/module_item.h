@@ -108,6 +108,13 @@ namespace hal
         bool highlighted() const;
 
         /**
+         * Checks if this ModuleItem is direct child to mRootItem
+         *
+         * @return
+         */
+        bool isToplevelItem() const;
+
+        /**
          * Gets the type of the netlist item this ModuleItem represents.
          *
          * @returns the ModuleItem type
@@ -122,6 +129,12 @@ namespace hal
         void setName(const QString& name);
 
         /**
+         * Set the module type name (gate types are immutable)
+         * @param moduleType
+         */
+        void setModuleType(const QString& moduleType);
+
+        /**
          * Marks/Unmarks this ModuleItem as highlighted.
          *
          * @param highlighted - <b>true</b> if the ModuleItem should be marked as highlighted.
@@ -131,8 +144,9 @@ namespace hal
 
     private:
         u32 mId;
-        TreeItemType mType;
+        TreeItemType mItemType;
         QString mName;
+        QString mModuleType;
 
         bool mHighlighted;
     };

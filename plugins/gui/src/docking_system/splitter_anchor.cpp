@@ -95,7 +95,7 @@ namespace hal
         mDockBar->uncheckButton(widget);
     }
 
-    int SplitterAnchor::count()
+    int SplitterAnchor::count() const
     {
         return mDockBar->count();
     }
