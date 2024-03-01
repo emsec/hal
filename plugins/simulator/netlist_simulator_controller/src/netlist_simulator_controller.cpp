@@ -884,6 +884,7 @@ namespace hal
         for (const Gate* g: mSimulationInput->get_gates())
         {
             Module* m = g->get_module();
+            // test all parent modules whether gates are contained in simulation
             while (m)
             {
                 auto it = containedModules.find(m);
@@ -898,6 +899,11 @@ namespace hal
                     it->second.erase(jt);
                 m = m->get_parent_module();
             }
+        }
+        for (const auto &it : containedModules)
+        {
+            if (it.second.empty())
+                std::cerr << it.first->get_id() << " mod simulated <" << it.first->get_name() << ">" << std::endl;
         }
     }
 
