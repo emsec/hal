@@ -163,10 +163,10 @@ namespace hal
 
     void ContentManager::handleOpenDocument(const QString& fileName)
     {
-        mExternalIndex = 6;
+        mExternalIndex = 1;
 
         mGraphTabWidget = new GraphTabWidget();
-        mMainWindow->addContent(mGraphTabWidget, 2, content_anchor::center);
+        mMainWindow->addContent(mGraphTabWidget, 0, content_anchor::center);
 
         mModuleWidget = new ModuleWidget();
         mMainWindow->addContent(mModuleWidget, 0, content_anchor::left);
@@ -213,7 +213,7 @@ namespace hal
         mPythonWidget->open();
 
         mPythonConsoleWidget = new PythonConsoleWidget();
-        mMainWindow->addContent(mPythonConsoleWidget, 5, content_anchor::bottom);
+        mMainWindow->addContent(mPythonConsoleWidget, 2, content_anchor::bottom);
         mPythonConsoleWidget->open();
 
         mContent.append(mGraphTabWidget);

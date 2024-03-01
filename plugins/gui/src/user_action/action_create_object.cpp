@@ -63,6 +63,7 @@ namespace hal
         switch (mObject.type())
         {
 
+        /* TODO PIN
         case UserActionObjectType::PinGroup:
         {
             Module* parentModule = gNetlist->get_module_by_id(mParentObject.id());
@@ -77,6 +78,7 @@ namespace hal
             else
                 return false;
         }
+        */
             break;
 
         case UserActionObjectType::Module:
@@ -84,8 +86,15 @@ namespace hal
             Module* parentModule = gNetlist->get_module_by_id(mParentId);
             if (parentModule)
             {
-                Module* m = gNetlist->create_module(gNetlist->get_unique_module_id(),
+                u32 modId = mObject.id() ? mObject.id() : gNetlist->get_unique_module_id();
+                Module* m = gNetlist->create_module(modId,
                                                 mObjectName.toStdString(), parentModule);
+                if (!m)
+                {
+                    log_warning("gui", "Failed to create module '{}' with ID={} under parent ID={}.",
+                                mObjectName.toStdString(), modId, mParentId);
+                    return false;
+                }
                 setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
                 standardUndo = true;
             }

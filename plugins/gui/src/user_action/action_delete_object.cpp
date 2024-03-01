@@ -42,6 +42,7 @@ namespace hal
 
         switch (mObject.type())
         {
+        /* TODO PIN
             case UserActionObjectType::PinGroup: {
                 mod            = gNetlist->get_module_by_id(mParentObject.id());
                 auto* pinGroup = mod->get_pin_group_by_id(mObject.id());
@@ -65,6 +66,7 @@ namespace hal
                     return false;
             }
             break;
+            */
             case UserActionObjectType::Module:
                 mod = gNetlist->get_module_by_id(mObject.id());
                 if (mod)
@@ -72,6 +74,7 @@ namespace hal
                     UserActionCompound* act = new UserActionCompound;
                     act->setUseCreatedObject();
                     ActionCreateObject* actCreate = new ActionCreateObject(UserActionObjectType::Module, QString::fromStdString(mod->get_name()));
+                    actCreate->setObject(mObject);
                     actCreate->setParentId(mod->get_parent_module()->get_id());
                     act->addAction(actCreate);
                     act->addAction(new ActionSetObjectType(QString::fromStdString(mod->get_type())));

@@ -487,14 +487,13 @@ namespace hal
         py_gate_type.def(
             "delete_pin_group",
             [](GateType& self, PinGroup<GatePin>* pin_group) {
-                auto res = self.delete_pin_group(pin_group);
-                if (res.is_ok())
+                if (self.delete_pin_group(pin_group))
                 {
                     return true;
                 }
                 else
                 {
-                    log_error("python_context", "error encountered while deleting pin group:\n{}", res.get_error().get());
+                    log_error("python_context", "error encountered while deleting pin group");
                     return false;
                 }
             },
