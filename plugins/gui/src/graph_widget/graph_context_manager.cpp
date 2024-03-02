@@ -599,10 +599,10 @@ namespace hal
                     continue;
                 u32 dirParentId = jsondir["parentId"].toInt();
 
-                BaseTreeItem* dirParent = nullptr;
+                BaseTreeItem* dirParent = mContextTreeModel->getRootItem();
 
                 if (dirParentId != 0) {
-                    mContextTreeModel->getDirectory(dirParentId);
+                   dirParent =  mContextTreeModel->getDirectory(dirParentId);
                 }
 
                 mContextTreeModel->addDirectory(dirName, dirParent, dirId);
@@ -629,10 +629,11 @@ namespace hal
                 if (!jsonView.contains("parentId"))
                     continue;
                 u32 viewParentId = jsonView["parentId"].toInt();
-                BaseTreeItem* viewParent = nullptr;
+
+                BaseTreeItem* viewParent = mContextTreeModel->getRootItem();
 
                 if (viewParentId != 0) {
-                    mContextTreeModel->getDirectory(viewParentId);
+                    viewParent = mContextTreeModel->getDirectory(viewParentId);
                 }
 
 
