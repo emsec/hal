@@ -29,23 +29,22 @@
 namespace hal
 {
     GateLibraryManager::GateLibraryManager(MainWindow *parent)
-        : QFrame(parent), mLayout(new QGridLayout()), mNonEditableGateLibrary(nullptr), mEditableGatelibrary(nullptr)
+        : QFrame(parent), mFrameWidth(0), mLayout(new QGridLayout()), mNonEditableGateLibrary(nullptr), mEditableGatelibrary(nullptr)
     {
 
         //TODO: GateLibrarymanager will stay in readOnly mode even if closing project and opening a new gateLibrary
-        QSplitter* split = new QSplitter(this);
-        QWidget* rightWindow = new QWidget(split);
+        mSplitter = new QSplitter(this);
+        QWidget* rightWindow = new QWidget(mSplitter);
         QGridLayout* rlay = new QGridLayout(rightWindow);
         QDialogButtonBox* bbox = new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Ok, Qt::Horizontal, rightWindow);
 
         mTableModel = new GatelibraryTableModel(this);
-        mContentWidget = new GatelibraryContentWidget(mTableModel,split);
+        mContentWidget = new GatelibraryContentWidget(mTableModel,mSplitter);
 
         //pages for the tab widget
         mGeneralTab = new GateLibraryTabGeneral(this);
         mPinTab = new GateLibraryTabPin(this);
-        mFlipFlopTab = new GateLibraryTabFlipFlop(this);
-        mBooleanFunctionTab = new GateLibraryTabBooleanFunction(this);
+        mBooleanFunctionTab = new GateLibraryTabTruthTable(this);
 
 
         //buttons
@@ -58,7 +57,6 @@ namespace hal
         mTabWidget = new QTabWidget(this);
         mTabWidget->addTab(mGeneralTab, "Gate Type");
         mTabWidget->addTab(mPinTab, "Pins");
-//        mTabWidget->addTab(mFlipFlopTab, "Flip Flops");
         mTabWidget->addTab(mBooleanFunctionTab, "Truth Table"); // TODO : implement truth table
 
         mGraphicsView = new GatelibraryGraphicsView(this);
@@ -71,10 +69,10 @@ namespace hal
         rlay->addWidget(bbox,1,0,1,2);
 
         // Add widgets to the layout
-        split->addWidget(mContentWidget);
-        split->addWidget(rightWindow);
+        mSplitter->addWidget(mContentWidget);
+        mSplitter->addWidget(rightWindow);
 
-        mLayout->addWidget(split);
+        mLayout->addWidget(mSplitter);
 
         //signal - slots
 //        connect(mAddBtn, &QPushButton::clicked, this, &GateLibraryManager::handleAddWizard);
@@ -236,9 +234,21 @@ namespace hal
 
     void GateLibraryManager::updateTabs(GateType* gateType)
     {
-        mFlipFlopTab->update(gateType);
         mGeneralTab->update(gateType);
         mBooleanFunctionTab->update(gateType);
         mPinTab->update(gateType);
+    }
+
+    void GateLibraryManager::resizeEvent(QResizeEvent* evt)
+    {
+        QFrame::resizeEvent(evt);
+        if (evt->size().width() != mFrameWidth)
+        {
+            mFrameWidth = evt->size().width();
+            QList<int> splitSizes;
+            // divide available size in percent
+            splitSizes << mFrameWidth * 27 / 100 << mFrameWidth * 73 / 100;
+            mSplitter->setSizes(splitSizes);
+        }
     }
 }

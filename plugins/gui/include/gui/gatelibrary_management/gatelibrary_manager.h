@@ -25,7 +25,6 @@
 
 #pragma once
 
-#include "gatelibrary_tab_widgets/gatelibrary_tab_flip_flop.h"
 #include "gatelibrary_table_model.h"
 #include "gui/gatelibrary_management/gatelibrary_wizard.h"
 #include "gui/gatelibrary_management/gatelibrary_content_widget.h"
@@ -33,13 +32,14 @@
 #include "hal_core/netlist/gate_library/gate_type.h"
 
 #include <QFrame>
-#include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_boolean_function.h>
+#include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_truth_table.h>
 #include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_general.h>
 #include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_pin.h>
 
 class QGridLayout;
 class QPushButton;
 class QTabWidget;
+class QSplitter;
 
 namespace hal
 {
@@ -49,6 +49,8 @@ namespace hal
     {
         Q_OBJECT
 
+    protected:
+        void resizeEvent(QResizeEvent* evt) override;
     public:
         /**
          * Constructor.
@@ -93,8 +95,8 @@ namespace hal
 
 
     private:
-
-        GateType* getSelectedGate();
+        QSplitter* mSplitter;
+        int mFrameWidth;
 
         QTabWidget* mTabWidget;
         QGridLayout* mLayout;
@@ -105,9 +107,8 @@ namespace hal
         QPushButton* mOkBtn;
         QPushButton* mCancelBtn;
 
-        GateLibraryTabFlipFlop* mFlipFlopTab;
         GateLibraryTabGeneral* mGeneralTab;
-        GateLibraryTabBooleanFunction* mBooleanFunctionTab;
+        GateLibraryTabTruthTable* mBooleanFunctionTab;
         GateLibraryTabPin* mPinTab;
 
         const GateLibrary* mNonEditableGateLibrary;
@@ -115,5 +116,7 @@ namespace hal
         std::unique_ptr<Netlist> mDemoNetlist;
 
         bool mReadOnly = false;
+
+        GateType* getSelectedGate();
     };
 }

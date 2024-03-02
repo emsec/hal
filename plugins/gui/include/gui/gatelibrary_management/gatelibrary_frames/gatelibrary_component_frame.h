@@ -25,58 +25,29 @@
 
 #pragma once
 
-#include "gatelibrary_tab_interface.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
-#include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_component_frame.h"
+
 #include <QFormLayout>
 #include <QLabel>
 #include <QFrame>
 
 namespace hal
 {
-    class GateLibraryLabel;
-    class GatelibraryFrameFF;
-
-    class GatelibraryFrameGeneral : public GatelibraryComponentFrame
-    {
-        Q_OBJECT
-    public:
-        GatelibraryFrameGeneral(QWidget* parent = nullptr);
-        void update(GateType *gt) override;
-
-    private:
-        GateLibraryLabel* mNameLabel;
-        GateLibraryLabel* mIdLabel;
-        GateLibraryLabel* mPropertiesLabel;
-    };
-
-    class GatelibraryFrameBoolean : public GatelibraryComponentFrame
-    {
-        Q_OBJECT
-    public:
-        GatelibraryFrameBoolean(QWidget* parent = nullptr);
-        void update(GateType *gt) override;
-    };
-
-    /**
-     * Widget which shows general information of a given gate
-     */
-    class GateLibraryTabGeneral : public GateLibraryTabInterface
+    class GatelibraryComponentFrame : public QFrame
     {
         Q_OBJECT
 
+    protected:
+        QString mTitle;
+        QFormLayout* mLayout;
+
     public:
-        GateLibraryTabGeneral(QWidget* parent = nullptr);
+        GatelibraryComponentFrame(const QString& title, QWidget* parent = nullptr);
 
+        virtual ~GatelibraryComponentFrame() {;}
 
-        void update(GateType* gt) override;
-
-
-    private:
-        GatelibraryFrameGeneral* mGeneralFrame;
-        GatelibraryFrameBoolean* mBooleanFrame;
-        GatelibraryFrameFF* mFlipflopFrame;
+        virtual void update(GateType* gt) = 0;
     };
-
 }
+

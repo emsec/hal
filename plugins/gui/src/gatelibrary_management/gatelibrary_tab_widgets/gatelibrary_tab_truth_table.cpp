@@ -1,5 +1,5 @@
 
-#include "gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_boolean_function.h"
+#include "gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_truth_table.h"
 
 #include "gui/gui_globals.h"
 
@@ -7,25 +7,26 @@
 namespace hal
 {
 
-    GateLibraryTabBooleanFunction::GateLibraryTabBooleanFunction(QWidget* parent) : GateLibraryTabInterface(parent)
+    GateLibraryTabTruthTable::GateLibraryTabTruthTable(QWidget* parent) : GateLibraryTabInterface(parent)
     {
-        mLayout = new QGridLayout(parent);
+        mLayout = new QGridLayout(this);
         mTableWidget = new QTableWidget();
 
+        mDisclaimer = new QLabel(this);
+        mDisclaimer->setAlignment(Qt::AlignCenter);
+        mLayout->addWidget(mDisclaimer);
+        mDisclaimer->hide();
         mLayout->addWidget(mTableWidget);
 
         //mHeaderView = new QHeaderView(Qt::Horizontal);
         //mTableWidget->setHorizontalHeader(mHeaderView);
-
-
-        setLayout(mLayout);
-
     }
 
-    void GateLibraryTabBooleanFunction::update(GateType* gate)
+    void GateLibraryTabTruthTable::update(GateType* gate)
     {
         if(gate)
         {
+            bool undefinedResult = false;
 
             if (getColumnNumber(gate)-1 > 8)
             {
@@ -44,21 +45,21 @@ namespace hal
             std::vector<std::string> outputs = gate->get_output_pin_names();
             auto truthTable = boolFunc.compute_truth_table(inputs, false).get().at(0);
 
-            for (int column = 0; column < inputs.size(); column++) {
+            for (uint column = 0; column < inputs.size(); column++) {
 
                 QTableWidgetItem* item = new QTableWidgetItem(QString::fromStdString(inputs[column]));
                 mTableWidget->setItem(0, column, item);
             }
-            for (int column = inputs.size(); column < outputs.size()+inputs.size(); column++) {
+            for (uint column = inputs.size(); column < outputs.size()+inputs.size(); column++) {
 
                 QTableWidgetItem* item = new QTableWidgetItem(QString::fromStdString(outputs[column-inputs.size()]));
                 mTableWidget->setItem(0, column, item);
             }
 
-            for (int truthTableIdx = 0; truthTableIdx < truthTable.size(); truthTableIdx++)
+            for (uint truthTableIdx = 0; truthTableIdx < truthTable.size(); truthTableIdx++)
             {
                 //iterate from 0..0 to 1..1
-                for (int i = 0; i < gate->get_input_pins().size(); i++)
+                for (uint i = 0; i < gate->get_input_pins().size(); i++)
                 {
                     u32 shift   = gate->get_input_pins().size() - i - 1;
                     u8 inputBit = u8((truthTableIdx >> shift) & 1);
@@ -98,18 +99,36 @@ namespace hal
                     {
                         QTableWidgetItem* item = new QTableWidgetItem("X");
                         mTableWidget->setItem(truthTableIdx+1, i, item);
+                        undefinedResult = true;
                     }
                 }
             }
+            if (undefinedResult)
+            {
+                mDisclaimer->setText("Truth table calculation\nfor gate type <" + QString::fromStdString(gate->get_name()) + ">\nnot implemented so far");
+                mDisclaimer->show();
+                mTableWidget->hide();
+            }
+            else
+            {
+                mDisclaimer->hide();
+                mTableWidget->show();
+            }
+        }
+        else
+        {
+            mDisclaimer->setText("No gate type selected");
+            mDisclaimer->show();
+            mTableWidget->hide();
         }
     }
 
-    int GateLibraryTabBooleanFunction::getRowNumber(GateType* gate)
+    int GateLibraryTabTruthTable::getRowNumber(GateType* gate)
     {
         return pow(2, gate->get_input_pins().size())+1; //iterate from 0..0 to 2^n
     }
 
-    int GateLibraryTabBooleanFunction::getColumnNumber(GateType* gate)
+    int GateLibraryTabTruthTable::getColumnNumber(GateType* gate)
     {
         if(gate)
         {

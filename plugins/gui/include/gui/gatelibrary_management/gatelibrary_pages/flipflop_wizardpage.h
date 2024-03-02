@@ -44,7 +44,6 @@ namespace hal {
     private:
         QGridLayout* mLayout;
         QTabWidget* mTabWidget;
-        //GateLibraryTabFlipFlop* mFlipFlopTab;
 
         QLineEdit* mClock;
         QLineEdit* mNextState;

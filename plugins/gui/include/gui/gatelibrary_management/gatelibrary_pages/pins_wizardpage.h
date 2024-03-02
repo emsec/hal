@@ -30,7 +30,7 @@
 #include <QPushButton>
 #include <QTreeView>
 
-#include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_boolean_function.h>
+#include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_truth_table.h>
 #include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_general.h>
 #include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_pin.h>
 

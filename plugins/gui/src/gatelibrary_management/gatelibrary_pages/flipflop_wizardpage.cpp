@@ -11,8 +11,6 @@ namespace hal
         setSubTitle("TODO: subtitle");
         mLayout = new QGridLayout(this);
         mTabWidget = new QTabWidget(this);
-        //mFlipFlopTab = new GateLibraryTabFlipFlop(this);
-        //mTabWidget->addTab(mFlipFlopTab, "Flip Flop");
 
         //TODO:
         //mTabWidget->addTab(mStateTableTab, "State Table");

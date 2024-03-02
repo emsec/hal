@@ -25,42 +25,20 @@
 
 #pragma once
 
-#include "gatelibrary_tab_interface.h"
-#include "hal_core/defines.h"
-#include "hal_core/netlist/gate_library/gate_type.h"
-
-#include <QFormLayout>
 #include <QLabel>
+#include <QObject>
 
 namespace hal
 {
-    /**
-     * Widget which shows information about the flip flop properties of a given gate
-     */
-    class GateLibraryTabFlipFlop : public GateLibraryTabInterface
+    class GateLibraryLabel : public QLabel
     {
         Q_OBJECT
 
+        Q_PROPERTY(bool isValue READ isValue WRITE setValue)  // label or value
+        bool mValue;
     public:
-        GateLibraryTabFlipFlop(QWidget* parent = nullptr);
-
-        void update(GateType* gate) override;
-
-    private:
-
-        QFormLayout* mFormLayout;
-        QLabel* mClockLabel;
-        QLabel* mNextStateLabel;
-        QLabel* mAsynchronousResetLabel;
-        QLabel* mInternalStateLabel;
-        QLabel* mNegatedInternalStateLabel;
-
-        QLabel* mClockPropertyLabel;
-        QLabel* mNextStatePropertyLabel;
-        QLabel* mAsynchronousResetPropertyLabel;
-        QLabel* mInternalStatePropertyLabel;
-        QLabel* mNegatedInternalStatePropertyLabel;
-
+        GateLibraryLabel(bool isVal, const QString& txt= QString(), QWidget* parent = nullptr);
+        bool isValue() const { return mValue; }
+        void setValue(bool isVal) { mValue = isVal; }
     };
-
 }

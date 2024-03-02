@@ -25,53 +25,41 @@
 
 #pragma once
 
-#include "gatelibrary_tab_interface.h"
+#include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_component_frame.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
-#include "hal_core/netlist/gate.h"
 
 #include <QFormLayout>
 #include <QLabel>
-#include <QTableWidget>
-#include <QHeaderView>
 
 namespace hal
 {
     /**
-     * Widget which shows information of the boolean functions of a gate
+     * Widget which shows information about the flip flop properties of a given gate
      */
-    class GateLibraryTabBooleanFunction : public GateLibraryTabInterface
+    class GatelibraryFrameFF : public GatelibraryComponentFrame
     {
         Q_OBJECT
 
     public:
-        GateLibraryTabBooleanFunction(QWidget* parent = nullptr);
+        GatelibraryFrameFF(QWidget* parent = nullptr);
 
-
-        void update(GateType* gate) override;
-        int getRowNumber(GateType* gate);
-        int getColumnNumber(GateType* gate);
-
+        void update(GateType* gt) override;
 
     private:
 
-        /*QFormLayout* mFormLayout;
+        QFormLayout* mFormLayout;
+        QLabel* mClockLabel;
+        QLabel* mNextStateLabel;
+        QLabel* mAsynchronousResetLabel;
+        QLabel* mInternalStateLabel;
+        QLabel* mNegatedInternalStateLabel;
 
-        QLabel* mPlaceholderLabel1;
-        QLabel* mPlaceholderLabel2;
-        QLabel* mPlaceholderLabel3;
-        QLabel* mPlaceholderLabel4;
-        QLabel* mPlaceholderLabel5;
-
-        QLabel* mPlaceholderPropertyLabel1;
-        QLabel* mPlaceholderPropertyLabel2;
-        QLabel* mPlaceholderPropertyLabel3;
-        QLabel* mPlaceholderPropertyLabel4;
-        QLabel* mPlaceholderPropertyLabel5;*/
-
-        QGridLayout* mLayout;
-        QTableWidget* mTableWidget;
-        QHeaderView* mHeaderView;
+        QLabel* mClockPropertyLabel;
+        QLabel* mNextStatePropertyLabel;
+        QLabel* mAsynchronousResetPropertyLabel;
+        QLabel* mInternalStatePropertyLabel;
+        QLabel* mNegatedInternalStatePropertyLabel;
 
     };
 

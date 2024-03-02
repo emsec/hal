@@ -28,55 +28,51 @@
 #include "gatelibrary_tab_interface.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate_library/gate_type.h"
-#include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_component_frame.h"
+#include "hal_core/netlist/gate.h"
+
 #include <QFormLayout>
 #include <QLabel>
-#include <QFrame>
+#include <QTableWidget>
+#include <QHeaderView>
 
 namespace hal
 {
-    class GateLibraryLabel;
-    class GatelibraryFrameFF;
-
-    class GatelibraryFrameGeneral : public GatelibraryComponentFrame
-    {
-        Q_OBJECT
-    public:
-        GatelibraryFrameGeneral(QWidget* parent = nullptr);
-        void update(GateType *gt) override;
-
-    private:
-        GateLibraryLabel* mNameLabel;
-        GateLibraryLabel* mIdLabel;
-        GateLibraryLabel* mPropertiesLabel;
-    };
-
-    class GatelibraryFrameBoolean : public GatelibraryComponentFrame
-    {
-        Q_OBJECT
-    public:
-        GatelibraryFrameBoolean(QWidget* parent = nullptr);
-        void update(GateType *gt) override;
-    };
-
     /**
-     * Widget which shows general information of a given gate
+     * Widget which shows information of the boolean functions of a gate
      */
-    class GateLibraryTabGeneral : public GateLibraryTabInterface
+    class GateLibraryTabTruthTable : public GateLibraryTabInterface
     {
         Q_OBJECT
 
     public:
-        GateLibraryTabGeneral(QWidget* parent = nullptr);
+        GateLibraryTabTruthTable(QWidget* parent = nullptr);
 
 
-        void update(GateType* gt) override;
+        void update(GateType* gate) override;
+        int getRowNumber(GateType* gate);
+        int getColumnNumber(GateType* gate);
 
 
     private:
-        GatelibraryFrameGeneral* mGeneralFrame;
-        GatelibraryFrameBoolean* mBooleanFrame;
-        GatelibraryFrameFF* mFlipflopFrame;
+
+        /*QFormLayout* mFormLayout;
+
+        QLabel* mPlaceholderLabel1;
+        QLabel* mPlaceholderLabel2;
+        QLabel* mPlaceholderLabel3;
+        QLabel* mPlaceholderLabel4;
+        QLabel* mPlaceholderLabel5;
+
+        QLabel* mPlaceholderPropertyLabel1;
+        QLabel* mPlaceholderPropertyLabel2;
+        QLabel* mPlaceholderPropertyLabel3;
+        QLabel* mPlaceholderPropertyLabel4;
+        QLabel* mPlaceholderPropertyLabel5;*/
+
+        QGridLayout* mLayout;
+        QTableWidget* mTableWidget;
+        QHeaderView* mHeaderView;
+        QLabel* mDisclaimer;
     };
 
 }
