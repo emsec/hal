@@ -74,7 +74,7 @@ namespace hal
         //mDuplicateAction->setEnabled(false);
         //mDeleteAction->setEnabled(false);
 
-        mContextTreeModel = gGraphContextManager->getContextTableModel();
+        mContextTreeModel = gGraphContextManager->getContextTreeModel();
 
         mContextTreeProxyModel = new ContextProxyModel(this);
         mContextTreeProxyModel->setSourceModel(mContextTreeModel);

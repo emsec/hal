@@ -559,7 +559,7 @@ namespace hal
         return new ModuleShader(context);
     }
 
-    ContextTreeModel* GraphContextManager::getContextTableModel() const
+    ContextTreeModel* GraphContextManager::getContextTreeModel() const
     {
         return mContextTreeModel;
     }

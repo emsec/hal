@@ -366,7 +366,7 @@ namespace hal
          *
          * @returns the context table model
          */
-        ContextTreeModel* getContextTableModel() const;
+        ContextTreeModel* getContextTreeModel() const;
 
         /**
          * Deletes all contexts.

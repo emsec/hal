@@ -1,5 +1,7 @@
 #include "gui/user_action/action_delete_object.h"
 
+#include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/context_manager_widget/models/context_tree_model.h"
 #include "gui/graph_widget/layout_locker.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
@@ -140,7 +142,12 @@ namespace hal
                 ctx = gGraphContextManager->getContextById(mObject.id());
                 if (ctx)
                 {
-                    // TODO : Undo action
+                    UserActionCompound* act = new UserActionCompound;
+                    act->setUseCreatedObject();
+                    act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, ctx->name()));
+                    act->addAction(new ActionAddItemsToObject(ctx->modules(), ctx->gates()));
+
+                    mUndoAction = act;
                     gGraphContextManager->deleteGraphContext(ctx);
                 }
                 else
@@ -150,7 +157,16 @@ namespace hal
                 ctxDir = gGraphContextManager->getDirectoryById(mObject.id());
                 if (ctxDir)
                 {
-                    // TODO : Undo action
+                    if (gGraphContextManager->getContextTreeModel()->getDirectory(ctxDir->id())->getChildCount() != 0) {
+                        mUndoAction = nullptr;
+                    } else {
+                        UserActionCompound* act = new UserActionCompound;
+                        act->setUseCreatedObject();
+                        act->addAction(new ActionCreateObject(UserActionObjectType::ContextDir, ctxDir->name()));
+                        act->addAction(new ActionAddItemsToObject({gNetlist->get_top_module()->get_id()}, {}));
+
+                        mUndoAction = act;
+                    }
                     gGraphContextManager->deleteContextDirectory(ctxDir);
                 }
                 else
