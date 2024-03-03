@@ -31,6 +31,10 @@ namespace hal
             if (getColumnNumber(gate)-1 > 8)
             {
                 mTableWidget->hide();
+                mDisclaimer->setText(QString("Cannot calculate truth table\nfor gate with %1 input pins\nand %2 output pins")
+                                     .arg(gate->get_input_pins().size())
+                                          .arg(gate->get_output_pins().size()));
+                mDisclaimer->show();
                 return;
             }
 
@@ -41,64 +45,50 @@ namespace hal
             mTableWidget->verticalHeader()->hide();
 
             BooleanFunction boolFunc = gate->get_boolean_function();
+            QStringList header;
             std::vector<std::string> inputs = gate->get_input_pin_names();
             std::vector<std::string> outputs = gate->get_output_pin_names();
+            for (const std::string& inputPinName : inputs)
+                header << "Input\n" + QString::fromStdString(inputPinName);
+            for (const std::string& outputPinName : outputs)
+                header << "Output\n" + QString::fromStdString(outputPinName);
+            mTableWidget->setHorizontalHeaderLabels(header);
+
             auto truthTable = boolFunc.compute_truth_table(inputs, false).get().at(0);
 
-            for (uint column = 0; column < inputs.size(); column++) {
-
-                QTableWidgetItem* item = new QTableWidgetItem(QString::fromStdString(inputs[column]));
-                mTableWidget->setItem(0, column, item);
-            }
-            for (uint column = inputs.size(); column < outputs.size()+inputs.size(); column++) {
-
-                QTableWidgetItem* item = new QTableWidgetItem(QString::fromStdString(outputs[column-inputs.size()]));
-                mTableWidget->setItem(0, column, item);
-            }
-
-            for (uint truthTableIdx = 0; truthTableIdx < truthTable.size(); truthTableIdx++)
+            for (uint irow = 0; irow < truthTable.size(); irow++)
             {
                 //iterate from 0..0 to 1..1
-                for (uint i = 0; i < gate->get_input_pins().size(); i++)
+                for (uint icol = 0; icol < gate->get_input_pins().size(); icol++)
                 {
-                    u32 shift   = gate->get_input_pins().size() - i - 1;
-                    u8 inputBit = u8((truthTableIdx >> shift) & 1);
-                    if(inputBit == 0)
-                    {
-                        QTableWidgetItem* item = new QTableWidgetItem("L");
-                        mTableWidget->setItem(truthTableIdx+1, i, item);
-                    }
-                    else
-                    {
-                        QTableWidgetItem* item = new QTableWidgetItem("H");
-                        mTableWidget->setItem(truthTableIdx+1, i, item);
-                    }
-
-
+                    u8 inputBit = u8((irow >> icol) & 1);
+                    QTableWidgetItem* item = new QTableWidgetItem(inputBit ? "H" : "L");
+                    mTableWidget->setItem(irow, icol, item);
                 }
+
                 //fill the output columns
-                for (int i = gate->get_input_pins().size(); i < gate->get_output_pins().size()+gate->get_input_pins().size(); i++)
+                for (uint icol = gate->get_input_pins().size(); icol < gate->get_output_pins().size()+gate->get_input_pins().size(); icol++)
                 {
-                    BooleanFunction::Value val = truthTable[truthTableIdx];
+                    BooleanFunction::Value val = truthTable[irow];
                     if (val == BooleanFunction::Value::ZERO)
                     {
                         QTableWidgetItem* item = new QTableWidgetItem("L");
-                        mTableWidget->setItem(truthTableIdx+1, i, item);
+                        mTableWidget->setItem(irow, icol, item);
                     }
                     else if (val == BooleanFunction::Value::ONE)
                     {
                         QTableWidgetItem* item = new QTableWidgetItem("H");
-                        mTableWidget->setItem(truthTableIdx+1, i, item);
+                        mTableWidget->setItem(irow, icol, item);
                     }
                     else if (val == BooleanFunction::Value::Z)
                     {
                         QTableWidgetItem* item = new QTableWidgetItem("Z");
-                        mTableWidget->setItem(truthTableIdx+1, i, item);
+                        mTableWidget->setItem(irow, icol, item);
                     }
                     else
                     {
                         QTableWidgetItem* item = new QTableWidgetItem("X");
-                        mTableWidget->setItem(truthTableIdx+1, i, item);
+                        mTableWidget->setItem(irow, icol, item);
                         undefinedResult = true;
                     }
                 }
@@ -125,7 +115,7 @@ namespace hal
 
     int GateLibraryTabTruthTable::getRowNumber(GateType* gate)
     {
-        return pow(2, gate->get_input_pins().size())+1; //iterate from 0..0 to 2^n
+        return pow(2, gate->get_input_pins().size()); //iterate from 0..0 to 2^n
     }
 
     int GateLibraryTabTruthTable::getColumnNumber(GateType* gate)
@@ -136,5 +126,4 @@ namespace hal
         }
         return 0;
     }
-
 }

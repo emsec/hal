@@ -1293,20 +1293,8 @@ namespace hal {
 
                 // Trigger the event
                 trigger_event[event_idx]();
-                Gate* gg = test_nl->get_gate_by_id(MIN_GATE_ID);
-                Module* mm = test_mod;
-                if (gg && mm)
-                {
-                    for (ModulePin* mp : mm->get_pins())
-                        std::cerr << "Module pin " << mp->get_id() << " <" << mp->get_name() << ">" << std::endl;
-                    for (Endpoint* ep : gg->get_fan_in_endpoints())
-                        std::cerr << "Gate in pin " << ep->get_pin()->get_id() << " <" << ep->get_pin()->get_name() << ">" << std::endl;
-                    for (Endpoint* ep : gg->get_fan_out_endpoints())
-                        std::cerr << "Gate out pin " << ep->get_pin()->get_id() << " <" << ep->get_pin()->get_name() << ">" << std::endl;
-                }
 
                 EXPECT_EQ(listener.get_event_count(), 1);
-                std::cerr << "Event "  << event_idx << " <" << std::get<2>(listener.get_last_parameters()) << "> exp=<" << std::get<2>(expected_parameter[event_idx]) << ">" << std::endl;
                 EXPECT_EQ(listener.get_last_parameters(), expected_parameter[event_idx]);
 
                 // Unregister the callback
