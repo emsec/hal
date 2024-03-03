@@ -146,6 +146,7 @@ namespace hal
                     act->setUseCreatedObject();
                     act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, ctx->name()));
                     act->addAction(new ActionAddItemsToObject(ctx->modules(), ctx->gates()));
+                    act->setParentObject(mParentObject);
 
                     mUndoAction = act;
                     gGraphContextManager->deleteGraphContext(ctx);
@@ -164,6 +165,7 @@ namespace hal
                         act->setUseCreatedObject();
                         act->addAction(new ActionCreateObject(UserActionObjectType::ContextDir, ctxDir->name()));
                         act->addAction(new ActionAddItemsToObject({gNetlist->get_top_module()->get_id()}, {}));
+                        act->setParentObject(mParentObject);
 
                         mUndoAction = act;
                     }

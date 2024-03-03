@@ -64,9 +64,9 @@ namespace hal
         mOpenAction->setText("Open view");
         mNewViewAction->setText("Create new view");
         mNewDirectoryAction->setText("Create new Directory");
-        mRenameAction->setText("Rename view");
+        mRenameAction->setText("Rename item");
         mDuplicateAction->setText("Duplicate view");
-        mDeleteAction->setText("Delete view");
+        mDeleteAction->setText("Delete item");
         mSearchAction->setText("Search");
 
         //mOpenAction->setEnabled(false);
