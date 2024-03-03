@@ -1,6 +1,9 @@
 
 #include "gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_general.h"
 #include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_frame_ff.h"
+
+#include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_frame_init.h"
+
 #include "gui/gatelibrary_management/gatelibrary_label.h"
 #include "gui/gui_globals.h"
 #include <QFrame>
@@ -99,6 +102,10 @@ namespace hal
         layout->addWidget(mBooleanFrame);
         mBooleanFrame->hide();
 
+        mInitFrame = new GatelibraryFrameInit(this);
+        layout->addWidget(mInitFrame);
+        mInitFrame->hide();
+
         topLayout->addWidget(scroll);
     }
 
@@ -109,10 +116,12 @@ namespace hal
             //TODO make default look
             mFlipflopFrame->hide();
             mBooleanFrame->hide();
+            mInitFrame->hide();
             return;
         }
 
         mFlipflopFrame->update(gt);
         mBooleanFrame->update(gt);
+        mInitFrame->update(gt);
     }
 }
