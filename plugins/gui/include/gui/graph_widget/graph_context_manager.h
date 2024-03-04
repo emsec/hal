@@ -122,6 +122,8 @@ namespace hal
         GraphContext* getContextById(u32 id) const;
 
 
+        u32 getParentId(u32 childId, bool isDirctory) const;
+
         ContextDirectory* getDirectoryById(u32 id) const;
 
         /**
@@ -362,7 +364,7 @@ namespace hal
         GraphShader* getDefaultShader(GraphContext* const context) const;
 
         /**
-         * Gets the table model for the contexts.
+         * Gets the tree model for the contexts.
          *
          * @returns the context table model
          */

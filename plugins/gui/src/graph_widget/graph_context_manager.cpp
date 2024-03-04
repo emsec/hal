@@ -55,6 +55,25 @@ namespace hal
         return contextDir;
     }
 
+    u32 GraphContextManager::getParentId(u32 childId, bool isDirctory) const
+    {
+        if (isDirctory)
+        {
+            BaseTreeItem* bti = mContextTreeModel->getDirectory(childId);
+            ContextTreeItem* parentItem = dynamic_cast<ContextTreeItem*>(bti->getParent());
+            if (parentItem) return parentItem->getId();
+            return 0;
+        }
+        GraphContext* context = getContextById(childId);
+        if (!context) return 0;
+        QModelIndex inx = mContextTreeModel->getIndexFromContext(context);
+        if (!inx.isValid()) return 0;
+        BaseTreeItem* bti =mContextTreeModel->getItemFromIndex(inx);
+        if (!bti) return 0;
+        ContextTreeItem* parentItem = dynamic_cast<ContextTreeItem*>(bti->getParent());
+        if (parentItem) return parentItem->getId();
+        return 0;
+    }
 
     GraphContext* GraphContextManager::createNewContext(const QString& name, u32 parentId)
     {
@@ -132,8 +151,12 @@ namespace hal
 
     ContextDirectory *GraphContextManager::getDirectoryById(u32 id) const
     {
-        ContextDirectory * directory = static_cast<ContextTreeItem *>(mContextTreeModel->getDirectory(id))->directory();
-        if (directory) return directory;
+        BaseTreeItem* bti = mContextTreeModel->getDirectory(id);
+        if (bti)
+        {
+            ContextDirectory* directory = static_cast<ContextTreeItem*>(bti)->directory();
+            if (directory) return directory;
+        }
 
         return nullptr;
     }

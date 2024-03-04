@@ -144,7 +144,10 @@ namespace hal
                 {
                     UserActionCompound* act = new UserActionCompound;
                     act->setUseCreatedObject();
-                    act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, ctx->name()));
+                    ActionCreateObject* actCreate = new ActionCreateObject(UserActionObjectType::ContextView, ctx->name());
+                    actCreate->setObject(UserActionObject(ctx->id(),UserActionObjectType::ContextView));
+                    actCreate->setParentId(gGraphContextManager->getParentId(ctx->id(),false));
+                    act->addAction(actCreate);
                     act->addAction(new ActionAddItemsToObject(ctx->modules(), ctx->gates()));
                     act->setParentObject(mParentObject);
 
@@ -163,7 +166,10 @@ namespace hal
                     } else {
                         UserActionCompound* act = new UserActionCompound;
                         act->setUseCreatedObject();
-                        act->addAction(new ActionCreateObject(UserActionObjectType::ContextDir, ctxDir->name()));
+                        ActionCreateObject* actCreate = new ActionCreateObject(UserActionObjectType::ContextDir, ctxDir->name());
+                        actCreate->setObject(UserActionObject(ctxDir->id(),UserActionObjectType::ContextDir));
+                        actCreate->setParentId(gGraphContextManager->getParentId(ctxDir->id(),true));
+                        act->addAction(actCreate);
                         act->addAction(new ActionAddItemsToObject({gNetlist->get_top_module()->get_id()}, {}));
                         act->setParentObject(mParentObject);
 

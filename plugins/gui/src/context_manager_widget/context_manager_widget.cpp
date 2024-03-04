@@ -291,6 +291,10 @@ namespace hal
     {
         const QModelIndex clicked_index = mContextTreeView->indexAt(point);
 
+        // TODO change current directory :
+        //   if clicked index is view : parent dir of view
+        //   if clicked index is dir  : this dir
+
         QMenu context_menu;
 
         context_menu.addAction(mNewViewAction);
