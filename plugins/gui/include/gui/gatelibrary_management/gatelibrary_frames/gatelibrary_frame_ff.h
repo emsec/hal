@@ -34,6 +34,8 @@
 
 namespace hal
 {
+    class GateLibraryLabel;
+
     /**
      * Widget which shows information about the flip flop properties of a given gate
      */
@@ -49,17 +51,15 @@ namespace hal
     private:
 
         QFormLayout* mFormLayout;
-        QLabel* mClockLabel;
-        QLabel* mNextStateLabel;
-        QLabel* mAsynchronousResetLabel;
-        QLabel* mInternalStateLabel;
-        QLabel* mNegatedInternalStateLabel;
 
-        QLabel* mClockPropertyLabel;
-        QLabel* mNextStatePropertyLabel;
-        QLabel* mAsynchronousResetPropertyLabel;
-        QLabel* mInternalStatePropertyLabel;
-        QLabel* mNegatedInternalStatePropertyLabel;
+        GateLibraryLabel* mClockProperty;
+        GateLibraryLabel* mNextStateProperty;
+        GateLibraryLabel* mAsynchronousResetProperty;
+        GateLibraryLabel* mAsynchronousSetProperty;
+        GateLibraryLabel* mInternalStateProperty;
+        GateLibraryLabel* mNegatedInternalStateProperty;
+        GateLibraryLabel* mInternalStateOnReset;
+        GateLibraryLabel* mNegatedInternalStateOnReset;
 
     };
 

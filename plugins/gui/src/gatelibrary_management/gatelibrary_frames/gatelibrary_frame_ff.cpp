@@ -9,18 +9,24 @@ namespace hal
     GatelibraryFrameFF::GatelibraryFrameFF(QWidget* parent)
         : GatelibraryComponentFrame("Flip Flop", parent)
     {
-        mClockPropertyLabel                = new GateLibraryLabel(true, " - ", this);
-        mNextStatePropertyLabel            = new GateLibraryLabel(true, " - ", this);
-        mAsynchronousResetPropertyLabel    = new GateLibraryLabel(true, " - ", this);
-        mInternalStatePropertyLabel        = new GateLibraryLabel(true, " - ", this);
-        mNegatedInternalStatePropertyLabel = new GateLibraryLabel(true, " - ", this);
+        mClockProperty                = new GateLibraryLabel(true, " - ", this);
+        mNextStateProperty            = new GateLibraryLabel(true, " - ", this);
+        mAsynchronousResetProperty    = new GateLibraryLabel(true, " - ", this);
+        mAsynchronousSetProperty      = new GateLibraryLabel(true, " - ", this);
+        mInternalStateProperty        = new GateLibraryLabel(true, " - ", this);
+        mNegatedInternalStateProperty = new GateLibraryLabel(true, " - ", this);
+        mInternalStateOnReset         = new GateLibraryLabel(true, " - ", this);
+        mNegatedInternalStateOnReset  = new GateLibraryLabel(true, " - ", this);
 
-        mLayout->addRow(new GateLibraryLabel(false, "Clock:",                  parent), mClockPropertyLabel);
-        mLayout->addRow(new GateLibraryLabel(false, "Next state:",             parent), mNextStatePropertyLabel);
-        mLayout->addRow(new GateLibraryLabel(false, "Asynchronous reset:",     parent), mAsynchronousResetPropertyLabel);
-        mLayout->addRow(new GateLibraryLabel(false, "Internal state:",         parent), mInternalStatePropertyLabel);
-        mLayout->addRow(new GateLibraryLabel(false, "Negated internal state:", parent), mNegatedInternalStatePropertyLabel);
-    }
+        mLayout->addRow(new GateLibraryLabel(false, "Clock:",                   parent), mClockProperty);
+        mLayout->addRow(new GateLibraryLabel(false, "Next state:",              parent), mNextStateProperty);
+        mLayout->addRow(new GateLibraryLabel(false, "Asynchronous reset:",      parent), mAsynchronousResetProperty);
+        mLayout->addRow(new GateLibraryLabel(false, "Asynchronous set:",        parent), mAsynchronousSetProperty);
+        mLayout->addRow(new GateLibraryLabel(false, "Internal state:",          parent), mInternalStateProperty);
+        mLayout->addRow(new GateLibraryLabel(false, "Negated internal state:",  parent), mNegatedInternalStateProperty);
+        mLayout->addRow(new GateLibraryLabel(false, "Internal state on reset:", parent), mInternalStateOnReset);
+        mLayout->addRow(new GateLibraryLabel(false, "Neg.int. state on reset:", parent), mNegatedInternalStateOnReset);
+     }
 
     void GatelibraryFrameFF::update(GateType* gt)
     {
@@ -30,18 +36,49 @@ namespace hal
 
             if (ff != nullptr)
             {
-                mClockPropertyLabel->setText(QString::fromStdString(ff->get_clock_function().to_string()));
-                mNextStatePropertyLabel->setText(QString::fromStdString(ff->get_next_state_function().to_string()));
-                mAsynchronousResetPropertyLabel->setText(QString::fromStdString(ff->get_async_reset_function().to_string()));
+                mClockProperty->setText(QString::fromStdString(ff->get_clock_function().to_string()));
+                mNextStateProperty->setText(QString::fromStdString(ff->get_next_state_function().to_string()));
 
-                mInternalStatePropertyLabel->setText(QString::fromStdString(gt->get_boolean_function().to_string()));
+                if (ff->get_async_reset_function().is_empty())
+                {
+                    mAsynchronousResetProperty->setText("N/A");
+                    mAsynchronousResetProperty->setValue(false);
+                }
+                else
+                {
+                    mAsynchronousResetProperty->setText(QString::fromStdString(ff->get_async_reset_function().to_string()));
+                    mAsynchronousResetProperty->setValue(true);
+                }
+
+                if (ff->get_async_set_function().is_empty())
+                {
+                    mAsynchronousResetProperty->setText("N/A");
+                    mAsynchronousResetProperty->setValue(false);
+                }
+                else
+                {
+                    mAsynchronousResetProperty->setText(QString::fromStdString(ff->get_async_set_function().to_string()));
+                    mAsynchronousResetProperty->setValue(true);
+                }
+
+                mInternalStateProperty->setText(QString::fromStdString(gt->get_boolean_function().to_string()));
 
                 Result<BooleanFunction> result = BooleanFunction::Not(gt->get_boolean_function(), gt->get_boolean_function().size());
                 if(result.is_ok())
-                    mNegatedInternalStatePropertyLabel->setText(QString::fromStdString(result.get().to_string()));
-                else{
-                    mNegatedInternalStatePropertyLabel->setText("ERROR");
+                {
+                    mNegatedInternalStateProperty->setText(QString::fromStdString(result.get().to_string()));
+                    mNegatedInternalStateProperty->setValue(true);
                 }
+                else
+                {
+                    mNegatedInternalStateProperty->setText("ERROR");
+                    mNegatedInternalStateProperty->setValue(false);
+                }
+
+                auto [stateBeh,negStateBeh] = ff->get_async_set_reset_behavior();
+                        mInternalStateOnReset->setText(QString::fromStdString(enum_to_string<AsyncSetResetBehavior>(stateBeh)));
+                        mInternalStateOnReset->setText(QString::fromStdString(enum_to_string<AsyncSetResetBehavior>(negStateBeh)));
+
                 show();
             }
             else
