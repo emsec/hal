@@ -1,5 +1,6 @@
 #include "bitwuzla_utils/bitwuzla_utils.h"
 
+#include "bitwuzla_utils/symbolic_execution.h"
 #include "hal_core/defines.h"
 #include "hal_core/utilities/log.h"
 #include "hal_core/utilities/utils.h"
@@ -461,17 +462,20 @@ namespace hal
 
         Result<bitwuzla::Term> simplify(const bitwuzla::Term& t)
         {
-            bitwuzla::Options options;
-            // options.set(bitwuzla::Option::PRODUCE_MODELS, true);
-            // options.set(bitwuzla::Option::SAT_SOLVER, "cadical");
-            bitwuzla::Bitwuzla bitwuzla(options);
+            auto current = function.clone(), before = BooleanFunction();
 
-            bitwuzla.assert_formula(bitwuzla::mk_term(bitwuzla::Kind::EQUAL, {t, bitwuzla::mk_bv_ones(t.sort())}));
-            bitwuzla.simplify();
+            do
+            {
+                before          = current.clone();
+                auto simplified = SMT::SymbolicExecution().evaluate(current);
+                if (simplified.is_error())
+                {
+                    return ERR_APPEND(simplified.get_error(), "could not apply local simplification: symbolic execution failed");
+                }
+                current = simplified.get();
+            } while (before != current);
 
-            bitwuzla.print_formula(std::cout, "smt2");
-
-            return ERR("Not implemented reached");
+            return OK(current);
         }
 
     }    // namespace bitwuzla_utils
