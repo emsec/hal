@@ -221,7 +221,7 @@ namespace hal
          * @param gatIds - A list of suppressed gate ids
          * @param netIds - A list of suppressed net ids
          */
-        void suppressedByFilter(const QList<u32>& modIds = QList<u32>(), const QList<u32>& gatIds = QList<u32>(), const QList<u32>& netIds = QList<u32>());
+        //void suppressedByFilter(const QList<u32>& modIds = QList<u32>(), const QList<u32>& gatIds = QList<u32>(), const QList<u32>& netIds = QList<u32>());
 
         /**
          * Gets a list of ids of all selected gates.

@@ -40,8 +40,9 @@ namespace hal
         return comparison;
     }
 
-    void SelectionTreeProxyModel::applyFilterOnGraphics()
+    /*void SelectionTreeProxyModel::applyFilterOnGraphics()
     {
+        qDebug()<<"called applyFilterOnGraphics()";
         if (isGraphicsBusy()) return;
         ++ mGraphicsBusy;
         QList<u32> modIds;
@@ -50,14 +51,14 @@ namespace hal
         static_cast<const SelectionTreeModel*>(sourceModel())->suppressedByFilter(modIds, gatIds, netIds, mFilterExpression);
         gSelectionRelay->suppressedByFilter(modIds, gatIds, netIds);
         -- mGraphicsBusy;
-    }
+    }*/
 
-    void SelectionTreeProxyModel::handleFilterTextChanged(const QString& filter_text)
+    /*void SelectionTreeProxyModel::handleFilterTextChanged(const QString& filter_text)
     {
         mFilterExpression.setPattern(filter_text);
         invalidateFilter();
         applyFilterOnGraphics();
-    }
+    }*/
 
     gui_utility::mSortMechanism SelectionTreeProxyModel::sortMechanism()
     {

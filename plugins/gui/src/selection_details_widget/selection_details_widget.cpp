@@ -445,14 +445,12 @@ namespace hal
 
     void SelectionDetailsWidget::singleSelectionInternal(const SelectionTreeItem *sti)
     {
-        SelectionTreeItem::TreeItemType tp = sti
-                ? sti->itemType()
-                : SelectionTreeItem::NullItem;
-
-        switch (tp) {
-        case SelectionTreeItem::NullItem:
+        if(!sti){
             showNoSelection();
-            break;
+            return;
+        }
+
+        switch (sti->itemType()) {
         case SelectionTreeItem::ModuleItem:
             if (Module* m = gNetlist->get_module_by_id(sti->id()); m)
             {

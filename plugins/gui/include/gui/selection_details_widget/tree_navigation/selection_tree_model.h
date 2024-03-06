@@ -141,8 +141,8 @@ namespace hal
          * @param netIds - The list that holds the ids of the suppressed nets.
          * @param regex - The regex to match the items against.
          */
-        void suppressedByFilter(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
-                                const QRegularExpression& regex) const;
+        //void suppressedByFilter(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
+        //                        const QRegularExpression& regex) const;
 
 
         static const int sNameColumn = 0;

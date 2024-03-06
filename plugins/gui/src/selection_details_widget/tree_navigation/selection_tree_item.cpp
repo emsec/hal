@@ -57,13 +57,13 @@ namespace hal
         return QVariant();
     }
 
-    bool SelectionTreeItem::match(const QRegularExpression& regex) const
+    /*bool SelectionTreeItem::match(const QRegularExpression& regex) const
     {
         if (!regex.isValid()) return true;
         return  regex.match(name().toString()).hasMatch() ||
                 regex.match(QString::number(mId)).hasMatch() ||
                 regex.match(boxType().toString()).hasMatch();
-    }
+    }*/
 
     bool SelectionTreeItem::isEqual(const SelectionTreeItem* sti) const
     {
@@ -128,22 +128,22 @@ namespace hal
         if(!module) return QVariant();
         return QString::fromStdString(module->get_type());
     }
-
+/*
     bool SelectionTreeItemModule::match(const QRegularExpression& regex) const
     {
         for (SelectionTreeItem* sti : mChildItem)
             if (sti->match(regex)) return true;
 
         return SelectionTreeItem::match(regex);
-    }
-
+    }*/
+/*
     void SelectionTreeItemModule::suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                                            const QRegularExpression& regex) const
     {
         if (!isRoot() && !match(regex)) modIds.append(mId);
         for (SelectionTreeItem* sti : mChildItem)
             sti->suppressedByFilterRecursion(modIds, gatIds, netIds, regex);
-    }
+    }*/
 
     //------- Gate ------
     SelectionTreeItemGate::SelectionTreeItemGate(u32 id_)
@@ -168,14 +168,14 @@ namespace hal
         if(!gate) return QVariant();
         return QString::fromStdString(gate->get_type()->get_name());
     }
-
+/*
     void SelectionTreeItemGate::suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                                            const QRegularExpression& regex) const
     {
         Q_UNUSED(modIds)
         Q_UNUSED(netIds)
         if (!match(regex)) gatIds.append(mId);
-    }
+    }*/
 
     //------- Net -------
     SelectionTreeItemNet::SelectionTreeItemNet(u32 id_)
@@ -193,13 +193,13 @@ namespace hal
     {
         return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::NetIcon,mId));
     }
-
+/*
     void SelectionTreeItemNet::suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                                            const QRegularExpression& regex) const
     {
         Q_UNUSED(modIds)
         Q_UNUSED(gatIds)
         if (!match(regex)) netIds.append(mId);
-    }
+    }*/
 
 }

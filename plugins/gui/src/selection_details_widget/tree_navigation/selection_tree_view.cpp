@@ -262,7 +262,7 @@ namespace hal
         else
             hide();
     }
-
+/*
     void SelectionTreeView::handleFilterTextChanged(const QString& filter_text)
     {
         SelectionTreeProxyModel* treeProxy = dynamic_cast<SelectionTreeProxyModel*>(model());
@@ -272,7 +272,7 @@ namespace hal
         QModelIndex defaultSel = treeProxy->index(0, 0, rootIndex());
         if (defaultSel.isValid())
             selectionModel()->setCurrentIndex(defaultSel, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
-    }
+    }*/
 
     SelectionTreeProxyModel* SelectionTreeView::proxyModel()
     {

@@ -494,7 +494,7 @@ namespace hal
 
     void GraphicsScene::handleHighlight(const QVector<const SelectionTreeItem*>& highlightItems)
     {
-        QSet<u32> highlightSet[SelectionTreeItem::MaxItem];
+        QSet<u32> highlightSet[3];
         for (const SelectionTreeItem* sti : highlightItems)
         {
             if (sti) highlightSet[sti->itemType()].insert(sti->id());

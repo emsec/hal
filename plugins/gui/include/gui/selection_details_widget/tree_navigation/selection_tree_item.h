@@ -55,7 +55,7 @@ namespace hal
          */
         enum TreeItemType
         {
-            NullItem, ModuleItem, GateItem, NetItem, MaxItem
+            ModuleItem, GateItem, NetItem
         };
 
         /**
@@ -64,7 +64,7 @@ namespace hal
          * @param t - The type based on the netlist item type it represents.
          * @param id_ The id of the item. It usually is the same as the underlying netlist item.
          */
-        SelectionTreeItem(TreeItemType t = NullItem, u32 id_ = 0);
+        SelectionTreeItem(TreeItemType t = ModuleItem, u32 id_ = 0);
 
         /**
          * The destructor.
@@ -155,7 +155,7 @@ namespace hal
          * @param regex -  The regex to match against the item.
          * @return True if a match in either of the categories was found. False otherwise.
          */
-        virtual bool match(const QRegularExpression& regex) const;
+        //virtual bool match(const QRegularExpression& regex) const;
 
         /**
          * A function that fills the modIds, gateIds, and netIds lists with the respective ids if the
@@ -169,8 +169,8 @@ namespace hal
          * @param netIds - The list that contains the suppressed net-type items at the end.
          * @param regex - The regular expression to match the items against.
          */
-        virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
-                                                 const QRegularExpression& regex) const = 0;
+        //virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
+        //                                         const QRegularExpression& regex) const = 0;
         bool isEqual(const SelectionTreeItem* sti) const;
     protected:
         TreeItemType mItemType;
@@ -244,7 +244,7 @@ namespace hal
          * @param regex -  The regex to match against.
          * @return True if a match in either of the categories was found or if a child item returns True. False otherwise.
          */
-        virtual bool     match(const QRegularExpression& regex) const;
+        //virtual bool     match(const QRegularExpression& regex) const;
 
         /**
          * Matches itself against the given regex. If no mbrief boxTypeatch was found or the module item is the root of
@@ -256,8 +256,8 @@ namespace hal
          * @param netIds - The list that contains the suppressed net-type items at the end.
          * @param regex - The regular expression to match the items against.
          */
-        virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
-                                                 const QRegularExpression& regex) const;
+        //virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
+        //                                         const QRegularExpression& regex) const;
 
         /**
          * Appends the given tree item to its children.
@@ -334,8 +334,8 @@ namespace hal
          * @param netIds - The list that contains the suppressed net-type items at the end.
          * @param regex - The regular expression to match the items against.
          */
-        virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
-                                                 const QRegularExpression& regex) const;
+        //virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
+        //                                         const QRegularExpression& regex) const;
 
         /**
          * Get the name of the gate's type (e.g. LUT5 or FF).
@@ -386,8 +386,8 @@ namespace hal
          * @param netIds - The list that contains the suppressed net-type items at the end.
          * @param regex - The regular expression to match the items against.
          */
-        virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
-                                                 const QRegularExpression& regex) const;
+        //virtual void suppressedByFilterRecursion(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
+        //                                         const QRegularExpression& regex) const;
     };
 
 }

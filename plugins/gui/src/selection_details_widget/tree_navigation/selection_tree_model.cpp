@@ -311,13 +311,13 @@ namespace hal
         // not found in parent
         return QModelIndex();
     }
-
+/*
     void SelectionTreeModel::suppressedByFilter(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                                 const QRegularExpression& regex) const
     {
         if (!mRootItem) return;
         mRootItem->suppressedByFilterRecursion(modIds, gatIds, netIds, regex);
-    }
+    }*/
 
     SelectionTreeModelDisposer::SelectionTreeModelDisposer(SelectionTreeItemRoot *stim, QObject* parent)
         : QObject(parent), mRootItem(stim)
