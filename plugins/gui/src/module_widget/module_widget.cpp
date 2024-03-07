@@ -611,11 +611,13 @@ namespace hal
 
         for (auto module_id : gSelectionRelay->selectedModulesList())
         {
-            ModuleItem* item = mModuleModel->getItem(module_id);
-            if(item)
+            for(ModuleItem* item : mModuleModel->getItems(module_id))
             {
-                QModelIndex index = mModuleProxyModel->mapFromSource(mModuleModel->getIndexFromItem(item));
-                module_selection.select(index, index);
+                if(item)
+                {
+                    QModelIndex index = mModuleProxyModel->mapFromSource(mModuleModel->getIndexFromItem(item));
+                    module_selection.select(index, index);
+                }
             }
         }
 
