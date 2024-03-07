@@ -61,7 +61,7 @@ namespace hal
          * @param id - The id of the netlist item this ModuleItem represents
          * @param type - The type of the netlist item
          */
-        ModuleItem(const u32 id, const TreeItemType type = TreeItemType::Module);
+        ModuleItem(const u32 id, const TreeItemType type);
 
         /**
          * Given a set of ModuleItems (in a map [id]->[ModuleItem]) this function adds each ModuleItem of this set as

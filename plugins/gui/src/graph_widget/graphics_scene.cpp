@@ -492,20 +492,20 @@ namespace hal
             gn->update();
     }
 
-    void GraphicsScene::handleHighlight(const QVector<const SelectionTreeItem*>& highlightItems)
+    void GraphicsScene::handleHighlight(const QVector<const ModuleItem*>& highlightItems)
     {
         QSet<u32> highlightSet[3];
-        for (const SelectionTreeItem* sti : highlightItems)
+        for (const ModuleItem* sti : highlightItems)
         {
-            if (sti) highlightSet[sti->itemType()].insert(sti->id());
+            if (sti) highlightSet[(int)sti->getType()].insert(sti->id());
         }
 
         for (GraphicsModule* gm :  mModuleItems)
-            gm->setHightlight(highlightSet[SelectionTreeItem::ModuleItem].contains(gm->id()));
+            gm->setHightlight(highlightSet[(int)ModuleItem::TreeItemType::Module].contains(gm->id()));
         for (GraphicsGate* gg :  mGateItems)
-            gg->setHightlight(highlightSet[SelectionTreeItem::GateItem].contains(gg->id()));
+            gg->setHightlight(highlightSet[(int)ModuleItem::TreeItemType::Gate].contains(gg->id()));
         for (GraphicsNet* gn :  mNetItems)
-            gn->setHightlight(highlightSet[SelectionTreeItem::NetItem].contains(gn->id()));
+            gn->setHightlight(highlightSet[(int)ModuleItem::TreeItemType::Net].contains(gn->id()));
     }
 
     void GraphicsScene::handleExternSelectionChanged(void* sender)

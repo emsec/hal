@@ -34,9 +34,9 @@ namespace hal
 
     void SelectionTreeView::setDefaultColumnWidth()
     {
-        setColumnWidth(SelectionTreeModel::sNameColumn, 160);
-        setColumnWidth(SelectionTreeModel::sIdColumn, 40);
-        setColumnWidth(SelectionTreeModel::sTypeColumn, 80);
+        setColumnWidth(0, 160);
+        setColumnWidth(1, 40);
+        setColumnWidth(2, 80);
         header()->setStretchLastSection(true);
     }
 
@@ -44,7 +44,7 @@ namespace hal
     {
         Q_UNUSED(previous);
 
-        const SelectionTreeItem* sti = current.isValid() ? itemFromIndex(current) : nullptr;
+        const ModuleItem* sti = current.isValid() ? itemFromIndex(current) : nullptr;
 
         Q_EMIT triggerSelection(sti);
     }
@@ -58,12 +58,12 @@ namespace hal
 
         if (index.isValid())
         {
-            SelectionTreeItem* item = itemFromIndex(index);
+            ModuleItem* item = itemFromIndex(index);
             Q_EMIT itemDoubleClicked(item);
         }
     }
 
-    SelectionTreeItem* SelectionTreeView::itemFromIndex(const QModelIndex& index) const
+    ModuleItem* SelectionTreeView::itemFromIndex(const QModelIndex& index) const
     {
         SelectionTreeProxyModel* treeProxy = dynamic_cast<SelectionTreeProxyModel*>(model());
         if (!treeProxy) return nullptr;
@@ -75,7 +75,7 @@ namespace hal
             return nullptr;
 
         QModelIndex modelIndex = treeProxy->mapToSource(proxyIndex);
-        return static_cast<SelectionTreeItem*>(modelIndex.internalPointer());
+        return static_cast<ModuleItem*>(modelIndex.internalPointer());
     }
 
     void SelectionTreeView::handleModuleColorChanged(u32 id)
@@ -92,13 +92,13 @@ namespace hal
         {
             QMenu menu;
 
-            SelectionTreeItem* item = itemFromIndex(index);
+            ModuleItem* item = itemFromIndex(index);
 
             if (item)
             {
-                switch (item->itemType())
+                switch (item->getType())
                 {
-                    case SelectionTreeItem::TreeItemType::ModuleItem:
+                    case ModuleItem::TreeItemType::Module:
 
                         menu.addAction(QIcon(":/icons/python"), "Extract Module as python code (copy to clipboard)", [item]() {
                             QApplication::clipboard()->setText("netlist.get_module_by_id(" + QString::number(item->id()) + ")");
@@ -109,7 +109,7 @@ namespace hal
                             menu.addAction("Add to Selection", [this, item]() { Q_EMIT handleAddToSelection(item); });
 
                         break;
-                    case SelectionTreeItem::TreeItemType::GateItem:
+                    case ModuleItem::TreeItemType::Gate:
 
                         menu.addAction(QIcon(":/icons/python"), "Extract Gate as python code (copy to clipboard)", [item]() {
                             QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(item->id()) + ")");
@@ -120,7 +120,7 @@ namespace hal
                             menu.addAction("Add to Selection", [this, item]() { Q_EMIT handleAddToSelection(item); });
 
                         break;
-                    case SelectionTreeItem::TreeItemType::NetItem:
+                    case ModuleItem::TreeItemType::Net:
 
                         menu.addAction(QIcon(":/icons/python"), "Extract Net as python code (copy to clipboard)", [item]() {
                             QApplication::clipboard()->setText("netlist.get_net_by_id(" + QString::number(item->id()) + ")");
@@ -129,7 +129,7 @@ namespace hal
                             menu.addAction("Add to Selection", [this, item]() { Q_EMIT handleAddToSelection(item); });
 
                         break;
-                    default:    // make compiler happy and handle irrelevant MaxItem, NullItem
+                    default:    // make compiler happy
                         break;
                 }
             }
@@ -140,14 +140,14 @@ namespace hal
         }
     }
 
-    void SelectionTreeView::handleIsolationViewAction(const SelectionTreeItem* sti)
+    void SelectionTreeView::handleIsolationViewAction(const ModuleItem* sti)
     {
         Node nd;
-        if (sti->itemType() == SelectionTreeItem::TreeItemType::GateItem)
+        if (sti->getType() == ModuleItem::TreeItemType::Gate)
         {
             nd = Node(sti->id(),Node::Gate);
         }
-        else if (sti->itemType() == SelectionTreeItem::TreeItemType::ModuleItem)
+        else if (sti->getType() == ModuleItem::TreeItemType::Module)
         {
             nd = Node(sti->id(),Node::Module);
         }
@@ -158,37 +158,30 @@ namespace hal
         isolateInNewViewAction(nd);
     }
 
-    void SelectionTreeView::handleAddToSelection(const SelectionTreeItem* sti)
+    void SelectionTreeView::handleAddToSelection(const ModuleItem* sti)
     {
-        // Abhängig vom Typ des TreeItems fügen wir unterschiedliche Elemente zur Auswahl hinzu.
-        switch (sti->itemType())
+        switch (sti->getType())
         {
-            case SelectionTreeItem::ModuleItem:
+            case ModuleItem::TreeItemType::Module:
             {
-                // Downcast auf Modul und hinzufügen zur Auswahl.
-                const SelectionTreeItemModule* moduleItem = static_cast<const SelectionTreeItemModule*>(sti);
-                gSelectionRelay->addModule(moduleItem->id());
+                gSelectionRelay->addModule(sti->id());
                 break;
             }
 
-            case SelectionTreeItem::GateItem:
+            case ModuleItem::TreeItemType::Gate:
             {
-                // Downcast auf Tor und hinzufügen zur Auswahl.
-                const SelectionTreeItemGate* gateItem = static_cast<const SelectionTreeItemGate*>(sti);
-                gSelectionRelay->addGate(gateItem->id());
+                gSelectionRelay->addGate(sti->id());
                 break;
             }
 
-            case SelectionTreeItem::NetItem:
+            case ModuleItem::TreeItemType::Net:
             {
-                // Downcast auf Netz und hinzufügen zur Auswahl.
-                const SelectionTreeItemNet* netItem = static_cast<const SelectionTreeItemNet*>(sti);
-                gSelectionRelay->addNet(netItem->id());
+                gSelectionRelay->addNet(sti->id());
                 break;
             }
 
             default:
-                // Ungültiger oder unbekannter Auswahltyp.
+                // Unknown or invalid type
                 return;
         }
         gSelectionRelay->relaySelectionChanged(this);
@@ -279,20 +272,20 @@ namespace hal
         return dynamic_cast<SelectionTreeProxyModel*>(model());
     }
 
-    void SelectionTreeView::handleTreeViewItemFocusClicked(const SelectionTreeItem* sti)
+    void SelectionTreeView::handleTreeViewItemFocusClicked(const ModuleItem* sti)
     {
         u32 itemId = sti->id();
 
-        switch (sti->itemType())
+        switch (sti->getType())
         {
-            case SelectionTreeItem::TreeItemType::GateItem:
+            case ModuleItem::TreeItemType::Module:
+                gContentManager->getGraphTabWidget()->handleModuleFocus(itemId);
+                break;
+            case ModuleItem::TreeItemType::Gate:
                 gContentManager->getGraphTabWidget()->handleGateFocus(itemId);
                 break;
-            case SelectionTreeItem::TreeItemType::NetItem:
+            case ModuleItem::TreeItemType::Net:
                 gContentManager->getGraphTabWidget()->handleNetFocus(itemId);
-                break;
-            case SelectionTreeItem::TreeItemType::ModuleItem:
-                gContentManager->getGraphTabWidget()->handleModuleFocus(itemId);
                 break;
             default: break;
         }

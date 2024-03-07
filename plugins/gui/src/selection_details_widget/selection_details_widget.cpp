@@ -301,19 +301,18 @@ namespace hal
         for(int i = 0; i < mSelectionTreeProxyModel->rowCount(); i++){
 
                 QModelIndex sourceModelIndex = mSelectionTreeProxyModel->mapToSource(mSelectionTreeProxyModel->index(i,0));
-                SelectionTreeItem* item              = sourceModel->itemFromIndex(sourceModelIndex);
-                SelectionTreeItem::TreeItemType type = item->itemType();
-                switch (type)
+                ModuleItem* item = dynamic_cast<ModuleItem*>(sourceModel->getItemFromIndex(sourceModelIndex));
+                switch (item->getType())
                 {
-                    case SelectionTreeItem::TreeItemType::ModuleItem:
+                    case ModuleItem::TreeItemType::Module:
                         mods.insert(item->id());
                         break;
 
-                    case SelectionTreeItem::TreeItemType::GateItem:
+                    case ModuleItem::TreeItemType::Gate:
                         gates.insert(item->id());
                         break;
 
-                    case SelectionTreeItem::TreeItemType::NetItem:
+                    case ModuleItem::TreeItemType::Net:
                         nets.insert(item->id());
                         break;
                     default:
@@ -372,7 +371,7 @@ namespace hal
         }
 
         mNumberSelectedItems = gSelectionRelay->numberSelectedItems();
-        QVector<const SelectionTreeItem*> defaultHighlight;
+        QVector<const ModuleItem*> defaultHighlight;
 
         if (mNumberSelectedItems)
         {
@@ -411,27 +410,27 @@ namespace hal
 
         if (gSelectionRelay->numberSelectedModules())
         {
-            SelectionTreeItemModule sti(gSelectionRelay->selectedModulesList().at(0));
+            ModuleItem sti(gSelectionRelay->selectedModulesList().at(0), ModuleItem::TreeItemType::Module);
             singleSelectionInternal(&sti);
         }
         else if (gSelectionRelay->numberSelectedGates())
         {
-            SelectionTreeItemGate sti(gSelectionRelay->selectedGatesList().at(0));
+            ModuleItem sti(gSelectionRelay->selectedGatesList().at(0), ModuleItem::TreeItemType::Gate);
             singleSelectionInternal(&sti);
         }
         else if (gSelectionRelay->numberSelectedNets())
         {
-            SelectionTreeItemNet sti(gSelectionRelay->selectedNetsList().at(0));
+            ModuleItem sti(gSelectionRelay->selectedNetsList().at(0), ModuleItem::TreeItemType::Net);
             singleSelectionInternal(&sti);
         }
 
         Q_EMIT triggerHighlight(defaultHighlight);
     }
 
-    void SelectionDetailsWidget::handleTreeSelection(const SelectionTreeItem *sti)
+    void SelectionDetailsWidget::handleTreeSelection(const ModuleItem *sti)
     {
         singleSelectionInternal(sti);
-        QVector<const SelectionTreeItem*> highlight;
+        QVector<const ModuleItem*> highlight;
         if (sti) highlight.append(sti);
         Q_EMIT triggerHighlight(highlight);
     }
@@ -443,15 +442,15 @@ namespace hal
         mStackedWidget->setCurrentWidget(mNoSelectionLabel);
     }
 
-    void SelectionDetailsWidget::singleSelectionInternal(const SelectionTreeItem *sti)
+    void SelectionDetailsWidget::singleSelectionInternal(const ModuleItem *sti)
     {
         if(!sti){
             showNoSelection();
             return;
         }
 
-        switch (sti->itemType()) {
-        case SelectionTreeItem::ModuleItem:
+        switch (sti->getType()) {
+        case ModuleItem::TreeItemType::Module:
             if (Module* m = gNetlist->get_module_by_id(sti->id()); m)
             {
                 mModuleDetailsTabs->setModule(m);
@@ -463,7 +462,7 @@ namespace hal
 
             break;
 
-        case SelectionTreeItem::GateItem:
+        case ModuleItem::TreeItemType::Gate:
             showNoSelection();
             if (Gate* g = gNetlist->get_gate_by_id(sti->id()); g)
             {
@@ -472,7 +471,7 @@ namespace hal
                 //            if (mNumberSelectedItems==1) set_name("Gate Details");
             }
             break;
-        case SelectionTreeItem::NetItem:
+        case ModuleItem::TreeItemType::Net:
             showNoSelection();
             if (Net* n = gNetlist->get_net_by_id(sti->id()); n)
             {
@@ -522,15 +521,15 @@ namespace hal
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
     }
 
-    void SelectionDetailsWidget::handleTreeViewItemFocusClicked(const SelectionTreeItem* sti)
+    void SelectionDetailsWidget::handleTreeViewItemFocusClicked(const ModuleItem* sti)
     {
         u32 itemId = sti->id();
 
-        switch (sti->itemType())
+        switch (sti->getType())
         {
-            case SelectionTreeItem::TreeItemType::GateItem:     Q_EMIT focusGateClicked(itemId);     break;
-            case SelectionTreeItem::TreeItemType::NetItem:      Q_EMIT focusNetClicked(itemId);      break;
-            case SelectionTreeItem::TreeItemType::ModuleItem:   Q_EMIT focusModuleClicked(itemId);   break;
+            case ModuleItem::TreeItemType::Module:   Q_EMIT focusModuleClicked(itemId);   break;
+            case ModuleItem::TreeItemType::Gate:     Q_EMIT focusGateClicked(itemId);     break;
+            case ModuleItem::TreeItemType::Net:      Q_EMIT focusNetClicked(itemId);      break;
             default: break;
         }
     }

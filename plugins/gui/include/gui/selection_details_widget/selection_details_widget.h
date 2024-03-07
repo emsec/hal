@@ -26,7 +26,7 @@
 #pragma once
 
 #include "gui/content_widget/content_widget.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
+#include "gui/module_model/module_item.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_proxy.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
 #include "hal_core/defines.h"
@@ -238,7 +238,7 @@ namespace hal
          *
          * @param highlight - The items to highlight (that were selected in the view).
          */
-        void triggerHighlight(QVector<const SelectionTreeItem*> highlight);
+        void triggerHighlight(QVector<const ModuleItem*> highlight);
 
         /**
          * Q_SIGNAL that is emitted when a gate-type item in the treeview is double clicked
@@ -280,7 +280,7 @@ namespace hal
          *
          * @param sti - The selected item.
          */
-        void handleTreeSelection(const SelectionTreeItem* sti);
+        void handleTreeSelection(const ModuleItem* sti);
 
         /**
          * Overriden function of the ContentWidget. Sets up all shortcuts and returns them.
@@ -320,7 +320,7 @@ namespace hal
          *
          * @param sti - The clicked item in the selection-treeview.
          */
-        void handleTreeViewItemFocusClicked(const SelectionTreeItem* sti);
+        void handleTreeViewItemFocusClicked(const ModuleItem* sti);
 
     private:
 
@@ -330,7 +330,7 @@ namespace hal
          *
          * @param sti - The item that is to be displayed.
          */
-        void singleSelectionInternal(const SelectionTreeItem* sti);
+        void singleSelectionInternal(const ModuleItem* sti);
 
         /**
          * Adds the current selection to a module selected by id (=actionCode if positive).

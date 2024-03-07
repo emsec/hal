@@ -28,6 +28,7 @@
 #include "hal_core/defines.h"
 #include "hal_core/netlist/event_system/event_handler.h"
 #include "gui/gui_utils/sort.h"
+#include "gui/module_model/module_model.h"
 
 #include <QAbstractItemModel>
 #include <QModelIndex>
@@ -37,10 +38,6 @@
 
 namespace hal
 {
-    class SelectionTreeItem;
-    class SelectionTreeItemModule;
-    class SelectionTreeItemRoot;
-
     /**
      * @ingroup utility_widgets-selection_details
      * @brief A model that contains the current selection.
@@ -49,7 +46,7 @@ namespace hal
      * Its most important function is fetchSelection that automatically updates
      * the model's internal data.
      */
-    class SelectionTreeModel : public QAbstractItemModel
+    class SelectionTreeModel : public ModuleModel
     {
         Q_OBJECT
 
@@ -63,159 +60,13 @@ namespace hal
         SelectionTreeModel(QObject* parent = nullptr);
 
         /**
-          * The destructor.
-          */
-        ~SelectionTreeModel();
-
-        /** @name Overwritten model functions.
-          */
-        ///@{
-
-        //information access
-        /**
-          * Overwritten Qt function that is necessary for the model. For further information pleaser
-          * refer to the Qt documentation.
-          */
-        QVariant data(const QModelIndex& index, int role) const override;
-
-        /**
-          * Overwritten Qt function that is necessary for the model. For further information pleaser
-          * refer to the Qt documentation.
-          */
-        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-
-        /**
-          * Overwritten Qt function that is necessary for the model. For further information pleaser
-          * refer to the Qt documentation.
-          */
-        QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
-
-        /**
-          * Overwritten Qt function that is necessary for the model. For further information pleaser
-          * refer to the Qt documentation.
-          */
-        QModelIndex parent(const QModelIndex& index) const override;
-
-        /**
-          * Overwritten Qt function that is necessary for the model. For further information pleaser
-          * refer to the Qt documentation.
-          */
-        Qt::ItemFlags flags(const QModelIndex& index) const override;
-
-        /**
-          * Overwritten Qt function that is necessary for the model. For further information pleaser
-          * refer to the Qt documentation.
-          */
-        int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-
-        /**
-          * Overwritten Qt function that is necessary for the model. For further information pleaser
-          * refer to the Qt documentation.
-          */
-        int columnCount(const QModelIndex& parent = QModelIndex()) const override;
-        ///@}
-
-        /**
-         * Updates its internal data. If hasEntries is set to True, the current selection is fetched
-         * from the selectionRelay. Otherwise the model is simply cleared.
+         * Updates its internal data. If a groupingId is given, then the items of this grouping are fetched. 
+         * Otherwise, if hasEntries is set to True, the current selection is fetched from the selectionRelay. 
+         * Elsewise the model is simply cleared.
          *
-         * @param hasEntries - Decides wether the current selection is fetched.
+         * @param hasEntries - Decides whether the current selection is fetched.
+         * @param groupingId - if not 0, the id of the grouping to fetch. Otherwise ignored.
          */
         void fetchSelection(bool hasEntries, u32 groupingId);
-
-        /**
-         * Helper functions to convert between an item and its corresponding index.
-         *
-         * @param item - The item from which to get the index.
-         * @return The index that holds the item.
-         */
-        QModelIndex indexFromItem(SelectionTreeItem* item) const;
-
-        /**
-         * A recursive function to get the suppressed items that are not matched by the given regular
-         * expression (and therefore should not be displayed). The ids of theese items are then stored
-         * in the appropriate lists.
-         *
-         * @param modIds - The list that holds the ids of the suppressed modules.
-         * @param gatIds - The list that holds the ids of the suppressed gates.
-         * @param netIds - The list that holds the ids of the suppressed nets.
-         * @param regex - The regex to match the items against.
-         */
-        //void suppressedByFilter(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
-        //                        const QRegularExpression& regex) const;
-
-
-        static const int sNameColumn = 0;
-        static const int sIdColumn   = 1;
-        static const int sTypeColumn = 2;
-        static const int sMaxColumn  = 3;
-
-    public Q_SLOTS:
-        /**
-         * Q_SLOT to handle the change of a gate and emits the dataChanged signal. This
-         * function is connected to the gateNameChanged signal.
-         *
-         * @param gate - The gate whose information changed.
-         */
-        void handleGateItemChanged(Gate* gate);
-
-        /**
-         * Q_SLOT to handle the change of a module and emits the dataChanged signal. This
-         * function is connected to the moduleNameChanged and moduleTypeChanged signal.
-         *
-         * @param module - The module whose information changed.
-         */
-        void handleModuleItemChanged(Module* module);
-
-        /**
-         * Retrieves the SelectionTreeItem associated with a given QModelIndex which holds information about the type, id and name of the given Item.
-         * @param index The QModelIndex for which to retrieve the associated SelectionTreeItem.
-         * @return A pointer to the associated SelectionTreeItem if the index is valid; otherwise, nullptr.
-         */
-        SelectionTreeItem* itemFromIndex(const QModelIndex& index) const;
-    private:
-
-        void moduleRecursion(SelectionTreeItemModule* modItem);
-        bool doNotDisturb(const QModelIndex& inx = QModelIndex()) const;
-        SelectionTreeItem* getItem(SelectionTreeItem *parentItem,
-                                   const SelectionTreeItem& needle) const;
-
-        SelectionTreeItemRoot* mRootItem;
-
-        /// avoid calls while model is under reconstruction
-        int mDoNotDisturb;
     };
-
-    /**
-     * @ingroup utility_widgets-selection_details
-     * @brief Deletes the current SelectionTreeModel.
-     *
-     * A utility class to delete the current model. The current root item of the
-     * model is given to the disposer and deleted when dispose is called.
-     */
-    class SelectionTreeModelDisposer : public QObject
-    {
-        Q_OBJECT
-    public:
-
-        /**
-         * The constructor.
-         *
-         * @param stim - The root item to "wrap".
-         * @param parent - The disposer's parent.
-         */
-        SelectionTreeModelDisposer(SelectionTreeItemRoot* stim, QObject* parent=nullptr);
-
-    public Q_SLOTS:
-
-        /**
-         * Deletes its root item.
-         */
-        void dispose();
-
-    private:
-        SelectionTreeItemRoot* mRootItem;
-    };
-
-
 }

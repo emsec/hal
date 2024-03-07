@@ -71,6 +71,10 @@ namespace hal
                 else
                     return QColor(QColor(255, 255, 255));    // USE STYLESHEETS
             }
+            case Qt::TextAlignmentRole:
+                return index.column() == 1
+                        ? Qt::AlignRight
+                        : Qt::AlignLeft;
             default:
                 return QVariant();
         }
@@ -708,6 +712,11 @@ namespace hal
         return mModuleItemMaps[(int)type]->value(id);
     }
 
+    QList<ModuleItem*> ModuleModel::getItems(u32 id, ModuleItem::TreeItemType type) const
+    {
+        return mModuleItemMaps[(int)type]->values(id);
+    }
+
     ModuleItem* ModuleModel::createChildItem(u32 id, ModuleItem::TreeItemType itemType, BaseTreeItem *parentItem)
     {
         ModuleItem* retval = new ModuleItem(id, itemType);
@@ -725,10 +734,13 @@ namespace hal
         return retval;
     }
 
-
     bool ModuleModel::isModifying()
     {
         return mIsModifying;
     }
-    
+
+    void ModuleModel::setIsModifying(bool pIsModifying)
+    {
+        mIsModifying = pIsModifying;
+    }
 }
