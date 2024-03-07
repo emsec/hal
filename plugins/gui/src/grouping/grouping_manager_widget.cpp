@@ -522,6 +522,14 @@ namespace hal
         layout->addWidget(closeButton);
 
         dialog.exec();
+
+        delete colorRectangle;
+        delete closeButton;
+        delete selectionTreeView;
+        delete selectionTreeProxyModel;
+        delete selectionTreeModel;
+        delete hlay;
+        delete layout;
     }
 
     void GroupingManagerWidget::handleDeleteGroupingClicked()
