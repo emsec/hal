@@ -18,14 +18,14 @@ namespace hal
         mInternalStateOnReset         = new GateLibraryLabel(true, " - ", this);
         mNegatedInternalStateOnReset  = new GateLibraryLabel(true, " - ", this);
 
-        mLayout->addRow(new GateLibraryLabel(false, "Clock:",                   parent), mClockProperty);
-        mLayout->addRow(new GateLibraryLabel(false, "Next state:",              parent), mNextStateProperty);
-        mLayout->addRow(new GateLibraryLabel(false, "Asynchronous reset:",      parent), mAsynchronousResetProperty);
-        mLayout->addRow(new GateLibraryLabel(false, "Asynchronous set:",        parent), mAsynchronousSetProperty);
-        mLayout->addRow(new GateLibraryLabel(false, "Internal state:",          parent), mInternalStateProperty);
-        mLayout->addRow(new GateLibraryLabel(false, "Negated internal state:",  parent), mNegatedInternalStateProperty);
-        mLayout->addRow(new GateLibraryLabel(false, "Internal state on reset:", parent), mInternalStateOnReset);
-        mLayout->addRow(new GateLibraryLabel(false, "Neg.int. state on reset:", parent), mNegatedInternalStateOnReset);
+        mLayout->addRow(new GateLibraryLabel(false, "Clock:",                        parent), mClockProperty);
+        mLayout->addRow(new GateLibraryLabel(false, "Next state:",                   parent), mNextStateProperty);
+        mLayout->addRow(new GateLibraryLabel(false, "Asynchronous reset:",           parent), mAsynchronousResetProperty);
+        mLayout->addRow(new GateLibraryLabel(false, "Asynchronous set:",             parent), mAsynchronousSetProperty);
+        mLayout->addRow(new GateLibraryLabel(false, "Internal state:",               parent), mInternalStateProperty);
+        mLayout->addRow(new GateLibraryLabel(false, "Negated internal state:",       parent), mNegatedInternalStateProperty);
+        mLayout->addRow(new GateLibraryLabel(false, "Set+Reset -> internal state:",  parent), mInternalStateOnReset);
+        mLayout->addRow(new GateLibraryLabel(false, "Set+Reset -> neg. int. state:", parent), mNegatedInternalStateOnReset);
      }
 
     void GatelibraryFrameFF::update(GateType* gt)
@@ -52,13 +52,13 @@ namespace hal
 
                 if (ff->get_async_set_function().is_empty())
                 {
-                    mAsynchronousResetProperty->setText("N/A");
-                    mAsynchronousResetProperty->setValue(false);
+                    mAsynchronousSetProperty->setText("N/A");
+                    mAsynchronousSetProperty->setValue(false);
                 }
                 else
                 {
-                    mAsynchronousResetProperty->setText(QString::fromStdString(ff->get_async_set_function().to_string()));
-                    mAsynchronousResetProperty->setValue(true);
+                    mAsynchronousSetProperty->setText(QString::fromStdString(ff->get_async_set_function().to_string()));
+                    mAsynchronousSetProperty->setValue(true);
                 }
 
                 mInternalStateProperty->setText(QString::fromStdString(gt->get_boolean_function().to_string()));
@@ -76,8 +76,27 @@ namespace hal
                 }
 
                 auto [stateBeh,negStateBeh] = ff->get_async_set_reset_behavior();
-                        mInternalStateOnReset->setText(QString::fromStdString(enum_to_string<AsyncSetResetBehavior>(stateBeh)));
-                        mInternalStateOnReset->setText(QString::fromStdString(enum_to_string<AsyncSetResetBehavior>(negStateBeh)));
+                if (stateBeh == AsyncSetResetBehavior::undef)
+                {
+                    mInternalStateOnReset->setText("undefined");
+                    mInternalStateOnReset->setValue(false);
+                }
+                else
+                {
+                    mInternalStateOnReset->setText(QString::fromStdString(enum_to_string<AsyncSetResetBehavior>(stateBeh)));
+                    mInternalStateOnReset->setValue(true);
+                }
+
+                if (negStateBeh == AsyncSetResetBehavior::undef)
+                {
+                    mNegatedInternalStateOnReset->setText("undefined");
+                    mNegatedInternalStateOnReset->setValue(false);
+                }
+                else
+                {
+                    mNegatedInternalStateOnReset->setText(QString::fromStdString(enum_to_string<AsyncSetResetBehavior>(negStateBeh)));
+                    mNegatedInternalStateOnReset->setValue(true);
+                }
 
                 show();
             }

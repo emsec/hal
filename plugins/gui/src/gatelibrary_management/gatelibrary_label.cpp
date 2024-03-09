@@ -1,4 +1,5 @@
 #include "gui/gatelibrary_management/gatelibrary_label.h"
+#include <QStyle>
 
 namespace hal {
     GateLibraryLabel::GateLibraryLabel(bool isVal, const QString& txt, QWidget *parent)
@@ -6,4 +7,15 @@ namespace hal {
     {
         mValue = isVal;
     }
+
+    void GateLibraryLabel::setValue(bool isVal)
+    {
+        if (isVal == mValue) return;
+        mValue = isVal;
+
+        QStyle* s = style();
+        s->unpolish(this);
+        s->polish(this);
+    }
+
 }

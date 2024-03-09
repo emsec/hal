@@ -39,6 +39,6 @@ namespace hal
     public:
         GateLibraryLabel(bool isVal, const QString& txt= QString(), QWidget* parent = nullptr);
         bool isValue() const { return mValue; }
-        void setValue(bool isVal) { mValue = isVal; }
+        void setValue(bool isVal);
     };
 }

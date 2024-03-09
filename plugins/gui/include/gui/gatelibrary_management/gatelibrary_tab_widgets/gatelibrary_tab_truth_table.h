@@ -34,9 +34,27 @@
 #include <QLabel>
 #include <QTableWidget>
 #include <QHeaderView>
+#include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_component_frame.h"
 
 namespace hal
 {
+    class GatelibraryLutInit : public GatelibraryComponentFrame
+    {
+        Q_OBJECT
+
+        QLineEdit* mEdit;
+
+    Q_SIGNALS:
+        void initValueChanged(u64 initValue);
+
+    private Q_SLOTS:
+        void handleTextChanged(const QString& txt);
+
+    public:
+        GatelibraryLutInit(QWidget* parent = nullptr);
+        void update(GateType *gt) override;
+    };
+
     /**
      * Widget which shows information of the boolean functions of a gate
      */
@@ -47,32 +65,26 @@ namespace hal
     public:
         GateLibraryTabTruthTable(QWidget* parent = nullptr);
 
+        void update(GateType* gt) override;
 
-        void update(GateType* gate) override;
-        int getRowNumber(GateType* gate);
-        int getColumnNumber(GateType* gate);
-
+    private Q_SLOTS:
+        void handleLutInitValueChanged(u64 initValue);
 
     private:
 
-        /*QFormLayout* mFormLayout;
-
-        QLabel* mPlaceholderLabel1;
-        QLabel* mPlaceholderLabel2;
-        QLabel* mPlaceholderLabel3;
-        QLabel* mPlaceholderLabel4;
-        QLabel* mPlaceholderLabel5;
-
-        QLabel* mPlaceholderPropertyLabel1;
-        QLabel* mPlaceholderPropertyLabel2;
-        QLabel* mPlaceholderPropertyLabel3;
-        QLabel* mPlaceholderPropertyLabel4;
-        QLabel* mPlaceholderPropertyLabel5;*/
-
         QGridLayout* mLayout;
+        GatelibraryLutInit* mLutInit;
         QTableWidget* mTableWidget;
         QHeaderView* mHeaderView;
         QLabel* mDisclaimer;
+        GateType* mGateType;
+
+        void setTableSize();
+        int getRowNumber() const;
+        int getColumnNumber() const;
+        bool updateFlipFlop();
+        void updateLookupTable();
+        bool setCellValue(int irow, int icol, BooleanFunction::Value bfval);
     };
 
 }

@@ -5,7 +5,7 @@
 namespace hal
 {
     GatelibraryFrameInit::GatelibraryFrameInit(QWidget* parent)
-        : GatelibraryComponentFrame("Init", parent)
+        : GatelibraryComponentFrame("Init from Data Field", parent)
     {
         mCategoryLabel                = new GateLibraryLabel(true, " - ", this);
         mIdentifiersLabel                = new GateLibraryLabel(true, " - ", this);

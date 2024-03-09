@@ -62,9 +62,12 @@ namespace hal
     {
         // Clear existing labels
         QLayoutItem* item;
-        while ((item = mLayout->takeAt(0)) != nullptr)  {
-            delete item->widget();
-            delete item;
+        if (!mLayout->isEmpty())
+        {
+            while ((item = mLayout->takeAt(0)) != nullptr)  {
+                delete item->widget();
+                delete item;
+            }
         }
         mLayout->insertRow(0, new GateLibraryLabel(false, "Boolean Functions", this));
 
@@ -98,13 +101,13 @@ namespace hal
         layout->addWidget(mFlipflopFrame);
         mFlipflopFrame->hide();
 
-        mBooleanFrame = new GatelibraryFrameBoolean(this);
-        layout->addWidget(mBooleanFrame);
-        mBooleanFrame->hide();
-
         mInitFrame = new GatelibraryFrameInit(this);
         layout->addWidget(mInitFrame);
         mInitFrame->hide();
+
+        mBooleanFrame = new GatelibraryFrameBoolean(this);
+        layout->addWidget(mBooleanFrame);
+        mBooleanFrame->hide();
 
         topLayout->addWidget(scroll);
     }
