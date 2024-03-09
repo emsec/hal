@@ -38,6 +38,8 @@ namespace hal
     class GateLibraryLabel;
     class GatelibraryFrameFF;
     class GatelibraryFrameInit;
+    class GatelibraryFrameState;
+    class GatelibraryFrameLut;
 
     class GatelibraryFrameGeneral : public GatelibraryComponentFrame
     {
@@ -76,9 +78,11 @@ namespace hal
 
     private:
         GatelibraryFrameGeneral* mGeneralFrame;
+        GatelibraryFrameFF*      mFlipflopFrame;
+        GatelibraryFrameState*   mStateFrame;
+        GatelibraryFrameLut*     mLutFrame;
+        GatelibraryFrameInit*    mInitFrame;
         GatelibraryFrameBoolean* mBooleanFrame;
-        GatelibraryFrameFF* mFlipflopFrame;
-        GatelibraryFrameInit* mInitFrame;
     };
 
 }

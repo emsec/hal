@@ -42,10 +42,6 @@ namespace hal
         void update(GateType* gt) override;
 
     private:
-        QFormLayout* mFormLayout;
-        QString mCategory;
-        QStringList mIdentifiers;
-
         QLabel* mCategoryLabel;
         QLabel* mIdentifiersLabel;
     };

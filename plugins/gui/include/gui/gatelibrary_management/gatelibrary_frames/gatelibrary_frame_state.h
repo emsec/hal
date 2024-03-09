@@ -26,36 +26,26 @@
 #pragma once
 
 #include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_component_frame.h"
-#include "hal_core/defines.h"
-#include "hal_core/netlist/gate_library/gate_type.h"
 
 #include <QFormLayout>
 #include <QLabel>
 
 namespace hal
 {
-    class GateLibraryLabel;
-
-    /**
-     * Widget which shows information about the flip flop properties of a given gate
-     */
-    class GatelibraryFrameFF : public GatelibraryComponentFrame
+    class GatelibraryFrameState : public GatelibraryComponentFrame
     {
         Q_OBJECT
 
     public:
-        GatelibraryFrameFF(QWidget* parent = nullptr);
+        GatelibraryFrameState(QWidget* parent = nullptr);
 
         void update(GateType* gt) override;
 
     private:
-        GateLibraryLabel* mClockProperty;
-        GateLibraryLabel* mNextStateProperty;
-        GateLibraryLabel* mAsynchronousResetProperty;
-        GateLibraryLabel* mAsynchronousSetProperty;
-        GateLibraryLabel* mInternalStateOnReset;
-        GateLibraryLabel* mNegatedInternalStateOnReset;
-
+        QLabel* mStateIdentifier;
+        QLabel* mNegStateIdentifier;
     };
 
 }
+
+

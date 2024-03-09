@@ -1,7 +1,8 @@
 
 #include "gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_general.h"
 #include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_frame_ff.h"
-
+#include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_frame_state.h"
+#include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_frame_lut.h"
 #include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_frame_init.h"
 
 #include "gui/gatelibrary_management/gatelibrary_label.h"
@@ -101,6 +102,14 @@ namespace hal
         layout->addWidget(mFlipflopFrame);
         mFlipflopFrame->hide();
 
+        mStateFrame = new GatelibraryFrameState(this);
+        layout->addWidget(mStateFrame);
+        mStateFrame->hide();
+
+        mLutFrame = new GatelibraryFrameLut(this);
+        layout->addWidget(mLutFrame);
+        mLutFrame->hide();
+
         mInitFrame = new GatelibraryFrameInit(this);
         layout->addWidget(mInitFrame);
         mInitFrame->hide();
@@ -118,13 +127,17 @@ namespace hal
         if(!gt){
             //TODO make default look
             mFlipflopFrame->hide();
-            mBooleanFrame->hide();
+            mStateFrame->hide();
+            mLutFrame->hide();
             mInitFrame->hide();
+            mBooleanFrame->hide();
             return;
         }
 
         mFlipflopFrame->update(gt);
-        mBooleanFrame->update(gt);
+        mStateFrame->update(gt);
+        mLutFrame->update(gt);
         mInitFrame->update(gt);
+        mBooleanFrame->update(gt);
     }
 }
