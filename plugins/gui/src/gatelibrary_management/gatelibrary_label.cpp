@@ -6,6 +6,7 @@ namespace hal {
         : QLabel(txt,parent)
     {
         mValue = isVal;
+        setWordWrap(true);
     }
 
     void GateLibraryLabel::setValue(bool isVal)

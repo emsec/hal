@@ -22,6 +22,8 @@ namespace hal
         mLayout->addRow(new GateLibraryLabel(false, "Asynchronous set:",             parent), mAsynchronousSetProperty);
         mLayout->addRow(new GateLibraryLabel(false, "Set+Reset -> internal state:",  parent), mInternalStateOnReset);
         mLayout->addRow(new GateLibraryLabel(false, "Set+Reset -> neg. int. state:", parent), mNegatedInternalStateOnReset);
+
+        mLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
      }
 
     void GatelibraryFrameFF::update(GateType* gt)

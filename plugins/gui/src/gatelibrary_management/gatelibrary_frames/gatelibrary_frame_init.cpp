@@ -13,6 +13,8 @@ namespace hal
         mLayout->addRow(new GateLibraryLabel(false, "Category:",                  parent), mCategoryLabel);
         mLayout->addRow(new GateLibraryLabel(false, "Identifiers:",                  parent), mIdentifiersLabel);
 
+        mLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
+
     }
 
     void GatelibraryFrameInit::update(GateType* gt)

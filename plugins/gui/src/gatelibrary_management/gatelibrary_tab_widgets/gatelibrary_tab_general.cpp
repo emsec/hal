@@ -23,6 +23,8 @@ namespace hal
         mLayout->addRow(new GateLibraryLabel(false, "Name:",       this), mNameLabel);
         mLayout->addRow(new GateLibraryLabel(false, "ID:",         this), mIdLabel);
         mLayout->addRow(new GateLibraryLabel(false, "Properties:", this), mPropertiesLabel);
+
+        mLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
     }
 
     void GatelibraryFrameGeneral::update(GateType *gt)
@@ -57,7 +59,7 @@ namespace hal
     //--------------------- boolean function frame ------------------
     GatelibraryFrameBoolean::GatelibraryFrameBoolean(QWidget* parent)
         : GatelibraryComponentFrame("Boolean Functions", parent)
-    {;}
+    {mLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);}
 
     void GatelibraryFrameBoolean::update(GateType *gt)
     {

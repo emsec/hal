@@ -13,6 +13,8 @@ namespace hal
         mLayout->addRow(new GateLibraryLabel(false, "State identifier:",        parent), mStateIdentifier);
         mLayout->addRow(new GateLibraryLabel(false, "Neg. state identifier:",   parent), mNegStateIdentifier);
 
+        mLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
+
     }
 
     void GatelibraryFrameState::update(GateType* gt)

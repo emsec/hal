@@ -10,6 +10,8 @@ namespace hal
         mAscending                = new GateLibraryLabel(true, " - ", this);
 
         mLayout->addRow(new GateLibraryLabel(false, "Bit Order:", parent), mAscending);
+
+        mLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
     }
 
     void GatelibraryFrameLut::update(GateType* gt)
