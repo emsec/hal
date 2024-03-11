@@ -288,6 +288,7 @@ namespace hal
         }
 
         QList<BaseTreeItem *> childCopy = item->getChildren();
+
         for (int i = 0; i < childCopy.length(); i++) {
             ContextTreeItem* child = static_cast<ContextTreeItem*>(childCopy[i]);
 
@@ -304,7 +305,7 @@ namespace hal
 
         }
 
-        ContextTreeItem* parent = static_cast<ContextTreeItem*>(item->getParent());
+        BaseTreeItem* parent = item->getParent();
         assert(item);
         assert(parent);
 

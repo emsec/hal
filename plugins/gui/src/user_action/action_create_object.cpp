@@ -25,7 +25,7 @@ namespace hal
 
     ActionCreateObject::ActionCreateObject(UserActionObjectType::ObjectType type,
                                            const QString &objName)
-      : mObjectName(objName), mParentId(0)
+      : mObjectName(objName), mParentId(0), mLinkedObjectId(0)
     {
         setObject(UserActionObject(0,type));
     }
@@ -34,6 +34,7 @@ namespace hal
     {
         cryptoHash.addData(mObjectName.toUtf8());
         cryptoHash.addData((char*)(&mParentId),sizeof(mParentId));
+        cryptoHash.addData((char*)(&mLinkedObjectId),sizeof(mLinkedObjectId));
     }
 
     void ActionCreateObject::writeToXml(QXmlStreamWriter& xmlOut) const
@@ -42,6 +43,7 @@ namespace hal
         writeParentObjectToXml(xmlOut);
         xmlOut.writeTextElement("objectname", mObjectName);
         xmlOut.writeTextElement("parentid", QString::number(mParentId));
+        xmlOut.writeTextElement("linkedid", QString::number(mLinkedObjectId));
     }
 
     void ActionCreateObject::readFromXml(QXmlStreamReader& xmlIn)
@@ -54,6 +56,8 @@ namespace hal
                 mObjectName = xmlIn.readElementText();
             if (xmlIn.name() == "parentid")
                 mParentId = xmlIn.readElementText().toInt();
+            if (xmlIn.name() == "linkedid")
+                mLinkedObjectId = xmlIn.readElementText().toInt();
         }
     }
 
@@ -63,21 +67,6 @@ namespace hal
 
         switch (mObject.type())
         {
-
-        case UserActionObjectType::PinGroup:
-        {
-            Module* parentModule = gNetlist->get_module_by_id(mParentObject.id());
-            if(parentModule)
-            {
-                auto res = parentModule->create_pin_group(mObjectName.toStdString());
-                if(res.is_error())
-                    return false;
-                setObject(UserActionObject(res.get()->get_id(), UserActionObjectType::PinGroup));
-                standardUndo = true;
-            }
-            else
-                return false;
-        }
             break;
 
         case UserActionObjectType::Module:
@@ -85,8 +74,15 @@ namespace hal
             Module* parentModule = gNetlist->get_module_by_id(mParentId);
             if (parentModule)
             {
-                Module* m = gNetlist->create_module(gNetlist->get_unique_module_id(),
+                u32 modId = mObject.id() ? mObject.id() : gNetlist->get_unique_module_id();
+                Module* m = gNetlist->create_module(modId,
                                                 mObjectName.toStdString(), parentModule);
+                if (!m)
+                {
+                    log_warning("gui", "Failed to create module '{}' with ID={} under parent ID={}.",
+                                mObjectName.toStdString(), modId, mParentId);
+                    return false;
+                }
                 setObject(UserActionObject(m->get_id(),UserActionObjectType::Module));
                 standardUndo = true;
             }
@@ -124,6 +120,7 @@ namespace hal
                     ? gGraphContextManager->nextDefaultName()
                     : mObjectName;
             GraphContext* ctxView = gGraphContextManager->createNewContext(contextName, mParentId);
+            if (mLinkedObjectId > 0) ctxView->setExclusiveModuleId(mLinkedObjectId);
             if (mObject.id() > 0) gGraphContextManager->setContextId(ctxView,mObject.id());
             setObject(UserActionObject(ctxView->id(),UserActionObjectType::ContextView));
             standardUndo = true;
@@ -148,7 +145,6 @@ namespace hal
         {
             mUndoAction = new ActionDeleteObject;
             mUndoAction->setObject(mObject);
-            mUndoAction->setParentObject(mParentObject);
         }
         return UserAction::exec();
     }

@@ -249,8 +249,8 @@ namespace hal
 
     void ContextManagerWidget::handleDeleteClicked()
     {
-        QModelIndex current = mContextTreeView->currentIndex();
-        if (!current.isValid()) return;
+        QModelIndex currentIndex = mContextTreeView->currentIndex();
+        if (!currentIndex.isValid()) return;
 
         ContextTreeItem* currentItem = getCurrentItem();
 
@@ -264,6 +264,13 @@ namespace hal
             act->exec();
         }
         else if (currentItem->isDirectory()) {
+            if (currentItem->getChildCount())
+            {
+                if (QMessageBox::Ok !=
+                        QMessageBox::information(this, "Directory not empty", "You are about to delete a directory which is not empty.\nThis action cannot be undone",
+                                                 QMessageBox::Ok|QMessageBox::Cancel))
+                    return;
+            }
 
             ContextDirectory* clicked_directory = currentItem->directory();
 
@@ -291,9 +298,10 @@ namespace hal
     {
         const QModelIndex clicked_index = mContextTreeView->indexAt(point);
 
-        // TODO change current directory :
-        //   if clicked index is view : parent dir of view
-        //   if clicked index is dir  : this dir
+        QModelIndex sourceIndex = mContextTreeProxyModel->mapToSource(clicked_index);
+        ContextTreeItem* item = static_cast<ContextTreeItem*>(mContextTreeModel->getItemFromIndex(sourceIndex));
+        if (item)
+            mContextTreeModel->setCurrentDirectory(item);
 
         QMenu context_menu;
 

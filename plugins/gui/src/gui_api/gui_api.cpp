@@ -87,7 +87,7 @@ namespace hal
 
         gSelectionRelay->addGate(gate->get_id());
         gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,gate->get_id());
-        gSelectionRelay->selectionChanged(this);
+        gSelectionRelay->relaySelectionChanged(this);
 
         if(navigate_to_selection)
             Q_EMIT navigationRequested();
@@ -115,7 +115,7 @@ namespace hal
 
         gate_ids.unite(gSelectionRelay->selectedGates());
         gSelectionRelay->setSelectedGates(gate_ids);
-        gSelectionRelay->selectionChanged(this);
+        gSelectionRelay->relaySelectionChanged(this);
 
         if(navigate_to_selection)
             Q_EMIT navigationRequested();
@@ -138,7 +138,7 @@ namespace hal
 
         gSelectionRelay->addNet(net->get_id());
         gSelectionRelay->setFocus(SelectionRelay::ItemType::Net,net->get_id());
-        gSelectionRelay->selectionChanged(this);
+        gSelectionRelay->relaySelectionChanged(this);
 
         if(navigate_to_selection)
             Q_EMIT navigationRequested();
@@ -166,7 +166,7 @@ namespace hal
 
         net_ids.unite(gSelectionRelay->selectedNets());
         gSelectionRelay->setSelectedNets(net_ids);
-        gSelectionRelay->selectionChanged(this);
+        gSelectionRelay->relaySelectionChanged(this);
 
         if(navigate_to_selection)
             Q_EMIT navigationRequested();
@@ -189,7 +189,7 @@ namespace hal
 
         gSelectionRelay->addModule(module->get_id());
         gSelectionRelay->setFocus(SelectionRelay::ItemType::Module,module->get_id());
-        gSelectionRelay->selectionChanged(this);
+        gSelectionRelay->relaySelectionChanged(this);
 
         if(navigate_to_selection)
             Q_EMIT navigationRequested();
@@ -217,7 +217,7 @@ namespace hal
 
         module_ids.unite(gSelectionRelay->selectedModules());
         gSelectionRelay->setSelectedModules(module_ids);
-        gSelectionRelay->selectionChanged(this);
+        gSelectionRelay->relaySelectionChanged(this);
 
         if(navigate_to_selection)
             Q_EMIT navigationRequested();
@@ -290,7 +290,7 @@ namespace hal
             return;
 
         gSelectionRelay->removeGate(gate->get_id());
-        gSelectionRelay->selectionChanged(this);
+        gSelectionRelay->relaySelectionChanged(this);
     }
 
     void GuiApi::deselectGate(u32 gate_id)
@@ -312,7 +312,7 @@ namespace hal
         }
 
         gSelectionRelay->setSelectedGates(gate_ids);
-        gSelectionRelay->selectionChanged(this);
+        gSelectionRelay->relaySelectionChanged(this);
     }
 
     void GuiApi::deselectGate(const std::vector<u32>& gate_ids)
@@ -328,7 +328,7 @@ namespace hal
             return;
 
         gSelectionRelay->removeNet(net->get_id());
-        gSelectionRelay->selectionChanged(this);
+        gSelectionRelay->relaySelectionChanged(this);
     }
 
     void GuiApi::deselectNet(u32 netId)
@@ -350,7 +350,7 @@ namespace hal
         }
 
         gSelectionRelay->setSelectedNets(net_ids);
-        gSelectionRelay->selectionChanged(this);
+        gSelectionRelay->relaySelectionChanged(this);
     }
 
     void GuiApi::deselectNet(const std::vector<u32>& net_ids)
@@ -366,7 +366,7 @@ namespace hal
             return;
 
         gSelectionRelay->removeModule(module->get_id());
-        gSelectionRelay->selectionChanged(this);
+        gSelectionRelay->relaySelectionChanged(this);
     }
 
     void GuiApi::deselectModule(u32 module_id)
@@ -387,7 +387,7 @@ namespace hal
         }
 
         gSelectionRelay->setSelectedModules(module_ids);
-        gSelectionRelay->selectionChanged(this);
+        gSelectionRelay->relaySelectionChanged(this);
     }
 
     void GuiApi::deselectModule(const std::vector<u32>& module_ids)

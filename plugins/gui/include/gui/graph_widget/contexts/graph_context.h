@@ -225,6 +225,13 @@ namespace hal
         bool isShowingNetDestination(const u32 mNetId) const;
 
         /**
+         * Checks whether there is only the folded top_module in the context
+         * which makes other time consumptive tests unnecessary
+         * @return <b>true</b> If here is only the folded top_module in the context
+         */
+        bool isShowingFoldedTopModule() const;
+
+        /**
          * Given a net, this function returns the first visible source node.
          *
          * @param n - Pointer to net

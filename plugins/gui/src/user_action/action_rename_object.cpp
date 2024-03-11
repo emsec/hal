@@ -119,49 +119,13 @@ namespace hal
                     return false;
                 }
                 break;
-            case UserActionObjectType::Pin: {
-                mod = gNetlist->get_module_by_id(mParentObject.id());
-                if (!mod)
-                {
-                    return false;
-                }
 
-                auto pin = mod->get_pin_by_id(mObject.id());
-                if (pin == nullptr)
-                {
-                    return false;
-                }
-
-                oldName = QString::fromStdString(pin->get_name());
-                mod->set_pin_name(pin, mNewName.toStdString());
-            }
-            break;
-            case UserActionObjectType::PinGroup: {
-                mod = gNetlist->get_module_by_id(mParentObject.id());
-                if (!mod)
-                {
-                    return false;
-                }
-
-                auto pinGroup = mod->get_pin_group_by_id(mObject.id());
-                if (pinGroup == nullptr)
-                {
-                    return false;
-                }
-
-                oldName = QString::fromStdString(pinGroup->get_name());
-                mod->set_pin_group_name(pinGroup, mNewName.toStdString());
-            }
-            break;
             default:
                 return false;
         }
         ActionRenameObject* undo = new ActionRenameObject(oldName);
         undo->setObject(mObject);
-        if (mObject.type() == UserActionObjectType::Pin || mObject.type() == UserActionObjectType::PinGroup)
-        {
-            undo->setParentObject(mParentObject);
-        }
+
         mUndoAction = undo;
         return UserAction::exec();
     }

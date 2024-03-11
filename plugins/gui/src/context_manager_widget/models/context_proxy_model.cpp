@@ -13,7 +13,7 @@ namespace hal
 
     bool ContextProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
     {
-        return checkRow(source_row, source_parent, 0, 1);
+        return checkRowRecursion(source_row, source_parent, 0, 1);
     }
 
     bool ContextProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const

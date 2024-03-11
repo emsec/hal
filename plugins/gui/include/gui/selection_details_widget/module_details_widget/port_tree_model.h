@@ -27,6 +27,9 @@
 
 //#include "gui/new_selection_details_widget/models/base_tree_model.h"
 #include "gui/basic_tree_model/base_tree_model.h"
+#include "hal_core/netlist/gate_library/enums/pin_direction.h"
+#include "hal_core/netlist/gate_library/enums/pin_event.h"
+#include "hal_core/netlist/gate_library/enums/pin_type.h"
 #include <QMap>
 
 namespace hal
@@ -37,21 +40,41 @@ namespace hal
 
     class PortTreeItem : public BaseTreeItem
     {
+    public:
+        enum Type {None, Pin, Group};
 
         private:
+            Type mItemType;
+            u32 mId;
             QString mPinName;
-            QString mPinDirection;
-            QString mPinType;
+            PinDirection mPinDirection;
+            PinType mPinType;
             QString mNetName;
+
         public:
 
-            PortTreeItem(QString pinName, QString pinDirection, QString pinType, QString netName);
-            PortTreeItem();
+            PortTreeItem(Type itype, u32 id_, QString pinName, PinDirection dir, PinType ptype, QString netName = QString());
+            PortTreeItem() : mItemType(None), mId(0) {;}
             QVariant getData(int column) const override;
             void setData(QList<QVariant> data) override;
             void setDataAtIndex(int index, QVariant& data) override;
             void appendData(QVariant data) override;
             int getColumnCount() const override;
+            void setItemType(Type tp) { mItemType = tp; }
+            Type itemType() const { return mItemType; }
+            QString name() const { return mPinName; }
+            void setName(const QString& nam) { mPinName = nam; }
+            void setPinType(PinType ptype) { mPinType = ptype; }
+            void setPinDirection(PinDirection dir) { mPinDirection = dir; }
+
+            /**
+             * Returns the pin-id if the item represents a pin or the pingroup-id
+             * if the item represents a pingroup.
+             *
+             * @param item - The item.
+             * @return The pin- or pingroup-id.
+             */
+            u32 id() const { return mId; }
     };
 
     /**
@@ -61,10 +84,6 @@ namespace hal
     {
         Q_OBJECT
     public:
-
-        //metatype declaration at the end of file (portSingleBit and portMultiBit are deprecated)
-        //important now are pins and groups
-        enum class itemType{portSingleBit = 0, portMultiBit = 1, pin = 2, group = 3};
 
         /**
          * The constructor.
@@ -116,27 +135,10 @@ namespace hal
          */
         int getRepresentedModuleId();
 
-        /**
-         * Get the type (enum) of a given item.
-         *
-         * @param item - The item for which the type is requested.
-         * @return The item's type.
-         */
-        itemType getTypeOfItem(PortTreeItem* item) const;
-
-        /**
-         * Returns the pin-id if the item represents a pin or the pingroup-id
-         * if the item represents a pingroup.
-         *
-         * @param item - The item.
-         * @return The pin- or pingroup-id.
-         */
-        int getIdOfItem(BaseTreeItem* item) const;
-
         /** @name Event Handler Functions
          */
         ///@{
-        void handleModulePortsChanged(Module* m);
+        void handleModulePortsChanged(Module* m, PinEvent pev, u32 pgid);
         ///@}
 
         //column identifier
@@ -144,10 +146,6 @@ namespace hal
         static const int sDirectionColumn = 1;
         static const int sTypeColumn = 2;
         static const int sNetColumn = 3;
-
-        //additional data keys
-        const QString keyType = "type";
-        const QString keyId = "id";
 
     Q_SIGNALS:
         /**
@@ -163,9 +161,8 @@ namespace hal
         Module* mModule;
         //name is (hopefully) enough to identify
         QMap<QString, BaseTreeItem*> mNameToTreeItem;
-        QMap<int, BaseTreeItem*> mIdToPinItem;
-        QMap<int, BaseTreeItem*> mIdToGroupItem;
-        bool mIgnoreEventsFlag;
+        QMap<int, PortTreeItem*> mIdToPinItem;
+        QMap<int, PortTreeItem*> mIdToGroupItem;
 
         void insertItem(PortTreeItem* item, BaseTreeItem* parent, int index);
         void removeItem(PortTreeItem* item);
@@ -178,5 +175,3 @@ namespace hal
         void dndPinBetweenGroup(PortTreeItem* droppedPin, int row);
     };
 }
-
-Q_DECLARE_METATYPE(hal::ModulePinsTreeModel::itemType)

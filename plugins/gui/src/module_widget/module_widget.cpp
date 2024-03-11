@@ -62,7 +62,8 @@ namespace hal
         mRenameAction->setToolTip("Rename");
         mToggleExpandTreeAction->setToolTip("Toggle expand all / collapse all");
 
-        mModuleProxyModel->setSourceModel(gNetlistRelay->getModuleModel());
+        mModuleModel = new ModuleModel(this);
+        mModuleProxyModel->setSourceModel(mModuleModel);
 
         mTreeView->setModel(mModuleProxyModel);
         mTreeView->setDefaultColumnWidth();
@@ -75,10 +76,9 @@ namespace hal
         mTreeView->setExpandsOnDoubleClick(false);
         mTreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
         mTreeView->setSelectionMode(QAbstractItemView::SingleSelection);
-        mTreeView->expandAllModules();
         mContentLayout->addWidget(mTreeView);
 
-        mSearchbar->setColumnNames(gNetlistRelay->getModuleModel()->headerLabels());
+        mSearchbar->setColumnNames(mModuleModel->headerLabels());
         mContentLayout->addWidget(mSearchbar);
         mSearchbar->hide();
 
@@ -91,7 +91,7 @@ namespace hal
         connect(mTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ModuleWidget::handleTreeSelectionChanged);
         connect(mTreeView->selectionModel(), &QItemSelectionModel::currentChanged, this, &ModuleWidget::handleCurrentChanged);
         connect(mTreeView, &ModuleTreeView::doubleClicked, this, &ModuleWidget::handleItemDoubleClicked);
-        connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &ModuleWidget::handleSelectionChanged);
+        connect(gSelectionRelay, &SelectionRelay::selectionChanged, this, &ModuleWidget::handleSelectionChanged, Qt::QueuedConnection);
         connect(gNetlistRelay, &NetlistRelay::moduleSubmoduleRemoved, this, &ModuleWidget::handleModuleRemoved);
 
         connect(mSearchAction, &QAction::triggered, this, &ModuleWidget::toggleSearchbar);
@@ -113,6 +113,9 @@ namespace hal
         connect(mToggleGatesAction, &QAction::triggered, this, &ModuleWidget::handleToggleGatesClicked);
         connect(mToggleExpandTreeAction, &QAction::triggered, this, &ModuleWidget::handleToggleExpandTreeClicked);
         connect(mRenameAction, &QAction::triggered, this, &ModuleWidget::handleRenameClicked);
+
+        mModuleModel->init();
+        mTreeView->expandAllModules();
     }
 
     void ModuleWidget::enableDeleteAction(bool enable)
@@ -295,6 +298,9 @@ namespace hal
                 extractPythonAction.setText("Extract Net as python code (copy to clipboard)");
                 extractPythonAction.setParent(&context_menu);
 
+                isolate_action.setText("Isolate in new view");
+                isolate_action.setParent(&context_menu);
+
                 change_name_action.setText("Change Net name");
                 change_name_action.setParent(&context_menu);
 
@@ -325,6 +331,7 @@ namespace hal
 
         if (type == ModuleItem::TreeItemType::Net){
             context_menu.addAction(&extractPythonAction);
+            context_menu.addAction(&isolate_action);
             context_menu.addAction(&change_name_action);
             context_menu.addAction(&focus_in_view);
         }
@@ -355,6 +362,7 @@ namespace hal
             {
             case ModuleItem::TreeItemType::Module: openModuleInView(index); break;
             case ModuleItem::TreeItemType::Gate: openGateInView(index); break;
+            case ModuleItem::TreeItemType::Net: openNetEndpointsInView(index); break;
             default:
                 break;
             }
@@ -427,7 +435,7 @@ namespace hal
         Q_UNUSED(selected)
         Q_UNUSED(deselected)
 
-        if (mIgnoreSelectionChange || gNetlistRelay->getModuleModel()->isModifying())
+        if (mIgnoreSelectionChange || mModuleModel->isModifying())
             return;
 
         gSelectionRelay->clear();
@@ -474,7 +482,12 @@ namespace hal
 
     void ModuleWidget::handleItemDoubleClicked(const QModelIndex& index)
     {
-        openModuleInView(index);
+        ModuleItem* mi = getModuleItemFromIndex(index);
+        switch(mi->getType()){
+            case ModuleItem::TreeItemType::Module: openModuleInView(index); break;
+            case ModuleItem::TreeItemType::Gate: openGateInView(index); break;
+            case ModuleItem::TreeItemType::Net: openNetEndpointsInView(index); break;
+        }
     }
 
     void ModuleWidget::openModuleInView(const QModelIndex& index)
@@ -495,6 +508,36 @@ namespace hal
         act->setUseCreatedObject();
         act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, name));
         act->addAction(new ActionAddItemsToObject(moduleId, gateId));
+        act->exec();
+    }
+
+    void ModuleWidget::openNetEndpointsInView(const QModelIndex &index){
+        QSet<u32> allGates;
+
+        Net* net = gNetlist->get_net_by_id(getModuleItemFromIndex(index)->id());
+
+        PlacementHint plc(PlacementHint::PlacementModeType::GridPosition);
+        int currentY = -(int)(net->get_num_of_sources()/2);
+        for(auto endpoint : net->get_sources()) {
+            u32 id = endpoint->get_gate()->get_id();
+            allGates.insert(id);
+            plc.addGridPosition(Node(id, Node::NodeType::Gate), {0, currentY++});
+        }
+        currentY = -(int)(net->get_num_of_destinations()/2);
+        for(auto endpoint : net->get_destinations()) {
+            u32 id = endpoint->get_gate()->get_id();
+            allGates.insert(id);
+            plc.addGridPosition(Node(id, Node::NodeType::Gate), {1, currentY++});
+        }
+
+        QString name = gGraphContextManager->nextViewName("Isolated View");
+
+        UserActionCompound* act = new UserActionCompound;
+        act->setUseCreatedObject();
+        act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, name));
+        auto actionAITO = new ActionAddItemsToObject({}, allGates);
+        actionAITO->setPlacementHint(plc);
+        act->addAction(actionAITO);
         act->exec();
     }
 
@@ -568,8 +611,12 @@ namespace hal
 
         for (auto module_id : gSelectionRelay->selectedModulesList())
         {
-            QModelIndex index = mModuleProxyModel->mapFromSource(gNetlistRelay->getModuleModel()->getIndex(gNetlistRelay->getModuleModel()->getItem(module_id)));
-            module_selection.select(index, index);
+            ModuleItem* item = mModuleModel->getItem(module_id);
+            if(item)
+            {
+                QModelIndex index = mModuleProxyModel->mapFromSource(mModuleModel->getIndexFromItem(item));
+                module_selection.select(index, index);
+            }
         }
 
         mTreeView->selectionModel()->select(module_selection, QItemSelectionModel::SelectionFlag::ClearAndSelect);
@@ -579,7 +626,7 @@ namespace hal
 
     ModuleItem* ModuleWidget::getModuleItemFromIndex(const QModelIndex& index)
     {
-        return gNetlistRelay->getModuleModel()->getItem(mModuleProxyModel->mapToSource(index));
+        return mModuleModel->getItem(mModuleProxyModel->mapToSource(index));
     }
 
     void ModuleWidget::updateSearchIcon()
@@ -588,6 +635,11 @@ namespace hal
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchActiveIconStyle, mSearchIconPath));
         else
             mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+    }
+
+    ModuleModel* ModuleWidget::getModuleModel() const
+    {
+        return mModuleModel;
     }
 
     QString ModuleWidget::disabledIconStyle() const

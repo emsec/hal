@@ -40,6 +40,7 @@ namespace hal
             return qvNetName;
             break;}
         }
+        return QVariant();
     }
 
     void PinTreeItem::setData(QList<QVariant> data)
@@ -98,7 +99,7 @@ namespace hal
     void GatePinsTreeModel::clear()
     {
         BaseTreeModel::clear();
-        mPinGroupingToTreeItem.clear();
+        mPinGroupToTreeItem.clear();
         mGateId = -1;
     }
 
@@ -120,7 +121,7 @@ namespace hal
 
             //evaluate netname (in case of inout multiple possible nets), method depends on pindirection (kind of ugly switch)
             QString netName = "";
-            QList<int> netIDs;
+            QList<u32> netIDs;
             switch (direction)
             {
                 case PinDirection::input:
@@ -158,20 +159,20 @@ namespace hal
             }
 
             pinItem->setData(QList<QVariant>() << QString::fromStdString(pin->get_name()) << pinDirection << pinType << netName);
-            pinItem->setAdditionalData(keyType, QVariant::fromValue(itemType::pin));
-            pinItem->setAdditionalData(keyRepresentedNetsID, QVariant::fromValue(netIDs));
+            pinItem->setType(PinTreeItem::Pin);
+            pinItem->setNetIds(netIDs);
             if (!grouping.empty())
             {
-                BaseTreeItem* groupingsItem = mPinGroupingToTreeItem.value(grouping, nullptr);    //since its a map, its okay
-                if (!groupingsItem)
+                PinTreeItem* pingroupItem = dynamic_cast<PinTreeItem*>(mPinGroupToTreeItem.value(grouping, nullptr));    //since its a map, its okay
+                if (!pingroupItem)
                 {
                     //assume all items in the same grouping habe the same direction and type, so the grouping-item has also these types
-                    groupingsItem = new PinTreeItem(grouping, pinDirection, pinType, "");
-                    groupingsItem->setAdditionalData(keyType, QVariant::fromValue(itemType::grouping));
-                    mRootItem->appendChild(groupingsItem);
-                    mPinGroupingToTreeItem.insert(grouping, groupingsItem);
+                    pingroupItem = new PinTreeItem(grouping, pinDirection, pinType, "");
+                    pingroupItem->setType(PinTreeItem::Group);
+                    mRootItem->appendChild(pingroupItem);
+                    mPinGroupToTreeItem.insert(grouping, pingroupItem);
                 }
-                groupingsItem->appendChild(pinItem);
+                pingroupItem->appendChild(pinItem);
             }
             else
                 mRootItem->appendChild(pinItem);
@@ -182,16 +183,6 @@ namespace hal
     int GatePinsTreeModel::getCurrentGateID()
     {
         return mGateId;
-    }
-
-    QList<int> GatePinsTreeModel::getNetIDsOfTreeItem(BaseTreeItem* item)
-    {
-        return item->getAdditionalData(keyRepresentedNetsID).value<QList<int>>();
-    }
-
-    GatePinsTreeModel::itemType GatePinsTreeModel::getTypeOfItem(BaseTreeItem* item)
-    {
-        return item->getAdditionalData(keyType).value<itemType>();
     }
 
     int GatePinsTreeModel::getNumberOfDisplayedPins()

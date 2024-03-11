@@ -2,6 +2,7 @@
 
 #include "gui/comment_system/comment_speech_bubble.h"
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/graph_widget/drag_controller.h"
 #include "gui/graph_widget/graph_widget.h"
 #include "gui/graph_widget/graph_widget_constants.h"
 #include "gui/graph_widget/graphics_scene.h"
@@ -15,6 +16,7 @@
 #include "gui/content_manager/content_manager.h"
 #include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
+#include "gui/graph_widget/graph_context_manager.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/grouping_dialog/grouping_dialog.h"
@@ -38,6 +40,7 @@
 #include "gui/module_dialog/module_dialog.h"
 #include "gui/module_dialog/gate_dialog.h"
 #include "gui/comment_system/widgets/comment_dialog.h"
+#include "gui/settings/settings_items/settings_item_checkbox.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
@@ -75,6 +78,7 @@ namespace hal
         : QGraphicsView(parent), mGraphWidget(parent),
           mMinimapEnabled(false), mGridEnabled(true), mGridClustersEnabled(true),
           mGridType(GraphicsScene::GridType::Dots),
+          mDragController(new DragController(mGraphWidget,this)),
           mDragModifier(Qt::KeyboardModifier::AltModifier),
           mPanModifier(Qt::KeyboardModifier::ShiftModifier),
           mZoomModifier(Qt::NoModifier),
@@ -381,23 +385,21 @@ namespace hal
         if(dynamic_cast<CommentSpeechBubble*>(itemAt(event->pos())))
             return;
 
-        if (event->modifiers() == mPanModifier)
+        if ((event->modifiers() == mPanModifier && event->button() == Qt::LeftButton) ||
+                (event->button() == Qt::MidButton && gGraphContextManager->sSettingPanOnMiddleButton->value().toBool()))
         {
-            if (event->button() == Qt::LeftButton)
-                mMovePosition = event->pos();
+            mMovePosition = event->pos();
         }
         else if (event->button() == Qt::LeftButton)
         {
-            GraphicsItem* item = static_cast<GraphicsItem*>(itemAt(event->pos()));
+            GraphicsNode* item = dynamic_cast<GraphicsNode*>(itemAt(event->pos()));
             if (item && itemDraggable(item))
             {
-                mDragItem               = static_cast<GraphicsGate*>(item);
-                mDragMousedownPosition = event->pos();
-                mDragStartGridpos      = closestLayouterPos(mapToScene(mDragMousedownPosition)).first;
+                mDragController->set(item, event->pos());
             }
             else
             {
-                mDragItem = nullptr;
+                mDragController->clear();
             }
 
             // we still need the normal mouse logic for single clicks
@@ -435,32 +437,30 @@ namespace hal
             mTargetScenePos    = mapToScene(event->pos());
         }
 
-        if (event->buttons().testFlag(Qt::LeftButton))
+        if ((event->buttons().testFlag(Qt::LeftButton) && event->modifiers() == mPanModifier) ||
+                (event->buttons().testFlag(Qt::MidButton) && gGraphContextManager->sSettingPanOnMiddleButton->value().toBool()))
         {
-            if (event->modifiers() == mPanModifier)
+            QScrollBar* hBar  = horizontalScrollBar();
+            QScrollBar* vBar  = verticalScrollBar();
+            QPoint delta_move = event->pos() - mMovePosition;
+            mMovePosition   = event->pos();
+            hBar->setValue(hBar->value() + (isRightToLeft() ? delta_move.x() : -delta_move.x()));
+            vBar->setValue(vBar->value() - delta_move.y());
+        }
+        else if (event->buttons().testFlag(Qt::LeftButton))
+        {
+            if (mDragController->hasDragged(event->pos()))
             {
-                QScrollBar* hBar  = horizontalScrollBar();
-                QScrollBar* vBar  = verticalScrollBar();
-                QPoint delta_move = event->pos() - mMovePosition;
-                mMovePosition   = event->pos();
-                hBar->setValue(hBar->value() + (isRightToLeft() ? delta_move.x() : -delta_move.x()));
-                vBar->setValue(vBar->value() - delta_move.y());
-            }
-            else
-            {
-                if (mDragItem && (event->pos() - mDragMousedownPosition).manhattanLength() >= QApplication::startDragDistance())
-                {
-                    QDrag* drag         = new QDrag(this);
-                    QMimeData* mimeData = new QMimeData;
+                QDrag* drag         = new QDrag(this);
+                QMimeData* mimeData = new QMimeData;
 
-                    // TODO set MIME type and icon
-                    mimeData->setText("dragTest");
-                    drag->setMimeData(mimeData);
-                    // drag->setPixmap(iconPixmap);
+                // TODO set MIME type and icon
+                mimeData->setText("dragTest");
+                drag->setMimeData(mimeData);
+                // drag->setPixmap(iconPixmap);
 
-                    // enable DragMoveEvents until mouse released
-                    drag->exec(Qt::MoveAction);
-                }
+                // enable DragMoveEvents until mouse released
+                drag->exec(Qt::MoveAction);
             }
         }
 #ifdef GUI_DEBUG_GRID
@@ -474,21 +474,8 @@ namespace hal
     {
         if (event->source() == this && event->proposedAction() == Qt::MoveAction)
         {
+            mDragController->enterDrag(event->keyboardModifiers() == mDragModifier);
             event->acceptProposedAction();
-            QSizeF size(mDragItem->width(), mDragItem->height());
-            QPointF mouse = event->posF();
-            QPointF snap  = closestLayouterPos(mapToScene(mouse.x(), mouse.y())).second;
-            if (gSelectionRelay->numberSelectedGates() > 1)
-            {
-                // if we are in multi-select mode, reduce the selection to the
-                // item we are dragging
-                gSelectionRelay->clear();
-                gSelectionRelay->addGate(mDragItem->id());
-                gSelectionRelay->setFocus(SelectionRelay::ItemType::Gate,mDragItem->id());
-                gSelectionRelay->relaySelectionChanged(nullptr);
-            }
-            mDropAllowed = false;
-            static_cast<GraphicsScene*>(scene())->startDragShadow(snap, size, NodeDragShadow::DragCue::Rejected);
         }
         else
         {
@@ -500,53 +487,49 @@ namespace hal
     void GraphGraphicsView::dragLeaveEvent(QDragLeaveEvent* event)
     {
         Q_UNUSED(event)
-        if (scene()) static_cast<GraphicsScene*>(scene())->stopDragShadow();
+        mDragController->clear();
+    }
+
+    void GraphGraphicsView::dragPan(float dpx, float dpy)
+    {
+        if (dpx != 0)
+        {
+            QScrollBar* hBar  = horizontalScrollBar();
+            int hValue = hBar->value() + 10*dpx;
+            if (hValue < hBar->minimum()) hBar->setMinimum(hValue);
+            if (hValue > hBar->maximum()) hBar->setMaximum(hValue);
+            hBar->setValue(hValue);
+        }
+        if (dpy != 0)
+        {
+            QScrollBar* vBar  = verticalScrollBar();
+            int vValue = vBar->value() + 10*dpy;
+            if (vValue < vBar->minimum()) vBar->setMinimum(vValue);
+            if (vValue > vBar->maximum()) vBar->setMaximum(vValue);
+            vBar->setValue(vValue);
+        }
     }
 
     void GraphGraphicsView::dragMoveEvent(QDragMoveEvent* event)
     {
         if (event->source() == this && event->proposedAction() == Qt::MoveAction)
         {
-            bool swapModifier    = event->keyboardModifiers() == mDragModifier;
             QPair<QPoint,QPointF> snap = closestLayouterPos(mapToScene(event->pos()));
 
-            if (snap.first == mDragCurrentGridpos && swapModifier == mDragCurrentModifier)
-            {
-                return;
-            }
-            mDragCurrentGridpos  = snap.first;
-            mDragCurrentModifier = swapModifier;
+            mDragController->move(event->pos(),event->keyboardModifiers() == mDragModifier,snap.first);
 
-            auto context            = mGraphWidget->getContext();
-            const GraphLayouter* layouter = context->getLayouter();
-            assert(layouter->done());    // ensure grid stable
-
-            QMap<QPoint, Node>::const_iterator node_iter = layouter->positionToNodeMap().find(snap.first);
-
-            NodeDragShadow::DragCue cue = NodeDragShadow::DragCue::Rejected;
-            // disallow dropping an item on itself
-            if (snap.first != mDragStartGridpos)
-            {
-                if (swapModifier)
-                {
-                    if (node_iter != layouter->positionToNodeMap().end())
-                    {
-                        // allow move only on empty cells
-                        cue = NodeDragShadow::DragCue::Swappable;
-                    }
-                }
-                else
-                {
-                    if (node_iter == layouter->positionToNodeMap().end())
-                    {
-                        // allow move only on empty cells
-                        cue = NodeDragShadow::DragCue::Movable;
-                    }
-                }
-            }
-            mDropAllowed = (cue != NodeDragShadow::DragCue::Rejected);
-
-            static_cast<GraphicsScene*>(scene())->moveDragShadow(snap.second, cue);
+            QPoint p = event->pos() - viewport()->geometry().topLeft();
+            float rx = 100. * p.x() / viewport()->geometry().width();
+            float ry = 100. * p.y() / viewport()->geometry().height();
+//            qDebug() << "move it" << event->pos() << viewport()->geometry() << rx << ry;
+            float dpx = 0;
+            float dpy = 0;
+            if (rx < 10) dpx = -10+rx;
+            if (rx > 90) dpx =  rx-90;
+            if (ry < 10) dpy = -10+ry;
+            if (ry > 90) dpy =  ry-90;
+            if (dpx !=0 || dpy != 0)
+                dragPan(dpx, dpy);
         }
     }
 
@@ -555,36 +538,23 @@ namespace hal
         if (event->source() == this && event->proposedAction() == Qt::MoveAction)
         {
             event->acceptProposedAction();
-            GraphicsScene* s = static_cast<GraphicsScene*>(scene());
-            if (s) s->stopDragShadow();
-            if (mDropAllowed)
+            if (mDragController->isDropAllowed())
             {
-                auto context            = mGraphWidget->getContext();
+                GridPlacement* plc = mDragController->finalGridPlacement();
+                GraphContext* context = mGraphWidget->getContext();
                 GraphLayouter* layouter = context->getLayouter();
                 assert(layouter->done());    // ensure grid stable
-
-                // convert scene coordinates into layouter grid coordinates
-                QPointF targetPos        = s->dropTarget();
-                QPoint targetLayouterPos = closestLayouterPos(targetPos).first;
-                QPoint sourceLayouterPos = layouter->gridPointByItem(mDragItem);
-
-                if (targetLayouterPos == sourceLayouterPos)
-                {
-                    qDebug() << "Attempted to drop gate onto itself, this should never happen!";
-                    return;
-                }
-                // assert(targetLayouterPos != sourceLayouterPos);
-
-                bool modifierPressed = event->keyboardModifiers() == mDragModifier;
-                ActionMoveNode* act = new ActionMoveNode(context->id(), sourceLayouterPos, targetLayouterPos, modifierPressed);
+                ActionMoveNode* act = new ActionMoveNode(context->id(),plc);
                 if (act->exec())
                     context->setDirty(true);
+                delete plc;
             }
         }
         else
         {
             QGraphicsView::dropEvent(event);
         }
+        mDragController->clear();
     }
 
     void GraphGraphicsView::wheelEvent(QWheelEvent* event)

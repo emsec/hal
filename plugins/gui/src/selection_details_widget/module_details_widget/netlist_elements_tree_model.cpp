@@ -10,34 +10,29 @@
 namespace hal
 {
 
-    NetlistElementsTreeitem::NetlistElementsTreeitem(const QString &name, int id, QString tp)
-        : mType(tp), mId(id), mName(name)
+    NetlistElementsTreeitem::NetlistElementsTreeitem(ItemType itp, u32 id_, const QString &name, const QString &ntp)
+        : mItemType(itp), mId(id_), mName(name), mNodeType(ntp)
     {;}
 
     QVariant NetlistElementsTreeitem::getData(int index) const
     {
         switch (index)
         {
-        case 0: {
-            QVariant qvName = QVariant(mName);
-            return qvName;
-            break;}
-        case 1: {
-            QVariant qvId  = QVariant(mId);
-            return qvId;
-            break;}
-        case 2: {
-            QVariant qvType = QVariant(mType);
-            return qvType;
-            break;}
+        case 0:
+            return mName;
+        case 1:
+            return mId;
+        case 2:
+            return mNodeType;
         }
+        return QVariant();
     }
 
     void NetlistElementsTreeitem::setData(QList<QVariant> data)
     {
         mName = data[0].toString();
         mId = data[1].toInt();
-        mType = data[2].toString();
+        mNodeType = data[2].toString();
 
     }
 
@@ -53,7 +48,7 @@ namespace hal
             for (int j=0; j<3; j++)
                 if (data.toString() == ctyp[j])
                 {
-                    mType = data.toString();
+                    mNodeType = data.toString();
                     break;
                 }
         }
@@ -142,12 +137,12 @@ namespace hal
             Module* mod = gNetlist->get_module_by_id(id);
             if(!mod)
                 continue;
-            NetlistElementsTreeitem* modItem = new NetlistElementsTreeitem(QString::fromStdString(mod->get_name()),
-                                                                           mod->get_id(), QString::fromStdString(mod->get_type()));
+            NetlistElementsTreeitem* modItem = new NetlistElementsTreeitem(NetlistElementsTreeitem::Module,
+                                                                           mod->get_id(),
+                                                                           QString::fromStdString(mod->get_name()),
+                                                                           QString::fromStdString(mod->get_type()));
             if(displayModulesRecursive)
                 moduleRecursive(mod, modItem, showGatesInSubmods, showNetsInSubmods);
-            modItem->setAdditionalData(keyItemType, QVariant::fromValue(itemType::module));
-            modItem->setAdditionalData(keyRepresentedID, mod->get_id());
             mRootItem->appendChild(modItem);
             mModuleToTreeitems.insert(mod, modItem);
         }
@@ -155,20 +150,19 @@ namespace hal
         for(int id : gateIds)
         {
             Gate* gate = gNetlist->get_gate_by_id(id);
-            NetlistElementsTreeitem* gateItem = new NetlistElementsTreeitem(QString::fromStdString(gate->get_name()),
-                                              gate->get_id(), QString::fromStdString(gate->get_type()->get_name()));
-            gateItem->setAdditionalData(keyItemType, QVariant::fromValue(itemType::gate));
-            gateItem->setAdditionalData(keyRepresentedID, gate->get_id());
+            NetlistElementsTreeitem* gateItem = new NetlistElementsTreeitem(NetlistElementsTreeitem::Gate,
+                                                                            gate->get_id(),
+                                                                            QString::fromStdString(gate->get_name()),
+                                                                            QString::fromStdString(gate->get_type()->get_name()));
             mRootItem->appendChild(gateItem);
             mGateToTreeitems.insert(gate, gateItem);
         }
         for(int id : netIds)
         {
             Net* net = gNetlist->get_net_by_id(id);
-            NetlistElementsTreeitem* netItem = new NetlistElementsTreeitem(QString::fromStdString(net->get_name()),
-                                             net->get_id(), "");
-            netItem->setAdditionalData(keyItemType, QVariant::fromValue(itemType::net));
-            netItem->setAdditionalData(keyRepresentedID, net->get_id());
+            NetlistElementsTreeitem* netItem = new NetlistElementsTreeitem(NetlistElementsTreeitem::Net,
+                                                                           net->get_id(),
+                                                                           QString::fromStdString(net->get_name()));
             mRootItem->appendChild(netItem);
             mNetToTreeitems.insert(net, netItem);
         }
@@ -194,16 +188,6 @@ namespace hal
 
         setContent(subModIds, gateIds, netIds, displayModulesRecursive, showGates, showNets);
         Q_EMIT numberOfSubmodulesChanged(mod->get_submodules().size());
-    }
-
-    NetlistElementsTreeModel::itemType NetlistElementsTreeModel::getTypeOfItem(NetlistElementsTreeitem *item) const
-    {
-        return item->getAdditionalData(keyItemType).value<itemType>();
-    }
-
-    int NetlistElementsTreeModel::getRepresentedIdOfItem(NetlistElementsTreeitem *item) const
-    {
-        return item->getAdditionalData(keyRepresentedID).toInt();
     }
 
     void NetlistElementsTreeModel::gateNameChanged(Gate *g)
@@ -299,13 +283,13 @@ namespace hal
             while(!treeItemsQueue.isEmpty())
             {
                 NetlistElementsTreeitem* currentItem = treeItemsQueue.dequeue();
-                int id = currentItem->getAdditionalData(keyRepresentedID).toUInt();
+                int id = currentItem->id();
 
-                switch (getTypeOfItem(currentItem))
+                switch (currentItem->itemType())
                 {
-                case itemType::module: mModuleToTreeitems.remove(gNetlist->get_module_by_id(id),currentItem); break;
-                case itemType::gate: mGateToTreeitems.remove(gNetlist->get_gate_by_id(id), currentItem); break;
-                case itemType::net: mNetToTreeitems.remove(gNetlist->get_net_by_id(id), currentItem); break;
+                case NetlistElementsTreeitem::Module : mModuleToTreeitems.remove(gNetlist->get_module_by_id(id),currentItem); break;
+                case NetlistElementsTreeitem::Gate   : mGateToTreeitems.remove(gNetlist->get_gate_by_id(id), currentItem); break;
+                case NetlistElementsTreeitem::Net    : mNetToTreeitems.remove(gNetlist->get_net_by_id(id), currentItem); break;
                 }
 
                 for(BaseTreeItem* child : currentItem->getChildren()){
@@ -346,14 +330,14 @@ namespace hal
             int indexToInsert = 0;
             for(; indexToInsert < modItem->getChildCount(); indexToInsert++) {
                 NetlistElementsTreeitem* neti = static_cast<NetlistElementsTreeitem*>(modItem->getChild(indexToInsert));
-                if(getTypeOfItem(neti) != itemType::module)
+                if(neti->itemType() != NetlistElementsTreeitem::Module)
                     break;
             }
 
-            NetlistElementsTreeitem* gateItem = new NetlistElementsTreeitem(QString::fromStdString(assignedGate->get_name()),
-                                              assignedGate->get_id(), QString::fromStdString(assignedGate->get_type()->get_name()));
-            gateItem->setAdditionalData(keyItemType, QVariant::fromValue(itemType::gate));
-            gateItem->setAdditionalData(keyRepresentedID, assignedGate->get_id());
+            NetlistElementsTreeitem* gateItem = new NetlistElementsTreeitem(NetlistElementsTreeitem::Gate,
+                                                                            assignedGate->get_id(),
+                                                                            QString::fromStdString(assignedGate->get_name()),
+                                                                            QString::fromStdString(assignedGate->get_type()->get_name()));
             //beginInsertRows(getIndexFromItem(modItem), indexToInsert, indexToInsert);
             beginResetModel();
             modItem->insertChild(indexToInsert, gateItem);
@@ -390,11 +374,11 @@ namespace hal
         Module* addedModule = gNetlist->get_module_by_id(added_module);
 
         auto appendNewSubmodItem = [this, addedModule](BaseTreeItem* parentModItem){
-            NetlistElementsTreeitem* addedSubmodItem = new NetlistElementsTreeitem(QString::fromStdString(addedModule->get_name()),
-                                                           addedModule->get_id(), QString::fromStdString(addedModule->get_type()));
+            NetlistElementsTreeitem* addedSubmodItem = new NetlistElementsTreeitem(NetlistElementsTreeitem::Module,
+                                                                                   addedModule->get_id(),
+                                                                                   QString::fromStdString(addedModule->get_name()),
+                                                                                   QString::fromStdString(addedModule->get_type()));
             moduleRecursive(addedModule, addedSubmodItem, mGatesDisplayed, mNetsDisplayed);
-            addedSubmodItem->setAdditionalData(keyItemType, QVariant::fromValue(itemType::module));
-            addedSubmodItem->setAdditionalData(keyRepresentedID, addedModule->get_id());
             parentModItem->insertChild(0, addedSubmodItem);
             mModuleToTreeitems.insert(addedModule, addedSubmodItem);
             if(mNetsDisplayed) {
@@ -422,11 +406,11 @@ namespace hal
         NetlistElementsTreeitem* subModItem = nullptr;
         for(Module* subMod : mod->get_submodules())
         {
-            subModItem = new NetlistElementsTreeitem(QString::fromStdString(subMod->get_name()),
-                                                subMod->get_id(), QString::fromStdString(subMod->get_type()));
+            subModItem = new NetlistElementsTreeitem(NetlistElementsTreeitem::Module,
+                                                     subMod->get_id(),
+                                                     QString::fromStdString(subMod->get_name()),
+                                                     QString::fromStdString(subMod->get_type()));
             moduleRecursive(subMod, subModItem, showGates);
-            subModItem->setAdditionalData(keyItemType, QVariant::fromValue(itemType::module));
-            subModItem->setAdditionalData(keyRepresentedID, subMod->get_id());
             modItem->appendChild(subModItem);
             mModuleToTreeitems.insert(subMod, subModItem);
         }
@@ -434,10 +418,10 @@ namespace hal
         {
             for(auto gate : mod->get_gates())
             {
-                NetlistElementsTreeitem* gateItem = new NetlistElementsTreeitem(QString::fromStdString(gate->get_name()),
-                                                  gate->get_id(), QString::fromStdString(gate->get_type()->get_name()));
-                gateItem->setAdditionalData(keyItemType, QVariant::fromValue(itemType::gate));
-                gateItem->setAdditionalData(keyRepresentedID, gate->get_id());
+                NetlistElementsTreeitem* gateItem = new NetlistElementsTreeitem(NetlistElementsTreeitem::Gate,
+                                                                                gate->get_id(),
+                                                                                QString::fromStdString(gate->get_name()),
+                                                                                QString::fromStdString(gate->get_type()->get_name()));
                 modItem->appendChild(gateItem);
                 mGateToTreeitems.insert(gate, gateItem);
             }
@@ -446,10 +430,10 @@ namespace hal
         {
             for(auto net : mod->get_internal_nets())
             {
-                NetlistElementsTreeitem* netItem = new NetlistElementsTreeitem(QString::fromStdString(net->get_name()),
-                                                 net->get_id(), "");
-                netItem->setAdditionalData(keyItemType, QVariant::fromValue(itemType::net));
-                netItem->setAdditionalData(keyRepresentedID, net->get_id());
+                NetlistElementsTreeitem* netItem = new NetlistElementsTreeitem(NetlistElementsTreeitem::Net,
+                                                                               net->get_id(),
+                                                                               QString::fromStdString(net->get_name()),
+                                                                               "");
                 modItem->appendChild(netItem);
                 mNetToTreeitems.insert(net, netItem);
             }
@@ -462,11 +446,11 @@ namespace hal
             return QIcon();
 
         u32 id = item->getData(1).toInt();
-        switch (getTypeOfItem(item))
+        switch (item->itemType())
         {
-        case itemType::module:
+        case NetlistElementsTreeitem::Module:
             return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::ModuleIcon,id));
-        case itemType::gate:
+        case NetlistElementsTreeitem::Gate:
             return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::GateIcon,id));
         default:
             return QIcon();
@@ -476,27 +460,26 @@ namespace hal
     void NetlistElementsTreeModel::updateInternalNetsOfModule(NetlistElementsTreeitem *moduleItem)
     {
         BaseTreeItem* moduleItemBase = static_cast<BaseTreeItem*>(moduleItem);
-       BaseTreeItem* mRootBase = static_cast<BaseTreeItem*>(mRootItem);
-        int moduleId = (moduleItemBase == mRootBase) ? mModId : moduleItem->getAdditionalData(keyRepresentedID).toInt();
+        BaseTreeItem* mRootBase = static_cast<BaseTreeItem*>(mRootItem);
+        int moduleId = (moduleItemBase == mRootBase) ? mModId : moduleItem->id();
         Module* mod = gNetlist->get_module_by_id(moduleId);
         //remove and delte the last child of the module-item until no net items are left
-        while(moduleItem->getChildCount() > 0 && getTypeOfItem(static_cast<NetlistElementsTreeitem*>(moduleItem->getChild(moduleItem->getChildCount()-1))) == itemType::net)
+        while(moduleItem->getChildCount() > 0 && static_cast<NetlistElementsTreeitem*>(moduleItem->getChild(moduleItem->getChildCount()-1))->itemType() == NetlistElementsTreeitem::Net)
         {
             NetlistElementsTreeitem* lastNetItem = static_cast<NetlistElementsTreeitem*>(moduleItem->removeChildAtPos(moduleItem->getChildCount()-1));
-            mNetToTreeitems.remove(gNetlist->get_net_by_id(lastNetItem->getAdditionalData(keyRepresentedID).toUInt()), lastNetItem);
+            mNetToTreeitems.remove(gNetlist->get_net_by_id(lastNetItem->id()), lastNetItem);
             delete lastNetItem;
         }
         //append (potentionally) new internal nets
         for(Net* n : mod->get_internal_nets())
         {
-            NetlistElementsTreeitem* netItem = new NetlistElementsTreeitem(QString::fromStdString(n->get_name()),n->get_id(), "");
+            NetlistElementsTreeitem* netItem = new NetlistElementsTreeitem(NetlistElementsTreeitem::Net,
+                                                                           n->get_id(),
+                                                                           QString::fromStdString(n->get_name()),
+                                                                           "");
             //netItem->setAdditionalData(keyItemType, itemType::net);
-            netItem->setAdditionalData(keyItemType, QVariant::fromValue(itemType::net));
-            netItem->setAdditionalData(keyRepresentedID, n->get_id());
             mNetToTreeitems.insert(n, netItem);
             moduleItem->appendChild(netItem);
         }
     }
-
-
 }

@@ -2055,7 +2055,9 @@
                 "state": "IQ",
                 "neg_state": "IQN",
                 "next_state": "(D & CE)",
-                "clocked_on": "C"
+                "clocked_on": "C",
+                "data_category": "generic",
+                "data_identifier": "INIT"
             },
             "pin_groups": [
                 {
@@ -2128,7 +2130,9 @@
                 "neg_state": "IQN",
                 "next_state": "(D & CE)",
                 "clocked_on": "C",
-                "preset_on": "S"
+                "preset_on": "S",
+                "data_category": "generic",
+                "data_identifier": "INIT"
             },
             "pin_groups": [
                 {
@@ -2215,7 +2219,9 @@
                 "neg_state": "IQN",
                 "next_state": "(D & CE)",
                 "clocked_on": "C",
-                "clear_on": "R"
+                "clear_on": "R",
+                "data_category": "generic",
+                "data_identifier": "INIT"
             },
             "pin_groups": [
                 {
@@ -2305,7 +2311,9 @@
                 "clear_on": "R",
                 "preset_on": "S",
                 "state_clear_preset": "L",
-                "neg_state_clear_preset": "H"
+                "neg_state_clear_preset": "H",
+                "data_category": "generic",
+                "data_identifier": "INIT"
             },
             "pin_groups": [
                 {

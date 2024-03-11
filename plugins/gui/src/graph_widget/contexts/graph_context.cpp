@@ -321,6 +321,16 @@ namespace hal
         return contextGates == moduleGates && contextModules == moduleModules;
     }
 
+
+    bool GraphContext::isShowingFoldedTopModule() const
+    {
+        auto contextGates = (mGates - mRemovedGates) + mAddedGates;
+        if (!contextGates.isEmpty()) return false;
+        auto contextModules = (mModules - mRemovedModules) + mAddedModules;
+        if (contextModules.size() != 1) return false;
+        return (*mModules.constBegin() == 1); // top_module has ID=1
+    }
+
     void GraphContext::getModuleChildrenRecursively(const u32 id, QSet<u32>* gates, QSet<u32>* modules) const
     {
 

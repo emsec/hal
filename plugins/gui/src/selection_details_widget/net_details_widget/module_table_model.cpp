@@ -178,8 +178,10 @@ namespace hal
         return mEntries[index.row()].name;
     }
 
-    void ModuleTableModel::handleModulePortsChanged(Module* m)
+    void ModuleTableModel::handleModulePortsChanged(Module* m, PinEvent pev, u32 pgid)
     {
+        Q_UNUSED(pev);
+        Q_UNUSED(pgid);
         if (mModIds.find((int)m->get_id()) != mModIds.end())
         {
             Net* net = gNetlist->get_net_by_id(mNetId);

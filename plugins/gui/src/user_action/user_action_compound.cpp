@@ -35,13 +35,11 @@ namespace hal {
         {
             if (mUseCreatedObject && !first){
                 act->setObject(object());
-                act->setParentObject(parentObject());
             }
             if (!act->exec())
                 return false;
             if (mUseCreatedObject && first){
                 setObject(act->object());
-                setParentObject(act->parentObject());
             }
             first = false;
         }

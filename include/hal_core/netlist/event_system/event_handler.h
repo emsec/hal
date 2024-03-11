@@ -114,7 +114,7 @@ namespace hal
             gates_remove_begin,    ///< associated_data = number of gates to remove
             gates_remove_end,      ///< associated_data = number of removed gates
             gate_removed,          ///< associated_data = id of removed gate
-            pin_changed,           ///< no associated_data
+            pin_changed,           ///< associated_data = [4LSB: type of action]  [28HSB: id of pin group or pin]
         };
     };
 

@@ -109,22 +109,6 @@ namespace hal
         virtual void setObject(const UserActionObject& obj);
 
         /**
-         * Setter for parent object argument. Used to identify pins and
-         * pingroups in which case the parent obj must be the corresponding
-         * module.
-         *
-         * @param obj - The parent object.
-         */
-        virtual void setParentObject(const UserActionObject& obj);
-
-        /**
-         * Getter for parent object argument.
-         *
-         * @return The parent object argument.
-         */
-        virtual UserActionObject parentObject() const {return mParentObject;}
-
-        /**
          * Get the order number in action compound, -1 if not in compound.
          *
          * @return The order number in action compount.
@@ -182,13 +166,6 @@ namespace hal
         void setObjectLock(bool lock) { mObjectLock = lock; }
 
         /**
-         * Refuse set parent object requests (in case if needed)
-         *
-         * @param lock - Param to set parent lock.
-         */
-        void setParentObjectLock(bool lock) {mParentObjectLock = lock;}
-
-        /**
          * Executing this action will modify the project thus a warning pops up when leaving hal without saving.
          * @return True if executing the action will modify the project, false otherwise.
          */
@@ -197,12 +174,10 @@ namespace hal
     protected:
         UserAction();
         UserActionObject mObject;
-        UserActionObject mParentObject;
         int mCompoundOrder;
         UserAction *mUndoAction;
         qint64 mTimeStamp;
         bool mObjectLock;
-        bool mParentObjectLock;
         bool mProjectModified;
 
         static QString setToText(const QSet<u32>& set);

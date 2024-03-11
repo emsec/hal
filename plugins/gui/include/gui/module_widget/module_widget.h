@@ -45,6 +45,7 @@ class QTreeView;
 
 namespace hal
 {
+    class ModuleModel;
     class ModuleProxyModel;
 
     /**
@@ -92,6 +93,13 @@ namespace hal
          * @returns the list of created shortcuts
          */
         virtual QList<QShortcut*> createShortcuts() override;
+
+        /**
+         * Accesses the module model.
+         *
+         * @returns the module model
+         */
+        ModuleModel* getModuleModel() const;
 
         /**
          * Opens a existing view that contains the given module, otherwise creates a new context
@@ -268,6 +276,7 @@ namespace hal
 
         bool mIgnoreSelectionChange;
 
+        ModuleModel* mModuleModel;
         ModuleProxyModel* mModuleProxyModel;
 
         QShortcut* mShortCutDeleteItem;
@@ -275,6 +284,8 @@ namespace hal
         void openModuleInView(const QModelIndex& index);
 
         void openGateInView(const QModelIndex& index);
+
+        void openNetEndpointsInView(const QModelIndex &index);
 
         void changeGateName(const QModelIndex& index);
 

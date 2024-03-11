@@ -116,52 +116,6 @@ namespace hal
                 else
                     return false;
                 break;
-            case UserActionObjectType::PinGroup: {
-                auto mod = gNetlist->get_module_by_id(mParentObject.id());
-                if (mod)
-                {
-                    auto pinGroup = mod->get_pin_group_by_id(mObject.id());
-                    if (pinGroup == nullptr)
-                    {
-                        return false;
-                    }
-
-                    for (u32 id : mPins)
-                    {
-                        if (mod->get_pin_by_id(id) == nullptr)
-                        {
-                            return false;
-                        }
-                    }
-                    for (u32 id : mPins)
-                    {
-                        if (mod->remove_pin_from_group(pinGroup, mod->get_pin_by_id(id), false).is_error())
-                        {
-                            return false;
-                        }
-                    }
-
-                    if (pinGroup->empty())    //delete group and undo=create+add
-                    {
-                        UserActionCompound* act = new UserActionCompound;
-                        act->setUseCreatedObject();
-                        ActionCreateObject* actCreate = new ActionCreateObject(UserActionObjectType::PinGroup, QString::fromStdString(pinGroup->get_name()));
-                        actCreate->setParentObject(mParentObject);
-                        act->addAction(actCreate);
-                        act->addAction(new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), mPins));
-                        mUndoAction = act;
-                        if (mod->delete_pin_group(pinGroup).is_error())
-                        {
-                            return false;
-                        }
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            break;
             default:
                 return false;
         }
@@ -170,7 +124,6 @@ namespace hal
         {
             mUndoAction = new ActionAddItemsToObject(mModules, mGates, mNets, mPins);
             mUndoAction->setObject(mObject);
-            mUndoAction->setParentObject(mParentObject);
         }
         return UserAction::exec();
     }
