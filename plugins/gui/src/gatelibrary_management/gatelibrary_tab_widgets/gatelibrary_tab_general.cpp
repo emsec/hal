@@ -4,6 +4,7 @@
 #include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_frame_state.h"
 #include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_frame_lut.h"
 #include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_frame_init.h"
+#include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_frame_latch.h"
 
 #include "gui/gatelibrary_management/gatelibrary_label.h"
 #include "gui/gui_globals.h"
@@ -120,6 +121,10 @@ namespace hal
         layout->addWidget(mBooleanFrame);
         mBooleanFrame->hide();
 
+        mLatchFrame = new GateLibraryFrameLatch(this);
+        layout->addWidget(mLatchFrame);
+        mLatchFrame->hide();
+
         topLayout->addWidget(scroll);
     }
 
@@ -133,6 +138,7 @@ namespace hal
             mLutFrame->hide();
             mInitFrame->hide();
             mBooleanFrame->hide();
+            mLatchFrame->hide();
             return;
         }
 
@@ -141,5 +147,6 @@ namespace hal
         mLutFrame->update(gt);
         mInitFrame->update(gt);
         mBooleanFrame->update(gt);
+        mLatchFrame->update(gt);
     }
 }

@@ -40,6 +40,7 @@ namespace hal
     class GatelibraryFrameInit;
     class GatelibraryFrameState;
     class GatelibraryFrameLut;
+    class GateLibraryFrameLatch;
 
     class GatelibraryFrameGeneral : public GatelibraryComponentFrame
     {
@@ -83,6 +84,7 @@ namespace hal
         GatelibraryFrameLut*     mLutFrame;
         GatelibraryFrameInit*    mInitFrame;
         GatelibraryFrameBoolean* mBooleanFrame;
+        GateLibraryFrameLatch*   mLatchFrame;
     };
 
 }
