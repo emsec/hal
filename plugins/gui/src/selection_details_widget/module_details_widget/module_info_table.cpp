@@ -1,36 +1,35 @@
 #include "gui/selection_details_widget/module_details_widget/module_info_table.h"
 
-#include "hal_core/netlist/module.h"
-
 #include "gui/gui_globals.h"
+#include "gui/module_dialog/module_dialog.h"
 #include "gui/python/py_code_provider.h"
+#include "gui/user_action/action_add_items_to_object.h"
+#include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/action_set_object_type.h"
-#include "gui/user_action/action_create_object.h"
-#include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/user_action_compound.h"
-#include "gui/module_dialog/module_dialog.h"
+#include "hal_core/netlist/module.h"
 
-#include <QMenu>
 #include <QInputDialog>
+#include <QMenu>
 
 namespace hal
 {
-    const QString ModuleInfoTable::nameRowKey = "Name";
-    const QString ModuleInfoTable::idRowKey = "ID";
-    const QString ModuleInfoTable::typeRowKey = "Type";
-    const QString ModuleInfoTable::moduleRowKey = "Parent";
-    const QString ModuleInfoTable::noOfAllGatesRowKey = "Total number of gates";
-    const QString ModuleInfoTable::noOfDirectGatesRowKey = "Number of direct member gates";
+    const QString ModuleInfoTable::nameRowKey                  = "Name";
+    const QString ModuleInfoTable::idRowKey                    = "ID";
+    const QString ModuleInfoTable::typeRowKey                  = "Type";
+    const QString ModuleInfoTable::moduleRowKey                = "Parent";
+    const QString ModuleInfoTable::noOfAllGatesRowKey          = "Total number of gates";
+    const QString ModuleInfoTable::noOfDirectGatesRowKey       = "Number of direct member gates";
     const QString ModuleInfoTable::noOfGatesInSubmodulesRowKey = "Number of gates in submodules";
-    const QString ModuleInfoTable::noOfModulesRowKey = "Number of submodules";
-    const QString ModuleInfoTable::noOfNetsRowKey = "Number of nets";
-    const QString ModuleInfoTable::noOfPinsKey = "Number of pins";
-    const QString ModuleInfoTable::noOfPinGroupsKey = "Number of pin groups";
-    const QString ModuleInfoTable::noOfInputNetsKey = "Number of inputs";
-    const QString ModuleInfoTable::noOfOutputNetsKey = "Number of outputs";
-    const QString ModuleInfoTable::noOfInternalNetsKey = "Number of internal nets";
-    const QString ModuleInfoTable::isTopModuleKey = "Is top module?";
+    const QString ModuleInfoTable::noOfModulesRowKey           = "Number of submodules";
+    const QString ModuleInfoTable::noOfNetsRowKey              = "Number of nets";
+    const QString ModuleInfoTable::noOfPinsKey                 = "Number of pins";
+    const QString ModuleInfoTable::noOfPinGroupsKey            = "Number of pin groups";
+    const QString ModuleInfoTable::noOfInputNetsKey            = "Number of inputs";
+    const QString ModuleInfoTable::noOfOutputNetsKey           = "Number of outputs";
+    const QString ModuleInfoTable::noOfInternalNetsKey         = "Number of internal nets";
+    const QString ModuleInfoTable::isTopModuleKey              = "Is top module?";
 
     ModuleInfoTable::ModuleInfoTable(QWidget* parent) : GeneralTableWidget(parent), mModule(nullptr), mPyIcon(":/icons/python")
     {
@@ -67,7 +66,7 @@ namespace hal
         mNumOfAllGatesContextMenu->addAction(mPyIcon, "Get all gates recursively", std::bind(&ModuleInfoTable::pyCopyAllGates, this));
 
         mNumOfDirectGatesContextMenu = new QMenu();
-        mNumOfDirectGatesContextMenu->addAction("Number of gates to clipboard", std::bind(&ModuleInfoTable::copyNumberOfDirectGates,this));
+        mNumOfDirectGatesContextMenu->addAction("Number of gates to clipboard", std::bind(&ModuleInfoTable::copyNumberOfDirectGates, this));
         mNumOfDirectGatesContextMenu->addAction(mPyIcon, "Get direct member gates", std::bind(&ModuleInfoTable::pyCopyDirectMemberGates, this));
 
         mNumOfGatesInSubmodulesContextMenu = new QMenu();
@@ -89,9 +88,9 @@ namespace hal
         mNumOfPinGroupsContextMenu->addAction("Number of pin groups to clipboard", std::bind(&ModuleInfoTable::copyNumberOfPinGroups, this));
         mNumOfPinGroupsContextMenu->addAction(mPyIcon, "Get pin groups", std::bind(&ModuleInfoTable::pyCopyGetPinGroups, this));
 
-        mNumOfInputNetsContextMenu = new QMenu;//making this widget the parent changes the context menu's background color...
+        mNumOfInputNetsContextMenu = new QMenu;    //making this widget the parent changes the context menu's background color...
         mNumOfInputNetsContextMenu->addAction("Number of input nets to clipboard", std::bind(&ModuleInfoTable::copyNumberOfInputs, this));
-        mNumOfInputNetsContextMenu->addAction(mPyIcon, "Get input nets", std::bind(&ModuleInfoTable::pyCopyGetInputNets,this));
+        mNumOfInputNetsContextMenu->addAction(mPyIcon, "Get input nets", std::bind(&ModuleInfoTable::pyCopyGetInputNets, this));
         mNumOfInputNetsContextMenu->addAction(mPyIcon, "Get input pins", std::bind(&ModuleInfoTable::pyCopyInputPins, this));
 
         mNumOfOutputNetsContextMenu = new QMenu;
@@ -124,7 +123,7 @@ namespace hal
 
     void ModuleInfoTable::setModule(hal::Module* module)
     {
-        if(gNetlist->is_module_in_netlist(module))
+        if (gNetlist->is_module_in_netlist(module))
         {
             mModule = module;
             module->is_top_module() ? mChangeParentAction->setEnabled(false) : mChangeParentAction->setEnabled(true);
@@ -144,7 +143,7 @@ namespace hal
             setRow(noOfOutputNetsKey, numberOfOutputNets(), mNumOfOutputNetsContextMenu);
             setRow(noOfInternalNetsKey, numberOfInternalNets(), mNumOfInternalNetsContextMenu);
             setRow(isTopModuleKey, isTopModule(), mIsTopModuleContextMenu);
-            
+
             adjustSize();
         }
     }
@@ -163,7 +162,7 @@ namespace hal
     {
         QString type = QString::fromStdString(mModule->get_type());
 
-        if(type.isEmpty())
+        if (type.isEmpty())
             type = "None";
 
         return type;
@@ -175,7 +174,7 @@ namespace hal
 
         Module* module = mModule->get_parent_module();
 
-        if(module)
+        if (module)
             parentModule = QString::fromStdString(module->get_name()) + "[ID:" + QString::number(module->get_id()) + "]";
 
         return parentModule;
@@ -184,18 +183,18 @@ namespace hal
     QString ModuleInfoTable::numberOfAllGates() const
     {
         return QString::number(mModule->get_gates(nullptr, true).size());
-//        QString numOfGates = "";
+        //        QString numOfGates = "";
 
-//        int numOfAllChilds = mModule->get_gates(nullptr, true).size();
-//        int numOfDirectChilds = mModule->get_gates(nullptr, false).size();
-//        int numOfChildsInModules = numOfAllChilds - numOfDirectChilds;
+        //        int numOfAllChilds = mModule->get_gates(nullptr, true).size();
+        //        int numOfDirectChilds = mModule->get_gates(nullptr, false).size();
+        //        int numOfChildsInModules = numOfAllChilds - numOfDirectChilds;
 
-//        numOfGates.append(QString::number(numOfAllChilds));
+        //        numOfGates.append(QString::number(numOfAllChilds));
 
-//        if(numOfChildsInModules > 0)
-//            numOfGates.append(" (" + QString::number(numOfDirectChilds) + " direct members and " + QString::number(numOfChildsInModules) +" in submodules)");
+        //        if(numOfChildsInModules > 0)
+        //            numOfGates.append(" (" + QString::number(numOfDirectChilds) + " direct members and " + QString::number(numOfChildsInModules) +" in submodules)");
 
-//        return numOfGates;
+        //        return numOfGates;
     }
 
     QString ModuleInfoTable::numberOfDirectGateMembers() const
@@ -251,7 +250,7 @@ namespace hal
     void ModuleInfoTable::changeName()
     {
         QString oldName = QString::fromStdString(mModule->get_name());
-        QString prompt = "Change module name";
+        QString prompt  = "Change module name";
 
         bool confirm;
         QString newName = QInputDialog::getText(this, prompt, "New name:", QLineEdit::Normal, oldName, &confirm);
@@ -294,7 +293,7 @@ namespace hal
         if (confirm)
         {
             ActionSetObjectType* act = new ActionSetObjectType(newType);
-            act->setObject(UserActionObject(mModule->get_id(),UserActionObjectType::Module));
+            act->setObject(UserActionObject(mModule->get_id(), UserActionObjectType::Module));
             act->exec();
         }
     }
@@ -312,7 +311,8 @@ namespace hal
     void ModuleInfoTable::copyModule() const
     {
         auto parentMod = mModule->get_parent_module();
-        if(!parentMod) return;
+        if (!parentMod)
+            return;
 
         copyToClipboard(QString::fromStdString(parentMod->get_name()));
     }
@@ -349,7 +349,6 @@ namespace hal
 
     void ModuleInfoTable::pyCopyGatesInSubmodules() const
     {
-
     }
 
     void ModuleInfoTable::copyNumberOfSubmodules() const
@@ -425,7 +424,8 @@ namespace hal
     void ModuleInfoTable::copyParentID() const
     {
         auto parentMod = mModule->get_parent_module();
-        if(!parentMod) return;
+        if (!parentMod)
+            return;
 
         copyToClipboard(QString::number(parentMod->get_id()));
     }
@@ -443,20 +443,22 @@ namespace hal
     void ModuleInfoTable::setParentAsSelection()
     {
         auto parentMod = mModule->get_parent_module();
-        if(!parentMod) return;
+        if (!parentMod)
+            return;
 
         gSelectionRelay->clear();
         gSelectionRelay->addModule(parentMod->get_id());
-        gSelectionRelay->relaySelectionChanged(this);//function cant be const because of this
+        gSelectionRelay->relaySelectionChanged(this);    //function cant be const because of this
     }
 
     void ModuleInfoTable::addParentToSelection()
     {
         auto parentMod = mModule->get_parent_module();
-        if(!parentMod) return;
+        if (!parentMod)
+            return;
 
         gSelectionRelay->addModule(parentMod->get_id());
-        gSelectionRelay->relaySelectionChanged(this);//function cant be const because of this
+        gSelectionRelay->relaySelectionChanged(this);    //function cant be const because of this
     }
 
     void ModuleInfoTable::pyCopyGetPins() const
@@ -468,7 +470,7 @@ namespace hal
     {
         Module* parentModule = mModule->get_parent_module();
 
-        if(parentModule != nullptr)
+        if (parentModule != nullptr)
         {
             u32 parentModuleId = parentModule->get_id();
 
@@ -484,16 +486,19 @@ namespace hal
         if (mModule)
         {
             Module* parentMod = mModule->get_parent_module();
-            if (parentMod) excludeMods.insert(parentMod->get_id());
+            if (parentMod)
+                excludeMods.insert(parentMod->get_id());
         }
         ModuleDialog md(excludeMods, "Move to module", nullptr, this);
-        if (md.exec() != QDialog::Accepted) return;
+        if (md.exec() != QDialog::Accepted)
+            return;
         if (md.isNewModule())
         {
             QString topModName = QString::fromStdString(gNetlist->get_top_module()->get_name());
             bool ok;
             QString name = QInputDialog::getText(nullptr, "", "New module will be created under \"" + topModName + "\"\nModule Name:", QLineEdit::Normal, "", &ok);
-            if (!ok || name.isEmpty()) return;
+            if (!ok || name.isEmpty())
+                return;
 
             ActionCreateObject* actNewModule = new ActionCreateObject(UserActionObjectType::Module, name);
             actNewModule->setParentId(gNetlist->get_top_module()->get_id());
@@ -507,7 +512,6 @@ namespace hal
         ActionAddItemsToObject* addAct = new ActionAddItemsToObject(QSet<u32>() << mModule->get_id());
         addAct->setObject(UserActionObject(md.selectedId(), UserActionObjectType::Module));
         addAct->exec();
-
     }
 
     void ModuleInfoTable::refresh()
@@ -517,7 +521,7 @@ namespace hal
 
     void ModuleInfoTable::handleModuleRemoved(Module* module)
     {
-        if(mModule == module)
+        if (mModule == module)
         {
             mModule = nullptr;
 
@@ -537,7 +541,7 @@ namespace hal
 
     void ModuleInfoTable::handleModuleChanged(Module* module)
     {
-        if(mModule == module)
+        if (mModule == module)
             refresh();
     }
 
@@ -545,10 +549,10 @@ namespace hal
     {
         Q_UNUSED(affectedModuleId);
 
-        if(!mModule)
+        if (!mModule)
             return;
 
-        if(mModule == parentModule || mModule->contains_module(parentModule))
+        if (mModule == parentModule || mModule->is_parent_module_of(parentModule))
             refresh();
     }
 
@@ -556,10 +560,10 @@ namespace hal
     {
         Q_UNUSED(affectedGateId);
 
-        if(!mModule)
+        if (!mModule)
             return;
 
-        if(mModule == parentModule || mModule->contains_module(parentModule))
+        if (mModule == parentModule || mModule->is_parent_module_of(parentModule))
             refresh();
     }
 
@@ -567,13 +571,13 @@ namespace hal
     {
         Q_UNUSED(net);
 
-        if(!mModule)
+        if (!mModule)
             return;
 
-        Gate* affectedGate = gNetlist->get_gate_by_id(affectedGateId);
+        Gate* affectedGate               = gNetlist->get_gate_by_id(affectedGateId);
         std::vector<Gate*> allChildGates = mModule->get_gates(nullptr, true);
 
-        if(std::find(std::begin(allChildGates), std::end(allChildGates), affectedGate) != std::end(allChildGates))
+        if (std::find(std::begin(allChildGates), std::end(allChildGates), affectedGate) != std::end(allChildGates))
             refresh();
     }
-}
+}    // namespace hal

@@ -14,8 +14,15 @@ namespace hal
     {
         m_internal_manager = internal_manager;
         m_id               = id;
-        m_parent           = parent;
-        m_name             = name;
+
+        if (parent != nullptr)
+        {
+            auto tmp_parents = parent->get_parent_modules();
+            m_parents        = std::list<Module*>(tmp_parents.begin(), tmp_parents.end());
+            m_parents.push_front(parent);
+        }
+
+        m_name = name;
 
         m_next_pin_id       = 1;
         m_next_pin_group_id = 1;
@@ -124,136 +131,59 @@ namespace hal
 
     Module* Module::get_parent_module() const
     {
-        return m_parent;
+        if (m_parents.empty())
+        {
+            return nullptr;
+        }
+        else
+        {
+            return m_parents.front();
+        }
     }
 
-    std::vector<Module*> Module::get_parent_modules(const std::function<bool(Module*)>& filter, bool recursive) const
+    std::vector<Module*> Module::get_parent_modules(const std::function<bool(Module*)>& filter) const
     {
         std::vector<Module*> res;
-        if (m_parent == nullptr)
+        if (m_parents.empty())
         {
             return {};
         }
 
         if (!filter)
         {
-            res.push_back(m_parent);
+            res = std::vector<Module*>(m_parents.begin(), m_parents.end());
         }
         else
         {
-            if (filter(m_parent))
+            for (auto* p : m_parents)
             {
-                res.push_back(m_parent);
+                if (filter(p))
+                {
+                    res.push_back(p);
+                }
             }
         }
 
-        if (recursive)
-        {
-            std::vector<Module*> more = m_parent->get_parent_modules(filter, true);
-            res.reserve(res.size() + more.size());
-            res.insert(res.end(), more.begin(), more.end());
-        }
         return res;
     }
 
     int Module::get_submodule_depth() const
     {
-        int retval      = 0;
-        const Module* p = this;
-        while ((p = p->get_parent_module()))
-            ++retval;
-        return retval;
+        return m_parents.size();
     }
 
     bool Module::set_parent_module(Module* new_parent)
     {
-        if (new_parent == this)
-        {
-            log_error("module", "module '{}' with ID {} in netlist with ID {} cannot be its own parent module.", m_name, m_id, m_internal_manager->m_netlist->get_id());
-            return false;
-        }
-
-        if (m_parent == nullptr)
-        {
-            log_error("module", "no parent module can be assigned to top module '{}' with ID {} in netlist with ID {}.", m_name, m_id, m_internal_manager->m_netlist->get_id());
-            return false;
-        }
-
-        if (new_parent == nullptr)
-        {
-            log_error("module", "module '{}' with ID {} in netlist with ID {} cannot be assigned to be the top module.", m_name, m_id, m_internal_manager->m_netlist->get_id());
-            return false;
-        }
-
-        if (!get_netlist()->is_module_in_netlist(new_parent))
-        {
-            log_error("module", "module '{}' with ID {} is not contained in netlist with ID {}.", new_parent->get_name(), new_parent->get_id(), m_internal_manager->m_netlist->get_id());
-            return false;
-        }
-
-        auto children = get_submodules(nullptr, true);
-        if (std::find(children.begin(), children.end(), new_parent) != children.end())
-        {
-            new_parent->set_parent_module(m_parent);
-        }
-
-        m_parent->m_submodules_map.erase(m_id);
-        m_parent->m_submodules.erase(std::find(m_parent->m_submodules.begin(), m_parent->m_submodules.end(), this));
-
-        if (m_internal_manager->m_net_checks_enabled)
-        {
-            for (Net* net : get_nets(nullptr, true))
-            {
-                if (auto res = m_parent->check_net(net, true); res.is_error())
-                {
-                    log_error("module", "{}", res.get_error().get());
-                }
-            }
-        }
-
-        m_event_handler->notify(ModuleEvent::event::submodule_removed, m_parent, m_id);
-
-        m_parent = new_parent;
-
-        m_parent->m_submodules_map[m_id] = this;
-        m_parent->m_submodules.push_back(this);
-
-        if (m_internal_manager->m_net_checks_enabled)
-        {
-            for (Net* net : get_nets(nullptr, true))
-            {
-                if (auto res = m_parent->check_net(net, true); res.is_error())
-                {
-                    log_error("module", "{}", res.get_error().get());
-                }
-            }
-        }
-
-        m_event_handler->notify(ModuleEvent::event::parent_changed, this);
-        m_event_handler->notify(ModuleEvent::event::submodule_added, m_parent, m_id);
-
-        return true;
+        return m_internal_manager->module_set_parent(this, new_parent);
     }
 
-    bool Module::is_parent_module_of(const Module* module, bool recursive) const
+    bool Module::is_parent_module_of(const Module* module) const
     {
         if (module == nullptr)
         {
             return false;
         }
-        for (auto sm : m_submodules)
-        {
-            if (sm == module)
-            {
-                return true;
-            }
-            else if (recursive && sm->is_parent_module_of(module, true))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return module->is_submodule_of(this);
     }
 
     std::vector<Module*> Module::get_submodules(const std::function<bool(Module*)>& filter, bool recursive) const
@@ -286,17 +216,13 @@ namespace hal
         return res;
     }
 
-    bool Module::is_submodule_of(const Module* module, bool recursive) const
+    bool Module::is_submodule_of(const Module* module) const
     {
         if (module == nullptr)
         {
             return false;
         }
-        if (m_parent == module)
-        {
-            return true;
-        }
-        else if (recursive && m_parent->is_submodule_of(module, true))
+        else if (std::find(m_parents.begin(), m_parents.end(), module) != m_parents.end())
         {
             return true;
         }
@@ -304,14 +230,9 @@ namespace hal
         return false;
     }
 
-    bool Module::contains_module(const Module* other, bool recursive) const
-    {
-        return is_parent_module_of(other, recursive);
-    }
-
     bool Module::is_top_module() const
     {
-        return m_parent == nullptr;
+        return m_parents.empty();
     }
 
     Netlist* Module::get_netlist() const
@@ -595,7 +516,7 @@ namespace hal
 
         for (Endpoint* ep : sources)
         {
-            if (Module* mod = ep->get_gate()->get_module(); this != mod && !is_parent_module_of(mod, true))
+            if (Module* mod = ep->get_gate()->get_module(); this != mod && !is_parent_module_of(mod))
             {
                 res.has_external_source = true;
             }
@@ -612,7 +533,7 @@ namespace hal
 
         for (Endpoint* ep : destinations)
         {
-            if (Module* mod = ep->get_gate()->get_module(); this != mod && !is_parent_module_of(mod, true))
+            if (Module* mod = ep->get_gate()->get_module(); this != mod && !is_parent_module_of(mod))
             {
                 res.has_external_destination = true;
             }
@@ -633,6 +554,7 @@ namespace hal
     Result<std::monostate> Module::check_net(Net* net, bool recursive)
     {
         NetConnectivity con = check_net_endpoints(net);
+
         if (con.has_internal_source && con.has_internal_destination)
         {
             m_internal_nets.insert(net);
@@ -741,9 +663,9 @@ namespace hal
             }
         }
 
-        if (m_internal_manager->m_net_checks_enabled && recursive && m_parent != nullptr)
+        if (m_internal_manager->m_net_checks_enabled && recursive && !m_parents.empty())
         {
-            if (auto res = m_parent->check_net(net, true); res.is_error())
+            if (auto res = m_parents.front()->check_net(net, true); res.is_error())
             {
                 return res;
             }
