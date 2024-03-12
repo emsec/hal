@@ -28,6 +28,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <cstdint>
 
 // unfortunately std::filesystem::path is not available for all platforms
 #ifdef _WIN32
