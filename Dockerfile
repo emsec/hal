@@ -14,7 +14,7 @@ RUN apt-get update -y && \
     apt-get install -y lsb-release
 
 COPY . .
-RUN ./install_dependencies.sh
+RUN HAL_DOCKER=1 ./install_dependencies.sh
 
 RUN mkdir build
 WORKDIR ${hal_path}/build/
