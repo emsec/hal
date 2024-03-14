@@ -39,15 +39,49 @@
 #include <string>
 #include <tuple>
 #include <vector>
+#include <unordered_map>
+
+namespace hal
+{
+    class Gate;
+    class GatePin;
+    class Endpoint;
+
+    struct EndpointKey
+    {
+        const Gate* gate;
+        const GatePin* pin;
+        EndpointKey(const Gate* g, const GatePin* p)
+            : gate(g), pin(p) {;}
+
+        EndpointKey(const Endpoint* ep);
+
+        bool operator==(const EndpointKey& other) const { return gate==other.gate && pin==other.pin; }
+    };
+}
+
+const int move_bits = sizeof(size_t) * 4;
+
+// std function must not be in hal namespace
+template <> struct std::hash<struct hal::EndpointKey>
+{
+    size_t operator()(const hal::EndpointKey& epk) const
+    {
+        size_t h1 = hash<unsigned int>()((uintptr_t) epk.gate);
+        size_t h2 = hash<unsigned int>()((uintptr_t) epk.pin);
+        h1 ^= (h2 << (move_bits+1) );
+        h1 ^= (h2 >> (move_bits-1) );
+        return h1;
+    }
+};
 
 namespace hal
 {
     /* forward declaration */
     class Netlist;
-    class Gate;
     class Grouping;
     class NetlistInternalManager;
-    class Endpoint;
+
 
     /**
      * Net class containing information about a net including its source and destination.
@@ -396,6 +430,7 @@ namespace hal
         bool is_global_output_net() const;
 
     private:
+
         friend class NetlistInternalManager;
         explicit Net(NetlistInternalManager* internal_manager, EventHandler* event_handler, const u32 id, const std::string& name = "");
 
@@ -418,8 +453,8 @@ namespace hal
         /* stores the dst gate and pin id of the dst gate */
         std::vector<std::unique_ptr<Endpoint>> m_destinations;
         std::vector<std::unique_ptr<Endpoint>> m_sources;
-        std::vector<Endpoint*> m_destinations_raw;
-        std::vector<Endpoint*> m_sources_raw;
+        std::unordered_map<EndpointKey,Endpoint*> m_destinations_hash;
+        std::unordered_map<EndpointKey,Endpoint*> m_sources_hash;
 
         EventHandler* m_event_handler;
     };

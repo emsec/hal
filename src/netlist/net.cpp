@@ -43,23 +43,18 @@ namespace hal
             return false;
         }
 
-        const std::vector<Endpoint*>& sources_n2 = other.get_sources();
-        for (const Endpoint* ep_n1 : m_sources_raw)
+        for (auto ep_n1_it = m_sources_hash.begin(); ep_n1_it != m_sources_hash.end(); ++ep_n1_it)
         {
-            if (std::find_if(sources_n2.begin(), sources_n2.end(), [ep_n1](const Endpoint* ep_n2) { return *ep_n1->get_pin() == *ep_n2->get_pin() && *ep_n1->get_gate() == *ep_n2->get_gate(); })
-                == sources_n2.end())
+            if (other.m_sources_hash.find(ep_n1_it->second) == other.m_sources_hash.end())
             {
                 log_debug("net", "the nets with IDs {} and {} are not equal due to an unequal source endpoint.", m_id, other.get_id());
                 return false;
             }
         }
 
-        const std::vector<Endpoint*>& destinations_n2 = other.get_destinations();
-        for (const Endpoint* ep_n1 : m_destinations_raw)
+        for (auto ep_n1_it = m_destinations_hash.begin(); ep_n1_it != m_destinations_hash.end(); ++ep_n1_it)
         {
-            if (std::find_if(
-                    destinations_n2.begin(), destinations_n2.end(), [ep_n1](const Endpoint* ep_n2) { return *ep_n1->get_pin() == *ep_n2->get_pin() && *ep_n1->get_gate() == *ep_n2->get_gate(); })
-                == destinations_n2.end())
+            if (other.m_destinations_hash.find(ep_n1_it->second) == other.m_destinations_hash.end())
             {
                 log_debug("net", "the nets with IDs {} and {} are not equal due to an unequal destination endpoint.", m_id, other.get_id());
                 return false;
@@ -147,9 +142,10 @@ namespace hal
 
     bool Net::remove_source(Gate* gate, const GatePin* pin)
     {
-        if (auto it = std::find_if(m_sources_raw.begin(), m_sources_raw.end(), [gate, pin](auto ep) { return ep->get_gate() == gate && *ep->get_pin() == *pin; }); it != m_sources_raw.end())
+        auto it = m_sources_hash.find(EndpointKey(gate,pin));
+        if (it != m_sources_hash.end())
         {
-            return m_internal_manager->net_remove_source(this, *it);
+            return m_internal_manager->net_remove_source(this, it->second);
         }
         return false;
     }
@@ -186,13 +182,11 @@ namespace hal
 
     bool Net::is_a_source(const Gate* gate) const
     {
-        if (gate == nullptr)
-        {
-            log_warning("net", "could not check if gate is a source: nullptr given for gate");
-            return false;
-        }
+        for (const Endpoint* ep : gate->get_fan_out_endpoints())
+            if (m_sources_hash.find(EndpointKey(ep)) != m_sources_hash.end())
+                return true;
 
-        return std::find_if(m_sources_raw.begin(), m_sources_raw.end(), [gate](const auto* ep) { return ep->get_gate() == gate; }) != m_sources_raw.end();
+        return false;
     }
 
     bool Net::is_a_source(const Gate* gate, const GatePin* pin) const
@@ -209,7 +203,7 @@ namespace hal
             return false;
         }
 
-        return std::find_if(m_sources_raw.begin(), m_sources_raw.end(), [gate, pin](const auto* ep) { return ep->get_gate() == gate && *ep->get_pin() == *pin; }) != m_sources_raw.end();
+        return m_sources_hash.find(EndpointKey(gate,pin)) != m_sources_hash.end();
     }
 
     bool Net::is_a_source(const Gate* gate, const std::string& pin_name) const
@@ -240,29 +234,30 @@ namespace hal
             return false;
         }
 
-        return std::find(m_sources_raw.begin(), m_sources_raw.end(), ep) != m_sources_raw.end();
+        return m_sources_hash.find(EndpointKey(ep)) != m_sources_hash.end();
     }
 
     u32 Net::get_num_of_sources() const
     {
-        return (u32)m_sources_raw.size();
+        return (u32)m_sources_hash.size();
     }
 
     std::vector<Endpoint*> Net::get_sources(const std::function<bool(Endpoint* ep)>& filter) const
     {
+        std::vector<Endpoint*> srcs;
         if (!filter)
         {
-            return m_sources_raw;
+            for (auto it = m_sources_hash.begin(); it != m_sources_hash.end(); ++it)
+                srcs.push_back(it->second);
         }
-
-        std::vector<Endpoint*> srcs;
-        for (auto src : m_sources_raw)
+        else
         {
-            if (!filter(src))
+            for (auto it = m_sources_hash.begin(); it != m_sources_hash.end(); ++it)
             {
-                continue;
+                Endpoint* src = it->second;
+                if (!filter(src)) continue;
+                srcs.push_back(src);
             }
-            srcs.push_back(src);
         }
         return srcs;
     }
@@ -295,10 +290,10 @@ namespace hal
 
     bool Net::remove_destination(Gate* gate, const GatePin* pin)
     {
-        if (auto it = std::find_if(m_destinations_raw.begin(), m_destinations_raw.end(), [gate, pin](const auto* ep) { return ep->get_gate() == gate && *ep->get_pin() == *pin; });
-            it != m_destinations_raw.end())
+        auto it = m_destinations_hash.find(EndpointKey(gate,pin));
+        if (it != m_destinations_hash.end())
         {
-            return m_internal_manager->net_remove_destination(this, *it);
+            return m_internal_manager->net_remove_destination(this, it->second);
         }
         return false;
     }
@@ -341,7 +336,11 @@ namespace hal
             return false;
         }
 
-        return std::find_if(m_destinations_raw.begin(), m_destinations_raw.end(), [gate](const auto* ep) { return ep->get_gate() == gate; }) != m_destinations_raw.end();
+        for (const Endpoint* ep : gate->get_fan_in_endpoints())
+            if (m_destinations_hash.find(EndpointKey(ep)) != m_destinations_hash.end())
+                return true;
+
+        return false;
     }
 
     bool Net::is_a_destination(const Gate* gate, const GatePin* pin) const
@@ -358,7 +357,7 @@ namespace hal
             return false;
         }
 
-        return std::find_if(m_destinations_raw.begin(), m_destinations_raw.end(), [gate, pin](const auto* ep) { return ep->get_gate() == gate && *ep->get_pin() == *pin; }) != m_destinations_raw.end();
+        return m_destinations_hash.find(EndpointKey(gate,pin)) != m_destinations_hash.end();
     }
 
     bool Net::is_a_destination(const Gate* gate, const std::string& pin_name) const
@@ -389,29 +388,30 @@ namespace hal
             return false;
         }
 
-        return std::find(m_destinations_raw.begin(), m_destinations_raw.end(), ep) != m_destinations_raw.end();
+        return m_destinations_hash.find(EndpointKey(ep))!=m_destinations_hash.end();
     }
 
     u32 Net::get_num_of_destinations() const
     {
-        return (u32)m_destinations_raw.size();
+        return (u32)m_destinations_hash.size();
     }
 
     std::vector<Endpoint*> Net::get_destinations(const std::function<bool(Endpoint* ep)>& filter) const
     {
+        std::vector<Endpoint*> dsts;
         if (!filter)
         {
-            return m_destinations_raw;
+            for (auto it = m_destinations_hash.begin(); it != m_destinations_hash.end(); ++it)
+                dsts.push_back(it->second);
         }
-
-        std::vector<Endpoint*> dsts;
-        for (auto dst : m_destinations_raw)
+        else
         {
-            if (!filter(dst))
+            for (auto it = m_destinations_hash.begin(); it != m_destinations_hash.end(); ++it)
             {
-                continue;
+                Endpoint* dst = it->second;
+                if (!filter(dst)) continue;
+                dsts.push_back(dst);
             }
-            dsts.push_back(dst);
         }
         return dsts;
     }

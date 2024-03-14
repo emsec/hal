@@ -442,19 +442,17 @@ namespace hal
             return false;
         }
 
-        auto dsts = net->m_destinations_raw;
-        for (auto dst : dsts)
+        for (auto dst_it = net->m_destinations_hash.begin(); dst_it != net->m_destinations_hash.end(); ++dst_it)
         {
-            if (!this->net_remove_destination(net, dst))
+            if (!this->net_remove_destination(net, dst_it->second))
             {
                 return false;
             }
         }
 
-        auto srcs = net->m_sources_raw;
-        for (auto src : srcs)
+        for (auto src_it = net->m_sources_hash.begin(); src_it != net->m_sources_hash.end(); ++src_it)
         {
-            if (!this->net_remove_source(net, src))
+            if (!this->net_remove_source(net, src_it->second))
             {
                 return false;
             }
@@ -533,7 +531,7 @@ namespace hal
         auto new_endpoint     = std::unique_ptr<Endpoint>(new Endpoint(gate, pin, net, false));
         auto new_endpoint_raw = new_endpoint.get();
         net->m_sources.push_back(std::move(new_endpoint));
-        net->m_sources_raw.push_back(new_endpoint_raw);
+        net->m_sources_hash[EndpointKey(new_endpoint_raw)] = new_endpoint_raw;
         gate->m_out_endpoints.push_back(new_endpoint_raw);
         gate->m_out_nets.push_back(net);
 
@@ -573,14 +571,14 @@ namespace hal
         bool removed = false;
         for (u32 i = 0; i < net->m_sources.size(); ++i)
         {
-            if (net->m_sources_raw[i] == ep)
+            auto src_it = net->m_sources_hash.find(EndpointKey(ep));
+            if (src_it != net->m_sources_hash.end())
             {
                 utils::unordered_vector_erase(gate->m_out_endpoints, ep);
                 utils::unordered_vector_erase(gate->m_out_nets, net);
                 net->m_sources[i] = std::move(net->m_sources.back());
                 net->m_sources.pop_back();
-                net->m_sources_raw[i] = net->m_sources_raw.back();
-                net->m_sources_raw.pop_back();
+                net->m_sources_hash.erase(src_it);
                 m_event_handler->notify(NetEvent::event::src_removed, net, gate->get_id());
                 removed = true;
                 break;
@@ -671,7 +669,7 @@ namespace hal
         std::unique_ptr<Endpoint> new_endpoint = std::unique_ptr<Endpoint>(new Endpoint(gate, pin, net, true));
         Endpoint* new_endpoint_raw             = new_endpoint.get();
         net->m_destinations.push_back(std::move(new_endpoint));
-        net->m_destinations_raw.push_back(new_endpoint_raw);
+        net->m_destinations_hash[EndpointKey(new_endpoint_raw)] = new_endpoint_raw;
         gate->m_in_endpoints.push_back(new_endpoint_raw);
         gate->m_in_nets.push_back(net);
 
@@ -710,14 +708,14 @@ namespace hal
         bool removed = false;
         for (u32 i = 0; i < net->m_destinations.size(); ++i)
         {
-            if (net->m_destinations_raw[i] == ep)
+            auto dst_it = net->m_destinations_hash.find(EndpointKey(ep));
+            if (dst_it != net->m_destinations_hash.end())
             {
                 utils::unordered_vector_erase(gate->m_in_endpoints, ep);
                 utils::unordered_vector_erase(gate->m_in_nets, net);
                 net->m_destinations[i] = std::move(net->m_destinations.back());
                 net->m_destinations.pop_back();
-                net->m_destinations_raw[i] = net->m_destinations_raw.back();
-                net->m_destinations_raw.pop_back();
+                net->m_destinations_hash.erase(dst_it);
                 m_event_handler->notify(NetEvent::event::dst_removed, net, gate->get_id());
                 removed = true;
                 break;
@@ -1304,4 +1302,9 @@ namespace hal
     {
         m_lut_function_cache.clear();
     }
+
+    EndpointKey::EndpointKey(const Endpoint* ep)
+        : gate(ep->get_gate()), pin(ep->get_pin())
+    {;}
+
 }    // namespace hal
