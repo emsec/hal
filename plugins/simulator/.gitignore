@@ -8,3 +8,5 @@
 !verilator*
 !verilator/**/*
 !.gitignore
+!custom_sim_plugin*
+!custom_sim_plugin/**/*
