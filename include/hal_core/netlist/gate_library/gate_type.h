@@ -354,9 +354,9 @@ namespace hal
          * Delete the given pin group.
          * 
          * @param[in] pin_group - The pin group to be deleted.
-         * @returns Ok on success, an error message otherwise.
+         * @returns true on success, false otherwise.
          */
-        Result<std::monostate> delete_pin_group(PinGroup<GatePin>* pin_group);
+        bool delete_pin_group(PinGroup<GatePin>* pin_group);
 
         /**
          * Assign a pin to a pin group.
@@ -470,6 +470,6 @@ namespace hal
         GateType& operator=(const GateType&) = delete;
 
         Result<PinGroup<GatePin>*> create_pin_group_internal(const u32 id, const std::string& name, PinDirection direction, PinType type, bool ascending, u32 start_index);
-        Result<std::monostate> delete_pin_group_internal(PinGroup<GatePin>* pin_group);
+        bool delete_pin_group_internal(PinGroup<GatePin>* pin_group);
     };
 }    // namespace hal

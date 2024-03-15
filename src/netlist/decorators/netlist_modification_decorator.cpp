@@ -291,15 +291,14 @@ namespace hal
                 // remove pin from current pin group
                 auto current_pin_group = pin->get_group().first;
                 // This get is safe, since we make sure that the pin is a valid pointer and part of the group
-                current_pin_group->remove_pin(pin).get();
+                current_pin_group->remove_pin(pin);
 
                 // delete old pin group incase it is now empty
                 if (current_pin_group->get_pins().empty())
                 {
-                    if (const auto res = m->delete_pin_group(current_pin_group); !res.is_ok())
+                    if (!m->delete_pin_group(current_pin_group))
                     {
-                        return ERR_APPEND(res.get_error(),
-                                          "could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name()
+                        return ERR("could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name()
                                               + "' with ID " + std::to_string(slave_net->get_id()) + ": failed to delete pingroup " + current_pin_group->get_name() + "with ID "
                                               + std::to_string(current_pin_group->get_id()) + " that is now empty.");
                     }
@@ -326,7 +325,7 @@ namespace hal
                     pin_group = pin_groups.front();
                 }
 
-                pin_group->assign_pin(pin).get();
+                pin_group->assign_pin(pin);
                 if (const auto res = pin_group->move_pin(pin, pin_index); res.is_error())
                 {
                     return ERR_APPEND(res.get_error(),

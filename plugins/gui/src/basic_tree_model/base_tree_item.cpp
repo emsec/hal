@@ -99,16 +99,6 @@ namespace hal
         return mParent->getRowForChild(this);
     }
 
-    void BaseTreeItem::setAdditionalData(QString key, QVariant data)
-    {
-        mAdditionalData.insert(key, data);
-    }
-
-    QVariant BaseTreeItem::getAdditionalData(QString key) const
-    {
-        return mAdditionalData.value(key, QVariant());
-    }
-
     QVariant RootTreeItem::getData(int column) const
         {
             if (column <= mHeaderLabels.size())

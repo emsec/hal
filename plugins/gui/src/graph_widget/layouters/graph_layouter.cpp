@@ -778,7 +778,7 @@ namespace hal
         {
             iy0     = ityLast.key();
             int iy1 = itNext.key();
-            Q_ASSERT(iy1 == iy0 + 1);
+//            Q_ASSERT(iy1 == iy0 + 1);
             if (iy0 % 2 != 0)
             {
                 // netjunction -> endpoint

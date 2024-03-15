@@ -1207,10 +1207,9 @@ namespace hal
 
             for (const auto& [index, pin] : index_to_pin)
             {
-                auto move_res = m->move_pin_within_group(pg, pin, index);
-                if (move_res.is_error())
+                if (!m->move_pin_within_group(pg, pin, index))
                 {
-                    return ERR_APPEND(move_res.get_error(),
+                    return ERR(
                                       "cannot reorder module pin groups: failed to move pin " + pin->get_name() + " in pin group " + pg->get_name() + " of module with ID "
                                           + std::to_string(m->get_id()) + " to new index " + std::to_string(index));
                 }

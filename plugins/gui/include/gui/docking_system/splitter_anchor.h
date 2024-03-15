@@ -113,7 +113,7 @@ namespace hal
          *
          * @return The number of widgets.
          */
-        int count();
+        int count() const override;
 
         /**
          * Removes all buttons from the dockbar and therefore the widgets from the area. The corresponding

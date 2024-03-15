@@ -69,11 +69,11 @@ namespace hal
         if(!idx.isValid())
             return;
 
-        auto clickedItem = mPinModel->getItemFromIndex(idx);
-        if(mPinModel->getTypeOfItem(clickedItem) != GatePinsTreeModel::itemType::pin)
+        PinTreeItem* clickedItem = dynamic_cast<PinTreeItem*>(mPinModel->getItemFromIndex(idx));
+        if(!clickedItem || clickedItem->type() != PinTreeItem::Pin)
             return;
 
-        auto netId = mPinModel->getNetIDsOfTreeItem(clickedItem).front();
+        auto netId = clickedItem->netIds().front();
         auto clickedNet = gNetlist->get_net_by_id(netId);
         if(clickedNet)
         {
@@ -96,9 +96,8 @@ namespace hal
         if(!idx.isValid())
             return;
 
-        BaseTreeItem* clickedItem = mPinModel->getItemFromIndex(idx);
+        PinTreeItem* clickedItem = dynamic_cast<PinTreeItem*>(mPinModel->getItemFromIndex(idx));
         QMenu menu;
-        GatePinsTreeModel::itemType type = mPinModel->getTypeOfItem(clickedItem);
         bool isMiscSectionSet = false;//so that the misc-section is not set multiple times
 
         //PLAINTEXT: NAME, DIRECTION, TYPE
@@ -118,9 +117,9 @@ namespace hal
         });
 
         //Check if jump to source or destination is possible
-        if(type == GatePinsTreeModel::itemType::pin && mPinModel->getNetIDsOfTreeItem(clickedItem).size()==1)
+        if(clickedItem->type() == PinTreeItem::Pin && clickedItem->netIds().size()==1)
         {
-            auto netId = mPinModel->getNetIDsOfTreeItem(clickedItem).front();
+            auto netId = clickedItem->netIds().front();
             auto clickedNet = gNetlist->get_net_by_id(netId);
             if(clickedNet)
             {
@@ -156,15 +155,19 @@ namespace hal
         }
 
         //Add nets to selection if possible
-        QList<int> netIds;
-        if(type == GatePinsTreeModel::itemType::pin)
+        QList<u32> netIds;
+        if(clickedItem->type() == PinTreeItem::Pin)
         {
-            netIds = mPinModel->getNetIDsOfTreeItem(clickedItem);
+            netIds = clickedItem->netIds();
         }
         else
         {
             for(auto childItem : clickedItem->getChildren())
-                netIds.append(mPinModel->getNetIDsOfTreeItem(childItem));
+            {
+                PinTreeItem* pti = dynamic_cast<PinTreeItem*>(childItem);
+                if (pti)
+                    netIds.append(pti->netIds());
+            }
         }
         if(netIds.size() != 0)
         {
@@ -191,7 +194,7 @@ namespace hal
 
         menu.addSection("Python");
 
-        if(type == GatePinsTreeModel::itemType::pin)
+        if(clickedItem->type() == PinTreeItem::Pin)
             buildPythonMenuForPin(menu, clickedItem);
         else
             buildPythonMenuForPinGroup(menu, clickedItem);
@@ -201,10 +204,10 @@ namespace hal
 
     }
 
-    void GatePinTree::buildPythonMenuForPin(QMenu &menu, BaseTreeItem *clickedPinItem)
+    void GatePinTree::buildPythonMenuForPin(QMenu &menu, PinTreeItem *clickedPinItem)
     {
         // 1.) NET-OBJECT
-        QList<int> netIdsOfItem = mPinModel->getNetIDsOfTreeItem(clickedPinItem);
+        QList<u32> netIdsOfItem = clickedPinItem->netIds();
         QString pythonCommandNetIds, pythonCommandName;
 
         if(netIdsOfItem.size() == 1)
@@ -243,7 +246,7 @@ namespace hal
 
     }
 
-    void GatePinTree::buildPythonMenuForPinGroup(QMenu &menu, BaseTreeItem *clickedPinIGrouptem)
+    void GatePinTree::buildPythonMenuForPinGroup(QMenu &menu, PinTreeItem *clickedPinIGrouptem)
     {
         // 1. PYTHON LIST OF PIN GROUPS
         QString pythonList = "[";

@@ -30,6 +30,7 @@
 #include "hal_core/netlist/event_system/event_handler.h"
 #include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "hal_core/netlist/gate_library/enums/pin_type.h"
+#include "hal_core/netlist/gate_library/enums/pin_event.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
 #include "hal_core/netlist/pins/module_pin.h"
 #include "hal_core/netlist/pins/pin_group.h"
@@ -526,9 +527,9 @@ namespace hal
          * Delete the given pin group.
          * 
          * @param[in] pin_group - The pin group to be deleted.
-         * @returns Ok on success, an error message otherwise.
+         * @returns true on success, false otherwise.
          */
-        Result<std::monostate> delete_pin_group(PinGroup<ModulePin>* pin_group);
+        bool delete_pin_group(PinGroup<ModulePin>* pin_group);
 
         /**
          * Move a pin group to another index within the module.
@@ -536,9 +537,9 @@ namespace hal
          * 
          * @param[in] pin_group - The pin group to be moved.
          * @param[in] new_index - The index to which the pin group is moved.
-         * @returns Ok on success, an error message otherwise.
+         * @returns true on success, false message otherwise.
          */
-        Result<std::monostate> move_pin_group(PinGroup<ModulePin>* pin_group, u32 new_index);
+        bool move_pin_group(PinGroup<ModulePin>* pin_group, u32 new_index);
 
         /**
          * Set the name of the given pin group.
@@ -574,9 +575,9 @@ namespace hal
          * @param[in] pin_group - The new pin group.
          * @param[in] pin - The pin to be added.
          * @param[in] delete_empty_groups - Set `true` to delete groups that are empty after the pin has been assigned to the new group, `false` to keep empty groups. Defaults to `true`.
-         * @returns Ok on success, an error message otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
-        Result<std::monostate> assign_pin_to_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups = true);
+        bool assign_pin_to_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups = true);
 
         /**
          * Move a pin to another index within the given pin group.
@@ -585,9 +586,9 @@ namespace hal
          * @param[in] pin_group - The pin group.
          * @param[in] pin - The pin to be moved.
          * @param[in] new_index - The index to which the pin is moved.
-         * @returns Ok on success, an error message otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
-        Result<std::monostate> move_pin_within_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, u32 new_index);
+        bool move_pin_within_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, u32 new_index);
 
         /**
          * Remove a pin from a pin group.
@@ -596,9 +597,9 @@ namespace hal
          * @param[in] pin_group - The old pin group.
          * @param[in] pin - The pin to be removed.
          * @param[in] delete_empty_groups - Set `true` to delete the group of it is empty after the pin has been removed, `false` to keep the empty group. Defaults to `true`.
-         * @returns Ok on success, an error message otherwise.
+         * @returns `true` on success, `false` otherwise.
          */
-        Result<std::monostate> remove_pin_from_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups = true);
+        bool remove_pin_from_group(PinGroup<ModulePin>* pin_group, ModulePin* pin, bool delete_empty_groups = true);
 
         /*
          * ################################################################
@@ -680,6 +681,12 @@ namespace hal
          */
         std::vector<Gate*> get_gates(const std::function<bool(Gate*)>& filter, bool recursive = false) const;
 
+        /**
+         * Get the event handler connected to module
+         * @return The event handler;
+         */
+        EventHandler* get_event_handler() const;
+
     private:
         friend class NetlistInternalManager;
         Module(NetlistInternalManager* internal_manager, EventHandler* event_handler, u32 id, Module* parent, const std::string& name);
@@ -741,11 +748,11 @@ namespace hal
 
         NetConnectivity check_net_endpoints(const Net* net) const;
         Result<std::monostate> check_net(Net* net, bool recursive = false);
-        Result<ModulePin*> assign_pin_net(const u32 pin_id, Net* net, PinDirection direction, const std::string& name = "", PinType type = PinType::none);
-        Result<std::monostate> remove_pin_net(Net* net);
+        bool assign_pin_net(const u32 pin_id, Net* net, PinDirection direction);
+        bool remove_pin_net(Net* net);
         Result<ModulePin*> create_pin_internal(const u32 id, const std::string& name, Net* net, PinDirection direction, PinType type, bool force_name);
-        Result<std::monostate> delete_pin_internal(ModulePin* pin);
+        bool delete_pin_internal(ModulePin* pin);
         Result<PinGroup<ModulePin>*> create_pin_group_internal(const u32 id, const std::string& name, PinDirection direction, PinType type, bool ascending, u32 start_index, bool force_name);
-        Result<std::monostate> delete_pin_group_internal(PinGroup<ModulePin>* pin_group);
+        bool delete_pin_group_internal(PinGroup<ModulePin>* pin_group);
     };
 }    // namespace hal

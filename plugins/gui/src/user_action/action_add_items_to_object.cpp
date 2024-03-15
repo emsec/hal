@@ -173,6 +173,7 @@ namespace hal
                 else
                     return false;
                 break;
+                /* TODO PIN
             case UserActionObjectType::PinGroup: {
                 if (mPins.empty())
                     return true;
@@ -200,7 +201,7 @@ namespace hal
 
                     for (auto id : mPins)
                     {
-                        if (mod->assign_pin_to_group(pinGrp, mod->get_pin_by_id(id), false).is_error())
+                        if (!mod->assign_pin_to_group(pinGrp, mod->get_pin_by_id(id), false))
                         {
                             return false;
                         }
@@ -257,6 +258,7 @@ namespace hal
                 }
             }
             break;
+            */
             default:
                 return false;
         }

@@ -524,9 +524,9 @@ namespace hal
                             }
                             else
                             {
-                                if (const auto res = new_mod->assign_pin_to_group(pg_it->second, pin); res.is_error())
+                                if (!new_mod->assign_pin_to_group(pg_it->second, pin))
                                 {
-                                    log_warning("dataflow", "{}", res.get_error().get());
+                                    log_warning("dataflow", "Assign pin to group failed.");
                                 }
                             }
 
@@ -564,9 +564,9 @@ namespace hal
                             }
                             else
                             {
-                                if (const auto res = new_mod->assign_pin_to_group(pg_it->second, pin); res.is_error())
+                                if (!new_mod->assign_pin_to_group(pg_it->second, pin))
                                 {
-                                    log_warning("dataflow", "{}", res.get_error().get());
+                                    log_warning("dataflow", "Assign pin to group failed.");
                                 }
                             }
 

@@ -36,6 +36,7 @@
 #include <QVariant>
 #include <set>
 #include <array>
+#include <QTextStream>
 
 namespace hal
 {
@@ -49,6 +50,28 @@ namespace hal
     class ModuleModel : public BaseTreeModel
     {
         Q_OBJECT
+
+        class TempGateAssignment
+        {
+            int mAccumulate;
+        public:
+            QHash<u32, Module*> mGateRemove;
+            QHash<u32, Module*> mGateAssign;
+
+            TempGateAssignment() : mAccumulate(0) {;}
+            void removeGateFromModule(u32 gateId, Module* m)
+            {
+                if (!mGateRemove.contains(gateId))
+                    mGateRemove[gateId] = m;
+            }
+            void assignGateToModule(u32 gateId, Module* m)
+            {
+                mGateAssign[gateId] = m;
+            }
+            bool isAccumulate() const { return mAccumulate > 0; }
+            void beginAccumulate() { mAccumulate++; }
+            void endAccumulate() { mAccumulate--; }
+        };
 
     public:
         /**
@@ -91,14 +114,6 @@ namespace hal
         ModuleItem* getItem(const QModelIndex& index) const;
 
         /**
-         * Returns the index where the specified ModuleItem can be found.
-         *
-         * @param item - The ModuleItem to search for in the item model
-         * @returns the model index of the specified ModuleItem
-         */
-        QModelIndex getIndex(const ModuleItem* const item) const;
-
-        /**
          * Returns the ModuleItem for a specified id and type.
          *
          * @param module_id - The id of the ModuleItem
@@ -123,7 +138,7 @@ namespace hal
          * @param id - The id of the module to add.
          * @param parent_module - The id of the parent module of the module to add.
          */
-        void addModule(const u32 id, const u32 parent_module);
+        void addModule(const u32 id, const u32 parentId);
 
         /**
          * Add a gate to the item model. For the specified gate a new ModuleItem is created and stored.
@@ -131,7 +146,7 @@ namespace hal
          * @param id - The id of the gate to add.
          * @param parent_module - The id of the parent module of the gate to add.
          */
-        void addGate(const u32 id, const u32 parent_module);
+        void addGate(const u32 id, const u32 parentId);
 
         /**
          * Add a net to the item model. For the specified net a new ModuleItem is created and stored.
@@ -139,7 +154,7 @@ namespace hal
          * @param id - The id of the net to add.
          * @param parent_module - The id of the parent module of the net to add.
          */
-        void addNet(const u32 id, const u32 parent_module);
+        void addNet(const u32 id, const u32 parentId);
 
         /**
          * Recursively adds the given module with all of its submodules (and their submodules and so on...)
@@ -148,7 +163,7 @@ namespace hal
          * @param module - The module which should be added to the item model together with all its
          *                  submodules, gates and nets.
          */
-        void addRecursively(const Module* module);
+        void addRecursively(const Module* module, BaseTreeItem* parentItem = nullptr);
 
         /**
          * Removes a module from the item model. The specified module MUST be contained in the item model.
@@ -172,20 +187,16 @@ namespace hal
         void removeNet(const u32 id);
 
         /**
-         * Moves the ModuleItem corresponding to the module under it's new parent ModuleItem.
-         * The items for all nets, that have at least one source or one destination within the module, 
-         * will be updated afterwards.
-         * 
-         * @param module The module whose parent has changed.
-        */
-        void handleModuleParentChanged(const Module* module);
-
-        /**
          * Handles the assigment of gates to modules. 
          * If the gate does not yet exist in the item model, a new one is created.
-         * All nets, that are connected to the gate, will be updated.
         */
-        void handleModuleGateAssinged(const u32 id, const u32 parent_module);
+        void moduleAssignGate(const u32 moduleId, const u32 gateId);
+
+        /**
+         * Handles the assigment of nets to modules for nets connected to gates of list.
+         * If the gate list is empty all nets connected to modules in tree are considered.
+        */
+        void moduleAssignNets(const QList<u32>& gateIds = QList<u32>());
 
         /**
          * Updates the position of a net in the ModuleTree. 
@@ -195,7 +206,7 @@ namespace hal
          * 
          * @param net The net whose source or destination might have changed.
         */
-        void updateNet(const Net* net);
+        void updateNetParent(const Net* net, const QHash<const Net*,ModuleItem*>* parentAssignment = nullptr);
 
         /**
          * Reattaches the ModuleItem corresponding to the specified module to a new parent item.
@@ -235,6 +246,47 @@ namespace hal
          */
         bool isModifying();
 
+    private Q_SLOTS:
+        void handleModuleNameChanged(Module* mod);
+
+        void handleModuleRemoved(Module* mod);
+
+        void handleModuleCreated(Module* mod);
+
+        /**
+         * Moves the ModuleItem corresponding to the module under it's new parent ModuleItem.
+         * The items for all nets, that have at least one source or one destination within the module,
+         * will be updated afterwards.
+         *
+         * @param module The module whose parent has changed.
+        */
+        void handleModuleParentChanged(const Module* mod);
+
+        void handleModuleSubmoduleAdded(Module* mod, u32 submodId);
+
+        void handleModuleSubmoduleRemoved(Module* mod, u32 submodId);
+
+        void handleModuleGateAssigned(Module* mod, u32 gateId);
+
+        void handleModuleGateRemoved(Module* mod, u32 gateId);
+
+        void handleModuleGatesAssignBegin(Module* mod, u32 numberGates);
+
+        void handleModuleGatesAssignEnd(Module* mod, u32 numberGates);
+
+        void handleGateCreated(Gate* gat);
+
+        void handleGateNameChanged(Gate* gat);
+
+        void handleGateRemoved(Gate* gat);
+
+        void handleNetCreated(Net* net);
+
+        void handleNetNameChanged(Net* net);
+
+        void handleNetRemoved(Net* net);
+
+        void handleNetUpdated(Net* net, u32 data);
     private:
         /**
          * Searches for a new parent module, such that it is the deepest module in the hierarchy, that contains all
@@ -243,15 +295,41 @@ namespace hal
          * @param net The net for which a new parent should be searched.
          * 
          * @return The new parent module, that contains all sources and destinations of net. If no such parent could be found 
-         * (e.g. net has no sources or destinations), nullptr is returned instead.
+         * (e.g. global input/output, net has no sources or destinations), nullptr is returned instead.
         */
-        Module* findNetParent(const Net* net);
+        Module* findNetParent(const Net* net) const;
 
-        QMap<u32, ModuleItem*> mModuleMap;
-        QMap<u32, ModuleItem*> mGateMap;
-        QMap<u32, ModuleItem*> mNetMap;
-        std::array<QMap<u32, ModuleItem*>*, 3> mModuleItemMaps = {&mModuleMap, &mGateMap, &mNetMap};;
+        /**
+         * Recursion to loop over all modules from (sub-)tree and create a hash assign how internal nets are assigned to module
+         * @param parent - top tree element
+         * @param parentAssignment - the resulting net module assignment
+         * @param assignedNets - nets already assigned (no assignment to module higher up in hierarchy)
+         */
+        void findNetParentRecursion(BaseTreeItem* parent, QHash<const Net*,ModuleItem*>& parentAssignment, std::unordered_set<Net*>& assignedNets) const;
+
+        /**
+         * Factory method to append new tree items. Insert signals are sent to view. New items are put into hash table.
+         * @param id - ID of new tree item
+         * @param itemType - Whether new tree item is module, gate, or net
+         * @param parentItem - Parent to new tree item. Will create top-level item if parent is nullptr
+         * @return Point to new tree item
+         */
+        ModuleItem* createChildItem(u32 id, ModuleItem::TreeItemType itemType, BaseTreeItem* parentItem = nullptr);
+
+        /**
+         * Method to remove and delete tree items. Remove signals are sent to view.
+         * Hash table will _NOT_ be updated since caller can do it more efficiently.
+         * @param itemToRemove - Item to be removed from tree
+         * @param parentItem - Parent item. Must be present.
+         */
+        void removeChildItem(ModuleItem* itemToRemove, BaseTreeItem* parentItem);
+
+        QMultiMap<u32, ModuleItem*> mModuleMap;
+        QMultiMap<u32, ModuleItem*> mGateMap;
+        QMultiMap<u32, ModuleItem*> mNetMap;
+        QMultiMap<u32, ModuleItem*>* mModuleItemMaps[3] = {&mModuleMap, &mGateMap, &mNetMap};;
 
         bool mIsModifying;
+        TempGateAssignment mTempGateAssignment;
     };
 }    // namespace hal
