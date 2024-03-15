@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
   * removed layouter code used prior to version 3.1.0 - thus removing the setting option to use that code
   * added setting option to dump junction layout input data for experts to debug in case of layout errors
 * miscellaneous
+  * added drag'n drop feature allowing to move several nodes in graph view at same time
   * added functions to Python GUI API to create, modifiy and delete views
   * added GUI PluginParameter type `ComboBox` for parameters that can be requested from plugin
   * added GUI PluginParameter types `Module` and `Gated` for parameters that can be requested from plugin

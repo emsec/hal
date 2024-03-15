@@ -52,6 +52,7 @@ namespace hal
         // At construction target position might still be occupied, so don't do any checks before exec()
     }
 
+    /*
     ActionMoveNode::ActionMoveNode(u32 ctxID, const QPoint& from, const QPoint& to, bool swap)
         : mContextId(ctxID), mTo(to), mSwap(swap)
     {
@@ -86,6 +87,7 @@ namespace hal
             return;
         }
     }
+*/
 
     QString ActionMoveNode::tagname() const
     {
