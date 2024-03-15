@@ -21,9 +21,8 @@ namespace hal {
         bool finalize();
     };
 
-    class CustomSimEngineFactory : SimulationEngineFactory
+    class CustomSimEngineFactory : public SimulationEngineFactory
     {
-        static CustomSimEngineFactory* sDumFac;
     public:
         CustomSimEngineFactory() : SimulationEngineFactory("custom_sim_engine") {}
         SimulationEngine* createEngine() const override;

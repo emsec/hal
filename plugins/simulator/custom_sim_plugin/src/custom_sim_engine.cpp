@@ -3,7 +3,6 @@
 
 namespace hal {
 
-    CustomSimEngineFactory* CustomSimEngineFactory::sDumFac = new CustomSimEngineFactory;
 
     bool CustomSimEngine::setSimulationInput(SimulationInput* simInput)
     {
