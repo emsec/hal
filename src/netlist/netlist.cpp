@@ -185,7 +185,7 @@ namespace hal
         return m_manager->delete_gate(gate);
     }
 
-    bool Netlist::is_gate_in_netlist(Gate* gate) const
+    bool Netlist::is_gate_in_netlist(const Gate* gate) const
     {
         return gate != nullptr && m_gates_set.find(gate) != m_gates_set.end();
     }
@@ -345,7 +345,7 @@ namespace hal
         return m_manager->delete_net(n);
     }
 
-    bool Netlist::is_net_in_netlist(Net* n) const
+    bool Netlist::is_net_in_netlist(const Net* n) const
     {
         return n != nullptr && m_nets_set.find(n) != m_nets_set.end();
     }
@@ -531,6 +531,40 @@ namespace hal
         m_manager->m_net_checks_enabled = enable_checks;
     }
 
+    std::vector<Net*> Netlist::get_gnd_nets() const
+    {
+        std::vector<Net*> gnd_nets;
+        for (const auto& gnd_gate : m_gnd_gates)
+        {
+            for (const auto& o_net : gnd_gate->get_fan_out_nets())
+            {
+                if (o_net->is_gnd_net())
+                {
+                    gnd_nets.push_back(o_net);
+                }
+            }
+        }
+
+        return gnd_nets;
+    }
+
+    std::vector<Net*> Netlist::get_vcc_nets() const
+    {
+        std::vector<Net*> vcc_nets;
+        for (const auto& vcc_gate : m_vcc_gates)
+        {
+            for (const auto& o_net : vcc_gate->get_fan_out_nets())
+            {
+                if (o_net->is_vcc_net())
+                {
+                    vcc_nets.push_back(o_net);
+                }
+            }
+        }
+
+        return vcc_nets;
+    }
+
     /*
      * ################################################################
      *      module functions
@@ -610,7 +644,7 @@ namespace hal
         return res;
     }
 
-    bool Netlist::is_module_in_netlist(Module* module) const
+    bool Netlist::is_module_in_netlist(const Module* module) const
     {
         return (module != nullptr) && (m_modules_set.find(module) != m_modules_set.end());
     }
@@ -649,7 +683,7 @@ namespace hal
         return m_manager->delete_grouping(g);
     }
 
-    bool Netlist::is_grouping_in_netlist(Grouping* n) const
+    bool Netlist::is_grouping_in_netlist(const Grouping* n) const
     {
         return n != nullptr && m_groupings_set.find(n) != m_groupings_set.end();
     }
@@ -667,7 +701,7 @@ namespace hal
 
     const std::vector<Grouping*>& Netlist::get_groupings() const
     {
-        return m_groupings;  
+        return m_groupings;
     }
 
     std::vector<Grouping*> Netlist::get_groupings(const std::function<bool(const Grouping*)>& filter) const
@@ -867,10 +901,9 @@ namespace hal
 
         if (failed > 0)
         {
-            log_warning("netlist", "failed to load locations of {} gates.", failed);
+            log_debug("netlist", "failed to load locations of {} gates.", failed);
         }
 
         return true;
     }
-
 }    // namespace hal

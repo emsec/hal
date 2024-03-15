@@ -57,7 +57,8 @@ namespace hal
 
         connect(mTableView->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &GatelibraryManagementDialog::handleCurrentRowChanged);
 
-        connect(mSearchbar, &Searchbar::textEdited, this, &GatelibraryManagementDialog::filter);
+        //connect(mSearchbar, &Searchbar::textEdited, this, &GatelibraryManagementDialog::filter);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mProxyModel, &GatelibraryProxyModel::startSearch);
 
         resize(1200, 600);
 
@@ -210,7 +211,6 @@ namespace hal
 
     void GatelibraryManagementDialog::filter(const QString& text)
     {
-
         QRegularExpression regex(text);
 
         if (regex.isValid())
@@ -218,4 +218,5 @@ namespace hal
             mProxyModel->setFilterRegularExpression(regex);
         }
     }
+
 }

@@ -3,7 +3,7 @@ if(BUILD_TESTS)
 
     add_executable(runTest-netlist_preprocessing netlist_preprocessing.cpp)
 
-    target_link_libraries(runTest-netlist_preprocessing netlist_preprocessing pthread gtest hal::core hal::netlist test_utils)
+    target_link_libraries(runTest-netlist_preprocessing netlist_preprocessing gtest hal::core hal::netlist test_utils)
 
     add_test(runTest-netlist_preprocessing ${CMAKE_BINARY_DIR}/bin/hal_plugins/runTest-netlist_preprocessing --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 

@@ -284,10 +284,10 @@ namespace hal
         return res;
     }
 
-    Result<BooleanFunction> Gate::get_resolved_boolean_function(const GatePin* pin) const
+    Result<BooleanFunction> Gate::get_resolved_boolean_function(const GatePin* pin, const bool stop_at_input_pins) const
     {
         const std::function<Result<BooleanFunction>(const GatePin*, std::unordered_set<std::string>&)> get_resolved_boolean_function_internal =
-            [this, &get_resolved_boolean_function_internal](const GatePin* output_pin, std::unordered_set<std::string>& on_stack) -> Result<BooleanFunction> {
+            [this, &get_resolved_boolean_function_internal, stop_at_input_pins](const GatePin* output_pin, std::unordered_set<std::string>& on_stack) -> Result<BooleanFunction> {
             if (output_pin == nullptr)
             {
                 return ERR("could not get resolved Boolean function of gate '" + this->get_name() + "' with ID " + std::to_string(this->get_id()) + ": given output pin is null.");
@@ -316,16 +316,19 @@ namespace hal
                 const PinDirection pin_dir = pin->get_direction();
                 if (pin_dir == PinDirection::input)
                 {
-                    const Net* const input_net = this->get_fan_in_net(var);
-                    if (input_net == nullptr)
+                    if (!stop_at_input_pins)
                     {
-                        // if no net is connected, the input pin name cannot be replaced
-                        return ERR("could not get resolved Boolean function of gate '" + this->get_name() + "' with ID " + std::to_string(this->get_id()) + ": failed to get fan-in net at pin '"
-                                   + pin->get_name() + "'");
-                    }
+                        const Net* const input_net = this->get_fan_in_net(var);
+                        if (input_net == nullptr)
+                        {
+                            // if no net is connected, the input pin name cannot be replaced
+                            return ERR("could not get resolved Boolean function of gate '" + this->get_name() + "' with ID " + std::to_string(this->get_id()) + ": failed to get fan-in net at pin '"
+                                       + pin->get_name() + "'");
+                        }
 
-                    const auto net_dec = BooleanFunctionNetDecorator(*input_net);
-                    input_to_bf.insert({var, net_dec.get_boolean_variable()});
+                        const auto net_dec = BooleanFunctionNetDecorator(*input_net);
+                        input_to_bf.insert({var, net_dec.get_boolean_variable()});
+                    }
                 }
                 else if ((pin_dir == PinDirection::internal) || (pin_dir == PinDirection::output))
                 {
@@ -407,6 +410,16 @@ namespace hal
         {
             log_error("gate",
                       "LUT gate '{}' with ID {} in netlist with ID {} has invalid configuration string of '{}', which is not a hex value.",
+                      m_name,
+                      m_id,
+                      m_internal_manager->m_netlist->get_id(),
+                      config_str);
+            return BooleanFunction();
+        }
+        catch (std::out_of_range& ex)
+        {
+            log_error("gate",
+                      "LUT gate '{}' with ID {} in netlist with ID {} has invalid configuration string of '{}', which has to many hex digits.",
                       m_name,
                       m_id,
                       m_internal_manager->m_netlist->get_id(),

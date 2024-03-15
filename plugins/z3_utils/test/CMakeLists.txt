@@ -3,7 +3,7 @@ if(BUILD_TESTS)
 
     add_executable(runTest-z3_utils  z3_utils.cpp)
 
-    target_link_libraries(runTest-z3_utils  z3_utils pthread gtest hal::core hal::netlist test_utils)
+    target_link_libraries(runTest-z3_utils  z3_utils gtest hal::core hal::netlist test_utils)
 
     add_test(runTest-z3_utils ${CMAKE_BINARY_DIR}/bin/hal_plugins/runTest-z3_utils --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 

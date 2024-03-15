@@ -340,7 +340,7 @@ namespace hal
         // add global GND gate if required by any instance
         if (m_netlist->get_gnd_gates().empty())
         {
-            if (!m_zero_net->get_destinations().empty())
+            if (m_zero_net->get_num_of_destinations() > 0)
             {
                 GateType* gnd_type  = m_gnd_gate_types.begin()->second;
                 GatePin* output_pin = gnd_type->get_output_pins().front();
@@ -365,7 +365,7 @@ namespace hal
         // add global VCC gate if required by any instance
         if (m_netlist->get_vcc_gates().empty())
         {
-            if (!m_one_net->get_destinations().empty())
+            if (m_one_net->get_num_of_destinations() > 0)
             {
                 GateType* vcc_type  = m_vcc_gate_types.begin()->second;
                 GatePin* output_pin = vcc_type->get_output_pins().front();
@@ -1332,8 +1332,10 @@ namespace hal
                             std::unordered_map<ci_string, std::vector<ci_string>> pin_groups;
                             for (const auto pin_group : gate_type_it->second->get_pin_groups())
                             {
-                                for (const auto pin : pin_group->get_pins())
+                                const auto pins = pin_group->get_pins();
+                                for (auto it = pins.rbegin(); it != pins.rend(); it++)
                                 {
+                                    const auto* pin = *it;
                                     pin_groups[core_strings::to<ci_string>(pin_group->get_name())].push_back(core_strings::to<ci_string>(pin->get_name()));
                                 }
                             }
@@ -1508,6 +1510,16 @@ namespace hal
             {
                 continue;
             }
+            else if (slave_net == m_zero_net || slave_net == m_one_net)
+            {
+                auto* tmp_net = master_net;
+                master_net    = slave_net;
+                slave_net     = tmp_net;
+
+                auto tmp_name = master;
+                master        = slave;
+                slave         = tmp_name;
+            }
 
             // merge sources
             if (slave_net->is_global_input_net())
@@ -1605,9 +1617,9 @@ namespace hal
                     std::vector<ci_string> next_slaves;
                     for (const auto& s : current_slaves)
                     {
-                        if (const auto m2s_it = master_to_slaves.find(s); m2s_it != master_to_slaves.end())
+                        if (const auto m2s_inner_it = master_to_slaves.find(s); m2s_inner_it != master_to_slaves.end())
                         {
-                            next_slaves.insert(next_slaves.end(), m2s_it->second.begin(), m2s_it->second.end());
+                            next_slaves.insert(next_slaves.end(), m2s_inner_it->second.begin(), m2s_inner_it->second.end());
                         }
                     }
 
@@ -1619,7 +1631,7 @@ namespace hal
                 // annotate all merged slave wire names as a JSON formatted list of list of strings
                 // each net can span a tree of "consumed" slave wire names where the nth list represents all wire names that where merged at depth n
                 ci_string merged_str = "";
-                bool has_merged_nets   = false;
+                bool has_merged_nets = false;
                 for (const auto& vec : merged_slaves)
                 {
                     if (!vec.empty())
@@ -1632,7 +1644,7 @@ namespace hal
                     {
                         s += ci_string(", ") + vec.at(idx);
                     }
-                    
+
                     merged_str += "[" + s + "], ";
                 }
                 merged_str = merged_str.substr(0, merged_str.size() - 2);
@@ -1708,7 +1720,7 @@ namespace hal
 
         // TODO check parent module assignments for port aliases
 
-        const std::string parent_name = parent == (nullptr) ? "" : parent->get_name();
+        const std::string parent_name       = parent == (nullptr) ? "" : parent->get_name();
         instance_alias[instance_identifier] = get_unique_alias(core_strings::to<ci_string>(parent_name), instance_identifier, m_instance_name_occurrences);
 
         // create netlist module
@@ -1814,18 +1826,11 @@ namespace hal
             {
                 b = alias_it->second;
             }
-            else if (b == "'0'" || b == "'1'")
-            {
-                // '0' or '1' is assigned, make sure that '0' or '1' net does not get deleted by merging
-                const auto tmp = a;
-                a              = b;
-                b              = tmp;
-            }
             else if (b == "'Z'" || b == "'X'")
             {
                 continue;
             }
-            else
+            else if (b != "'0'" && b != "'1'")
             {
                 return ERR("could not create instance '" + core_strings::to<std::string>(instance_identifier) + "' of type '" + core_strings::to<std::string>(instance_type)
                            + "': failed to find alias for net '" + core_strings::to<std::string>(b) + "'");

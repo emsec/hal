@@ -63,6 +63,13 @@ namespace hal
         std::set<std::string> get_plugin_names();
 
         /**
+         * Get the full path for plugin. Will probe several possible extension on MAC
+         *
+         * @returns The full path to plugin in HAL build directory.
+         */
+        std::filesystem::path get_plugin_path(std::string plugin_name);
+
+        /**
          * TODO Python binding.
          * 
          * Get a mapping of flags pointing to their corresponding CLI plugin.

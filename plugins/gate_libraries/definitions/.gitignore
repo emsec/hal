@@ -7,3 +7,9 @@
 !lsi_10k.hgl
 !NangateOpenCellLibrary.hgl
 !NanGate_15nm_OCL.hgl
+
+!ice40ultra_hal.hgl
+!XILINX_UNISIM_hal.hgl
+
+!helper_libs*
+!helper_libs/*

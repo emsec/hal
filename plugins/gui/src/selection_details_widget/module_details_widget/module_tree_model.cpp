@@ -1,6 +1,5 @@
 #include "gui/selection_details_widget/module_details_widget/module_tree_model.h"
 #include "gui/selection_details_widget/selection_details_icon_provider.h"
-#include "gui/basic_tree_model/tree_item.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate.h"
 #include "gui/gui_globals.h"
@@ -9,9 +8,65 @@
 namespace hal
 {
 
+
+    ModuleTreeitem::ModuleTreeitem(ItemType itp, int id, const QString &name, const QString &ntp)
+        : mItemType(itp), mId(id), mName(name), mNodeType(ntp)
+    {;}
+
+    QVariant ModuleTreeitem::getData(int index) const
+    {
+        switch (index)
+        {
+        case 0:
+            return mName;
+        case 1:
+            return mId;
+        case 2:
+            return mNodeType;
+        }
+
+        return QVariant(QVariant::Type::Invalid);
+    }
+
+    void ModuleTreeitem::setData(QList<QVariant> data)
+    {
+        mName = data[0].toString();
+        mId = data[1].toInt();
+        mNodeType = data[2].toString();
+    }
+
+    void ModuleTreeitem::setDataAtIndex(int index, QVariant &data)
+    {
+        const char* ctyp[] = { "module", "gate"};
+
+        switch (index)
+        {
+        case 0: mName = data.toString(); break;
+        case 1: mId   = data.toInt(); break;
+        case 2:
+            for (int j=0; j<3; j++)
+                if (data.toString() == ctyp[j])
+                {
+                    mNodeType = data.toString();
+                    break;
+                }
+        }
+    }
+
+    void ModuleTreeitem::appendData(QVariant data)
+    {
+
+    }
+
+    int ModuleTreeitem::getColumnCount() const
+    {
+        return 3;
+    }
+
+
     ModuleTreeModel::ModuleTreeModel(QObject* parent) : BaseTreeModel(parent), mModId(-1)
     {
-        setHeaderLabels(QList<QVariant>() << "Name" << "ID" << "Type");
+        setHeaderLabels(QStringList() << "Name" << "ID" << "Type");
     }
 
     ModuleTreeModel::~ModuleTreeModel()
@@ -33,7 +88,7 @@ namespace hal
         //delete all children, not the root item (manually for performance reasons)
         while(mRootItem->getChildCount() > 0)
         {
-            TreeItem* tmp = mRootItem->removeChildAtPos(0);
+            BaseTreeItem* tmp = mRootItem->removeChildAtPos(0);
             delete tmp;
         }
 
@@ -41,21 +96,21 @@ namespace hal
         //add modules
         for(auto mod : m->get_submodules())
         {
-            TreeItem* modItem = new TreeItem(QList<QVariant>() << QString::fromStdString(mod->get_name())
-                                                << mod->get_id() << QString::fromStdString(mod->get_type()));
+            ModuleTreeitem* modItem = new ModuleTreeitem(ModuleTreeitem::Module,
+                                                         mod->get_id(),
+                                                         QString::fromStdString(mod->get_name()),
+                                                         QString::fromStdString(mod->get_type()));
             moduleRecursive(mod, modItem);
-            modItem->setAdditionalData(mKeyItemType, QVariant::fromValue(itemType::module));
-            modItem->setAdditionalData(mKeyRepId, mod->get_id());
             mRootItem->appendChild(modItem);
             mModuleToTreeitems.insert(mod, modItem);
         }
         //add gates
         for(auto gate : m->get_gates())
         {
-            TreeItem* gateItem = new TreeItem(QList<QVariant>() << QString::fromStdString(gate->get_name())
-                                              << gate->get_id() << QString::fromStdString(gate->get_type()->get_name()));
-            gateItem->setAdditionalData(mKeyItemType, QVariant::fromValue(itemType::gate));
-            gateItem->setAdditionalData(mKeyRepId, gate->get_id());
+            ModuleTreeitem* gateItem = new ModuleTreeitem(ModuleTreeitem::Gate,
+                                                          gate->get_id(),
+                                                          QString::fromStdString(gate->get_name()),
+                                                          QString::fromStdString(gate->get_type()->get_name()));
             mRootItem->appendChild(gateItem);
             mGateToTreeitems.insert(gate, gateItem);
         }
@@ -78,42 +133,37 @@ namespace hal
         if(!index.isValid())
             return QVariant();
 
-        TreeItem* item = getItemFromIndex(index);
+        ModuleTreeitem* item = dynamic_cast<ModuleTreeitem*>(getItemFromIndex(index));
         if(!item)
             return QVariant();
 
         if(role == Qt::DecorationRole && index.column() == 0)
-            return getIconFromItem(getItemFromIndex(index));
+            return getIconFromItem(item);
 
         //yes, it performs the same two checks again, should be okay though (in terms of performance)
         return BaseTreeModel::data(index, role);
 
     }
 
-    ModuleTreeModel::itemType ModuleTreeModel::getTypeOfItem(TreeItem *item) const
+    void ModuleTreeModel::moduleRecursive(Module *mod, BaseTreeItem *modItem)
     {
-        return item->getAdditionalData(mKeyItemType).value<itemType>();
-    }
-
-    void ModuleTreeModel::moduleRecursive(Module *mod, TreeItem *modItem)
-    {
-        TreeItem* subModItem = nullptr;
+        ModuleTreeitem* subModItem = nullptr;
         for(Module* subMod : mod->get_submodules())
         {
-            subModItem = new TreeItem(QList<QVariant>() << QString::fromStdString(subMod->get_name())
-                                                << subMod->get_id() << QString::fromStdString(subMod->get_type()));
+            subModItem = new ModuleTreeitem(ModuleTreeitem::Module,
+                                            subMod->get_id(),
+                                            QString::fromStdString(subMod->get_name()),
+                                            QString::fromStdString(subMod->get_type()));
             moduleRecursive(subMod, subModItem);
-            subModItem->setAdditionalData(mKeyItemType, QVariant::fromValue(itemType::module));
-            subModItem->setAdditionalData(mKeyRepId, subMod->get_id());
             modItem->appendChild(subModItem);
             mModuleToTreeitems.insert(subMod, subModItem);
         }
         for(auto gate : mod->get_gates())
         {
-            TreeItem* gateItem = new TreeItem(QList<QVariant>() << QString::fromStdString(gate->get_name())
-                                              << gate->get_id() << QString::fromStdString(gate->get_type()->get_name()));
-            gateItem->setAdditionalData(mKeyItemType, QVariant::fromValue(itemType::gate));
-            gateItem->setAdditionalData(mKeyRepId, gate->get_id());
+            ModuleTreeitem* gateItem = new ModuleTreeitem(ModuleTreeitem::Gate,
+                                                          gate->get_id(),
+                                                          QString::fromStdString(gate->get_name()),
+                                                          QString::fromStdString(gate->get_type()->get_name()));
             modItem->appendChild(gateItem);
             mGateToTreeitems.insert(gate, gateItem);
         }
@@ -130,8 +180,10 @@ namespace hal
         //1. Find index of first gate-type item
         int startIndex = 0;
         for(; startIndex < modItem->getChildCount(); startIndex++)
-            if(getTypeOfItem(modItem->getChild(startIndex)) != itemType::module)
+        {
+            if(static_cast<ModuleTreeitem*>(modItem->getChild(startIndex))->itemType() != ModuleTreeitem::Module)
                 break;
+        }
 
         beginResetModel();
 
@@ -153,10 +205,10 @@ namespace hal
             beginResetModel();
             for(auto gate : mod->get_gates())
             {
-                TreeItem* gateItem = new TreeItem(QList<QVariant>() << QString::fromStdString(gate->get_name())
-                                                  << gate->get_id() << QString::fromStdString(gate->get_type()->get_name()));
-                gateItem->setAdditionalData(mKeyItemType, QVariant::fromValue(itemType::gate));
-                gateItem->setAdditionalData(mKeyRepId, gate->get_id());
+                ModuleTreeitem* gateItem = new ModuleTreeitem(ModuleTreeitem::Gate,
+                                                              gate->get_id(),
+                                                              QString::fromStdString(gate->get_name()),
+                                                              QString::fromStdString(gate->get_type()->get_name()));
                 modItem->appendChild(gateItem);
                 mGateToTreeitems.insert(gate, gateItem);
             }
@@ -164,17 +216,17 @@ namespace hal
         endResetModel();
     }
 
-    QIcon ModuleTreeModel::getIconFromItem(TreeItem *item) const
+    QIcon ModuleTreeModel::getIconFromItem(ModuleTreeitem *item) const
     {
         if(!item)
             return QIcon();
 
         u32 id = item->getData(1).toInt();
-        switch (getTypeOfItem(item))
+        switch (item->itemType())
         {
-        case itemType::module:
+        case ModuleTreeitem::Module:
             return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::ModuleIcon,id));
-        case itemType::gate:
+        case ModuleTreeitem::Gate:
             return QIcon(*SelectionDetailsIconProvider::instance()->getIcon(SelectionDetailsIconProvider::GateIcon,id));
         default:
             return QIcon();
@@ -238,11 +290,11 @@ namespace hal
         {
             beginResetModel();
             auto addedMod = gNetlist->get_module_by_id(added_module);
-            TreeItem* addedSubmodItem = new TreeItem(QList<QVariant>() << QString::fromStdString(addedMod->get_name()) << addedMod->get_id()
-                                                     << QString::fromStdString(addedMod->get_type()));
+            ModuleTreeitem* addedSubmodItem = new ModuleTreeitem(ModuleTreeitem::Module,
+                                                                 addedMod->get_id(),
+                                                                 QString::fromStdString(addedMod->get_name()),
+                                                                 QString::fromStdString(addedMod->get_type()));
             moduleRecursive(addedMod, addedSubmodItem);
-            addedSubmodItem->setAdditionalData(mKeyItemType, QVariant::fromValue(itemType::module));
-            addedSubmodItem->setAdditionalData(mKeyRepId, addedMod->get_id());
             parentModItem ? parentModItem->insertChild(0, addedSubmodItem) : mRootItem->insertChild(0, addedSubmodItem);
             mModuleToTreeitems.insert(addedMod, addedSubmodItem);
             endResetModel();
@@ -258,15 +310,15 @@ namespace hal
             return;
 
         //1. Remove all items from maps through BFS (maybe own function?)
-        QQueue<TreeItem*> treeItemsQueue;
+        QQueue<BaseTreeItem*> treeItemsQueue;
         treeItemsQueue.enqueue(removedModItem);
         while(!treeItemsQueue.isEmpty())
         {
-            TreeItem* current = treeItemsQueue.dequeue();
-            switch (getTypeOfItem(current))
+            ModuleTreeitem* current = static_cast<ModuleTreeitem*>(treeItemsQueue.dequeue());
+            switch (current->itemType())
             {
-                case itemType::module: mModuleToTreeitems.remove(gNetlist->get_module_by_id(current->getData(ModuleTreeModel::sIdColumn).toInt())); break;
-                case itemType::gate: mGateToTreeitems.remove(gNetlist->get_gate_by_id(current->getData(ModuleTreeModel::sIdColumn).toInt()));break;
+                case ModuleTreeitem::Module: mModuleToTreeitems.remove(gNetlist->get_module_by_id(current->getData(ModuleTreeModel::sIdColumn).toInt())); break;
+                case ModuleTreeitem::Gate: mGateToTreeitems.remove(gNetlist->get_gate_by_id(current->getData(ModuleTreeModel::sIdColumn).toInt()));break;
             }
             for(auto child : current->getChildren())
                 treeItemsQueue.enqueue(child);
@@ -283,7 +335,7 @@ namespace hal
 
     void ModuleTreeModel::handleModuleGateAssigned(Module *m, u32 assigned_gate)
     {
-        TreeItem* modItem = mModuleToTreeitems.value(m, nullptr);
+        BaseTreeItem* modItem = mModuleToTreeitems.value(m, nullptr);
         if((int)m->get_id() == mModId)
             modItem = mRootItem;
 
@@ -293,12 +345,13 @@ namespace hal
         auto assignedGate = gNetlist->get_gate_by_id(assigned_gate);
         int indexToInsert = 0; //first item after the modules
         for(; indexToInsert < modItem->getChildCount(); indexToInsert++)
-            if(getTypeOfItem(modItem->getChild(indexToInsert)) != itemType::module)
+            if(static_cast<ModuleTreeitem*>(modItem->getChild(indexToInsert))->itemType() != ModuleTreeitem::Module)
                 break;
 
-        TreeItem* gateItem = new TreeItem(QList<QVariant>() << QString::fromStdString(assignedGate->get_name())
-                                          << assignedGate->get_id() << QString::fromStdString(assignedGate->get_type()->get_name()));
-        gateItem->setAdditionalData(mKeyItemType, QVariant::fromValue(itemType::gate));
+        ModuleTreeitem* gateItem = new ModuleTreeitem(ModuleTreeitem::Gate,
+                                                      assignedGate->get_id(),
+                                                      QString::fromStdString(assignedGate->get_name()),
+                                                      QString::fromStdString(assignedGate->get_type()->get_name()));
         mGateToTreeitems.insert(assignedGate, gateItem);
         //beginInsertRows(getIndexFromItem(modItem), indexToInsert, indexToInsert);
         beginResetModel();
@@ -336,7 +389,8 @@ namespace hal
         auto gateItem = mGateToTreeitems.value(g, nullptr);
         if(gateItem)
         {
-            gateItem->setDataAtIndex(sNameColumn, QString::fromStdString(g->get_name()));
+            QVariant qv = QVariant(QString::fromStdString(g->get_name()));
+            gateItem->setDataAtIndex(sNameColumn, qv);
             QModelIndex inx0 = getIndexFromItem(gateItem);
             QModelIndex inx1 = createIndex(inx0.row(), sNameColumn, inx0.internalPointer());
             Q_EMIT dataChanged(inx0, inx1);
@@ -348,7 +402,8 @@ namespace hal
         auto moduleItem = mModuleToTreeitems.value(m, nullptr);
         if(moduleItem)
         {
-            moduleItem->setDataAtIndex(sNameColumn, QString::fromStdString(m->get_name()));
+            QVariant qv = QVariant(QString::fromStdString(m->get_name()));
+            moduleItem->setDataAtIndex(sNameColumn, qv);
             QModelIndex inx0 = getIndexFromItem(moduleItem);
             QModelIndex inx1 = createIndex(inx0.row(), sNameColumn, inx0.internalPointer());
             Q_EMIT dataChanged(inx0, inx1);
@@ -360,7 +415,8 @@ namespace hal
         auto moduleItem = mModuleToTreeitems.value(m, nullptr);
         if(moduleItem)
         {
-            moduleItem->setDataAtIndex(sTypeColumn, QString::fromStdString(m->get_type()));
+            QVariant qv = QVariant(QString::fromStdString(m->get_type()));
+            moduleItem->setDataAtIndex(sTypeColumn, qv);
             QModelIndex inx0 = getIndexFromItem(moduleItem);
             QModelIndex inx1 = createIndex(inx0.row(), sTypeColumn, inx0.internalPointer());
             Q_EMIT dataChanged(inx0, inx1);
@@ -416,4 +472,7 @@ namespace hal
 
         mEventsConnected = true;
     }
+
+
+
 }

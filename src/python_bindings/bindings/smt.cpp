@@ -14,7 +14,16 @@ namespace hal
 
         py_smt_solver_type.value("Z3", SMT::SolverType::Z3, R"(Z3 SMT solver.)")
             .value("Boolector", SMT::SolverType::Boolector, R"(Boolector SMT solver.)")
+            .value("Bitwuzla", SMT::SolverType::Bitwuzla, R"(Bitwuzla SMT solver.)")
             .value("Unknown", SMT::SolverType::Unknown, R"(Unknown (unsupported) SMT solver.)")
+            .export_values();
+
+        py::enum_<SMT::SolverCall> py_smt_solver_call(py_smt, "SolverCall", R"(
+            Identifier for the SMT solver call type.
+        )");
+
+        py_smt_solver_call.value("Binary", SMT::SolverCall::Binary, R"(Binary SMT call.)")
+            .value("Library", SMT::SolverCall::Library, R"(Library SMT call.)")
             .export_values();
 
         py::class_<SMT::QueryConfig> py_smt_query_config(py_smt, "QueryConfig", R"(
@@ -399,7 +408,22 @@ namespace hal
             :rtype: hal_py.SMT.Result or str
         )");
 
-        py_smt_solver.def("query_local", &SMT::Solver::query_local, py::arg("config"), R"(
+        py_smt_solver.def(
+            "query_local",
+            [](const SMT::Solver& self, const SMT::QueryConfig& config = SMT::QueryConfig()) -> std::optional<SMT::SolverResult> {
+                auto res = self.query_local(config);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("config"),
+            R"(
             Queries a local SMT solver with the specified query configuration.
 
             :param hal_py.SMT.QueryConfig config: The SMT solver query configuration.

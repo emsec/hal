@@ -95,10 +95,10 @@ namespace hal
         {
             if (gPythonContext->pythonThread())
             {
-                log_info("gui", "Autosave deferred while python script is running...");
+                log_debug("gui", "Autosave deferred while python script is running...");
                 return;
             }
-            log_info("gui", "saving a backup in case something goes wrong...");
+            log_debug("gui", "saving a backup in case something goes wrong...");
             if (!ProjectManager::instance()->serialize_project(gNetlist, true))
                 log_warning("gui", "Autosave failed to create project backup to directory '{}'.", pm->get_project_directory().get_shadow_dir().string());
         }
@@ -357,62 +357,67 @@ namespace hal
             }
         }
 
-        ImportNetlistDialog ind(filename, qApp->activeWindow());
-        if (ind.exec() != QDialog::Accepted) return;
-        QString projdir = ind.projectDirectory();
-        if (projdir.isEmpty()) return;
-
-        if (!QFileInfo(projdir).suffix().isEmpty())
+        for (;;) // loop upon wrong suffix or upon error creating project directory
         {
-            QMessageBox::warning(qApp->activeWindow(),"Aborted", "selected project directory name must not have suffix ." + QFileInfo(projdir).suffix());
-            return;
-        }
+            ImportNetlistDialog ind(filename, qApp->activeWindow());
+            if (ind.exec() != QDialog::Accepted) return;
+            QString projdir = ind.projectDirectory();
+            if (projdir.isEmpty()) return;
 
+            if (!QFileInfo(projdir).suffix().isEmpty())
+            {
+                QMessageBox::warning(qApp->activeWindow(),"Aborted", "selected project directory name must not have suffix ." + QFileInfo(projdir).suffix());
+                continue;
+            }
 
-        ProjectManager* pm = ProjectManager::instance();
-        if (!pm->create_project_directory(projdir.toStdString()))
-        {
-            QMessageBox::warning(qApp->activeWindow(),"Aborted", "Error creating project directory <" + projdir + ">");
-            return;
-        }
+            ProjectManager* pm = ProjectManager::instance();
+            if (!pm->create_project_directory(projdir.toStdString()))
+            {
+                QMessageBox::warning(qApp->activeWindow(),"Aborted", "Error creating project directory <" + projdir +
+                                     ">\nYou might want to try a different name or location");
+                continue;
+            }
 
-        QDir projectDir(projdir);
-        QString netlistFilename = filename;
-        if (ind.isMoveNetlistChecked())
-        {
-            netlistFilename = projectDir.absoluteFilePath(QFileInfo(filename).fileName());
-            QDir().rename(filename,netlistFilename);
-        }
-
-        QString gatelib = ind.gateLibraryPath();
-        if (ind.isCopyGatelibChecked() && !gatelib.isEmpty())
-        {
-            QFileInfo glInfo(gatelib);
-            QString targetGateLib = projectDir.absoluteFilePath(glInfo.fileName());
-            if (QFile::copy(gatelib,targetGateLib))
-                gatelib = targetGateLib;
-        }
-
-        std::filesystem::path lpath = pm->get_project_directory().get_default_filename(".log");
-        LogManager::get_instance()->set_file_name(lpath);
-
-        if (deprecatedOpenFile(netlistFilename, gatelib))
-        {
-            gFileStatusManager->netlistChanged();
-            if (gNetlist)
-                if (pm->serialize_project(gNetlist))
-                    gFileStatusManager->netlistSaved();
-            Q_EMIT projectOpened(projectDir.absolutePath(),QString::fromStdString(pm->get_netlist_filename()));
-        }
-        else
-        {
-            // failed to create project: if netlist was moved move back before deleting directory
+            QDir projectDir(projdir);
+            QString netlistFilename = filename;
             if (ind.isMoveNetlistChecked())
-                QDir().rename(netlistFilename,filename);
-            if (pm->remove_project_directory())
-                log_info("gui", "Project directory removed since import failed.");
+            {
+                netlistFilename = projectDir.absoluteFilePath(QFileInfo(filename).fileName());
+                QDir().rename(filename,netlistFilename);
+            }
+
+            QString gatelib = ind.gateLibraryPath();
+            if (ind.isCopyGatelibChecked() && !gatelib.isEmpty())
+            {
+                QFileInfo glInfo(gatelib);
+                QString targetGateLib = projectDir.absoluteFilePath(glInfo.fileName());
+                if (QFile::copy(gatelib,targetGateLib))
+                    gatelib = targetGateLib;
+            }
+
+            std::filesystem::path lpath = pm->get_project_directory().get_default_filename(".log");
+            LogManager::get_instance()->set_file_name(lpath);
+
+            if (deprecatedOpenFile(netlistFilename, gatelib))
+            {
+                gFileStatusManager->netlistChanged();
+                if (gNetlist)
+                    if (pm->serialize_project(gNetlist))
+                        gFileStatusManager->netlistSaved();
+                Q_EMIT projectOpened(projectDir.absolutePath(),QString::fromStdString(pm->get_netlist_filename()));
+            }
             else
-                log_warning("gui", "Failed to remove project directory after failed import attempt");
+            {
+                // failed to create project: if netlist was moved move back before deleting directory
+                if (ind.isMoveNetlistChecked())
+                    QDir().rename(netlistFilename,filename);
+                if (pm->remove_project_directory())
+                    log_info("gui", "Project directory removed since import failed.");
+                else
+                    log_warning("gui", "Failed to remove project directory after failed import attempt");
+            }
+
+            return; // break loop
         }
     }
 
@@ -489,6 +494,9 @@ namespace hal
     {
         QString logical_file_name = filename;
 
+        QString glSuffix = QFileInfo(gatelibraryPath).suffix();
+        gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser,"."+glSuffix);
+
         if (gNetlist)
         {
             // ADD ERROR MESSAGE
@@ -516,23 +524,27 @@ namespace hal
         QFileInfo nlInfo(filename);
         if (nlInfo.suffix()=="hal")
         {
-            // event_controls::enable_all(false); won't get events until callbacks are registered
-            auto netlist = netlist_factory::load_netlist(filename.toStdString());
-            // event_controls::enable_all(true);
-            if (netlist)
+            QHash<int,int> errorCount;
+            for (;;) // try loading hal file until exit by return
             {
-                gNetlistOwner = std::move(netlist);
-                gNetlist       = gNetlistOwner.get();
-                gNetlistRelay->registerNetlistCallbacks();
-                fileSuccessfullyLoaded(logical_file_name);
-                return true;
-            }
-            else
-            {
-                std::string error_message("Failed to create netlist from .hal file");
-                log_error("gui", "{}", error_message);
-                displayErrorMessage(QString::fromStdString(error_message));
-                return false;
+                // event_controls::enable_all(false); won't get events until callbacks are registered
+                auto netlist = netlist_factory::load_netlist(filename.toStdString(),gatelibraryPath.toStdString());
+                // event_controls::enable_all(true);
+                if (netlist)
+                {
+                    gNetlistOwner = std::move(netlist);
+                    gNetlist       = gNetlistOwner.get();
+                    gNetlistRelay->registerNetlistCallbacks();
+                    fileSuccessfullyLoaded(logical_file_name);
+                    return true;
+                }
+                else
+                {
+                    std::string error_message("Failed to create netlist from .hal file");
+                    log_error("gui", "{}", error_message);
+                    displayErrorMessage(QString::fromStdString(error_message));
+                    return false;
+                }
             }
         }
         else

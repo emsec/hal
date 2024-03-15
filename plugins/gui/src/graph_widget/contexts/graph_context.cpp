@@ -321,6 +321,16 @@ namespace hal
         return contextGates == moduleGates && contextModules == moduleModules;
     }
 
+
+    bool GraphContext::isShowingFoldedTopModule() const
+    {
+        auto contextGates = (mGates - mRemovedGates) + mAddedGates;
+        if (!contextGates.isEmpty()) return false;
+        auto contextModules = (mModules - mRemovedModules) + mAddedModules;
+        if (contextModules.size() != 1) return false;
+        return (*mModules.constBegin() == 1); // top_module has ID=1
+    }
+
     void GraphContext::getModuleChildrenRecursively(const u32 id, QSet<u32>* gates, QSet<u32>* modules) const
     {
 
@@ -861,6 +871,41 @@ namespace hal
         if (mDirty==dty) return;
         mDirty = dty;
         Q_EMIT(dataChanged());
+    }
+
+    void GraphContext::setScheduleRemove(const QSet<u32>& mods, const QSet<u32>& gats)
+    {
+        mScheduleRemoveModules = mods;
+        mScheduleRemoveGates = gats;
+    }
+
+    bool GraphContext::isScheduledRemove(const Node& nd)
+    {
+        switch (nd.type()) {
+        case Node::Module:
+        {
+            auto it = mScheduleRemoveModules.find(nd.id());
+            if (it != mScheduleRemoveModules.end())
+            {
+                mScheduleRemoveModules.erase(it);
+                return true;
+            }
+            break;
+        }
+        case Node::Gate:
+        {
+            auto it = mScheduleRemoveGates.find(nd.id());
+            if (it != mScheduleRemoveGates.end())
+            {
+                mScheduleRemoveGates.erase(it);
+                return true;
+            }
+            break;
+        }
+        default:
+            break;
+        }
+        return false;
     }
 
     void GraphContext::setSpecialUpdate(bool state)

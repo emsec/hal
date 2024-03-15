@@ -67,13 +67,6 @@ option(BUILD_TESTS "Enable test builds" OFF)
 option(BUILD_COVERAGE "Enable code coverage build" OFF)
 option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation")
 option(ENABLE_INSTALL_LDCONFIG "When installing via make/ninja install, also install and run the LDCONFIG post_install scripts" ON)
-option(UPLOAD_PPA "Upload package to ppa" OFF)
-option(PACKAGE_DEB "Package DEB Package" OFF)
-option(ENABLE_PPA "Prepare PPA" ON)
-option(PACKAGE_TGZ "Package TGZ archive" OFF)
-option(PACKAGE_ZIP "Package ZIP archive" OFF)
-option(PACKAGE_RPM "Package RPM package" OFF)
-option(PACKAGE_MACOS "Package for macOS" OFF)
 
 # Include Helper Modules
 include(hal_cmake_tools) # Version helper
@@ -112,12 +105,8 @@ project(hal
 set(PROJECT_VENDOR "hal")
 set(PROJECT_WEBSITE "https://github.com/emsec/hal")
 set(PROJECT_MAINTAINER "Sebastian Wallat <sebastian.wallat@rub.de>")
-set(PROJECT_DESCRIPTION_SUMMARY "Hardware Reverse engineering framework")
+set(PROJECT_DESCRIPTION_SUMMARY "Hardware reverse engineering framework")
 set(PROJECT_DESCRIPTION "hal - Hardware Analyzer")
-
-# set(CHANGELOG_MESSAGE ${CHANGELOG_LAST_MESSAGE})
-set(PROJECT_PPA "ppa:sebastian-wallat/hal")
-set(PROJECT_PPA_USER "sebastian-wallat")
 
 # Use C11 and C++17 as minimum standard
 set(CMAKE_C_STANDARD 11)
@@ -192,10 +181,11 @@ if(UNIX)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
 
-    # set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer -fsanitize=address")
+    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer -fsanitize=thread -fsanitize=undefined")
 
-    # SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fsanitize=address")
-    # SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
+    # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -fsanitize=undefined")
+    # SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=thread -fsanitize=undefined")
+
     if(USE_LIBCXX)
         enable_cxx_compile_option_if_supported("-stdlib=libc++" "" "PUBLIC")
         enable_c_compile_option_if_supported("-stdlib=libc++" "" "PUBLIC")
@@ -328,7 +318,6 @@ install(FILES tools/genversion.py
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/pybind11 DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/spdlog-${spdlog_VERSION} DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/subprocess DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
-
 
 if(NOT(CMAKE_VERSION VERSION_LESS 3.0))
     install(EXPORT hal

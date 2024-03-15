@@ -5,6 +5,7 @@
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/gui_globals.h"
 #include "gui/module_model/module_model.h"
+#include "gui/module_model/module_color_manager.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_set_object_color.h"
@@ -41,6 +42,7 @@ namespace hal
 
         switch (mObject.type())
         {
+        /* TODO PIN
             case UserActionObjectType::PinGroup: {
                 mod            = gNetlist->get_module_by_id(mParentObject.id());
                 auto* pinGroup = mod->get_pin_group_by_id(mObject.id());
@@ -64,6 +66,7 @@ namespace hal
                     return false;
             }
             break;
+            */
             case UserActionObjectType::Module:
                 mod = gNetlist->get_module_by_id(mObject.id());
                 if (mod)
@@ -71,10 +74,11 @@ namespace hal
                     UserActionCompound* act = new UserActionCompound;
                     act->setUseCreatedObject();
                     ActionCreateObject* actCreate = new ActionCreateObject(UserActionObjectType::Module, QString::fromStdString(mod->get_name()));
+                    actCreate->setObject(mObject);
                     actCreate->setParentId(mod->get_parent_module()->get_id());
                     act->addAction(actCreate);
                     act->addAction(new ActionSetObjectType(QString::fromStdString(mod->get_type())));
-                    act->addAction(new ActionSetObjectColor(gNetlistRelay->getModuleModel()->moduleColor(mod->get_id())));
+                    act->addAction(new ActionSetObjectColor(gNetlistRelay->getModuleColorManager()->moduleColor(mod->get_id())));
                     QSet<u32> mods, gats;
                     for (Gate* g : mod->get_gates())
                         gats.insert(g->get_id());

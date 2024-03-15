@@ -39,12 +39,11 @@ namespace hal
     namespace dataflow
     {
         /**
-         * Analyze the datapath to identify word-level registers in the given netlist.
+         * Analyze the datapath to identify word-level registers in the netlist specified in the configuration.
          * 
-         * @param[in] nl - The netlist.
          * @param[in] config - The dataflow analysis configuration.
          * @returns Ok() and the dataflow analysis result on success, an error otherwise.
          */
-        hal::Result<dataflow::Result> analyze(Netlist* nl, const Configuration& config = Configuration());
+        hal::Result<dataflow::Result> analyze(const Configuration& config);
     }    // namespace dataflow
 }    // namespace hal

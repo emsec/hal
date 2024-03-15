@@ -166,15 +166,18 @@ namespace hal
             :rtype: bool
         )");
 
-        py_net.def_property_readonly("num_of_sources", &Net::get_num_of_sources, R"(
+        py_net.def_property_readonly(
+            "num_of_sources", [](Net* n) { return n->get_num_of_sources(); }, R"(
             The number of sources of the net.
 
             :type: int
         )");
 
-        py_net.def("get_num_of_sources", &Net::get_num_of_sources, R"(
+        py_net.def("get_num_of_sources", &Net::get_num_of_sources, py::arg("filter") = nullptr, R"(
             Get the number of sources of the net.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
+            :param lambda filter: An optional filter.
             :returns: The number of sources.
             :rtype: int
         )");
@@ -279,15 +282,18 @@ namespace hal
             :rtype: bool
         )");
 
-        py_net.def_property_readonly("num_of_destinations", &Net::get_num_of_destinations, R"(
+        py_net.def_property_readonly(
+            "num_of_destinations", [](Net* n) { return n->get_num_of_destinations(); }, R"(
             The number of destinations of the net.
 
             :type: int
         )");
 
-        py_net.def("get_num_of_destinations", &Net::get_num_of_destinations, R"(
+        py_net.def("get_num_of_destinations", &Net::get_num_of_destinations, py::arg("filter") = nullptr, R"(
             Get the number of destinations of the net.
+            The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
+            :param filter: An optional filter.
             :returns: The number of destinations.
             :rtype: int
         )");

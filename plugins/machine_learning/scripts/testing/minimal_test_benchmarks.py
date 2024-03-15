@@ -61,7 +61,7 @@ if pathlib.Path("/home/simon/projects/hal/plugins/machine_learning/data/netlist_
     data_set = torch.load("/home/simon/projects/hal/plugins/machine_learning/data/netlist_graphs.pt")
     print("Loaded dataset")
 else:
-    for nl_path, gl_path in netlist_paths:
+    for nl_path, gl_path in netlist_paths[:1]:
         #print(nl_path)
         edge_index, x, y = generate_netlist_graph(nl_path, gl_path)
 

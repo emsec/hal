@@ -28,6 +28,7 @@
 #include "gui/content_widget/content_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 #include "hal_core/defines.h"
+#include "gui/settings/settings_items/settings_item_keybind.h"
 
 #include <QColor>
 #include "gui/grouping/grouping_color_serializer.h"
@@ -66,8 +67,6 @@ namespace hal
         Q_PROPERTY(QString renameGroupingIconStyle READ renameGroupingIconStyle WRITE setRenameGroupingIconStyle)
         Q_PROPERTY(QString deleteIconPath READ deleteIconPath WRITE setDeleteIconPath)
         Q_PROPERTY(QString deleteIconStyle READ deleteIconStyle WRITE setDeleteIconStyle)
-        // Q_PROPERTY(QString openIconPath READ openIconPath WRITE setOpenIconPath)
-        // Q_PROPERTY(QString openIconStyle READ openIconStyle WRITE setOpenIconStyle)
         Q_PROPERTY(QString colorSelectIconPath READ colorSelectIconPath WRITE setColorSelectIconPath)
         Q_PROPERTY(QString colorSelectIconStyle READ colorSelectIconStyle WRITE setColorSelectIconStyle)
         Q_PROPERTY(QString toSelectionIconPath READ toSelectionIconPath WRITE setToSelectionIconPath)
@@ -75,6 +74,9 @@ namespace hal
         Q_PROPERTY(QString searchIconPath READ searchIconPath WRITE setSearchIconPath)
         Q_PROPERTY(QString searchIconStyle READ searchIconStyle WRITE setSearchIconStyle)
         Q_PROPERTY(QString searchActiveIconStyle READ searchActiveIconStyle WRITE setSearchActiveIconStyle)
+
+        Q_PROPERTY(QString tableIconPath READ tableIconPath WRITE setTableIconPath)
+        Q_PROPERTY(QString tableIconStyle READ tableIconStyle WRITE setTableIconStyle)
 
     public:
         /**
@@ -109,8 +111,6 @@ namespace hal
         QString renameGroupingIconStyle() const;
         QString deleteIconPath() const;
         QString deleteIconStyle() const;
-        // QString openIconPath() const;
-        // QString openIconStyle() const;
         QString colorSelectIconPath() const;
         QString colorSelectIconStyle() const;
         QString toSelectionIconPath() const;
@@ -119,6 +119,9 @@ namespace hal
         QString searchIconPath() const;
         QString searchIconStyle() const;
         QString searchActiveIconStyle() const;
+
+        QString tableIconPath() const;
+        QString tableIconStyle() const;
         ///@}
 
         /** @name Q_PROPERTY WRITE Functions
@@ -133,8 +136,6 @@ namespace hal
         void setRenameGroupingIconStyle(const QString& style);
         void setDeleteIconPath(const QString& path);
         void setDeleteIconStyle(const QString& style);
-        // void setOpenIconPath(const QString& path);
-        // void setOpenIconStyle(const QString& style);
         void setColorSelectIconPath(const QString& path);
         void setColorSelectIconStyle(const QString& style);
         void setToSelectionIconPath(const QString& path);
@@ -142,6 +143,9 @@ namespace hal
         void setSearchIconPath(const QString& path);
         void setSearchIconStyle(const QString& style);
         void setSearchActiveIconStyle(const QString& style);
+
+        void setTableIconPath(const QString& path);
+        void setTableIconStyle(const QString& style);
         ///@}
 
         /**
@@ -266,6 +270,11 @@ namespace hal
         void handleRenameGroupingClicked();
 
         /**
+         * Q_SLOT to show the content of a grouping. Called when the 'Show content'-buttons was clicked.
+         */
+        void handleShowContentClicked();
+
+        /**
          * Q_SLOT to change the color of a grouping. Called when the color icon was clicked.
          */
         void handleColorSelectClicked();
@@ -300,6 +309,8 @@ namespace hal
          * @param index - The sender that emitted the change.
          */
         void handleDoubleClicked(const QModelIndex& index);
+
+        void handleDeleteShortcutOnFocusChanged(QWidget *oldWidget, QWidget *newWidget);
 
     private:
         class ToolboxModuleHash
@@ -354,8 +365,14 @@ namespace hal
         QString mSearchIconStyle;
         QString mSearchActiveIconStyle;
 
+        QAction* mTableAction;
+        QString mTableIconPath;
+        QString mTableIconStyle;
+
         QString mDisabledIconStyle;
         GroupingColorSerializer mColorSerializer;
+
+        QShortcut* mShortCutDeleteItem;
 
         GroupingTableEntry getCurrentGrouping();
     };

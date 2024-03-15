@@ -52,17 +52,18 @@ namespace hal
 
     class GuiExtensionDataflow : public GuiExtensionInterface
     {
-        dataflow::Configuration m_config;
-        std::string m_output_path;
-        bool m_write_dot;
-        bool m_write_txt;
-        bool m_create_modules;
-        bool m_button_clicked;
+        std::string m_output_path = "/tmp";
+        bool m_write_dot          = false;
+        bool m_write_txt          = false;
+        bool m_create_modules     = false;
+        bool m_button_clicked     = false;
+
+        std::vector<u32> m_expected_sizes = {};
+        u32 m_min_group_size              = 8;
+        bool m_enable_stages              = false;
 
     public:
-        GuiExtensionDataflow() : m_output_path("/tmp"), m_write_dot(false), m_write_txt(false), m_create_modules(false), m_button_clicked(false)
-        {
-        }
+        GuiExtensionDataflow() = default;
 
         /**
          * Get list of configurable parameter

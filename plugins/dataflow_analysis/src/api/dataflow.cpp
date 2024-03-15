@@ -9,11 +9,21 @@ namespace hal
 {
     namespace dataflow
     {
-        hal::Result<dataflow::Result> analyze(Netlist* nl, const Configuration& config)
+        hal::Result<dataflow::Result> analyze(const Configuration& config)
         {
-            if (nl == nullptr)
+            if (config.netlist == nullptr)
             {
                 return ERR("netlist is a nullptr");
+            }
+
+            if (config.gate_types.empty())
+            {
+                return ERR("no gate types specified");
+            }
+
+            if (config.control_pin_types.empty())
+            {
+                return ERR("no control pin types specified");
             }
 
             // set up dataflow analysis
@@ -24,6 +34,7 @@ namespace hal
             proc_config.pass_layers              = 2;
             proc_config.num_threads              = std::thread::hardware_concurrency();
             proc_config.enforce_type_consistency = config.enforce_type_consistency;
+            proc_config.has_known_groups         = !config.known_net_groups.empty();
 
             dataflow::evaluation::Context eval_ctx;
 
@@ -36,8 +47,8 @@ namespace hal
                 log_info("dataflow", "will prioritize sizes {}", utils::join(", ", config.expected_sizes));
             }
 
-            auto netlist_abstr    = dataflow::pre_processing::run(nl, config.enable_register_stages);
-            auto initial_grouping = std::make_shared<dataflow::Grouping>(netlist_abstr, config.known_groups);
+            std::shared_ptr<dataflow::Grouping> initial_grouping = nullptr;
+            auto netlist_abstr                                   = dataflow::pre_processing::run(config, initial_grouping);
             std::shared_ptr<dataflow::Grouping> final_grouping;
 
             u32 iteration = 0;
@@ -66,7 +77,7 @@ namespace hal
 
             log_info("dataflow", "dataflow processing finished in {:3.2f}s", total_time);
 
-            return OK(dataflow::Result(nl, *final_grouping));
+            return OK(dataflow::Result(config.netlist, *final_grouping));
         }
     }    // namespace dataflow
 }    // namespace hal

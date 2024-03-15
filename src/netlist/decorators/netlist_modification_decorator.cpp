@@ -4,7 +4,6 @@
 #include "hal_core/netlist/grouping.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
-#include "hal_core/netlist/netlist.h"
 
 namespace hal
 {
@@ -292,15 +291,14 @@ namespace hal
                 // remove pin from current pin group
                 auto current_pin_group = pin->get_group().first;
                 // This get is safe, since we make sure that the pin is a valid pointer and part of the group
-                current_pin_group->remove_pin(pin).get();
+                current_pin_group->remove_pin(pin);
 
                 // delete old pin group incase it is now empty
                 if (current_pin_group->get_pins().empty())
                 {
-                    if (const auto res = m->delete_pin_group(current_pin_group); !res.is_ok())
+                    if (!m->delete_pin_group(current_pin_group))
                     {
-                        return ERR_APPEND(res.get_error(),
-                                          "could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name()
+                        return ERR("could not connect master net '" + master_net->get_name() + "' with ID " + std::to_string(master_net->get_id()) + " with slave net '" + slave_net->get_name()
                                               + "' with ID " + std::to_string(slave_net->get_id()) + ": failed to delete pingroup " + current_pin_group->get_name() + "with ID "
                                               + std::to_string(current_pin_group->get_id()) + " that is now empty.");
                     }
@@ -327,7 +325,7 @@ namespace hal
                     pin_group = pin_groups.front();
                 }
 
-                pin_group->assign_pin(pin).get();
+                pin_group->assign_pin(pin);
                 if (const auto res = pin_group->move_pin(pin, pin_index); res.is_error())
                 {
                     return ERR_APPEND(res.get_error(),
@@ -345,5 +343,129 @@ namespace hal
         }
 
         return OK(master_net);
+    }
+
+    Result<std::vector<Net*>> NetlistModificationDecorator::create_gnd_net()
+    {
+        // check for already existing gnd nets and return them incase there are any
+        const auto gnd_nets = m_netlist.get_gnd_nets();
+        if (!gnd_nets.empty())
+        {
+            return OK(gnd_nets);
+        }
+
+        // find GND gate type, create a GND gate and connect a correspondig GND net
+        if (m_netlist.get_gate_library()->get_gnd_gate_types().empty())
+        {
+            return ERR("cannot create a GND net: failed to find GND gate type in gate library " + m_netlist.get_gate_library()->get_name());
+        }
+        const auto gnd_type = m_netlist.get_gate_library()->get_gnd_gate_types().begin()->second;
+
+        const auto gnd_pins = gnd_type->get_pins([](const auto& pin) {
+            const auto direction = pin->get_direction();
+            const auto type      = pin->get_type();
+            return (direction == PinDirection::output) && (type == PinType::ground);
+        });
+
+        if (gnd_pins.size() < 1)
+        {
+            return ERR("cannot create a GND net: found no ground pins for gate type " + gnd_type->get_name());
+        }
+
+        if (gnd_pins.size() > 1)
+        {
+            return ERR("cannot create a GND net: found multiple ground pins for gate type " + gnd_type->get_name() + ". This is currently not handled.");
+        }
+
+        auto gnd_gate = m_netlist.create_gate(gnd_type, "GND_TEMP");
+        if (gnd_gate == nullptr)
+        {
+            return ERR("cannot create a GND net: failed to create GND gate in netlist");
+        }
+        // set gate name to be likely a unique gate name
+        gnd_gate->set_name("GND_" + std::to_string(gnd_gate->get_id()));
+
+        if (!gnd_gate->mark_gnd_gate())
+        {
+            return ERR("cannot create GND net: failed to mark created GND gate as such");
+        }
+
+        auto gnd_net = m_netlist.create_net("GND_TEMP");
+        if (gnd_net == nullptr)
+        {
+            return ERR("cannot create a GND net: failed to create a new net in netlist");
+        }
+        // set net name to be likely a unique net name
+        gnd_net->set_name("GND_" + std::to_string(gnd_net->get_id()));
+
+        const auto gnd_ep = gnd_net->add_source(gnd_gate, gnd_pins.front());
+        if (gnd_ep == nullptr)
+        {
+            return ERR("cannot create a GND net: failed to connect newly created net to created GND gate");
+        }
+
+        return OK({gnd_net});
+    }
+
+    Result<std::vector<Net*>> NetlistModificationDecorator::create_vcc_net()
+    {
+        // check for already existing vcc nets and return them incase there are any
+        const auto vcc_nets = m_netlist.get_vcc_nets();
+        if (!vcc_nets.empty())
+        {
+            return OK(vcc_nets);
+        }
+
+        // find VCC gate type, create a VCC gate and connect a correspondig VCC net
+        if (m_netlist.get_gate_library()->get_vcc_gate_types().empty())
+        {
+            return ERR("cannot create a VCC net: failed to find VCC gate type in gate library " + m_netlist.get_gate_library()->get_name());
+        }
+        const auto vcc_type = m_netlist.get_gate_library()->get_vcc_gate_types().begin()->second;
+
+        const auto vcc_pins = vcc_type->get_pins([](const auto& pin) {
+            const auto direction = pin->get_direction();
+            const auto type      = pin->get_type();
+            return (direction == PinDirection::output) && (type == PinType::power);
+        });
+
+        if (vcc_pins.size() < 1)
+        {
+            return ERR("cannot create a VCC net: found no power pins for gate type " + vcc_type->get_name());
+        }
+
+        if (vcc_pins.size() > 1)
+        {
+            return ERR("cannot create a VCC net: found multiple power pins for gate type " + vcc_type->get_name() + ". This is currently not handled.");
+        }
+
+        auto vcc_gate = m_netlist.create_gate(vcc_type, "VCC_TEMP");
+        if (vcc_gate == nullptr)
+        {
+            return ERR("cannot create a VCC net: failed to create VCC gate in netlist");
+        }
+        // set gate name to be likely a unique gate name
+        vcc_gate->set_name("VCC_" + std::to_string(vcc_gate->get_id()));
+
+        auto vcc_net = m_netlist.create_net("VCC_TEMP");
+        if (vcc_net == nullptr)
+        {
+            return ERR("cannot create a VCC net: failed to create a new net in netlist");
+        }
+        // set net name to be likely a unique net name
+        vcc_net->set_name("VCC_" + std::to_string(vcc_net->get_id()));
+
+        if (!vcc_gate->mark_vcc_gate())
+        {
+            return ERR("cannot create VCC net: failed to mark created VCC gate as such");
+        }
+
+        const auto vcc_ep = vcc_net->add_source(vcc_gate, vcc_pins.front());
+        if (vcc_ep == nullptr)
+        {
+            return ERR("cannot create a VCC net: failed to connect newly created net to created VCC gate");
+        }
+
+        return OK({vcc_net});
     }
 }    // namespace hal

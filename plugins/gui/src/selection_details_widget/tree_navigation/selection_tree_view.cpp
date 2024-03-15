@@ -1,6 +1,7 @@
 #include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
 
 #include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/gui_globals.h"
 #include "gui/context_manager_widget/context_manager_widget.h"
 #include "gui/user_action/action_create_object.h"
@@ -15,18 +16,20 @@
 
 namespace hal
 {
-    SelectionTreeView::SelectionTreeView(QWidget* parent) : QTreeView(parent)
+    SelectionTreeView::SelectionTreeView(QWidget* parent, bool isGrouping) : QTreeView(parent)
     {
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        mSelectionTreeModel      = new SelectionTreeModel(this);
-        mSelectionTreeProxyModel = new SelectionTreeProxyModel(this);
-        mSelectionTreeProxyModel->setSourceModel(mSelectionTreeModel);
-        setModel(mSelectionTreeProxyModel);
         setDefaultColumnWidth();
         header()->setDefaultAlignment(Qt::AlignHCenter | Qt::AlignCenter);
 
+        mIsGrouping = isGrouping;
+
         setContextMenuPolicy(Qt::CustomContextMenu);
         connect(this, &QTreeView::customContextMenuRequested, this, &SelectionTreeView::handleCustomContextMenuRequested);
+
+        connect(this, &SelectionTreeView::itemDoubleClicked, this, &SelectionTreeView::handleTreeViewItemFocusClicked);
+        connect(this, &SelectionTreeView::focusItemClicked, this, &SelectionTreeView::handleTreeViewItemFocusClicked);
+        connect(gNetlistRelay->getModuleColorManager(),&ModuleColorManager::moduleColorChanged,this,&SelectionTreeView::handleModuleColorChanged);
     }
 
     void SelectionTreeView::setDefaultColumnWidth()
@@ -62,14 +65,23 @@ namespace hal
 
     SelectionTreeItem* SelectionTreeView::itemFromIndex(const QModelIndex& index) const
     {
+        SelectionTreeProxyModel* treeProxy = dynamic_cast<SelectionTreeProxyModel*>(model());
+        if (!treeProxy) return nullptr;
+
         // topmost element if no valid index given
-        QModelIndex proxyIndex = index.isValid() ? index : mSelectionTreeProxyModel->index(0, 0, rootIndex());
+        QModelIndex proxyIndex = index.isValid() ? index : treeProxy->index(0, 0, rootIndex());
 
         if (!proxyIndex.isValid())
             return nullptr;
 
-        QModelIndex modelIndex = mSelectionTreeProxyModel->mapToSource(proxyIndex);
+        QModelIndex modelIndex = treeProxy->mapToSource(proxyIndex);
         return static_cast<SelectionTreeItem*>(modelIndex.internalPointer());
+    }
+
+    void SelectionTreeView::handleModuleColorChanged(u32 id)
+    {
+        Q_UNUSED(id);
+        update();
     }
 
     void SelectionTreeView::handleCustomContextMenuRequested(const QPoint& point)
@@ -93,6 +105,8 @@ namespace hal
                         });
 
                         menu.addAction("Isolate in new view", [this, item]() { Q_EMIT handleIsolationViewAction(item); });
+                        if (mIsGrouping)
+                            menu.addAction("Add to Selection", [this, item]() { Q_EMIT handleAddToSelection(item); });
 
                         break;
                     case SelectionTreeItem::TreeItemType::GateItem:
@@ -102,6 +116,8 @@ namespace hal
                         });
 
                         menu.addAction("Isolate in new view", [this, item]() { Q_EMIT handleIsolationViewAction(item); });
+                        if (mIsGrouping)
+                            menu.addAction("Add to Selection", [this, item]() { Q_EMIT handleAddToSelection(item); });
 
                         break;
                     case SelectionTreeItem::TreeItemType::NetItem:
@@ -109,6 +125,8 @@ namespace hal
                         menu.addAction(QIcon(":/icons/python"), "Extract Net as python code (copy to clipboard)", [item]() {
                             QApplication::clipboard()->setText("netlist.get_net_by_id(" + QString::number(item->id()) + ")");
                         });
+                        if (mIsGrouping)
+                            menu.addAction("Add to Selection", [this, item]() { Q_EMIT handleAddToSelection(item); });
 
                         break;
                     default:    // make compiler happy and handle irrelevant MaxItem, NullItem
@@ -140,6 +158,43 @@ namespace hal
         isolateInNewViewAction(nd);
     }
 
+    void SelectionTreeView::handleAddToSelection(const SelectionTreeItem* sti)
+    {
+        // Abhängig vom Typ des TreeItems fügen wir unterschiedliche Elemente zur Auswahl hinzu.
+        switch (sti->itemType())
+        {
+            case SelectionTreeItem::ModuleItem:
+            {
+                // Downcast auf Modul und hinzufügen zur Auswahl.
+                const SelectionTreeItemModule* moduleItem = static_cast<const SelectionTreeItemModule*>(sti);
+                gSelectionRelay->addModule(moduleItem->id());
+                break;
+            }
+
+            case SelectionTreeItem::GateItem:
+            {
+                // Downcast auf Tor und hinzufügen zur Auswahl.
+                const SelectionTreeItemGate* gateItem = static_cast<const SelectionTreeItemGate*>(sti);
+                gSelectionRelay->addGate(gateItem->id());
+                break;
+            }
+
+            case SelectionTreeItem::NetItem:
+            {
+                // Downcast auf Netz und hinzufügen zur Auswahl.
+                const SelectionTreeItemNet* netItem = static_cast<const SelectionTreeItemNet*>(sti);
+                gSelectionRelay->addNet(netItem->id());
+                break;
+            }
+
+            default:
+                // Ungültiger oder unbekannter Auswahltyp.
+                return;
+        }
+        gSelectionRelay->relaySelectionChanged(this);
+    }
+
+
     void SelectionTreeView::isolateInNewViewAction(Node nd)
     {
         QSet<u32> gateId;
@@ -148,14 +203,7 @@ namespace hal
 
         if (nd.type() == Node::Gate)
         {
-            u32 cnt = 0;
-            for (;;)
-            {
-                ++cnt;
-                name = "Isolated View " + QString::number(cnt);
-                if (!gGraphContextManager->contextWithNameExists(name))
-                    break;
-            }
+            name = gGraphContextManager->nextViewName("Isolated View");
             gateId.insert(nd.id());
         }
         else if (nd.type() == Node::Module)
@@ -191,18 +239,23 @@ namespace hal
         }
     }
 
-    void SelectionTreeView::populate(bool mVisible)
+    void SelectionTreeView::populate(bool mVisible, u32 groupingId)
     {
-        if (mSelectionTreeProxyModel->isGraphicsBusy())
+        SelectionTreeProxyModel* treeProxy = dynamic_cast<SelectionTreeProxyModel*>(model());
+        if (!treeProxy) return;
+        SelectionTreeModel* treeModel = dynamic_cast<SelectionTreeModel*>(treeProxy->sourceModel());
+        if (!treeModel) return;
+
+        if (treeProxy->isGraphicsBusy())
             return;
         setSelectionMode(QAbstractItemView::NoSelection);
         selectionModel()->clear();
-        mSelectionTreeModel->fetchSelection(mVisible);
+        treeModel->fetchSelection(mVisible, groupingId);
         if (mVisible)
         {
             show();
             setSelectionMode(QAbstractItemView::SingleSelection);
-            QModelIndex defaultSel = mSelectionTreeProxyModel->index(0, 0, rootIndex());
+            QModelIndex defaultSel = treeProxy->index(0, 0, rootIndex());
             if (defaultSel.isValid())
                 selectionModel()->setCurrentIndex(defaultSel, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
         }
@@ -212,16 +265,37 @@ namespace hal
 
     void SelectionTreeView::handleFilterTextChanged(const QString& filter_text)
     {
-        mSelectionTreeProxyModel->handleFilterTextChanged(filter_text);
+        SelectionTreeProxyModel* treeProxy = dynamic_cast<SelectionTreeProxyModel*>(model());
+        if (!treeProxy) return;
+        treeProxy->handleFilterTextChanged(filter_text);
         expandAll();
-        QModelIndex defaultSel = mSelectionTreeProxyModel->index(0, 0, rootIndex());
+        QModelIndex defaultSel = treeProxy->index(0, 0, rootIndex());
         if (defaultSel.isValid())
             selectionModel()->setCurrentIndex(defaultSel, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     }
 
     SelectionTreeProxyModel* SelectionTreeView::proxyModel()
     {
-        return mSelectionTreeProxyModel;
+        return dynamic_cast<SelectionTreeProxyModel*>(model());
+    }
+
+    void SelectionTreeView::handleTreeViewItemFocusClicked(const SelectionTreeItem* sti)
+    {
+        u32 itemId = sti->id();
+
+        switch (sti->itemType())
+        {
+            case SelectionTreeItem::TreeItemType::GateItem:
+                gContentManager->getGraphTabWidget()->handleGateFocus(itemId);
+                break;
+            case SelectionTreeItem::TreeItemType::NetItem:
+                gContentManager->getGraphTabWidget()->handleNetFocus(itemId);
+                break;
+            case SelectionTreeItem::TreeItemType::ModuleItem:
+                gContentManager->getGraphTabWidget()->handleModuleFocus(itemId);
+                break;
+            default: break;
+        }
     }
 
 }    // namespace hal

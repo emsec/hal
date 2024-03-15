@@ -5,6 +5,11 @@ if(PL_NETLIST_PREPROCESSING OR BUILD_ALL_PLUGINS)
     file(GLOB_RECURSE NETLIST_PREPROCESSING_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
     file(GLOB_RECURSE NETLIST_PREPROCESSING_PYTHON_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/*.cpp)
 
+    if(Bitwuzla_FOUND)
+        add_compile_definitions(BITWUZLA_LIBRARY)
+        message(STATUS "found bitwuzla, adding define for solver query to bitwuzla library")
+    endif()
+
     hal_add_plugin(netlist_preprocessing
         SHARED
         HEADER ${NETLIST_PREPROCESSING_INC}

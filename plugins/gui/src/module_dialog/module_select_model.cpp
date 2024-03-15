@@ -158,7 +158,7 @@ namespace hal
     }
 
     //---------------- PROXY ------------------------------------------
-    ModuleSelectProxy::ModuleSelectProxy(QObject* parent) : QSortFilterProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::numerated)
+    ModuleSelectProxy::ModuleSelectProxy(QObject* parent) : SearchProxyModel(parent), mSortMechanism(gui_utility::mSortMechanism::numerated)
     {
         ;
     }
@@ -195,10 +195,16 @@ namespace hal
         return gui_utility::compare(mSortMechanism, sLeft, sRight);
     }
 
-    void ModuleSelectProxy::searchTextChanged(const QString& txt)
+    void ModuleSelectProxy::startSearch(QString text, int options)
+    {      
+        mSearchString = text;
+        mSearchOptions = SearchOptions(options);
+        invalidateFilter();
+    }
+
+    bool ModuleSelectProxy::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
     {
-        setFilterKeyColumn(-1);
-        setFilterRegularExpression(txt);
+        return checkRow(source_row, source_parent, 1, 3, 1);
     }
 
     //---------------- EXCLUDE ----------------------------------------
@@ -313,7 +319,7 @@ namespace hal
         setSelectionMode(QAbstractItemView::SingleSelection);
 
         ModuleSelectProxy* prox = new ModuleSelectProxy(this);
-        connect(sbar, &Searchbar::textEdited, prox, &ModuleSelectProxy::searchTextChanged);
+        connect(sbar, &Searchbar::triggerNewSearch, prox, &ModuleSelectProxy::startSearch);
 
         ModuleSelectModel* modl = new ModuleSelectModel(this);
 

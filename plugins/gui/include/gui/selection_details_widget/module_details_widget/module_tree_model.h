@@ -23,25 +23,54 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#pragma once
+
 #include "gui/basic_tree_model/base_tree_model.h"
 #include "hal_core/defines.h"
 #include <QIcon>
 #include <QMap>
+#include <string>
+
 
 namespace hal
 {
     class Module;
     class Gate;
     class Net;
-    class TreeItem;
+    class BaseTreeItem;
+
+    class ModuleTreeitem : public BaseTreeItem
+    {
+    public:
+        enum ItemType { None, Module, Gate};
+
+        private:
+            ItemType mItemType;
+            int mId;
+            QString mName;
+            QString mNodeType;
+        public:
+
+            ModuleTreeitem(ItemType itp, int id, const QString& name, const QString& ntp);
+            QVariant getData(int column) const override;
+            void setData(QList<QVariant> data) override;
+            void setDataAtIndex(int index, QVariant& data) override;
+            void appendData(QVariant data) override;
+            int getColumnCount() const override;
+
+            /**
+             * Get the type (enum) of a given item.
+             *
+             * @param item - The item for which the type is requested.
+             * @return The item's type.
+             */
+            ItemType itemType() const { return mItemType; }
+    };
 
     class ModuleTreeModel : public BaseTreeModel
     {
         Q_OBJECT
     public:
-
-        //metatype declaration at the end of file
-        enum class itemType {module = 0, gate = 1};
 
         ModuleTreeModel(QObject* parent = nullptr);
 
@@ -61,14 +90,6 @@ namespace hal
           */
         QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
         ///@}
-
-        /**
-         * Get the type (enum) of a given item.
-         *
-         * @param item - The item for which the type is requested.
-         * @return The item's type.
-         */
-        itemType getTypeOfItem(TreeItem* item) const;
 
         /**
          * Disconnects all events from the model. Can be called to increase performance when
@@ -108,11 +129,11 @@ namespace hal
         bool mEventsConnected = false;
 
         int mModId;
-        QMap<Module*, TreeItem*> mModuleToTreeitems;
-        QMap<Gate*, TreeItem*> mGateToTreeitems;
+        QMap<Module*, BaseTreeItem*> mModuleToTreeitems;
+        QMap<Gate*, BaseTreeItem*> mGateToTreeitems;
 
         //necessary because setModule uses beginResetModel (should not be called by each recursive iteration)
-        void moduleRecursive(Module* mod, TreeItem* modItem);
+        void moduleRecursive(Module* mod, BaseTreeItem* modItem);
 
         //perhaps more performance instead of setting the whole displayed module anew
         void updateGatesOfModule(Module* mod);
@@ -123,7 +144,7 @@ namespace hal
          * @param item - The requested item.
          * @return A module, net, or gate icon depending on the item's type.
          */
-        QIcon getIconFromItem(TreeItem* item) const;
+        QIcon getIconFromItem(ModuleTreeitem* item) const;
 
         void clearOwnStructures();
 
@@ -146,5 +167,3 @@ namespace hal
     };
 
 }
-
-Q_DECLARE_METATYPE(hal::ModuleTreeModel::itemType)

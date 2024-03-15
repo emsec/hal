@@ -3,12 +3,18 @@
 !bitorder_propagation/**/*
 !boolean_influence*
 !boolean_influence/**/*
+!bitwuzla_utils*
+!bitwuzla_utils/**/*
 !dataflow_analysis*
 !dataflow_analysis/**/*
+!edif_parser*
+!edif_parser/**/*
 !gate_libraries*
 !gate_libraries/**/*
 !gexf_writer*
 !gexf_writer/**/*
+!genlib_writer*
+!genlib_writer/**/*
 !graph_algorithm*
 !graph_algorithm/**/*
 !gui*
@@ -17,6 +23,8 @@
 !gui_extension_demo/**/*
 !liberty_parser*
 !liberty_parser/**/*
+!machine_learning*
+!machine_learning/**/*
 !netlist_preprocessing*
 !netlist_preprocessing/**/*
 !hgl_parser*

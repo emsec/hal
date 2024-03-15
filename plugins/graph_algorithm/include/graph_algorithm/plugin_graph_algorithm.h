@@ -27,6 +27,7 @@
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
 
+#include <filesystem>
 #include <igraph/igraph.h>
 
 namespace hal
@@ -123,10 +124,21 @@ namespace hal
          * that for each global input and output dummy nodes are generated in the igraph representation.
          *
          * @param[in] netlist - The netlist to operate on.
+         * @param[out] graph - The output igraph object.
+         * @returns map from igraph node id to HAL gate ID, to be able to match back any graph operations.
+         */
+        std::map<int, Gate*> get_igraph_directed(Netlist* const netlist, igraph_t* graph);
+
+        /**
+         * Generates an directed graph based on the current netlist with only the dependency of the FFs.
+         * Each FF is transformed to a node while each net is transformed to an edge. The function returns
+         * the mapping from igraph node ids to HAL gates. 
+         * 
+         * @param[in] netlist - The netlist to operate on.
          * @param[in] igraph - igraph object
          * @returns map from igraph node id to HAL gate ID, to be able to match back any graph operations.
          */
-        std::map<int, Gate*> get_igraph_directed(Netlist* const netlist, igraph_t* igraph);
+        std::map<int, Gate*> get_igraph_ff_dependency(Netlist* const nl, igraph_t* graph);
 
         /**
          * Uses the mapping provided by the the get_igraph_directed() function to generate sets of HAL gates
@@ -141,5 +153,48 @@ namespace hal
          * @returns map from membership id to set of gates that have the membership.
          */
         std::map<int, std::set<Gate*>> get_memberships_for_hal(igraph_t* graph, igraph_vector_t membership, std::map<int, Gate*> vertex_to_gate);
+
+        /**
+         * Creates a graph edgelist file based on the current igraph
+         *
+         * @param[in] graph - igraph graph object
+         * @param[in] output_file - output file path
+         * @returns map from membership id to set of gates that have the membership.
+         */
+        bool write_graph_to_file(igraph_t* graph, const std::string& output_file);
+
+        /**
+         * Creates a graph edgelist file based on the current netlist with only the FF dependencies
+         *
+         * @param[in] netlist - netlist
+         * @param[in] output_file - output file path
+         * @returns map from membership id to set of gates that have the membership.
+         */
+        bool write_ff_dependency_graph(Netlist* nl, const std::string& output_file);
     };
+
+    namespace graph_algorithm
+    {
+        /**
+         * TODO
+         *
+         * @param[out] igraph - The output igraph object.
+         */
+        void get_igraph_directed(const std::vector<std::pair<u32, u32>>& edges, igraph_t* graph);
+
+        /**
+         * TODO
+         *
+         * @param[out] igraph - The output igraph object.
+         */
+        void add_edges(const std::vector<std::pair<u32, u32>>& edges, igraph_t* graph);
+
+        /**
+         * Get a vector of strongly connected components (SCC) with each SSC being represented by a vector of gates.
+         *
+         * @param[in] graph - The igraph object to operate on.
+         * @returns A set of SCCs.
+         */
+        std::set<std::set<u32>> get_strongly_connected_components(igraph_t* graph);
+    }    // namespace graph_algorithm
 }    // namespace hal

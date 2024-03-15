@@ -94,11 +94,6 @@ namespace hal
             void appendVLine(const qreal x, const qreal mSmallY, const qreal mBigY);
 
             /**
-             * Merges all horizontal and vertical lines so that overlapping lines are replaced by only a single line.
-             */
-            void mergeLines();
-
-            /**
              * Gets the total amount of lines (includes horizontal AND vertical lines).
              *
              * @returns the total amount of lines
@@ -129,7 +124,7 @@ namespace hal
          * @param n - The undelying net of the StandardGraphicsNet
          * @param l - The lines this GraphicsNet consists of
          */
-        StandardGraphicsNet(Net* n, const Lines& l);
+        StandardGraphicsNet(Net* n, const Lines& l, const QList<QPointF>& knots = QList<QPointF>());
 
         /**
          * Draws the StandardGraphicsNet in the scene.

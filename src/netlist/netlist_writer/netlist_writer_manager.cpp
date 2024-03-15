@@ -29,7 +29,7 @@ namespace hal
 
                 if (auto it = m_extension_to_writer.find(extension); it != m_extension_to_writer.end())
                 {
-                    log_info("netlist_writer", "selected writer: {}", it->second.first);
+                    log_debug("netlist_writer", "selected writer: {}", it->second.first);
                     return it->second.second;
                 }
 
@@ -67,7 +67,7 @@ namespace hal
                 m_extension_to_writer.emplace(ext, std::make_pair(name, writer_factory));
                 m_writer_to_extensions[name].push_back(ext);
 
-                log_info("netlist_writer", "registered netlist writer '{}' for file extension '{}'.", name, ext);
+                log_debug("netlist_writer", "registered netlist writer '{}' for file extension '{}'.", name, ext);
             }
         }
 
@@ -80,7 +80,7 @@ namespace hal
                     if (auto rm_it = m_extension_to_writer.find(ext); rm_it != m_extension_to_writer.end())
                     {
                         m_extension_to_writer.erase(rm_it);
-                        log_info("netlist_writer", "unregistered netlist writer '{}' for file extension '{}'.", name, ext);
+                        log_debug("netlist_writer", "unregistered netlist writer '{}' for file extension '{}'.", name, ext);
                     }
                 }
                 m_writer_to_extensions.erase(it);
@@ -108,7 +108,7 @@ namespace hal
 
             std::unique_ptr<NetlistWriter> writer = factory();
 
-            log_info("netlist_writer", "writing netlist '{}' to file '{}'...", netlist->get_design_name(), file_path.string());
+            log_debug("netlist_writer", "writing netlist '{}' to file '{}'...", netlist->get_design_name(), file_path.string());
 
             auto begin_time = std::chrono::high_resolution_clock::now();
             if (auto res = writer->write(netlist, file_path); res.is_error())
@@ -117,11 +117,11 @@ namespace hal
                 return false;
             }
 
-            log_info("netlist_writer",
-                     "wrote netlist '{}' to file '{}' in {:2.2f} seconds.",
-                     netlist->get_design_name(),
-                     file_path.string(),
-                     (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
+            log_debug("netlist_writer",
+                      "wrote netlist '{}' to file '{}' in {:2.2f} seconds.",
+                      netlist->get_design_name(),
+                      file_path.string(),
+                      (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
 
             return true;
         }

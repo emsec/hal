@@ -61,9 +61,9 @@ namespace hal
         if(!clickedIndex.isValid())
             return;
 
-        TreeItem* clickedItem = mModel->getItemFromIndex(clickedIndex);
+        ModuleTreeitem* clickedItem = dynamic_cast<ModuleTreeitem*>(mModel->getItemFromIndex(clickedIndex));
         int id = clickedItem->getData(ModuleTreeModel::sIdColumn).toInt();
-        ModuleTreeModel::itemType type = mModel->getTypeOfItem(clickedItem);
+        ModuleTreeitem::ItemType type = clickedItem->itemType();
         QMenu menu;
 
         //menu.addSection("here comes the plaintext");
@@ -97,8 +97,8 @@ namespace hal
             gSelectionRelay->clear();
             switch(type)
             {
-                case ModuleTreeModel::itemType::module: gSelectionRelay->addModule(id); break;
-                case ModuleTreeModel::itemType::gate: gSelectionRelay->addGate(id); break;
+                case ModuleTreeitem::Module: gSelectionRelay->addModule(id); break;
+                case ModuleTreeitem::Gate: gSelectionRelay->addGate(id); break;
             }
             gSelectionRelay->relaySelectionChanged(this);
            }
@@ -109,8 +109,8 @@ namespace hal
            {
             switch(type)
             {
-                case ModuleTreeModel::itemType::module: gSelectionRelay->addModule(id); break;
-                case ModuleTreeModel::itemType::gate: gSelectionRelay->addGate(id); break;
+                case ModuleTreeitem::Module: gSelectionRelay->addModule(id); break;
+                case ModuleTreeitem::Gate: gSelectionRelay->addGate(id); break;
             }
             gSelectionRelay->relaySelectionChanged(this);
            }
@@ -122,8 +122,8 @@ namespace hal
                 Node nd;
                 switch(type)
                 {
-                    case ModuleTreeModel::itemType::module: nd = Node(id, Node::Module); break;
-                    case ModuleTreeModel::itemType::gate:   nd = Node(id, Node::Gate); break;
+                    case ModuleTreeitem::Module: nd = Node(id, Node::Module); break;
+                    case ModuleTreeitem::Gate:   nd = Node(id, Node::Gate); break;
                 }
                 SelectionTreeView::isolateInNewViewAction(nd);
             }
@@ -134,16 +134,16 @@ namespace hal
             {
                 switch(type)
                 {
-                    case ModuleTreeModel::itemType::module: gContentManager->getGraphTabWidget()->handleModuleFocus(id); break;
-                    case ModuleTreeModel::itemType::gate:   gContentManager->getGraphTabWidget()->handleGateFocus(id);   break;
+                    case ModuleTreeitem::Module: gContentManager->getGraphTabWidget()->handleModuleFocus(id); break;
+                    case ModuleTreeitem::Gate:   gContentManager->getGraphTabWidget()->handleGateFocus(id);   break;
                 }
             }
         );
 
         menu.addSection("Python Code");
 
-        QString pythonGetObject = (type == ModuleTreeModel::itemType::module) ? PyCodeProvider::pyCodeModule(id) : PyCodeProvider::pyCodeGate(id);
-        QString pythonDescription = (type == ModuleTreeModel::itemType::module) ? "Get module" : "Get gate";
+        QString pythonGetObject = (type == ModuleTreeitem::Module) ? PyCodeProvider::pyCodeModule(id) : PyCodeProvider::pyCodeGate(id);
+        QString pythonDescription = (type == ModuleTreeitem::Module) ? "Get module" : "Get gate";
         menu.addAction(QIcon(":/icons/python"), pythonDescription,
            [pythonGetObject]()
            {

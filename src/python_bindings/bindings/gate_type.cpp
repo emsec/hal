@@ -230,9 +230,9 @@ namespace hal
             :param int id: The ID of the pin.
             :param str name: The name of the pin.
             :param hal_py.PinDirection direction: The direction of the pin.
-            :param hal_py.PinType type: The type of the pin. Defaults to hal_py.PinType.none.
-            :param bool create_group: Set True to automatically assign the pin to a new pin group, False otherwise. Defaults to True.
-            :returns: The gate pin on success, None otherwise.
+            :param hal_py.PinType type: The type of the pin. Defaults to ``hal_py.PinType.none``.
+            :param bool create_group: Set ``True`` to automatically assign the pin to a new pin group, ``False`` otherwise. Defaults to ``True``.
+            :returns: The gate pin on success, ``None`` otherwise.
             :rtype: hal_py.GatePin or None
         )");
 
@@ -260,9 +260,9 @@ namespace hal
 
             :param str name: The name of the pin.
             :param hal_py.PinDirection direction: The direction of the pin.
-            :param hal_py.PinType type: The type of the pin. Defaults to hal_py.PinType.none.
-            :param bool create_group: Set True to automatically assign the pin to a new pin group, False otherwise. Defaults to True.
-            :returns: The gate pin on success, None otherwise.
+            :param hal_py.PinType type: The type of the pin. Defaults to ``hal_py.PinType.none``.
+            :param bool create_group: Set ``True`` to automatically assign the pin to a new pin group, ``False`` otherwise. Defaults to ``True``.
+            :returns: The gate pin on success, ``None`` otherwise.
             :rtype: hal_py.GatePin or None
         )");
 
@@ -275,7 +275,7 @@ namespace hal
             :type: list[hal_py.GatePin]
         )");
 
-        py_gate_type.def("get_pins", &GateType::get_pins, R"(
+        py_gate_type.def("get_pins", &GateType::get_pins, py::arg("filter") = nullptr, R"(
             Get an ordered list of all pins of the gate type.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -293,7 +293,7 @@ namespace hal
             :type: list[str]
         )");
 
-        py_gate_type.def("get_pin_names", &GateType::get_pin_names, R"(
+        py_gate_type.def("get_pin_names", &GateType::get_pin_names, py::arg("filter") = nullptr, R"(
             Get an ordered list of the names of all pins of the gate type.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -359,7 +359,7 @@ namespace hal
             Get the pin corresponding to the given ID.
 
             :param int id: The ID of the pin.
-            :returns: The pin on success, None otherwise.
+            :returns: The pin on success, ``None`` otherwise.
             :rtype: hal_py.GatePin or None
         )");
 
@@ -367,7 +367,7 @@ namespace hal
             Get the pin corresponding to the given name.
 
             :param str name: The name of the pin.
-            :returns: The pin on success, None otherwise.
+            :returns: The pin on success, ``None`` otherwise.
             :rtype: hal_py.GatePin or None
         )");
 
@@ -379,9 +379,10 @@ namespace hal
                const std::vector<GatePin*> pins = {},
                PinDirection direction           = PinDirection::none,
                PinType type                     = PinType::none,
-               bool ascending                   = false,
-               u32 start_index                  = 0) -> PinGroup<GatePin>* {
-                auto res = self.create_pin_group(id, name, pins, direction, type, ascending, start_index);
+               bool ascending                   = true,
+               u32 start_index                  = 0,
+               bool delete_empty_groups         = true) -> PinGroup<GatePin>* {
+                auto res = self.create_pin_group(id, name, pins, direction, type, ascending, start_index, delete_empty_groups);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -394,22 +395,24 @@ namespace hal
             },
             py::arg("id"),
             py::arg("name"),
-            py::arg("pins")        = std::vector<GatePin*>(),
-            py::arg("direction")   = PinDirection::none,
-            py::arg("type")        = PinType::none,
-            py::arg("ascending")   = false,
-            py::arg("start_index") = 0,
+            py::arg("pins")                = std::vector<GatePin*>(),
+            py::arg("direction")           = PinDirection::none,
+            py::arg("type")                = PinType::none,
+            py::arg("ascending")           = true,
+            py::arg("start_index")         = 0,
+            py::arg("delete_empty_groups") = true,
             R"(
             Create a gate pin group with the given name.
 
             :param int id: The ID of the pin group.
             :param str name: The name of the pin group.
             :param list[hal_py.GatePin] pins: The pins to be assigned to the pin group. Defaults to an empty list.
-            :param hal_py.PinDirection direction: The direction of the pin group. Defaults to hal_py.PinDirection.none.
-            :param hal_py.PinType type: The type of the pin group. Defaults to hal_py.PinType.none.
-            :param bool ascending: Set True for ascending pin order (from 0 to n-1), False otherwise (from n-1 to 0). Defaults to False.
-            :param int start_index: The start index of the pin group. Defaults to 0.
-            :returns: The pin group on success, None otherwise.
+            :param hal_py.PinDirection direction: The direction of the pin group. Defaults to ``hal_py.PinDirection.none``.
+            :param hal_py.PinType type: The type of the pin group. Defaults to ``hal_py.PinType.none``.
+            :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``True``.
+            :param int start_index: The start index of the pin group. Defaults to ``0``.
+            :param bool delete_empty_groups: Set ``True`` to delete groups that are empty after the pins have been assigned to the new group, ``False`` to keep empty groups. Defaults to ``True``.
+            :returns: The pin group on success, ``None`` otherwise.
             :rtype: hal_py.GatePinGroup or None
         )");
 
@@ -420,9 +423,10 @@ namespace hal
                const std::vector<GatePin*> pins = {},
                PinDirection direction           = PinDirection::none,
                PinType type                     = PinType::none,
-               bool ascending                   = false,
-               u32 start_index                  = 0) -> PinGroup<GatePin>* {
-                auto res = self.create_pin_group(name, pins, direction, type, ascending, start_index);
+               bool ascending                   = true,
+               u32 start_index                  = 0,
+               bool delete_empty_groups         = true) -> PinGroup<GatePin>* {
+                auto res = self.create_pin_group(name, pins, direction, type, ascending, start_index, delete_empty_groups);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -434,26 +438,28 @@ namespace hal
                 }
             },
             py::arg("name"),
-            py::arg("pins")        = std::vector<GatePin*>(),
-            py::arg("direction")   = PinDirection::none,
-            py::arg("type")        = PinType::none,
-            py::arg("ascending")   = false,
-            py::arg("start_index") = 0,
+            py::arg("pins")                = std::vector<GatePin*>(),
+            py::arg("direction")           = PinDirection::none,
+            py::arg("type")                = PinType::none,
+            py::arg("ascending")           = true,
+            py::arg("start_index")         = 0,
+            py::arg("delete_empty_groups") = true,
             R"(
             Create a gate pin group with the given name.
             The ID of the pin group is set automatically.
 
             :param str name: The name of the pin group.
             :param list[hal_py.GatePin] pins: The pins to be assigned to the pin group. Defaults to an empty list.
-            :param hal_py.PinDirection direction: The direction of the pin group. Defaults to hal_py.PinDirection.none.
-            :param hal_py.PinType type: The type of the pin group. Defaults to hal_py.PinType.none.
-            :param bool ascending: Set True for ascending pin order (from 0 to n-1), False otherwise (from n-1 to 0). Defaults to False.
-            :param int start_index: The start index of the pin group. Defaults to 0.
-            :returns: The pin group on success, None otherwise.
+            :param hal_py.PinDirection direction: The direction of the pin group. Defaults to ``hal_py.PinDirection.none``.
+            :param hal_py.PinType type: The type of the pin group. Defaults to ``hal_py.PinType.none``.
+            :param bool ascending: Set ``True`` for ascending pin order (from 0 to n-1), ``False`` otherwise (from n-1 to 0). Defaults to ``True``.
+            :param int start_index: The start index of the pin group. Defaults to ``0``.
+            :param bool delete_empty_groups: Set ``True`` to delete groups that are empty after the pins have been assigned to the new group, ``False`` to keep empty groups. Defaults to ``True``.
+            :returns: The pin group on success, ``None`` otherwise.
             :rtype: hal_py.GatePinGroup or None
         )");
 
-        py_gate_type.def("get_pin_groups", &GateType::get_pin_groups, R"(
+        py_gate_type.def("get_pin_groups", &GateType::get_pin_groups, py::arg("filter") = nullptr, R"(
             Get an ordered list of all pin groups of the gate type.
             The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
 
@@ -466,7 +472,7 @@ namespace hal
             Get the pin group corresponding to the given ID.
 
             :param int id: The ID of the pin group.
-            :returns: The pin group on success, None otherwise.
+            :returns: The pin group on success, ``None`` otherwise.
             :rtype: hal_py.GatePinGroup or None
         )");
 
@@ -474,8 +480,84 @@ namespace hal
             Get the pin group corresponding to the given name.
 
             :param str name: The name of the pin group.
-            :returns: The pin group on success, None otherwise.
+            :returns: The pin group on success, ``None`` otherwise.
             :rtype: hal_py.GatePinGroup or None
+        )");
+
+        py_gate_type.def(
+            "delete_pin_group",
+            [](GateType& self, PinGroup<GatePin>* pin_group) {
+                if (self.delete_pin_group(pin_group))
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while deleting pin group");
+                    return false;
+                }
+            },
+            py::arg("pin_group"),
+            R"(
+            Delete the given pin group.
+
+            :param hal_py.GatePinGroup pin_group: The pin group to be deleted.
+            :returns: ``True`` on success, ``False`` otherwise.
+            :rtype: bool
+        )");
+
+        py_gate_type.def(
+            "assign_pin_to_group",
+            [](GateType& self, PinGroup<GatePin>* pin_group, GatePin* pin, bool delete_empty_groups = true) {
+                auto res = self.assign_pin_to_group(pin_group, pin, delete_empty_groups);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while assigning pin to pin group:\n{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("pin_group"),
+            py::arg("pin"),
+            py::arg("delete_empty_groups") = true,
+            R"(
+            Assign a pin to a pin group.
+
+            :param hal_py.GatePinGroup pin_group: The new pin group.
+            :param hal_py.GatePin pin: The pin to be added.
+            :param bool delete_empty_groups: Set ``True`` to delete groups that are empty after the pin has been assigned to the new group, ``False`` to keep empty groups. Defaults to ``True``.
+            :returns: ``True`` on success, ``False`` otherwise.
+            :rtype: bool
+        )");
+
+        py_gate_type.def("set_pin_group_name", &GateType::set_pin_group_name, py::arg("pin_group"), py::arg("new_name"), R"(
+            Set the name of the given pin group.
+
+            :param hal_py.GatePinGroup pin_group: The pin group.
+            :param str new_name: The name to be assigned to the pin group.
+            :returns: ``True`` on success, ``False`` otherwise.
+            :rtype: bool
+        )");
+
+        py_gate_type.def("set_pin_group_type", &GateType::set_pin_group_type, py::arg("pin_group"), py::arg("new_type"), R"(
+            Set the type of the given pin group.
+
+            :param hal_py.GatePinGroup pin_group: The pin group.
+            :param hal_py.PinType new_type: The type to be assigned to the pin group.
+            :returns: ``True`` on success, ``False`` otherwise.
+            :rtype: bool
+        )");
+
+        py_gate_type.def("set_pin_group_direction", &GateType::set_pin_group_direction, py::arg("pin_group"), py::arg("new_direction"), R"(
+            Set the direction of the given pin group.
+
+            :param hal_py.GatePinGroup pin_group: The pin group.
+            :param hal_py.PinDirection new_direction: The direction to be assigned to the pin group.
+            :returns: ``True`` on success, ``False`` otherwise.
+            :rtype: bool
         )");
 
         py_gate_type.def("add_boolean_function", &GateType::add_boolean_function, py::arg("pin_name"), py::arg("function"), R"(

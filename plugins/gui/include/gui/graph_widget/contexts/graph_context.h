@@ -224,6 +224,13 @@ namespace hal
         bool isShowingNetDestination(const u32 mNetId) const;
 
         /**
+         * Checks whether there is only the folded top_module in the context
+         * which makes other time consumptive tests unnecessary
+         * @return <b>true</b> If here is only the folded top_module in the context
+         */
+        bool isShowingFoldedTopModule() const;
+
+        /**
          * Given a net, this function returns the first visible source node.
          *
          * @param n - Pointer to net
@@ -437,6 +444,16 @@ namespace hal
          */
         void updateNets();
 
+        /**
+         * Make sure these nodes gets removed from context
+         */
+        void setScheduleRemove(const QSet<u32>& mods, const QSet<u32>& gats);
+
+        /**
+         * Check whether node is scheduled for removal
+         */
+        bool isScheduledRemove(const Node& nd);
+
     Q_SIGNALS:
         void dataChanged();
         void exclusiveModuleLost(u32 old_id);
@@ -489,6 +506,9 @@ namespace hal
         QDateTime mTimestamp;
 
         bool mSpecialUpdate;
+
+        QSet<u32> mScheduleRemoveModules;
+        QSet<u32> mScheduleRemoveGates;
 
         u32 mExclusiveModuleId;
     };

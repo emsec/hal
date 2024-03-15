@@ -3,6 +3,8 @@
 #include "gui/gui_globals.h"
 #include "gui/main_window/main_window.h"
 #include "gui/settings/settings_items/settings_item_dropdown.h"
+#include "gui/module_model/module_model.h"
+#include "gui/module_model/module_color_manager.h"
 #include <QDebug>
 #include <QImage>
 
@@ -30,6 +32,7 @@ namespace hal
 
     SelectionDetailsIconProvider* SelectionDetailsIconProvider::instance()
     {
+        Q_ASSERT(gNetlistRelay); // make sure it does not get called before event relay is installed
         if (!inst) inst = new SelectionDetailsIconProvider();
         return inst;
     }
@@ -38,7 +41,17 @@ namespace hal
         : QObject(parent)
     {
         connect(MainWindow::sSettingStyle, &SettingsItemDropdown::intChanged,this,&SelectionDetailsIconProvider::loadIcons);
+        connect(gNetlistRelay->getModuleColorManager(),&ModuleColorManager::moduleColorChanged,this,&SelectionDetailsIconProvider::handleModuleColorChanged);
         loadIcons(MainWindow::sSettingStyle->value().toInt());
+    }
+
+    void SelectionDetailsIconProvider::handleModuleColorChanged(u32 id)
+    {
+        auto it = mModuleIcons.find(id);
+        if (it == mModuleIcons.end()) return;
+        delete it.value();
+        QColor col = gNetlistRelay->getModuleColor(id);
+        mModuleIcons[id] = new QIcon(gui_utility::getStyledSvgIcon("all->" + col.name(QColor::HexRgb), ":/icons/ne_module"));
     }
 
     void SelectionDetailsIconProvider::loadIcons(int istyle)
@@ -46,9 +59,21 @@ namespace hal
         MainWindow::StyleSheetOption theme = static_cast<MainWindow::StyleSheetOption>(istyle);
         QString solidColor = (theme == MainWindow::Light) ? "all->#000000" : "all->#ffffff";
 
+        if (!mDefaultIcons.isEmpty())
+        {
+            for (auto it = mDefaultIcons.begin(); it != mDefaultIcons.end(); ++it)
+                delete it.value();
+        }
+
         mDefaultIcons[ModuleIcon] = new QIcon(gui_utility::getStyledSvgIcon(solidColor, ":/icons/ne_module"));
         mDefaultIcons[GateIcon]   = new QIcon(gui_utility::getStyledSvgIcon(solidColor, ":/icons/ne_gate"));
         mDefaultIcons[NetIcon]    = new QIcon(gui_utility::getStyledSvgIcon(solidColor, ":/icons/ne_net"));
+
+        if (!mGateIcons.isEmpty())
+        {
+            for (auto it = mGateIcons.begin(); it != mGateIcons.end(); ++it)
+                delete it.value();
+        }
 
         mGateIcons[(int)GateTypeProperty::c_buffer]   = new QIcon(gui_utility::getStyledSvgIcon(solidColor, ":/icons/ne_gate_buffer"));
         mGateIcons[(int)GateTypeProperty::c_inverter] = new QIcon(gui_utility::getStyledSvgIcon(solidColor, ":/icons/ne_gate_inverter"));
@@ -63,7 +88,7 @@ namespace hal
     const QIcon* SelectionDetailsIconProvider::getIcon(IconCategory catg, u32 itemId)
     {
         Gate* g = nullptr;
-        Module* m = nullptr;
+        QColor col;
 
         switch (catg)
         {
@@ -80,18 +105,15 @@ namespace hal
             }
             break;
         case ModuleIcon:
-            m = gNetlist->get_module_by_id(itemId);
-            if (m)
+            col = gNetlistRelay->getModuleColor(itemId);
+            if (col.isValid())
             {
-                QColor col = gNetlistRelay->getModuleColor(itemId);
-                if (col.isValid())
-                {
-                    const QIcon* moduleColorIcon = mModuleIcons.value(m,nullptr);
-                    if (moduleColorIcon) return moduleColorIcon;
-                    moduleColorIcon = new QIcon(gui_utility::getStyledSvgIcon("all->" + col.name(QColor::HexRgb), ":/icons/ne_module"));
-                    mModuleIcons.insert(m, moduleColorIcon);
-                    return moduleColorIcon;
-                }
+                auto it = mModuleIcons.find(itemId);
+                if (it != mModuleIcons.end())
+                    return it.value();
+                QIcon* newIcon = new QIcon(gui_utility::getStyledSvgIcon("all->" + col.name(QColor::HexRgb), ":/icons/ne_module"));
+                mModuleIcons[itemId] = newIcon;
+                return newIcon;
             }
             break;
         default:

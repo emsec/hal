@@ -201,4 +201,9 @@ namespace hal
         if (mDockBar->unused())
             hide();
     }
+
+    int TabWidget::count() const
+    {
+        return mDockBar->count();
+    }
 }

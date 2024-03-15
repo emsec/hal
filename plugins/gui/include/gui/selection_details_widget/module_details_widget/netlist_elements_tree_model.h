@@ -27,15 +27,44 @@
 
 #include <QAbstractItemModel>
 #include <QIcon>
-//#include "gui/new_selection_details_widget/models/tree_item.h"
+//#include "gui/new_selection_details_widget/models/base_tree_item.h"
 #include "gui/basic_tree_model/base_tree_model.h"
+#include "hal_core/defines.h"
 
 namespace hal
 {
     class Module;
     class Gate;
     class Net;
-    class TreeItem;
+    class BaseTreeItem;
+
+    class NetlistElementsTreeitem : public BaseTreeItem
+    {
+    public:
+        enum ItemType { None, Module, Gate, Net};
+
+        private:
+            ItemType mItemType;
+            u32 mId;
+            QString mName;
+            QString mNodeType;
+        public:
+
+            NetlistElementsTreeitem(ItemType itp, u32 id_, const QString& name, const QString& ntp = QString());
+            QVariant getData(int column) const override;
+            void setData(QList<QVariant> data) override;
+            void setDataAtIndex(int index, QVariant& data) override;
+            void appendData(QVariant data) override;
+            int getColumnCount() const override;
+
+            u32 id() const { return mId; }
+            /**
+             * Get the type (enum) of a given item.
+             *
+             * @return The item's type.
+             */
+            ItemType itemType() const { return mItemType; }
+    };
 
     /**
      * @ingroup utility_widgets-selection_details
@@ -46,8 +75,6 @@ namespace hal
         Q_OBJECT
     public:
 
-        //metatype declaration at the end of file
-        enum class itemType {module = 0, gate = 1, net = 2};
 
         /**
          * The constructor.
@@ -105,21 +132,13 @@ namespace hal
         void setModule(Module* mod, bool showGates = true, bool showNets = true, bool displayModulesRecursive = true);
 
         /**
-         * Get the type (enum) of a given item.
-         *
-         * @param item - The item for which the type is requested.
-         * @return The item's type.
-         */
-        itemType getTypeOfItem(TreeItem* item) const;
-
-        /**
          * Get the module/gate/net id that the given item represents.
          * To know the type of the item, call getTypeOfItem().
          *
          * @param item - The item from which to extract the id.
          * @return The corresponding module, gate, or net id.
          */
-        int getRepresentedIdOfItem(TreeItem* item) const;
+        int getRepresentedIdOfItem(NetlistElementsTreeitem* item) const;
 
         /** @name Event Handler Functions
          */
@@ -173,12 +192,12 @@ namespace hal
         //1) 1 map that maps "raw element pointer (gate,net,module)" to a list of treeitems
         //2) 3 maps with either id->treeitems or pointer->treeitems
         //QMultiMap<void*, TreeItem*> mElementToTreeitem;
-        QMultiMap<Module*, TreeItem*> mModuleToTreeitems;
-        QMultiMap<Gate*, TreeItem*> mGateToTreeitems;
-        QMultiMap<Net*, TreeItem*> mNetToTreeitems;
+        QMultiMap<Module*, NetlistElementsTreeitem*> mModuleToTreeitems;
+        QMultiMap<Gate*, NetlistElementsTreeitem*> mGateToTreeitems;
+        QMultiMap<Net*, NetlistElementsTreeitem*> mNetToTreeitems;
 
         //necessary because setModule uses beginResetModel (should not be called by each recursive iteration)
-        void moduleRecursive(Module* mod, TreeItem* modItem,  bool showGates = true, bool showNets = true);
+        void moduleRecursive(Module* mod, NetlistElementsTreeitem* modItem,  bool showGates = true, bool showNets = true);
 
         /**
          * Utility function to determine the displayed icon for a given item
@@ -186,7 +205,7 @@ namespace hal
          * @param item - The requested item.
          * @return A module, net, or gate icon depending on the item's type.
          */
-        QIcon getIconFromItem(TreeItem* item) const;
+        QIcon getIconFromItem(NetlistElementsTreeitem* item) const;
 
         /**
          * Utility function to remove all net items of the given module item and
@@ -195,10 +214,8 @@ namespace hal
          *
          * @param moduleItem - The module item to modify.
          */
-        void updateInternalNetsOfModule(TreeItem* moduleItem);
+        void updateInternalNetsOfModule(NetlistElementsTreeitem* moduleItem);
 
     };
 
 }
-
-Q_DECLARE_METATYPE(hal::NetlistElementsTreeModel::itemType)

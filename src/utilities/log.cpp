@@ -45,7 +45,7 @@ namespace hal
         spdlog::set_error_handler([](const std::string& msg) { throw std::invalid_argument("[!] internal log error: " + msg); });
 
         //set_format_pattern("[%c %z] [%n] [%l] %v");
-        set_format_pattern("[%n] [%l] %v");
+        set_format_pattern("%^[%n] [%l] %v%$");
 
         m_default_sinks = {gui_sink, LogManager::create_stdout_sink(), LogManager::create_file_sink(m_file_path)};
     }
@@ -79,7 +79,7 @@ namespace hal
         {
             if (channel != "stdout")    // avoid infinite recursion
             {
-                log_warning("stdout", "log channel '{}' was not registered so far, creating default channel.", channel);
+                log_debug("stdout", "log channel '{}' was not registered so far, creating default channel.", channel);
             }
             return add_channel(channel, m_default_sinks, "info");
         }

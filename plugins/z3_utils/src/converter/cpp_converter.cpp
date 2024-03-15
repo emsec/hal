@@ -26,6 +26,7 @@ namespace hal
             }
 
             log_error("z3_utils", "Unkown operand format for {}!", operand);
+            exit(0);
             return "NOT IMPLEMENTED REACHED";
         }
 
@@ -65,7 +66,7 @@ namespace hal
                     op.erase(op.size() - 3);
                     break;
                 default:
-                    log_error("z3_utils", "unkown operation for operation building ({})", operation);
+                    log_error("z3_utils", "unkown operation for operation building ({})", operation_to_string(operation));
                     return "NOT IMPLEMENTED REACHED";
             }
 

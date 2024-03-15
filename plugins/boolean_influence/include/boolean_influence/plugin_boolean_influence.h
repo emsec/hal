@@ -64,6 +64,26 @@ namespace hal
         static Result<std::unordered_map<std::string, double>> get_boolean_influence(const z3::expr& e, const u32 num_evaluations = 32000, const std::string& unique_identifier = "");
 
         /**
+         * Generates the Boolean influence of each input variable of a Boolean function using the internal HAL functions only
+         * The function is slower, but can be better used in multithreading enviroment.
+         *
+         * @param[in] bf - The Boolean function.
+         * @param[in] num_evaluations - The amount of evaluations that are performed for each input variable.
+         * @returns A map from the variables that appear in the function to their Boolean influence on said function on success, an error otherwise.
+         */
+        static Result<std::unordered_map<std::string, double>> get_boolean_influence_with_hal_boolean_function_class(const BooleanFunction& bf, const u32 num_evaluations);
+
+        /**
+         * Generates the Boolean influence of each input variable of a Boolean function using z3 expressions and substitutions/simplifications only.
+         * The function is slower, but can be better used in multithreading enviroment.
+         *
+         * @param[in] bf - The Boolean function.
+         * @param[in] num_evaluations - The amount of evaluations that are performed for each input variable.
+         * @returns A map from the variables that appear in the function to their Boolean influence on said function on success, an error otherwise.
+         */
+        static Result<std::unordered_map<std::string, double>> get_boolean_influence_with_z3_expr(const BooleanFunction& bf, const u32 num_evaluations);
+
+        /**
          * Generates the Boolean influence of each input variable of a Boolean function.
          *
          * @param[in] bf - The Boolean function.

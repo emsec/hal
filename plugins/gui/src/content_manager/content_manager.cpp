@@ -38,6 +38,7 @@
 
 namespace hal
 {
+
     ExternalContent* ExternalContent::inst = nullptr;
 
     ExternalContent* ExternalContent::instance()
@@ -60,6 +61,7 @@ namespace hal
 
     SettingsItemDropdown* ContentManager::sSettingSortMechanism;
     SettingsItemKeybind* ContentManager::sSettingSearch;
+    SettingsItemKeybind* ContentManager::sSettingDeleteItem;
     bool ContentManager::sSettingsInitialized = initializeSettings();
     bool ContentManager::initializeSettings()
     {
@@ -74,12 +76,21 @@ namespace hal
                                     "Keybindings:Global",
                                     "Keybind for toggeling the searchbar in widgets where available (Selection Details Widget, Modules Widget, Python Editor, Views Widget, Grouping Widget).");
 
+
+        sSettingDeleteItem =
+            new SettingsItemKeybind("Delete Item",
+                                    "keybinds/item_delete",
+                                    QKeySequence("Del"),
+                                    "Keybindings:Global",
+                                    "Keybind for deleting the focused Item.");
         return true;
     }
 
     ContentManager::ContentManager(MainWindow* parent) : QObject(parent), mMainWindow(parent),
         mExternalIndex(0), mContextSerializer(nullptr)
     {
+
+
         // has to be created this early in order to receive deserialization by the core signals
         mPythonWidget = new PythonEditor();
 
@@ -139,10 +150,10 @@ namespace hal
 
     void ContentManager::handleOpenDocument(const QString& fileName)
     {
-        mExternalIndex = 6;
+        mExternalIndex = 1;
 
         mGraphTabWidget = new GraphTabWidget();
-        mMainWindow->addContent(mGraphTabWidget, 2, content_anchor::center);
+        mMainWindow->addContent(mGraphTabWidget, 0, content_anchor::center);
 
         mModuleWidget = new ModuleWidget();
         mMainWindow->addContent(mModuleWidget, 0, content_anchor::left);
@@ -189,7 +200,7 @@ namespace hal
         mPythonWidget->open();
 
         mPythonConsoleWidget = new PythonConsoleWidget();
-        mMainWindow->addContent(mPythonConsoleWidget, 5, content_anchor::bottom);
+        mMainWindow->addContent(mPythonConsoleWidget, 2, content_anchor::bottom);
         mPythonConsoleWidget->open();
 
         mContent.append(mGraphTabWidget);

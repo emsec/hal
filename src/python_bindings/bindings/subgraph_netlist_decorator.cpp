@@ -16,8 +16,8 @@ namespace hal
 
         py_subgraph_netlist_decorator.def(
             "copy_subgraph_netlist",
-            [](SubgraphNetlistDecorator& self, const std::vector<const Gate*>& subgraph_gates) -> std::shared_ptr<Netlist> {
-                auto res = self.copy_subgraph_netlist(subgraph_gates);
+            [](SubgraphNetlistDecorator& self, const std::vector<const Gate*>& subgraph_gates, const bool outside_conncetions_as_global_io) -> std::shared_ptr<Netlist> {
+                auto res = self.copy_subgraph_netlist(subgraph_gates, outside_conncetions_as_global_io);
                 if (res.is_ok())
                 {
                     return std::shared_ptr<Netlist>(res.get());
@@ -29,18 +29,20 @@ namespace hal
                 }
             },
             py::arg("subgraph_gates"),
+            py::arg("outside_conncetions_as_global_io"),
             R"(
             Get a deep copy of a netlist subgraph including all of its gates and nets, but excluding modules and groupings.
 
             :param list[hal_py.Gate] subgraph_gates: The gates making up the subgraph that shall be copied from the netlist.
+            :param bool outside_conncetions_as_global_io: Option determining what nets are considered as global inout. Either only nets with no source or destination or all nets that lost any conneciton to a source or destination.
             :returns: The copied subgraph netlist on success, None otherwise.
             :rtype: hal_py.Netlist or None
         )");
 
         py_subgraph_netlist_decorator.def(
             "copy_subgraph_netlist",
-            [](SubgraphNetlistDecorator& self, const Module* subgraph_module) -> std::shared_ptr<Netlist> {
-                auto res = self.copy_subgraph_netlist(subgraph_module);
+            [](SubgraphNetlistDecorator& self, const Module* subgraph_module, const bool outside_conncetions_as_global_io) -> std::shared_ptr<Netlist> {
+                auto res = self.copy_subgraph_netlist(subgraph_module, outside_conncetions_as_global_io);
                 if (res.is_ok())
                 {
                     return std::shared_ptr<Netlist>(res.get());
@@ -52,10 +54,12 @@ namespace hal
                 }
             },
             py::arg("subgraph_module"),
+            py::arg("outside_conncetions_as_global_io"),
             R"(
             Get a deep copy of a netlist subgraph including all of its gates and nets, but excluding modules and groupings.
 
             :param hal_py.Module subgraph_module: The module making up the subgraph that shall be copied from the netlist.
+            :param bool outside_conncetions_as_global_io: Option determining what nets are considered as global inout. Either only nets with no source or destination or all nets that lost any conneciton to a source or destination.
             :returns: The copied subgraph netlist on success, None otherwise.
             :rtype: hal_py.Netlist or None
         )");

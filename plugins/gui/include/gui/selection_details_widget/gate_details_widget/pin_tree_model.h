@@ -26,13 +26,56 @@
 #pragma once
 
 //#include "gui/new_selection_details_widget/models/base_tree_model.h"
+#include "hal_core/defines.h"
 #include "gui/basic_tree_model/base_tree_model.h"
 #include <QMap>
+#include <QList>
 
 namespace hal
 {
 
     class Gate;
+
+    class PinTreeItem : public BaseTreeItem
+    {
+    public:
+        enum Type {None, Pin, Group};
+
+        private:
+            Type mType;
+            QList<u32> mNetIds;
+            std::string mPinName;
+            QString mPinDirection;
+            QString mPinType;
+            QString mNetName;
+        public:
+
+            PinTreeItem(const std::string& pinName, QString pinDirection, QString pinTypee, QString netName);
+            PinTreeItem();
+            QVariant getData(int column) const override;
+            void setData(QList<QVariant> data) override;
+            void setDataAtIndex(int index, QVariant& data) override;
+            void appendData(QVariant data) override;
+            int getColumnCount() const override;
+            void setType(Type tp) { mType = tp; }
+
+            /**
+             * Get the type (enum) of a given item.
+             *
+             * @return The item's type.
+             */
+            Type type() const { return mType; }
+            void setNetIds(const QList<u32>& nids) { mNetIds = nids; }
+
+            /**
+             * Get the connected nets for a given treeitem (represents a pin). If the
+             * item is grouping type or the pin has no connected net, an empty list
+             * is returned. In case of an inout pin, even multiple connected nets are possible.
+             *
+             * @return A list of net ids.
+             */
+            QList<u32> netIds() const { return mNetIds; }
+    };
 
 /**
  * @ingroup gui
@@ -43,9 +86,6 @@ class GatePinsTreeModel : public BaseTreeModel
     Q_OBJECT
 
 public:
-
-    //metatype declaration at the end of file
-    enum class itemType {grouping = 0, pin = 1};
 
     /**
      * The constructor.
@@ -80,24 +120,6 @@ public:
     int getCurrentGateID();
 
     /**
-     * Get the connected nets for a given treeitem (represents a pin). If the
-     * item is grouping type or the pin has no connected net, an empty list
-     * is returned. In case of an inout pin, even multiple connected nets are possible.
-     *
-     * @param item - The treeitem from which to get the connected nets.
-     * @return A list of net ids.
-     */
-    QList<int> getNetIDsOfTreeItem(TreeItem* item);
-
-    /**
-     * Get the type (enum) of a given item.
-     *
-     * @param item - The item for which the type is requested.
-     * @return The item's type.
-     */
-    itemType getTypeOfItem(TreeItem* item);
-
-    /**
      * Get the number of displayed pins (the number of pins of all types).
      *
      * @return The number of pins.
@@ -111,16 +133,10 @@ public:
     static const int sTypeColumn = 2;
     static const int sConnectedNetColumn = 3;
 
-    //additional data keys
-    const QString keyType = "type";
-    const QString keyRepresentedNetsID = "netID"; //might not be needed
-
 private:
     int mGateId;
-    QMap<std::string, TreeItem*> mPinGroupingToTreeItem;
+    QMap<std::string, BaseTreeItem*> mPinGroupToTreeItem;
 
 };
 
 }
-
-Q_DECLARE_METATYPE(hal::GatePinsTreeModel::itemType)

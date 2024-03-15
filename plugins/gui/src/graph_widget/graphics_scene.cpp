@@ -7,6 +7,7 @@
 
 #include "gui/graph_widget/graph_widget_constants.h"
 #include "gui/graph_widget/graphics_factory.h"
+#include "gui/graph_widget/drag_controller.h"
 #include "gui/graph_widget/items/nodes/gates/graphics_gate.h"
 #include "gui/graph_widget/items/graphics_item.h"
 #include "gui/graph_widget/items/nodes/modules/graphics_module.h"
@@ -74,23 +75,24 @@ namespace hal
     }
 
     GraphicsScene::GraphicsScene(QObject* parent) : QGraphicsScene(parent),
-        mDragShadowGate(new NodeDragShadow()), mDebugGridEnable(false),
+        mDebugGridEnable(false),
+        mDragController(nullptr),
         mSelectionStatus(NotPressed)
     {
         // FIND OUT IF MANUAL CHANGE TO DEPTH IS NECESSARY / INCREASES PERFORMANCE
         //mScene.setBspTreeDepth(10);
 
-
         gSelectionRelay->registerSender(this, "GraphView");
         connectAll();
 
-        QGraphicsScene::addItem(mDragShadowGate);
         connect(gGraphContextManager->sSettingNetGroupingToPins,&SettingsItem::valueChanged,this,&GraphicsScene::updateAllItems);
     }
 
     GraphicsScene::~GraphicsScene()
     {
         disconnect(this, &QGraphicsScene::selectionChanged, this, &GraphicsScene::handleInternSelectionChanged);
+        if (mDragController) mDragController->clearShadows(this);
+
         for (QGraphicsItem* gi : items())
         {
             removeItem(gi);
@@ -98,26 +100,9 @@ namespace hal
         }
     }
 
-    void GraphicsScene::startDragShadow(const QPointF& posF, const QSizeF& sizeF, const NodeDragShadow::DragCue cue)
+    void GraphicsScene::setDragController(DragController* dc)
     {
-        mDragShadowGate->setVisualCue(cue);
-        mDragShadowGate->start(posF, sizeF);
-    }
-
-    void GraphicsScene::moveDragShadow(const QPointF& posF, const NodeDragShadow::DragCue cue)
-    {
-        mDragShadowGate->setPos(posF);
-        mDragShadowGate->setVisualCue(cue);
-    }
-
-    void GraphicsScene::stopDragShadow()
-    {
-        mDragShadowGate->stop();
-    }
-
-    QPointF GraphicsScene::dropTarget()
-    {
-        return mDragShadowGate->pos();
+        mDragController = dc;
     }
 
     void GraphicsScene::addGraphItem(GraphicsItem* item)
@@ -330,16 +315,11 @@ namespace hal
 
     void GraphicsScene::deleteAllItems()
     {
-        // this breaks the mDragShadowGate
-        // clear();
-        // so we do this instead
-        // TODO check performance hit
+        if (mDragController) mDragController->clearShadows(this);
+
         for (auto item : items())
         {
-            if (item != mDragShadowGate)
-            {
-                removeItem(item);
-            }
+            removeItem(item);
         }
 
         mModuleItems.clear();
@@ -375,10 +355,14 @@ namespace hal
     void GraphicsScene::setMousePressed(bool isPressed)
     {
         if (isPressed)
-            mSelectionStatus = BeginPressed;
+        {
+            // internal selection changed event might fire before mouse pressed event
+            if (mSelectionStatus != SelectionChanged)
+                mSelectionStatus = BeginPressed;
+        }
         else
         {
-            // not pressed ...
+            // released ...
             if (mSelectionStatus == SelectionChanged)
             {
                 mSelectionStatus = EndPressed;
@@ -387,6 +371,7 @@ namespace hal
             mSelectionStatus = NotPressed;
         }
     }
+
 
     void GraphicsScene::handleInternSelectionChanged()
     {
@@ -708,6 +693,7 @@ namespace hal
 
     void GraphicsScene::debugDrawLayouterGrid(QPainter* painter, const int x_from, const int x_to, const int y_from, const int y_to)
     {
+        if (mDebugXLines.isEmpty() || mDebugYLines.isEmpty()) return;
         painter->setPen(QPen(Qt::magenta));
 
         for (qreal x : mDebugXLines)

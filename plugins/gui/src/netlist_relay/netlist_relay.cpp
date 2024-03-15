@@ -27,7 +27,8 @@
 
 namespace hal
 {
-    NetlistRelay::NetlistRelay(QObject* parent) : QObject(parent), mModuleModel(new ModuleModel(this))
+    NetlistRelay::NetlistRelay(QObject* parent)
+        : QObject(parent), mModuleColorManager(new ModuleColorManager(this))
     {
         connect(FileManager::get_instance(), &FileManager::fileOpened, this, &NetlistRelay::debugHandleFileOpened);    // DEBUG LINE
         connect(this, &NetlistRelay::signalThreadEvent, this, &NetlistRelay::handleThreadEvent, Qt::BlockingQueuedConnection);
@@ -81,12 +82,12 @@ namespace hal
 
     QColor NetlistRelay::getModuleColor(const u32 id)
     {
-        return mModuleModel->moduleColor(id);
+        return mModuleColorManager->moduleColor(id);
     }
 
-    ModuleModel* NetlistRelay::getModuleModel()
+    ModuleColorManager* NetlistRelay::getModuleColorManager() const
     {
-        return mModuleModel;
+        return mModuleColorManager;
     }
 
     void NetlistRelay::changeModuleName(const u32 id)
@@ -140,8 +141,6 @@ namespace hal
         ActionSetObjectColor* act = new ActionSetObjectColor(color);
         act->setObject(UserActionObject(id, UserActionObjectType::Module));
         act->exec();
-
-        Q_EMIT moduleColorChanged(m);
     }
 
     void NetlistRelay::addSelectionToModule(const u32 id)
@@ -376,7 +375,7 @@ namespace hal
                 // suppress actions if we receive this for the top module
                 if (mod->get_parent_module() != nullptr)
                 {
-                    mModuleModel->setRandomColor(mod->get_id());
+                    mModuleColorManager->setRandomColor(mod->get_id());
                 }
 
                 gGraphContextManager->handleModuleCreated(mod);
@@ -387,7 +386,7 @@ namespace hal
             case ModuleEvent::event::removed: {
                 //< no associated_data
 
-                mModuleModel->removeColor(mod->get_id());
+                mModuleColorManager->removeColor(mod->get_id());
 
                 gGraphContextManager->handleModuleRemoved(mod);
                 gSelectionRelay->handleModuleRemoved(mod->get_id());
@@ -397,8 +396,6 @@ namespace hal
             }
             case ModuleEvent::event::name_changed: {
                 //< no associated_data
-
-                mModuleModel->updateModule(mod->get_id());
 
                 gGraphContextManager->handleModuleNameChanged(mod);
 
@@ -414,8 +411,6 @@ namespace hal
             case ModuleEvent::event::submodule_added: {
                 //< associated_data = id of added module
 
-                mModuleModel->addModule(associated_data, mod->get_id());
-
                 gGraphContextManager->handleModuleSubmoduleAdded(mod, associated_data);
 
                 Q_EMIT moduleSubmoduleAdded(mod, associated_data);
@@ -423,8 +418,6 @@ namespace hal
             }
             case ModuleEvent::event::submodule_removed: {
                 //< associated_data = id of removed module
-
-                mModuleModel->remove_module(associated_data);
 
                 gGraphContextManager->handleModuleSubmoduleRemoved(mod, associated_data);
 
@@ -448,11 +441,12 @@ namespace hal
                 break;
             }
             case ModuleEvent::event::pin_changed: {
-                //< no associated_data
+                 //< associated_data = [4LSB: type of action]  [28HSB: id of pin group or pin]
+                PinEvent pev = (PinEvent) (associated_data&0xF);
+                u32 id = (associated_data >> 4);
+                gGraphContextManager->handleModulePortsChanged(mod,pev,id);
 
-                gGraphContextManager->handleModulePortsChanged(mod);
-
-                Q_EMIT modulePortsChanged(mod);
+                Q_EMIT modulePortsChanged(mod,pev,id);
                 break;
             }
             case ModuleEvent::event::type_changed: {
@@ -667,16 +661,23 @@ namespace hal
         }
     }
 
+    void NetlistRelay::dumpModuleRecursion(Module *m)
+    {
+        for (int i=0; i<m->get_submodule_depth(); i++)
+            std::cerr << "   ";
+        std::cerr << "Mod " << m->get_id() << " <" << m->get_name() << ">\n";
+        for (Module* sm : m->get_submodules())
+            dumpModuleRecursion(sm);
+    }
+
     void NetlistRelay::debugHandleFileOpened()
     {
         for (Module* m : gNetlist->get_modules())
-            mModuleModel->setRandomColor(m->get_id());
-        mModuleModel->init();
-        mColorSerializer.restore(mModuleModel);
+            mModuleColorManager->setRandomColor(m->get_id());
+        mColorSerializer.restore(mModuleColorManager);
     }
 
     void NetlistRelay::debugHandleFileClosed()
     {
-        mModuleModel->clear();
     }
 }    // namespace hal

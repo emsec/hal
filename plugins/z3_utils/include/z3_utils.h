@@ -142,17 +142,30 @@ namespace hal
          * Compare two nets from two different netlist. 
          * This is done on a functional level by buidling the subgraph function of each net considering all combinational gates of the netlist.
          * In order for this two work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
-         * If replace_net_ids is set the function subtitutes the input nets of the functions with their source gate and pin.
-         * This allows to also change the output nets of the sequential gates.
          * 
          * @param[in] netlist_a - The first netlist.
          * @param[in] netlist_b - The second netlist.
          * @param[in] net_a - First net, from netlist_a.
          * @param[in] net_b - Second net, from netlist_b.
-         * @param[in] replace_net_ids - If set, the input_net_ids are substituted by their source gate and pin.
+         * @param[in] fail_on_unknown - Determines whether the function returns false or true incase the SAT solver returns unknown.
+         * @param[in] solver_timeout - The timeout for the SAT solver query in seconds.
          * @returns Ok and a Boolean indicating whether the two nets are functionally equivalent, an error otherwise.
          */
-        Result<bool> compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const Net* net_a, const Net* net_b, bool replace_net_ids = true);
+        Result<bool> compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const Net* net_a, const Net* net_b, const bool fail_on_unknown = true, const u32 solver_timeout = 10);
+
+        /**
+         * Compare pairs of nets from two different netlist. 
+         * This is done on a functional level by buidling the subgraph function of each net considering all combinational gates of the netlist.
+         * In order for this two work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
+         * 
+         * @param[in] netlist_a - The first netlist.
+         * @param[in] netlist_b - The second netlist.
+         * @param[in] nets - The pairs of nets to compare against each other.
+         * @param[in] fail_on_unknown - Determines whether the function returns false or true incase the SAT solver returns unknown.
+         * @param[in] solver_timeout - The timeout for each SAT solver query in seconds.
+         * @returns Ok and a Boolean indicating whether the two nets are functionally equivalent, an error otherwise.
+         */
+        Result<bool> compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const std::vector<std::pair<Net*, Net*>>& nets, const bool fail_on_unknown = true, const u32 solver_timeout = 10);
 
         /**
          * Compares two netlist by finding a corresponding partner for each sequential gate in the netlist and checking whether they are identical.
@@ -161,9 +174,11 @@ namespace hal
          * 
          * @param[in] netlist_a - The first netlist.
          * @param[in] netlist_b - The second netlist.
+         * @param[in] fail_on_unknown - Determines whether the function returns false or true incase the SAT solver returns unknown.
+         * @param[in] solver_timeout - The timeout for each SAT solver query in seconds.
          * 
          * @returns Ok and a Boolean indicating whether the two netlists are functionally equivalent, an error otherwise.
          */
-        Result<bool> compare_netlists(const Netlist* netlist_a, const Netlist* netlist_b);
+        Result<bool> compare_netlists(const Netlist* netlist_a, const Netlist* netlist_b, const bool fail_on_unknown = true, const u32 solver_timeout = 10);
     }    // namespace z3_utils
 }    // namespace hal

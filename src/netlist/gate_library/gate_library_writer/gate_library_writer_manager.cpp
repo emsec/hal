@@ -28,7 +28,7 @@ namespace hal
 
                 if (auto it = m_extension_to_writer.find(extension); it != m_extension_to_writer.end())
                 {
-                    log_info("gate_library_writer", "selected gate library writer '{}'.", it->second.first);
+                    log_debug("gate_library_writer", "selected gate library writer '{}'.", it->second.first);
                     return it->second.second;
                 }
 
@@ -54,7 +54,7 @@ namespace hal
                 m_extension_to_writer.emplace(ext, std::make_pair(name, writer_factory));
                 m_writer_to_extensions[name].push_back(ext);
 
-                log_info("gate_library_writer", "registered gate library writer '{}' for file extension '{}'.", name, ext);
+                log_debug("gate_library_writer", "registered gate library writer '{}' for file extension '{}'.", name, ext);
             }
         }
 
@@ -67,7 +67,7 @@ namespace hal
                     if (auto rm_it = m_extension_to_writer.find(ext); rm_it != m_extension_to_writer.end())
                     {
                         m_extension_to_writer.erase(rm_it);
-                        log_info("gate_library_writer", "unregistered gate library writer '{}' for file extension '{}'.", name, ext);
+                        log_debug("gate_library_writer", "unregistered gate library writer '{}' for file extension '{}'.", name, ext);
                     }
                 }
                 m_writer_to_extensions.erase(it);
@@ -84,7 +84,7 @@ namespace hal
 
             std::unique_ptr<GateLibraryWriter> writer = factory();
 
-            log_info("gate_library_writer", "writing gate library '{}' to file '{}'...", gate_lib->get_name(), file_path.string());
+            log_debug("gate_library_writer", "writing gate library '{}' to file '{}'...", gate_lib->get_name(), file_path.string());
 
             auto begin_time = std::chrono::high_resolution_clock::now();
             if (!writer->write(gate_lib, file_path))
@@ -93,11 +93,11 @@ namespace hal
                 return false;
             }
 
-            log_info("gate_library_writer",
-                     "wrote gate library '{}' to file '{}' in {:2.2f} seconds.",
-                     gate_lib->get_name(),
-                     file_path.string(),
-                     (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
+            log_debug("gate_library_writer",
+                      "wrote gate library '{}' to file '{}' in {:2.2f} seconds.",
+                      gate_lib->get_name(),
+                      file_path.string(),
+                      (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
 
             return true;
         }

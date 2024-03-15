@@ -4,6 +4,7 @@
 #include "gui/module_model/module_model.h"
 #include "gui/module_model/module_proxy_model.h"
 #include "gui/module_model/module_item.h"
+#include "gui/module_widget/module_widget.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/searchbar/searchbar.h"
 #include "gui/content_manager/content_manager.h"
@@ -56,6 +57,7 @@ namespace hal {
         mTabWidget->addTab(mTreeView, "Module tree");
 
         mTableView = new ModuleSelectView(false, mSearchbar, &mExcludeIds, mTabWidget);
+
         connect(mTableView, &ModuleSelectView::moduleSelected, this, &ModuleDialog::handleTableSelection);
         mTabWidget->addTab(mTableView, "Module list");
 
@@ -80,9 +82,14 @@ namespace hal {
         mModuleTreeProxyModel = new ModuleProxyModel(this);
         mModuleTreeProxyModel->setFilterKeyColumn(-1);
         mModuleTreeProxyModel->setDynamicSortFilter(true);
-        mModuleTreeProxyModel->setSourceModel(gNetlistRelay->getModuleModel());
+        mModuleTreeProxyModel->setSourceModel(gContentManager->getModuleWidget()->getModuleModel());
         mTreeView->setModel(mModuleTreeProxyModel);
         mTreeView->expandAll();
+
+        mModuleTableProxyModel = new ModuleSelectProxy(this),
+        mModuleTableProxyModel->setSourceModel(mTableView->model());
+        mTableView->setModel(mModuleTableProxyModel);
+
 
         mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, this);
         layout->addWidget(mButtonBox, 3, 0, 1, 3, Qt::AlignHCenter);
@@ -91,19 +98,27 @@ namespace hal {
         mToggleSearchbar->setShortcut(QKeySequence(ContentManager::sSettingSearch->value().toString()));
         addAction(mToggleSearchbar);
 
-        mTabWidget->setCurrentIndex(1);
+        mTabWidget->setCurrentIndex(0);
         enableButtons();
         mSearchbar->hide();
 
+        //get column names for searchbar
+        if(mTabWidget->currentWidget() == mTreeView)
+            mSearchbar->setColumnNames(mModuleTreeProxyModel->getColumnNames());
+        else
+            mSearchbar->setColumnNames(mModuleTableProxyModel->getColumnNames());
 
         connect(mTabWidget, &QTabWidget::currentChanged, this, &ModuleDialog::handleCurrentTabChanged);
         connect(mToggleSearchbar, &QAction::triggered, this, &ModuleDialog::handleToggleSearchbar);
-        connect(mSearchbar, &Searchbar::textEdited, this, &ModuleDialog::filter);
+// TODO textEdited        connect(mSearchbar, &Searchbar::textEdited, this, &ModuleDialog::filter);
         connect(ContentManager::sSettingSearch, &SettingsItemKeybind::keySequenceChanged, this, &ModuleDialog::keybindToggleSearchbar);
         connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
         connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
         connect(mTreeView, &QTreeView::doubleClicked, this, &ModuleDialog::handleTreeDoubleClick);
         connect(mTreeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ModuleDialog::handleTreeSelectionChanged);
+
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mModuleTreeProxyModel, &ModuleProxyModel::startSearch);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mModuleTableProxyModel, &ModuleSelectProxy::startSearch);
     }
 
     void ModuleDialog::enableButtons()
@@ -218,6 +233,11 @@ namespace hal {
     void ModuleDialog::handleCurrentTabChanged(int index)
     {
         Q_UNUSED(index);
+        //set columnNames for searchbar
+        if(mTabWidget->currentWidget() == mTreeView)
+            mSearchbar->setColumnNames(mModuleTreeProxyModel->getColumnNames());
+        else
+            mSearchbar->setColumnNames(mModuleTableProxyModel->getColumnNames());
         mTreeView->clearSelection();
         mTableView->clearSelection();
         mSearchbar->clear();
@@ -227,16 +247,6 @@ namespace hal {
     void ModuleDialog::keybindToggleSearchbar(const QKeySequence& seq)
     {
         mToggleSearchbar->setShortcut(seq);
-    }
-
-    void ModuleDialog::filter(const QString& text)
-    {
-        mModuleTreeProxyModel->setFilterRegularExpression(text);
-        static_cast<ModuleSelectProxy*>(mTableView->model())->setFilterRegularExpression(text);
-        if (mLastUsed)
-            static_cast<ModuleSelectProxy*>(mLastUsed->model())->setFilterRegularExpression(text);
-        QString output = "navigation regular expression '" + text + "' entered.";
-        log_info("user", output.toStdString());
     }
 }
 

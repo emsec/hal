@@ -121,7 +121,7 @@ namespace hal
          *
          * @param hasEntries - Decides wether the current selection is fetched.
          */
-        void fetchSelection(bool hasEntries);
+        void fetchSelection(bool hasEntries, u32 groupingId);
 
         /**
          * Helper functions to convert between an item and its corresponding index.
@@ -143,6 +143,7 @@ namespace hal
          */
         void suppressedByFilter(QList<u32>& modIds, QList<u32>& gatIds, QList<u32>& netIds,
                                 const QRegularExpression& regex) const;
+
 
         static const int sNameColumn = 0;
         static const int sIdColumn   = 1;
@@ -166,11 +167,16 @@ namespace hal
          */
         void handleModuleItemChanged(Module* module);
 
+        /**
+         * Retrieves the SelectionTreeItem associated with a given QModelIndex which holds information about the type, id and name of the given Item.
+         * @param index The QModelIndex for which to retrieve the associated SelectionTreeItem.
+         * @return A pointer to the associated SelectionTreeItem if the index is valid; otherwise, nullptr.
+         */
+        SelectionTreeItem* itemFromIndex(const QModelIndex& index) const;
     private:
 
         void moduleRecursion(SelectionTreeItemModule* modItem);
         bool doNotDisturb(const QModelIndex& inx = QModelIndex()) const;
-        SelectionTreeItem* itemFromIndex(const QModelIndex& index) const;
         SelectionTreeItem* getItem(SelectionTreeItem *parentItem,
                                    const SelectionTreeItem& needle) const;
 

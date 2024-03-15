@@ -144,31 +144,37 @@ namespace hal
                 std::set<const Gate*> neighbors_a;
                 std::set<const Gate*> neighbors_b;
 
-                if (m_direction == GraphDirection::directed_forward)
+                if (m_direction == GraphDirection::directed_forward || m_direction == GraphDirection::directed_backward)
                 {
                     std::vector<const Gate*> q = {g_a};
 
-                    for (const auto g_n : NetlistTraversalDecorator(*fc.nl).get_next_gates(g_a, true, m_depth))
+                    const bool search_successors = (m_direction == directed_forward);
+
+                    auto subgraph_a_res =
+                        NetlistTraversalDecorator(*fc.nl).get_subgraph_gates(g_a, search_successors, nullptr, [this](const auto& _ep, const auto& cur_depth) { return cur_depth <= this->m_depth; });
+                    auto subgraph_b_res =
+                        NetlistTraversalDecorator(*fc.nl).get_subgraph_gates(g_b, search_successors, nullptr, [this](const auto& _ep, const auto& cur_depth) { return cur_depth <= this->m_depth; });
+
+                    if (subgraph_a_res.is_error())
+                    {
+                        log_error(
+                            "machine_learning", "cannot calculate shared neighbors feature: failed to build subgraph of depth {} for gate {} with ID {}", m_depth, g_a->get_name(), g_a->get_id());
+                        return {};
+                    }
+
+                    if (subgraph_b_res.is_error())
+                    {
+                        log_error(
+                            "machine_learning", "cannot calculate shared neighbors feature: failed to build subgraph of depth {} for gate {} with ID {}", m_depth, g_b->get_name(), g_b->get_id());
+                        return {};
+                    }
+
+                    for (const auto g_n : subgraph_a_res.get())
                     {
                         neighbors_a.insert(g_n);
                     }
 
-                    for (const auto g_n : NetlistTraversalDecorator(*fc.nl).get_next_gates(g_b, true, m_depth))
-                    {
-                        neighbors_b.insert(g_n);
-                    }
-                }
-
-                if (m_direction == GraphDirection::directed_backward)
-                {
-                    std::vector<const Gate*> q = {g_a};
-
-                    for (const auto g_n : NetlistTraversalDecorator(*fc.nl).get_next_gates(g_a, false, m_depth))
-                    {
-                        neighbors_a.insert(g_n);
-                    }
-
-                    for (const auto g_n : NetlistTraversalDecorator(*fc.nl).get_next_gates(g_b, false, m_depth))
+                    for (const auto g_n : subgraph_b_res.get())
                     {
                         neighbors_b.insert(g_n);
                     }

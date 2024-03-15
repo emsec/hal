@@ -33,9 +33,9 @@ namespace hal
         py_z3_utils.def("get_subgraph_function", &Z3UtilsPlugin::get_subgraph_function_py);
 
         py_z3_utils.def_static(
-            "compare_netlists",
-            [](const Netlist* netlist_a, const Netlist* netlist_b) -> std::optional<bool> {
-                auto res = z3_utils::compare_netlists(netlist_a, netlist_b);
+            "compare_nets",
+            [](const Netlist* netlist_a, const Netlist* netlist_b, const Net* net_a, const Net* net_b, const bool fail_on_unknown = true, const u32 solver_timeout = 10) -> std::optional<bool> {
+                auto res = z3_utils::compare_nets(netlist_a, netlist_b, net_a, net_b, fail_on_unknown, solver_timeout);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -48,6 +48,77 @@ namespace hal
             },
             py::arg("netlist_a"),
             py::arg("netlist_b"),
+            py::arg("net_a"),
+            py::arg("net_b"),
+            py::arg("fail_on_unknown") = true,
+            py::arg("solver_timeout")  = 10,
+            R"(
+            Compare two nets from two different netlist. 
+            This is done on a functional level by buidling the subgraph function of each net considering all combinational gates of the netlist.
+            In order for this two work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
+
+            :param hal_py.Netlist netlist_a: First netlist. 
+            :param hal_py.Netlist netlist_b: Second netlist. 
+            :param hal_py.Net net_a: First net. 
+            :param hal_py.Net net_b: Second net. 
+            :param bool fail_on_unknown: Determines whether the function returns false or true incase the SAT solver returns unknown.
+            :param int solver_timeout; The timeout for each SAT solver query in seconds. 
+            :returns: A Boolean indicating whether the two nets are functionally equivalent on success, None otherwise.
+            :rtype: bool or None
+        )");
+
+        py_z3_utils.def_static(
+            "compare_nets",
+            [](const Netlist* netlist_a, const Netlist* netlist_b, const std::vector<std::pair<Net*, Net*>>& nets, const bool fail_on_unknown = true, const u32 solver_timeout = 10)
+                -> std::optional<bool> {
+                auto res = z3_utils::compare_nets(netlist_a, netlist_b, nets, fail_on_unknown, solver_timeout);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("netlist_a"),
+            py::arg("netlist_b"),
+            py::arg("nets"),
+            py::arg("fail_on_unknown") = true,
+            py::arg("solver_timeout")  = 10,
+            R"(
+            Compare two nets from two different netlist. 
+            This is done on a functional level by buidling the subgraph function of each net considering all combinational gates of the netlist.
+            In order for this two work the sequential gates of both netlists must have identical names and only the combinational gates may differ.
+
+            :param hal_py.Netlist netlist_a: First netlist. 
+            :param hal_py.Netlist netlist_b: Second netlist. 
+            :param list[tuple(hal_py.Net, hal_py.Net)] nets : The pairs of nets to compare against each other.
+            :param bool fail_on_unknown: Determines whether the function returns false or true incase the SAT solver returns unknown.
+            :param int solver_timeout; The timeout for each SAT solver query in seconds. 
+            :returns: A Boolean indicating whether the two nets are functionally equivalent on success, None otherwise.
+            :rtype: bool or None
+        )");
+
+        py_z3_utils.def_static(
+            "compare_netlists",
+            [](const Netlist* netlist_a, const Netlist* netlist_b, const bool fail_on_unknown = true, const u32 solver_timeout = 10) -> std::optional<bool> {
+                auto res = z3_utils::compare_netlists(netlist_a, netlist_b, fail_on_unknown, solver_timeout);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("netlist_a"),
+            py::arg("netlist_b"),
+            py::arg("fail_on_unknown") = true,
+            py::arg("solver_timeout")  = 10,
             R"(
             Compares two netlist by finding a corresponding partner for each sequential gate in the netlist and checking whether they are identical.
             This is done on a functional level by buidling the subgraph function of all their input nets considering all combinational gates of the netlist.
@@ -55,6 +126,8 @@ namespace hal
 
             :param hal_py.Netlist netlist_a: First netlist to compare. 
             :param hal_py.Netlist netlist_b: Second netlist to compare. 
+            :param bool fail_on_unknown: Determines whether the function returns false or true incase the SAT solver returns unknown.
+            :param int solver_timeout; The timeout for each SAT solver query in seconds. 
             :returns: A Boolean indicating whether the two netlists are functionally equivalent on success, None otherwise.
             :rtype: bool or None
         )");

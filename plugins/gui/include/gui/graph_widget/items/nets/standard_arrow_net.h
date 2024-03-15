@@ -47,7 +47,7 @@ namespace hal {
          * @param n - The underlying net
          * @param l - The lines this GraphicsNet consists of
          */
-        StandardArrowNet(Net* n, const Lines& l);
+        StandardArrowNet(Net* n, const Lines& l, const QList<QPointF>& knots = QList<QPointF>());
         /**
          * Adds an input position.
          *
@@ -67,7 +67,7 @@ namespace hal {
          *
          * @param v - The visuals to set.
          */
-        virtual void setVisuals(const Visuals& v);
+        virtual void setVisuals(const Visuals& v) override;
 
         /**
          * Overwritten qt function to draw the net.

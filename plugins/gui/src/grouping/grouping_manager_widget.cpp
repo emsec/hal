@@ -17,8 +17,10 @@
 #include "gui/user_action/action_set_object_color.h"
 #include "gui/user_action/user_action_compound.h"
 #include "hal_core/utilities/log.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
 
 #include <QAction>
+#include <QApplication>
 #include <QColorDialog>
 #include <QHeaderView>
 #include <QImage>
@@ -34,7 +36,7 @@ namespace hal
 {
     GroupingManagerWidget::GroupingManagerWidget(QWidget* parent)
         : ContentWidget("Groupings", parent), mProxyModel(new GroupingProxyModel(this)), mSearchbar(new Searchbar(this)), mNewGroupingAction(new QAction(this)),
-          mRenameAction(new QAction(this)), mColorSelectAction(new QAction(this)), mDeleteAction(new QAction(this)), mToSelectionAction(new QAction(this))
+          mRenameAction(new QAction(this)), mColorSelectAction(new QAction(this)), mDeleteAction(new QAction(this)), mToSelectionAction(new QAction(this)), mTableAction(new QAction(this))
     {
         //needed to load the properties
         ensurePolished();
@@ -45,6 +47,7 @@ namespace hal
         mColorSelectAction->setIcon(gui_utility::getStyledSvgIcon(mColorSelectIconStyle, mColorSelectIconPath));
         mToSelectionAction->setIcon(gui_utility::getStyledSvgIcon(mToSelectionIconStyle, mToSelectionIconPath));
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
+        mTableAction->setIcon(gui_utility::getStyledSvgIcon(mTableIconStyle, mTableIconPath));
 
         mNewGroupingAction->setToolTip("New");
         mRenameAction->setToolTip("Rename");
@@ -52,6 +55,7 @@ namespace hal
         mDeleteAction->setToolTip("Delete");
         mToSelectionAction->setToolTip("To selection");
         mSearchAction->setToolTip("Search");
+        mTableAction->setToolTip("Show content");
 
         mNewGroupingAction->setText("Create new grouping");
         mRenameAction->setText("Rename grouping");
@@ -59,6 +63,7 @@ namespace hal
         mDeleteAction->setText("Delete grouping");
         mToSelectionAction->setText("Add grouping to selection");
         mSearchAction->setText("Search");
+        mTableAction->setText("Show content");
 
         //mOpenAction->setEnabled(false);
         //mRenameAction->setEnabled(false);
@@ -92,9 +97,10 @@ namespace hal
         mContentLayout->addWidget(mSearchbar);
 
         mSearchbar->hide();
+        mSearchbar->setColumnNames(mProxyModel->getColumnNames());
 
-        connect(mSearchbar, &Searchbar::textEdited, this, &GroupingManagerWidget::filter);
-        connect(mSearchbar, &Searchbar::textEdited, this, &GroupingManagerWidget::updateSearchIcon);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, this, &GroupingManagerWidget::updateSearchIcon);
+        connect(mSearchbar, &Searchbar::triggerNewSearch, mProxyModel, &GroupingProxyModel::startSearch);
 
         connect(mNewGroupingAction, &QAction::triggered, this, &GroupingManagerWidget::handleCreateGroupingClicked);
         connect(mRenameAction, &QAction::triggered, this, &GroupingManagerWidget::handleRenameGroupingClicked);
@@ -102,6 +108,7 @@ namespace hal
         connect(mToSelectionAction, &QAction::triggered, this, &GroupingManagerWidget::handleToSelectionClicked);
         connect(mDeleteAction, &QAction::triggered, this, &GroupingManagerWidget::handleDeleteGroupingClicked);
         connect(mSearchAction, &QAction::triggered, this, &GroupingManagerWidget::toggleSearchbar);
+        connect(mTableAction, &QAction::triggered, this, &GroupingManagerWidget::handleShowContentClicked);
 
         connect(mGroupingTableView, &QTableView::customContextMenuRequested, this, &GroupingManagerWidget::handleContextMenuRequest);
         connect(mGroupingTableView->selectionModel(), &QItemSelectionModel::currentChanged, this, &GroupingManagerWidget::handleCurrentChanged);
@@ -109,6 +116,14 @@ namespace hal
         connect(mGroupingTableModel, &GroupingTableModel::newEntryAdded, this, &GroupingManagerWidget::handleNewEntryAdded);
         connect(mGroupingTableView, &QTableView::doubleClicked, this, &GroupingManagerWidget::handleDoubleClicked);
         handleCurrentChanged();
+
+        mShortCutDeleteItem = new QShortcut(ContentManager::sSettingDeleteItem->value().toString(), this);
+        mShortCutDeleteItem->setEnabled(false);
+
+        connect(ContentManager::sSettingDeleteItem, &SettingsItemKeybind::keySequenceChanged, mShortCutDeleteItem, &QShortcut::setKey);
+        connect(mShortCutDeleteItem, &QShortcut::activated, this, &GroupingManagerWidget::handleDeleteGroupingClicked);
+
+        connect(qApp, &QApplication::focusChanged, this, &GroupingManagerWidget::handleDeleteShortcutOnFocusChanged);
     }
 
     QList<QShortcut*> GroupingManagerWidget::createShortcuts()
@@ -187,7 +202,7 @@ namespace hal
     void GroupingManagerWidget::handleDoubleClicked(const QModelIndex& index)
     {
         if (index.column() == 0)
-            handleRenameGroupingClicked();
+            handleShowContentClicked();
         if (index.column() == 2)
             handleColorSelectClicked();
     }
@@ -462,8 +477,60 @@ namespace hal
         mGroupingTableModel->setAboutToRename(QString());
     }
 
+    void GroupingManagerWidget::handleShowContentClicked()
+    {
+        QModelIndex currentIndex = mProxyModel->mapToSource(mGroupingTableView->currentIndex());
+        if (!currentIndex.isValid())
+            return;
+
+        int irow = currentIndex.row();
+        GroupingTableEntry gte = mGroupingTableModel->groupingAt(irow);
+
+        QString grpName  = gte.name();
+        u32     grpId    = gte.id();
+        QColor  grpColor = gte.color();
+
+        QDialog dialog;
+        dialog.setWindowTitle(QString("Content of %1 (ID: %2)").arg(grpName).arg(grpId));
+
+
+        // Create color rectangle
+        QLabel* colorRectangle = new QLabel();
+        colorRectangle->setText(QString());  // Empty text to visualize grouping color
+        colorRectangle->setStyleSheet("background-color: " + grpColor.name());
+        colorRectangle->setFixedSize(25, 25);  // Adapt size of grouping color
+        colorRectangle->setAutoFillBackground(true);
+
+        // Replace InputDialog with SelectionTreeView
+        SelectionTreeView* selectionTreeView = new SelectionTreeView(&dialog, true);
+        SelectionTreeModel* selectionTreeModel = new SelectionTreeModel(this); // Need to fully initialise SelectionTreeView with a model
+        SelectionTreeProxyModel* selectionTreeProxyModel = new SelectionTreeProxyModel(this);
+        selectionTreeProxyModel->setSourceModel(selectionTreeModel);
+        selectionTreeView->setModel(selectionTreeProxyModel);
+
+        selectionTreeView->populate(true, grpId);
+
+        QPushButton* closeButton = new QPushButton("Close", &dialog);
+        connect(closeButton, &QPushButton::clicked, [&dialog](){ dialog.close(); });
+
+        QVBoxLayout* layout = new QVBoxLayout(&dialog);
+        QHBoxLayout* hlay = new QHBoxLayout;
+        hlay->addStretch();
+        hlay->addWidget(colorRectangle);
+        layout->addLayout(hlay);
+        layout->addWidget(selectionTreeView);
+        layout->addWidget(closeButton);
+
+        dialog.exec();
+    }
+
     void GroupingManagerWidget::handleDeleteGroupingClicked()
     {
+        if (sender() != mDeleteAction &&
+                !hasFocus() && !mGroupingTableView->hasFocus()) return;
+
+        QModelIndex current     = mGroupingTableView->currentIndex();
+        if (!current.isValid()) return;
         int irow                = mProxyModel->mapToSource(mGroupingTableView->currentIndex()).row();
         u32 grpId               = mGroupingTableModel->groupingAt(irow).id();
         ActionDeleteObject* act = new ActionDeleteObject;
@@ -485,6 +552,7 @@ namespace hal
             context_menu.addAction(mColorSelectAction);
             context_menu.addAction(mToSelectionAction);
             context_menu.addAction(mDeleteAction);
+            context_menu.addAction(mTableAction);
         }
 
         context_menu.exec(mGroupingTableView->viewport()->mapToGlobal(point));
@@ -505,6 +573,7 @@ namespace hal
         toolbar->addAction(mToSelectionAction);
         toolbar->addAction(mDeleteAction);
         toolbar->addAction(mSearchAction);
+        toolbar->addAction(mTableAction);
         mSearchAction->setEnabled(mGroupingTableModel->rowCount() > 0);
     }
 
@@ -514,6 +583,7 @@ namespace hal
         mColorSelectAction->setEnabled(enable);
         mToSelectionAction->setEnabled(enable);
         mDeleteAction->setEnabled(enable);
+        mTableAction->setEnabled(enable);
     }
 
     void GroupingManagerWidget::handleNewEntryAdded(const QModelIndex& modelIndexName)
@@ -544,11 +614,11 @@ namespace hal
         Q_UNUSED(previous);
 
         bool enable                 = mGroupingTableModel->rowCount() > 0 && current.isValid();
-        QAction* entryBasedAction[] = {mRenameAction, mColorSelectAction, mDeleteAction, mToSelectionAction, nullptr};
+        QAction* entryBasedAction[] = {mRenameAction, mColorSelectAction, mDeleteAction, mToSelectionAction, mTableAction, nullptr};
 
         QStringList iconPath, iconStyle;
-        iconPath << mRenameGroupingIconPath << mColorSelectIconPath << mDeleteIconPath << mToSelectionIconPath;
-        iconStyle << mRenameGroupingIconStyle << mColorSelectIconStyle << mDeleteIconStyle << mToSelectionIconStyle;
+        iconPath << mRenameGroupingIconPath << mColorSelectIconPath << mDeleteIconPath << mToSelectionIconPath << mTableIconPath;
+        iconStyle << mRenameGroupingIconStyle << mColorSelectIconStyle << mDeleteIconStyle << mToSelectionIconStyle << mTableIconStyle;
 
         for (int iacc = 0; entryBasedAction[iacc]; iacc++)
         {
@@ -751,6 +821,16 @@ namespace hal
         return mSearchActiveIconStyle;
     }
 
+    QString GroupingManagerWidget::tableIconPath() const
+    {
+        return mTableIconPath;
+    }
+
+    QString GroupingManagerWidget::tableIconStyle() const
+    {
+        return mTableIconStyle;
+    }
+
     void GroupingManagerWidget::setSearchIconPath(const QString& path)
     {
         mSearchIconPath = path;
@@ -764,5 +844,30 @@ namespace hal
     void GroupingManagerWidget::setSearchActiveIconStyle(const QString& style)
     {
         mSearchActiveIconStyle = style;
+    }
+
+    void GroupingManagerWidget::setTableIconPath(const QString& path)
+    {
+        mTableIconPath = path;
+    }
+
+    void GroupingManagerWidget::setTableIconStyle(const QString& style)
+    {
+        mTableIconStyle = style;
+    }
+
+    void GroupingManagerWidget::handleDeleteShortcutOnFocusChanged(QWidget* oldWidget, QWidget* newWidget)
+    {
+        if(!newWidget) return;
+        if(newWidget->parent() == this)
+        {
+            mShortCutDeleteItem->setEnabled(true);
+            return;
+        }
+        else
+        {
+            mShortCutDeleteItem->setEnabled(false);
+            return;
+        }
     }
 }    // namespace hal

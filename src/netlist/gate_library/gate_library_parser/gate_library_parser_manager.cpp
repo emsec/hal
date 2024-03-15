@@ -28,11 +28,11 @@ namespace hal
 
                 if (auto it = m_extension_to_parser.find(extension); it != m_extension_to_parser.end())
                 {
-                    log_info("gate_library_parser", "selected gate library parser '{}'.", it->second.first);
+                    log_debug("gate_library_parser", "selected gate library parser '{}'.", it->second.first);
                     return it->second.second;
                 }
 
-                log_error("gate_library_parser", "no gate library parser registered for file extension '{}'.", extension);
+                log_debug("gate_library_parser", "no gate library parser registered for file extension '{}'.", extension);
                 return ParserFactory();
             }
         }    // namespace
@@ -54,7 +54,7 @@ namespace hal
                 m_extension_to_parser.emplace(ext, std::make_pair(name, parser_factory));
                 m_parser_to_extensions[name].push_back(ext);
 
-                log_info("gate_library_parser", "registered gate library parser '{}' for file extension '{}'.", name, ext);
+                log_debug("gate_library_parser", "registered gate library parser '{}' for file extension '{}'.", name, ext);
             }
         }
 
@@ -67,7 +67,7 @@ namespace hal
                     if (auto rm_it = m_extension_to_parser.find(ext); rm_it != m_extension_to_parser.end())
                     {
                         m_extension_to_parser.erase(rm_it);
-                        log_info("gate_library_parser", "unregistered gate library parser '{}' for file extension '{}'.", name, ext);
+                        log_debug("gate_library_parser", "unregistered gate library parser '{}' for file extension '{}'.", name, ext);
                     }
                 }
                 m_parser_to_extensions.erase(it);
@@ -94,11 +94,11 @@ namespace hal
             else
             {
                 std::unique_ptr<GateLibrary> gate_lib = res.get();
-                log_info("gate_library_parser",
-                         "parsed gate library '{}' from file '{}' in {:2.2f} seconds.",
-                         gate_lib->get_name(),
-                         file_path.string(),
-                         (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
+                log_debug("gate_library_parser",
+                          "parsed gate library '{}' from file '{}' in {:2.2f} seconds.",
+                          gate_lib->get_name(),
+                          file_path.string(),
+                          (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
                 return gate_lib;
             }
         }

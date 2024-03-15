@@ -26,14 +26,17 @@
 #pragma once
 
 #include "hal_core/netlist/event_system/event_handler.h"
+#include "hal_core/netlist/gate_library/enums/pin_event.h"
 #include "gui/grouping/grouping_color_serializer.h"
+#include "gui/module_model/module_color_manager.h"
 #include <QMap>
 #include <QObject>
 
 namespace hal
 {
     class ModuleItem;
-    class ModuleModel;
+    class ModuleColorManager;
+    class ModuleColorSerializer;
     class Module;
 
     /**
@@ -84,11 +87,11 @@ namespace hal
         QColor getModuleColor(const u32 id);
 
         /**
-         * Accesses the module model.
+         * Accesses the module color manager
          *
-         * @returns the module model
+         * @returns the module color manager
          */
-        ModuleModel* getModuleModel();
+        ModuleColorManager* getModuleColorManager() const;
 
         /**
          * Changes the name of a specific module by asking the user for a new name in a 'Rename'-dialogue.
@@ -332,7 +335,7 @@ namespace hal
          * @param m - The module with the changed port
          * @param respective_net - The id of the net of the renamed input port
          */
-        void modulePortsChanged(Module* m) const;
+        void modulePortsChanged(Module* m, PinEvent pev, u32 pgid) const;
 
         /**
          * Q_SIGNAL to notify that the type of a module has been changed. <br>
@@ -584,17 +587,6 @@ namespace hal
         */
         void groupingModuleRemoved(Grouping* grp, u32 id) const;
 
-        /*=======================================
-           Other Signals
-         ========================================*/
-
-        /**
-         * Q_SIGNAL to notify that the color of a module has been changed.
-         *
-         * @param m - The module with the changed color
-         */
-        void moduleColorChanged(Module* m) const;
-
     public Q_SLOTS:
         /**
          * Q_SLOT to handle that a netlist has been opened.
@@ -615,12 +607,13 @@ namespace hal
         void relayGateEvent(GateEvent::event ev, Gate* gat, u32 associated_data);
         void relayNetEvent(NetEvent::event ev, Net* net, u32 associated_data);
         void relayGroupingEvent(GroupingEvent::event ev, Grouping* grp, u32 associated_data);
+        static void dumpModuleRecursion(Module* m);
 
         void handleNetlistModified();
         bool mNotified;
 
         QMap<u32, QColor> mModuleColors;
-        ModuleModel* mModuleModel;
+        ModuleColorManager* mModuleColorManager;
         ModuleColorSerializer mColorSerializer;
         enum ThreadEventType { TetNetlist, TetModule, TetGate, TetNet, TetGrouping };
     };

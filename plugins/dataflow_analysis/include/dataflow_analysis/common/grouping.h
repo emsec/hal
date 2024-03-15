@@ -42,7 +42,7 @@ namespace hal
         struct Grouping
         {
             Grouping(const NetlistAbstraction& na);
-            Grouping(const NetlistAbstraction& na, const std::vector<std::vector<u32>>& groups);
+            Grouping(const NetlistAbstraction& na, const std::vector<std::vector<Gate*>>& groups);
             Grouping(const Grouping& other);
 
             const NetlistAbstraction& netlist_abstr;
@@ -56,13 +56,13 @@ namespace hal
             bool operator==(const Grouping& other) const;
             bool operator!=(const Grouping& other) const;
 
-            std::unordered_set<u32> get_clock_signals_of_group(u32 group_id) const;
-            std::unordered_set<u32> get_control_signals_of_group(u32 group_id) const;
-            std::unordered_set<u32> get_reset_signals_of_group(u32 group_id) const;
-            std::unordered_set<u32> get_set_signals_of_group(u32 group_id) const;
+            std::map<PinType, std::unordered_set<u32>> get_control_signals_of_group(u32 group_id) const;
 
             std::unordered_set<u32> get_successor_groups_of_group(u32 group_id) const;
             std::unordered_set<u32> get_predecessor_groups_of_group(u32 group_id) const;
+
+            std::unordered_set<u32> get_known_successor_groups_of_group(u32 group_id) const;
+            std::unordered_set<u32> get_known_predecessor_groups_of_group(u32 group_id) const;
 
             std::set<u32> get_register_stage_intersect_of_group(u32 group_id) const;
 
@@ -76,6 +76,8 @@ namespace hal
                 std::shared_mutex mutex;
                 std::unordered_map<u32, std::unordered_set<u32>> suc_cache;
                 std::unordered_map<u32, std::unordered_set<u32>> pred_cache;
+                std::unordered_map<u32, std::unordered_set<u32>> suc_known_group_cache;
+                std::unordered_map<u32, std::unordered_set<u32>> pred_known_group_cache;
                 std::set<std::set<u32>> comparison_cache;
             } cache;
 

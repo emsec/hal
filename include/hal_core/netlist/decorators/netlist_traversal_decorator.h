@@ -31,11 +31,13 @@
 #include <map>
 #include <set>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace hal
 {
     /* Forward declaration */
+    class Endpoint;
     class Gate;
     class GatePin;
     class GateType;
@@ -43,6 +45,7 @@ namespace hal
     class Netlist;
 
     enum class GateTypeProperty;
+    enum class PinType;
 
     class NETLIST_API NetlistTraversalDecorator
     {
@@ -52,37 +55,7 @@ namespace hal
          * 
          * @param[in] netlist - The netlist to operate on.
          */
-        NetlistTraversalDecorator(const Netlist& netlist) : m_netlist{netlist} {};
-
-        /**
-         * Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors will be returned. 
-         * Higher number of depth causes as many steps of recursive calls. 
-         * If depth is set to 0 there is no limitation and the loop continues until no more predecessors/succesors are found.
-         * If a filter function is given only gates matching the filter will be added to the result vector.
-         * The result will not include the provided gate itself.
-         *
-         * @param[in] gate - The initial gate.
-         * @param[in] get_successors - True to return successors, false for Predecessors.
-         * @param[in] depth - Depth of recursion.
-         * @param[in] filter - User-defined filter function.
-         * @return Vector of predecessor/successor gates.
-         */
-        std::vector<Gate*> get_next_gates(const Gate* gate, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
-
-        /**
-         * Find predecessors or successors of a net. If depth is set to 1 only direct predecessors/successors will be returned. 
-         * Higher number of depth causes as many steps of recursive calls. 
-         * If depth is set to 0  there is no limitation and the loop continues until no more predecessors/succesors are found.
-         * If a filter function is given, the recursion stops whenever the filter function evaluates to False. 
-         * Only gates matching the filter will be added to the result vector.
-         *
-         * @param[in] net - The initial net.
-         * @param[in] get_successors - True to return successors, false for Predecessors.
-         * @param[in] depth - Depth of recursion.
-         * @param[in] filter - User-defined filter function.
-         * @return Vector of predecessor/successor gates.
-         */
-        std::vector<Gate*> get_next_gates(const Net* net, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
+        NetlistTraversalDecorator(const Netlist& netlist);
 
         /**
          * Find all sequential predecessors or successors of a gate.
@@ -97,7 +70,7 @@ namespace hal
          * @param[inout] cache - The cache. 
          * @returns All sequential successors or predecessors of the gate.
          */
-        std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache, const u32 depth = 1);
+        std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache, const u32 depth = 1) const;
 
         /**
          * Find all sequential predecessors or successors of a gate.
@@ -108,7 +81,7 @@ namespace hal
          * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
          * @returns All sequential successors or predecessors of the gate.
          */
-        std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors, const u32 depth = 1);
+        std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors, const u32 depth = 1) const;
 
         /**
          * Find all sequential predecessors or successors of a net.
@@ -122,7 +95,7 @@ namespace hal
          * @param[inout] cache - The cache. 
          * @returns All sequential successors or predecessors of the net.
          */
-        std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache, const u32 depth = 1);
+        std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache, const u32 depth = 1) const;
 
         /**
          * Find all sequential predecessors or successors of a net.
@@ -132,7 +105,7 @@ namespace hal
          * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
          * @returns All sequential successors or predecessors of the net.
          */
-        std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors, const u32 depth = 1);
+        std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors, const u32 depth = 1) const;
 
         /**
          * Find all gates on the predecessor or successor path of a gate.
@@ -148,7 +121,7 @@ namespace hal
          * @param[inout] cache - The cache. 
          * @returns All gates on the predecessor or successor path of the gate.
          */
-        std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties, std::unordered_map<u32, std::vector<Gate*>>& cache);
+        std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties, std::unordered_map<u32, std::vector<Gate*>>& cache) const;
 
         /**
          * Find all gates on the predeccessor or successor path of a gate.
@@ -160,7 +133,7 @@ namespace hal
          * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @returns All gates on the predecessor or successor path of the gate.
          */
-        std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties);
+        std::vector<Gate*> get_path(const Gate* gate, bool get_successors, std::set<GateTypeProperty> stop_properties) const;
 
         /**
          * Find all gates on the predecessor or successor path of a net.
@@ -175,7 +148,7 @@ namespace hal
          * @param[inout] cache - The cache. 
          * @returns All gates on the predecessor or successor path of the net.
          */
-        std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties, std::unordered_map<u32, std::vector<Gate*>>& cache);
+        std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties, std::unordered_map<u32, std::vector<Gate*>>& cache) const;
 
         /**
          * Find all gates on the predecessor or successor path of a net.
@@ -186,7 +159,7 @@ namespace hal
          * @param[in] stop_properties - Stop recursion when reaching a gate of a type with one of the specified properties.
          * @returns All gates on the predecessor or successor path of the net.
          */
-        std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties);
+        std::vector<Gate*> get_path(const Net* net, bool get_successors, std::set<GateTypeProperty> stop_properties) const;
 
         /**
          * Find a sequence of identical gates that are connected via the specified input and output pins.
@@ -203,7 +176,7 @@ namespace hal
         Result<std::vector<Gate*>> get_gate_chain(Gate* start_gate,
                                                   const std::vector<const GatePin*>& input_pins  = {},
                                                   const std::vector<const GatePin*>& output_pins = {},
-                                                  const std::function<bool(const Gate*)>& filter = nullptr);
+                                                  const std::function<bool(const Gate*)>& filter = nullptr) const;
 
         /**
          * Find a sequence of gates (of the specified sequence of gate types) that are connected via the specified input and output pins.
@@ -223,7 +196,7 @@ namespace hal
                                                           const std::vector<GateType*>& chain_types,
                                                           const std::map<GateType*, std::vector<const GatePin*>>& input_pins,
                                                           const std::map<GateType*, std::vector<const GatePin*>>& output_pins,
-                                                          const std::function<bool(const Gate*)>& filter = nullptr);
+                                                          const std::function<bool(const Gate*)>& filter = nullptr) const;
 
         /**
          * Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with the end gate. 
@@ -235,7 +208,7 @@ namespace hal
          * @param[in] search_both_directions - True to additionally check whether a shorter path from end to start exists, false otherwise.
          * @return A vector of gates that connect the start with end gate (possibly in reverse order).
          */
-        // std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions = false);
+        // std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions = false) const;
 
         /**
          * Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with the end gate. 
@@ -247,7 +220,7 @@ namespace hal
          * @param[in] search_both_directions - True to additionally check whether a shorter path from end to start exists, false otherwise.
          * @return A vector of gates that connect the start with end gate (possibly in reverse order).
          */
-        std::vector<const Gate*> get_shortest_path(const Gate* start_gate, const Gate* end_gate, bool search_both_directions = false);
+        std::vector<const Gate*> get_shortest_path(const Gate* start_gate, const Gate* end_gate, bool search_both_directions = false) const;
 
         /**
          * Find the shortest path (i.e., theresult set with the lowest number of gates) that connects the start gate with the end gate. 
@@ -259,7 +232,135 @@ namespace hal
          * @param[in] search_both_directions - True to additionally check whether a shorter path from end to start exists, false otherwise.
          * @return A vector of gates that connect the start with end gate (possibly in reverse order).
          */
-        std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions = false);
+        std::vector<Gate*> get_shortest_path(Gate* start_gate, Gate* end_gate, bool search_both_directions = false) const;
+
+        /**
+         * TODO deprecate
+         * Starting from the given net, get the successor/predecessor gates for which the filter evaluates to `true`.
+         * Does not continue traversal beyond gates fulfilling the filter condition, i.e., only the first layer of successors/predecessors is returned.
+         * 
+         * @param[in] cache - Gate cache to speed up traversal for parts of the netlist that have been traversed before.
+         * @param[in] net - Start net.
+         * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[in] filter - Filter condition that must be met for the target gates.
+         * @param[in] forbidden_pins - Types of pins through which propagation shall not continue. Defaults to en empty set.
+         * @returns The next gates fulfilling the filter condition.
+         */
+        Result<std::unordered_set<Gate*>> get_next_gates(std::unordered_map<const Net*, std::unordered_set<Gate*>>& cache,
+                                                         const Net* net,
+                                                         bool successors,
+                                                         const std::function<bool(const Gate*)>& filter,
+                                                         const std::set<PinType>& forbidden_pins = {}) const;
+
+        /**
+         * TODO deprecate
+         * Starting from the given gate, get the successor/predecessor gates for which the filter evaluates to `true`.
+         * Does not continue traversal beyond gates fulfilling the filter condition, i.e., only the first layer of successors/predecessors is returned.
+         * 
+         * @param[in] cache - Gate cache to speed up traversal for parts of the netlist that have been traversed before.
+         * @param[in] gate - Start gate.
+         * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[in] filter - Filter condition that must be met for the target gates.
+         * @param[in] forbidden_pins - Types of pins through which propagation shall not continue. Defaults to en empty set.
+         * @returns The next gates fulfilling the filter condition.
+         */
+        Result<std::unordered_set<Gate*>> get_next_gates(std::unordered_map<const Net*, std::unordered_set<Gate*>>& cache,
+                                                         const Gate* gate,
+                                                         bool successors,
+                                                         const std::function<bool(const Gate*)>& filter,
+                                                         const std::set<PinType>& forbidden_pins = {}) const;
+
+        /**
+         * Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
+         * Stop traversal if (1) the `target_gate_filter` evaluates to `true`, (2) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
+         * Both the `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted.
+         * 
+         * @param[in] net - Start net.
+         * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+         * @returns The next gates fulfilling the target gate filter condition.
+         */
+        Result<std::set<Gate*>> get_next_gates_fancy(const Net* net,
+                                                     bool successors,
+                                                     const std::function<bool(const Gate*)>& target_gate_filter,
+                                                     const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                     const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        /**
+         * Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
+         * Stop traversal if (1) the `target_gate_filter` evaluates to `true`, (2) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
+         * Both the `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted.
+         * 
+         * @param[in] gate - Start gate.
+         * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+         * @returns The next gates fulfilling the target gate filter condition.
+         */
+        Result<std::set<Gate*>> get_next_gates_fancy(const Gate* gate,
+                                                     bool successors,
+                                                     const std::function<bool(const Gate*)>& target_gate_filter,
+                                                     const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                     const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        /**
+         * Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
+         * Stop traversal if (1) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (2) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
+         * The target_gate_filter may be ommitted in which case all traversed gates will be returned.
+         * Both `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted as well.
+         * 
+         * @param[in] net - Start net.
+         * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+         * @returns The next gates fulfilling the target gate filter condition.
+         */
+        Result<std::set<Gate*>> get_subgraph_gates(const Net* net,
+                                                   bool successors,
+                                                   const std::function<bool(const Gate*)>& target_gate_filter                                 = nullptr,
+                                                   const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                   const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        /**
+         * Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
+         * Stop traversal if (1) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (2) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
+         * The target_gate_filter may be ommitted in which case all traversed gates will be returned.
+         * Both `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted as well.
+         * 
+         * @param[in] gate - Start gate.
+         * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
+         * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
+         * @returns The next gates fulfilling the target gate filter condition.
+         */
+        Result<std::set<Gate*>> get_subgraph_gates(const Gate* gate,
+                                                   bool successors,
+                                                   const std::function<bool(const Gate*)>& target_gate_filter                                 = nullptr,
+                                                   const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                   const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        /**
+         * TODO document
+         */
+        Result<std::set<Net*>> get_subgraph_input_nets(const Net* net,
+                                                       bool successors,
+                                                       const std::function<bool(const Net*)>& target_net_filter,
+                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
+
+        /**
+         * TODO document
+         */
+        Result<std::set<Net*>> get_subgraph_input_nets(const Gate* gate,
+                                                       bool successors,
+                                                       const std::function<bool(const Net*)>& target_net_filter,
+                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
+                                                       const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
     private:
         const Netlist& m_netlist;

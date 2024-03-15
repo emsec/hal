@@ -1,0 +1,3 @@
+from hal_plugins import netlist_preprocessing
+
+netlist_preprocessing.NetlistPreprocessingPlugin.remove_unused_lut_inputs(netlist)

@@ -28,7 +28,7 @@ namespace hal
 
                 if (auto it = m_extension_to_parser.find(extension); it != m_extension_to_parser.end())
                 {
-                    log_info("netlist_parser", "selected parser: {}", it->second.first);
+                    log_debug("netlist_parser", "selected parser: {}", it->second.first);
                     return it->second.second;
                 }
 
@@ -41,7 +41,7 @@ namespace hal
             {
                 auto begin_time = std::chrono::high_resolution_clock::now();
 
-                log_info("netlist_parser", "parsing '{}'...", file_name.string());
+                log_debug("netlist_parser", "parsing '{}'...", file_name.string());
 
                 if (auto res = parser->parse(file_name); res.is_error())
                 {
@@ -49,9 +49,9 @@ namespace hal
                     return {};
                 }
 
-                log_info("netlist_parser",
-                         "finished parsing in {:2.2f} seconds.",
-                         (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
+                log_debug("netlist_parser",
+                          "finished parsing in {:2.2f} seconds.",
+                          (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
 
                 std::vector<std::unique_ptr<Netlist>> netlists;
 
@@ -59,11 +59,11 @@ namespace hal
                 {
                     begin_time = std::chrono::high_resolution_clock::now();
 
-                    log_info("netlist_parser", "instantiating '{}' with gate library '{}'...", file_name.string(), gate_library->get_name());
+                    log_debug("netlist_parser", "instantiating '{}' with gate library '{}'...", file_name.string(), gate_library->get_name());
 
                     if (auto res = parser->instantiate(gate_library); res.is_error())
                     {
-                        log_info("netlist_parser", "failed to instantiate '{}' with gate library '{}':\n{}", file_name.string(), gate_library->get_name(), res.get_error().get());
+                        log_debug("netlist_parser", "failed to instantiate '{}' with gate library '{}':\n{}", file_name.string(), gate_library->get_name(), res.get_error().get());
                         return {};
                     }
                     else
@@ -71,10 +71,10 @@ namespace hal
                         auto netlist = res.get();
                         netlist->set_input_filename(file_name.string());
 
-                        log_info("netlist_parser",
-                                 "instantiated '{}' in {:2.2f} seconds.",
-                                 file_name.string(),
-                                 (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
+                        log_debug("netlist_parser",
+                                  "instantiated '{}' in {:2.2f} seconds.",
+                                  file_name.string(),
+                                  (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
 
                         netlists.push_back(std::move(netlist));
                     }
@@ -88,11 +88,11 @@ namespace hal
                     {
                         begin_time = std::chrono::high_resolution_clock::now();
 
-                        log_info("netlist_parser", "instantiating '{}' with gate library '{}'...", file_name.string(), lib_it->get_name());
+                        log_debug("netlist_parser", "instantiating '{}' with gate library '{}'...", file_name.string(), lib_it->get_name());
 
                         if (auto res = parser->instantiate(lib_it); res.is_error())
                         {
-                            log_info("netlist_parser", "failed to instantiate '{}' with gate library '{}':\n{}", file_name.string(), lib_it->get_name(), res.get_error().get());
+                            log_debug("netlist_parser", "failed to instantiate '{}' with gate library '{}':\n{}", file_name.string(), lib_it->get_name(), res.get_error().get());
                             // log_debug("netlist_parser", "error encountered during netlist instantiation:\n{}", res.get_error().get());
                             continue;
                         }
@@ -102,10 +102,10 @@ namespace hal
 
                             netlist->set_input_filename(file_name.string());
 
-                            log_info("netlist_parser",
-                                     "instantiated '{}' in {:2.2f} seconds.",
-                                     file_name.string(),
-                                     (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
+                            log_debug("netlist_parser",
+                                      "instantiated '{}' in {:2.2f} seconds.",
+                                      file_name.string(),
+                                      (double)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin_time).count() / 1000);
 
                             netlists.push_back(std::move(netlist));
 
@@ -162,7 +162,7 @@ namespace hal
                 m_extension_to_parser.emplace(ext, std::make_pair(name, parser_factory));
                 m_parser_to_extensions[name].push_back(ext);
 
-                log_info("netlist_parser", "registered netlist parser '{}' for file type '{}'", name, ext);
+                log_debug("netlist_parser", "registered netlist parser '{}' for file type '{}'", name, ext);
             }
         }
 
@@ -175,7 +175,7 @@ namespace hal
                     if (auto rm_it = m_extension_to_parser.find(ext); rm_it != m_extension_to_parser.end())
                     {
                         m_extension_to_parser.erase(rm_it);
-                        log_info("netlist_parser", "unregistered netlist parser '{}' which was registered for file type '{}'", name, ext);
+                        log_debug("netlist_parser", "unregistered netlist parser '{}' which was registered for file type '{}'", name, ext);
                     }
                 }
                 m_parser_to_extensions.erase(it);

@@ -100,7 +100,7 @@ namespace hal
                     case BooleanFunction::NodeType::Ult:
                         return {true, z3::ult(p[0], p[1])};
                     case BooleanFunction::NodeType::Ite:
-                        return {true, z3::ite(p[0] == context.bv_val(1, 1), p[1], p[2])};
+                        return {true, z3::ite(p[0], p[1], p[2])};
                     default:
                         log_error("netlist", "Not implemented reached for nodetype {} in z3 conversion", node.type);
                         return {false, z3::expr(context)};
@@ -418,6 +418,7 @@ namespace hal
             return extract_net_ids(get_variable_names(e));
         }
 
+        // TODO make this return a result (i think)
         std::set<u32> extract_net_ids(const std::set<std::string>& variable_names)
         {
             std::set<u32> net_ids;

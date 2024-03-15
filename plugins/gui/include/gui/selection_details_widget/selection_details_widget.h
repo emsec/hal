@@ -27,7 +27,10 @@
 
 #include "gui/content_widget/content_widget.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_proxy.h"
+#include "gui/selection_details_widget/tree_navigation/selection_tree_model.h"
 #include "hal_core/defines.h"
+
 
 class QTableWidget;
 class QStackedWidget;
@@ -335,6 +338,8 @@ namespace hal
          */
         void selectionToModuleAction(int actionCode);
 
+        void showNoSelection();
+
         QSplitter*           mSplitter;
         SelectionTreeView*   mSelectionTreeView;
         unsigned int         mNumberSelectedItems;
@@ -371,5 +376,7 @@ namespace hal
         GateDetailsTabWidget* mGateDetailsTabs;
         NetDetailsTabWidget* mNetDetailsTabs;
         ModuleDetailsTabWidget* mModuleDetailsTabs;
+        SelectionTreeProxyModel* mSelectionTreeProxyModel;
+        SelectionTreeModel* mSelectionTreeModel;
     };
 }

@@ -308,7 +308,7 @@ namespace hal {
             {
                 auto res = BooleanFunction::Slice(_A.clone(), i1.clone(), i1.clone(), 1);
                 ASSERT_TRUE(res.is_ok());
-                EXPECT_TRUE(res.get().simplify().has_constant_value(0));
+                EXPECT_TRUE(res.get().simplify().has_constant_value(1));
             }
             {
                 auto res = BooleanFunction::Slice(_A.clone(), i2.clone(), i2.clone(), 1);
@@ -1648,4 +1648,29 @@ namespace hal {
             }
         }
     }
+
+#ifdef BITWUZLA_LIBRARY
+    TEST(BooleanFunction, BitwuzlaTest) {
+        const auto  a = BooleanFunction::Var("a"),
+                   _1 = BooleanFunction::Const(1, 1);
+
+        const auto boolean_function = a | _1;
+        const auto constraint = BooleanFunction::Eq(a.clone(), boolean_function.clone(), 1);
+
+
+        auto s = SMT::Solver();
+        auto config = SMT::QueryConfig();
+        auto s_type = SMT::SolverType::Bitwuzla;
+        auto s_call = SMT::SolverCall::Library;
+        config.with_solver(s_type).with_call(s_call).with_model_generation();
+        auto result = s.with_constraint(SMT::Constraint(constraint.get().clone())).query(config);
+
+
+
+        ASSERT_TRUE(result.is_ok());
+        auto solver_result = result.get();
+        EXPECT_EQ(solver_result.type, SMT::SolverResultType::Sat);
+    }
+#endif
+
 } //namespace hal
