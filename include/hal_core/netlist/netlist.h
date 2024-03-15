@@ -438,6 +438,20 @@ namespace hal
          */
         void enable_automatic_net_checks(bool enable_checks = true);
 
+        /**
+         * Get all GND nets in the netlist.
+         * 
+         * @returns A vector nets.
+         */
+        std::vector<Net*> get_gnd_nets() const;
+
+        /**
+         * Get all VCC nets in the netlist.
+         * 
+         * @returns A vector of nets.
+         */
+        std::vector<Net*> get_vcc_nets() const;
+
         /*
          * ################################################################
          *      module functions

@@ -23,7 +23,6 @@ namespace hal
             {
                 auto* o5       = g->get_fan_out_net("O5");
                 auto* o6       = g->get_fan_out_net("O6");
-                const auto* i5 = g->get_fan_in_net("I5");
 
                 const auto init_get_res = g->get_init_data();
                 if (init_get_res.is_error())

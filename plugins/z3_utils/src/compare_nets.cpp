@@ -339,8 +339,8 @@ namespace hal
 
             Result<bool> compare_nets_internal(z3::context& ctx,
                                                z3::solver& s,
-                                               const Netlist* netlist_a,
-                                               const Netlist* netlist_b,
+                                               //    const Netlist* netlist_a,
+                                               //    const Netlist* netlist_b,
                                                const Net* net_a,
                                                const Net* net_b,
                                                const std::vector<Gate*>& gates_a,
@@ -444,7 +444,7 @@ namespace hal
                 return ERR_APPEND(setup_res.get_error(), "cannot compare netlist a with ID " + std::to_string(netlist_a->get_id()) + " netlist b with ID " + std::to_string(netlist_b->get_id()) + ": failed to setup solver");
             }
 
-            return compare_nets_internal(ctx, s, netlist_a, netlist_b, net_a, net_b, comb_gates_a, comb_gates_b, fail_on_unknown, solver_timeout);
+            return compare_nets_internal(ctx, s, net_a, net_b, comb_gates_a, comb_gates_b, fail_on_unknown, solver_timeout);
         }
 
         Result<bool> compare_nets(const Netlist* netlist_a, const Netlist* netlist_b, const std::vector<std::pair<Net*, Net*>>& nets, const bool fail_on_unknown, const u32 solver_timeout)
@@ -487,7 +487,7 @@ namespace hal
                 }
 
                 s.push();
-                auto comp_res = compare_nets_internal(ctx, s, netlist_a, netlist_b, net_a, net_b, comb_gates_a, comb_gates_b, fail_on_unknown, solver_timeout);
+                auto comp_res = compare_nets_internal(ctx, s, net_a, net_b, comb_gates_a, comb_gates_b, fail_on_unknown, solver_timeout);
                 s.pop();
                 
                 if (comp_res.is_error())

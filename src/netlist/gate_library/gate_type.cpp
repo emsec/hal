@@ -383,7 +383,8 @@ namespace hal
         {
             if (auto res = assign_pin_to_group(pin_group, pin, delete_empty_groups); res.is_error())
             {
-                assert(delete_pin_group(pin_group).is_ok());
+                auto delete_res = delete_pin_group(pin_group);
+                assert(delete_res.is_ok());
                 return ERR(res.get_error());
             }
         }
@@ -438,12 +439,9 @@ namespace hal
                        + ": pin group does not belong to gate type");
         }
 
-        bool removed_pins = false;
-
         std::vector<GatePin*> pins_copy = pin_group->get_pins();
         for (auto* pin : pins_copy)
         {
-            removed_pins = true;
             if (auto res = create_pin_group(pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), true, 0, false); res.is_error())
             {
                 return ERR(res.get_error());

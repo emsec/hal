@@ -163,6 +163,15 @@ namespace hal
                     }
                     return OK(BooleanFunction::Var(name.value(), size));
                 }
+                else if (t.is_variable())
+                {
+                    const auto name = t.symbol();
+                    if (!name.has_value())
+                    {
+                        return ERR("cannot translate term to hal Boolean function: failed to extract symbol");
+                    }
+                    return OK(BooleanFunction::Var(name.value(), size));
+                }
             }
             // else
             // {
