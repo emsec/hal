@@ -102,20 +102,21 @@ namespace hal
             // -- remove the net
             test_nl->delete_net(multi_src_net);
         }
-        {
-            // The output net has no source
-            // -- create such a net
-            Net* no_src_net = test_nl->create_net("muli_src_net");
+        // {
+        //     // NOTE: while a net without a source that is not a global input net should not occur in a perfect netlist, this proved to be unrealistic
+        //     // The output net has no source
+        //     // -- create such a net
+        //     Net* no_src_net = test_nl->create_net("muli_src_net");
 
-            const std::vector<const Gate*> subgraph_gates({gate_0, gate_3});
-            const Net* output_net        = no_src_net;
-            
-            auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
-            ASSERT_TRUE(res.is_error());
-            
-            // -- remove the net
-            test_nl->delete_net(no_src_net);
-        }
+        //     const std::vector<const Gate*> subgraph_gates({gate_0, gate_3});
+        //     const Net* output_net        = no_src_net;
+
+        //     auto res = netlist_utils::get_subgraph_function(output_net, subgraph_gates);
+        //     ASSERT_TRUE(res.is_error());
+
+        //     // -- remove the net
+        //     test_nl->delete_net(no_src_net);
+        // }
         {
             // A net in between has multiple sources
             // -- add a source to net 30 temporarily

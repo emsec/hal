@@ -59,7 +59,7 @@ namespace hal
                     }
 
                     GateType* gt = lib->create_gate_type(name, {GateTypeProperty::combinational, GateTypeProperty::power});
-                    if (auto res = gt->create_pin("O", PinDirection::output, PinType::ground); res.is_error())
+                    if (auto res = gt->create_pin("O", PinDirection::output, PinType::power); res.is_error())
                     {
                         return ERR_APPEND(res.get_error(), "could not prepare gate library '" + lib->get_name() + "': failed to create output pin 'O' for gate type 'HAL_VDD'");
                     }

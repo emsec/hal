@@ -1391,10 +1391,9 @@ namespace hal
                        + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin does not belong to module");
         }
 
-        if (pin->get_group().first == pin_group)
+        if (pin_group->contains_pin(pin))
         {
-            return ERR("could not assign pin '" + pin->get_name() + "' with ID " + std::to_string(pin->get_id()) + " to pin group '" + pin_group->get_name() + "' with ID "
-                       + std::to_string(pin_group->get_id()) + " of module '" + m_name + "' with ID " + std::to_string(m_id) + ": pin already belongs to pin group");
+            return OK({});
         }
 
         if (PinGroup<ModulePin>* pg = pin->get_group().first; pg != nullptr)

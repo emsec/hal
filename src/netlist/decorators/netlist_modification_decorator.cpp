@@ -378,13 +378,18 @@ namespace hal
             return ERR("cannot create a GND net: found multiple ground pins for gate type " + gnd_type->get_name() + ". This is currently not handled.");
         }
 
-        auto gnd_gate = m_netlist.create_gate(gnd_type);
+        auto gnd_gate = m_netlist.create_gate(gnd_type, "GND_TEMP");
         if (gnd_gate == nullptr)
         {
             return ERR("cannot create a GND net: failed to create GND gate in netlist");
         }
         // set gate name to be likely a unique gate name
         gnd_gate->set_name("GND_" + std::to_string(gnd_gate->get_id()));
+
+        if (!gnd_gate->mark_gnd_gate())
+        {
+            return ERR("cannot create GND net: failed to mark created GND gate as such");
+        }
 
         auto gnd_net = m_netlist.create_net("GND_TEMP");
         if (gnd_net == nullptr)
@@ -427,15 +432,15 @@ namespace hal
 
         if (vcc_pins.size() < 1)
         {
-            return ERR("cannot create a VCC net: found no ground pins for gate type " + vcc_type->get_name());
+            return ERR("cannot create a VCC net: found no power pins for gate type " + vcc_type->get_name());
         }
 
         if (vcc_pins.size() > 1)
         {
-            return ERR("cannot create a VCC net: found multiple ground pins for gate type " + vcc_type->get_name() + ". This is currently not handled.");
+            return ERR("cannot create a VCC net: found multiple power pins for gate type " + vcc_type->get_name() + ". This is currently not handled.");
         }
 
-        auto vcc_gate = m_netlist.create_gate(vcc_type);
+        auto vcc_gate = m_netlist.create_gate(vcc_type, "VCC_TEMP");
         if (vcc_gate == nullptr)
         {
             return ERR("cannot create a VCC net: failed to create VCC gate in netlist");
@@ -450,6 +455,11 @@ namespace hal
         }
         // set net name to be likely a unique net name
         vcc_net->set_name("VCC_" + std::to_string(vcc_net->get_id()));
+
+        if (!vcc_gate->mark_vcc_gate())
+        {
+            return ERR("cannot create VCC net: failed to mark created VCC gate as such");
+        }
 
         const auto vcc_ep = vcc_net->add_source(vcc_gate, vcc_pins.front());
         if (vcc_ep == nullptr)
