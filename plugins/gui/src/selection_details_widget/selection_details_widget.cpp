@@ -80,9 +80,9 @@ namespace hal
 
         mSelectionTreeView  = new SelectionTreeView(treeViewContainer);
 
-        mSelectionTreeModel = new SelectionTreeModel(this);
+        mModuleModel = new ModuleModel(this);
         mSelectionTreeProxyModel = new SelectionTreeProxyModel(this);
-        mSelectionTreeProxyModel->setSourceModel(mSelectionTreeModel);
+        mSelectionTreeProxyModel->setSourceModel(mModuleModel);
         mSelectionTreeView->setModel(mSelectionTreeProxyModel);
 
         //mSelectionTreeProxyModel->setSourceModel(mSelectionTreeView->model());
@@ -295,7 +295,7 @@ namespace hal
         QSet<u32> mods = {};
         QSet<u32> gates = {};
         QSet<u32> nets = {};
-        auto* sourceModel = static_cast<SelectionTreeModel*>(mSelectionTreeProxyModel->sourceModel());
+        auto* sourceModel = static_cast<ModuleModel*>(mSelectionTreeProxyModel->sourceModel());
 
         //check each row for its Itemtype and append the ID to the corresponding QSet {mods, gates, nets}
         for(int i = 0; i < mSelectionTreeProxyModel->rowCount(); i++){

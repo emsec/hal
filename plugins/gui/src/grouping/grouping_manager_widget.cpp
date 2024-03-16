@@ -495,7 +495,7 @@ namespace hal
 
 
         // Create color rectangle
-        QLabel* colorRectangle = new QLabel();
+        QLabel* colorRectangle = new QLabel(&dialog);
         colorRectangle->setText(QString());  // Empty text to visualize grouping color
         colorRectangle->setStyleSheet("background-color: " + grpColor.name());
         colorRectangle->setFixedSize(25, 25);  // Adapt size of grouping color
@@ -503,18 +503,18 @@ namespace hal
 
         // Replace InputDialog with SelectionTreeView
         SelectionTreeView* selectionTreeView = new SelectionTreeView(&dialog, true);
-        SelectionTreeModel* selectionTreeModel = new SelectionTreeModel(this); // Need to fully initialise SelectionTreeView with a model
-        SelectionTreeProxyModel* selectionTreeProxyModel = new SelectionTreeProxyModel(this);
-        selectionTreeProxyModel->setSourceModel(selectionTreeModel);
+        SelectionTreeProxyModel* selectionTreeProxyModel = new SelectionTreeProxyModel(&dialog);
+        ModuleModel* moduleModel = new ModuleModel(&dialog); // Need to fully initialise SelectionTreeView with a model
+        selectionTreeProxyModel->setSourceModel(moduleModel);
         selectionTreeView->setModel(selectionTreeProxyModel);
-
+        
         selectionTreeView->populate(true, grpId);
 
         QPushButton* closeButton = new QPushButton("Close", &dialog);
         connect(closeButton, &QPushButton::clicked, [&dialog](){ dialog.close(); });
 
         QVBoxLayout* layout = new QVBoxLayout(&dialog);
-        QHBoxLayout* hlay = new QHBoxLayout;
+        QHBoxLayout* hlay = new QHBoxLayout(&dialog);
         hlay->addStretch();
         hlay->addWidget(colorRectangle);
         layout->addLayout(hlay);
@@ -527,7 +527,7 @@ namespace hal
         delete closeButton;
         delete selectionTreeView;
         delete selectionTreeProxyModel;
-        delete selectionTreeModel;
+        delete moduleModel;
         delete hlay;
         delete layout;
     }

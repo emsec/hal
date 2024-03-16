@@ -7,6 +7,7 @@
 #include "gui/user_action/action_create_object.h"
 #include "gui/user_action/action_add_items_to_object.h"
 #include "gui/user_action/user_action_compound.h"
+#include "hal_core/netlist/grouping.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -236,14 +237,34 @@ namespace hal
     {
         SelectionTreeProxyModel* treeProxy = dynamic_cast<SelectionTreeProxyModel*>(model());
         if (!treeProxy) return;
-        SelectionTreeModel* treeModel = dynamic_cast<SelectionTreeModel*>(treeProxy->sourceModel());
+        ModuleModel* treeModel = dynamic_cast<ModuleModel*>(treeProxy->sourceModel());
         if (!treeModel) return;
 
         if (treeProxy->isGraphicsBusy())
             return;
         setSelectionMode(QAbstractItemView::NoSelection);
         selectionModel()->clear();
-        treeModel->fetchSelection(mVisible, groupingId);
+
+        if (!groupingId)
+        {
+            if(mVisible)
+            {
+                QVector<u32> modIds = QVector<u32>::fromList(gSelectionRelay->selectedModulesList());
+                QVector<u32> gateIds = QVector<u32>::fromList(gSelectionRelay->selectedGatesList());
+                QVector<u32> netIds = QVector<u32>::fromList(gSelectionRelay->selectedNetsList());
+                treeModel->populateTree(modIds, gateIds, netIds);
+            }
+            else treeModel->clear();
+        }
+        else
+        {
+            Grouping* grouping = gNetlist->get_grouping_by_id(groupingId);
+            QVector<u32> modIds = QVector<u32>::fromStdVector(grouping->get_module_ids());
+            QVector<u32> gateIds = QVector<u32>::fromStdVector(grouping->get_gate_ids());
+            QVector<u32> netIds = QVector<u32>::fromStdVector(grouping->get_net_ids());
+            treeModel->populateTree(modIds, gateIds, netIds);
+        }
+
         if (mVisible)
         {
             show();

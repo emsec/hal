@@ -114,7 +114,7 @@ namespace hal
         connect(mToggleExpandTreeAction, &QAction::triggered, this, &ModuleWidget::handleToggleExpandTreeClicked);
         connect(mRenameAction, &QAction::triggered, this, &ModuleWidget::handleRenameClicked);
 
-        mModuleModel->init();
+        mModuleModel->populateTree({gNetlist->get_top_module()->get_id()});
         mTreeView->expandAllModules();
     }
 

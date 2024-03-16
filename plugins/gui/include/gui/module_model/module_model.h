@@ -43,14 +43,19 @@ namespace hal
 
     /**
      * @ingroup gui
-     * @brief Represents the netlist module's hierarchy.
+     * @brief A model for displaying multiple netlist elements.
      *
-     * The ModuleModel is the item model that represents the modules and their hierarchy in the netlist.
+     * An item model that manages a specifiable set of netlist elements in a tree-styled fashion.
+     * May contain a single netlist element multiple times.
+     * See populateTree() for more information.
      */
     class ModuleModel : public BaseTreeModel
     {
         Q_OBJECT
 
+        /**
+         * Class for compatibility to NetlistRelay::moduleGatesAssignBegin and NetlistRelay::moduleGatesAssignEnd.
+        */
         class TempGateAssignment
         {
             int mAccumulate;
@@ -76,8 +81,7 @@ namespace hal
     public:
         /**
          * Constructor. <br>
-         * Since the netlist is not necessarily loaded when this class is instantiated, the model won't be filled with
-         * data until the init function is called. The constructor is an empty one.
+         * Constructs an empty item model and connects relevant slots to the global netlist relay.
          *
          * @param parent - The parent object.
          */
@@ -132,14 +136,22 @@ namespace hal
         QList<ModuleItem*> getItems(const u32 id, ModuleItem::TreeItemType type = ModuleItem::TreeItemType::Module) const;
 
         /**
-         * Initializes the item model using the global netlist object gNetlist.
-         */
-        void init();
-
-        /**
          * Clears the item model and deletes all ModuleItems.
          */
         void clear() override;
+
+        /**
+         * Clears current tree item model and repopulates it with new ModuleItems for the netlist elements
+         * specified in the parameters.
+         * All netlist elements present in the parameters are added to the root of the tree. 
+         * All submodules, gates and nets of given modules will also be added to the tree as children of those modules.
+         * This way some netlist elements may be present in the item model multiple times.
+         * 
+         * @param modIds QVector of ids of modules to be added to the item model. 
+         * @param gateIds QVector of ids of gates to be added to the item model. 
+         * @param netIds QVector of ids of nets to be added to the item model. 
+        */
+        void populateTree(const QVector<u32>& modIds = {}, const QVector<u32>& gatIds = {}, const QVector<u32>& netIds = {});
 
         /**
          * Add a module to the item model. For the specified module new ModuleItems are created and stored.
@@ -168,9 +180,10 @@ namespace hal
         /**
          * Recursively adds the given module with all of its submodules (and their submodules and so on...)
          * and the gates of those modules to the item model.
+         * Nets have to be added in another way, like for example using moduleAssignNets().
          *
          * @param module - The module which should be added to the item model together with all its
-         *                  submodules, gates and nets.
+         *                  submodules and gates.
          */
         void addRecursively(const Module* module, BaseTreeItem* parentItem = nullptr);
 
