@@ -451,10 +451,8 @@ namespace hal
         Grouping* m_grouping = nullptr;
 
         /* stores the dst gate and pin id of the dst gate */
-        std::vector<std::unique_ptr<Endpoint>> m_destinations;
-        std::vector<std::unique_ptr<Endpoint>> m_sources;
-        std::unordered_map<EndpointKey,Endpoint*> m_destinations_hash;
-        std::unordered_map<EndpointKey,Endpoint*> m_sources_hash;
+        std::unordered_map<EndpointKey,std::unique_ptr<Endpoint>> m_destinations_hash;
+        std::unordered_map<EndpointKey,std::unique_ptr<Endpoint>> m_sources_hash;
 
         EventHandler* m_event_handler;
     };

@@ -37,7 +37,7 @@ namespace hal
             return false;
         }
 
-        if (m_sources.size() != other.get_num_of_sources() || m_destinations.size() != other.get_num_of_destinations())
+        if (m_sources_hash.size() != other.m_sources_hash.size() || m_destinations_hash.size() != other.m_destinations_hash.size())
         {
             log_debug("net", "the nets with IDs {} and {} are not equal due to an unequal number of sources or destinations.", m_id, other.get_id());
             return false;
@@ -45,7 +45,7 @@ namespace hal
 
         for (auto ep_n1_it = m_sources_hash.begin(); ep_n1_it != m_sources_hash.end(); ++ep_n1_it)
         {
-            if (other.m_sources_hash.find(ep_n1_it->second) == other.m_sources_hash.end())
+            if (other.m_sources_hash.find(ep_n1_it->second.get()) == other.m_sources_hash.end())
             {
                 log_debug("net", "the nets with IDs {} and {} are not equal due to an unequal source endpoint.", m_id, other.get_id());
                 return false;
@@ -54,7 +54,7 @@ namespace hal
 
         for (auto ep_n1_it = m_destinations_hash.begin(); ep_n1_it != m_destinations_hash.end(); ++ep_n1_it)
         {
-            if (other.m_destinations_hash.find(ep_n1_it->second) == other.m_destinations_hash.end())
+            if (other.m_destinations_hash.find(ep_n1_it->second.get()) == other.m_destinations_hash.end())
             {
                 log_debug("net", "the nets with IDs {} and {} are not equal due to an unequal destination endpoint.", m_id, other.get_id());
                 return false;
@@ -145,7 +145,7 @@ namespace hal
         auto it = m_sources_hash.find(EndpointKey(gate,pin));
         if (it != m_sources_hash.end())
         {
-            return m_internal_manager->net_remove_source(this, it->second);
+            return m_internal_manager->net_remove_source(this, it->second.get());
         }
         return false;
     }
@@ -248,13 +248,13 @@ namespace hal
         if (!filter)
         {
             for (auto it = m_sources_hash.begin(); it != m_sources_hash.end(); ++it)
-                srcs.push_back(it->second);
+                srcs.push_back(it->second.get());
         }
         else
         {
             for (auto it = m_sources_hash.begin(); it != m_sources_hash.end(); ++it)
             {
-                Endpoint* src = it->second;
+                Endpoint* src = it->second.get();
                 if (!filter(src)) continue;
                 srcs.push_back(src);
             }
@@ -293,7 +293,7 @@ namespace hal
         auto it = m_destinations_hash.find(EndpointKey(gate,pin));
         if (it != m_destinations_hash.end())
         {
-            return m_internal_manager->net_remove_destination(this, it->second);
+            return m_internal_manager->net_remove_destination(this, it->second.get());
         }
         return false;
     }
@@ -402,13 +402,13 @@ namespace hal
         if (!filter)
         {
             for (auto it = m_destinations_hash.begin(); it != m_destinations_hash.end(); ++it)
-                dsts.push_back(it->second);
+                dsts.push_back(it->second.get());
         }
         else
         {
             for (auto it = m_destinations_hash.begin(); it != m_destinations_hash.end(); ++it)
             {
-                Endpoint* dst = it->second;
+                Endpoint* dst = it->second.get();
                 if (!filter(dst)) continue;
                 dsts.push_back(dst);
             }
@@ -418,17 +418,17 @@ namespace hal
 
     bool Net::is_unrouted() const
     {
-        return ((m_sources.size() == 0) || (m_destinations.size() == 0));
+        return ((m_sources_hash.size() == 0) || (m_destinations_hash.size() == 0));
     }
 
     bool Net::is_gnd_net() const
     {
-        return m_sources.size() == 1 && m_sources.front()->get_gate()->is_gnd_gate();
+        return m_sources_hash.size() == 1 && m_sources_hash.begin()->first.gate->is_gnd_gate();
     }
 
     bool Net::is_vcc_net() const
     {
-        return m_sources.size() == 1 && m_sources.front()->get_gate()->is_vcc_gate();
+        return m_sources_hash.size() == 1 && m_sources_hash.begin()->first.gate->is_vcc_gate();
     }
 
     bool Net::mark_global_input_net()
