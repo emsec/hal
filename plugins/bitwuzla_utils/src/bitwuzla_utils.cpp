@@ -459,15 +459,19 @@ namespace hal
             std::string output(result_string.str());
             return output;
         }
-
         Result<bitwuzla::Term> simplify(const bitwuzla::Term& t)
         {
-            auto current = function.clone(), before = BooleanFunction();
-
+            std::map<u64, bitwuzla::Term> res;
+            return simplify(t, res);
+        }
+        Result<bitwuzla::Term> simplify(const bitwuzla::Term& t, std::map<u64, bitwuzla::Term>& id_to_term)
+        {
+            bitwuzla::Term current = t;
+            bitwuzla::Term before;
             do
             {
-                before          = current.clone();
-                auto simplified = SMT::SymbolicExecution().evaluate(current);
+                before          = current;
+                auto simplified = SMT::SymbolicExecution().evaluate(current, id_to_term);
                 if (simplified.is_error())
                 {
                     return ERR_APPEND(simplified.get_error(), "could not apply local simplification: symbolic execution failed");

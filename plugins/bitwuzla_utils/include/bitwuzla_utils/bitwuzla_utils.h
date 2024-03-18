@@ -136,6 +136,7 @@ namespace hal
         Result<std::vector<bitwuzla::Term>> get_subgraph_bitwuzla_functions(const std::vector<Gate*>& subgraph_gates, const std::vector<Net*>& subgraph_outputs);
 
         Result<bitwuzla::Term> simplify(const bitwuzla::Term& t);
+        Result<bitwuzla::Term> simplify(const bitwuzla::Term& t, std::map<u64, bitwuzla::Term>& id_to_term);
 
     }    // namespace bitwuzla_utils
 }    // namespace hal

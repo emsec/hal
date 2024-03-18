@@ -459,9 +459,9 @@ namespace hal
                 return result;
             }
         }    // namespace
-        Result<bitwuzla::Term> SymbolicExecution::evaluate(const bitwuzla::Term& function) const
+        Result<bitwuzla::Term> SymbolicExecution::evaluate(const bitwuzla::Term& function, std::map<u64, bitwuzla::Term> id_to_term) const
         {
-            std::map<u64, bitwuzla::Term> id_to_term;
+            //std::map<u64, bitwuzla::Term> id_to_term;
             std::vector<bitwuzla::Term> stack = get_terms_dfs(function, id_to_term);
             bitwuzla::Term result;
             for (const auto& node : stack)
