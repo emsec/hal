@@ -439,7 +439,7 @@ namespace hal
             std::vector<bitwuzla::Term> get_terms_dfs(const bitwuzla::Term& function, std::map<u64, bitwuzla::Term>& id_to_term)
             {
                 std::vector<bitwuzla::Term> result;
-                if (function.num_children() > 0)
+                if (function.children().size() > 0)
                 {
                     auto children = function.children();
                     for (const auto cur_child : children)
@@ -544,15 +544,25 @@ namespace hal
             std::sort(p.begin(), p.end(), [](const auto& lhs, const auto& rhs) {
                 if (lhs.kind() == rhs.kind())
                 {
-                    return lhs < rhs;
+                    return lhs.str() < rhs.str();
                 }
-                return rhs.is_value() || rhs.is_bool();
+                return rhs.is_value() || rhs.sort().is_bool();
             });
             return std::move(p);
         }
 
         namespace
         {
+
+            bool is_x_y(const bitwuzla::Term& x, const bitwuzla::Term& y)
+            {
+                //TODO implement this in a more detailed way maybe?
+                if (x.id() == y.id())
+                {
+                    return true;
+                }
+                return x.str() == y.str();
+            }
             /**
              * Helper function to check whether one of the two functions is just the other function negated.
              */
@@ -587,15 +597,6 @@ namespace hal
                     }
                 }
             }
-            bool is_x_y(const bitwuzla::Term& x, const bitwuzla::Term& y)
-            {
-                //TODO implement this in a more detailed way maybe?
-                if (x.id() == y.id())
-                {
-                    return true;
-                }
-                return x.str() == y.str();
-            }
 
             bool is_commutative(const bitwuzla::Term& x)
             {
@@ -622,7 +623,7 @@ namespace hal
 
         Result<bitwuzla::Term> SymbolicExecution::simplify(const bitwuzla::Term& node, std::vector<bitwuzla::Term>& p)
         {
-            if (!p.empty() && std::all_of(p.begin(), p.end(), [](const auto& function) { return function.is_bool() || function.is_value(); }))
+            if (!p.empty() && std::all_of(p.begin(), p.end(), [](const auto& function) { return function.sort().is_bool() || function.is_value(); }))
             {
                 if (auto res = SymbolicExecution::constant_propagation(node, p); res.is_error())
                 {

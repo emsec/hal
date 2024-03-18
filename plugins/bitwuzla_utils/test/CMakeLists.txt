@@ -8,7 +8,7 @@ if(BUILD_TESTS)
     target_link_libraries(runTest-bitwuzla_simplification bitwuzla_utils gtest hal::core hal::netlist test_utils)
 
     add_test(runTest-bitwuzla_utils ${CMAKE_BINARY_DIR}/bin/hal_plugins/runTest-bitwuzla_utils --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
-    add_test(runTest-bitwuzla_utils ${CMAKE_BINARY_DIR}/bin/hal_plugins/runTest-bitwuzla_simplification --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
+    add_test(runTest-bitwuzla_simplification ${CMAKE_BINARY_DIR}/bin/hal_plugins/runTest-bitwuzla_simplification --gtest_output=xml:${CMAKE_BINARY_DIR}/gtestresults-runBasicTests.xml)
 
     if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         add_sanitizers(runTest-bitwuzla_utils)

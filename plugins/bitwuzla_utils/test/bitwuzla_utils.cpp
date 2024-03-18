@@ -238,9 +238,9 @@ namespace hal
             }
         }
         {
-            auto a   = BooleanFunction::Var("A", 16);
-            auto i0  = BooleanFunction::Index(3, 16);
-            auto i1  = BooleanFunction::Index(6, 16);
+            auto a  = BooleanFunction::Var("A", 16);
+            auto i0 = BooleanFunction::Index(3, 16);
+            auto i1 = BooleanFunction::Index(6, 16);
 
             auto bf_slice_res = BooleanFunction::Slice(a.clone(), i0.clone(), i1.clone(), 4);
             ASSERT_TRUE(bf_slice_res.is_ok());

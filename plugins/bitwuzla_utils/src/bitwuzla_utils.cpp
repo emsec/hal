@@ -1,4 +1,4 @@
-#include "bitwuzla_utils/bitwuzla_utils.h"
+//#include "bitwuzla_utils/bitwuzla_utils.h"
 
 #include "bitwuzla_utils/symbolic_execution.h"
 #include "hal_core/defines.h"

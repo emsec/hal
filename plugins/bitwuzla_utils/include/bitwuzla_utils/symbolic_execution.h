@@ -31,7 +31,7 @@ namespace hal
              * 
              * @param[in] variables - The (optional) list of variables.
              */
-            explicit SymbolicExecution(const std::vector<bitwuzla::Term>& variables = {});
+            //explicit SymbolicExecution(const std::vector<bitwuzla::Term>& variables = {});
 
             ////////////////////////////////////////////////////////////////////////////
             // Interface
