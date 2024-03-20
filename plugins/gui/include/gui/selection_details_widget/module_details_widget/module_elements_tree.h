@@ -26,6 +26,8 @@
 #pragma once
 
 #include "hal_core/defines.h"
+#include "gui/module_model/module_model.h"
+
 #include <QTreeView>
 
 namespace hal
@@ -85,7 +87,7 @@ namespace hal
         void updateText(const QString& newHeadline);
 
     private:
-        ModuleTreeModel* mModel;
+        ModuleModel* mModel;
         int mModuleID;
 
         void handleNumberSubmodulesChanged(const int number);

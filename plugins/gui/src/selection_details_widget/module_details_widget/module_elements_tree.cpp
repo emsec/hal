@@ -1,6 +1,4 @@
 #include "gui/selection_details_widget/module_details_widget/module_elements_tree.h"
-#include "gui/selection_details_widget/module_details_widget/netlist_elements_tree_model.h"
-#include "gui/selection_details_widget/module_details_widget/module_tree_model.h"
 #include "gui/selection_details_widget/tree_navigation/selection_tree_view.h"
 #include "gui/graph_tab_widget/graph_tab_widget.h"
 #include "gui/python/py_code_provider.h"
@@ -14,7 +12,7 @@ namespace hal
 {
 
     ModuleElementsTree::ModuleElementsTree(QWidget *parent) : QTreeView(parent), //mNetlistElementsModel(new NetlistElementsTreeModel(this)),
-        mModel(new ModuleTreeModel(this)), mModuleID(-1)
+        mModel(new ModuleModel(this)), mModuleID(-1)
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -22,12 +20,11 @@ namespace hal
         setSelectionBehavior(QAbstractItemView::SelectRows);
         setFocusPolicy(Qt::NoFocus);
         header()->setStretchLastSection(true);
-        //setModel(mNetlistElementsModel);
         setModel(mModel);
 
         //connections
         connect(this, &QTreeView::customContextMenuRequested, this, &ModuleElementsTree::handleContextMenuRequested);
-        connect(mModel, &ModuleTreeModel::numberOfSubmodulesChanged, this, &ModuleElementsTree::handleNumberSubmodulesChanged);
+        //connect(mModel, &ModuleTreeModel::numberOfSubmodulesChanged, this, &ModuleElementsTree::handleNumberSubmodulesChanged);
     }
 
     void ModuleElementsTree::setModule(u32 moduleID)
@@ -40,17 +37,23 @@ namespace hal
 
     void ModuleElementsTree::setModule(Module *m)
     {
-        //if(!m) return;
+        if(!m) return;
 
-        //mNetlistElementsModel->setModule(m, true, false, false);
-
-        mModel->setModule(m);
+        //mModel->setModule(m);
+        /*QVector<u32> modIds, gateIds;
+        for(auto submodule : m->get_submodules())
+            modIds.append(submodule->get_id());
+        for(auto gate : m->get_gates())
+            gateIds.append(gate->get_id());
+        mModel->populateTree(modIds, gateIds);*/
+        //Before only submodules were shown. Put Module m in tree and use proxy to hide m?
+        mModel->populateTree({m->get_id()});
+        
         mModuleID = m->get_id();
     }
 
     void ModuleElementsTree::removeContent()
     {
-        //mNetlistElementsModel->clear();
         mModel->clear();
         mModuleID = -1;
     }
@@ -61,9 +64,9 @@ namespace hal
         if(!clickedIndex.isValid())
             return;
 
-        ModuleTreeitem* clickedItem = dynamic_cast<ModuleTreeitem*>(mModel->getItemFromIndex(clickedIndex));
-        int id = clickedItem->getData(ModuleTreeModel::sIdColumn).toInt();
-        ModuleTreeitem::ItemType type = clickedItem->itemType();
+        ModuleItem* clickedItem = dynamic_cast<ModuleItem*>(mModel->getItemFromIndex(clickedIndex));
+        int id = clickedItem->id();
+        ModuleItem::TreeItemType type = clickedItem->getType();
         QMenu menu;
 
         //menu.addSection("here comes the plaintext");
@@ -71,7 +74,7 @@ namespace hal
         menu.addAction("Name to clipboard",
            [clickedItem]()
            {
-               QApplication::clipboard()->setText(clickedItem->getData(NetlistElementsTreeModel::sNameColumn).toString());
+               QApplication::clipboard()->setText(clickedItem->getData(0).toString());
            }
         );
 
@@ -85,7 +88,7 @@ namespace hal
         menu.addAction("Type to clipboard",
            [clickedItem]()
            {
-               QApplication::clipboard()->setText(clickedItem->getData(NetlistElementsTreeModel::sTypeColumn).toString());
+               QApplication::clipboard()->setText(clickedItem->getData(2).toString());
            }
         );
 
@@ -97,8 +100,8 @@ namespace hal
             gSelectionRelay->clear();
             switch(type)
             {
-                case ModuleTreeitem::Module: gSelectionRelay->addModule(id); break;
-                case ModuleTreeitem::Gate: gSelectionRelay->addGate(id); break;
+                case ModuleItem::TreeItemType::Module: gSelectionRelay->addModule(id); break;
+                case ModuleItem::TreeItemType::Gate: gSelectionRelay->addGate(id); break;
             }
             gSelectionRelay->relaySelectionChanged(this);
            }
@@ -109,8 +112,8 @@ namespace hal
            {
             switch(type)
             {
-                case ModuleTreeitem::Module: gSelectionRelay->addModule(id); break;
-                case ModuleTreeitem::Gate: gSelectionRelay->addGate(id); break;
+                case ModuleItem::TreeItemType::Module: gSelectionRelay->addModule(id); break;
+                case ModuleItem::TreeItemType::Gate: gSelectionRelay->addGate(id); break;
             }
             gSelectionRelay->relaySelectionChanged(this);
            }
@@ -122,8 +125,8 @@ namespace hal
                 Node nd;
                 switch(type)
                 {
-                    case ModuleTreeitem::Module: nd = Node(id, Node::Module); break;
-                    case ModuleTreeitem::Gate:   nd = Node(id, Node::Gate); break;
+                    case ModuleItem::TreeItemType::Module: nd = Node(id, Node::Module); break;
+                    case ModuleItem::TreeItemType::Gate: nd = Node(id, Node::Gate); break;
                 }
                 SelectionTreeView::isolateInNewViewAction(nd);
             }
@@ -134,16 +137,16 @@ namespace hal
             {
                 switch(type)
                 {
-                    case ModuleTreeitem::Module: gContentManager->getGraphTabWidget()->handleModuleFocus(id); break;
-                    case ModuleTreeitem::Gate:   gContentManager->getGraphTabWidget()->handleGateFocus(id);   break;
+                    case ModuleItem::TreeItemType::Module: gContentManager->getGraphTabWidget()->handleModuleFocus(id); break;
+                    case ModuleItem::TreeItemType::Gate: gContentManager->getGraphTabWidget()->handleGateFocus(id); break;
                 }
             }
         );
 
         menu.addSection("Python Code");
 
-        QString pythonGetObject = (type == ModuleTreeitem::Module) ? PyCodeProvider::pyCodeModule(id) : PyCodeProvider::pyCodeGate(id);
-        QString pythonDescription = (type == ModuleTreeitem::Module) ? "Get module" : "Get gate";
+        QString pythonGetObject = (type == ModuleItem::TreeItemType::Module) ? PyCodeProvider::pyCodeModule(id) : PyCodeProvider::pyCodeGate(id);
+        QString pythonDescription = (type == ModuleItem::TreeItemType::Module) ? "Get module" : "Get gate";
         menu.addAction(QIcon(":/icons/python"), pythonDescription,
            [pythonGetObject]()
            {
