@@ -493,43 +493,34 @@ namespace hal
         QDialog dialog;
         dialog.setWindowTitle(QString("Content of %1 (ID: %2)").arg(grpName).arg(grpId));
 
-
         // Create color rectangle
-        QLabel* colorRectangle = new QLabel(&dialog);
-        colorRectangle->setText(QString());  // Empty text to visualize grouping color
-        colorRectangle->setStyleSheet("background-color: " + grpColor.name());
-        colorRectangle->setFixedSize(25, 25);  // Adapt size of grouping color
-        colorRectangle->setAutoFillBackground(true);
+        QLabel colorRectangle(&dialog);
+        colorRectangle.setText(QString());  // Empty text to visualize grouping color
+        colorRectangle.setStyleSheet("background-color: " + grpColor.name());
+        colorRectangle.setFixedSize(25, 25);  // Adapt size of grouping color
+        colorRectangle.setAutoFillBackground(true);
 
         // Replace InputDialog with SelectionTreeView
-        SelectionTreeView* selectionTreeView = new SelectionTreeView(&dialog, true);
-        SelectionTreeProxyModel* selectionTreeProxyModel = new SelectionTreeProxyModel(&dialog);
-        ModuleModel* moduleModel = new ModuleModel(&dialog); // Need to fully initialise SelectionTreeView with a model
-        selectionTreeProxyModel->setSourceModel(moduleModel);
-        selectionTreeView->setModel(selectionTreeProxyModel);
+        SelectionTreeView selectionTreeView(&dialog, true);
+        SelectionTreeProxyModel selectionTreeProxyModel(&dialog);
+        ModuleModel moduleModel(&dialog); // Need to fully initialise SelectionTreeView with a model
+        selectionTreeProxyModel.setSourceModel(&moduleModel);
+        selectionTreeView.setModel(&selectionTreeProxyModel);
         
-        selectionTreeView->populate(true, grpId);
+        selectionTreeView.populate(true, grpId);
 
-        QPushButton* closeButton = new QPushButton("Close", &dialog);
-        connect(closeButton, &QPushButton::clicked, [&dialog](){ dialog.close(); });
+        QPushButton closeButton("Close",&dialog);// = new QPushButton("Close", &dialog);
+        connect(&closeButton, &QPushButton::clicked, [&dialog](){ dialog.close(); });
 
-        QVBoxLayout* layout = new QVBoxLayout(&dialog);
-        QHBoxLayout* hlay = new QHBoxLayout(&dialog);
-        hlay->addStretch();
-        hlay->addWidget(colorRectangle);
-        layout->addLayout(hlay);
-        layout->addWidget(selectionTreeView);
-        layout->addWidget(closeButton);
+        QVBoxLayout layout(&dialog);
+        QHBoxLayout hlay(&dialog);
+        hlay.addStretch();
+        hlay.addWidget(&colorRectangle);
+        layout.addLayout(&hlay);
+        layout.addWidget(&selectionTreeView);
+        layout.addWidget(&closeButton);
 
         dialog.exec();
-
-        delete colorRectangle;
-        delete closeButton;
-        delete selectionTreeView;
-        delete selectionTreeProxyModel;
-        delete moduleModel;
-        delete hlay;
-        delete layout;
     }
 
     void GroupingManagerWidget::handleDeleteGroupingClicked()
