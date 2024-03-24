@@ -11,8 +11,7 @@
 namespace hal
 {
 
-    ModuleElementsTree::ModuleElementsTree(QWidget *parent) : QTreeView(parent), //mNetlistElementsModel(new NetlistElementsTreeModel(this)),
-        mModel(new ModuleModel(this)), mModuleID(-1)
+    ModuleElementsTree::ModuleElementsTree(QWidget *parent) : QTreeView(parent), mModuleID(-1)
     {
         setContextMenuPolicy(Qt::CustomContextMenu);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -20,7 +19,11 @@ namespace hal
         setSelectionBehavior(QAbstractItemView::SelectRows);
         setFocusPolicy(Qt::NoFocus);
         header()->setStretchLastSection(true);
-        setModel(mModel);
+        mProxyModel = new FilterElementsProxyModel(this);
+        mModel = new ModuleModel(mProxyModel);
+        mProxyModel->setSourceModel(mModel);
+        mProxyModel->setFilterNets(true);
+        setModel(mProxyModel);
 
         //connections
         connect(this, &QTreeView::customContextMenuRequested, this, &ModuleElementsTree::handleContextMenuRequested);
@@ -39,15 +42,8 @@ namespace hal
     {
         if(!m) return;
 
-        //mModel->setModule(m);
-        /*QVector<u32> modIds, gateIds;
-        for(auto submodule : m->get_submodules())
-            modIds.append(submodule->get_id());
-        for(auto gate : m->get_gates())
-            gateIds.append(gate->get_id());
-        mModel->populateTree(modIds, gateIds);*/
-        //Before only submodules were shown. Put Module m in tree and use proxy to hide m?
         mModel->populateTree({m->get_id()});
+        setRootIndex(mProxyModel->mapFromSource(mModel->getIndexFromItem(mModel->getItem(m->get_id())))); // hide top-element m in TreeView
         
         mModuleID = m->get_id();
     }

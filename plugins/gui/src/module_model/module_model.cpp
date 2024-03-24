@@ -120,6 +120,8 @@ namespace hal
 
     void ModuleModel::populateTree(const QVector<u32>& modIds, const QVector<u32>& gateIds, const QVector<u32>& netIds)
     {
+        setIsModifying(true);
+        beginResetModel();
         // Might want to add parameter for container of moduleIds that don't get recursively inserted.
         clear();
 
@@ -134,8 +136,6 @@ namespace hal
         for(u32 id : netIds)
             newRootList.append(new ModuleItem(id, ModuleItem::TreeItemType::Net));
 
-        setIsModifying(true);
-        beginResetModel();
         for(auto item : newRootList)
             mRootItem->appendChild(item);
         setIsModifying(false);
