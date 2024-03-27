@@ -112,16 +112,16 @@ class NN(torch.nn.Module):
         return x
         #return F.softmax(x)
 
-#model = GNN().to(device)
-model = NN().to(device)
+model = GNN().to(device)
+#model = NN().to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
     
 for epoch in range(2500):
     for edge_index, x, _y in training_set:
         optimizer.zero_grad()
 
-        #out = model(x, edge_index)
-        out = model(x)
+        out = model(x, edge_index)
+        #out = model(x)
 
         y = torch.eye(num_classes).to(device)[_y].squeeze()
 
@@ -138,8 +138,8 @@ model.eval()
 
 with torch.no_grad():
     for edge_index, x, _y in evaluation_set:
-        # out = model(x, edge_index)
-        out = model(x)
+        out = model(x, edge_index)
+        #out = model(x)
 
         y = torch.eye(num_classes).to(device)[_y].squeeze()
 

@@ -50,7 +50,7 @@ def generate_netlist_graph(nl_path, gl_path):
     # print(l)
 
     edge_index = torch.Tensor(g.edge_list).long().to(device)
-    x = torch.Tensor(g.node_features).float32().to(device)
+    x = torch.Tensor(g.node_features).float().to(device)
     y = torch.Tensor(l).long().to(device)
 
     return (edge_index, x, y)
