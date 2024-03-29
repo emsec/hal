@@ -5,6 +5,8 @@
 #include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_frame_lut.h"
 #include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_frame_init.h"
 #include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_frame_latch.h"
+#include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_frame_ram.h"
+#include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_frame_ram_port.h"
 
 #include "gui/gatelibrary_management/gatelibrary_label.h"
 #include "gui/gui_globals.h"
@@ -60,7 +62,9 @@ namespace hal
     //--------------------- boolean function frame ------------------
     GatelibraryFrameBoolean::GatelibraryFrameBoolean(QWidget* parent)
         : GatelibraryComponentFrame("Boolean Functions", parent)
-    {mLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);}
+    {
+        mLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
+    }
 
     void GatelibraryFrameBoolean::update(GateType *gt)
     {
@@ -95,8 +99,14 @@ namespace hal
     GateLibraryTabGeneral::GateLibraryTabGeneral(QWidget* parent) : GateLibraryTabInterface(parent)
     {
         QVBoxLayout* topLayout = new QVBoxLayout(this);
-        QScrollArea* scroll = new QScrollArea(this); // add scrollbar if needed
-        QVBoxLayout* layout = new QVBoxLayout(scroll);
+
+        //QScrollArea* scroll = new QScrollArea(this); // add scrollbar if needed
+        //QVBoxLayout* layout = new QVBoxLayout(scroll);
+
+        QScrollArea* scroll = new QScrollArea();
+        QVBoxLayout* layout = new QVBoxLayout();
+        QFrame* content = new QFrame();
+
 
         mGeneralFrame = new GatelibraryFrameGeneral(this);
         layout->addWidget(mGeneralFrame);
@@ -125,7 +135,22 @@ namespace hal
         layout->addWidget(mLatchFrame);
         mLatchFrame->hide();
 
+        mRAMFrame = new GateLibraryFrameRAM(this);
+        layout->addWidget(mRAMFrame);
+        mRAMFrame->hide();
+
+        mRAMPortFrame = new GateLibraryFrameRAMPort(this);
+        layout->addWidget(mRAMPortFrame);
+        mRAMPortFrame->hide();
+
+        scroll->setWidgetResizable(true);
+
+        content->setLayout(layout);
         topLayout->addWidget(scroll);
+        scroll->setWidget(content);
+
+
+        //topLayout->addWidget(scroll);
     }
 
     void GateLibraryTabGeneral::update(GateType* gt)
@@ -139,6 +164,8 @@ namespace hal
             mInitFrame->hide();
             mBooleanFrame->hide();
             mLatchFrame->hide();
+            mRAMFrame->hide();
+            mRAMPortFrame->hide();
             return;
         }
 
@@ -148,5 +175,7 @@ namespace hal
         mInitFrame->update(gt);
         mBooleanFrame->update(gt);
         mLatchFrame->update(gt);
+        mRAMFrame->update(gt);
+        mRAMPortFrame->update(gt);
     }
 }

@@ -25,70 +25,30 @@
 
 #pragma once
 
-#include "gatelibrary_tab_interface.h"
-#include "hal_core/defines.h"
-#include "hal_core/netlist/gate_library/gate_type.h"
 #include "gui/gatelibrary_management/gatelibrary_frames/gatelibrary_component_frame.h"
+
 #include <QFormLayout>
 #include <QLabel>
-#include <QFrame>
 
 namespace hal
 {
-    class GateLibraryLabel;
-    class GatelibraryFrameFF;
-    class GatelibraryFrameInit;
-    class GatelibraryFrameState;
-    class GatelibraryFrameLut;
-    class GateLibraryFrameLatch;
-    class GateLibraryFrameRAM;
-    class GateLibraryFrameRAMPort;
-
-    class GatelibraryFrameGeneral : public GatelibraryComponentFrame
-    {
-        Q_OBJECT
-    public:
-        GatelibraryFrameGeneral(QWidget* parent = nullptr);
-        void update(GateType *gt) override;
-
-    private:
-        GateLibraryLabel* mNameLabel;
-        GateLibraryLabel* mIdLabel;
-        GateLibraryLabel* mPropertiesLabel;
-    };
-
-    class GatelibraryFrameBoolean : public GatelibraryComponentFrame
-    {
-        Q_OBJECT
-    public:
-        GatelibraryFrameBoolean(QWidget* parent = nullptr);
-        void update(GateType *gt) override;
-    };
-
-    /**
-     * Widget which shows general information of a given gate
-     */
-    class GateLibraryTabGeneral : public GateLibraryTabInterface
+    class GateLibraryFrameRAMPort : public GatelibraryComponentFrame
     {
         Q_OBJECT
 
     public:
-        GateLibraryTabGeneral(QWidget* parent = nullptr);
-
+        GateLibraryFrameRAMPort(QWidget* parent = nullptr);
 
         void update(GateType* gt) override;
 
-
     private:
-        GatelibraryFrameGeneral* mGeneralFrame;
-        GatelibraryFrameFF*      mFlipflopFrame;
-        GatelibraryFrameState*   mStateFrame;
-        GatelibraryFrameLut*     mLutFrame;
-        GatelibraryFrameInit*    mInitFrame;
-        GatelibraryFrameBoolean* mBooleanFrame;
-        GateLibraryFrameLatch*   mLatchFrame;
-        GateLibraryFrameRAM*     mRAMFrame;
-        GateLibraryFrameRAMPort* mRAMPortFrame;
+        QLabel* mDataGroup;
+        QLabel* mAddressGroup;
+        QLabel* mClockFunction;
+        QLabel* mEnableFunciton;
+        QLabel* mIsWritePort;
     };
 
 }
+
+

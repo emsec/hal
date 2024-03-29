@@ -10,5 +10,7 @@ namespace hal {
         setLineWidth(2);
         mLayout = new QFormLayout(this);
         mLayout->addRow(new GateLibraryLabel(false, mTitle, this));
+
+        //mLayout->setSizeConstraint(QLayout::SetMinimumSize);
     }
 }
