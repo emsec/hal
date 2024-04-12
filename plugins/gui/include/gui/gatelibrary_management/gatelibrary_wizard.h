@@ -30,6 +30,10 @@
 #include "gui/gatelibrary_management/gatelibrary_pages/pins_wizardpage.h"
 #include "gui/gatelibrary_management/gatelibrary_pages/flipflop_wizardpage.h"
 #include "gui/gatelibrary_management/gatelibrary_pages/bool_wizardpage.h"
+#include "gui/gatelibrary_management/gatelibrary_pages/latch_wizardpage.h"
+#include "gui/gatelibrary_management/gatelibrary_pages/lut_wizardpage.h"
+#include "gui/gatelibrary_management/gatelibrary_pages/init_wizardpage.h"
+#include "gui/gatelibrary_management/gatelibrary_pages/ram_wizardpage.h"
 
 #include <QWizard>
 #include <QWizardPage>
@@ -41,11 +45,14 @@ namespace hal
     public:
         enum PAGE
         {
-            GeneralInfo = 0,
-            Pin = 1,
-            FlipFlop = 2,
-            BooleanFunction = 3,
-            None = -1
+            GeneralInfo,
+            Pin,
+            FlipFlop,
+            Latch,
+            LUT,
+            RAM,
+            Init,
+            BooleanFunction
         };
 
         GateLibraryWizard(const GateLibrary* gateLibrary, GateType* gateType, QWidget* parent = nullptr);
@@ -57,15 +64,20 @@ namespace hal
         QStringList getProperties();
         void accept() override;
 
-        int getNextPageId(PAGE page);
-        void setPageOrder();
+        //int getNextPageId(PAGE page);
+        //void setPageOrder();
+
+        int nextId() const override;
     private:
         const GateLibrary* mGateLibrary;
         GateType* mGateType;
-        QMap<PAGE, PAGE>  mPageLookupTable;
         GeneralInfoWizardPage* generalInfoPage;
         PinsWizardPage* pinsPage;
         FlipFlopWizardPage* ffPage;
+        LatchWizardPage* latchPage;
+        LUTWizardPage* lutPage;
+        InitWizardPage* initPage;
+        RAMWizardPage* ramPage;
         BoolWizardPage* boolPage;
 
         QString mName;

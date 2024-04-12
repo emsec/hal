@@ -24,49 +24,28 @@
 // SOFTWARE.
 
 #pragma once
+#include "gui/gatelibrary_management/gatelibrary_pages/generalinfo_wizardpage.h"
 
-#include "hal_core/netlist/gate_library/enums/gate_type_property.h"
-#include "hal_core/netlist/gate_library/gate_library.h"
 
 #include <QWizardPage>
 #include <QGridLayout>
-#include <QLabel>
+#include <QTabWidget>
 #include <QLineEdit>
-#include <QListWidget>
-#include <QComboBox>
-#include <QPushButton>
+#include <QLabel>
 
 namespace hal {
-    class GeneralInfoWizardPage:public QWizardPage{
-        Q_OBJECT
+    class RAMWizardPage:public QWizardPage{
     public:
-        GeneralInfoWizardPage(const GateLibrary* gt, QWidget* parent = nullptr);
-        void setData(QString name, QStringList properties);
-        QString getName();
-        QStringList getProperties();
-        void setMode(bool edit);
-        bool validatePage() override;
+        RAMWizardPage(QWidget* parent = nullptr);
+        //void initializePage() override;
         //int nextId() const override;
-    public Q_SLOTS:
-        void addProperty();
-        void deleteProperty();
+        void setData(GateType* gate);
+
     private:
-        QWizard* mWizard;
         QGridLayout* mLayout;
-        QLabel* mLabelName;
-        QLabel* mLabelProperties;
-        QLabel* mLabelAddProperty;
 
-        QLineEdit* mName;
-        QListWidget* mProperties;
-        QComboBox* mAddProperty;
+        QLineEdit* mBitSize;
 
-        QPushButton* mDelBtn;
-        QPushButton* mAddBtn;
-
-        const GateLibrary* mGateLibrary;
-        bool mIsEdit;
-        QString gateInit;
-        //QStringList mPropertiesList;
+        QLabel* mLabBitSize;
     };
 }

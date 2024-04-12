@@ -39,7 +39,8 @@ namespace hal {
     public:
         FlipFlopWizardPage(QWidget* parent = nullptr);
         void initializePage() override;
-        int nextId() const override;
+        //int nextId() const override;
+        void setData(GateType* gate);
 
     private:
         QGridLayout* mLayout;
@@ -48,12 +49,14 @@ namespace hal {
         QLineEdit* mClock;
         QLineEdit* mNextState;
         QLineEdit* mAReset;
+        QLineEdit* mASet;
         QLineEdit* mIntState;
         QLineEdit* mNegIntState;
 
         QLabel* mLabClock;
         QLabel* mLabNextState;
         QLabel* mLabAReset;
+        QLabel* mLabASet;
         QLabel* mLabIntState;
         QLabel* mLabNegIntState;
     };

@@ -40,7 +40,7 @@ namespace hal {
     public:
         PinsWizardPage(QWidget* parent = nullptr);
         void setGateType(GateType* gate);
-        int nextId() const override;
+        //int nextId() const override;
         QList<PinModel::PINGROUP*> getPingroups();
 
     public Q_SLOTS:

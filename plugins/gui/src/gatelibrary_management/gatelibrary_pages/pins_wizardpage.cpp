@@ -39,13 +39,13 @@ namespace hal
         pinModel->handleDeleteItem(treeView->currentIndex());
     }
 
-    int PinsWizardPage::nextId() const
-    {
-        auto parentWizard = wizard();
-        if(!parentWizard)
-            return -1;
-        return static_cast<GateLibraryWizard*>(parentWizard)->getNextPageId(GateLibraryWizard::Pin);
-    }
+//    int PinsWizardPage::nextId() const
+//    {
+//        auto parentWizard = wizard();
+//        if(!parentWizard)
+//            return -1;
+//        return static_cast<GateLibraryWizard*>(parentWizard)->getNextPageId(GateLibraryWizard::Pin);
+//    }
 
     QList<PinModel::PINGROUP*> PinsWizardPage::getPingroups(){
         return mPinModel->getPinGroups();

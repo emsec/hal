@@ -10,11 +10,11 @@ namespace hal
         setSubTitle("TODO: subtitle");
         mLayout = new QGridLayout(this);
     }
-    int BoolWizardPage::nextId() const
-    {
-        auto parentWizard = wizard();
-        if(!parentWizard)
-            return -1;
-        return static_cast<GateLibraryWizard*>(parentWizard)->getNextPageId(GateLibraryWizard::BooleanFunction);
-    }
+//    int BoolWizardPage::nextId() const
+//    {
+//        auto parentWizard = wizard();
+//        if(!parentWizard)
+//            return -1;
+//        return static_cast<GateLibraryWizard*>(parentWizard)->getNextPageId(GateLibraryWizard::BooleanFunction);
+//    }
 }
