@@ -38,5 +38,7 @@
 !xilinx_toolbox/**/*
 !z3_utils*
 !z3_utils/**/*
+!netlist_modifier*
+!netlist_modifier/**/*
 !CMakeLists.txt
 !.gitignore
