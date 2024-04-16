@@ -55,7 +55,7 @@ This repository contains a selection of curated plugins:
 A comprehensive documentation of HAL's features from a user perspective is available in our [Wiki](https://github.com/emsec/hal/wiki). In addition, we provide a full [C++ API](https://emsec.github.io/hal/doc/) and [Python API](https://emsec.github.io/hal/pydoc/) documentation.
 
 ## Slack, Contact and Support
-For all kinds of inquiries, please contact us using our dedicated e-mail address: [hal@mpi-sp.org](mailto:hal@mpi-sp.org).
+For all kinds of inquiries, please contact us using our dedicated e-mail address: ![email address image](https://raw.githubusercontent.com/emsec/hal/master/.github/email-address-image.gif "Mail")
 
 <a name="build-instructions"></a>
 # Build Instructions 
