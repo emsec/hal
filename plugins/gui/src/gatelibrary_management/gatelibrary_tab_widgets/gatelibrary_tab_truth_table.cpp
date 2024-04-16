@@ -118,7 +118,7 @@ namespace hal
         {
             header << "last\n" + qx;
             stateHash[qx] = QPair<int,int>(columnNumber,columnNumber+tempQ.size());
-            ++columnNumber;
+            inputColHash[qx] = columnNumber++;
         }
         for (const QString& qx : tempQ)
         {
