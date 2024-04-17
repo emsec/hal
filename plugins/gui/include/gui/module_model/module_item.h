@@ -80,13 +80,6 @@ namespace hal
         QVariant getData(int column) const override;
 
         /**
-         * Gets the index of this ModuleItem in the list of children ModuleItems of its parent.
-         *
-         * @returns the index in the parents ModuleItem children list
-         */
-        int row() const;
-
-        /**
          * Gets the name of the netlist item this ModuleItem represents.
          *
          * @returns the netlist items name

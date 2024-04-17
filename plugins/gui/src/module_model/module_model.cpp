@@ -270,7 +270,7 @@ namespace hal
 
         QModelIndex index = getIndexFromItem(parentItem);
 
-        int row = itemToRemove->row();
+        int row = itemToRemove->getOwnRow();
 
         mIsModifying = true;
         beginRemoveRows(index, row, row);
@@ -648,7 +648,7 @@ namespace hal
                     moduleItemToBeMoved = submItem;
                     QModelIndex index = getIndexFromItem(oldParentItem);
 
-                    int row = submItem->row();
+                    int row = submItem->getOwnRow();
 
                     mIsModifying = true;
                     beginRemoveRows(index, row, row);
