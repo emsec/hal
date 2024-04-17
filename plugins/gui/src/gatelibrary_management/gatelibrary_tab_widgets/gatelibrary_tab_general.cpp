@@ -99,58 +99,51 @@ namespace hal
     GateLibraryTabGeneral::GateLibraryTabGeneral(QWidget* parent) : GateLibraryTabInterface(parent)
     {
         QVBoxLayout* topLayout = new QVBoxLayout(this);
+        QScrollArea* scroll = new QScrollArea(this); // add scrollbar if needed
 
-        //QScrollArea* scroll = new QScrollArea(this); // add scrollbar if needed
-        //QVBoxLayout* layout = new QVBoxLayout(scroll);
+        QFrame* content = new QFrame(scroll);
+        QVBoxLayout* layout = new QVBoxLayout(content);
 
-        QScrollArea* scroll = new QScrollArea();
-        QVBoxLayout* layout = new QVBoxLayout();
-        QFrame* content = new QFrame();
-
-
-        mGeneralFrame = new GatelibraryFrameGeneral(this);
+        mGeneralFrame = new GatelibraryFrameGeneral(content);
         layout->addWidget(mGeneralFrame);
 
-        mFlipflopFrame = new GatelibraryFrameFF(this);
+        mFlipflopFrame = new GatelibraryFrameFF(content);
         layout->addWidget(mFlipflopFrame);
         mFlipflopFrame->hide();
 
-        mStateFrame = new GatelibraryFrameState(this);
+        mStateFrame = new GatelibraryFrameState(content);
         layout->addWidget(mStateFrame);
         mStateFrame->hide();
 
-        mLutFrame = new GatelibraryFrameLut(this);
+        mLutFrame = new GatelibraryFrameLut(content);
         layout->addWidget(mLutFrame);
         mLutFrame->hide();
 
-        mInitFrame = new GatelibraryFrameInit(this);
+        mInitFrame = new GatelibraryFrameInit(content);
         layout->addWidget(mInitFrame);
         mInitFrame->hide();
 
-        mBooleanFrame = new GatelibraryFrameBoolean(this);
+        mBooleanFrame = new GatelibraryFrameBoolean(content);
         layout->addWidget(mBooleanFrame);
         mBooleanFrame->hide();
 
-        mLatchFrame = new GateLibraryFrameLatch(this);
+        mLatchFrame = new GateLibraryFrameLatch(content);
         layout->addWidget(mLatchFrame);
         mLatchFrame->hide();
 
-        mRAMFrame = new GateLibraryFrameRAM(this);
+        mRAMFrame = new GateLibraryFrameRAM(content);
         layout->addWidget(mRAMFrame);
         mRAMFrame->hide();
 
-        mRAMPortFrame = new GateLibraryFrameRAMPort(this);
+        mRAMPortFrame = new GateLibraryFrameRAMPort(content);
         layout->addWidget(mRAMPortFrame);
         mRAMPortFrame->hide();
 
+        scroll->setWidget(content);
         scroll->setWidgetResizable(true);
 
         content->setLayout(layout);
         topLayout->addWidget(scroll);
-        scroll->setWidget(content);
-
-
-        //topLayout->addWidget(scroll);
     }
 
     void GateLibraryTabGeneral::update(GateType* gt)
