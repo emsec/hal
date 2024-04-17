@@ -60,7 +60,7 @@ namespace hal
         if(!clickedIndex.isValid())
             return;
 
-        ModuleItem* clickedItem = dynamic_cast<ModuleItem*>(mModel->getItemFromIndex(clickedIndex));
+        ModuleItem* clickedItem = dynamic_cast<ModuleItem*>(mModel->getItemFromIndex(mProxyModel->mapToSource(clickedIndex)));
         int id = clickedItem->id();
         ModuleItem::TreeItemType type = clickedItem->getType();
         QMenu menu;
