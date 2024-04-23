@@ -3,6 +3,7 @@
 #include <boost/spirit/home/x3.hpp>
 #include <mutex>
 #include <numeric>
+#include <sstream>
 
 namespace hal
 {
