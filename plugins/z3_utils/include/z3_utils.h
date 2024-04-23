@@ -53,6 +53,15 @@ namespace hal
         z3::expr from_bf(const BooleanFunction& bf, z3::context& context, const std::map<std::string, z3::expr>& var2expr = {});
 
         /**
+         * Creates a z3 expr from a binary representation of a value of arbitrary size.
+         * 
+         * @param[in] ctx - The context where the new expression is created in.
+         * @param[in] bit_string - The binary string 
+         * @returns A z3 expression equivalent to the Boolean function.
+         */
+        Result<z3::expr> value_from_binary_string(z3::context& context, const std::string& bit_string);
+
+        /**
          * Translates a z3 expression into an equivalent hal Boolean function.
          * 
          * @param[in] e - The expression to translate.
@@ -128,6 +137,13 @@ namespace hal
          * @return The the z3 expression representations of combined Boolean functions of the subgraph on success, an error otherwise.
          */
         Result<std::vector<z3::expr>> get_subgraph_z3_functions(const std::vector<Gate*>& subgraph_gates, const std::vector<Net*>& subgraph_outputs, z3::context& ctx);
+
+        /**
+         * TODO document
+        */
+        Result<z3::expr> simplify_local(const z3::expr& e, std::unordered_map<u32, z3::expr>& cache);
+
+        Result<z3::expr> simplify_local(const z3::expr& e, const bool check=false);
 
         /**
          * Translates the expr to another context.

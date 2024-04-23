@@ -1954,6 +1954,28 @@ namespace hal
         return OK(all_modules);
     }
 
+    Result<std::vector<Net*>> NetlistPreprocessingPlugin::create_nets_at_unconnected_pins(Netlist* nl)
+    {
+        std::vector<Net*> created_nets;
+
+        for (const auto& g : nl->get_gates())
+        {
+            for (const auto& p : g->get_type()->get_output_pins())
+            {
+                if (g->get_fan_out_net(p) == nullptr)
+                {
+                    auto new_net = nl->create_net("TEMP");
+                    new_net->set_name("HAL_UNCONNECTED_" + std::to_string(new_net->get_id()));
+                    new_net->add_source(g, p);
+
+                    created_nets.push_back(new_net);
+                }
+            }
+        }
+
+        return OK(created_nets);
+    }
+
     Result<u32> NetlistPreprocessingPlugin::unify_ff_outputs(Netlist* nl, const std::vector<Gate*>& ffs, GateType* inverter_type)
     {
         if (nl == nullptr)

@@ -406,7 +406,8 @@ namespace hal
                 else
                 {
                     // unconnected pin of a group with at least one connection
-                    res_stream << "1'bz";
+                    // res_stream << "1'bz";
+                    res_stream << "HAL_UNUSED_SIGNAL";
                 }
             }
 

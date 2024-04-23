@@ -26,6 +26,14 @@ namespace hal
         static Result<u32> split_luts(Netlist* nl);
 
         /**
+         * Removes all shift register primitives and replaces them with equivalent chains of singular flip flops.
+         * 
+         * @param[in] nl - The netlist to operate on. 
+         * @return The number of removed gates on success, an error otherwise.
+         */
+        static Result<u32> split_shift_registers(Netlist* nl);
+
+        /**
          * Parses an .xdc file and extracts the position LOC and BEL data.
          * Afterwards translates the found LOC and BEL data into integer coordinates.
          * 

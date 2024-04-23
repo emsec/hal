@@ -351,6 +351,7 @@ namespace hal
                 }
                 return OK(p2);
             }
+
             /**
              * Helper function to simplify a constant CONCAT operation.
              * 
@@ -373,6 +374,7 @@ namespace hal
                 auto simplified_val = res.get() << p1.sort().bv_size() + res2.get();
                 return OK(bitwuzla::mk_bv_value_uint64(bitwuzla::mk_bv_sort(p0.sort().bv_size()), simplified_val));
             }
+
             Result<bitwuzla::Term> EQUAL(const bitwuzla::Term& p0, const bitwuzla::Term& p1)
             {
                 const auto res = utils::wrapped_stoull(p0.value<std::string>(), 2);
@@ -398,6 +400,7 @@ namespace hal
                 }
                 return OK(bitwuzla::mk_bv_value_uint64(bitwuzla::mk_bv_sort(p.sort().bv_size() + size), res.get()));
             }
+
             Result<bitwuzla::Term> BV_SIGN_EXTEND(const bitwuzla::Term& p, const u64 size)
             {
                 u64 res = 0;
@@ -415,6 +418,7 @@ namespace hal
                 }
                 return OK(bitwuzla::mk_bv_value_uint64(bitwuzla::mk_bv_sort(p.sort().bv_size() + size), res));
             }
+
             Result<bitwuzla::Term> BV_EXTRACT(const bitwuzla::Term& p, const u64 start, const u64 end)
             {
                 std::string new_str = p.value<std::string>();
@@ -459,6 +463,7 @@ namespace hal
                 return result;
             }
         }    // namespace
+
         Result<bitwuzla::Term> SymbolicExecution::evaluate(const bitwuzla::Term& function, std::map<u64, bitwuzla::Term> id_to_term) const
         {
             //std::map<u64, bitwuzla::Term> id_to_term;

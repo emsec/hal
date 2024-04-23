@@ -76,6 +76,29 @@ namespace hal
         )");
 
         py_xilinx_toolbox.def_static(
+            "split_shift_registers",
+            [](Netlist* nl) -> std::optional<u32> {
+                auto res = XilinxToolboxPlugin::split_shift_registers(nl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            R"(
+            Removes all shift register primitives and replaces them with equivalent chains of singular flip flops.
+
+            :param hal_py.Netlist nl: The netlist to operate on. 
+            :returns: The number of removed gates on success, None otherwise.
+            :rtype: int or None
+        )");
+
+        py_xilinx_toolbox.def_static(
             "parse_xdc_file",
             [](Netlist* nl, const std::filesystem::path& xdc_file) -> std::optional<bool> {
                 auto res = XilinxToolboxPlugin::parse_xdc_file(nl, xdc_file);

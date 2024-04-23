@@ -252,6 +252,9 @@ namespace hal {
                 if (!mSaleae) abbrev = QString::number(icol);
                 QString name;
                 u32 id = header.trimmed().toUInt(&ok);
+                // std::cout << "Header: " << header.trimmed() << std::endl;
+                std::cout << "ID: " << id << std::endl;
+
                 if (ok && id)
                     name = QString("net[%1]").arg(id);
                 else
@@ -264,7 +267,7 @@ namespace hal {
                 }
                 if (!name.isEmpty() || id)
                 {
-                    SaleaeOutputFile* sof = mSaleaeWriter->add_or_replace_waveform(name.toStdString(),0);
+                    SaleaeOutputFile* sof = mSaleaeWriter->add_or_replace_waveform(name.toStdString(), id);
                     if (!sof) return false;
                     mSaleaeFiles.insert(abbrev,sof);
                 }
@@ -493,6 +496,12 @@ namespace hal {
         for (const Net* n : onlyNets)
             netNames.insert(QString::fromStdString(n->get_name()),n);
 
+        // std::cout << "Net Names: " << std::endl;
+        // for (const auto& [name, n] : netNames.toStdMap())
+        // {
+        //     std::cout << name.toStdString() << ": " << n->get_name() << std::endl;
+        // }
+
         QRegularExpression reHead("\\$(\\w*) (.*)\\$end");
         QRegularExpression reWire("wire\\s+(\\d+) ([^ ]+) (.*) $");
 
@@ -539,9 +548,18 @@ namespace hal {
                     {
                         QRegularExpressionMatch mWire = reWire.match(mHead.captured(2));
                         bool ok;
-                        QString wireName   = mWire.captured(3);
+                        QString wireName = mWire.captured(3).trimmed();
+                        wireName.remove(QChar('\\'), Qt::CaseInsensitive);
+
                         const Net* net = netNames.value(wireName);
-                        if (!netNames.isEmpty() && !net) continue; // net not found in given name list
+                        //std::cout << "Found " << wireName.toStdString() << " and corresponding net " << net << std::endl;
+
+                        if (!netNames.isEmpty() && !net)
+                        {
+                            //std::cout << "Did not find net for name " << wireName.toStdString() << std::endl;
+                            continue;    // net not found in given name list
+                        }
+
                         if (mAbbrevByName.contains(wireName))
                         {
                             if (mErrorCount[7]++ < maxErrorMessages)
@@ -549,6 +567,7 @@ namespace hal {
                             continue;
                         }
                         QString wireAbbrev = mWire.captured(2);
+                        //std::cout << "Found abbrev: " << wireAbbrev.toStdString() << std::endl;
                         mAbbrevByName.insert(wireName,wireAbbrev);
                         int     wireBits   = mWire.captured(1).toUInt(&ok);
                         if (!ok) wireBits = 1;

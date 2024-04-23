@@ -1223,7 +1223,7 @@ namespace hal
                 m->set_pin_name(pin, pin_name);
             }
 
-            m->set_pin_group_name(pg, pg->get_name() + "_ordered");
+            // m->set_pin_group_name(pg, pg->get_name() + "_ordered");
         }
 
         return OK({});

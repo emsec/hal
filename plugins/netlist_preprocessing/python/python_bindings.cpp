@@ -649,6 +649,22 @@ namespace hal
             )");
 
         py_netlist_preprocessing.def_static(
+            "create_nets_at_unconnected_pins",
+            [](Netlist* nl) -> std::vector<Net*> {
+                auto res = NetlistPreprocessingPlugin::create_nets_at_unconnected_pins(nl);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return {};
+                }
+            },
+            py::arg("nl"));
+
+        py_netlist_preprocessing.def_static(
             "unify_ff_outputs",
             [](Netlist* nl, const std::vector<Gate*>& ffs = {}, GateType* inverter_type = nullptr) -> std::optional<u32> {
                 auto res = NetlistPreprocessingPlugin::unify_ff_outputs(nl, ffs, inverter_type);

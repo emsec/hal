@@ -285,6 +285,11 @@ namespace hal
         static Result<std::vector<Module*>> create_multi_bit_gate_modules(Netlist* nl, const std::map<std::string, std::map<std::string, std::vector<std::string>>>& concatenated_pin_groups);
 
         /**
+         * TODO: document
+        */
+        static Result<std::vector<Net*>> create_nets_at_unconnected_pins(Netlist* nl);
+
+        /**
          * Iterates all flip-flops of the netlist or specified by the user.
          * If a flip-flop has a `state` and a `neg_state` output, a new inverter gate is created and connected to the `state` output net as an additional destination.
          * Finally, the `neg_state` output net is disconnected from the `neg_state` pin and re-connected to the new inverter gate's output. 
