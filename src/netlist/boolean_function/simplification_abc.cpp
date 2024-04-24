@@ -5,6 +5,7 @@
 #include <boost/spirit/home/x3.hpp>
 #include <mutex>
 #include <string.h>
+#include <sstream>
 
 extern "C" {
 ////////////////////////////////////////////////////////////////////////////
