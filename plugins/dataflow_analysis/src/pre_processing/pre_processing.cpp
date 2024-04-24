@@ -172,6 +172,7 @@ namespace hal
                             {
                                 if (const auto group_it = net_to_group_index.find(current); group_it != net_to_group_index.end())
                                 {
+                                    std::get<1>(suc_cache[current]).insert(group_it->second);
                                     for (const auto* n : previous)
                                     {
                                         std::get<1>(suc_cache[n]).insert(group_it->second);
@@ -257,6 +258,7 @@ namespace hal
                             {
                                 if (const auto group_it = net_to_group_index.find(current); group_it != net_to_group_index.end())
                                 {
+                                    pred_cache[current].insert(group_it->second);
                                     for (const auto* n : previous)
                                     {
                                         pred_cache[n].insert(group_it->second);
