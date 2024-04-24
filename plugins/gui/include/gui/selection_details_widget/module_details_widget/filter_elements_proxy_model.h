@@ -58,7 +58,7 @@ namespace hal
         bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 
     private:
-        bool mFilterNets = false;
-        bool mFilterGates = false;
+        bool mFilterNets;
+        bool mFilterGates;
     };
 }

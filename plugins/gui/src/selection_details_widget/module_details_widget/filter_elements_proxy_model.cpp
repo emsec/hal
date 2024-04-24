@@ -5,7 +5,7 @@
 
 namespace hal
 {
-    FilterElementsProxyModel::FilterElementsProxyModel(QObject* parent)
+    FilterElementsProxyModel::FilterElementsProxyModel(QObject* parent) : mFilterNets(false), mFilterGates(false)
     {}
 
     void FilterElementsProxyModel::setFilterNets(bool filterNets){
