@@ -8,15 +8,15 @@ set (IGRAPH_INCLUDES  "${IGRAPH_INSTALL}/include")
 set (IGRAPH_LIB       "${IGRAPH_INSTALL}/lib/libigraph${CMAKE_SHARED_LIBRARY_SUFFIX}")
 set (HAVE_IGRAPH TRUE)
   
-message("-- IGRAPH version 0.9.10 : download and build libigraph${CMAKE_SHARED_LIBRARY_SUFFIX} in ${IGRAPH_BASE}")
+message("-- IGRAPH version 0.10.11 : download and build libigraph${CMAKE_SHARED_LIBRARY_SUFFIX} in ${IGRAPH_BASE}")
 
-ExternalProject_Add(igraph_0_9
+ExternalProject_Add(igraph_0_10
   PREFIX "${IGRAPH_INSTALL}"
-  URL "https://github.com/igraph/igraph/releases/download/0.9.10/igraph-0.9.10.tar.gz"
+  URL "https://github.com/igraph/igraph/releases/download/0.10.11/igraph-0.10.11.tar.gz"
   SOURCE_DIR "${IGRAPH_DOWNLOAD}"
   CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${IGRAPH_INSTALL}" "-DBUILD_SHARED_LIBS=ON" "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}" "-Wno-deprecated" "-DIGRAPH_VERSION=0.9.10"
   BINARY_DIR "${IGRAPH_BUILD}"
-  PATCH_COMMAND patch -p2 -u -i ${CMAKE_CURRENT_SOURCE_DIR}/patch.txt
+  PATCH_COMMAND echo PATCH 
   INSTALL_DIR "${IGRAPH_INSTALL}"
   BUILD_BYPRODUCTS "${IGRAPH_LIB}"
   )
@@ -29,7 +29,7 @@ set_target_properties ( igraph::igraph PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${IGRAPH_INCLUDES}
 )
 
-add_dependencies ( igraph::igraph igraph_0_9 )
+add_dependencies ( igraph::igraph igraph_0_10 )
 
 mark_as_advanced (
   HAVE_IGRAPH
