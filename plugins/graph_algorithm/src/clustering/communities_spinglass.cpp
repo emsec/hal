@@ -26,18 +26,18 @@ namespace hal
 
         
         igraph_real_t modularity, temperature;
-        igraph_vector_t membership, csize;
+        igraph_vector_int_t membership, csize;
 
-        igraph_vector_init(&membership, 0);
-        igraph_vector_init(&csize, 0);
+        igraph_vector_int_init(&membership, 0);
+        igraph_vector_int_init(&csize, 0);
         igraph_community_spinglass(&graph,
-                                   0, /* no weights */
+                                   nullptr, /* no weights */
                                    &modularity,
                                    &temperature,
                                    &membership,
                                    &csize,
-                                   (igraph_integer_t)spins, /* no of spins */
-                                   0,                       /* parallel update */
+                                   spins, /* no of spins */
+                                   false,                       /* parallel update */
                                    1.0,                     /* start temperature */
                                    0.01,                    /* stop temperature */
                                    0.99,                    /* cooling factor */
@@ -51,17 +51,17 @@ namespace hal
 
         log("\tTemperature: {}", temperature);
         log("\tCluster sizes: ");
-        for (long int i = 0; i < igraph_vector_size(&csize); i++)
+        for (igraph_integer_t i = 0; i < igraph_vector_int_size(&csize); i++)
         {
             log("\t\t{}", (long int)VECTOR(csize)[i]);
         }
 
         // map back to HAL structures
-        auto community_sets = get_memberships_for_hal(&graph, membership, vertex_to_gate);
+        auto community_sets = get_memberships_for_hal(&graph, &membership, vertex_to_gate);
 
         igraph_destroy(&graph);
-        igraph_vector_destroy(&membership);
-        igraph_vector_destroy(&csize);
+        igraph_vector_int_destroy(&membership);
+        igraph_vector_int_destroy(&csize);
 
         return community_sets;
     }

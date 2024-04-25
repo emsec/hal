@@ -68,8 +68,8 @@ namespace hal
         }
 
         /* transform all nets to igraph_real_t */
-        igraph_real_t* edges     = new igraph_real_t[edge_counter];
-        u32 edge_vertice_counter = 0;
+        igraph_integer_t* edges     = new igraph_integer_t[edge_counter];
+        u32 edge_vertex_counter = 0;
         for (auto net : nl->get_nets())
         {
             assert(net->get_sources().size() == 1);
@@ -83,40 +83,35 @@ namespace hal
                 if (successor->get_gate() == nullptr)
                     continue;
                 auto successor_id             = nl_igraph_id_match[successor->get_gate()->get_id()];
-                edges[edge_vertice_counter++] = (igraph_real_t)predecessor_id;
-                edges[edge_vertice_counter++] = (igraph_real_t)successor_id;
+                edges[edge_vertex_counter++] = predecessor_id;
+                edges[edge_vertex_counter++] = successor_id;
             }
         }
 
         /* create and add edges to the graph */
         igraph_t graph;
-        igraph_vector_t netlist_edges;
-        igraph_vector_init_copy(&netlist_edges, edges, edge_counter);
+        igraph_vector_int_t netlist_edges;
+        igraph_vector_int_init_array(&netlist_edges, edges, edge_counter);
         delete[] edges;
         igraph_create(&graph, &netlist_edges, nl->get_gates().size(), IGRAPH_UNDIRECTED);
-        igraph_vector_destroy(&netlist_edges);
+        igraph_vector_int_destroy(&netlist_edges);
 
         /* remove double edges */
         igraph_simplify(&graph, true, false, 0);
 
         /* Louvain method without weights */
-        igraph_vector_t membership, modularity;
-        igraph_matrix_t merges;
-        igraph_vector_init(&membership, 1);
-        igraph_vector_init(&modularity, 1);
-        igraph_matrix_init(&merges, 1, 1);
-        igraph_community_fastgreedy(&graph, nullptr, &merges, &modularity, &membership);
-        igraph_vector_destroy(&modularity);
-        igraph_matrix_destroy(&merges);
+        igraph_vector_int_t membership;
+        igraph_vector_int_init(&membership, 0);
+        igraph_community_fastgreedy(&graph, nullptr, nullptr, nullptr, &membership);
         igraph_destroy(&graph);
 
         /* group gates by community membership */
         std::map<int, std::set<Gate*>> community_sets;
-        for (int i = 0; i < igraph_vector_size(&membership); i++)
+        for (igraph_integer_t i = 0; i < igraph_vector_int_size(&membership); i++)
         {
-            community_sets[(int)VECTOR(membership)[i]].insert(nl->get_gate_by_id(igraph_nl_id_match[i]));
+            community_sets[VECTOR(membership)[i]].insert(nl->get_gate_by_id(igraph_nl_id_match[i]));
         }
-        igraph_vector_destroy(&membership);
+        igraph_vector_int_destroy(&membership);
 
         return community_sets;
     }
