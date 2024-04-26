@@ -357,6 +357,18 @@ namespace hal
             replace_gate(Gate* gate, GateType* target_type, std::map<GatePin*, GatePin*> pin_map);
 
         /**
+         * Identify carry chains in a given netlist. The user has to provide the input pin of the carry
+         * gates and output pin that will go into the subsequent gate.
+         * Note that this function relies on having annotated carry gates in the netlist to work.
+         * 
+         * @param[in] nl - The netlist to detect the carry chains in.
+         * @param[in] input_pin - The input pin through which the carries must be connected.
+         * @param[in] output_pin - The output pin through which the carries must be connected.
+         * @returns A vector of vector of gates that form a chain on success, an error otherwise.
+         */
+        CORE_API Result<std::vector<std::vector<Gate*>>> find_carry_chains(const Netlist* nl, const const std::string input_pins, const const std::string output_pins);
+
+        /**
          * Find a sequence of identical gates that are connected via the specified input and output pins.
          * The start gate may be any gate within a such a sequence, it is not required to be the first or the last gate.
          * If input and/or output pins are specified, the gates must be connected through one of the input pins and/or one of the output pins.
@@ -365,7 +377,6 @@ namespace hal
          * @param[in] start_gate - The gate at which to start the chain detection.
          * @param[in] input_pins - The input pins through which the gates must be connected. Defaults to an empty vector.
          * @param[in] output_pins - The output pins through which the gates must be connected. Defaults to an empty vector.
-         * @param[in] filter - An optional filter function to be evaluated on each gate.
          * @returns A vector of gates that form a chain on success, an error otherwise.
          */
         CORE_API Result<std::vector<Gate*>> get_gate_chain(Gate* start_gate,

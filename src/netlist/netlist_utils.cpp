@@ -336,7 +336,7 @@ namespace hal
             {
                 if (std::find(allowed_pin_types.begin(), allowed_pin_types.end(), endpoint->get_pin()->get_type()) != allowed_pin_types.end() || allowed_pin_types.empty())
                 {
-                    auto n = endpoint->get_net();
+                    auto n   = endpoint->get_net();
                     auto suc = get_next_sequential_gates(n, get_successors, allowed_pin_types, cache);
                     found_ffs.insert(found_ffs.end(), suc.begin(), suc.end());
                 }
@@ -829,6 +829,96 @@ namespace hal
             {
                 return ERR(res.get_error());
             }
+        }
+
+        Result<std::vector<std::vector<Gate*>>> find_carry_chains(const Netlist* nl, const std::string input_pin, const std::string output_pin)
+        {
+            if (input_pin.empty() || output_pin.empty())
+            {
+                return ERR("input or output pin is empty");
+            }
+
+            std::vector<std::vector<Gate*>> carry_chains;
+
+            // retrieve all carry gates
+            std::vector<Gate*> carry_gates  = nl->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::c_carry); });
+            std::set<Gate*> carry_gates_set = std::set<Gate*>(carry_gates.begin(), carry_gates.end());
+            if (carry_gates_set.empty())
+            {
+                return ERR("no carry gates in netlists");
+            }
+
+            // collect carry chains until all carry gates have been analyzed
+            while (!carry_gates_set.empty())
+            {
+                Gate* current_gate         = *carry_gates_set.begin();
+                const GateType* carry_type = current_gate->get_type();
+
+                auto input_pin_type = carry_type->get_pin_by_name(input_pin);
+                if (input_pin_type == nullptr)
+                {
+                    return ERR("could not get input pin type, is nullptr");
+                }
+
+                auto output_pin_type = carry_type->get_pin_by_name(output_pin);
+                if (output_pin_type == nullptr)
+                {
+                    return ERR("could not get output pin type, is nullptr");
+                }
+
+                // get carry chains by defining appropriate filter function
+                auto chain_res = netlist_utils::get_gate_chain(current_gate, {input_pin_type}, {output_pin_type});
+                if (chain_res.is_error())
+                {
+                    return ERR(chain_res.get_error());
+                }
+                std::vector<Gate*> carry_chain = chain_res.get();
+
+                // remove shift register gates from candidate set
+                for (Gate* g : carry_chain)
+                {
+                    carry_gates_set.erase(g);
+                }
+
+                // only consider carry chains with more than 2 gates for now
+                if (carry_chain.size() >= 2)
+                {
+                    log_debug("netlist_utils", "\tcarry_gate: {}", carry_chain.front()->get_name());
+                    carry_chains.push_back(carry_chain);
+                }
+            }
+
+            // check whether a carry chain is a subset of another one
+            std::vector<std::vector<Gate*>> filtered_carry_chains;
+            for (u32 i = 0; i < carry_chains.size(); i++)
+            {
+                auto& c_test             = carry_chains.at(i);
+                std::set<Gate*> test_set = {c_test.begin(), c_test.end()};
+
+                bool is_subset = false;
+                for (u32 j = 0; j < carry_chains.size(); j++)
+                {
+                    if (i == j)
+                    {
+                        continue;
+                    }
+
+                    auto& c_other             = carry_chains.at(j);
+                    std::set<Gate*> other_set = {c_other.begin(), c_other.end()};
+
+                    if (std::includes(other_set.begin(), other_set.end(), test_set.begin(), test_set.end()))
+                    {
+                        is_subset = true;
+                        break;
+                    }
+                }
+
+                if (!is_subset)
+                {
+                    filtered_carry_chains.push_back(c_test);
+                }
+            }
+            return OK(filtered_carry_chains);
         }
 
         Result<std::vector<Gate*>>

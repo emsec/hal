@@ -402,6 +402,37 @@ namespace hal
         )");
 
         py_netlist_utils.def(
+            "find_carry_chains",
+            [](const Netlist* nl, const std::string input_pin, const std::string output_pin)
+                -> std::vector<std::vector<Gate*>> {
+                auto res = netlist_utils::find_carry_chains(nl, input_pin, output_pin);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while detecting gate chain:\n{}", res.get_error().get());
+                    return {};
+                }
+            },
+            py::arg("nl"),
+            py::arg("input_pin")  = std::string(),
+            py::arg("output_pin") = std::string(),
+            R"(
+            Identify carry chains in a given netlist. The user has to provide the input pin of the carry
+            gates and output pin that will go into the subsequent gate.
+            Note that this function relies on having annotated carry gates in the netlist to work.
+         
+
+            :param hal_py.Netlist nl: The netlist to detect the carry chains in.
+            :param list[hal_py.GatePin] input_pin: The input through which the gates must be connected.
+            :param set[hal_py.GatePin] output_pin: The output through which the gates must be connected.
+            @returns A vector of vector of gates that form a chain on success, an error otherwise.
+            :rtype: list[list[hal_py.Gate]]
+        )");
+
+        py_netlist_utils.def(
             "get_gate_chain",
             [](Gate* start_gate, const std::vector<const GatePin*>& input_pins = {}, const std::vector<const GatePin*>& output_pins = {}, const std::function<bool(const Gate*)>& filter = nullptr)
                 -> std::vector<Gate*> {
