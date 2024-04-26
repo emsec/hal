@@ -40,5 +40,7 @@
 !z3_utils/**/*
 !netlist_modifier*
 !netlist_modifier/**/*
+!netlist_simulator_study*
+!netlist_simulator_study/**/*
 !CMakeLists.txt
 !.gitignore

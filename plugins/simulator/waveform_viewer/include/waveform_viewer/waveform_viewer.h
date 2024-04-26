@@ -94,7 +94,6 @@ namespace hal
         void handleSimulSettings();
         void handleOpenInputFile();
         void handleSaveWaveforms();
-        void handleRunSimulation();
         void handleAddResultWave();
         void handleToggleMaxZoom();
         void handleUndoZoomShift();
@@ -114,6 +113,7 @@ namespace hal
         void handleControllerAdded(u32 controllerId);
         void handleControllerRemoved(u32 controllerId);
         void handleParseComplete();
+        void handleRunSimulation();
         void displayStatusMessage(const QString& msg = QString());
         void closeEvent(QCloseEvent *event) override;
         void currentTabChanged(int inx);

@@ -317,6 +317,11 @@ public:
     bool run_simulation();
 
     /**
+     * Send signal to viewer to start simulation.
+     */
+    void emit_run_simulation();
+
+    /**
      * Import VCD file and convert content into SALEAE format
      * @param[in] filename the filename to read
      * @param[in] filter filter to select waveform data from file
@@ -466,6 +471,7 @@ Q_SIGNALS:
     void engineFinished(bool success);
     void parseComplete();
     void loadProgress(int percent);
+    void triggerRunSimulation();
 
 private:
     std::vector<const Net*> getFilterNets(FilterInputFlag filter) const;

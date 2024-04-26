@@ -79,6 +79,8 @@ namespace hal {
             {
                 connect(mController,&NetlistSimulatorController::parseComplete,vv,&WaveformViewer::handleParseComplete,Qt::QueuedConnection);
                 connect(mController,&NetlistSimulatorController::loadProgress,vv,&WaveformViewer::showProgress,Qt::QueuedConnection);
+                connect(mController,&NetlistSimulatorController::triggerRunSimulation,vv,&WaveformViewer::handleRunSimulation);
+                
                 connect(mGraphicsCanvas,&WaveGraphicsCanvas::undoStateChanged,vv,&WaveformViewer::testUndoEnable,Qt::QueuedConnection);
             }
         }
