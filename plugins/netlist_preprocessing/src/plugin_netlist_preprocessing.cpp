@@ -624,13 +624,13 @@ namespace hal
             const GateType* type;
             std::map<GatePin*, Net*> ordered_fan_in = {};
             std::set<Net*> unordered_fan_in         = {};
-            u8 trust_table_hw                       = 0;
+            u8 truth_table_hw                       = 0;
 
             bool operator<(const GateFingerprint& other) const
             {
                 return (other.type < type) || (other.type == type && other.ordered_fan_in < ordered_fan_in)
                        || (other.type == type && other.ordered_fan_in == ordered_fan_in && other.unordered_fan_in < unordered_fan_in)
-                       || (other.type == type && other.ordered_fan_in == ordered_fan_in && other.unordered_fan_in == unordered_fan_in && other.trust_table_hw < trust_table_hw);
+                       || (other.type == type && other.ordered_fan_in == ordered_fan_in && other.unordered_fan_in == unordered_fan_in && other.truth_table_hw < truth_table_hw);
             }
         };
 
@@ -681,9 +681,9 @@ namespace hal
                                 u8 tmp = std::toupper(c) - 0x30;
                                 if (tmp > 9)
                                 {
-                                    tmp -= 0x11;
+                                    tmp -= 0x7;
                                 }
-                                fingerprint.trust_table_hw += hw_map.at(tmp);
+                                fingerprint.truth_table_hw += hw_map.at(tmp);
                             }
                         }
                     }
