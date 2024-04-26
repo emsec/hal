@@ -366,7 +366,7 @@ namespace hal
          * @param[in] output_pin - The output pin through which the carries must be connected.
          * @returns A vector of vector of gates that form a chain on success, an error otherwise.
          */
-        CORE_API Result<std::vector<std::vector<Gate*>>> find_carry_chains(const Netlist* nl, const const std::string input_pins, const const std::string output_pins);
+        CORE_API Result<std::vector<std::vector<Gate*>>> find_carry_chains(const Netlist* nl, const std::string input_pins, const std::string output_pins);
 
         /**
          * Find a sequence of identical gates that are connected via the specified input and output pins.
