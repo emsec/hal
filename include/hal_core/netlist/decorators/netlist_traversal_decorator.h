@@ -31,6 +31,11 @@
 
 namespace hal
 {
+    /**
+     * A netlist decorator that provides functionality to traverse the associated netlist without making any modifications.
+     *
+     * @ingroup decorators
+     */
     class NETLIST_API NetlistTraversalDecorator
     {
     public:

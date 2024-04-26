@@ -33,8 +33,13 @@
  */
 
 /**
- * @defgroup pins Pins
+ * @defgroup decorators Decorators
  * @ingroup core
+ */
+
+/**
+ * @defgroup pins Pins
+ * @ingroup netlist
  */
 
 /**

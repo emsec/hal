@@ -4,7 +4,8 @@ namespace hal
 {
     void netlist_modification_decorator_init(py::module& m)
     {
-        py::class_<NetlistModificationDecorator> py_netlist_modification_decorator(m, "NetlistModificationDecorator", R"()");
+        py::class_<NetlistModificationDecorator> py_netlist_modification_decorator(
+            m, "NetlistModificationDecorator", R"(A netlist decorator that provides functionality to modify the associated netlist.)");
 
         py_netlist_modification_decorator.def(py::init<Netlist&>(), py::arg("netlist"), R"(
             Construct new NetlistModificationDecorator object.

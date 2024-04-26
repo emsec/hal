@@ -31,6 +31,11 @@
 
 namespace hal
 {
+    /**
+     * A net decorator that provides functionality to translate between nets and Boolean function variables.
+     *
+     * @ingroup decorators
+     */
     class NETLIST_API BooleanFunctionNetDecorator
     {
     public:

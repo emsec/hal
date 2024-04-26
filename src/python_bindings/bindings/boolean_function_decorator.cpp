@@ -4,7 +4,8 @@ namespace hal
 {
     void boolean_function_decorator_init(py::module& m)
     {
-        py::class_<BooleanFunctionDecorator> py_boolean_function_decorator(m, "BooleanFunctionDecorator", R"()");
+        py::class_<BooleanFunctionDecorator> py_boolean_function_decorator(
+            m, "BooleanFunctionDecorator", R"(A Boolean function decorator that provides functionality to operate on the associated Boolean function.)");
 
         py_boolean_function_decorator.def(py::init<const BooleanFunction&>(), py::arg("bf"), R"(
             Construct new BooleanFunctionDecorator object.

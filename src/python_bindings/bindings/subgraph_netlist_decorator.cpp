@@ -6,7 +6,10 @@ namespace hal
 {
     void subgraph_netlist_decorator_init(py::module& m)
     {
-        py::class_<SubgraphNetlistDecorator> py_subgraph_netlist_decorator(m, "SubgraphNetlistDecorator", R"()");
+        py::class_<SubgraphNetlistDecorator> py_subgraph_netlist_decorator(
+            m,
+            "SubgraphNetlistDecorator",
+            R"(A netlist decorator that operates on an existing subgraph of the associated netlist to, e.g., copy the subgraph as a new netlist object or compute a Boolean function describing the subgraph.)");
 
         py_subgraph_netlist_decorator.def(py::init<const Netlist&>(), py::arg("netlist"), R"(
             Construct new SubgraphNetlistDecorator object.

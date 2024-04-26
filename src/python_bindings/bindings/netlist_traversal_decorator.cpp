@@ -4,7 +4,8 @@ namespace hal
 {
     void netlist_traversal_decorator_init(py::module& m)
     {
-        py::class_<NetlistTraversalDecorator> py_netlist_traversal_decorator(m, "NetlistTraversalDecorator", R"()");
+        py::class_<NetlistTraversalDecorator> py_netlist_traversal_decorator(
+            m, "NetlistTraversalDecorator", R"(A netlist decorator that provides functionality to traverse the associated netlist without making any modifications.)");
 
         py_netlist_traversal_decorator.def(py::init<Netlist&>(), py::arg("netlist"), R"(
             Construct new NetlistTraversalDecorator object.
