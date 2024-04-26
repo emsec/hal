@@ -34,7 +34,7 @@ namespace hal
             }
             case 1: {
                 //dont create a widget for dummyEntries
-                if(itemType != PinItem::TreeItemType::Pin && itemType != PinItem::TreeItemType::InvalidPin)
+                if(itemType == PinItem::TreeItemType::GroupCreator || itemType == PinItem::TreeItemType::PinCreator)
                     return nullptr;
                 auto comboBox = new QComboBox(parent);
                 //TODO provide enum to string method
@@ -135,7 +135,7 @@ namespace hal
             case 1:{
                 //direction column
                 //TODO currently only pins can change the direction while groups does not allow modification
-                if(itemType != PinItem::TreeItemType::Pin && itemType != PinItem::TreeItemType::InvalidPin)
+                if(itemType == PinItem::TreeItemType::GroupCreator || itemType == PinItem::TreeItemType::PinCreator)
                     break;
                 auto comboBox = static_cast<QComboBox*>(editor);
                 QString text = comboBox->currentText();

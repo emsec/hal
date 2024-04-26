@@ -36,6 +36,8 @@
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
+#include <QMessageBox>
+#include <QPushButton>
 #include <array>
 #include <set>
 
