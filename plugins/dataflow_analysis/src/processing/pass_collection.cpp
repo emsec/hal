@@ -32,7 +32,7 @@ namespace hal
                     std::vector<PassConfiguration> m_all_passes;
                     std::vector<PassConfiguration> m_intermediate_passes;
                     std::unordered_map<pass_id, std::unordered_set<pass_id>> m_useless_follow_ups;
-                    bool m_initialized;
+                    bool m_initialized = false;
 
                     PassConfiguration group_by_ctrl_sigs;
 
@@ -129,7 +129,12 @@ namespace hal
                     return passes;
                 }
 
+                void clear()
+                {
+                    m_initialized = false;
+                }
+
             }    // namespace pass_collection
-        }        // namespace processing
-    }            // namespace dataflow
+        }    // namespace processing
+    }    // namespace dataflow
 }    // namespace hal
