@@ -2328,6 +2328,9 @@ namespace hal
                 const auto [it, _] = cache.insert({e.id(), simplify_res.get()});
                 res                = it->second;
 
+                // TODO remove
+                // return OK(res);
+
                 iteration++;
                 if (iteration > max_loop_iterations)
                 {
