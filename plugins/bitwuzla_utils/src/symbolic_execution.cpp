@@ -601,6 +601,8 @@ namespace hal
                         return true;
                     }
                 }
+
+                return false;
             }
 
             bool is_commutative(const bitwuzla::Term& x)

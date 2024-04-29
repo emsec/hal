@@ -2307,6 +2307,9 @@ namespace hal
 
         Result<z3::expr> simplify_local(const z3::expr& e, const bool check)
         {
+            const u32 max_loop_iterations = 128;
+            u32 iteration                 = 0;
+
             z3::expr res      = e;
             z3::expr prev_res = res;
 
@@ -2324,6 +2327,17 @@ namespace hal
                 }
                 const auto [it, _] = cache.insert({e.id(), simplify_res.get()});
                 res                = it->second;
+
+                iteration++;
+                if (iteration > max_loop_iterations)
+                {
+                    std::cout << "PREV: " << std::endl;
+                    std::cout << prev_res << std::endl;
+                    std::cout << "CURR: " << std::endl;
+                    std::cout << res << std::endl;
+
+                    return ERR("Triggered max iteration counter during simplificaton!");
+                }
             } while (!z3::eq(prev_res, res));
 
             if (check && !check_correctness(e, res))
