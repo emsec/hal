@@ -275,6 +275,13 @@ namespace hal
                         }
                         return bf_res;
                     }
+                    case Z3_OP_BNEG: {
+                        if (num_args != 1)
+                        {
+                            return ERR("operation 'NEG' must have arity 1");
+                        }
+                        return ERR("Negation not implemented");
+                    }
                     case Z3_OP_BADD: {
                         auto bf_res = BooleanFunction::Add(std::move(args.at(0)), std::move(args.at(1)), size);
                         for (u64 i = 2; i < num_args; i++)
