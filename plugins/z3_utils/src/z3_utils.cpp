@@ -204,6 +204,7 @@ namespace hal
                     }
                     else if (e.is_const())
                     {
+                        // std::cout << e << std::endl;
                         const std::string name = e.decl().name().str();
                         return OK(BooleanFunction::Var(name, size));
                     }

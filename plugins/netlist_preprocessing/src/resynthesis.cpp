@@ -147,15 +147,31 @@ namespace hal
                         const auto& net_connections = global_io_mapping.at(src_n);
                         new_net                     = net_connections.front();
 
-                        // if a single global output leads to multiple nets in the dst netlist, that means that the nets are functionally equivalent and we can connect/merge them.
-                        for (u32 i = 1; i < net_connections.size(); i++)
+                        if (net_connections.size() != 1)
                         {
-                            const auto& res = NetlistModificationDecorator(*dst_nl).connect_nets(new_net, net_connections.at(i));
-                            if (res.is_error())
+                            log_warning(
+                                "resynthesis", "Found multiple io connections for net {} with ID {}, this might lead to missing nets in the destination netlist", src_n->get_name(), src_n->get_id());
+                            for (const auto& net : net_connections)
                             {
-                                return ERR("unable to replace subgraph with netlist: failed to connect/merge all the net connections of net " + src_n->get_name() + " with ID "
-                                           + std::to_string(src_n->get_id()));
+                                std::cout << net->get_id() << " - " << net->get_name() << std::endl;
                             }
+
+                            // if a single global output of the src netlist leads to multiple nets in the dst netlist, that means that the nets are functionally equivalent and we can connect/merge them.
+                            // however this can lead to nets disappearing from the dst netlist which might be unexpected behavior.
+
+                            for (u32 i = 1; i < net_connections.size(); i++)
+                            {
+                                const auto& res = NetlistModificationDecorator(*dst_nl).connect_nets(new_net, net_connections.at(i));
+                                if (res.is_error())
+                                {
+                                    return ERR("unable to replace subgraph with netlist: failed to connect/merge all the net connections of net " + src_n->get_name() + " with ID "
+                                               + std::to_string(src_n->get_id()));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            new_net = net_connections.front();
                         }
                     }
                     else
@@ -190,7 +206,7 @@ namespace hal
                     const auto org_src_name     = src_ep->get_gate()->get_name();
                     const auto org_src_pin_name = src_ep->get_pin()->get_name();
                     auto new_src_g              = gate_name_to_gate.at(org_src_name);
-                    if (!new_net->add_source(new_src_g, org_src_pin_name))
+                    if (new_net->add_source(new_src_g, org_src_pin_name) == nullptr)
                     {
                         return ERR("unable to replace subgraph with netlist: failed to add gate " + new_src_g->get_name() + " with ID " + std::to_string(new_src_g->get_id()) + " at pin "
                                    + org_src_pin_name + " as new source to net " + new_net->get_name() + " with ID " + std::to_string(new_net->get_id()));
