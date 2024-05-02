@@ -43,6 +43,9 @@ namespace hal
         //TODO:
         //mTabWidget->addTab(mStateTableTab, "State Table");
 
+        mAReset->setDisabled(true);
+        mASet->setDisabled(true);
+
         setLayout(mLayout);
 
     }
@@ -72,10 +75,16 @@ namespace hal
                 mNextState->setText(QString::fromStdString(ff->get_next_state_function().to_string()));
 
                 if (ff->get_async_reset_function().is_empty()) mAReset->setText("N/A");
-                else mAReset->setText(QString::fromStdString(ff->get_async_reset_function().to_string()));
+                else {
+                    mAReset->setDisabled(false);
+                    mAReset->setText(QString::fromStdString(ff->get_async_reset_function().to_string()));
+                }
 
                 if (ff->get_async_set_function().is_empty()) mASet->setText("N/A");
-                else mASet->setText(QString::fromStdString(ff->get_async_set_function().to_string()));
+                else {
+                    mASet->setDisabled(false);
+                    mASet->setText(QString::fromStdString(ff->get_async_set_function().to_string()));
+                }
 
                 auto [stateBeh,negStateBeh] = ff->get_async_set_reset_behavior();
                 if (stateBeh == AsyncSetResetBehavior::undef) mIntState->setText("undefined");

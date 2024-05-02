@@ -34,6 +34,9 @@
 #include "gui/gatelibrary_management/gatelibrary_pages/lut_wizardpage.h"
 #include "gui/gatelibrary_management/gatelibrary_pages/init_wizardpage.h"
 #include "gui/gatelibrary_management/gatelibrary_pages/ram_wizardpage.h"
+#include "gui/gatelibrary_management/gatelibrary_pages/ram_port_wizardpage.h"
+#include "gui/gatelibrary_management/gatelibrary_pages/state_wizardpage.h"
+
 
 #include <QWizard>
 #include <QWizardPage>
@@ -42,6 +45,7 @@ namespace hal
 {
     class GateLibraryWizard : public QWizard
     {
+        friend class RAMPortWizardPage;
     public:
         enum PAGE
         {
@@ -51,7 +55,9 @@ namespace hal
             Latch,
             LUT,
             RAM,
+            RAMPort,
             Init,
+            State,
             BooleanFunction
         };
 
@@ -62,6 +68,7 @@ namespace hal
         void addGate();
         void setData(GateLibrary* gateLibrary, GateType* gateType);
         QStringList getProperties();
+        QList<PinModel::PINGROUP*> getPingroups();
         void accept() override;
 
         //int getNextPageId(PAGE page);
@@ -78,7 +85,9 @@ namespace hal
         LUTWizardPage* lutPage;
         InitWizardPage* initPage;
         RAMWizardPage* ramPage;
+        RAMPortWizardPage* ramportPage;
         BoolWizardPage* boolPage;
+        StateWizardPage* statePage;
 
         QString mName;
         QStringList mProperties;

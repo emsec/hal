@@ -16,17 +16,8 @@ namespace hal
         lutPage = new LUTWizardPage(parent);
         initPage = new InitWizardPage(parent);
         ramPage = new RAMWizardPage(parent);
-
-        /*this->addPage(generalInfoPage);
-        this->addPage(pinsPage);
-        this->addPage(ffPage);
-
-        this->addPage(latchPage);
-        this->addPage(lutPage);
-        this->addPage(ramPage);
-        this->addPage(initPage);
-
-        this->addPage(boolPage);*/
+        ramportPage = new RAMPortWizardPage(parent);
+        statePage = new StateWizardPage(parent);
 
         setPage(GeneralInfo, generalInfoPage);
         setPage(Pin, pinsPage);
@@ -34,7 +25,9 @@ namespace hal
         setPage(Latch, latchPage);
         setPage(LUT, lutPage);
         setPage(RAM, ramPage);
+        setPage(RAMPort, ramportPage);
         setPage(Init, initPage);
+        setPage(State, statePage);
         setPage(BooleanFunction, boolPage);
 
         mGateLibrary = gateLibrary;
@@ -54,9 +47,10 @@ namespace hal
             lutPage->setData(mGateType);
             initPage->setData(mGateType);
             ramPage->setData(mGateType);
+            ramportPage->setData(mGateType);
+            statePage->setData(mGateType);
             pinsPage->setGateType(mGateType);
         }
-        //setPageOrder();
     }
 
     GateLibraryWizard::GateLibraryWizard(const GateLibrary *gateLibrary, QWidget* parent): QWizard(parent)
@@ -68,29 +62,24 @@ namespace hal
         lutPage = new LUTWizardPage(parent);
         initPage = new InitWizardPage(parent);
         ramPage = new RAMWizardPage(parent);
+        ramportPage = new RAMPortWizardPage(parent);
         boolPage = new BoolWizardPage(parent);
+        statePage = new StateWizardPage(parent);
 
-        /*this->addPage(generalInfoPage);
-        this->addPage(pinsPage);
-        this->addPage(ffPage);
-        this->addPage(latchPage);
-        this->addPage(lutPage);
-        this->addPage(ramPage);
-        this->addPage(initPage);
-        this->addPage(boolPage);*/
         setPage(GeneralInfo, generalInfoPage);
         setPage(Pin, pinsPage);
         setPage(FlipFlop, ffPage);
         setPage(Latch, latchPage);
         setPage(LUT, lutPage);
         setPage(RAM, ramPage);
+        setPage(RAMPort, ramportPage);
         setPage(Init, initPage);
+        setPage(State, statePage);
         setPage(BooleanFunction, boolPage);
         pinsPage->setGateType(nullptr);
         mGateLibrary = gateLibrary;
         generalInfoPage->setMode(false);
         ffPage->setData(nullptr);
-        //setPageOrder();
     }
 
     void GateLibraryWizard::editGate(GateType* gt)
@@ -125,6 +114,11 @@ namespace hal
         return mProperties;
     }
 
+    QList<PinModel::PINGROUP*> GateLibraryWizard::getPingroups()
+    {
+        return pinsPage->getPingroups();
+    }
+
     int GateLibraryWizard::nextId() const
     {
         const QStringList properties = generalInfoPage->getProperties();
@@ -133,11 +127,16 @@ namespace hal
         case GeneralInfo:
             return Pin;
         case Pin:
+            /*if(properties.contains("ff")) return FlipFlop;
+            else if(properties.contains("latch")) return Latch;
+            else if(properties.contains("c_lut")) return LUT;
+            else if(properties.contains("ram")) return RAM;*/
+            return BooleanFunction;
+        case BooleanFunction:
             if(properties.contains("ff")) return FlipFlop;
             else if(properties.contains("latch")) return Latch;
             else if(properties.contains("c_lut")) return LUT;
             else if(properties.contains("ram")) return RAM;
-            else return Init;
         case FlipFlop:
             if(properties.contains("latch")) return Latch;
             else if(properties.contains("c_lut")) return LUT;
@@ -151,10 +150,14 @@ namespace hal
             if(properties.contains("ram")) return RAM;
             else return Init;
         case RAM:
-            return Init;
+            return RAMPort; //TODO
+        case RAMPort:
+            if(properties.contains("ff") || properties.contains("latch")) return State;
+            else return Init;
+        case State:
+            if(properties.contains("ff") || properties.contains("latch") || properties.contains("c_lut") || properties.contains("ram")) return Init;
+            else return -1;
         case Init:
-            return BooleanFunction;
-        case BooleanFunction:
         default:
             return -1;
         }
