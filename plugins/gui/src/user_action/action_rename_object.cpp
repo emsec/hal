@@ -33,7 +33,6 @@ namespace hal
 
     void ActionRenameObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
-        writeParentObjectToXml(xmlOut);
         xmlOut.writeTextElement("name", mNewName);
     }
 
@@ -41,7 +40,6 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
-            readParentObjectFromXml(xmlIn);
             if (xmlIn.name() == "name")
                 mNewName = xmlIn.readElementText();
         }

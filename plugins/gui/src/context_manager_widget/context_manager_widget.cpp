@@ -31,6 +31,7 @@
 #include "gui/user_action/action_delete_object.h"
 #include "gui/user_action/action_rename_object.h"
 #include "gui/user_action/user_action_compound.h"
+#include "gui/user_action/action_move_item.h"
 #include <QShortcut>
 #include <QApplication>
 #include <QInputDialog>
@@ -39,7 +40,7 @@ namespace hal
 {
     ContextManagerWidget::ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent)
         : ContentWidget("Views", parent), mSearchbar(new Searchbar(this)), mNewDirectoryAction(new QAction(this)), mNewViewAction(new QAction(this)), mRenameAction(new QAction(this)), mDuplicateAction(new QAction(this)),
-          mDeleteAction(new QAction(this)), mOpenAction(new QAction(this))
+          mDeleteAction(new QAction(this)), mOpenAction(new QAction(this)), mMoveToplevelAction(new QAction(this))
     {
         //needed to load the properties
         ensurePolished();
@@ -51,22 +52,25 @@ namespace hal
         mRenameAction->setIcon(gui_utility::getStyledSvgIcon(mRenameIconStyle, mRenameIconPath));
         mDuplicateAction->setIcon(gui_utility::getStyledSvgIcon(mDuplicateIconStyle, mDuplicateIconPath));
         mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
+        mMoveToplevelAction->setIcon(gui_utility::getStyledSvgIcon(mMoveToplevelStyle, mMoveToplevelPath));
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
 
         mOpenAction->setToolTip("Open");
-        mNewViewAction->setToolTip("New View");
-        mNewDirectoryAction->setToolTip("New Directory");
-        mRenameAction->setToolTip("Rename view");
+        mNewViewAction->setToolTip("New view");
+        mNewDirectoryAction->setToolTip("New directory");
+        mRenameAction->setToolTip("Rename");
         mDuplicateAction->setToolTip("Duplicate");
         mDeleteAction->setToolTip("Delete");
+        mMoveToplevelAction->setToolTip("to toplevel");
         mSearchAction->setToolTip("Search");
 
         mOpenAction->setText("Open view");
         mNewViewAction->setText("Create new view");
-        mNewDirectoryAction->setText("Create new Directory");
+        mNewDirectoryAction->setText("Create new directory");
         mRenameAction->setText("Rename item");
         mDuplicateAction->setText("Duplicate view");
         mDeleteAction->setText("Delete item");
+        mMoveToplevelAction->setText("Move to toplevel");
         mSearchAction->setText("Search");
 
         //mOpenAction->setEnabled(false);
@@ -89,7 +93,9 @@ namespace hal
         mContextTreeView->sortByColumn(1, Qt::SortOrder::DescendingOrder);
         mContextTreeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-
+        mContextTreeView->setDragEnabled(true);
+        mContextTreeView->setAcceptDrops(true);
+        mContextTreeView->setDropIndicatorShown(true);
 
         mContentLayout->addWidget(mContextTreeView);
         mContentLayout->addWidget(mSearchbar);
@@ -104,6 +110,7 @@ namespace hal
         connect(mRenameAction, &QAction::triggered, this, &ContextManagerWidget::handleRenameClicked);
         connect(mDuplicateAction, &QAction::triggered, this, &ContextManagerWidget::handleDuplicateContextClicked);
         connect(mDeleteAction, &QAction::triggered, this, &ContextManagerWidget::handleDeleteClicked);
+        connect(mMoveToplevelAction, &QAction::triggered, this, &ContextManagerWidget::handleMoveToplevelClicked);
         connect(mSearchAction, &QAction::triggered, this, &ContextManagerWidget::toggleSearchbar);
 
         connect(mContextTreeView, &QTreeView::customContextMenuRequested, this, &ContextManagerWidget::handleContextMenuRequest);
@@ -125,6 +132,7 @@ namespace hal
         connect(qApp, &QApplication::focusChanged, this, &ContextManagerWidget::handleFocusChanged);
 
         connect(mContextTreeModel, &ContextTreeModel::directoryCreatedSignal, this, &ContextManagerWidget::selectDirectory);
+        connect(mContextTreeModel, &QAbstractItemModel::rowsInserted, this, &ContextManagerWidget::handleRowsInserted);
     }
 
     void ContextManagerWidget::handleCreateContextClicked()
@@ -135,6 +143,15 @@ namespace hal
                   QString::fromStdString(gNetlist->get_top_module()->get_name())));
         act->addAction(new ActionAddItemsToObject({gNetlist->get_top_module()->get_id()}, {}));
         act->exec();
+    }
+
+    void ContextManagerWidget::handleRowsInserted(const QModelIndex &parent, int first, int last)
+    {
+        mContextTreeView->expand(mContextTreeProxyModel->mapFromSource(parent));
+        for (int irow = first; irow <= last; irow++)
+        {
+            mContextTreeView->expand(mContextTreeProxyModel->mapFromSource(mContextTreeModel->index(irow,0,parent)));
+        }
     }
 
     void ContextManagerWidget::handleCreateDirectoryClicked()
@@ -156,6 +173,30 @@ namespace hal
         GraphContext* defaultContext = getCurrentContext();
         if (!defaultContext) return;
         mTabView->showContext(defaultContext);
+    }
+
+    void ContextManagerWidget::handleMoveToplevelClicked()
+    {
+        ContextTreeItem* clicked_item = getCurrentItem();
+        if (!clicked_item) return;
+
+        UserActionObject uao;
+        if (clicked_item->isContext())
+            uao = UserActionObject(clicked_item->context()->id(), UserActionObjectType::ContextView);
+        else if (clicked_item->isDirectory())
+            uao = UserActionObject(clicked_item->directory()->id(), UserActionObjectType::ContextDir);
+        else
+           return;
+
+        BaseTreeItem* bti = clicked_item->getParent();
+        while (bti->getParent())
+            bti = bti->getParent();
+
+        ActionMoveItem* act = new ActionMoveItem(0);
+        act->setObject(uao);
+        act->exec();
+
+        mContextTreeModel->moveItem(clicked_item,bti);
     }
 
     void ContextManagerWidget::handleItemDoubleClicked(const QModelIndex &proxyIndex)
@@ -330,6 +371,10 @@ namespace hal
             context_menu.addAction(mRenameAction);
         }
 
+        // unless parent is rootItem thus not a ContextTreeItem
+        if (dynamic_cast<ContextTreeItem*>(item->getParent()))
+            context_menu.addAction(mMoveToplevelAction);
+
         context_menu.exec(mContextTreeView->viewport()->mapToGlobal(point));
     }
 
@@ -395,8 +440,6 @@ namespace hal
         toolbar->addAction(mOpenAction);
         toolbar->addAction(mDuplicateAction);
         toolbar->addAction(mRenameAction);
-        toolbar->addAction(mRenameAction);
-        toolbar->addAction(mDeleteAction);
         toolbar->addAction(mDeleteAction);
         toolbar->addAction(mSearchAction);
     }

@@ -194,10 +194,21 @@ namespace hal
          */
         void selectDirectory(ContextTreeItem* item);
 
+        void handleRowsInserted(const QModelIndex &parent, int first, int last);
+
     private Q_SLOTS:
 
         void handleFocusChanged(QWidget* oldWidget, QWidget* newWidget);
+        void handleCreateClicked();
+        void handleCreateContextClicked();
+        void handleCreateDirectoryClicked();
+        void handleRenameClicked();
+        void handleDuplicateContextClicked();
+        void handleDeleteClicked();
+        void handleMoveToplevelClicked();
 
+        void handleContextMenuRequest(const QPoint& point);
+        void handleSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
     private:
         GraphTabWidget* mTabView;
@@ -234,22 +245,15 @@ namespace hal
         QString mOpenIconPath;
         QString mOpenIconStyle;
 
+        QAction* mMoveToplevelAction;
+        QString mMoveToplevelPath;
+        QString mMoveToplevelStyle;
+
         QString mSearchIconPath;
         QString mSearchIconStyle;
         QString mSearchActiveIconStyle;
 
         QShortcut* mShortCutDeleteItem;
-
-        void handleCreateClicked();
-        void handleCreateContextClicked();
-        void handleCreateDirectoryClicked();
-        void handleRenameClicked();
-        void handleDuplicateContextClicked();
-        void handleDeleteClicked();
-
-
-        void handleContextMenuRequest(const QPoint& point);
-        void handleSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
         void setToolbarButtonsEnabled(bool enabled);
 

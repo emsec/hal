@@ -123,7 +123,9 @@ namespace hal
         GraphContext* getContextById(u32 id) const;
 
 
-        u32 getParentId(u32 childId, bool isDirctory) const;
+        u32 getParentId(u32 childId, bool isDirectory) const;
+
+        bool moveItem(u32 itemId, bool isDirectory, u32 parentId, int row = -1);
 
         ContextDirectory* getDirectoryById(u32 id) const;
 

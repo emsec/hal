@@ -29,7 +29,7 @@
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/basic_tree_model/base_tree_model.h"
 
-
+#include <QMimeData>
 
 namespace hal
 {
@@ -122,6 +122,8 @@ namespace hal
 
         BaseTreeItem* getDirectory(u32 directoryId) const;
 
+        BaseTreeItem* getContext(u32 contextId) const;
+
         /**
          * Adds a given GraphContext to the model.
          *
@@ -163,7 +165,13 @@ namespace hal
         /**
          * Resets the model (removes all GraphContext%s).
          */
-        void clear();
+        void clear() override;
+
+        Qt::ItemFlags flags(const QModelIndex& index) const override;
+        QStringList mimeTypes() const override;
+        QMimeData* mimeData(const QModelIndexList &indexes) const override;
+        bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
+        bool canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const override;
 
         /**
          * Get all GraphContext%s of the model.
@@ -200,12 +208,13 @@ namespace hal
          */
         u32 minDirectoryId() const { return mMinDirectoryId; }
 
+        bool moveItem(ContextTreeItem* itemToMove, BaseTreeItem* newParent, int row = -1);
 
     Q_SIGNALS:
         void directoryCreatedSignal(ContextTreeItem* item);
 
     private:
-        BaseTreeItem* getDirectoryInternal(BaseTreeItem* parentItem, u32 directoryId) const;
+        BaseTreeItem* getItemInternal(BaseTreeItem* parentItem, u32 id, bool isDirectory) const;
         ContextTreeItem *mCurrentDirectory;
         std::map<GraphContext *, ContextTreeItem *> mContextMap;
         QVector<GraphContext*> mContextList;

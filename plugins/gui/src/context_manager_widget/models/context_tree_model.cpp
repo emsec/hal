@@ -3,11 +3,10 @@
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
 #include "gui/user_action/action_delete_object.h"
-
+#include "gui/user_action/action_move_item.h"
 
 #include <limits>
 #include <QApplication>
-
 
 namespace hal
 {
@@ -45,28 +44,22 @@ namespace hal
         {
             switch(column)
             {
-                case 0:
-                {
-                    return mDirectory->name();
-                }
-                case 1:
-                {
-                    return "";
-                }
+            case 0:
+                return mDirectory->name();
+            default:
+                return "";
             }
         }
         if(isContext())
         {
             switch(column)
             {
-                case 0:
-                {
-                    return mContext->getNameWithDirtyState();
-                }
-                case 1:
-                {
-                    return mContext->getTimestamp().toString(Qt::SystemLocaleShortDate);
-                }
+            case 0:
+                return mContext->getNameWithDirtyState();
+            case 1:
+                return mContext->id();
+            case 2:
+                return mContext->getTimestamp().toString(Qt::SystemLocaleShortDate);
             }
         }
         return QVariant();
@@ -99,7 +92,7 @@ namespace hal
 
     int ContextTreeItem::getColumnCount() const
     {
-        return 2;
+        return 3;
     }
 
     int ContextTreeItem::row() const
@@ -121,7 +114,7 @@ namespace hal
 
     ContextTreeModel::ContextTreeModel(QObject* parent) : BaseTreeModel(parent), mCurrentDirectory(nullptr), mMinDirectoryId(std::numeric_limits<u32>::max())
     {
-        setHeaderLabels(QStringList() << "View Name" << "Timestamp");
+        setHeaderLabels(QStringList() << "View Name" << "ID" << "Timestamp");
     }
 
     QVariant ContextTreeModel::data(const QModelIndex& index, int role) const
@@ -162,23 +155,171 @@ namespace hal
         return QVariant();
     }
 
-    BaseTreeItem* ContextTreeModel::getDirectory(u32 directoryId) const
+    Qt::ItemFlags ContextTreeModel::flags(const QModelIndex& index) const
     {
-        return getDirectoryInternal(mRootItem, directoryId);
+        Qt::ItemFlags baseFlags = BaseTreeModel::flags(index);
+        return baseFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+        ContextTreeItem* item = dynamic_cast<ContextTreeItem*>(getItemFromIndex(index));
+        if (!item)
+            return baseFlags |  Qt::ItemIsDropEnabled; // root item
+
+        if (item->isContext())
+            return baseFlags | Qt::ItemIsDragEnabled;
+
+        if (item->isDirectory())
+            return baseFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+
+        Q_ASSERT(1==0);
+        return baseFlags;
     }
 
-    BaseTreeItem* ContextTreeModel::getDirectoryInternal(BaseTreeItem *parentItem, u32 directoryId) const
+    QStringList ContextTreeModel::mimeTypes() const
+    {
+        QStringList types;
+        types << "contexttreemodel/item";
+        return types;
+    }
+
+    QMimeData* ContextTreeModel::mimeData(const QModelIndexList& indexes) const
+    {
+        QMimeData* retval = new QMimeData;
+        // only single row allowed
+        int row = -1;
+        for (const QModelIndex& inx : indexes)
+        {
+            if (row < 0)
+                row = inx.row();
+            else if (row != inx.row())
+                return retval;
+        }
+        if (row < 0)
+            return retval;
+
+        BaseTreeItem* bti = getItemFromIndex(indexes.at(0));
+        BaseTreeItem* parentItem = bti->getParent();
+        ContextTreeItem* item = dynamic_cast<ContextTreeItem*>(bti);
+        if (!item)
+        {
+            qDebug() << "cannot cast" << indexes.at(0);
+            return retval;
+        }
+        QByteArray encodedData;
+        QDataStream stream(&encodedData, QIODevice::WriteOnly);
+        QString type;
+        int id;
+        if (item->isDirectory())
+        {
+            id = item->directory()->id();
+            type = "dir";
+        }
+        else if (item->isContext())
+        {
+            id = item->context()->id();
+            type = "view";
+        }
+        else
+            Q_ASSERT (1==0);
+        stream << type << id << row << (quintptr) parentItem;
+        retval->setText(type);
+        retval->setData("contexttreemodel/item", encodedData);
+        return retval;
+    }
+
+    bool ContextTreeModel::canDropMimeData(const QMimeData *mimeData, Qt::DropAction action, int row, int column, const QModelIndex &parent) const
+    {
+        Q_UNUSED(column)
+        Q_UNUSED(action)
+        Q_UNUSED(row)
+        int moveRow = -1;
+        quintptr moveParent = 0;
+        if(!mimeData->formats().contains("contexttreemodel/item")) return false;
+
+        BaseTreeItem* targetParentItem = getItemFromIndex(parent);
+        if (targetParentItem == mRootItem) return true;
+        ContextTreeItem* parentItem = dynamic_cast<ContextTreeItem*>(getItemFromIndex(parent));
+        if (!parentItem || parentItem->isContext()) return false;
+
+        QString type;
+        int id;
+        auto encItem = mimeData->data("contexttreemodel/item");
+        QDataStream dataStream(&encItem, QIODevice::ReadOnly);
+        dataStream >> type >> id >> moveRow >> moveParent;
+
+        if (type == "dir")
+        {
+            if (parentItem->isDirectory() && (int) parentItem->directory()->id() == id)
+                return false;
+        }
+
+        return true;
+    }
+
+    bool ContextTreeModel::dropMimeData(const QMimeData *mimeData, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+    {
+        Q_UNUSED(column);
+        Q_UNUSED(action);
+
+        QString type;
+        int id;
+        int sourceRow = -1;
+        quintptr sourceParent = 0;
+
+        auto encItem = mimeData->data("contexttreemodel/item");
+        QDataStream dataStream(&encItem, QIODevice::ReadOnly);
+        dataStream >> type >> id >> sourceRow >> sourceParent;
+
+        BaseTreeItem* targetParentItem = getItemFromIndex(parent);
+        ContextTreeItem* sourceParentItem = dynamic_cast<ContextTreeItem*>((BaseTreeItem*) sourceParent);
+
+        u32 targetId = 0;
+        ContextTreeItem* cti = dynamic_cast<ContextTreeItem*>(targetParentItem);
+        if (cti) targetId = cti->getId();
+
+        UserActionObject uao;
+
+        QModelIndex moveInx = index(sourceRow, 0, getIndexFromItem((BaseTreeItem*) sourceParent));
+        ContextTreeItem* itemToMove = dynamic_cast<ContextTreeItem*>(getItemFromIndex(moveInx));
+        if (itemToMove->isContext())
+            uao = UserActionObject(itemToMove->context()->id(), UserActionObjectType::ContextView);
+        else if (itemToMove->isDirectory())
+            uao = UserActionObject(itemToMove->directory()->id(), UserActionObjectType::ContextDir);
+        else
+            return false;
+
+        ActionMoveItem* act = new ActionMoveItem(targetId, sourceParentItem ? sourceParentItem->getId() : 0);
+        act->setObject(uao);
+        act->exec();
+        return true;
+    }
+
+
+    BaseTreeItem* ContextTreeModel::getDirectory(u32 directoryId) const
+    {
+        return getItemInternal(mRootItem, directoryId, true);
+    }
+
+    BaseTreeItem* ContextTreeModel::getContext(u32 contextId) const
+    {
+        return getItemInternal(mRootItem, contextId, true);
+    }
+
+    BaseTreeItem* ContextTreeModel::getItemInternal(BaseTreeItem *parentItem, u32 id, bool isDirectory) const
     {
         for (BaseTreeItem* childItem : parentItem->getChildren())
         {
             ContextTreeItem* ctxItem = static_cast<ContextTreeItem*>(childItem);
             if (ctxItem->isDirectory())
             {
-                if (ctxItem->getId() == directoryId)
+                if (ctxItem->getId() == id && isDirectory)
                     return ctxItem;
-                BaseTreeItem* bti = getDirectoryInternal(childItem, directoryId);
+                BaseTreeItem* bti = getItemInternal(childItem, id, isDirectory);
                 if (bti)
                     return bti;
+            }
+            else if (ctxItem->isContext() && !isDirectory)
+            {
+                if (ctxItem->getId() == id)
+                    return ctxItem;
             }
         }
         return nullptr;
@@ -302,7 +443,6 @@ namespace hal
                 act->setObject(UserActionObject(child->directory()->id(),UserActionObjectType::ContextDir));
                 act->exec();
             }
-
         }
 
         BaseTreeItem* parent = item->getParent();
@@ -369,4 +509,25 @@ namespace hal
             mCurrentDirectory = currentItem;
     }
 
+    bool ContextTreeModel::moveItem(ContextTreeItem* itemToMove, BaseTreeItem *newParent, int row)
+    {
+        if (!itemToMove || !newParent ) return false;
+        if (newParent != mRootItem)
+        {
+            ContextTreeItem* cti = dynamic_cast<ContextTreeItem*>(newParent);
+            if (!cti || !cti->isDirectory()) return false;
+        }
+
+        BaseTreeItem* oldParent = itemToMove->getParent();
+        if (!oldParent) return false;
+
+        int currentRow = itemToMove->row();
+        beginRemoveRows(getIndexFromItem(oldParent), currentRow, currentRow);
+        oldParent->removeChild(itemToMove);
+        endRemoveRows();
+
+        insertChildItem(itemToMove, newParent, row);
+
+        return true;
+    }
 }

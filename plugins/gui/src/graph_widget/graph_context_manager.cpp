@@ -64,9 +64,28 @@ namespace hal
         return contextDir;
     }
 
-    u32 GraphContextManager::getParentId(u32 childId, bool isDirctory) const
+
+    bool GraphContextManager::moveItem(u32 itemId, bool isDirectory, u32 parentId, int row)
     {
-        if (isDirctory)
+        ContextTreeItem* itemToMove = nullptr;
+        if (isDirectory)
+            itemToMove = dynamic_cast<ContextTreeItem*>(mContextTreeModel->getDirectory(itemId));
+        else
+            itemToMove = dynamic_cast<ContextTreeItem*>(mContextTreeModel->getContext(itemId));
+
+        BaseTreeItem* parentItem = parentId
+                ? mContextTreeModel->getDirectory(parentId)
+                : mContextTreeModel->getRootItem();
+        if (!parentItem || !itemToMove) return false;
+
+        return mContextTreeModel->moveItem(itemToMove, parentItem, row);
+    }
+
+
+
+    u32 GraphContextManager::getParentId(u32 childId, bool isDirectory) const
+    {
+        if (isDirectory)
         {
             BaseTreeItem* bti = mContextTreeModel->getDirectory(childId);
             ContextTreeItem* parentItem = dynamic_cast<ContextTreeItem*>(bti->getParent());

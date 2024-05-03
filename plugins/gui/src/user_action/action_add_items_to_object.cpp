@@ -41,7 +41,6 @@ namespace hal
 
     void ActionAddItemsToObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
-        writeParentObjectToXml(xmlOut);
         if (mPlacementHint.mode() != PlacementHint::Standard)
         {
             UserActionObjectType::ObjectType tp = UserActionObjectType::fromNodeType(mPlacementHint.preferredOrigin().type());
@@ -65,7 +64,6 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
-            readParentObjectFromXml(xmlIn);
             if (xmlIn.name() == "placement")
             {
                 u32 id                                = xmlIn.attributes().value("id").toInt();

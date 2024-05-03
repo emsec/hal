@@ -40,7 +40,6 @@ namespace hal
 
     void ActionRemoveItemsFromObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
-        writeParentObjectToXml(xmlOut);
         if (!mModules.isEmpty())
             xmlOut.writeTextElement("modules", setToText(mModules));
         if (!mGates.isEmpty())
@@ -55,7 +54,6 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
-            readParentObjectFromXml(xmlIn);
             if (xmlIn.name() == "modules")
                 mModules = setFromText(xmlIn.readElementText());
             else if (xmlIn.name() == "gates")

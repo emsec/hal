@@ -714,12 +714,8 @@ namespace hal
         mModuleItemMaps[(int)itemType]->insertMulti(id,retval);
 
         if (!parentItem) parentItem = mRootItem;
-        QModelIndex index = getIndexFromItem(parentItem);
-        int row = parentItem->getChildCount();
         mIsModifying = true;
-        beginInsertRows(index, row, row);
-        parentItem->appendChild(retval);
-        endInsertRows();
+        insertChildItem(retval, parentItem);
         mIsModifying = false;
 
         return retval;

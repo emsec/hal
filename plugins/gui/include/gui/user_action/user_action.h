@@ -183,21 +183,6 @@ namespace hal
         static QString setToText(const QSet<u32>& set);
         static QSet<u32> setFromText(const QString& s);
 
-        /**
-         * Utility function to write the parent object.
-         * (Also checks if it is even necessary)
-         *
-         * @param xmlOut - The writer.
-         */
-        void writeParentObjectToXml(QXmlStreamWriter& xmlOut) const;
-
-        /**
-         * Utility function that can be used to read the parent object
-         * if necessary. (Also does the checking)
-         *
-         * @param xmlIn - The reader.
-         */
-        void readParentObjectFromXml(QXmlStreamReader& xmlIn);
     };
 
     /**

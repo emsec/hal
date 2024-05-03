@@ -39,8 +39,6 @@ namespace hal
 
     void ActionCreateObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
-        //todo: remove parentId, switch entirely to parentObject
-        writeParentObjectToXml(xmlOut);
         xmlOut.writeTextElement("objectname", mObjectName);
         xmlOut.writeTextElement("parentid", QString::number(mParentId));
         xmlOut.writeTextElement("linkedid", QString::number(mLinkedObjectId));
@@ -50,8 +48,6 @@ namespace hal
     {
         while (xmlIn.readNextStartElement())
         {
-            //todo: emove parentId, switch entirely to parentObject
-            readParentObjectFromXml(xmlIn);
             if (xmlIn.name() == "objectname")
                 mObjectName = xmlIn.readElementText();
             if (xmlIn.name() == "parentid")
