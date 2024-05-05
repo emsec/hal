@@ -43,6 +43,7 @@ namespace hal
     {
         u32 mSourceParentId;
         u32 mTargetParentId;
+        int mTargetRow;
 
     public:
         /**
@@ -51,7 +52,7 @@ namespace hal
          * Will move the tree item to new parent,
          * action object must indicate tree item
          */
-        ActionMoveItem(u32 tgtId = 0, u32 srcId = 0);
+        ActionMoveItem(u32 tgtId = 0, u32 srcId = 0, int tgtRow = -1);
 
         bool exec() override;
         QString tagname() const override;

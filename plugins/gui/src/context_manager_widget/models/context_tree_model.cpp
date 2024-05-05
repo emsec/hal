@@ -46,6 +46,8 @@ namespace hal
             {
             case 0:
                 return mDirectory->name();
+            case 1:
+                return mDirectory->id();
             default:
                 return "";
             }
@@ -230,10 +232,30 @@ namespace hal
         Q_UNUSED(column)
         Q_UNUSED(action)
         Q_UNUSED(row)
+
+        std::cerr << "   test " << row << (parent.isValid() ? " valid" : " root") << std::endl;
+
+        if (!parent.isValid())
+            return true; // can always drop on root
+
         int moveRow = -1;
         quintptr moveParent = 0;
         if(!mimeData->formats().contains("contexttreemodel/item")) return false;
 
+/*
+        {
+            if (parent.isValid())
+            {
+                ContextTreeItem* cti = dynamic_cast<ContextTreeItem*>(getItemFromIndex(parent));
+                if (cti)
+                    qDebug() << "drop on " << (cti->isDirectory() ? "directory" : "view") << cti->getId() << row << column;
+                else
+                    qDebug() << "drop on root " << row << column;
+            }
+            else
+                qDebug() << "drop no parent " << row << column;
+        }
+        */
         BaseTreeItem* targetParentItem = getItemFromIndex(parent);
         if (targetParentItem == mRootItem) return true;
         ContextTreeItem* parentItem = dynamic_cast<ContextTreeItem*>(getItemFromIndex(parent));
@@ -264,21 +286,15 @@ namespace hal
         int sourceRow = -1;
         quintptr sourceParent = 0;
 
+        std::cerr << "***drop " << row << (parent.isValid() ? " valid" : " root") << std::endl;
         auto encItem = mimeData->data("contexttreemodel/item");
         QDataStream dataStream(&encItem, QIODevice::ReadOnly);
         dataStream >> type >> id >> sourceRow >> sourceParent;
-
-        BaseTreeItem* targetParentItem = getItemFromIndex(parent);
         ContextTreeItem* sourceParentItem = dynamic_cast<ContextTreeItem*>((BaseTreeItem*) sourceParent);
-
-        u32 targetId = 0;
-        ContextTreeItem* cti = dynamic_cast<ContextTreeItem*>(targetParentItem);
-        if (cti) targetId = cti->getId();
-
-        UserActionObject uao;
 
         QModelIndex moveInx = index(sourceRow, 0, getIndexFromItem((BaseTreeItem*) sourceParent));
         ContextTreeItem* itemToMove = dynamic_cast<ContextTreeItem*>(getItemFromIndex(moveInx));
+        UserActionObject uao;
         if (itemToMove->isContext())
             uao = UserActionObject(itemToMove->context()->id(), UserActionObjectType::ContextView);
         else if (itemToMove->isDirectory())
@@ -286,12 +302,25 @@ namespace hal
         else
             return false;
 
-        ActionMoveItem* act = new ActionMoveItem(targetId, sourceParentItem ? sourceParentItem->getId() : 0);
+        u32 targetId = 0;
+
+        if (parent.isValid())
+        {
+            BaseTreeItem* targetParentItem = getItemFromIndex(parent);
+            ContextTreeItem* cti = dynamic_cast<ContextTreeItem*>(targetParentItem);
+            if (cti)
+            {
+                if (!cti->isDirectory()) return false;
+                targetId = cti->directory()->id();
+            }
+
+        }
+
+        ActionMoveItem* act = new ActionMoveItem(targetId, sourceParentItem ? sourceParentItem->getId() : 0, row);
         act->setObject(uao);
         act->exec();
         return true;
     }
-
 
     BaseTreeItem* ContextTreeModel::getDirectory(u32 directoryId) const
     {
@@ -300,7 +329,7 @@ namespace hal
 
     BaseTreeItem* ContextTreeModel::getContext(u32 contextId) const
     {
-        return getItemInternal(mRootItem, contextId, true);
+        return getItemInternal(mRootItem, contextId, false);
     }
 
     BaseTreeItem* ContextTreeModel::getItemInternal(BaseTreeItem *parentItem, u32 id, bool isDirectory) const
@@ -511,6 +540,7 @@ namespace hal
 
     bool ContextTreeModel::moveItem(ContextTreeItem* itemToMove, BaseTreeItem *newParent, int row)
     {
+        std::cerr << "...move " << row << std::endl;
         if (!itemToMove || !newParent ) return false;
         if (newParent != mRootItem)
         {

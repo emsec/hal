@@ -1,5 +1,5 @@
 #include "gui/basic_tree_model/base_tree_item.h"
-
+#include <iostream>
 
 namespace hal
 {
@@ -45,6 +45,7 @@ namespace hal
     void BaseTreeItem::insertChild(int index, BaseTreeItem *child)
     {
         child->setParent(this);
+        std::cerr << "...chld " << index << std::endl;
         mChildren.insert(index, child);
     }
 

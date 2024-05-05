@@ -20,8 +20,8 @@ namespace hal
         return new ActionMoveItem;
     }
 
-    ActionMoveItem::ActionMoveItem(u32 tgtId, u32 srcId)
-        : mSourceParentId(srcId), mTargetParentId(tgtId)
+    ActionMoveItem::ActionMoveItem(u32 tgtId, u32 srcId, int tgtRow)
+        : mSourceParentId(srcId), mTargetParentId(tgtId), mTargetRow(tgtRow)
     {;}
 
     QString ActionMoveItem::tagname() const
@@ -54,9 +54,11 @@ namespace hal
 
     bool ActionMoveItem::exec()
     {
-        if (!mTargetParentId || !mObject.id()) return false;
+        if (!mObject.id()) return false;
 
+        std::cerr << "   actx " << mTargetRow << std::endl;
         BaseTreeItem* bti = nullptr;
+        bool isDirectory = false;
 
         switch (mObject.type()) {
         case UserActionObjectType::ContextView:
@@ -64,6 +66,7 @@ namespace hal
             break;
         case UserActionObjectType::ContextDir:
             bti = gGraphContextManager->getContextTreeModel()->getDirectory(mObject.id());
+            isDirectory = true;
             break;
         default:
             break;
@@ -77,6 +80,9 @@ namespace hal
         }
 
         mUndoAction = new ActionMoveItem(mSourceParentId, mTargetParentId);
+        mUndoAction->setObject(mObject);
+
+        gGraphContextManager->moveItem(mObject.id(), isDirectory, mTargetParentId, mTargetRow);
 
         return UserAction::exec();
     }

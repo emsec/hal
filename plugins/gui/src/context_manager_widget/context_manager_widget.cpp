@@ -40,7 +40,7 @@ namespace hal
 {
     ContextManagerWidget::ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent)
         : ContentWidget("Views", parent), mSearchbar(new Searchbar(this)), mNewDirectoryAction(new QAction(this)), mNewViewAction(new QAction(this)), mRenameAction(new QAction(this)), mDuplicateAction(new QAction(this)),
-          mDeleteAction(new QAction(this)), mOpenAction(new QAction(this)), mMoveToplevelAction(new QAction(this))
+          mDeleteAction(new QAction(this)), mOpenAction(new QAction(this))
     {
         //needed to load the properties
         ensurePolished();
@@ -52,7 +52,6 @@ namespace hal
         mRenameAction->setIcon(gui_utility::getStyledSvgIcon(mRenameIconStyle, mRenameIconPath));
         mDuplicateAction->setIcon(gui_utility::getStyledSvgIcon(mDuplicateIconStyle, mDuplicateIconPath));
         mDeleteAction->setIcon(gui_utility::getStyledSvgIcon(mDeleteIconStyle, mDeleteIconPath));
-        mMoveToplevelAction->setIcon(gui_utility::getStyledSvgIcon(mMoveToplevelStyle, mMoveToplevelPath));
         mSearchAction->setIcon(gui_utility::getStyledSvgIcon(mSearchIconStyle, mSearchIconPath));
 
         mOpenAction->setToolTip("Open");
@@ -61,7 +60,6 @@ namespace hal
         mRenameAction->setToolTip("Rename");
         mDuplicateAction->setToolTip("Duplicate");
         mDeleteAction->setToolTip("Delete");
-        mMoveToplevelAction->setToolTip("to toplevel");
         mSearchAction->setToolTip("Search");
 
         mOpenAction->setText("Open view");
@@ -70,7 +68,6 @@ namespace hal
         mRenameAction->setText("Rename item");
         mDuplicateAction->setText("Duplicate view");
         mDeleteAction->setText("Delete item");
-        mMoveToplevelAction->setText("Move to toplevel");
         mSearchAction->setText("Search");
 
         //mOpenAction->setEnabled(false);
@@ -110,7 +107,6 @@ namespace hal
         connect(mRenameAction, &QAction::triggered, this, &ContextManagerWidget::handleRenameClicked);
         connect(mDuplicateAction, &QAction::triggered, this, &ContextManagerWidget::handleDuplicateContextClicked);
         connect(mDeleteAction, &QAction::triggered, this, &ContextManagerWidget::handleDeleteClicked);
-        connect(mMoveToplevelAction, &QAction::triggered, this, &ContextManagerWidget::handleMoveToplevelClicked);
         connect(mSearchAction, &QAction::triggered, this, &ContextManagerWidget::toggleSearchbar);
 
         connect(mContextTreeView, &QTreeView::customContextMenuRequested, this, &ContextManagerWidget::handleContextMenuRequest);
@@ -173,30 +169,6 @@ namespace hal
         GraphContext* defaultContext = getCurrentContext();
         if (!defaultContext) return;
         mTabView->showContext(defaultContext);
-    }
-
-    void ContextManagerWidget::handleMoveToplevelClicked()
-    {
-        ContextTreeItem* clicked_item = getCurrentItem();
-        if (!clicked_item) return;
-
-        UserActionObject uao;
-        if (clicked_item->isContext())
-            uao = UserActionObject(clicked_item->context()->id(), UserActionObjectType::ContextView);
-        else if (clicked_item->isDirectory())
-            uao = UserActionObject(clicked_item->directory()->id(), UserActionObjectType::ContextDir);
-        else
-           return;
-
-        BaseTreeItem* bti = clicked_item->getParent();
-        while (bti->getParent())
-            bti = bti->getParent();
-
-        ActionMoveItem* act = new ActionMoveItem(0);
-        act->setObject(uao);
-        act->exec();
-
-        mContextTreeModel->moveItem(clicked_item,bti);
     }
 
     void ContextManagerWidget::handleItemDoubleClicked(const QModelIndex &proxyIndex)
@@ -370,10 +342,6 @@ namespace hal
             context_menu.addAction(mDeleteAction);
             context_menu.addAction(mRenameAction);
         }
-
-        // unless parent is rootItem thus not a ContextTreeItem
-        if (dynamic_cast<ContextTreeItem*>(item->getParent()))
-            context_menu.addAction(mMoveToplevelAction);
 
         context_menu.exec(mContextTreeView->viewport()->mapToGlobal(point));
     }
@@ -659,6 +627,7 @@ namespace hal
 
     void ContextManagerWidget::handleFocusChanged(QWidget* oldWidget, QWidget* newWidget)
     {
+        Q_UNUSED(oldWidget);
         if(!newWidget) return;
         if(newWidget->parent() == this)
         {
@@ -671,5 +640,4 @@ namespace hal
             return;
         }
     }
-
 }

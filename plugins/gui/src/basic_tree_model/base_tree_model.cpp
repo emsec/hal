@@ -154,7 +154,7 @@ namespace hal
         if (row < 0) row = parentItem->getChildCount();
         QModelIndex index = getIndexFromItem(parentItem);
         beginInsertRows(index, row, row);
-        parentItem->appendChild(childItem);
+        parentItem->insertChild(row,childItem);
         endInsertRows();
     }
 

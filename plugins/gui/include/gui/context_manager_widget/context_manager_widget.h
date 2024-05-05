@@ -205,7 +205,6 @@ namespace hal
         void handleRenameClicked();
         void handleDuplicateContextClicked();
         void handleDeleteClicked();
-        void handleMoveToplevelClicked();
 
         void handleContextMenuRequest(const QPoint& point);
         void handleSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
@@ -244,10 +243,6 @@ namespace hal
         QAction* mOpenAction;
         QString mOpenIconPath;
         QString mOpenIconStyle;
-
-        QAction* mMoveToplevelAction;
-        QString mMoveToplevelPath;
-        QString mMoveToplevelStyle;
 
         QString mSearchIconPath;
         QString mSearchIconStyle;
