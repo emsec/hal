@@ -25,42 +25,18 @@
 
 #pragma once
 
-#include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/defines.h"
+#include "hal_core/utilities/result.h"
 
 #include <igraph/igraph.h>
+#include <set>
 
 namespace hal
 {
-    /* forward declaration */
-    class Netlist;
-    class Gate;
-    class Net;
-
-    class PLUGIN_API GraphAlgorithmPlugin : public BasePluginInterface
+    namespace graph_algorithm
     {
-    public:
-        /** constructor (= default) */
-        GraphAlgorithmPlugin() = default;
+        class NetlistGraph;
 
-        /** destructor (= default) */
-        ~GraphAlgorithmPlugin() = default;
-
-        /*
-        *      interface implementations
-        */
-
-        /**
-         * Get the name of the plugin.
-         *
-         * @returns The name of the plugin.
-         */
-        std::string get_name() const override;
-
-        /**
-         * Get the version of the plugin.
-         *
-         * @returns The version of the plugin.
-         */
-        std::string get_version() const override;
-    };
+        Result<std::set<std::set<u32>>> get_connected_components(const NetlistGraph* graph, bool strong);
+    }    // namespace graph_algorithm
 }    // namespace hal
