@@ -8,7 +8,7 @@ namespace hal
 {
     namespace graph_algorithm
     {
-        Result<std::set<std::set<u32>>> get_connected_components(const NetlistGraph* graph, bool strong)
+        Result<std::vector<std::vector<u32>>> get_connected_components(NetlistGraph* graph, bool strong, u32 min_size)
         {
             if (graph == nullptr)
             {
@@ -45,24 +45,29 @@ namespace hal
 
             // map back to HAL structures
             u32 num_vertices = (u32)igraph_vcount(igr);
-            std::map<u32, std::set<u32>> components;
+            std::map<u32, std::set<u32>> components_raw;
 
             for (i32 i = 0; i < num_vertices; i++)
             {
-                components[VECTOR(membership)[i]].insert(i);
+                components_raw[VECTOR(membership)[i]].insert(i);
             }
 
             // convert to set
-            std::set<std::set<u32>> sccs;
-            for (auto& [_, members] : components)
+            std::vector<std::vector<u32>> components;
+            for (auto& [_, members] : components_raw)
             {
-                sccs.insert(std::move(members));
+                if (members.size() < min_size)
+                {
+                    continue;
+                }
+
+                components.push_back(std::vector<u32>(members.begin(), members.end()));
             }
 
             igraph_vector_int_destroy(&membership);
             igraph_vector_int_destroy(&csize);
 
-            return OK(sccs);
+            return OK(components);
         }
     }    // namespace graph_algorithm
 }    // namespace hal
