@@ -9,17 +9,23 @@ namespace hal
 {
     namespace graph_algorithm
     {
+
         NetlistGraph::NetlistGraph(Netlist* nl) : m_nl(nl)
         {
         }
 
         NetlistGraph::~NetlistGraph()
         {
-            igraph_destroy(m_graph);
+            igraph_destroy(&m_graph);
         }
 
         Result<std::unique_ptr<NetlistGraph>> NetlistGraph::from_netlist(Netlist* nl, bool create_dummy_nodes, const std::function<bool(const Net*)>& filter)
         {
+            if (!nl)
+            {
+                return ERR("netlist is a nullptr");
+            }
+
             auto graph = std::unique_ptr<NetlistGraph>(new NetlistGraph(nl));
 
             // count all edges as this number is needed to create a new graph
@@ -62,7 +68,6 @@ namespace hal
             auto err = igraph_vector_int_init(&edges, 2 * edge_counter);
             if (err != IGRAPH_SUCCESS)
             {
-                igraph_vector_int_destroy(&edges);
                 return ERR(igraph_strerror(err));
             }
 
@@ -72,7 +77,7 @@ namespace hal
 
             for (auto* g : graph->m_nl->get_gates())
             {
-                u32 node                      = node_counter++;
+                const u32 node                = node_counter++;
                 graph->m_gates_to_nodes[g]    = node;
                 graph->m_nodes_to_gates[node] = g;
             }
@@ -94,7 +99,7 @@ namespace hal
                 if (src_gates.empty() && create_dummy_nodes)
                 {
                     // if no sources, add one dummy node
-                    u32 dummy_node                      = ++node_counter;
+                    const u32 dummy_node                = node_counter++;
                     graph->m_nodes_to_gates[dummy_node] = nullptr;
                     for (auto* dst_gate : dst_gates)
                     {
@@ -105,7 +110,7 @@ namespace hal
                 else if (dst_gates.empty() && create_dummy_nodes)
                 {
                     // if no destinations, add one dummy node
-                    u32 dummy_node                      = ++node_counter;
+                    const u32 dummy_node                = node_counter++;
                     graph->m_nodes_to_gates[dummy_node] = nullptr;
                     for (auto* src_gate : src_gates)
                     {
@@ -126,9 +131,35 @@ namespace hal
                 }
             }
 
-            err = igraph_create(graph->m_graph, &edges, node_counter, IGRAPH_DIRECTED);
+            err = igraph_create(&(graph->m_graph), &edges, node_counter, IGRAPH_DIRECTED);
             igraph_vector_int_destroy(&edges);
 
+            if (err != IGRAPH_SUCCESS)
+            {
+                return ERR(igraph_strerror(err));
+            }
+
+            return OK(std::move(graph));
+        }
+
+        Result<std::unique_ptr<NetlistGraph>> NetlistGraph::from_netlist_no_edges(Netlist* nl)
+        {
+            if (!nl)
+            {
+                return ERR("netlist is a nullptr");
+            }
+
+            auto graph = std::unique_ptr<NetlistGraph>(new NetlistGraph(nl));
+
+            u32 node_counter = 0;
+            for (auto* g : graph->m_nl->get_gates())
+            {
+                const u32 node                = node_counter++;
+                graph->m_gates_to_nodes[g]    = node;
+                graph->m_nodes_to_gates[node] = g;
+            }
+
+            auto err = igraph_empty(&(graph->m_graph), node_counter, IGRAPH_DIRECTED);
             if (err != IGRAPH_SUCCESS)
             {
                 return ERR(igraph_strerror(err));
@@ -142,111 +173,305 @@ namespace hal
             return m_nl;
         }
 
-        igraph_t* NetlistGraph::get_graph() const
+        igraph_t* NetlistGraph::get_graph()
         {
-            return m_graph;
+            return &m_graph;
         }
 
-        Result<Gate*> NetlistGraph::get_gate_of_vertex(const u32 node) const
+        Result<Gate*> NetlistGraph::get_gate_from_vertex(const u32 vertex) const
         {
-            if (!m_nl)
+            const auto res = get_gates_from_vertices(std::vector<u32>({vertex}));
+            if (res.is_error())
             {
-                return ERR("graph does not correspond to a netlist");
+                return ERR(res.get_error());
             }
 
-            if (const auto it = m_nodes_to_gates.find(node); it != m_nodes_to_gates.end())
+            return OK(res.get().front());
+        }
+
+        Result<u32> NetlistGraph::get_vertex_from_gate(Gate* g) const
+        {
+            const auto res = get_vertices_from_gates(std::vector<Gate*>({g}));
+            if (res.is_error())
             {
-                Gate* g = it->second;
-                if (g != nullptr)
+                return ERR(res.get_error());
+            }
+
+            return OK(res.get().front());
+        }
+
+        Result<std::vector<std::pair<u32, u32>>> NetlistGraph::get_edges() const
+        {
+            const u32 ecount = igraph_ecount(&m_graph);
+
+            igraph_vector_int_t edges;
+            if (auto res = igraph_vector_int_init(&edges, 2 * ecount); res != IGRAPH_SUCCESS)
+            {
+                return ERR(igraph_strerror(res));
+            }
+
+            if (auto res = igraph_get_edgelist(&m_graph, &edges, false); res != IGRAPH_SUCCESS)
+            {
+                igraph_vector_int_destroy(&edges);
+                return ERR(igraph_strerror(res));
+            }
+
+            std::vector<std::pair<u32, u32>> e_vec(ecount);
+            for (u32 i = 0; i < ecount; i++)
+            {
+                const u32 src_vertex = (u32)VECTOR(edges)[2 * i];
+                const u32 dst_vertex = (u32)VECTOR(edges)[2 * i + 1];
+
+                e_vec[i] = std::make_pair(src_vertex, dst_vertex);
+            }
+
+            return OK(e_vec);
+        }
+
+        Result<std::vector<std::pair<Gate*, Gate*>>> NetlistGraph::get_edges_in_netlist() const
+        {
+            const u32 ecount = igraph_ecount(&m_graph);
+
+            igraph_vector_int_t edges;
+            if (auto res = igraph_vector_int_init(&edges, 2 * ecount); res != IGRAPH_SUCCESS)
+            {
+                return ERR(igraph_strerror(res));
+            }
+
+            if (auto res = igraph_get_edgelist(&m_graph, &edges, false); res != IGRAPH_SUCCESS)
+            {
+                igraph_vector_int_destroy(&edges);
+                return ERR(igraph_strerror(res));
+            }
+
+            std::vector<std::pair<Gate*, Gate*>> e_vec(ecount);
+            for (u32 i = 0; i < ecount; i++)
+            {
+                const u32 src_vertex = (u32)VECTOR(edges)[2 * i];
+                const u32 dst_vertex = (u32)VECTOR(edges)[2 * i + 1];
+                Gate *src_gate, *dst_gate;
+
+                if (const auto it = m_nodes_to_gates.find(src_vertex); it != m_nodes_to_gates.end())
                 {
-                    return OK(g);
+                    src_gate = it->second;
+                    if (src_gate == nullptr)
+                    {
+                        log_warning("graph_algorithm",
+                                    "ignored edge (" + std::to_string(src_vertex) + "," + std::to_string(dst_vertex) + ") at dummy source vertex '" + std::to_string(src_vertex) + "'");
+                        continue;
+                    }
+                }
+
+                if (const auto it = m_nodes_to_gates.find(dst_vertex); it != m_nodes_to_gates.end())
+                {
+                    dst_gate = it->second;
+                    if (dst_gate == nullptr)
+                    {
+                        log_warning("graph_algorithm",
+                                    "ignored edge (" + std::to_string(src_vertex) + "," + std::to_string(dst_vertex) + ") at dummy destination vertex '" + std::to_string(dst_vertex) + "'");
+                        continue;
+                    }
+                }
+
+                e_vec[i] = std::make_pair(src_gate, dst_gate);
+            }
+
+            return OK(e_vec);
+        }
+
+        Result<std::monostate> NetlistGraph::add_edges(const std::vector<std::pair<Gate*, Gate*>>& edges)
+        {
+            igraph_vector_int_t e_vec;
+            if (auto res = igraph_vector_int_init(&e_vec, 2 * edges.size()); res != IGRAPH_SUCCESS)
+            {
+                return ERR(igraph_strerror(res));
+            }
+
+            u32 edge_index = 0;
+            for (const auto& [src_gate, dst_gate] : edges)
+            {
+                if (auto it = m_gates_to_nodes.find(src_gate); it != m_gates_to_nodes.end())
+                {
+                    VECTOR(e_vec)[edge_index++] = it->second;
                 }
                 else
                 {
-                    log_warning("graph_algorithm", "no gate exists for dummy node {}", node);
+                    igraph_vector_int_destroy(&e_vec);
+                    return ERR("no node for gate '" + src_gate->get_name() + "' with ID " + std::to_string(src_gate->get_id()) + " exists in graph for netlist with ID "
+                               + std::to_string(m_nl->get_id()));
                 }
-            }
-            else
-            {
-                return ERR("no gate for node " + std::to_string(node) + " exists in netlist with ID " + std::to_string(m_nl->get_id()));
-            }
-        }
 
-        Result<std::vector<Gate*>> NetlistGraph::get_gates_of_vertices(const std::set<u32>& nodes) const
-        {
-            if (!m_nl)
-            {
-                return ERR("graph does not correspond to a netlist");
-            }
-
-            std::vector<Gate*> res;
-            for (const auto& node : nodes)
-            {
-                if (const auto it = m_nodes_to_gates.find(node); it != m_nodes_to_gates.end())
+                if (auto it = m_gates_to_nodes.find(dst_gate); it != m_gates_to_nodes.end())
                 {
-                    Gate* g = it->second;
-                    if (g != nullptr)
-                    {
-                        res.push_back(g);
-                    }
-                    else
-                    {
-                        log_warning("graph_algorithm", "no gate exists for dummy node {}", node);
-                    }
+                    VECTOR(e_vec)[edge_index++] = it->second;
                 }
                 else
                 {
-                    return ERR("no gate for node " + std::to_string(node) + " exists in netlist with ID " + std::to_string(m_nl->get_id()));
+                    igraph_vector_int_destroy(&e_vec);
+                    return ERR("no node for gate '" + dst_gate->get_name() + "' with ID " + std::to_string(dst_gate->get_id()) + " exists in graph for netlist with ID "
+                               + std::to_string(m_nl->get_id()));
                 }
             }
-            return OK(res);
-        }
 
-        Result<std::vector<Gate*>> NetlistGraph::get_gates_of_vertices(const std::vector<u32>& nodes) const
-        {
-            if (!m_nl)
+            if (auto res = igraph_add_edges(&m_graph, &e_vec, nullptr); res != IGRAPH_SUCCESS)
             {
-                return ERR("graph does not correspond to a netlist");
+                igraph_vector_int_destroy(&e_vec);
+                return ERR(igraph_strerror(res));
             }
 
-            std::vector<Gate*> res;
-            for (const auto& node : nodes)
+            return OK({});
+        }
+
+        Result<std::monostate> NetlistGraph::add_edges(const std::vector<std::pair<u32, u32>>& edges)
+        {
+            igraph_vector_int_t e_vec;
+            if (auto err = igraph_vector_int_init(&e_vec, 2 * edges.size()); err != IGRAPH_SUCCESS)
             {
-                if (const auto it = m_nodes_to_gates.find(node); it != m_nodes_to_gates.end())
+                return ERR(igraph_strerror(err));
+            }
+
+            u32 vcount = igraph_vcount(&m_graph);
+
+            u32 edge_index = 0;
+            for (const auto& [src_vertex, dst_vertex] : edges)
+            {
+                if (src_vertex >= vcount)
                 {
-                    Gate* g = it->second;
-                    if (g != nullptr)
-                    {
-                        res.push_back(g);
-                    }
-                    else
-                    {
-                        log_warning("graph_algorithm", "no gate exists for dummy node {}", node);
-                    }
+                    igraph_vector_int_destroy(&e_vec);
+                    return ERR("source vertex '" + std::to_string(src_vertex) + "' does not exist in graph for netlist with ID " + std::to_string(m_nl->get_id()));
+                }
+                if (dst_vertex >= vcount)
+                {
+                    igraph_vector_int_destroy(&e_vec);
+                    return ERR("destination vertex '" + std::to_string(dst_vertex) + "' does not exist in graph for netlist with ID " + std::to_string(m_nl->get_id()));
+                }
+
+                VECTOR(e_vec)[edge_index++] = src_vertex;
+                VECTOR(e_vec)[edge_index++] = dst_vertex;
+            }
+
+            if (auto err = igraph_add_edges(&m_graph, &e_vec, nullptr); err != IGRAPH_SUCCESS)
+            {
+                igraph_vector_int_destroy(&e_vec);
+                return ERR(igraph_strerror(err));
+            }
+
+            return OK({});
+        }
+
+        Result<std::monostate> NetlistGraph::delete_edges(const std::vector<std::pair<Gate*, Gate*>>& edges)
+        {
+            igraph_vector_int_t e_vec;
+            if (auto err = igraph_vector_int_init(&e_vec, 2 * edges.size()); err != IGRAPH_SUCCESS)
+            {
+                return ERR(igraph_strerror(err));
+            }
+
+            u32 vcount = igraph_vcount(&m_graph);
+
+            u32 edge_index = 0;
+            for (const auto& [src_gate, dst_gate] : edges)
+            {
+                if (auto it = m_gates_to_nodes.find(src_gate); it != m_gates_to_nodes.end())
+                {
+                    VECTOR(e_vec)[edge_index++] = it->second;
                 }
                 else
                 {
-                    return ERR("no gate for node " + std::to_string(node) + " exists in netlist with ID " + std::to_string(m_nl->get_id()));
+                    igraph_vector_int_destroy(&e_vec);
+                    return ERR("no node for gate '" + src_gate->get_name() + "' with ID " + std::to_string(src_gate->get_id()) + " exists in graph for netlist with ID "
+                               + std::to_string(m_nl->get_id()));
+                }
+
+                if (auto it = m_gates_to_nodes.find(dst_gate); it != m_gates_to_nodes.end())
+                {
+                    VECTOR(e_vec)[edge_index++] = it->second;
+                }
+                else
+                {
+                    igraph_vector_int_destroy(&e_vec);
+                    return ERR("no node for gate '" + dst_gate->get_name() + "' with ID " + std::to_string(dst_gate->get_id()) + " exists in graph for netlist with ID "
+                               + std::to_string(m_nl->get_id()));
                 }
             }
-            return OK(res);
+
+            igraph_es_t e_sel;
+            if (auto res = igraph_es_pairs(&e_sel, &e_vec, IGRAPH_DIRECTED); res != IGRAPH_SUCCESS)
+            {
+                igraph_vector_int_destroy(&e_vec);
+                return ERR(igraph_strerror(res));
+            }
+
+            if (auto res = igraph_delete_edges(&m_graph, e_sel); res != IGRAPH_SUCCESS)
+            {
+                igraph_es_destroy(&e_sel);
+                igraph_vector_int_destroy(&e_vec);
+                return ERR(igraph_strerror(res));
+            }
+
+            igraph_es_destroy(&e_sel);
+            igraph_vector_int_destroy(&e_vec);
+
+            return OK({});
         }
 
-        Result<u32> NetlistGraph::get_vertex_of_gate(Gate* g) const
+        Result<std::monostate> NetlistGraph::delete_edges(const std::vector<std::pair<u32, u32>>& edges)
         {
-            if (!m_nl)
+            igraph_vector_int_t e_vec;
+            if (auto err = igraph_vector_int_init(&e_vec, 2 * edges.size()); err != IGRAPH_SUCCESS)
             {
-                return ERR("graph does not correspond to a netlist");
+                return ERR(igraph_strerror(err));
             }
 
-            if (const auto it = m_gates_to_nodes.find(g); it != m_gates_to_nodes.end())
+            u32 vcount = igraph_vcount(&m_graph);
+
+            u32 edge_index = 0;
+            for (const auto& [src_vertex, dst_vertex] : edges)
             {
-                return OK(it->second);
+                if (src_vertex >= vcount)
+                {
+                    igraph_vector_int_destroy(&e_vec);
+                    return ERR("source vertex '" + std::to_string(src_vertex) + "' does not exist in graph for netlist with ID " + std::to_string(m_nl->get_id()));
+                }
+                if (dst_vertex >= vcount)
+                {
+                    igraph_vector_int_destroy(&e_vec);
+                    return ERR("destination vertex '" + std::to_string(dst_vertex) + "' does not exist in graph for netlist with ID " + std::to_string(m_nl->get_id()));
+                }
+
+                VECTOR(e_vec)[edge_index++] = src_vertex;
+                VECTOR(e_vec)[edge_index++] = dst_vertex;
             }
-            else
+
+            igraph_es_t e_sel;
+            if (auto res = igraph_es_pairs(&e_sel, &e_vec, IGRAPH_DIRECTED); res != IGRAPH_SUCCESS)
             {
-                return ERR("no node for gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()) + " exists in netlist with ID " + std::to_string(m_nl->get_id()));
+                igraph_vector_int_destroy(&e_vec);
+                return ERR(igraph_strerror(res));
             }
+
+            if (auto res = igraph_delete_edges(&m_graph, e_sel); res != IGRAPH_SUCCESS)
+            {
+                igraph_es_destroy(&e_sel);
+                igraph_vector_int_destroy(&e_vec);
+                return ERR(igraph_strerror(res));
+            }
+
+            igraph_es_destroy(&e_sel);
+            igraph_vector_int_destroy(&e_vec);
+
+            return OK({});
+        }
+
+        void NetlistGraph::print() const
+        {
+            igraph_write_graph_edgelist(&m_graph, stdout);
         }
     }    // namespace graph_algorithm
+
+    template<>
+    std::map<graph_algorithm::NetlistGraph::Direction, std::string> EnumStrings<graph_algorithm::NetlistGraph::Direction>::data = {{graph_algorithm::NetlistGraph::Direction::NONE, "NONE"},
+                                                                                                                                   {graph_algorithm::NetlistGraph::Direction::IN, "IN"},
+                                                                                                                                   {graph_algorithm::NetlistGraph::Direction::OUT, "OUT"},
+                                                                                                                                   {graph_algorithm::NetlistGraph::Direction::ALL, "ALL"}};
 }    // namespace hal
