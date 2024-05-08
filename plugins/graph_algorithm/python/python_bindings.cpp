@@ -293,6 +293,29 @@ namespace hal
         )");
 
         py_netlist_graph.def(
+            "get_vertices",
+            [](const graph_algorithm::NetlistGraph& self, bool only_connected = false) -> std::optional<std::vector<u32>> {
+                auto res = self.get_vertices(only_connected);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting vertices:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("only_connected") = false,
+            R"(
+            Get the vertices in the netlist graph.
+
+            :param bool only_connected: Set ``True`` to only return vertices connected to at least one edge, ``False`` otherwise. Defaults to ``False``.
+            :returns: A list of vertices on success, ``None`` otherwise.
+            :rtype: list[int] or None
+        )");
+
+        py_netlist_graph.def(
             "get_edges",
             [](const graph_algorithm::NetlistGraph& self) -> std::optional<std::vector<std::pair<u32, u32>>> {
                 auto res = self.get_edges();

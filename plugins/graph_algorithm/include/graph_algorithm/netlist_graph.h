@@ -175,6 +175,14 @@ namespace hal
             u32 get_num_edges() const;
 
             /**
+             * Get the vertices in the netlist graph.
+             * 
+             * @param[in] only_connected - Set `true` to only return vertices connected to at least one edge, `false` otherwise. Defaults to `false`.
+             * @returns A vector of vertices on success, an error otherwise.
+             */
+            Result<std::vector<u32>> get_vertices(bool only_connected = false) const;
+
+            /**
              * Get the edges between vertices in the netlist graph.
              * 
              * @returns A vector of edges on success, an error otherwise.

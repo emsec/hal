@@ -396,6 +396,58 @@ namespace hal
             return igraph_ecount(&m_graph);
         }
 
+        Result<std::vector<u32>> NetlistGraph::get_vertices(bool only_connected) const
+        {
+            u32 num_vertices = igraph_vcount(&m_graph);
+
+            if (!only_connected)
+            {
+                std::vector<u32> vertices(num_vertices);
+                for (u32 i = 0; i < num_vertices; i++)
+                {
+                    vertices[i] = i;
+                }
+                return OK(vertices);
+            }
+            else
+            {
+                std::vector<u32> vertices;
+
+                igraph_vector_int_t degrees;
+                if (auto res = igraph_vector_int_init(&degrees, num_vertices); res != IGRAPH_SUCCESS)
+                {
+                    return ERR(igraph_strerror(res));
+                }
+
+                igraph_vs_t v_sel;
+                if (auto res = igraph_vs_all(&v_sel); res != IGRAPH_SUCCESS)
+                {
+                    igraph_vector_int_destroy(&degrees);
+                    return ERR(igraph_strerror(res));
+                }
+
+                if (auto res = igraph_degree(&m_graph, &degrees, v_sel, IGRAPH_ALL, IGRAPH_LOOPS); res != IGRAPH_SUCCESS)
+                {
+                    igraph_vs_destroy(&v_sel);
+                    igraph_vector_int_destroy(&degrees);
+                    return ERR(igraph_strerror(res));
+                }
+
+                for (u32 i = 0; i < num_vertices; i++)
+                {
+                    if (VECTOR(degrees)[i] != 0)
+                    {
+                        vertices.push_back(i);
+                    }
+                }
+
+                igraph_vector_int_destroy(&degrees);
+                igraph_vs_destroy(&v_sel);
+
+                return OK(vertices);
+            }
+        }
+
         Result<std::vector<std::pair<u32, u32>>> NetlistGraph::get_edges() const
         {
             const u32 ecount = igraph_ecount(&m_graph);
