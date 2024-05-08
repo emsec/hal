@@ -62,6 +62,10 @@ option(HAL_VERSION_MAJOR "Pass major version via cmake options" "")
 option(HAL_VERSION_MINOR "Pass minor version via cmake options" "")
 option(HAL_VERSION_PATCH "Pass patch version via cmake options" "")
 option(USE_LIBCXX "Force the use of LIBCXX for e.g. gcc" FALSE)
+option(USE_VENDORED_PYBIND11 "Use vendored 'pybind11' Python library" ON)
+option(USE_VENDORED_SPDLOG "Use vendored 'spdlog' library" ON)
+option(USE_VENDORED_QUAZIP "Use vendored 'quazip' library" ON)
+option(USE_VENDORED_IGRAPH "Use vendored 'igraph' library" ON)
 option(BUILD_ALL_PLUGINS "Build all available plugins" OFF)
 option(BUILD_TESTS "Enable test builds" OFF)
 option(BUILD_COVERAGE "Enable code coverage build" OFF)
@@ -325,8 +329,12 @@ install(FILES tools/genversion.py
     GROUP_EXECUTE
     WORLD_READ
     WORLD_EXECUTE)
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/pybind11 DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/spdlog-${spdlog_VERSION} DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
+if(USE_VENDORED_PYBIND11)
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/pybind11 DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
+endif()
+if(USE_VENDORED_SPDLOG)
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/spdlog-${spdlog_VERSION} DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
+endif()
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/deps/subprocess DESTINATION ${HAL_CMAKECONFIG_INSTALL_DIR})
 
 
