@@ -79,7 +79,10 @@ namespace hal
 
         BaseTreeModel* model = static_cast<BaseTreeModel*>(sourceModel());
         if (!model) return retval;
-        BaseTreeItem* bti = model->getItemFromIndex(mapToSource(indexes.at(0)));
+
+        QModelIndex sourceIndex = mapToSource(indexes.at(0));
+        BaseTreeItem* bti = model->getItemFromIndex(sourceIndex);
+        row = sourceIndex.row();
         BaseTreeItem* parentItem = bti->getParent();
         ContextTreeItem* item = dynamic_cast<ContextTreeItem*>(bti);
         if (!item)
@@ -123,7 +126,6 @@ namespace hal
         int sourceRow = -1;
         quintptr sourceParent = 0;
 
-        std::cerr << "***drop " << row << (parent.isValid() ? " valid" : " root") << std::endl;
         auto encItem = mimeData->data("contexttreemodel/item");
         QDataStream dataStream(&encItem, QIODevice::ReadOnly);
         dataStream >> type >> id >> sourceRow >> sourceParent;
@@ -175,8 +177,6 @@ namespace hal
 
         BaseTreeModel* model = static_cast<BaseTreeModel*>(sourceModel());
         if (!model) return false;
-
-        std::cerr << "   test " << row << (parent.isValid() ? " valid" : " root") << std::endl;
 
         if (!parent.isValid())
             return true; // can always drop on root

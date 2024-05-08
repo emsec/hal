@@ -93,6 +93,9 @@ namespace hal
         mContextTreeView->setAcceptDrops(true);
         mContextTreeView->setDropIndicatorShown(true);
 
+        mContextTreeView->header()->setSortIndicator(-1, Qt::AscendingOrder);
+        mContextTreeView->header()->setSortIndicatorShown(false);
+
         mContentLayout->addWidget(mContextTreeView);
         mContentLayout->addWidget(mSearchbar);
 

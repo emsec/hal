@@ -45,7 +45,6 @@ namespace hal
     void BaseTreeItem::insertChild(int index, BaseTreeItem *child)
     {
         child->setParent(this);
-        std::cerr << "...chld " << index << std::endl;
         mChildren.insert(index, child);
     }
 

@@ -410,7 +410,6 @@ namespace hal
 
     bool ContextTreeModel::moveItem(ContextTreeItem* itemToMove, BaseTreeItem *newParent, int row)
     {
-        std::cerr << "...move " << row << std::endl;
         if (!itemToMove || !newParent ) return false;
         if (newParent != mRootItem)
         {
@@ -428,7 +427,7 @@ namespace hal
 
         insertChildItem(itemToMove, newParent, row);
 
-        dumpRecursion();
+        // dumpRecursion();
         return true;
     }
 
