@@ -3,6 +3,7 @@
 
 #include "graph_algorithm/algorithms/components.h"
 #include "graph_algorithm/algorithms/neighborhood.h"
+#include "graph_algorithm/algorithms/subgraph.h"
 #include "graph_algorithm/netlist_graph.h"
 #include "graph_algorithm/plugin_graph_algorithm.h"
 
@@ -525,6 +526,56 @@ namespace hal
                 :param int min_dist: The minimum distance of the vertices to include in the result.
                 :returns: A list of neighborhoods of each of the provided start vertices (in order) on success, ``None`` otherwise.
                 :rtype: list[list[int]] or None
+        )");
+
+        m.def(
+            "get_subgraph",
+            [](graph_algorithm::NetlistGraph* graph, const std::vector<Gate*>& subgraph_gates) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
+                auto res = graph_algorithm::get_subgraph(graph, subgraph_gates);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while computing subgraph:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("subgraph_gates"),
+            R"(
+                Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.
+
+                :param graph_algorithm.NetlistGraph graph: The netlist graph.
+                :param list[hal_py.Gate] subgraph_gates: A list of gates that make up the subgraph.
+                :returns: The subgraph as a new netlist graph on success, ``None`` otherwise.
+                :rtype: graph_algorithm.NetlistGraph or None
+        )");
+
+        m.def(
+            "get_subgraph",
+            [](graph_algorithm::NetlistGraph* graph, const std::vector<u32>& subgraph_vertices) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
+                auto res = graph_algorithm::get_subgraph(graph, subgraph_vertices);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while computing subgraph:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("subgraph_vertices"),
+            R"(
+                Compute the subgraph induced by the specified vertices, including all edges between these vertices.
+                
+                :param graph_algorithm.NetlistGraph graph: The netlist graph.
+                :param list[int] subgraph_vertices: A list of vertices that make up the subgraph.
+                :returns: The subgraph as a new netlist graph on success, ``None`` otherwise.
+                :rtype: graph_algorithm.NetlistGraph or None
         )");
 
         // .def("get_communities", &GraphAlgorithmPlugin::get_communities, py::arg("netlist"), R"(
