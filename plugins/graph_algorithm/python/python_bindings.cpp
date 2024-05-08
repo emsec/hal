@@ -83,8 +83,8 @@ namespace hal
 
         py_netlist_graph.def_static(
             "from_netlist",
-            [](Netlist* nl, bool create_dummy_nodes = false, const std::function<bool(const Net*)>& filter = nullptr) -> std::unique_ptr<graph_algorithm::NetlistGraph> {
-                auto res = graph_algorithm::NetlistGraph::from_netlist(nl, create_dummy_nodes, filter);
+            [](Netlist* nl, bool create_dummy_vertices = false, const std::function<bool(const Net*)>& filter = nullptr) -> std::unique_ptr<graph_algorithm::NetlistGraph> {
+                auto res = graph_algorithm::NetlistGraph::from_netlist(nl, create_dummy_vertices, filter);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -96,12 +96,12 @@ namespace hal
                 }
             },
             py::arg("nl"),
-            py::arg("create_dummy_nodes") = false,
-            py::arg("filter")             = nullptr,
+            py::arg("create_dummy_vertices") = false,
+            py::arg("filter")                = nullptr,
             R"(Create a directed graph from a netlist. Optionally create dummy nodes at nets missing a source or destination. An optional filter can be applied to exclude undesired edges.
              
              :param hal_py.Netlist nl: The netlist.
-             :param bool create_dummy_nodes: Set ``True`` to create dummy nodes, ``False`` otherwise. Defaults to ``False``.
+             :param bool create_dummy_vertices: Set ``True`` to create dummy vertices, ``False`` otherwise. Defaults to ``False``.
              :param lambda filter: An optional filter that is evaluated on every net of the netlist. Defaults to ``None``.
              :returns: The netlist graph on success, ``None`` otherwise.
              :rtype: graph_algorithm.NetlistGraph or None

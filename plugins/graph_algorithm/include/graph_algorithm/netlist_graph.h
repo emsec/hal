@@ -59,14 +59,14 @@ namespace hal
                         ~NetlistGraph();
 
             /**
-             * Create a directed graph from a netlist. Optionally create dummy nodes at nets missing a source or destination. An optional filter can be applied to exclude undesired edges.
+             * Create a directed graph from a netlist. Optionally create dummy vertices at nets missing a source or destination. An optional filter can be applied to exclude undesired edges.
              * 
              * @param[in] nl - The netlist.
-             * @param[in] create_dummy_nodes - Set `true` to create dummy nodes, `false` otherwise. Defaults to `false`.
+             * @param[in] create_dummy_vertices - Set `true` to create dummy vertices, `false` otherwise. Defaults to `false`.
              * @param[in] filter - An optional filter that is evaluated on every net of the netlist. Defaults to `nullptr`.
              * @returns The netlist graph on success, an error otherwise.
              */
-            static Result<std::unique_ptr<NetlistGraph>> from_netlist(Netlist* nl, bool create_dummy_nodes = false, const std::function<bool(const Net*)>& filter = nullptr);
+            static Result<std::unique_ptr<NetlistGraph>> from_netlist(Netlist* nl, bool create_dummy_vertices = false, const std::function<bool(const Net*)>& filter = nullptr);
 
             /**
              * Create an empty directed graph from a netlist, i.e., vertices for all gates are created, but no edges are added.
@@ -196,9 +196,6 @@ namespace hal
              */
             Result<std::monostate> add_edges(const std::vector<std::pair<u32, u32>>& edges);
 
-            // TODO implement
-            Result<std::monostate> add_edges(const std::vector<Net*>& edges);
-
             /**
              * Delete edges between the specified pairs of source and destination gates from the netlist graph.
              * 
@@ -214,9 +211,6 @@ namespace hal
              * @returns OK on success, an error otherwise.
              */
             Result<std::monostate> delete_edges(const std::vector<std::pair<u32, u32>>& edges);
-
-            // TODO implement
-            Result<std::monostate> delete_edges(const std::vector<Net*>& edges);
 
             /**
              * Print the edge list of the graph to stdout.
