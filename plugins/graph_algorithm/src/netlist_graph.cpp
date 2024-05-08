@@ -14,12 +14,23 @@ namespace hal
         {
         }
 
+        NetlistGraph::NetlistGraph(Netlist* nl, igraph_t&& graph, std::unordered_map<u32, Gate*>&& nodes_to_gates) : m_nl(nl), m_graph(std::move(graph)), m_nodes_to_gates(std::move(nodes_to_gates))
+        {
+            for (const auto& [node, gate] : m_nodes_to_gates)
+            {
+                if (gate)
+                {
+                    m_gates_to_nodes[gate] = node;
+                }
+            }
+        }
+
         NetlistGraph::~NetlistGraph()
         {
             igraph_destroy(&m_graph);
         }
 
-        Result<std::unique_ptr<NetlistGraph>> NetlistGraph::from_netlist(Netlist* nl, bool create_dummy_nodes, const std::function<bool(const Net*)>& filter)
+        Result<std::unique_ptr<NetlistGraph>> NetlistGraph::from_netlist(Netlist* nl, bool create_dummy_vertices, const std::function<bool(const Net*)>& filter)
         {
             if (!nl)
             {
@@ -44,13 +55,13 @@ namespace hal
                     dst_gates.push_back(dst_ep->get_gate());
                 }
 
-                if (src_gates.empty() && create_dummy_nodes)
+                if (src_gates.empty() && create_dummy_vertices)
                 {
                     // if no sources, add one dummy edge for every destination
                     // all dummy edges will come from the same dummy node
                     edge_counter += dst_gates.size();
                 }
-                else if (dst_gates.empty() && create_dummy_nodes)
+                else if (dst_gates.empty() && create_dummy_vertices)
                 {
                     // if no destinations, add one dummy edge for every source
                     // all dummy edges will go to the same dummy node
@@ -96,7 +107,7 @@ namespace hal
                     dst_gates.push_back(dst_ep->get_gate());
                 }
 
-                if (src_gates.empty() && create_dummy_nodes)
+                if (src_gates.empty() && create_dummy_vertices)
                 {
                     // if no sources, add one dummy node
                     const u32 dummy_node                = node_counter++;
@@ -107,7 +118,7 @@ namespace hal
                         VECTOR(edges)[edge_index++] = graph->m_gates_to_nodes.at(dst_gate);
                     }
                 }
-                else if (dst_gates.empty() && create_dummy_nodes)
+                else if (dst_gates.empty() && create_dummy_vertices)
                 {
                     // if no destinations, add one dummy node
                     const u32 dummy_node                = node_counter++;

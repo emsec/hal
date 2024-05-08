@@ -56,7 +56,9 @@ namespace hal
                 ALL
             };
 
-                        ~NetlistGraph();
+            NetlistGraph(Netlist* nl, igraph_t&& graph, std::unordered_map<u32, Gate*>&& m_nodes_to_gates);
+
+            ~NetlistGraph();
 
             /**
              * Create a directed graph from a netlist. Optionally create dummy vertices at nets missing a source or destination. An optional filter can be applied to exclude undesired edges.
