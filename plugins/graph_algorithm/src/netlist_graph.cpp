@@ -200,6 +200,46 @@ namespace hal
             return OK(res.get().front());
         }
 
+        u32 NetlistGraph::get_num_vertices(bool only_connected) const
+        {
+            u32 num_vertices = igraph_vcount(&m_graph);
+
+            if (!only_connected)
+            {
+                return num_vertices;
+            }
+            else
+            {
+                u32 num_connected_vertices = 0;
+
+                igraph_vector_int_t degrees;
+                igraph_vector_int_init(&degrees, num_vertices);
+
+                igraph_vs_t v_sel;
+                igraph_vs_all(&v_sel);
+
+                igraph_degree(&m_graph, &degrees, v_sel, IGRAPH_ALL, IGRAPH_LOOPS);
+
+                for (u32 i = 0; i < num_vertices; i++)
+                {
+                    if (VECTOR(degrees)[i] != 0)
+                    {
+                        num_connected_vertices++;
+                    }
+                }
+
+                igraph_vector_int_destroy(&degrees);
+                igraph_vs_destroy(&v_sel);
+
+                return num_connected_vertices;
+            }
+        }
+
+        u32 NetlistGraph::get_num_edges() const
+        {
+            return igraph_ecount(&m_graph);
+        }
+
         Result<std::vector<std::pair<u32, u32>>> NetlistGraph::get_edges() const
         {
             const u32 ecount = igraph_ecount(&m_graph);

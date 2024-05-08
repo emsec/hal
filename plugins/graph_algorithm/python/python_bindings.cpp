@@ -274,6 +274,21 @@ namespace hal
                 :rtype: int or None
         )");
 
+        py_netlist_graph.def("get_num_vertices", &graph_algorithm::NetlistGraph::get_num_vertices, py::arg("only_connected") = false, R"(
+            Get the number of vertices in the netlist graph.
+
+            :param bool only_connected: Set ``True`` to only count vertices connected to at least one edge, ``False`` otherwise. Defaults to ``False``.
+            :returns: The number of vertices in the netlist graph.
+            :rtype: int
+        )");
+
+        py_netlist_graph.def("get_num_edges", &graph_algorithm::NetlistGraph::get_num_edges, R"(
+            Get the number of edges in the netlist graph.
+
+            :returns: The number of edges in the netlist graph.
+            :rtype: int
+        )");
+
         py_netlist_graph.def(
             "get_edges",
             [](const graph_algorithm::NetlistGraph& self) -> std::optional<std::vector<std::pair<u32, u32>>> {

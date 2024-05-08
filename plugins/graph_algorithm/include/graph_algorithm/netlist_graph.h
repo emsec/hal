@@ -165,6 +165,21 @@ namespace hal
             Result<u32> get_vertex_from_gate(Gate* g) const;
 
             /**
+             * Get the number of vertices in the netlist graph.
+             * 
+             * @param[in] only_connected - Set `true` to only count vertices connected to at least one edge, `false` otherwise. Defaults to `false`.
+             * @returns The number of vertices in the netlist graph.
+             */
+            u32 get_num_vertices(bool only_connected = false) const;
+
+            /**
+             * Get the number of edges in the netlist graph.
+             * 
+             * @returns The number of edges in the netlist graph.
+             */
+            u32 get_num_edges() const;
+
+            /**
              * Get the edges between vertices in the netlist graph.
              * 
              * @returns A vector of edges on success, an error otherwise.
