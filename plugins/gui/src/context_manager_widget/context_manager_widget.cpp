@@ -87,7 +87,6 @@ namespace hal
         mContextTreeView->setSelectionBehavior(QAbstractItemView::SelectRows);
         mContextTreeView->setSelectionMode(QAbstractItemView::SingleSelection); // ERROR ???
         mContextTreeView->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
-        mContextTreeView->sortByColumn(1, Qt::SortOrder::DescendingOrder);
         mContextTreeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
         mContextTreeView->setDragEnabled(true);

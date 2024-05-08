@@ -30,6 +30,7 @@
 
 #include <QRegularExpression>
 #include <QSortFilterProxyModel>
+#include <QMimeData>
 
 namespace hal
 {
@@ -60,6 +61,11 @@ namespace hal
          */
         bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
 
+        QStringList mimeTypes() const override;
+        QMimeData* mimeData(const QModelIndexList &indexes) const override;
+        bool dropMimeData(const QMimeData *mimeData, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
+        bool canDropMimeData(const QMimeData *mimeData, Qt::DropAction action, int row, int column, const QModelIndex &parent) const override;
+
     public Q_SLOTS:
 
         /**
@@ -74,13 +80,13 @@ namespace hal
     protected:
 
         /**
-         * Defines the compare criteria of 2 data entries (might be defined for each column specifically).
+         * Defines the compare criteria of tree entries (might be defined for each column specifically).
          *
          * @param left - The first entry.
          * @param right - The seconds entry.
          * @return True if left < right, False otherwise.
          */
-        bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
+       bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
 
     };
 }    // namespace hal

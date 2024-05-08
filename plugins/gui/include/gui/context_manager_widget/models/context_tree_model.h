@@ -54,12 +54,10 @@ namespace hal
              */
             void writeToFile(QJsonObject& json);
 
-
             QString name() const { return mName; }
             u32 id() const { return mId; }
             void setId(u32 id_) { mId = id_; }
             void setName(QString name_) { mName = name_; }
-
     };
 
     class ContextTreeItem : public BaseTreeItem
@@ -80,6 +78,8 @@ namespace hal
             bool isDirectory() const;
             bool isContext() const;
             u32 getId() const;
+            QString getName() const;
+            QDateTime getTimestamp() const;
             GraphContext* context() const;
             ContextDirectory* directory() const;
     };
@@ -169,9 +169,6 @@ namespace hal
 
         Qt::ItemFlags flags(const QModelIndex& index) const override;
         QStringList mimeTypes() const override;
-        QMimeData* mimeData(const QModelIndexList &indexes) const override;
-        bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
-        bool canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const override;
 
         /**
          * Get all GraphContext%s of the model.
@@ -220,6 +217,8 @@ namespace hal
         QVector<GraphContext*> mContextList;
         QVector<ContextDirectory*> mDirectoryList;
         u32 mMinDirectoryId;
+
+        void dumpRecursion(ContextTreeItem* parent = nullptr, int level = 0) const;
 
     };
 }    // namespace hal

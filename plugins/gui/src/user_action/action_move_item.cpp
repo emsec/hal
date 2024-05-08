@@ -79,7 +79,11 @@ namespace hal
             if (parCti) mSourceParentId = parCti->getId();
         }
 
-        mUndoAction = new ActionMoveItem(mSourceParentId, mTargetParentId);
+        int sourceRow = 0;
+        QModelIndex sourceIndex = gGraphContextManager->getContextTreeModel()->getIndexFromItem(bti);
+        if (sourceIndex.isValid())
+            sourceRow = sourceIndex.row();
+        mUndoAction = new ActionMoveItem(mSourceParentId, mTargetParentId, sourceRow);
         mUndoAction->setObject(mObject);
 
         gGraphContextManager->moveItem(mObject.id(), isDirectory, mTargetParentId, mTargetRow);
