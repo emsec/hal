@@ -153,6 +153,7 @@ namespace hal
             py::arg("vertices"),
             R"(
                 Get the gates corresponding to the specified list of vertices.
+                The result may contain ``None`` for dummy vertices.
 
                 :param list[int] vertices: A list of vertices.
                 :returns: A list of gates on success, ``None`` otherwise.
@@ -176,6 +177,7 @@ namespace hal
             py::arg("vertices"),
             R"(
                 Get the gates corresponding to the specified set of vertices.
+                The result may contain ``None`` for dummy vertices.
 
                 :param set[int] vertices: A set of vertices.
                 :returns: A list of gates on success, ``None`` otherwise.

@@ -91,37 +91,31 @@ namespace hal
             igraph_t* get_graph();
 
             /**
-             * Get the gates corresponding to the specified vertices. C must be an iterable container type of `u32` elements.
+             * Get the gates corresponding to the specified vertices.
+             * The result may contain `nullptr` for dummy vertices.
              * 
-             * @tparam C - An iterable container type of `u32` elements.
-             * @param[in] vertices - A container of vertices.
+             * @param[in] vertices - A vector of vertices.
              * @returns A vector of gates on success, an error otherwise.
              */
-            template<typename C>
-            Result<std::vector<Gate*>> get_gates_from_vertices(const C& vertices) const
-            {
-                std::vector<Gate*> res;
-                for (const auto& vertex : vertices)
-                {
-                    if (const auto it = m_nodes_to_gates.find(vertex); it != m_nodes_to_gates.end())
-                    {
-                        Gate* g = it->second;
-                        if (g != nullptr)
-                        {
-                            res.push_back(g);
-                        }
-                        else
-                        {
-                            log_warning("graph_algorithm", "no gate exists for dummy node {}", vertex);
-                        }
-                    }
-                    else
-                    {
-                        return ERR("no gate for node " + std::to_string(vertex) + " exists in netlist with ID " + std::to_string(m_nl->get_id()));
-                    }
-                }
-                return OK(res);
-            }
+            Result<std::vector<Gate*>> get_gates_from_vertices(const std::vector<u32>& vertices) const;
+
+            /**
+             * Get the gates corresponding to the specified vertices.
+             * The result may contain `nullptr` for dummy vertices.
+             * 
+             * @param[in] vertices - A set of vertices.
+             * @returns A vector of gates on success, an error otherwise.
+             */
+            Result<std::vector<Gate*>> get_gates_from_vertices(const std::set<u32>& vertices) const;
+
+            /**
+             * Get the gates corresponding to the specified vertices.
+             * The result may contain `nullptr` for dummy vertices.
+             * 
+             * @param[in] vertices - An igraph vector of vertices.
+             * @returns A vector of gates on success, an error otherwise.
+             */
+            Result<std::vector<Gate*>> get_gates_from_vertices_igraph(const igraph_vector_int_t* vertices) const;
 
             /**
              * Get the gate corresponding to the specified vertex.
@@ -134,27 +128,26 @@ namespace hal
             /**
              * Get the vertices corresponding to the specified gates.
              * 
-             * @tparam C - An iterable container type of `Gate*` elements.
-             * @param[in] gates - A container of gates.
+             * @param[in] gates - A vector of gates.
              * @returns A vector of vertices on success, an error otherwise.
              */
-            template<typename C>
-            Result<std::vector<u32>> get_vertices_from_gates(const C& gates) const
-            {
-                std::vector<u32> res;
-                for (const auto& g : gates)
-                {
-                    if (const auto it = m_gates_to_nodes.find(g); it != m_gates_to_nodes.end())
-                    {
-                        res.push_back(it->second);
-                    }
-                    else
-                    {
-                        return ERR("no node for gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()) + " exists in graph for netlist with ID " + std::to_string(m_nl->get_id()));
-                    }
-                }
-                return OK(res);
-            }
+            Result<std::vector<u32>> get_vertices_from_gates(const std::vector<Gate*>& gates) const;
+
+            /**
+             * Get the vertices corresponding to the specified gates.
+             * 
+             * @param[in] gates - A set of gates.
+             * @returns A vector of vertices on success, an error otherwise.
+             */
+            Result<std::vector<u32>> get_vertices_from_gates(const std::set<Gate*>& gates) const;
+
+            /**
+             * Get the vertices corresponding to the specified gates.
+             * 
+             * @param[in] gates - A vector of gates.
+             * @returns An igraph vector of vertices on success, an error otherwise.
+             */
+            Result<igraph_vector_int_t> get_vertices_from_gates_igraph(const std::vector<Gate*>& gates) const;
 
             /**
              * Get the vertex corresponding to the specified gate.

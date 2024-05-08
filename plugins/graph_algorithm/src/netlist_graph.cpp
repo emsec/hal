@@ -178,6 +178,76 @@ namespace hal
             return &m_graph;
         }
 
+        Result<std::vector<Gate*>> NetlistGraph::get_gates_from_vertices(const std::vector<u32>& vertices) const
+        {
+            std::vector<Gate*> res;
+            for (const auto& vertex : vertices)
+            {
+                if (const auto it = m_nodes_to_gates.find(vertex); it != m_nodes_to_gates.end())
+                {
+                    Gate* g = it->second;
+
+                    res.push_back(g);
+                    if (!g)
+                    {
+                        log_warning("graph_algorithm", "no gate exists for dummy node {}, added nullptr", vertex);
+                    }
+                }
+                else
+                {
+                    return ERR("no gate for node " + std::to_string(vertex) + " exists in netlist with ID " + std::to_string(m_nl->get_id()));
+                }
+            }
+            return OK(res);
+        }
+
+        Result<std::vector<Gate*>> NetlistGraph::get_gates_from_vertices(const std::set<u32>& vertices) const
+        {
+            std::vector<Gate*> res;
+            for (const auto& vertex : vertices)
+            {
+                if (const auto it = m_nodes_to_gates.find(vertex); it != m_nodes_to_gates.end())
+                {
+                    Gate* g = it->second;
+
+                    res.push_back(g);
+                    if (!g)
+                    {
+                        log_warning("graph_algorithm", "no gate exists for dummy node {}, added nullptr", vertex);
+                    }
+                }
+                else
+                {
+                    return ERR("no gate for node " + std::to_string(vertex) + " exists in netlist with ID " + std::to_string(m_nl->get_id()));
+                }
+            }
+            return OK(res);
+        }
+
+        Result<std::vector<Gate*>> NetlistGraph::get_gates_from_vertices_igraph(const igraph_vector_int_t* vertices) const
+        {
+            std::vector<Gate*> res;
+            for (u32 i = 0; i < igraph_vector_int_size(vertices); i++)
+            {
+                u32 vertex = VECTOR(*vertices)[i];
+                if (const auto it = m_nodes_to_gates.find(vertex); it != m_nodes_to_gates.end())
+                {
+                    Gate* g = it->second;
+
+                    res.push_back(g);
+                    if (!g)
+                    {
+                        log_warning("graph_algorithm", "no gate exists for dummy node {}, added nullptr", vertex);
+                    }
+                }
+                else
+                {
+                    return ERR("no gate for node " + std::to_string(vertex) + " exists in netlist with ID " + std::to_string(m_nl->get_id()));
+                }
+            }
+            return OK(res);
+        }
+
         Result<Gate*> NetlistGraph::get_gate_from_vertex(const u32 vertex) const
         {
             const auto res = get_gates_from_vertices(std::vector<u32>({vertex}));
@@ -187,6 +257,81 @@ namespace hal
             }
 
             return OK(res.get().front());
+        }
+
+        Result<std::vector<u32>> NetlistGraph::get_vertices_from_gates(const std::vector<Gate*>& gates) const
+        {
+            std::vector<u32> res;
+            for (u32 i = 0; i < gates.size(); i++)
+            {
+                auto* g = gates.at(i);
+
+                if (!g)
+                {
+                    return ERR("gate at index " + std::to_string(i) + " is a nullptr");
+                }
+
+                if (const auto it = m_gates_to_nodes.find(g); it != m_gates_to_nodes.end())
+                {
+                    res.push_back(it->second);
+                }
+                else
+                {
+                    return ERR("no node for gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()) + " exists in graph for netlist with ID " + std::to_string(m_nl->get_id()));
+                }
+            }
+            return OK(res);
+        }
+
+        Result<std::vector<u32>> NetlistGraph::get_vertices_from_gates(const std::set<Gate*>& gates) const
+        {
+            std::vector<u32> res;
+            for (auto* g : gates)
+            {
+                if (!g)
+                {
+                    return ERR("set of gates contains a nullptr");
+                }
+
+                if (const auto it = m_gates_to_nodes.find(g); it != m_gates_to_nodes.end())
+                {
+                    res.push_back(it->second);
+                }
+                else
+                {
+                    return ERR("no node for gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()) + " exists in graph for netlist with ID " + std::to_string(m_nl->get_id()));
+                }
+            }
+            return OK(res);
+        }
+
+        Result<igraph_vector_int_t> NetlistGraph::get_vertices_from_gates_igraph(const std::vector<Gate*>& gates) const
+        {
+            igraph_vector_int_t out;
+            if (auto res = igraph_vector_int_init(&out, gates.size()); res != IGRAPH_SUCCESS)
+            {
+                return ERR(igraph_strerror(res));
+            }
+
+            for (u32 i = 0; i < gates.size(); i++)
+            {
+                auto* g = gates.at(i);
+
+                if (!g)
+                {
+                    return ERR("gate at index " + std::to_string(i) + " is a nullptr");
+                }
+
+                if (const auto it = m_gates_to_nodes.find(g); it != m_gates_to_nodes.end())
+                {
+                    VECTOR(out)[i] = it->second;
+                }
+                else
+                {
+                    return ERR("no node for gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()) + " exists in graph for netlist with ID " + std::to_string(m_nl->get_id()));
+                }
+            }
+            return OK(std::move(out));
         }
 
         Result<u32> NetlistGraph::get_vertex_from_gate(Gate* g) const
