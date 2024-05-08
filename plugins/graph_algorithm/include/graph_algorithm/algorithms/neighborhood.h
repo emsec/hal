@@ -44,13 +44,13 @@ namespace hal
          * Returns each neighborhood as a vector of vertices in the netlist graph.
          * 
          * @param[in] graph - The netlist graph.
-         * @param[in] start_gates - The gates for which to compute the neighborhood.
+         * @param[in] start_gates - A vector of gates for which to compute the neighborhood.
          * @param[in] order - The order of the neighborhood to compute.
          * @param[in] direction - The direction in which the neighborhood should be computed.
          * @param[in] min_dist - The minimum distance of the vertices to include in the result.
          * @returns A vector of neighborhoods of each of the provided start gates (in order) on success, an error otherwise.
          */
-        Result<std::vector<std::vector<u32>>> get_neighborhood(NetlistGraph* graph, std::vector<Gate*> start_gates, u32 order, NetlistGraph::Direction direction, u32 min_dist = 0);
+        Result<std::vector<std::vector<u32>>> get_neighborhood(NetlistGraph* graph, const std::vector<Gate*>& start_gates, u32 order, NetlistGraph::Direction direction, u32 min_dist = 0);
 
         /**
          * Compute the neighborhood of the given order for each of the specified vertices within the given netlist graph.
@@ -58,12 +58,26 @@ namespace hal
          * Returns each neighborhood as a vector of vertices in the netlist graph.
          * 
          * @param[in] graph - The netlist graph.
-         * @param[in] start_vertices - The vertices for which to compute the neighborhood.
+         * @param[in] start_vertices - A vector of vertices for which to compute the neighborhood.
          * @param[in] order - The order of the neighborhood to compute.
          * @param[in] direction - The direction in which the neighborhood should be computed.
          * @param[in] min_dist - The minimum distance of the vertices to include in the result.
          * @returns A vector of neighborhoods of each of the provided start vertices (in order) on success, an error otherwise.
          */
-        Result<std::vector<std::vector<u32>>> get_neighborhood(NetlistGraph* graph, std::vector<u32> start_vertices, u32 order, NetlistGraph::Direction direction, u32 min_dist = 0);
+        Result<std::vector<std::vector<u32>>> get_neighborhood(NetlistGraph* graph, const std::vector<u32>& start_vertices, u32 order, NetlistGraph::Direction direction, u32 min_dist = 0);
+
+        /**
+         * Compute the neighborhood of the given order for each of the specified vertices within the given netlist graph.
+         * For order 0, only the vertex itself is returned. For order 1, the vertex itself and all vertices that are its direct predecessors and/or successors (depending on the specified direction). For order 2, the neighborhood of order 1 plus all direct predecessors and/or successors of the vertices in order 1 are returned, etc.
+         * Returns each neighborhood as a vector of vertices in the netlist graph.
+         * 
+         * @param[in] graph - The netlist graph.
+         * @param[in] start_vertices - An igraph vector of vertices for which to compute the neighborhood.
+         * @param[in] order - The order of the neighborhood to compute.
+         * @param[in] direction - The direction in which the neighborhood should be computed.
+         * @param[in] min_dist - The minimum distance of the vertices to include in the result.
+         * @returns A vector of neighborhoods of each of the provided start vertices (in order) on success, an error otherwise.
+         */
+        Result<std::vector<std::vector<u32>>> get_neighborhood_igraph(NetlistGraph* graph, const igraph_vector_int_t* start_vertices, u32 order, NetlistGraph::Direction direction, u32 min_dist = 0);
     }    // namespace graph_algorithm
 }    // namespace hal

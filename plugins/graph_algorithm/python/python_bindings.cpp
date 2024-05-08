@@ -461,7 +461,7 @@ namespace hal
 
         m.def(
             "get_neighborhood",
-            [](graph_algorithm::NetlistGraph* graph, std::vector<Gate*> start_gates, u32 order, graph_algorithm::NetlistGraph::Direction direction, u32 min_dist = 0)
+            [](graph_algorithm::NetlistGraph* graph, const std::vector<Gate*>& start_gates, u32 order, graph_algorithm::NetlistGraph::Direction direction, u32 min_dist = 0)
                 -> std::optional<std::vector<std::vector<u32>>> {
                 auto res = graph_algorithm::get_neighborhood(graph, start_gates, order, direction, min_dist);
                 if (res.is_ok())
@@ -485,7 +485,7 @@ namespace hal
                 Returns each neighborhood as a list of vertices in the netlist graph.
 
                 :param graph_algorithm.NetlistGraph graph: The netlist graph.
-                :param list[hal_py.Gate] start_gates: The gates for which to compute the neighborhood.
+                :param list[hal_py.Gate] start_gates: A list of gates for which to compute the neighborhood.
                 :param int order: The order of the neighborhood to compute.
                 :param graph_algorithm.NetlistGraph.Direction direction: The direction in which the neighborhood should be computed.
                 :param int min_dist: The minimum distance of the vertices to include in the result.
@@ -495,7 +495,7 @@ namespace hal
 
         m.def(
             "get_neighborhood",
-            [](graph_algorithm::NetlistGraph* graph, std::vector<u32> start_vertices, u32 order, graph_algorithm::NetlistGraph::Direction direction, u32 min_dist = 0)
+            [](graph_algorithm::NetlistGraph* graph, const std::vector<u32>& start_vertices, u32 order, graph_algorithm::NetlistGraph::Direction direction, u32 min_dist = 0)
                 -> std::optional<std::vector<std::vector<u32>>> {
                 auto res = graph_algorithm::get_neighborhood(graph, start_vertices, order, direction, min_dist);
                 if (res.is_ok())
@@ -519,7 +519,7 @@ namespace hal
                 Returns each neighborhood as a list of vertices in the netlist graph.
 
                 :param graph_algorithm.NetlistGraph graph: The netlist graph.
-                :param list[int] start_vertices: The vertices for which to compute the neighborhood.
+                :param list[int] start_vertices: A list of vertices for which to compute the neighborhood.
                 :param int order: The order of the neighborhood to compute.
                 :param graph_algorithm.NetlistGraph.Direction direction: The direction in which the neighborhood should be computed.
                 :param int min_dist: The minimum distance of the vertices to include in the result.

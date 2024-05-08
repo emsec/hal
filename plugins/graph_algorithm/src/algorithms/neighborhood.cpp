@@ -6,7 +6,7 @@ namespace hal
 
     namespace graph_algorithm
     {
-        Result<std::vector<std::vector<u32>>> get_neighborhood(NetlistGraph* graph, std::vector<Gate*> start_gates, u32 order, NetlistGraph::Direction direction, u32 min_dist)
+        Result<std::vector<std::vector<u32>>> get_neighborhood(NetlistGraph* graph, const std::vector<Gate*>& start_gates, u32 order, NetlistGraph::Direction direction, u32 min_dist)
         {
             if (!graph)
             {
@@ -18,23 +18,29 @@ namespace hal
                 return ERR("no start gates provided");
             }
 
-            std::vector<u32> start_vertices;
-            for (auto* g : start_gates)
+            igraph_vector_int_t i_gates;
+            if (auto res = graph->get_vertices_from_gates_igraph(start_gates); res.is_ok())
             {
-                if (const auto res = graph->get_vertex_from_gate(g); res.is_ok())
-                {
-                    start_vertices.push_back(res.get());
-                }
-                else
-                {
-                    return ERR(res.get_error());
-                }
+                i_gates = std::move(res.get());
+            }
+            else
+            {
+                return ERR(res.get_error());
             }
 
-            return get_neighborhood(graph, start_vertices, order, direction, min_dist);
+            auto res = get_neighborhood_igraph(graph, &i_gates, order, direction, min_dist);
+
+            igraph_vector_int_destroy(&i_gates);
+
+            if (res.is_error())
+            {
+                return ERR(res.get_error());
+            }
+
+            return res;
         }
 
-        Result<std::vector<std::vector<u32>>> get_neighborhood(NetlistGraph* graph, std::vector<u32> start_vertices, u32 order, NetlistGraph::Direction direction, u32 min_dist)
+        Result<std::vector<std::vector<u32>>> get_neighborhood(NetlistGraph* graph, const std::vector<u32>& start_vertices, u32 order, NetlistGraph::Direction direction, u32 min_dist)
         {
             if (!graph)
             {
@@ -46,28 +52,39 @@ namespace hal
                 return ERR("no start vertices provided");
             }
 
-            u32 num_vertices = igraph_vcount(graph->get_graph());
-            if (std::any_of(start_vertices.begin(), start_vertices.end(), [num_vertices](const u32 v) { return v >= num_vertices; }))
-            {
-                return ERR("invalid vertex contained in start vertices");
-            }
-
-            igraph_vector_int_t v_vec;
-            if (auto res = igraph_vector_int_init(&v_vec, start_vertices.size()); res != IGRAPH_SUCCESS)
+            igraph_vector_int_t i_gates;
+            if (auto res = igraph_vector_int_init(&i_gates, start_vertices.size()); res != IGRAPH_SUCCESS)
             {
                 return ERR(igraph_strerror(res));
             }
 
-            u32 v_count = 0;
-            for (const auto v : start_vertices)
+            for (u32 i = 0; i < start_vertices.size(); i++)
             {
-                VECTOR(v_vec)[v_count++] = v;
+                VECTOR(i_gates)[i] = start_vertices.at(i);
+            }
+
+            auto res = get_neighborhood_igraph(graph, &i_gates, order, direction, min_dist);
+
+            igraph_vector_int_destroy(&i_gates);
+
+            if (res.is_error())
+            {
+                return ERR(res.get_error());
+            }
+
+            return res;
+        }
+
+        Result<std::vector<std::vector<u32>>> get_neighborhood_igraph(NetlistGraph* graph, const igraph_vector_int_t* start_gates, u32 order, NetlistGraph::Direction direction, u32 min_dist)
+        {
+            if (!graph)
+            {
+                return ERR("graph is a nullptr");
             }
 
             igraph_vs_t v_sel;
-            if (auto res = igraph_vs_vector(&v_sel, &v_vec); res != IGRAPH_SUCCESS)
+            if (auto res = igraph_vs_vector(&v_sel, start_gates); res != IGRAPH_SUCCESS)
             {
-                igraph_vector_int_destroy(&v_vec);
                 return ERR(igraph_strerror(res));
             }
 
@@ -85,7 +102,6 @@ namespace hal
                     break;
                 case NetlistGraph::Direction::NONE:
                     igraph_vs_destroy(&v_sel);
-                    igraph_vector_int_destroy(&v_vec);
                     return ERR("invalid direction 'NONE'");
             }
 
@@ -93,14 +109,12 @@ namespace hal
             if (auto res = igraph_vector_int_list_init(&neighborhoods_raw, 1); res != IGRAPH_SUCCESS)
             {
                 igraph_vs_destroy(&v_sel);
-                igraph_vector_int_destroy(&v_vec);
                 return ERR(igraph_strerror(res));
             }
 
             if (auto res = igraph_neighborhood(graph->get_graph(), &neighborhoods_raw, v_sel, order, mode, min_dist); res != IGRAPH_SUCCESS)
             {
                 igraph_vs_destroy(&v_sel);
-                igraph_vector_int_destroy(&v_vec);
                 igraph_vector_int_list_destroy(&neighborhoods_raw);
                 return ERR(igraph_strerror(res));
             }
@@ -120,7 +134,6 @@ namespace hal
             }
 
             igraph_vs_destroy(&v_sel);
-            igraph_vector_int_destroy(&v_vec);
             igraph_vector_int_list_destroy(&neighborhoods_raw);
 
             return OK(neighborhoods);
