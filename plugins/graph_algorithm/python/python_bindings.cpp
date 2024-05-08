@@ -3,6 +3,7 @@
 
 #include "graph_algorithm/algorithms/components.h"
 #include "graph_algorithm/algorithms/neighborhood.h"
+#include "graph_algorithm/algorithms/shortest_path.h"
 #include "graph_algorithm/algorithms/subgraph.h"
 #include "graph_algorithm/netlist_graph.h"
 #include "graph_algorithm/plugin_graph_algorithm.h"
@@ -548,6 +549,134 @@ namespace hal
                 :param graph_algorithm.NetlistGraph.Direction direction: The direction in which the neighborhood should be computed.
                 :param int min_dist: The minimum distance of the vertices to include in the result.
                 :returns: A list of neighborhoods of each of the provided start vertices (in order) on success, ``None`` otherwise.
+                :rtype: list[list[int]] or None
+        )");
+
+        m.def(
+            "get_shortest_paths",
+            [](graph_algorithm::NetlistGraph* graph, Gate* from_gate, const std::vector<Gate*>& to_gates, graph_algorithm::NetlistGraph::Direction direction)
+                -> std::optional<std::vector<std::vector<u32>>> {
+                auto res = graph_algorithm::get_shortest_paths(graph, from_gate, to_gates, direction);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while computing shortest paths:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("from_gate"),
+            py::arg("to_gates"),
+            py::arg("direction"),
+            R"(
+                Compute a shortest path from the specified ``from_gate`` to each of the given ``to_gates`` by traversing in the provided direction.
+                Returns one shortest path for each end gate, even if multiple shortest paths exist.
+                Each shortest path is given as a list of vertices in the order of traversal.
+
+                :param graph_algorithm.NetlistGraph graph: The netlist graph.
+                :param hal_py.Gate from_gate: The start gate of the shortest path.
+                :param list[hal_py.Gate] to_gates: A list of end gates of the shortest path.
+                :param graph_algorithm.NetlistGraph.Direction direction: The direction in which to compute the shortest paths starting at the ``from_gate``.
+                :returns: The shortest paths in order of the ``to_gates`` on success, an error otherwise.
+                :rtype: list[list[int]] or None
+        )");
+
+        m.def(
+            "get_shortest_paths",
+            [](graph_algorithm::NetlistGraph* graph, u32 from_vertice, const std::vector<u32>& to_vertices, graph_algorithm::NetlistGraph::Direction direction)
+                -> std::optional<std::vector<std::vector<u32>>> {
+                auto res = graph_algorithm::get_shortest_paths(graph, from_vertice, to_vertices, direction);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while computing shortest paths:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("from_vertex"),
+            py::arg("to_vertices"),
+            py::arg("direction"),
+            R"(
+                Compute a shortest path from the specified ``from_vertex`` to each of the given ``to_vertices`` by traversing in the provided direction.
+                Returns one shortest path for each end vertex, even if multiple shortest paths exist.
+                Each shortest path is given as a list of vertices in the order of traversal.
+                
+                :param graph_algorithm.NetlistGraph graph: The netlist graph.
+                :param int from_vertex: The start vertex of the shortest path.
+                :param list[int] to_vertices: A list of end vertices of the shortest path.
+                :param graph_algorithm.NetlistGraph.Direction direction: The direction in which to compute the shortest paths starting at the ``from_vertex``.
+                :returns: The shortest paths in order of the ``to_vertices`` on success, an error otherwise.
+                :rtype: list[list[int]] or None
+        )");
+
+        m.def(
+            "get_all_shortest_paths",
+            [](graph_algorithm::NetlistGraph* graph, Gate* from_gate, const std::vector<Gate*>& to_gates, graph_algorithm::NetlistGraph::Direction direction)
+                -> std::optional<std::vector<std::vector<u32>>> {
+                auto res = graph_algorithm::get_all_shortest_paths(graph, from_gate, to_gates, direction);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while computing all shortest paths:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("from_gate"),
+            py::arg("to_gates"),
+            py::arg("direction"),
+            R"(
+                Compute a shortest path from the specified ``from_gate`` to each of the given ``to_gates`` by traversing in the provided direction.
+                Returns all shortest paths for each end gate.
+                Each shortest path is given as a list of vertices in the order of traversal.
+
+                :param graph_algorithm.NetlistGraph graph: The netlist graph.
+                :param hal_py.Gate from_gate: The start gate of the shortest path.
+                :param list[hal_py.Gate] to_gates: A list of end gates of the shortest path.
+                :param graph_algorithm.NetlistGraph.Direction direction: The direction in which to compute the shortest paths starting at the ``from_gate``.
+                :returns: The shortest paths in order of the ``to_gates`` on success, an error otherwise.
+                :rtype: list[list[int]] or None
+        )");
+
+        m.def(
+            "get_all_shortest_paths",
+            [](graph_algorithm::NetlistGraph* graph, u32 from_vertice, const std::vector<u32>& to_vertices, graph_algorithm::NetlistGraph::Direction direction)
+                -> std::optional<std::vector<std::vector<u32>>> {
+                auto res = graph_algorithm::get_all_shortest_paths(graph, from_vertice, to_vertices, direction);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while computing all shortest paths:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("from_vertex"),
+            py::arg("to_vertices"),
+            py::arg("direction"),
+            R"(
+                Compute a shortest path from the specified ``from_vertex`` to each of the given ``to_vertices`` by traversing in the provided direction.
+                Returns all shortest paths for each end gate.
+                Each shortest path is given as a list of vertices in the order of traversal.
+                
+                :param graph_algorithm.NetlistGraph graph: The netlist graph.
+                :param int from_vertex: The start vertex of the shortest path.
+                :param list[int] to_vertices: A list of end vertices of the shortest path.
+                :param graph_algorithm.NetlistGraph.Direction direction: The direction in which to compute the shortest paths starting at the ``from_vertex``.
+                :returns: The shortest paths in order of the ``to_vertices`` on success, an error otherwise.
                 :rtype: list[list[int]] or None
         )");
 
