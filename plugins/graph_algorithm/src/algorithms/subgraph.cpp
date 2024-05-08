@@ -83,12 +83,7 @@ namespace hal
                 return ERR("graph is a nullptr");
             }
 
-            igraph_vs_t v_sel;
-            if (auto res = igraph_vs_vector(&v_sel, subgraph_vertices); res != IGRAPH_SUCCESS)
-            {
-                return ERR(igraph_strerror(res));
-            }
-
+            igraph_vs_t v_sel = igraph_vss_vector(subgraph_vertices);
             u32 subgraph_size = igraph_vector_int_size(subgraph_vertices);
 
             igraph_vector_int_t i_vertex_map;

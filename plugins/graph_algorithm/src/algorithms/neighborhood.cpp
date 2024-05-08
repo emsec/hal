@@ -82,12 +82,7 @@ namespace hal
                 return ERR("graph is a nullptr");
             }
 
-            igraph_vs_t v_sel;
-            if (auto res = igraph_vs_vector(&v_sel, start_gates); res != IGRAPH_SUCCESS)
-            {
-                return ERR(igraph_strerror(res));
-            }
-
+            igraph_vs_t v_sel = igraph_vss_vector(start_gates);
             igraph_neimode_t mode;
             switch (direction)
             {
@@ -120,13 +115,14 @@ namespace hal
             }
 
             std::vector<std::vector<u32>> neighborhoods;
-            for (u32 i = 0; i < igraph_vector_int_list_size(&neighborhoods_raw); i++)
+            const u32 num_neighborhoods = igraph_vector_int_list_size(&neighborhoods_raw);
+            for (u32 i = 0; i < num_neighborhoods; i++)
             {
                 auto vec = igraph_vector_int_list_get_ptr(&neighborhoods_raw, i);
 
-                u32 vec_size = igraph_vector_int_size(vec);
+                const u32 vec_size = igraph_vector_int_size(vec);
                 std::vector<u32> tmp(vec_size);
-                for (u32 j = 0; j < igraph_vector_int_size(vec); j++)
+                for (u32 j = 0; j < vec_size; j++)
                 {
                     tmp[j] = VECTOR(*vec)[j];
                 }

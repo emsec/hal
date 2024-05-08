@@ -15,36 +15,20 @@ namespace hal
                 return ERR("graph is a nullptr");
             }
 
-            igraph_vector_int_t membership, csize;
-            igraph_integer_t number_of_clusters;
-            auto err = igraph_vector_int_init(&membership, 0);
-            if (err != IGRAPH_SUCCESS)
+            igraph_vector_int_t membership;
+            if (auto res = igraph_vector_int_init(&membership, 0); res != IGRAPH_SUCCESS)
             {
-                igraph_vector_int_destroy(&membership);
-                return ERR(igraph_strerror(err));
+                return ERR(igraph_strerror(res));
             }
 
-            err = igraph_vector_int_init(&csize, 0);
-            if (err != IGRAPH_SUCCESS)
+            const igraph_t* i_graph = graph->get_graph();
+            if (auto res = igraph_connected_components(i_graph, &membership, nullptr, nullptr, strong ? IGRAPH_STRONG : IGRAPH_WEAK); res != IGRAPH_SUCCESS)
             {
                 igraph_vector_int_destroy(&membership);
-                igraph_vector_int_destroy(&csize);
-                return ERR(igraph_strerror(err));
+                return ERR(igraph_strerror(res));
             }
 
-            igraph_t* igr = graph->get_graph();
-
-            // run scc
-            err = igraph_clusters(igr, &membership, &csize, &number_of_clusters, strong ? IGRAPH_STRONG : IGRAPH_WEAK);
-            if (err != IGRAPH_SUCCESS)
-            {
-                igraph_vector_int_destroy(&membership);
-                igraph_vector_int_destroy(&csize);
-                return ERR(igraph_strerror(err));
-            }
-
-            // map back to HAL structures
-            u32 num_vertices = (u32)igraph_vcount(igr);
+            u32 num_vertices = igraph_vcount(i_graph);
             std::map<u32, std::set<u32>> components_raw;
 
             for (i32 i = 0; i < num_vertices; i++)
@@ -52,7 +36,6 @@ namespace hal
                 components_raw[VECTOR(membership)[i]].insert(i);
             }
 
-            // convert to set
             std::vector<std::vector<u32>> components;
             for (auto& [_, members] : components_raw)
             {
@@ -65,7 +48,6 @@ namespace hal
             }
 
             igraph_vector_int_destroy(&membership);
-            igraph_vector_int_destroy(&csize);
 
             return OK(components);
         }

@@ -238,7 +238,8 @@ namespace hal
         Result<std::vector<Gate*>> NetlistGraph::get_gates_from_vertices_igraph(const igraph_vector_int_t* vertices) const
         {
             std::vector<Gate*> res;
-            for (u32 i = 0; i < igraph_vector_int_size(vertices); i++)
+            const u32 num_vertices = igraph_vector_int_size(vertices);
+            for (u32 i = 0; i < num_vertices; i++)
             {
                 u32 vertex = VECTOR(*vertices)[i];
                 if (const auto it = m_nodes_to_gates.find(vertex); it != m_nodes_to_gates.end())
@@ -371,9 +372,7 @@ namespace hal
                 igraph_vector_int_t degrees;
                 igraph_vector_int_init(&degrees, num_vertices);
 
-                igraph_vs_t v_sel;
-                igraph_vs_all(&v_sel);
-
+                igraph_vs_t v_sel = igraph_vss_all();
                 igraph_degree(&m_graph, &degrees, v_sel, IGRAPH_ALL, IGRAPH_LOOPS);
 
                 for (u32 i = 0; i < num_vertices; i++)
@@ -419,13 +418,7 @@ namespace hal
                     return ERR(igraph_strerror(res));
                 }
 
-                igraph_vs_t v_sel;
-                if (auto res = igraph_vs_all(&v_sel); res != IGRAPH_SUCCESS)
-                {
-                    igraph_vector_int_destroy(&degrees);
-                    return ERR(igraph_strerror(res));
-                }
-
+                igraph_vs_t v_sel = igraph_vss_all();
                 if (auto res = igraph_degree(&m_graph, &degrees, v_sel, IGRAPH_ALL, IGRAPH_LOOPS); res != IGRAPH_SUCCESS)
                 {
                     igraph_vs_destroy(&v_sel);

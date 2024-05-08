@@ -114,12 +114,7 @@ namespace hal
                     return ERR("invalid direction 'NONE'");
             }
 
-            igraph_vs_t v_sel;
-            if (auto res = igraph_vs_vector(&v_sel, to_vertices); res != IGRAPH_SUCCESS)
-            {
-                return ERR(igraph_strerror(res));
-            }
-
+            igraph_vs_t v_sel = igraph_vss_vector(to_vertices);
             igraph_vector_int_list_t paths_raw;
             if (auto res = igraph_vector_int_list_init(&paths_raw, 1); res != IGRAPH_SUCCESS)
             {
@@ -261,12 +256,7 @@ namespace hal
                     return ERR("invalid direction 'NONE'");
             }
 
-            igraph_vs_t v_sel;
-            if (auto res = igraph_vs_vector(&v_sel, to_vertices); res != IGRAPH_SUCCESS)
-            {
-                return ERR(igraph_strerror(res));
-            }
-
+            igraph_vs_t v_sel = igraph_vss_vector(to_vertices);
             igraph_vector_int_list_t paths_raw;
             if (auto res = igraph_vector_int_list_init(&paths_raw, 1); res != IGRAPH_SUCCESS)
             {
@@ -282,13 +272,14 @@ namespace hal
             }
 
             std::vector<std::vector<u32>> paths;
-            for (u32 i = 0; i < igraph_vector_int_list_size(&paths_raw); i++)
+            const u32 paths_size = igraph_vector_int_list_size(&paths_raw);
+            for (u32 i = 0; i < paths_size; i++)
             {
                 auto vec = igraph_vector_int_list_get_ptr(&paths_raw, i);
 
-                u32 vec_size = igraph_vector_int_size(vec);
+                const u32 vec_size = igraph_vector_int_size(vec);
                 std::vector<u32> tmp(vec_size);
-                for (u32 j = 0; j < igraph_vector_int_size(vec); j++)
+                for (u32 j = 0; j < vec_size; j++)
                 {
                     tmp[j] = VECTOR(*vec)[j];
                 }
