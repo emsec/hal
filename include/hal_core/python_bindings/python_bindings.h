@@ -33,8 +33,9 @@
 #include "hal_core/netlist/boolean_function/types.h"
 #include "hal_core/netlist/decorators/boolean_function_decorator.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
-#include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 #include "hal_core/netlist/decorators/netlist_modification_decorator.h"
+#include "hal_core/netlist/decorators/netlist_traversal_decorator.h"
+#include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/gate_library/enums/async_set_reset_behavior.h"
 #include "hal_core/netlist/gate_library/gate_library.h"
@@ -318,6 +319,13 @@ namespace hal
      * @param[in] m - the python module
      */
     void netlist_modification_decorator_init(py::module& m);
+
+    /**
+     * Initializes Python bindings for the HAL netlist traversal decorator in a python module.
+     *
+     * @param[in] m - the python module
+     */
+    void netlist_traversal_decorator_init(py::module& m);
 
     /**
      * Initializes Python bindings for the HAL LogManager in a python module.
