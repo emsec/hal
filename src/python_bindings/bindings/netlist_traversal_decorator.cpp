@@ -169,5 +169,59 @@ namespace hal
             :returns: The next gates fulfilling the target gate filter condition on success, ``None`` otherwise.
             :rtype: set[hal_py.Gate] or None
         )");
+
+        py_netlist_traversal_decorator.def(
+            "get_next_sequential_gates",
+            [](NetlistTraversalDecorator& self, const Net* net, bool successors, const std::set<PinType>& forbidden_input_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr)
+                -> std::optional<std::set<Gate*>> {
+                auto res = self.get_next_sequential_gates(net, successors, forbidden_input_pins, cache);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting next sequential gates:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("net"),
+            py::arg("successors"),
+            py::arg("forbidden_input_pins") = std::set<PinType>(),
+            py::arg("cache")                = nullptr,
+            R"(
+
+            :param hal_py.Net net: Start net.
+            :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
+
+            :rtype: set[hal_py.Gate] or None
+        )");
+
+        py_netlist_traversal_decorator.def(
+            "get_next_sequential_gates",
+            [](NetlistTraversalDecorator& self, const Gate* gate, bool successors, const std::set<PinType>& forbidden_input_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr)
+                -> std::optional<std::set<Gate*>> {
+                auto res = self.get_next_sequential_gates(gate, successors, forbidden_input_pins, cache);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting next sequential gates:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("gate"),
+            py::arg("successors"),
+            py::arg("forbidden_input_pins") = std::set<PinType>(),
+            py::arg("cache")                = nullptr,
+            R"(
+
+            :param hal_py.Gate gate: Start gate.
+            :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
+
+            :rtype: set[hal_py.Gate] or None
+        )");
     }
 }    // namespace hal

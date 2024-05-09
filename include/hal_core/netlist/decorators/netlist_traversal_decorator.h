@@ -123,7 +123,13 @@ namespace hal
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
-        // TODO implement get_next_sequential_gates (get all sequential successors of the current gate by traversing other gates)
+        // test & document
+        Result<std::set<Gate*>>
+            get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_input_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+
+        // test & document
+        Result<std::set<Gate*>>
+            get_next_sequential_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_input_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
 
         // TODO implement get_next_combinational_gates (get all combinational successor gates until sequential (non-combinational) gates are hit)
 
