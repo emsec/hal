@@ -73,6 +73,46 @@ namespace hal
         return retval;
     }
 
+    QString UserAction::gridToText(const QHash<hal::Node,QPoint>& grid)
+    {
+        QString retval;
+        for (auto it = grid.constBegin(); it!= grid.constEnd(); ++it)
+        {
+            if (!retval.isEmpty()) retval += ',';
+            retval += QString("%1%2:%3:%4")
+                    .arg(it.key().type()==hal::Node::Module?'M':'G')
+                    .arg(it.key().id())
+                    .arg(it.value().x())
+                    .arg(it.value().y());
+        }
+        return retval;
+    }
+
+    QHash<hal::Node,QPoint> UserAction::gridFromText(const QString& txt)
+    {
+        QHash<hal::Node,QPoint> retval;
+        for (QString s : txt.split(','))
+        {
+            if (s.isEmpty()) continue;
+            hal::Node::NodeType tp = hal::Node::None;
+            switch (s.at(0).unicode())
+            {
+            case 'M':
+                tp = hal::Node::Module;
+                break;
+            case 'G':
+                tp = hal::Node::Gate;
+                break;
+            default:
+                continue;
+            }
+            QStringList num = s.mid(1).split(':');
+            if (num.size() != 3) continue;
+            retval.insert(hal::Node(num.at(0).toUInt(),tp),QPoint(num.at(1).toInt(),num.at(2).toInt()));
+        }
+        return retval;
+    }
+
     void UserAction::writeParentObjectToXml(QXmlStreamWriter &xmlOut) const
     {
         if(mParentObject.type() != UserActionObjectType::None)
