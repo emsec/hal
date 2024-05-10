@@ -191,12 +191,12 @@ namespace hal
             R"(
             Starting from the given net, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
             Traverse over gates that are not sequential until a sequential gate is found.
-            Stops at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
+            Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
 
             :param hal_py.Net net: Start net.
             :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
             :param set[hal_py.PinType] forbidden_pins: Sequential gates reached through these pins will not be part of the result. Defaults to an empty set.
-            :returns: The next sequential gates.
+            :returns: The next sequential gates on success, ``None`` otherwise.
             :rtype: set[hal_py.Gate] or None
         )");
 
@@ -222,14 +222,14 @@ namespace hal
             R"(
             Starting from the given net, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
             Traverse over gates that are not sequential until a sequential gate is found.
-            Stops at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
+            Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
             Provide a cache to speed up traversal when calling this function multiple times on the same netlist using the same forbidden pins.
 
             :param hal_py.Net net: Start net.
             :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
             :param set[hal_py.PinType] forbidden_pins: Sequential gates reached through these pins will not be part of the result.
             :param dict[hal_py.Net, set[hal_py.Gate]] cache: A cache that can be used for better performance on repeated calls.
-            :returns: The next sequential gates.
+            :returns: The next sequential gates on success, ``None`` otherwise.
             :rtype: set[hal_py.Gate] or None
         )");
 
@@ -253,12 +253,12 @@ namespace hal
             R"(
             Starting from the given gate, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
             Traverse over gates that are not sequential until a sequential gate is found.
-            Stops at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
+            Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
 
             :param hal_py.Gate gate: Start gate.
             :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
             :param set[hal_py.PinType] forbidden_pins: Sequential gates reached through these pins will not be part of the result. Defaults to an empty set.
-            :returns: The next sequential gates.
+            :returns: The next sequential gates on success, ``None`` otherwise.
             :rtype: set[hal_py.Gate] or None
         )");
 
@@ -284,15 +284,42 @@ namespace hal
             R"(
             Starting from the given gate, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
             Traverse over gates that are not sequential until a sequential gate is found.
-            Stops at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
+            Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
             Provide a cache to speed up traversal when calling this function multiple times on the same netlist using the same forbidden pins.
 
             :param hal_py.Gate gate: Start gate.
             :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
             :param set[hal_py.PinType] forbidden_pins: Sequential gates reached through these pins will not be part of the result.
             :param dict[hal_py.Net, set[hal_py.Gate]] cache: A cache that can be used for better performance on repeated calls.
-            :returns: The next sequential gates.
+            :returns: The next sequential gates on success, ``None`` otherwise.
             :rtype: set[hal_py.Gate] or None
+        )");
+
+        py_netlist_traversal_decorator.def(
+            "get_next_sequential_gates_map",
+            [](NetlistTraversalDecorator& self, bool successors, const std::set<PinType>& forbidden_pins) -> std::optional<std::map<Gate*, std::set<Gate*>>> {
+                auto res = self.get_next_sequential_gates_map(successors, forbidden_pins);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting next sequential gates:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("successors"),
+            py::arg("forbidden_pins"),
+            R"(
+            Get the next sequential gates for all sequential gates in the netlist by traversing through remaining logic (e.g., combinational logic).
+            Compute a dict from a sequential gate to all its successors.
+            Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
+
+            :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
+            :param set[hal_py.PinType] forbidden_pins: Sequential gates reached through these pins will not be part of the result.
+            :returns: A dict from each sequential gate to all its sequential successors on success, ``None`` otherwise.
+            :rtype: dict[hal_py.Gate,set[hal_py.Gate]] or None
         )");
     }
 }    // namespace hal

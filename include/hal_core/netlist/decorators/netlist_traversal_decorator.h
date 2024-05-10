@@ -57,7 +57,7 @@ namespace hal
          * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
          * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
-         * @returns The next gates fulfilling the target gate filter condition.
+         * @returns The next gates fulfilling the target gate filter condition on success, an error otherwise.
          */
         Result<std::set<Gate*>> get_next_matching_gates(const Net* net,
                                                         bool successors,
@@ -76,7 +76,7 @@ namespace hal
          * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
          * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
-         * @returns The next gates fulfilling the target gate filter condition.
+         * @returns The next gates fulfilling the target gate filter condition on success, an error otherwise.
          */
         Result<std::set<Gate*>> get_next_matching_gates(const Gate* gate,
                                                         bool successors,
@@ -96,7 +96,7 @@ namespace hal
          * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
          * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
-         * @returns The next gates fulfilling the target gate filter condition.
+         * @returns The next gates fulfilling the target gate filter condition on success, an error otherwise.
          */
         Result<std::set<Gate*>> get_next_matching_gates_until(const Net* net,
                                                               bool successors,
@@ -116,7 +116,7 @@ namespace hal
          * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
          * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
-         * @returns The next gates fulfilling the target gate filter condition.
+         * @returns The next gates fulfilling the target gate filter condition on success, an error otherwise.
          */
         Result<std::set<Gate*>> get_next_matching_gates_until(const Gate* gate,
                                                               bool successors,
@@ -127,14 +127,14 @@ namespace hal
         /**
          * Starting from the given net, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
          * Traverse over gates that are not sequential until a sequential gate is found.
-         * Stops at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
+         * Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
          * Provide a cache to speed up traversal when calling this function multiple times on the same netlist using the same forbidden pins.
          * 
          * @param[in] net - Start net.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
          * @param[in] forbidden_pins - Sequential gates reached through these pins will not be part of the result.
          * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
-         * @returns The next sequential gates.
+         * @returns The next sequential gates on success, an error otherwise.
          */
         Result<std::set<Gate*>>
             get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
@@ -142,21 +142,30 @@ namespace hal
         /**
          * Starting from the given gate, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
          * Traverse over gates that are not sequential until a sequential gate is found.
-         * Stops at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
+         * Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
          * Provide a cache to speed up traversal when calling this function multiple times on the same netlist using the same forbidden pins.
          * 
          * @param[in] gate - Start gate.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
          * @param[in] forbidden_pins - Sequential gates reached through these pins will not be part of the result.
          * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
-         * @returns The next sequential gates.
+         * @returns The next sequential gates on success, an error otherwise.
          */
         Result<std::set<Gate*>>
             get_next_sequential_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
 
         // TODO implement get_next_combinational_gates (get all combinational successor gates until sequential (non-combinational) gates are hit)
 
-        // TODO implement get_sequential_successor_map (iteratively call get_next_sequential_gates on all sequential gates and create a map)
+        /**
+         * Get the next sequential gates for all sequential gates in the netlist by traversing through remaining logic (e.g., combinational logic).
+         * Compute a map from a sequential gate to all its successors.
+         * Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
+         * 
+         * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[in] forbidden_pins - Sequential gates reached through these pins will not be part of the result.
+         * @returns A map from each sequential gate to all its sequential successors on success, an error otherwise.
+         */
+        Result<std::map<Gate*, std::set<Gate*>>> get_next_sequential_gates_map(bool successors, const std::set<PinType>& forbidden_pins) const;
 
         // TODO move get_path and get_shortest_path here
 

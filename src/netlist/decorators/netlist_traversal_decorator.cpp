@@ -359,4 +359,24 @@ namespace hal
         }
         return OK(res);
     }
+
+    Result<std::map<Gate*, std::set<Gate*>>> NetlistTraversalDecorator::get_next_sequential_gates_map(bool successors, const std::set<PinType>& forbidden_pins) const
+    {
+        std::map<Gate*, std::set<Gate*>> seq_gate_map;
+        std::unordered_map<const Net*, std::set<Gate*>> cache = {};
+
+        for (auto* sg : m_netlist.get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::sequential); }))
+        {
+            if (const auto res = this->get_next_sequential_gates(sg, successors, forbidden_pins, &cache); res.is_ok())
+            {
+                seq_gate_map[sg] = res.get();
+            }
+            else
+            {
+                return ERR(res.get_error());
+            }
+        }
+
+        return OK(std::move(seq_gate_map));
+    }
 }    // namespace hal
