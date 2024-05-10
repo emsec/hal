@@ -600,6 +600,60 @@ namespace hal
             return OK({});
         }
 
+        Result<std::monostate> NetlistGraph::add_edges(const std::map<Gate*, std::set<Gate*>>& edges)
+        {
+            u32 edge_count = 0;
+            for (const auto& [_, dst_gates] : edges)
+            {
+                edge_count += dst_gates.size();
+            }
+
+            igraph_vector_int_t e_vec;
+            if (auto err = igraph_vector_int_init(&e_vec, 2 * edge_count); err != IGRAPH_SUCCESS)
+            {
+                return ERR(igraph_strerror(err));
+            }
+
+            u32 edge_index = 0;
+            for (const auto& [src_gate, dst_gates] : edges)
+            {
+                u32 src_vertex;
+                if (auto it = m_gates_to_nodes.find(src_gate); it != m_gates_to_nodes.end())
+                {
+                    src_vertex = it->second;
+                }
+                else
+                {
+                    igraph_vector_int_destroy(&e_vec);
+                    return ERR("no node for gate '" + src_gate->get_name() + "' with ID " + std::to_string(src_gate->get_id()) + " exists in graph for netlist with ID "
+                               + std::to_string(m_nl->get_id()));
+                }
+
+                for (auto* dst_gate : dst_gates)
+                {
+                    if (auto it = m_gates_to_nodes.find(dst_gate); it != m_gates_to_nodes.end())
+                    {
+                        VECTOR(e_vec)[edge_index++] = src_vertex;
+                        VECTOR(e_vec)[edge_index++] = it->second;
+                    }
+                    else
+                    {
+                        igraph_vector_int_destroy(&e_vec);
+                        return ERR("no node for gate '" + dst_gate->get_name() + "' with ID " + std::to_string(dst_gate->get_id()) + " exists in graph for netlist with ID "
+                                   + std::to_string(m_nl->get_id()));
+                    }
+                }
+            }
+
+            if (auto err = igraph_add_edges(&m_graph, &e_vec, nullptr); err != IGRAPH_SUCCESS)
+            {
+                igraph_vector_int_destroy(&e_vec);
+                return ERR(igraph_strerror(err));
+            }
+
+            return OK({});
+        }
+
         Result<std::monostate> NetlistGraph::delete_edges(const std::vector<std::pair<Gate*, Gate*>>& edges)
         {
             igraph_vector_int_t e_vec;

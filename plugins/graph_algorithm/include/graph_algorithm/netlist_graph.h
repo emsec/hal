@@ -215,6 +215,15 @@ namespace hal
             Result<std::monostate> add_edges(const std::vector<std::pair<u32, u32>>& edges);
 
             /**
+             * Add edges between the specified pairs of source and destination gates to the netlist graph.
+             * The vertices must already exist in the graph.
+             * 
+             * @param[in] edges - The edges to add as a map from source gate to its destination gates.
+             * @returns OK on success, an error otherwise.
+             */
+            Result<std::monostate> add_edges(const std::map<Gate*, std::set<Gate*>>& edges);
+
+            /**
              * Delete edges between the specified pairs of source and destination gates from the netlist graph.
              * 
              * @param[in] edges - The edges to delete as pairs of gates.

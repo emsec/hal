@@ -407,6 +407,30 @@ namespace hal
         )");
 
         py_netlist_graph.def(
+            "add_edges",
+            [](graph_algorithm::NetlistGraph& self, const std::map<Gate*, std::set<Gate*>>& edges) -> bool {
+                auto res = self.add_edges(edges);
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while adding edges:\n{}", res.get_error().get());
+                    return false;
+                }
+            },
+            py::arg("edges"),
+            R"(
+                Add edges between the specified pairs of source and destination gates to the netlist graph.
+                The vertices must already exist in the graph.
+
+                :param dict[hal_py.Gate,set[hal_py.Gate]] edges: The edges to add as a dict from source gate to its destination gates.
+                :returns: ``True`` on success, ``False`` otherwise.
+                :rtype: bool
+        )");
+
+        py_netlist_graph.def(
             "delete_edges",
             [](graph_algorithm::NetlistGraph& self, const std::vector<std::pair<Gate*, Gate*>>& edges) -> bool {
                 auto res = self.delete_edges(edges);
