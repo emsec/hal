@@ -49,12 +49,13 @@ namespace hal
         /**
          * Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
          * Traverse over gates that do not meet the `target_gate_filter` condition.
-         * Stop traversal if (1) the `target_gate_filter` evaluates to `true`, (2) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
+         * Stop traversal if (1) `continue_on_match` is `false` the `target_gate_filter` evaluates to `true`, (2) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
          * Both the `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted.
          * 
          * @param[in] net - Start net.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
          * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] continue_on_match - Set `true` to continue even if `target_gate_filter` evaluated to `true`, `false` otherwise. Defaults to `false`.
          * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
          * @returns The next gates fulfilling the target gate filter condition on success, an error otherwise.
@@ -62,18 +63,20 @@ namespace hal
         Result<std::set<Gate*>> get_next_matching_gates(const Net* net,
                                                         bool successors,
                                                         const std::function<bool(const Gate*)>& target_gate_filter,
+                                                        bool continue_on_match                                                                     = false,
                                                         const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                         const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
         /**
          * Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
          * Traverse over gates that do not meet the `target_gate_filter` condition.
-         * Stop traversal if (1) the `target_gate_filter` evaluates to `true`, (2) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
+         * Stop traversal if (1) `continue_on_match` is `false` the `target_gate_filter` evaluates to `true`, (2) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
          * Both the `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted.
          * 
          * @param[in] gate - Start gate.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
          * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] continue_on_match - Set `true` to continue even if `target_gate_filter` evaluated to `true`, `false` otherwise. Defaults to `false`.
          * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
          * @returns The next gates fulfilling the target gate filter condition on success, an error otherwise.
@@ -81,46 +84,49 @@ namespace hal
         Result<std::set<Gate*>> get_next_matching_gates(const Gate* gate,
                                                         bool successors,
                                                         const std::function<bool(const Gate*)>& target_gate_filter,
+                                                        bool continue_on_match                                                                     = false,
                                                         const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                         const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
         /**
          * Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
          * Continue traversal independent of whatever `target_gate_filter` evaluates to.
-         * Stop traversal if (1) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal) or (2) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
-         * The target_gate_filter may be omitted in which case all traversed gates will be returned.
-         * Both `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted as well.
+         * Stop traversal if (1) `continue_on_mismatch` is `false` the `target_gate_filter` evaluates to `false`, (2) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
+         * Both `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted.
          * 
          * @param[in] net - Start net.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
          * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] continue_on_mismatch - Set `true` to continue even if `target_gate_filter` evaluated to `false`, `false` otherwise. Defaults to `false`.
          * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
          * @returns The next gates fulfilling the target gate filter condition on success, an error otherwise.
          */
         Result<std::set<Gate*>> get_next_matching_gates_until(const Net* net,
                                                               bool successors,
-                                                              const std::function<bool(const Gate*)>& target_gate_filter                                 = nullptr,
+                                                              const std::function<bool(const Gate*)>& target_gate_filter,
+                                                              bool continue_on_mismatch                                                                  = false,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
         /**
          * Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
          * Continue traversal independent of whatever `target_gate_filter` evaluates to.
-         * Stop traversal if (1) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal) or (2) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
-         * The target_gate_filter may be omitted in which case all traversed gates will be returned.
-         * Both `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted as well.
+         * Stop traversal if (1) `continue_on_mismatch` is `false` the `target_gate_filter` evaluates to `false`, (2) the `exit_endpoint_filter` evaluates to `false` on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the `entry_endpoint_filter` evaluates to `false` on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
+         * Both `entry_endpoint_filter` and the `exit_endpoint_filter` may be omitted.
          * 
          * @param[in] gate - Start gate.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
          * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] continue_on_mismatch - Set `true` to continue even if `target_gate_filter` evaluated to `false`, `false` otherwise. Defaults to `false`.
          * @param[in] exit_endpoint_filter - Filter condition that determines whether to stop traversal on a fan-in/out endpoint.
          * @param[in] entry_endpoint_filter - Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.
          * @returns The next gates fulfilling the target gate filter condition on success, an error otherwise.
          */
         Result<std::set<Gate*>> get_next_matching_gates_until(const Gate* gate,
                                                               bool successors,
-                                                              const std::function<bool(const Gate*)>& target_gate_filter                                 = nullptr,
+                                                              const std::function<bool(const Gate*)>& target_gate_filter,
+                                                              bool continue_on_mismatch                                                                  = false,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& exit_endpoint_filter  = nullptr,
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
@@ -129,32 +135,32 @@ namespace hal
          * Continue traversal independent of whatever `target_gate_filter` evaluates to.
          * Stop traversal if the specified depth is reached.
          * The current depth is counted starting at 1 for the destinations of the provided net. 
-         * If no depth is provided, all gates between the start net and the global netlist outputs will be traversed.
+         * For a `depth` of `0`, all nets between the start gate and the global netlist outputs will be traversed.
          * The target_gate_filter may be omitted in which case all traversed gates will be returned.
          * 
          * @param[in] net - Start net.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
-         * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
          * @param[in] max_depth - The maximum depth for netlist traversal starting from the start net.
+         * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
          * @returns The next gates fulfilling the target gate filter condition on success, an error otherwise.
          */
-        Result<std::set<Gate*>> get_next_matching_gates_until_depth(const Net* net, bool successors, const std::function<bool(const Gate*)>& target_gate_filter = nullptr, u32 max_depth = 0) const;
+        Result<std::set<Gate*>> get_next_matching_gates_until_depth(const Net* net, bool successors, u32 max_depth, const std::function<bool(const Gate*)>& target_gate_filter = nullptr) const;
 
         /**
          * Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
          * Continue traversal independent of whatever `target_gate_filter` evaluates to.
          * Stop traversal if the specified depth is reached.
          * The current depth is counted starting at 1 for the direct successors/predecessors of the provided gate. 
-         * If no depth is provided, all gates between the start gate and the global netlist outputs will be traversed.
+         * For a `depth` of `0`, all gates between the start gate and the global netlist outputs will be traversed.
          * The target_gate_filter may be omitted in which case all traversed gates will be returned.
          * 
          * @param[in] gate - Start gate.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
-         * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
          * @param[in] max_depth - The maximum depth for netlist traversal starting from the start gate.
+         * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
          * @returns The next gates fulfilling the target gate filter condition on success, an error otherwise.
          */
-        Result<std::set<Gate*>> get_next_matching_gates_until_depth(const Gate* gate, bool successors, const std::function<bool(const Gate*)>& target_gate_filter = nullptr, u32 max_depth = 0) const;
+        Result<std::set<Gate*>> get_next_matching_gates_until_depth(const Gate* gate, bool successors, u32 max_depth, const std::function<bool(const Gate*)>& target_gate_filter = nullptr) const;
 
         /**
          * Starting from the given net, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
