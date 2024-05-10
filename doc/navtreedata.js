@@ -28,18 +28,17 @@ var NAVTREE =
       [ "Introduction", "index.html#autotoc_md28", [
         [ "What the hell is HAL?", "index.html#autotoc_md29", null ],
         [ "Shipped Plugins", "index.html#autotoc_md30", null ],
-        [ "Documentation", "index.html#autotoc_md31", null ],
-        [ "Slack, Contact and Support", "index.html#autotoc_md32", null ]
+        [ "Documentation", "index.html#autotoc_md31", null ]
       ] ],
-      [ "Build Instructions", "index.html#autotoc_md33", null ],
-      [ "Quickstart Guide", "index.html#autotoc_md34", null ],
-      [ "Contributing", "index.html#autotoc_md35", [
-        [ "Run static checks and clang format locally", "index.html#autotoc_md36", null ],
-        [ "Generate Changelog", "index.html#autotoc_md37", null ]
+      [ "Build Instructions", "index.html#autotoc_md32", null ],
+      [ "Quickstart Guide", "index.html#autotoc_md33", null ],
+      [ "Contributing", "index.html#autotoc_md34", [
+        [ "Run static checks and clang format locally", "index.html#autotoc_md35", null ],
+        [ "Generate Changelog", "index.html#autotoc_md36", null ]
       ] ],
-      [ "Academic Context", "index.html#autotoc_md38", null ],
-      [ "Licensing", "index.html#autotoc_md39", null ],
-      [ "Disclaimer", "index.html#autotoc_md40", null ]
+      [ "Academic Context", "index.html#autotoc_md37", null ],
+      [ "Licensing", "index.html#autotoc_md38", null ],
+      [ "Disclaimer", "index.html#autotoc_md39", null ]
     ] ],
     [ "LICENSE", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html", [
       [ "SIL Open Font License v1.1", "md__home_runner_work_hal_hal_plugins_gui_resources_fonts__l_i_c_e_n_s_e.html#autotoc_md13", [
@@ -128,15 +127,15 @@ var NAVTREEINDEX =
 "expanding__list__button_8h_source.html",
 "gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caaf3d6b70c12864b0ccaa58d3e02d18fd3",
 "group__pybind.html#ga9e03e20ad125cd9eb1f4e601ac556777",
-"mac__component_8cpp.html",
-"net__layout__junction_8h.html",
-"parser_8h.html#ab7792aeb2f619d1832ed2115e3780b55",
-"port__tree__model_8h_source.html",
-"runtime__library_8h.html",
-"sort_8h.html#a1e95bade9096c47139daec1bd6600432",
-"struct_abc___obj__t__.html#ab2b854cabb7ad3681f9336920f4dbfe8",
-"structhal_1_1dataflow_1_1_configuration.html#aa68e649ceb526265d7c7c444fc0d75b2",
-"types_8cpp.html#a3d377a7208c5173dc9a3681d3de23240"
+"mac__component_8cpp_source.html",
+"net__layout__junction_8h.html#a8164f3fe18946ad6d73fa48b336073ee",
+"parser_8h.html#ab7792aeb2f619d1832ed2115e3780b55a144330dfe27435d5a290af3833f59fcd",
+"position__generator_8cpp.html",
+"runtime__library_8h.html#a618c6a05a78f79aa047ae4309ea75f3a",
+"sort_8h.html#a4f8333ab2d1d7395a872b3a8280f711e",
+"struct_abc___obj__t__.html#abd080dda7751851b7d55aa9326191d44",
+"structhal_1_1dataflow_1_1_configuration.html#aacbb82235bd4d3f00940ddd50c50f2cf",
+"types_8cpp.html#a408877dc60e7c74daa8c42e2ae277212"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
