@@ -1,4 +1,4 @@
 <map id="hal::ActionRenameObject" name="hal::ActionRenameObject">
-<area shape="rect" id="node1" title="Renames an item." alt="" coords="21,351,208,501"/>
-<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,5,224,303"/>
+<area shape="rect" id="node1" title="Renames an item." alt="" coords="21,380,208,531"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,5,224,332"/>
 </map>

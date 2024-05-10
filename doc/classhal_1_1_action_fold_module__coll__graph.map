@@ -1,6 +1,6 @@
 <map id="hal::ActionFoldModule" name="hal::ActionFoldModule">
-<area shape="rect" id="node1" title="Folds a module." alt="" coords="299,565,466,701"/>
-<area shape="rect" id="node2" href="$classhal_1_1_user_action_compound.html" title=" " alt="" coords="287,351,478,516"/>
-<area shape="rect" id="node3" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,5,224,288"/>
-<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qlist.html" title=" " alt="" coords="376,13,571,281"/>
+<area shape="rect" id="node1" title="Folds a module." alt="" coords="299,595,466,731"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action_compound.html" title=" " alt="" coords="287,380,478,545"/>
+<area shape="rect" id="node3" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,5,224,317"/>
+<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qlist.html" title=" " alt="" coords="376,27,571,295"/>
 </map>

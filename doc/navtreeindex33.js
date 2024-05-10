@@ -1,5 +1,6 @@
 var NAVTREEINDEX33 =
 {
+"structhal_1_1dataflow_1_1_configuration.html#aa68e649ceb526265d7c7c444fc0d75b2":[6,0,0,2,2,9],
 "structhal_1_1dataflow_1_1_configuration.html#aacbb82235bd4d3f00940ddd50c50f2cf":[6,0,0,2,2,12],
 "structhal_1_1dataflow_1_1_configuration.html#ab042ff6cb281a4dd5bf8c4251971ca9b":[6,0,0,2,2,0],
 "structhal_1_1dataflow_1_1_configuration.html#adeed2b1c81e1831eb33115e31da17f1d":[6,0,0,2,2,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX33 =
 "types_8cpp.html#a04ea14e7af004d0e444ea51a2667bcb6":[7,0,2,0,0,9,17],
 "types_8cpp.html#a0efe29c3d392a657118e17f689b16a42":[7,0,2,0,0,9,1],
 "types_8cpp.html#a1abbca0f53ce9868ab55b56548bbcda0":[7,0,2,0,0,9,12],
-"types_8cpp.html#a393500151a486fa6cc36e13e7920ef5a":[7,0,2,0,0,9,9],
-"types_8cpp.html#a3d377a7208c5173dc9a3681d3de23240":[7,0,2,0,0,9,8]
+"types_8cpp.html#a393500151a486fa6cc36e13e7920ef5a":[7,0,2,0,0,9,9]
 };

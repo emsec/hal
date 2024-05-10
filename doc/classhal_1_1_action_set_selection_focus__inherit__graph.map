@@ -1,4 +1,4 @@
 <map id="hal::ActionSetSelectionFocus" name="hal::ActionSetSelectionFocus">
-<area shape="rect" id="node1" title="Set the selection and focus." alt="" coords="10,351,219,501"/>
-<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,5,224,303"/>
+<area shape="rect" id="node1" title="Set the selection and focus." alt="" coords="10,380,219,531"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,5,224,332"/>
 </map>

@@ -1,5 +1,6 @@
 var NAVTREEINDEX20 =
 {
+"classhal_1_1_token_stream.html#a41a6a977f6adbbacf250be5ad1b78b83":[4,1,3,7,4],
 "classhal_1_1_token_stream.html#a505399e571df285e38c42b4b6a7ac98f":[4,1,3,7,20],
 "classhal_1_1_token_stream.html#a660cabea791d72b7980930d49e8f8ec9":[4,1,3,7,16],
 "classhal_1_1_token_stream.html#a663fd5064d81ff35e0d957858bf8ddb8":[4,1,3,7,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX20 =
 "code__editor__minimap_8cpp_source.html":[7,0,1,3,2,3,2],
 "code__editor__minimap_8h.html":[7,0,1,3,0,0,3,2],
 "code__editor__minimap_8h_source.html":[7,0,1,3,0,0,3,2],
-"code__editor__scrollbar_8cpp.html":[7,0,1,3,2,3,3],
-"code__editor__scrollbar_8cpp_source.html":[7,0,1,3,2,3,3]
+"code__editor__scrollbar_8cpp.html":[7,0,1,3,2,3,3]
 };

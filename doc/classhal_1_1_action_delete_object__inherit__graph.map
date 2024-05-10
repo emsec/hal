@@ -1,4 +1,4 @@
 <map id="hal::ActionDeleteObject" name="hal::ActionDeleteObject">
-<area shape="rect" id="node1" title="Deletes an object." alt="" coords="27,351,203,457"/>
-<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,5,224,303"/>
+<area shape="rect" id="node1" title="Deletes an object." alt="" coords="27,380,203,487"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action.html" title="The UserAction class is the abstract base class for user interactions." alt="" coords="5,5,224,332"/>
 </map>

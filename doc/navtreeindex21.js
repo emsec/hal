@@ -1,5 +1,6 @@
 var NAVTREEINDEX21 =
 {
+"code__editor__scrollbar_8cpp_source.html":[7,0,1,3,2,3,3],
 "code__editor__scrollbar_8h.html":[7,0,1,3,0,0,3,3],
 "code__editor__scrollbar_8h_source.html":[7,0,1,3,0,0,3,3],
 "color__selection_8cpp.html":[7,0,1,3,2,29,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX21 =
 "dir_4a8579db386ef695e67dd0763cf247a7.html":[7,0,1,3,0,0,30],
 "dir_4b346f2da5758358aaea2285e1f43dfc.html":[7,0,1,3,0,0,3,0],
 "dir_4e0a37862cc7407b708ad1629646627b.html":[7,0,1,1,0,0,3],
-"dir_521e0a67f0f6ccf539d1fe300f576c15.html":[7,0,1,1,0,0,2],
-"dir_527facc1459bfa3f362f8599485e2a7b.html":[7,0,0,0,1,3,3]
+"dir_521e0a67f0f6ccf539d1fe300f576c15.html":[7,0,1,1,0,0,2]
 };
