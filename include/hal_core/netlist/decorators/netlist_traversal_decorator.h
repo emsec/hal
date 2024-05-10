@@ -186,8 +186,6 @@ namespace hal
         Result<std::set<Gate*>>
             get_next_sequential_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
 
-        // TODO implement get_next_combinational_gates (get all combinational successor gates until sequential (non-combinational) gates are hit)
-
         /**
          * Get the next sequential gates for all sequential gates in the netlist by traversing through remaining logic (e.g., combinational logic).
          * Compute a map from a sequential gate to all its successors.
@@ -198,6 +196,32 @@ namespace hal
          * @returns A map from each sequential gate to all its sequential successors on success, an error otherwise.
          */
         Result<std::map<Gate*, std::set<Gate*>>> get_next_sequential_gates_map(bool successors, const std::set<PinType>& forbidden_pins) const;
+
+        /**
+         * Starting from the given net, traverse the netlist and return all combinational successor/predecessor gates.
+         * Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
+         * All combinational gates found during traversal are added to the result.
+         * Provide a cache to speed up traversal when calling this function multiple times on the same netlist.
+         * 
+         * @param[in] net - Start net.
+         * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
+         * @returns The next combinational gates on success, an error otherwise.
+         */
+        Result<std::set<Gate*>> get_next_combinational_gates(const Net* net, bool successors, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+
+        /**
+         * Starting from the given gate, traverse the netlist and return all combinational successor/predecessor gates.
+         * Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
+         * All combinational gates found during traversal are added to the result.
+         * Provide a cache to speed up traversal when calling this function multiple times on the same netlist.
+         * 
+         * @param[in] gate - Start gate.
+         * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
+         * @returns The next combinational gates on success, an error otherwise.
+         */
+        Result<std::set<Gate*>> get_next_combinational_gates(const Gate* gate, bool successors, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
 
         // TODO move get_path and get_shortest_path here
 
