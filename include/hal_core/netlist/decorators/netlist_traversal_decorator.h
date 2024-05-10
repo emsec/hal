@@ -125,6 +125,38 @@ namespace hal
                                                               const std::function<bool(const Endpoint*, const u32 current_depth)>& entry_endpoint_filter = nullptr) const;
 
         /**
+         * Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
+         * Continue traversal independent of whatever `target_gate_filter` evaluates to.
+         * Stop traversal if the specified depth is reached.
+         * The current depth is counted starting at 1 for the destinations of the provided net. 
+         * If no depth is provided, all gates between the start net and the global netlist outputs will be traversed.
+         * The target_gate_filter may be omitted in which case all traversed gates will be returned.
+         * 
+         * @param[in] net - Start net.
+         * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] max_depth - The maximum depth for netlist traversal starting from the start net.
+         * @returns The next gates fulfilling the target gate filter condition on success, an error otherwise.
+         */
+        Result<std::set<Gate*>> get_next_matching_gates_until_depth(const Net* net, bool successors, const std::function<bool(const Gate*)>& target_gate_filter = nullptr, u32 max_depth = 0) const;
+
+        /**
+         * Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the `target_gate_filter` evaluates to `true`.
+         * Continue traversal independent of whatever `target_gate_filter` evaluates to.
+         * Stop traversal if the specified depth is reached.
+         * The current depth is counted starting at 1 for the direct successors/predecessors of the provided gate. 
+         * If no depth is provided, all gates between the start gate and the global netlist outputs will be traversed.
+         * The target_gate_filter may be omitted in which case all traversed gates will be returned.
+         * 
+         * @param[in] gate - Start gate.
+         * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
+         * @param[in] target_gate_filter - Filter condition that must be met for the target gates.
+         * @param[in] max_depth - The maximum depth for netlist traversal starting from the start gate.
+         * @returns The next gates fulfilling the target gate filter condition on success, an error otherwise.
+         */
+        Result<std::set<Gate*>> get_next_matching_gates_until_depth(const Gate* gate, bool successors, const std::function<bool(const Gate*)>& target_gate_filter = nullptr, u32 max_depth = 0) const;
+
+        /**
          * Starting from the given net, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
          * Traverse over gates that are not sequential until a sequential gate is found.
          * Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
