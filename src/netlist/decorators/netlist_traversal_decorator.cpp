@@ -410,25 +410,28 @@ namespace hal
             bool added = false;
             for (const auto* entry_ep : successors ? current->get_destinations() : current->get_sources())
             {
-                auto pin   = entry_ep->get_pin();
+                auto entry_pin   = entry_ep->get_pin();
                 auto* gate = entry_ep->get_gate();
 
+                // stop traversal if gate is sequential
                 if (gate->get_type()->has_property(GateTypeProperty::sequential))
                 {
-                    // stop traversal if gate is sequential
-                    if (forbidden_pins.find(pin->get_type()) == forbidden_pins.end())
+                    // stop traversal on forbidden pins
+                    if (forbidden_pins.find(entry_pin->get_type()) != forbidden_pins.end())
                     {
-                        // only add gate to result if it has not been reached through a forbidden pin (e.g., control pin)
-                        res.insert(gate);
+                        continue;
+                    }
 
-                        // update cache
-                        if (cache)
+                    // only add gate to result if it has not been reached through a forbidden pin (e.g., control pin)
+                    res.insert(gate);
+
+                    // update cache
+                    if (cache)
+                    {
+                        (*cache)[current].insert(gate);
+                        for (const auto* n : previous)
                         {
-                            (*cache)[current].insert(gate);
-                            for (const auto* n : previous)
-                            {
-                                (*cache)[n].insert(gate);
-                            }
+                            (*cache)[n].insert(gate);
                         }
                     }
                 }
@@ -437,6 +440,14 @@ namespace hal
                     for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
                     {
                         const Net* n = exit_ep->get_net();
+                        const GatePin* exit_pin = exit_ep->get_pin();
+
+                        // stop traversal on forbidden pins
+                        if (forbidden_pins.find(exit_pin->get_type()) != forbidden_pins.end())
+                        {
+                            continue;
+                        }
+
                         if (visited.find(n) == visited.end())
                         {
                             stack.push_back(n);
@@ -475,6 +486,14 @@ namespace hal
         std::set<Gate*> res;
         for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
         {
+            const GatePin* exit_pin = exit_ep->get_pin();
+
+            // stop traversal on forbidden pins
+            if (forbidden_pins.find(exit_pin->get_type()) != forbidden_pins.end())
+            {
+                continue;
+            }
+
             const auto next_res = this->get_next_sequential_gates(exit_ep->get_net(), successors, forbidden_pins, cache);
             if (next_res.is_error())
             {
