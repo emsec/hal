@@ -132,12 +132,12 @@ namespace hal
          * 
          * @param[in] net - Start net.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
-         * @param[in] forbidden_pins - Sequential gates reached through these pins will not be part of the result. Defaults to an empty set.
-         * @param[in] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
+         * @param[in] forbidden_pins - Sequential gates reached through these pins will not be part of the result.
+         * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
          * @returns The next sequential gates.
          */
         Result<std::set<Gate*>>
-            get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+            get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
 
         /**
          * Starting from the given gate, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
@@ -147,12 +147,12 @@ namespace hal
          * 
          * @param[in] gate - Start gate.
          * @param[in] successors - Set `true` to get successors, set `false` to get predecessors.
-         * @param[in] forbidden_pins - Sequential gates reached through these pins will not be part of the result. Defaults to an empty set.
-         * @param[in] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
+         * @param[in] forbidden_pins - Sequential gates reached through these pins will not be part of the result.
+         * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
          * @returns The next sequential gates.
          */
         Result<std::set<Gate*>>
-            get_next_sequential_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+            get_next_sequential_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
 
         // TODO implement get_next_combinational_gates (get all combinational successor gates until sequential (non-combinational) gates are hit)
 

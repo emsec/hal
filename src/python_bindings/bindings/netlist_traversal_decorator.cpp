@@ -173,7 +173,7 @@ namespace hal
 
         py_netlist_traversal_decorator.def(
             "get_next_sequential_gates",
-            [](NetlistTraversalDecorator& self, const Net* net, bool successors, const std::set<PinType>& forbidden_pins = {}) -> std::optional<std::set<Gate*>> {
+            [](NetlistTraversalDecorator& self, const Net* net, bool successors, const std::set<PinType>& forbidden_pins) -> std::optional<std::set<Gate*>> {
                 auto res = self.get_next_sequential_gates(net, successors, forbidden_pins, nullptr);
                 if (res.is_ok())
                 {
@@ -187,7 +187,7 @@ namespace hal
             },
             py::arg("net"),
             py::arg("successors"),
-            py::arg("forbidden_pins") = std::set<PinType>(),
+            py::arg("forbidden_pins"),
             R"(
             Starting from the given net, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
             Traverse over gates that are not sequential until a sequential gate is found.
@@ -235,7 +235,7 @@ namespace hal
 
         py_netlist_traversal_decorator.def(
             "get_next_sequential_gates",
-            [](NetlistTraversalDecorator& self, const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins = {}) -> std::optional<std::set<Gate*>> {
+            [](NetlistTraversalDecorator& self, const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins) -> std::optional<std::set<Gate*>> {
                 auto res = self.get_next_sequential_gates(gate, successors, forbidden_pins, nullptr);
                 if (res.is_ok())
                 {
@@ -249,7 +249,7 @@ namespace hal
             },
             py::arg("gate"),
             py::arg("successors"),
-            py::arg("forbidden_pins") = std::set<PinType>(),
+            py::arg("forbidden_pins"),
             R"(
             Starting from the given gate, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
             Traverse over gates that are not sequential until a sequential gate is found.
