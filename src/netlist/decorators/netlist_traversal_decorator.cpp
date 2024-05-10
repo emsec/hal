@@ -274,6 +274,9 @@ namespace hal
                     // append cached gates to result
                     res.insert(cached_gates.begin(), cached_gates.end());
 
+                    // pop net from stack as it has been dealt with
+                    stack.pop_back();
+
                     continue;
                 }
             }
