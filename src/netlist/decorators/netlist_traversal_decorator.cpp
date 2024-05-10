@@ -235,10 +235,8 @@ namespace hal
         return OK(res);
     }
 
-    Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_sequential_gates(const Net* net,
-                                                                                 bool successors,
-                                                                                 const std::set<PinType>& forbidden_input_pins,
-                                                                                 std::unordered_map<const Net*, std::set<Gate*>>* cache) const
+    Result<std::set<Gate*>>
+        NetlistTraversalDecorator::get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache) const
     {
         if (net == nullptr)
         {
@@ -289,7 +287,7 @@ namespace hal
                 if (gate->get_type()->has_property(GateTypeProperty::sequential))
                 {
                     // stop traversal if gate is sequential
-                    if (forbidden_input_pins.find(pin->get_type()) == forbidden_input_pins.end())
+                    if (forbidden_pins.find(pin->get_type()) == forbidden_pins.end())
                     {
                         // only add gate to result if it has not been reached through a forbidden pin (e.g., control pin)
                         res.insert(gate);
@@ -332,10 +330,8 @@ namespace hal
         return OK(res);
     }
 
-    Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_sequential_gates(const Gate* gate,
-                                                                                 bool successors,
-                                                                                 const std::set<PinType>& forbidden_input_pins,
-                                                                                 std::unordered_map<const Net*, std::set<Gate*>>* cache) const
+    Result<std::set<Gate*>>
+        NetlistTraversalDecorator::get_next_sequential_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache) const
     {
         if (gate == nullptr)
         {
@@ -350,7 +346,7 @@ namespace hal
         std::set<Gate*> res;
         for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
         {
-            const auto next_res = this->get_next_sequential_gates(exit_ep->get_net(), successors, forbidden_input_pins, cache);
+            const auto next_res = this->get_next_sequential_gates(exit_ep->get_net(), successors, forbidden_pins, cache);
             if (next_res.is_error())
             {
                 return ERR(next_res.get_error());
