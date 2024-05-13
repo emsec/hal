@@ -14,7 +14,8 @@ namespace hal
                                                                                const std::function<bool(const Gate*)>& target_gate_filter,
                                                                                bool continue_on_match,
                                                                                const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
-                                                                               const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+                                                                               const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter,
+                                                                               std::unordered_map<const Net*, std::set<Gate*>>* cache) const
     {
         if (net == nullptr)
         {
@@ -56,11 +57,21 @@ namespace hal
                     continue;
                 }
 
-                auto* g = entry_ep->get_gate();
+                auto* gate = entry_ep->get_gate();
 
-                if (target_gate_filter(g))
+                if (target_gate_filter(gate))
                 {
-                    res.insert(g);
+                    res.insert(gate);
+
+                    // update cache
+                    if (cache)
+                    {
+                        (*cache)[current].insert(gate);
+                        for (const auto* n : previous)
+                        {
+                            (*cache)[n].insert(gate);
+                        }
+                    }
 
                     if (!continue_on_match)
                     {
@@ -68,17 +79,37 @@ namespace hal
                     }
                 }
 
-                for (const auto* exit_ep : successors ? g->get_fan_out_endpoints() : g->get_fan_in_endpoints())
+                for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
                 {
                     if (exit_endpoint_filter != nullptr && !exit_endpoint_filter(exit_ep, previous.size() + 1))
                     {
                         continue;
                     }
 
-                    const Net* n = exit_ep->get_net();
-                    if (visited.find(n) == visited.end())
+                    const Net* exit_net = exit_ep->get_net();
+                    if (cache)
                     {
-                        stack.push_back(n);
+                        if (const auto it = cache->find(exit_net); it != cache->end())
+                        {
+                            const auto& cached_gates = std::get<1>(*it);
+
+                            // append cached gates to result
+                            res.insert(cached_gates.begin(), cached_gates.end());
+
+                            // update cache
+                            (*cache)[current].insert(cached_gates.begin(), cached_gates.end());
+                            for (const auto* n : previous)
+                            {
+                                (*cache)[n].insert(cached_gates.begin(), cached_gates.end());
+                            }
+
+                            continue;
+                        }
+                    }
+
+                    if (visited.find(exit_net) == visited.end())
+                    {
+                        stack.push_back(exit_net);
                         added = true;
                     }
                 }
@@ -102,7 +133,8 @@ namespace hal
                                                                                const std::function<bool(const Gate*)>& target_gate_filter,
                                                                                bool continue_on_match,
                                                                                const std::function<bool(const Endpoint*, u32 current_depth)>& exit_endpoint_filter,
-                                                                               const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter) const
+                                                                               const std::function<bool(const Endpoint*, u32 current_depth)>& entry_endpoint_filter,
+                                                                               std::unordered_map<const Net*, std::set<Gate*>>* cache) const
     {
         if (gate == nullptr)
         {
@@ -122,7 +154,21 @@ namespace hal
                 continue;
             }
 
-            const auto next_res = this->get_next_matching_gates(exit_ep->get_net(), successors, target_gate_filter, continue_on_match, exit_endpoint_filter, entry_endpoint_filter);
+            const auto* exit_net = exit_ep->get_net();
+            if (cache)
+            {
+                if (const auto it = cache->find(exit_net); it != cache->end())
+                {
+                    const auto& cached_gates = std::get<1>(*it);
+
+                    // append cached gates to result
+                    res.insert(cached_gates.begin(), cached_gates.end());
+
+                    continue;
+                }
+            }
+
+            const auto next_res = this->get_next_matching_gates(exit_net, successors, target_gate_filter, continue_on_match, exit_endpoint_filter, entry_endpoint_filter, cache);
             if (next_res.is_error())
             {
                 return ERR(next_res.get_error());
