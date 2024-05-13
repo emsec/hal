@@ -689,7 +689,39 @@ namespace hal {
                 // test NetlistModificationDecorator::get_next_matching_gates_until
                 const auto trav_dec = NetlistTraversalDecorator(*(nl.get()));
 
-                // TODO implement
+                // successors
+                {
+                    const auto res = trav_dec.get_next_matching_gates_until(dff1, true, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); }, false, nullptr, nullptr);
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({and0, or2, or0, or3, and1, or4}));
+                }
+                {
+                    const auto res = trav_dec.get_next_matching_gates_until(dff1, true, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); }, true, nullptr, [](const Endpoint* ep, u32 current_depth) { return !ep->get_gate()->get_type()->has_property(GateTypeProperty::ff); });
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({and0, or2, or0, or3, and1, or4}));
+                }
+
+                // predecessors
+                {
+                    const auto res = trav_dec.get_next_matching_gates_until(dff5, false, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); }, false, nullptr, nullptr);
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({or3, and0, and1, inv6}));
+                }
+                {
+                    const auto res = trav_dec.get_next_matching_gates_until(dff4, false, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); }, false, nullptr, nullptr);
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({or2, inv0, and0, inv6}));
+                }
+                {
+                    const auto res = trav_dec.get_next_matching_gates_until(dff5, false, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); }, true, nullptr, [](const Endpoint* ep, u32 current_depth) { return !ep->get_gate()->get_type()->has_property(GateTypeProperty::ff); });
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({or3, and0, and1, inv6}));
+                }
+                {
+                    const auto res = trav_dec.get_next_matching_gates_until(dff5, false, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::combinational); }, true, [](const Endpoint* ep, u32 current_depth) { return ep->get_pin()->get_type() == PinType::data || ep->get_pin()->get_type() == PinType::none; }, [](const Endpoint* ep, u32 current_depth) { return !ep->get_gate()->get_type()->has_property(GateTypeProperty::ff); });
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({or3, and0, and1}));
+                }
             }
             {
                 // test NetlistModificationDecorator::get_next_matching_gates_until_depth
