@@ -273,7 +273,7 @@ endif(Z3_FOUND)
 # ####   igraph
 # ###############################
 if(USE_VENDORED_IGRAPH)
-set (IGRAPH_SUBDIR "${CMAKE_SOURCE_DIR}/deps/igraph-0.9.10")
+    set(IGRAPH_SUBDIR "${CMAKE_SOURCE_DIR}/deps/igraph-0.10.x")
     add_subdirectory(${IGRAPH_SUBDIR})
     get_directory_property(igraph_INCLUDES DIRECTORY ${IGRAPH_SUBDIR} DEFINITION IGRAPH_INCLUDES)
     get_directory_property(igraph_LIBRARIES      DIRECTORY ${IGRAPH_SUBDIR} DEFINITION IGRAPH_LIB)

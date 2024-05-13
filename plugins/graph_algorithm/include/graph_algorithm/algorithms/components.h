@@ -25,42 +25,27 @@
 
 #pragma once
 
-#include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/defines.h"
+#include "hal_core/utilities/result.h"
 
 #include <igraph/igraph.h>
+#include <set>
 
 namespace hal
 {
-    /* forward declaration */
-    class Netlist;
-    class Gate;
-    class Net;
-
-    class PLUGIN_API GraphAlgorithmPlugin : public BasePluginInterface
+    namespace graph_algorithm
     {
-    public:
-        /** constructor (= default) */
-        GraphAlgorithmPlugin() = default;
+        class NetlistGraph;
 
-        /** destructor (= default) */
-        ~GraphAlgorithmPlugin() = default;
-
-        /*
-        *      interface implementations
-        */
-
-        /**
-         * Get the name of the plugin.
-         *
-         * @returns The name of the plugin.
+        /** 
+         * Compute the (strongly) connected components of the specified graph.
+         * Returns each connected component as a vector of vertices in the netlist graph.
+         * 
+         * @param[in] graph - The netlist graph.
+         * @param[in] strong - Set `true` to compute strongly connected components, `false` otherwise.
+         * @param[in] min_size - Minimal size of a connected component to be part of the result. Set to `0` to include all components. Defaults to `0`.
+         * @returns A vector of strongly connected components on success, an error otherwise.
          */
-        std::string get_name() const override;
-
-        /**
-         * Get the version of the plugin.
-         *
-         * @returns The version of the plugin.
-         */
-        std::string get_version() const override;
-    };
+        Result<std::vector<std::vector<u32>>> get_connected_components(NetlistGraph* graph, bool strong, u32 min_size = 0);
+    }    // namespace graph_algorithm
 }    // namespace hal
