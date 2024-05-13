@@ -553,6 +553,7 @@ namespace hal {
             auto inv3 = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "INV3");
             auto inv4 = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "INV4");
             auto inv5 = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "INV5");
+            auto inv6 = nl_raw->create_gate(gl->get_gate_type_by_name("INV"), "INV6");
 
             auto and0 = nl_raw->create_gate(gl->get_gate_type_by_name("AND2"), "AND0");
             auto and1 = nl_raw->create_gate(gl->get_gate_type_by_name("AND2"), "AND1");
@@ -636,18 +637,19 @@ namespace hal {
             test_utils::connect(nl_raw, sff0, "Q", dff10, "EN");
             test_utils::connect(nl_raw, sff0, "Q", dff11, "EN");
 
-            Net* rst = test_utils::connect(nl_raw, sff1, "Q", dff0, "R", "rst");
-            test_utils::connect(nl_raw, sff1, "Q", dff1, "R");
-            test_utils::connect(nl_raw, sff1, "Q", dff2, "R");
-            test_utils::connect(nl_raw, sff1, "Q", dff3, "R");
-            test_utils::connect(nl_raw, sff1, "Q", dff4, "R");
-            test_utils::connect(nl_raw, sff1, "Q", dff5, "R");
-            test_utils::connect(nl_raw, sff1, "Q", dff6, "R");
-            test_utils::connect(nl_raw, sff1, "Q", dff7, "R");
-            test_utils::connect(nl_raw, sff1, "Q", dff8, "R");
-            test_utils::connect(nl_raw, sff1, "Q", dff9, "R");
-            test_utils::connect(nl_raw, sff1, "Q", dff10, "R");
-            test_utils::connect(nl_raw, sff1, "Q", dff11, "R");
+            Net* irst = test_utils::connect(nl_raw, sff1, "Q", inv6, "I", "irst");
+            Net* rst = test_utils::connect(nl_raw, inv6, "O", dff0, "R", "rst");
+            test_utils::connect(nl_raw, inv6, "O", dff1, "R");
+            test_utils::connect(nl_raw, inv6, "O", dff2, "R");
+            test_utils::connect(nl_raw, inv6, "O", dff3, "R");
+            test_utils::connect(nl_raw, inv6, "O", dff4, "R");
+            test_utils::connect(nl_raw, inv6, "O", dff5, "R");
+            test_utils::connect(nl_raw, inv6, "O", dff6, "R");
+            test_utils::connect(nl_raw, inv6, "O", dff7, "R");
+            test_utils::connect(nl_raw, inv6, "O", dff8, "R");
+            test_utils::connect(nl_raw, inv6, "O", dff9, "R");
+            test_utils::connect(nl_raw, inv6, "O", dff10, "R");
+            test_utils::connect(nl_raw, inv6, "O", dff11, "R");
 
 
             {
@@ -770,13 +772,145 @@ namespace hal {
                 // test NetlistModificationDecorator::get_next_sequential_gates_map
                 const auto trav_dec = NetlistTraversalDecorator(*(nl.get()));
 
-                // TODO implement
+                {
+                    std::map<Gate*, std::set<Gate*>> gt;
+                    gt[dff0] = {dff4, dff5, dff0};
+                    gt[dff1] = {dff4, dff5, dff6, dff0};
+                    gt[dff2] = {dff5, dff6, dff7, dff3};
+                    gt[dff3] = {dff6, dff7, dff3};
+                    gt[dff4] = {dff8};
+                    gt[dff5] = {dff9};
+                    gt[dff6] = {dff10};
+                    gt[dff7] = {dff11};
+                    gt[dff8] = {};
+                    gt[dff9] = {};
+                    gt[dff10] = {};
+                    gt[dff11] = {};
+                    gt[sff0] = {sff1};
+                    gt[sff1] = {};
+
+                    const auto res = trav_dec.get_next_sequential_gates_map(true, {PinType::enable, PinType::reset, PinType::set, PinType::clock});
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), gt);
+                }
+                {
+                    std::map<Gate*, std::set<Gate*>> gt;
+                    gt[dff0] = {dff4, dff5, dff0};
+                    gt[dff1] = {dff4, dff5, dff6, dff0};
+                    gt[dff2] = {dff5, dff6, dff7, dff3};
+                    gt[dff3] = {dff6, dff7, dff3};
+                    gt[dff4] = {dff8};
+                    gt[dff5] = {dff9};
+                    gt[dff6] = {dff10};
+                    gt[dff7] = {dff11};
+                    gt[dff8] = {};
+                    gt[dff9] = {};
+                    gt[dff10] = {};
+                    gt[dff11] = {};
+                    gt[sff0] = {dff0, dff1, dff2, dff3, dff4, dff5, dff6, dff7, dff8, dff9, dff10, dff11, sff1};
+                    gt[sff1] = {dff0, dff1, dff2, dff3, dff4, dff5, dff6, dff7, dff8, dff9, dff10, dff11};
+
+                    const auto res = trav_dec.get_next_sequential_gates_map(true, {});
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), gt);
+                }
+                {
+                    std::map<Gate*, std::set<Gate*>> gt;
+                    gt[dff0] = {dff0, dff1};
+                    gt[dff1] = {};
+                    gt[dff2] = {};
+                    gt[dff3] = {dff3, dff2};
+                    gt[dff4] = {dff0, dff1};
+                    gt[dff5] = {dff0, dff1, dff2};
+                    gt[dff6] = {dff1, dff2, dff3};
+                    gt[dff7] = {dff2, dff3};
+                    gt[dff8] = {dff4};
+                    gt[dff9] = {dff5};
+                    gt[dff10] = {dff6};
+                    gt[dff11] = {dff7};
+                    gt[sff0] = {};
+                    gt[sff1] = {sff0};
+
+                    const auto res = trav_dec.get_next_sequential_gates_map(false, {PinType::enable, PinType::reset, PinType::set, PinType::clock});
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), gt);
+                }
+                {
+                    std::map<Gate*, std::set<Gate*>> gt;
+                    gt[dff0] = {dff0, dff1, sff0, sff1};
+                    gt[dff1] = {sff0, sff1};
+                    gt[dff2] = {sff0, sff1};
+                    gt[dff3] = {dff3, dff2, sff0, sff1};
+                    gt[dff4] = {dff0, dff1, sff0, sff1};
+                    gt[dff5] = {dff0, dff1, dff2, sff0, sff1};
+                    gt[dff6] = {dff1, dff2, dff3, sff0, sff1};
+                    gt[dff7] = {dff2, dff3, sff0, sff1};
+                    gt[dff8] = {dff4, sff0, sff1};
+                    gt[dff9] = {dff5, sff0, sff1};
+                    gt[dff10] = {dff6, sff0, sff1};
+                    gt[dff11] = {dff7, sff0, sff1};
+                    gt[sff0] = {};
+                    gt[sff1] = {sff0};
+
+                    const auto res = trav_dec.get_next_sequential_gates_map(false, {});
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), gt);
+                }
             }
             {
                 // test NetlistModificationDecorator::get_next_combinational_gates
                 const auto trav_dec = NetlistTraversalDecorator(*(nl.get()));
 
-                // TODO implement
+                {
+                    const auto res = trav_dec.get_next_combinational_gates(dff4, true, {}, nullptr);
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({inv2}));
+                }
+                {
+                    const auto res = trav_dec.get_next_combinational_gates(dff4, false, {}, nullptr);
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({inv0, and0, or2, inv6}));
+                }
+                {
+                    const auto res = trav_dec.get_next_combinational_gates(dff4, false, {PinType::enable, PinType::reset, PinType::clock, PinType::set}, nullptr);
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({inv0, and0, or2}));
+                }
+                {
+                    const auto res = trav_dec.get_next_combinational_gates(dff4, false, {PinType::none}, nullptr);
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({}));
+                }
+                {
+                    const auto res = trav_dec.get_next_combinational_gates(dff0, true, {}, nullptr);
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({inv0, and0, or2, or3, or0}));
+                }
+                {
+                    const auto res = trav_dec.get_next_combinational_gates(dff0, false, {}, nullptr);
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({inv0, and0, or2, or0, inv6}));
+                }
+                {
+                    std::unordered_map<const Net*, std::set<Gate*>> cache;
+                    const auto res1 = trav_dec.get_next_combinational_gates(dff1, true, {}, &cache);
+                    EXPECT_TRUE(res1.is_ok());
+                    EXPECT_EQ(res1.get(), std::set<Gate*>({and0, or2, or3, and1, or4, or0}));
+
+                    const auto res2 = trav_dec.get_next_combinational_gates(dff2, true, {}, &cache);
+                    EXPECT_TRUE(res2.is_ok());
+                    EXPECT_EQ(res2.get(), std::set<Gate*>({and1, or3, or4, and2, or5, or1}));
+                }
+                {
+                    std::unordered_map<const Net*, std::set<Gate*>> cache;
+                    const auto res1 = trav_dec.get_next_combinational_gates(dff5, false, {}, &cache);
+                    EXPECT_TRUE(res1.is_ok());
+                    EXPECT_EQ(res1.get(), std::set<Gate*>({or3, and0, and1, inv6}));
+
+                    const auto res2 = trav_dec.get_next_combinational_gates(dff6, false, {}, &cache);
+                    EXPECT_TRUE(res2.is_ok());
+                    EXPECT_EQ(res2.get(), std::set<Gate*>({or4, and1, and2, inv6}));
+                }
             }
         }
         TEST_END
