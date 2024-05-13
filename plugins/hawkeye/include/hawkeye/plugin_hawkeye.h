@@ -35,12 +35,15 @@ namespace hal
     class PLUGIN_API HawkeyePlugin : public BasePluginInterface
     {
     public:
+        /** constructor (= default) */
+        HawkeyePlugin() = default;
+
+        /** destructor (= default) */
+        ~HawkeyePlugin() = default;
+
         /*
          * interface implementations
          */
-
-        HawkeyePlugin();
-        ~HawkeyePlugin() = default;
 
         /**
          * Get the name of the plugin.

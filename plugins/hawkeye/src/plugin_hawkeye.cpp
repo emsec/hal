@@ -28,8 +28,4 @@ namespace hal
         retval.insert("graph_algorithm");
         return retval;
     }
-
-    HawkeyePlugin::HawkeyePlugin()
-    {
-    }
 }    // namespace hal
