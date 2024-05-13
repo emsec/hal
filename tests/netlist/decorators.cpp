@@ -695,7 +695,63 @@ namespace hal {
                 // test NetlistModificationDecorator::get_next_matching_gates_until_depth
                 const auto trav_dec = NetlistTraversalDecorator(*(nl.get()));
 
-                // TODO implement
+                // successors
+                {
+                    const auto res = trav_dec.get_next_matching_gates_until_depth(dff1, true, 2, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); });
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({}));
+                }
+                {
+                    const auto res = trav_dec.get_next_matching_gates_until_depth(dff1, true, 3, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); });
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({dff4, dff5, dff6}));
+                }
+                {
+                    const auto res = trav_dec.get_next_matching_gates_until_depth(dff1, true, 4, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); });
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff4, dff5, dff6}));
+                }
+                {
+                    const auto res = trav_dec.get_next_matching_gates_until_depth(dff1, true, 5, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); });
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff4, dff5, dff6, dff8, dff9, dff10}));
+                }
+                {
+                    const auto res = trav_dec.get_next_matching_gates_until_depth(dff1, true, 6, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); });
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff4, dff5, dff6, dff8, dff9, dff10}));
+                }
+                {
+                    const auto res = trav_dec.get_next_matching_gates_until_depth(dff1, true, 100, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); });
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff4, dff5, dff6, dff8, dff9, dff10}));
+                }
+                // predecessors
+                {
+                    const auto res = trav_dec.get_next_matching_gates_until_depth(dff5, false, 2, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); });
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({sff0, sff1}));
+                }
+                {
+                    const auto res = trav_dec.get_next_matching_gates_until_depth(dff5, false, 3, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); });
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff1, dff2, sff0, sff1}));
+                }
+                {
+                    const auto res = trav_dec.get_next_matching_gates_until_depth(dff5, false, 4, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); });
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff1, dff2, sff0, sff1}));
+                }
+                {
+                    const auto res = trav_dec.get_next_matching_gates_until_depth(dff5, false, 5, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); });
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff1, dff2, sff0, sff1}));
+                }
+                {
+                    const auto res = trav_dec.get_next_matching_gates_until_depth(dff5, false, 100, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); });
+                    EXPECT_TRUE(res.is_ok());
+                    EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff1, dff2, sff0, sff1}));
+                }
             }
             {
                 // test NetlistModificationDecorator::get_next_sequential_gates
