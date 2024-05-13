@@ -282,39 +282,6 @@ namespace hal
 
         py_netlist_traversal_decorator.def(
             "get_next_sequential_gates",
-            [](NetlistTraversalDecorator& self, const Net* net, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache)
-                -> std::optional<std::set<Gate*>> {
-                auto res = self.get_next_sequential_gates(net, successors, forbidden_pins, cache);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while getting next sequential gates:\n{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            },
-            py::arg("net"),
-            py::arg("successors"),
-            py::arg("forbidden_pins"),
-            py::arg("cache"),
-            R"(
-            Starting from the given net, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
-            Traverse over gates that are not sequential until a sequential gate is found.
-            Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
-            Provide a cache to speed up traversal when calling this function multiple times on the same netlist using the same forbidden pins.
-
-            :param hal_py.Net net: Start net.
-            :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
-            :param set[hal_py.PinType] forbidden_pins: Sequential gates reached through these pins will not be part of the result.
-            :param dict[hal_py.Net, set[hal_py.Gate]] cache: A cache that can be used for better performance on repeated calls.
-            :returns: The next sequential gates on success, ``None`` otherwise.
-            :rtype: set[hal_py.Gate] or None
-        )");
-
-        py_netlist_traversal_decorator.def(
-            "get_next_sequential_gates",
             [](NetlistTraversalDecorator& self, const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins) -> std::optional<std::set<Gate*>> {
                 auto res = self.get_next_sequential_gates(gate, successors, forbidden_pins, nullptr);
                 if (res.is_ok())
@@ -338,39 +305,6 @@ namespace hal
             :param hal_py.Gate gate: Start gate.
             :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
             :param set[hal_py.PinType] forbidden_pins: Sequential gates reached through these pins will not be part of the result.
-            :returns: The next sequential gates on success, ``None`` otherwise.
-            :rtype: set[hal_py.Gate] or None
-        )");
-
-        py_netlist_traversal_decorator.def(
-            "get_next_sequential_gates",
-            [](NetlistTraversalDecorator& self, const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache)
-                -> std::optional<std::set<Gate*>> {
-                auto res = self.get_next_sequential_gates(gate, successors, forbidden_pins, cache);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while getting next sequential gates:\n{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            },
-            py::arg("gate"),
-            py::arg("successors"),
-            py::arg("forbidden_pins"),
-            py::arg("cache"),
-            R"(
-            Starting from the given gate, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
-            Traverse over gates that are not sequential until a sequential gate is found.
-            Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.
-            Provide a cache to speed up traversal when calling this function multiple times on the same netlist using the same forbidden pins.
-
-            :param hal_py.Gate gate: Start gate.
-            :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
-            :param set[hal_py.PinType] forbidden_pins: Sequential gates reached through these pins will not be part of the result.
-            :param dict[hal_py.Net, set[hal_py.Gate]] cache: A cache that can be used for better performance on repeated calls.
             :returns: The next sequential gates on success, ``None`` otherwise.
             :rtype: set[hal_py.Gate] or None
         )");
@@ -434,40 +368,6 @@ namespace hal
 
         py_netlist_traversal_decorator.def(
             "get_next_combinational_gates",
-            [](NetlistTraversalDecorator& self, const Net* net, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache)
-                -> std::optional<std::set<Gate*>> {
-                auto res = self.get_next_combinational_gates(net, successors, forbidden_pins, cache);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while getting next combinational gates:\n{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            },
-            py::arg("net"),
-            py::arg("successors"),
-            py::arg("forbidden_pins"),
-            py::arg("cache"),
-            R"(
-            Starting from the given net, traverse the netlist and return all combinational successor/predecessor gates.
-            Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
-            All combinational gates found during traversal are added to the result.
-            Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front of flip-flop control inputs.
-            Provide a cache to speed up traversal when calling this function multiple times on the same netlist using the same forbidden pins.
-
-            :param hal_py.Net net: Start net.
-            :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
-            :param set[hal_py.PinType] forbidden_pins: Netlist traversal stops at these pins.
-            :param dict[hal_py.Net, set[hal_py.Gate]] cache: A cache that can be used for better performance on repeated calls.
-            :returns: The next combinational gates on success, ``None`` otherwise.
-            :rtype: set[hal_py.Gate] or None
-        )");
-
-        py_netlist_traversal_decorator.def(
-            "get_next_combinational_gates",
             [](NetlistTraversalDecorator& self, const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins) -> std::optional<std::set<Gate*>> {
                 auto res = self.get_next_combinational_gates(gate, successors, forbidden_pins, nullptr);
                 if (res.is_ok())
@@ -492,40 +392,6 @@ namespace hal
             :param hal_py.Gate gate: Start gate.
             :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
             :param set[hal_py.PinType] forbidden_pins: Netlist traversal stops at these pins.
-            :returns: The next combinational gates on success, ``None`` otherwise.
-            :rtype: set[hal_py.Gate] or None
-        )");
-
-        py_netlist_traversal_decorator.def(
-            "get_next_combinational_gates",
-            [](NetlistTraversalDecorator& self, const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache)
-                -> std::optional<std::set<Gate*>> {
-                auto res = self.get_next_combinational_gates(gate, successors, forbidden_pins, cache);
-                if (res.is_ok())
-                {
-                    return res.get();
-                }
-                else
-                {
-                    log_error("python_context", "error encountered while getting next combinational gates:\n{}", res.get_error().get());
-                    return std::nullopt;
-                }
-            },
-            py::arg("gate"),
-            py::arg("successors"),
-            py::arg("forbidden_pins"),
-            py::arg("cache"),
-            R"(
-            Starting from the given gate, traverse the netlist and return all combinational successor/predecessor gates.
-            Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
-            All combinational gates found during traversal are added to the result.
-            Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front of flip-flop control inputs.
-            Provide a cache to speed up traversal when calling this function multiple times on the same netlist using the same forbidden pins.
-
-            :param hal_py.Gate gate: Start gate.
-            :param bool successors: Set ``True`` to get successors, set ``False`` to get predecessors.
-            :param set[hal_py.PinType] forbidden_pins: Netlist traversal stops at these pins.
-            :param dict[hal_py.Net, set[hal_py.Gate]] cache: A cache that can be used for better performance on repeated calls.
             :returns: The next combinational gates on success, ``None`` otherwise.
             :rtype: set[hal_py.Gate] or None
         )");
