@@ -214,7 +214,8 @@ namespace hal
          * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
          * @returns The next combinational gates on success, an error otherwise.
          */
-        Result<std::set<Gate*>> get_next_combinational_gates(const Net* net, bool successors, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+        Result<std::set<Gate*>>
+            get_next_combinational_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
 
         /**
          * Starting from the given gate, traverse the netlist and return all combinational successor/predecessor gates.
@@ -227,7 +228,8 @@ namespace hal
          * @param[inout] cache - An optional cache that can be used for better performance on repeated calls. Defaults to a `nullptr`.
          * @returns The next combinational gates on success, an error otherwise.
          */
-        Result<std::set<Gate*>> get_next_combinational_gates(const Gate* gate, bool successors, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+        Result<std::set<Gate*>>
+            get_next_combinational_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
 
         // TODO move get_path and get_shortest_path here
 

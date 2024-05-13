@@ -391,27 +391,11 @@ namespace hal
 
             visited.insert(current);
 
-            if (cache)
-            {
-                if (const auto it = cache->find(current); it != cache->end())
-                {
-                    const auto& cached_gates = std::get<1>(*it);
-
-                    // append cached gates to result
-                    res.insert(cached_gates.begin(), cached_gates.end());
-
-                    // pop net from stack as it has been dealt with
-                    stack.pop_back();
-
-                    continue;
-                }
-            }
-
             bool added = false;
             for (const auto* entry_ep : successors ? current->get_destinations() : current->get_sources())
             {
-                auto entry_pin   = entry_ep->get_pin();
-                auto* gate = entry_ep->get_gate();
+                auto entry_pin = entry_ep->get_pin();
+                auto* gate     = entry_ep->get_gate();
 
                 // stop traversal if gate is sequential
                 if (gate->get_type()->has_property(GateTypeProperty::sequential))
@@ -439,7 +423,7 @@ namespace hal
                 {
                     for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
                     {
-                        const Net* n = exit_ep->get_net();
+                        const Net* exit_net     = exit_ep->get_net();
                         const GatePin* exit_pin = exit_ep->get_pin();
 
                         // stop traversal on forbidden pins
@@ -448,9 +432,29 @@ namespace hal
                             continue;
                         }
 
-                        if (visited.find(n) == visited.end())
+                        if (cache)
                         {
-                            stack.push_back(n);
+                            if (const auto it = cache->find(exit_net); it != cache->end())
+                            {
+                                const auto& cached_gates = std::get<1>(*it);
+
+                                // append cached gates to result
+                                res.insert(cached_gates.begin(), cached_gates.end());
+
+                                // update cache
+                                (*cache)[current].insert(cached_gates.begin(), cached_gates.end());
+                                for (const auto* n : previous)
+                                {
+                                    (*cache)[n].insert(cached_gates.begin(), cached_gates.end());
+                                }
+
+                                continue;
+                            }
+                        }
+
+                        if (visited.find(exit_net) == visited.end())
+                        {
+                            stack.push_back(exit_net);
                             added = true;
                         }
                     }
@@ -486,12 +490,26 @@ namespace hal
         std::set<Gate*> res;
         for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
         {
-            const GatePin* exit_pin = exit_ep->get_pin();
+            const auto* exit_net = exit_ep->get_net();
+            const auto* exit_pin = exit_ep->get_pin();
 
             // stop traversal on forbidden pins
             if (forbidden_pins.find(exit_pin->get_type()) != forbidden_pins.end())
             {
                 continue;
+            }
+
+            if (cache)
+            {
+                if (const auto it = cache->find(exit_net); it != cache->end())
+                {
+                    const auto& cached_gates = std::get<1>(*it);
+
+                    // append cached gates to result
+                    res.insert(cached_gates.begin(), cached_gates.end());
+
+                    continue;
+                }
             }
 
             const auto next_res = this->get_next_sequential_gates(exit_ep->get_net(), successors, forbidden_pins, cache);
@@ -525,7 +543,8 @@ namespace hal
         return OK(std::move(seq_gate_map));
     }
 
-    Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_combinational_gates(const Net* net, bool successors, std::unordered_map<const Net*, std::set<Gate*>>* cache) const
+    Result<std::set<Gate*>>
+        NetlistTraversalDecorator::get_next_combinational_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache) const
     {
         if (net == nullptr)
         {
@@ -554,29 +573,20 @@ namespace hal
 
             visited.insert(current);
 
-            if (cache)
-            {
-                if (const auto it = cache->find(current); it != cache->end())
-                {
-                    const auto& cached_gates = std::get<1>(*it);
-
-                    // append cached gates to result
-                    res.insert(cached_gates.begin(), cached_gates.end());
-
-                    // pop net from stack as it has been dealt with
-                    stack.pop_back();
-
-                    continue;
-                }
-            }
-
             bool added = false;
             for (const auto* entry_ep : successors ? current->get_destinations() : current->get_sources())
             {
-                auto* gate = entry_ep->get_gate();
+                auto* gate            = entry_ep->get_gate();
+                const auto* entry_pin = entry_ep->get_pin();
                 if (!gate->get_type()->has_property(GateTypeProperty::combinational))
                 {
                     // stop traversal if not combinational
+                    continue;
+                }
+
+                // stop traversal on forbidden pins
+                if (forbidden_pins.find(entry_pin->get_type()) != forbidden_pins.end())
+                {
                     continue;
                 }
 
@@ -595,10 +605,31 @@ namespace hal
 
                 for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
                 {
-                    const Net* n = exit_ep->get_net();
-                    if (visited.find(n) == visited.end())
+                    const Net* exit_net     = exit_ep->get_net();
+                    const GatePin* exit_pin = exit_ep->get_pin();
+
+                    // stop traversal on forbidden pins
+                    if (forbidden_pins.find(exit_pin->get_type()) != forbidden_pins.end())
                     {
-                        stack.push_back(n);
+                        continue;
+                    }
+
+                    if (cache)
+                    {
+                        if (const auto it = cache->find(exit_net); it != cache->end())
+                        {
+                            const auto& cached_gates = std::get<1>(*it);
+
+                            // append cached gates to result
+                            res.insert(cached_gates.begin(), cached_gates.end());
+
+                            continue;
+                        }
+                    }
+
+                    if (visited.find(exit_net) == visited.end())
+                    {
+                        stack.push_back(exit_net);
                         added = true;
                     }
                 }
@@ -617,7 +648,10 @@ namespace hal
         return OK(res);
     }
 
-    Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_combinational_gates(const Gate* gate, bool successors, std::unordered_map<const Net*, std::set<Gate*>>* cache) const
+    Result<std::set<Gate*>> NetlistTraversalDecorator::get_next_combinational_gates(const Gate* gate,
+                                                                                    bool successors,
+                                                                                    const std::set<PinType>& forbidden_pins,
+                                                                                    std::unordered_map<const Net*, std::set<Gate*>>* cache) const
     {
         if (gate == nullptr)
         {
@@ -632,7 +666,29 @@ namespace hal
         std::set<Gate*> res;
         for (const auto* exit_ep : successors ? gate->get_fan_out_endpoints() : gate->get_fan_in_endpoints())
         {
-            const auto next_res = this->get_next_combinational_gates(exit_ep->get_net(), successors, cache);
+            const auto* exit_net = exit_ep->get_net();
+            const auto* exit_pin = exit_ep->get_pin();
+
+            // stop traversal on forbidden pins
+            if (forbidden_pins.find(exit_pin->get_type()) != forbidden_pins.end())
+            {
+                continue;
+            }
+
+            if (cache)
+            {
+                if (const auto it = cache->find(exit_net); it != cache->end())
+                {
+                    const auto& cached_gates = std::get<1>(*it);
+
+                    // append cached gates to result
+                    res.insert(cached_gates.begin(), cached_gates.end());
+
+                    continue;
+                }
+            }
+
+            const auto next_res = this->get_next_combinational_gates(exit_ep->get_net(), successors, forbidden_pins, cache);
             if (next_res.is_error())
             {
                 return ERR(next_res.get_error());
