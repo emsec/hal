@@ -1,5 +1,6 @@
 #include "hal_core/python_bindings/python_bindings.h"
 
+#include "hawkeye/candidate_search.h"
 #include "hawkeye/plugin_hawkeye.h"
 #include "hawkeye/sbox_database.h"
 #include "pybind11/operators.h"
@@ -232,6 +233,49 @@ namespace hal
             Print the database.
         )");
 
+        py::class_<hawkeye::DetectionConfiguration, RawPtrWrapper<hawkeye::DetectionConfiguration>> py_hawkeye_detection_configuration(m, "DetectionConfiguration", R"(TODO)");
+
+        py_hawkeye_detection_configuration.def(py::init<>(), R"(
+            Constructs a default DetectionConfiguration.
+        )");
+
+        py::enum_<hawkeye::DetectionConfiguration::Control> py_hawkeye_detection_configuration_control(py_hawkeye_detection_configuration, "Control", R"(TODO)");
+
+        py_hawkeye_detection_configuration_control.value("CHECK_FF", hawkeye::DetectionConfiguration::Control::CHECK_FF, R"(TODO)")
+            .value("CHECK_TYPE", hawkeye::DetectionConfiguration::Control::CHECK_TYPE, R"(TODO)")
+            .value("CHECK_PINS", hawkeye::DetectionConfiguration::Control::CHECK_PINS, R"(TODO)")
+            .value("CHECK_NETS", hawkeye::DetectionConfiguration::Control::CHECK_NETS, R"(TODO)")
+            .export_values();
+
+        py_hawkeye_detection_configuration.def_readwrite("control", &hawkeye::DetectionConfiguration::control, R"(
+            TODO
+
+            :type: hawkeye.DetectionConfiguration.Control
+        )");
+
+        py::enum_<hawkeye::DetectionConfiguration::Components> py_hawkeye_detection_configuration_components(py_hawkeye_detection_configuration, "Components", R"(TODO)");
+
+        py_hawkeye_detection_configuration_components.value("NONE", hawkeye::DetectionConfiguration::Components::NONE, R"(TODO)")
+            .value("CHECK_SCC", hawkeye::DetectionConfiguration::Components::CHECK_SCC, R"(TODO)")
+            .export_values();
+
+        py_hawkeye_detection_configuration.def_readwrite("components", &hawkeye::DetectionConfiguration::components, R"(
+            TODO
+            
+            :type: hawkeye.DetectionConfiguration.Components
+        )");
+
+        py_hawkeye_detection_configuration.def_readwrite("timeout", &hawkeye::DetectionConfiguration::timeout, R"(
+            TODO
+            
+            :type: int
+        )");
+
+        py_hawkeye_detection_configuration.def_readwrite("min_register_size", &hawkeye::DetectionConfiguration::min_register_size, R"(
+            TODO
+            
+            :type: int
+        )");
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE
