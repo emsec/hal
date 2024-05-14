@@ -276,6 +276,75 @@ namespace hal
             
             :type: int
         )");
+
+        py::class_<hawkeye::Candidate, RawPtrWrapper<hawkeye::Candidate>> py_hawkeye_candidate(m, "Candidate", R"(
+            Holds all information on a crypto candidate.
+        )");
+
+        py_hawkeye_candidate.def("get_netlist", &hawkeye::Candidate::get_netlist, R"(
+            Get the netlist associated with the candidate.
+
+            :returns: The netlist of the candidate.
+            :rtype: hal_py.Netlist
+        )");
+
+        py_hawkeye_candidate.def("get_size", &hawkeye::Candidate::get_size, R"(
+            Get the size of the candidate, i.e., the width of its registers.
+
+            :returns: The size of the candidate.
+            :rtype: int
+        )");
+
+        py_hawkeye_candidate.def("is_round_based", &hawkeye::Candidate::is_round_based, R"(
+            Check if the candidate is round-based, i.e., input and output register are the same.
+
+            :returns: ``True`` if the candidate is round-based, ``False`` otherwise. 
+            :rtype: bool
+        )");
+
+        py_hawkeye_candidate.def("get_input_reg", &hawkeye::Candidate::get_input_reg, R"(
+            Get the candidate's input register.
+
+            :returns: The input register of the candidate.
+            :rtype: set[hal_py.Gate]
+        )");
+
+        py_hawkeye_candidate.def("get_output_reg", &hawkeye::Candidate::get_output_reg, R"(
+            Get the candidate's output register.
+
+            :returns: The output register of the candidate.
+            :rtype: set[hal_py.Gate]
+        )");
+
+        m.def(
+            "detect_candidates",
+            [](Netlist* nl, const std::vector<hawkeye::DetectionConfiguration>& configs, u32 min_state_size = 40, const std::vector<Gate*>& start_ffs = {})
+                -> std::optional<std::vector<hawkeye::Candidate>> {
+                auto res = hawkeye::detect_candidates(nl, configs, min_state_size, start_ffs);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "cannot detect crypto candidates:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            py::arg("configs"),
+            py::arg("min_state_size") = 40,
+            py::arg("start_ffs")      = std::vector<Gate*>(),
+            R"(TODO description
+
+            :param hal_py.Netlist nl: The netlist to operate on.
+            :param list[hawkeye.DetectionConfiguration] configs: The configurations of the detection approaches to be executed one after another on each start flip-flop.
+            :param int min_state_size: The minimum size of a register candidate to be considered a cryptographic state register. Defaults to ``40``.
+            :param list[hal_py.Gate] start_ffs: The flip-flops to analyze. Defaults to an empty list, i.e., all flip-flops in the netlist will be analyzed.
+            :returns: A list of candidates on success, ``None`` otherwise.
+            :rtype: list[hawkeye.Candidate] or None
+        )");
+
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE
