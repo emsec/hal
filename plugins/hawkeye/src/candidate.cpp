@@ -61,12 +61,12 @@ namespace hal
             return m_is_round_based;
         }
 
-        const std::set<Gate*>& Candidate::get_in_reg() const
+        const std::set<Gate*>& Candidate::get_input_reg() const
         {
             return m_in_reg;
         }
 
-        const std::set<Gate*>& Candidate::get_out_reg() const
+        const std::set<Gate*>& Candidate::get_output_reg() const
         {
             return m_out_reg;
         }

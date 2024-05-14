@@ -101,14 +101,14 @@ namespace hal
              * 
              * @returns The input register of the candidate.
              */
-            const std::set<Gate*>& get_in_reg() const;
+            const std::set<Gate*>& get_input_reg() const;
 
             /**
              * Get the candidate's output register.
              * 
              * @returns The output register of the candidate.
              */
-            const std::set<Gate*>& get_out_reg() const;
+            const std::set<Gate*>& get_output_reg() const;
 
         private:
             /**
