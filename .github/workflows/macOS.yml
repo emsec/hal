@@ -92,7 +92,6 @@ jobs:
           export PATH="$(brew --prefix qt@5)/bin:$PATH"
           brew ls llvm@14
           brew --prefix llvm@14
-          ln -s /opt/homebrew/Cellar/llvm@14 /opt/homebrew/opt/
           ls -l /usr/local
           ls -l /opt/homebrew/opt
           ls -l /opt/homebrew/opt/llvm@14
