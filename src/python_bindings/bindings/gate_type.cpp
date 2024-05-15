@@ -15,6 +15,8 @@ namespace hal
             .value("ff", GateTypeProperty::ff, R"(Flip-flop gate type.)")
             .value("latch", GateTypeProperty::latch, R"(Latch gate type.)")
             .value("ram", GateTypeProperty::ram, R"(RAM gate type.)")
+            .value("fifo", GateTypeProperty::ram, R"(FIFO gate type.)")
+            .value("shift_register", GateTypeProperty::shift_register, R"(Shift register gate type.)")
             .value("io", GateTypeProperty::io, R"(IO gate type.)")
             .value("dsp", GateTypeProperty::dsp, R"(DSP gate type.)")
             .value("pll", GateTypeProperty::pll, R"(PLL gate type.)")
@@ -64,6 +66,11 @@ namespace hal
             .value("select", PinType::select, R"(Select pin.)")
             .value("carry", PinType::carry, R"(Carry pad pin.)")
             .value("sum", PinType::sum, R"(Sum pin.)")
+            .value("status", PinType::status, R"(Status pin.)")
+            .value("error", PinType::error, R"(Error pin.)")
+            .value("error_detection", PinType::error_detection, R"(Error detection pin.)")
+            .value("done", PinType::done, R"(Pin pin.)")
+            .value("control", PinType::control, R"(Control pin.)")
             .export_values();
 
         py::enum_<AsyncSetResetBehavior>(m, "AsyncSetResetBehavior", R"(
@@ -74,7 +81,7 @@ namespace hal
             .value("N", AsyncSetResetBehavior::N, R"(Do not change the internal state.)")
             .value("T", AsyncSetResetBehavior::T, R"(Toggle, i.e., invert the internal state.)")
             .value("X", AsyncSetResetBehavior::X, R"(Set the internal state to 'X'.)")
-            .value("undef", AsyncSetResetBehavior::undef, R"(Invalid bahavior, used by default.)")
+            .value("undef", AsyncSetResetBehavior::undef, R"(Invalid behavior, used by default.)")
             .export_values();
 
         py::class_<GateType, RawPtrWrapper<GateType>> py_gate_type(m, "GateType", R"(
@@ -184,8 +191,7 @@ namespace hal
             :rtype: hal_py.GateLibrary
         )");
 
-        py_gate_type.def(
-            "__str__", [](const GateType& gt) { return gt.to_string(); }, R"(
+        py_gate_type.def("__str__", [](const GateType& gt) { return gt.to_string(); }, R"(
             Get a string describing the given gate type object.
 
             :returns: A string describing the gate type.
