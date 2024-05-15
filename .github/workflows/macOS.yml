@@ -91,6 +91,8 @@ jobs:
           cd build
           export PATH="/usr/local/opt/qt@5/bin:$PATH"
           brew ls llvm@14
+          brew --prefix llvm@14
+          ln -s /opt/homebrew/Cellar/llvm@14 /usr/local/opt/
           ls -l /usr/local
           ls -l /usr/local/opt
           ls -l /usr/local/opt/llvm@14
