@@ -88,6 +88,13 @@ namespace hal
             A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
         )");
 
+        py_gate_type.def("__hash__", &GateType::get_hash, R"(
+            Python requires hash for set and dict container.
+
+            :returns: The hash.
+            :rtype: Py_hash_t
+        )");
+
         py_gate_type.def_property_readonly("components", &GateType::get_components, R"(
             All components of the gate type as a list.
 
