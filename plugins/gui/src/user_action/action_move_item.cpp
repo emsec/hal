@@ -56,7 +56,6 @@ namespace hal
     {
         if (!mObject.id()) return false;
 
-        std::cerr << "   actx " << mTargetRow << std::endl;
         BaseTreeItem* bti = nullptr;
         bool isDirectory = false;
 
