@@ -80,6 +80,13 @@ namespace hal
             static Result<std::unique_ptr<NetlistGraph>> from_netlist_no_edges(Netlist* nl, const std::vector<Gate*>& gates = {});
 
             /**
+             * Creates a deep copy of the netlist graph.
+             * 
+             * @returns The copied netlist graph on success, an error otherwise.
+             */
+            Result<std::unique_ptr<NetlistGraph>> copy() const;
+
+            /**
              * Get the netlist associated with the netlist graph.
              * 
              * @returns The netlist.

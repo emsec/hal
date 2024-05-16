@@ -181,6 +181,21 @@ namespace hal
             return OK(std::move(graph));
         }
 
+        Result<std::unique_ptr<NetlistGraph>> NetlistGraph::copy() const
+        {
+            auto graph = std::unique_ptr<NetlistGraph>(new NetlistGraph(m_nl));
+
+            if (const auto res = igraph_copy(&(graph->m_graph), &(this->m_graph)); res != IGRAPH_SUCCESS)
+            {
+                return ERR(igraph_strerror(res));
+            }
+
+            graph->m_gates_to_nodes = this->m_gates_to_nodes;
+            graph->m_nodes_to_gates = this->m_nodes_to_gates;
+
+            return OK(std::move(graph));
+        }
+
         Netlist* NetlistGraph::get_netlist() const
         {
             return m_nl;

@@ -133,6 +133,27 @@ namespace hal
              :rtype: graph_algorithm.NetlistGraph or None
         )");
 
+        py_netlist_graph.def(
+            "copy",
+            [](const graph_algorithm::NetlistGraph& self) -> std::unique_ptr<graph_algorithm::NetlistGraph> {
+                auto res = self.copy();
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while copying netlist graph:\n{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            R"(
+                Creates a deep copy of the netlist graph.
+
+                :returns: The copied netlist graph on success, ``None`` otherwise.
+                :rtype: graph_algorithm.NetlistGraph or None
+        )");
+
         py_netlist_graph.def("get_netlist", &graph_algorithm::NetlistGraph::get_netlist, R"(
             Get the netlist associated with the netlist graph.
 
