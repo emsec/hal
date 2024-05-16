@@ -111,8 +111,8 @@ namespace hal
 
         py_netlist_graph.def_static(
             "from_netlist_no_edges",
-            [](Netlist* nl) -> std::unique_ptr<graph_algorithm::NetlistGraph> {
-                auto res = graph_algorithm::NetlistGraph::from_netlist_no_edges(nl);
+            [](Netlist* nl, const std::vector<Gate*>& gates = {}) -> std::unique_ptr<graph_algorithm::NetlistGraph> {
+                auto res = graph_algorithm::NetlistGraph::from_netlist_no_edges(nl, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -124,9 +124,11 @@ namespace hal
                 }
             },
             py::arg("nl"),
+            py::arg("gates") = std::vector<Gate*>(),
             R"(Create an empty directed graph from a netlist, i.e., vertices for all gates are created, but no edges are added.
              
              :param hal_py.Netlist nl: The netlist.
+             :param list[hal_py.Gate] gates: The gates to include in the graph. If omitted, all gates of the netlist will be included.
              :returns: The netlist graph on success, ``None`` otherwise.
              :rtype: graph_algorithm.NetlistGraph or None
         )");

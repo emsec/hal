@@ -74,9 +74,10 @@ namespace hal
              * Create an empty directed graph from a netlist, i.e., vertices for all gates are created, but no edges are added.
              * 
              * @param[in] nl - The netlist.
+             * @param[in] gates - The gates to include in the graph. If omitted, all gates of the netlist will be included.
              * @returns The netlist graph on success, an error otherwise.
              */
-            static Result<std::unique_ptr<NetlistGraph>> from_netlist_no_edges(Netlist* nl);
+            static Result<std::unique_ptr<NetlistGraph>> from_netlist_no_edges(Netlist* nl, const std::vector<Gate*>& gates = {});
 
             /**
              * Get the netlist associated with the netlist graph.

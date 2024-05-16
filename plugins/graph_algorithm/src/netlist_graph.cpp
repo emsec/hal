@@ -153,7 +153,7 @@ namespace hal
             return OK(std::move(graph));
         }
 
-        Result<std::unique_ptr<NetlistGraph>> NetlistGraph::from_netlist_no_edges(Netlist* nl)
+        Result<std::unique_ptr<NetlistGraph>> NetlistGraph::from_netlist_no_edges(Netlist* nl, const std::vector<Gate*>& gates)
         {
             if (!nl)
             {
@@ -162,8 +162,10 @@ namespace hal
 
             auto graph = std::unique_ptr<NetlistGraph>(new NetlistGraph(nl));
 
+            const auto& graph_gates = gates.empty() ? graph->m_nl->get_gates() : gates;
+
             u32 node_counter = 0;
-            for (auto* g : graph->m_nl->get_gates())
+            for (auto* g : graph_gates)
             {
                 const u32 node                = node_counter++;
                 graph->m_gates_to_nodes[g]    = node;
