@@ -403,9 +403,8 @@ namespace hal {
                 NO_COUT_TEST_BLOCK;
                 std::string path_lib = utils::get_base_directory().string() + "/bin/hal_plugins/test-files/liberty_parser/invalid_test6.lib";
                 LibertyParser liberty_parser;
-                bool result_is_error = false;
-                ASSERT_THROW({auto gl_res = liberty_parser.parse(path_lib); result_is_error = gl_res.is_error();},std::runtime_error);
-                ASSERT_TRUE(result_is_error);
+                auto gl_res = liberty_parser.parse(path_lib);
+                ASSERT_TRUE(gl_res.is_error());
             }
             // { // NOTE: Works (is ok?)
             //     // Use an unknown variable in a boolean function
