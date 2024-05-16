@@ -189,6 +189,52 @@ namespace hal
         )");
 
         py_netlist_graph.def(
+            "get_gates_set_from_vertices",
+            [](const graph_algorithm::NetlistGraph& self, const std::vector<u32>& vertices) -> std::optional<std::set<Gate*>> {
+                auto res = self.get_gates_set_from_vertices(vertices);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting gates from vertices:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("vertices"),
+            R"(
+                Get the gates corresponding to the specified list of vertices.
+
+                :param list[int] vertices: A list of vertices.
+                :returns: A list of gates on success, ``None`` otherwise.
+                :rtype: set[hal_py.Gate] or None
+        )");
+
+        py_netlist_graph.def(
+            "get_gates_set_from_vertices",
+            [](const graph_algorithm::NetlistGraph& self, const std::set<u32>& vertices) -> std::optional<std::set<Gate*>> {
+                const auto res = self.get_gates_set_from_vertices(vertices);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting gates from vertices:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("vertices"),
+            R"(
+                Get the gates corresponding to the specified set of vertices.
+
+                :param set[int] vertices: A set of vertices.
+                :returns: A list of gates on success, ``None`` otherwise.
+                :rtype: set[hal_py.Gate] or None
+        )");
+
+        py_netlist_graph.def(
             "get_gate_from_vertex",
             [](const graph_algorithm::NetlistGraph& self, const u32 vertex) -> Gate* {
                 const auto res = self.get_gate_from_vertex(vertex);
