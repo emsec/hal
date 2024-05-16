@@ -75,14 +75,14 @@ namespace hal
             return res;
         }
 
-        Result<std::vector<std::vector<u32>>> get_neighborhood_igraph(NetlistGraph* graph, const igraph_vector_int_t* start_gates, u32 order, NetlistGraph::Direction direction, u32 min_dist)
+        Result<std::vector<std::vector<u32>>> get_neighborhood_igraph(NetlistGraph* graph, const igraph_vector_int_t* start_vertices, u32 order, NetlistGraph::Direction direction, u32 min_dist)
         {
             if (!graph)
             {
                 return ERR("graph is a nullptr");
             }
 
-            igraph_vs_t v_sel = igraph_vss_vector(start_gates);
+            igraph_vs_t v_sel = igraph_vss_vector(start_vertices);
             igraph_neimode_t mode;
             switch (direction)
             {
