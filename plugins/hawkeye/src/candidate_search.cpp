@@ -10,7 +10,152 @@ namespace hal
 {
     namespace hawkeye
     {
-        static std::set<PinType> control_types = {PinType::enable, PinType::clock, PinType::set, PinType::reset};
+        namespace
+        {
+            static std::set<PinType> control_types = {PinType::enable, PinType::clock, PinType::set, PinType::reset};
+
+            bool continue_through_exit_ep(const Endpoint* exit_ep, const u32 current_depth)
+            {
+                if (exit_ep == nullptr)
+                {
+                    return false;
+                }
+
+                if (exit_ep->get_gate()->get_type()->has_property(GateTypeProperty::ff))
+                {
+                    if (current_depth != 0)
+                    {
+                        return false;
+                    }
+                    else if (control_types.find(exit_ep->get_pin()->get_type()) != control_types.end())
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            bool continue_through_entry_ep(const Endpoint* entry_ep, const u32 current_depth)
+            {
+                if (entry_ep == nullptr)
+                {
+                    return false;
+                }
+
+                if (control_types.find(entry_ep->get_pin()->get_type()) != control_types.end())
+                {
+                    return false;
+                }
+
+                const auto* gt = entry_ep->get_gate()->get_type();
+                if (gt->has_property(GateTypeProperty::ram))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            struct GraphCandidate
+            {
+                u32 size;
+                std::set<u32> in_reg;
+                std::set<u32> out_reg;
+
+                bool operator==(const GraphCandidate& rhs) const
+                {
+                    return this->size == rhs.size && this->in_reg == rhs.in_reg && this->out_reg == rhs.out_reg;
+                }
+
+                bool operator<(const GraphCandidate& rhs) const
+                {
+                    return this->size > rhs.size || (this->size == rhs.size && this->in_reg > rhs.in_reg) || (this->size == rhs.size && this->in_reg == rhs.in_reg && this->out_reg > rhs.out_reg);
+                }
+            };
+
+            igraph_error_t get_saturating_neighborhoods(const igraph_t* graph, igraph_vector_int_t* in_set, igraph_vector_int_t* out_set, igraph_integer_t node, igraph_integer_t timeout)
+            {
+                igraph_integer_t no_of_nodes = igraph_vcount(graph);
+                igraph_integer_t i, j, k;
+                igraph_bool_t* added;
+                igraph_vector_int_t current_hood, previous_hood;
+                igraph_vector_int_t* chp = &current_hood;
+                igraph_vector_int_t* php = &previous_hood;
+                igraph_vector_int_t tmp;
+
+                if (timeout < 0)
+                {
+                    IGRAPH_ERROR("Negative timeout", IGRAPH_EINVAL);
+                }
+
+                added = IGRAPH_CALLOC(no_of_nodes, igraph_bool_t);
+                IGRAPH_CHECK_OOM(added, "Cannot calculate neighborhood size.");
+                IGRAPH_FINALLY(igraph_free, added);
+
+                IGRAPH_VECTOR_INT_INIT_FINALLY(chp, 0);
+                IGRAPH_VECTOR_INT_INIT_FINALLY(php, 0);
+                IGRAPH_VECTOR_INT_INIT_FINALLY(&tmp, 0);
+
+                IGRAPH_CHECK(igraph_vector_int_init(in_set, 0));
+                IGRAPH_CHECK(igraph_vector_int_init(out_set, 0));
+                igraph_vector_int_clear(in_set);
+                igraph_vector_int_clear(out_set);
+
+                IGRAPH_CHECK(igraph_vector_int_push_back(chp, node));
+
+                igraph_integer_t previous_size, current_size;
+
+                for (i = 0; i < timeout; i++)
+                {
+                    previous_size = igraph_vector_int_size(php);
+                    current_size  = igraph_vector_int_size(chp);
+
+                    if (previous_size < current_size)
+                    {
+                        IGRAPH_CHECK(igraph_vector_int_swap(php, chp));
+                        igraph_vector_int_clear(chp);
+
+                        memset(added, false, no_of_nodes * sizeof(igraph_bool_t));
+
+                        for (j = 0; j < current_size; j++)
+                        {
+                            igraph_integer_t actnode = VECTOR(*php)[j];
+                            igraph_vector_int_clear(&tmp);
+                            IGRAPH_CHECK(igraph_neighbors(graph, &tmp, actnode, IGRAPH_OUT));
+
+                            for (k = 0; k < igraph_vector_int_size(&tmp); k++)
+                            {
+                                igraph_integer_t nei = VECTOR(tmp)[k];
+                                if (!added[nei])
+                                {
+                                    added[nei] = true;
+                                    IGRAPH_CHECK(igraph_vector_int_push_back(chp, nei));
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (previous_size == current_size)
+                        {
+                            IGRAPH_CHECK(igraph_vector_int_update(in_set, php));
+                            IGRAPH_CHECK(igraph_vector_int_update(out_set, chp));
+                        }
+
+                        break;
+                    }
+                }
+
+                igraph_vector_int_destroy(chp);
+                igraph_vector_int_destroy(php);
+                igraph_vector_int_destroy(&tmp);
+                IGRAPH_FREE(added);
+                IGRAPH_FINALLY_CLEAN(4);
+
+                return IGRAPH_SUCCESS;
+            }
+        }    // namespace
 
         Result<std::vector<Candidate>> detect_candidates(Netlist* nl, const std::vector<DetectionConfiguration>& configs, u32 min_state_size, const std::vector<Gate*>& start_ffs)
         {
@@ -19,23 +164,18 @@ namespace hal
                 return ERR("netlist is a nullptr");
             }
 
-            const auto start = std::chrono::system_clock::now();
+            log_info("hawkeye", "start traversing netlist to determine flip-flop dependencies...");
+            auto global_start = std::chrono::system_clock::now();
+            auto start        = global_start;
 
             const auto nl_dec = NetlistTraversalDecorator(*nl);
-
             std::map<Gate*, std::set<Gate*>> ff_map;
             std::unordered_map<const Net*, std::set<Gate*>> cache = {};
             const auto start_gates                                = nl->get_gates([](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); });
             for (auto* sg : start_gates)
             {
                 if (const auto res = nl_dec.get_next_matching_gates(
-                        sg,
-                        true,
-                        [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); },
-                        false,
-                        nullptr,
-                        [](const Endpoint* ep, u32 _) { return control_types.find(ep->get_pin()->get_type()) == control_types.end(); },
-                        &cache);
+                        sg, true, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); }, false, continue_through_exit_ep, continue_through_entry_ep);
                     res.is_ok())
                 {
                     ff_map[sg] = res.get();
@@ -46,28 +186,61 @@ namespace hal
                 }
             }
 
-            std::set<Candidate> candidates;
+            auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
+            log_info("hawkeye", "successfully traversed netlist in {} seconds", duration_in_seconds);
 
+            log_info("hawkeye", "start constructing empty netlist graph...");
+            start = std::chrono::system_clock::now();
+
+            auto res = graph_algorithm::NetlistGraph::from_netlist_no_edges(nl, start_gates);
+            if (res.is_error())
+            {
+                return ERR(res.get_error());
+            }
+            auto base_graph = res.get();
+
+            const auto start_vertices_res = base_graph->get_vertices_from_gates(start_gates);
+            if (start_vertices_res.is_error())
+            {
+                return ERR(start_vertices_res.get_error());
+            }
+            auto start_vertices = start_vertices_res.get();
+
+            duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
+            log_info("hawkeye", "successfully created empty netlist graph in {} seconds", duration_in_seconds);
+
+            log_info("hawkeye", "start candidate identification using {} configurations...", configs.size());
+            start = std::chrono::system_clock::now();
+
+            std::set<Candidate> candidates;
             for (const auto& config : configs)
             {
-                auto res = graph_algorithm::NetlistGraph::from_netlist_no_edges(nl);
-                if (res.is_error())
+                log_info("hawkeye",
+                         "start filling netlist graph with configuration [timeout={}, min_register_size={}, control={}, components={}]...",
+                         config.timeout,
+                         config.min_register_size,
+                         enum_to_string(config.control),
+                         enum_to_string(config.components));
+                auto start_inner = std::chrono::system_clock::now();
+
+                auto tmp_graph_res = base_graph->copy();
+                if (tmp_graph_res.is_error())
                 {
-                    return ERR(res.get_error());
+                    return ERR(tmp_graph_res.get_error());
                 }
+                auto tmp_graph = tmp_graph_res.get();
 
-                auto nl_graph = res.get();
-
+                std::map<Gate*, std::set<Gate*>> filtered_map;
                 if (config.control == DetectionConfiguration::Control::CHECK_FF)
                 {
-                    if (const auto edge_res = nl_graph->add_edges(ff_map); edge_res.is_error())
+                    filtered_map = std::move(ff_map);
+                    if (const auto edge_res = tmp_graph->add_edges(ff_map); edge_res.is_error())
                     {
                         return ERR(edge_res.get_error());
                     }
                 }
                 else if (config.control == DetectionConfiguration::Control::CHECK_TYPE)
                 {
-                    std::map<Gate*, std::set<Gate*>> tmp_map;
                     for (const auto& [src, dsts] : ff_map)
                     {
                         for (auto* dst : dsts)
@@ -77,168 +250,191 @@ namespace hal
                                 continue;
                             }
 
-                            tmp_map[src].insert(dst);
+                            filtered_map[src].insert(dst);
                         }
-                    }
-
-                    if (const auto edge_res = nl_graph->add_edges(tmp_map); edge_res.is_error())
-                    {
-                        return ERR(edge_res.get_error());
                     }
                 }
-                else
+                else if (config.control == DetectionConfiguration::Control::CHECK_NETS)
                 {
-                    std::map<Gate*, std::set<Gate*>> tmp_map;
-
-                    if (config.control == DetectionConfiguration::Control::CHECK_NETS)
+                    std::unordered_map<const Gate*, std::map<PinType, const Net*>> control_map;
+                    for (const auto* gate : start_gates)
                     {
-                        std::unordered_map<const Gate*, std::map<PinType, const Net*>> control_map;
-                        for (const auto* gate : start_gates)
+                        for (const auto& ep : gate->get_fan_in_endpoints())
                         {
-                            for (const auto& ep : gate->get_fan_in_endpoints())
+                            if (auto pin_type = ep->get_pin()->get_type(); control_types.find(pin_type) != control_types.end())
                             {
-                                if (auto pin_type = ep->get_pin()->get_type(); control_types.find(pin_type) != control_types.end())
-                                {
-                                    control_map[gate][pin_type] = ep->get_net();
-                                }
-                            }
-                        }
-
-                        for (const auto& [src, dsts] : ff_map)
-                        {
-                            for (auto* dst : dsts)
-                            {
-                                if (src->get_type() != dst->get_type())
-                                {
-                                    continue;
-                                }
-
-                                if (control_map.at(src) != control_map.at(dst))
-                                {
-                                    continue;
-                                }
-
-                                tmp_map[src].insert(dst);
-                            }
-                        }
-                    }
-                    else if (config.control == DetectionConfiguration::Control::CHECK_PINS)
-                    {
-                        std::unordered_map<const Gate*, std::set<PinType>> control_map;
-                        for (const auto* gate : start_gates)
-                        {
-                            for (const auto& ep : gate->get_fan_in_endpoints())
-                            {
-                                auto sources = ep->get_net()->get_sources();
-                                if (sources.size() != 1)
-                                {
-                                    continue;
-                                }
-                                if (sources.at(0)->get_gate()->is_gnd_gate() || sources.at(0)->get_gate()->is_vcc_gate())
-                                {
-                                    continue;
-                                }
-
-                                if (auto pin_type = ep->get_pin()->get_type(); control_types.find(pin_type) != control_types.end())
-                                {
-                                    control_map[gate].insert(pin_type);
-                                }
-                            }
-                        }
-
-                        for (const auto& [src, dsts] : ff_map)
-                        {
-                            for (auto* dst : dsts)
-                            {
-                                if (src->get_type() != dst->get_type())
-                                {
-                                    continue;
-                                }
-
-                                if (control_map.at(src) != control_map.at(dst))
-                                {
-                                    continue;
-                                }
-
-                                tmp_map[src].insert(dst);
+                                control_map[gate][pin_type] = ep->get_net();
                             }
                         }
                     }
 
-                    if (const auto edge_res = nl_graph->add_edges(tmp_map); edge_res.is_error())
+                    for (const auto& [src, dsts] : ff_map)
                     {
-                        return ERR(edge_res.get_error());
+                        for (auto* dst : dsts)
+                        {
+                            // if (src->get_type() != dst->get_type())
+                            // {
+                            //     continue;
+                            // }
+
+                            if (control_map.at(src) != control_map.at(dst))
+                            {
+                                continue;
+                            }
+
+                            filtered_map[src].insert(dst);
+                        }
+                    }
+                }
+                else if (config.control == DetectionConfiguration::Control::CHECK_PINS)
+                {
+                    std::unordered_map<const Gate*, std::set<PinType>> control_map;
+                    for (const auto* gate : start_gates)
+                    {
+                        for (const auto& ep : gate->get_fan_in_endpoints())
+                        {
+                            auto sources = ep->get_net()->get_sources();
+                            if (sources.size() != 1)
+                            {
+                                continue;
+                            }
+                            if (sources.at(0)->get_gate()->is_gnd_gate() || sources.at(0)->get_gate()->is_vcc_gate())
+                            {
+                                continue;
+                            }
+
+                            if (auto pin_type = ep->get_pin()->get_type(); control_types.find(pin_type) != control_types.end())
+                            {
+                                control_map[gate].insert(pin_type);
+                            }
+                        }
+                    }
+
+                    for (const auto& [src, dsts] : ff_map)
+                    {
+                        for (auto* dst : dsts)
+                        {
+                            if (src->get_type() != dst->get_type())
+                            {
+                                continue;
+                            }
+
+                            if (control_map.at(src) != control_map.at(dst))
+                            {
+                                continue;
+                            }
+
+                            filtered_map[src].insert(dst);
+                        }
                     }
                 }
 
-                const auto vertices_res = nl_graph->get_vertices_from_gates(start_gates);
-                if (vertices_res.is_error())
+                if (const auto edge_res = tmp_graph->add_edges(filtered_map); edge_res.is_error())
                 {
-                    return ERR(vertices_res.get_error());
+                    return ERR(edge_res.get_error());
                 }
-                auto for_vertices = vertices_res.get();
 
-                std::unordered_map<u32, std::vector<u32>> prev_hoods;
-                for (u32 i = 1; i <= config.timeout; i++)
+                duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start_inner).count();
+                log_info("hawkeye", "successfully filled netlist graph in {} seconds", duration_in_seconds);
+
+                log_info("hawkeye",
+                         "start neighborhood discovery with configuration [timeout={}, min_register_size={}, control={}, components={}]...",
+                         config.timeout,
+                         config.min_register_size,
+                         enum_to_string(config.control),
+                         enum_to_string(config.components));
+                start_inner = std::chrono::system_clock::now();
+
+                igraph_vector_int_t in_set, out_set;
+                if (const auto res = igraph_vector_int_init(&in_set, 0); res != IGRAPH_SUCCESS)
                 {
-                    const auto neighborhood_res = graph_algorithm::get_neighborhood(nl_graph.get(), for_vertices, i, graph_algorithm::NetlistGraph::Direction::OUT, 0);
-                    if (neighborhood_res.is_error())
+                    return ERR(igraph_strerror(res));
+                }
+
+                if (const auto res = igraph_vector_int_init(&out_set, 0); res != IGRAPH_SUCCESS)
+                {
+                    igraph_vector_int_destroy(&in_set);
+                    return ERR(igraph_strerror(res));
+                }
+
+                std::set<GraphCandidate> graph_candidates;
+                for (const auto v : start_vertices)
+                {
+                    igraph_vector_int_clear(&in_set);
+                    igraph_vector_int_clear(&out_set);
+
+                    if (const auto res = get_saturating_neighborhoods(tmp_graph->get_graph(), &in_set, &out_set, v, config.timeout); res != IGRAPH_SUCCESS)
                     {
-                        return ERR(neighborhood_res.get_error());
+                        igraph_vector_int_destroy(&in_set);
+                        igraph_vector_int_destroy(&out_set);
+                        return ERR(igraph_strerror(res));
                     }
-                    const auto neighborhoods = neighborhood_res.get();
 
-                    std::vector<u32> new_vertices;
-                    for (u32 i = 0; i < for_vertices.size(); i++)
+                    u32 size = igraph_vector_int_size(&out_set);
+                    if (size < config.min_register_size)
                     {
-                        u32 v            = for_vertices.at(i);
-                        const auto& hood = neighborhoods.at(i);
-                        auto& prev_hood  = prev_hoods[v];
+                        continue;
+                    }
 
-                        if (prev_hood.size() < hood.size())
+                    GraphCandidate c;
+                    c.size = size;
+                    for (u32 i = 0; i < igraph_vector_int_size(&in_set); i++)
+                    {
+                        c.in_reg.insert(VECTOR(in_set)[i]);
+                    }
+                    for (u32 i = 0; i < igraph_vector_int_size(&out_set); i++)
+                    {
+                        c.out_reg.insert(VECTOR(out_set)[i]);
+                    }
+                    graph_candidates.insert(c);
+                }
+
+                igraph_vector_int_destroy(&in_set);
+                igraph_vector_int_destroy(&out_set);
+
+                for (const auto& gc : graph_candidates)
+                {
+                    std::set<Gate*> out_reg;
+
+                    if (auto out_reg_res = tmp_graph->get_gates_set_from_vertices(gc.out_reg); out_reg_res.is_ok())
+                    {
+                        out_reg = out_reg_res.get();
+                    }
+                    else
+                    {
+                        return ERR(out_reg_res.get_error());
+                    }
+
+                    if (gc.in_reg == gc.out_reg)
+                    {
+                        candidates.insert(Candidate(out_reg));
+                    }
+                    else
+                    {
+                        std::set<Gate*> in_reg;
+                        if (auto in_reg_res = tmp_graph->get_gates_set_from_vertices(gc.in_reg); in_reg_res.is_ok())
                         {
-                            new_vertices.push_back(v);
-                            prev_hood = hood;
+                            in_reg = in_reg_res.get();
+                            candidates.insert(Candidate(in_reg, out_reg));
                         }
                         else
                         {
-                            if (prev_hood.size() == hood.size() && hood.size() >= config.min_register_size)
-                            {
-                                auto gates_res = nl_graph->get_gates_from_vertices(hood).map<std::set<Gate*>>(
-                                    [](const auto& gates) -> Result<std::set<Gate*>> { return OK(std::set<Gate*>(gates.begin(), gates.end())); });
-                                if (gates_res.is_error())
-                                {
-                                    return ERR(gates_res.get_error());
-                                }
-
-                                if (prev_hood == hood)
-                                {
-                                    candidates.insert(Candidate(gates_res.get()));
-                                }
-                                else
-                                {
-                                    auto prev_gates_res = nl_graph->get_gates_from_vertices(prev_hood).map<std::set<Gate*>>(
-                                        [](const auto& gates) -> Result<std::set<Gate*>> { return OK(std::set<Gate*>(gates.begin(), gates.end())); });
-                                    if (prev_gates_res.is_error())
-                                    {
-                                        return ERR(prev_gates_res.get_error());
-                                    }
-                                    candidates.insert(Candidate(prev_gates_res.get(), gates_res.get()));
-                                }
-                            }
+                            return ERR(in_reg_res.get_error());
                         }
                     }
-
-                    if (new_vertices.empty())
-                    {
-                        break;
-                    }
-
-                    for_vertices = std::move(new_vertices);
                 }
+
+                duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start_inner).count();
+                log_info("hawkeye", "successfully completed neighborhood discovery in {} seconds", duration_in_seconds);
 
                 // TODO implement SCC method
             }
+
+            duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
+            log_info("hawkeye", "successfully completed candidate identification in {} seconds", duration_in_seconds);
+
+            log_info("hawkeye", "start reducing candidates...", configs.size());
+            start = std::chrono::system_clock::now();
 
             std::set<const Candidate*> candidates_to_delete;
             for (auto outer_it = candidates.begin(); outer_it != candidates.end(); outer_it++)
@@ -263,11 +459,25 @@ namespace hal
                 candidates.erase(*c);
             }
 
-            // TODO remove debug prints
-            const auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
-            std::cout << duration_in_seconds << std::endl;
+            duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
+            log_info("hawkeye", "successfully completed reducing candidates in {} seconds", duration_in_seconds);
+
+            duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - global_start).count();
+            log_info("hawkeye", "overall runtime: {} seconds", duration_in_seconds);
 
             return OK(std::vector<Candidate>(candidates.begin(), candidates.end()));
         }
     }    // namespace hawkeye
+
+    template<>
+    std::map<hawkeye::DetectionConfiguration::Control, std::string> EnumStrings<hawkeye::DetectionConfiguration::Control>::data = {
+        {hawkeye::DetectionConfiguration::Control::CHECK_FF, "CHECK_FF"},
+        {hawkeye::DetectionConfiguration::Control::CHECK_TYPE, "CHECK_TYPE"},
+        {hawkeye::DetectionConfiguration::Control::CHECK_PINS, "CHECK_PINS"},
+        {hawkeye::DetectionConfiguration::Control::CHECK_NETS, "CHECK_NETS"}};
+
+    template<>
+    std::map<hawkeye::DetectionConfiguration::Components, std::string> EnumStrings<hawkeye::DetectionConfiguration::Components>::data = {
+        {hawkeye::DetectionConfiguration::Components::NONE, "NONE"},
+        {hawkeye::DetectionConfiguration::Components::CHECK_SCC, "CHECK_SCC"}};
 }    // namespace hal

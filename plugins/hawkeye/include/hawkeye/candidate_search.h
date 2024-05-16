@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "hal_core/utilities/enums.h"
 #include "hal_core/utilities/result.h"
 #include "hawkeye/candidate.h"
 
@@ -65,4 +66,10 @@ namespace hal
          */
         Result<std::vector<Candidate>> detect_candidates(Netlist* nl, const std::vector<DetectionConfiguration>& configs, u32 min_state_size = 40, const std::vector<Gate*>& start_ffs = {});
     }    // namespace hawkeye
+
+    template<>
+    std::map<hawkeye::DetectionConfiguration::Control, std::string> EnumStrings<hawkeye::DetectionConfiguration::Control>::data;
+
+    template<>
+    std::map<hawkeye::DetectionConfiguration::Components, std::string> EnumStrings<hawkeye::DetectionConfiguration::Components>::data;
 }    // namespace hal
