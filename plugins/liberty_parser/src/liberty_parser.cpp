@@ -418,17 +418,10 @@ namespace hal
                 auto direction_str = pin_str.consume().string;
                 try
                 {
-                    std::cerr << "Pin direction <" << direction_str << ">" << std::endl;
                     pin.direction = enum_from_string<PinDirection>(direction_str);
                 }
                 catch (const std::runtime_error&)
                 {
-                    std::cerr << "Exception type runtime_error" << std::endl;
-                    return ERR("could not parse pin: invalid pin direction '" + direction_str + "' (line " + std::to_string(pin.line_number) + ")");
-                }
-                catch (...)
-                {
-                    std::cerr << "Exception type unknown" << std::endl;
                     return ERR("could not parse pin: invalid pin direction '" + direction_str + "' (line " + std::to_string(pin.line_number) + ")");
                 }
 
