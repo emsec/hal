@@ -1,5 +1,6 @@
 
 #include "verilator/verilator.h"
+#include "verilator/path_to_verilator_executable.h"
 
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
@@ -220,6 +221,11 @@ namespace hal
                                                        "saleae_parser.cpp",
                                                        "saleae_file.cpp",
                                                        m_design_name + ".v"};
+
+                    if (strlen(path_to_verilator_executable))
+                    {
+                        retval[0] = path_to_verilator_executable + std::string("verilator");
+                    }
 
                     if (!m_compiler.empty())
                     {

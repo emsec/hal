@@ -39,10 +39,11 @@ namespace hal
     {
         auto it = mNextValueMap.begin();
         if (it == mNextValueMap.end()) return false;
+        uint64_t currT = it->first;
         DataFileHandle wff = it->second;
         mNextValueMap.erase(it);
-//        std::cerr << "SaleaeParser::callback o=" << std::hex << (uintptr_t)wff.obj << " t=" << std::dec << it->first << " v=" << wff.value << " size=" << mNextValueMap.size() << std::endl;
-        wff.callback(wff.obj,it->first,wff.value);
+//        std::cerr << "SaleaeParser::callback o=" << std::hex << (uintptr_t)wff.obj << " t=" << std::dec << currT << " v=" << wff.value << " size=" << mNextValueMap.size() << std::endl;
+        wff.callback(wff.obj,currT,wff.value);
         if (wff.file->good())
         {
             SaleaeDataTuple sdt = wff.file->get_next_value();
