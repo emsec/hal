@@ -157,7 +157,7 @@ $(document).ready(function(){initNavTree('netlist_2decorators_2boolean__function
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">try</span></div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>(std::stoul(var_name.substr(VAR_NET_PREFIX.size())));</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a>((<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>) std::stoul(var_name.substr(VAR_NET_PREFIX.size())));</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        }</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::invalid_argument&amp; e)</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        {</div>
@@ -209,13 +209,14 @@ $(document).ready(function(){initNavTree('netlist_2decorators_2boolean__function
 <div class="ttc" id="aclasshal_1_1_net_html"><div class="ttname"><a href="classhal_1_1_net.html">hal::Net</a></div><div class="ttdef"><b>Definition:</b> <a href="net_8h_source.html#l00057">net.h:57</a></div></div>
 <div class="ttc" id="aclasshal_1_1_boolean_function_html"><div class="ttname"><a href="classhal_1_1_boolean_function.html">hal::BooleanFunction</a></div><div class="ttdef"><b>Definition:</b> <a href="boolean__function_8h_source.html#l00054">boolean_function.h:54</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_af20e293cf442ddedc129f87bbb6a69e9"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#af20e293cf442ddedc129f87bbb6a69e9">ERR_APPEND</a></div><div class="ttdeci">#define ERR_APPEND(prev_error, message)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00057">result.h:57</a></div></div>
+<div class="ttc" id="anet__layout__point_8h_html_aa7fe0c70576e86ca2c5f641bb47ccc9d"><div class="ttname"><a href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a></div><div class="ttdeci">quint32 u32</div><div class="ttdef"><b>Definition:</b> <a href="net__layout__point_8h_source.html#l00040">net_layout_point.h:40</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html_a5ad667153a89697b109f5b8e64da7fe7"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html#a5ad667153a89697b109f5b8e64da7fe7">OK</a></div><div class="ttdeci">#define OK(...)</div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2utilities_2result_8h_source.html#l00049">result.h:49</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html"><div class="ttname"><a href="classhal_1_1_netlist.html">hal::Netlist</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2netlist_2netlist_8h_source.html#l00055">netlist.h:55</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="dir_8b970151d598b4fae8bb0815b2681fca.html">decorators</a></li><li class="navelem"><a class="el" href="netlist_2decorators_2boolean__function__net__decorator_8cpp.html">boolean_function_net_decorator.cpp</a></li>
-    <li class="footer">Generated on Sun May 12 2024 17:11:47 for HAL by
+    <li class="footer">Generated on Fri May 17 2024 18:41:43 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

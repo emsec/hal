@@ -3190,178 +3190,180 @@ $(document).ready(function(){initNavTree('test_2verilog__parser_8cpp_source.html
 <div class="line"><a name="l03195"></a><span class="lineno"> 3195</span>&#160;                EXPECT_TRUE(nl_res.is_error());</div>
 <div class="line"><a name="l03196"></a><span class="lineno"> 3196</span>&#160;            }</div>
 <div class="line"><a name="l03197"></a><span class="lineno"> 3197</span>&#160;            <span class="comment">// ------ Verilog specific tests ------</span></div>
-<div class="line"><a name="l03198"></a><span class="lineno"> 3198</span>&#160;            {</div>
-<div class="line"><a name="l03199"></a><span class="lineno"> 3199</span>&#160;                <span class="comment">// The Module has no identifier</span></div>
-<div class="line"><a name="l03200"></a><span class="lineno"> 3200</span>&#160;                NO_COUT_TEST_BLOCK;</div>
-<div class="line"><a name="l03201"></a><span class="lineno"> 3201</span>&#160;                std::string netlist_input(<span class="stringliteral">&quot;module (&quot;</span></div>
-<div class="line"><a name="l03202"></a><span class="lineno"> 3202</span>&#160;                                        <span class="stringliteral">&quot;  global_in,&quot;</span></div>
-<div class="line"><a name="l03203"></a><span class="lineno"> 3203</span>&#160;                                        <span class="stringliteral">&quot;  global_out&quot;</span></div>
-<div class="line"><a name="l03204"></a><span class="lineno"> 3204</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
-<div class="line"><a name="l03205"></a><span class="lineno"> 3205</span>&#160;                                        <span class="stringliteral">&quot;  input global_in ;&quot;</span></div>
-<div class="line"><a name="l03206"></a><span class="lineno"> 3206</span>&#160;                                        <span class="stringliteral">&quot;  output global_out ;&quot;</span></div>
-<div class="line"><a name="l03207"></a><span class="lineno"> 3207</span>&#160;                                        <span class="stringliteral">&quot;BUF gate_0 (&quot;</span></div>
-<div class="line"><a name="l03208"></a><span class="lineno"> 3208</span>&#160;                                        <span class="stringliteral">&quot;  .I (global_in ),&quot;</span></div>
-<div class="line"><a name="l03209"></a><span class="lineno"> 3209</span>&#160;                                        <span class="stringliteral">&quot;  .O (global_out )&quot;</span></div>
-<div class="line"><a name="l03210"></a><span class="lineno"> 3210</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
-<div class="line"><a name="l03211"></a><span class="lineno"> 3211</span>&#160;                                        <span class="stringliteral">&quot;endmodule&quot;</span>);</div>
-<div class="line"><a name="l03212"></a><span class="lineno"> 3212</span>&#160;                <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_lib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a99efc94447f62ce59b3aea6409c46d14">test_utils::get_gate_library</a>();</div>
-<div class="line"><a name="l03213"></a><span class="lineno"> 3213</span>&#160;                <span class="keyword">auto</span> verilog_file = test_utils::create_sandbox_file(<span class="stringliteral">&quot;netlist.v&quot;</span>, netlist_input);</div>
-<div class="line"><a name="l03214"></a><span class="lineno"> 3214</span>&#160;                <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a> verilog_parser;</div>
-<div class="line"><a name="l03215"></a><span class="lineno"> 3215</span>&#160;                <span class="keyword">auto</span> nl_res = verilog_parser.<a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(verilog_file, gate_lib);</div>
-<div class="line"><a name="l03216"></a><span class="lineno"> 3216</span>&#160;                EXPECT_TRUE(nl_res.is_error());</div>
-<div class="line"><a name="l03217"></a><span class="lineno"> 3217</span>&#160;            }</div>
-<div class="line"><a name="l03218"></a><span class="lineno"> 3218</span>&#160;            {</div>
-<div class="line"><a name="l03219"></a><span class="lineno"> 3219</span>&#160;                <span class="comment">// implicit net declaration through assign (not yet supported)</span></div>
-<div class="line"><a name="l03220"></a><span class="lineno"> 3220</span>&#160;                NO_COUT_TEST_BLOCK;</div>
-<div class="line"><a name="l03221"></a><span class="lineno"> 3221</span>&#160;                std::string netlist_input(</div>
-<div class="line"><a name="l03222"></a><span class="lineno"> 3222</span>&#160;                                        <span class="stringliteral">&quot;module ();&quot;</span></div>
-<div class="line"><a name="l03223"></a><span class="lineno"> 3223</span>&#160;                                        <span class="stringliteral">&quot;   wire b;&quot;</span></div>
-<div class="line"><a name="l03224"></a><span class="lineno"> 3224</span>&#160;                                        <span class="stringliteral">&quot;   assign a = b;&quot;</span></div>
-<div class="line"><a name="l03225"></a><span class="lineno"> 3225</span>&#160;                                        <span class="stringliteral">&quot;endmodule&quot;</span>);</div>
-<div class="line"><a name="l03226"></a><span class="lineno"> 3226</span>&#160;                <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_lib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a99efc94447f62ce59b3aea6409c46d14">test_utils::get_gate_library</a>();</div>
-<div class="line"><a name="l03227"></a><span class="lineno"> 3227</span>&#160;                <span class="keyword">auto</span> verilog_file = test_utils::create_sandbox_file(<span class="stringliteral">&quot;netlist.v&quot;</span>, netlist_input);</div>
-<div class="line"><a name="l03228"></a><span class="lineno"> 3228</span>&#160;                <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a> verilog_parser;</div>
-<div class="line"><a name="l03229"></a><span class="lineno"> 3229</span>&#160;                <span class="keyword">auto</span> nl_res = verilog_parser.<a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(verilog_file, gate_lib);</div>
-<div class="line"><a name="l03230"></a><span class="lineno"> 3230</span>&#160;                EXPECT_TRUE(nl_res.is_error());</div>
-<div class="line"><a name="l03231"></a><span class="lineno"> 3231</span>&#160;            }</div>
-<div class="line"><a name="l03232"></a><span class="lineno"> 3232</span>&#160;            {</div>
-<div class="line"><a name="l03233"></a><span class="lineno"> 3233</span>&#160;                <span class="comment">// implicit net declaration through port assign (not yet supported)</span></div>
-<div class="line"><a name="l03234"></a><span class="lineno"> 3234</span>&#160;                NO_COUT_TEST_BLOCK;</div>
-<div class="line"><a name="l03235"></a><span class="lineno"> 3235</span>&#160;                std::string netlist_input(</div>
-<div class="line"><a name="l03236"></a><span class="lineno"> 3236</span>&#160;                                        <span class="stringliteral">&quot;module ();&quot;</span></div>
-<div class="line"><a name="l03237"></a><span class="lineno"> 3237</span>&#160;                                        <span class="stringliteral">&quot;   wire b;&quot;</span></div>
-<div class="line"><a name="l03238"></a><span class="lineno"> 3238</span>&#160;                                        <span class="stringliteral">&quot;   BUF gate_0 (&quot;</span></div>
-<div class="line"><a name="l03239"></a><span class="lineno"> 3239</span>&#160;                                        <span class="stringliteral">&quot;       .I(a),&quot;</span></div>
-<div class="line"><a name="l03240"></a><span class="lineno"> 3240</span>&#160;                                        <span class="stringliteral">&quot;       .O(b)&quot;</span></div>
-<div class="line"><a name="l03241"></a><span class="lineno"> 3241</span>&#160;                                        <span class="stringliteral">&quot;   );&quot;</span></div>
-<div class="line"><a name="l03242"></a><span class="lineno"> 3242</span>&#160;                                        <span class="stringliteral">&quot;endmodule&quot;</span>);</div>
-<div class="line"><a name="l03243"></a><span class="lineno"> 3243</span>&#160;                <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_lib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a99efc94447f62ce59b3aea6409c46d14">test_utils::get_gate_library</a>();</div>
-<div class="line"><a name="l03244"></a><span class="lineno"> 3244</span>&#160;                <span class="keyword">auto</span> verilog_file = test_utils::create_sandbox_file(<span class="stringliteral">&quot;netlist.v&quot;</span>, netlist_input);</div>
-<div class="line"><a name="l03245"></a><span class="lineno"> 3245</span>&#160;                <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a> verilog_parser;</div>
-<div class="line"><a name="l03246"></a><span class="lineno"> 3246</span>&#160;                <span class="keyword">auto</span> nl_res = verilog_parser.<a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(verilog_file, gate_lib);</div>
-<div class="line"><a name="l03247"></a><span class="lineno"> 3247</span>&#160;                EXPECT_TRUE(nl_res.is_error());</div>
-<div class="line"><a name="l03248"></a><span class="lineno"> 3248</span>&#160;            }</div>
-<div class="line"><a name="l03249"></a><span class="lineno"> 3249</span>&#160;            <span class="keywordflow">if</span>(test_utils::known_issue_tests_active())</div>
-<div class="line"><a name="l03250"></a><span class="lineno"> 3250</span>&#160;            {</div>
-<div class="line"><a name="l03251"></a><span class="lineno"> 3251</span>&#160;                <span class="comment">// one side of the direct assignment is empty</span></div>
-<div class="line"><a name="l03252"></a><span class="lineno"> 3252</span>&#160;                NO_COUT_TEST_BLOCK;</div>
-<div class="line"><a name="l03253"></a><span class="lineno"> 3253</span>&#160;                std::string netlist_input(<span class="stringliteral">&quot;module top (&quot;</span></div>
-<div class="line"><a name="l03254"></a><span class="lineno"> 3254</span>&#160;                         <span class="stringliteral">&quot;  global_in,&quot;</span></div>
-<div class="line"><a name="l03255"></a><span class="lineno"> 3255</span>&#160;                         <span class="stringliteral">&quot;  global_out&quot;</span></div>
-<div class="line"><a name="l03256"></a><span class="lineno"> 3256</span>&#160;                         <span class="stringliteral">&quot; ) ;&quot;</span></div>
-<div class="line"><a name="l03257"></a><span class="lineno"> 3257</span>&#160;                         <span class="stringliteral">&quot;  input global_in ;&quot;</span></div>
-<div class="line"><a name="l03258"></a><span class="lineno"> 3258</span>&#160;                         <span class="stringliteral">&quot;  output global_out ;&quot;</span></div>
-<div class="line"><a name="l03259"></a><span class="lineno"> 3259</span>&#160;                         <span class="stringliteral">&quot;  wire signal_0 ;&quot;</span></div>
-<div class="line"><a name="l03260"></a><span class="lineno"> 3260</span>&#160;                         <span class="stringliteral">&quot;  assign signal_0 = ;&quot;</span></div>
-<div class="line"><a name="l03261"></a><span class="lineno"> 3261</span>&#160;                         <span class="stringliteral">&quot;endmodule&quot;</span>);</div>
-<div class="line"><a name="l03262"></a><span class="lineno"> 3262</span>&#160;                <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_lib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a99efc94447f62ce59b3aea6409c46d14">test_utils::get_gate_library</a>();</div>
-<div class="line"><a name="l03263"></a><span class="lineno"> 3263</span>&#160;                <span class="keyword">auto</span> verilog_file = test_utils::create_sandbox_file(<span class="stringliteral">&quot;netlist.v&quot;</span>, netlist_input);</div>
-<div class="line"><a name="l03264"></a><span class="lineno"> 3264</span>&#160;                <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a> verilog_parser;</div>
-<div class="line"><a name="l03265"></a><span class="lineno"> 3265</span>&#160;                <span class="keyword">auto</span> nl_res = verilog_parser.<a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(verilog_file, gate_lib);</div>
-<div class="line"><a name="l03266"></a><span class="lineno"> 3266</span>&#160;                EXPECT_TRUE(nl_res.is_error());</div>
-<div class="line"><a name="l03267"></a><span class="lineno"> 3267</span>&#160;            }</div>
-<div class="line"><a name="l03268"></a><span class="lineno"> 3268</span>&#160;            {</div>
-<div class="line"><a name="l03269"></a><span class="lineno"> 3269</span>&#160;                <span class="comment">// Having a cyclic Module hierarchy</span></div>
-<div class="line"><a name="l03270"></a><span class="lineno"> 3270</span>&#160;                NO_COUT_TEST_BLOCK;</div>
-<div class="line"><a name="l03271"></a><span class="lineno"> 3271</span>&#160;                std::string netlist_input(<span class="stringliteral">&quot;module ENT_0 (&quot;</span></div>
-<div class="line"><a name="l03272"></a><span class="lineno"> 3272</span>&#160;                                        <span class="stringliteral">&quot;  IE0,&quot;</span></div>
-<div class="line"><a name="l03273"></a><span class="lineno"> 3273</span>&#160;                                        <span class="stringliteral">&quot;  OE0 &quot;</span></div>
-<div class="line"><a name="l03274"></a><span class="lineno"> 3274</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
-<div class="line"><a name="l03275"></a><span class="lineno"> 3275</span>&#160;                                        <span class="stringliteral">&quot;  input IE0 ;&quot;</span></div>
-<div class="line"><a name="l03276"></a><span class="lineno"> 3276</span>&#160;                                        <span class="stringliteral">&quot;  output OE0 ;&quot;</span></div>
-<div class="line"><a name="l03277"></a><span class="lineno"> 3277</span>&#160;                                        <span class="stringliteral">&quot;ENT_1 gate_0 (&quot;</span></div>
-<div class="line"><a name="l03278"></a><span class="lineno"> 3278</span>&#160;                                        <span class="stringliteral">&quot;  .\\IE1 (IE0 ),&quot;</span></div>
-<div class="line"><a name="l03279"></a><span class="lineno"> 3279</span>&#160;                                        <span class="stringliteral">&quot;  .\\OE1 (OE0 )&quot;</span></div>
-<div class="line"><a name="l03280"></a><span class="lineno"> 3280</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
-<div class="line"><a name="l03281"></a><span class="lineno"> 3281</span>&#160;                                        <span class="stringliteral">&quot;endmodule&quot;</span></div>
-<div class="line"><a name="l03282"></a><span class="lineno"> 3282</span>&#160;                                        <span class="stringliteral">&quot;module ENT_1 (&quot;</span></div>
-<div class="line"><a name="l03283"></a><span class="lineno"> 3283</span>&#160;                                        <span class="stringliteral">&quot;  IE1,&quot;</span></div>
-<div class="line"><a name="l03284"></a><span class="lineno"> 3284</span>&#160;                                        <span class="stringliteral">&quot;  OE1 &quot;</span></div>
-<div class="line"><a name="l03285"></a><span class="lineno"> 3285</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
-<div class="line"><a name="l03286"></a><span class="lineno"> 3286</span>&#160;                                        <span class="stringliteral">&quot;  input IE1 ;&quot;</span></div>
-<div class="line"><a name="l03287"></a><span class="lineno"> 3287</span>&#160;                                        <span class="stringliteral">&quot;  output OE1 ;&quot;</span></div>
-<div class="line"><a name="l03288"></a><span class="lineno"> 3288</span>&#160;                                        <span class="stringliteral">&quot;ENT_0 gate_0 (&quot;</span></div>
-<div class="line"><a name="l03289"></a><span class="lineno"> 3289</span>&#160;                                        <span class="stringliteral">&quot;  .\\IE0 (IE1 ),&quot;</span></div>
-<div class="line"><a name="l03290"></a><span class="lineno"> 3290</span>&#160;                                        <span class="stringliteral">&quot;  .\\OE0 (OE1 )&quot;</span></div>
-<div class="line"><a name="l03291"></a><span class="lineno"> 3291</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
-<div class="line"><a name="l03292"></a><span class="lineno"> 3292</span>&#160;                                        <span class="stringliteral">&quot;endmodule&quot;</span>);</div>
-<div class="line"><a name="l03293"></a><span class="lineno"> 3293</span>&#160;                <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_lib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a99efc94447f62ce59b3aea6409c46d14">test_utils::get_gate_library</a>();</div>
-<div class="line"><a name="l03294"></a><span class="lineno"> 3294</span>&#160;                <span class="keyword">auto</span> verilog_file = test_utils::create_sandbox_file(<span class="stringliteral">&quot;netlist.v&quot;</span>, netlist_input);</div>
-<div class="line"><a name="l03295"></a><span class="lineno"> 3295</span>&#160;                <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a> verilog_parser;</div>
-<div class="line"><a name="l03296"></a><span class="lineno"> 3296</span>&#160;                <span class="keyword">auto</span> nl_res = verilog_parser.<a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(verilog_file, gate_lib);</div>
-<div class="line"><a name="l03297"></a><span class="lineno"> 3297</span>&#160;                EXPECT_TRUE(nl_res.is_error());</div>
-<div class="line"><a name="l03298"></a><span class="lineno"> 3298</span>&#160;            }</div>
-<div class="line"><a name="l03299"></a><span class="lineno"> 3299</span>&#160;            {</div>
-<div class="line"><a name="l03300"></a><span class="lineno"> 3300</span>&#160;                <span class="comment">// Store an unknown data type</span></div>
-<div class="line"><a name="l03301"></a><span class="lineno"> 3301</span>&#160;                NO_COUT_TEST_BLOCK;</div>
-<div class="line"><a name="l03302"></a><span class="lineno"> 3302</span>&#160;                std::string netlist_input(<span class="stringliteral">&quot;module top (&quot;</span></div>
-<div class="line"><a name="l03303"></a><span class="lineno"> 3303</span>&#160;                                        <span class="stringliteral">&quot;  global_in,&quot;</span></div>
-<div class="line"><a name="l03304"></a><span class="lineno"> 3304</span>&#160;                                        <span class="stringliteral">&quot;  global_out&quot;</span></div>
-<div class="line"><a name="l03305"></a><span class="lineno"> 3305</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
-<div class="line"><a name="l03306"></a><span class="lineno"> 3306</span>&#160;                                        <span class="stringliteral">&quot;  input global_in ;&quot;</span></div>
-<div class="line"><a name="l03307"></a><span class="lineno"> 3307</span>&#160;                                        <span class="stringliteral">&quot;  output global_out ;&quot;</span></div>
-<div class="line"><a name="l03308"></a><span class="lineno"> 3308</span>&#160;                                        <span class="stringliteral">&quot;BUF #(&quot;</span></div>
-<div class="line"><a name="l03309"></a><span class="lineno"> 3309</span>&#160;                                        <span class="stringliteral">&quot;.key_unknown(#Unkn0wn!)) &quot;</span></div>
-<div class="line"><a name="l03310"></a><span class="lineno"> 3310</span>&#160;                                        <span class="stringliteral">&quot;gate_0 (&quot;</span></div>
-<div class="line"><a name="l03311"></a><span class="lineno"> 3311</span>&#160;                                        <span class="stringliteral">&quot;  .I (global_in ),&quot;</span></div>
-<div class="line"><a name="l03312"></a><span class="lineno"> 3312</span>&#160;                                        <span class="stringliteral">&quot;  .O (global_out )&quot;</span></div>
-<div class="line"><a name="l03313"></a><span class="lineno"> 3313</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
-<div class="line"><a name="l03314"></a><span class="lineno"> 3314</span>&#160;                                        <span class="stringliteral">&quot;endmodule&quot;</span>);</div>
-<div class="line"><a name="l03315"></a><span class="lineno"> 3315</span>&#160;                <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_lib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a99efc94447f62ce59b3aea6409c46d14">test_utils::get_gate_library</a>();</div>
-<div class="line"><a name="l03316"></a><span class="lineno"> 3316</span>&#160;                <span class="keyword">auto</span> verilog_file = test_utils::create_sandbox_file(<span class="stringliteral">&quot;netlist.v&quot;</span>, netlist_input);</div>
-<div class="line"><a name="l03317"></a><span class="lineno"> 3317</span>&#160;                <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a> verilog_parser;</div>
-<div class="line"><a name="l03318"></a><span class="lineno"> 3318</span>&#160;                <span class="keyword">auto</span> nl_res = verilog_parser.<a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(verilog_file, gate_lib);</div>
-<div class="line"><a name="l03319"></a><span class="lineno"> 3319</span>&#160;                EXPECT_TRUE(nl_res.is_ok());</div>
-<div class="line"><a name="l03320"></a><span class="lineno"> 3320</span>&#160;            }</div>
-<div class="line"><a name="l03321"></a><span class="lineno"> 3321</span>&#160;            {</div>
-<div class="line"><a name="l03322"></a><span class="lineno"> 3322</span>&#160;                <span class="comment">// Use an undeclared signal</span></div>
-<div class="line"><a name="l03323"></a><span class="lineno"> 3323</span>&#160;                NO_COUT_TEST_BLOCK;</div>
-<div class="line"><a name="l03324"></a><span class="lineno"> 3324</span>&#160;                std::string netlist_input(<span class="stringliteral">&quot;module top (&quot;</span></div>
-<div class="line"><a name="l03325"></a><span class="lineno"> 3325</span>&#160;                                        <span class="stringliteral">&quot;  global_in,&quot;</span></div>
-<div class="line"><a name="l03326"></a><span class="lineno"> 3326</span>&#160;                                        <span class="stringliteral">&quot;  global_out&quot;</span></div>
-<div class="line"><a name="l03327"></a><span class="lineno"> 3327</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
-<div class="line"><a name="l03328"></a><span class="lineno"> 3328</span>&#160;                                        <span class="stringliteral">&quot;  input global_in ;&quot;</span></div>
-<div class="line"><a name="l03329"></a><span class="lineno"> 3329</span>&#160;                                        <span class="stringliteral">&quot;  output global_out ;&quot;</span></div>
-<div class="line"><a name="l03330"></a><span class="lineno"> 3330</span>&#160;                                        <span class="stringliteral">&quot;BUF gate_0 (&quot;</span></div>
-<div class="line"><a name="l03331"></a><span class="lineno"> 3331</span>&#160;                                        <span class="stringliteral">&quot;  .I (global_in ),&quot;</span></div>
-<div class="line"><a name="l03332"></a><span class="lineno"> 3332</span>&#160;                                        <span class="stringliteral">&quot;  .O (net_0 )&quot;</span>    <span class="comment">// &lt;- undeclared</span></div>
-<div class="line"><a name="l03333"></a><span class="lineno"> 3333</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
-<div class="line"><a name="l03334"></a><span class="lineno"> 3334</span>&#160;                                        <span class="stringliteral">&quot;BUF gate_1 (&quot;</span></div>
-<div class="line"><a name="l03335"></a><span class="lineno"> 3335</span>&#160;                                        <span class="stringliteral">&quot;  .I (net_0 ),&quot;</span></div>
-<div class="line"><a name="l03336"></a><span class="lineno"> 3336</span>&#160;                                        <span class="stringliteral">&quot;  .O (global_out )&quot;</span></div>
-<div class="line"><a name="l03337"></a><span class="lineno"> 3337</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
-<div class="line"><a name="l03338"></a><span class="lineno"> 3338</span>&#160;                                        <span class="stringliteral">&quot;endmodule&quot;</span>);</div>
-<div class="line"><a name="l03339"></a><span class="lineno"> 3339</span>&#160;                <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_lib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a99efc94447f62ce59b3aea6409c46d14">test_utils::get_gate_library</a>();</div>
-<div class="line"><a name="l03340"></a><span class="lineno"> 3340</span>&#160;                <span class="keyword">auto</span> verilog_file = test_utils::create_sandbox_file(<span class="stringliteral">&quot;netlist.v&quot;</span>, netlist_input);</div>
-<div class="line"><a name="l03341"></a><span class="lineno"> 3341</span>&#160;                <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a> verilog_parser;</div>
-<div class="line"><a name="l03342"></a><span class="lineno"> 3342</span>&#160;                <span class="keyword">auto</span> nl_res = verilog_parser.<a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(verilog_file, gate_lib);</div>
-<div class="line"><a name="l03343"></a><span class="lineno"> 3343</span>&#160;                EXPECT_TRUE(nl_res.is_error());</div>
-<div class="line"><a name="l03344"></a><span class="lineno"> 3344</span>&#160;            }</div>
-<div class="line"><a name="l03345"></a><span class="lineno"> 3345</span>&#160;            {</div>
-<div class="line"><a name="l03346"></a><span class="lineno"> 3346</span>&#160;                <span class="comment">// Assign unknown signals</span></div>
-<div class="line"><a name="l03347"></a><span class="lineno"> 3347</span>&#160;                NO_COUT_TEST_BLOCK;</div>
-<div class="line"><a name="l03348"></a><span class="lineno"> 3348</span>&#160;                std::string netlist_input(<span class="stringliteral">&quot;module top (&quot;</span></div>
-<div class="line"><a name="l03349"></a><span class="lineno"> 3349</span>&#160;                         <span class="stringliteral">&quot;  global_in,&quot;</span></div>
-<div class="line"><a name="l03350"></a><span class="lineno"> 3350</span>&#160;                         <span class="stringliteral">&quot;  global_out&quot;</span></div>
-<div class="line"><a name="l03351"></a><span class="lineno"> 3351</span>&#160;                         <span class="stringliteral">&quot; ) ;&quot;</span></div>
-<div class="line"><a name="l03352"></a><span class="lineno"> 3352</span>&#160;                         <span class="stringliteral">&quot;  input global_in ;&quot;</span></div>
-<div class="line"><a name="l03353"></a><span class="lineno"> 3353</span>&#160;                         <span class="stringliteral">&quot;  output global_out ;&quot;</span></div>
-<div class="line"><a name="l03354"></a><span class="lineno"> 3354</span>&#160;                         <span class="stringliteral">&quot;  wire [0:4] signal_vec ;&quot;</span></div>
-<div class="line"><a name="l03355"></a><span class="lineno"> 3355</span>&#160;                         <span class="stringliteral">&quot;  assign signal_unknown[0:4] = signal_vec[0:4];&quot;</span></div>
-<div class="line"><a name="l03356"></a><span class="lineno"> 3356</span>&#160;                         <span class="stringliteral">&quot;BUF gate_0 (&quot;</span></div>
-<div class="line"><a name="l03357"></a><span class="lineno"> 3357</span>&#160;                         <span class="stringliteral">&quot;  .I (global_in ),&quot;</span></div>
-<div class="line"><a name="l03358"></a><span class="lineno"> 3358</span>&#160;                         <span class="stringliteral">&quot;  .O (global_out )&quot;</span></div>
-<div class="line"><a name="l03359"></a><span class="lineno"> 3359</span>&#160;                         <span class="stringliteral">&quot; ) ;&quot;</span></div>
-<div class="line"><a name="l03360"></a><span class="lineno"> 3360</span>&#160;                         <span class="stringliteral">&quot;endmodule&quot;</span>);</div>
-<div class="line"><a name="l03361"></a><span class="lineno"> 3361</span>&#160;                <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_lib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a99efc94447f62ce59b3aea6409c46d14">test_utils::get_gate_library</a>();</div>
-<div class="line"><a name="l03362"></a><span class="lineno"> 3362</span>&#160;                <span class="keyword">auto</span> verilog_file = test_utils::create_sandbox_file(<span class="stringliteral">&quot;netlist.v&quot;</span>, netlist_input);</div>
-<div class="line"><a name="l03363"></a><span class="lineno"> 3363</span>&#160;                <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a> verilog_parser;</div>
-<div class="line"><a name="l03364"></a><span class="lineno"> 3364</span>&#160;                <span class="keyword">auto</span> nl_res = verilog_parser.<a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(verilog_file, gate_lib);</div>
-<div class="line"><a name="l03365"></a><span class="lineno"> 3365</span>&#160;                EXPECT_TRUE(nl_res.is_ok());</div>
-<div class="line"><a name="l03366"></a><span class="lineno"> 3366</span>&#160;            }</div>
-<div class="line"><a name="l03367"></a><span class="lineno"> 3367</span>&#160;        TEST_END</div>
-<div class="line"><a name="l03368"></a><span class="lineno"> 3368</span>&#160;    }</div>
-<div class="line"><a name="l03369"></a><span class="lineno"> 3369</span>&#160;} <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l03198"></a><span class="lineno"> 3198</span>&#160;<span class="preprocessor">#if !defined(__APPLE__)</span></div>
+<div class="line"><a name="l03199"></a><span class="lineno"> 3199</span>&#160;            {</div>
+<div class="line"><a name="l03200"></a><span class="lineno"> 3200</span>&#160;                <span class="comment">// The Module has no identifier</span></div>
+<div class="line"><a name="l03201"></a><span class="lineno"> 3201</span>&#160;                NO_COUT_TEST_BLOCK;</div>
+<div class="line"><a name="l03202"></a><span class="lineno"> 3202</span>&#160;                std::string netlist_input(<span class="stringliteral">&quot;module (&quot;</span></div>
+<div class="line"><a name="l03203"></a><span class="lineno"> 3203</span>&#160;                                        <span class="stringliteral">&quot;  global_in,&quot;</span></div>
+<div class="line"><a name="l03204"></a><span class="lineno"> 3204</span>&#160;                                        <span class="stringliteral">&quot;  global_out&quot;</span></div>
+<div class="line"><a name="l03205"></a><span class="lineno"> 3205</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
+<div class="line"><a name="l03206"></a><span class="lineno"> 3206</span>&#160;                                        <span class="stringliteral">&quot;  input global_in ;&quot;</span></div>
+<div class="line"><a name="l03207"></a><span class="lineno"> 3207</span>&#160;                                        <span class="stringliteral">&quot;  output global_out ;&quot;</span></div>
+<div class="line"><a name="l03208"></a><span class="lineno"> 3208</span>&#160;                                        <span class="stringliteral">&quot;BUF gate_0 (&quot;</span></div>
+<div class="line"><a name="l03209"></a><span class="lineno"> 3209</span>&#160;                                        <span class="stringliteral">&quot;  .I (global_in ),&quot;</span></div>
+<div class="line"><a name="l03210"></a><span class="lineno"> 3210</span>&#160;                                        <span class="stringliteral">&quot;  .O (global_out )&quot;</span></div>
+<div class="line"><a name="l03211"></a><span class="lineno"> 3211</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
+<div class="line"><a name="l03212"></a><span class="lineno"> 3212</span>&#160;                                        <span class="stringliteral">&quot;endmodule&quot;</span>);</div>
+<div class="line"><a name="l03213"></a><span class="lineno"> 3213</span>&#160;                <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_lib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a99efc94447f62ce59b3aea6409c46d14">test_utils::get_gate_library</a>();</div>
+<div class="line"><a name="l03214"></a><span class="lineno"> 3214</span>&#160;                <span class="keyword">auto</span> verilog_file = test_utils::create_sandbox_file(<span class="stringliteral">&quot;netlist.v&quot;</span>, netlist_input);</div>
+<div class="line"><a name="l03215"></a><span class="lineno"> 3215</span>&#160;                <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a> verilog_parser;</div>
+<div class="line"><a name="l03216"></a><span class="lineno"> 3216</span>&#160;                <span class="keyword">auto</span> nl_res = verilog_parser.<a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(verilog_file, gate_lib);</div>
+<div class="line"><a name="l03217"></a><span class="lineno"> 3217</span>&#160;                EXPECT_TRUE(nl_res.is_error());</div>
+<div class="line"><a name="l03218"></a><span class="lineno"> 3218</span>&#160;            }</div>
+<div class="line"><a name="l03219"></a><span class="lineno"> 3219</span>&#160;            {</div>
+<div class="line"><a name="l03220"></a><span class="lineno"> 3220</span>&#160;                <span class="comment">// implicit net declaration through assign (not yet supported)</span></div>
+<div class="line"><a name="l03221"></a><span class="lineno"> 3221</span>&#160;                NO_COUT_TEST_BLOCK;</div>
+<div class="line"><a name="l03222"></a><span class="lineno"> 3222</span>&#160;                std::string netlist_input(</div>
+<div class="line"><a name="l03223"></a><span class="lineno"> 3223</span>&#160;                                        <span class="stringliteral">&quot;module ();&quot;</span></div>
+<div class="line"><a name="l03224"></a><span class="lineno"> 3224</span>&#160;                                        <span class="stringliteral">&quot;   wire b;&quot;</span></div>
+<div class="line"><a name="l03225"></a><span class="lineno"> 3225</span>&#160;                                        <span class="stringliteral">&quot;   assign a = b;&quot;</span></div>
+<div class="line"><a name="l03226"></a><span class="lineno"> 3226</span>&#160;                                        <span class="stringliteral">&quot;endmodule&quot;</span>);</div>
+<div class="line"><a name="l03227"></a><span class="lineno"> 3227</span>&#160;                <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_lib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a99efc94447f62ce59b3aea6409c46d14">test_utils::get_gate_library</a>();</div>
+<div class="line"><a name="l03228"></a><span class="lineno"> 3228</span>&#160;                <span class="keyword">auto</span> verilog_file = test_utils::create_sandbox_file(<span class="stringliteral">&quot;netlist.v&quot;</span>, netlist_input);</div>
+<div class="line"><a name="l03229"></a><span class="lineno"> 3229</span>&#160;                <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a> verilog_parser;</div>
+<div class="line"><a name="l03230"></a><span class="lineno"> 3230</span>&#160;                <span class="keyword">auto</span> nl_res = verilog_parser.<a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(verilog_file, gate_lib);</div>
+<div class="line"><a name="l03231"></a><span class="lineno"> 3231</span>&#160;                EXPECT_TRUE(nl_res.is_error());</div>
+<div class="line"><a name="l03232"></a><span class="lineno"> 3232</span>&#160;            }</div>
+<div class="line"><a name="l03233"></a><span class="lineno"> 3233</span>&#160;            {</div>
+<div class="line"><a name="l03234"></a><span class="lineno"> 3234</span>&#160;                <span class="comment">// implicit net declaration through port assign (not yet supported)</span></div>
+<div class="line"><a name="l03235"></a><span class="lineno"> 3235</span>&#160;                NO_COUT_TEST_BLOCK;</div>
+<div class="line"><a name="l03236"></a><span class="lineno"> 3236</span>&#160;                std::string netlist_input(</div>
+<div class="line"><a name="l03237"></a><span class="lineno"> 3237</span>&#160;                                        <span class="stringliteral">&quot;module ();&quot;</span></div>
+<div class="line"><a name="l03238"></a><span class="lineno"> 3238</span>&#160;                                        <span class="stringliteral">&quot;   wire b;&quot;</span></div>
+<div class="line"><a name="l03239"></a><span class="lineno"> 3239</span>&#160;                                        <span class="stringliteral">&quot;   BUF gate_0 (&quot;</span></div>
+<div class="line"><a name="l03240"></a><span class="lineno"> 3240</span>&#160;                                        <span class="stringliteral">&quot;       .I(a),&quot;</span></div>
+<div class="line"><a name="l03241"></a><span class="lineno"> 3241</span>&#160;                                        <span class="stringliteral">&quot;       .O(b)&quot;</span></div>
+<div class="line"><a name="l03242"></a><span class="lineno"> 3242</span>&#160;                                        <span class="stringliteral">&quot;   );&quot;</span></div>
+<div class="line"><a name="l03243"></a><span class="lineno"> 3243</span>&#160;                                        <span class="stringliteral">&quot;endmodule&quot;</span>);</div>
+<div class="line"><a name="l03244"></a><span class="lineno"> 3244</span>&#160;                <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_lib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a99efc94447f62ce59b3aea6409c46d14">test_utils::get_gate_library</a>();</div>
+<div class="line"><a name="l03245"></a><span class="lineno"> 3245</span>&#160;                <span class="keyword">auto</span> verilog_file = test_utils::create_sandbox_file(<span class="stringliteral">&quot;netlist.v&quot;</span>, netlist_input);</div>
+<div class="line"><a name="l03246"></a><span class="lineno"> 3246</span>&#160;                <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a> verilog_parser;</div>
+<div class="line"><a name="l03247"></a><span class="lineno"> 3247</span>&#160;                <span class="keyword">auto</span> nl_res = verilog_parser.<a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(verilog_file, gate_lib);</div>
+<div class="line"><a name="l03248"></a><span class="lineno"> 3248</span>&#160;                EXPECT_TRUE(nl_res.is_error());</div>
+<div class="line"><a name="l03249"></a><span class="lineno"> 3249</span>&#160;            }</div>
+<div class="line"><a name="l03250"></a><span class="lineno"> 3250</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l03251"></a><span class="lineno"> 3251</span>&#160;            <span class="keywordflow">if</span>(test_utils::known_issue_tests_active())</div>
+<div class="line"><a name="l03252"></a><span class="lineno"> 3252</span>&#160;            {</div>
+<div class="line"><a name="l03253"></a><span class="lineno"> 3253</span>&#160;                <span class="comment">// one side of the direct assignment is empty</span></div>
+<div class="line"><a name="l03254"></a><span class="lineno"> 3254</span>&#160;                NO_COUT_TEST_BLOCK;</div>
+<div class="line"><a name="l03255"></a><span class="lineno"> 3255</span>&#160;                std::string netlist_input(<span class="stringliteral">&quot;module top (&quot;</span></div>
+<div class="line"><a name="l03256"></a><span class="lineno"> 3256</span>&#160;                         <span class="stringliteral">&quot;  global_in,&quot;</span></div>
+<div class="line"><a name="l03257"></a><span class="lineno"> 3257</span>&#160;                         <span class="stringliteral">&quot;  global_out&quot;</span></div>
+<div class="line"><a name="l03258"></a><span class="lineno"> 3258</span>&#160;                         <span class="stringliteral">&quot; ) ;&quot;</span></div>
+<div class="line"><a name="l03259"></a><span class="lineno"> 3259</span>&#160;                         <span class="stringliteral">&quot;  input global_in ;&quot;</span></div>
+<div class="line"><a name="l03260"></a><span class="lineno"> 3260</span>&#160;                         <span class="stringliteral">&quot;  output global_out ;&quot;</span></div>
+<div class="line"><a name="l03261"></a><span class="lineno"> 3261</span>&#160;                         <span class="stringliteral">&quot;  wire signal_0 ;&quot;</span></div>
+<div class="line"><a name="l03262"></a><span class="lineno"> 3262</span>&#160;                         <span class="stringliteral">&quot;  assign signal_0 = ;&quot;</span></div>
+<div class="line"><a name="l03263"></a><span class="lineno"> 3263</span>&#160;                         <span class="stringliteral">&quot;endmodule&quot;</span>);</div>
+<div class="line"><a name="l03264"></a><span class="lineno"> 3264</span>&#160;                <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_lib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a99efc94447f62ce59b3aea6409c46d14">test_utils::get_gate_library</a>();</div>
+<div class="line"><a name="l03265"></a><span class="lineno"> 3265</span>&#160;                <span class="keyword">auto</span> verilog_file = test_utils::create_sandbox_file(<span class="stringliteral">&quot;netlist.v&quot;</span>, netlist_input);</div>
+<div class="line"><a name="l03266"></a><span class="lineno"> 3266</span>&#160;                <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a> verilog_parser;</div>
+<div class="line"><a name="l03267"></a><span class="lineno"> 3267</span>&#160;                <span class="keyword">auto</span> nl_res = verilog_parser.<a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(verilog_file, gate_lib);</div>
+<div class="line"><a name="l03268"></a><span class="lineno"> 3268</span>&#160;                EXPECT_TRUE(nl_res.is_error());</div>
+<div class="line"><a name="l03269"></a><span class="lineno"> 3269</span>&#160;            }</div>
+<div class="line"><a name="l03270"></a><span class="lineno"> 3270</span>&#160;            {</div>
+<div class="line"><a name="l03271"></a><span class="lineno"> 3271</span>&#160;                <span class="comment">// Having a cyclic Module hierarchy</span></div>
+<div class="line"><a name="l03272"></a><span class="lineno"> 3272</span>&#160;                NO_COUT_TEST_BLOCK;</div>
+<div class="line"><a name="l03273"></a><span class="lineno"> 3273</span>&#160;                std::string netlist_input(<span class="stringliteral">&quot;module ENT_0 (&quot;</span></div>
+<div class="line"><a name="l03274"></a><span class="lineno"> 3274</span>&#160;                                        <span class="stringliteral">&quot;  IE0,&quot;</span></div>
+<div class="line"><a name="l03275"></a><span class="lineno"> 3275</span>&#160;                                        <span class="stringliteral">&quot;  OE0 &quot;</span></div>
+<div class="line"><a name="l03276"></a><span class="lineno"> 3276</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
+<div class="line"><a name="l03277"></a><span class="lineno"> 3277</span>&#160;                                        <span class="stringliteral">&quot;  input IE0 ;&quot;</span></div>
+<div class="line"><a name="l03278"></a><span class="lineno"> 3278</span>&#160;                                        <span class="stringliteral">&quot;  output OE0 ;&quot;</span></div>
+<div class="line"><a name="l03279"></a><span class="lineno"> 3279</span>&#160;                                        <span class="stringliteral">&quot;ENT_1 gate_0 (&quot;</span></div>
+<div class="line"><a name="l03280"></a><span class="lineno"> 3280</span>&#160;                                        <span class="stringliteral">&quot;  .\\IE1 (IE0 ),&quot;</span></div>
+<div class="line"><a name="l03281"></a><span class="lineno"> 3281</span>&#160;                                        <span class="stringliteral">&quot;  .\\OE1 (OE0 )&quot;</span></div>
+<div class="line"><a name="l03282"></a><span class="lineno"> 3282</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
+<div class="line"><a name="l03283"></a><span class="lineno"> 3283</span>&#160;                                        <span class="stringliteral">&quot;endmodule&quot;</span></div>
+<div class="line"><a name="l03284"></a><span class="lineno"> 3284</span>&#160;                                        <span class="stringliteral">&quot;module ENT_1 (&quot;</span></div>
+<div class="line"><a name="l03285"></a><span class="lineno"> 3285</span>&#160;                                        <span class="stringliteral">&quot;  IE1,&quot;</span></div>
+<div class="line"><a name="l03286"></a><span class="lineno"> 3286</span>&#160;                                        <span class="stringliteral">&quot;  OE1 &quot;</span></div>
+<div class="line"><a name="l03287"></a><span class="lineno"> 3287</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
+<div class="line"><a name="l03288"></a><span class="lineno"> 3288</span>&#160;                                        <span class="stringliteral">&quot;  input IE1 ;&quot;</span></div>
+<div class="line"><a name="l03289"></a><span class="lineno"> 3289</span>&#160;                                        <span class="stringliteral">&quot;  output OE1 ;&quot;</span></div>
+<div class="line"><a name="l03290"></a><span class="lineno"> 3290</span>&#160;                                        <span class="stringliteral">&quot;ENT_0 gate_0 (&quot;</span></div>
+<div class="line"><a name="l03291"></a><span class="lineno"> 3291</span>&#160;                                        <span class="stringliteral">&quot;  .\\IE0 (IE1 ),&quot;</span></div>
+<div class="line"><a name="l03292"></a><span class="lineno"> 3292</span>&#160;                                        <span class="stringliteral">&quot;  .\\OE0 (OE1 )&quot;</span></div>
+<div class="line"><a name="l03293"></a><span class="lineno"> 3293</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
+<div class="line"><a name="l03294"></a><span class="lineno"> 3294</span>&#160;                                        <span class="stringliteral">&quot;endmodule&quot;</span>);</div>
+<div class="line"><a name="l03295"></a><span class="lineno"> 3295</span>&#160;                <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_lib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a99efc94447f62ce59b3aea6409c46d14">test_utils::get_gate_library</a>();</div>
+<div class="line"><a name="l03296"></a><span class="lineno"> 3296</span>&#160;                <span class="keyword">auto</span> verilog_file = test_utils::create_sandbox_file(<span class="stringliteral">&quot;netlist.v&quot;</span>, netlist_input);</div>
+<div class="line"><a name="l03297"></a><span class="lineno"> 3297</span>&#160;                <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a> verilog_parser;</div>
+<div class="line"><a name="l03298"></a><span class="lineno"> 3298</span>&#160;                <span class="keyword">auto</span> nl_res = verilog_parser.<a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(verilog_file, gate_lib);</div>
+<div class="line"><a name="l03299"></a><span class="lineno"> 3299</span>&#160;                EXPECT_TRUE(nl_res.is_error());</div>
+<div class="line"><a name="l03300"></a><span class="lineno"> 3300</span>&#160;            }</div>
+<div class="line"><a name="l03301"></a><span class="lineno"> 3301</span>&#160;            {</div>
+<div class="line"><a name="l03302"></a><span class="lineno"> 3302</span>&#160;                <span class="comment">// Store an unknown data type</span></div>
+<div class="line"><a name="l03303"></a><span class="lineno"> 3303</span>&#160;                NO_COUT_TEST_BLOCK;</div>
+<div class="line"><a name="l03304"></a><span class="lineno"> 3304</span>&#160;                std::string netlist_input(<span class="stringliteral">&quot;module top (&quot;</span></div>
+<div class="line"><a name="l03305"></a><span class="lineno"> 3305</span>&#160;                                        <span class="stringliteral">&quot;  global_in,&quot;</span></div>
+<div class="line"><a name="l03306"></a><span class="lineno"> 3306</span>&#160;                                        <span class="stringliteral">&quot;  global_out&quot;</span></div>
+<div class="line"><a name="l03307"></a><span class="lineno"> 3307</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
+<div class="line"><a name="l03308"></a><span class="lineno"> 3308</span>&#160;                                        <span class="stringliteral">&quot;  input global_in ;&quot;</span></div>
+<div class="line"><a name="l03309"></a><span class="lineno"> 3309</span>&#160;                                        <span class="stringliteral">&quot;  output global_out ;&quot;</span></div>
+<div class="line"><a name="l03310"></a><span class="lineno"> 3310</span>&#160;                                        <span class="stringliteral">&quot;BUF #(&quot;</span></div>
+<div class="line"><a name="l03311"></a><span class="lineno"> 3311</span>&#160;                                        <span class="stringliteral">&quot;.key_unknown(#Unkn0wn!)) &quot;</span></div>
+<div class="line"><a name="l03312"></a><span class="lineno"> 3312</span>&#160;                                        <span class="stringliteral">&quot;gate_0 (&quot;</span></div>
+<div class="line"><a name="l03313"></a><span class="lineno"> 3313</span>&#160;                                        <span class="stringliteral">&quot;  .I (global_in ),&quot;</span></div>
+<div class="line"><a name="l03314"></a><span class="lineno"> 3314</span>&#160;                                        <span class="stringliteral">&quot;  .O (global_out )&quot;</span></div>
+<div class="line"><a name="l03315"></a><span class="lineno"> 3315</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
+<div class="line"><a name="l03316"></a><span class="lineno"> 3316</span>&#160;                                        <span class="stringliteral">&quot;endmodule&quot;</span>);</div>
+<div class="line"><a name="l03317"></a><span class="lineno"> 3317</span>&#160;                <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_lib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a99efc94447f62ce59b3aea6409c46d14">test_utils::get_gate_library</a>();</div>
+<div class="line"><a name="l03318"></a><span class="lineno"> 3318</span>&#160;                <span class="keyword">auto</span> verilog_file = test_utils::create_sandbox_file(<span class="stringliteral">&quot;netlist.v&quot;</span>, netlist_input);</div>
+<div class="line"><a name="l03319"></a><span class="lineno"> 3319</span>&#160;                <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a> verilog_parser;</div>
+<div class="line"><a name="l03320"></a><span class="lineno"> 3320</span>&#160;                <span class="keyword">auto</span> nl_res = verilog_parser.<a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(verilog_file, gate_lib);</div>
+<div class="line"><a name="l03321"></a><span class="lineno"> 3321</span>&#160;                EXPECT_TRUE(nl_res.is_ok());</div>
+<div class="line"><a name="l03322"></a><span class="lineno"> 3322</span>&#160;            }</div>
+<div class="line"><a name="l03323"></a><span class="lineno"> 3323</span>&#160;            {</div>
+<div class="line"><a name="l03324"></a><span class="lineno"> 3324</span>&#160;                <span class="comment">// Use an undeclared signal</span></div>
+<div class="line"><a name="l03325"></a><span class="lineno"> 3325</span>&#160;                NO_COUT_TEST_BLOCK;</div>
+<div class="line"><a name="l03326"></a><span class="lineno"> 3326</span>&#160;                std::string netlist_input(<span class="stringliteral">&quot;module top (&quot;</span></div>
+<div class="line"><a name="l03327"></a><span class="lineno"> 3327</span>&#160;                                        <span class="stringliteral">&quot;  global_in,&quot;</span></div>
+<div class="line"><a name="l03328"></a><span class="lineno"> 3328</span>&#160;                                        <span class="stringliteral">&quot;  global_out&quot;</span></div>
+<div class="line"><a name="l03329"></a><span class="lineno"> 3329</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
+<div class="line"><a name="l03330"></a><span class="lineno"> 3330</span>&#160;                                        <span class="stringliteral">&quot;  input global_in ;&quot;</span></div>
+<div class="line"><a name="l03331"></a><span class="lineno"> 3331</span>&#160;                                        <span class="stringliteral">&quot;  output global_out ;&quot;</span></div>
+<div class="line"><a name="l03332"></a><span class="lineno"> 3332</span>&#160;                                        <span class="stringliteral">&quot;BUF gate_0 (&quot;</span></div>
+<div class="line"><a name="l03333"></a><span class="lineno"> 3333</span>&#160;                                        <span class="stringliteral">&quot;  .I (global_in ),&quot;</span></div>
+<div class="line"><a name="l03334"></a><span class="lineno"> 3334</span>&#160;                                        <span class="stringliteral">&quot;  .O (net_0 )&quot;</span>    <span class="comment">// &lt;- undeclared</span></div>
+<div class="line"><a name="l03335"></a><span class="lineno"> 3335</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
+<div class="line"><a name="l03336"></a><span class="lineno"> 3336</span>&#160;                                        <span class="stringliteral">&quot;BUF gate_1 (&quot;</span></div>
+<div class="line"><a name="l03337"></a><span class="lineno"> 3337</span>&#160;                                        <span class="stringliteral">&quot;  .I (net_0 ),&quot;</span></div>
+<div class="line"><a name="l03338"></a><span class="lineno"> 3338</span>&#160;                                        <span class="stringliteral">&quot;  .O (global_out )&quot;</span></div>
+<div class="line"><a name="l03339"></a><span class="lineno"> 3339</span>&#160;                                        <span class="stringliteral">&quot; ) ;&quot;</span></div>
+<div class="line"><a name="l03340"></a><span class="lineno"> 3340</span>&#160;                                        <span class="stringliteral">&quot;endmodule&quot;</span>);</div>
+<div class="line"><a name="l03341"></a><span class="lineno"> 3341</span>&#160;                <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_lib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a99efc94447f62ce59b3aea6409c46d14">test_utils::get_gate_library</a>();</div>
+<div class="line"><a name="l03342"></a><span class="lineno"> 3342</span>&#160;                <span class="keyword">auto</span> verilog_file = test_utils::create_sandbox_file(<span class="stringliteral">&quot;netlist.v&quot;</span>, netlist_input);</div>
+<div class="line"><a name="l03343"></a><span class="lineno"> 3343</span>&#160;                <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a> verilog_parser;</div>
+<div class="line"><a name="l03344"></a><span class="lineno"> 3344</span>&#160;                <span class="keyword">auto</span> nl_res = verilog_parser.<a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(verilog_file, gate_lib);</div>
+<div class="line"><a name="l03345"></a><span class="lineno"> 3345</span>&#160;                EXPECT_TRUE(nl_res.is_error());</div>
+<div class="line"><a name="l03346"></a><span class="lineno"> 3346</span>&#160;            }</div>
+<div class="line"><a name="l03347"></a><span class="lineno"> 3347</span>&#160;            {</div>
+<div class="line"><a name="l03348"></a><span class="lineno"> 3348</span>&#160;                <span class="comment">// Assign unknown signals</span></div>
+<div class="line"><a name="l03349"></a><span class="lineno"> 3349</span>&#160;                NO_COUT_TEST_BLOCK;</div>
+<div class="line"><a name="l03350"></a><span class="lineno"> 3350</span>&#160;                std::string netlist_input(<span class="stringliteral">&quot;module top (&quot;</span></div>
+<div class="line"><a name="l03351"></a><span class="lineno"> 3351</span>&#160;                         <span class="stringliteral">&quot;  global_in,&quot;</span></div>
+<div class="line"><a name="l03352"></a><span class="lineno"> 3352</span>&#160;                         <span class="stringliteral">&quot;  global_out&quot;</span></div>
+<div class="line"><a name="l03353"></a><span class="lineno"> 3353</span>&#160;                         <span class="stringliteral">&quot; ) ;&quot;</span></div>
+<div class="line"><a name="l03354"></a><span class="lineno"> 3354</span>&#160;                         <span class="stringliteral">&quot;  input global_in ;&quot;</span></div>
+<div class="line"><a name="l03355"></a><span class="lineno"> 3355</span>&#160;                         <span class="stringliteral">&quot;  output global_out ;&quot;</span></div>
+<div class="line"><a name="l03356"></a><span class="lineno"> 3356</span>&#160;                         <span class="stringliteral">&quot;  wire [0:4] signal_vec ;&quot;</span></div>
+<div class="line"><a name="l03357"></a><span class="lineno"> 3357</span>&#160;                         <span class="stringliteral">&quot;  assign signal_unknown[0:4] = signal_vec[0:4];&quot;</span></div>
+<div class="line"><a name="l03358"></a><span class="lineno"> 3358</span>&#160;                         <span class="stringliteral">&quot;BUF gate_0 (&quot;</span></div>
+<div class="line"><a name="l03359"></a><span class="lineno"> 3359</span>&#160;                         <span class="stringliteral">&quot;  .I (global_in ),&quot;</span></div>
+<div class="line"><a name="l03360"></a><span class="lineno"> 3360</span>&#160;                         <span class="stringliteral">&quot;  .O (global_out )&quot;</span></div>
+<div class="line"><a name="l03361"></a><span class="lineno"> 3361</span>&#160;                         <span class="stringliteral">&quot; ) ;&quot;</span></div>
+<div class="line"><a name="l03362"></a><span class="lineno"> 3362</span>&#160;                         <span class="stringliteral">&quot;endmodule&quot;</span>);</div>
+<div class="line"><a name="l03363"></a><span class="lineno"> 3363</span>&#160;                <span class="keyword">const</span> <a class="code" href="classhal_1_1_gate_library.html">GateLibrary</a>* gate_lib = <a class="code" href="namespacehal_1_1gate__library__manager.html#a99efc94447f62ce59b3aea6409c46d14">test_utils::get_gate_library</a>();</div>
+<div class="line"><a name="l03364"></a><span class="lineno"> 3364</span>&#160;                <span class="keyword">auto</span> verilog_file = test_utils::create_sandbox_file(<span class="stringliteral">&quot;netlist.v&quot;</span>, netlist_input);</div>
+<div class="line"><a name="l03365"></a><span class="lineno"> 3365</span>&#160;                <a class="code" href="classhal_1_1_verilog_parser.html">VerilogParser</a> verilog_parser;</div>
+<div class="line"><a name="l03366"></a><span class="lineno"> 3366</span>&#160;                <span class="keyword">auto</span> nl_res = verilog_parser.<a class="code" href="classhal_1_1_netlist_parser.html#a1ee24a678cd03d814358160c6c7ca453">parse_and_instantiate</a>(verilog_file, gate_lib);</div>
+<div class="line"><a name="l03367"></a><span class="lineno"> 3367</span>&#160;                EXPECT_TRUE(nl_res.is_ok());</div>
+<div class="line"><a name="l03368"></a><span class="lineno"> 3368</span>&#160;            }</div>
+<div class="line"><a name="l03369"></a><span class="lineno"> 3369</span>&#160;        TEST_END</div>
+<div class="line"><a name="l03370"></a><span class="lineno"> 3370</span>&#160;    }</div>
+<div class="line"><a name="l03371"></a><span class="lineno"> 3371</span>&#160;} <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_module_html_af2e1a399775172613cc78fcb2d493e3e"><div class="ttname"><a href="classhal_1_1_module.html#af2e1a399775172613cc78fcb2d493e3e">hal::Module::get_type</a></div><div class="ttdeci">std::string get_type() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2module_8cpp_source.html#l00106">module.cpp:106</a></div></div>
@@ -3418,7 +3420,7 @@ $(document).ready(function(){initNavTree('test_2verilog__parser_8cpp_source.html
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_d7fcdf7474b2628967f84c9d1dc1db2a.html">verilog_parser</a></li><li class="navelem"><a class="el" href="dir_da341e1d90abfb35857ca25139700c01.html">test</a></li><li class="navelem"><a class="el" href="test_2verilog__parser_8cpp.html">verilog_parser.cpp</a></li>
-    <li class="footer">Generated on Sun May 12 2024 17:11:46 for HAL by
+    <li class="footer">Generated on Fri May 17 2024 18:41:43 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
