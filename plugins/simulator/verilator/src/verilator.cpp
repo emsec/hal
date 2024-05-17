@@ -222,10 +222,12 @@ namespace hal
                                                        "saleae_file.cpp",
                                                        m_design_name + ".v"};
 
+#if defined(__APPLE__)
                     if (strlen(path_to_verilator_executable))
                     {
                         retval[0] = path_to_verilator_executable + std::string("verilator");
                     }
+#endif
 
                     if (strlen(path_to_rapidjson_includedir))
                     {
