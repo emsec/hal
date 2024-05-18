@@ -80,8 +80,8 @@ namespace hal
                 igraph_integer_t i, j, k;
                 igraph_bool_t* added;
                 igraph_vector_int_t current_hood, previous_hood;
-                igraph_vector_int_t* chp = &current_hood;
-                igraph_vector_int_t* php = &previous_hood;
+                igraph_vector_int_t* current_hood_p  = &current_hood;
+                igraph_vector_int_t* previous_hood_p = &previous_hood;
                 igraph_vector_int_t tmp;
 
                 if (timeout < 0)
@@ -93,8 +93,8 @@ namespace hal
                 IGRAPH_CHECK_OOM(added, "Cannot calculate neighborhood size.");
                 IGRAPH_FINALLY(igraph_free, added);
 
-                IGRAPH_VECTOR_INT_INIT_FINALLY(chp, 0);
-                IGRAPH_VECTOR_INT_INIT_FINALLY(php, 0);
+                IGRAPH_VECTOR_INT_INIT_FINALLY(current_hood_p, 0);
+                IGRAPH_VECTOR_INT_INIT_FINALLY(previous_hood_p, 0);
                 IGRAPH_VECTOR_INT_INIT_FINALLY(&tmp, 0);
 
                 IGRAPH_CHECK(igraph_vector_int_init(in_set, 0));
@@ -102,25 +102,25 @@ namespace hal
                 igraph_vector_int_clear(in_set);
                 igraph_vector_int_clear(out_set);
 
-                IGRAPH_CHECK(igraph_vector_int_push_back(chp, node));
+                IGRAPH_CHECK(igraph_vector_int_push_back(current_hood_p, node));
 
                 igraph_integer_t previous_size, current_size;
 
                 for (i = 0; i < timeout; i++)
                 {
-                    previous_size = igraph_vector_int_size(php);
-                    current_size  = igraph_vector_int_size(chp);
+                    previous_size = igraph_vector_int_size(previous_hood_p);
+                    current_size  = igraph_vector_int_size(current_hood_p);
 
                     if (previous_size < current_size)
                     {
-                        IGRAPH_CHECK(igraph_vector_int_swap(php, chp));
-                        igraph_vector_int_clear(chp);
+                        IGRAPH_CHECK(igraph_vector_int_swap(previous_hood_p, current_hood_p));
+                        igraph_vector_int_clear(current_hood_p);
 
                         memset(added, false, no_of_nodes * sizeof(igraph_bool_t));
 
                         for (j = 0; j < current_size; j++)
                         {
-                            igraph_integer_t actnode = VECTOR(*php)[j];
+                            igraph_integer_t actnode = VECTOR(*previous_hood_p)[j];
                             igraph_vector_int_clear(&tmp);
                             IGRAPH_CHECK(igraph_neighbors(graph, &tmp, actnode, IGRAPH_OUT));
 
@@ -130,7 +130,7 @@ namespace hal
                                 if (!added[nei])
                                 {
                                     added[nei] = true;
-                                    IGRAPH_CHECK(igraph_vector_int_push_back(chp, nei));
+                                    IGRAPH_CHECK(igraph_vector_int_push_back(current_hood_p, nei));
                                 }
                             }
                         }
@@ -139,19 +139,169 @@ namespace hal
                     {
                         if (previous_size == current_size)
                         {
-                            IGRAPH_CHECK(igraph_vector_int_update(in_set, php));
-                            IGRAPH_CHECK(igraph_vector_int_update(out_set, chp));
+                            IGRAPH_CHECK(igraph_vector_int_update(in_set, previous_hood_p));
+                            IGRAPH_CHECK(igraph_vector_int_update(out_set, current_hood_p));
                         }
 
                         break;
                     }
                 }
 
-                igraph_vector_int_destroy(chp);
-                igraph_vector_int_destroy(php);
+                igraph_vector_int_destroy(current_hood_p);
+                igraph_vector_int_destroy(previous_hood_p);
                 igraph_vector_int_destroy(&tmp);
                 IGRAPH_FREE(added);
                 IGRAPH_FINALLY_CLEAN(4);
+
+                return IGRAPH_SUCCESS;
+            }
+
+            igraph_error_t get_saturating_neighborhoods_scc(const igraph_t* graph,
+                                                            igraph_vector_int_t* in_set,
+                                                            igraph_vector_int_t* out_set,
+                                                            igraph_integer_t node,
+                                                            igraph_integer_t timeout,
+                                                            std::map<std::set<u32>, igraph_vector_int_t*>& cache)
+            {
+                igraph_integer_t no_of_nodes = igraph_vcount(graph);
+                igraph_integer_t i, j, k;
+                igraph_bool_t* added;
+                igraph_vector_int_t current_hood, previous_hood;
+                igraph_vector_int_t current_component, previous_component;
+                igraph_vector_int_t* current_hood_p       = &current_hood;
+                igraph_vector_int_t* previous_hood_p      = &previous_hood;
+                igraph_vector_int_t* current_component_p  = &current_component;
+                igraph_vector_int_t* previous_component_p = &previous_component;
+                igraph_vector_int_t tmp;
+
+                if (timeout < 0)
+                {
+                    IGRAPH_ERROR("Negative timeout", IGRAPH_EINVAL);
+                }
+
+                added = IGRAPH_CALLOC(no_of_nodes, igraph_bool_t);
+                IGRAPH_CHECK_OOM(added, "Cannot calculate neighborhood size.");
+                IGRAPH_FINALLY(igraph_free, added);
+
+                IGRAPH_VECTOR_INT_INIT_FINALLY(current_hood_p, 0);
+                IGRAPH_VECTOR_INT_INIT_FINALLY(previous_hood_p, 0);
+                IGRAPH_VECTOR_INT_INIT_FINALLY(current_component_p, 0);
+                IGRAPH_VECTOR_INT_INIT_FINALLY(previous_component_p, 0);
+                IGRAPH_VECTOR_INT_INIT_FINALLY(&tmp, 0);
+
+                IGRAPH_CHECK(igraph_vector_int_init(in_set, 0));
+                IGRAPH_CHECK(igraph_vector_int_init(out_set, 0));
+                igraph_vector_int_clear(in_set);
+                igraph_vector_int_clear(out_set);
+
+                IGRAPH_CHECK(igraph_vector_int_push_back(current_hood_p, node));
+                IGRAPH_CHECK(igraph_vector_int_push_back(current_component_p, node));
+
+                igraph_integer_t previous_size, current_size;
+
+                for (i = 0; i < timeout; i++)
+                {
+                    previous_size         = igraph_vector_int_size(previous_component_p);
+                    current_size          = igraph_vector_int_size(current_component_p);
+                    u32 current_hood_size = igraph_vector_int_size(current_hood_p);
+
+                    if (previous_size < current_size || current_size == 1)
+                    {
+                        // move current objects to previous
+                        IGRAPH_CHECK(igraph_vector_int_swap(previous_hood_p, current_hood_p));
+                        IGRAPH_CHECK(igraph_vector_int_swap(previous_component_p, current_component_p));
+                        igraph_vector_int_clear(current_hood_p);
+                        igraph_vector_int_clear(current_component_p);
+
+                        // clear flags of added vertices
+                        memset(added, false, no_of_nodes * sizeof(igraph_bool_t));
+
+                        std::set<u32> cache_key;
+                        for (j = 0; j < current_hood_size; j++)
+                        {
+                            igraph_integer_t actnode = VECTOR(*previous_hood_p)[j];
+                            igraph_vector_int_clear(&tmp);
+                            IGRAPH_CHECK(igraph_neighbors(graph, &tmp, actnode, IGRAPH_OUT));
+
+                            for (k = 0; k < igraph_vector_int_size(&tmp); k++)
+                            {
+                                igraph_integer_t nei = VECTOR(tmp)[k];
+                                if (!added[nei])
+                                {
+                                    added[nei] = true;
+                                    IGRAPH_CHECK(igraph_vector_int_push_back(current_hood_p, nei));
+                                    cache_key.insert(nei);
+                                }
+                            }
+                        }
+
+                        if (k == 0)
+                        {
+                            continue;
+                        }
+
+                        if (const auto cache_it = cache.find(cache_key); cache_it != cache.end())
+                        {
+                            IGRAPH_CHECK(igraph_vector_int_update(current_component_p, cache_it->second));
+                        }
+                        else
+                        {
+                            igraph_t subgraph;
+                            igraph_vs_t subgraph_vertices = igraph_vss_vector(current_hood_p);
+                            IGRAPH_FINALLY(igraph_vs_destroy, &subgraph_vertices);
+                            igraph_vector_int_t vertex_map;
+                            IGRAPH_VECTOR_INT_INIT_FINALLY(&vertex_map, igraph_vector_int_size(current_hood_p));
+                            IGRAPH_CHECK(igraph_induced_subgraph_map(graph, &subgraph, subgraph_vertices, IGRAPH_SUBGRAPH_CREATE_FROM_SCRATCH, nullptr, &vertex_map));
+                            IGRAPH_FINALLY(igraph_destroy, &subgraph);
+
+                            igraph_vector_int_t membership, csize;
+                            IGRAPH_VECTOR_INT_INIT_FINALLY(&membership, 0);
+                            IGRAPH_VECTOR_INT_INIT_FINALLY(&csize, 0);
+                            IGRAPH_CHECK(igraph_connected_components(&subgraph, &membership, &csize, nullptr, IGRAPH_STRONG));
+
+                            u32 max_id                = igraph_vector_int_which_max(&csize);
+                            u32 num_subgraph_vertices = igraph_vcount(&subgraph);
+                            for (i32 i = 0; i < num_subgraph_vertices; i++)
+                            {
+                                u32 cid = VECTOR(membership)[i];
+                                if (cid == max_id)
+                                {
+                                    IGRAPH_CHECK(igraph_vector_int_push_back(current_component_p, VECTOR(vertex_map)[i]));
+                                }
+                            }
+
+                            igraph_vs_destroy(&subgraph_vertices);
+                            igraph_vector_int_destroy(&vertex_map);
+                            igraph_vector_int_destroy(&membership);
+                            igraph_vector_int_destroy(&csize);
+                            igraph_destroy(&subgraph);
+                            IGRAPH_FINALLY_CLEAN(5);
+
+                            igraph_vector_int_t* cache_tmp = new igraph_vector_int_t;
+                            IGRAPH_CHECK(igraph_vector_int_init(cache_tmp, 0));    // cleanup handled by caller
+                            IGRAPH_CHECK(igraph_vector_int_update(cache_tmp, current_component_p));
+                            cache[cache_key] = cache_tmp;
+                        }
+                    }
+                    else
+                    {
+                        if (previous_size == current_size)
+                        {
+                            IGRAPH_CHECK(igraph_vector_int_update(in_set, previous_component_p));
+                            IGRAPH_CHECK(igraph_vector_int_update(out_set, current_component_p));
+                        }
+
+                        break;
+                    }
+                }
+
+                igraph_vector_int_destroy(current_hood_p);
+                igraph_vector_int_destroy(previous_hood_p);
+                igraph_vector_int_destroy(current_component_p);
+                igraph_vector_int_destroy(previous_component_p);
+                igraph_vector_int_destroy(&tmp);
+                IGRAPH_FREE(added);
+                IGRAPH_FINALLY_CLEAN(6);
 
                 return IGRAPH_SUCCESS;
             }
@@ -199,7 +349,7 @@ namespace hal
             }
             auto base_graph = res.get();
 
-            const auto start_vertices_res = base_graph->get_vertices_from_gates(start_gates);
+            const auto start_vertices_res = base_graph->get_vertices_from_gates(start_ffs.empty() ? start_gates : start_ffs);
             if (start_vertices_res.is_error())
             {
                 return ERR(start_vertices_res.get_error());
@@ -358,35 +508,85 @@ namespace hal
                 }
 
                 std::set<GraphCandidate> graph_candidates;
-                for (const auto v : start_vertices)
+
+                if (config.components == DetectionConfiguration::Components::NONE)
                 {
-                    igraph_vector_int_clear(&in_set);
-                    igraph_vector_int_clear(&out_set);
+                    for (const auto v : start_vertices)
+                    {
+                        igraph_vector_int_clear(&in_set);
+                        igraph_vector_int_clear(&out_set);
 
-                    if (const auto res = get_saturating_neighborhoods(tmp_graph->get_graph(), &in_set, &out_set, v, config.timeout); res != IGRAPH_SUCCESS)
+                        if (const auto res = get_saturating_neighborhoods(tmp_graph->get_graph(), &in_set, &out_set, v, config.timeout); res != IGRAPH_SUCCESS)
+                        {
+                            igraph_vector_int_destroy(&in_set);
+                            igraph_vector_int_destroy(&out_set);
+                            return ERR(igraph_strerror(res));
+                        }
+
+                        u32 size = igraph_vector_int_size(&out_set);
+                        if (size < config.min_register_size)
+                        {
+                            continue;
+                        }
+
+                        GraphCandidate c;
+                        c.size = size;
+                        for (u32 i = 0; i < igraph_vector_int_size(&in_set); i++)
+                        {
+                            c.in_reg.insert(VECTOR(in_set)[i]);
+                        }
+                        for (u32 i = 0; i < igraph_vector_int_size(&out_set); i++)
+                        {
+                            c.out_reg.insert(VECTOR(out_set)[i]);
+                        }
+                        graph_candidates.insert(c);
+                    }
+                }
+                else if (config.components == DetectionConfiguration::Components::CHECK_SCC)
+                {
+                    std::map<std::set<u32>, igraph_vector_int_t*> scc_cache;
+
+                    for (const auto v : start_vertices)
                     {
-                        igraph_vector_int_destroy(&in_set);
-                        igraph_vector_int_destroy(&out_set);
-                        return ERR(igraph_strerror(res));
+                        igraph_vector_int_clear(&in_set);
+                        igraph_vector_int_clear(&out_set);
+
+                        if (const auto res = get_saturating_neighborhoods_scc(tmp_graph->get_graph(), &in_set, &out_set, v, config.timeout, scc_cache); res != IGRAPH_SUCCESS)
+                        {
+                            igraph_vector_int_destroy(&in_set);
+                            igraph_vector_int_destroy(&out_set);
+                            for (auto& [_, comp] : scc_cache)
+                            {
+                                igraph_vector_int_destroy(comp);
+                                delete comp;
+                            }
+                            return ERR(igraph_strerror(res));
+                        }
+
+                        u32 size = igraph_vector_int_size(&out_set);
+                        if (size < config.min_register_size)
+                        {
+                            continue;
+                        }
+
+                        GraphCandidate c;
+                        c.size = size;
+                        for (u32 i = 0; i < igraph_vector_int_size(&in_set); i++)
+                        {
+                            c.in_reg.insert(VECTOR(in_set)[i]);
+                        }
+                        for (u32 i = 0; i < igraph_vector_int_size(&out_set); i++)
+                        {
+                            c.out_reg.insert(VECTOR(out_set)[i]);
+                        }
+                        graph_candidates.insert(c);
                     }
 
-                    u32 size = igraph_vector_int_size(&out_set);
-                    if (size < config.min_register_size)
+                    for (auto& [_, comp] : scc_cache)
                     {
-                        continue;
+                        igraph_vector_int_destroy(comp);
+                        delete comp;
                     }
-
-                    GraphCandidate c;
-                    c.size = size;
-                    for (u32 i = 0; i < igraph_vector_int_size(&in_set); i++)
-                    {
-                        c.in_reg.insert(VECTOR(in_set)[i]);
-                    }
-                    for (u32 i = 0; i < igraph_vector_int_size(&out_set); i++)
-                    {
-                        c.out_reg.insert(VECTOR(out_set)[i]);
-                    }
-                    graph_candidates.insert(c);
                 }
 
                 igraph_vector_int_destroy(&in_set);
@@ -426,8 +626,6 @@ namespace hal
 
                 duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start_inner).count();
                 log_info("hawkeye", "successfully completed neighborhood discovery in {} seconds", duration_in_seconds);
-
-                // TODO implement SCC method
             }
 
             duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
