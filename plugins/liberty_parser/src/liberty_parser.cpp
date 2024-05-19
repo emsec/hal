@@ -424,6 +424,7 @@ namespace hal
                 {
                     return ERR("could not parse pin: invalid pin direction '" + direction_str + "' (line " + std::to_string(pin.line_number) + ")");
                 }
+
                 pin_str.consume(";", true);
             }
             else if (next_token == "function")

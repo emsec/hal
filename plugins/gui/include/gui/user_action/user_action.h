@@ -208,6 +208,9 @@ namespace hal
         static QString setToText(const QSet<u32>& set);
         static QSet<u32> setFromText(const QString& s);
 
+        static QString gridToText(const QHash<hal::Node,QPoint>& grid);
+        static QHash<hal::Node,QPoint> gridFromText(const QString& txt);
+
         /**
          * Utility function to write the parent object.
          * (Also checks if it is even necessary)
