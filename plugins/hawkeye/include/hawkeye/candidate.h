@@ -33,6 +33,7 @@ namespace hal
 {
     class Netlist;
     class Gate;
+    class Net;
 
     namespace hawkeye
     {
@@ -110,6 +111,46 @@ namespace hal
              */
             const std::set<Gate*>& get_output_reg() const;
 
+            /**
+             * Get the candidate's combinational logic computing the next state.
+             * 
+             * @returns The state logic of the candidate.
+             */
+            const std::set<Gate*>& get_state_logic() const;
+
+            /**
+             * Get the candidate's state inputs to the logic computing the next state.
+             * 
+             * @returns The state inputs of the candidate.
+             */
+            const std::set<Net*>& get_state_inputs() const;
+
+            /**
+             * Get the candidate's control inputs to the logic computing the next state.
+             * 
+             * @returns The control inputs of the candidate.
+             */
+            const std::set<Net*>& get_control_inputs() const;
+
+            /**
+             * Get the candidate's other inputs to the logic computing the next state.
+             * 
+             * @returns The other inputs of the candidate.
+             */
+            const std::set<Net*>& get_other_inputs() const;
+
+            /**
+             * Get the candidate's state outputs from the logic computing the next state.
+             * 
+             * @returns The state outputs of the candidate.
+             */
+            const std::set<Net*>& get_state_outputs() const;
+
+            /**
+             * Isolate the round function including the input and output registers as well as the combinational logic in between.
+             */
+            void isolate_round_function();
+
         private:
             /**
              * The netlist to which the candidate belongs.
@@ -135,6 +176,31 @@ namespace hal
              * The candidate output register. May be equal to `m_in_reg` for round-based implementations.
              */
             std::set<Gate*> m_out_reg;
+
+            /**
+             * The combinational logic computing the next state.
+             */
+            std::set<Gate*> m_state_logic;
+
+            /**
+             * The state inputs to the combinational logic computing the next state.
+             */
+            std::set<Net*> m_state_inputs;
+
+            /**
+             * The control inputs to the combinational logic computing the next state.
+             */
+            std::set<Net*> m_control_inputs;
+
+            /**
+             * All other inputs to the combinational logic computing the next state.
+             */
+            std::set<Net*> m_other_inputs;
+
+            /**
+             * The state outputs from the combinational logic computing the next state.
+             */
+            std::set<Net*> m_state_outputs;
         };
     }    // namespace hawkeye
 }    // namespace hal

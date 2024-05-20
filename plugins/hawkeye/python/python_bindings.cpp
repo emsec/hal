@@ -316,6 +316,45 @@ namespace hal
             :rtype: set[hal_py.Gate]
         )");
 
+        py_hawkeye_candidate.def("get_state_logic", &hawkeye::Candidate::get_state_logic, R"(
+            Get the candidate's combinational logic computing the next state.
+
+            :returns: The state logic of the candidate.
+            :rtype: set[hal_py.Gate]
+        )");
+
+        py_hawkeye_candidate.def("get_state_inputs", &hawkeye::Candidate::get_state_inputs, R"(
+            Get the candidate's state inputs to the logic computing the next state.
+
+            :returns: The state inputs of the candidate.
+            :rtype: set[hal_py.Net]
+        )");
+
+        py_hawkeye_candidate.def("get_control_inputs", &hawkeye::Candidate::get_control_inputs, R"(
+            Get the candidate's control inputs to the logic computing the next state.
+
+            :returns: The control inputs of the candidate.
+            :rtype: set[hal_py.Net]
+        )");
+
+        py_hawkeye_candidate.def("get_other_inputs", &hawkeye::Candidate::get_other_inputs, R"(
+            Get the candidate's other inputs to the logic computing the next state.
+
+            :returns: The other inputs of the candidate.
+            :rtype: set[hal_py.Net]
+        )");
+
+        py_hawkeye_candidate.def("get_state_outputs", &hawkeye::Candidate::get_state_outputs, R"(
+            Get the candidate's state outputs from the logic computing the next state.
+
+            :returns: The state outputs of the candidate.
+            :rtype: set[hal_py.Net]
+        )");
+
+        py_hawkeye_candidate.def("isolate_round_function", &hawkeye::Candidate::isolate_round_function, R"(
+            Isolate the round function including the input and output registers as well as the combinational logic in between.
+        )");
+
         m.def(
             "detect_candidates",
             [](Netlist* nl, const std::vector<hawkeye::DetectionConfiguration>& configs, u32 min_state_size = 40, const std::vector<Gate*>& start_ffs = {})

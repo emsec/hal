@@ -422,11 +422,6 @@ namespace hal
                     {
                         for (auto* dst : dsts)
                         {
-                            // if (src->get_type() != dst->get_type())
-                            // {
-                            //     continue;
-                            // }
-
                             if (control_map.at(src) != control_map.at(dst))
                             {
                                 continue;
