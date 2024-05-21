@@ -27,7 +27,7 @@
 
 #include "hal_core/utilities/enums.h"
 #include "hal_core/utilities/result.h"
-#include "hawkeye/candidate.h"
+#include "hawkeye/register_candidate.h"
 
 namespace hal
 {
@@ -64,7 +64,7 @@ namespace hal
          * @param[in] start_ffs - The flip-flops to analyze. Defaults to an empty vector, i.e., all flip-flops in the netlist will be analyzed.
          * @returns Ok() and a vector of candidates on success, an error otherwise.
          */
-        Result<std::vector<Candidate>> detect_candidates(Netlist* nl, const std::vector<DetectionConfiguration>& configs, u32 min_state_size = 40, const std::vector<Gate*>& start_ffs = {});
+        Result<std::vector<RegisterCandidate>> detect_candidates(Netlist* nl, const std::vector<DetectionConfiguration>& configs, u32 min_state_size = 40, const std::vector<Gate*>& start_ffs = {});
     }    // namespace hawkeye
 
     template<>

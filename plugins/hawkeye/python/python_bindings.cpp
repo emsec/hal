@@ -3,6 +3,7 @@
 #include "hawkeye/candidate_search.h"
 #include "hawkeye/plugin_hawkeye.h"
 #include "hawkeye/sbox_database.h"
+#include "hawkeye/state_candidate.h"
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
@@ -277,88 +278,140 @@ namespace hal
             :type: int
         )");
 
-        py::class_<hawkeye::Candidate, RawPtrWrapper<hawkeye::Candidate>> py_hawkeye_candidate(m, "Candidate", R"(
+        py::class_<hawkeye::RegisterCandidate, RawPtrWrapper<hawkeye::RegisterCandidate>> py_hawkeye_register_candidate(m, "RegisterCandidate", R"(
             Holds all information on a crypto candidate.
         )");
 
-        py_hawkeye_candidate.def("get_netlist", &hawkeye::Candidate::get_netlist, R"(
+        py_hawkeye_register_candidate.def("get_netlist", &hawkeye::RegisterCandidate::get_netlist, R"(
             Get the netlist associated with the candidate.
 
             :returns: The netlist of the candidate.
             :rtype: hal_py.Netlist
         )");
 
-        py_hawkeye_candidate.def("get_size", &hawkeye::Candidate::get_size, R"(
+        py_hawkeye_register_candidate.def("get_size", &hawkeye::RegisterCandidate::get_size, R"(
             Get the size of the candidate, i.e., the width of its registers.
 
             :returns: The size of the candidate.
             :rtype: int
         )");
 
-        py_hawkeye_candidate.def("is_round_based", &hawkeye::Candidate::is_round_based, R"(
+        py_hawkeye_register_candidate.def("is_round_based", &hawkeye::RegisterCandidate::is_round_based, R"(
             Check if the candidate is round-based, i.e., input and output register are the same.
 
             :returns: ``True`` if the candidate is round-based, ``False`` otherwise. 
             :rtype: bool
         )");
 
-        py_hawkeye_candidate.def("get_input_reg", &hawkeye::Candidate::get_input_reg, R"(
+        py_hawkeye_register_candidate.def("get_input_reg", &hawkeye::RegisterCandidate::get_input_reg, R"(
             Get the candidate's input register.
 
             :returns: The input register of the candidate.
             :rtype: set[hal_py.Gate]
         )");
 
-        py_hawkeye_candidate.def("get_output_reg", &hawkeye::Candidate::get_output_reg, R"(
+        py_hawkeye_register_candidate.def("get_output_reg", &hawkeye::RegisterCandidate::get_output_reg, R"(
             Get the candidate's output register.
 
             :returns: The output register of the candidate.
             :rtype: set[hal_py.Gate]
         )");
 
-        py_hawkeye_candidate.def("get_state_logic", &hawkeye::Candidate::get_state_logic, R"(
+        py::class_<hawkeye::StateCandidate, RawPtrWrapper<hawkeye::StateCandidate>> py_hawkeye_state_candidate(m, "StateCandidate", R"(
+            Holds all information on a crypto candidate.
+        )");
+
+        py_hawkeye_state_candidate.def_static(
+            "from_register_candidate",
+            [](hawkeye::RegisterCandidate* candidate) -> std::unique_ptr<hawkeye::StateCandidate> {
+                auto res = hawkeye::StateCandidate::from_register_candidate(candidate);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            py::arg("candidate"),
+            R"(
+            Computes a state candidate from the previously identified register candidate.
+            The netlist of this candidate will be a partial copy of the original netlist, comprising only the gates belonging to the registers and the logic computing the next state.
+
+            :param hawkeye.RegisterCandidate candidate: The register candidate.
+            :returns: The state candidate on success, ``None`` otherwise.
+            :rtype: hawkeye.StateCandidate or None
+        )");
+
+        py_hawkeye_state_candidate.def("get_netlist", &hawkeye::StateCandidate::get_netlist, R"(
+            Get the netlist associated with the candidate.
+
+            :returns: The netlist of the candidate.
+            :rtype: hal_py.Netlist
+        )");
+
+        py_hawkeye_state_candidate.def("get_size", &hawkeye::StateCandidate::get_size, R"(
+            Get the size of the candidate, i.e., the width of its registers.
+
+            :returns: The size of the candidate.
+            :rtype: int
+        )");
+
+        py_hawkeye_state_candidate.def("get_input_reg", &hawkeye::StateCandidate::get_input_reg, R"(
+            Get the candidate's input register.
+
+            :returns: The input register of the candidate.
+            :rtype: set[hal_py.Gate]
+        )");
+
+        py_hawkeye_state_candidate.def("get_output_reg", &hawkeye::StateCandidate::get_output_reg, R"(
+            Get the candidate's output register.
+
+            :returns: The output register of the candidate.
+            :rtype: set[hal_py.Gate]
+        )");
+
+        py_hawkeye_state_candidate.def("get_state_logic", &hawkeye::StateCandidate::get_state_logic, R"(
             Get the candidate's combinational logic computing the next state.
 
             :returns: The state logic of the candidate.
             :rtype: set[hal_py.Gate]
         )");
 
-        py_hawkeye_candidate.def("get_state_inputs", &hawkeye::Candidate::get_state_inputs, R"(
+        py_hawkeye_state_candidate.def("get_state_inputs", &hawkeye::StateCandidate::get_state_inputs, R"(
             Get the candidate's state inputs to the logic computing the next state.
 
             :returns: The state inputs of the candidate.
             :rtype: set[hal_py.Net]
         )");
 
-        py_hawkeye_candidate.def("get_control_inputs", &hawkeye::Candidate::get_control_inputs, R"(
+        py_hawkeye_state_candidate.def("get_control_inputs", &hawkeye::StateCandidate::get_control_inputs, R"(
             Get the candidate's control inputs to the logic computing the next state.
 
             :returns: The control inputs of the candidate.
             :rtype: set[hal_py.Net]
         )");
 
-        py_hawkeye_candidate.def("get_other_inputs", &hawkeye::Candidate::get_other_inputs, R"(
+        py_hawkeye_state_candidate.def("get_other_inputs", &hawkeye::StateCandidate::get_other_inputs, R"(
             Get the candidate's other inputs to the logic computing the next state.
 
             :returns: The other inputs of the candidate.
             :rtype: set[hal_py.Net]
         )");
 
-        py_hawkeye_candidate.def("get_state_outputs", &hawkeye::Candidate::get_state_outputs, R"(
+        py_hawkeye_state_candidate.def("get_state_outputs", &hawkeye::StateCandidate::get_state_outputs, R"(
             Get the candidate's state outputs from the logic computing the next state.
 
             :returns: The state outputs of the candidate.
             :rtype: set[hal_py.Net]
         )");
 
-        py_hawkeye_candidate.def("isolate_round_function", &hawkeye::Candidate::isolate_round_function, R"(
-            Isolate the round function including the input and output registers as well as the combinational logic in between.
-        )");
-
         m.def(
             "detect_candidates",
             [](Netlist* nl, const std::vector<hawkeye::DetectionConfiguration>& configs, u32 min_state_size = 40, const std::vector<Gate*>& start_ffs = {})
-                -> std::optional<std::vector<hawkeye::Candidate>> {
+                -> std::optional<std::vector<hawkeye::RegisterCandidate>> {
                 auto res = hawkeye::detect_candidates(nl, configs, min_state_size, start_ffs);
                 if (res.is_ok())
                 {
@@ -381,7 +434,7 @@ namespace hal
             :param int min_state_size: The minimum size of a register candidate to be considered a cryptographic state register. Defaults to ``40``.
             :param list[hal_py.Gate] start_ffs: The flip-flops to analyze. Defaults to an empty list, i.e., all flip-flops in the netlist will be analyzed.
             :returns: A list of candidates on success, ``None`` otherwise.
-            :rtype: list[hawkeye.Candidate] or None
+            :rtype: list[hawkeye.RegisterCandidate] or None
         )");
 
 #ifndef PYBIND11_MODULE

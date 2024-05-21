@@ -37,44 +37,44 @@ namespace hal
 
     namespace hawkeye
     {
-        class Candidate
+        class RegisterCandidate
         {
         public:
-            Candidate()  = default;
-            ~Candidate() = default;
+            RegisterCandidate()  = default;
+            ~RegisterCandidate() = default;
 
             /**
-             * Construct a crypto candidate from the state register of a round-based implementation.
+             * Construct a state register candidate from the state register of a round-based implementation.
              * 
              * @param[in] round_reg - The state register.
              */
-            Candidate(const std::set<Gate*>& round_reg);
+            RegisterCandidate(const std::set<Gate*>& round_reg);
 
             /**
-             * Construct a crypto candidate from the state register of a round-based implementation.
+             * Construct a state register candidate from the state register of a round-based implementation.
              * 
              * @param[in] round_reg - The state register.
              */
-            Candidate(std::set<Gate*>&& round_reg);
+            RegisterCandidate(std::set<Gate*>&& round_reg);
 
             /**
-             * Construct a crypto candidate from the input and output registers from a round of a pipelined implementation.
+             * Construct a state register candidate from the input and output registers from a round of a pipelined implementation.
              * 
              * @param[in] in_reg - The input register.
              * @param[in] out_reg - The output register.
              */
-            Candidate(const std::set<Gate*>& in_reg, const std::set<Gate*>& out_reg);
+            RegisterCandidate(const std::set<Gate*>& in_reg, const std::set<Gate*>& out_reg);
 
             /**
-             * Construct a crypto candidate from the input and output registers from a round of a pipelined implementation.
+             * Construct a state register candidate from the input and output registers from a round of a pipelined implementation.
              * 
              * @param[in] in_reg - The input register.
              * @param[in] out_reg - The output register.
              */
-            Candidate(std::set<Gate*>&& in_reg, std::set<Gate*>&& out_reg);
+            RegisterCandidate(std::set<Gate*>&& in_reg, std::set<Gate*>&& out_reg);
 
-            bool operator==(const Candidate& rhs) const;
-            bool operator<(const Candidate& rhs) const;
+            bool operator==(const RegisterCandidate& rhs) const;
+            bool operator<(const RegisterCandidate& rhs) const;
 
             /** 
              * Get the netlist associated with the candidate.
@@ -111,46 +111,6 @@ namespace hal
              */
             const std::set<Gate*>& get_output_reg() const;
 
-            /**
-             * Get the candidate's combinational logic computing the next state.
-             * 
-             * @returns The state logic of the candidate.
-             */
-            const std::set<Gate*>& get_state_logic() const;
-
-            /**
-             * Get the candidate's state inputs to the logic computing the next state.
-             * 
-             * @returns The state inputs of the candidate.
-             */
-            const std::set<Net*>& get_state_inputs() const;
-
-            /**
-             * Get the candidate's control inputs to the logic computing the next state.
-             * 
-             * @returns The control inputs of the candidate.
-             */
-            const std::set<Net*>& get_control_inputs() const;
-
-            /**
-             * Get the candidate's other inputs to the logic computing the next state.
-             * 
-             * @returns The other inputs of the candidate.
-             */
-            const std::set<Net*>& get_other_inputs() const;
-
-            /**
-             * Get the candidate's state outputs from the logic computing the next state.
-             * 
-             * @returns The state outputs of the candidate.
-             */
-            const std::set<Net*>& get_state_outputs() const;
-
-            /**
-             * Isolate the round function including the input and output registers as well as the combinational logic in between.
-             */
-            void isolate_round_function();
-
         private:
             /**
              * The netlist to which the candidate belongs.
@@ -176,31 +136,6 @@ namespace hal
              * The candidate output register. May be equal to `m_in_reg` for round-based implementations.
              */
             std::set<Gate*> m_out_reg;
-
-            /**
-             * The combinational logic computing the next state.
-             */
-            std::set<Gate*> m_state_logic;
-
-            /**
-             * The state inputs to the combinational logic computing the next state.
-             */
-            std::set<Net*> m_state_inputs;
-
-            /**
-             * The control inputs to the combinational logic computing the next state.
-             */
-            std::set<Net*> m_control_inputs;
-
-            /**
-             * All other inputs to the combinational logic computing the next state.
-             */
-            std::set<Net*> m_other_inputs;
-
-            /**
-             * The state outputs from the combinational logic computing the next state.
-             */
-            std::set<Net*> m_state_outputs;
         };
     }    // namespace hawkeye
 }    // namespace hal

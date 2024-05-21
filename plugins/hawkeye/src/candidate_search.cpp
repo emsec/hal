@@ -307,7 +307,7 @@ namespace hal
             }
         }    // namespace
 
-        Result<std::vector<Candidate>> detect_candidates(Netlist* nl, const std::vector<DetectionConfiguration>& configs, u32 min_state_size, const std::vector<Gate*>& start_ffs)
+        Result<std::vector<RegisterCandidate>> detect_candidates(Netlist* nl, const std::vector<DetectionConfiguration>& configs, u32 min_state_size, const std::vector<Gate*>& start_ffs)
         {
             if (nl == nullptr)
             {
@@ -362,7 +362,7 @@ namespace hal
             log_info("hawkeye", "start candidate identification using {} configurations...", configs.size());
             start = std::chrono::system_clock::now();
 
-            std::set<Candidate> candidates;
+            std::set<RegisterCandidate> candidates;
             for (const auto& config : configs)
             {
                 log_info("hawkeye",
@@ -602,7 +602,7 @@ namespace hal
 
                     if (gc.in_reg == gc.out_reg)
                     {
-                        candidates.insert(Candidate(out_reg));
+                        candidates.insert(RegisterCandidate(out_reg));
                     }
                     else
                     {
@@ -610,7 +610,7 @@ namespace hal
                         if (auto in_reg_res = tmp_graph->get_gates_set_from_vertices(gc.in_reg); in_reg_res.is_ok())
                         {
                             in_reg = in_reg_res.get();
-                            candidates.insert(Candidate(in_reg, out_reg));
+                            candidates.insert(RegisterCandidate(in_reg, out_reg));
                         }
                         else
                         {
@@ -629,7 +629,7 @@ namespace hal
             log_info("hawkeye", "start reducing candidates...", configs.size());
             start = std::chrono::system_clock::now();
 
-            std::set<const Candidate*> candidates_to_delete;
+            std::set<const RegisterCandidate*> candidates_to_delete;
             for (auto outer_it = candidates.begin(); outer_it != candidates.end(); outer_it++)
             {
                 for (auto inner_it = std::next(outer_it, 1); inner_it != candidates.end(); inner_it++)
@@ -658,7 +658,7 @@ namespace hal
             duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - global_start).count();
             log_info("hawkeye", "overall runtime: {} seconds", duration_in_seconds);
 
-            return OK(std::vector<Candidate>(candidates.begin(), candidates.end()));
+            return OK(std::vector<RegisterCandidate>(candidates.begin(), candidates.end()));
         }
     }    // namespace hawkeye
 
