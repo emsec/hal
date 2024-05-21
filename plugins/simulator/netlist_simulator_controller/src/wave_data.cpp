@@ -1290,20 +1290,20 @@ namespace hal {
 
         mTimeframe.setSceneMaxTime(tmax);
         if (mustUpdateClocks) updateClocks();
-        qDebug() << "setMaxTime-Tfc" << mTimeframe.sceneMaxTime();
+        // qDebug() << "setMaxTime-Tfc" << mTimeframe.sceneMaxTime();
         Q_EMIT timeframeChanged(&mTimeframe);
     }
 
     void WaveDataList::emitTimeframeChanged()
     {
-        qDebug() << "emitTimeframeChanged-Tfc" << mTimeframe.sceneMaxTime();
+        // qDebug() << "emitTimeframeChanged-Tfc" << mTimeframe.sceneMaxTime();
         Q_EMIT timeframeChanged(&mTimeframe);
     }
 
     void WaveDataList::incrementSimulTime(u64 deltaT)
     {
         mTimeframe.mSimulateMaxTime += deltaT;
-        qDebug() << "incrementSimulTime-Tfc" << mTimeframe.mSimulateMaxTime << ">" << mTimeframe.mSceneMaxTime;
+        // qDebug() << "incrementSimulTime-Tfc" << mTimeframe.mSimulateMaxTime << ">" << mTimeframe.mSceneMaxTime;
         if (mTimeframe.mSimulateMaxTime > mTimeframe.mSceneMaxTime)
             setMaxTime(mTimeframe.mSimulateMaxTime);
     }
@@ -1323,7 +1323,7 @@ namespace hal {
                 wd->clear();
             }
         }
-        qDebug() << "setUserTimeframe-Tfc" << mTimeframe.sceneMaxTime();
+        // qDebug() << "setUserTimeframe-Tfc" << mTimeframe.sceneMaxTime();
         Q_EMIT timeframeChanged(&mTimeframe);
     }
 
