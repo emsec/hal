@@ -252,7 +252,7 @@ namespace hal
          * @param[in] pin - The pin.
          * @returns The index of the pin on success, an error message otherwise.
          */
-        Result<u32> get_index(const T* pin) const
+        Result<i32> get_index(const T* pin) const
         {
             if (pin == nullptr)
             {

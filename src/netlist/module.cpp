@@ -93,7 +93,7 @@ namespace hal
     {
         if (utils::trim(name).empty())
         {
-            log_error("module", "module name cannot be empty.");
+            log_warning("module", "module name cannot be empty.");
             return;
         }
         if (name != m_name)
