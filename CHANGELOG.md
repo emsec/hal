@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+* **WARNING:** this release breaks the API of the `graph_algorithm` plugin
 * refactored module widget
   * added option to show gate content for each module
   * added option to show interior nets for each module
@@ -19,6 +20,11 @@ All notable changes to this project will be documented in this file.
   * boosted performance by using classes with faster memory access
   * removed layouter code used prior to version 3.1.0 - thus removing the setting option to use that code
   * added setting option to dump junction layout input data for experts to debug in case of layout errors
+* refactored `graph_algorithm` plugin
+  * updated the igraph dependency shipped with HAL
+  * changed the API and made everything accessible via Python
+  * graph corresponding to a netlist is now encapsulated within an `NetlistGraph` object that allows easy interaction with the graph
+  * added new functions for computing neighborhoods, shortest paths, subgraphs, and (strongly) connected components
 * module pins
   * added qualifier for `pin_changed` core events telling receiver details about the recent modification
   * added event scope and stacking classes so that `pin_changed` events can be collected and prioritized

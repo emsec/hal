@@ -1,4 +1,4 @@
-name: Ubuntu 20.04
+name: Ubuntu 24.04
 
 on:
   push:
@@ -7,13 +7,13 @@ on:
 #      - v*
 
 jobs:
-  build_ubuntu_20_04:
-    name:  Build and Test on Ubuntu 20.04
+  build_ubuntu_24_04:
+    name: Build and Test on Ubuntu 24.04
 
     strategy:
       matrix:
-        #        runs-on: [ ubuntu-20.04, macOS-latest]
-        runs-on: [ ubuntu-20.04 ]
+        #        runs-on: [ ubuntu-22.04, macOS-latest]
+        runs-on: [ ubuntu-24.04 ]
       fail-fast: false
 
     runs-on: ${{ matrix.runs-on }}

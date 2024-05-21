@@ -69,7 +69,7 @@ namespace hal
 
         try
         {
-            return OK(std::stoul(var_name.substr(VAR_NET_PREFIX.size())));
+            return OK((u32) std::stoul(var_name.substr(VAR_NET_PREFIX.size())));
         }
         catch (const std::invalid_argument& e)
         {

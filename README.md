@@ -30,7 +30,7 @@ We want HAL to enable a common baseline for researchers and analysts to improve 
 - **Stability** is ensured via a rich test suite
 
 HAL is actively developed by the Embedded Security group of the [Max Planck Institute for Security and Privacy](https://www.mpi-sp.org).
-Apart from multiple research projects, it is also used in our university lecture [Introduction to Hardware Reverse Engineering](https://www.ei.ruhr-uni-bochum.de/studium/lehrveranstaltungen/832/).
+Apart from multiple research projects, it is also used in our university lecture "Einführung ins Hardware Reverse Engineering" (Introduction to Hardware Reverse Engineering) at Ruhr University Bochum (RUB).
 
 Note that we also have a set of **modern** state-of-the-art benchmark circuits for the evaluation of netlist reverse engineering techniques available in a seperate [repository](https://github.com/emsec/hal-benchmarks).
 
@@ -53,9 +53,6 @@ This repository contains a selection of curated plugins:
 
 ## Documentation
 A comprehensive documentation of HAL's features from a user perspective is available in our [Wiki](https://github.com/emsec/hal/wiki). In addition, we provide a full [C++ API](https://emsec.github.io/hal/doc/) and [Python API](https://emsec.github.io/hal/pydoc/) documentation.
-
-## Slack, Contact and Support
-For all kinds of inquiries, please contact us using our dedicated e-mail address: [hal@mpi-sp.org](mailto:hal@mpi-sp.org).
 
 <a name="build-instructions"></a>
 # Build Instructions 

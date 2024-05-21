@@ -1266,17 +1266,18 @@ namespace hal {
             std::vector<std::function<void(void)>> trigger_event = { trigger_name_changed, trigger_type_changed,
                  trigger_parent_changed, trigger_submodule_added, trigger_submodule_removed, trigger_gate_assigned, trigger_input_port_name_changed, trigger_output_port_name_changed, trigger_gate_removed};
 
-            // The parameters of the events that are expected
-            std::vector<std::tuple<ModuleEvent::event, Module*, u32>> expected_parameter = {
-                std::make_tuple(ModuleEvent::event::name_changed, test_mod, NO_DATA),
-                std::make_tuple(ModuleEvent::event::type_changed, test_mod, NO_DATA),
-                std::make_tuple(ModuleEvent::event::parent_changed, test_mod, NO_DATA),
-                std::make_tuple(ModuleEvent::event::submodule_added, test_mod, other_mod_sub->get_id()),
-                std::make_tuple(ModuleEvent::event::submodule_removed, test_mod, other_mod_sub->get_id()),
-                std::make_tuple(ModuleEvent::event::gate_assigned, test_mod, test_gate->get_id()),
-                std::make_tuple(ModuleEvent::event::pin_changed, test_mod, PinChangedEvent(test_mod,PinEvent::PinRename,3).associated_data()),
-                std::make_tuple(ModuleEvent::event::pin_changed, test_mod, PinChangedEvent(test_mod,PinEvent::PinRename,1).associated_data()),
-                std::make_tuple(ModuleEvent::event::gate_removed, test_mod, test_gate->get_id())
+            // The parameters of the events that are expecteda
+            //   identify pin by name since ID is non-deterministic
+            std::vector<std::tuple<ModuleEvent::event, Module*, u32, const char*>> expected_parameter = {
+                std::make_tuple(ModuleEvent::event::name_changed, test_mod, NO_DATA, nullptr),
+                std::make_tuple(ModuleEvent::event::type_changed, test_mod, NO_DATA, nullptr),
+                std::make_tuple(ModuleEvent::event::parent_changed, test_mod, NO_DATA, nullptr),
+                std::make_tuple(ModuleEvent::event::submodule_added, test_mod, other_mod_sub->get_id(), nullptr),
+                std::make_tuple(ModuleEvent::event::submodule_removed, test_mod, other_mod_sub->get_id(), nullptr),
+                std::make_tuple(ModuleEvent::event::gate_assigned, test_mod, test_gate->get_id(), nullptr),
+                std::make_tuple(ModuleEvent::event::pin_changed, test_mod, PinChangedEvent(test_mod,PinEvent::PinRename,3).associated_data(), "mod_in_0"),
+                std::make_tuple(ModuleEvent::event::pin_changed, test_mod, PinChangedEvent(test_mod,PinEvent::PinRename,1).associated_data(), "mod_out"),
+                std::make_tuple(ModuleEvent::event::gate_removed, test_mod, test_gate->get_id(), nullptr)
             };
 
             // Check all events in a for-loop
@@ -1294,8 +1295,20 @@ namespace hal {
                 // Trigger the event
                 trigger_event[event_idx]();
 
+                // Pin ID is non-deterministic
+                std::tuple<ModuleEvent::event, Module*, u32> expected_par = {
+                    std::get<0>(expected_parameter.at(event_idx)),
+                    std::get<1>(expected_parameter.at(event_idx)),
+                    std::get<2>(expected_parameter.at(event_idx)),
+                };
+                if (const char* pin_name = std::get<3>(expected_parameter.at(event_idx)))
+                {
+                    ModulePin* pin = test_mod->get_pin_by_name(pin_name);
+                    if (pin)
+                        std::get<2>(expected_par) = PinChangedEvent(test_mod,PinEvent::PinRename,pin->get_id()).associated_data();
+                }
                 EXPECT_EQ(listener.get_event_count(), 1);
-                EXPECT_EQ(listener.get_last_parameters(), expected_parameter[event_idx]);
+                EXPECT_EQ(listener.get_last_parameters(), expected_par);
 
                 // Unregister the callback
                 test_nl->get_event_handler()->unregister_callback(cb_name);

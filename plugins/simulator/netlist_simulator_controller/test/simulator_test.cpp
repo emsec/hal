@@ -63,6 +63,18 @@ namespace hal
             plugin_manager::unload_all_plugins();
         }
 
+        void dump_engine_log(std::string directory)
+        {
+            std::cout << std::endl;
+            std::ifstream ff(directory + "/engine_log.html");
+            while (ff.good())
+            {
+                std::string line;
+                std::getline(ff,line);
+                std::cout << line << std::endl;
+            }
+        }
+
         bool cmp_sim_data(NetlistSimulatorController* reference_simulation_ctrl, NetlistSimulatorController* simulation_ctrl, int tolerance = 200)
         {
             bool no_errors                     = true;
@@ -429,6 +441,7 @@ namespace hal
         }
         if (verilator_engine->get_state() == SimulationEngine::State::Failed)
         {
+            dump_engine_log(verilator_engine->get_working_directory());
             FAIL() << "engine failed";
         }
 
@@ -545,6 +558,7 @@ namespace hal
 
         if (verilator_engine->get_state() == SimulationEngine::State::Failed)
         {
+            dump_engine_log(verilator_engine->get_working_directory());
             FAIL() << "engine failed";
         }
 
@@ -719,6 +733,7 @@ namespace hal
 
         if (verilator_engine->get_state() == SimulationEngine::State::Failed)
         {
+            dump_engine_log(verilator_engine->get_working_directory());
             FAIL() << "engine failed";
         }
 
@@ -877,6 +892,7 @@ namespace hal
 
         if (verilator_engine->get_state() == SimulationEngine::State::Failed)
         {
+            dump_engine_log(verilator_engine->get_working_directory());
             FAIL() << "engine failed";
         }
 
@@ -1333,6 +1349,7 @@ namespace hal
 
         if (verilator_engine->get_state() == SimulationEngine::State::Failed)
         {
+            dump_engine_log(verilator_engine->get_working_directory());
             FAIL() << "engine failed";
         }
 
