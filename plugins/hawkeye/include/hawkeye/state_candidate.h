@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "graph_algorithm/netlist_graph.h"
 #include "hal_core/defines.h"
 #include "hawkeye/register_candidate.h"
 
@@ -53,6 +54,13 @@ namespace hal
              * @returns The netlist.
              */
             Netlist* get_netlist() const;
+
+            /**
+             * Get the netlist graph of the state candidate.
+             * 
+             * @returns The netlist graph.
+             */
+            graph_algorithm::NetlistGraph* get_graph() const;
 
             /**
              * Get the size of the candidate, i.e., the width of its registers.
@@ -115,6 +123,11 @@ namespace hal
              * The netlist to which the candidate belongs.
              */
             std::unique_ptr<Netlist> m_netlist;
+
+            /**
+             * The netlist to which the candidate belongs.
+             */
+            std::unique_ptr<graph_algorithm::NetlistGraph> m_graph;
 
             /**
              * The bit-size of the candidate.

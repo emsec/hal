@@ -183,14 +183,16 @@ namespace hal
             log_info("hawkeye", "successfully identified control inputs in {} seconds", duration_in_seconds);
 
             // copy partial netlist
-            auto state_cand      = StateCandidate();
-            state_cand.m_netlist = netlist_factory::create_netlist(candidate->get_netlist()->get_gate_library());
-            auto* copied_nl      = state_cand.m_netlist.get();
+            auto state_cand       = std::make_unique<StateCandidate>();
+            state_cand->m_netlist = std::move(netlist_factory::create_netlist(candidate->get_netlist()->get_gate_library()));
+            auto* copied_nl       = state_cand->m_netlist.get();
+
+            state_cand->m_size = candidate->get_size();
 
             for (const auto* g : candidate->get_input_reg())
             {
                 auto* new_g = copied_nl->create_gate(g->get_id(), g->get_type(), g->get_name());
-                state_cand.m_in_reg.insert(new_g);
+                state_cand->m_in_reg.insert(new_g);
 
                 copy_out_eps_of_gate(copied_nl, g, new_g, &state_inputs);    // only fan-out EPs for state input register
             }
@@ -199,7 +201,7 @@ namespace hal
             {
                 auto* new_g = copied_nl->create_gate(g->get_id(), g->get_type(), g->get_name());
                 new_g->set_data_map(g->get_data_map());    // take care of LUT INIT strings
-                state_cand.m_state_logic.insert(new_g);
+                state_cand->m_state_logic.insert(new_g);
 
                 copy_in_eps_of_gate(copied_nl, g, new_g);
                 copy_out_eps_of_gate(copied_nl, g, new_g);
@@ -210,7 +212,7 @@ namespace hal
                 for (const auto* g : candidate->get_output_reg())
                 {
                     auto* new_g = copied_nl->create_gate(g->get_id(), g->get_type(), g->get_name());
-                    state_cand.m_out_reg.insert(new_g);
+                    state_cand->m_out_reg.insert(new_g);
 
                     copy_in_eps_of_gate(copied_nl, g, new_g, &state_outputs);    // only fan-in EPs for state output register
                 }
@@ -222,18 +224,40 @@ namespace hal
                 {
                     // only differences: do not enforce ID (already taken by in_reg FF) and append suffix to name
                     auto* new_g = copied_nl->create_gate(g->get_type(), g->get_name() + "_OUT");
-                    state_cand.m_out_reg.insert(new_g);
+                    state_cand->m_out_reg.insert(new_g);
 
                     copy_in_eps_of_gate(copied_nl, g, new_g, &state_outputs);    // only fan-in EPs for state output register
                 }
             }
 
-            // TODO fill control and other inputs
+            for (const auto* control_net : control_inputs)
+            {
+                state_cand->m_state_inputs.insert(copied_nl->get_net_by_id(control_net->get_id()));
+            }
+
+            for (const auto* other_net : other_inputs)
+            {
+                state_cand->m_state_inputs.insert(copied_nl->get_net_by_id(other_net->get_id()));
+            }
+
+            auto nl_graph_res = graph_algorithm::NetlistGraph::from_netlist(copied_nl);
+            if (nl_graph_res.is_error())
+            {
+                return ERR(nl_graph_res.get_error());
+            }
+            state_cand->m_graph = std::move(nl_graph_res.get());
+
+            return OK(std::move(state_cand));
         }
 
         Netlist* StateCandidate::get_netlist() const
         {
             return m_netlist.get();
+        }
+
+        graph_algorithm::NetlistGraph* StateCandidate::get_graph() const
+        {
+            return m_graph.get();
         }
 
         u32 StateCandidate::get_size() const

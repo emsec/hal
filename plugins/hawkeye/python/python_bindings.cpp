@@ -346,10 +346,17 @@ namespace hal
         )");
 
         py_hawkeye_state_candidate.def("get_netlist", &hawkeye::StateCandidate::get_netlist, R"(
-            Get the netlist associated with the candidate.
+            Get the netlist of the state candidate. The netlist will be a partial copy of the netlist of the register candidate.
 
             :returns: The netlist of the candidate.
             :rtype: hal_py.Netlist
+        )");
+
+        py_hawkeye_state_candidate.def("get_graph", &hawkeye::StateCandidate::get_graph, R"(
+            Get the netlist graph of the state candidate.
+
+            :returns: The netlist graph of the candidate.
+            :rtype: graph_algorithm.NetlistGraph
         )");
 
         py_hawkeye_state_candidate.def("get_size", &hawkeye::StateCandidate::get_size, R"(
