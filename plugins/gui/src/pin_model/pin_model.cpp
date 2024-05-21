@@ -303,25 +303,49 @@ namespace hal
 
         switch (itemType)
         {
-            case PinItem::TreeItemType::InvalidPin:
-            case PinItem::TreeItemType::Pin: {
+            case PinItem::TreeItemType::InvalidPin:{
                 pinItem->setType(type);
                 handleInvalidPinUpdate(pinItem);
                 break;
             }
-            case PinItem::TreeItemType::InvalidPinGroup:
+            case PinItem::TreeItemType::Pin: {
+                pinItem->setType(type);
+                break;
+            }
+            case PinItem::TreeItemType::InvalidPinGroup:{
+                        pinItem->setType(type);
+                        for(auto child : pinItem->getChildren()) //set same type for all pins of the pingroup
+                        {
+                            PinItem* pin = static_cast<PinItem*>(child);
+                            if(pin->getItemType() == PinItem::TreeItemType::Pin || pin->getItemType() == PinItem::TreeItemType::InvalidPin){
+                                pin->setType(type);
+                                handleInvalidPinUpdate(pin);
+                            }
+                        }
+                        handleInvalidGroupUpdate(pinItem);
+                        break;
+                    }
             case PinItem::TreeItemType::PinGroup: {
                 pinItem->setType(type);
-                for(auto child : pinItem->getChildren()) //set same direction for all pins of the pingroup
+                //PinModel::PINGROUP* pinGroup = static_cast<PinModel::PINGROUP*>(pinItem);
+
+                /*for(auto child : pinItem->getChildren()) //set same type for all pins of the pingroup
                 {
                     PinItem* pin = static_cast<PinItem*>(child);
                     if(pin->getItemType() == PinItem::TreeItemType::Pin || pin->getItemType() == PinItem::TreeItemType::InvalidPin){
                         pin->setType(type);
-                        handleInvalidPinUpdate(pin);
+                    }
+                }*/
+
+                PinModel::PINGROUP* pg = static_cast<PinModel::PINGROUP*>(index.internalPointer());
+                for(auto group : mPinGroups){
+                    if(group->name == pinItem->getName()){
+                        for(auto pin : group->pins){
+                            pin->type = PinType::data;
+                        }
+                        break;
                     }
                 }
-                handleInvalidGroupUpdate(pinItem);
-                break;
             }
         }
     }

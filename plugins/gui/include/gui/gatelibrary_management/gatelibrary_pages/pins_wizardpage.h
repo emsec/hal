@@ -35,18 +35,20 @@
 #include <gui/gatelibrary_management/gatelibrary_tab_widgets/gatelibrary_tab_pin.h>
 
 namespace hal {
+    class GateLibraryWizard;
     class PinsWizardPage:public QWizardPage{
         Q_OBJECT
     public:
         PinsWizardPage(QWidget* parent = nullptr);
         void setGateType(GateType* gate);
-        //int nextId() const override;
+        void initializePage() override;
         QList<PinModel::PINGROUP*> getPingroups();
 
     public Q_SLOTS:
         void handleDeleteClicked();
     private:
         QGridLayout* mLayout;
+        GateLibraryWizard* mWizard;
         PinModel* mPinModel;
         QTreeView* mPinsTreeView;
         GateLibrary* mGateLibrary;

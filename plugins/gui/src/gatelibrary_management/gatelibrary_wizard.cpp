@@ -7,17 +7,17 @@ namespace hal
 {
     GateLibraryWizard::GateLibraryWizard(const GateLibrary *gateLibrary, GateType *gateType, QWidget* parent): QWizard(parent)
     {
-        generalInfoPage = new GeneralInfoWizardPage(gateLibrary, parent);
-        pinsPage = new PinsWizardPage(parent);
-        ffPage = new FlipFlopWizardPage(parent);
-        boolPage = new BoolWizardPage(parent);
+        generalInfoPage = new GeneralInfoWizardPage(gateLibrary, this);
+        pinsPage = new PinsWizardPage(this);
+        ffPage = new FlipFlopWizardPage(this);
+        boolPage = new BoolWizardPage(this);
 
-        latchPage = new LatchWizardPage(parent);
-        lutPage = new LUTWizardPage(parent);
-        initPage = new InitWizardPage(parent);
-        ramPage = new RAMWizardPage(parent);
-        ramportPage = new RAMPortWizardPage(parent);
-        statePage = new StateWizardPage(parent);
+        latchPage = new LatchWizardPage(this);
+        lutPage = new LUTWizardPage(this);
+        initPage = new InitWizardPage(this);
+        ramPage = new RAMWizardPage(this);
+        ramportPage = new RAMPortWizardPage(this);
+        statePage = new StateWizardPage(this);
 
         setPage(GeneralInfo, generalInfoPage);
         setPage(Pin, pinsPage);
@@ -33,6 +33,8 @@ namespace hal
         mGateLibrary = gateLibrary;
         mGateType = gateType;
         generalInfoPage->setMode(false);
+        mPinModel = new PinModel(this, true);
+        mPinTab = new GateLibraryTabPin(this, true);
 
         if(mGateType != nullptr)
         {
@@ -49,22 +51,23 @@ namespace hal
             ramPage->setData(mGateType);
             ramportPage->setData(mGateType);
             statePage->setData(mGateType);
-            pinsPage->setGateType(mGateType);
+            //pinsPage->setGateType(mGateType);
         }
     }
 
     GateLibraryWizard::GateLibraryWizard(const GateLibrary *gateLibrary, QWidget* parent): QWizard(parent)
     {
-        generalInfoPage = new GeneralInfoWizardPage(gateLibrary, parent);
-        pinsPage = new PinsWizardPage(parent);
-        ffPage = new FlipFlopWizardPage(parent);
-        latchPage = new LatchWizardPage(parent);
-        lutPage = new LUTWizardPage(parent);
-        initPage = new InitWizardPage(parent);
-        ramPage = new RAMWizardPage(parent);
-        ramportPage = new RAMPortWizardPage(parent);
-        boolPage = new BoolWizardPage(parent);
-        statePage = new StateWizardPage(parent);
+        generalInfoPage = new GeneralInfoWizardPage(gateLibrary, this);
+        pinsPage = new PinsWizardPage(this);
+        ffPage = new FlipFlopWizardPage(this);
+        boolPage = new BoolWizardPage(this);
+
+        latchPage = new LatchWizardPage(this);
+        lutPage = new LUTWizardPage(this);
+        initPage = new InitWizardPage(this);
+        ramPage = new RAMWizardPage(this);
+        ramportPage = new RAMPortWizardPage(this);
+        statePage = new StateWizardPage(this);
 
         setPage(GeneralInfo, generalInfoPage);
         setPage(Pin, pinsPage);
@@ -76,10 +79,13 @@ namespace hal
         setPage(Init, initPage);
         setPage(State, statePage);
         setPage(BooleanFunction, boolPage);
-        pinsPage->setGateType(nullptr);
-        mGateLibrary = gateLibrary;
+        //pinsPage->setGateType(nullptr);
         generalInfoPage->setMode(false);
         ffPage->setData(nullptr);
+        mGateLibrary = gateLibrary;
+
+        mPinTab = new GateLibraryTabPin(this, true);
+        mPinModel = new PinModel(this, true);
     }
 
     void GateLibraryWizard::editGate(GateType* gt)
@@ -116,7 +122,7 @@ namespace hal
 
     QList<PinModel::PINGROUP*> GateLibraryWizard::getPingroups()
     {
-        return pinsPage->getPingroups();
+        return mPinModel->getPinGroups();
     }
 
     int GateLibraryWizard::nextId() const

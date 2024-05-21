@@ -16,45 +16,6 @@ namespace hal
         mLabEnableFunciton = new QLabel("Enable boolean function: ");
         mLabIsWritePort = new QLabel("Is a write port: ");
 
-
-        int dataCnt =0, addrCnt=0;
-
-        //Error at casting
-        //GateLibraryWizard *wizard = reinterpret_cast<GateLibraryWizard*>(this->wizard());
-        //QList<PinModel::PINGROUP*> pingroups = wizard->getPingroups();
-
-
-        /*for (auto pinGroup : pingroups) {
-            if(pinGroup->type == PinType::data) dataCnt++;
-            if(pinGroup->type == PinType::address) addrCnt++;
-        }*/
-
-        //check for equality?
-        //if(dataCnt!=addrCnt)
-
-        //create empty lines for ram_port for each data/address pair
-        for (int i=0; i<dataCnt; i++) {
-            mLayout->addWidget(new GateLibraryLabel(false, QString("RAM Port %1").arg(i+1), this));
-
-            mDataGroup = new QLineEdit(this);
-            mAddressGroup = new QLineEdit(this);
-            mClockFunction = new QLineEdit(this);
-            mEnableFunciton = new QLineEdit(this);
-            mIsWritePort = new QLineEdit(this);
-
-            mLayout->addWidget(mLabDataGroup, 0, 0);
-            mLayout->addWidget(mDataGroup, 0, 1);
-            mLayout->addWidget(mLabAddressGroup, 1, 0);
-            mLayout->addWidget(mAddressGroup, 1, 1);
-            mLayout->addWidget(mLabClockFunction, 2, 0);
-            mLayout->addWidget(mClockFunction, 2, 1);
-            mLayout->addWidget(mLabEnableFunciton, 3, 0);
-            mLayout->addWidget(mEnableFunciton, 3, 1);
-            mLayout->addWidget(mLabIsWritePort, 4, 0);
-            mLayout->addWidget(mIsWritePort, 4, 1);
-
-        }
-
         /*mDataGroup = new QLineEdit(this);
         mAddressGroup = new QLineEdit(this);
         mClockFunction = new QLineEdit(this);
@@ -81,13 +42,49 @@ namespace hal
         setLayout(mLayout);
     }
 
-//    int InitWizardPage::nextId() const
-//    {
-//        auto parentWizard = wizard();
-//        if(!parentWizard)
-//            return -1;
-//        return static_cast<GateLibraryWizard*>(parentWizard)->getNextPageId(GateLibraryWizard::Init);
-//    }
+void RAMPortWizardPage::initializePage(){
+    mWizard = static_cast<GateLibraryWizard*>(wizard());
+    int ramPortCnt = 1;
+    QList<PinModel::PINGROUP*> pinGroups = mWizard->getPingroups();
+    /*for (auto pinGroup : mWizard->getPingroups()) {
+        //assumption at this point: #data fields = #address fields
+        if(pinGroup->type == PinType::data) ramPortCnt++;
+    }*/
+    //check for equality?
+    //if(dataCnt!=addrCnt)
+
+    //create empty lines for ram_port for each data/address pair
+    for (int i=0; i<pinGroups.length(); i++) {
+        QString name = pinGroups[i]->name;
+        PinType type = pinGroups[i]->type;
+        if(pinGroups[i]->type == PinType::data)
+        {
+            mLayout->addWidget(new GateLibraryLabel(false, QString("RAM Port %1").arg(ramPortCnt), this));
+
+            mDataGroup = new QLineEdit(this);
+            mAddressGroup = new QLineEdit(this);
+            mClockFunction = new QLineEdit(this);
+            mEnableFunciton = new QLineEdit(this);
+            mIsWritePort = new QLineEdit(this);
+
+            mLayout->addWidget(mLabDataGroup, 0+i*5, 0);
+            mLayout->addWidget(mDataGroup, 0+i*5, 1);
+            mLayout->addWidget(mLabAddressGroup, 1+i*5, 0);
+            mLayout->addWidget(mAddressGroup, 1+i*5, 1);
+            mLayout->addWidget(mLabClockFunction, 2+i*5, 0);
+            mLayout->addWidget(mClockFunction, 2+i*5, 1);
+            mLayout->addWidget(mLabEnableFunciton, 3+i*5, 0);
+            mLayout->addWidget(mEnableFunciton, 3+i*5, 1);
+            mLayout->addWidget(mLabIsWritePort, 4+i*5, 0);
+            mLayout->addWidget(mIsWritePort, 4+i*5, 1);
+
+            ramPortCnt++;
+        }
+    }
+
+    setLayout(mLayout);
+
+}
 
     void RAMPortWizardPage::setData(GateType *gate){
         if(gate != nullptr && gate->has_component_of_type(GateTypeComponent::ComponentType::ram_port))

@@ -35,14 +35,15 @@
 #include <QLabel>
 
 namespace hal {
+    class GateLibraryWizard;
     class RAMPortWizardPage:public QWizardPage{
     public:
         RAMPortWizardPage(QWidget* parent = nullptr);
-        //void initializePage() override;
-        //int nextId() const override;
         void setData(GateType* gate);
+        void initializePage() override;
 
     private:
+        GateLibraryWizard* mWizard;
         QGridLayout* mLayout;
 
         QLineEdit* mDataGroup;

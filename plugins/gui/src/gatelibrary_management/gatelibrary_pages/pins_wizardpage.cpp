@@ -10,26 +10,38 @@ namespace hal
         setTitle("Step 2: Pins and Pingroups");
         setSubTitle("Edit pins and pingroups");
         mLayout = new QGridLayout(this);
-        mPinModel = new PinModel(this, true);
-        //mPinModel->setGate(new GateType());
 
         mPinTab = new GateLibraryTabPin(this, true);
-        //mAddBtn = new QPushButton("Add", this);
         mDelBtn = new QPushButton("Delete", this);
 
-        mLayout->addWidget(mPinTab, 0, 0, 1, 2);
+
         mLayout->addWidget(mDelBtn, 1, 0);
-        //mLayout->addWidget(mAddBtn, 1, 1);
+        mLayout->addWidget(mPinTab, 0, 0, 1, 2);
 
         connect(mDelBtn, &QPushButton::clicked, this, &PinsWizardPage::handleDeleteClicked);
 
         setLayout(mLayout);
     }
 
-    void PinsWizardPage::setGateType(GateType* gate)
-    {
-        mPinTab->update(gate);
+    void PinsWizardPage::initializePage(){
+
+        //2
+        //mPinTab = mWizard->mPinTab;
+        mWizard = static_cast<GateLibraryWizard*>(wizard());
+        mPinModel = mPinTab->getPinModel();
+        mWizard->mPinModel = mPinModel;
+
+        mPinTab->update(mWizard->mGateType);
+
     }
+
+    /*void PinsWizardPage::setGateType(GateType* gate)
+    {
+        //1
+        mWizard = static_cast<GateLibraryWizard*>(wizard());
+        mPinModel = mWizard->mPinModel;
+        mPinTab->update(gate);
+    }*/
 
     void PinsWizardPage::handleDeleteClicked()
     {
@@ -38,14 +50,6 @@ namespace hal
 
         pinModel->handleDeleteItem(treeView->currentIndex());
     }
-
-//    int PinsWizardPage::nextId() const
-//    {
-//        auto parentWizard = wizard();
-//        if(!parentWizard)
-//            return -1;
-//        return static_cast<GateLibraryWizard*>(parentWizard)->getNextPageId(GateLibraryWizard::Pin);
-//    }
 
     QList<PinModel::PINGROUP*> PinsWizardPage::getPingroups(){
         return mPinModel->getPinGroups();

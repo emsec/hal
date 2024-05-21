@@ -46,6 +46,7 @@ namespace hal
     class GateLibraryWizard : public QWizard
     {
         friend class RAMPortWizardPage;
+        friend class PinsWizardPage;
     public:
         enum PAGE
         {
@@ -70,10 +71,6 @@ namespace hal
         QStringList getProperties();
         QList<PinModel::PINGROUP*> getPingroups();
         void accept() override;
-
-        //int getNextPageId(PAGE page);
-        //void setPageOrder();
-
         int nextId() const override;
     private:
         const GateLibrary* mGateLibrary;
@@ -92,6 +89,8 @@ namespace hal
         QString mName;
         QStringList mProperties;
         QList<PinModel::PINGROUP*> mPingroups;
+        PinModel* mPinModel;
+        GateLibraryTabPin* mPinTab;
 
         bool isDirty;
     };
