@@ -1,12 +1,5 @@
 var NAVTREEINDEX18 =
 {
-"classhal_1_1_selection_details_icon_provider.html#a5b0d410fc7e98ab341009ed087fd8711a012f87398c9660934dfaf7e7c997b1c1":[6,0,0,378,0,0],
-"classhal_1_1_selection_details_icon_provider.html#a5b0d410fc7e98ab341009ed087fd8711a4f541d46a2fa17a7f38d5bec8727468a":[6,0,0,378,0,2],
-"classhal_1_1_selection_details_icon_provider.html#a5b0d410fc7e98ab341009ed087fd8711af50b51decf902824574cdd0868b88ba7":[6,0,0,378,0,1],
-"classhal_1_1_selection_details_icon_provider.html#ab296625b14f3038f60bcc239e55aa470":[6,0,0,378,3],
-"classhal_1_1_selection_details_widget.html":[4,0,7,3,18],
-"classhal_1_1_selection_details_widget.html#a17e6cfee8aab5895581a832b43c79d76":[4,0,7,3,18,9],
-"classhal_1_1_selection_details_widget.html#a1869e13594d994732d4c105f9e751c59":[4,0,7,3,18,0],
 "classhal_1_1_selection_details_widget.html#a1c67af6ca68247138bbae71d2398be5f":[4,0,7,3,18,31],
 "classhal_1_1_selection_details_widget.html#a1d92935801758a5a2083ef04e346aa08":[4,0,7,3,18,35],
 "classhal_1_1_selection_details_widget.html#a1fbe8596d07fab1aeb5e84b9c9468461":[4,0,7,3,18,16],
@@ -249,5 +242,12 @@ var NAVTREEINDEX18 =
 "classhal_1_1_settings_item_dropdown.html#a5a1025c9f5581eb7ea7167d4a38d01d8":[4,0,4,11,2],
 "classhal_1_1_settings_item_dropdown.html#a75a0260ac558e16ff4fe6bc67b1b2e7b":[4,0,4,11,9],
 "classhal_1_1_settings_item_dropdown.html#a81507fdb71ae980c3c1ca1c0e8a42f02":[4,0,4,11,3],
-"classhal_1_1_settings_item_dropdown.html#a8759ce38f6166d7e4a8342e6b919883f":[4,0,4,11,1]
+"classhal_1_1_settings_item_dropdown.html#a8759ce38f6166d7e4a8342e6b919883f":[4,0,4,11,1],
+"classhal_1_1_settings_item_dropdown.html#ad17f7b2db93bc40284f6319289693bc6":[4,0,4,11,5],
+"classhal_1_1_settings_item_dropdown.html#af25d2c474b0df442d145ce1fbd47c16f":[4,0,4,11,4],
+"classhal_1_1_settings_item_keybind.html":[4,0,4,12],
+"classhal_1_1_settings_item_keybind.html#a1a0c9f668fe5efebeb788c99bf97e297":[4,0,4,12,2],
+"classhal_1_1_settings_item_keybind.html#a1e614620132e15d0d166de636d466fd4":[4,0,4,12,4],
+"classhal_1_1_settings_item_keybind.html#a2552a08bf7d57dc2e5853d6766cd8a06":[4,0,4,12,3],
+"classhal_1_1_settings_item_keybind.html#a3af9226f0e8dab351ac42e2c9cce3317":[4,0,4,12,5]
 };

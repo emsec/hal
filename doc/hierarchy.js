@@ -180,6 +180,7 @@ var hierarchy =
     [ "hal::Netlist", "classhal_1_1_netlist.html", null ],
     [ "hal::dataflow::NetlistAbstraction", "structhal_1_1dataflow_1_1_netlist_abstraction.html", null ],
     [ "hal::NetlistEvent", "classhal_1_1_netlist_event.html", null ],
+    [ "hal::graph_algorithm::NetlistGraph", "classhal_1_1graph__algorithm_1_1_netlist_graph.html", null ],
     [ "hal::NetlistInternalManager", "classhal_1_1_netlist_internal_manager.html", null ],
     [ "hal::NetlistModificationDecorator", "classhal_1_1_netlist_modification_decorator.html", null ],
     [ "hal::NetlistParser", "classhal_1_1_netlist_parser.html", [
@@ -609,10 +610,10 @@ var hierarchy =
       [ "hal::NodeBoxes", "classhal_1_1_node_boxes.html", null ]
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
+    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
+    [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
     [ "hal::Result< T >", "classhal_1_1_result.html", null ],
     [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
-    [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
-    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "hal::RuntimeLibrary", "classhal_1_1_runtime_library.html", null ],
     [ "hal::SearchOptions", "classhal_1_1_search_options.html", null ],
     [ "hal::SelectionTreeItem", "classhal_1_1_selection_tree_item.html", [
@@ -693,8 +694,8 @@ var hierarchy =
     [ "Vec_Ptr_t_", "struct_vec___ptr__t__.html", null ],
     [ "Vec_Vec_t_", "struct_vec___vec__t__.html", null ],
     [ "hal::GuiApiClasses::View", "classhal_1_1_gui_api_classes_1_1_view.html", null ],
-    [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
+    [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
     [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ]
 ];

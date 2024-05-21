@@ -316,15 +316,6 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_color()
 : <a class="el" href="classhal_1_1_grouping.html#a309d7952a4c0fc0feb78db56a4c15cbd">hal::Grouping</a>
 </li>
-<li>get_communities()
-: <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#ae32ee8a59a9ff8b24fdeea7359222560">hal::GraphAlgorithmPlugin</a>
-</li>
-<li>get_communities_fast_greedy()
-: <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#af82475a54f82d29378db571359a3f9f5">hal::GraphAlgorithmPlugin</a>
-</li>
-<li>get_communities_spinglass()
-: <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#abf2f2b094763a46218ac2cfc5c0ac998">hal::GraphAlgorithmPlugin</a>
-</li>
 <li>get_component()
 : <a class="el" href="classhal_1_1_gate_type.html#aa9df15aa0cd043bca80751f0665e0210">hal::GateType</a>
 , <a class="el" href="classhal_1_1_gate_type_component.html#acb0075c46f66aa6004b6cd529cb4c411">hal::GateTypeComponent</a>
@@ -402,6 +393,12 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_direction()
 : <a class="el" href="classhal_1_1_base_pin.html#a8027dbd47c6dcb221f5333f3ee269dc3">hal::BasePin&lt; T &gt;</a>
 , <a class="el" href="classhal_1_1_pin_group.html#ac9b30b31956f5c9670d61f1163f737b7">hal::PinGroup&lt; T &gt;</a>
+</li>
+<li>get_edges()
+: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#aaa0cc93a427a8a3f1b28e36b33ed1ac6">hal::graph_algorithm::NetlistGraph</a>
+</li>
+<li>get_edges_in_netlist()
+: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#aaac920154374b304559cbcdc69692b37">hal::graph_algorithm::NetlistGraph</a>
 </li>
 <li>get_enable_function()
 : <a class="el" href="classhal_1_1_latch_component.html#ac3f21d6a0e0de9e4ee65ae94a1cf0ccb">hal::LatchComponent</a>
@@ -483,6 +480,9 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_gate_control_nets()
 : <a class="el" href="structhal_1_1dataflow_1_1_result.html#a7a96adfbbf2db4d4ff1676e634dccb80">hal::dataflow::Result</a>
 </li>
+<li>get_gate_from_vertex()
+: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a51f32e2c61aad6b47ea84d457f792cf5">hal::graph_algorithm::NetlistGraph</a>
+</li>
 <li>get_gate_ids()
 : <a class="el" href="classhal_1_1_grouping.html#a0284ba2eaa2efc592d79303798da0b72">hal::Grouping</a>
 </li>
@@ -514,6 +514,12 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 , <a class="el" href="classhal_1_1_module.html#a7a969d9d27d1d5f9ab6b6826b0745085">hal::Module</a>
 , <a class="el" href="classhal_1_1_netlist.html#a0d6c2c4b712ac8964253627e7adf3266">hal::Netlist</a>
 </li>
+<li>get_gates_from_vertices()
+: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a2bf62e379172d9f948e74c10c002e98a">hal::graph_algorithm::NetlistGraph</a>
+</li>
+<li>get_gates_from_vertices_igraph()
+: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a9c9f2fac0f0fc865a4f73435bb3a7afb">hal::graph_algorithm::NetlistGraph</a>
+</li>
 <li>get_gates_of_group()
 : <a class="el" href="structhal_1_1dataflow_1_1_result.html#a1c89579d95b9645da1fac384dff2d886">hal::dataflow::Result</a>
 </li>
@@ -529,8 +535,8 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_gnd_gates()
 : <a class="el" href="classhal_1_1_netlist.html#a5024423d773b9705545bf62f64c749a9">hal::Netlist</a>
 </li>
-<li>get_graph_cut()
-: <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#a6ded910dd4dcf488aba3e104f5af957b">hal::GraphAlgorithmPlugin</a>
+<li>get_graph()
+: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a388d6b3e8c561bc831af51738a058a0a">hal::graph_algorithm::NetlistGraph</a>
 </li>
 <li>get_group()
 : <a class="el" href="classhal_1_1_base_pin.html#a7fc8266508d7bf0c81093449383392da">hal::BasePin&lt; T &gt;</a>
@@ -587,9 +593,6 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_ids()
 : <a class="el" href="classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#a8eb9eb26c2d0274a2497495e48cbab45">hal::CallbackHook&lt; R(ArgTypes...)&gt;</a>
 </li>
-<li>get_igraph_directed()
-: <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#a9116b9073591b53b54a95e134864fe36">hal::GraphAlgorithmPlugin</a>
-</li>
 <li>get_includes()
 : <a class="el" href="classhal_1_1_gate_library.html#a955208e223376a19c808f83d486311d2">hal::GateLibrary</a>
 </li>
@@ -645,9 +648,6 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_location_y()
 : <a class="el" href="classhal_1_1_gate.html#a24b3bfe5d03a6f61b4e8be79b69b256c">hal::Gate</a>
 </li>
-<li>get_memberships_for_hal()
-: <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#a09fa3b108baeaf83a130bf9da1b3d0f8">hal::GraphAlgorithmPlugin</a>
-</li>
 <li>get_module()
 : <a class="el" href="classhal_1_1_gate.html#a8ebbb9b79db2666beadc913467436a1f">hal::Gate</a>
 , <a class="el" href="classhal_1_1_pin_changed_event.html#a937a27b7b5a10fade40c52454ccdba51">hal::PinChangedEvent</a>
@@ -660,7 +660,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 </li>
 <li>get_modules()
 : <a class="el" href="classhal_1_1_gate.html#ab40f6f6b7cbe6ada763ed36b45f9ad33">hal::Gate</a>
-, <a class="el" href="classhal_1_1_grouping.html#af61fefef5d401834f0738cb354f361ef">hal::Grouping</a>
+, <a class="el" href="classhal_1_1_grouping.html#aba703c0ff0fe75d2f7b0e31b8c7e0683">hal::Grouping</a>
 , <a class="el" href="classhal_1_1_netlist.html#a7eb17e617d1b20d05fdd146ad63c138b">hal::Netlist</a>
 </li>
 <li>get_name()
@@ -708,6 +708,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_netlist()
 : <a class="el" href="structhal_1_1dataflow_1_1_result.html#a8de92d6b9e454ff1d0ce07c5f4b28615">hal::dataflow::Result</a>
 , <a class="el" href="classhal_1_1_gate.html#ae77f8b10587bddd7b80fe0ab008953e3">hal::Gate</a>
+, <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a00d12d6f99e745c2b2431a65fdd3f84c">hal::graph_algorithm::NetlistGraph</a>
 , <a class="el" href="classhal_1_1_grouping.html#a3f5d53b665b845c866b0b738804176b3">hal::Grouping</a>
 , <a class="el" href="classhal_1_1_module.html#ab7ad37f7e5b0982c387ec6c33651a25f">hal::Module</a>
 , <a class="el" href="classhal_1_1_net.html#a102810d0ac7d3950505b4361616ae243">hal::Net</a>
@@ -739,11 +740,17 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_nodes()
 : <a class="el" href="classhal_1_1_boolean_function.html#a9ed2f3d3b5abf93dc89e66ddc796f635">hal::BooleanFunction</a>
 </li>
+<li>get_num_edges()
+: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#aaa8b436d499886fd2e46892a28cf67bd">hal::graph_algorithm::NetlistGraph</a>
+</li>
 <li>get_num_of_destinations()
 : <a class="el" href="classhal_1_1_net.html#a64c732bd554df5a840aa5d4ec38eee0a">hal::Net</a>
 </li>
 <li>get_num_of_sources()
 : <a class="el" href="classhal_1_1_net.html#ae13cde7edde05bcd731a564d41e4d58e">hal::Net</a>
+</li>
+<li>get_num_vertices()
+: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a1809b66c69be895ca35d44928915b08b">hal::graph_algorithm::NetlistGraph</a>
 </li>
 <li>get_option_descriptions()
 : <a class="el" href="classhal_1_1_log_manager.html#a6a016672969496755f2f19148f9b30d4">hal::LogManager</a>
@@ -878,14 +885,11 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_state_identifier()
 : <a class="el" href="classhal_1_1_state_component.html#a0d67c158fec2a49c54d9105307a721e6">hal::StateComponent</a>
 </li>
-<li>get_strongly_connected_components()
-: <a class="el" href="classhal_1_1_graph_algorithm_plugin.html#a8f5e1e5548d6bcca304ae9943f582e61">hal::GraphAlgorithmPlugin</a>
-</li>
 <li>get_subgraph_function()
-: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a78d92aede2df7af96954115478046601">hal::SubgraphNetlistDecorator</a>
+: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#ae8245fa6d538060a09860b7d747b7d6a">hal::SubgraphNetlistDecorator</a>
 </li>
 <li>get_subgraph_function_inputs()
-: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a602fe3be3c5979579024b42b8c4439eb">hal::SubgraphNetlistDecorator</a>
+: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#aabf7b9a86855378c51d9774d8980b57e">hal::SubgraphNetlistDecorator</a>
 </li>
 <li>get_submodule_depth()
 : <a class="el" href="classhal_1_1_module.html#a533cbe33380469fe81fcead287efc437">hal::Module</a>
@@ -1003,6 +1007,18 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 , <a class="el" href="classhal_1_1_verilog_parser_plugin.html#a6cfc976fa374ab2b48b3068d66c1162d">hal::VerilogParserPlugin</a>
 , <a class="el" href="classhal_1_1_verilog_writer_plugin.html#af90f92ec67fa79ed4810f89985a4840a">hal::VerilogWriterPlugin</a>
 , <a class="el" href="classhal_1_1_v_h_d_l_parser_plugin.html#a57cfb438770ef0926ed6c98fea771c72">hal::VHDLParserPlugin</a>
+</li>
+<li>get_vertex_from_gate()
+: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a6cdbf6af3e642ead2bb07f790f7cf10e">hal::graph_algorithm::NetlistGraph</a>
+</li>
+<li>get_vertices()
+: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#af023be0105fabe45836fae46e5a99fbd">hal::graph_algorithm::NetlistGraph</a>
+</li>
+<li>get_vertices_from_gates()
+: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a79fdf485990c5381c2650aa3e5546869">hal::graph_algorithm::NetlistGraph</a>
+</li>
+<li>get_vertices_from_gates_igraph()
+: <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a6f4cc0de28874cd858e1bb58102a88a5">hal::graph_algorithm::NetlistGraph</a>
 </li>
 <li>getAbsFilename()
 : <a class="el" href="classhal_1_1_python_code_editor.html#a39a4b5589d3f585f87e874f735def3d8">hal::PythonCodeEditor</a>
@@ -1556,7 +1572,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 : <a class="el" href="classhal_1_1_grouping_dialog.html#a31b2b5118bf361433c6b0566258d2d39">hal::GroupingDialog</a>
 </li>
 <li>Grouping()
-: <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a3368041577b46e6bdc8309d59e9709d3">hal::dataflow::Grouping</a>
+: <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a6e5a0f3bd4de3837bfea9b28b0bbc879">hal::dataflow::Grouping</a>
 </li>
 <li>grouping()
 : <a class="el" href="classhal_1_1_grouping_table_entry.html#a1eddd594c0671c4b62a71119cd547402">hal::GroupingTableEntry</a>
@@ -1638,7 +1654,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 : <a class="el" href="classhal_1_1_groupings_of_item_widget.html#a11b92486b219ac0edf4a9bfb30daa9ea">hal::GroupingsOfItemWidget</a>
 </li>
 <li>GroupingTableEntry()
-: <a class="el" href="classhal_1_1_grouping_table_entry.html#a5a7b41bbacfe16d7cce06e07aa9ac903">hal::GroupingTableEntry</a>
+: <a class="el" href="classhal_1_1_grouping_table_entry.html#ae620437a3a81bef2b83bba661054135e">hal::GroupingTableEntry</a>
 </li>
 <li>GroupingTableModel()
 : <a class="el" href="classhal_1_1_grouping_table_model.html#a361bc539eceb5a6712460cf0522b7897">hal::GroupingTableModel</a>
@@ -1691,7 +1707,7 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon May 20 2024 08:25:35 for HAL by
+    <li class="footer">Generated on Tue May 21 2024 13:55:51 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

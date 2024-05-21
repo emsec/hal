@@ -3,6 +3,7 @@ var namespacehal =
     [ "BooleanFunctionParser", "namespacehal_1_1_boolean_function_parser.html", "namespacehal_1_1_boolean_function_parser" ],
     [ "core_strings", "namespacehal_1_1core__strings.html", "namespacehal_1_1core__strings" ],
     [ "dataflow", "namespacehal_1_1dataflow.html", "namespacehal_1_1dataflow" ],
+    [ "graph_algorithm", "namespacehal_1_1graph__algorithm.html", "namespacehal_1_1graph__algorithm" ],
     [ "gui_utility", "namespacehal_1_1gui__utility.html", "namespacehal_1_1gui__utility" ],
     [ "GuiApiClasses", "namespacehal_1_1_gui_api_classes.html", "namespacehal_1_1_gui_api_classes" ],
     [ "plugin_manager", "namespacehal_1_1plugin__manager.html", "namespacehal_1_1plugin__manager" ],
