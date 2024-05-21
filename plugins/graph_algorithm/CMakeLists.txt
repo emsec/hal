@@ -1,4 +1,4 @@
-option(PL_GRAPH_ALGORITHM "PL_GRAPH_ALGORITHM" OFF)
+option(PL_GRAPH_ALGORITHM "PL_GRAPH_ALGORITHM" ON)
 
 if(PL_GRAPH_ALGORITHM OR BUILD_ALL_PLUGINS)
     file(GLOB_RECURSE GRAPH_ALGORITHM_INC ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
@@ -14,6 +14,6 @@ if(PL_GRAPH_ALGORITHM OR BUILD_ALL_PLUGINS)
         LINK_LIBRARIES PUBLIC ${igraph_LIBRARIES}
     )
 
-add_dependencies(graph_algorithm igraph_0_9)
+add_dependencies(graph_algorithm igraph_0_10)
 
 endif()

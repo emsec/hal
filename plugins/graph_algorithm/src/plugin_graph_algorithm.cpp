@@ -16,6 +16,6 @@ namespace hal
 
     std::string GraphAlgorithmPlugin::get_version() const
     {
-        return std::string("0.1");
+        return std::string("0.2");
     }
 }    // namespace hal
