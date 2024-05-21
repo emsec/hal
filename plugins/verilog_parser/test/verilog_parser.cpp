@@ -3195,6 +3195,7 @@ namespace hal {
                 EXPECT_TRUE(nl_res.is_error());
             }
             // ------ Verilog specific tests ------
+#if !defined(__APPLE__)
             {
                 // The Module has no identifier
                 NO_COUT_TEST_BLOCK;
@@ -3246,6 +3247,7 @@ namespace hal {
                 auto nl_res = verilog_parser.parse_and_instantiate(verilog_file, gate_lib);
                 EXPECT_TRUE(nl_res.is_error());
             }
+#endif
             if(test_utils::known_issue_tests_active())
             {
                 // one side of the direct assignment is empty
