@@ -42,7 +42,7 @@ namespace hal {
         PinsWizardPage(QWidget* parent = nullptr);
         void setGateType(GateType* gate);
         void initializePage() override;
-        QList<PinModel::PINGROUP*> getPingroups();
+        QList<PinItem*> getPingroups();
 
     public Q_SLOTS:
         void handleDeleteClicked();

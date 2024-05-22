@@ -64,7 +64,7 @@ namespace hal
 
         int row() const;
 
-        u32 id() const;
+        u32 getId() const;
         QString getName() const;
         QString getType() const;
         QString getDirection() const;
@@ -80,6 +80,8 @@ namespace hal
         void setDirection(const QString& direction);
         void setId(u32 newId);
         void setType(const QString& type);
+        void setDirection(PinDirection direction);
+        void setType(PinType type);
 
         void setFields(GatePin* pin);
         void setFields(const QString& name, u32 id, PinDirection direction, PinType type);
@@ -87,9 +89,6 @@ namespace hal
 
 
     private:
-        void setDirection(PinDirection direction);
-        void setType(PinType type);
-
         TreeItemType mItemType;
         u32 mId;
         QString mName;

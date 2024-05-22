@@ -50,20 +50,6 @@ namespace hal
         Q_OBJECT
 
     public:
-        struct PIN {
-            QString name;
-            PinDirection direction;
-            PinType type;
-            u32 id;
-        };
-
-        struct PINGROUP {
-            QString name;
-            PinDirection direction;
-            PinType type;
-            u32 id;
-            QList<PIN*> pins;
-        };
 
         explicit PinModel(QObject* parent = nullptr);
         explicit PinModel(QObject* parent, bool editable);
@@ -111,7 +97,7 @@ namespace hal
          * Returns a List of PinGroup structures representing the pingroups of a GateType
          * @return List of PinGroup structures representing the pingroups of a GateType
          */
-        QList<PINGROUP*> getPinGroups();
+        QList<PinItem*> getPinGroups();
 
     private:
         QList<PinItem*> mInvalidPins = QList<PinItem*>();
@@ -141,7 +127,7 @@ namespace hal
         QSet<QString> mAssignedNames;
         QSet<QString> mAssignedPinNames;
         QSet<QString> mAssignedGroupNames;
-        QList<PINGROUP*> mPinGroups;
+        QList<PinItem*> mPinGroups;
         bool mEditable;
 
     };

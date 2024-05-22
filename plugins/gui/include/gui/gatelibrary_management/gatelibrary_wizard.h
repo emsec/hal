@@ -69,7 +69,7 @@ namespace hal
         void addGate();
         void setData(GateLibrary* gateLibrary, GateType* gateType);
         QStringList getProperties();
-        QList<PinModel::PINGROUP*> getPingroups();
+        QList<PinItem*> getPingroups();
         void accept() override;
         int nextId() const override;
     private:
@@ -88,7 +88,7 @@ namespace hal
 
         QString mName;
         QStringList mProperties;
-        QList<PinModel::PINGROUP*> mPingroups;
+        QList<PinItem*> mPingroups;
         PinModel* mPinModel;
         GateLibraryTabPin* mPinTab;
 

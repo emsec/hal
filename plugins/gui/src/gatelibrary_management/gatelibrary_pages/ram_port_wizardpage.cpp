@@ -45,7 +45,7 @@ namespace hal
 void RAMPortWizardPage::initializePage(){
     mWizard = static_cast<GateLibraryWizard*>(wizard());
     int ramPortCnt = 1;
-    QList<PinModel::PINGROUP*> pinGroups = mWizard->getPingroups();
+    QList<PinItem*> pinGroups = mWizard->getPingroups();
     /*for (auto pinGroup : mWizard->getPingroups()) {
         //assumption at this point: #data fields = #address fields
         if(pinGroup->type == PinType::data) ramPortCnt++;
@@ -55,9 +55,9 @@ void RAMPortWizardPage::initializePage(){
 
     //create empty lines for ram_port for each data/address pair
     for (int i=0; i<pinGroups.length(); i++) {
-        QString name = pinGroups[i]->name;
-        PinType type = pinGroups[i]->type;
-        if(pinGroups[i]->type == PinType::data)
+        QString name = pinGroups[i]->getName();
+        QString type = pinGroups[i]->getType();
+        if(type == "data")
         {
             mLayout->addWidget(new GateLibraryLabel(false, QString("RAM Port %1").arg(ramPortCnt), this));
 

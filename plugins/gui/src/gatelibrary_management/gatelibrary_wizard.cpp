@@ -120,7 +120,7 @@ namespace hal
         return mProperties;
     }
 
-    QList<PinModel::PINGROUP*> GateLibraryWizard::getPingroups()
+    QList<PinItem*> GateLibraryWizard::getPingroups()
     {
         return mPinModel->getPinGroups();
     }

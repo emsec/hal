@@ -81,7 +81,7 @@ namespace hal
         return mDirection;
     }
 
-    u32 PinItem::id() const
+    u32 PinItem::getId() const
     {
         return mId;
     }

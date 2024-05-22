@@ -51,7 +51,7 @@ namespace hal
         pinModel->handleDeleteItem(treeView->currentIndex());
     }
 
-    QList<PinModel::PINGROUP*> PinsWizardPage::getPingroups(){
+    QList<PinItem*> PinsWizardPage::getPingroups(){
         return mPinModel->getPinGroups();
     }
 
