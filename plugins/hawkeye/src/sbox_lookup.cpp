@@ -108,7 +108,7 @@ namespace hal
                 }
 
                 // brute-force all control inputs
-                for (u32 i = 0; i < (2 << actual_control_inputs.size()); i++)
+                for (u32 i = 0; i < (1 << actual_control_inputs.size()); i++)
                 {
                     // prepare values to assign to control inputs
                     std::map<std::string, BooleanFunction> control_values;
@@ -150,7 +150,65 @@ namespace hal
                         sbox.push_back(u64_res.get());
                     }
 
-                    // TODO perform magic if input and output length do not match
+                    // check linear independence of outputs if more outputs than inputs
+                    // remove outputs that are linearly dependent on others
+                    // basically uses Gauss elimination
+                    if (input_gates.size() != output_gates.size())
+                    {
+                        std::vector<u64> mat;
+                        for (j = 0; j < output_gates.size(); j++)
+                        {
+                            u64 sum = 0;
+                            for (u32 k = 0; k < (1 << input_gates.size()); k++)
+                            {
+                                sum += (1 << k) * ((sbox[k] >> j) & 1);
+                            }
+                            mat.push_back(sum);
+                        }
+
+                        for (j = 0; j < (1 << input_gates.size()); j++)
+                        {
+                            u32 kk = 0;
+                            for (u32 k = 0; k < output_gates.size(); k++)
+                            {
+                                if ((mat.at(k) >> j) & 1 == 1)
+                                {
+                                    kk = k;
+                                    break;
+                                }
+                            }
+
+                            for (u32 k = kk + 1; k < output_gates.size(); k++)
+                            {
+                                if ((mat.at(k) >> j) & 1 == 1)
+                                {
+                                    mat.at(k) = mat.at(k) ^ mat.at(kk);
+                                }
+                            }
+                        }
+
+                        std::vector<u32> idx;
+                        for (j = 0; j < mat.size(); j++)
+                        {
+                            if (mat.at(j) != 0)
+                            {
+                                idx.push_back(j);
+                            }
+                        }
+
+                        if (idx.size() == input_gates.size())
+                        {
+                            for (j = 0; j < sbox.size(); j++)
+                            {
+                                u8 new_val = 0;
+                                for (u32 k = 0; k < idx.size(); k++)
+                                {
+                                    new_val += (1 << k) * ((sbox.at(j) >> idx.at(k)) & 1);
+                                }
+                                sbox.at(j) = new_val;
+                            }
+                        }
+                    }
 
                     std::set<u8> sbox_set(sbox.begin(), sbox.end());
                     if (sbox.size() != sbox_set.size())
