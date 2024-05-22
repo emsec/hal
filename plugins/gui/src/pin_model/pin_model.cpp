@@ -23,13 +23,7 @@ namespace hal
     }
 
     PinModel::~PinModel(){
-        //free old allocated memory of structs
-        for(auto pinGroup : mPinGroups){
-            for(auto pin : pinGroup->getChildren()){
-                delete(pin);
-            }
-            delete(pinGroup);
-        }
+        BaseTreeModel::clear();
     }
 
 
@@ -45,15 +39,6 @@ namespace hal
 
         //TODO change font of dummy entries
         clear();
-
-        //free old allocated memory of structs
-        for(auto pinGroup : mPinGroups){
-            for(auto pin : pinGroup->getChildren()){
-                delete(pin);
-            }
-            delete(pinGroup);
-        }
-        mPinGroups.clear();
 
 
         //get all pins of a given gate if it exists
@@ -78,6 +63,8 @@ namespace hal
             }
         }*/
 
+        QList<PinItem*> tempGroupList;
+
         if(gate){
             for (auto pinGroup : gate->get_pin_groups())
             {
@@ -95,12 +82,12 @@ namespace hal
                     pinStruct->setType(pin->get_type());
                     groupStruct->appendChild(pinStruct);
                 }
-                mPinGroups.append(groupStruct);
+                tempGroupList.append(groupStruct);
             }
         }
 
         beginResetModel();
-        for(auto group : mPinGroups){
+        for(auto group : tempGroupList){
             auto groupItem = new PinItem(PinItem::TreeItemType::PinGroup);
             //get all infos for that group
             QString groupDirection        = group->getDirection();
@@ -209,8 +196,6 @@ namespace hal
                 newPinGroup->setName(pinItem->getName());
                 newPinGroup->setDirection(pinItem->getDirection());
                 newPinGroup->setType(pinItem->getType());
-
-                mPinGroups.append(newPinGroup);
 
                 //add pin to group
                 addPinToPinGroup(initialPin, pinItem);
@@ -360,7 +345,7 @@ namespace hal
                     }
                 }*/
 
-                for(auto group : mPinGroups){
+                for(auto group : getPinGroups()){
                     if(group->getName() == pinItem->getName()){
                         for(auto item : group->getChildren()){
                             PinItem* pin = static_cast<PinItem*>(item);
@@ -376,7 +361,7 @@ namespace hal
 
     void PinModel::addPinToPinGroup(PinItem* pinItem, PinItem* groupItem)
     {
-        for(auto pinGroup : mPinGroups){
+        for(auto pinGroup : getPinGroups()){
             //PinItem* pinGroup = static_cast<PinItem*>(item);
             if(pinGroup->getId() == groupItem->getId()){
                 PinItem* pin = new PinItem(PinItem::TreeItemType::Pin);
@@ -407,7 +392,7 @@ namespace hal
 
             //rename pin within pinGroup
             auto pinGroup = static_cast<PinItem*>(pinItem->getParent());
-            for(auto group : mPinGroups){
+            for(auto group : getPinGroups()){
                 if(group->getName() == pinGroup->getName()){
                     for(auto item : group->getChildren()){
                         PinItem* pin = static_cast<PinItem*>(item);
@@ -438,7 +423,7 @@ namespace hal
             groupItem->setName(newName);
 
             //rename corresponding pinGroup
-            for(auto group : mPinGroups){
+            for(auto group : getPinGroups()){
                 if(group->getId() == groupItem->getId()){
                     group->setName(newName);
                     break;
@@ -589,7 +574,7 @@ namespace hal
     void PinModel::printGateMember()
     {
         qInfo() << "Printing PinGroups and Pins";
-        for(auto pinGroup : mPinGroups){
+        for(auto pinGroup : getPinGroups()){
             qInfo() << "PinGroup: " << pinGroup->getName() << " " << pinGroup->getId();
             for(auto item : pinGroup->getChildren()){
                 PinItem* pin = static_cast<PinItem*>(item);
@@ -604,7 +589,7 @@ namespace hal
         QSet<u32> takenPinIds = QSet<u32>();
 
         //get all currently taken ids
-        for(auto item : mPinGroups){
+        for(auto item : getPinGroups()){
             PinItem* pinGroup = static_cast<PinItem*>(item);
             takenGroupIds.insert(pinGroup->getId());
             for(auto item : pinGroup->getChildren()){
@@ -634,9 +619,12 @@ namespace hal
         return counter;
     }
 
-    QList<PinItem*> PinModel::getPinGroups()
+    QList<PinItem*> PinModel::getPinGroups() const
     {
-        return mPinGroups;
+        QList<PinItem*> retval;
+        for (BaseTreeItem* bti : mRootItem->getChildren())
+            retval.append(static_cast<PinItem*>(bti));
+        return retval;
     }
 
     void PinModel::handleDeleteItem(QModelIndex index)
@@ -653,14 +641,13 @@ namespace hal
         PinItem::TreeItemType type = item->getItemType();
         if(type == PinItem::TreeItemType::PinGroup || type == PinItem::TreeItemType::InvalidPinGroup){
             //handle group deletion
-            for(auto item : mPinGroups){
+            for(auto item : getPinGroups()){
                 PinItem* group = static_cast<PinItem*>(item);
                 //delete all pins from the group and free group afterward
                 if(group->getId() == item->getId()){
                     for(auto pin : group->getChildren()){
                         delete(pin);
                     }
-                    mPinGroups.removeAll(group);
                     delete(group);
                     break;
                 }
@@ -676,7 +663,7 @@ namespace hal
 
             //get the parent group of the pin
             auto parentGroup = static_cast<PinItem*>(item->getParent());
-            for(auto item : mPinGroups){
+            for(auto item : getPinGroups()){
                 PinItem* group = static_cast<PinItem*>(item);
                 if(group->getId() == parentGroup->getId()){
                     //delete pin from the group

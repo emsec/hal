@@ -97,7 +97,7 @@ namespace hal
          * Returns a List of PinGroup structures representing the pingroups of a GateType
          * @return List of PinGroup structures representing the pingroups of a GateType
          */
-        QList<PinItem*> getPinGroups();
+        QList<PinItem*> getPinGroups() const;
 
     private:
         QList<PinItem*> mInvalidPins = QList<PinItem*>();
@@ -127,7 +127,6 @@ namespace hal
         QSet<QString> mAssignedNames;
         QSet<QString> mAssignedPinNames;
         QSet<QString> mAssignedGroupNames;
-        QList<PinItem*> mPinGroups;
         bool mEditable;
 
     };
