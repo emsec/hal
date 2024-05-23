@@ -118,6 +118,9 @@ namespace hal
              */
             const std::set<Net*>& get_state_outputs() const;
 
+            const std::map<Gate*, std::set<Gate*>>& get_input_ffs_of_gate() const;
+            const std::map<u32, std::set<Gate*>>& get_longest_distance_to_gate() const;
+
         private:
             /**
              * The netlist to which the candidate belongs.
@@ -168,6 +171,12 @@ namespace hal
              * The state outputs from the combinational logic computing the next state.
              */
             std::set<Net*> m_state_outputs;
+
+            std::map<Gate*, std::set<Gate*>> m_gates_reached_by_input_ff;
+
+            std::map<Gate*, std::set<Gate*>> m_input_ffs_of_gate;
+
+            std::map<u32, std::set<Gate*>> m_longest_distance_to_gate;
         };
     }    // namespace hawkeye
 }    // namespace hal

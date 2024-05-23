@@ -58,8 +58,11 @@ namespace hal
             log_info("hawkeye", "start isolating state logic...");
             auto start = std::chrono::system_clock::now();
 
-            const auto& cand_input_reg = candidate->get_input_reg();
-            for (const auto* out_ff : candidate->get_output_reg())
+            const auto& state_input_reg  = candidate->get_input_reg();
+            const auto& state_output_reg = candidate->get_output_reg();
+
+            // DFS from output reg backwards
+            for (const auto* out_ff : state_output_reg)
             {
                 auto ff_data_predecessors = out_ff->get_predecessors([](const GatePin* p, const Endpoint* _) { return p->get_type() == PinType::data; });
 
@@ -101,7 +104,7 @@ namespace hal
                         if (predecessor_gate->get_type()->has_property(GateTypeProperty::ff))
                         {
                             // if predecessor is part of input state reg, fill set of next state logic
-                            if (cand_input_reg.find(predecessor_gate) != cand_input_reg.end())
+                            if (state_input_reg.find(predecessor_gate) != state_input_reg.end())
                             {
                                 state_inputs.insert(next_predecessor->get_net());
                                 state_logic.insert(current_gate);
@@ -189,7 +192,7 @@ namespace hal
 
             state_cand->m_size = candidate->get_size();
 
-            for (const auto* g : candidate->get_input_reg())
+            for (const auto* g : state_input_reg)
             {
                 auto* new_g = copied_nl->create_gate(g->get_id(), g->get_type(), g->get_name());
                 state_cand->m_in_reg.insert(new_g);
@@ -207,9 +210,9 @@ namespace hal
                 copy_out_eps_of_gate(copied_nl, g, new_g);
             }
 
-            if (candidate->get_input_reg() != candidate->get_output_reg())
+            if (state_input_reg != state_output_reg)
             {
-                for (const auto* g : candidate->get_output_reg())
+                for (const auto* g : state_output_reg)
                 {
                     auto* new_g = copied_nl->create_gate(g->get_id(), g->get_type(), g->get_name());
                     state_cand->m_out_reg.insert(new_g);
@@ -220,7 +223,7 @@ namespace hal
             else
             {
                 // create separate FF instances for state output register so that input and output register are distinct
-                for (const auto* g : candidate->get_output_reg())
+                for (const auto* g : state_output_reg)
                 {
                     // only differences: do not enforce ID (already taken by in_reg FF) and append suffix to name
                     auto* new_g = copied_nl->create_gate(g->get_type(), g->get_name() + "_OUT");
@@ -246,6 +249,85 @@ namespace hal
                 return ERR(nl_graph_res.get_error());
             }
             state_cand->m_graph = std::move(nl_graph_res.get());
+
+            // DFS from input reg forwards
+            std::map<Gate*, u32> gate_to_longest_distance;
+            for (auto* in_ff : state_cand->m_in_reg)
+            {
+                std::vector<Gate*> stack = {in_ff};
+                std::vector<Gate*> previous;
+                while (!stack.empty())
+                {
+                    auto* current_gate = stack.back();
+
+                    // pop stack if last gate on stack has been dealt with completely
+                    if (!previous.empty() && previous.back() == current_gate)
+                    {
+                        stack.pop_back();
+                        previous.pop_back();
+                        continue;
+                    }
+
+                    state_cand->m_input_ffs_of_gate[current_gate].insert(in_ff);
+                    state_cand->m_gates_reached_by_input_ff[in_ff].insert(current_gate);
+
+                    // expand towards successors
+                    bool added = false;
+                    for (auto* next_successor : current_gate->get_successors())
+                    {
+                        auto* successor_gate = next_successor->get_gate();
+                        if (successor_gate->get_type()->has_property(GateTypeProperty::ff))
+                        {
+                            // if successor is part of output state reg, fill set of gates reached by input FF
+                            if (state_cand->m_out_reg.find(successor_gate) != state_cand->m_out_reg.end())
+                            {
+                                state_cand->m_input_ffs_of_gate[successor_gate].insert(in_ff);
+                                state_cand->m_gates_reached_by_input_ff[in_ff].insert(successor_gate);
+                            }
+                        }
+                        else if (successor_gate->get_type()->has_property(GateTypeProperty::combinational))
+                        {
+                            // if successor is part of next state logic, add gate to stack
+                            if (state_cand->m_state_logic.find(successor_gate) != state_cand->m_state_logic.end())
+                            {
+                                stack.push_back(successor_gate);
+                                added = true;
+
+                                u32 current_distance = previous.size() + 1;
+                                if (const auto dist_it = gate_to_longest_distance.find(successor_gate); dist_it != gate_to_longest_distance.end())
+                                {
+                                    u32 stored_distance = dist_it->second;
+                                    if (stored_distance < current_distance)
+                                    {
+                                        gate_to_longest_distance[successor_gate] = current_distance;
+                                    }
+                                }
+                                else
+                                {
+                                    gate_to_longest_distance[successor_gate] = current_distance;
+                                }
+                            }
+                        }
+                    }
+
+                    if (added)
+                    {
+                        // push current gate to previous if progress was made
+                        previous.push_back(current_gate);
+                    }
+                    else
+                    {
+                        // otherwise pop last element from stack as it has been dealt with already
+                        stack.pop_back();
+                    }
+                }
+            }
+
+            // invert gate_to_longest_distance map to fill m_longest_distance_to_gate
+            for (const auto& [gate, distance] : gate_to_longest_distance)
+            {
+                state_cand->m_longest_distance_to_gate[distance].insert(gate);
+            }
 
             return OK(std::move(state_cand));
         }
@@ -298,6 +380,16 @@ namespace hal
         const std::set<Net*>& StateCandidate::get_state_outputs() const
         {
             return m_state_outputs;
+        }
+
+        const std::map<Gate*, std::set<Gate*>>& StateCandidate::get_input_ffs_of_gate() const
+        {
+            return m_input_ffs_of_gate;
+        }
+
+        const std::map<u32, std::set<Gate*>>& StateCandidate::get_longest_distance_to_gate() const
+        {
+            return m_longest_distance_to_gate;
         }
     }    // namespace hawkeye
 }    // namespace hal

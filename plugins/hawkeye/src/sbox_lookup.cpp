@@ -1,5 +1,7 @@
 #include "hawkeye/sbox_lookup.h"
 
+#include "graph_algorithm/algorithms/components.h"
+#include "graph_algorithm/algorithms/subgraph.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
@@ -12,6 +14,199 @@ namespace hal
 {
     namespace hawkeye
     {
+        Result<std::vector<std::pair<std::set<Gate*>, std::set<Gate*>>>> locate_sboxes(const StateCandidate* candidate)
+        {
+            const auto* nl    = candidate->get_netlist();
+            const auto* graph = candidate->get_graph();
+
+            // get initial set of components
+            auto comp_res = graph_algorithm::get_connected_components(graph, false).map<std::vector<std::vector<Gate*>>>([graph](const auto& comps) -> Result<std::vector<std::vector<Gate*>>> {
+                std::vector<std::vector<Gate*>> res;
+                for (const auto& c : comps)
+                {
+                    if (const auto gates_res = graph->get_gates_from_vertices(c); gates_res.is_ok())
+                    {
+                        res.push_back(gates_res.get());
+                    }
+                    else
+                    {
+                        return ERR(gates_res.get_error());
+                    }
+                }
+                return OK(res);
+            });
+            if (comp_res.is_error())
+            {
+                return ERR(comp_res.get_error());
+            }
+            auto components = comp_res.get();
+
+            const auto& state_input_reg  = candidate->get_input_reg();
+            const auto& state_output_reg = candidate->get_output_reg();
+
+            std::vector<std::pair<std::set<Gate*>, std::set<Gate*>>> res;
+
+            for (const auto& component : components)
+            {
+                // gather FFs of the component that are also part of the state input reg
+                std::set<Gate*> component_input_ffs;
+                std::set_intersection(component.begin(), component.end(), state_input_reg.begin(), state_input_reg.end(), std::inserter(component_input_ffs, component_input_ffs.begin()));
+
+                u32 number_input_ffs = component_input_ffs.size();
+                if (number_input_ffs < 3)
+                {
+                    // too small for S-box
+                    continue;
+                }
+                else if (number_input_ffs <= 8)
+                {
+                    // assume to have found a single S-box
+                    std::set<Gate*> sbox_output_gates;
+
+                    for (auto* cand_gate : component)
+                    {
+                        // skip FFs
+                        if (cand_gate->get_type()->has_property(GateTypeProperty::ff))
+                        {
+                            continue;
+                        }
+
+                        // output gates are all combinational gates that have no other successors but the state output reg
+                        const auto suc_gates = cand_gate->get_unique_successors();
+                        if (std::none_of(suc_gates.begin(), suc_gates.end(), [&state_output_reg](Gate* g) { return state_output_reg.find(g) == state_output_reg.end(); }))
+                        {
+                            sbox_output_gates.insert(cand_gate);
+                        }
+                    }
+
+                    // create S-box candidate if input size equals output size
+                    if (sbox_output_gates.size() == number_input_ffs)
+                    {
+                        res.push_back(std::make_pair(std::move(component_input_ffs), std::move(sbox_output_gates)));
+                    }
+                    continue;
+                }
+
+                // try to split component in smaller sub-components (assuming component is combination of S-box and linear layer)
+                std::set<Gate*> current_subset = component_input_ffs;
+                std::vector<std::vector<std::set<Gate*>>> input_groupings;
+
+                // abuse that map keys are sorted, hence rbegin() will return max distance in map
+                const auto& longest_dist_to_gates = candidate->get_longest_distance_to_gate();
+                for (u32 step = 1; step < longest_dist_to_gates.rbegin()->first; step++)
+                {
+                    if (const auto dist_it = longest_dist_to_gates.find(step); dist_it != longest_dist_to_gates.end())
+                    {
+                        const auto& new_gates = std::get<1>(*dist_it);
+                        current_subset.insert(new_gates.begin(), new_gates.end());
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+                    // generate subgraph of new sub-component
+                    auto subgraph_res = graph_algorithm::get_subgraph(graph, current_subset);
+                    if (subgraph_res.is_error())
+                    {
+                        return ERR(subgraph_res.get_error());
+                    }
+                    auto subgraph = std::move(subgraph_res.get());
+
+                    auto comp_res = graph_algorithm::get_connected_components(subgraph.get(), false);
+                    if (comp_res.is_error())
+                    {
+                        return ERR(comp_res.get_error());
+                    }
+
+                    // determine input groups feeding into distinct sub-circuits
+                    std::set<u32> lens;
+                    std::vector<std::vector<Gate*>> subcomponents;
+                    std::vector<std::set<Gate*>> input_groups;
+                    for (const auto& comp : comp_res.get())
+                    {
+                        auto gates_res = graph->get_gates_from_vertices(comp);
+                        if (gates_res.is_error())
+                        {
+                            return ERR(gates_res.get_error());
+                        }
+                        auto comp_gates = gates_res.get();
+
+                        // only consider sub-components connected to at least one input FF
+                        if (std::any_of(comp_gates.begin(), comp_gates.end(), [&component_input_ffs](Gate* g) { return component_input_ffs.find(g) != component_input_ffs.end(); }))
+                        {
+                            std::set<Gate*> input_group;
+                            std::set_intersection(comp_gates.begin(), comp_gates.end(), state_input_reg.begin(), state_input_reg.end(), std::inserter(input_group, input_group.begin()));
+                            lens.insert(input_group.size());
+                            input_groups.push_back(std::move(input_group));
+                            subcomponents.push_back(std::move(comp_gates));
+                        }
+                    }
+
+                    // all input groups should have same size and comprise more than one input
+                    if (lens.size() == 1 && input_groups.at(0).size() > 1 && input_groups.size() > 1)
+                    {
+                        input_groupings.push_back(input_groups);
+                    }
+                }
+
+                const auto& input_ffs_of_gate = candidate->get_input_ffs_of_gate();
+
+                std::vector<std::pair<std::set<Gate*>, std::set<Gate*>>> sboxes_input_output_gates;
+                for (const auto& input_groups : input_groupings)
+                {
+                    for (const auto& input_group : input_groups)
+                    {
+                        std::set<Gate*> output_group;
+                        for (auto auto* comp_gate : component)
+                        {
+                            // disregard output FFs
+                            if (state_output_reg.find(comp_gate) != state_output_reg.end())
+                            {
+                                continue;
+                            }
+
+                            // disregard gates that only depend on a single input FF
+                            if (input_ffs_of_gate.at(comp_gate).size() <= 1)
+                            {
+                                continue;
+                            }
+
+                            // disregard gates that do not only depend on the input FFs of the sub-component
+                            if (!std::includes(input_group.begin(), input_group.end(), input_ffs_of_gate.at(comp_gate).begin(), input_ffs_of_gate.at(comp_gate).end()))
+                            {
+                                continue;
+                            }
+
+                            // disregard gates for which no successor is dependent on an additional (external) input
+                            auto sucs = comp_gate->get_unique_successors();
+                            if (std::all_of(sucs.begin(), sucs.end(), [&input_ffs_of_gate, &input_group](auto* sg) {
+                                    return std::includes(input_group.begin(), input_group.end(), input_ffs_of_gate.at(sg).begin(), input_ffs_of_gate.at(sg).end())
+                                }))
+                            {
+                                continue;
+                            }
+
+                            // TODO kick out inverters
+
+                            // TODO kick out everything that depends on other outputs only
+
+                            output_group.insert(comp_gate);
+                        }
+
+                        if (output_group.size() == input_group.size() && output_group.size() <= 8)
+                        {
+                            sboxes_input_output_gates.push_back(std::make_pair(input_group, output_group));
+                        }
+
+                        // TODO other cases
+                    }
+                }
+
+                // TODO call identify_sbox on all pairs sboxes_input_output_gates
+            }
+        }
+
         Result<std::string>
             identify_sbox(const StateCandidate* candidate, const std::set<Gate*>& component, const std::set<Gate*>& input_gates, const std::set<Gate*>& output_gates, const SBoxDatabase& db)
         {

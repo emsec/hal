@@ -38,7 +38,7 @@ namespace hal
     {
         class StateCandidate;
 
-        // TODO extract_sbox_components();
+        Result<std::vector<std::pair<std::set<Gate*>, std::set<Gate*>>>> locate_sboxes(const StateCandidate* candidate);
 
         Result<std::string>
             identify_sbox(const StateCandidate* candidate, const std::set<Gate*>& component, const std::set<Gate*>& input_gates, const std::set<Gate*>& output_gates, const SBoxDatabase& db);
