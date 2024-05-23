@@ -88,7 +88,7 @@ namespace hal
 
         QString mName;
         QStringList mProperties;
-        QList<PinItem*> mPingroups;
+        //QList<PinItem*> mPingroups;
         PinModel* mPinModel;
         GateLibraryTabPin* mPinTab;
 

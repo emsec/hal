@@ -80,6 +80,7 @@ namespace hal
         void setDirection(const QString& direction);
         void setId(u32 newId);
         void setType(const QString& type);
+
         void setDirection(PinDirection direction);
         void setType(PinType type);
 
@@ -92,6 +93,8 @@ namespace hal
         TreeItemType mItemType;
         u32 mId;
         QString mName;
+
+        //enum
         QString mDirection;
         QString mType;
 

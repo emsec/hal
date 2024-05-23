@@ -181,14 +181,14 @@ namespace hal
 
                 //add new dummypin to the group
                 auto dummyPin = new PinItem(PinItem::TreeItemType::PinCreator);
-                dummyPin->setData(QList<QVariant>() << "create new pin ...");
+                //dummyPin->setData(QList<QVariant>() << "create new pin ...");
                 pinItem->appendChild(dummyPin);
 
                 //add new dummygroup after entry
                 auto dummyGroup = new PinItem(PinItem::TreeItemType::GroupCreator);
-                dummyGroup->setData(QList<QVariant>() << "create new group ...");
+                //dummyGroup->setData(QList<QVariant>() << "create new group ...");
                 pinItem->getParent()->appendChild(dummyGroup);
-                endInsertRows();
+
 
                 //create new pinGroupStruct and add it to the list of pingroups
                 PinItem* newPinGroup = new PinItem(PinItem::TreeItemType::PinGroup);
@@ -196,9 +196,10 @@ namespace hal
                 newPinGroup->setName(pinItem->getName());
                 newPinGroup->setDirection(pinItem->getDirection());
                 newPinGroup->setType(pinItem->getType());
+                endInsertRows();
 
                 //add pin to group
-                addPinToPinGroup(initialPin, pinItem);
+                //addPinToPinGroup(initialPin, pinItem);
 
                 break;
             }
@@ -214,7 +215,7 @@ namespace hal
                 beginInsertRows(index.parent(),0,0);
                 //add new dummy after entry
                 auto dummyPin = new PinItem(PinItem::TreeItemType::PinCreator);
-                dummyPin->setData(QList<QVariant>() << "create new pin ...");
+                //dummyPin->setData(QList<QVariant>() << "create new pin ...");
                 pinItem->getParent()->appendChild(dummyPin);
                 endInsertRows();
 
@@ -361,19 +362,10 @@ namespace hal
 
     void PinModel::addPinToPinGroup(PinItem* pinItem, PinItem* groupItem)
     {
-        for(auto pinGroup : getPinGroups()){
-            //PinItem* pinGroup = static_cast<PinItem*>(item);
-            if(pinGroup->getId() == groupItem->getId()){
-                PinItem* pin = new PinItem(PinItem::TreeItemType::Pin);
-                pin->setId(pinItem->getId());
-                pin->setName(pinItem->getName());
-                pin->setDirection(pinItem->getDirection());
-                pin->setType(pinItem->getType());
-
-                pinGroup->appendChild(pin);
-                break;
-            }
-        }
+        QModelIndex index = getIndexFromItem(groupItem);
+        beginInsertRows(index, groupItem->getChildCount(), groupItem->getChildCount());
+        groupItem->appendChild(pinItem);
+        endInsertRows();
     }
 
 
@@ -641,6 +633,7 @@ namespace hal
         PinItem::TreeItemType type = item->getItemType();
         if(type == PinItem::TreeItemType::PinGroup || type == PinItem::TreeItemType::InvalidPinGroup){
             //handle group deletion
+            beginRemoveRows(index, 0, 0);
             for(auto item : getPinGroups()){
                 PinItem* group = static_cast<PinItem*>(item);
                 //delete all pins from the group and free group afterward
@@ -653,7 +646,7 @@ namespace hal
                 }
             }
             //remove actual modelItem
-            beginRemoveRows(index, 0, 0);
+
             getRootItem()->removeChild(item);
             endRemoveRows();
             handleItemRemoved(item);

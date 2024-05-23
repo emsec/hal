@@ -22,6 +22,17 @@ namespace hal
 
     QVariant PinItem::getData(int column) const
     {
+        switch(mItemType){
+        case TreeItemType::GroupCreator:
+            if(!column) return "create new pingroup...";
+            return QVariant();
+        case TreeItemType::PinCreator:
+            if(!column) return "create new pin...";
+            return QVariant();
+        default:
+            break;
+        }
+
         switch (column){
             case 0:
                 return QVariant(mName);
