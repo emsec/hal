@@ -16,6 +16,8 @@ namespace hal
 
         NetlistGraph::NetlistGraph(Netlist* nl, igraph_t&& graph, std::unordered_map<u32, Gate*>&& nodes_to_gates) : m_nl(nl), m_graph(std::move(graph)), m_nodes_to_gates(std::move(nodes_to_gates))
         {
+            m_graph_ptr = &m_graph;
+
             for (const auto& [node, gate] : m_nodes_to_gates)
             {
                 if (gate)
@@ -142,7 +144,9 @@ namespace hal
                 }
             }
 
-            err = igraph_create(&(graph->m_graph), &edges, node_counter, IGRAPH_DIRECTED);
+            graph->m_graph_ptr = &(graph->m_graph);
+            err                = igraph_create(graph->m_graph_ptr, &edges, node_counter, IGRAPH_DIRECTED);
+
             igraph_vector_int_destroy(&edges);
 
             if (err != IGRAPH_SUCCESS)
@@ -172,7 +176,8 @@ namespace hal
                 graph->m_nodes_to_gates[node] = g;
             }
 
-            auto err = igraph_empty(&(graph->m_graph), node_counter, IGRAPH_DIRECTED);
+            graph->m_graph_ptr = &(graph->m_graph);
+            auto err           = igraph_empty(graph->m_graph_ptr, node_counter, IGRAPH_DIRECTED);
             if (err != IGRAPH_SUCCESS)
             {
                 return ERR(igraph_strerror(err));
@@ -201,9 +206,9 @@ namespace hal
             return m_nl;
         }
 
-        igraph_t* NetlistGraph::get_graph()
+        igraph_t* NetlistGraph::get_graph() const
         {
-            return &m_graph;
+            return m_graph_ptr;
         }
 
         Result<std::vector<Gate*>> NetlistGraph::get_gates_from_vertices(const std::vector<u32>& vertices) const

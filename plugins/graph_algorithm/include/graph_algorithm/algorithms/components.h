@@ -46,6 +46,6 @@ namespace hal
          * @param[in] min_size - Minimal size of a connected component to be part of the result. Set to `0` to include all components. Defaults to `0`.
          * @returns A vector of strongly connected components on success, an error otherwise.
          */
-        Result<std::vector<std::vector<u32>>> get_connected_components(NetlistGraph* graph, bool strong, u32 min_size = 0);
+        Result<std::vector<std::vector<u32>>> get_connected_components(const NetlistGraph* graph, bool strong, u32 min_size = 0);
     }    // namespace graph_algorithm
 }    // namespace hal

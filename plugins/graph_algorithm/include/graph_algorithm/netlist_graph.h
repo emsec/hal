@@ -98,7 +98,7 @@ namespace hal
              * 
              * @returns The graph object.
              */
-            igraph_t* get_graph();
+            igraph_t* get_graph() const;
 
             /**
              * Get the gates corresponding to the specified vertices.
@@ -282,6 +282,7 @@ namespace hal
 
             Netlist* m_nl;
             igraph_t m_graph;
+            igraph_t* m_graph_ptr;
             std::unordered_map<u32, Gate*> m_nodes_to_gates;
             std::unordered_map<Gate*, u32> m_gates_to_nodes;
         };
