@@ -442,6 +442,38 @@ namespace hal
             return OK(std::move(out));
         }
 
+        Result<igraph_vector_int_t> NetlistGraph::get_vertices_from_gates_igraph(const std::set<Gate*>& gates) const
+        {
+            igraph_vector_int_t out;
+            if (auto res = igraph_vector_int_init(&out, gates.size()); res != IGRAPH_SUCCESS)
+            {
+                return ERR(igraph_strerror(res));
+            }
+
+            u32 i = 0;
+            for (auto gates_it = gates.begin(); gates_it != gates.end(); gates_it++)
+            {
+                auto* g = *gates_it;
+
+                if (!g)
+                {
+                    return ERR("gate at index " + std::to_string(i) + " is a nullptr");
+                }
+
+                if (const auto nodes_it = m_gates_to_nodes.find(g); nodes_it != m_gates_to_nodes.end())
+                {
+                    VECTOR(out)[i] = nodes_it->second;
+                }
+                else
+                {
+                    return ERR("no node for gate '" + g->get_name() + "' with ID " + std::to_string(g->get_id()) + " exists in graph for netlist with ID " + std::to_string(m_nl->get_id()));
+                }
+
+                i++;
+            }
+            return OK(std::move(out));
+        }
+
         Result<u32> NetlistGraph::get_vertex_from_gate(Gate* g) const
         {
             const auto res = get_vertices_from_gates(std::vector<Gate*>({g}));

@@ -775,7 +775,7 @@ namespace hal
 
         m.def(
             "get_subgraph",
-            [](graph_algorithm::NetlistGraph* graph, const std::vector<Gate*>& subgraph_gates) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
+            [](const graph_algorithm::NetlistGraph* graph, const std::vector<Gate*>& subgraph_gates) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
                 auto res = graph_algorithm::get_subgraph(graph, subgraph_gates);
                 if (res.is_ok())
                 {
@@ -800,7 +800,32 @@ namespace hal
 
         m.def(
             "get_subgraph",
-            [](graph_algorithm::NetlistGraph* graph, const std::vector<u32>& subgraph_vertices) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
+            [](const graph_algorithm::NetlistGraph* graph, const std::set<Gate*>& subgraph_gates) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
+                auto res = graph_algorithm::get_subgraph(graph, subgraph_gates);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while computing subgraph:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("subgraph_gates"),
+            R"(
+                Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.
+
+                :param graph_algorithm.NetlistGraph graph: The netlist graph.
+                :param set[hal_py.Gate] subgraph_gates: A set of gates that make up the subgraph.
+                :returns: The subgraph as a new netlist graph on success, ``None`` otherwise.
+                :rtype: graph_algorithm.NetlistGraph or None
+        )");
+
+        m.def(
+            "get_subgraph",
+            [](const graph_algorithm::NetlistGraph* graph, const std::vector<u32>& subgraph_vertices) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
                 auto res = graph_algorithm::get_subgraph(graph, subgraph_vertices);
                 if (res.is_ok())
                 {
@@ -819,6 +844,31 @@ namespace hal
                 
                 :param graph_algorithm.NetlistGraph graph: The netlist graph.
                 :param list[int] subgraph_vertices: A list of vertices that make up the subgraph.
+                :returns: The subgraph as a new netlist graph on success, ``None`` otherwise.
+                :rtype: graph_algorithm.NetlistGraph or None
+        )");
+
+        m.def(
+            "get_subgraph",
+            [](const graph_algorithm::NetlistGraph* graph, const std::set<u32>& subgraph_vertices) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
+                auto res = graph_algorithm::get_subgraph(graph, subgraph_vertices);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while computing subgraph:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("subgraph_vertices"),
+            R"(
+                Compute the subgraph induced by the specified vertices, including all edges between these vertices.
+                
+                :param graph_algorithm.NetlistGraph graph: The netlist graph.
+                :param set[int] subgraph_vertices: A set of vertices that make up the subgraph.
                 :returns: The subgraph as a new netlist graph on success, ``None`` otherwise.
                 :rtype: graph_algorithm.NetlistGraph or None
         )");

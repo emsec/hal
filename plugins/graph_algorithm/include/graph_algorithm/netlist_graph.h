@@ -184,6 +184,14 @@ namespace hal
             Result<igraph_vector_int_t> get_vertices_from_gates_igraph(const std::vector<Gate*>& gates) const;
 
             /**
+             * Get the vertices corresponding to the specified gates.
+             * 
+             * @param[in] gates - A set of gates.
+             * @returns An igraph vector of vertices on success, an error otherwise.
+             */
+            Result<igraph_vector_int_t> get_vertices_from_gates_igraph(const std::set<Gate*>& gates) const;
+
+            /**
              * Get the vertex corresponding to the specified gate.
              * 
              * @param[in] g - A gate.
