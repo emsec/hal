@@ -14,7 +14,7 @@ namespace hal
 {
     namespace hawkeye
     {
-        Result<std::vector<std::pair<std::set<Gate*>, std::set<Gate*>>>> locate_sboxes(const StateCandidate* candidate)
+        Result<std::vector<SBoxCandidate>> locate_sboxes(const StateCandidate* candidate)
         {
             const auto* nl    = candidate->get_netlist();
             const auto* graph = candidate->get_graph();
@@ -44,7 +44,7 @@ namespace hal
             const auto& state_input_reg  = candidate->get_input_reg();
             const auto& state_output_reg = candidate->get_output_reg();
 
-            std::vector<std::pair<std::set<Gate*>, std::set<Gate*>>> res;
+            std::vector<SBoxCandidate> res;
 
             for (const auto& component : components)
             {
@@ -82,7 +82,12 @@ namespace hal
                     // create S-box candidate if input size equals output size
                     if (sbox_output_gates.size() == number_input_ffs)
                     {
-                        res.push_back(std::make_pair(std::move(component_input_ffs), std::move(sbox_output_gates)));
+                        SBoxCandidate sbox_candidate;
+                        sbox_candidate.m_candidate    = candidate;
+                        sbox_candidate.m_component    = component;
+                        sbox_candidate.m_input_gates  = std::move(component_input_ffs);
+                        sbox_candidate.m_output_gates = std::move(sbox_output_gates);
+                        res.push_back(sbox_candidate);
                     }
                     continue;
                 }
@@ -158,7 +163,7 @@ namespace hal
                     for (const auto& input_group : input_groups)
                     {
                         std::set<Gate*> output_group;
-                        for (auto auto* comp_gate : component)
+                        for (auto* comp_gate : component)
                         {
                             // disregard output FFs
                             if (state_output_reg.find(comp_gate) != state_output_reg.end())
@@ -181,35 +186,82 @@ namespace hal
                             // disregard gates for which no successor is dependent on an additional (external) input
                             auto sucs = comp_gate->get_unique_successors();
                             if (std::all_of(sucs.begin(), sucs.end(), [&input_ffs_of_gate, &input_group](auto* sg) {
-                                    return std::includes(input_group.begin(), input_group.end(), input_ffs_of_gate.at(sg).begin(), input_ffs_of_gate.at(sg).end())
+                                    return std::includes(input_group.begin(), input_group.end(), input_ffs_of_gate.at(sg).begin(), input_ffs_of_gate.at(sg).end());
                                 }))
                             {
                                 continue;
                             }
 
-                            // TODO kick out inverters
+                            // disregard inverters at the outputs (should also be covered by next step)
+                            auto preds = comp_gate->get_unique_predecessors();
+                            if (comp_gate->get_type()->has_property(GateTypeProperty::c_inverter))
+                            {
+                                if (std::includes(output_group.begin(), output_group.end(), preds.begin(), preds.end()))
+                                {
+                                    continue;
+                                }
+                            }
 
                             // TODO kick out everything that depends on other outputs only
 
                             output_group.insert(comp_gate);
                         }
-
-                        if (output_group.size() == input_group.size() && output_group.size() <= 8)
+                        if (input_group.size() <= 8 && output_group.size() <= 20)
                         {
-                            sboxes_input_output_gates.push_back(std::make_pair(input_group, output_group));
+                            if (output_group.size() == input_group.size() + 1)
+                            {
+                                for (auto* drop_gate : output_group)
+                                {
+                                    SBoxCandidate sbox_candidate;
+                                    sbox_candidate.m_candidate    = candidate;
+                                    sbox_candidate.m_component    = component;
+                                    sbox_candidate.m_input_gates  = input_group;
+                                    sbox_candidate.m_output_gates = output_group;
+                                    sbox_candidate.m_output_gates.erase(drop_gate);
+                                    res.push_back(sbox_candidate);
+                                }
+                            }
+                            else if (output_group.size() == input_group.size() + 2)
+                            {
+                                for (auto* drop_gate_1 : output_group)
+                                {
+                                    for (auto* drop_gate_2 : output_group)
+                                    {
+                                        SBoxCandidate sbox_candidate;
+                                        sbox_candidate.m_candidate    = candidate;
+                                        sbox_candidate.m_component    = component;
+                                        sbox_candidate.m_input_gates  = input_group;
+                                        sbox_candidate.m_output_gates = output_group;
+                                        sbox_candidate.m_output_gates.erase(drop_gate_1);
+                                        sbox_candidate.m_output_gates.erase(drop_gate_2);
+                                        res.push_back(sbox_candidate);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                SBoxCandidate sbox_candidate;
+                                sbox_candidate.m_candidate    = candidate;
+                                sbox_candidate.m_component    = component;
+                                sbox_candidate.m_input_gates  = std::move(input_group);
+                                sbox_candidate.m_output_gates = std::move(output_group);
+                                res.push_back(sbox_candidate);
+                            }
                         }
-
-                        // TODO other cases
                     }
                 }
-
-                // TODO call identify_sbox on all pairs sboxes_input_output_gates
             }
+
+            return OK(res);
         }
 
-        Result<std::string>
-            identify_sbox(const StateCandidate* candidate, const std::set<Gate*>& component, const std::set<Gate*>& input_gates, const std::set<Gate*>& output_gates, const SBoxDatabase& db)
+        Result<std::string> identify_sbox(const SBoxCandidate& sbox_candidate, const SBoxDatabase& db)
         {
+            const StateCandidate* candidate     = sbox_candidate.m_candidate;
+            const std::vector<Gate*>& component = sbox_candidate.m_component;
+            const std::set<Gate*>& input_gates  = sbox_candidate.m_input_gates;
+            const std::set<Gate*>& output_gates = sbox_candidate.m_output_gates;
+
             if (input_gates.size() == 0)
             {
                 return ERR("empty set of input gates provided");

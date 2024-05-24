@@ -38,9 +38,17 @@ namespace hal
     {
         class StateCandidate;
 
-        Result<std::vector<std::pair<std::set<Gate*>, std::set<Gate*>>>> locate_sboxes(const StateCandidate* candidate);
+        class SBoxCandidate
+        {
+        public:
+            const StateCandidate* m_candidate;
+            std::vector<Gate*> m_component;
+            std::set<Gate*> m_input_gates;
+            std::set<Gate*> m_output_gates;
+        };
 
-        Result<std::string>
-            identify_sbox(const StateCandidate* candidate, const std::set<Gate*>& component, const std::set<Gate*>& input_gates, const std::set<Gate*>& output_gates, const SBoxDatabase& db);
+        Result<std::vector<SBoxCandidate>> locate_sboxes(const StateCandidate* candidate);
+
+        Result<std::string> identify_sbox(const SBoxCandidate& sbox_candidate, const SBoxDatabase& db);
     }    // namespace hawkeye
 }    // namespace hal
