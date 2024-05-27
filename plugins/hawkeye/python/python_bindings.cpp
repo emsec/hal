@@ -2,8 +2,9 @@
 
 #include "hawkeye/candidate_search.h"
 #include "hawkeye/plugin_hawkeye.h"
+#include "hawkeye/round_candidate.h"
 #include "hawkeye/sbox_database.h"
-#include "hawkeye/state_candidate.h"
+#include "hawkeye/sbox_lookup.h"
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
@@ -317,14 +318,14 @@ namespace hal
             :rtype: set[hal_py.Gate]
         )");
 
-        py::class_<hawkeye::StateCandidate, RawPtrWrapper<hawkeye::StateCandidate>> py_hawkeye_state_candidate(m, "StateCandidate", R"(
+        py::class_<hawkeye::RoundCandidate, RawPtrWrapper<hawkeye::RoundCandidate>> py_hawkeye_state_candidate(m, "RoundCandidate", R"(
             Holds all information on a crypto candidate.
         )");
 
         py_hawkeye_state_candidate.def_static(
             "from_register_candidate",
-            [](hawkeye::RegisterCandidate* candidate) -> std::unique_ptr<hawkeye::StateCandidate> {
-                auto res = hawkeye::StateCandidate::from_register_candidate(candidate);
+            [](hawkeye::RegisterCandidate* candidate) -> std::unique_ptr<hawkeye::RoundCandidate> {
+                auto res = hawkeye::RoundCandidate::from_register_candidate(candidate);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -342,77 +343,91 @@ namespace hal
 
             :param hawkeye.RegisterCandidate candidate: The register candidate.
             :returns: The state candidate on success, ``None`` otherwise.
-            :rtype: hawkeye.StateCandidate or None
+            :rtype: hawkeye.RoundCandidate or None
         )");
 
-        py_hawkeye_state_candidate.def("get_netlist", &hawkeye::StateCandidate::get_netlist, R"(
+        py_hawkeye_state_candidate.def("get_netlist", &hawkeye::RoundCandidate::get_netlist, R"(
             Get the netlist of the state candidate. The netlist will be a partial copy of the netlist of the register candidate.
 
             :returns: The netlist of the candidate.
             :rtype: hal_py.Netlist
         )");
 
-        py_hawkeye_state_candidate.def("get_graph", &hawkeye::StateCandidate::get_graph, R"(
+        py_hawkeye_state_candidate.def("get_graph", &hawkeye::RoundCandidate::get_graph, R"(
             Get the netlist graph of the state candidate.
 
             :returns: The netlist graph of the candidate.
             :rtype: graph_algorithm.NetlistGraph
         )");
 
-        py_hawkeye_state_candidate.def("get_size", &hawkeye::StateCandidate::get_size, R"(
+        py_hawkeye_state_candidate.def("get_size", &hawkeye::RoundCandidate::get_size, R"(
             Get the size of the candidate, i.e., the width of its registers.
 
             :returns: The size of the candidate.
             :rtype: int
         )");
 
-        py_hawkeye_state_candidate.def("get_input_reg", &hawkeye::StateCandidate::get_input_reg, R"(
+        py_hawkeye_state_candidate.def("get_input_reg", &hawkeye::RoundCandidate::get_input_reg, R"(
             Get the candidate's input register.
 
             :returns: The input register of the candidate.
             :rtype: set[hal_py.Gate]
         )");
 
-        py_hawkeye_state_candidate.def("get_output_reg", &hawkeye::StateCandidate::get_output_reg, R"(
+        py_hawkeye_state_candidate.def("get_output_reg", &hawkeye::RoundCandidate::get_output_reg, R"(
             Get the candidate's output register.
 
             :returns: The output register of the candidate.
             :rtype: set[hal_py.Gate]
         )");
 
-        py_hawkeye_state_candidate.def("get_state_logic", &hawkeye::StateCandidate::get_state_logic, R"(
+        py_hawkeye_state_candidate.def("get_state_logic", &hawkeye::RoundCandidate::get_state_logic, R"(
             Get the candidate's combinational logic computing the next state.
 
             :returns: The state logic of the candidate.
             :rtype: set[hal_py.Gate]
         )");
 
-        py_hawkeye_state_candidate.def("get_state_inputs", &hawkeye::StateCandidate::get_state_inputs, R"(
+        py_hawkeye_state_candidate.def("get_state_inputs", &hawkeye::RoundCandidate::get_state_inputs, R"(
             Get the candidate's state inputs to the logic computing the next state.
 
             :returns: The state inputs of the candidate.
             :rtype: set[hal_py.Net]
         )");
 
-        py_hawkeye_state_candidate.def("get_control_inputs", &hawkeye::StateCandidate::get_control_inputs, R"(
+        py_hawkeye_state_candidate.def("get_control_inputs", &hawkeye::RoundCandidate::get_control_inputs, R"(
             Get the candidate's control inputs to the logic computing the next state.
 
             :returns: The control inputs of the candidate.
             :rtype: set[hal_py.Net]
         )");
 
-        py_hawkeye_state_candidate.def("get_other_inputs", &hawkeye::StateCandidate::get_other_inputs, R"(
+        py_hawkeye_state_candidate.def("get_other_inputs", &hawkeye::RoundCandidate::get_other_inputs, R"(
             Get the candidate's other inputs to the logic computing the next state.
 
             :returns: The other inputs of the candidate.
             :rtype: set[hal_py.Net]
         )");
 
-        py_hawkeye_state_candidate.def("get_state_outputs", &hawkeye::StateCandidate::get_state_outputs, R"(
+        py_hawkeye_state_candidate.def("get_state_outputs", &hawkeye::RoundCandidate::get_state_outputs, R"(
             Get the candidate's state outputs from the logic computing the next state.
 
             :returns: The state outputs of the candidate.
             :rtype: set[hal_py.Net]
+        )");
+
+        py_hawkeye_state_candidate.def("get_input_ffs_of_gate", &hawkeye::RoundCandidate::get_input_ffs_of_gate, R"(
+            Get a dict from each combinational gate of the round function to all the input flip-flops it depends on.
+
+            :returns: A dict from gates to sets of input flip-flops.
+            :rtype: dict[hal_py.Gate,set[hal_py.Gate]]
+        )");
+
+        py_hawkeye_state_candidate.def("get_state_outputs", &hawkeye::RoundCandidate::get_state_outputs, R"(
+            Get a dict from an integer distance to all gates that are reachable within at most that distance when starting at any input flip-flop.
+
+            :returns: A dict from longest distance to a set of gates being reachable in at most that distance.
+            :rtype: dict[int,set[hal_py.Gate]]
         )");
 
         m.def(
@@ -442,6 +457,66 @@ namespace hal
             :param list[hal_py.Gate] start_ffs: The flip-flops to analyze. Defaults to an empty list, i.e., all flip-flops in the netlist will be analyzed.
             :returns: A list of candidates on success, ``None`` otherwise.
             :rtype: list[hawkeye.RegisterCandidate] or None
+        )");
+
+        py::class_<hawkeye::SBoxCandidate, RawPtrWrapper<hawkeye::SBoxCandidate>> py_hawkeye_sbox_candidate(
+            m,
+            "SBoxCandidate",
+            R"(Stores all information related to an S-box candidate such as the ``RoundCandidate`` it belongs to, the connected component it is part of, and its input and output gates.)");
+
+        py_hawkeye_sbox_candidate.def_readonly("m_candidate", &hawkeye::SBoxCandidate::m_candidate, R"(The ``RoundCandidate`` that the S-box candidate belongs to.)");
+
+        py_hawkeye_sbox_candidate.def_readonly("m_component", &hawkeye::SBoxCandidate::m_component, R"(The gates of the component which the S-box candidate is part of.)");
+
+        py_hawkeye_sbox_candidate.def_readonly("m_input_gates", &hawkeye::SBoxCandidate::m_input_gates, R"(The input gates of the S-box candidate (will be flip-flops).)");
+
+        py_hawkeye_sbox_candidate.def_readonly(
+            "m_output_gates", &hawkeye::SBoxCandidate::m_output_gates, R"(The output gates of the S-box candidate (usually combinational logic that is input to the linear layer).)");
+
+        m.def(
+            "locate_sboxes",
+            [](const hawkeye::RoundCandidate* candidate) -> std::optional<std::vector<hawkeye::SBoxCandidate>> {
+                auto res = hawkeye::locate_sboxes(candidate);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "cannot locate S-boxes:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("candidate"),
+            R"(Tries to locate S-box candidates within the combinational next-state logic of the round function candidate. 
+
+            :param hawkeye.RoundCandidate candidate: A round function candidate.
+            :returns: A list of S-box candidates on success, ``None`` otherwise.
+            :rtype: list[hawkeye.SBoxCandidate] or None
+        )");
+
+        m.def(
+            "identify_sbox",
+            [](const hawkeye::SBoxCandidate& sbox_candidate, const hawkeye::SBoxDatabase& db) -> std::optional<std::string> {
+                auto res = hawkeye::identify_sbox(sbox_candidate, db);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "cannot identify S-box:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("sbox_candidate"),
+            py::arg("db"),
+            R"(Tries to identify an S-box candidate by matching it against a database of known S-boxes under affine equivalence. 
+
+            :param hawkeye.SBoxCandidate sbox_candidate: An S-box candidate.
+            :param hawkeye.SBoxDatabase db: A database of known S-boxes.
+            :returns: The name of the S-box on success, ``None`` otherwise.
+            :rtype: str or None
         )");
 
 #ifndef PYBIND11_MODULE

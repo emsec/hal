@@ -1,4 +1,4 @@
-#include "hawkeye/state_candidate.h"
+#include "hawkeye/round_candidate.h"
 
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
@@ -50,7 +50,7 @@ namespace hal
             }
         }    // namespace
 
-        Result<std::unique_ptr<StateCandidate>> StateCandidate::from_register_candidate(RegisterCandidate* candidate)
+        Result<std::unique_ptr<RoundCandidate>> RoundCandidate::from_register_candidate(RegisterCandidate* candidate)
         {
             std::set<Gate*> state_logic;
             std::set<Net*> state_inputs, state_outputs, control_inputs, other_inputs;
@@ -186,7 +186,7 @@ namespace hal
             log_info("hawkeye", "successfully identified control inputs in {} seconds", duration_in_seconds);
 
             // copy partial netlist
-            auto state_cand       = std::make_unique<StateCandidate>();
+            auto state_cand       = std::make_unique<RoundCandidate>();
             state_cand->m_netlist = std::move(netlist_factory::create_netlist(candidate->get_netlist()->get_gate_library()));
             auto* copied_nl       = state_cand->m_netlist.get();
 
@@ -332,62 +332,62 @@ namespace hal
             return OK(std::move(state_cand));
         }
 
-        Netlist* StateCandidate::get_netlist() const
+        Netlist* RoundCandidate::get_netlist() const
         {
             return m_netlist.get();
         }
 
-        graph_algorithm::NetlistGraph* StateCandidate::get_graph() const
+        graph_algorithm::NetlistGraph* RoundCandidate::get_graph() const
         {
             return m_graph.get();
         }
 
-        u32 StateCandidate::get_size() const
+        u32 RoundCandidate::get_size() const
         {
             return m_size;
         }
 
-        const std::set<Gate*>& StateCandidate::get_input_reg() const
+        const std::set<Gate*>& RoundCandidate::get_input_reg() const
         {
             return m_in_reg;
         }
 
-        const std::set<Gate*>& StateCandidate::get_output_reg() const
+        const std::set<Gate*>& RoundCandidate::get_output_reg() const
         {
             return m_out_reg;
         }
 
-        const std::set<Gate*>& StateCandidate::get_state_logic() const
+        const std::set<Gate*>& RoundCandidate::get_state_logic() const
         {
             return m_state_logic;
         }
 
-        const std::set<Net*>& StateCandidate::get_state_inputs() const
+        const std::set<Net*>& RoundCandidate::get_state_inputs() const
         {
             return m_state_inputs;
         }
 
-        const std::set<Net*>& StateCandidate::get_control_inputs() const
+        const std::set<Net*>& RoundCandidate::get_control_inputs() const
         {
             return m_control_inputs;
         }
 
-        const std::set<Net*>& StateCandidate::get_other_inputs() const
+        const std::set<Net*>& RoundCandidate::get_other_inputs() const
         {
             return m_other_inputs;
         }
 
-        const std::set<Net*>& StateCandidate::get_state_outputs() const
+        const std::set<Net*>& RoundCandidate::get_state_outputs() const
         {
             return m_state_outputs;
         }
 
-        const std::map<Gate*, std::set<Gate*>>& StateCandidate::get_input_ffs_of_gate() const
+        const std::map<Gate*, std::set<Gate*>>& RoundCandidate::get_input_ffs_of_gate() const
         {
             return m_input_ffs_of_gate;
         }
 
-        const std::map<u32, std::set<Gate*>>& StateCandidate::get_longest_distance_to_gate() const
+        const std::map<u32, std::set<Gate*>>& RoundCandidate::get_longest_distance_to_gate() const
         {
             return m_longest_distance_to_gate;
         }

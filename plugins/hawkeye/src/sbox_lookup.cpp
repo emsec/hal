@@ -6,7 +6,7 @@
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 #include "hal_core/netlist/gate.h"
-#include "hawkeye/state_candidate.h"
+#include "hawkeye/round_candidate.h"
 
 #include <algorithm>
 
@@ -14,7 +14,7 @@ namespace hal
 {
     namespace hawkeye
     {
-        Result<std::vector<SBoxCandidate>> locate_sboxes(const StateCandidate* candidate)
+        Result<std::vector<SBoxCandidate>> locate_sboxes(const RoundCandidate* candidate)
         {
             const auto* nl    = candidate->get_netlist();
             const auto* graph = candidate->get_graph();
@@ -257,7 +257,7 @@ namespace hal
 
         Result<std::string> identify_sbox(const SBoxCandidate& sbox_candidate, const SBoxDatabase& db)
         {
-            const StateCandidate* candidate     = sbox_candidate.m_candidate;
+            const RoundCandidate* candidate     = sbox_candidate.m_candidate;
             const std::vector<Gate*>& component = sbox_candidate.m_component;
             const std::set<Gate*>& input_gates  = sbox_candidate.m_input_gates;
             const std::set<Gate*>& output_gates = sbox_candidate.m_output_gates;

@@ -36,19 +36,51 @@ namespace hal
 
     namespace hawkeye
     {
-        class StateCandidate;
 
+        class RoundCandidate;
+
+        /**
+         * Stores all information related to an S-box candidate such as the `RoundCandidate` it belongs to, the connected component it is part of, and its input and output gates.
+         */
         class SBoxCandidate
         {
         public:
-            const StateCandidate* m_candidate;
+            /**
+             * The `RoundCandidate` that the S-box candidate belongs to.
+             */
+            const RoundCandidate* m_candidate;
+
+            /**
+             * The gates of the component which the S-box candidate is part of.
+             */
             std::vector<Gate*> m_component;
+
+            /**
+             * The input gates of the S-box candidate (will be flip-flops).
+             */
             std::set<Gate*> m_input_gates;
+
+            /**
+             * The output gates of the S-box candidate (usually combinational logic that is input to the linear layer).
+             */
             std::set<Gate*> m_output_gates;
         };
 
-        Result<std::vector<SBoxCandidate>> locate_sboxes(const StateCandidate* candidate);
+        /**
+         * Tries to locate S-box candidates within the combinational next-state logic of the round function candidate. 
+         * 
+         * @param[in] candidate - A round function candidate.
+         * @returns A vector of S-box candidates on success, an error otherwise.
+         */
+        Result<std::vector<SBoxCandidate>> locate_sboxes(const RoundCandidate* candidate);
 
+        /**
+         * Tries to identify an S-box candidate by matching it against a database of known S-boxes under affine equivalence.
+         * 
+         * @param[in] sbox_candidate - An S-box candidate.
+         * @param[in] db - A database of known S-boxes.
+         * @returns The name of the S-box on success, an error otherwise.
+         */
         Result<std::string> identify_sbox(const SBoxCandidate& sbox_candidate, const SBoxDatabase& db);
     }    // namespace hawkeye
 }    // namespace hal

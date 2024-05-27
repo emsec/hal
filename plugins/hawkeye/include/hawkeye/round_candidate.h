@@ -33,11 +33,11 @@ namespace hal
 {
     namespace hawkeye
     {
-        class StateCandidate
+        class RoundCandidate
         {
         public:
-            StateCandidate()  = default;
-            ~StateCandidate() = default;
+            RoundCandidate()  = default;
+            ~RoundCandidate() = default;
 
             /**
              * Computes a state candidate from the previously identified register candidate.
@@ -46,7 +46,7 @@ namespace hal
              * @param[in] candidate - The register candidate.
              * @returns The state candidate on success, an error otherwise.
              */
-            static Result<std::unique_ptr<StateCandidate>> from_register_candidate(RegisterCandidate* candidate);
+            static Result<std::unique_ptr<RoundCandidate>> from_register_candidate(RegisterCandidate* candidate);
 
             /**
              * Get the netlist of the state candidate. The netlist will be a partial copy of the netlist of the register candidate.
@@ -118,7 +118,18 @@ namespace hal
              */
             const std::set<Net*>& get_state_outputs() const;
 
+            /**
+             * Get a map from each combinational gate of the round function to all the input flip-flops it depends on.
+             * 
+             * @returns A map from gates to sets of input flip-flops.
+             */
             const std::map<Gate*, std::set<Gate*>>& get_input_ffs_of_gate() const;
+
+            /**
+             * Get a map from an integer distance to all gates that are reachable within at most that distance when starting at any input flip-flop.
+             * 
+             * @returns A map from longest distance to a set of gates being reachable in at most that distance.
+             */
             const std::map<u32, std::set<Gate*>>& get_longest_distance_to_gate() const;
 
         private:
