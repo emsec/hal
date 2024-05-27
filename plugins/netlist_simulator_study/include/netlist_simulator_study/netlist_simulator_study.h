@@ -28,7 +28,7 @@ namespace hal
          */
         std::set<std::string> get_dependencies() const override;
 
-        bool simulate(std::filesystem::path sim_input);
+        bool simulate(std::filesystem::path sim_input, std::vector<const Net*> probes);
 
     };
 

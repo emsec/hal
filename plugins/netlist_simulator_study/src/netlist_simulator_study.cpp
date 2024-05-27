@@ -5,6 +5,14 @@
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "hal_core/netlist/netlist_factory.h"
 
+#include "gui/gui_api/gui_api.h"
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <random>
+#include <ctime>
+
 namespace hal
 {
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
@@ -28,7 +36,7 @@ namespace hal
 
     void NetlistSimulatorStudyPlugin::on_load()
     {   
-        m_original_netlist = netlist_factory::load_netlist("/home/ole/Documents/MPI/hal_project_for_testing/simple.v", "/home/ole/Documents/MPI/hal_project_for_testing/unknown_design.lib");
+        m_original_netlist = netlist_factory::load_netlist("/home/ole/Documents/MPI/hal_project_for_testing/fulladderStructural_netlist.v", "/home/ole/Documents/programs/hal/build/share/hal/gate_libraries/NangateOpenCellLibrary.hgl");
         std::cout << m_original_netlist.get() << std::endl;
 
 
@@ -58,7 +66,7 @@ namespace hal
          return retval;
      }
 
-     bool NetlistSimulatorStudyPlugin::simulate(std::filesystem::path sim_input)
+     bool NetlistSimulatorStudyPlugin::simulate(std::filesystem::path sim_input, std::vector<const Net*> probes)
      {
          enum {VCD, CSV, SAL} input_file_format;
          if (sim_input.extension() == ".vcd")
@@ -100,7 +108,11 @@ namespace hal
              break;
          }
 
+         m_simul_controller.get()->simulate_only_probes(probes);
+
          m_simul_controller.get()->emit_run_simulation();
+
+         return true;
      }
 
      //----------------------
@@ -108,6 +120,7 @@ namespace hal
          GuiExtensionNetlistSimulatorStudy::GuiExtensionNetlistSimulatorStudy()
          {
              m_parameter.push_back(PluginParameter(PluginParameter::ExistingFile,"sim_input","Simulation input file"));
+             m_parameter.push_back(PluginParameter(PluginParameter::Boolean, "net_picker", "You are only allowed to select 5 nets to probe.\nSelect up to 5 at random if more then 5 are selected?\nOtherwise the execution just stops.", "true"));
              m_parameter.push_back(PluginParameter(PluginParameter::PushButton,"simulate","Start Simulation"));
          }
 
@@ -119,18 +132,82 @@ namespace hal
          void GuiExtensionNetlistSimulatorStudy::set_parameter(const std::vector<PluginParameter>& params)
          {
              m_parameter = params;
-             bool simulate = false;
-             std::filesystem::path sim_input;
-             for (PluginParameter par : m_parameter)
+             GuiApi* guiAPI = new GuiApi();
+
+            std::vector<const Net*> probes;
+
+            bool simulate = false;
+            bool net_picker_checkbox = false;
+            std::filesystem::path sim_input;
+
+            bool valid_inputs = true;
+
+            for (PluginParameter par : m_parameter)
              {
-                 if(par.get_tagname()=="simulate" && par.get_value() == "clicked")
-                     simulate = true;
-                 else if (par.get_tagname()=="sim_input")
-                     sim_input = par.get_value();
+                if(par.get_tagname()=="net_picker" && par.get_value() == "clicked"){
+                    net_picker_checkbox = true;
+                }
+                else if(par.get_tagname()=="simulate" && par.get_value() == "clicked")
+                    simulate = true;
+                else if (par.get_tagname()=="sim_input")
+                    sim_input = par.get_value();
              }
-             if (simulate && m_parent )
+
+             if (sim_input == ""){
+                valid_inputs = false;
+             }
+
+
+            std::vector<Net*> nets = guiAPI->getSelectedNets();
+
+            // get all the selected wires that are not global in or out
+            for(Net* net: nets){
+                if(!net->is_global_input_net() && !net->is_global_output_net()){
+                    probes.push_back(net);
+                }
+            }
+
+            // only let the user to select at most 5 probes
+            const u8 MAX_PROBES = 5;
+
+            std::vector<const Net*> probes_final_selection;
+
+            if(probes.size() > MAX_PROBES){
+                if(!net_picker_checkbox){
+                    valid_inputs = false;
+                }else{
+                    std::vector<int> indices(probes.size());
+        
+                    std::iota(indices.begin(), indices.end(), 0);
+
+                    // Shuffle the indices
+                    std::random_device rd;
+                    std::mt19937 gen(rd());
+                    std::shuffle(indices.begin(), indices.end(), gen);
+
+                    // Pick the first subsetSize elements from the shuffled indices
+                    std::vector<int> subset;
+                    for (int i = 0; i < MAX_PROBES; ++i) {
+                        probes_final_selection.push_back(probes[indices[i]]);
+                    }
+                }
+            }else{
+                for(const Net* net: probes){
+                    probes_final_selection.push_back(net);
+                }
+            }
+
+            for(Net* net: m_parent->m_original_netlist.get()->get_nets()){
+                if(net->is_global_input_net() || net->is_global_output_net()){
+                    probes_final_selection.push_back(net);
+                }
+            }
+
+
+             
+             if (simulate && m_parent && valid_inputs )
              {
-                m_parent->simulate(sim_input);
+                m_parent->simulate(sim_input, probes_final_selection);
              }
          }
 
