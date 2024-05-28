@@ -136,7 +136,7 @@ namespace hal
                     std::vector<std::set<Gate*>> input_groups;
                     for (const auto& comp : comp_res.get())
                     {
-                        auto gates_res = graph->get_gates_from_vertices(comp);
+                        auto gates_res = subgraph->get_gates_from_vertices(comp);
                         if (gates_res.is_error())
                         {
                             return ERR(gates_res.get_error());
