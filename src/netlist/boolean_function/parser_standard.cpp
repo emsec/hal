@@ -5,6 +5,8 @@
 #include <boost/fusion/sequence/intrinsic/at_c.hpp>
 #include <boost/spirit/home/x3.hpp>
 
+#include <sstream>
+
 namespace hal
 {
     namespace BooleanFunctionParser

@@ -59,7 +59,7 @@ namespace hal
 
     WaveformViewer::WaveformViewer(QWidget *parent)
         : ExternalContentWidget("waveform_viewer","WaveformViewer",parent),
-          mVisualizeNetState(false), mCurrentWaveWidget(nullptr)
+          mVisualizeNetState(false), mOwnershipRequired(false), mCurrentWaveWidget(nullptr)
     {
         LogManager::get_instance()->add_channel(std::string("waveform_viewer"), {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
         mCreateControlAction = new QAction(this);
@@ -366,6 +366,9 @@ namespace hal
 
     void WaveformViewer::handleControllerAdded(u32 controllerId)
     {
+        // nothing to do here, viewer will open widget when taking over ownership
+        if (mOwnershipRequired) return;
+
         // check whether controller already added
         for (int inx=0; inx<mTabWidget->count(); inx++)
         {
@@ -406,8 +409,10 @@ namespace hal
             NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
             if (ctrlPlug)
             {
+                mOwnershipRequired = true;
                 std::unique_ptr<NetlistSimulatorController> ctrlRef = ctrlPlug->restore_simulator_controller(gNetlist,filename.toStdString());
                 takeControllerOwnership(ctrlRef, true);
+                mOwnershipRequired = false;
             }
         }
         else if (mCurrentWaveWidget && mCurrentWaveWidget->controller()->can_import_data() && filename.toLower().endsWith(".vcd"))

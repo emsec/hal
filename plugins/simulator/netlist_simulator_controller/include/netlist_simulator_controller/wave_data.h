@@ -93,7 +93,7 @@ namespace hal {
         WaveData(u32 id_, const QString& nam, NetType tp = RegularNet,
                  const QMap<u64,int>& dat = QMap<u64,int>() );
         WaveData(const Net* n, NetType tp = RegularNet);
-        virtual ~WaveData();
+        virtual ~WaveData() {;}
         u32     id()                        const { return mId; }
         QString name()                      const { return mName; }
         NetType netType()                   const { return mNetType; }
@@ -170,6 +170,7 @@ namespace hal {
         u32               mMaxBooleanId;
         u32               mMaxTriggerid;
         QList<WaveData*>  mTrashCan;
+        QSet<QString>     mNotInNetlist;
         void testDoubleCount();
         void restoreIndex();
         void updateMaxTime();

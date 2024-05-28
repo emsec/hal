@@ -166,6 +166,13 @@ namespace hal
         void setObjectLock(bool lock) { mObjectLock = lock; }
 
         /**
+         * Refuse set parent object requests (in case if needed)
+         *
+         * @param lock - Param to set parent lock.
+         */
+        void setParentObjectLock(bool lock) {mParentObjectLock = lock;}
+
+        /**
          * Executing this action will modify the project thus a warning pops up when leaving hal without saving.
          * @return True if executing the action will modify the project, false otherwise.
          */
@@ -174,15 +181,35 @@ namespace hal
     protected:
         UserAction();
         UserActionObject mObject;
+        UserActionObject mParentObject;
         int mCompoundOrder;
         UserAction *mUndoAction;
         qint64 mTimeStamp;
         bool mObjectLock;
+        bool mParentObjectLock;
         bool mProjectModified;
 
         static QString setToText(const QSet<u32>& set);
         static QSet<u32> setFromText(const QString& s);
 
+        static QString gridToText(const QHash<hal::Node,QPoint>& grid);
+        static QHash<hal::Node,QPoint> gridFromText(const QString& txt);
+
+        /**
+         * Utility function to write the parent object.
+         * (Also checks if it is even necessary)
+         *
+         * @param xmlOut - The writer.
+         */
+        void writeParentObjectToXml(QXmlStreamWriter& xmlOut) const;
+
+        /**
+         * Utility function that can be used to read the parent object
+         * if necessary. (Also does the checking)
+         *
+         * @param xmlIn - The reader.
+         */
+        void readParentObjectFromXml(QXmlStreamReader& xmlIn);
     };
 
     /**

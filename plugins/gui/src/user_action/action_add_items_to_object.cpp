@@ -41,14 +41,24 @@ namespace hal
 
     void ActionAddItemsToObject::writeToXml(QXmlStreamWriter& xmlOut) const
     {
-        if (mPlacementHint.mode() != PlacementHint::Standard)
+        writeParentObjectToXml(xmlOut);
+
+        UserActionObjectType::ObjectType tp = UserActionObjectType::fromNodeType(mPlacementHint.preferredOrigin().type());
+        switch (mPlacementHint.mode())
         {
-            UserActionObjectType::ObjectType tp = UserActionObjectType::fromNodeType(mPlacementHint.preferredOrigin().type());
+        case PlacementHint::Standard:
+            break;
+        case PlacementHint::PreferLeft:
+        case PlacementHint::PreferRight:
             xmlOut.writeStartElement("placement");
             xmlOut.writeAttribute("id", QString::number(mPlacementHint.preferredOrigin().id()));
             xmlOut.writeAttribute("type", UserActionObjectType::toString(tp));
             xmlOut.writeAttribute("mode", mPlacementHint.mode() == PlacementHint::PreferLeft ? "left" : "right");
             xmlOut.writeEndElement();
+            break;
+        case PlacementHint::GridPosition:
+            xmlOut.writeTextElement("gridposition", gridToText(mPlacementHint.gridPosition()));
+            break;
         }
         if (!mModules.isEmpty())
             xmlOut.writeTextElement("modules", setToText(mModules));
@@ -71,6 +81,11 @@ namespace hal
                 PlacementHint::PlacementModeType mode = (xmlIn.attributes().value("mode").toString() == "left") ? PlacementHint::PreferLeft : PlacementHint::PreferRight;
                 mPlacementHint                        = PlacementHint(mode, Node(id, UserActionObjectType::toNodeType(tp)));
                 xmlIn.skipCurrentElement();    // no text body to read
+            }
+            else if (xmlIn.name() == "gridposition")
+            {
+                GridPlacement gp(gridFromText(xmlIn.readElementText()));
+                mPlacementHint = PlacementHint(gp);
             }
             else if (xmlIn.name() == "modules")
                 mModules = setFromText(xmlIn.readElementText());

@@ -1,5 +1,6 @@
 
 #include "verilator/verilator.h"
+#include "verilator/path_to_verilator_executable.h"
 
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate.h"
@@ -190,10 +191,12 @@ namespace hal
             switch (lineIndex)
             {
                 case 0: {
-                    std::vector<std::string> retval = {"verilator",
-                                                       "-I.",
-                                                       "-Wall",
-                                                       "-Wno-fatal",
+                    std::vector<std::string> retval = {"verilator",             // 0
+                                                       "-I.",                   // 1
+                                                       "-Wall",                 // 2
+                                                       "-Wno-fatal",            // 3
+                                                       "-CFLAGS",               // 4
+                                                       "-O3",                   // 5
                                                        "--MMD",
                                                        "-trace",
                                                        //    "--trace-threads",
@@ -206,8 +209,6 @@ namespace hal
                                                        "obj_dir",
                                                        "-O3",
                                                        "--noassert",
-                                                       "-CFLAGS",
-                                                       "-O3",
                                                        "--exe",
                                                        "-cc",
                                                        "-DSIM_VERILATOR",
@@ -220,6 +221,18 @@ namespace hal
                                                        "saleae_parser.cpp",
                                                        "saleae_file.cpp",
                                                        m_design_name + ".v"};
+
+#if defined(__APPLE__)
+                    if (strlen(path_to_verilator_executable))
+                    {
+                        retval[0] = path_to_verilator_executable + std::string("verilator");
+                    }
+#endif
+
+                    if (strlen(path_to_rapidjson_includedir))
+                    {
+                        retval[5] = retval[5] + " -I" + path_to_rapidjson_includedir;
+                    }
 
                     if (!m_compiler.empty())
                     {
