@@ -119,6 +119,11 @@ namespace hal
                                 stack.push_back(predecessor_gate);
                                 added = true;
                             }
+                            else if (state_logic.find(predecessor_gate) != state_logic.end())
+                            {
+                                state_logic.insert(current_gate);
+                                state_logic.insert(previous.begin(), previous.end());
+                            }
                         }
                     }
 
