@@ -390,7 +390,7 @@ namespace hal
                     }
 
                     // actually assign the values
-                    std::vector<std::vector<BooleanFunction::Value>> truth_tables_inverted;
+                    std::vector<std::vector<BooleanFunction::Value>> truth_tables_inverted(1 << bfs.size(), std::vector<BooleanFunction::Value>(bfs.size()));
                     for (j = 0; j < bfs.size(); j++)
                     {
                         const auto& bf    = bfs.at(j);
@@ -405,7 +405,7 @@ namespace hal
                         auto tmp = tt_res.get().front();
                         for (u32 k = 0; k < tmp.size(); k++)
                         {
-                            truth_tables_inverted[k].push_back(tmp.at(k));
+                            truth_tables_inverted.at(k).at(j) = tmp.at(k);
                         }
                     }
 
