@@ -364,17 +364,18 @@ namespace hal
                 std::vector<BooleanFunction> bf_const = {bf_const_0, bf_const_1};
 
                 // set all other inputs to '0'
-                for (const auto* other_in : actual_other_inputs)
+                for (auto& bf : bfs)
                 {
-                    for (auto& bf : bfs)
+                    for (const auto* other_in : actual_other_inputs)
                     {
                         const auto sub_res = bf.substitute(BooleanFunctionNetDecorator(*other_in).get_boolean_variable_name(), bf_const_0);
                         if (sub_res.is_error())
                         {
                             return ERR(sub_res.get_error());
                         }
-                        bf = sub_res.get().simplify();
+                        bf = sub_res.get();
                     }
+                    // bf = bf.simplify();
                 }
 
                 // brute-force all control inputs
@@ -395,7 +396,8 @@ namespace hal
                     {
                         const auto& bf    = bfs.at(j);
                         const auto tt_res = bf.substitute(control_values).map<std::vector<std::vector<BooleanFunction::Value>>>([&actual_state_input_names](auto&& bf) {
-                            return bf.simplify().compute_truth_table(actual_state_input_names);
+                            // return bf.simplify().compute_truth_table(actual_state_input_names);
+                            return bf.compute_truth_table(actual_state_input_names);
                         });
                         if (tt_res.is_error())
                         {
