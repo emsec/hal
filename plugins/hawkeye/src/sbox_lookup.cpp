@@ -50,7 +50,13 @@ namespace hal
             {
                 // gather FFs of the component that are also part of the state input reg
                 std::set<Gate*> component_input_ffs;
-                std::set_intersection(component.begin(), component.end(), state_input_reg.begin(), state_input_reg.end(), std::inserter(component_input_ffs, component_input_ffs.begin()));
+                for (auto* comp_g : component)
+                {
+                    if (state_input_reg.find(comp_g) != state_input_reg.end())
+                    {
+                        component_input_ffs.insert(comp_g);
+                    }
+                }
 
                 u32 number_input_ffs = component_input_ffs.size();
                 if (number_input_ffs < 3)
@@ -141,7 +147,13 @@ namespace hal
                         if (std::any_of(comp_gates.begin(), comp_gates.end(), [&component_input_ffs](Gate* g) { return component_input_ffs.find(g) != component_input_ffs.end(); }))
                         {
                             std::set<Gate*> input_group;
-                            std::set_intersection(comp_gates.begin(), comp_gates.end(), state_input_reg.begin(), state_input_reg.end(), std::inserter(input_group, input_group.begin()));
+                            for (auto* comp_g : comp_gates)
+                            {
+                                if (state_input_reg.find(comp_g) != state_input_reg.end())
+                                {
+                                    input_group.insert(comp_g);
+                                }
+                            }
                             lens.insert(input_group.size());
                             input_groups.push_back(std::move(input_group));
                             subcomponents.push_back(std::move(comp_gates));
