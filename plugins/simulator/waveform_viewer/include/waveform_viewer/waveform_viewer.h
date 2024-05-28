@@ -123,6 +123,7 @@ namespace hal
 
     private:
         bool mVisualizeNetState;
+        bool mOwnershipRequired;
 
         QAction* mCreateControlAction;
         QAction* mSimulSettingsAction;

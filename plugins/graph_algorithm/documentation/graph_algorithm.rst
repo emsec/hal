@@ -1,5 +1,5 @@
 Graph Algorithms
 ==========================
 
-.. autoclass:: graph_algorithm.GraphAlgorithmPlugin
-   :members:
+.. automodule:: graph_algorithm
+    :members:

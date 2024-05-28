@@ -136,14 +136,18 @@ namespace hal {
                 }
                 else    // ... or has a source outside of the simulation set
                 {
+                    int number_sources = 0;
                     for (auto src : net->get_sources())
                     {
+                        ++number_sources;
                         if (!contains_gate(src->get_gate()))
                         {
                             m_input_nets.insert(net);
                             break;
                         }
                     }
+                    if (!number_sources)
+                        m_input_nets.insert(net);
                 }
             }
         }
@@ -163,14 +167,18 @@ namespace hal {
                 }
                 else    // ... or has a destination outside of the simulation set
                 {
+                    int number_destinations = 0;
                     for (auto dst : net->get_destinations())
                     {
+                        ++number_destinations;
                         if (!contains_gate(dst->get_gate()))
                         {
                             m_output_nets.push_back(net);
                             break;
                         }
                     }
+                    if (!number_destinations)
+                        m_output_nets.push_back(net);
                 }
             }
         }

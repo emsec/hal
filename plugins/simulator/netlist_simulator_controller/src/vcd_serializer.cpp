@@ -412,7 +412,7 @@ namespace hal {
         for (const Net* n : onlyNets)
             netNames.insert(QString::fromStdString(n->get_name()),n);
 
-        static const int bufsize = 4095;
+        static const int bufsize = 65535;
         char buf[bufsize+1];
 
         bool parseHeader = true;

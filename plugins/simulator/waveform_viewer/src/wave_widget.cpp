@@ -270,6 +270,7 @@ namespace hal {
                         wavesToAdd.append(mWaveDataList->at(iwave));
                 }
                 mTreeModel->addWaves(wavesToAdd);
+                mGraphicsCanvas->handleTimeframeChanged(&mWaveDataList->timeFrame());
             }
         }
         if (sd) delete sd;
