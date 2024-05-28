@@ -303,6 +303,35 @@ namespace hal
                 :rtype: bool
             )");
 
+        py_netlist_preprocessing.def_static(
+            "unify_ff_outputs",
+            [](Netlist* nl, const std::vector<Gate*>& ffs = {}, GateType* inverter_type = nullptr) -> std::optional<u32> {
+                auto res = NetlistPreprocessingPlugin::unify_ff_outputs(nl, ffs, inverter_type);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("nl"),
+            py::arg("ffs")           = std::vector<Gate*>(),
+            py::arg("inverter_type") = nullptr,
+            R"(
+                Iterates all flip-flops of the netlist or specified by the user.
+                If a flip-flop has a ``state`` and a ``neg_state`` output, a new inverter gate is created and connected to the ``state`` output net as an additional destination.
+                Finally, the ``neg_state`` output net is disconnected from the ``neg_state`` pin and re-connected to the new inverter gate's output. 
+
+                :param hal_py.Netlist nl: The netlist to operate on. 
+                :param list[hal_py.Gate] ffs: The flip-flops to operate on. Defaults to an empty vector, in which case all flip-flops of the netlist are considered.
+                :param hal_py.GateType inverter_type:  The inverter gate type to use. Defaults to a ``None``, in which case the first inverter type found in the gate library is used.
+                :returns: The number of rerouted ``neg_state`` outputs on success, ``None`` otherwise.
+                :rtype: int or ``None``
+            )");
+
 #ifndef PYBIND11_MODULE
         return m.ptr();
 #endif    // PYBIND11_MODULE
