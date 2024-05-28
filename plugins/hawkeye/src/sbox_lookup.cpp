@@ -346,7 +346,7 @@ namespace hal
                 actual_state_input_names.push_back(BooleanFunctionNetDecorator(*n).get_boolean_variable_name());
             }
 
-            if (actual_control_inputs.size() >= 8)
+            if (actual_control_inputs.size() <= 8)
             {
                 const auto bf_const_0                 = BooleanFunction::Const(0, 1);
                 const auto bf_const_1                 = BooleanFunction::Const(1, 1);
