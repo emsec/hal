@@ -337,7 +337,7 @@ namespace hal
             }
 
             auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
-            log_info("hawkeye", "successfully traversed netlist in {} seconds", duration_in_seconds);
+            log_info("hawkeye", "successfully traversed netlist in {:.2f} seconds", duration_in_seconds);
 
             log_info("hawkeye", "start constructing empty netlist graph...");
             start = std::chrono::system_clock::now();
@@ -357,7 +357,7 @@ namespace hal
             auto start_vertices = start_vertices_res.get();
 
             duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
-            log_info("hawkeye", "successfully created empty netlist graph in {} seconds", duration_in_seconds);
+            log_info("hawkeye", "successfully created empty netlist graph in {:.2f} seconds", duration_in_seconds);
 
             log_info("hawkeye", "start candidate identification using {} configurations...", configs.size());
             start = std::chrono::system_clock::now();
@@ -480,7 +480,7 @@ namespace hal
                 }
 
                 duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start_inner).count();
-                log_info("hawkeye", "successfully filled netlist graph in {} seconds", duration_in_seconds);
+                log_info("hawkeye", "successfully filled netlist graph in {:.2f} seconds", duration_in_seconds);
 
                 log_info("hawkeye",
                          "start neighborhood discovery with configuration [timeout={}, min_register_size={}, control={}, components={}]...",
@@ -620,11 +620,11 @@ namespace hal
                 }
 
                 duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start_inner).count();
-                log_info("hawkeye", "successfully completed neighborhood discovery in {} seconds", duration_in_seconds);
+                log_info("hawkeye", "successfully completed neighborhood discovery in {:.2f} seconds", duration_in_seconds);
             }
 
             duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
-            log_info("hawkeye", "successfully completed candidate identification in {} seconds", duration_in_seconds);
+            log_info("hawkeye", "successfully completed candidate identification in {:.2f} seconds", duration_in_seconds);
 
             log_info("hawkeye", "start reducing candidates...", configs.size());
             start = std::chrono::system_clock::now();
@@ -653,7 +653,7 @@ namespace hal
             }
 
             duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
-            log_info("hawkeye", "successfully completed reducing candidates in {} seconds", duration_in_seconds);
+            log_info("hawkeye", "successfully completed reducing candidates in {:.2f} seconds", duration_in_seconds);
 
             duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - global_start).count();
             log_info("hawkeye", "overall runtime: {} seconds", duration_in_seconds);

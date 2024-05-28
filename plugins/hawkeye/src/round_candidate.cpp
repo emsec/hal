@@ -141,9 +141,9 @@ namespace hal
             }
 
             auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
-            log_info("hawkeye", "successfully isolated state logic in {} seconds", duration_in_seconds);
+            log_info("hawkeye", "successfully isolated state logic in {:.2f} seconds", duration_in_seconds);
 
-            log_info("hawkeye", "start identifying control inputs...");
+            log_info("hawkeye", "start identifying inputs...");
             start = std::chrono::system_clock::now();
 
             std::set<Net*> visited;
@@ -188,9 +188,12 @@ namespace hal
             }
 
             duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
-            log_info("hawkeye", "successfully identified control inputs in {} seconds", duration_in_seconds);
+            log_info("hawkeye", "successfully identified inputs in {:.2f} seconds", duration_in_seconds);
 
             // copy partial netlist
+            log_info("hawkeye", "start creating sub-circuit netlist...");
+            start = std::chrono::system_clock::now();
+
             auto round_cand       = std::make_unique<RoundCandidate>();
             round_cand->m_netlist = std::move(netlist_factory::create_netlist(candidate->get_netlist()->get_gate_library()));
             auto* copied_nl       = round_cand->m_netlist.get();
@@ -284,7 +287,6 @@ namespace hal
                     }
 
                     round_cand->m_input_ffs_of_gate[current_gate].insert(in_ff);
-                    round_cand->m_gates_reached_by_input_ff[in_ff].insert(current_gate);
 
                     // expand towards successors
                     bool added = false;
@@ -297,7 +299,6 @@ namespace hal
                             if (round_cand->m_out_reg.find(successor_gate) != round_cand->m_out_reg.end())
                             {
                                 round_cand->m_input_ffs_of_gate[successor_gate].insert(in_ff);
-                                round_cand->m_gates_reached_by_input_ff[in_ff].insert(successor_gate);
                             }
                         }
                         else if (successor_gate->get_type()->has_property(GateTypeProperty::combinational))
@@ -343,6 +344,9 @@ namespace hal
             {
                 round_cand->m_longest_distance_to_gate[distance].insert(gate);
             }
+
+            duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
+            log_info("hawkeye", "successfully created sub-circuit netlist in {:.2f} seconds", duration_in_seconds);
 
             return OK(std::move(round_cand));
         }

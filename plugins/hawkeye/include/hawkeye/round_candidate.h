@@ -183,8 +183,6 @@ namespace hal
              */
             std::set<Net*> m_state_outputs;
 
-            std::map<Gate*, std::set<Gate*>> m_gates_reached_by_input_ff;
-
             std::map<Gate*, std::set<Gate*>> m_input_ffs_of_gate;
 
             std::map<u32, std::set<Gate*>> m_longest_distance_to_gate;

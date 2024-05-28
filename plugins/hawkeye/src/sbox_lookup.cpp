@@ -16,6 +16,9 @@ namespace hal
     {
         Result<std::vector<SBoxCandidate>> locate_sboxes(const RoundCandidate* candidate)
         {
+            log_info("hawkeye", "start locating S-boxes within round candidate now...");
+            auto start = std::chrono::system_clock::now();
+
             const auto* nl    = candidate->get_netlist();
             const auto* graph = candidate->get_graph();
 
@@ -264,11 +267,19 @@ namespace hal
                 }
             }
 
+            auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
+            log_info("hawkeye", "located {} S-box candidates within round candidate in {:.2f} seconds", res.size(), duration_in_seconds);
+
             return OK(res);
         }
 
         Result<std::string> identify_sbox(const SBoxCandidate& sbox_candidate, const SBoxDatabase& db)
         {
+            log_info("hawkeye", "start identifying S-box candidate now...");
+            auto start = std::chrono::system_clock::now();
+
+            std::string sbox_name;
+
             const RoundCandidate* candidate     = sbox_candidate.m_candidate;
             const std::vector<Gate*>& component = sbox_candidate.m_component;
             const std::set<Gate*>& input_gates  = sbox_candidate.m_input_gates;
@@ -478,12 +489,23 @@ namespace hal
 
                     if (const auto sbox_res = db.lookup(sbox); sbox_res.is_ok())
                     {
-                        return sbox_res;
+                        sbox_name = sbox_res.get();
+                        break;
                     }
                 }
             }
 
-            return ERR("could not identify S-box");
+            auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
+            if (!sbox_name.empty())
+            {
+                log_info("hawkeye", "identified {} S-box in {:.2f} seconds", sbox_name, duration_in_seconds);
+            }
+            else
+            {
+                log_info("hawkeye", "could not identify S-box in {:.2f} seconds", duration_in_seconds);
+            }
+
+            return OK(sbox_name);
         }
     }    // namespace hawkeye
 }    // namespace hal
