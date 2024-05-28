@@ -55,7 +55,7 @@ namespace hal
             std::set<Gate*> state_logic;
             std::set<Net*> state_inputs, state_outputs, control_inputs, other_inputs;
 
-            log_info("hawkeye", "start isolating state logic...");
+            log_info("hawkeye", "start constructing round function candidate from state register candidate...");
             auto start = std::chrono::system_clock::now();
 
             const auto& state_input_reg  = candidate->get_input_reg();
@@ -140,12 +140,6 @@ namespace hal
                 }
             }
 
-            auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
-            log_info("hawkeye", "successfully isolated state logic in {:.2f} seconds", duration_in_seconds);
-
-            log_info("hawkeye", "start identifying inputs...");
-            start = std::chrono::system_clock::now();
-
             std::set<Net*> visited;
             for (auto* gate : state_logic)
             {
@@ -187,13 +181,7 @@ namespace hal
                 }
             }
 
-            duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
-            log_info("hawkeye", "successfully identified inputs in {:.2f} seconds", duration_in_seconds);
-
             // copy partial netlist
-            log_info("hawkeye", "start creating sub-circuit netlist...");
-            start = std::chrono::system_clock::now();
-
             auto round_cand       = std::make_unique<RoundCandidate>();
             round_cand->m_netlist = std::move(netlist_factory::create_netlist(candidate->get_netlist()->get_gate_library()));
             auto* copied_nl       = round_cand->m_netlist.get();
@@ -345,8 +333,8 @@ namespace hal
                 round_cand->m_longest_distance_to_gate[distance].insert(gate);
             }
 
-            duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
-            log_info("hawkeye", "successfully created sub-circuit netlist in {:.2f} seconds", duration_in_seconds);
+            auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
+            log_info("hawkeye", "successfully constructed round function candidate from state register candidate in {:.2f} seconds", duration_in_seconds);
 
             return OK(std::move(round_cand));
         }

@@ -314,9 +314,8 @@ namespace hal
                 return ERR("netlist is a nullptr");
             }
 
-            log_info("hawkeye", "start traversing netlist to determine flip-flop dependencies...");
-            auto global_start = std::chrono::system_clock::now();
-            auto start        = global_start;
+            log_info("hawkeye", "start detecting state register candidates...");
+            auto start = std::chrono::system_clock::now();
 
             const auto nl_dec = NetlistTraversalDecorator(*nl);
             std::map<Gate*, std::set<Gate*>> ff_map;
@@ -336,12 +335,6 @@ namespace hal
                 }
             }
 
-            auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
-            log_info("hawkeye", "successfully traversed netlist in {:.2f} seconds", duration_in_seconds);
-
-            log_info("hawkeye", "start constructing empty netlist graph...");
-            start = std::chrono::system_clock::now();
-
             auto res = graph_algorithm::NetlistGraph::from_netlist_no_edges(nl, start_gates);
             if (res.is_error())
             {
@@ -356,23 +349,9 @@ namespace hal
             }
             auto start_vertices = start_vertices_res.get();
 
-            duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
-            log_info("hawkeye", "successfully created empty netlist graph in {:.2f} seconds", duration_in_seconds);
-
-            log_info("hawkeye", "start candidate identification using {} configurations...", configs.size());
-            start = std::chrono::system_clock::now();
-
             std::set<RegisterCandidate> candidates;
             for (const auto& config : configs)
             {
-                log_info("hawkeye",
-                         "start filling netlist graph with configuration [timeout={}, min_register_size={}, control={}, components={}]...",
-                         config.timeout,
-                         config.min_register_size,
-                         enum_to_string(config.control),
-                         enum_to_string(config.components));
-                auto start_inner = std::chrono::system_clock::now();
-
                 auto tmp_graph_res = base_graph->copy();
                 if (tmp_graph_res.is_error())
                 {
@@ -478,17 +457,6 @@ namespace hal
                 {
                     return ERR(edge_res.get_error());
                 }
-
-                duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start_inner).count();
-                log_info("hawkeye", "successfully filled netlist graph in {:.2f} seconds", duration_in_seconds);
-
-                log_info("hawkeye",
-                         "start neighborhood discovery with configuration [timeout={}, min_register_size={}, control={}, components={}]...",
-                         config.timeout,
-                         config.min_register_size,
-                         enum_to_string(config.control),
-                         enum_to_string(config.components));
-                start_inner = std::chrono::system_clock::now();
 
                 igraph_vector_int_t in_set, out_set;
                 if (const auto res = igraph_vector_int_init(&in_set, 0); res != IGRAPH_SUCCESS)
@@ -618,16 +586,7 @@ namespace hal
                         }
                     }
                 }
-
-                duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start_inner).count();
-                log_info("hawkeye", "successfully completed neighborhood discovery in {:.2f} seconds", duration_in_seconds);
             }
-
-            duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
-            log_info("hawkeye", "successfully completed candidate identification in {:.2f} seconds", duration_in_seconds);
-
-            log_info("hawkeye", "start reducing candidates...", configs.size());
-            start = std::chrono::system_clock::now();
 
             std::set<const RegisterCandidate*> candidates_to_delete;
             for (auto outer_it = candidates.begin(); outer_it != candidates.end(); outer_it++)
@@ -652,11 +611,15 @@ namespace hal
                 candidates.erase(*c);
             }
 
-            duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
-            log_info("hawkeye", "successfully completed reducing candidates in {:.2f} seconds", duration_in_seconds);
-
-            duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - global_start).count();
-            log_info("hawkeye", "overall runtime: {} seconds", duration_in_seconds);
+            auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
+            if (candidates.size() == 1)
+            {
+                log_info("hawkeye", "detected {} state register candidate in {} seconds", candidates.size(), duration_in_seconds);
+            }
+            else
+            {
+                log_info("hawkeye", "detected {} state register candidates in {} seconds", candidates.size(), duration_in_seconds);
+            }
 
             return OK(std::vector<RegisterCandidate>(candidates.begin(), candidates.end()));
         }

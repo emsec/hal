@@ -16,7 +16,7 @@ namespace hal
     {
         Result<std::vector<SBoxCandidate>> locate_sboxes(const RoundCandidate* candidate)
         {
-            log_info("hawkeye", "start locating S-boxes within round candidate now...");
+            log_info("hawkeye", "start locating S-boxes within round function candidate...");
             auto start = std::chrono::system_clock::now();
 
             const auto* nl    = candidate->get_netlist();
@@ -268,14 +268,14 @@ namespace hal
             }
 
             auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
-            log_info("hawkeye", "located {} S-box candidates within round candidate in {:.2f} seconds", res.size(), duration_in_seconds);
+            log_info("hawkeye", "located {} S-box candidates within round function candidate in {:.2f} seconds", res.size(), duration_in_seconds);
 
             return OK(res);
         }
 
         Result<std::string> identify_sbox(const SBoxCandidate& sbox_candidate, const SBoxDatabase& db)
         {
-            log_info("hawkeye", "start identifying S-box candidate now...");
+            log_info("hawkeye", "start identifying S-box candidate...");
             auto start = std::chrono::system_clock::now();
 
             std::string sbox_name;
