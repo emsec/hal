@@ -195,6 +195,7 @@ namespace hal
                 return ERR(igraph_strerror(res));
             }
 
+            graph->m_graph_ptr      = &(graph->m_graph);
             graph->m_gates_to_nodes = this->m_gates_to_nodes;
             graph->m_nodes_to_gates = this->m_nodes_to_gates;
 
