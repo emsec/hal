@@ -186,16 +186,16 @@ namespace hal
             log_info("hawkeye", "successfully identified control inputs in {} seconds", duration_in_seconds);
 
             // copy partial netlist
-            auto state_cand       = std::make_unique<RoundCandidate>();
-            state_cand->m_netlist = std::move(netlist_factory::create_netlist(candidate->get_netlist()->get_gate_library()));
-            auto* copied_nl       = state_cand->m_netlist.get();
+            auto round_cand       = std::make_unique<RoundCandidate>();
+            round_cand->m_netlist = std::move(netlist_factory::create_netlist(candidate->get_netlist()->get_gate_library()));
+            auto* copied_nl       = round_cand->m_netlist.get();
 
-            state_cand->m_size = candidate->get_size();
+            round_cand->m_size = candidate->get_size();
 
             for (const auto* g : state_input_reg)
             {
                 auto* new_g = copied_nl->create_gate(g->get_id(), g->get_type(), g->get_name());
-                state_cand->m_in_reg.insert(new_g);
+                round_cand->m_in_reg.insert(new_g);
 
                 copy_out_eps_of_gate(copied_nl, g, new_g, &state_inputs);    // only fan-out EPs for state input register
             }
@@ -204,7 +204,7 @@ namespace hal
             {
                 auto* new_g = copied_nl->create_gate(g->get_id(), g->get_type(), g->get_name());
                 new_g->set_data_map(g->get_data_map());    // take care of LUT INIT strings
-                state_cand->m_state_logic.insert(new_g);
+                round_cand->m_state_logic.insert(new_g);
 
                 copy_in_eps_of_gate(copied_nl, g, new_g);
                 copy_out_eps_of_gate(copied_nl, g, new_g);
@@ -215,7 +215,7 @@ namespace hal
                 for (const auto* g : state_output_reg)
                 {
                     auto* new_g = copied_nl->create_gate(g->get_id(), g->get_type(), g->get_name());
-                    state_cand->m_out_reg.insert(new_g);
+                    round_cand->m_out_reg.insert(new_g);
 
                     copy_in_eps_of_gate(copied_nl, g, new_g, &state_outputs);    // only fan-in EPs for state output register
                 }
@@ -227,20 +227,30 @@ namespace hal
                 {
                     // only differences: do not enforce ID (already taken by in_reg FF) and append suffix to name
                     auto* new_g = copied_nl->create_gate(g->get_type(), g->get_name() + "_OUT");
-                    state_cand->m_out_reg.insert(new_g);
+                    round_cand->m_out_reg.insert(new_g);
 
                     copy_in_eps_of_gate(copied_nl, g, new_g, &state_outputs);    // only fan-in EPs for state output register
                 }
             }
 
+            for (const auto* state_in_net : state_inputs)
+            {
+                round_cand->m_state_inputs.insert(copied_nl->get_net_by_id(state_in_net->get_id()));
+            }
+
+            for (const auto* state_out_net : state_outputs)
+            {
+                round_cand->m_state_outputs.insert(copied_nl->get_net_by_id(state_out_net->get_id()));
+            }
+
             for (const auto* control_net : control_inputs)
             {
-                state_cand->m_state_inputs.insert(copied_nl->get_net_by_id(control_net->get_id()));
+                round_cand->m_control_inputs.insert(copied_nl->get_net_by_id(control_net->get_id()));
             }
 
             for (const auto* other_net : other_inputs)
             {
-                state_cand->m_state_inputs.insert(copied_nl->get_net_by_id(other_net->get_id()));
+                round_cand->m_other_inputs.insert(copied_nl->get_net_by_id(other_net->get_id()));
             }
 
             auto nl_graph_res = graph_algorithm::NetlistGraph::from_netlist(copied_nl);
@@ -248,11 +258,11 @@ namespace hal
             {
                 return ERR(nl_graph_res.get_error());
             }
-            state_cand->m_graph = std::move(nl_graph_res.get());
+            round_cand->m_graph = std::move(nl_graph_res.get());
 
             // DFS from input reg forwards
             std::map<Gate*, u32> gate_to_longest_distance;
-            for (auto* in_ff : state_cand->m_in_reg)
+            for (auto* in_ff : round_cand->m_in_reg)
             {
                 std::vector<Gate*> stack = {in_ff};
                 std::vector<Gate*> previous;
@@ -268,8 +278,8 @@ namespace hal
                         continue;
                     }
 
-                    state_cand->m_input_ffs_of_gate[current_gate].insert(in_ff);
-                    state_cand->m_gates_reached_by_input_ff[in_ff].insert(current_gate);
+                    round_cand->m_input_ffs_of_gate[current_gate].insert(in_ff);
+                    round_cand->m_gates_reached_by_input_ff[in_ff].insert(current_gate);
 
                     // expand towards successors
                     bool added = false;
@@ -279,16 +289,16 @@ namespace hal
                         if (successor_gate->get_type()->has_property(GateTypeProperty::ff))
                         {
                             // if successor is part of output state reg, fill set of gates reached by input FF
-                            if (state_cand->m_out_reg.find(successor_gate) != state_cand->m_out_reg.end())
+                            if (round_cand->m_out_reg.find(successor_gate) != round_cand->m_out_reg.end())
                             {
-                                state_cand->m_input_ffs_of_gate[successor_gate].insert(in_ff);
-                                state_cand->m_gates_reached_by_input_ff[in_ff].insert(successor_gate);
+                                round_cand->m_input_ffs_of_gate[successor_gate].insert(in_ff);
+                                round_cand->m_gates_reached_by_input_ff[in_ff].insert(successor_gate);
                             }
                         }
                         else if (successor_gate->get_type()->has_property(GateTypeProperty::combinational))
                         {
                             // if successor is part of next state logic, add gate to stack
-                            if (state_cand->m_state_logic.find(successor_gate) != state_cand->m_state_logic.end())
+                            if (round_cand->m_state_logic.find(successor_gate) != round_cand->m_state_logic.end())
                             {
                                 stack.push_back(successor_gate);
                                 added = true;
@@ -326,10 +336,10 @@ namespace hal
             // invert gate_to_longest_distance map to fill m_longest_distance_to_gate
             for (const auto& [gate, distance] : gate_to_longest_distance)
             {
-                state_cand->m_longest_distance_to_gate[distance].insert(gate);
+                round_cand->m_longest_distance_to_gate[distance].insert(gate);
             }
 
-            return OK(std::move(state_cand));
+            return OK(std::move(round_cand));
         }
 
         Netlist* RoundCandidate::get_netlist() const
