@@ -104,7 +104,7 @@ namespace hal
 
                 // abuse that map keys are sorted, hence rbegin() will return max distance in map
                 const auto& longest_dist_to_gates = candidate->get_longest_distance_to_gate();
-                for (u32 step = 1; step < longest_dist_to_gates.rbegin()->first; step++)
+                for (u32 step = 1; step < longest_dist_to_gates.rbegin()->first + 1; step++)
                 {
                     if (const auto dist_it = longest_dist_to_gates.find(step); dist_it != longest_dist_to_gates.end())
                     {
