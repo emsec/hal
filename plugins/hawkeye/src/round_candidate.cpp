@@ -197,7 +197,7 @@ namespace hal
                 auto* new_g = copied_nl->create_gate(g->get_id(), g->get_type(), g->get_name());
                 round_cand->m_in_reg.insert(new_g);
 
-                copy_out_eps_of_gate(copied_nl, g, new_g, &state_inputs);    // only fan-out EPs for state input register
+                copy_out_eps_of_gate(copied_nl, g, new_g);    // only fan-out EPs for state input register
             }
 
             for (const auto* g : state_logic)
@@ -217,7 +217,7 @@ namespace hal
                     auto* new_g = copied_nl->create_gate(g->get_id(), g->get_type(), g->get_name());
                     round_cand->m_out_reg.insert(new_g);
 
-                    copy_in_eps_of_gate(copied_nl, g, new_g, &state_outputs);    // only fan-in EPs for state output register
+                    copy_in_eps_of_gate(copied_nl, g, new_g);    // only fan-in EPs for state output register
                 }
             }
             else
@@ -229,7 +229,7 @@ namespace hal
                     auto* new_g = copied_nl->create_gate(g->get_type(), g->get_name() + "_OUT");
                     round_cand->m_out_reg.insert(new_g);
 
-                    copy_in_eps_of_gate(copied_nl, g, new_g, &state_outputs);    // only fan-in EPs for state output register
+                    copy_in_eps_of_gate(copied_nl, g, new_g);    // only fan-in EPs for state output register
                 }
             }
 
