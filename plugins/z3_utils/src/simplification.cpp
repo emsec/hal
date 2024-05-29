@@ -1769,6 +1769,16 @@ namespace hal
                     return OK(res);
                 }
 
+                case Z3_OP_BNEG: {
+                    // --X   =>   X
+                    if (is_kind(p[0], Z3_OP_BNEG))
+                    {
+                        return OK(get_parameters(p[0])[0]);
+                    }
+
+                    return OK(-p[0]);
+                }
+
                 case Z3_OP_BADD: {
                     if (p.size() == 2)
                     {
@@ -1888,11 +1898,13 @@ namespace hal
                     {
                         return OK(p[0]);
                     }
-                    // X * -1   =>  -X
-                    if (is_ones(p[1]))
-                    {
-                        return OK(-p[0]);
-                    }
+
+                    // This currently leads to problems, since the HAL boolean function can not handle this, so translation causes errors
+                    // // X * -1   =>  -X
+                    // if (is_ones(p[1]))
+                    // {
+                    //     return OK(-p[0]);
+                    // }
 
                     return OK(p[0] * p[1]);
                 }
@@ -2327,6 +2339,9 @@ namespace hal
                 }
                 const auto [it, _] = cache.insert({e.id(), simplify_res.get()});
                 res                = it->second;
+
+                // TODO remove
+                // return OK(res);
 
                 iteration++;
                 if (iteration > max_loop_iterations)
