@@ -51,6 +51,8 @@ namespace hal
                 CHECK_SCC
             } components = Components::NONE;
 
+            std::vector<std::vector<std::string>> equivalent_types = {};
+
             u32 timeout           = 10;
             u32 min_register_size = 10;
         };

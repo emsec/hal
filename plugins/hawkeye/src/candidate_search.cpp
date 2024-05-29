@@ -370,13 +370,42 @@ namespace hal
                 }
                 else if (config.control == DetectionConfiguration::Control::CHECK_TYPE)
                 {
+                    std::map<const GateType*, std::set<const GateType*>> allowed_gate_type_map;
+                    const auto* gl = nl->get_gate_library();
+                    for (const auto& gt_list : config.equivalent_types)
+                    {
+                        std::set<const GateType*> types;
+                        for (const auto& gt_name : gt_list)
+                        {
+                            types.insert(gl->get_gate_type_by_name(gt_name));
+                        }
+
+                        for (const auto* gt : types)
+                        {
+                            allowed_gate_type_map[gt] = types;
+                        }
+                    }
+
                     for (const auto& [src, dsts] : ff_map)
                     {
                         for (auto* dst : dsts)
                         {
-                            if (src->get_type() != dst->get_type())
+                            const auto* src_type = src->get_type();
+                            const auto* dst_type = dst->get_type();
+                            if (src_type != dst_type)
                             {
-                                continue;
+                                if (const auto src_it = allowed_gate_type_map.find(src_type); src_it != allowed_gate_type_map.end())
+                                {
+                                    const auto& allowed_gates = std::get<1>(*src_it);
+                                    if (allowed_gates.find(dst_type) == allowed_gates.end())
+                                    {
+                                        continue;
+                                    }
+                                }
+                                else
+                                {
+                                    continue;
+                                }
                             }
 
                             filtered_map[src].insert(dst);
@@ -388,6 +417,8 @@ namespace hal
                     std::unordered_map<const Gate*, std::map<PinType, const Net*>> control_map;
                     for (const auto* gate : start_gates)
                     {
+                        control_map[gate] = std::map<PinType, const Net*>();
+
                         for (const auto& ep : gate->get_fan_in_endpoints())
                         {
                             if (auto pin_type = ep->get_pin()->get_type(); control_types.find(pin_type) != control_types.end())
@@ -415,6 +446,8 @@ namespace hal
                     std::unordered_map<const Gate*, std::set<PinType>> control_map;
                     for (const auto* gate : start_gates)
                     {
+                        control_map[gate] = std::set<PinType>();
+
                         for (const auto& ep : gate->get_fan_in_endpoints())
                         {
                             auto sources = ep->get_net()->get_sources();
@@ -438,10 +471,10 @@ namespace hal
                     {
                         for (auto* dst : dsts)
                         {
-                            if (src->get_type() != dst->get_type())
-                            {
-                                continue;
-                            }
+                            // if (src->get_type() != dst->get_type())
+                            // {
+                            //     continue;
+                            // }
 
                             if (control_map.at(src) != control_map.at(dst))
                             {
@@ -487,7 +520,7 @@ namespace hal
                         }
 
                         u32 size = igraph_vector_int_size(&out_set);
-                        if (size < config.min_register_size)
+                        if (size <= config.min_register_size)
                         {
                             continue;
                         }
@@ -527,7 +560,7 @@ namespace hal
                         }
 
                         u32 size = igraph_vector_int_size(&out_set);
-                        if (size < config.min_register_size)
+                        if (size <= config.min_register_size)
                         {
                             continue;
                         }
