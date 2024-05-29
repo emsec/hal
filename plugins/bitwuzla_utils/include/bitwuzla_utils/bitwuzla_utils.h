@@ -84,6 +84,15 @@ namespace hal
          */
         std::set<std::string> get_variable_names(const bitwuzla::Term& t);
 
+        
+        /**
+         * Extracts all variables as term from a bitwuzla term.
+         * 
+         * @param[in] t - The term to extract the variable names from.
+         * @returns A vectir containing all the variables
+         */
+        Result<std::vector<bitwuzla::Term>> get_variables(const bitwuzla::Term& t);
+
         /**
          * Extracts all net ids from the variables of a bitwuzla term.
          * 
@@ -134,9 +143,34 @@ namespace hal
          * @return The the bitwuzla term representations of combined Boolean functions of the subgraph on success, an error otherwise.
          */
         Result<std::vector<bitwuzla::Term>> get_subgraph_bitwuzla_functions(const std::vector<Gate*>& subgraph_gates, const std::vector<Net*>& subgraph_outputs);
-
+        /**
+         * Simplify the provided Term with optional replacements as much as possible
+         * 
+         * @param[in] t - The term to simplify.
+         * @param[in] id_to_term - Terms with the given ids will be replaced with Terms specified in the map.
+         * @return The simplified version of the term t.
+         */
         Result<bitwuzla::Term> simplify(const bitwuzla::Term& t);
         Result<bitwuzla::Term> simplify(const bitwuzla::Term& t, std::map<u64, bitwuzla::Term>& id_to_term);
+
+        /**
+         * Evalute the provided Term when a value is given for each variable.
+         * 
+         * @param[in] t - The term to evaluate.
+         * @param[in] id_to_value - A map of each variable mapped to a constant value which will be evaluated. This will fail if the value does not fit into size of the given Variable.
+         * @return The evaluated version of the term t as Constant.
+         */
+        
+        Result<bitwuzla::Term> evaluate(const bitwuzla::Term& t,std::map<u64,u64>& id_to_value);
+
+        /**
+         * Substitue Subterms of the provided Term with other terms and simplify afterwards.
+         * 
+         * @param[in] t - The term to evaluate.
+         * @param[in] term_to_term - A map of Terms with the corresponding Terms to replace them with.
+         * @return The substituted version of the term t.
+         */
+        Result<bitwuzla::Term> substitue(const bitwuzla::Term& t,std::map< u64,bitwuzla::Term>& id_to_term);
 
     }    // namespace bitwuzla_utils
 }    // namespace hal

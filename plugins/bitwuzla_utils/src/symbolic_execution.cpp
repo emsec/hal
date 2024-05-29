@@ -507,6 +507,10 @@ namespace hal
             std::vector<bitwuzla::Term> get_terms_dfs(const bitwuzla::Term& function, std::map<u64, bitwuzla::Term>& id_to_term)
             {
                 std::vector<bitwuzla::Term> result;
+                if(id_to_term.find(function.id()) != id_to_term.end())
+                {
+                    return result;
+                }
                 if (function.num_children() > 0)
                 {
                     auto children = function.children();
@@ -528,7 +532,7 @@ namespace hal
             }
         }    // namespace
 
-        Result<bitwuzla::Term> SymbolicExecution::evaluate(const bitwuzla::Term& function, std::map<u64, bitwuzla::Term> id_to_term) const
+        Result<bitwuzla::Term> SymbolicExecution::evaluate(const bitwuzla::Term& function, std::map<u64, bitwuzla::Term> id_to_term,std::map<u64, bitwuzla::Term>& resulting_id_to_term) const
         {
             //std::map<u64, bitwuzla::Term> id_to_term;
             std::vector<bitwuzla::Term> stack = get_terms_dfs(function, id_to_term);
@@ -567,7 +571,7 @@ namespace hal
                     
                 }
             }
-        
+            resulting_id_to_term = id_to_term;
             return OK(result);
         }
 

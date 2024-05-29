@@ -468,23 +468,136 @@ namespace hal
         {
             bitwuzla::Term current = t;
             bitwuzla::Term before;
+            std::map<u64, bitwuzla::Term> resulting_id_to_term;
             do
             {
                 before          = current;
-                auto simplified = SMT::SymbolicExecution().evaluate(current, id_to_term);
+                auto simplified = SMT::SymbolicExecution().evaluate(current, id_to_term,resulting_id_to_term);
                 if (simplified.is_error())
                 {
                     return ERR_APPEND(simplified.get_error(), "could not apply local simplification: symbolic execution failed");
                 }
                 current = simplified.get();
             } while (before != current);
-            // auto simplified = SMT::SymbolicExecution().evaluate(current, id_to_term);
-            // if (simplified.is_error())
-            // {
-            //     return ERR_APPEND(simplified.get_error(), "could not apply local simplification: symbolic execution failed");
-            // }
-            // return simplified;
+            id_to_term =resulting_id_to_term;
             return OK(current);
+        }
+        //actual returns Terms inside a Term for each variable
+        // way slower than SMT string but this way IDs can be used
+        Result<std::vector<bitwuzla::Term>> get_variables(const bitwuzla::Term& t)
+        {
+            //
+            std::vector<bitwuzla::Term> result;
+            if (t.num_children() > 0)
+            {
+                auto children = t.children();
+                for (const auto cur_child : children)
+                {   
+                    auto child_res = get_variables(cur_child).get();
+                    for(auto cur_child: child_res)
+                    {
+                        bool doubled = false;
+                        for(auto term: result)
+                        {
+                        if(term.id() == t.id())
+                        {
+                            doubled = true;
+                            break;
+                        }
+                        }
+                        if(!doubled) 
+                        {                        
+                            result.push_back(t);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if(t.is_variable())
+                {
+                    bool doubled = false;
+                    for(auto term: result)
+                    {
+                        if(term.id() == t.id())
+                        {
+                            doubled = true;
+                            break;
+                        }
+                    }
+                    if(!doubled) 
+                    {                        
+                        result.push_back(t);
+                    }
+
+                }
+            }
+            return OK(result);
+        }
+        Result<bitwuzla::Term> substitue(const bitwuzla::Term& t,std::map< u64,bitwuzla::Term>& id_to_term)
+        {
+            
+            std::map<u64, bitwuzla::Term> res;
+            auto simplified = SMT::SymbolicExecution().evaluate(t,id_to_term ,res);
+            if (simplified.is_error())
+            {
+                return ERR_APPEND(simplified.get_error(), "could not apply local substitution: symbolic execution failed");
+            }
+            return simplified;
+        }
+        Result<bitwuzla::Term> evaluate(const bitwuzla::Term& t,std::map<u64,u64>& id_to_value)
+        {
+            auto variables = get_variables(t);
+            
+            std::map< u64,bitwuzla::Term> id_to_initial_term;
+            if(variables.is_error())
+            {
+                return ERR("Could not resolve variables of given Term.");
+            }
+            if(variables.get().size() != id_to_value.size())
+            {
+                return ERR("Variables given are not the same amount as expected.");
+            }
+            for(auto current_var: variables.get())
+            {
+                if(id_to_value.find(current_var.id()) == id_to_value.end())
+                {
+                    return ERR("Did not specify value for variable "+current_var.str());
+                }
+                else{
+                    id_to_initial_term[current_var.id()] =current_var;
+                }
+            }
+            
+            std::map< u64,bitwuzla::Term> id_to_term;
+            for(auto [id,value] :id_to_value)
+            {
+                u64 arity = id_to_initial_term[id].sort().bv_size();
+                if((value >> arity)!= 0)
+                {
+                    return ERR("The given value for variable " + id_to_initial_term[id].str() + " does not fit into the size of that variable.");
+                }
+                id_to_term[id] =bitwuzla::mk_bv_value_uint64(bitwuzla::mk_bv_sort(arity), value);
+            }
+
+            bitwuzla::Term current = t;
+            bitwuzla::Term before;
+            do
+            {
+                before          = current;
+                std::map<u64, bitwuzla::Term> res;
+                auto simplified = SMT::SymbolicExecution().evaluate(current, id_to_term,res);
+                if (simplified.is_error())
+                {
+                    return ERR_APPEND(simplified.get_error(), "could not apply constant propagation: symbolic execution failed");
+                }
+                current = simplified.get();
+            } while (before != current);
+            if(current.is_const())
+            {                
+                return OK(current);
+            }
+            return ERR("Could not resolve inputs to constant value.");
         }
 
     }    // namespace bitwuzla_utils

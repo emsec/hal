@@ -822,14 +822,31 @@ namespace hal
                 "I1)) & I2) & I3) & I4) & I5)) | (((((I0 & (! I1)) & I2) & I3) & I4) & I5)) | (((((I0 & I1) & I2) & I3) & I4) & I5))")
                 .get();
         auto bf_function      = bitwuzla_utils::from_bf(function).get();
+        
+        std::map<u64, bitwuzla::Term> res;
         auto start      = std::chrono::system_clock::now();
-        const auto simplified = bitwuzla_utils::simplify(bf_function);
+        const auto simplified = bitwuzla_utils::simplify(bf_function,res);
 
         const auto duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
+
+        for(auto [id,term]:res)
+        {
+            std::cout << id << ":" << term.str() <<std::endl;
+        }
+
+        start      = std::chrono::system_clock::now();
+        const auto simplified2 = bitwuzla_utils::simplify(bf_function,res);
+
+        const auto duration_in_seconds_second_time = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
+
+
+
+
         start      = std::chrono::system_clock::now();
         const auto bf_simplified = function.simplify();        
         const auto bf_duration_in_seconds = std::chrono::duration<double>(std::chrono::system_clock::now() - start).count();
         std::cout << "BW_simplification took "<< duration_in_seconds<< " seconds"<< std::endl;
+        std::cout << "BW_simplification took "<< duration_in_seconds_second_time<< " seconds the second time"<< std::endl;
         std::cout << "BF_simplification took "<< bf_duration_in_seconds<< " seconds"<< std::endl;
     }
 

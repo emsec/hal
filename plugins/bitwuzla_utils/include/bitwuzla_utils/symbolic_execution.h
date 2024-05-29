@@ -43,7 +43,7 @@ namespace hal
              * @param[in] function - The Boolean function to evaluate.
              * @returns Ok() and the evaluated Boolean function on success, Err() otherwise.
              */
-            Result<bitwuzla::Term> evaluate(const bitwuzla::Term& function, std::map<u64, bitwuzla::Term> id_to_term) const;
+            Result<bitwuzla::Term> evaluate(const bitwuzla::Term& function, std::map<u64, bitwuzla::Term> id_to_term,std::map<u64, bitwuzla::Term>& resulting_id_to_term) const;
 
             // /**
             //  * Evaluates an equality constraint and applies it to the symbolic state of the symbolic execution.
