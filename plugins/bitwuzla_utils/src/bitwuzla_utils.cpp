@@ -478,7 +478,12 @@ namespace hal
                 }
                 current = simplified.get();
             } while (before != current);
-
+            // auto simplified = SMT::SymbolicExecution().evaluate(current, id_to_term);
+            // if (simplified.is_error())
+            // {
+            //     return ERR_APPEND(simplified.get_error(), "could not apply local simplification: symbolic execution failed");
+            // }
+            // return simplified;
             return OK(current);
         }
 

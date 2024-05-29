@@ -2,6 +2,8 @@
 
 #include "hal_core/utilities/log.h"
 
+#include <string>
+
 namespace hal
 {
     namespace SMT
@@ -147,7 +149,7 @@ namespace hal
                 {
                     return ERR_APPEND(res.get_error(), "cannot tranlate term to hal Boolean function: failed to extract value");
                 }
-                auto simplified_val = res.get() + res2.get();
+                auto simplified_val = (res.get() + res2.get())%(1<<p0.sort().bv_size());
                 return OK(bitwuzla::mk_bv_value_uint64(bitwuzla::mk_bv_sort(p0.sort().bv_size()), simplified_val));
             }
 
@@ -170,7 +172,7 @@ namespace hal
                 {
                     return ERR_APPEND(res.get_error(), "cannot tranlate term to hal Boolean function: failed to extract value");
                 }
-                auto simplified_val = res.get() - res2.get();
+                auto simplified_val = (res.get() - res2.get())%(1<<p0.sort().bv_size());
                 return OK(bitwuzla::mk_bv_value_uint64(bitwuzla::mk_bv_sort(p0.sort().bv_size()), simplified_val));
             }
 
@@ -193,8 +195,25 @@ namespace hal
                 {
                     return ERR_APPEND(res.get_error(), "cannot tranlate term to hal Boolean function: failed to extract value");
                 }
-                auto simplified_val = res.get() * res2.get();
+                auto simplified_val = (res.get() * res2.get())%(1<<p0.sort().bv_size());
                 return OK(bitwuzla::mk_bv_value_uint64(bitwuzla::mk_bv_sort(p0.sort().bv_size()), simplified_val));
+            }
+            namespace{
+                std::string string_replace_all(std::string& in, const std::string old_value, const std::string new_value)
+                {
+                    
+                    size_t pos = in.find(old_value); 
+  
+                    // Iterate through the string and replace all 
+                    while (pos != std::string::npos) { 
+                        // Replace the substring with the specified string 
+                        in.replace(pos, old_value.size(), new_value); 
+  
+                        // Find the next occurrence of the substring 
+                        pos = in.find(old_value, pos + new_value.size()); 
+                    } 
+                    return in;
+                }
             }
 
             /**
@@ -206,38 +225,84 @@ namespace hal
              */
             Result<bitwuzla::Term> Sle(const bitwuzla::Term& p0, const bitwuzla::Term& p1)
             {
-                u64 res = 0;
-                try
-                {
-                    res = std::stoll(p0.value<std::string>(), nullptr, 2);
-                }
-                catch (const std::invalid_argument& e)
-                {
-                    return ERR("could not get u64 from string");
-                }
-                catch (const std::out_of_range& e)
-                {
-                    return ERR("could not get u64 from string");
-                }
-                u64 res2 = 0;
-                try
-                {
-                    res2 = std::stoll(p0.value<std::string>(), nullptr, 2);
-                }
-                catch (const std::invalid_argument& e)
-                {
-                    return ERR("could not get u64 from string");
-                }
-                catch (const std::out_of_range& e)
-                {
-                    return ERR("could not get u64 from string");
-                }
+                // i64 res = 0;
+                // try
+                // {
+                //     res = std::stoll(p0.value<std::string>(), nullptr, 2);
+                // }
+                // catch (const std::invalid_argument& e)
+                // {
+                //     return ERR("could not get u64 from string");
+                // }
+                // catch (const std::out_of_range& e)
+                // {
+                //     return ERR("could not get u64 from string");
+                // }
+                // i64 res2 = 0;
+                // try
+                // {
+                //     res2 = std::stoll(p1.value<std::string>(), nullptr, 2);
+                // }
+                // catch (const std::invalid_argument& e)
+                // {
+                //     return ERR("could not get u64 from string");
+                // }
+                // catch (const std::out_of_range& e)
+                // {
+                //     return ERR("could not get u64 from string");
+                // }
 
-                if (res <= res2)
+                // if (res <= res2)
+                // {
+                //     return OK(bitwuzla::mk_true());
+                // }
+                // return OK(bitwuzla::mk_false());
+                
+                auto value0 = p0.value<std::string>();
+                bool negative = false;
+                if(value0.substr(0,1) == "1")
                 {
-                    return OK(bitwuzla::mk_bv_one(bitwuzla::mk_bv_sort(1)));
+                    negative = true;
+                    value0 = string_replace_all(value0,"0", "2");
+                    value0 = string_replace_all(value0,"1", "0");
+                    value0 = string_replace_all(value0,"2", "1");
                 }
-                return OK(bitwuzla::mk_bv_zero(bitwuzla::mk_bv_sort(1)));
+                value0 =value0.substr(1,value0.length()-1);
+                const auto res = utils::wrapped_stoull(value0, 2);
+                if (res.is_error())
+                {
+                    return ERR_APPEND(res.get_error(), "cannot tranlate term to hal Boolean function: failed to extract value");
+                }
+                i64 res_value = res.get();
+                if(negative)
+                {
+                    res_value = -res_value;
+                }
+                auto value1 = p1.value<std::string>();
+                negative = false;
+                if(value1.substr(0,1) == "1")
+                {
+                    negative = true;
+                    value1 = string_replace_all(value1,"0", "2");
+                    value1 = string_replace_all(value1,"1", "0");
+                    value1 = string_replace_all(value1,"2", "1");
+                }
+                value1 =value1.substr(1,value1.length()-1);
+                const auto res1 = utils::wrapped_stoull(value1, 2);
+                if (res1.is_error())
+                {
+                    return ERR_APPEND(res1.get_error(), "cannot tranlate term to hal Boolean function: failed to extract value");
+                }
+                i64 res_value1 = res1.get();
+                if(negative)
+                {
+                    res_value1 = -res_value1;
+                }
+                if (res_value <= res_value1)
+                {
+                    return OK(bitwuzla::mk_true());
+                }
+                return OK(bitwuzla::mk_false());
             }
 
             /**
@@ -249,37 +314,51 @@ namespace hal
              */
             Result<bitwuzla::Term> Slt(const bitwuzla::Term& p0, const bitwuzla::Term& p1)
             {
-                u64 res = 0;
-                try
+                auto value0 = p0.value<std::string>();
+                bool negative = false;
+                if(value0.substr(0,1) == "1")
                 {
-                    res = std::stoll(p0.value<std::string>(), nullptr, 2);
+                    negative = true;
+                    value0 = string_replace_all(value0,"0", "2");
+                    value0 = string_replace_all(value0,"1", "0");
+                    value0 = string_replace_all(value0,"2", "1");
                 }
-                catch (const std::invalid_argument& e)
+                value0 =value0.substr(1,value0.length()-1);
+                const auto res = utils::wrapped_stoull(value0, 2);
+                if (res.is_error())
                 {
-                    return ERR("could not get u64 from string");
+                    return ERR_APPEND(res.get_error(), "cannot tranlate term to hal Boolean function: failed to extract value");
                 }
-                catch (const std::out_of_range& e)
+                i64 res_value = res.get();
+                if(negative)
                 {
-                    return ERR("could not get u64 from string");
+                    res_value = -res_value;
                 }
-                u64 res2 = 0;
-                try
+                auto value1 = p1.value<std::string>();
+                negative = false;
+                if(value1.substr(0,1) == "1")
                 {
-                    res2 = std::stoll(p0.value<std::string>(), nullptr, 2);
+                    negative = true;
+                    value1 = string_replace_all(value1,"0", "2");
+                    value1 = string_replace_all(value1,"1", "0");
+                    value1 = string_replace_all(value1,"2", "1");
                 }
-                catch (const std::invalid_argument& e)
+                value1 =value1.substr(1,value1.length()-1);
+                const auto res1 = utils::wrapped_stoull(value1, 2);
+                if (res1.is_error())
                 {
-                    return ERR("could not get u64 from string");
+                    return ERR_APPEND(res1.get_error(), "cannot tranlate term to hal Boolean function: failed to extract value");
                 }
-                catch (const std::out_of_range& e)
+                i64 res_value1 = res1.get();
+                if(negative)
                 {
-                    return ERR("could not get u64 from string");
+                    res_value1 = -res_value1;
                 }
-                if (res < res2)
+                if (res_value < res_value1)
                 {
-                    return OK(bitwuzla::mk_bv_one(bitwuzla::mk_bv_sort(1)));
+                    return OK(bitwuzla::mk_true());
                 }
-                return OK(bitwuzla::mk_bv_zero(bitwuzla::mk_bv_sort(1)));
+                return OK(bitwuzla::mk_false());
             }
 
             /**
@@ -303,10 +382,10 @@ namespace hal
                 }
                 if (res.get() <= res2.get())
                 {
-                    return OK(bitwuzla::mk_bv_one(bitwuzla::mk_bv_sort(1)));
+                    return OK(bitwuzla::mk_true());
                 }
-                return OK(bitwuzla::mk_bv_zero(bitwuzla::mk_bv_sort(1)));
-                ;
+                return OK(bitwuzla::mk_false());
+                
             }
 
             /**
@@ -330,9 +409,9 @@ namespace hal
                 }
                 if (res.get() < res2.get())
                 {
-                    return OK(bitwuzla::mk_bv_one(bitwuzla::mk_bv_sort(1)));
+                    return OK(bitwuzla::mk_true());
                 }
-                return OK(bitwuzla::mk_bv_zero(bitwuzla::mk_bv_sort(1)));
+                return OK(bitwuzla::mk_false());
             }
 
             /**
@@ -371,24 +450,8 @@ namespace hal
                 {
                     return ERR_APPEND(res.get_error(), "cannot tranlate term to hal Boolean function: failed to extract value");
                 }
-                auto simplified_val = res.get() << p1.sort().bv_size() + res2.get();
-                return OK(bitwuzla::mk_bv_value_uint64(bitwuzla::mk_bv_sort(p0.sort().bv_size()), simplified_val));
-            }
-
-            Result<bitwuzla::Term> EQUAL(const bitwuzla::Term& p0, const bitwuzla::Term& p1)
-            {
-                const auto res = utils::wrapped_stoull(p0.value<std::string>(), 2);
-                if (res.is_error())
-                {
-                    return ERR_APPEND(res.get_error(), "cannot tranlate term to hal Boolean function: failed to extract value");
-                }
-                const auto res2 = utils::wrapped_stoull(p1.value<std::string>(), 2);
-                if (res2.is_error())
-                {
-                    return ERR_APPEND(res.get_error(), "cannot tranlate term to hal Boolean function: failed to extract value");
-                }
-                auto simplified_val = res.get() << p1.sort().bv_size() + res2.get();
-                return OK(bitwuzla::mk_bv_value_uint64(bitwuzla::mk_bv_sort(p0.sort().bv_size()), simplified_val));
+                auto simplified_val = (res.get() << p1.sort().bv_size()) + res2.get();
+                return OK(bitwuzla::mk_bv_value_uint64(bitwuzla::mk_bv_sort(p0.sort().bv_size()+p1.sort().bv_size()), simplified_val));
             }
 
             Result<bitwuzla::Term> BV_ZERO_EXTEND(const bitwuzla::Term& p, const u64 size)
@@ -404,6 +467,10 @@ namespace hal
             Result<bitwuzla::Term> BV_SIGN_EXTEND(const bitwuzla::Term& p, const u64 size)
             {
                 u64 res = 0;
+                if(p.value<std::string>() == "1")
+                {
+                    return OK(bitwuzla::mk_bv_ones(bitwuzla::mk_bv_sort(p.sort().bv_size() + size)));
+                }
                 try
                 {
                     res = std::stoll(p.value<std::string>(), nullptr, 2);
@@ -419,35 +486,32 @@ namespace hal
                 return OK(bitwuzla::mk_bv_value_uint64(bitwuzla::mk_bv_sort(p.sort().bv_size() + size), res));
             }
 
-            Result<bitwuzla::Term> BV_EXTRACT(const bitwuzla::Term& p, const u64 start, const u64 end)
+            Result<bitwuzla::Term> BV_EXTRACT(const bitwuzla::Term& p, const u64 end, const u64 start)
             {
                 std::string new_str = p.value<std::string>();
                 new_str.insert(new_str.begin(), p.sort().bv_size() - new_str.size(), '0');
-                new_str        = new_str.substr(start, end);
+                new_str        = new_str.substr(new_str.size()-end-1, end-start+1);
                 const auto res = utils::wrapped_stoull(new_str, 2);
                 if (res.is_error())
                 {
                     return ERR_APPEND(res.get_error(), "cannot translate term to hal Boolean function: failed to extract value");
                 }
-                return OK(bitwuzla::mk_bv_value_uint64(bitwuzla::mk_bv_sort(end - start), res.get()));
+                return OK(bitwuzla::mk_bv_value_uint64(bitwuzla::mk_bv_sort(end - start+1), res.get()));
             }
 
         }    // namespace ConstantPropagation
 
-        // SymbolicExecution::SymbolicExecution(const std::vector<bitwuzla::Term>& variables) : state(SymbolicState(variables))
-        // {
-        // }
 
         namespace
         {
             std::vector<bitwuzla::Term> get_terms_dfs(const bitwuzla::Term& function, std::map<u64, bitwuzla::Term>& id_to_term)
             {
                 std::vector<bitwuzla::Term> result;
-                if (function.children().size() > 0)
+                if (function.num_children() > 0)
                 {
                     auto children = function.children();
                     for (const auto cur_child : children)
-                    {
+                    {   
                         auto child_res = get_terms_dfs(cur_child, id_to_term);
                         result.insert(result.end(), child_res.begin(), child_res.end());
                     }
@@ -469,13 +533,17 @@ namespace hal
             //std::map<u64, bitwuzla::Term> id_to_term;
             std::vector<bitwuzla::Term> stack = get_terms_dfs(function, id_to_term);
             bitwuzla::Term result;
+            if(stack.size() == 0)
+            {
+                return OK(function);
+            }
             for (const auto& node : stack)
             {
-                //std::move(stack.end() - static_cast<i64>(node.num_children()), stack.end(), std::back_inserter(parameters));
-                //stack.erase(stack.end() - static_cast<i64>(node.num_children()), stack.end());
-
-                if (id_to_term.find(node.id()) == id_to_term.end())
+                
+                //std::cout << "current node is " <<node.str() << "with ID: "<< node.id() << std::endl;
+                if (id_to_term.find(node.id()) != id_to_term.end())
                 {
+                    
                     //already simplified that term
                     continue;
                 }
@@ -488,6 +556,7 @@ namespace hal
                     }
                     if (auto simplified = this->simplify(node, parameters); simplified.is_ok())
                     {
+                        
                         id_to_term[node.id()] = simplified.get();
                         result                = simplified.get();
                     }
@@ -495,9 +564,10 @@ namespace hal
                     {
                         return ERR_APPEND(simplified.get_error(), "could not evaluate Boolean function within symbolic state: simplification failed");
                     }
+                    
                 }
             }
-
+        
             return OK(result);
         }
 
@@ -630,6 +700,7 @@ namespace hal
 
         Result<bitwuzla::Term> SymbolicExecution::simplify(const bitwuzla::Term& node, std::vector<bitwuzla::Term>& p)
         {
+            
             if (!p.empty() && std::all_of(p.begin(), p.end(), [](const auto& function) { return function.sort().is_bool() || function.is_value(); }))
             {
                 if (auto res = SymbolicExecution::constant_propagation(node, p); res.is_error())
@@ -642,7 +713,6 @@ namespace hal
                 }
             }
 
-            //TODO
             if (is_commutative(node))
             {
                 p = SymbolicExecution::normalize(std::move(p));
@@ -1518,7 +1588,7 @@ namespace hal
                     // }
 
                     // We intend to group slices into the same concatination, so that they maybe can be merged into one slice. We try to do this from right to left to make succeeding simplifications easier.
-                    if ((p[0].kind() == bitwuzla::Kind::BV_EXTRACT) && p[1].kind() == (bitwuzla::Kind::BV_CONCAT))
+                    if ((p[0].kind() == bitwuzla::Kind::BV_EXTRACT) && (p[1].kind() == (bitwuzla::Kind::BV_CONCAT)))
                     {
                         auto p1_parameter = p[1].children();
 
@@ -1527,14 +1597,14 @@ namespace hal
                             auto p0_parameter  = p[0].children();
                             auto p10_parameter = p1_parameter[0].children();
 
-                            if (p0_parameter[0] == p10_parameter[0])
+                            if (is_x_y(p0_parameter[0], p10_parameter[0]))
                             {
                                 if (p1_parameter[1].kind() == (bitwuzla::Kind::BV_EXTRACT))
                                 {
                                     auto p11_parameter = p1_parameter[1].children();
-
+                                    
                                     // CONCAT(SLICE(X, i, j), CONCAT(SLICE(X, k, l), SLICE(Z, m, n))) => CONCAT(CONCAT(SLICE(X, i, j), SLICE(X, k, l)), SLICE(Z, m, n)))
-                                    if (p11_parameter[0] != p10_parameter[0])
+                                    if (!is_x_y(p11_parameter[0] ,p10_parameter[0]))
                                     {
                                         auto concatination = bitwuzla::mk_term(bitwuzla::Kind::BV_CONCAT, {p[0], p1_parameter[0]});
                                         return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_CONCAT, {concatination, p1_parameter[1]}));
@@ -1549,7 +1619,7 @@ namespace hal
                                         auto p110_parameter = p11_parameter[0].children();
 
                                         // CONCAT(SLICE(X, i, j), CONCAT(SLICE(X, k, l), CONCAT(SLICE(Y, m, n), Z))) => CONCAT(CONCAT(SLICE(X, i, j), SLICE(X, k, l)), CONCAT(SLICE(Y, m, n), Z)))
-                                        if (p110_parameter[0] != p10_parameter[0])
+                                        if (!is_x_y(p110_parameter[0], p10_parameter[0]))
                                         {
                                             auto c1 = bitwuzla::mk_term(bitwuzla::Kind::BV_CONCAT, {p[0], p1_parameter[0]});
                                             return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_CONCAT, {c1, p1_parameter[1]}));
@@ -1566,25 +1636,34 @@ namespace hal
                         }
                     }
 
-                    if (p[0].kind() == (bitwuzla::Kind::BV_EXTRACT) && p[1].kind() == (bitwuzla::Kind::BV_EXTRACT))
+                    if ((p[0].kind() == bitwuzla::Kind::BV_EXTRACT) && (p[1].kind() == bitwuzla::Kind::BV_EXTRACT))
                     {
                         auto p0_parameter = p[0].children();
                         auto p1_parameter = p[1].children();
-
                         if (is_x_y(p0_parameter[0], p1_parameter[0]))
-                        {
+                        {   
                             // CONCAT(SLICE(X, j+1, k), SLICE(X, i, j)) => SLICE(X, i, k)
+                            //j and k swapped for bitwuzla
                             if ((p[1].indices()[0] == (p[0].indices()[1] - 1)))
                             {
                                 return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_EXTRACT, {p0_parameter[0]}, {p[0].indices()[0], p[1].indices()[1]}));
                             }
 
                             // CONCAT(SLICE(X, j, j), SLICE(X, i, j)) => SEXT(SLICE(X, i, j), j-i+1)
-                            if ((p[1].indices()[1] == p[0].indices()[0]) && (p[1].indices()[1] == p[0].indices()[1]))
+                            if ((p[1].indices()[0] == p[0].indices()[0]) && (p[1].indices()[0] == p[0].indices()[1]))
                             {
                                 return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_SIGN_EXTEND, {p[1]}, {1}));
                             }
+                            
+                            // std::cout << "did not trigger any case"<<std::endl;
+                            
+                            // std::cout << "SLICE()"<< p[0].indices()[0] << "," <<  p[0].indices()[1] <<std::endl;
+                            // std::cout << "SLICE()"<< p[1].indices()[0] << "," <<  p[1].indices()[1] <<std::endl;
                         }
+                        // else{
+                            
+                        //     std::cout << p0_parameter[0].str() << " != " << p1_parameter[0].str()<<std::endl;
+                        // }
                     }
 
                     // CONCAT(SLICE(X, j, j), SEXT(SLICE(X, i, j), j-i+n)) => SEXT(SLICE(X, i, j), j-i+n+1)
@@ -1597,15 +1676,15 @@ namespace hal
                             auto p0_parameter  = p[0].children();
                             auto p10_parameter = p1_parameter[0].children();
 
-                            if ((is_x_y(p0_parameter[0], p10_parameter[0])) && (is_x_y(p0_parameter[1], p0_parameter[2])) && (p[0].indices()[0] == p1_parameter[0].indices()[1]))
+                            if ((is_x_y(p0_parameter[0], p10_parameter[0])) && (is_x_y(p0_parameter[1], p0_parameter[2])) && (p[0].indices()[1] == p1_parameter[0].indices()[0]))
                             {
-                                return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_SIGN_EXTEND, {p1_parameter[0]}, {p[1].indices()[0] + 1}));
+                                return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_SIGN_EXTEND, {p1_parameter[0]}, {p[1].indices()[1] + 1}));
                             }
                         }
                     }
 
                     // CONCAT(SLICE(X, j, j), CONCAT(SEXT(SLICE(X, i, j), j-i+n), Y)) => CONCAT(SEXT(SLICE(X, i, j), j-i+n+1), Y)
-                    if (p[0].kind() == (bitwuzla::Kind::BV_EXTRACT) && p[1].kind() == (bitwuzla::Kind::BV_CONCAT))
+                    if ((p[0].kind() == bitwuzla::Kind::BV_EXTRACT) && (p[1].kind() == bitwuzla::Kind::BV_CONCAT))
                     {
                         auto p1_parameter = p[1].children();
 
@@ -1635,19 +1714,19 @@ namespace hal
                     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_SIGN_EXTEND, {p[0]}, {node.indices()[0]}));
                 }
                 case bitwuzla::Kind::EQUAL: {
+                    
                     // X == X   =>   1
                     if (is_x_y(p[0], p[1]))
-                    {
+                    {   
                         return OK(bitwuzla::mk_true());
                     }
-
                     return OK(bitwuzla::mk_term(bitwuzla::Kind::EQUAL, {p[0], p[1]}));
                 }
                 case bitwuzla::Kind::BV_SLE: {
                     // X <=s X   =>   1
                     if (is_x_y(p[0], p[1]))
                     {
-                        return OK(bitwuzla::mk_bv_one(bitwuzla::mk_bv_sort(node.sort().bv_size())));
+                        return OK(bitwuzla::mk_true());
                     }
 
                     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_SLE, {p[0], p[1]}));
@@ -1678,10 +1757,10 @@ namespace hal
                     }
                     // X < X   =>   0
                     if (is_x_y(p[0], p[1]))
-                    {
+                    {   
+                        
                         return OK(bitwuzla::mk_false());
                     }
-
                     return OK(bitwuzla::mk_term(bitwuzla::Kind::BV_ULT, {p[0], p[1]}));
                 }
                 case bitwuzla::Kind::ITE: {
