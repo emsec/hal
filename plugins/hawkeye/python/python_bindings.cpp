@@ -470,6 +470,10 @@ namespace hal
             "SBoxCandidate",
             R"(Stores all information related to an S-box candidate such as the ``RoundCandidate`` it belongs to, the connected component it is part of, and its input and output gates.)");
 
+        py_hawkeye_sbox_candidate.def(py::init<>(), R"(
+            TODO
+        )");
+
         py_hawkeye_sbox_candidate.def_readonly("m_candidate", &hawkeye::SBoxCandidate::m_candidate, R"(The ``RoundCandidate`` that the S-box candidate belongs to.)");
 
         py_hawkeye_sbox_candidate.def_readonly("m_component", &hawkeye::SBoxCandidate::m_component, R"(The gates of the component which the S-box candidate is part of.)");
