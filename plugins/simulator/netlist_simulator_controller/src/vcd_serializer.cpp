@@ -494,7 +494,7 @@ namespace hal {
             netNames.insert(QString::fromStdString(n->get_name()),n);
 
         QRegularExpression reHead("\\$(\\w*) (.*)\\$end");
-        QRegularExpression reWire("wire\\s+(\\d+) ([^ ]+) (.*) $");
+        QRegularExpression reWire("wire\\s+(\\d+) ([^ ]+) (.*)$");
 
         quint64 fileSize = ff.size();
         quint64 totalRead = 0;
@@ -540,7 +540,8 @@ namespace hal {
                         QRegularExpressionMatch mWire = reWire.match(mHead.captured(2));
                         bool ok;
                         QString wireName   = mWire.captured(3);
-                        const Net* net = netNames.value(wireName);
+                        if (!wireName.isEmpty() && wireName.at(0)=='\\') wireName.remove(0,1);
+                        const Net* net = netNames.value(wireName.trimmed());
                         if (!netNames.isEmpty() && !net) continue; // net not found in given name list
                         if (mAbbrevByName.contains(wireName))
                         {
