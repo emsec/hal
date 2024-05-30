@@ -405,7 +405,7 @@ namespace hal
                     }
 
                     // actually assign the values
-                    std::vector<std::vector<BooleanFunction::Value>> truth_tables_inverted(1 << bfs.size(), std::vector<BooleanFunction::Value>(bfs.size()));
+                    std::vector<std::vector<BooleanFunction::Value>> truth_tables_inverted(1 << actual_state_inputs.size(), std::vector<BooleanFunction::Value>(bfs.size()));
                     for (j = 0; j < bfs.size(); j++)
                     {
                         const auto& bf    = bfs.at(j);
@@ -425,7 +425,7 @@ namespace hal
                         }
                     }
 
-                    std::vector<u8> sbox;
+                    std::vector<u64> sbox_tmp;
                     for (const auto& tt : truth_tables_inverted)
                     {
                         const auto u64_res = BooleanFunction::to_u64(tt);
@@ -433,7 +433,7 @@ namespace hal
                         {
                             return ERR(u64_res.get_error());
                         }
-                        sbox.push_back(u64_res.get());
+                        sbox_tmp.push_back(u64_res.get());
                     }
 
                     // check linear independence of outputs if more outputs than inputs
@@ -447,7 +447,7 @@ namespace hal
                             u64 sum = 0;
                             for (u32 k = 0; k < (1 << input_gates.size()); k++)
                             {
-                                sum += (1 << k) * ((sbox[k] >> j) & 1);
+                                sum += (1 << k) * ((sbox_tmp[k] >> j) & 1);
                             }
                             mat.push_back(sum);
                         }
@@ -484,22 +484,33 @@ namespace hal
 
                         if (idx.size() == input_gates.size())
                         {
-                            for (j = 0; j < sbox.size(); j++)
+                            for (j = 0; j < sbox_tmp.size(); j++)
                             {
                                 u8 new_val = 0;
                                 for (u32 k = 0; k < idx.size(); k++)
                                 {
-                                    new_val += (1 << k) * ((sbox.at(j) >> idx.at(k)) & 1);
+                                    new_val += (1 << k) * ((sbox_tmp.at(j) >> idx.at(k)) & 1);
                                 }
-                                sbox.at(j) = new_val;
+                                sbox_tmp.at(j) = new_val;
                             }
                         }
+                        else
+                        {
+                            log_info("hawkeye", "found {} linear independent", idx.size());
+                            continue;
+                        }
+                    }
+
+                    std::vector<u8> sbox;
+                    for (const auto elem : sbox_tmp)
+                    {
+                        sbox.push_back((u8)elem);
                     }
 
                     std::set<u8> sbox_set(sbox.begin(), sbox.end());
                     if (sbox.size() != sbox_set.size())
                     {
-                        log_debug("hawkeye", "found non-bijective S-box");
+                        log_info("hawkeye", "found non-bijective S-box");
                         continue;
                     }
 
