@@ -25,10 +25,12 @@
 
 #pragma once
 
+#include "hal_core/defines.h"
 #include "hal_core/utilities/result.h"
 #include "hawkeye/sbox_database.h"
 
 #include <set>
+#include <vector>
 
 namespace hal
 {

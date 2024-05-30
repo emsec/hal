@@ -29,6 +29,9 @@
 #include "hal_core/defines.h"
 #include "hawkeye/register_candidate.h"
 
+#include <map>
+#include <set>
+
 namespace hal
 {
     namespace hawkeye
