@@ -255,7 +255,7 @@ namespace hal
             :type: hawkeye.DetectionConfiguration.Control
         )");
 
-                py::enum_<hawkeye::DetectionConfiguration::Components> py_hawkeye_detection_configuration_components(py_hawkeye_detection_configuration, "Components", R"(TODO)");
+        py::enum_<hawkeye::DetectionConfiguration::Components> py_hawkeye_detection_configuration_components(py_hawkeye_detection_configuration, "Components", R"(TODO)");
 
         py_hawkeye_detection_configuration_components.value("NONE", hawkeye::DetectionConfiguration::Components::NONE, R"(TODO)")
             .value("CHECK_SCC", hawkeye::DetectionConfiguration::Components::CHECK_SCC, R"(TODO)")
