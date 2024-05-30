@@ -9,6 +9,7 @@
 #include "hawkeye/round_candidate.h"
 
 #include <algorithm>
+#include <vector>
 
 namespace hal
 {

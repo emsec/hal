@@ -8,6 +8,7 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
+#include <vector>
 
 #ifdef __AVX2__
 #include <immintrin.h>
@@ -30,9 +31,9 @@ public:
 
     void dump() const;
 
-    smallset_t operator| (const smallset_t& other) const;
-    smallset_t operator& (const smallset_t& other) const;
-    smallset_t operator^ (const smallset_t& other) const;
+    smallset_t operator|(const smallset_t& other) const;
+    smallset_t operator&(const smallset_t& other) const;
+    smallset_t operator^(const smallset_t& other) const;
     smallset_t shuffle(u8 shift) const;
 
     void to_array(u64* arr) const;
@@ -44,6 +45,7 @@ public:
     static int size(u64 dw, int level);
 
     bool empty() const;
+
 private:
     u64 dw64[4];
 };
@@ -53,42 +55,43 @@ smallset_t::smallset_t(int preset)
     memset(dw64, 0, sizeof(dw64));
     switch (preset)
     {
-    case 8:
-        dw64[0] = 0xFF;
-        break;
-    case 16:
-        dw64[0] = 0xFFFF;
-        break;
-    case 32:
-        dw64[0] = 0xFFFFFFFF;
-        break;
-    case 64:
-        memset(dw64, 0xFF, sizeof(u64));
-        break;
-    case 128:
-        memset(dw64, 0xFF, 2*sizeof(u64));
-        break;
-    case 256:
-        memset(dw64, 0xFF, sizeof(dw64));
-        break;
+        case 8:
+            dw64[0] = 0xFF;
+            break;
+        case 16:
+            dw64[0] = 0xFFFF;
+            break;
+        case 32:
+            dw64[0] = 0xFFFFFFFF;
+            break;
+        case 64:
+            memset(dw64, 0xFF, sizeof(u64));
+            break;
+        case 128:
+            memset(dw64, 0xFF, 2 * sizeof(u64));
+            break;
+        case 256:
+            memset(dw64, 0xFF, sizeof(dw64));
+            break;
     }
 }
 
 bool smallset_t::empty() const
 {
-    for (int i=0; i<4; i++)
+    for (int i = 0; i < 4; i++)
     {
-        if (dw64[i]) return false;
+        if (dw64[i])
+            return false;
     }
     return true;
 }
 
 u8 smallset_t::least_bit() const
 {
-    for (int i=0; i<4; i++)
+    for (int i = 0; i < 4; i++)
     {
         if (dw64[i])
-            return i*64 + least_bit(dw64[i]);
+            return i * 64 + least_bit(dw64[i]);
     }
     std::cerr << "Called smallset_t::least_bit() on empty set\n" << std::endl;
     return 0;
@@ -100,65 +103,59 @@ smallset_t smallset_t::shuffle(u8 shift) const
     if (shift & 0x80)
     {
         smallset_t temp = retval;
-        retval.dw64[0] = temp.dw64[2];
-        retval.dw64[1] = temp.dw64[3];
-        retval.dw64[2] = temp.dw64[0];
-        retval.dw64[3] = temp.dw64[1];
+        retval.dw64[0]  = temp.dw64[2];
+        retval.dw64[1]  = temp.dw64[3];
+        retval.dw64[2]  = temp.dw64[0];
+        retval.dw64[3]  = temp.dw64[1];
     }
     if (shift & 0x40)
     {
         smallset_t temp = retval;
-        retval.dw64[0] = temp.dw64[1];
-        retval.dw64[1] = temp.dw64[0];
-        retval.dw64[2] = temp.dw64[3];
-        retval.dw64[3] = temp.dw64[2];
+        retval.dw64[0]  = temp.dw64[1];
+        retval.dw64[1]  = temp.dw64[0];
+        retval.dw64[2]  = temp.dw64[3];
+        retval.dw64[3]  = temp.dw64[2];
     }
     if (shift & 0x20)
     {
-        for (int i=0; i<4; i++)
+        for (int i = 0; i < 4; i++)
         {
-            retval.dw64[i] = ((retval.dw64[i] & 0xFFFFFFFF00000000ULL) >> 16 ) |
-                             ((retval.dw64[i] & 0x00000000FFFFFFFFULL) << 16);
+            retval.dw64[i] = ((retval.dw64[i] & 0xFFFFFFFF00000000ULL) >> 16) | ((retval.dw64[i] & 0x00000000FFFFFFFFULL) << 16);
         }
     }
     if (shift & 0x10)
     {
-        for (int i=0; i<4; i++)
+        for (int i = 0; i < 4; i++)
         {
-            retval.dw64[i] = ((retval.dw64[i] & 0xFFFF0000FFFF0000ULL) >> 16 ) |
-                             ((retval.dw64[i] & 0x0000FFFF0000FFFFULL) << 16);
+            retval.dw64[i] = ((retval.dw64[i] & 0xFFFF0000FFFF0000ULL) >> 16) | ((retval.dw64[i] & 0x0000FFFF0000FFFFULL) << 16);
         }
     }
     if (shift & 0x08)
     {
-        for (int i=0; i<4; i++)
+        for (int i = 0; i < 4; i++)
         {
-            retval.dw64[i] = ((retval.dw64[i] & 0xFF00FF00FF00FF00ULL) >> 8 ) |
-                             ((retval.dw64[i] & 0x00FF00FF00FF00FFULL) << 8);
+            retval.dw64[i] = ((retval.dw64[i] & 0xFF00FF00FF00FF00ULL) >> 8) | ((retval.dw64[i] & 0x00FF00FF00FF00FFULL) << 8);
         }
     }
     if (shift & 0x04)
     {
-        for (int i=0; i<4; i++)
+        for (int i = 0; i < 4; i++)
         {
-            retval.dw64[i] = ((retval.dw64[i] & 0xF0F0F0F0F0F0F0F0ULL) >> 4 ) |
-                             ((retval.dw64[i] & 0x0F0F0F0F0F0F0F0FULL) << 4);
+            retval.dw64[i] = ((retval.dw64[i] & 0xF0F0F0F0F0F0F0F0ULL) >> 4) | ((retval.dw64[i] & 0x0F0F0F0F0F0F0F0FULL) << 4);
         }
     }
     if (shift & 0x02)
     {
-        for (int i=0; i<4; i++)
+        for (int i = 0; i < 4; i++)
         {
-            retval.dw64[i] = ((retval.dw64[i] & 0xCCCCCCCCCCCCCCCCULL) >> 2 ) |
-                             ((retval.dw64[i] & 0x3333333333333333ULL) << 2);
+            retval.dw64[i] = ((retval.dw64[i] & 0xCCCCCCCCCCCCCCCCULL) >> 2) | ((retval.dw64[i] & 0x3333333333333333ULL) << 2);
         }
     }
     if (shift & 0x01)
     {
-        for (int i=0; i<4; i++)
+        for (int i = 0; i < 4; i++)
         {
-            retval.dw64[i] = ((retval.dw64[i] & 0xAAAAAAAAAAAAAAAAULL) >> 1 ) |
-                             ((retval.dw64[i] & 0x5555555555555555ULL) << 1);
+            retval.dw64[i] = ((retval.dw64[i] & 0xAAAAAAAAAAAAAAAAULL) >> 1) | ((retval.dw64[i] & 0x5555555555555555ULL) << 1);
         }
     }
     return retval;
@@ -171,43 +168,43 @@ void smallset_t::to_array(u64* arr) const
 
 void smallset_t::set(u8 bit)
 {
-    dw64[bit/64] |= (_ONE_ << (bit%64));
+    dw64[bit / 64] |= (_ONE_ << (bit % 64));
 }
 
 bool smallset_t::is_set(u8 bit) const
 {
-    return (dw64[bit/64] & (_ONE_ << (bit%64)) != 0);
+    return (dw64[bit / 64] & (_ONE_ << (bit % 64)) != 0);
 }
 
 int smallset_t::size() const
 {
-  int retval = 0;
-  for (int i=0; i<4; i++)
-    retval += size(dw64[i],0);
-  return retval;
+    int retval = 0;
+    for (int i = 0; i < 4; i++)
+        retval += size(dw64[i], 0);
+    return retval;
 }
 
 int smallset_t::size(u64 dw, int level)
 {
-    static const u64 segmask[] = {0xFFFFFFFF, 0xFFFF, 0xFF, 0xF};
-    static const int segshft[] = { 32, 16, 8, 4 };
-    static const int szlookup[16] = { 0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4 };
+    static const u64 segmask[]    = {0xFFFFFFFF, 0xFFFF, 0xFF, 0xF};
+    static const int segshft[]    = {32, 16, 8, 4};
+    static const int szlookup[16] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4};
 
     if (level >= 4)
-      return szlookup[dw & 0xF];
+        return szlookup[dw & 0xF];
 
     int retval = 0;
-    retval += size(dw & segmask[level], level+1);
+    retval += size(dw & segmask[level], level + 1);
     dw >>= segshft[level];
-    retval += size(dw & segmask[level], level+1);
+    retval += size(dw & segmask[level], level + 1);
 
     return retval;
 }
 
 int smallset_t::least_bit(u64 dw)
 {
-    static const u64 segmask[] = {0xFFFFFFFF, 0xFFFF, 0xFF, 0xF};
-    static const int lblookup[16] = { -61, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0 };
+    static const u64 segmask[]    = {0xFFFFFFFF, 0xFFFF, 0xFF, 0xF};
+    static const int lblookup[16] = {-61, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0};
 
     int retval = 0;
     int segval = 32;
@@ -227,37 +224,37 @@ int smallset_t::least_bit(u64 dw)
 
 void smallset_t::dump() const
 {
-    for (int i=3; i>=0; i--)
+    for (int i = 3; i >= 0; i--)
         printf("%016lx", dw64[i]);
     printf("\n");
 
-    for (unsigned int i=0; i<256; i++)
+    for (unsigned int i = 0; i < 256; i++)
     {
-        if (dw64[i/64] & (_ONE_ << (i%64)))
+        if (dw64[i / 64] & (_ONE_ << (i % 64)))
             printf("%8d\n", i);
     }
 }
 
-smallset_t smallset_t::operator| (const smallset_t& other) const
+smallset_t smallset_t::operator|(const smallset_t& other) const
 {
     smallset_t retval = other;
-    for (int i=0; i<4; i++)
+    for (int i = 0; i < 4; i++)
         retval.dw64[i] |= dw64[i];
     return retval;
 }
 
-smallset_t smallset_t::operator& (const smallset_t& other) const
+smallset_t smallset_t::operator&(const smallset_t& other) const
 {
     smallset_t retval = other;
-    for (int i=0; i<4; i++)
+    for (int i = 0; i < 4; i++)
         retval.dw64[i] &= dw64[i];
     return retval;
 }
 
-smallset_t smallset_t::operator^ (const smallset_t& other) const
+smallset_t smallset_t::operator^(const smallset_t& other) const
 {
     smallset_t retval = other;
-    for (int i=0; i<4; i++)
+    for (int i = 0; i < 4; i++)
         retval.dw64[i] = dw64[i];
     return retval;
 }
@@ -569,7 +566,7 @@ namespace hal
 #elif defined(__ARM_NEON)
                 return {vandq_u64(a.val[0], b.val[0]), vandq_u64(a.val[1], b.val[1])};
 #else
-                return (a&b);
+                return (a & b);
 #endif
             }
 
@@ -580,7 +577,7 @@ namespace hal
 #elif defined(__ARM_NEON)
                 return {vorrq_u64(a.val[0], b.val[0]), vorrq_u64(a.val[1], b.val[1])};
 #else
-                return (a|b);
+                return (a | b);
 #endif
             }
 
@@ -649,7 +646,7 @@ namespace hal
 
             smallset_t smallset_shift(const smallset_t& b, const u8 shift)
             {
-#if !defined (__AVX2__) && !defined (__ARM_NEON)
+#if !defined(__AVX2__) && !defined(__ARM_NEON)
                 return b.shuffle(shift);
 #endif
 
@@ -822,7 +819,7 @@ namespace hal
 
             inline smallset_t smallset_init_full(const u32 len)
             {
-#if !defined (__AVX2__) && !defined (__ARM_NEON)
+#if !defined(__AVX2__) && !defined(__ARM_NEON)
                 return smallset_t(len);
 #endif
                 // N must be in {256, 128, 64, 32, 16, 8}
@@ -896,7 +893,7 @@ namespace hal
 #elif defined(__ARM_NEON)
                 return {veorq_u64(a.val[0], b.val[0]), veorq_u64(a.val[1], b.val[1])};
 #else
-                return (a^b);
+                return (a ^ b);
 #endif
             }
 
@@ -908,7 +905,7 @@ namespace hal
 
             bool smallset_elm_is_in_set(const u8 e, const smallset_t& a)
             {
-#if !defined (__AVX2__) && !defined (__ARM_NEON)
+#if !defined(__AVX2__) && !defined(__ARM_NEON)
                 return a.is_set(e);
 #endif
                 smallset_t b = smallset_init_empty();
