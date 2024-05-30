@@ -199,7 +199,6 @@ namespace hal
     private Q_SLOTS:
 
         void handleFocusChanged(QWidget* oldWidget, QWidget* newWidget);
-        void handleCreateClicked();
         void handleCreateContextClicked();
         void handleCreateDirectoryClicked();
         void handleRenameClicked();
