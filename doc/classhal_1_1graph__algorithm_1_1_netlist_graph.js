@@ -11,6 +11,7 @@ var classhal_1_1graph__algorithm_1_1_netlist_graph =
     [ "add_edges", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a6a966402c642dda1275a1d6ef40b1eda", null ],
     [ "add_edges", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a933d03ef8deec44b8d0aa38cacbb6b30", null ],
     [ "add_edges", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a8f3197970954019cd49dcd6d1a1376d1", null ],
+    [ "copy", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a54388968caa5f71f2cc3029fc8934d4f", null ],
     [ "delete_edges", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#ad288320ab6a9207742ff581afa2cb931", null ],
     [ "delete_edges", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#ad9ac753041fa357f528f7f705cceb7b3", null ],
     [ "get_edges", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#aaa0cc93a427a8a3f1b28e36b33ed1ac6", null ],
@@ -19,7 +20,10 @@ var classhal_1_1graph__algorithm_1_1_netlist_graph =
     [ "get_gates_from_vertices", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#affc7628792b7f4fd122a1b94a222a4d8", null ],
     [ "get_gates_from_vertices", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a2bf62e379172d9f948e74c10c002e98a", null ],
     [ "get_gates_from_vertices_igraph", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a9c9f2fac0f0fc865a4f73435bb3a7afb", null ],
-    [ "get_graph", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a388d6b3e8c561bc831af51738a058a0a", null ],
+    [ "get_gates_set_from_vertices", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#abaf6d2cb92adb15342169c827c12ae44", null ],
+    [ "get_gates_set_from_vertices", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a5df5d6856a1d13e94c7c374cc07e5b5d", null ],
+    [ "get_gates_set_from_vertices_igraph", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a646fc79778a638095f61ffa39f554ab5", null ],
+    [ "get_graph", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#afd9b42ee5a97346f3d12aa4f4dca8402", null ],
     [ "get_netlist", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a00d12d6f99e745c2b2431a65fdd3f84c", null ],
     [ "get_num_edges", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#aaa8b436d499886fd2e46892a28cf67bd", null ],
     [ "get_num_vertices", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a1809b66c69be895ca35d44928915b08b", null ],
@@ -27,6 +31,7 @@ var classhal_1_1graph__algorithm_1_1_netlist_graph =
     [ "get_vertices", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#af023be0105fabe45836fae46e5a99fbd", null ],
     [ "get_vertices_from_gates", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#ab7ebd7465d0bfe0ca0f7ede175a6fe17", null ],
     [ "get_vertices_from_gates", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a79fdf485990c5381c2650aa3e5546869", null ],
+    [ "get_vertices_from_gates_igraph", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#ab3dec1533b9c528e76eda2f4c075d32f", null ],
     [ "get_vertices_from_gates_igraph", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a6f4cc0de28874cd858e1bb58102a88a5", null ],
     [ "print", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a9641fcf8d678c37e5a015b8da133a323", null ]
 ];

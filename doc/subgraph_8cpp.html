@@ -130,12 +130,16 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a03cf57e5f0410435b5f5f7ac138fa52f"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unique_ptr&lt; NetlistGraph &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a03cf57e5f0410435b5f5f7ac138fa52f">hal::graph_algorithm::get_subgraph</a> (NetlistGraph *graph, const std::vector&lt; Gate * &gt; &amp;subgraph_gates)</td></tr>
-<tr class="separator:a03cf57e5f0410435b5f5f7ac138fa52f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21bf8387428bb2a785f322481f883f35"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unique_ptr&lt; NetlistGraph &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a21bf8387428bb2a785f322481f883f35">hal::graph_algorithm::get_subgraph</a> (NetlistGraph *graph, const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;subgraph_vertices)</td></tr>
-<tr class="separator:a21bf8387428bb2a785f322481f883f35"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6074392ebbc7cabf77d8450cdcaf372c"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unique_ptr&lt; NetlistGraph &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a6074392ebbc7cabf77d8450cdcaf372c">hal::graph_algorithm::get_subgraph_igraph</a> (NetlistGraph *graph, const igraph_vector_int_t *subgraph_vertices)</td></tr>
-<tr class="separator:a6074392ebbc7cabf77d8450cdcaf372c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0eda0a1c6ed5556e55821fa94d54967"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unique_ptr&lt; NetlistGraph &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#aa0eda0a1c6ed5556e55821fa94d54967">hal::graph_algorithm::get_subgraph</a> (const NetlistGraph *graph, const std::vector&lt; Gate * &gt; &amp;subgraph_gates)</td></tr>
+<tr class="separator:aa0eda0a1c6ed5556e55821fa94d54967"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a447180e9c645a82c7f6eb471dbf039c4"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unique_ptr&lt; NetlistGraph &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a447180e9c645a82c7f6eb471dbf039c4">hal::graph_algorithm::get_subgraph</a> (const NetlistGraph *graph, const std::set&lt; Gate * &gt; &amp;subgraph_gates)</td></tr>
+<tr class="separator:a447180e9c645a82c7f6eb471dbf039c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45e518de37423f701ab0d907e5e07a83"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unique_ptr&lt; NetlistGraph &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a45e518de37423f701ab0d907e5e07a83">hal::graph_algorithm::get_subgraph</a> (const NetlistGraph *graph, const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;subgraph_vertices)</td></tr>
+<tr class="separator:a45e518de37423f701ab0d907e5e07a83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74f0da8591287e3843ec6147ccaa8e96"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unique_ptr&lt; NetlistGraph &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a74f0da8591287e3843ec6147ccaa8e96">hal::graph_algorithm::get_subgraph</a> (const NetlistGraph *graph, const std::set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;subgraph_vertices)</td></tr>
+<tr class="separator:a74f0da8591287e3843ec6147ccaa8e96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6de3adfdb0cca775a2dff1af5f877061"><td class="memItemLeft" align="right" valign="top">Result&lt; std::unique_ptr&lt; NetlistGraph &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a6de3adfdb0cca775a2dff1af5f877061">hal::graph_algorithm::get_subgraph_igraph</a> (const NetlistGraph *graph, const igraph_vector_int_t *subgraph_vertices)</td></tr>
+<tr class="separator:a6de3adfdb0cca775a2dff1af5f877061"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -143,7 +147,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_192b19fb2b8fdce0ad89db78639c6562.html">graph_algorithm</a></li><li class="navelem"><a class="el" href="dir_12e2d667539b63992169e7388aea4805.html">src</a></li><li class="navelem"><a class="el" href="dir_7f6e6e76e7fbca7c850e966c11babe0e.html">algorithms</a></li><li class="navelem"><a class="el" href="subgraph_8cpp.html">subgraph.cpp</a></li>
-    <li class="footer">Generated on Thu May 30 2024 18:59:28 for HAL by
+    <li class="footer">Generated on Thu May 30 2024 21:27:35 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

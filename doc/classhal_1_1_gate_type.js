@@ -16,6 +16,7 @@ var classhal_1_1_gate_type =
     [ "get_component_as", "classhal_1_1_gate_type.html#adcd3bbe2eccad65c88f5333237bc2848", null ],
     [ "get_components", "classhal_1_1_gate_type.html#a86d15f2d10d4c95944b758835d3c0403", null ],
     [ "get_gate_library", "classhal_1_1_gate_type.html#a09290296b2b3f8ca839cf1d428b81f05", null ],
+    [ "get_hash", "classhal_1_1_gate_type.html#aa860b764701d6b28049cec147fbc9e82", null ],
     [ "get_id", "classhal_1_1_gate_type.html#ad72821321f4c0394d735b4862a66ad9d", null ],
     [ "get_input_pin_names", "classhal_1_1_gate_type.html#a02c15ddfe108682453cbf87305d6fccb", null ],
     [ "get_input_pins", "classhal_1_1_gate_type.html#ac1f8907479a3cfb66dc512d5a12a9163", null ],

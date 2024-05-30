@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Graph Algorithms &mdash; hal_py v4.2.0-433-g9f835fa76 documentation</title>
+  <title>Graph Algorithms &mdash; hal_py v4.2.0-434-g8f6c18d44 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-433-g9f835fa76
+                v4.2.0-434-g8f6c18d44
               </div>
             
           
@@ -92,6 +92,7 @@
 <li class="toctree-l2"><a class="reference internal" href="dataflow.html">Dataflow Analysis (DANA)</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Graph Algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gui.html">GUI API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hawkeye.html">HAWKEYE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_preprocessing.html">Netlist Preprocessing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_simulator.html">Netlist Simulator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_simulator_controller.html">Netlist Simulator Controller</a></li>
@@ -257,6 +258,22 @@ The vertices must already exist in the graph.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="graph_algorithm.NetlistGraph.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><em>self: graph_algorithm.NetlistGraph</em><span class="sig-paren">)</span> &#x2192; graph_algorithm.NetlistGraph<a class="headerlink" href="#graph_algorithm.NetlistGraph.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a deep copy of the netlist graph.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The copied netlist graph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#graph_algorithm.NetlistGraph" title="graph_algorithm.NetlistGraph">graph_algorithm.NetlistGraph</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="graph_algorithm.NetlistGraph.delete_edges">
 <code class="descname">delete_edges</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#graph_algorithm.NetlistGraph.delete_edges" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
@@ -329,7 +346,7 @@ The vertices must already exist in the graph.</p>
 
 <dl class="staticmethod">
 <dt id="graph_algorithm.NetlistGraph.from_netlist_no_edges">
-<em class="property">static </em><code class="descname">from_netlist_no_edges</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; graph_algorithm.NetlistGraph<a class="headerlink" href="#graph_algorithm.NetlistGraph.from_netlist_no_edges" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">from_netlist_no_edges</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist</em>, <em>gates: List[hal_py.Gate] = []</em><span class="sig-paren">)</span> &#x2192; graph_algorithm.NetlistGraph<a class="headerlink" href="#graph_algorithm.NetlistGraph.from_netlist_no_edges" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an empty directed graph from a netlist, i.e., vertices for all gates are created, but no edges are added.</p>
 <blockquote>
 <div><table class="docutils field-list" frame="void" rules="none">
@@ -339,9 +356,12 @@ The vertices must already exist in the graph.</p>
 <tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Netlist nl:</th></tr>
 <tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The netlist graph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+<tr class="field-even field"><th class="field-name" colspan="2">param list[hal_py.Gate] gates:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The gates to include in the graph. If omitted, all gates of the netlist will be included.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">graph_algorithm.NetlistGraph or None</td>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The netlist graph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">graph_algorithm.NetlistGraph or None</td>
 </tr>
 </tbody>
 </table>
@@ -436,6 +456,50 @@ The result may contain <code class="docutils literal notranslate"><span class="p
 <tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">A list of gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">list[hal_py.Gate] or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_algorithm.NetlistGraph.get_gates_set_from_vertices">
+<code class="descname">get_gates_set_from_vertices</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#graph_algorithm.NetlistGraph.get_gates_set_from_vertices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_gates_set_from_vertices(self: graph_algorithm.NetlistGraph, vertices: List[int]) -&gt; Optional[Set[hal_py.Gate]]</p>
+<blockquote>
+<div><p>Get the gates corresponding to the specified list of vertices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[int] vertices:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">A list of vertices.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">A list of gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">set[hal_py.Gate] or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">get_gates_set_from_vertices(self: graph_algorithm.NetlistGraph, vertices: Set[int]) -&gt; Optional[Set[hal_py.Gate]]</p>
+<blockquote>
+<div><p>Get the gates corresponding to the specified set of vertices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param set[int] vertices:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">A set of vertices.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">A list of gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">set[hal_py.Gate] or None</td>
 </tr>
 </tbody>
 </table>
@@ -838,6 +902,27 @@ Each shortest path is given as a list of vertices in the order of traversal.</p>
 </table>
 </div></blockquote>
 </li>
+<li><p class="first">get_subgraph(graph: graph_algorithm.NetlistGraph, subgraph_gates: Set[hal_py.Gate]) -&gt; Optional[graph_algorithm.NetlistGraph]</p>
+<blockquote>
+<div><p>Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param set[hal_py.Gate] subgraph_gates:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">A set of gates that make up the subgraph.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The subgraph as a new netlist graph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">graph_algorithm.NetlistGraph or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
 <li><p class="first">get_subgraph(graph: graph_algorithm.NetlistGraph, subgraph_vertices: List[int]) -&gt; Optional[graph_algorithm.NetlistGraph]</p>
 <blockquote>
 <div><p>Compute the subgraph induced by the specified vertices, including all edges between these vertices.</p>
@@ -850,6 +935,27 @@ Each shortest path is given as a list of vertices in the order of traversal.</p>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">param list[int] subgraph_vertices:</th></tr>
 <tr class="field-even field"><td>&#160;</td><td class="field-body">A list of vertices that make up the subgraph.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The subgraph as a new netlist graph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">graph_algorithm.NetlistGraph or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">get_subgraph(graph: graph_algorithm.NetlistGraph, subgraph_vertices: Set[int]) -&gt; Optional[graph_algorithm.NetlistGraph]</p>
+<blockquote>
+<div><p>Compute the subgraph induced by the specified vertices, including all edges between these vertices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param set[int] subgraph_vertices:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">A set of vertices that make up the subgraph.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The subgraph as a new netlist graph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
 </tr>

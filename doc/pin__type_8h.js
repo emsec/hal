@@ -16,6 +16,11 @@ var pin__type_8h =
       [ "io_pad", "pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba1822c0e3720259c5b1054f25fc266cac", null ],
       [ "select", "pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba99938282f04071859941e18f16efcf42", null ],
       [ "carry", "pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94baf9c05403344bba5b3993d54797b56820", null ],
-      [ "sum", "pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba1d623b89683f9ce4e074de1676d12416", null ]
+      [ "sum", "pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba1d623b89683f9ce4e074de1676d12416", null ],
+      [ "status", "pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba9acb44549b41563697bb490144ec6258", null ],
+      [ "error", "pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacb5e100e5a9a3e7f6d1fd97512215282", null ],
+      [ "error_detection", "pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05f4129fc2919400006be8bec6215343", null ],
+      [ "done", "pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba6b2ded51d81a4403d8a4bd25fa1e57ee", null ],
+      [ "control", "pin__type_8h.html#ae062cd9848a7ac51bd0bb4d76f1fb94bafc5364bf9dbfa34954526becad136d4b", null ]
     ] ]
 ];

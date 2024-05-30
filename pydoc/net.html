@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Net &mdash; hal_py v4.2.0-433-g9f835fa76 documentation</title>
+  <title>Net &mdash; hal_py v4.2.0-434-g8f6c18d44 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-433-g9f835fa76
+                v4.2.0-434-g8f6c18d44
               </div>
             
           
@@ -477,15 +477,18 @@ If no grouping contains this gate, <em>None</em> is returned.</p>
 
 <dl class="method">
 <dt id="hal_py.Net.get_num_of_destinations">
-<code class="descname">get_num_of_destinations</code><span class="sig-paren">(</span><em>self: hal_py.Net</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.Net.get_num_of_destinations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the number of destinations of the net.</p>
+<code class="descname">get_num_of_destinations</code><span class="sig-paren">(</span><em>self: hal_py.Net, filter: Callable[[hal_py.Endpoint], bool] = None</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.Net.get_num_of_destinations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of destinations of the net.
+The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The number of destinations.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> – An optional filter.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The number of destinations.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></td>
 </tr>
 </tbody>
 </table>
@@ -493,15 +496,18 @@ If no grouping contains this gate, <em>None</em> is returned.</p>
 
 <dl class="method">
 <dt id="hal_py.Net.get_num_of_sources">
-<code class="descname">get_num_of_sources</code><span class="sig-paren">(</span><em>self: hal_py.Net</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.Net.get_num_of_sources" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the number of sources of the net.</p>
+<code class="descname">get_num_of_sources</code><span class="sig-paren">(</span><em>self: hal_py.Net, filter: Callable[[hal_py.Endpoint], bool] = None</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#hal_py.Net.get_num_of_sources" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of sources of the net.
+The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The number of sources.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filter</strong> (<em>lambda</em>) – An optional filter.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The number of sources.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></td>
 </tr>
 </tbody>
 </table>

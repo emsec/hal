@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Netlist Preprocessing &mdash; hal_py v4.2.0-433-g9f835fa76 documentation</title>
+  <title>Netlist Preprocessing &mdash; hal_py v4.2.0-434-g8f6c18d44 documentation</title>
   
 
   
@@ -36,7 +36,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Netlist Simulator" href="netlist_simulator.html" />
-    <link rel="prev" title="GUI API" href="gui.html" /> 
+    <link rel="prev" title="HAWKEYE" href="hawkeye.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-433-g9f835fa76
+                v4.2.0-434-g8f6c18d44
               </div>
             
           
@@ -92,6 +92,7 @@
 <li class="toctree-l2"><a class="reference internal" href="dataflow.html">Dataflow Analysis (DANA)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="graph_algorithm.html">Graph Algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gui.html">GUI API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hawkeye.html">HAWKEYE</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Netlist Preprocessing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_simulator.html">Netlist Simulator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="netlist_simulator_controller.html">Netlist Simulator Controller</a></li>
@@ -427,6 +428,33 @@ For example, a 2-input AND gate with one input being connected to constant ‘1�
 </table>
 </dd></dl>
 
+<dl class="staticmethod">
+<dt id="netlist_preprocessing.NetlistPreprocessingPlugin.unify_ff_outputs">
+<em class="property">static </em><code class="descname">unify_ff_outputs</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist</em>, <em>ffs: List[hal_py.Gate] = []</em>, <em>inverter_type: hal_py.GateType = None</em><span class="sig-paren">)</span> &#x2192; Optional[int]<a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.unify_ff_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterates all flip-flops of the netlist or specified by the user.
+If a flip-flop has a <code class="docutils literal notranslate"><span class="pre">state</span></code> and a <code class="docutils literal notranslate"><span class="pre">neg_state</span></code> output, a new inverter gate is created and connected to the <code class="docutils literal notranslate"><span class="pre">state</span></code> output net as an additional destination.
+Finally, the <code class="docutils literal notranslate"><span class="pre">neg_state</span></code> output net is disconnected from the <code class="docutils literal notranslate"><span class="pre">neg_state</span></code> pin and re-connected to the new inverter gate’s output.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</li>
+<li><strong>ffs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The flip-flops to operate on. Defaults to an empty vector, in which case all flip-flops of the netlist are considered.</li>
+<li><strong>inverter_type</strong> (<a class="reference internal" href="gate_type.html#hal_py.GateType" title="hal_py.GateType"><em>hal_py.GateType</em></a>) – The inverter gate type to use. Defaults to a <code class="docutils literal notranslate"><span class="pre">None</span></code>, in which case the first inverter type found in the gate library is used.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The number of rerouted <code class="docutils literal notranslate"><span class="pre">neg_state</span></code> outputs on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int or <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="netlist_preprocessing.NetlistPreprocessingPlugin.version">
 <code class="descname">version</code><a class="headerlink" href="#netlist_preprocessing.NetlistPreprocessingPlugin.version" title="Permalink to this definition">¶</a></dt>
@@ -456,7 +484,7 @@ For example, a 2-input AND gate with one input being connected to constant ‘1�
         <a href="netlist_simulator.html" class="btn btn-neutral float-right" title="Netlist Simulator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="gui.html" class="btn btn-neutral float-left" title="GUI API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="hawkeye.html" class="btn btn-neutral float-left" title="HAWKEYE" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

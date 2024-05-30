@@ -9,6 +9,8 @@ var gate__type__property_8h =
       [ "ff", "gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31", null ],
       [ "latch", "gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caa42f3c93a0b1ca287d5456f3fc3200366", null ],
       [ "ram", "gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caa4641999a7679fcaef2df0e26d11e3c72", null ],
+      [ "fifo", "gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caacf54937a2330ac17aa523bf7130911a3", null ],
+      [ "shift_register", "gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caafcc74848c0088841743de28f4c61a69e", null ],
       [ "io", "gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caaf98ed07a4d5f50f7de1410d905f1477f", null ],
       [ "dsp", "gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caaa9bfcbd77aed59d33d77710050ce42d6", null ],
       [ "pll", "gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caab23e9e4405d0c242f0d6b1c946683384", null ],

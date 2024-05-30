@@ -9,6 +9,7 @@ HAL Plugins Documentation
    dataflow
    graph_algorithm
    gui
+   hawkeye
    netlist_preprocessing
    netlist_simulator
    netlist_simulator_controller

@@ -103,8 +103,8 @@ $(document).ready(function(){initNavTree('classhal_1_1_net.html',''); initResiza
   <tr><td class="entry"><a class="el" href="classhal_1_1_net.html#a086e0fa561405ac8b0beae95d8caa69d">get_id</a>() const</td><td class="entry"><a class="el" href="classhal_1_1_net.html">hal::Net</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_net.html#a4627e0be693c99fece29559be12898bd">get_name</a>() const</td><td class="entry"><a class="el" href="classhal_1_1_net.html">hal::Net</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="classhal_1_1_net.html#a102810d0ac7d3950505b4361616ae243">get_netlist</a>() const</td><td class="entry"><a class="el" href="classhal_1_1_net.html">hal::Net</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_net.html#a64c732bd554df5a840aa5d4ec38eee0a">get_num_of_destinations</a>() const</td><td class="entry"><a class="el" href="classhal_1_1_net.html">hal::Net</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="classhal_1_1_net.html#ae13cde7edde05bcd731a564d41e4d58e">get_num_of_sources</a>() const</td><td class="entry"><a class="el" href="classhal_1_1_net.html">hal::Net</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_net.html#aa76dff7b223ce4676dfb8e4232ae2488">get_num_of_destinations</a>(const std::function&lt; bool(Endpoint *ep)&gt; &amp;filter=nullptr) const</td><td class="entry"><a class="el" href="classhal_1_1_net.html">hal::Net</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="classhal_1_1_net.html#a0533048a763403dee9e8b43a0fd4e143">get_num_of_sources</a>(const std::function&lt; bool(Endpoint *ep)&gt; &amp;filter=nullptr) const</td><td class="entry"><a class="el" href="classhal_1_1_net.html">hal::Net</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_net.html#af62cd3da438ede28f00f3076fd949fac">get_sources</a>(const std::function&lt; bool(Endpoint *ep)&gt; &amp;filter=nullptr) const</td><td class="entry"><a class="el" href="classhal_1_1_net.html">hal::Net</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="classhal_1_1_data_container.html#acd955fb78b54c430d54666c3883220da">has_data</a>(const std::string &amp;category, const std::string &amp;key) const</td><td class="entry"><a class="el" href="classhal_1_1_data_container.html">hal::DataContainer</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_net.html#ac00581b780f9ea901f6b3d7bc710bbdc">is_a_destination</a>(const Gate *gate) const</td><td class="entry"><a class="el" href="classhal_1_1_net.html">hal::Net</a></td><td class="entry"></td></tr>
@@ -145,7 +145,7 @@ $(document).ready(function(){initNavTree('classhal_1_1_net.html',''); initResiza
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu May 30 2024 18:59:30 for HAL by
+    <li class="footer">Generated on Thu May 30 2024 21:27:37 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
