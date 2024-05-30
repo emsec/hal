@@ -217,10 +217,24 @@ namespace hal
                                 }
                             }
 
-                            // TODO kick out everything that depends on other outputs only
-
                             output_group.insert(comp_gate);
                         }
+
+                        // disregard output gates that only depend on other output gates
+                        std::vector<Gate*> to_delete;
+                        for (auto* out_gate : output_group)
+                        {
+                            const auto pred_gates = out_gate->get_unique_predecessors();
+                            if (std::all_of(pred_gates.begin(), pred_gates.end(), [output_group](Gate* g) { return output_group.find(g) != output_group.end(); }))
+                            {
+                                to_delete.push_back(out_gate);
+                            }
+                        }
+                        for (auto* del_gate : to_delete)
+                        {
+                            output_group.erase(del_gate);
+                        }
+
                         if (input_group.size() <= 8 && output_group.size() <= 20)
                         {
                             if (output_group.size() == input_group.size() + 1)
