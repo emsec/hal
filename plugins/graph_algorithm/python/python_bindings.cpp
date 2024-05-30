@@ -111,8 +111,8 @@ namespace hal
 
         py_netlist_graph.def_static(
             "from_netlist_no_edges",
-            [](Netlist* nl) -> std::unique_ptr<graph_algorithm::NetlistGraph> {
-                auto res = graph_algorithm::NetlistGraph::from_netlist_no_edges(nl);
+            [](Netlist* nl, const std::vector<Gate*>& gates = {}) -> std::unique_ptr<graph_algorithm::NetlistGraph> {
+                auto res = graph_algorithm::NetlistGraph::from_netlist_no_edges(nl, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -124,11 +124,34 @@ namespace hal
                 }
             },
             py::arg("nl"),
+            py::arg("gates") = std::vector<Gate*>(),
             R"(Create an empty directed graph from a netlist, i.e., vertices for all gates are created, but no edges are added.
              
              :param hal_py.Netlist nl: The netlist.
+             :param list[hal_py.Gate] gates: The gates to include in the graph. If omitted, all gates of the netlist will be included.
              :returns: The netlist graph on success, ``None`` otherwise.
              :rtype: graph_algorithm.NetlistGraph or None
+        )");
+
+        py_netlist_graph.def(
+            "copy",
+            [](const graph_algorithm::NetlistGraph& self) -> std::unique_ptr<graph_algorithm::NetlistGraph> {
+                auto res = self.copy();
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while copying netlist graph:\n{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            R"(
+                Creates a deep copy of the netlist graph.
+
+                :returns: The copied netlist graph on success, ``None`` otherwise.
+                :rtype: graph_algorithm.NetlistGraph or None
         )");
 
         py_netlist_graph.def("get_netlist", &graph_algorithm::NetlistGraph::get_netlist, R"(
@@ -184,6 +207,52 @@ namespace hal
                 :param set[int] vertices: A set of vertices.
                 :returns: A list of gates on success, ``None`` otherwise.
                 :rtype: list[hal_py.Gate] or None
+        )");
+
+        py_netlist_graph.def(
+            "get_gates_set_from_vertices",
+            [](const graph_algorithm::NetlistGraph& self, const std::vector<u32>& vertices) -> std::optional<std::set<Gate*>> {
+                auto res = self.get_gates_set_from_vertices(vertices);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting gates from vertices:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("vertices"),
+            R"(
+                Get the gates corresponding to the specified list of vertices.
+
+                :param list[int] vertices: A list of vertices.
+                :returns: A list of gates on success, ``None`` otherwise.
+                :rtype: set[hal_py.Gate] or None
+        )");
+
+        py_netlist_graph.def(
+            "get_gates_set_from_vertices",
+            [](const graph_algorithm::NetlistGraph& self, const std::set<u32>& vertices) -> std::optional<std::set<Gate*>> {
+                const auto res = self.get_gates_set_from_vertices(vertices);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting gates from vertices:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("vertices"),
+            R"(
+                Get the gates corresponding to the specified set of vertices.
+
+                :param set[int] vertices: A set of vertices.
+                :returns: A list of gates on success, ``None`` otherwise.
+                :rtype: set[hal_py.Gate] or None
         )");
 
         py_netlist_graph.def(
@@ -706,7 +775,7 @@ namespace hal
 
         m.def(
             "get_subgraph",
-            [](graph_algorithm::NetlistGraph* graph, const std::vector<Gate*>& subgraph_gates) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
+            [](const graph_algorithm::NetlistGraph* graph, const std::vector<Gate*>& subgraph_gates) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
                 auto res = graph_algorithm::get_subgraph(graph, subgraph_gates);
                 if (res.is_ok())
                 {
@@ -731,7 +800,32 @@ namespace hal
 
         m.def(
             "get_subgraph",
-            [](graph_algorithm::NetlistGraph* graph, const std::vector<u32>& subgraph_vertices) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
+            [](const graph_algorithm::NetlistGraph* graph, const std::set<Gate*>& subgraph_gates) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
+                auto res = graph_algorithm::get_subgraph(graph, subgraph_gates);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while computing subgraph:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("subgraph_gates"),
+            R"(
+                Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.
+
+                :param graph_algorithm.NetlistGraph graph: The netlist graph.
+                :param set[hal_py.Gate] subgraph_gates: A set of gates that make up the subgraph.
+                :returns: The subgraph as a new netlist graph on success, ``None`` otherwise.
+                :rtype: graph_algorithm.NetlistGraph or None
+        )");
+
+        m.def(
+            "get_subgraph",
+            [](const graph_algorithm::NetlistGraph* graph, const std::vector<u32>& subgraph_vertices) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
                 auto res = graph_algorithm::get_subgraph(graph, subgraph_vertices);
                 if (res.is_ok())
                 {
@@ -750,6 +844,31 @@ namespace hal
                 
                 :param graph_algorithm.NetlistGraph graph: The netlist graph.
                 :param list[int] subgraph_vertices: A list of vertices that make up the subgraph.
+                :returns: The subgraph as a new netlist graph on success, ``None`` otherwise.
+                :rtype: graph_algorithm.NetlistGraph or None
+        )");
+
+        m.def(
+            "get_subgraph",
+            [](const graph_algorithm::NetlistGraph* graph, const std::set<u32>& subgraph_vertices) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
+                auto res = graph_algorithm::get_subgraph(graph, subgraph_vertices);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while computing subgraph:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("subgraph_vertices"),
+            R"(
+                Compute the subgraph induced by the specified vertices, including all edges between these vertices.
+                
+                :param graph_algorithm.NetlistGraph graph: The netlist graph.
+                :param set[int] subgraph_vertices: A set of vertices that make up the subgraph.
                 :returns: The subgraph as a new netlist graph on success, ``None`` otherwise.
                 :rtype: graph_algorithm.NetlistGraph or None
         )");

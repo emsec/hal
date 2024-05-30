@@ -32,34 +32,36 @@ namespace hal
      */
     enum class GateTypeProperty
     {
-        combinational, /**< Combinational gate type. **/
-        sequential,    /**< Sequential gate type. **/
-        tristate,      /**< Tristate gate type. **/
-        power,         /**< Power gate type. **/
-        ground,        /**< Ground gate type. **/
-        ff,            /**< Flip-flop gate type. **/
-        latch,         /**< Latch gate type. **/
-        ram,           /**< RAM gate type. **/
-        io,            /**< IO gate type. **/
-        dsp,           /**< DSP gate type. **/
-        pll,           /**< PLL gate type. **/
-        oscillator,    /**< Oscillator gate type. **/
-        scan,          /**< Scan gate type. **/
-        c_buffer,      /**< Buffer gate type. **/
-        c_inverter,    /**< Inverter gate type. **/
-        c_and,         /**< AND gate type. **/
-        c_nand,        /**< NAND gate type. **/
-        c_or,          /**< OR gate type. **/
-        c_nor,         /**< NOR gate type. **/
-        c_xor,         /**< XOR gate type. **/
-        c_xnor,        /**< XNOR gate type. **/
-        c_aoi,         /**< AOI gate type. **/
-        c_oai,         /**< OAI gate type. **/
-        c_mux,         /**< MUX gate type. **/
-        c_carry,       /**< Carry gate type. **/
-        c_half_adder,  /**< Half adder gate type. **/
-        c_full_adder,  /**< Full adder gate type. **/
-        c_lut          /**< LUT gate type. **/
+        combinational,  /**< Combinational gate type. **/
+        sequential,     /**< Sequential gate type. **/
+        tristate,       /**< Tristate gate type. **/
+        power,          /**< Power gate type. **/
+        ground,         /**< Ground gate type. **/
+        ff,             /**< Flip-flop gate type. **/
+        latch,          /**< Latch gate type. **/
+        ram,            /**< RAM gate type. **/
+        fifo,           /**< FIFO gate type. **/
+        shift_register, /**< Shift register gate type. **/
+        io,             /**< IO gate type. **/
+        dsp,            /**< DSP gate type. **/
+        pll,            /**< PLL gate type. **/
+        oscillator,     /**< Oscillator gate type. **/
+        scan,           /**< Scan gate type. **/
+        c_buffer,       /**< Buffer gate type. **/
+        c_inverter,     /**< Inverter gate type. **/
+        c_and,          /**< AND gate type. **/
+        c_nand,         /**< NAND gate type. **/
+        c_or,           /**< OR gate type. **/
+        c_nor,          /**< NOR gate type. **/
+        c_xor,          /**< XOR gate type. **/
+        c_xnor,         /**< XNOR gate type. **/
+        c_aoi,          /**< AOI gate type. **/
+        c_oai,          /**< OAI gate type. **/
+        c_mux,          /**< MUX gate type. **/
+        c_carry,        /**< Carry gate type. **/
+        c_half_adder,   /**< Half adder gate type. **/
+        c_full_adder,   /**< Full adder gate type. **/
+        c_lut           /**< LUT gate type. **/
     };
 
     template<>

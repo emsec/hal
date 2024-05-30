@@ -74,9 +74,17 @@ namespace hal
              * Create an empty directed graph from a netlist, i.e., vertices for all gates are created, but no edges are added.
              * 
              * @param[in] nl - The netlist.
+             * @param[in] gates - The gates to include in the graph. If omitted, all gates of the netlist will be included.
              * @returns The netlist graph on success, an error otherwise.
              */
-            static Result<std::unique_ptr<NetlistGraph>> from_netlist_no_edges(Netlist* nl);
+            static Result<std::unique_ptr<NetlistGraph>> from_netlist_no_edges(Netlist* nl, const std::vector<Gate*>& gates = {});
+
+            /**
+             * Creates a deep copy of the netlist graph.
+             * 
+             * @returns The copied netlist graph on success, an error otherwise.
+             */
+            Result<std::unique_ptr<NetlistGraph>> copy() const;
 
             /**
              * Get the netlist associated with the netlist graph.
@@ -90,7 +98,7 @@ namespace hal
              * 
              * @returns The graph object.
              */
-            igraph_t* get_graph();
+            igraph_t* get_graph() const;
 
             /**
              * Get the gates corresponding to the specified vertices.
@@ -118,6 +126,30 @@ namespace hal
              * @returns A vector of gates on success, an error otherwise.
              */
             Result<std::vector<Gate*>> get_gates_from_vertices_igraph(const igraph_vector_int_t* vertices) const;
+
+            /**
+             * Get the gates corresponding to the specified vertices.
+             * 
+             * @param[in] vertices - A vector of vertices.
+             * @returns A set of gates on success, an error otherwise.
+             */
+            Result<std::set<Gate*>> get_gates_set_from_vertices(const std::vector<u32>& vertices) const;
+
+            /**
+             * Get the gates corresponding to the specified vertices.
+             * 
+             * @param[in] vertices - A set of vertices.
+             * @returns A set of gates on success, an error otherwise.
+             */
+            Result<std::set<Gate*>> get_gates_set_from_vertices(const std::set<u32>& vertices) const;
+
+            /**
+             * Get the gates corresponding to the specified vertices.
+             * 
+             * @param[in] vertices - An igraph vector of vertices.
+             * @returns A set of gates on success, an error otherwise.
+             */
+            Result<std::set<Gate*>> get_gates_set_from_vertices_igraph(const igraph_vector_int_t* vertices) const;
 
             /**
              * Get the gate corresponding to the specified vertex.
@@ -150,6 +182,14 @@ namespace hal
              * @returns An igraph vector of vertices on success, an error otherwise.
              */
             Result<igraph_vector_int_t> get_vertices_from_gates_igraph(const std::vector<Gate*>& gates) const;
+
+            /**
+             * Get the vertices corresponding to the specified gates.
+             * 
+             * @param[in] gates - A set of gates.
+             * @returns An igraph vector of vertices on success, an error otherwise.
+             */
+            Result<igraph_vector_int_t> get_vertices_from_gates_igraph(const std::set<Gate*>& gates) const;
 
             /**
              * Get the vertex corresponding to the specified gate.
@@ -250,6 +290,7 @@ namespace hal
 
             Netlist* m_nl;
             igraph_t m_graph;
+            igraph_t* m_graph_ptr;
             std::unordered_map<u32, Gate*> m_nodes_to_gates;
             std::unordered_map<Gate*, u32> m_gates_to_nodes;
         };

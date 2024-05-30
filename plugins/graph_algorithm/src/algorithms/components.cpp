@@ -8,7 +8,7 @@ namespace hal
 {
     namespace graph_algorithm
     {
-        Result<std::vector<std::vector<u32>>> get_connected_components(NetlistGraph* graph, bool strong, u32 min_size)
+        Result<std::vector<std::vector<u32>>> get_connected_components(const NetlistGraph* graph, bool strong, u32 min_size)
         {
             if (graph == nullptr)
             {

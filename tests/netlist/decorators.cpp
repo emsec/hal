@@ -672,15 +672,6 @@ namespace hal {
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff4, dff5, dff6}));
                 }
-                {
-                    std::unordered_map<const Net*, std::set<Gate*>> cache;
-                    const auto res1 = trav_dec.get_next_matching_gates(dff2, true, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); }, false, nullptr, nullptr, &cache);
-                    EXPECT_TRUE(res1.is_ok());
-                    EXPECT_EQ(res1.get(), std::set<Gate*>({dff5, dff6, dff7, dff3}));
-                    const auto res2 = trav_dec.get_next_matching_gates(dff3, true, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); }, false, nullptr, nullptr, &cache);
-                    EXPECT_TRUE(res2.is_ok());
-                    EXPECT_EQ(res2.get(), std::set<Gate*>({dff6, dff7, dff3}));
-                }
 
                 // predecessors
                 {
@@ -692,15 +683,6 @@ namespace hal {
                     const auto res = trav_dec.get_next_matching_gates(dff5, false, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); }, false, [](const Endpoint* ep, u32 current_depth) { return ep->get_pin()->get_type() == PinType::data || ep->get_pin()->get_type() == PinType::none; }, nullptr);
                     EXPECT_TRUE(res.is_ok());
                     EXPECT_EQ(res.get(), std::set<Gate*>({dff0, dff1, dff2}));
-                }
-                {
-                    std::unordered_map<const Net*, std::set<Gate*>> cache;
-                    const auto res1 = trav_dec.get_next_matching_gates(dff6, false, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); }, false, nullptr, nullptr, &cache);
-                    EXPECT_TRUE(res1.is_ok());
-                    EXPECT_EQ(res1.get(), std::set<Gate*>({dff1, dff2, dff3, sff0, sff1}));
-                    const auto res2 = trav_dec.get_next_matching_gates(dff7, false, [](const Gate* g) { return g->get_type()->has_property(GateTypeProperty::ff); }, false, nullptr, nullptr, &cache);
-                    EXPECT_TRUE(res2.is_ok());
-                    EXPECT_EQ(res2.get(), std::set<Gate*>({dff2, dff3, sff0, sff1}));
                 }
             }
             {

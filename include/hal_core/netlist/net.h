@@ -210,10 +210,12 @@ namespace hal
 
         /**
          * Get the number of sources of the net.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
+         * @param[in] filter - An optional filter.
          * @returns The number of sources.
          */
-        u32 get_num_of_sources() const;
+        u32 get_num_of_sources(const std::function<bool(Endpoint* ep)>& filter = nullptr) const;
 
         /**
          * Get a vector of sources of the net.
@@ -318,10 +320,12 @@ namespace hal
 
         /**
          * Get the number of destinations of the net.
+         * The optional filter is evaluated on every candidate such that the result only contains those matching the specified condition.
          *
+         * @param[in] filter - An optional filter.
          * @returns The number of destinations.
          */
-        u32 get_num_of_destinations() const;
+        u32 get_num_of_destinations(const std::function<bool(Endpoint* ep)>& filter = nullptr) const;
 
         /**
          * Get a vector of destinations of the net.
