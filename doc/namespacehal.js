@@ -312,6 +312,7 @@ var namespacehal =
     [ "NetlistModificationDecorator", "classhal_1_1_netlist_modification_decorator.html", "classhal_1_1_netlist_modification_decorator" ],
     [ "NetlistParser", "classhal_1_1_netlist_parser.html", "classhal_1_1_netlist_parser" ],
     [ "NetlistRelay", "classhal_1_1_netlist_relay.html", "classhal_1_1_netlist_relay" ],
+    [ "NetlistTraversalDecorator", "classhal_1_1_netlist_traversal_decorator.html", "classhal_1_1_netlist_traversal_decorator" ],
     [ "NetlistWriter", "classhal_1_1_netlist_writer.html", "classhal_1_1_netlist_writer" ],
     [ "NetModuleTable", "classhal_1_1_net_module_table.html", "classhal_1_1_net_module_table" ],
     [ "NewProjectDialog", "classhal_1_1_new_project_dialog.html", "classhal_1_1_new_project_dialog" ],

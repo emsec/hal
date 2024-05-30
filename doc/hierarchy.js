@@ -187,6 +187,7 @@ var hierarchy =
       [ "hal::VerilogParser", "classhal_1_1_verilog_parser.html", null ],
       [ "hal::VHDLParser", "classhal_1_1_v_h_d_l_parser.html", null ]
     ] ],
+    [ "hal::NetlistTraversalDecorator", "classhal_1_1_netlist_traversal_decorator.html", null ],
     [ "hal::NetlistWriter", "classhal_1_1_netlist_writer.html", [
       [ "hal::VerilogWriter", "classhal_1_1_verilog_writer.html", null ]
     ] ],
@@ -610,10 +611,10 @@ var hierarchy =
       [ "hal::NodeBoxes", "classhal_1_1_node_boxes.html", null ]
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
-    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
-    [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
-    [ "hal::Result< T >", "classhal_1_1_result.html", null ],
     [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
+    [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
+    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
+    [ "hal::Result< T >", "classhal_1_1_result.html", null ],
     [ "hal::RuntimeLibrary", "classhal_1_1_runtime_library.html", null ],
     [ "hal::SearchOptions", "classhal_1_1_search_options.html", null ],
     [ "hal::SelectionTreeItem", "classhal_1_1_selection_tree_item.html", [

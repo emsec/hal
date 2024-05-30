@@ -786,17 +786,35 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 , <a class="el" href="classhal_1_1_module.html#a00f21d72e6698eeecab5a719b9acdd6a">hal::Module</a>
 , <a class="el" href="classhal_1_1_netlist.html#ac787de6b52a38112735e3ff9bd2b6d17">hal::Netlist</a>
 </li>
+<li>get_next_combinational_gates()
+: <a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a23197fc1565face4777f144097785f96">hal::NetlistTraversalDecorator</a>
+</li>
 <li>get_next_gate_id()
 : <a class="el" href="classhal_1_1_netlist.html#ad4152742f2e30b4694ffb6b0632e6675">hal::Netlist</a>
 </li>
 <li>get_next_grouping_id()
 : <a class="el" href="classhal_1_1_netlist.html#ad0c4a5818446c1036802ef588bf18d4f">hal::Netlist</a>
 </li>
+<li>get_next_matching_gates()
+: <a class="el" href="classhal_1_1_netlist_traversal_decorator.html#ac7a3070f863fc5f3451ac11f9db4dc56">hal::NetlistTraversalDecorator</a>
+</li>
+<li>get_next_matching_gates_until()
+: <a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a701f97708037268a15cdf5ba34641dc3">hal::NetlistTraversalDecorator</a>
+</li>
+<li>get_next_matching_gates_until_depth()
+: <a class="el" href="classhal_1_1_netlist_traversal_decorator.html#aa4fbd6366666a6cbf4c079a4e2be8594">hal::NetlistTraversalDecorator</a>
+</li>
 <li>get_next_module_id()
 : <a class="el" href="classhal_1_1_netlist.html#a7e2dfd8c4fa7be87c0a307eb643bdd06">hal::Netlist</a>
 </li>
 <li>get_next_net_id()
 : <a class="el" href="classhal_1_1_netlist.html#a730c75bae75323000569ced56870e395">hal::Netlist</a>
+</li>
+<li>get_next_sequential_gates()
+: <a class="el" href="classhal_1_1_netlist_traversal_decorator.html#aa23c526dca97f5d409d4c1b1fac72421">hal::NetlistTraversalDecorator</a>
+</li>
+<li>get_next_sequential_gates_map()
+: <a class="el" href="classhal_1_1_netlist_traversal_decorator.html#a3b17ad3e798cb28fa1ee0bfd57929bff">hal::NetlistTraversalDecorator</a>
 </li>
 <li>get_next_state_function()
 : <a class="el" href="classhal_1_1_f_f_component.html#aac1e7d26f508aaa2e849dc3513b218b3">hal::FFComponent</a>
@@ -950,10 +968,10 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_state_component.html#a0d67c158fec2a49c54d9105307a721e6">hal::StateComponent</a>
 </li>
 <li>get_subgraph_function()
-: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#ae8245fa6d538060a09860b7d747b7d6a">hal::SubgraphNetlistDecorator</a>
+: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a1131ad88f3e2a50f7b0720e129f195ba">hal::SubgraphNetlistDecorator</a>
 </li>
 <li>get_subgraph_function_inputs()
-: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a455e99786471a0d9293000f56b28be7a">hal::SubgraphNetlistDecorator</a>
+: <a class="el" href="classhal_1_1_subgraph_netlist_decorator.html#a602fe3be3c5979579024b42b8c4439eb">hal::SubgraphNetlistDecorator</a>
 </li>
 <li>get_submodule_depth()
 : <a class="el" href="classhal_1_1_module.html#a533cbe33380469fe81fcead287efc437">hal::Module</a>
@@ -962,7 +980,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_module.html#af1256fe9a3080693b07d7e657d9a31ba">hal::Module</a>
 </li>
 <li>get_successor()
-: <a class="el" href="classhal_1_1_gate.html#a8774b931a46ce3c96d05cb0cfd49e351">hal::Gate</a>
+: <a class="el" href="classhal_1_1_gate.html#aa5fb025fba52e715cdb47203d31b96c6">hal::Gate</a>
 </li>
 <li>get_successor_groups_of_group()
 : <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#ab51c9dd5358c657fecfa4ece4b7c7b4b">hal::dataflow::Grouping</a>
@@ -1294,7 +1312,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_get_in_touch_widget.html#a25e6cbcd27c08366d3170718fde88158">hal::GetInTouchWidget</a>
 </li>
 <li>getItem()
-: <a class="el" href="classhal_1_1_module_model.html#a788da4c0a93921306f941a9a541a2c57">hal::ModuleModel</a>
+: <a class="el" href="classhal_1_1_module_model.html#af5a06c7a1416730ebfde2e9f294d63a4">hal::ModuleModel</a>
 </li>
 <li>getItemFromIndex()
 : <a class="el" href="classhal_1_1_base_tree_model.html#ab5007e8f297014b1e49a08138fda4f45">hal::BaseTreeModel</a>
@@ -1596,11 +1614,11 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>greenColor()
 : <a class="el" href="classhal_1_1_comment_dialog.html#a1707766aab8cdc1b481b7423ac9ebd94">hal::CommentDialog</a>
 </li>
-<li>gridBaseDotColor()
-: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a34f564cd583502946e37e851e1f25862">hal::GraphicsQssAdapter</a>
+<li>gridBaseDotColor
+: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a20397d891f58e3b5790725dfb9d8843e">hal::GraphicsQssAdapter</a>
 </li>
-<li>gridBaseLineColor
-: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#afff6b69c76ff8bae52a0cc09252c1925">hal::GraphicsQssAdapter</a>
+<li>gridBaseLineColor()
+: <a class="el" href="classhal_1_1_graphics_qss_adapter.html#a0d2a008588e0a6f3ddacb0a3963577bc">hal::GraphicsQssAdapter</a>
 </li>
 <li>gridClusterDotColor()
 : <a class="el" href="classhal_1_1_graphics_qss_adapter.html#af9aef20d9706f52511bb341144bb4800">hal::GraphicsQssAdapter</a>
@@ -1628,10 +1646,12 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 </li>
 <li>gridPosition()
 : <a class="el" href="classhal_1_1_node_box.html#ac6c6fde7e4fe21bec776050f6debd747">hal::NodeBox</a>
-, <a class="el" href="classhal_1_1_placement_hint.html#addeee89e239e71feffce0f710595207d">hal::PlacementHint</a>
 </li>
 <li>GridPosition
 : <a class="el" href="classhal_1_1_placement_hint.html#ad09aba494db43e08dc70e4c26b83b8e0a30472caec088342be6e3c336a35fcfbc">hal::PlacementHint</a>
+</li>
+<li>gridPosition()
+: <a class="el" href="classhal_1_1_placement_hint.html#addeee89e239e71feffce0f710595207d">hal::PlacementHint</a>
 </li>
 <li>gridToText()
 : <a class="el" href="classhal_1_1_user_action.html#a40cf24ca7394f5976d20987f57801b31">hal::UserAction</a>
@@ -1668,7 +1688,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_grouping_dialog.html#a31b2b5118bf361433c6b0566258d2d39">hal::GroupingDialog</a>
 </li>
 <li>Grouping()
-: <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a3368041577b46e6bdc8309d59e9709d3">hal::dataflow::Grouping</a>
+: <a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a9a7e5b1cd6762b9699e58fa660e4d68e">hal::dataflow::Grouping</a>
 </li>
 <li>grouping()
 : <a class="el" href="classhal_1_1_grouping_table_entry.html#a1eddd594c0671c4b62a71119cd547402">hal::GroupingTableEntry</a>
@@ -1789,8 +1809,8 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>guiIconDisabledStyle()
 : <a class="el" href="classhal_1_1_gui_plugin_manager.html#af28ec6aca8e1ccbfa3061be946ba04f4">hal::GuiPluginManager</a>
 </li>
-<li>guiIconPath
-: <a class="el" href="classhal_1_1_gui_plugin_manager.html#a5c15ac800feeb10e3cd56859bac1c8ec">hal::GuiPluginManager</a>
+<li>guiIconPath()
+: <a class="el" href="classhal_1_1_gui_plugin_manager.html#ac1e74d9f31a8d65e321af080e851417a">hal::GuiPluginManager</a>
 </li>
 <li>guiIconStyle
 : <a class="el" href="classhal_1_1_gui_plugin_manager.html#a491b5a4c1fa9cd70ac645618e6aec972">hal::GuiPluginManager</a>
@@ -1802,7 +1822,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classhal_1_1_gui_plugin_delegate.html#a22251255840777bfc1791d024c52cfaf">hal::GuiPluginDelegate</a>
 </li>
 <li>GuiPluginEntry()
-: <a class="el" href="classhal_1_1_gui_plugin_entry.html#a0246b0353cd844fa9dc0812879d3c38e">hal::GuiPluginEntry</a>
+: <a class="el" href="classhal_1_1_gui_plugin_entry.html#a18a9537f4dede9ecf839babcf562c730">hal::GuiPluginEntry</a>
 </li>
 <li>GuiPluginManager
 : <a class="el" href="classhal_1_1_gui_plugin_delegate.html#a0de770239a7ebe00cf4e39a3ed2a0fc8">hal::GuiPluginDelegate</a>
@@ -1821,7 +1841,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri May 24 2024 11:27:14 for HAL by
+    <li class="footer">Generated on Thu May 30 2024 14:45:01 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

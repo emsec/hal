@@ -447,7 +447,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors will be returned. Higher number of depth causes as many steps of recursive calls. If depth is set to 0 there is no limitation and the loop continues until no more predecessors/succesors are found. If a filter function is given only gates matching the filter will be added to the result vector. The result will not include the provided gate itself.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated:</a></b></dt><dd>Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors will be returned. Higher number of depth causes as many steps of recursive calls. If depth is set to 0 there is no limitation and the loop continues until no more predecessors/succesors are found. If a filter function is given only gates matching the filter will be added to the result vector. The result will not include the provided gate itself.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The initial gate. </td></tr>
@@ -504,7 +504,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Find predecessors or successors of a net. If depth is set to 1 only direct predecessors/successors will be returned. Higher number of depth causes as many steps of recursive calls. If depth is set to 0 there is no limitation and the loop continues until no more predecessors/succesors are found. If a filter function is given, the recursion stops whenever the filter function evaluates to False. Only gates matching the filter will be added to the result vector.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated:</a></b></dt><dd>Find predecessors or successors of a net. If depth is set to 1 only direct predecessors/successors will be returned. Higher number of depth causes as many steps of recursive calls. If depth is set to 0 there is no limitation and the loop continues until no more predecessors/succesors are found. If a filter function is given, the recursion stops whenever the filter function evaluates to False. Only gates matching the filter will be added to the result vector.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">net</td><td>- The initial net. </td></tr>
@@ -547,7 +547,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Find all sequential predecessors or successors of a gate. Traverses combinational logic of all input or output nets until sequential gates are found. The result may include the provided gate itself.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000011">Deprecated:</a></b></dt><dd>Find all sequential predecessors or successors of a gate. Traverses combinational logic of all input or output nets until sequential gates are found. The result may include the provided gate itself.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The initial gate. </td></tr>
@@ -594,7 +594,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Find all sequential predecessors or successors of a gate. Traverses combinational logic of all input or output nets until sequential gates are found. The result may include the provided gate itself. The use of the this cached version is recommended in case of extensive usage to improve performance. The cache will be filled by this function and should initially be provided empty. Different caches for different values of get_successors shall be used.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated:</a></b></dt><dd>Find all sequential predecessors or successors of a gate. Traverses combinational logic of all input or output nets until sequential gates are found. The result may include the provided gate itself. The use of the this cached version is recommended in case of extensive usage to improve performance. The cache will be filled by this function and should initially be provided empty. Different caches for different values of get_successors shall be used.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The initial gate. </td></tr>
@@ -638,7 +638,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Find all sequential predecessors or successors of a net. Traverses combinational logic of all input or output nets until sequential gates are found.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000013">Deprecated:</a></b></dt><dd>Find all sequential predecessors or successors of a net. Traverses combinational logic of all input or output nets until sequential gates are found.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">net</td><td>- The initial net. </td></tr>
@@ -685,7 +685,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Find all sequential predecessors or successors of a net. Traverses combinational logic of all input or output nets until sequential gates are found. The use of the cache is recommended in case of extensive usage of this function. The cache will be filled by this function and should initially be provided empty. Different caches for different values of get_successors shall be used.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000012">Deprecated:</a></b></dt><dd>Find all sequential predecessors or successors of a net. Traverses combinational logic of all input or output nets until sequential gates are found. The use of the cache is recommended in case of extensive usage of this function. The cache will be filled by this function and should initially be provided empty. Different caches for different values of get_successors shall be used.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">net</td><td>- The initial net. </td></tr>
@@ -1115,7 +1115,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated:</a></b></dt><dd>Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets. If enabled, analyzes every gate's inputs and removes fixed '0' or '1' inputs from the Boolean function.</dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated:</a></b></dt><dd>Remove all buffer gates from the netlist and connect their fan-in to their fan-out nets. If enabled, analyzes every gate's inputs and removes fixed '0' or '1' inputs from the Boolean function.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">netlist</td><td>- The target netlist. </td></tr>
@@ -1148,7 +1148,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated:</a></b></dt><dd>Remove all LUT fan-in endpoints that are not present within the Boolean function of the output of a gate.</dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000015">Deprecated:</a></b></dt><dd>Remove all LUT fan-in endpoints that are not present within the Boolean function of the output of a gate.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">netlist</td><td>- The target netlist. </td></tr>
@@ -1196,7 +1196,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000010">Deprecated:</a></b></dt><dd>Replace the given gate with a gate of the specified gate type. A map from old to new pins must be provided in order to correctly connect the gates inputs and outputs. A pin can be omitted if no connection at that pin is desired.</dd></dl>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated:</a></b></dt><dd>Replace the given gate with a gate of the specified gate type. A map from old to new pins must be provided in order to correctly connect the gates inputs and outputs. A pin can be omitted if no connection at that pin is desired.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gate</td><td>- The gate to be replaced. </td></tr>
@@ -1221,7 +1221,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1netlist__utils.html">netlist_utils</a></li>
-    <li class="footer">Generated on Fri May 24 2024 11:27:14 for HAL by
+    <li class="footer">Generated on Thu May 30 2024 14:45:01 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

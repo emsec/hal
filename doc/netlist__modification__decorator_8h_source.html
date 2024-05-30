@@ -120,23 +120,23 @@ $(document).ready(function(){initNavTree('netlist__modification__decorator_8h_so
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classhal_1_1_netlist_modification_decorator.html">   35</a></span>&#160;    <span class="keyword">class </span><a class="code" href="arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> <a class="code" href="classhal_1_1_netlist_modification_decorator.html">NetlistModificationDecorator</a></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    {</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="code" href="classhal_1_1_netlist_modification_decorator.html">NetlistModificationDecorator</a>(<a class="code" href="classhal_1_1_netlist.html">Netlist</a>&amp; <a class="code" href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">netlist</a>);</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> delete_modules(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_module.html">Module</a>*)&gt;&amp; filter = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;Gate*&gt;</a> <a class="code" href="namespacehal_1_1netlist__utils.html#a91da9ccb1b2005faf2ec66b2e0618aba">replace_gate</a>(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <a class="code" href="classhal_1_1_gate_type.html">GateType</a>* target_type, <span class="keyword">const</span> std::map&lt;GatePin*, GatePin*&gt;&amp; pin_map);</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;Net*&gt;</a> connect_gates(<a class="code" href="classhal_1_1_gate.html">Gate</a>* src_gate, <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* src_pin, <a class="code" href="classhal_1_1_gate.html">Gate</a>* dst_gate, <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* dst_pin);</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;Net*&gt;</a> connect_nets(<a class="code" href="classhal_1_1_net.html">Net</a>* master_net, <a class="code" href="classhal_1_1_net.html">Net</a>* slave_net);</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <a class="code" href="classhal_1_1_netlist.html">Netlist</a>&amp; m_netlist;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    };</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classhal_1_1_netlist_modification_decorator.html">   40</a></span>&#160;    <span class="keyword">class </span><a class="code" href="arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a> <a class="code" href="classhal_1_1_netlist_modification_decorator.html">NetlistModificationDecorator</a></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="code" href="classhal_1_1_netlist_modification_decorator.html">NetlistModificationDecorator</a>(<a class="code" href="classhal_1_1_netlist.html">Netlist</a>&amp; <a class="code" href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">netlist</a>);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;std::monostate&gt;</a> delete_modules(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">bool</span>(<span class="keyword">const</span> <a class="code" href="classhal_1_1_module.html">Module</a>*)&gt;&amp; filter = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;Gate*&gt;</a> <a class="code" href="namespacehal_1_1netlist__utils.html#a91da9ccb1b2005faf2ec66b2e0618aba">replace_gate</a>(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate, <a class="code" href="classhal_1_1_gate_type.html">GateType</a>* target_type, <span class="keyword">const</span> std::map&lt;GatePin*, GatePin*&gt;&amp; pin_map);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;Net*&gt;</a> connect_gates(<a class="code" href="classhal_1_1_gate.html">Gate</a>* src_gate, <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* src_pin, <a class="code" href="classhal_1_1_gate.html">Gate</a>* dst_gate, <a class="code" href="classhal_1_1_gate_pin.html">GatePin</a>* dst_pin);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <a class="code" href="classhal_1_1_result.html">Result&lt;Net*&gt;</a> connect_nets(<a class="code" href="classhal_1_1_net.html">Net</a>* master_net, <a class="code" href="classhal_1_1_net.html">Net</a>* slave_net);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <a class="code" href="classhal_1_1_netlist.html">Netlist</a>&amp; m_netlist;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    };</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclasshal_1_1_module_html"><div class="ttname"><a href="classhal_1_1_module.html">hal::Module</a></div><div class="ttdef"><b>Definition:</b> <a href="module_8h_source.html#l00065">module.h:65</a></div></div>
@@ -152,14 +152,14 @@ $(document).ready(function(){initNavTree('netlist__modification__decorator_8h_so
 <div class="ttc" id="anamespacehal_1_1netlist__utils_html_a91da9ccb1b2005faf2ec66b2e0618aba"><div class="ttname"><a href="namespacehal_1_1netlist__utils.html#a91da9ccb1b2005faf2ec66b2e0618aba">hal::netlist_utils::replace_gate</a></div><div class="ttdeci">Result&lt; std::monostate &gt; replace_gate(Gate *gate, GateType *target_type, std::map&lt; GatePin *, GatePin * &gt; pin_map)</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2netlist__utils_8cpp_source.html#l00768">netlist_utils.cpp:768</a></div></div>
 <div class="ttc" id="ainclude_2hal__core_2utilities_2result_8h_html"><div class="ttname"><a href="include_2hal__core_2utilities_2result_8h.html">result.h</a></div></div>
 <div class="ttc" id="aarch__linux_8h_html_a3541b40303f35100314d8bb7efd18371"><div class="ttname"><a href="arch__linux_8h.html#a3541b40303f35100314d8bb7efd18371">NETLIST_API</a></div><div class="ttdeci">#define NETLIST_API</div><div class="ttdef"><b>Definition:</b> <a href="arch__linux_8h_source.html#l00030">arch_linux.h:30</a></div></div>
-<div class="ttc" id="aclasshal_1_1_netlist_modification_decorator_html"><div class="ttname"><a href="classhal_1_1_netlist_modification_decorator.html">hal::NetlistModificationDecorator</a></div><div class="ttdef"><b>Definition:</b> <a href="netlist__modification__decorator_8h_source.html#l00035">netlist_modification_decorator.h:35</a></div></div>
+<div class="ttc" id="aclasshal_1_1_netlist_modification_decorator_html"><div class="ttname"><a href="classhal_1_1_netlist_modification_decorator.html">hal::NetlistModificationDecorator</a></div><div class="ttdef"><b>Definition:</b> <a href="netlist__modification__decorator_8h_source.html#l00040">netlist_modification_decorator.h:40</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_html"><div class="ttname"><a href="classhal_1_1_netlist.html">hal::Netlist</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2netlist_2netlist_8h_source.html#l00055">netlist.h:55</a></div></div>
 <div class="ttc" id="aclasshal_1_1_gate_pin_html"><div class="ttname"><a href="classhal_1_1_gate_pin.html">hal::GatePin</a></div><div class="ttdef"><b>Definition:</b> <a href="gate__pin_8h_source.html#l00044">gate_pin.h:44</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="dir_805ebc0df5c9adc006f435b512768f5c.html">decorators</a></li><li class="navelem"><a class="el" href="netlist__modification__decorator_8h.html">netlist_modification_decorator.h</a></li>
-    <li class="footer">Generated on Fri May 24 2024 11:27:08 for HAL by
+    <li class="footer">Generated on Thu May 30 2024 14:44:55 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

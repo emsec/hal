@@ -181,7 +181,7 @@ $(document).ready(function(){initNavTree('include_2hal__core_2netlist_2netlist_8
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        <span class="keywordtype">bool</span> delete_gate(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate);</div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; </div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        <span class="keywordtype">bool</span> is_gate_in_netlist(<a class="code" href="classhal_1_1_gate.html">Gate</a>* gate) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        <span class="keywordtype">bool</span> is_gate_in_netlist(<span class="keyword">const</span> <a class="code" href="classhal_1_1_gate.html">Gate</a>* gate) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <a class="code" href="classhal_1_1_gate.html">Gate</a>* get_gate_by_id(<span class="keyword">const</span> <a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> gate_id) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
@@ -219,7 +219,7 @@ $(document).ready(function(){initNavTree('include_2hal__core_2netlist_2netlist_8
 <div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160; </div>
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        <span class="keywordtype">bool</span> delete_net(<a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>);</div>
 <div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160; </div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        <span class="keywordtype">bool</span> is_net_in_netlist(<a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        <span class="keywordtype">bool</span> is_net_in_netlist(<span class="keyword">const</span> <a class="code" href="classhal_1_1_net.html">Net</a>* <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772">net</a>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160; </div>
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        <a class="code" href="classhal_1_1_net.html">Net</a>* get_net_by_id(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> net_id) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160; </div>
@@ -259,7 +259,7 @@ $(document).ready(function(){initNavTree('include_2hal__core_2netlist_2netlist_8
 <div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160; </div>
 <div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;        <span class="keywordtype">bool</span> delete_module(Module* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>);</div>
 <div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160; </div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;        <span class="keywordtype">bool</span> is_module_in_netlist(Module* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;        <span class="keywordtype">bool</span> is_module_in_netlist(<span class="keyword">const</span> Module* <a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160; </div>
 <div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;        Module* get_module_by_id(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> module_id) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160; </div>
@@ -283,7 +283,7 @@ $(document).ready(function(){initNavTree('include_2hal__core_2netlist_2netlist_8
 <div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160; </div>
 <div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;        <span class="keywordtype">bool</span> delete_grouping(Grouping* grouping);</div>
 <div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160; </div>
-<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;        <span class="keywordtype">bool</span> is_grouping_in_netlist(Grouping* grouping) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;        <span class="keywordtype">bool</span> is_grouping_in_netlist(<span class="keyword">const</span> Grouping* grouping) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160; </div>
 <div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;        Grouping* get_grouping_by_id(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> grouping_id) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160; </div>
@@ -396,22 +396,22 @@ $(document).ready(function(){initNavTree('include_2hal__core_2netlist_2netlist_8
 <div class="line"><a name="l00836"></a><span class="lineno">  836</span>&#160;        <span class="comment">/* stores the modules */</span></div>
 <div class="line"><a name="l00837"></a><span class="lineno">  837</span>&#160;        Module* m_top_module;</div>
 <div class="line"><a name="l00838"></a><span class="lineno">  838</span>&#160;        std::unordered_map&lt;u32, std::unique_ptr&lt;Module&gt;&gt; m_modules_map;</div>
-<div class="line"><a name="l00839"></a><span class="lineno">  839</span>&#160;        std::unordered_set&lt;Module*&gt; m_modules_set;</div>
+<div class="line"><a name="l00839"></a><span class="lineno">  839</span>&#160;        std::unordered_set&lt;const Module*&gt; m_modules_set;</div>
 <div class="line"><a name="l00840"></a><span class="lineno">  840</span>&#160;        std::vector&lt;Module*&gt; m_modules;</div>
 <div class="line"><a name="l00841"></a><span class="lineno">  841</span>&#160; </div>
 <div class="line"><a name="l00842"></a><span class="lineno">  842</span>&#160;        <span class="comment">/* stores the nets */</span></div>
 <div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160;        std::unordered_map&lt;u32, std::unique_ptr&lt;Net&gt;&gt; m_nets_map;</div>
-<div class="line"><a name="l00844"></a><span class="lineno">  844</span>&#160;        std::unordered_set&lt;Net*&gt; m_nets_set;</div>
+<div class="line"><a name="l00844"></a><span class="lineno">  844</span>&#160;        std::unordered_set&lt;const Net*&gt; m_nets_set;</div>
 <div class="line"><a name="l00845"></a><span class="lineno">  845</span>&#160;        std::vector&lt;Net*&gt; m_nets;</div>
 <div class="line"><a name="l00846"></a><span class="lineno">  846</span>&#160; </div>
 <div class="line"><a name="l00847"></a><span class="lineno">  847</span>&#160;        <span class="comment">/* stores the gates */</span></div>
 <div class="line"><a name="l00848"></a><span class="lineno">  848</span>&#160;        std::unordered_map&lt;u32, std::unique_ptr&lt;Gate&gt;&gt; m_gates_map;</div>
-<div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160;        std::unordered_set&lt;Gate*&gt; m_gates_set;</div>
+<div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160;        std::unordered_set&lt;const Gate*&gt; m_gates_set;</div>
 <div class="line"><a name="l00850"></a><span class="lineno">  850</span>&#160;        std::vector&lt;Gate*&gt; m_gates;</div>
 <div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160; </div>
 <div class="line"><a name="l00852"></a><span class="lineno">  852</span>&#160;        <span class="comment">/* stores the groupings */</span></div>
 <div class="line"><a name="l00853"></a><span class="lineno">  853</span>&#160;        std::unordered_map&lt;u32, std::unique_ptr&lt;Grouping&gt;&gt; m_groupings_map;</div>
-<div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160;        std::unordered_set&lt;Grouping*&gt; m_groupings_set;</div>
+<div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160;        std::unordered_set&lt;const Grouping*&gt; m_groupings_set;</div>
 <div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160;        std::vector&lt;Grouping*&gt; m_groupings;</div>
 <div class="line"><a name="l00856"></a><span class="lineno">  856</span>&#160; </div>
 <div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;        <span class="comment">/* stores the set of global gates and nets */</span></div>
@@ -449,7 +449,7 @@ $(document).ready(function(){initNavTree('include_2hal__core_2netlist_2netlist_8
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_ef96d94451875f81e56c678363187add.html">netlist</a></li><li class="navelem"><a class="el" href="include_2hal__core_2netlist_2netlist_8h.html">netlist.h</a></li>
-    <li class="footer">Generated on Fri May 24 2024 11:27:08 for HAL by
+    <li class="footer">Generated on Thu May 30 2024 14:44:56 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

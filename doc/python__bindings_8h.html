@@ -97,8 +97,9 @@ $(document).ready(function(){initNavTree('python__bindings_8h.html',''); initRes
 <code>#include &quot;<a class="el" href="types_8h_source.html">hal_core/netlist/boolean_function/types.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="boolean__function__decorator_8h_source.html">hal_core/netlist/decorators/boolean_function_decorator.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="boolean__function__net__decorator_8h_source.html">hal_core/netlist/decorators/boolean_function_net_decorator.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="subgraph__netlist__decorator_8h_source.html">hal_core/netlist/decorators/subgraph_netlist_decorator.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="netlist__modification__decorator_8h_source.html">hal_core/netlist/decorators/netlist_modification_decorator.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="netlist__traversal__decorator_8h_source.html">hal_core/netlist/decorators/netlist_traversal_decorator.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="subgraph__netlist__decorator_8h_source.html">hal_core/netlist/decorators/subgraph_netlist_decorator.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gate_8h_source.html">hal_core/netlist/gate.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="async__set__reset__behavior_8h_source.html">hal_core/netlist/gate_library/enums/async_set_reset_behavior.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gate__library_8h_source.html">hal_core/netlist/gate_library/gate_library.h</a>&quot;</code><br />
@@ -209,6 +210,8 @@ Functions</h2></td></tr>
 <tr class="separator:gadcbe9ddba67d0061af0b3f101c727c6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad828e83bab5914c1f8f18d2cf61e5f98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gad828e83bab5914c1f8f18d2cf61e5f98">hal::netlist_modification_decorator_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:gad828e83bab5914c1f8f18d2cf61e5f98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gada2e57065ce648d389abb22e94a9ab69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gada2e57065ce648d389abb22e94a9ab69">hal::netlist_traversal_decorator_init</a> (py::module &amp;m)</td></tr>
+<tr class="separator:gada2e57065ce648d389abb22e94a9ab69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac711bd76ed6d19d0ae42c56d8f190cfa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gac711bd76ed6d19d0ae42c56d8f190cfa">hal::log_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:gac711bd76ed6d19d0ae42c56d8f190cfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
@@ -226,6 +229,9 @@ Functions</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:gad828e83bab5914c1f8f18d2cf61e5f98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gad828e83bab5914c1f8f18d2cf61e5f98">hal::netlist_modification_decorator_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:gad828e83bab5914c1f8f18d2cf61e5f98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:gada2e57065ce648d389abb22e94a9ab69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gada2e57065ce648d389abb22e94a9ab69">hal::netlist_traversal_decorator_init</a> (py::module &amp;m)</td></tr>
+<tr class="separator:gada2e57065ce648d389abb22e94a9ab69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:gac5492afb41ef2e8dd6c49f56ddb7e73c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gac5492afb41ef2e8dd6c49f56ddb7e73c">hal::subgraph_netlist_decorator_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:gac5492afb41ef2e8dd6c49f56ddb7e73c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -353,6 +359,8 @@ Functions</h2></td></tr>
 <tr class="separator:gad828e83bab5914c1f8f18d2cf61e5f98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga4294dbde61031dc6505415b4c0efd3f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#ga4294dbde61031dc6505415b4c0efd3f9">hal::netlist_serializer_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:ga4294dbde61031dc6505415b4c0efd3f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gada2e57065ce648d389abb22e94a9ab69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gada2e57065ce648d389abb22e94a9ab69">hal::netlist_traversal_decorator_init</a> (py::module &amp;m)</td></tr>
+<tr class="separator:gada2e57065ce648d389abb22e94a9ab69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga60d7e2dfe01bc847292f5473e2b849d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#ga60d7e2dfe01bc847292f5473e2b849d1">hal::netlist_utils_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:ga60d7e2dfe01bc847292f5473e2b849d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga24b748055e4be6a24e7103a78f6f272d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#ga24b748055e4be6a24e7103a78f6f272d">hal::netlist_writer_manager_init</a> (py::module &amp;m)</td></tr>
@@ -378,7 +386,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_5f4cccbb839d6c6ae068437bcedb0ae8.html">hal_core</a></li><li class="navelem"><a class="el" href="dir_6b3eaace1e5cb9cf9685601c4832ce47.html">python_bindings</a></li><li class="navelem"><a class="el" href="python__bindings_8h.html">python_bindings.h</a></li>
-    <li class="footer">Generated on Fri May 24 2024 11:27:10 for HAL by
+    <li class="footer">Generated on Thu May 30 2024 14:44:58 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

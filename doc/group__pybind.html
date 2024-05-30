@@ -167,6 +167,8 @@ Typedefs</h2></td></tr>
 <tr class="separator:gadcbe9ddba67d0061af0b3f101c727c6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad828e83bab5914c1f8f18d2cf61e5f98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gad828e83bab5914c1f8f18d2cf61e5f98">hal::netlist_modification_decorator_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:gad828e83bab5914c1f8f18d2cf61e5f98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gada2e57065ce648d389abb22e94a9ab69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gada2e57065ce648d389abb22e94a9ab69">hal::netlist_traversal_decorator_init</a> (py::module &amp;m)</td></tr>
+<tr class="separator:gada2e57065ce648d389abb22e94a9ab69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac711bd76ed6d19d0ae42c56d8f190cfa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pybind.html#gac711bd76ed6d19d0ae42c56d8f190cfa">hal::log_init</a> (py::module &amp;m)</td></tr>
 <tr class="separator:gac711bd76ed6d19d0ae42c56d8f190cfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -187,7 +189,7 @@ template&lt;class T &gt; </div>
 </div><div class="memdoc">
 <p>Wrapper class so that PyBind can work with raw pointers to classes that are managed by HAL. </p>
 
-<p class="definition">Definition at line <a class="el" href="python__bindings_8h_source.html#l00089">89</a> of file <a class="el" href="python__bindings_8h_source.html">python_bindings.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="python__bindings_8h_source.html#l00090">90</a> of file <a class="el" href="python__bindings_8h_source.html">python_bindings.h</a>.</p>
 
 </div>
 </div>
@@ -982,6 +984,37 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a id="gada2e57065ce648d389abb22e94a9ab69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gada2e57065ce648d389abb22e94a9ab69">&#9670;&nbsp;</a></span>netlist_traversal_decorator_init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::netlist_traversal_decorator_init </td>
+          <td>(</td>
+          <td class="paramtype">py::module &amp;&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Initializes Python bindings for the HAL netlist traversal decorator in a python module.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>- the python module </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="python__bindings_2bindings_2netlist__traversal__decorator_8cpp_source.html#l00005">5</a> of file <a class="el" href="python__bindings_2bindings_2netlist__traversal__decorator_8cpp_source.html">netlist_traversal_decorator.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="log_8h_source.html#l00078">log_error</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="src_2python__bindings_2python__bindings_8cpp_source.html#l00010">hal::PYBIND11_PLUGIN()</a>.</p>
+
+</div>
+</div>
 <a id="ga60d7e2dfe01bc847292f5473e2b849d1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga60d7e2dfe01bc847292f5473e2b849d1">&#9670;&nbsp;</a></span>netlist_utils_init()</h2>
 
@@ -1204,7 +1237,7 @@ template&lt;class T &gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri May 24 2024 11:27:11 for HAL by
+    <li class="footer">Generated on Thu May 30 2024 14:44:58 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

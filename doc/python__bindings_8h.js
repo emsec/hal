@@ -27,6 +27,7 @@ var python__bindings_8h =
     [ "netlist_init", "python__bindings_8h.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e", null ],
     [ "netlist_modification_decorator_init", "python__bindings_8h.html#gad828e83bab5914c1f8f18d2cf61e5f98", null ],
     [ "netlist_serializer_init", "python__bindings_8h.html#ga4294dbde61031dc6505415b4c0efd3f9", null ],
+    [ "netlist_traversal_decorator_init", "python__bindings_8h.html#gada2e57065ce648d389abb22e94a9ab69", null ],
     [ "netlist_utils_init", "python__bindings_8h.html#ga60d7e2dfe01bc847292f5473e2b849d1", null ],
     [ "netlist_writer_manager_init", "python__bindings_8h.html#ga24b748055e4be6a24e7103a78f6f272d", null ],
     [ "plugin_interfaces_init", "python__bindings_8h.html#gae288c84ff5c0b70e6f9571669aa29eb7", null ],

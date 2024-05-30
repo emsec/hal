@@ -27,6 +27,7 @@ var group__pybind =
     [ "netlist_init", "group__pybind.html#gaa10fb860bfd6cbdbe95ab96e78c8cb1e", null ],
     [ "netlist_modification_decorator_init", "group__pybind.html#gad828e83bab5914c1f8f18d2cf61e5f98", null ],
     [ "netlist_serializer_init", "group__pybind.html#ga4294dbde61031dc6505415b4c0efd3f9", null ],
+    [ "netlist_traversal_decorator_init", "group__pybind.html#gada2e57065ce648d389abb22e94a9ab69", null ],
     [ "netlist_utils_init", "group__pybind.html#ga60d7e2dfe01bc847292f5473e2b849d1", null ],
     [ "netlist_writer_manager_init", "group__pybind.html#ga24b748055e4be6a24e7103a78f6f272d", null ],
     [ "plugin_interfaces_init", "group__pybind.html#gae288c84ff5c0b70e6f9571669aa29eb7", null ],

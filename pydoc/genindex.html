@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; hal_py v4.2.0-414-g3e682e948 documentation</title>
+  <title>Index &mdash; hal_py v4.2.0-415-g3164cba28 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v4.2.0-414-g3e682e948
+                v4.2.0-415-g3164cba28
               </div>
             
           
@@ -265,6 +265,8 @@
 </li>
         <li><a href="netlist_modification_decorator.html#hal_py.NetlistModificationDecorator.__init__">(hal_py.NetlistModificationDecorator method)</a>
 </li>
+        <li><a href="netlist_traversal_decorator.html#hal_py.NetlistTraversalDecorator.__init__">(hal_py.NetlistTraversalDecorator method)</a>
+</li>
         <li><a href="smt.html#hal_py.SMT.Constraint.__init__">(hal_py.SMT.Constraint method)</a>
 </li>
         <li><a href="smt.html#hal_py.SMT.Model.__init__">(hal_py.SMT.Model method)</a>
@@ -284,6 +286,8 @@
         <li><a href="subgraph_netlist_decorator.html#hal_py.SubgraphNetlistDecorator.__init__">(hal_py.SubgraphNetlistDecorator method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Value.__int__">__int__() (hal_py.BooleanFunction.Value method)</a>
 
       <ul>
@@ -292,8 +296,6 @@
         <li><a href="smt.html#hal_py.SMT.SolverType.__int__">(hal_py.SMT.SolverType method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.__invert__">__invert__() (hal_py.BooleanFunction method)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.__ior__">__ior__() (hal_py.BooleanFunction method)</a>
@@ -1256,8 +1258,6 @@
 </li>
       <li><a href="grouping.html#hal_py.Grouping.get_module_ids">get_module_ids() (hal_py.Grouping method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate.html#hal_py.Gate.get_modules">get_modules() (hal_py.Gate method)</a>
 
       <ul>
@@ -1266,6 +1266,8 @@
         <li><a href="netlist.html#hal_py.Netlist.get_modules">(hal_py.Netlist method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bitorder_propagation.html#bitorder_propagation.BitorderPropagationPlugin.get_name">get_name() (bitorder_propagation.BitorderPropagationPlugin method)</a>
 
       <ul>
@@ -1354,17 +1356,31 @@
       </ul></li>
       <li><a href="netlist_utils.html#hal_py.NetlistUtils.get_nets_at_pins">get_nets_at_pins() (in module hal_py.NetlistUtils)</a>
 </li>
+      <li><a href="netlist_traversal_decorator.html#hal_py.NetlistTraversalDecorator.get_next_combinational_gates">get_next_combinational_gates() (hal_py.NetlistTraversalDecorator method)</a>
+</li>
       <li><a href="netlist.html#hal_py.Netlist.get_next_gate_id">get_next_gate_id() (hal_py.Netlist method)</a>
 </li>
       <li><a href="netlist_utils.html#hal_py.NetlistUtils.get_next_gates">get_next_gates() (in module hal_py.NetlistUtils)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.get_next_grouping_id">get_next_grouping_id() (hal_py.Netlist method)</a>
 </li>
+      <li><a href="netlist_traversal_decorator.html#hal_py.NetlistTraversalDecorator.get_next_matching_gates">get_next_matching_gates() (hal_py.NetlistTraversalDecorator method)</a>
+</li>
+      <li><a href="netlist_traversal_decorator.html#hal_py.NetlistTraversalDecorator.get_next_matching_gates_until">get_next_matching_gates_until() (hal_py.NetlistTraversalDecorator method)</a>
+</li>
+      <li><a href="netlist_traversal_decorator.html#hal_py.NetlistTraversalDecorator.get_next_matching_gates_until_depth">get_next_matching_gates_until_depth() (hal_py.NetlistTraversalDecorator method)</a>
+</li>
       <li><a href="netlist.html#hal_py.Netlist.get_next_module_id">get_next_module_id() (hal_py.Netlist method)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.get_next_net_id">get_next_net_id() (hal_py.Netlist method)</a>
 </li>
-      <li><a href="netlist_utils.html#hal_py.NetlistUtils.get_next_sequential_gates">get_next_sequential_gates() (in module hal_py.NetlistUtils)</a>
+      <li><a href="netlist_traversal_decorator.html#hal_py.NetlistTraversalDecorator.get_next_sequential_gates">get_next_sequential_gates() (hal_py.NetlistTraversalDecorator method)</a>
+
+      <ul>
+        <li><a href="netlist_utils.html#hal_py.NetlistUtils.get_next_sequential_gates">(in module hal_py.NetlistUtils)</a>
+</li>
+      </ul></li>
+      <li><a href="netlist_traversal_decorator.html#hal_py.NetlistTraversalDecorator.get_next_sequential_gates_map">get_next_sequential_gates_map() (hal_py.NetlistTraversalDecorator method)</a>
 </li>
       <li><a href="gate_type_component.html#hal_py.FFComponent.get_next_state_function">get_next_state_function() (hal_py.FFComponent method)</a>
 </li>
@@ -2154,10 +2170,10 @@
       </ul></li>
       <li><a href="gate_type_component.html#hal_py.StateComponent.neg_state_identifier">neg_state_identifier (hal_py.StateComponent attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="net.html#hal_py.Net">Net (class in hal_py)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="endpoint.html#hal_py.Endpoint.net">net (hal_py.Endpoint attribute)</a>
 
       <ul>
@@ -2193,6 +2209,8 @@
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorControllerPlugin">NetlistSimulatorControllerPlugin (class in netlist_simulator_controller)</a>
 </li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin">NetlistSimulatorPlugin (class in netlist_simulator)</a>
+</li>
+      <li><a href="netlist_traversal_decorator.html#hal_py.NetlistTraversalDecorator">NetlistTraversalDecorator (class in hal_py)</a>
 </li>
       <li><a href="grouping.html#hal_py.Grouping.nets">nets (hal_py.Grouping attribute)</a>
 
