@@ -252,17 +252,17 @@ namespace hal
                             }
                             else if (output_group.size() == input_group.size() + 2)
                             {
-                                for (auto* drop_gate_1 : output_group)
+                                for (auto drop_it_1 = output_group.begin(); drop_it_1 != output_group.end(); drop_it_1++)
                                 {
-                                    for (auto* drop_gate_2 : output_group)
+                                    for (auto drop_it_2 = std::next(drop_it_1); drop_it_2 != output_group.end(); drop_it_2++)
                                     {
                                         SBoxCandidate sbox_candidate;
                                         sbox_candidate.m_candidate    = candidate;
                                         sbox_candidate.m_component    = component;
                                         sbox_candidate.m_input_gates  = input_group;
                                         sbox_candidate.m_output_gates = output_group;
-                                        sbox_candidate.m_output_gates.erase(drop_gate_1);
-                                        sbox_candidate.m_output_gates.erase(drop_gate_2);
+                                        sbox_candidate.m_output_gates.erase(*drop_it_1);
+                                        sbox_candidate.m_output_gates.erase(*drop_it_2);
                                         res.push_back(sbox_candidate);
                                     }
                                 }
