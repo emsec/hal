@@ -168,8 +168,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af097c3b6ed0f3bd6094451d2e41e796e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3417dd40b6902e97ffa6ddc8b10fc0bc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_selection_relay.html#a3417dd40b6902e97ffa6ddc8b10fc0bc">isNetSelected</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2">id</a>) const</td></tr>
 <tr class="separator:a3417dd40b6902e97ffa6ddc8b10fc0bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a02eb403c7d8ada1a1262e182a54f28"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_selection_relay.html#a0a02eb403c7d8ada1a1262e182a54f28">suppressedByFilter</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;modIds=<a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;(), const <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;gatIds=<a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;(), const <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;netIds=<a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;())</td></tr>
-<tr class="separator:a0a02eb403c7d8ada1a1262e182a54f28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab944d7cadd0a9e4cf90f708c575642e9"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_selection_relay.html#ab944d7cadd0a9e4cf90f708c575642e9">selectedGatesList</a> () const</td></tr>
 <tr class="separator:ab944d7cadd0a9e4cf90f708c575642e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5040a3c88a222ef3a487021f5916d220"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_selection_relay.html#a5040a3c88a222ef3a487021f5916d220">selectedNetsList</a> () const</td></tr>
@@ -625,7 +623,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="net__endpoint__table_8cpp_source.html#l00064">hal::NetEndpointTable::handleContextMenuRequested()</a>, <a class="el" href="module__elements__tree_8cpp_source.html#l00058">hal::ModuleElementsTree::handleContextMenuRequested()</a>, <a class="el" href="module__widget_8cpp_source.html#l00433">hal::ModuleWidget::handleTreeSelectionChanged()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00080">hal::GuiApi::selectGate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__endpoint__table_8cpp_source.html#l00064">hal::NetEndpointTable::handleContextMenuRequested()</a>, <a class="el" href="module__elements__tree_8cpp_source.html#l00057">hal::ModuleElementsTree::handleContextMenuRequested()</a>, <a class="el" href="module__widget_8cpp_source.html#l00433">hal::ModuleWidget::handleTreeSelectionChanged()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00080">hal::GuiApi::selectGate()</a>.</p>
 
 </div>
 </div>
@@ -656,7 +654,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="net__module__table_8cpp_source.html#l00062">hal::NetModuleTable::handleContextMenuRequested()</a>, <a class="el" href="module__elements__tree_8cpp_source.html#l00058">hal::ModuleElementsTree::handleContextMenuRequested()</a>, <a class="el" href="module__dialog_8cpp_source.html#l00171">hal::AddToModuleReceiver::handleModulesPicked()</a>, <a class="el" href="module__widget_8cpp_source.html#l00433">hal::ModuleWidget::handleTreeSelectionChanged()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00182">hal::GuiApi::selectModule()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="net__module__table_8cpp_source.html#l00062">hal::NetModuleTable::handleContextMenuRequested()</a>, <a class="el" href="module__elements__tree_8cpp_source.html#l00057">hal::ModuleElementsTree::handleContextMenuRequested()</a>, <a class="el" href="module__dialog_8cpp_source.html#l00171">hal::AddToModuleReceiver::handleModulesPicked()</a>, <a class="el" href="module__widget_8cpp_source.html#l00433">hal::ModuleWidget::handleTreeSelectionChanged()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00182">hal::GuiApi::selectModule()</a>.</p>
 
 </div>
 </div>
@@ -711,7 +709,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#clear">QSet::clear()</a>, <a class="el" href="user__action_8h_source.html#l00199">hal::UserAction::mObject</a>, and <a class="el" href="classhal_1_1_selection_relay.html#a75d8c404b06807f7e57fe3f9c1a39ff2a6adf97f83acf6453d4a6a4b1070f3754">None</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="selection__relay_8cpp_source.html#l00155">clearAndUpdate()</a>, <a class="el" href="net__module__table_8cpp_source.html#l00062">hal::NetModuleTable::handleContextMenuRequested()</a>, <a class="el" href="module__elements__tree_8cpp_source.html#l00058">hal::ModuleElementsTree::handleContextMenuRequested()</a>, <a class="el" href="gate__pin__tree_8cpp_source.html#l00093">hal::GatePinTree::handleContextMenuRequested()</a>, <a class="el" href="module__ports__tree_8cpp_source.html#l00084">hal::ModulePinsTree::handleContextMenuRequested()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00376">hal::GraphicsScene::handleInternSelectionChanged()</a>, <a class="el" href="module__dialog_8cpp_source.html#l00171">hal::AddToModuleReceiver::handleModulesPicked()</a>, <a class="el" href="module__widget_8cpp_source.html#l00433">hal::ModuleWidget::handleTreeSelectionChanged()</a>, <a class="el" href="gui__api_8cpp_source.html#l00261">hal::GuiApi::select()</a>, <a class="el" href="gui__api_8cpp_source.html#l00080">hal::GuiApi::selectGate()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00015">SelectionRelay()</a>, <a class="el" href="gui__api_8cpp_source.html#l00182">hal::GuiApi::selectModule()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00131">hal::GuiApi::selectNet()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="selection__relay_8cpp_source.html#l00155">clearAndUpdate()</a>, <a class="el" href="net__module__table_8cpp_source.html#l00062">hal::NetModuleTable::handleContextMenuRequested()</a>, <a class="el" href="module__elements__tree_8cpp_source.html#l00057">hal::ModuleElementsTree::handleContextMenuRequested()</a>, <a class="el" href="gate__pin__tree_8cpp_source.html#l00093">hal::GatePinTree::handleContextMenuRequested()</a>, <a class="el" href="module__ports__tree_8cpp_source.html#l00084">hal::ModulePinsTree::handleContextMenuRequested()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00376">hal::GraphicsScene::handleInternSelectionChanged()</a>, <a class="el" href="module__dialog_8cpp_source.html#l00171">hal::AddToModuleReceiver::handleModulesPicked()</a>, <a class="el" href="module__widget_8cpp_source.html#l00433">hal::ModuleWidget::handleTreeSelectionChanged()</a>, <a class="el" href="gui__api_8cpp_source.html#l00261">hal::GuiApi::select()</a>, <a class="el" href="gui__api_8cpp_source.html#l00080">hal::GuiApi::selectGate()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00015">SelectionRelay()</a>, <a class="el" href="gui__api_8cpp_source.html#l00182">hal::GuiApi::selectModule()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00131">hal::GuiApi::selectNet()</a>.</p>
 
 </div>
 </div>
@@ -1174,7 +1172,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#size">QSet::size()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00511">hal::GraphicsScene::handleExternSelectionChanged()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00355">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00511">hal::GraphicsScene::handleExternSelectionChanged()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00354">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>.</p>
 
 </div>
 </div>
@@ -1207,7 +1205,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#size">QSet::size()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gate__select__model_8cpp_source.html#l00183">hal::GateSelectPicker::handleSelectionChanged()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00261">hal::ModuleSelectPicker::handleSelectionChanged()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00355">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gate__select__model_8cpp_source.html#l00183">hal::GateSelectPicker::handleSelectionChanged()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00261">hal::ModuleSelectPicker::handleSelectionChanged()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00354">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>.</p>
 
 </div>
 </div>
@@ -1240,7 +1238,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#size">QSet::size()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00511">hal::GraphicsScene::handleExternSelectionChanged()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00355">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00511">hal::GraphicsScene::handleExternSelectionChanged()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00354">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>.</p>
 
 </div>
 </div>
@@ -1273,7 +1271,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#size">QSet::size()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00511">hal::GraphicsScene::handleExternSelectionChanged()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00355">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graphics__scene_8cpp_source.html#l00511">hal::GraphicsScene::handleExternSelectionChanged()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00354">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>.</p>
 
 </div>
 </div>
@@ -1306,7 +1304,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#size">QSet::size()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="selection__details__widget_8cpp_source.html#l00355">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="selection__details__widget_8cpp_source.html#l00354">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>.</p>
 
 </div>
 </div>
@@ -1381,7 +1379,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#sender">QObject::sender()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00287">hal::GuiApi::deselectGate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00363">hal::GuiApi::deselectModule()</a>, <a class="el" href="gui__api_8cpp_source.html#l00325">hal::GuiApi::deselectNet()</a>, <a class="el" href="net__endpoint__table_8cpp_source.html#l00064">hal::NetEndpointTable::handleContextMenuRequested()</a>, <a class="el" href="net__module__table_8cpp_source.html#l00062">hal::NetModuleTable::handleContextMenuRequested()</a>, <a class="el" href="module__elements__tree_8cpp_source.html#l00058">hal::ModuleElementsTree::handleContextMenuRequested()</a>, <a class="el" href="gate__pin__tree_8cpp_source.html#l00093">hal::GatePinTree::handleContextMenuRequested()</a>, <a class="el" href="module__ports__tree_8cpp_source.html#l00084">hal::ModulePinsTree::handleContextMenuRequested()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00376">hal::GraphicsScene::handleInternSelectionChanged()</a>, <a class="el" href="module__dialog_8cpp_source.html#l00171">hal::AddToModuleReceiver::handleModulesPicked()</a>, <a class="el" href="module__widget_8cpp_source.html#l00433">hal::ModuleWidget::handleTreeSelectionChanged()</a>, <a class="el" href="gui__api_8cpp_source.html#l00080">hal::GuiApi::selectGate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00182">hal::GuiApi::selectModule()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00131">hal::GuiApi::selectNet()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00287">hal::GuiApi::deselectGate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00363">hal::GuiApi::deselectModule()</a>, <a class="el" href="gui__api_8cpp_source.html#l00325">hal::GuiApi::deselectNet()</a>, <a class="el" href="net__endpoint__table_8cpp_source.html#l00064">hal::NetEndpointTable::handleContextMenuRequested()</a>, <a class="el" href="net__module__table_8cpp_source.html#l00062">hal::NetModuleTable::handleContextMenuRequested()</a>, <a class="el" href="module__elements__tree_8cpp_source.html#l00057">hal::ModuleElementsTree::handleContextMenuRequested()</a>, <a class="el" href="gate__pin__tree_8cpp_source.html#l00093">hal::GatePinTree::handleContextMenuRequested()</a>, <a class="el" href="module__ports__tree_8cpp_source.html#l00084">hal::ModulePinsTree::handleContextMenuRequested()</a>, <a class="el" href="graphics__scene_8cpp_source.html#l00376">hal::GraphicsScene::handleInternSelectionChanged()</a>, <a class="el" href="module__dialog_8cpp_source.html#l00171">hal::AddToModuleReceiver::handleModulesPicked()</a>, <a class="el" href="module__widget_8cpp_source.html#l00433">hal::ModuleWidget::handleTreeSelectionChanged()</a>, <a class="el" href="gui__api_8cpp_source.html#l00080">hal::GuiApi::selectGate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00182">hal::GuiApi::selectModule()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00131">hal::GuiApi::selectNet()</a>.</p>
 
 </div>
 </div>
@@ -1591,14 +1589,22 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Gets a list of ids of all selected gates.</p>
+<p>Overwrites the list of suppressed modules, gates and nets. Suppressed items can't be selected i.e. isModuleSelected/isGateSelected/isNetSelected will always return <b>false</b>. Note that this only applies to these three functions. It does not restrict their appearance in the public members mSelectedGates/mSelectedNets/mSelectedModules.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">modIds</td><td>- A list of suppressed module ids </td></tr>
+    <tr><td class="paramname">gatIds</td><td>- A list of suppressed gate ids </td></tr>
+    <tr><td class="paramname">netIds</td><td>- A list of suppressed net ids Gets a list of ids of all selected gates.</td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>the list of gate ids </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="selection__relay_8h_source.html#l00231">231</a> of file <a class="el" href="selection__relay_8h_source.html">selection_relay.h</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#values">QSet::values()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00848">hal::GraphWidget::ensureSelectionVisible()</a>, <a class="el" href="selection__tree__model_8cpp_source.html#l00149">hal::SelectionTreeModel::fetchSelection()</a>, <a class="el" href="gui__api_8cpp_source.html#l00051">hal::GuiApi::getSelectedGates()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00183">hal::GateSelectPicker::handleSelectionChanged()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00355">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00211">hal::ModuleSelectExclude::ModuleSelectExclude()</a>, and <a class="el" href="selection__relay_8cpp_source.html#l00473">selectedNodesList()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00848">hal::GraphWidget::ensureSelectionVisible()</a>, <a class="el" href="gui__api_8cpp_source.html#l00051">hal::GuiApi::getSelectedGates()</a>, <a class="el" href="gate__select__model_8cpp_source.html#l00183">hal::GateSelectPicker::handleSelectionChanged()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00354">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00211">hal::ModuleSelectExclude::ModuleSelectExclude()</a>, <a class="el" href="selection__tree__view_8cpp_source.html#l00236">hal::SelectionTreeView::populate()</a>, and <a class="el" href="selection__relay_8cpp_source.html#l00473">selectedNodesList()</a>.</p>
 
 </div>
 </div>
@@ -1695,7 +1701,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#values">QSet::values()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00848">hal::GraphWidget::ensureSelectionVisible()</a>, <a class="el" href="selection__tree__model_8cpp_source.html#l00149">hal::SelectionTreeModel::fetchSelection()</a>, <a class="el" href="gui__api_8cpp_source.html#l00067">hal::GuiApi::getSelectedModules()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00261">hal::ModuleSelectPicker::handleSelectionChanged()</a>, <a class="el" href="module__widget_8cpp_source.html#l00603">hal::ModuleWidget::handleSelectionChanged()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00355">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00211">hal::ModuleSelectExclude::ModuleSelectExclude()</a>, and <a class="el" href="selection__relay_8cpp_source.html#l00473">selectedNodesList()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00848">hal::GraphWidget::ensureSelectionVisible()</a>, <a class="el" href="gui__api_8cpp_source.html#l00067">hal::GuiApi::getSelectedModules()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00261">hal::ModuleSelectPicker::handleSelectionChanged()</a>, <a class="el" href="module__widget_8cpp_source.html#l00603">hal::ModuleWidget::handleSelectionChanged()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00354">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>, <a class="el" href="module__select__model_8cpp_source.html#l00211">hal::ModuleSelectExclude::ModuleSelectExclude()</a>, <a class="el" href="selection__tree__view_8cpp_source.html#l00236">hal::SelectionTreeView::populate()</a>, and <a class="el" href="selection__relay_8cpp_source.html#l00473">selectedNodesList()</a>.</p>
 
 </div>
 </div>
@@ -1792,7 +1798,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#values">QSet::values()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00848">hal::GraphWidget::ensureSelectionVisible()</a>, <a class="el" href="selection__tree__model_8cpp_source.html#l00149">hal::SelectionTreeModel::fetchSelection()</a>, <a class="el" href="gui__api_8cpp_source.html#l00059">hal::GuiApi::getSelectedNets()</a>, and <a class="el" href="selection__details__widget_8cpp_source.html#l00355">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__widget_8cpp_source.html#l00848">hal::GraphWidget::ensureSelectionVisible()</a>, <a class="el" href="gui__api_8cpp_source.html#l00059">hal::GuiApi::getSelectedNets()</a>, <a class="el" href="selection__details__widget_8cpp_source.html#l00354">hal::SelectionDetailsWidget::handleSelectionUpdate()</a>, and <a class="el" href="selection__tree__view_8cpp_source.html#l00236">hal::SelectionTreeView::populate()</a>.</p>
 
 </div>
 </div>
@@ -2181,55 +2187,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a0a02eb403c7d8ada1a1262e182a54f28"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a02eb403c7d8ada1a1262e182a54f28">&#9670;&nbsp;</a></span>suppressedByFilter()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void hal::SelectionRelay::suppressedByFilter </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>modIds</em> = <code><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&gt;()</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>gatIds</em> = <code><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&gt;()</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>netIds</em> = <code><a class="elRef" href="https://doc.qt.io/qt-5/qlist.html">QList</a>&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&gt;()</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Overwrites the list of suppressed modules, gates and nets. Suppressed items can't be selected i.e. isModuleSelected/isGateSelected/isNetSelected will always return <b>false</b>. Note that this only applies to these three functions. It does not restrict their appearance in the public members mSelectedGates/mSelectedNets/mSelectedModules.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">modIds</td><td>- A list of suppressed module ids </td></tr>
-    <tr><td class="paramname">gatIds</td><td>- A list of suppressed gate ids </td></tr>
-    <tr><td class="paramname">netIds</td><td>- A list of suppressed net ids </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="selection__relay_8cpp_source.html#l00378">378</a> of file <a class="el" href="selection__relay_8cpp_source.html">selection_relay.cpp</a>.</p>
-
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#toSet">QList::toSet()</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="selection__tree__proxy_8cpp_source.html#l00043">hal::SelectionTreeProxyModel::applyFilterOnGraphics()</a>.</p>
-
-</div>
-</div>
 <a id="a1162df01f394b8e7347377d4fe8e7d4f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1162df01f394b8e7347377d4fe8e7d4f">&#9670;&nbsp;</a></span>toUserActionObject()</h2>
 
@@ -2265,7 +2222,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_selection_relay.html">SelectionRelay</a></li>
-    <li class="footer">Generated on Thu May 30 2024 14:45:01 for HAL by
+    <li class="footer">Generated on Thu May 30 2024 17:17:07 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

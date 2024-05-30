@@ -131,7 +131,7 @@ var group__graph =
       [ "handleGroupingAssignModule", "classhal_1_1_graphics_scene.html#a2ea80b86489ae06dfa73ef31f19809a0", null ],
       [ "handleGroupingAssignNet", "classhal_1_1_graphics_scene.html#a23a47b0aef4492b34064c84d2d7d33c2", null ],
       [ "handleGroupingColorChanged", "classhal_1_1_graphics_scene.html#a8aa989ce041eb8a60e047bb99488b966", null ],
-      [ "handleHighlight", "classhal_1_1_graphics_scene.html#a7e94fedb6cc79c14d70a0ce6612ad48f", null ],
+      [ "handleHighlight", "classhal_1_1_graphics_scene.html#a4997a61f7f068138325144817be18ab1", null ],
       [ "handleInternSelectionChanged", "classhal_1_1_graphics_scene.html#a94739cc177b5f2188e8bd59dd7c16086", null ],
       [ "mousePressEvent", "classhal_1_1_graphics_scene.html#a058a592f0c567866e683fdf8589d21de", null ],
       [ "moveNetsToBackground", "classhal_1_1_graphics_scene.html#af1b953794af7656ee478baa25e4e4896", null ],

@@ -377,7 +377,7 @@ var group__gui =
         [ "Gate", "classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16", null ],
         [ "Net", "classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42a5012af45088eb8e999bb8350077b12ca", null ]
       ] ],
-      [ "ModuleItem", "classhal_1_1_module_item.html#a6ac714a2c1cce8d63a205ec85e1a5d7a", null ],
+      [ "ModuleItem", "classhal_1_1_module_item.html#a5fda4644b7fef29a73c218211b57bf58", null ],
       [ "appendData", "classhal_1_1_module_item.html#a97b2cf4a8f36aba02dcc402b1d186881", null ],
       [ "appendExistingChildIfAny", "classhal_1_1_module_item.html#a2378322995e661d6d0538d4007652b3c", null ],
       [ "getColumnCount", "classhal_1_1_module_item.html#a92bfd214ea29198702a1df25ed36f288", null ],
@@ -387,7 +387,6 @@ var group__gui =
       [ "id", "classhal_1_1_module_item.html#aa8eb05d41577f125ff7f03cf0e9a6dad", null ],
       [ "isToplevelItem", "classhal_1_1_module_item.html#a8edd3b37443b316e260f6e338313be66", null ],
       [ "name", "classhal_1_1_module_item.html#aa9b0899e7859e368d169da839a352ece", null ],
-      [ "row", "classhal_1_1_module_item.html#a6d96895a06a09860e1787e279e6d0867", null ],
       [ "setData", "classhal_1_1_module_item.html#a414fb66f33e15959aadc21d0113c0d18", null ],
       [ "setDataAtIndex", "classhal_1_1_module_item.html#a030a4d5fdbff4f218db0c2db86dd8460", null ],
       [ "setHighlighted", "classhal_1_1_module_item.html#a412ccb69f5b0198e097ba37b609de924", null ],
@@ -401,17 +400,21 @@ var group__gui =
       [ "addNet", "classhal_1_1_module_model.html#a4402cda06af16279b4960a282e5e9079", null ],
       [ "addRecursively", "classhal_1_1_module_model.html#a1e5a1a1dbd4f163ee61617861110d9c2", null ],
       [ "clear", "classhal_1_1_module_model.html#abc15230240d0186e45a8dd7ee5a25924", null ],
+      [ "createChildItem", "classhal_1_1_module_model.html#a82bad5f14004958f18e9aa3c744c57a7", null ],
       [ "data", "classhal_1_1_module_model.html#a99479fd9bf082b812515289f4a2e3e59", null ],
       [ "flags", "classhal_1_1_module_model.html#a129509c2c741b517a0bbbfcc1b2f0a0f", null ],
       [ "getItem", "classhal_1_1_module_model.html#a788da4c0a93921306f941a9a541a2c57", null ],
       [ "getItem", "classhal_1_1_module_model.html#af5a06c7a1416730ebfde2e9f294d63a4", null ],
-      [ "init", "classhal_1_1_module_model.html#a6558a8708fce61fefcf23cb497a83d14", null ],
+      [ "getItems", "classhal_1_1_module_model.html#a7042227704380b03593cb92f7955f71f", null ],
       [ "isModifying", "classhal_1_1_module_model.html#a37147ee3ccd0f7401622dd6a8337dc4d", null ],
       [ "moduleAssignGate", "classhal_1_1_module_model.html#ae12115af71e541b27ce7c63a40df50e9", null ],
       [ "moduleAssignNets", "classhal_1_1_module_model.html#a5054952ed8223b6b50cea83dedfa090b", null ],
+      [ "populateTree", "classhal_1_1_module_model.html#ad71349cba1c0411437ea063d84a85a67", null ],
+      [ "removeChildItem", "classhal_1_1_module_model.html#ad1fc84abc9e0ed3dd140c02cc83c75fc", null ],
       [ "removeGate", "classhal_1_1_module_model.html#a4bbb17f1eb8cae8afd62ad9fdae6ca65", null ],
       [ "removeModule", "classhal_1_1_module_model.html#a66df758d860323f458c3cb2c9e052516", null ],
       [ "removeNet", "classhal_1_1_module_model.html#aa1b9eaad2187572b1631bd88d90d874f", null ],
+      [ "setIsModifying", "classhal_1_1_module_model.html#aa0170922e216b32944fbbe3488482a0f", null ],
       [ "updateGateName", "classhal_1_1_module_model.html#a8a1cfb7a8ed65b65cda4d971316e0536", null ],
       [ "updateModuleName", "classhal_1_1_module_model.html#aba67be1ad929342450a11ff64f73c7a9", null ],
       [ "updateModuleParent", "classhal_1_1_module_model.html#a1244c475cef303c88d73eaaafad72484", null ],
@@ -581,6 +584,14 @@ var group__gui =
       [ "setModule", "classhal_1_1_groupings_of_item_model.html#a6d829c3c3ad15d176a8a45f735be893f", null ],
       [ "setNet", "classhal_1_1_groupings_of_item_model.html#ad2fe177e4286ba9ea144323890b129fc", null ]
     ] ],
+    [ "FilterElementsProxyModel", "classhal_1_1_filter_elements_proxy_model.html", [
+      [ "FilterElementsProxyModel", "classhal_1_1_filter_elements_proxy_model.html#a992d5be384c4bac2bfbafe31e72be485", null ],
+      [ "areGatesFiltered", "classhal_1_1_filter_elements_proxy_model.html#ad1774840ed126f81684f5885945a7e95", null ],
+      [ "areNetsFiltered", "classhal_1_1_filter_elements_proxy_model.html#af4f8eb8e37a9414e8e89019540c0e255", null ],
+      [ "filterAcceptsRow", "classhal_1_1_filter_elements_proxy_model.html#a332c32f21dc6a99a519ea5d867b06dc5", null ],
+      [ "setFilterGates", "classhal_1_1_filter_elements_proxy_model.html#aa121f62cf249af20d9a85ad37f73d461", null ],
+      [ "setFilterNets", "classhal_1_1_filter_elements_proxy_model.html#ad97e1ce3abdb9f3595939281540b945b", null ]
+    ] ],
     [ "EndpointTableModel", "classhal_1_1_endpoint_table_model.html", [
       [ "Type", "classhal_1_1_endpoint_table_model.html#aa915111b587c5f60f5d78ecd2edcb915", [
         [ "source", "classhal_1_1_endpoint_table_model.html#aa915111b587c5f60f5d78ecd2edcb915ae0f635e03303634676d5b47e4844bfae", null ],
@@ -678,7 +689,6 @@ var group__gui =
       [ "subfocus", "classhal_1_1_selection_relay.html#a58d4652d7bc4725db934ddc2673c34a1", null ],
       [ "subfocusChanged", "classhal_1_1_selection_relay.html#ad43860216a9fd0d75aacdf2cf229d07b", null ],
       [ "subfocusIndex", "classhal_1_1_selection_relay.html#a92213d7efc95573f26f8e9232e404a1e", null ],
-      [ "suppressedByFilter", "classhal_1_1_selection_relay.html#a0a02eb403c7d8ada1a1262e182a54f28", null ],
       [ "toUserActionObject", "classhal_1_1_selection_relay.html#a1162df01f394b8e7347377d4fe8e7d4f", null ]
     ] ],
     [ "Splitter", "classhal_1_1_splitter.html", [

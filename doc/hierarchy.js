@@ -50,8 +50,6 @@ var hierarchy =
     ] ],
     [ "hal::BaseTreeItem", "classhal_1_1_base_tree_item.html", [
       [ "hal::ModuleItem", "classhal_1_1_module_item.html", null ],
-      [ "hal::ModuleTreeitem", "classhal_1_1_module_treeitem.html", null ],
-      [ "hal::NetlistElementsTreeitem", "classhal_1_1_netlist_elements_treeitem.html", null ],
       [ "hal::PinTreeItem", "classhal_1_1_pin_tree_item.html", null ],
       [ "hal::PortTreeItem", "classhal_1_1_port_tree_item.html", null ],
       [ "hal::RootTreeItem", "classhal_1_1_root_tree_item.html", null ]
@@ -329,7 +327,6 @@ var hierarchy =
       [ "hal::PluginRelay", "classhal_1_1_plugin_relay.html", null ],
       [ "hal::SelectionDetailsIconProvider", "classhal_1_1_selection_details_icon_provider.html", null ],
       [ "hal::SelectionRelay", "classhal_1_1_selection_relay.html", null ],
-      [ "hal::SelectionTreeModelDisposer", "classhal_1_1_selection_tree_model_disposer.html", null ],
       [ "hal::SettingsItem", "classhal_1_1_settings_item.html", [
         [ "hal::SettingsItemCheckbox", "classhal_1_1_settings_item_checkbox.html", null ],
         [ "hal::SettingsItemDropdown", "classhal_1_1_settings_item_dropdown.html", null ],
@@ -355,13 +352,11 @@ var hierarchy =
         [ "hal::BaseTreeModel", "classhal_1_1_base_tree_model.html", [
           [ "hal::GatePinsTreeModel", "classhal_1_1_gate_pins_tree_model.html", null ],
           [ "hal::ModuleModel", "classhal_1_1_module_model.html", null ],
-          [ "hal::ModulePinsTreeModel", "classhal_1_1_module_pins_tree_model.html", null ],
-          [ "hal::ModuleTreeModel", "classhal_1_1_module_tree_model.html", null ],
-          [ "hal::NetlistElementsTreeModel", "classhal_1_1_netlist_elements_tree_model.html", null ]
+          [ "hal::ModulePinsTreeModel", "classhal_1_1_module_pins_tree_model.html", null ]
         ] ],
-        [ "hal::SelectionTreeModel", "classhal_1_1_selection_tree_model.html", null ],
         [ "QAbstractProxyModel", "https://doc.qt.io/qt-5/qabstractproxymodel.html", [
           [ "QSortFilterProxyModel", "https://doc.qt.io/qt-5/qsortfilterproxymodel.html", [
+            [ "hal::FilterElementsProxyModel", "classhal_1_1_filter_elements_proxy_model.html", null ],
             [ "hal::SearchProxyModel", "classhal_1_1_search_proxy_model.html", [
               [ "hal::ContextTableProxyModel", "classhal_1_1_context_table_proxy_model.html", null ],
               [ "hal::GatelibraryProxyModel", "classhal_1_1_gatelibrary_proxy_model.html", null ],
@@ -611,19 +606,12 @@ var hierarchy =
       [ "hal::NodeBoxes", "classhal_1_1_node_boxes.html", null ]
     ] ],
     [ "hal::utils::RecursiveDirectoryRange", "classhal_1_1utils_1_1_recursive_directory_range.html", null ],
+    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "hal::dataflow::Result", "structhal_1_1dataflow_1_1_result.html", null ],
     [ "hal::dataflow::evaluation::Result", "structhal_1_1dataflow_1_1evaluation_1_1_result.html", null ],
-    [ "hal::dataflow::processing::Result", "structhal_1_1dataflow_1_1processing_1_1_result.html", null ],
     [ "hal::Result< T >", "classhal_1_1_result.html", null ],
     [ "hal::RuntimeLibrary", "classhal_1_1_runtime_library.html", null ],
     [ "hal::SearchOptions", "classhal_1_1_search_options.html", null ],
-    [ "hal::SelectionTreeItem", "classhal_1_1_selection_tree_item.html", [
-      [ "hal::SelectionTreeItemGate", "classhal_1_1_selection_tree_item_gate.html", null ],
-      [ "hal::SelectionTreeItemModule", "classhal_1_1_selection_tree_item_module.html", [
-        [ "hal::SelectionTreeItemRoot", "classhal_1_1_selection_tree_item_root.html", null ]
-      ] ],
-      [ "hal::SelectionTreeItemNet", "classhal_1_1_selection_tree_item_net.html", null ]
-    ] ],
     [ "hal::GraphShader::Shading", "structhal_1_1_graph_shader_1_1_shading.html", null ],
     [ "hal::SMT::Solver", "classhal_1_1_s_m_t_1_1_solver.html", null ],
     [ "hal::SMT::SolverResult", "structhal_1_1_s_m_t_1_1_solver_result.html", null ],
@@ -638,8 +626,8 @@ var hierarchy =
       [ "hal::VerilogWriterTest", "classhal_1_1_verilog_writer_test.html", null ],
       [ "hal::VHDLParserTest", "classhal_1_1_v_h_d_l_parser_test.html", null ]
     ] ],
-    [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
     [ "hal::Token< T >", "structhal_1_1_token.html", null ],
+    [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
     [ "hal::TokenStream< T >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< ci_string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< std::string >", "classhal_1_1_token_stream.html", null ],
@@ -695,8 +683,8 @@ var hierarchy =
     [ "Vec_Ptr_t_", "struct_vec___ptr__t__.html", null ],
     [ "Vec_Vec_t_", "struct_vec___vec__t__.html", null ],
     [ "hal::GuiApiClasses::View", "classhal_1_1_gui_api_classes_1_1_view.html", null ],
-    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
+    [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
     [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ]
 ];

@@ -62,6 +62,5 @@ var classhal_1_1_selection_relay =
     [ "subfocus", "classhal_1_1_selection_relay.html#a58d4652d7bc4725db934ddc2673c34a1", null ],
     [ "subfocusChanged", "classhal_1_1_selection_relay.html#ad43860216a9fd0d75aacdf2cf229d07b", null ],
     [ "subfocusIndex", "classhal_1_1_selection_relay.html#a92213d7efc95573f26f8e9232e404a1e", null ],
-    [ "suppressedByFilter", "classhal_1_1_selection_relay.html#a0a02eb403c7d8ada1a1262e182a54f28", null ],
     [ "toUserActionObject", "classhal_1_1_selection_relay.html#a1162df01f394b8e7347377d4fe8e7d4f", null ]
 ];

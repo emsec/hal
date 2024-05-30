@@ -5,7 +5,7 @@ var classhal_1_1_module_item =
       [ "Gate", "classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42ad25b4bd4c72aa2c07ee87adb10b59f16", null ],
       [ "Net", "classhal_1_1_module_item.html#adbacf40a93cae0f07b72c07da9bb9f42a5012af45088eb8e999bb8350077b12ca", null ]
     ] ],
-    [ "ModuleItem", "classhal_1_1_module_item.html#a6ac714a2c1cce8d63a205ec85e1a5d7a", null ],
+    [ "ModuleItem", "classhal_1_1_module_item.html#a5fda4644b7fef29a73c218211b57bf58", null ],
     [ "appendData", "classhal_1_1_module_item.html#a97b2cf4a8f36aba02dcc402b1d186881", null ],
     [ "appendExistingChildIfAny", "classhal_1_1_module_item.html#a2378322995e661d6d0538d4007652b3c", null ],
     [ "getColumnCount", "classhal_1_1_module_item.html#a92bfd214ea29198702a1df25ed36f288", null ],
@@ -15,7 +15,6 @@ var classhal_1_1_module_item =
     [ "id", "classhal_1_1_module_item.html#aa8eb05d41577f125ff7f03cf0e9a6dad", null ],
     [ "isToplevelItem", "classhal_1_1_module_item.html#a8edd3b37443b316e260f6e338313be66", null ],
     [ "name", "classhal_1_1_module_item.html#aa9b0899e7859e368d169da839a352ece", null ],
-    [ "row", "classhal_1_1_module_item.html#a6d96895a06a09860e1787e279e6d0867", null ],
     [ "setData", "classhal_1_1_module_item.html#a414fb66f33e15959aadc21d0113c0d18", null ],
     [ "setDataAtIndex", "classhal_1_1_module_item.html#a030a4d5fdbff4f218db0c2db86dd8460", null ],
     [ "setHighlighted", "classhal_1_1_module_item.html#a412ccb69f5b0198e097ba37b609de924", null ],

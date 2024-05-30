@@ -1,6 +1,0 @@
-<map id="hal::SelectionTreeItemRoot" name="hal::SelectionTreeItemRoot">
-<area shape="rect" id="node1" title="Tree item that represent the root." alt="" coords="217,551,414,628"/>
-<area shape="rect" id="node2" href="$classhal_1_1_selection_tree_item_module.html" title="Tree item that represents a module." alt="" coords="204,351,427,501"/>
-<area shape="rect" id="node3" href="$classhal_1_1_selection_tree_item.html" title="Basic item for the SelectionTreeModel." alt="" coords="5,64,180,229"/>
-<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qlist.html" title=" " alt="" coords="297,5,483,288"/>
-</map>

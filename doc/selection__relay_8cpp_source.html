@@ -463,14 +463,14 @@ $(document).ready(function(){initNavTree('selection__relay_8cpp_source.html','')
 <div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;        <a class="code" href="classhal_1_1_selection_relay.html#a3ea76ff8af6ef9d0596f39ed238a7231">relaySubfocusChanged</a>(<span class="keyword">nullptr</span>);</div>
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;    }</div>
 <div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160; </div>
-<div class="line"><a name="l00378"></a><span class="lineno"><a class="line" href="classhal_1_1_selection_relay.html#a0a02eb403c7d8ada1a1262e182a54f28">  378</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_selection_relay.html#a0a02eb403c7d8ada1a1262e182a54f28">SelectionRelay::suppressedByFilter</a>(<span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;u32&gt;</a>&amp; modIds, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;u32&gt;</a>&amp; gatIds, <span class="keyword">const</span> <a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html">QList&lt;u32&gt;</a>&amp; netIds)</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    {</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;        initializeAction();</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        mModulesSuppressedByFilter = modIds.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#toSet">toSet</a>();</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        mGatesSuppressedByFilter   = gatIds.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#toSet">toSet</a>();</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;        mNetsSuppressedByFilter    = netIds.<a class="codeRef" href="https://doc.qt.io/qt-5/qlist.html#toSet">toSet</a>();</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;        executeAction();</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    }</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    <span class="comment">/*void SelectionRelay::suppressedByFilter(const QList&lt;u32&gt;&amp; modIds, const QList&lt;u32&gt;&amp; gatIds, const QList&lt;u32&gt;&amp; netIds)</span></div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;<span class="comment">    {</span></div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;<span class="comment">        initializeAction();</span></div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;<span class="comment">        mModulesSuppressedByFilter = modIds.toSet();</span></div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;<span class="comment">        mGatesSuppressedByFilter   = gatIds.toSet();</span></div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;<span class="comment">        mNetsSuppressedByFilter    = netIds.toSet();</span></div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;<span class="comment">        executeAction();</span></div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;<span class="comment">    }*/</span></div>
 <div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160; </div>
 <div class="line"><a name="l00387"></a><span class="lineno"><a class="line" href="classhal_1_1_selection_relay.html#acecf274e3361b088b0c0f19f5c4cd9a9">  387</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_selection_relay.html#acecf274e3361b088b0c0f19f5c4cd9a9">SelectionRelay::isModuleSelected</a>(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;<span class="keyword">    </span>{</div>
@@ -605,7 +605,6 @@ $(document).ready(function(){initNavTree('selection__relay_8cpp_source.html','')
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqlist_html_append"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#append">QList::append</a></div><div class="ttdeci">void append(const T &amp;value)</div></div>
-<div class="ttc" id="aclasshal_1_1_selection_relay_html_a0a02eb403c7d8ada1a1262e182a54f28"><div class="ttname"><a href="classhal_1_1_selection_relay.html#a0a02eb403c7d8ada1a1262e182a54f28">hal::SelectionRelay::suppressedByFilter</a></div><div class="ttdeci">void suppressedByFilter(const QList&lt; u32 &gt; &amp;modIds=QList&lt; u32 &gt;(), const QList&lt; u32 &gt; &amp;gatIds=QList&lt; u32 &gt;(), const QList&lt; u32 &gt; &amp;netIds=QList&lt; u32 &gt;())</div><div class="ttdef"><b>Definition:</b> <a href="selection__relay_8cpp_source.html#l00378">selection_relay.cpp:378</a></div></div>
 <div class="ttc" id="aclasshal_1_1_selection_relay_html_acf75b58fbbcae4132677602b826c265f"><div class="ttname"><a href="classhal_1_1_selection_relay.html#acf75b58fbbcae4132677602b826c265f">hal::SelectionRelay::setSelectedNets</a></div><div class="ttdeci">void setSelectedNets(const QSet&lt; u32 &gt; &amp;ids)</div><div class="ttdef"><b>Definition:</b> <a href="selection__relay_8cpp_source.html#l00101">selection_relay.cpp:101</a></div></div>
 <div class="ttc" id="aqset_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html">QSet&lt; u32 &gt;</a></div></div>
 <div class="ttc" id="aclasshal_1_1_selection_relay_html_ad43860216a9fd0d75aacdf2cf229d07b"><div class="ttname"><a href="classhal_1_1_selection_relay.html#ad43860216a9fd0d75aacdf2cf229d07b">hal::SelectionRelay::subfocusChanged</a></div><div class="ttdeci">void subfocusChanged(void *sender)</div></div>
@@ -653,7 +652,6 @@ $(document).ready(function(){initNavTree('selection__relay_8cpp_source.html','')
 <div class="ttc" id="aclasshal_1_1_selection_relay_html_a1bc4a95ff5facc74556c37ca01d7b663"><div class="ttname"><a href="classhal_1_1_selection_relay.html#a1bc4a95ff5facc74556c37ca01d7b663">hal::SelectionRelay::navigateDown</a></div><div class="ttdeci">void navigateDown()</div><div class="ttdef"><b>Definition:</b> <a href="selection__relay_8cpp_source.html#l00285">selection_relay.cpp:285</a></div></div>
 <div class="ttc" id="aclasshal_1_1_user_action_object_type_html_a2de00e63df4cf86816f688fad6754d79a201c9bb8033ad45e270bbab36b9564fa"><div class="ttname"><a href="classhal_1_1_user_action_object_type.html#a2de00e63df4cf86816f688fad6754d79a201c9bb8033ad45e270bbab36b9564fa">hal::UserActionObjectType::Module</a></div><div class="ttdeci">@ Module</div><div class="ttdef"><b>Definition:</b> <a href="user__action__object_8h_source.html#l00051">user_action_object.h:51</a></div></div>
 <div class="ttc" id="agroup__utilities_html_ga5a10e8bbe0ebf932e114b116b32d7ed2"><div class="ttname"><a href="group__utilities.html#ga5a10e8bbe0ebf932e114b116b32d7ed2">log_info</a></div><div class="ttdeci">#define log_info(channel,...)</div><div class="ttdef"><b>Definition:</b> <a href="log_8h_source.html#l00070">log.h:70</a></div></div>
-<div class="ttc" id="aqlist_html_toSet"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#toSet">QList::toSet</a></div><div class="ttdeci">QSet&lt; T &gt; toSet() const const</div></div>
 <div class="ttc" id="aclasshal_1_1_selection_relay_html_a2c60a03847a015475d7f3e5018ca1956"><div class="ttname"><a href="classhal_1_1_selection_relay.html#a2c60a03847a015475d7f3e5018ca1956">hal::SelectionRelay::selectionChanged</a></div><div class="ttdeci">void selectionChanged(void *sender)</div></div>
 <div class="ttc" id="aqstring_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qstring.html">QString</a></div></div>
 <div class="ttc" id="agui__globals_8h_html"><div class="ttname"><a href="gui__globals_8h.html">gui_globals.h</a></div></div>
@@ -704,7 +702,7 @@ $(document).ready(function(){initNavTree('selection__relay_8cpp_source.html','')
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_065624142a172e6b137c5c3355653862.html">selection_relay</a></li><li class="navelem"><a class="el" href="selection__relay_8cpp.html">selection_relay.cpp</a></li>
-    <li class="footer">Generated on Thu May 30 2024 14:44:57 for HAL by
+    <li class="footer">Generated on Thu May 30 2024 17:17:03 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

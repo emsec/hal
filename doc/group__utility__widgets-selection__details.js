@@ -144,28 +144,6 @@ var group__utility__widgets_selection__details =
       [ "clear", "classhal_1_1_module_details_tab_widget.html#a53a707089769b4b6d6ed315d9117a6e4", null ],
       [ "setModule", "classhal_1_1_module_details_tab_widget.html#a55805addd37e2d10cfba3f470c6cd61e", null ]
     ] ],
-    [ "NetlistElementsTreeModel", "classhal_1_1_netlist_elements_tree_model.html", [
-      [ "NetlistElementsTreeModel", "classhal_1_1_netlist_elements_tree_model.html#afb9b2934b9192ec323630c56167eb1c6", null ],
-      [ "~NetlistElementsTreeModel", "classhal_1_1_netlist_elements_tree_model.html#a79f4241587238298d19a663699e4a93f", null ],
-      [ "clear", "classhal_1_1_netlist_elements_tree_model.html#a356e96e66483ff3a1e7bc243a8cd1f76", null ],
-      [ "data", "classhal_1_1_netlist_elements_tree_model.html#a79eaea2551e98929a1b1f9edba174a36", null ],
-      [ "gateNameChanged", "classhal_1_1_netlist_elements_tree_model.html#ac287407533985cf34acf8ac76e7c9383", null ],
-      [ "gateRemoved", "classhal_1_1_netlist_elements_tree_model.html#a3881516cf0419a5dfe8da055b87565eb", null ],
-      [ "getRepresentedIdOfItem", "classhal_1_1_netlist_elements_tree_model.html#a2644c77459c5f73867e61b81582bf7f0", null ],
-      [ "moduleGateAssigned", "classhal_1_1_netlist_elements_tree_model.html#af027054cef4fb0abfb2df75e53fc1110", null ],
-      [ "moduleGateRemoved", "classhal_1_1_netlist_elements_tree_model.html#ad98ad5dbaeb8d8d3d075b164529b6221", null ],
-      [ "moduleNameChanged", "classhal_1_1_netlist_elements_tree_model.html#a7def1d4fa385558be96d4d72222ef649", null ],
-      [ "moduleSubmoduleAdded", "classhal_1_1_netlist_elements_tree_model.html#a19e560d10078a2a68b57e549dcef1456", null ],
-      [ "moduleSubmoduleRemoved", "classhal_1_1_netlist_elements_tree_model.html#a22b5192bf9e9ca3c631d75fc5e22c133", null ],
-      [ "moduleTypeChanged", "classhal_1_1_netlist_elements_tree_model.html#a0853561f7d07dcb8d84feb4be143f52f", null ],
-      [ "netNameChanged", "classhal_1_1_netlist_elements_tree_model.html#abad07885dd63196e60cecbbf20e5e856", null ],
-      [ "netRemoved", "classhal_1_1_netlist_elements_tree_model.html#a041a948c606902e4aef2c7d6f864d5ee", null ],
-      [ "numberOfSubmodulesChanged", "classhal_1_1_netlist_elements_tree_model.html#a83b219f499c9d2c38b6f7b5927141d93", null ],
-      [ "setContent", "classhal_1_1_netlist_elements_tree_model.html#ab347230388eb52ef8329f5588d540215", null ],
-      [ "setModule", "classhal_1_1_netlist_elements_tree_model.html#ab49994fbdac1b6fe112a047af9a7e1fc", null ],
-      [ "keyItemType", "classhal_1_1_netlist_elements_tree_model.html#a2de532cc36e17ce36bbf181f5b7609c9", null ],
-      [ "keyRepresentedID", "classhal_1_1_netlist_elements_tree_model.html#a9a439410f7db14593b2accd2e998e42e", null ]
-    ] ],
     [ "NetDetailsTabWidget", "classhal_1_1_net_details_tab_widget.html", [
       [ "NetDetailsTabWidget", "classhal_1_1_net_details_tab_widget.html#aefa71e174ec4fce4d0c5f456e79694c7", null ],
       [ "setNet", "classhal_1_1_net_details_tab_widget.html#a2ca81b2d70e7575025f0875834834242", null ]
@@ -179,7 +157,7 @@ var group__utility__widgets_selection__details =
       [ "focusNetClicked", "classhal_1_1_selection_details_widget.html#a36b921a6229c6367ac9180f4894cbe33", null ],
       [ "groupingUnassignActionFactory", "classhal_1_1_selection_details_widget.html#ab3e209462aed3084f6482d2c23d9251b", null ],
       [ "handleSelectionUpdate", "classhal_1_1_selection_details_widget.html#ad33fdda076a48dbfc7b76db3fa9a0159", null ],
-      [ "handleTreeSelection", "classhal_1_1_selection_details_widget.html#a43a06ae08fbc046cdeda0651e7bec713", null ],
+      [ "handleTreeSelection", "classhal_1_1_selection_details_widget.html#a607c12a4ffe1ab517817c65f1904b416", null ],
       [ "searchActiveIconStyle", "classhal_1_1_selection_details_widget.html#a17e6cfee8aab5895581a832b43c79d76", null ],
       [ "searchIconPath", "classhal_1_1_selection_details_widget.html#ae8e71a4860e44e6093ccd7ae359b52c3", null ],
       [ "searchIconStyle", "classhal_1_1_selection_details_widget.html#aa2157c04025e1ff55a2c2d6e6ba5c70c", null ],
@@ -198,7 +176,7 @@ var group__utility__widgets_selection__details =
       [ "toGroupingIconStyle", "classhal_1_1_selection_details_widget.html#a49bf4c3e4a39d37e92ea4fcc42d4e2c9", null ],
       [ "toModuleIconPath", "classhal_1_1_selection_details_widget.html#a973b3961f8a006ed97ad7be97080f707", null ],
       [ "toModuleIconStyle", "classhal_1_1_selection_details_widget.html#a50c1014521b59f45564be2b479b7c98e", null ],
-      [ "triggerHighlight", "classhal_1_1_selection_details_widget.html#aa83df22ab5bfcb6074dbf3ac1851ef70", null ],
+      [ "triggerHighlight", "classhal_1_1_selection_details_widget.html#af95582c1acedaa718aed0ffb552652b2", null ],
       [ "disabledIconStyle", "classhal_1_1_selection_details_widget.html#a20ffc750d4e0fbdcca3049155d984465", null ],
       [ "searchActiveIconStyle", "classhal_1_1_selection_details_widget.html#a89ed768b5d03dcfee39ebb4376697bc8", null ],
       [ "searchIconPath", "classhal_1_1_selection_details_widget.html#a67971cc387ac16d418067bcfe8b02ccc", null ],
@@ -208,90 +186,9 @@ var group__utility__widgets_selection__details =
       [ "toModuleIconPath", "classhal_1_1_selection_details_widget.html#ab79714f917bf12326f8885518f48931e", null ],
       [ "toModuleIconStyle", "classhal_1_1_selection_details_widget.html#a1d92935801758a5a2083ef04e346aa08", null ]
     ] ],
-    [ "SelectionTreeItem", "classhal_1_1_selection_tree_item.html", [
-      [ "TreeItemType", "classhal_1_1_selection_tree_item.html#a9035c6a32a5ddf83771aad02b549b177", [
-        [ "NullItem", "classhal_1_1_selection_tree_item.html#a9035c6a32a5ddf83771aad02b549b177a25fd7fb3b9cc0e296309916d9c256e6e", null ],
-        [ "ModuleItem", "classhal_1_1_selection_tree_item.html#a9035c6a32a5ddf83771aad02b549b177ab5db58ad43a3c434ccbf89a51e1f24ed", null ],
-        [ "GateItem", "classhal_1_1_selection_tree_item.html#a9035c6a32a5ddf83771aad02b549b177adc47f95a324a32a8eecb50e412f743f9", null ],
-        [ "NetItem", "classhal_1_1_selection_tree_item.html#a9035c6a32a5ddf83771aad02b549b177a251839713d2b1ca94ece1d4469850b57", null ],
-        [ "MaxItem", "classhal_1_1_selection_tree_item.html#a9035c6a32a5ddf83771aad02b549b177a707e08174ca1484f7ad5fcd08e536d3d", null ]
-      ] ],
-      [ "SelectionTreeItem", "classhal_1_1_selection_tree_item.html#ad0bfd229e5b4b0d97e533589c680cabc", null ],
-      [ "~SelectionTreeItem", "classhal_1_1_selection_tree_item.html#aab8ad4fc7ac9958e58696338ef405106", null ],
-      [ "boxType", "classhal_1_1_selection_tree_item.html#a2feee181a59b464e66badd050881ea2c", null ],
-      [ "child", "classhal_1_1_selection_tree_item.html#a83aa7ae6414f207934144a6c04ce5053", null ],
-      [ "childCount", "classhal_1_1_selection_tree_item.html#a22a03fb63fd92c07332c1d4635f3096f", null ],
-      [ "data", "classhal_1_1_selection_tree_item.html#a07461aec8fff230c57fc86066ab04678", null ],
-      [ "icon", "classhal_1_1_selection_tree_item.html#a19ca3862218f08462f8827246362c08b", null ],
-      [ "id", "classhal_1_1_selection_tree_item.html#a9571f0b8bf91dd67fcf8aba04c742f24", null ],
-      [ "isEqual", "classhal_1_1_selection_tree_item.html#af605657dd13a60db8b0b311e707c8e15", null ],
-      [ "itemType", "classhal_1_1_selection_tree_item.html#acc3d34d7ca5190e1d39ac1df7f126bc8", null ],
-      [ "match", "classhal_1_1_selection_tree_item.html#a00937a305e27184c33e51222714240f0", null ],
-      [ "name", "classhal_1_1_selection_tree_item.html#ac0723f18ccdcb6d103dd1b6f9ef20924", null ],
-      [ "parent", "classhal_1_1_selection_tree_item.html#a644520ec20688987df031dd99bb7273e", null ],
-      [ "setParent", "classhal_1_1_selection_tree_item.html#a683beff75a5c3c764e06eb77cc639055", null ],
-      [ "suppressedByFilterRecursion", "classhal_1_1_selection_tree_item.html#aa43c24ea967793005340c8399a376020", null ],
-      [ "mId", "classhal_1_1_selection_tree_item.html#a29ea93468d706eac0a69524bec40f708", null ],
-      [ "mItemType", "classhal_1_1_selection_tree_item.html#a7af86760054b836f7332ce2d2f7921d4", null ],
-      [ "mParent", "classhal_1_1_selection_tree_item.html#ad2f51021cbc61dba8b4646c6046512e8", null ]
-    ] ],
-    [ "SelectionTreeItemModule", "classhal_1_1_selection_tree_item_module.html", [
-      [ "SelectionTreeItemModule", "classhal_1_1_selection_tree_item_module.html#a8fe3bb892e8993e87e293549b4b50f03", null ],
-      [ "~SelectionTreeItemModule", "classhal_1_1_selection_tree_item_module.html#acb84a1d0bdab07a0dd2ed5fb1dc26cfa", null ],
-      [ "addChild", "classhal_1_1_selection_tree_item_module.html#a8391db07c594d3f5e1fea13a6707efcb", null ],
-      [ "boxType", "classhal_1_1_selection_tree_item_module.html#adf89187ecaac1f4e60b660b576021666", null ],
-      [ "child", "classhal_1_1_selection_tree_item_module.html#a35bc6b8899836bbe851a2a5cca7779d2", null ],
-      [ "childCount", "classhal_1_1_selection_tree_item_module.html#a446df5ca6d2747b928452a08781ba146", null ],
-      [ "icon", "classhal_1_1_selection_tree_item_module.html#a0cc459f2ed00cdeca2c191bba12f6bfa", null ],
-      [ "isRoot", "classhal_1_1_selection_tree_item_module.html#a46a5be0835ae1bfa73c7aabd54048d50", null ],
-      [ "match", "classhal_1_1_selection_tree_item_module.html#a462f965619b4b1c831711cb55c0642cd", null ],
-      [ "name", "classhal_1_1_selection_tree_item_module.html#a7f308a6b2af506e9b94dda3ba1cfb6fd", null ],
-      [ "suppressedByFilterRecursion", "classhal_1_1_selection_tree_item_module.html#af3edf99edb78758b5379d307658b7455", null ],
-      [ "mChildItem", "classhal_1_1_selection_tree_item_module.html#a0022430af328d94c3f6d912d7ec96131", null ],
-      [ "mIsRoot", "classhal_1_1_selection_tree_item_module.html#a99a166d7225e793d81edf7b3efacbb63", null ]
-    ] ],
-    [ "SelectionTreeItemRoot", "classhal_1_1_selection_tree_item_root.html", [
-      [ "SelectionTreeItemRoot", "classhal_1_1_selection_tree_item_root.html#a362976b80b39906526d6b13e6e603059", null ]
-    ] ],
-    [ "SelectionTreeItemGate", "classhal_1_1_selection_tree_item_gate.html", [
-      [ "SelectionTreeItemGate", "classhal_1_1_selection_tree_item_gate.html#a8012553f0a5e50d5a495422c32ec8bb3", null ],
-      [ "boxType", "classhal_1_1_selection_tree_item_gate.html#a11bbe57b0a5651457993325057343951", null ],
-      [ "icon", "classhal_1_1_selection_tree_item_gate.html#adb8f1db02828a9aa3548c480db3c0cc1", null ],
-      [ "name", "classhal_1_1_selection_tree_item_gate.html#a69f525301b3a0a8f86ada4d5d5534c12", null ],
-      [ "suppressedByFilterRecursion", "classhal_1_1_selection_tree_item_gate.html#a4c496d6dfb4886e702f19d3691865f80", null ]
-    ] ],
-    [ "SelectionTreeItemNet", "classhal_1_1_selection_tree_item_net.html", [
-      [ "SelectionTreeItemNet", "classhal_1_1_selection_tree_item_net.html#aa4bd84705a7f33a232a75d4cb20cad5e", null ],
-      [ "icon", "classhal_1_1_selection_tree_item_net.html#ad08efdcb89069ec033d430dfec5f4b53", null ],
-      [ "name", "classhal_1_1_selection_tree_item_net.html#a3da4148455810767dc6068c8d68274bd", null ],
-      [ "suppressedByFilterRecursion", "classhal_1_1_selection_tree_item_net.html#a8b545763003e982765d2d129fd090595", null ]
-    ] ],
-    [ "SelectionTreeModel", "classhal_1_1_selection_tree_model.html", [
-      [ "SelectionTreeModel", "classhal_1_1_selection_tree_model.html#a120ba3abee09190d0b64bf58634ec0ca", null ],
-      [ "~SelectionTreeModel", "classhal_1_1_selection_tree_model.html#a92d1e1c9a31770e34cb7a4cdeb39e576", null ],
-      [ "columnCount", "classhal_1_1_selection_tree_model.html#a4d5c83a3d9b380ea3b00c4e12f09b329", null ],
-      [ "data", "classhal_1_1_selection_tree_model.html#a1dd9a9eda59a5dfa3b0986df57447f35", null ],
-      [ "fetchSelection", "classhal_1_1_selection_tree_model.html#a100c76a0f51676a3e49a68fd50caf6d7", null ],
-      [ "flags", "classhal_1_1_selection_tree_model.html#a78b46c059f16e3922a76d462f7ee284d", null ],
-      [ "handleGateItemChanged", "classhal_1_1_selection_tree_model.html#af0c459f2f4f7fd78e3dd97229c96d7ae", null ],
-      [ "handleModuleItemChanged", "classhal_1_1_selection_tree_model.html#a344466253f572cbd207403fbeebb9996", null ],
-      [ "headerData", "classhal_1_1_selection_tree_model.html#a782e9fcc8a32fbb287b6f34341f965c9", null ],
-      [ "index", "classhal_1_1_selection_tree_model.html#acc35eaa7f604261a6f3eacce9010caba", null ],
-      [ "indexFromItem", "classhal_1_1_selection_tree_model.html#a71d5294c577a3effa1da18111f59e7f1", null ],
-      [ "itemFromIndex", "classhal_1_1_selection_tree_model.html#a701530fd98c124b0c0ee34af19461ce4", null ],
-      [ "parent", "classhal_1_1_selection_tree_model.html#a9e8d580aa80c80e72503b3f1ce01e072", null ],
-      [ "rowCount", "classhal_1_1_selection_tree_model.html#af15f97f318fd282fc82056321fd42d12", null ],
-      [ "suppressedByFilter", "classhal_1_1_selection_tree_model.html#a19010499ce631f4767f20e12cdc4b10c", null ]
-    ] ],
-    [ "SelectionTreeModelDisposer", "classhal_1_1_selection_tree_model_disposer.html", [
-      [ "SelectionTreeModelDisposer", "classhal_1_1_selection_tree_model_disposer.html#acfe5597734f4ebf34e0e32d3af4c81bc", null ],
-      [ "dispose", "classhal_1_1_selection_tree_model_disposer.html#a4dbd91364a7ffb68f8d0c8d3d119eb3b", null ]
-    ] ],
     [ "SelectionTreeProxyModel", "classhal_1_1_selection_tree_proxy_model.html", [
       [ "SelectionTreeProxyModel", "classhal_1_1_selection_tree_proxy_model.html#a98e3ac73943898ce18edf1b7d87d39ed", null ],
-      [ "applyFilterOnGraphics", "classhal_1_1_selection_tree_proxy_model.html#a668016e5bb684102c9cfd1c316004272", null ],
       [ "filterAcceptsRow", "classhal_1_1_selection_tree_proxy_model.html#a941d282999cea4b0772088a445d341d1", null ],
-      [ "handleFilterTextChanged", "classhal_1_1_selection_tree_proxy_model.html#aa42bd5b88900bdce659d3977ac86f007", null ],
       [ "isGraphicsBusy", "classhal_1_1_selection_tree_proxy_model.html#a82e6b262e43300ba06858c58ac39d04e", null ],
       [ "lessThan", "classhal_1_1_selection_tree_proxy_model.html#a8787bd5dbb3fc5384ec803639b43a7fa", null ],
       [ "setSortMechanism", "classhal_1_1_selection_tree_proxy_model.html#a3ee4f45a615e4985251a28e137820d46", null ],
@@ -301,15 +198,14 @@ var group__utility__widgets_selection__details =
     [ "SelectionTreeView", "classhal_1_1_selection_tree_view.html", [
       [ "SelectionTreeView", "classhal_1_1_selection_tree_view.html#a6537e37433bc1b2118c57cb7b150ddcc", null ],
       [ "currentChanged", "classhal_1_1_selection_tree_view.html#a4b2c31d0cc60ab474ccb1c17109f467c", null ],
-      [ "focusItemClicked", "classhal_1_1_selection_tree_view.html#a8eeca3ab47eea84731688109c2ff3d60", null ],
-      [ "handleFilterTextChanged", "classhal_1_1_selection_tree_view.html#ab123472a7403baf5cccaef718f8347ca", null ],
+      [ "focusItemClicked", "classhal_1_1_selection_tree_view.html#a8d24660773d6ad251a9041e17cddf681", null ],
       [ "handleModuleColorChanged", "classhal_1_1_selection_tree_view.html#a03e180010458d0b85f22f0523c1e72cb", null ],
-      [ "itemDoubleClicked", "classhal_1_1_selection_tree_view.html#a7d2993e7658a9c191d212e55c0cafb3a", null ],
-      [ "itemFromIndex", "classhal_1_1_selection_tree_view.html#aeccd713447b14d8c26c5d5d3b53db2da", null ],
+      [ "itemDoubleClicked", "classhal_1_1_selection_tree_view.html#a2d2fd153d7a574f30de10a927c4ebb09", null ],
+      [ "itemFromIndex", "classhal_1_1_selection_tree_view.html#ac15c8cbdba606611892f5126ce4d010f", null ],
       [ "mouseDoubleClickEvent", "classhal_1_1_selection_tree_view.html#a01f646cadd86a82126b679012f9a1c0f", null ],
       [ "populate", "classhal_1_1_selection_tree_view.html#a1ab58314a44ddeb92e3ba91918d23dc8", null ],
       [ "proxyModel", "classhal_1_1_selection_tree_view.html#abffcb20d54a094da1076360c5da65a92", null ],
       [ "setDefaultColumnWidth", "classhal_1_1_selection_tree_view.html#a80c6b14c0f26e332e15ae000358e23ea", null ],
-      [ "triggerSelection", "classhal_1_1_selection_tree_view.html#aa32c88a22d9710d4e672f29c5fd95153", null ]
+      [ "triggerSelection", "classhal_1_1_selection_tree_view.html#ac29fd2837a08c9edd074837218d7e891", null ]
     ] ]
 ];

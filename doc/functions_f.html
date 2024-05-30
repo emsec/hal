@@ -136,9 +136,6 @@ $(document).ready(function(){initNavTree('functions_f.html',''); initResizable()
 <li>feature
 : <a class="el" href="structhal_1_1plugin__manager_1_1_plugin_feature.html#a72d3b8b0b2394c90af135499e241bdaf">hal::plugin_manager::PluginFeature</a>
 </li>
-<li>fetchSelection()
-: <a class="el" href="classhal_1_1_selection_tree_model.html#a100c76a0f51676a3e49a68fd50caf6d7">hal::SelectionTreeModel</a>
-</li>
 <li>fExor
 : <a class="el" href="struct_abc___obj__t__.html#a74bdb0a27577d80b8f0e54002ede540b">Abc_Obj_t_</a>
 </li>
@@ -206,6 +203,7 @@ $(document).ready(function(){initNavTree('functions_f.html',''); initResizable()
 </li>
 <li>filterAcceptsRow()
 : <a class="el" href="classhal_1_1_context_table_proxy_model.html#ae3c8f5f08ea76f50f92eb105f3df8fe4">hal::ContextTableProxyModel</a>
+, <a class="el" href="classhal_1_1_filter_elements_proxy_model.html#a332c32f21dc6a99a519ea5d867b06dc5">hal::FilterElementsProxyModel</a>
 , <a class="el" href="classhal_1_1_gatelibrary_proxy_model.html#a3517246fff132ca383e92eb4e027fb77">hal::GatelibraryProxyModel</a>
 , <a class="el" href="classhal_1_1_gate_select_proxy.html#a07ea466df44dacc7fdb8cade0704546b">hal::GateSelectProxy</a>
 , <a class="el" href="classhal_1_1_grouping_proxy_model.html#ab26c05f78495eff017b32164f3d5864b">hal::GroupingProxyModel</a>
@@ -215,6 +213,9 @@ $(document).ready(function(){initNavTree('functions_f.html',''); initResizable()
 </li>
 <li>filterApplied()
 : <a class="el" href="classhal_1_1_searchbar.html#a14cc2b8882715e9148108786a4bce5fc">hal::Searchbar</a>
+</li>
+<li>FilterElementsProxyModel()
+: <a class="el" href="classhal_1_1_filter_elements_proxy_model.html#a992d5be384c4bac2bfbafe31e72be485">hal::FilterElementsProxyModel</a>
 </li>
 <li>filterNotInView()
 : <a class="el" href="classhal_1_1_node_boxes.html#aca3eafb47c2269d1c6dbd858df864912">hal::NodeBoxes</a>
@@ -258,7 +259,6 @@ $(document).ready(function(){initNavTree('functions_f.html',''); initResizable()
 , <a class="el" href="classhal_1_1_channel_model.html#a4ee146f10f45b40f6ec60a31dafd8aae">hal::ChannelModel</a>
 , <a class="el" href="classhal_1_1_module_model.html#a129509c2c741b517a0bbbfcc1b2f0a0f">hal::ModuleModel</a>
 , <a class="el" href="classhal_1_1_module_pins_tree_model.html#a95a545a07f1ae68ee0ec0c33d090862c">hal::ModulePinsTreeModel</a>
-, <a class="el" href="classhal_1_1_selection_tree_model.html#a78b46c059f16e3922a76d462f7ee284d">hal::SelectionTreeModel</a>
 </li>
 <li>Float
 : <a class="el" href="classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3a64911c89f3f485ff0ae51f0121129599">hal::PluginParameter</a>
@@ -298,7 +298,7 @@ $(document).ready(function(){initNavTree('functions_f.html',''); initResizable()
 , <a class="el" href="classhal_1_1_graph_navigation_widget.html#ae12ce78b2c255f2c96e547bcb59871cf">hal::GraphNavigationWidget</a>
 </li>
 <li>focusItemClicked()
-: <a class="el" href="classhal_1_1_selection_tree_view.html#a8eeca3ab47eea84731688109c2ff3d60">hal::SelectionTreeView</a>
+: <a class="el" href="classhal_1_1_selection_tree_view.html#a8d24660773d6ad251a9041e17cddf681">hal::SelectionTreeView</a>
 </li>
 <li>focusModule()
 : <a class="el" href="classhal_1_1_graph_widget.html#abc032294c0ba3084763faa1bd940610c">hal::GraphWidget</a>
@@ -373,7 +373,7 @@ $(document).ready(function(){initNavTree('functions_f.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu May 30 2024 14:45:01 for HAL by
+    <li class="footer">Generated on Thu May 30 2024 17:17:08 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
