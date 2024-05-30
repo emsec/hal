@@ -41,7 +41,6 @@ namespace hal
 
     /*void SelectionTreeProxyModel::applyFilterOnGraphics()
     {
-        qDebug()<<"called applyFilterOnGraphics()";
         if (isGraphicsBusy()) return;
         ++ mGraphicsBusy;
         QList<u32> modIds;
