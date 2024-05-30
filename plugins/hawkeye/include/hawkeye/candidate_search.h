@@ -29,9 +29,12 @@
 #include "hal_core/utilities/result.h"
 #include "hawkeye/register_candidate.h"
 
+#include <vector>
+
 namespace hal
 {
     class Netlist;
+    class Gate;
 
     namespace hawkeye
     {
@@ -51,7 +54,7 @@ namespace hal
                 CHECK_SCC
             } components = Components::NONE;
 
-            std::vector<std::vector<std::string>> equivalent_types = {};
+            std::vector<std::vector<std::string>> equivalent_types;
 
             u32 timeout           = 10;
             u32 min_register_size = 10;
