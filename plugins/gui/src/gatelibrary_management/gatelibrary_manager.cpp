@@ -204,7 +204,7 @@ namespace hal
         GateType* gateType;
         //get selected gate
         gateType = mTableModel->getGateTypeAtIndex(index.row());
-        qInfo() << "selected " << QString::fromStdString(gateType->get_name());
+        //qInfo() << "selected " << QString::fromStdString(gateType->get_name());
 
         if(!mReadOnly) mContentWidget->toggleSelection(true);
         //update tabs

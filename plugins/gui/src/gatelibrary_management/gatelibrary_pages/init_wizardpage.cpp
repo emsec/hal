@@ -39,7 +39,7 @@ namespace hal
 
             if(init != nullptr)
             {
-                mLabCategory->setText(QString::fromStdString(init->get_init_category()));
+                mCategory->setText(QString::fromStdString(init->get_init_category()));
                 QString ids = "";
 
                 bool first = true;
@@ -51,7 +51,7 @@ namespace hal
 
                     ids.append(QString::fromStdString(i));
                 }
-                mLabIdentifiers->setText(ids);
+                mIdentifiers->setText(ids);
             }
         }
 

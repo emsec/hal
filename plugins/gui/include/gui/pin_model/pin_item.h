@@ -93,10 +93,8 @@ namespace hal
         TreeItemType mItemType;
         u32 mId;
         QString mName;
-
-        //enum
-        QString mDirection;
-        QString mType;
+        PinDirection mDirection;
+        PinType mType;
 
     };
 }

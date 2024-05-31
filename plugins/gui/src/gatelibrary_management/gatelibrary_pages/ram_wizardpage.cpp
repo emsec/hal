@@ -21,14 +21,6 @@ namespace hal
 
     }
 
-//    int RAMWizardPage::nextId() const
-//    {
-//        auto parentWizard = wizard();
-//        if(!parentWizard)
-//            return -1;
-//        return static_cast<GateLibraryWizard*>(parentWizard)->getNextPageId(GateLibraryWizard::RAM);
-//    }
-
     void RAMWizardPage::setData(GateType *gate){
         if(gate->has_component_of_type(GateTypeComponent::ComponentType::ram))
         {

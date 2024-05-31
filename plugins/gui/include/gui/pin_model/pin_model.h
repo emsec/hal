@@ -99,6 +99,9 @@ namespace hal
          */
         QList<PinItem*> getPinGroups() const;
 
+        QList<PinItem*> getInputPins();
+        QList<PinItem*> getOutputPins();
+
     private:
         QList<PinItem*> mInvalidPins = QList<PinItem*>();
         QList<PinItem*> mInvalidGroups = QList<PinItem*>();

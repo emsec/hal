@@ -1,5 +1,6 @@
 #include "gui/pin_model/pin_item.h"
 
+#include "hal_core/utilities/enums.h"
 #include "gui/gui_globals.h"
 #include "gui/gui_utils/graphics.h"
 
@@ -37,9 +38,9 @@ namespace hal
             case 0:
                 return QVariant(mName);
             case 1:
-                return QVariant(mDirection);
+                return QString::fromStdString(enum_to_string(mDirection));
             case 2:
-                return QVariant(mType);
+                return QString::fromStdString(enum_to_string(mType));
         }
         return QVariant();
     }
@@ -52,16 +53,16 @@ namespace hal
             case TreeItemType::Pin: {
                 mId = data[0].toInt();
                 mName = data[1].toString();
-                mDirection = data[2].toString();
-                mType = data[3].toString();
+                mDirection = enum_from_string<PinDirection>(data[2].toString().toStdString());
+                mType = enum_from_string<PinType>(data[3].toString().toStdString());
                 break;
             }
             case TreeItemType::GroupCreator:
             case TreeItemType::PinCreator: {
                 mName = data[0].toString();
                 mId = 0;
-                mDirection = "";
-                mType = "";
+                mDirection = PinDirection::none;
+                mType = PinType::none;
                 break;
             }
 
@@ -84,12 +85,12 @@ namespace hal
 
     QString PinItem::getType() const
     {
-        return mType;
+        return QString::fromStdString(enum_to_string(mType));
     }
 
     QString PinItem::getDirection() const
     {
-        return mDirection;
+        return QString::fromStdString(enum_to_string(mDirection));
     }
 
     u32 PinItem::getId() const
@@ -104,11 +105,11 @@ namespace hal
 
     void PinItem::setDirection(const QString& direction)
     {
-        mDirection = direction;
+        mDirection = enum_from_string<PinDirection>(direction.toStdString());
     }
 
     void PinItem::setType(const QString& type){
-        mType = type;
+        mType = enum_from_string<PinType>(type.toStdString());
     }
 
     int PinItem::getColumnCount() const
@@ -126,12 +127,12 @@ namespace hal
 
     void PinItem::setDirection(PinDirection direction)
     {
-        mDirection = QString::fromStdString(enum_to_string(direction));
+        mDirection = direction;
     }
 
     void PinItem::setType(PinType type)
     {
-        mType = QString::fromStdString(enum_to_string(type));
+        mType = type;
     }
 
     void PinItem::setFields(GatePin* pin){

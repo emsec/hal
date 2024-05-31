@@ -29,6 +29,7 @@ namespace hal
 
     Qt::ItemFlags PinModel::flags(const QModelIndex& index) const
     {
+        if(!index.isValid()) return Qt::ItemFlags();
         if(!mEditable)
             return BaseTreeModel::flags(index);
 
@@ -140,6 +141,7 @@ namespace hal
 
     void PinModel::handleEditName(QModelIndex index, const QString& input)
     {
+        if(!index.isValid()) return;
         //TODO handle text edited from PinDelegate
         auto pinItem = static_cast<PinItem*>(index.internalPointer());
         auto itemType = pinItem->getItemType();
@@ -220,8 +222,8 @@ namespace hal
                 endInsertRows();
 
                 //add pinItem to pinGroups
-                auto pinGroup = static_cast<PinItem*>(pinItem->getParent());
-                addPinToPinGroup(pinItem, pinGroup);
+                //auto pinGroup = static_cast<PinItem*>(pinItem->getParent());
+                //addPinToPinGroup(pinItem, pinGroup);
 
                 break;
             }
@@ -235,6 +237,7 @@ namespace hal
 
     void PinModel::handleEditDirection(QModelIndex index, const QString& direction)
     {
+        if(!index.isValid()) return;
         //TODO handle direction edited from PinDelegate
         auto pinItem = static_cast<PinItem*>(index.internalPointer());
         auto itemType = pinItem->getItemType();
@@ -307,6 +310,7 @@ namespace hal
 
     void PinModel::handleEditType(QModelIndex index, const QString& type)
     {
+        if(!index.isValid()) return;
         auto pinItem  = static_cast<PinItem*>(index.internalPointer());
         auto itemType = pinItem->getItemType();
 
@@ -363,6 +367,7 @@ namespace hal
     void PinModel::addPinToPinGroup(PinItem* pinItem, PinItem* groupItem)
     {
         QModelIndex index = getIndexFromItem(groupItem);
+        if(!index.isValid()) return;
         beginInsertRows(index, groupItem->getChildCount(), groupItem->getChildCount());
         groupItem->appendChild(pinItem);
         endInsertRows();
@@ -621,6 +626,8 @@ namespace hal
 
     void PinModel::handleDeleteItem(QModelIndex index)
     {
+        //check index
+        if(!index.isValid()) return;
         //get item from index
         auto item = static_cast<PinItem*>(getItemFromIndex(index));
 
@@ -634,7 +641,14 @@ namespace hal
         if(type == PinItem::TreeItemType::PinGroup || type == PinItem::TreeItemType::InvalidPinGroup){
             //handle group deletion
             beginRemoveRows(index, 0, 0);
-            for(auto item : getPinGroups()){
+            //delete all pins of the pingroup
+            for(auto i : item->getChildren()){
+                item->removeChild(i);
+            }
+            //delete the group
+            getRootItem()->removeChild(item);
+
+            /*for(auto item : getPinGroups()){
                 PinItem* group = static_cast<PinItem*>(item);
                 //delete all pins from the group and free group afterward
                 if(group->getId() == item->getId()){
@@ -644,10 +658,9 @@ namespace hal
                     delete(group);
                     break;
                 }
-            }
+            }*/
             //remove actual modelItem
 
-            getRootItem()->removeChild(item);
             endRemoveRows();
             handleItemRemoved(item);
         }
@@ -655,7 +668,8 @@ namespace hal
             //handle pin deletion
 
             //get the parent group of the pin
-            auto parentGroup = static_cast<PinItem*>(item->getParent());
+            PinItem* parentGroup = static_cast<PinItem*>(item->getParent());
+            /*
             for(auto item : getPinGroups()){
                 PinItem* group = static_cast<PinItem*>(item);
                 if(group->getId() == parentGroup->getId()){
@@ -670,7 +684,7 @@ namespace hal
                     }
                     break;
                 }
-            }
+            }*/
             //remove actual modelItem
             beginRemoveRows(index, 0, 0);
             parentGroup->removeChild(item);
@@ -693,6 +707,32 @@ namespace hal
             //item was a pin so we have to check if the parent group is assigned to that name,  otherwise it can be freed
             mAssignedPinNames.remove(item->getName());
         }
+    }
+
+    QList<PinItem*> PinModel::getInputPins()
+    {
+        QList<PinItem*> inputPins;
+        for(BaseTreeItem* pinGroup : mRootItem->getChildren())
+        {
+            for(BaseTreeItem* item : pinGroup->getChildren()){
+                PinItem* pin = static_cast<PinItem*>(item);
+                if(pin->getDirection() == "input" || pin->getDirection() == "inout") inputPins.append(pin);
+            }
+        }
+        return inputPins;
+    }
+
+    QList<PinItem*> PinModel::getOutputPins()
+    {
+        QList<PinItem*> outputPins;
+        for(BaseTreeItem* pinGroup : mRootItem->getChildren())
+        {
+            for(BaseTreeItem* item : pinGroup->getChildren()){
+                PinItem* pin = static_cast<PinItem*>(item);
+                if(pin->getDirection() == "output" || pin->getDirection() == "inout") outputPins.append(pin);
+            }
+        }
+        return outputPins;
     }
 
 }

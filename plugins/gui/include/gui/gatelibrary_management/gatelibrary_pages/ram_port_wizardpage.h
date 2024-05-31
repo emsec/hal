@@ -57,5 +57,7 @@ namespace hal {
         QLabel* mLabClockFunction;
         QLabel* mLabEnableFunciton;
         QLabel* mLabIsWritePort;
+
+        GateType* mGate = nullptr;
     };
 }
