@@ -541,7 +541,8 @@ namespace hal {
                         bool ok;
                         QString wireName   = mWire.captured(3);
                         if (!wireName.isEmpty() && wireName.at(0)=='\\') wireName.remove(0,1);
-                        const Net* net = netNames.value(wireName.trimmed());
+                        wireName = wireName.trimmed();
+                        const Net* net = netNames.value(wireName);
                         if (!netNames.isEmpty() && !net) continue; // net not found in given name list
                         if (mAbbrevByName.contains(wireName))
                         {
