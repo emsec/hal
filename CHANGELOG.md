@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
   * added button to expand or collapse all tree items
   * added delete module action and shortcut
   * added entries for context menu
+  * adapted appearance for menu content tree, selection details tree, grouping content tree (same model for all)
 * refactored search bar
   * changed appearance of search bar to be more intuitive
   * added menu for extended options - e.g. option to search in selected columns only
@@ -26,6 +27,11 @@ All notable changes to this project will be documented in this file.
   * changed the API and made everything accessible via Python
   * graph corresponding to a netlist is now encapsulated within an `NetlistGraph` object that allows easy interaction with the graph
   * added new functions for computing neighborhoods, shortest paths, subgraphs, and (strongly) connected components
+* simulation
+  * added feature to VCD parser: removal of leading backslash and trailing whitespace from waveform name
+  * extended maximum line with the CSV parser can handle
+  * changed warning messages for waveform parsing and made them more specific
+  * changed policy toward 'dangling' wires, they are no longer ignored but considered as global inputs or outputs
 * added `hawkeye` plugin for the detection of symmetric cryptographic implementations in gate-level netlists
   * see publication `HAWKEYE - Recovering Symmetric Cryptography From Hardware Circuits` at CRYPTO'24 for details
 * added `NetlistTraversalDecorator` to ease exploration of a netlist
@@ -60,8 +66,12 @@ All notable changes to this project will be documented in this file.
   * changed behavior of import netlist dialog, suggest only non-existing directory names and loop until an acceptable name was entered
   * changed appearance and behavior of import project dialog, make sure existing hal projects don't get overwritten
   * changed installation script policy to install Python packages (omit 'pip install' which would need virtual environment)
+  * removed hard coded path names from CI MacOS workflow script
   * deprecated many functions in `netlist_utils` as they have been moved somewhere else
 * bugfixes
+  * fixed saleae input data reader which gets linked into external verilator simulation code
+  * fixed waveform viewer: opening old results will no longer generate the same view twice
+  * fixed waveform viewer: opening old results will by now also update waveform time axis
   * fixed colors in Python Console when switching between color schemes
   * fixed pybind of `Module::get_gates`
   * fixed Python script execution abort button disappearing when switching tabs
@@ -75,8 +85,12 @@ All notable changes to this project will be documented in this file.
   * fixed format string handling of enums in log outputs
   * fixed restoring user assigned module colors from project file
   * fixed no scrollbar shown in `Data` tab of `Selection Details` widget
+  * fixed declaration of FF-gate type in example gate library
+  * fixed error which could cause crashes in do-not-render-layout-until-complex-operation-finished algorithm
+  * fixed wrong placements of nodes in view by XML-macro (might even crash)
   * fixed problems in GUI plugin management caused by addressing plugins by absolute path
   * fixed several bugs related to moving node boxes in GUI by drag'n'drop
+  * fixed several bugs in automatted tests, eliminate cases which produce non-deterministic results
 
 ## [4.2.0](v4.2.0) - 2023-05-24 10:02:04-07:00 (urgency: medium)
 * GUI plugin manager
