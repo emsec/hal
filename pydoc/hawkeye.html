@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>HAWKEYE &mdash; hal_py v4.2.0-438-g2acbadc5e documentation</title>
+  <title>HAWKEYE &mdash; hal_py v4.2.0-440-gcee86e1c2 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-438-g2acbadc5e
+                v4.2.0-440-gcee86e1c2
               </div>
             
           
@@ -302,41 +302,6 @@
 <dt id="hawkeye.DetectionConfiguration.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hawkeye.DetectionConfiguration</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hawkeye.DetectionConfiguration.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructs a default DetectionConfiguration.</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="hawkeye.DetectionConfiguration.DetectionConfiguration.Control">
-<em class="property">class </em><code class="descname">Control</code><a class="headerlink" href="#hawkeye.DetectionConfiguration.DetectionConfiguration.Control" title="Permalink to this definition">¶</a></dt>
-<dd><p>This enum specifies the checks that are to be performed on the flip-flops of the netlist to determine whether there should be an edge between two flip-flops or not.</p>
-<p>Members:</p>
-<blockquote>
-<div><p>CHECK_FF : If two flip-flops <code class="docutils literal notranslate"><span class="pre">ff1</span></code> and <code class="docutils literal notranslate"><span class="pre">ff2</span></code> are connected through combinational logic, an edge is added such that <code class="docutils literal notranslate"><span class="pre">(ff1,ff2)</span></code> is part of the graph.</p>
-<p>CHECK_TYPE : If two flip-flops <code class="docutils literal notranslate"><span class="pre">ff1</span></code> and <code class="docutils literal notranslate"><span class="pre">ff2</span></code> are connected through combinational logic and are of the same gate type, an edge is added such that <code class="docutils literal notranslate"><span class="pre">(ff1,ff2)</span></code> is part of the graph.</p>
-<p>CHECK_PINS : If two flip-flops <code class="docutils literal notranslate"><span class="pre">ff1</span></code> and <code class="docutils literal notranslate"><span class="pre">ff2</span></code> are connected through combinational logic and are controlled through the same input pins, an edge is added such that <code class="docutils literal notranslate"><span class="pre">(ff1,ff2)</span></code> is part of the graph.</p>
-<p>CHECK_NETS : If two flip-flops <code class="docutils literal notranslate"><span class="pre">ff1</span></code> and <code class="docutils literal notranslate"><span class="pre">ff2</span></code> are connected through combinational logic and are controlled through the same input nets, an edge is added such that <code class="docutils literal notranslate"><span class="pre">(ff1,ff2)</span></code> is part of the graph.</p>
-</div></blockquote>
-<dl class="attribute">
-<dt id="hawkeye.DetectionConfiguration.DetectionConfiguration.Control.Control.name">
-<code class="descclassname">Control.</code><code class="descname">name</code><a class="headerlink" href="#hawkeye.DetectionConfiguration.DetectionConfiguration.Control.Control.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="hawkeye.DetectionConfiguration.DetectionConfiguration.Components">
-<em class="property">class </em><code class="descname">Components</code><a class="headerlink" href="#hawkeye.DetectionConfiguration.DetectionConfiguration.Components" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>This enum specifies whether SCC detection should be used to refine the results of neighborhood discovery. If SCC detection is used, the exploration only stops if the size of the largest discovered SCC saturates. Specifically, it does no longer require the size of the entire neighborhood to saturate.</div></blockquote>
-<p>Members:</p>
-<blockquote>
-<div><p>NONE : Do not use SCC detection and instead resort to the simple neighborhood discovery algorithm.</p>
-<p>CHECK_SCC : Use SCC detection within the currently explored neighborhood of a start flip-flop.</p>
-</div></blockquote>
-<dl class="attribute">
-<dt id="hawkeye.DetectionConfiguration.DetectionConfiguration.Components.Components.name">
-<code class="descclassname">Components.</code><code class="descname">name</code><a class="headerlink" href="#hawkeye.DetectionConfiguration.DetectionConfiguration.Components.Components.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="class">
