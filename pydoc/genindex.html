@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; hal_py v4.2.0-437-g43a357a2c documentation</title>
+  <title>Index &mdash; hal_py v4.2.0-438-g2acbadc5e documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                v4.2.0-437-g43a357a2c
+                v4.2.0-438-g2acbadc5e
               </div>
             
           
@@ -285,6 +285,16 @@
 </li>
         <li><a href="subgraph_netlist_decorator.html#hal_py.SubgraphNetlistDecorator.__init__">(hal_py.SubgraphNetlistDecorator method)</a>
 </li>
+        <li><a href="hawkeye.html#hawkeye.DetectionConfiguration.__init__">(hawkeye.DetectionConfiguration method)</a>
+</li>
+        <li><a href="hawkeye.html#hawkeye.RegisterCandidate.__init__">(hawkeye.RegisterCandidate method)</a>
+</li>
+        <li><a href="hawkeye.html#hawkeye.RoundCandidate.__init__">(hawkeye.RoundCandidate method)</a>
+</li>
+        <li><a href="hawkeye.html#hawkeye.SBoxCandidate.__init__">(hawkeye.SBoxCandidate method)</a>
+</li>
+        <li><a href="hawkeye.html#hawkeye.SBoxDatabase.__init__">(hawkeye.SBoxDatabase method)</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -405,6 +415,8 @@
       <li><a href="boolean_function.html#hal_py.BooleanFunction.NodeType.Add">Add (hal_py.BooleanFunction.NodeType attribute)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Add">Add() (hal_py.BooleanFunction static method)</a>
+</li>
+      <li><a href="hawkeye.html#hawkeye.SBoxDatabase.add">add() (hawkeye.SBoxDatabase method)</a>
 </li>
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorController.add_boolean_accept_list_waveform">add_boolean_accept_list_waveform() (netlist_simulator_controller.NetlistSimulatorController method)</a>
 </li>
@@ -563,7 +575,11 @@
       <ul>
         <li><a href="gate_type_component.html#hal_py.GateTypeComponent.components">(hal_py.GateTypeComponent attribute)</a>
 </li>
+        <li><a href="hawkeye.html#hawkeye.DetectionConfiguration.components">(hawkeye.DetectionConfiguration attribute)</a>
+</li>
       </ul></li>
+      <li><a href="hawkeye.html#hawkeye.SBoxDatabase.compute_linear_representative">compute_linear_representative() (hawkeye.SBoxDatabase static method)</a>
+</li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.compute_truth_table">compute_truth_table() (hal_py.BooleanFunction method)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.NodeType.Concat">Concat (hal_py.BooleanFunction.NodeType attribute)</a>
@@ -600,10 +616,10 @@
 </li>
       <li><a href="gate_library.html#hal_py.GateLibrary.contains_gate_type">contains_gate_type() (hal_py.GateLibrary method)</a>
 </li>
-      <li><a href="gate_library.html#hal_py.GateLibrary.contains_gate_type_by_name">contains_gate_type_by_name() (hal_py.GateLibrary method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="gate_library.html#hal_py.GateLibrary.contains_gate_type_by_name">contains_gate_type_by_name() (hal_py.GateLibrary method)</a>
+</li>
       <li><a href="grouping.html#hal_py.Grouping.contains_module">contains_module() (hal_py.Grouping method)</a>
 
       <ul>
@@ -626,6 +642,8 @@
         <li><a href="module_pin_group.html#hal_py.ModulePinGroup.contains_pin">(hal_py.ModulePinGroup method)</a>
 </li>
       </ul></li>
+      <li><a href="hawkeye.html#hawkeye.DetectionConfiguration.control">control (hawkeye.DetectionConfiguration attribute)</a>
+</li>
       <li><a href="graph_algorithm.html#graph_algorithm.NetlistGraph.copy">copy() (graph_algorithm.NetlistGraph method)</a>
 
       <ul>
@@ -714,8 +732,6 @@
 </li>
       <li><a href="netlist.html#hal_py.Netlist.delete_module">delete_module() (hal_py.Netlist method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist_modification_decorator.html#hal_py.NetlistModificationDecorator.delete_modules">delete_modules() (hal_py.NetlistModificationDecorator method)</a>
 </li>
       <li><a href="netlist.html#hal_py.Netlist.delete_net">delete_net() (hal_py.Netlist method)</a>
@@ -726,10 +742,20 @@
         <li><a href="module.html#hal_py.Module.delete_pin_group">(hal_py.Module method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.dependencies">dependencies (hal_py.BasePluginInterface attribute)</a>
+
+      <ul>
+        <li><a href="hawkeye.html#hawkeye.HawkeyePlugin.dependencies">(hawkeye.HawkeyePlugin attribute)</a>
 </li>
+      </ul></li>
       <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.description">description (hal_py.BasePluginInterface attribute)</a>
+
+      <ul>
+        <li><a href="hawkeye.html#hawkeye.HawkeyePlugin.description">(hawkeye.HawkeyePlugin attribute)</a>
 </li>
+      </ul></li>
       <li><a href="gui.html#hal_gui.GuiApi.deselect">deselect() (hal_gui.GuiApi method)</a>
 </li>
       <li><a href="gui.html#hal_gui.GuiApi.deselectAllItems">deselectAllItems() (hal_gui.GuiApi method)</a>
@@ -748,6 +774,22 @@
 </li>
       <li><a href="net.html#hal_py.Net.destinations">destinations (hal_py.Net attribute)</a>
 </li>
+      <li><a href="hawkeye.html#hawkeye.detect_candidates">detect_candidates() (in module hawkeye)</a>
+</li>
+      <li><a href="hawkeye.html#hawkeye.DetectionConfiguration">DetectionConfiguration (class in hawkeye)</a>
+</li>
+      <li><a href="hawkeye.html#hawkeye.DetectionConfiguration.Components">DetectionConfiguration.Components (class in hawkeye)</a>
+
+      <ul>
+        <li><a href="hawkeye.html#hawkeye.DetectionConfiguration.DetectionConfiguration.Components">(class in hawkeye.DetectionConfiguration)</a>
+</li>
+      </ul></li>
+      <li><a href="hawkeye.html#hawkeye.DetectionConfiguration.Control">DetectionConfiguration.Control (class in hawkeye)</a>
+
+      <ul>
+        <li><a href="hawkeye.html#hawkeye.DetectionConfiguration.DetectionConfiguration.Control">(class in hawkeye.DetectionConfiguration)</a>
+</li>
+      </ul></li>
       <li><a href="netlist.html#hal_py.Netlist.device_name">device_name (hal_py.Netlist attribute)</a>
 </li>
       <li><a href="gate_pin.html#hal_py.GatePin.direction">direction (hal_py.GatePin attribute)</a>
@@ -790,6 +832,8 @@
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Eq">Eq() (hal_py.BooleanFunction static method)</a>
 </li>
+      <li><a href="hawkeye.html#hawkeye.DetectionConfiguration.equivalent_types">equivalent_types (hawkeye.DetectionConfiguration attribute)</a>
+</li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.evaluate">evaluate() (hal_py.BooleanFunction method)</a>
 
       <ul>
@@ -816,13 +860,17 @@
 </li>
       <li><a href="gate.html#hal_py.Gate.fan_out_nets">fan_out_nets (hal_py.Gate attribute)</a>
 </li>
+      <li><a href="gate_type_component.html#hal_py.FFComponent">FFComponent (class in hal_py)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="gate_type_component.html#hal_py.FFComponent">FFComponent (class in hal_py)</a>
+      <li><a href="hawkeye.html#hawkeye.SBoxDatabase.from_file">from_file() (hawkeye.SBoxDatabase static method)</a>
 </li>
       <li><a href="graph_algorithm.html#graph_algorithm.NetlistGraph.from_netlist">from_netlist() (graph_algorithm.NetlistGraph static method)</a>
 </li>
       <li><a href="graph_algorithm.html#graph_algorithm.NetlistGraph.from_netlist_no_edges">from_netlist_no_edges() (graph_algorithm.NetlistGraph static method)</a>
+</li>
+      <li><a href="hawkeye.html#hawkeye.RoundCandidate.from_register_candidate">from_register_candidate() (hawkeye.RoundCandidate static method)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.from_string">from_string() (hal_py.BooleanFunction static method)</a>
 </li>
@@ -984,6 +1032,8 @@
       </ul></li>
       <li><a href="smt.html#hal_py.SMT.Solver.get_constraints">get_constraints() (hal_py.SMT.Solver method)</a>
 </li>
+      <li><a href="hawkeye.html#hawkeye.RoundCandidate.get_control_inputs">get_control_inputs() (hawkeye.RoundCandidate method)</a>
+</li>
       <li><a href="data_container.html#hal_py.DataContainer.get_data">get_data() (hal_py.DataContainer method)</a>
 
       <ul>
@@ -1011,9 +1061,17 @@
       <li><a href="core_utils.html#hal_py.CoreUtils.get_default_log_directory">get_default_log_directory() (in module hal_py.CoreUtils)</a>
 </li>
       <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.get_dependencies">get_dependencies() (hal_py.BasePluginInterface method)</a>
+
+      <ul>
+        <li><a href="hawkeye.html#hawkeye.HawkeyePlugin.get_dependencies">(hawkeye.HawkeyePlugin method)</a>
 </li>
+      </ul></li>
       <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.get_description">get_description() (hal_py.BasePluginInterface method)</a>
+
+      <ul>
+        <li><a href="hawkeye.html#hawkeye.HawkeyePlugin.get_description">(hawkeye.HawkeyePlugin method)</a>
 </li>
+      </ul></li>
       <li><a href="netlist.html#hal_py.Netlist.get_design_name">get_design_name() (hal_py.Netlist method)</a>
 </li>
       <li><a href="net.html#hal_py.Net.get_destinations">get_destinations() (hal_py.Net method)</a>
@@ -1148,6 +1206,8 @@
 </li>
       <li><a href="netlist.html#hal_py.Netlist.get_gnd_gates">get_gnd_gates() (hal_py.Netlist method)</a>
 </li>
+      <li><a href="hawkeye.html#hawkeye.RoundCandidate.get_graph">get_graph() (hawkeye.RoundCandidate method)</a>
+</li>
       <li><a href="gate_pin.html#hal_py.GatePin.get_group">get_group() (hal_py.GatePin method)</a>
 
       <ul>
@@ -1224,6 +1284,8 @@
 </li>
       <li><a href="gate_type_component.html#hal_py.InitComponent.get_init_identifier">get_init_identifier() (hal_py.InitComponent method)</a>
 </li>
+      <li><a href="hawkeye.html#hawkeye.RoundCandidate.get_input_ffs_of_gate">get_input_ffs_of_gate() (hawkeye.RoundCandidate method)</a>
+</li>
       <li><a href="netlist.html#hal_py.Netlist.get_input_filename">get_input_filename() (hal_py.Netlist method)</a>
 </li>
       <li><a href="module.html#hal_py.Module.get_input_nets">get_input_nets() (hal_py.Module method)</a>
@@ -1244,6 +1306,12 @@
         <li><a href="module.html#hal_py.Module.get_input_pins">(hal_py.Module method)</a>
 </li>
       </ul></li>
+      <li><a href="hawkeye.html#hawkeye.RegisterCandidate.get_input_reg">get_input_reg() (hawkeye.RegisterCandidate method)</a>
+
+      <ul>
+        <li><a href="hawkeye.html#hawkeye.RoundCandidate.get_input_reg">(hawkeye.RoundCandidate method)</a>
+</li>
+      </ul></li>
       <li><a href="module.html#hal_py.Module.get_internal_nets">get_internal_nets() (hal_py.Module method)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.get_length">get_length() (hal_py.BooleanFunction method)</a>
@@ -1255,6 +1323,8 @@
       <li><a href="gate.html#hal_py.Gate.get_location_x">get_location_x() (hal_py.Gate method)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.get_location_y">get_location_y() (hal_py.Gate method)</a>
+</li>
+      <li><a href="hawkeye.html#hawkeye.RoundCandidate.get_longest_distance_to_gate">get_longest_distance_to_gate() (hawkeye.RoundCandidate method)</a>
 </li>
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorController.get_max_simulated_time">get_max_simulated_time() (netlist_simulator_controller.NetlistSimulatorController method)</a>
 </li>
@@ -1272,8 +1342,6 @@
         <li><a href="netlist.html#hal_py.Netlist.get_modules">(hal_py.Netlist method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="bitorder_propagation.html#bitorder_propagation.BitorderPropagationPlugin.get_name">get_name() (bitorder_propagation.BitorderPropagationPlugin method)</a>
 
       <ul>
@@ -1303,6 +1371,8 @@
 </li>
         <li><a href="net.html#hal_py.Net.get_name">(hal_py.Net method)</a>
 </li>
+        <li><a href="hawkeye.html#hawkeye.HawkeyePlugin.get_name">(hawkeye.HawkeyePlugin method)</a>
+</li>
         <li><a href="netlist_preprocessing.html#netlist_preprocessing.NetlistPreprocessingPlugin.get_name">(netlist_preprocessing.NetlistPreprocessingPlugin method)</a>
 </li>
         <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin.get_name">(netlist_simulator.NetlistSimulatorPlugin method)</a>
@@ -1318,6 +1388,8 @@
         <li><a href="verilator.html#verilator.VerilatorSimulatorPlugin.get_name">(verilator.VerilatorSimulatorPlugin method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_type_component.html#hal_py.StateComponent.get_neg_state_identifier">get_neg_state_identifier() (hal_py.StateComponent method)</a>
 </li>
       <li><a href="graph_algorithm.html#graph_algorithm.get_neighborhood">get_neighborhood() (in module graph_algorithm)</a>
@@ -1348,6 +1420,10 @@
         <li><a href="module.html#hal_py.Module.get_netlist">(hal_py.Module method)</a>
 </li>
         <li><a href="net.html#hal_py.Net.get_netlist">(hal_py.Net method)</a>
+</li>
+        <li><a href="hawkeye.html#hawkeye.RegisterCandidate.get_netlist">(hawkeye.RegisterCandidate method)</a>
+</li>
+        <li><a href="hawkeye.html#hawkeye.RoundCandidate.get_netlist">(hawkeye.RoundCandidate method)</a>
 </li>
       </ul></li>
       <li><a href="project_manager.html#hal_py.ProjectManager.get_netlist_filename">get_netlist_filename() (hal_py.ProjectManager method)</a>
@@ -1400,6 +1476,8 @@
 </li>
       <li><a href="graph_algorithm.html#graph_algorithm.NetlistGraph.get_num_vertices">get_num_vertices() (graph_algorithm.NetlistGraph method)</a>
 </li>
+      <li><a href="hawkeye.html#hawkeye.RoundCandidate.get_other_inputs">get_other_inputs() (hawkeye.RoundCandidate method)</a>
+</li>
       <li><a href="module.html#hal_py.Module.get_output_nets">get_output_nets() (hal_py.Module method)</a>
 
       <ul>
@@ -1416,6 +1494,12 @@
 
       <ul>
         <li><a href="module.html#hal_py.Module.get_output_pins">(hal_py.Module method)</a>
+</li>
+      </ul></li>
+      <li><a href="hawkeye.html#hawkeye.RegisterCandidate.get_output_reg">get_output_reg() (hawkeye.RegisterCandidate method)</a>
+
+      <ul>
+        <li><a href="hawkeye.html#hawkeye.RoundCandidate.get_output_reg">(hawkeye.RoundCandidate method)</a>
 </li>
       </ul></li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.get_parameters">get_parameters() (hal_py.BooleanFunction method)</a>
@@ -1521,7 +1605,13 @@
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.get_simulation_timeout">get_simulation_timeout() (netlist_simulator.NetlistSimulator method)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.get_size">get_size() (hal_py.BooleanFunction method)</a>
+
+      <ul>
+        <li><a href="hawkeye.html#hawkeye.RegisterCandidate.get_size">(hawkeye.RegisterCandidate method)</a>
 </li>
+        <li><a href="hawkeye.html#hawkeye.RoundCandidate.get_size">(hawkeye.RoundCandidate method)</a>
+</li>
+      </ul></li>
       <li><a href="net.html#hal_py.Net.get_sources">get_sources() (hal_py.Net method)</a>
 </li>
       <li><a href="gate_pin_group.html#hal_py.GatePinGroup.get_start_index">get_start_index() (hal_py.GatePinGroup method)</a>
@@ -1533,6 +1623,12 @@
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.SimulationEngine.get_state">get_state() (netlist_simulator_controller.SimulationEngine method)</a>
 </li>
       <li><a href="gate_type_component.html#hal_py.StateComponent.get_state_identifier">get_state_identifier() (hal_py.StateComponent method)</a>
+</li>
+      <li><a href="hawkeye.html#hawkeye.RoundCandidate.get_state_inputs">get_state_inputs() (hawkeye.RoundCandidate method)</a>
+</li>
+      <li><a href="hawkeye.html#hawkeye.RoundCandidate.get_state_logic">get_state_logic() (hawkeye.RoundCandidate method)</a>
+</li>
+      <li><a href="hawkeye.html#hawkeye.RoundCandidate.get_state_outputs">get_state_outputs() (hawkeye.RoundCandidate method)</a>
 </li>
       <li><a href="graph_algorithm.html#graph_algorithm.get_subgraph">get_subgraph() (in module graph_algorithm)</a>
 </li>
@@ -1628,6 +1724,8 @@
         <li><a href="dataflow.html#dataflow.DataflowPlugin.get_version">(dataflow.DataflowPlugin method)</a>
 </li>
         <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.get_version">(hal_py.BasePluginInterface method)</a>
+</li>
+        <li><a href="hawkeye.html#hawkeye.HawkeyePlugin.get_version">(hawkeye.HawkeyePlugin method)</a>
 </li>
         <li><a href="netlist_preprocessing.html#netlist_preprocessing.NetlistPreprocessingPlugin.get_version">(netlist_preprocessing.NetlistPreprocessingPlugin method)</a>
 </li>
@@ -1730,8 +1828,6 @@
         <li><a href="boolean_function.html#hal_py.BooleanFunction.Node.has_constant_value">(hal_py.BooleanFunction.Node method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="data_container.html#hal_py.DataContainer.has_data">has_data() (hal_py.DataContainer method)</a>
 
       <ul>
@@ -1742,6 +1838,8 @@
         <li><a href="net.html#hal_py.Net.has_data">(hal_py.Net method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.has_index_value">has_index_value() (hal_py.BooleanFunction method)</a>
 
       <ul>
@@ -1760,6 +1858,10 @@
         <li><a href="boolean_function.html#hal_py.BooleanFunction.Node.has_variable_name">(hal_py.BooleanFunction.Node method)</a>
 </li>
       </ul></li>
+      <li><a href="hawkeye.html#module-hawkeye">hawkeye (module)</a>
+</li>
+      <li><a href="hawkeye.html#hawkeye.HawkeyePlugin">HawkeyePlugin (class in hawkeye)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -1790,6 +1892,8 @@
         <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveEvent.id">(netlist_simulator_controller.WaveEvent attribute)</a>
 </li>
       </ul></li>
+      <li><a href="hawkeye.html#hawkeye.identify_sbox">identify_sbox() (in module hawkeye)</a>
+</li>
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorController.import_csv">import_csv() (netlist_simulator_controller.NetlistSimulatorController method)</a>
 </li>
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorController.import_saleae">import_saleae() (netlist_simulator_controller.NetlistSimulatorController method)</a>
@@ -1948,6 +2052,8 @@
 </li>
       <li><a href="module.html#hal_py.Module.is_parent_module_of">is_parent_module_of() (hal_py.Module method)</a>
 </li>
+      <li><a href="hawkeye.html#hawkeye.RegisterCandidate.is_round_based">is_round_based() (hawkeye.RegisterCandidate method)</a>
+</li>
       <li><a href="smt.html#hal_py.SMT.SolverResult.is_sat">is_sat() (hal_py.SMT.SolverResult method)</a>
 </li>
       <li><a href="endpoint.html#hal_py.Endpoint.is_source_pin">is_source_pin() (hal_py.Endpoint method)</a>
@@ -2000,9 +2106,11 @@
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.length">length (hal_py.BooleanFunction attribute)</a>
 </li>
-      <li><a href="gate_library_manager.html#hal_py.GateLibraryManager.load">load() (in module hal_py.GateLibraryManager)</a>
+      <li><a href="hawkeye.html#hawkeye.SBoxDatabase.load">load() (hawkeye.SBoxDatabase method)</a>
 
       <ul>
+        <li><a href="gate_library_manager.html#hal_py.GateLibraryManager.load">(in module hal_py.GateLibraryManager)</a>
+</li>
         <li><a href="plugin_manager.html#hal_py.plugin_manager.load">(in module hal_py.plugin_manager)</a>
 </li>
       </ul></li>
@@ -2016,21 +2124,25 @@
 </li>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.load_initial_values">load_initial_values() (netlist_simulator.NetlistSimulator method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulator.load_initial_values_from_netlist">load_initial_values_from_netlist() (netlist_simulator.NetlistSimulator method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist_factory.html#hal_py.NetlistFactory.load_netlist">load_netlist() (in module hal_py.NetlistFactory)</a>
 </li>
       <li><a href="netlist_factory.html#hal_py.NetlistFactory.load_netlists">load_netlists() (in module hal_py.NetlistFactory)</a>
 </li>
       <li><a href="smt.html#hal_py.SMT.QueryConfig.local">local (hal_py.SMT.QueryConfig attribute)</a>
 </li>
+      <li><a href="hawkeye.html#hawkeye.locate_sboxes">locate_sboxes() (in module hawkeye)</a>
+</li>
       <li><a href="gate.html#hal_py.Gate.location">location (hal_py.Gate attribute)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.location_x">location_x (hal_py.Gate attribute)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.location_y">location_y (hal_py.Gate attribute)</a>
+</li>
+      <li><a href="hawkeye.html#hawkeye.SBoxDatabase.lookup">lookup() (hawkeye.SBoxDatabase method)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.NodeType.Lshr">Lshr (hal_py.BooleanFunction.NodeType attribute)</a>
 </li>
@@ -2044,6 +2156,14 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="hawkeye.html#hawkeye.SBoxCandidate.m_candidate">m_candidate (hawkeye.SBoxCandidate attribute)</a>
+</li>
+      <li><a href="hawkeye.html#hawkeye.SBoxCandidate.m_component">m_component (hawkeye.SBoxCandidate attribute)</a>
+</li>
+      <li><a href="hawkeye.html#hawkeye.SBoxCandidate.m_input_gates">m_input_gates (hawkeye.SBoxCandidate attribute)</a>
+</li>
+      <li><a href="hawkeye.html#hawkeye.SBoxCandidate.m_output_gates">m_output_gates (hawkeye.SBoxCandidate attribute)</a>
+</li>
       <li><a href="net.html#hal_py.Net.mark_global_input_net">mark_global_input_net() (hal_py.Net method)</a>
 
       <ul>
@@ -2076,6 +2196,10 @@
 </li>
       <li><a href="dataflow.html#dataflow.Dataflow.Configuration.min_group_size">min_group_size (dataflow.Dataflow.Configuration attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="hawkeye.html#hawkeye.DetectionConfiguration.min_register_size">min_register_size (hawkeye.DetectionConfiguration attribute)</a>
+</li>
       <li><a href="smt.html#hal_py.SMT.Model">Model (class in hal_py.SMT)</a>
 </li>
       <li><a href="smt.html#hal_py.SMT.Model.model">model (hal_py.SMT.Model attribute)</a>
@@ -2084,8 +2208,6 @@
         <li><a href="smt.html#hal_py.SMT.SolverResult.model">(hal_py.SMT.SolverResult attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module.html#hal_py.Module">Module (class in hal_py)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.module">module (hal_py.Gate attribute)</a>
@@ -2161,6 +2283,16 @@
 </li>
         <li><a href="smt.html#hal_py.SMT.SolverType.name">(hal_py.SMT.SolverType attribute)</a>
 </li>
+        <li><a href="hawkeye.html#hawkeye.DetectionConfiguration.Components.name">(hawkeye.DetectionConfiguration.Components attribute)</a>
+</li>
+        <li><a href="hawkeye.html#hawkeye.DetectionConfiguration.Control.name">(hawkeye.DetectionConfiguration.Control attribute)</a>
+</li>
+        <li><a href="hawkeye.html#hawkeye.DetectionConfiguration.DetectionConfiguration.Components.Components.name">(hawkeye.DetectionConfiguration.DetectionConfiguration.Components.Components attribute)</a>
+</li>
+        <li><a href="hawkeye.html#hawkeye.DetectionConfiguration.DetectionConfiguration.Control.Control.name">(hawkeye.DetectionConfiguration.DetectionConfiguration.Control.Control attribute)</a>
+</li>
+        <li><a href="hawkeye.html#hawkeye.HawkeyePlugin.name">(hawkeye.HawkeyePlugin attribute)</a>
+</li>
         <li><a href="netlist_preprocessing.html#netlist_preprocessing.NetlistPreprocessingPlugin.name">(netlist_preprocessing.NetlistPreprocessingPlugin attribute)</a>
 </li>
         <li><a href="netlist_simulator.html#netlist_simulator.NetlistSimulatorPlugin.name">(netlist_simulator.NetlistSimulatorPlugin attribute)</a>
@@ -2174,12 +2306,12 @@
         <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.SimulationEngine.name">(netlist_simulator_controller.SimulationEngine method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_type_component.html#hal_py.StateComponent.neg_state_identifier">neg_state_identifier (hal_py.StateComponent attribute)</a>
 </li>
       <li><a href="net.html#hal_py.Net">Net (class in hal_py)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="endpoint.html#hal_py.Endpoint.net">net (hal_py.Endpoint attribute)</a>
 
       <ul>
@@ -2306,8 +2438,6 @@
       </ul></li>
       <li><a href="pin_direction.html#hal_py.PinDirection">PinDirection (class in hal_py)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gate_pin_group.html#hal_py.GatePinGroup.pins">pins (hal_py.GatePinGroup attribute)</a>
 
       <ul>
@@ -2318,12 +2448,18 @@
         <li><a href="module_pin_group.html#hal_py.ModulePinGroup.pins">(hal_py.ModulePinGroup attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pin_type.html#hal_py.PinType">PinType (class in hal_py)</a>
 </li>
       <li><a href="gate.html#hal_py.Gate.predecessors">predecessors (hal_py.Gate attribute)</a>
 </li>
       <li><a href="graph_algorithm.html#graph_algorithm.NetlistGraph.print">print() (graph_algorithm.NetlistGraph method)</a>
+
+      <ul>
+        <li><a href="hawkeye.html#hawkeye.SBoxDatabase.print">(hawkeye.SBoxDatabase method)</a>
 </li>
+      </ul></li>
       <li><a href="project_manager.html#hal_py.ProjectManager">ProjectManager (class in hal_py)</a>
 </li>
       <li><a href="project_manager.html#hal_py.ProjectManager.ProjectStatus">ProjectManager.ProjectStatus (class in hal_py)</a>
@@ -2361,6 +2497,8 @@
       <li><a href="gate_type_component.html#hal_py.RAMPortComponent">RAMPortComponent (class in hal_py)</a>
 </li>
       <li><a href="netlist_preprocessing.html#netlist_preprocessing.NetlistPreprocessingPlugin.reconstruct_indexed_ff_identifiers">reconstruct_indexed_ff_identifiers() (netlist_preprocessing.NetlistPreprocessingPlugin static method)</a>
+</li>
+      <li><a href="hawkeye.html#hawkeye.RegisterCandidate">RegisterCandidate (class in hawkeye)</a>
 </li>
       <li><a href="netlist_utils.html#hal_py.NetlistUtils.remove_buffers">remove_buffers() (in module hal_py.NetlistUtils)</a>
 
@@ -2438,6 +2576,8 @@
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Ror">Ror() (hal_py.BooleanFunction static method)</a>
 </li>
+      <li><a href="hawkeye.html#hawkeye.RoundCandidate">RoundCandidate (class in hawkeye)</a>
+</li>
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.NetlistSimulatorController.run_simulation">run_simulation() (netlist_simulator_controller.NetlistSimulatorController method)</a>
 </li>
   </ul></td>
@@ -2451,6 +2591,10 @@
       <li><a href="smt.html#hal_py.SMT.SolverResult.Sat">Sat() (hal_py.SMT.SolverResult static method)</a>
 </li>
       <li><a href="gate_library_manager.html#hal_py.GateLibraryManager.save">save() (in module hal_py.GateLibraryManager)</a>
+</li>
+      <li><a href="hawkeye.html#hawkeye.SBoxCandidate">SBoxCandidate (class in hawkeye)</a>
+</li>
+      <li><a href="hawkeye.html#hawkeye.SBoxDatabase">SBoxDatabase (class in hawkeye)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.NodeType.Sdiv">Sdiv (hal_py.BooleanFunction.NodeType attribute)</a>
 </li>
@@ -2730,6 +2874,8 @@
 </li>
       <li><a href="gate_type_component.html#hal_py.StateComponent">StateComponent (class in hal_py)</a>
 </li>
+      <li><a href="hawkeye.html#hawkeye.SBoxDatabase.store">store() (hawkeye.SBoxDatabase method)</a>
+</li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.NodeType.Sub">Sub (hal_py.BooleanFunction.NodeType attribute)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Sub">Sub() (hal_py.BooleanFunction static method)</a>
@@ -2760,6 +2906,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="netlist_simulator_controller.html#netlist_simulator_controller.WaveEvent.time">time (netlist_simulator_controller.WaveEvent attribute)</a>
 </li>
+      <li><a href="hawkeye.html#hawkeye.DetectionConfiguration.timeout">timeout (hawkeye.DetectionConfiguration attribute)</a>
+</li>
       <li><a href="smt.html#hal_py.SMT.QueryConfig.timeout_in_seconds">timeout_in_seconds (hal_py.SMT.QueryConfig attribute)</a>
 </li>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.to_string">to_string() (hal_py.BooleanFunction static method)</a>
@@ -2774,6 +2922,8 @@
         <li><a href="netlist.html#hal_py.Netlist.top_module">(hal_py.Netlist attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="boolean_function.html#hal_py.BooleanFunction.Node.type">type (hal_py.BooleanFunction.Node attribute)</a>
 
       <ul>
@@ -2902,6 +3052,8 @@
 
       <ul>
         <li><a href="base_plugin_interface.html#hal_py.BasePluginInterface.version">(hal_py.BasePluginInterface attribute)</a>
+</li>
+        <li><a href="hawkeye.html#hawkeye.HawkeyePlugin.version">(hawkeye.HawkeyePlugin attribute)</a>
 </li>
         <li><a href="netlist_preprocessing.html#netlist_preprocessing.NetlistPreprocessingPlugin.version">(netlist_preprocessing.NetlistPreprocessingPlugin attribute)</a>
 </li>
