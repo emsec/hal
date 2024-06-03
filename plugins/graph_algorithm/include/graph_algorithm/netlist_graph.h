@@ -34,6 +34,11 @@
 #include <set>
 #include <unordered_map>
 
+/**
+ * @file netlist_graph.h 
+ * @brief This file contains the class that holds a netlist graph.
+ */
+
 namespace hal
 {
     class Netlist;
@@ -43,25 +48,60 @@ namespace hal
     namespace graph_algorithm
     {
         /**
-         * Holds a directed graph corresponding to a netlist.
+         * @class NetlistGraph
+         * @brief A directed graph corresponding to a netlist.
+         * 
+         * This class holds all information on a netlist graph that corresponds to a gate-level netlist and provides functions to access and operate on it.
          */
         class NetlistGraph
         {
         public:
+            /**
+             * @enum Direction
+             * @brief The direction of exploration within the graph.
+             */
             enum class Direction
             {
+                /**
+                 * @brief No direction, invalid default setting.
+                 */
                 NONE,
+
+                /**
+                 * @brief Explore through the inputs of the current node, i.e., traverse backwards.
+                 */
                 IN,
+
+                /**
+                 * @brief Explore through the outputs of the current node, i.e., traverse forwards.
+                 */
                 OUT,
+
+                /**
+                 * @brief Explore in both directions, i.e., treat the graph as undirected.
+                 */
                 ALL
             };
 
-            NetlistGraph(Netlist* nl, igraph_t&& graph, std::unordered_map<u32, Gate*>&& m_nodes_to_gates);
+            /**
+             * @brief Construct a netlist graph from a netlist, an `igraph` graph object, and a map from graph nodes to HAL gates.
+             * 
+             * @param[in] nl - The netlist.
+             * @param[in] graph - The igrapg graph object.
+             * @param[in] nodes_to_gates - A map from nodes to gates.
+             */
+            NetlistGraph(Netlist* nl, igraph_t&& graph, std::unordered_map<u32, Gate*>&& nodes_to_gates);
 
+            /** 
+             * @brief Default destructor for `NetlistGraph`.
+             */
             ~NetlistGraph();
 
             /**
-             * Create a directed graph from a netlist. Optionally create dummy vertices at nets missing a source or destination. An optional filter can be applied to exclude undesired edges.
+             * @brief Create a directed graph from a netlist. 
+             * 
+             * Optionally create dummy vertices at nets missing a source or destination.
+             * An optional filter can be applied to exclude undesired edges.
              * 
              * @param[in] nl - The netlist.
              * @param[in] create_dummy_vertices - Set `true` to create dummy vertices, `false` otherwise. Defaults to `false`.
@@ -71,7 +111,9 @@ namespace hal
             static Result<std::unique_ptr<NetlistGraph>> from_netlist(Netlist* nl, bool create_dummy_vertices = false, const std::function<bool(const Net*)>& filter = nullptr);
 
             /**
-             * Create an empty directed graph from a netlist, i.e., vertices for all gates are created, but no edges are added.
+             * @brief Create an empty directed graph from a netlist.
+             * 
+             * Vertices for all gates are created, but no edges are added.
              * 
              * @param[in] nl - The netlist.
              * @param[in] gates - The gates to include in the graph. If omitted, all gates of the netlist will be included.
@@ -80,28 +122,29 @@ namespace hal
             static Result<std::unique_ptr<NetlistGraph>> from_netlist_no_edges(Netlist* nl, const std::vector<Gate*>& gates = {});
 
             /**
-             * Creates a deep copy of the netlist graph.
+             * @brief Create a deep copy of the netlist graph.
              * 
              * @returns The copied netlist graph on success, an error otherwise.
              */
             Result<std::unique_ptr<NetlistGraph>> copy() const;
 
             /**
-             * Get the netlist associated with the netlist graph.
+             * @brief Get the netlist associated with the netlist graph.
              * 
              * @returns The netlist.
              */
             Netlist* get_netlist() const;
 
             /**
-             * Get the graph object of the netlist graph.
+             * @brief Get the graph object of the netlist graph.
              * 
              * @returns The graph object.
              */
             igraph_t* get_graph() const;
 
             /**
-             * Get the gates corresponding to the specified vertices.
+             * @brief Get the gates corresponding to the specified vertices.
+             * 
              * The result may contain `nullptr` for dummy vertices.
              * 
              * @param[in] vertices - A vector of vertices.
@@ -110,7 +153,8 @@ namespace hal
             Result<std::vector<Gate*>> get_gates_from_vertices(const std::vector<u32>& vertices) const;
 
             /**
-             * Get the gates corresponding to the specified vertices.
+             * @brief Get the gates corresponding to the specified vertices.
+             * 
              * The result may contain `nullptr` for dummy vertices.
              * 
              * @param[in] vertices - A set of vertices.
@@ -119,7 +163,8 @@ namespace hal
             Result<std::vector<Gate*>> get_gates_from_vertices(const std::set<u32>& vertices) const;
 
             /**
-             * Get the gates corresponding to the specified vertices.
+             * @brief Get the gates corresponding to the specified vertices.
+             * 
              * The result may contain `nullptr` for dummy vertices.
              * 
              * @param[in] vertices - An igraph vector of vertices.
@@ -128,7 +173,7 @@ namespace hal
             Result<std::vector<Gate*>> get_gates_from_vertices_igraph(const igraph_vector_int_t* vertices) const;
 
             /**
-             * Get the gates corresponding to the specified vertices.
+             * @brief Get the gates corresponding to the specified vertices.
              * 
              * @param[in] vertices - A vector of vertices.
              * @returns A set of gates on success, an error otherwise.
@@ -136,7 +181,7 @@ namespace hal
             Result<std::set<Gate*>> get_gates_set_from_vertices(const std::vector<u32>& vertices) const;
 
             /**
-             * Get the gates corresponding to the specified vertices.
+             * @brief Get the gates corresponding to the specified vertices.
              * 
              * @param[in] vertices - A set of vertices.
              * @returns A set of gates on success, an error otherwise.
@@ -144,7 +189,7 @@ namespace hal
             Result<std::set<Gate*>> get_gates_set_from_vertices(const std::set<u32>& vertices) const;
 
             /**
-             * Get the gates corresponding to the specified vertices.
+             * @brief Get the gates corresponding to the specified vertices.
              * 
              * @param[in] vertices - An igraph vector of vertices.
              * @returns A set of gates on success, an error otherwise.
@@ -152,7 +197,7 @@ namespace hal
             Result<std::set<Gate*>> get_gates_set_from_vertices_igraph(const igraph_vector_int_t* vertices) const;
 
             /**
-             * Get the gate corresponding to the specified vertex.
+             * @brief Get the gate corresponding to the specified vertex.
              * 
              * @param[in] vertex - A vertex.
              * @returns A gates on success, an error otherwise.
@@ -160,7 +205,7 @@ namespace hal
             Result<Gate*> get_gate_from_vertex(const u32 vertex) const;
 
             /**
-             * Get the vertices corresponding to the specified gates.
+             * @brief Get the vertices corresponding to the specified gates.
              * 
              * @param[in] gates - A vector of gates.
              * @returns A vector of vertices on success, an error otherwise.
@@ -168,7 +213,7 @@ namespace hal
             Result<std::vector<u32>> get_vertices_from_gates(const std::vector<Gate*>& gates) const;
 
             /**
-             * Get the vertices corresponding to the specified gates.
+             * @brief Get the vertices corresponding to the specified gates.
              * 
              * @param[in] gates - A set of gates.
              * @returns A vector of vertices on success, an error otherwise.
@@ -176,7 +221,7 @@ namespace hal
             Result<std::vector<u32>> get_vertices_from_gates(const std::set<Gate*>& gates) const;
 
             /**
-             * Get the vertices corresponding to the specified gates.
+             * @brief Get the vertices corresponding to the specified gates.
              * 
              * @param[in] gates - A vector of gates.
              * @returns An igraph vector of vertices on success, an error otherwise.
@@ -184,7 +229,7 @@ namespace hal
             Result<igraph_vector_int_t> get_vertices_from_gates_igraph(const std::vector<Gate*>& gates) const;
 
             /**
-             * Get the vertices corresponding to the specified gates.
+             * @brief Get the vertices corresponding to the specified gates.
              * 
              * @param[in] gates - A set of gates.
              * @returns An igraph vector of vertices on success, an error otherwise.
@@ -192,7 +237,7 @@ namespace hal
             Result<igraph_vector_int_t> get_vertices_from_gates_igraph(const std::set<Gate*>& gates) const;
 
             /**
-             * Get the vertex corresponding to the specified gate.
+             * @brief Get the vertex corresponding to the specified gate.
              * 
              * @param[in] g - A gate.
              * @returns A vertex on success, an error otherwise.
@@ -200,7 +245,7 @@ namespace hal
             Result<u32> get_vertex_from_gate(Gate* g) const;
 
             /**
-             * Get the number of vertices in the netlist graph.
+             * @brief Get the number of vertices in the netlist graph.
              * 
              * @param[in] only_connected - Set `true` to only count vertices connected to at least one edge, `false` otherwise. Defaults to `false`.
              * @returns The number of vertices in the netlist graph.
@@ -208,14 +253,14 @@ namespace hal
             u32 get_num_vertices(bool only_connected = false) const;
 
             /**
-             * Get the number of edges in the netlist graph.
+             * @brief Get the number of edges in the netlist graph.
              * 
              * @returns The number of edges in the netlist graph.
              */
             u32 get_num_edges() const;
 
             /**
-             * Get the vertices in the netlist graph.
+             * @brief Get the vertices in the netlist graph.
              * 
              * @param[in] only_connected - Set `true` to only return vertices connected to at least one edge, `false` otherwise. Defaults to `false`.
              * @returns A vector of vertices on success, an error otherwise.
@@ -223,21 +268,22 @@ namespace hal
             Result<std::vector<u32>> get_vertices(bool only_connected = false) const;
 
             /**
-             * Get the edges between vertices in the netlist graph.
+             * @brief Get the edges between vertices in the netlist graph.
              * 
              * @returns A vector of edges on success, an error otherwise.
              */
             Result<std::vector<std::pair<u32, u32>>> get_edges() const;
 
             /**
-             * Get the edges between gates in the netlist corresponding to the netlist graph.
+             * @brief Get the edges between gates in the netlist corresponding to the netlist graph.
              * 
              * @returns A vector of edges on success, an error otherwise.
              */
             Result<std::vector<std::pair<Gate*, Gate*>>> get_edges_in_netlist() const;
 
             /**
-             * Add edges between the specified pairs of source and destination gates to the netlist graph.
+             * @brief Add edges between the specified pairs of source and destination gates to the netlist graph.
+             * 
              * The gates must already correspond to vertices in the graph.
              * 
              * @param[in] edges - The edges to add as pairs of gates.
@@ -246,7 +292,8 @@ namespace hal
             Result<std::monostate> add_edges(const std::vector<std::pair<Gate*, Gate*>>& edges);
 
             /**
-             * Add edges between the specified pairs of source and destination vertices to the netlist graph.
+             * @brief Add edges between the specified pairs of source and destination vertices to the netlist graph.
+             * 
              * The vertices must already exist in the graph.
              * 
              * @param[in] edges - The edges to add as pairs of vertices.
@@ -255,7 +302,8 @@ namespace hal
             Result<std::monostate> add_edges(const std::vector<std::pair<u32, u32>>& edges);
 
             /**
-             * Add edges between the specified pairs of source and destination gates to the netlist graph.
+             * @brief Add edges between the specified pairs of source and destination gates to the netlist graph.
+             * 
              * The vertices must already exist in the graph.
              * 
              * @param[in] edges - The edges to add as a map from source gate to its destination gates.
@@ -264,7 +312,7 @@ namespace hal
             Result<std::monostate> add_edges(const std::map<Gate*, std::set<Gate*>>& edges);
 
             /**
-             * Delete edges between the specified pairs of source and destination gates from the netlist graph.
+             * @brief Delete edges between the specified pairs of source and destination gates from the netlist graph.
              * 
              * @param[in] edges - The edges to delete as pairs of gates.
              * @returns OK on success, an error otherwise.
@@ -272,7 +320,7 @@ namespace hal
             Result<std::monostate> delete_edges(const std::vector<std::pair<Gate*, Gate*>>& edges);
 
             /**
-             * Delete edges between the specified pairs of source and destination vertices from the netlist graph.
+             * @brief Delete edges between the specified pairs of source and destination vertices from the netlist graph.
              * 
              * @param[in] edges - The edges to delete as pairs of vertices.
              * @returns OK on success, an error otherwise.
@@ -280,18 +328,43 @@ namespace hal
             Result<std::monostate> delete_edges(const std::vector<std::pair<u32, u32>>& edges);
 
             /**
-             * Print the edge list of the graph to stdout.
+             * @brief Print the edge list of the graph to stdout.
              */
             void print() const;
 
         private:
             NetlistGraph() = delete;
+
+            /**
+             * @brief Construct an empty netlist graph from a netlist.
+             * 
+             * @param[in] nl - The netlist.
+             */
             NetlistGraph(Netlist* nl);
 
+            /**
+             * The netlist to which the graph corresponds. 
+             */
             Netlist* m_nl;
+
+            /**
+             * The `igraph` object corresponding to the netlist.
+             */
             igraph_t m_graph;
+
+            /**
+             * A pointer to the `igraph` object.
+             */
             igraph_t* m_graph_ptr;
+
+            /**
+             * A map from `igraph` nodes to HAL gates.
+             */
             std::unordered_map<u32, Gate*> m_nodes_to_gates;
+
+            /**
+             * A map from HAL gates to `igraph` nodes. 
+             */
             std::unordered_map<Gate*, u32> m_gates_to_nodes;
         };
     }    // namespace graph_algorithm

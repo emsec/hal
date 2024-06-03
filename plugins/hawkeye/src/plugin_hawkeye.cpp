@@ -12,14 +12,14 @@ namespace hal
         return std::string("hawkeye");
     }
 
-    std::string HawkeyePlugin::get_description() const
-    {
-        return "Attempts to locate arbitrary symmetric cryptographic implementations.";
-    }
-
     std::string HawkeyePlugin::get_version() const
     {
         return std::string("0.1");
+    }
+
+    std::string HawkeyePlugin::get_description() const
+    {
+        return "Attempts to locate arbitrary symmetric cryptographic implementations.";
     }
 
     std::set<std::string> HawkeyePlugin::get_dependencies() const

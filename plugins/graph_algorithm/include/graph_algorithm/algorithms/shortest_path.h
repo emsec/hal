@@ -23,6 +23,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/**
+ * @file shortest_path.h 
+ * @brief This file contains functions related to shortest paths in graphs.
+ */
+
 #pragma once
 
 #include "graph_algorithm/netlist_graph.h"
@@ -39,7 +44,8 @@ namespace hal
     namespace graph_algorithm
     {
         /**
-         * Compute a shortest path from the specified `from_gate` to each of the given `to_gates` by traversing in the provided direction.
+         * @brief Compute a shortest path from the specified `from_gate` to each of the given `to_gates` by traversing in the provided direction.
+         * 
          * Returns one shortest path for each end gate, even if multiple shortest paths exist.
          * Each shortest path is given as a vector of vertices in the order of traversal.
          * 
@@ -52,7 +58,8 @@ namespace hal
         Result<std::vector<std::vector<u32>>> get_shortest_paths(NetlistGraph* graph, Gate* from_gate, const std::vector<Gate*>& to_gates, NetlistGraph::Direction direction);
 
         /**
-         * Compute a shortest path from the specified `from_vertex` to each of the given `to_vertices` by traversing in the provided direction.
+         * @brief Compute a shortest path from the specified `from_vertex` to each of the given `to_vertices` by traversing in the provided direction.
+         * 
          * Returns one shortest path for each end vertex, even if multiple shortest paths exist.
          * Each shortest path is given as a vector of vertices in the order of traversal.
          * 
@@ -65,7 +72,8 @@ namespace hal
         Result<std::vector<std::vector<u32>>> get_shortest_paths(NetlistGraph* graph, u32 from_vertex, const std::vector<u32>& to_vertices, NetlistGraph::Direction direction);
 
         /**
-         * Compute a shortest path from the specified `from_vertex` to each of the given `to_vertices` by traversing in the provided direction.
+         * @brief Compute a shortest path from the specified `from_vertex` to each of the given `to_vertices` by traversing in the provided direction.
+         * 
          * Returns one shortest path for each end vertex, even if multiple shortest paths exist.
          * Each shortest path is given as a vector of vertices in the order of traversal.
          * 
@@ -78,7 +86,8 @@ namespace hal
         Result<std::vector<std::vector<u32>>> get_shortest_paths_igraph(NetlistGraph* graph, u32 from_vertex, const igraph_vector_int_t* to_vertices, NetlistGraph::Direction direction);
 
         /**
-         * Compute a shortest path from the specified `from_gate` to each of the given `to_gates` by traversing in the provided direction.
+         * @brief Compute shortest paths from the specified `from_gate` to each of the given `to_gates` by traversing in the provided direction.
+         * 
          * Returns all shortest paths for each end gate.
          * Each shortest path is given as a vector of vertices in the order of traversal.
          * 
@@ -91,7 +100,8 @@ namespace hal
         Result<std::vector<std::vector<u32>>> get_all_shortest_paths(NetlistGraph* graph, Gate* from_gate, const std::vector<Gate*>& to_gates, NetlistGraph::Direction direction);
 
         /**
-         * Compute a shortest path from the specified `from_vertex` to each of the given `to_vertices` by traversing in the provided direction.
+         * @brief Compute shortest paths from the specified `from_vertex` to each of the given `to_vertices` by traversing in the provided direction.
+         * 
          * Returns all shortest paths for each end gate.
          * Each shortest path is given as a vector of vertices in the order of traversal.
          * 
@@ -104,7 +114,7 @@ namespace hal
         Result<std::vector<std::vector<u32>>> get_all_shortest_paths(NetlistGraph* graph, u32 from_vertex, const std::vector<u32>& to_vertices, NetlistGraph::Direction direction);
 
         /**
-         * Compute a shortest path from the specified `from_vertex` to each of the given `to_vertices` by traversing in the provided direction.
+         * @brief Compute shortest paths from the specified `from_vertex` to each of the given `to_vertices` by traversing in the provided direction.
          * Returns all shortest paths for each end gate.
          * Each shortest path is given as a vector of vertices in the order of traversal.
          * 

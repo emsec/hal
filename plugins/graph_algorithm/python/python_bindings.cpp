@@ -53,7 +53,7 @@ namespace hal
         py_graph_algorithm_plugin.def("get_name", &GraphAlgorithmPlugin::get_name, R"(
             Get the name of the plugin.
 
-            :returns: Plugin name.
+            :returns: The name of the plugin.
             :rtype: str
         )");
 
@@ -66,8 +66,34 @@ namespace hal
         py_graph_algorithm_plugin.def("get_version", &GraphAlgorithmPlugin::get_version, R"(
             Get the version of the plugin.
 
-            :returns: Plugin version.
+            :returns: The version of the plugin.
             :rtype: str
+        )");
+
+        py_graph_algorithm_plugin.def_property_readonly("description", &GraphAlgorithmPlugin::get_description, R"(
+            The description of the plugin.
+
+            :type: str
+        )");
+
+        py_graph_algorithm_plugin.def("get_description", &GraphAlgorithmPlugin::get_description, R"(
+            Get the description of the plugin.
+
+            :returns: The description of the plugin.
+            :rtype: str
+        )");
+
+        py_graph_algorithm_plugin.def_property_readonly("dependencies", &GraphAlgorithmPlugin::get_dependencies, R"(
+            A set of plugin names that this plugin depends on.
+
+            :type: set[str]
+        )");
+
+        py_graph_algorithm_plugin.def("get_dependencies", &GraphAlgorithmPlugin::get_dependencies, R"(
+            Get a set of plugin names that this plugin depends on.
+
+            :returns: A set of plugin names that this plugin depends on.
+            :rtype: set[str]
         )");
 
         py::class_<graph_algorithm::NetlistGraph, RawPtrWrapper<graph_algorithm::NetlistGraph>> py_netlist_graph(m, "NetlistGraph", R"(
@@ -75,12 +101,12 @@ namespace hal
         )");
 
         py::enum_<graph_algorithm::NetlistGraph::Direction>(py_netlist_graph, "Direction", R"(
-            Defines the direction of a pin.
+            The direction of exploration within the graph.
         )")
-            .value("NONE", graph_algorithm::NetlistGraph::Direction::NONE, R"(Invalid direction.)")
-            .value("IN", graph_algorithm::NetlistGraph::Direction::IN, R"(Vertex fan-in.)")
-            .value("OUT", graph_algorithm::NetlistGraph::Direction::OUT, R"(Vertex fan-out.)")
-            .value("ALL", graph_algorithm::NetlistGraph::Direction::ALL, R"(All directions.)")
+            .value("NONE", graph_algorithm::NetlistGraph::Direction::NONE, R"(No direction, invalid default setting.)")
+            .value("IN", graph_algorithm::NetlistGraph::Direction::IN, R"(Explore through the inputs of the current node, i.e., traverse backwards.)")
+            .value("OUT", graph_algorithm::NetlistGraph::Direction::OUT, R"(Explore through the outputs of the current node, i.e., traverse forwards.)")
+            .value("ALL", graph_algorithm::NetlistGraph::Direction::ALL, R"(Explore in both directions, i.e., treat the graph as undirected.)")
             .export_values();
 
         py_netlist_graph.def_static(
@@ -148,7 +174,7 @@ namespace hal
                 }
             },
             R"(
-                Creates a deep copy of the netlist graph.
+                Create a deep copy of the netlist graph.
 
                 :returns: The copied netlist graph on success, ``None`` otherwise.
                 :rtype: graph_algorithm.NetlistGraph or None
@@ -729,7 +755,7 @@ namespace hal
             py::arg("to_gates"),
             py::arg("direction"),
             R"(
-                Compute a shortest path from the specified ``from_gate`` to each of the given ``to_gates`` by traversing in the provided direction.
+                Compute shortest paths from the specified ``from_gate`` to each of the given ``to_gates`` by traversing in the provided direction.
                 Returns all shortest paths for each end gate.
                 Each shortest path is given as a list of vertices in the order of traversal.
 
@@ -761,7 +787,7 @@ namespace hal
             py::arg("to_vertices"),
             py::arg("direction"),
             R"(
-                Compute a shortest path from the specified ``from_vertex`` to each of the given ``to_vertices`` by traversing in the provided direction.
+                Compute shortest paths from the specified ``from_vertex`` to each of the given ``to_vertices`` by traversing in the provided direction.
                 Returns all shortest paths for each end gate.
                 Each shortest path is given as a list of vertices in the order of traversal.
                 

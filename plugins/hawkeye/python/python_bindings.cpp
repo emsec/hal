@@ -44,19 +44,6 @@ namespace hal
             :rtype: str
         )");
 
-        py_hawkeye_plugin.def_property_readonly("description", &HawkeyePlugin::get_description, R"(
-            The description of the plugin.
-
-            :type: str
-        )");
-
-        py_hawkeye_plugin.def("get_description", &HawkeyePlugin::get_description, R"(
-            Get the description of the plugin.
-
-            :returns: The description of the plugin.
-            :rtype: str
-        )");
-
         py_hawkeye_plugin.def_property_readonly("version", &HawkeyePlugin::get_version, R"(
             The version of the plugin.
 
@@ -67,6 +54,19 @@ namespace hal
             Get the version of the plugin.
 
             :returns: The version of the plugin.
+            :rtype: str
+        )");
+
+        py_hawkeye_plugin.def_property_readonly("description", &HawkeyePlugin::get_description, R"(
+            The description of the plugin.
+
+            :type: str
+        )");
+
+        py_hawkeye_plugin.def("get_description", &HawkeyePlugin::get_description, R"(
+            Get the description of the plugin.
+
+            :returns: The description of the plugin.
             :rtype: str
         )");
 

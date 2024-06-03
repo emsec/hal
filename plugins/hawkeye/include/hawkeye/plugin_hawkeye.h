@@ -34,9 +34,6 @@
 
 namespace hal
 {
-    class Gate;
-    class Netlist;
-
     /**
      * @class HawkeyePlugin
      * @brief Plugin interface for HAWKEYE.
@@ -64,18 +61,18 @@ namespace hal
         std::string get_name() const override;
 
         /**
-         * @brief Get a short description of the plugin.
-         *
-         * @returns The short description of the plugin.
-         */
-        std::string get_description() const override;
-
-        /**
          * @brief Get the version of the plugin.
          *
          * @returns The version of the plugin.
          */
         std::string get_version() const override;
+
+        /**
+         * @brief Get a short description of the plugin.
+         *
+         * @returns The short description of the plugin.
+         */
+        std::string get_description() const override;
 
         /**
          * @brief Get the plugin dependencies.

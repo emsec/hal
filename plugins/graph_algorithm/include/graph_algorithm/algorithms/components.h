@@ -23,6 +23,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/**
+ * @file components.h 
+ * @brief This file contains functions related to graph components.
+ */
+
 #pragma once
 
 #include "hal_core/defines.h"
@@ -38,7 +43,8 @@ namespace hal
         class NetlistGraph;
 
         /** 
-         * Compute the (strongly) connected components of the specified graph.
+         * @brief Compute the (strongly) connected components of the specified graph.
+         * 
          * Returns each connected component as a vector of vertices in the netlist graph.
          * 
          * @param[in] graph - The netlist graph.
