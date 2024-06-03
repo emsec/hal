@@ -19,7 +19,7 @@ namespace hal
 
     std::string HawkeyePlugin::get_description() const
     {
-        return "Attempts to locate arbitrary symmetric cryptographic implementations.";
+        return "Automated tool to locate arbitrary symmetric cryptographic implementations in gate-level netlists.";
     }
 
     std::set<std::string> HawkeyePlugin::get_dependencies() const

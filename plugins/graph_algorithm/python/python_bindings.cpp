@@ -35,11 +35,11 @@ namespace hal
 #ifdef PYBIND11_MODULE
     PYBIND11_MODULE(graph_algorithm, m)
     {
-        m.doc() = "hal GraphAlgorithmPlugin python bindings";
+        m.doc() = "Graph algorithms based on igraph operating on a netlist graph abstraction.";
 #else
     PYBIND11_PLUGIN(graph_algorithm)
     {
-        py::module m("graph_algorithm", "hal GraphAlgorithmPlugin python bindings");
+        py::module m("graph_algorithm", "Graph algorithms based on igraph operating on a netlist graph abstraction.");
 #endif    // ifdef PYBIND11_MODULE
 
         py::class_<GraphAlgorithmPlugin, RawPtrWrapper<GraphAlgorithmPlugin>, BasePluginInterface> py_graph_algorithm_plugin(m, "GraphAlgorithmPlugin");

@@ -21,11 +21,11 @@ namespace hal
 #ifdef PYBIND11_MODULE
     PYBIND11_MODULE(hawkeye, m)
     {
-        m.doc() = "hal HawkeyePlugin python bindings";
+        m.doc() = "Automated tool to locate arbitrary symmetric cryptographic implementations in gate-level netlists.";
 #else
     PYBIND11_PLUGIN(hawkeye)
     {
-        py::module m("hawkeye", "hal HawkeyePlugin python bindings");
+        py::module m("hawkeye", "Automated tool to locate arbitrary symmetric cryptographic implementations in gate-level netlists.");
 #endif    // ifdef PYBIND11_MODULE
 
         py::class_<HawkeyePlugin, RawPtrWrapper<HawkeyePlugin>, BasePluginInterface> py_hawkeye_plugin(
