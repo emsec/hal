@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Graph Algorithms &mdash; hal_py v4.2.0-442-gec57fcae1 documentation</title>
+  <title>Graph Algorithms &mdash; hal_py v4.2.0-443-gf6051d749 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-442-gec57fcae1
+                v4.2.0-443-gf6051d749
               </div>
             
           
@@ -489,131 +489,6 @@ Each shortest path is given as a list of vertices in the order of traversal.</p>
 </div></blockquote>
 </li>
 </ol>
-</dd></dl>
-
-<dl class="class">
-<dt id="graph_algorithm.GraphAlgorithmPlugin">
-<em class="property">class </em><code class="descclassname">graph_algorithm.</code><code class="descname">GraphAlgorithmPlugin</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="graph_algorithm.GraphAlgorithmPlugin.dependencies">
-<code class="descname">dependencies</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.dependencies" title="Permalink to this definition">¶</a></dt>
-<dd><p>A set of plugin names that this plugin depends on.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="graph_algorithm.GraphAlgorithmPlugin.description">
-<code class="descname">description</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.description" title="Permalink to this definition">¶</a></dt>
-<dd><p>The description of the plugin.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="graph_algorithm.GraphAlgorithmPlugin.get_dependencies">
-<code class="descname">get_dependencies</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em><span class="sig-paren">)</span> &#x2192; Set[str]<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_dependencies" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a set of plugin names that this plugin depends on.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A set of plugin names that this plugin depends on.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="graph_algorithm.GraphAlgorithmPlugin.get_description">
-<code class="descname">get_description</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_description" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the description of the plugin.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The description of the plugin.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="graph_algorithm.GraphAlgorithmPlugin.get_name">
-<code class="descname">get_name</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the name of the plugin.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The name of the plugin.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="graph_algorithm.GraphAlgorithmPlugin.get_version">
-<code class="descname">get_version</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_version" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the version of the plugin.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The version of the plugin.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="graph_algorithm.GraphAlgorithmPlugin.name">
-<code class="descname">name</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.name" title="Permalink to this definition">¶</a></dt>
-<dd><p>The name of the plugin.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="graph_algorithm.GraphAlgorithmPlugin.version">
-<code class="descname">version</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.version" title="Permalink to this definition">¶</a></dt>
-<dd><p>The version of the plugin.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="class">
@@ -1089,6 +964,131 @@ The result may contain <code class="docutils literal notranslate"><span class="p
 <dt id="graph_algorithm.NetlistGraph.print">
 <code class="descname">print</code><span class="sig-paren">(</span><em>self: graph_algorithm.NetlistGraph</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#graph_algorithm.NetlistGraph.print" title="Permalink to this definition">¶</a></dt>
 <dd><p>Print the edge list of the graph to stdout.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="graph_algorithm.GraphAlgorithmPlugin">
+<em class="property">class </em><code class="descclassname">graph_algorithm.</code><code class="descname">GraphAlgorithmPlugin</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.dependencies">
+<code class="descname">dependencies</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd><p>A set of plugin names that this plugin depends on.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.description">
+<code class="descname">description</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>The description of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.get_dependencies">
+<code class="descname">get_dependencies</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em><span class="sig-paren">)</span> &#x2192; Set[str]<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_dependencies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a set of plugin names that this plugin depends on.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A set of plugin names that this plugin depends on.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.get_description">
+<code class="descname">get_description</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the description of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The description of the plugin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The name of the plugin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.get_version">
+<code class="descname">get_version</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the version of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The version of the plugin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.name">
+<code class="descname">name</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.version">
+<code class="descname">version</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>The version of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
