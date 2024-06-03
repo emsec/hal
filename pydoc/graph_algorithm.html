@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Graph Algorithms &mdash; hal_py v4.2.0-441-gc49bff2bb documentation</title>
+  <title>Graph Algorithms &mdash; hal_py v4.2.0-442-gec57fcae1 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-441-gc49bff2bb
+                v4.2.0-442-gec57fcae1
               </div>
             
           
@@ -168,7 +168,454 @@
             
   <div class="section" id="module-graph_algorithm">
 <span id="graph-algorithms"></span><h1>Graph Algorithms<a class="headerlink" href="#module-graph_algorithm" title="Permalink to this headline">¶</a></h1>
-<p>hal GraphAlgorithmPlugin python bindings</p>
+<p>Graph algorithms based on igraph operating on a netlist graph abstraction.</p>
+<dl class="function">
+<dt id="graph_algorithm.get_connected_components">
+<code class="descclassname">graph_algorithm.</code><code class="descname">get_connected_components</code><span class="sig-paren">(</span><em>graph: graph_algorithm.NetlistGraph</em>, <em>strong: bool</em>, <em>min_size: int = 0</em><span class="sig-paren">)</span> &#x2192; Optional[List[List[int]]]<a class="headerlink" href="#graph_algorithm.get_connected_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the (strongly) connected components of the specified graph.
+Returns each connected component as a list of vertices in the netlist graph.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>graph</strong> (<a class="reference internal" href="#graph_algorithm.NetlistGraph" title="graph_algorithm.NetlistGraph"><em>graph_algorithm.NetlistGraph</em></a>) – The netlist graph.</li>
+<li><strong>strong</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to compute strongly connected components, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</li>
+<li><strong>min_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimal size of a connected component to be part of the result. Set to <code class="docutils literal notranslate"><span class="pre">0</span></code> to include all components. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of strongly connected components on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>]] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="graph_algorithm.get_neighborhood">
+<code class="descclassname">graph_algorithm.</code><code class="descname">get_neighborhood</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#graph_algorithm.get_neighborhood" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_neighborhood(graph: graph_algorithm.NetlistGraph, start_gates: List[hal_py.Gate], order: int, direction: graph_algorithm.NetlistGraph.Direction, min_dist: int = 0) -&gt; Optional[List[List[int]]]</p>
+<blockquote>
+<div><p>Compute the neighborhood of the given order for each of the specified gates within the given netlist graph.
+For order 0, only the vertex itself is returned. For order 1, the vertex itself and all vertices that are its direct predecessors and/or successors (depending on the specified direction). For order 2, the neighborhood of order 1 plus all direct predecessors and/or successors of the vertices in order 1 are returned, etc.
+Returns each neighborhood as a list of vertices in the netlist graph.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param list[hal_py.Gate] start_gates:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">A list of gates for which to compute the neighborhood.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param int order:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The order of the neighborhood to compute.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph.Direction direction:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The direction in which the neighborhood should be computed.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param int min_dist:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The minimum distance of the vertices to include in the result.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">A list of neighborhoods of each of the provided start gates (in order) on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">list[list[int]] or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">get_neighborhood(graph: graph_algorithm.NetlistGraph, start_vertices: List[int], order: int, direction: graph_algorithm.NetlistGraph.Direction, min_dist: int = 0) -&gt; Optional[List[List[int]]]</p>
+<blockquote>
+<div><p>Compute the neighborhood of the given order for each of the specified vertices within the given netlist graph.
+For order 0, only the vertex itself is returned. For order 1, the vertex itself and all vertices that are its direct predecessors and/or successors (depending on the specified direction). For order 2, the neighborhood of order 1 plus all direct predecessors and/or successors of the vertices in order 1 are returned, etc.
+Returns each neighborhood as a list of vertices in the netlist graph.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param list[int] start_vertices:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">A list of vertices for which to compute the neighborhood.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param int order:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The order of the neighborhood to compute.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph.Direction direction:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The direction in which the neighborhood should be computed.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param int min_dist:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The minimum distance of the vertices to include in the result.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">A list of neighborhoods of each of the provided start vertices (in order) on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">list[list[int]] or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="function">
+<dt id="graph_algorithm.get_shortest_paths">
+<code class="descclassname">graph_algorithm.</code><code class="descname">get_shortest_paths</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#graph_algorithm.get_shortest_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_shortest_paths(graph: graph_algorithm.NetlistGraph, from_gate: hal_py.Gate, to_gates: List[hal_py.Gate], direction: graph_algorithm.NetlistGraph.Direction) -&gt; Optional[List[List[int]]]</p>
+<blockquote>
+<div><p>Compute a shortest path from the specified <code class="docutils literal notranslate"><span class="pre">from_gate</span></code> to each of the given <code class="docutils literal notranslate"><span class="pre">to_gates</span></code> by traversing in the provided direction.
+Returns one shortest path for each end gate, even if multiple shortest paths exist.
+Each shortest path is given as a list of vertices in the order of traversal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param hal_py.Gate from_gate:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The start gate of the shortest path.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Gate] to_gates:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">A list of end gates of the shortest path.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph.Direction direction:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The direction in which to compute the shortest paths starting at the <code class="docutils literal notranslate"><span class="pre">from_gate</span></code>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The shortest paths in order of the <code class="docutils literal notranslate"><span class="pre">to_gates</span></code> on success, an error otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[list[int]] or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">get_shortest_paths(graph: graph_algorithm.NetlistGraph, from_vertex: int, to_vertices: List[int], direction: graph_algorithm.NetlistGraph.Direction) -&gt; Optional[List[List[int]]]</p>
+<blockquote>
+<div><p>Compute a shortest path from the specified <code class="docutils literal notranslate"><span class="pre">from_vertex</span></code> to each of the given <code class="docutils literal notranslate"><span class="pre">to_vertices</span></code> by traversing in the provided direction.
+Returns one shortest path for each end vertex, even if multiple shortest paths exist.
+Each shortest path is given as a list of vertices in the order of traversal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param int from_vertex:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The start vertex of the shortest path.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[int] to_vertices:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">A list of end vertices of the shortest path.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph.Direction direction:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The direction in which to compute the shortest paths starting at the <code class="docutils literal notranslate"><span class="pre">from_vertex</span></code>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The shortest paths in order of the <code class="docutils literal notranslate"><span class="pre">to_vertices</span></code> on success, an error otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[list[int]] or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="function">
+<dt id="graph_algorithm.get_all_shortest_paths">
+<code class="descclassname">graph_algorithm.</code><code class="descname">get_all_shortest_paths</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#graph_algorithm.get_all_shortest_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_all_shortest_paths(graph: graph_algorithm.NetlistGraph, from_gate: hal_py.Gate, to_gates: List[hal_py.Gate], direction: graph_algorithm.NetlistGraph.Direction) -&gt; Optional[List[List[int]]]</p>
+<blockquote>
+<div><p>Compute shortest paths from the specified <code class="docutils literal notranslate"><span class="pre">from_gate</span></code> to each of the given <code class="docutils literal notranslate"><span class="pre">to_gates</span></code> by traversing in the provided direction.
+Returns all shortest paths for each end gate.
+Each shortest path is given as a list of vertices in the order of traversal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param hal_py.Gate from_gate:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The start gate of the shortest path.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Gate] to_gates:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">A list of end gates of the shortest path.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph.Direction direction:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The direction in which to compute the shortest paths starting at the <code class="docutils literal notranslate"><span class="pre">from_gate</span></code>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The shortest paths in order of the <code class="docutils literal notranslate"><span class="pre">to_gates</span></code> on success, an error otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[list[int]] or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">get_all_shortest_paths(graph: graph_algorithm.NetlistGraph, from_vertex: int, to_vertices: List[int], direction: graph_algorithm.NetlistGraph.Direction) -&gt; Optional[List[List[int]]]</p>
+<blockquote>
+<div><p>Compute shortest paths from the specified <code class="docutils literal notranslate"><span class="pre">from_vertex</span></code> to each of the given <code class="docutils literal notranslate"><span class="pre">to_vertices</span></code> by traversing in the provided direction.
+Returns all shortest paths for each end gate.
+Each shortest path is given as a list of vertices in the order of traversal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param int from_vertex:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The start vertex of the shortest path.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[int] to_vertices:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">A list of end vertices of the shortest path.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph.Direction direction:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">The direction in which to compute the shortest paths starting at the <code class="docutils literal notranslate"><span class="pre">from_vertex</span></code>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The shortest paths in order of the <code class="docutils literal notranslate"><span class="pre">to_vertices</span></code> on success, an error otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[list[int]] or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="function">
+<dt id="graph_algorithm.get_subgraph">
+<code class="descclassname">graph_algorithm.</code><code class="descname">get_subgraph</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#graph_algorithm.get_subgraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">get_subgraph(graph: graph_algorithm.NetlistGraph, subgraph_gates: List[hal_py.Gate]) -&gt; Optional[graph_algorithm.NetlistGraph]</p>
+<blockquote>
+<div><p>Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param list[hal_py.Gate] subgraph_gates:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">A list of gates that make up the subgraph.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The subgraph as a new netlist graph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">graph_algorithm.NetlistGraph or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">get_subgraph(graph: graph_algorithm.NetlistGraph, subgraph_gates: Set[hal_py.Gate]) -&gt; Optional[graph_algorithm.NetlistGraph]</p>
+<blockquote>
+<div><p>Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param set[hal_py.Gate] subgraph_gates:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">A set of gates that make up the subgraph.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The subgraph as a new netlist graph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">graph_algorithm.NetlistGraph or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">get_subgraph(graph: graph_algorithm.NetlistGraph, subgraph_vertices: List[int]) -&gt; Optional[graph_algorithm.NetlistGraph]</p>
+<blockquote>
+<div><p>Compute the subgraph induced by the specified vertices, including all edges between these vertices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param list[int] subgraph_vertices:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">A list of vertices that make up the subgraph.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The subgraph as a new netlist graph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">graph_algorithm.NetlistGraph or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">get_subgraph(graph: graph_algorithm.NetlistGraph, subgraph_vertices: Set[int]) -&gt; Optional[graph_algorithm.NetlistGraph]</p>
+<blockquote>
+<div><p>Compute the subgraph induced by the specified vertices, including all edges between these vertices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param set[int] subgraph_vertices:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">A set of vertices that make up the subgraph.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The subgraph as a new netlist graph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">graph_algorithm.NetlistGraph or None</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="class">
+<dt id="graph_algorithm.GraphAlgorithmPlugin">
+<em class="property">class </em><code class="descclassname">graph_algorithm.</code><code class="descname">GraphAlgorithmPlugin</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.dependencies">
+<code class="descname">dependencies</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd><p>A set of plugin names that this plugin depends on.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.description">
+<code class="descname">description</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>The description of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.get_dependencies">
+<code class="descname">get_dependencies</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em><span class="sig-paren">)</span> &#x2192; Set[str]<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_dependencies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a set of plugin names that this plugin depends on.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A set of plugin names that this plugin depends on.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.get_description">
+<code class="descname">get_description</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the description of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The description of the plugin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the name of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The name of the plugin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.get_version">
+<code class="descname">get_version</code><span class="sig-paren">(</span><em>self: graph_algorithm.GraphAlgorithmPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.get_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the version of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The version of the plugin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.name">
+<code class="descname">name</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="graph_algorithm.GraphAlgorithmPlugin.version">
+<code class="descname">version</code><a class="headerlink" href="#graph_algorithm.GraphAlgorithmPlugin.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>The version of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="class">
 <dt id="graph_algorithm.NetlistGraph">
 <em class="property">class </em><code class="descclassname">graph_algorithm.</code><code class="descname">NetlistGraph</code><a class="headerlink" href="#graph_algorithm.NetlistGraph" title="Permalink to this definition">¶</a></dt>
@@ -644,328 +1091,6 @@ The result may contain <code class="docutils literal notranslate"><span class="p
 <dd><p>Print the edge list of the graph to stdout.</p>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="function">
-<dt id="graph_algorithm.get_all_shortest_paths">
-<code class="descclassname">graph_algorithm.</code><code class="descname">get_all_shortest_paths</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#graph_algorithm.get_all_shortest_paths" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overloaded function.</p>
-<ol class="arabic">
-<li><p class="first">get_all_shortest_paths(graph: graph_algorithm.NetlistGraph, from_gate: hal_py.Gate, to_gates: List[hal_py.Gate], direction: graph_algorithm.NetlistGraph.Direction) -&gt; Optional[List[List[int]]]</p>
-<blockquote>
-<div><p>Compute shortest paths from the specified <code class="docutils literal notranslate"><span class="pre">from_gate</span></code> to each of the given <code class="docutils literal notranslate"><span class="pre">to_gates</span></code> by traversing in the provided direction.
-Returns all shortest paths for each end gate.
-Each shortest path is given as a list of vertices in the order of traversal.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param hal_py.Gate from_gate:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">The start gate of the shortest path.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Gate] to_gates:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">A list of end gates of the shortest path.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph.Direction direction:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">The direction in which to compute the shortest paths starting at the <code class="docutils literal notranslate"><span class="pre">from_gate</span></code>.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The shortest paths in order of the <code class="docutils literal notranslate"><span class="pre">to_gates</span></code> on success, an error otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[list[int]] or None</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-<li><p class="first">get_all_shortest_paths(graph: graph_algorithm.NetlistGraph, from_vertex: int, to_vertices: List[int], direction: graph_algorithm.NetlistGraph.Direction) -&gt; Optional[List[List[int]]]</p>
-<blockquote>
-<div><p>Compute shortest paths from the specified <code class="docutils literal notranslate"><span class="pre">from_vertex</span></code> to each of the given <code class="docutils literal notranslate"><span class="pre">to_vertices</span></code> by traversing in the provided direction.
-Returns all shortest paths for each end gate.
-Each shortest path is given as a list of vertices in the order of traversal.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param int from_vertex:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">The start vertex of the shortest path.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param list[int] to_vertices:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">A list of end vertices of the shortest path.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph.Direction direction:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">The direction in which to compute the shortest paths starting at the <code class="docutils literal notranslate"><span class="pre">from_vertex</span></code>.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The shortest paths in order of the <code class="docutils literal notranslate"><span class="pre">to_vertices</span></code> on success, an error otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[list[int]] or None</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-</ol>
-</dd></dl>
-
-<dl class="function">
-<dt id="graph_algorithm.get_connected_components">
-<code class="descclassname">graph_algorithm.</code><code class="descname">get_connected_components</code><span class="sig-paren">(</span><em>graph: graph_algorithm.NetlistGraph</em>, <em>strong: bool</em>, <em>min_size: int = 0</em><span class="sig-paren">)</span> &#x2192; Optional[List[List[int]]]<a class="headerlink" href="#graph_algorithm.get_connected_components" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the (strongly) connected components of the specified graph.
-Returns each connected component as a list of vertices in the netlist graph.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>graph</strong> (<a class="reference internal" href="#graph_algorithm.NetlistGraph" title="graph_algorithm.NetlistGraph"><em>graph_algorithm.NetlistGraph</em></a>) – The netlist graph.</li>
-<li><strong>strong</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to compute strongly connected components, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</li>
-<li><strong>min_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Minimal size of a connected component to be part of the result. Set to <code class="docutils literal notranslate"><span class="pre">0</span></code> to include all components. Defaults to <code class="docutils literal notranslate"><span class="pre">0</span></code>.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of strongly connected components on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>]] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="graph_algorithm.get_neighborhood">
-<code class="descclassname">graph_algorithm.</code><code class="descname">get_neighborhood</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#graph_algorithm.get_neighborhood" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overloaded function.</p>
-<ol class="arabic">
-<li><p class="first">get_neighborhood(graph: graph_algorithm.NetlistGraph, start_gates: List[hal_py.Gate], order: int, direction: graph_algorithm.NetlistGraph.Direction, min_dist: int = 0) -&gt; Optional[List[List[int]]]</p>
-<blockquote>
-<div><p>Compute the neighborhood of the given order for each of the specified gates within the given netlist graph.
-For order 0, only the vertex itself is returned. For order 1, the vertex itself and all vertices that are its direct predecessors and/or successors (depending on the specified direction). For order 2, the neighborhood of order 1 plus all direct predecessors and/or successors of the vertices in order 1 are returned, etc.
-Returns each neighborhood as a list of vertices in the netlist graph.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param list[hal_py.Gate] start_gates:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">A list of gates for which to compute the neighborhood.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param int order:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The order of the neighborhood to compute.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph.Direction direction:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">The direction in which the neighborhood should be computed.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param int min_dist:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The minimum distance of the vertices to include in the result.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">A list of neighborhoods of each of the provided start gates (in order) on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">list[list[int]] or None</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-<li><p class="first">get_neighborhood(graph: graph_algorithm.NetlistGraph, start_vertices: List[int], order: int, direction: graph_algorithm.NetlistGraph.Direction, min_dist: int = 0) -&gt; Optional[List[List[int]]]</p>
-<blockquote>
-<div><p>Compute the neighborhood of the given order for each of the specified vertices within the given netlist graph.
-For order 0, only the vertex itself is returned. For order 1, the vertex itself and all vertices that are its direct predecessors and/or successors (depending on the specified direction). For order 2, the neighborhood of order 1 plus all direct predecessors and/or successors of the vertices in order 1 are returned, etc.
-Returns each neighborhood as a list of vertices in the netlist graph.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param list[int] start_vertices:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">A list of vertices for which to compute the neighborhood.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param int order:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The order of the neighborhood to compute.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph.Direction direction:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">The direction in which the neighborhood should be computed.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param int min_dist:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The minimum distance of the vertices to include in the result.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">A list of neighborhoods of each of the provided start vertices (in order) on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">list[list[int]] or None</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-</ol>
-</dd></dl>
-
-<dl class="function">
-<dt id="graph_algorithm.get_shortest_paths">
-<code class="descclassname">graph_algorithm.</code><code class="descname">get_shortest_paths</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#graph_algorithm.get_shortest_paths" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overloaded function.</p>
-<ol class="arabic">
-<li><p class="first">get_shortest_paths(graph: graph_algorithm.NetlistGraph, from_gate: hal_py.Gate, to_gates: List[hal_py.Gate], direction: graph_algorithm.NetlistGraph.Direction) -&gt; Optional[List[List[int]]]</p>
-<blockquote>
-<div><p>Compute a shortest path from the specified <code class="docutils literal notranslate"><span class="pre">from_gate</span></code> to each of the given <code class="docutils literal notranslate"><span class="pre">to_gates</span></code> by traversing in the provided direction.
-Returns one shortest path for each end gate, even if multiple shortest paths exist.
-Each shortest path is given as a list of vertices in the order of traversal.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param hal_py.Gate from_gate:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">The start gate of the shortest path.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Gate] to_gates:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">A list of end gates of the shortest path.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph.Direction direction:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">The direction in which to compute the shortest paths starting at the <code class="docutils literal notranslate"><span class="pre">from_gate</span></code>.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The shortest paths in order of the <code class="docutils literal notranslate"><span class="pre">to_gates</span></code> on success, an error otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[list[int]] or None</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-<li><p class="first">get_shortest_paths(graph: graph_algorithm.NetlistGraph, from_vertex: int, to_vertices: List[int], direction: graph_algorithm.NetlistGraph.Direction) -&gt; Optional[List[List[int]]]</p>
-<blockquote>
-<div><p>Compute a shortest path from the specified <code class="docutils literal notranslate"><span class="pre">from_vertex</span></code> to each of the given <code class="docutils literal notranslate"><span class="pre">to_vertices</span></code> by traversing in the provided direction.
-Returns one shortest path for each end vertex, even if multiple shortest paths exist.
-Each shortest path is given as a list of vertices in the order of traversal.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param int from_vertex:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">The start vertex of the shortest path.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param list[int] to_vertices:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">A list of end vertices of the shortest path.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph.Direction direction:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">The direction in which to compute the shortest paths starting at the <code class="docutils literal notranslate"><span class="pre">from_vertex</span></code>.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The shortest paths in order of the <code class="docutils literal notranslate"><span class="pre">to_vertices</span></code> on success, an error otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">list[list[int]] or None</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-</ol>
-</dd></dl>
-
-<dl class="function">
-<dt id="graph_algorithm.get_subgraph">
-<code class="descclassname">graph_algorithm.</code><code class="descname">get_subgraph</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#graph_algorithm.get_subgraph" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overloaded function.</p>
-<ol class="arabic">
-<li><p class="first">get_subgraph(graph: graph_algorithm.NetlistGraph, subgraph_gates: List[hal_py.Gate]) -&gt; Optional[graph_algorithm.NetlistGraph]</p>
-<blockquote>
-<div><p>Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param list[hal_py.Gate] subgraph_gates:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">A list of gates that make up the subgraph.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The subgraph as a new netlist graph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">graph_algorithm.NetlistGraph or None</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-<li><p class="first">get_subgraph(graph: graph_algorithm.NetlistGraph, subgraph_gates: Set[hal_py.Gate]) -&gt; Optional[graph_algorithm.NetlistGraph]</p>
-<blockquote>
-<div><p>Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param set[hal_py.Gate] subgraph_gates:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">A set of gates that make up the subgraph.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The subgraph as a new netlist graph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">graph_algorithm.NetlistGraph or None</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-<li><p class="first">get_subgraph(graph: graph_algorithm.NetlistGraph, subgraph_vertices: List[int]) -&gt; Optional[graph_algorithm.NetlistGraph]</p>
-<blockquote>
-<div><p>Compute the subgraph induced by the specified vertices, including all edges between these vertices.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param list[int] subgraph_vertices:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">A list of vertices that make up the subgraph.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The subgraph as a new netlist graph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">graph_algorithm.NetlistGraph or None</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-<li><p class="first">get_subgraph(graph: graph_algorithm.NetlistGraph, subgraph_vertices: Set[int]) -&gt; Optional[graph_algorithm.NetlistGraph]</p>
-<blockquote>
-<div><p>Compute the subgraph induced by the specified vertices, including all edges between these vertices.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param graph_algorithm.NetlistGraph graph:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The netlist graph.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param set[int] subgraph_vertices:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">A set of vertices that make up the subgraph.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The subgraph as a new netlist graph on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">graph_algorithm.NetlistGraph or None</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-</ol>
 </dd></dl>
 
 </div>

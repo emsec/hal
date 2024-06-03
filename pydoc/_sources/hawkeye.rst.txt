@@ -1,6 +1,9 @@
 HAWKEYE
 ==========================
 
+.. automodule:: hawkeye
+    :members: detect_candidates, locate_sboxes, identify_sbox
+
 .. autoclass:: hawkeye.HawkeyePlugin
     :members:
 
@@ -28,6 +31,3 @@ HAWKEYE
     :members:
 
     .. automethod:: __init__
-
-.. automodule:: hawkeye
-    :members: detect_candidates, locate_sboxes, identify_sbox

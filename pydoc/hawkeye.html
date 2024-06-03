@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>HAWKEYE &mdash; hal_py v4.2.0-441-gc49bff2bb documentation</title>
+  <title>HAWKEYE &mdash; hal_py v4.2.0-442-gec57fcae1 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-441-gc49bff2bb
+                v4.2.0-442-gec57fcae1
               </div>
             
           
@@ -166,8 +166,87 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="hawkeye">
-<h1>HAWKEYE<a class="headerlink" href="#hawkeye" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-hawkeye">
+<span id="hawkeye"></span><h1>HAWKEYE<a class="headerlink" href="#module-hawkeye" title="Permalink to this headline">¶</a></h1>
+<p>Automated tool to locate arbitrary symmetric cryptographic implementations in gate-level netlists.</p>
+<dl class="function">
+<dt id="hawkeye.detect_candidates">
+<code class="descclassname">hawkeye.</code><code class="descname">detect_candidates</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist, configs: List[hawkeye.DetectionConfiguration], min_state_size: int = 40, start_ffs: List[hal_py.Gate] = []</em><span class="sig-paren">)</span> &#x2192; Optional[List[hawkeye.RegisterCandidate]]<a class="headerlink" href="#hawkeye.detect_candidates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempt to locate candidates for symmetric cryptographic implementations within a gate-level netlist.
+Search operates only on an abstraction of the netlist that contains only flip-flops as nodes and connections through combinational logic as edges.
+The algorithm computes the k-neighborhood of each flip-flop for <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">=</span> <span class="pre">1,</span> <span class="pre">...,</span> <span class="pre">config.timeout</span></code> and stops when the neighborhood size saturates.
+Depending on the <code class="docutils literal notranslate"><span class="pre">config</span></code>, additional criteria are used to narrow down the search space, see <code class="docutils literal notranslate"><span class="pre">DetectionConfiguration.Control</span></code> and <code class="docutils literal notranslate"><span class="pre">DetectionConfiguration.Components</span></code> for details.
+When the neighborhood size saturates, a register candidate is created if the last neighborhood size is larger than <code class="docutils literal notranslate"><span class="pre">config.min_register_size</span></code>.
+After the candidates have been identified, they are reduced further to produce the final set of register candidates.
+To this end, large candidates that fully contain a smaller candidate and candidates that are smaller than <code class="docutils literal notranslate"><span class="pre">min_state_size</span></code> are discarded.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</li>
+<li><strong>configs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="#hawkeye.DetectionConfiguration" title="hawkeye.DetectionConfiguration"><em>hawkeye.DetectionConfiguration</em></a><em>]</em>) – The configurations of the detection approaches to be executed one after another on each start flip-flop.</li>
+<li><strong>min_state_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The minimum size of a register candidate to be considered a cryptographic state register. Defaults to <code class="docutils literal notranslate"><span class="pre">40</span></code>.</li>
+<li><strong>start_ffs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The flip-flops to analyze. Defaults to an empty list, i.e., all flip-flops in the netlist will be analyzed.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of candidates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="#hawkeye.RegisterCandidate" title="hawkeye.RegisterCandidate">hawkeye.RegisterCandidate</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hawkeye.locate_sboxes">
+<code class="descclassname">hawkeye.</code><code class="descname">locate_sboxes</code><span class="sig-paren">(</span><em>candidate: hawkeye.RoundCandidate</em><span class="sig-paren">)</span> &#x2192; Optional[List[hawkeye.SBoxCandidate]]<a class="headerlink" href="#hawkeye.locate_sboxes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to locate S-box candidates within the combinational next-state logic of the round function candidate. 
+Computes an initial set of connected components within the round function extracted between the input and output register of the round candidate.
+If these initial components are reasonably small and their input and output sizes match, construct S-box candidates for further analysis right away.
+Otherwise, iteratively consider more combinational gates starting from the components’ input gates and search for sub-components.
+Create S-box candidates for these sub-components after determining the respective S-box output gates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>candidate</strong> (<a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><em>hawkeye.RoundCandidate</em></a>) – A round function candidate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of S-box candidates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="#hawkeye.SBoxCandidate" title="hawkeye.SBoxCandidate">hawkeye.SBoxCandidate</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hawkeye.identify_sbox">
+<code class="descclassname">hawkeye.</code><code class="descname">identify_sbox</code><span class="sig-paren">(</span><em>sbox_candidate: hawkeye.SBoxCandidate</em>, <em>db: hawkeye.SBoxDatabase</em><span class="sig-paren">)</span> &#x2192; Optional[str]<a class="headerlink" href="#hawkeye.identify_sbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to identify an S-box candidate by matching it against a database of known S-boxes under affine equivalence.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sbox_candidate</strong> (<a class="reference internal" href="#hawkeye.SBoxCandidate" title="hawkeye.SBoxCandidate"><em>hawkeye.SBoxCandidate</em></a>) – An S-box candidate.</li>
+<li><strong>db</strong> (<a class="reference internal" href="#hawkeye.SBoxDatabase" title="hawkeye.SBoxDatabase"><em>hawkeye.SBoxDatabase</em></a>) – A database of known S-boxes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The name of the S-box on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="class">
 <dt id="hawkeye.HawkeyePlugin">
 <em class="property">class </em><code class="descclassname">hawkeye.</code><code class="descname">HawkeyePlugin</code><a class="headerlink" href="#hawkeye.HawkeyePlugin" title="Permalink to this definition">¶</a></dt>
@@ -982,85 +1061,6 @@ All data structures of the round candidate will be initialized in the process.</
 </table>
 </dd></dl>
 
-</dd></dl>
-
-<span class="target" id="module-hawkeye"></span><p>hal HawkeyePlugin python bindings</p>
-<dl class="function">
-<dt id="hawkeye.detect_candidates">
-<code class="descclassname">hawkeye.</code><code class="descname">detect_candidates</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist, configs: List[hawkeye.DetectionConfiguration], min_state_size: int = 40, start_ffs: List[hal_py.Gate] = []</em><span class="sig-paren">)</span> &#x2192; Optional[List[hawkeye.RegisterCandidate]]<a class="headerlink" href="#hawkeye.detect_candidates" title="Permalink to this definition">¶</a></dt>
-<dd><p>Attempt to locate candidates for symmetric cryptographic implementations within a gate-level netlist.
-Search operates only on an abstraction of the netlist that contains only flip-flops as nodes and connections through combinational logic as edges.
-The algorithm computes the k-neighborhood of each flip-flop for <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">=</span> <span class="pre">1,</span> <span class="pre">...,</span> <span class="pre">config.timeout</span></code> and stops when the neighborhood size saturates.
-Depending on the <code class="docutils literal notranslate"><span class="pre">config</span></code>, additional criteria are used to narrow down the search space, see <code class="docutils literal notranslate"><span class="pre">DetectionConfiguration.Control</span></code> and <code class="docutils literal notranslate"><span class="pre">DetectionConfiguration.Components</span></code> for details.
-When the neighborhood size saturates, a register candidate is created if the last neighborhood size is larger than <code class="docutils literal notranslate"><span class="pre">config.min_register_size</span></code>.
-After the candidates have been identified, they are reduced further to produce the final set of register candidates.
-To this end, large candidates that fully contain a smaller candidate and candidates that are smaller than <code class="docutils literal notranslate"><span class="pre">min_state_size</span></code> are discarded.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</li>
-<li><strong>configs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="#hawkeye.DetectionConfiguration" title="hawkeye.DetectionConfiguration"><em>hawkeye.DetectionConfiguration</em></a><em>]</em>) – The configurations of the detection approaches to be executed one after another on each start flip-flop.</li>
-<li><strong>min_state_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The minimum size of a register candidate to be considered a cryptographic state register. Defaults to <code class="docutils literal notranslate"><span class="pre">40</span></code>.</li>
-<li><strong>start_ffs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The flip-flops to analyze. Defaults to an empty list, i.e., all flip-flops in the netlist will be analyzed.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of candidates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="#hawkeye.RegisterCandidate" title="hawkeye.RegisterCandidate">hawkeye.RegisterCandidate</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="hawkeye.locate_sboxes">
-<code class="descclassname">hawkeye.</code><code class="descname">locate_sboxes</code><span class="sig-paren">(</span><em>candidate: hawkeye.RoundCandidate</em><span class="sig-paren">)</span> &#x2192; Optional[List[hawkeye.SBoxCandidate]]<a class="headerlink" href="#hawkeye.locate_sboxes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Try to locate S-box candidates within the combinational next-state logic of the round function candidate. 
-Computes an initial set of connected components within the round function extracted between the input and output register of the round candidate.
-If these initial components are reasonably small and their input and output sizes match, construct S-box candidates for further analysis right away.
-Otherwise, iteratively consider more combinational gates starting from the components’ input gates and search for sub-components.
-Create S-box candidates for these sub-components after determining the respective S-box output gates.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>candidate</strong> (<a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><em>hawkeye.RoundCandidate</em></a>) – A round function candidate.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of S-box candidates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="#hawkeye.SBoxCandidate" title="hawkeye.SBoxCandidate">hawkeye.SBoxCandidate</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="hawkeye.identify_sbox">
-<code class="descclassname">hawkeye.</code><code class="descname">identify_sbox</code><span class="sig-paren">(</span><em>sbox_candidate: hawkeye.SBoxCandidate</em>, <em>db: hawkeye.SBoxDatabase</em><span class="sig-paren">)</span> &#x2192; Optional[str]<a class="headerlink" href="#hawkeye.identify_sbox" title="Permalink to this definition">¶</a></dt>
-<dd><p>Try to identify an S-box candidate by matching it against a database of known S-boxes under affine equivalence.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>sbox_candidate</strong> (<a class="reference internal" href="#hawkeye.SBoxCandidate" title="hawkeye.SBoxCandidate"><em>hawkeye.SBoxCandidate</em></a>) – An S-box candidate.</li>
-<li><strong>db</strong> (<a class="reference internal" href="#hawkeye.SBoxDatabase" title="hawkeye.SBoxDatabase"><em>hawkeye.SBoxDatabase</em></a>) – A database of known S-boxes.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The name of the S-box on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 </div>
