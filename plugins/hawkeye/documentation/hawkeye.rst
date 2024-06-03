@@ -9,12 +9,6 @@ HAWKEYE
 
     .. automethod:: __init__
 
-    .. autoclass:: hawkeye.DetectionConfiguration.Control
-        :members:
-
-    .. autoclass:: hawkeye.DetectionConfiguration.Components
-        :members:
-
 .. autoclass:: hawkeye.RegisterCandidate
     :members:
 
