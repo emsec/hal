@@ -23,6 +23,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/**
+ * @file plugin_hawkeye.h 
+ * @brief This file contains all functions related to the HAL plugin API.
+ */
+
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
@@ -32,43 +37,50 @@ namespace hal
     class Gate;
     class Netlist;
 
+    /**
+     * @class HawkeyePlugin
+     * @brief Plugin interface for HAWKEYE.
+     * 
+     * This class provides an interface to integrate the HAWKEYE tool as a plugin within the HAL framework.
+     */
     class PLUGIN_API HawkeyePlugin : public BasePluginInterface
     {
     public:
-        /** constructor (= default) */
+        /** 
+         * @brief Default constructor for `HawkeyePlugin`.
+         */
         HawkeyePlugin() = default;
 
-        /** destructor (= default) */
+        /** 
+         * @brief Default destructor for `HawkeyePlugin`.
+         */
         ~HawkeyePlugin() = default;
 
-        /*
-         * interface implementations
-         */
-
         /**
-         * Get the name of the plugin.
+         * @brief Get the name of the plugin.
          *
          * @returns The name of the plugin.
          */
         std::string get_name() const override;
 
         /**
-         * Get short description for plugin.
+         * @brief Get a short description of the plugin.
          *
-         * @return The short description.
+         * @returns The short description of the plugin.
          */
         std::string get_description() const override;
 
         /**
-         * Get the version of the plugin.
+         * @brief Get the version of the plugin.
          *
          * @returns The version of the plugin.
          */
         std::string get_version() const override;
 
         /**
-         * Get plugin dependencies.
-         * @return Set of plugins that this plugin depends on.
+         * @brief Get the plugin dependencies.
+         * 
+         * @returns A set of plugin names that this plugin depends on.
          */
         std::set<std::string> get_dependencies() const override;
     };

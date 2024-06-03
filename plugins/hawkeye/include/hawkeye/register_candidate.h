@@ -23,6 +23,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/**
+ * @file register_candidate.h 
+ * @brief This file contains the class that holds all information on a register candidate.
+ */
+
 #pragma once
 
 #include "hal_core/utilities/result.h"
@@ -37,28 +42,41 @@ namespace hal
 
     namespace hawkeye
     {
+        /**
+         * @class RegisterCandidate
+         * @brief A register candidate discovered by HAWKEYE.
+         * 
+         * This class holds all information belonging to a register candidate discovered by HAWKEYE's candidate search and makes these information accessible through getters.
+         */
         class RegisterCandidate
         {
         public:
-            RegisterCandidate()  = default;
+            /** 
+             * @brief Default constructor for `RegisterCandidate`.
+             */
+            RegisterCandidate() = default;
+
+            /** 
+             * @brief Default destructor for `RegisterCandidate`.
+             */
             ~RegisterCandidate() = default;
 
             /**
-             * Construct a state register candidate from the state register of a round-based implementation.
+             * @brief Construct a state register candidate from the state register of a round-based implementation.
              * 
              * @param[in] round_reg - The state register.
              */
             RegisterCandidate(const std::set<Gate*>& round_reg);
 
             /**
-             * Construct a state register candidate from the state register of a round-based implementation.
+             * @brief Construct a state register candidate from the state register of a round-based implementation.
              * 
              * @param[in] round_reg - The state register.
              */
             RegisterCandidate(std::set<Gate*>&& round_reg);
 
             /**
-             * Construct a state register candidate from the input and output registers from a round of a pipelined implementation.
+             * @brief Construct a state register candidate from the input and output registers from one round of a pipelined implementation.
              * 
              * @param[in] in_reg - The input register.
              * @param[in] out_reg - The output register.
@@ -66,46 +84,63 @@ namespace hal
             RegisterCandidate(const std::set<Gate*>& in_reg, const std::set<Gate*>& out_reg);
 
             /**
-             * Construct a state register candidate from the input and output registers from a round of a pipelined implementation.
+             * @brief Construct a state register candidate from the input and output registers from one round of a pipelined implementation.
              * 
              * @param[in] in_reg - The input register.
              * @param[in] out_reg - The output register.
              */
             RegisterCandidate(std::set<Gate*>&& in_reg, std::set<Gate*>&& out_reg);
 
+            /**
+             * @brief Equality comparison operator for two register candidates.
+             * 
+             * Compares two register candidates for equality. Two candidates are considered equal if they have the same size, input register, and (if round-based) output register.
+             * 
+             * @param[in] rhs - The register candidate to compare against.
+             * @returns `true` if the candidates are equal, `false` otherwise.
+             */
             bool operator==(const RegisterCandidate& rhs) const;
+
+            /**
+             * @brief Less-than comparison operator for two register candidates.
+             * 
+             * Compares two register candidates to determine their relative order. Candidates are compared based on their size, input register, and (if round-based) output register.
+             * 
+             * @param rhs The register candidate to compare against.
+             * @returns `true` if this candidate is less than the `rhs` candidate, `false` otherwise.
+             */
             bool operator<(const RegisterCandidate& rhs) const;
 
             /** 
-             * Get the netlist associated with the candidate.
+             * @brief Get the netlist associated with the candidate.
              * 
              * @return The netlist of the candidate.
              */
             Netlist* get_netlist() const;
 
             /**
-             * Get the size of the candidate, i.e., the width of its registers.
+             * @brief Get the size of the candidate, i.e., the width of its registers.
              * 
              * @returns The size of the candidate.
              */
             u32 get_size() const;
 
             /**
-             * Check if the candidate is round-based, i.e., input and output register are the same.
+             * @brief Check if the candidate is round-based, i.e., input and output register are the same.
              * 
              * @returns `true` if the candidate is round-based, `false` otherwise. 
              */
             bool is_round_based() const;
 
             /**
-             * Get the candidate's input register.
+             * @brief Get the candidate's input register.
              * 
              * @returns The input register of the candidate.
              */
             const std::set<Gate*>& get_input_reg() const;
 
             /**
-             * Get the candidate's output register.
+             * @brief Get the candidate's output register.
              * 
              * @returns The output register of the candidate.
              */

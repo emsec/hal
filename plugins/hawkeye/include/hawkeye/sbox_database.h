@@ -23,6 +23,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/**
+ * @file sbox_database.h 
+ * @brief This file contains the S-box database class that holds and manages known cryptographic S-boxes up to 8 bits wide.
+ */
+
 #pragma once
 
 #include "hal_core/defines.h"
@@ -36,30 +41,33 @@ namespace hal
     namespace hawkeye
     {
         /**
-         * Database of known S-boxes.
+         * @class SBoxDatabase
+         * @brief Database of known S-boxes.
+         * 
+         * This class holds and manages known S-boxes and allows to perform efficient S-box lookups in the database.
          */
         class SBoxDatabase
         {
         public:
             /**
-             * Constructs an empty S-box database.
+             * @brief Construct an empty S-box database.
              */
             SBoxDatabase() = default;
 
             /**
-             * Constructs an S-box database from the given S-boxes.
+             * @brief Construct an S-box database from the given S-boxes.
              * 
              * @param[in] sboxes - A map from S-box name to the respective S-box.
              */
             SBoxDatabase(const std::map<std::string, std::vector<u8>>& sboxes);
 
             /**
-             * Destructs the S-box database.
+             * @brief Destruct the S-box database.
              */
             ~SBoxDatabase() = default;
 
             /**
-             * Constructs an S-box database from file.
+             * @brief Construct an S-box database from file.
              * 
              * @param[in] file_path - The path from which to load the S-box database file.
              * @returns The S-box database on success, an error otherwise.
@@ -67,7 +75,7 @@ namespace hal
             static Result<SBoxDatabase> from_file(const std::filesystem::path& file_path);
 
             /**
-             * Compute the linear representative of the given S-box.
+             * @brief Compute the linear representative of the given S-box.
              * 
              * @param[in] sbox - The S-box.
              * @returns The linear representative.
@@ -75,7 +83,7 @@ namespace hal
             static std::vector<u8> compute_linear_representative(const std::vector<u8>& sbox);
 
             /**
-             * Add an S-box to the database.
+             * @brief Add an S-box to the database.
              * 
              * @param[in] name - The name of the S-box.
              * @param[in] sbox - The S-box.
@@ -84,7 +92,7 @@ namespace hal
             Result<std::monostate> add(const std::string& name, const std::vector<u8>& sbox);
 
             /**
-             * Add multiple S-boxes to the database.
+             * @brief Add multiple S-boxes to the database.
              * 
              * @param[in] sboxes - A map from S-box name to the respective S-box.
              * @returns Ok() on success, an error otherwise.
@@ -92,16 +100,16 @@ namespace hal
             Result<std::monostate> add(const std::map<std::string, std::vector<u8>>& sboxes);
 
             /**
-             * Load S-boxes to the database from a file.
+             * @brief Load S-boxes from a file and add them to the existing database.
              * 
              * @param[in] file_path - The path from which to load the S-box database file.
-             * @param[in] overwrite - Set `true` to overwrite existing database, `false` otherwise. Defaults to `true`.
+             * @param[in] overwrite - Set `true` to overwrite existing database, `false` otherwise. Defaults to `false`.
              * @returns Ok() on success, an error otherwise.
              */
-            Result<std::monostate> load(const std::filesystem::path& file_path, bool overwrite = true);
+            Result<std::monostate> load(const std::filesystem::path& file_path, bool overwrite = false);
 
             /**
-             * Store the S-box database to a database file.
+             * @brief Store the S-box database to a database file.
              * 
              * @param[in] file_path - The path to where to store the S-box database file.
              * @returns Ok() on success, an error otherwise.
@@ -109,7 +117,7 @@ namespace hal
             Result<std::monostate> store(const std::filesystem::path& file_path) const;
 
             /**
-             * Attempt to look up an S-box in the database.
+             * @brief Attempt to look up an S-box in the database.
              * 
              * @param[in] sbox - The S-box to look for.
              * @returns Ok() and the S-box name on success, an error otherwise.
@@ -117,11 +125,14 @@ namespace hal
             Result<std::string> lookup(const std::vector<u8>& sbox) const;
 
             /**
-             * Print the database.
+             * @brief Print the database.
              */
             void print() const;
 
         private:
+            /**
+             * Holds the S-boxes contained within the database.
+             */
             std::map<u32, std::map<std::vector<u8>, std::vector<std::pair<std::string, u8>>>> m_data;
         };
     }    // namespace hawkeye

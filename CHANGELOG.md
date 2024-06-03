@@ -38,7 +38,7 @@ All notable changes to this project will be documented in this file.
   * added `get_next_matching_gates` to get successor/predecessor gates matching a certain condition
   * added `get_next_matching_gates_until` to get successor/predecessor gates until a certain condition is fulfilled
   * added `get_next_matching_gates_until_depth` to get successor/predecessor gates up to a certain depth
-  * added `get_next_sequential_gates` and `get_next_sequential_gates_map` to get the next layer of sequental successors/predecessors
+  * added `get_next_sequential_gates` and `get_next_sequential_gates_map` to get the next layer of sequential successors/predecessors
   * added `get_next_combinational_gates` to get all combinational gates until the next non-combinational gates are reached
 * module pins
   * added qualifier for `pin_changed` core events telling receiver details about the recent modification
@@ -49,7 +49,7 @@ All notable changes to this project will be documented in this file.
   * added support for Ubuntu 24.04 LTS
   * added INIT field declaration to FF-gate-types in example library
   * added drag'n drop feature allowing to move several nodes in graph view at same time
-  * added functions to Python GUI API to create, modifiy and delete views
+  * added functions to Python GUI API to create, modify and delete views
   * added GUI PluginParameter type `ComboBox` for parameters that can be requested from plugin
   * added GUI PluginParameter types `Module` and `Gated` for parameters that can be requested from plugin
   * added `Show content` button to `Groupings` widget to show content of grouping as a list
@@ -69,7 +69,7 @@ All notable changes to this project will be documented in this file.
   * removed hard coded path names from CI MacOS workflow script
   * deprecated many functions in `netlist_utils` as they have been moved somewhere else
 * bugfixes
-  * fixed saleae input data reader which gets linked into external verilator simulation code
+  * fixed saleae input data reader which gets linked into external Verilator simulation code
   * fixed waveform viewer: opening old results will no longer generate the same view twice
   * fixed waveform viewer: opening old results will by now also update waveform time axis
   * fixed colors in Python Console when switching between color schemes
@@ -90,7 +90,7 @@ All notable changes to this project will be documented in this file.
   * fixed wrong placements of nodes in view by XML-macro (might even crash)
   * fixed problems in GUI plugin management caused by addressing plugins by absolute path
   * fixed several bugs related to moving node boxes in GUI by drag'n'drop
-  * fixed several bugs in automatted tests, eliminate cases which produce non-deterministic results
+  * fixed several bugs in automated tests, eliminate cases which produce non-deterministic results
 
 ## [4.2.0](v4.2.0) - 2023-05-24 10:02:04-07:00 (urgency: medium)
 * GUI plugin manager
