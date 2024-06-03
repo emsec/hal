@@ -54,8 +54,8 @@ namespace hal
 
                     // mark all sequential gates as unassigned gates
                     std::vector<u32> unassigned_gates;
-                    unassigned_gates.reserve(netlist_abstr.all_sequential_gates.size());
-                    std::transform(netlist_abstr.all_sequential_gates.begin(), netlist_abstr.all_sequential_gates.end(), std::back_inserter(unassigned_gates), [](auto& g) { return g->get_id(); });
+                    unassigned_gates.reserve(netlist_abstr.target_gates.size());
+                    std::transform(netlist_abstr.target_gates.begin(), netlist_abstr.target_gates.end(), std::back_inserter(unassigned_gates), [](auto& g) { return g->get_id(); });
 
                     // sort unassignes gates to be able to use std::algorithms
                     std::sort(unassigned_gates.begin(), unassigned_gates.end());
@@ -304,5 +304,5 @@ namespace hal
                 return output;
             }
         }    // namespace evaluation
-    }        // namespace dataflow
+    }    // namespace dataflow
 }    // namespace hal
