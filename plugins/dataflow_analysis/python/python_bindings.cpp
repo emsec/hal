@@ -12,13 +12,14 @@ namespace hal
 #ifdef PYBIND11_MODULE
     PYBIND11_MODULE(dataflow, m)
     {
-        m.doc() = "hal DataflowPlugin python bindings";
+        m.doc() = "Dataflow analysis tool DANA to recover word-level structures such as registers from gate-level netlists.";
 #else
     PYBIND11_PLUGIN(dataflow)
     {
-        py::module m("dataflow", "hal DataflowPlugin python bindings");
+        py::module m("dataflow", "Dataflow analysis tool DANA to recover word-level structures such as registers from gate-level netlists.");
 #endif    // ifdef PYBIND11_MODULE
-        py::class_<DataflowPlugin, RawPtrWrapper<DataflowPlugin>, BasePluginInterface> py_dataflow_plugin(m, "DataflowPlugin");
+        py::class_<DataflowPlugin, RawPtrWrapper<DataflowPlugin>, BasePluginInterface> py_dataflow_plugin(
+            m, "DataflowPlugin", R"(This class provides an interface to integrate the DANA tool as a plugin within the HAL framework.)");
 
         py_dataflow_plugin.def_property_readonly("name", &DataflowPlugin::get_name, R"(
             The name of the plugin.

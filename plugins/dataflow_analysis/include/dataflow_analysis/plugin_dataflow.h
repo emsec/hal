@@ -131,6 +131,13 @@ namespace hal
         std::string get_name() const override;
 
         /**
+         * @brief Get the version of the plugin.
+         *
+         * @returns The version of the plugin.
+         */
+        std::string get_version() const override;
+
+        /**
          * @brief Get a short description of the plugin.
          *
          * @return The short description of the plugin.
@@ -138,10 +145,10 @@ namespace hal
         std::string get_description() const override;
 
         /**
-         * @brief Get the version of the plugin.
-         *
-         * @returns The version of the plugin.
+         * @brief Get the plugin dependencies.
+         * 
+         * @returns A set of plugin names that this plugin depends on.
          */
-        std::string get_version() const override;
+        std::set<std::string> get_dependencies() const override;
     };
 }    // namespace hal

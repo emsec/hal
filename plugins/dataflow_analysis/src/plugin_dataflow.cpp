@@ -21,14 +21,19 @@ namespace hal
         return std::string("dataflow");
     }
 
-    std::string DataflowPlugin::get_description() const
-    {
-        return "Dataflow analysis for gate-level netlist reverse engineering";
-    }
-
     std::string DataflowPlugin::get_version() const
     {
         return std::string("0.3");
+    }
+
+    std::string DataflowPlugin::get_description() const
+    {
+        return "Dataflow analysis tool DANA to recover word-level structures such as registers from gate-level netlists.";
+    }
+
+    std::set<std::string> DataflowPlugin::get_dependencies() const
+    {
+        return {};
     }
 
     DataflowPlugin::DataflowPlugin()
