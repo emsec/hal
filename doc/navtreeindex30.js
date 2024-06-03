@@ -1,5 +1,7 @@
 var NAVTREEINDEX30 =
 {
+"settings__display_8cpp.html":[7,0,1,3,2,40,4],
+"settings__display_8cpp_source.html":[7,0,1,3,2,40,4],
 "settings__display_8h.html":[7,0,1,3,0,0,42,5],
 "settings__display_8h_source.html":[7,0,1,3,0,0,42,5],
 "settings__item_8h.html":[7,0,1,3,0,0,42,0,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX30 =
 "src_2netlist_2grouping_8cpp_source.html":[7,0,2,0,12],
 "src_2netlist_2netlist_8cpp.html":[7,0,2,0,15],
 "src_2netlist_2netlist_8cpp_source.html":[7,0,2,0,15],
-"src_2python__bindings_2bindings_2grouping_8cpp.html":[7,0,2,2,0,14],
-"src_2python__bindings_2bindings_2grouping_8cpp.html#ga0b8291fb8af058d824b23bcd16a86821":[7,0,2,2,0,14,0],
-"src_2python__bindings_2bindings_2grouping_8cpp_source.html":[7,0,2,2,0,14]
+"src_2python__bindings_2bindings_2grouping_8cpp.html":[7,0,2,2,0,14]
 };

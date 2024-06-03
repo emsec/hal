@@ -1,7 +1,7 @@
 <map id="/home/runner/work/hal/hal/plugins/graph_algorithm/src/algorithms/shortest_path.cpp" name="/home/runner/work/hal/hal/plugins/graph_algorithm/src/algorithms/shortest_path.cpp">
 <area shape="rect" id="node1" title=" " alt="" coords="80,5,319,61"/>
-<area shape="rect" id="node2" href="$shortest__path_8h.html" title=" " alt="" coords="98,184,301,225"/>
-<area shape="rect" id="node3" href="$netlist__graph_8h.html" title=" " alt="" coords="146,273,320,315"/>
+<area shape="rect" id="node2" href="$shortest__path_8h.html" title="This file contains functions related to shortest paths in graphs." alt="" coords="98,184,301,225"/>
+<area shape="rect" id="node3" href="$netlist__graph_8h.html" title="This file contains the class that holds a netlist graph." alt="" coords="146,273,320,315"/>
 <area shape="rect" id="node10" href="$gate_8h.html" title=" " alt="" coords="732,109,899,136"/>
 <area shape="rect" id="node4" href="$defines_8h.html" title=" " alt="" coords="632,452,772,479"/>
 <area shape="rect" id="node5" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="293,363,424,404"/>

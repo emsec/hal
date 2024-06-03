@@ -1,5 +1,7 @@
 var NAVTREEINDEX23 =
 {
+"functions_g.html":[6,3,0,6],
+"functions_h.html":[6,3,0,7],
 "functions_i.html":[6,3,0,8],
 "functions_j.html":[6,3,0,9],
 "functions_k.html":[6,3,0,10],
@@ -40,8 +42,8 @@ var NAVTREEINDEX23 =
 "functions_type.html":[6,3,3],
 "functions_u.html":[6,3,0,20],
 "functions_v.html":[6,3,0,21],
-"functions_vars.html":[6,3,2],
 "functions_vars.html":[6,3,2,0],
+"functions_vars.html":[6,3,2],
 "functions_vars_b.html":[6,3,2,1],
 "functions_vars_c.html":[6,3,2,2],
 "functions_vars_d.html":[6,3,2,3],
@@ -217,8 +219,8 @@ var NAVTREEINDEX23 =
 "get__in__touch__widget_8cpp_source.html":[7,0,1,3,2,48,1],
 "get__in__touch__widget_8h.html":[7,0,1,3,0,0,51,1],
 "get__in__touch__widget_8h_source.html":[7,0,1,3,0,0,51,1],
-"globals.html":[7,1,0],
 "globals.html":[7,1,0,0],
+"globals.html":[7,1,0],
 "globals_a.html":[7,1,0,1],
 "globals_b.html":[7,1,0,2],
 "globals_c.html":[7,1,0,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX23 =
 "globals_u.html":[7,1,0,21],
 "globals_v.html":[7,1,0,22],
 "globals_vars.html":[7,1,2],
-"globals_w.html":[7,1,0,23],
-"graph__context_8cpp.html":[7,0,1,3,2,19,0,0],
-"graph__context_8cpp_source.html":[7,0,1,3,2,19,0,0]
+"globals_w.html":[7,1,0,23]
 };

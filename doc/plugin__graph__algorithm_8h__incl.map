@@ -1,5 +1,5 @@
 <map id="/home/runner/work/hal/hal/plugins/graph_algorithm/include/graph_algorithm/plugin_graph_algorithm.h" name="/home/runner/work/hal/hal/plugins/graph_algorithm/include/graph_algorithm/plugin_graph_algorithm.h">
-<area shape="rect" id="node1" title=" " alt="" coords="183,5,411,76"/>
+<area shape="rect" id="node1" title="This file contains all functions related to the HAL plugin API." alt="" coords="183,5,411,76"/>
 <area shape="rect" id="node2" href="$plugin__interface__base_8h.html" title=" " alt="" coords="119,124,301,165"/>
 <area shape="rect" id="node8" title=" " alt="" coords="325,131,445,158"/>
 <area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="5,303,145,329"/>

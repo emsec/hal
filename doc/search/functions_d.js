@@ -74,7 +74,7 @@ var searchData=
   ['netlistdesignnamechanged_25615',['netlistDesignNameChanged',['../classhal_1_1_netlist_relay.html#acf27074098e68d4473c3030079e42e58',1,'hal::NetlistRelay']]],
   ['netlistdevicenamechanged_25616',['netlistDeviceNameChanged',['../classhal_1_1_netlist_relay.html#a3026e24a3314902f7bb0a60047ba0f89',1,'hal::NetlistRelay']]],
   ['netlistfilename_25617',['netlistFilename',['../classhal_1_1_project_json.html#aec8b9bae07b0fbfba1f8e3e216efb81d',1,'hal::ProjectJson']]],
-  ['netlistgraph_25618',['NetlistGraph',['../classhal_1_1graph__algorithm_1_1_netlist_graph.html#a94b7e072e88d1c84e499f00d690658db',1,'hal::graph_algorithm::NetlistGraph']]],
+  ['netlistgraph_25618',['NetlistGraph',['../classhal_1_1graph__algorithm_1_1_netlist_graph.html#a229ec0ba38595eafc670c4a7c09550ee',1,'hal::graph_algorithm::NetlistGraph']]],
   ['netlistidchanged_25619',['netlistIdChanged',['../classhal_1_1_netlist_relay.html#a37214350d5065af0055a02a6bcef706c',1,'hal::NetlistRelay']]],
   ['netlistinputfilenamechanged_25620',['netlistInputFilenameChanged',['../classhal_1_1_netlist_relay.html#a56487c116520cba55b33dcadd8d9911a',1,'hal::NetlistRelay']]],
   ['netlistmarkedglobalgnd_25621',['netlistMarkedGlobalGnd',['../classhal_1_1_netlist_relay.html#adc920ae9fb3930dd5dcbca23095bfd2f',1,'hal::NetlistRelay']]],

@@ -1,6 +1,6 @@
 <map id="/home/runner/work/hal/hal/plugins/graph_algorithm/include/graph_algorithm/algorithms/neighborhood.h" name="/home/runner/work/hal/hal/plugins/graph_algorithm/include/graph_algorithm/algorithms/neighborhood.h">
-<area shape="rect" id="node1" title=" " alt="" coords="317,5,575,76"/>
-<area shape="rect" id="node2" href="$netlist__graph_8h.html" title=" " alt="" coords="359,124,533,165"/>
+<area shape="rect" id="node1" title="This file contains functions related to neighborhoods in graphs." alt="" coords="317,5,575,76"/>
+<area shape="rect" id="node2" href="$netlist__graph_8h.html" title="This file contains the class that holds a netlist graph." alt="" coords="359,124,533,165"/>
 <area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="67,303,207,329"/>
 <area shape="rect" id="node7" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="25,213,155,255"/>
 <area shape="rect" id="node8" title=" " alt="" coords="534,221,654,247"/>

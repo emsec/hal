@@ -1,5 +1,7 @@
 var NAVTREEINDEX15 =
 {
+"classhal_1_1_open_file_widget.html#ab05e51bf4dda8c7240fa68025437ad07":[4,0,52,1],
+"classhal_1_1_open_file_widget.html#ab86b8741bd7d1db27fc74e9d93073175":[4,0,52,0],
 "classhal_1_1_open_file_widget.html#ad52808414feb1120be90d900feceeb04":[4,0,52,9],
 "classhal_1_1_open_file_widget.html#adbf87a07f5c402ac9ea68313d4df05f6":[4,0,52,2],
 "classhal_1_1_open_file_widget.html#ae2a4d60b89d2db141cf4afcaea878296":[4,0,52,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX15 =
 "classhal_1_1_project_manager.html#a95fd85c289774d162dc03bf83f6fee71":[4,1,0,3,1,8],
 "classhal_1_1_project_manager.html#aa0b4d568444acf0e8ede1bfc5b7175a5":[4,1,0,3,1,6],
 "classhal_1_1_project_manager.html#abab7b72e2024d037dfa40ee45250c70a":[4,1,0,3,1,10],
-"classhal_1_1_project_manager.html#ae3e31c378bef8edc9b63f3308029c3eb":[4,1,0,3,1,14],
-"classhal_1_1_project_serializer.html":[6,0,0,345],
-"classhal_1_1_project_serializer.html#a3530c29f02a63a9edcf608e95f2d60db":[6,0,0,345,4]
+"classhal_1_1_project_manager.html#ae3e31c378bef8edc9b63f3308029c3eb":[4,1,0,3,1,14]
 };

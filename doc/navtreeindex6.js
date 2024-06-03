@@ -137,9 +137,11 @@ var NAVTREEINDEX6 =
 "classhal_1_1_get_in_touch_widget.html#af74690f4dbd2584bdd4c7d0161c6090b":[4,0,51,1],
 "classhal_1_1_graph_algorithm_plugin.html":[6,0,0,165],
 "classhal_1_1_graph_algorithm_plugin.html#a1e3b049baf3b4653ac4e09c4ff823486":[6,0,0,165,0],
-"classhal_1_1_graph_algorithm_plugin.html#a48de68f15009493b5ce4e99651a7468d":[6,0,0,165,3],
+"classhal_1_1_graph_algorithm_plugin.html#a21d84fd0af2e6f3acb48a36a234d0982":[6,0,0,165,3],
+"classhal_1_1_graph_algorithm_plugin.html#a48de68f15009493b5ce4e99651a7468d":[6,0,0,165,5],
 "classhal_1_1_graph_algorithm_plugin.html#a9ca751cbbd728c6d26b3e5f8d829652f":[6,0,0,165,1],
-"classhal_1_1_graph_algorithm_plugin.html#af0c694efa2388d6f404ceaba245f0171":[6,0,0,165,2],
+"classhal_1_1_graph_algorithm_plugin.html#ae9b1f634a193b0ccd4eb025bfda13f4f":[6,0,0,165,2],
+"classhal_1_1_graph_algorithm_plugin.html#af0c694efa2388d6f404ceaba245f0171":[6,0,0,165,4],
 "classhal_1_1_graph_context.html":[4,0,0,1,0],
 "classhal_1_1_graph_context.html#a00ae714ff83079561b0d3987189754f4":[4,0,0,1,0,23],
 "classhal_1_1_graph_context.html#a0219fc146717ebddc0a45c8091985c6c":[4,0,0,1,0,22],
@@ -247,7 +249,5 @@ var NAVTREEINDEX6 =
 "classhal_1_1_graph_context_serializer.html":[6,0,0,168],
 "classhal_1_1_graph_context_serializer.html#a0b8ec238cd78ddeb4b2c3f2c92b514c3":[6,0,0,168,2],
 "classhal_1_1_graph_context_serializer.html#a5e87d0d4267dcb1801a07ba1892adde5":[6,0,0,168,0],
-"classhal_1_1_graph_context_serializer.html#a794500909aafd6182fd6eedc6d2e16d2":[6,0,0,168,3],
-"classhal_1_1_graph_context_serializer.html#aa3282d2b19cde8312d7aca7d3a4b52a5":[6,0,0,168,1],
-"classhal_1_1_graph_context_serializer.html#adc080da07a0a3472701f23ec3986bf54":[6,0,0,168,4]
+"classhal_1_1_graph_context_serializer.html#a794500909aafd6182fd6eedc6d2e16d2":[6,0,0,168,3]
 };

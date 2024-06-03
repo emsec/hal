@@ -6,7 +6,7 @@ var classhal_1_1graph__algorithm_1_1_netlist_graph =
       [ "OUT", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a65ceac15864cd408ec0dec300413961baef373774188a51f80463f37b6bd9e83a", null ],
       [ "ALL", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a65ceac15864cd408ec0dec300413961ba5fb1f955b45e38e31789286a1790398d", null ]
     ] ],
-    [ "NetlistGraph", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a94b7e072e88d1c84e499f00d690658db", null ],
+    [ "NetlistGraph", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a229ec0ba38595eafc670c4a7c09550ee", null ],
     [ "~NetlistGraph", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a62aae1ec285d147edf6435f268f6ddf1", null ],
     [ "add_edges", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a6a966402c642dda1275a1d6ef40b1eda", null ],
     [ "add_edges", "classhal_1_1graph__algorithm_1_1_netlist_graph.html#a933d03ef8deec44b8d0aa38cacbb6b30", null ],

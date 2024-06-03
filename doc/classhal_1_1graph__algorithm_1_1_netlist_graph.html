@@ -92,13 +92,16 @@ $(document).ready(function(){initNavTree('classhal_1_1graph__algorithm_1_1_netli
 </div><!--header-->
 <div class="contents">
 
+<p>A directed graph corresponding to a netlist.  
+ <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="netlist__graph_8h_source.html">netlist_graph.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::graph_algorithm::NetlistGraph:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1graph__algorithm_1_1_netlist_graph__coll__graph.png" border="0" usemap="#hal_1_1graph__algorithm_1_1_netlist_graph_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1graph__algorithm_1_1_netlist_graph_coll__map" id="hal_1_1graph__algorithm_1_1_netlist_graph_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,200,200"/>
+<area shape="rect" title="A directed graph corresponding to a netlist." alt="" coords="5,5,200,200"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -109,78 +112,110 @@ Public Types</h2></td></tr>
 <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a65ceac15864cd408ec0dec300413961baef373774188a51f80463f37b6bd9e83a">Direction::OUT</a>, 
 <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a65ceac15864cd408ec0dec300413961ba5fb1f955b45e38e31789286a1790398d">Direction::ALL</a>
  }</td></tr>
+<tr class="memdesc:a65ceac15864cd408ec0dec300413961b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The direction of exploration within the graph.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a65ceac15864cd408ec0dec300413961b">More...</a><br /></td></tr>
 <tr class="separator:a65ceac15864cd408ec0dec300413961b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a94b7e072e88d1c84e499f00d690658db"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a94b7e072e88d1c84e499f00d690658db">NetlistGraph</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, igraph_t &amp;&amp;graph, std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;&amp;m_nodes_to_gates)</td></tr>
-<tr class="separator:a94b7e072e88d1c84e499f00d690658db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a229ec0ba38595eafc670c4a7c09550ee"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a229ec0ba38595eafc670c4a7c09550ee">NetlistGraph</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, igraph_t &amp;&amp;graph, std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;&amp;nodes_to_gates)</td></tr>
+<tr class="memdesc:a229ec0ba38595eafc670c4a7c09550ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a netlist graph from a netlist, an <code>igraph</code> graph object, and a map from graph nodes to HAL gates.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a229ec0ba38595eafc670c4a7c09550ee">More...</a><br /></td></tr>
+<tr class="separator:a229ec0ba38595eafc670c4a7c09550ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62aae1ec285d147edf6435f268f6ddf1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a62aae1ec285d147edf6435f268f6ddf1">~NetlistGraph</a> ()</td></tr>
+<tr class="memdesc:a62aae1ec285d147edf6435f268f6ddf1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor for <code><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html" title="A directed graph corresponding to a netlist.">NetlistGraph</a></code>.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a62aae1ec285d147edf6435f268f6ddf1">More...</a><br /></td></tr>
 <tr class="separator:a62aae1ec285d147edf6435f268f6ddf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54388968caa5f71f2cc3029fc8934d4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unique_ptr&lt; <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a54388968caa5f71f2cc3029fc8934d4f">copy</a> () const</td></tr>
+<tr class="memdesc:a54388968caa5f71f2cc3029fc8934d4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a deep copy of the netlist graph.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a54388968caa5f71f2cc3029fc8934d4f">More...</a><br /></td></tr>
 <tr class="separator:a54388968caa5f71f2cc3029fc8934d4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00d12d6f99e745c2b2431a65fdd3f84c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_netlist.html">Netlist</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a00d12d6f99e745c2b2431a65fdd3f84c">get_netlist</a> () const</td></tr>
+<tr class="memdesc:a00d12d6f99e745c2b2431a65fdd3f84c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the netlist associated with the netlist graph.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a00d12d6f99e745c2b2431a65fdd3f84c">More...</a><br /></td></tr>
 <tr class="separator:a00d12d6f99e745c2b2431a65fdd3f84c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd9b42ee5a97346f3d12aa4f4dca8402"><td class="memItemLeft" align="right" valign="top">igraph_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#afd9b42ee5a97346f3d12aa4f4dca8402">get_graph</a> () const</td></tr>
+<tr class="memdesc:afd9b42ee5a97346f3d12aa4f4dca8402"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the graph object of the netlist graph.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#afd9b42ee5a97346f3d12aa4f4dca8402">More...</a><br /></td></tr>
 <tr class="separator:afd9b42ee5a97346f3d12aa4f4dca8402"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2bf62e379172d9f948e74c10c002e98a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a2bf62e379172d9f948e74c10c002e98a">get_gates_from_vertices</a> (const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;vertices) const</td></tr>
+<tr class="memdesc:a2bf62e379172d9f948e74c10c002e98a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the gates corresponding to the specified vertices.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a2bf62e379172d9f948e74c10c002e98a">More...</a><br /></td></tr>
 <tr class="separator:a2bf62e379172d9f948e74c10c002e98a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affc7628792b7f4fd122a1b94a222a4d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#affc7628792b7f4fd122a1b94a222a4d8">get_gates_from_vertices</a> (const std::set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;vertices) const</td></tr>
+<tr class="memdesc:affc7628792b7f4fd122a1b94a222a4d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the gates corresponding to the specified vertices.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#affc7628792b7f4fd122a1b94a222a4d8">More...</a><br /></td></tr>
 <tr class="separator:affc7628792b7f4fd122a1b94a222a4d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c9f2fac0f0fc865a4f73435bb3a7afb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a9c9f2fac0f0fc865a4f73435bb3a7afb">get_gates_from_vertices_igraph</a> (const igraph_vector_int_t *vertices) const</td></tr>
+<tr class="memdesc:a9c9f2fac0f0fc865a4f73435bb3a7afb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the gates corresponding to the specified vertices.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a9c9f2fac0f0fc865a4f73435bb3a7afb">More...</a><br /></td></tr>
 <tr class="separator:a9c9f2fac0f0fc865a4f73435bb3a7afb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5df5d6856a1d13e94c7c374cc07e5b5d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a5df5d6856a1d13e94c7c374cc07e5b5d">get_gates_set_from_vertices</a> (const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;vertices) const</td></tr>
+<tr class="memdesc:a5df5d6856a1d13e94c7c374cc07e5b5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the gates corresponding to the specified vertices.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a5df5d6856a1d13e94c7c374cc07e5b5d">More...</a><br /></td></tr>
 <tr class="separator:a5df5d6856a1d13e94c7c374cc07e5b5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abaf6d2cb92adb15342169c827c12ae44"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#abaf6d2cb92adb15342169c827c12ae44">get_gates_set_from_vertices</a> (const std::set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;vertices) const</td></tr>
+<tr class="memdesc:abaf6d2cb92adb15342169c827c12ae44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the gates corresponding to the specified vertices.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#abaf6d2cb92adb15342169c827c12ae44">More...</a><br /></td></tr>
 <tr class="separator:abaf6d2cb92adb15342169c827c12ae44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a646fc79778a638095f61ffa39f554ab5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a646fc79778a638095f61ffa39f554ab5">get_gates_set_from_vertices_igraph</a> (const igraph_vector_int_t *vertices) const</td></tr>
+<tr class="memdesc:a646fc79778a638095f61ffa39f554ab5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the gates corresponding to the specified vertices.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a646fc79778a638095f61ffa39f554ab5">More...</a><br /></td></tr>
 <tr class="separator:a646fc79778a638095f61ffa39f554ab5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51f32e2c61aad6b47ea84d457f792cf5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a51f32e2c61aad6b47ea84d457f792cf5">get_gate_from_vertex</a> (const <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> vertex) const</td></tr>
+<tr class="memdesc:a51f32e2c61aad6b47ea84d457f792cf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the gate corresponding to the specified vertex.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a51f32e2c61aad6b47ea84d457f792cf5">More...</a><br /></td></tr>
 <tr class="separator:a51f32e2c61aad6b47ea84d457f792cf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79fdf485990c5381c2650aa3e5546869"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a79fdf485990c5381c2650aa3e5546869">get_vertices_from_gates</a> (const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;gates) const</td></tr>
+<tr class="memdesc:a79fdf485990c5381c2650aa3e5546869"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the vertices corresponding to the specified gates.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a79fdf485990c5381c2650aa3e5546869">More...</a><br /></td></tr>
 <tr class="separator:a79fdf485990c5381c2650aa3e5546869"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7ebd7465d0bfe0ca0f7ede175a6fe17"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#ab7ebd7465d0bfe0ca0f7ede175a6fe17">get_vertices_from_gates</a> (const std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;gates) const</td></tr>
+<tr class="memdesc:ab7ebd7465d0bfe0ca0f7ede175a6fe17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the vertices corresponding to the specified gates.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#ab7ebd7465d0bfe0ca0f7ede175a6fe17">More...</a><br /></td></tr>
 <tr class="separator:ab7ebd7465d0bfe0ca0f7ede175a6fe17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f4cc0de28874cd858e1bb58102a88a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; igraph_vector_int_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a6f4cc0de28874cd858e1bb58102a88a5">get_vertices_from_gates_igraph</a> (const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;gates) const</td></tr>
+<tr class="memdesc:a6f4cc0de28874cd858e1bb58102a88a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the vertices corresponding to the specified gates.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a6f4cc0de28874cd858e1bb58102a88a5">More...</a><br /></td></tr>
 <tr class="separator:a6f4cc0de28874cd858e1bb58102a88a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3dec1533b9c528e76eda2f4c075d32f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; igraph_vector_int_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#ab3dec1533b9c528e76eda2f4c075d32f">get_vertices_from_gates_igraph</a> (const std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;gates) const</td></tr>
+<tr class="memdesc:ab3dec1533b9c528e76eda2f4c075d32f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the vertices corresponding to the specified gates.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#ab3dec1533b9c528e76eda2f4c075d32f">More...</a><br /></td></tr>
 <tr class="separator:ab3dec1533b9c528e76eda2f4c075d32f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cdbf6af3e642ead2bb07f790f7cf10e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a6cdbf6af3e642ead2bb07f790f7cf10e">get_vertex_from_gate</a> (<a class="el" href="classhal_1_1_gate.html">Gate</a> *g) const</td></tr>
+<tr class="memdesc:a6cdbf6af3e642ead2bb07f790f7cf10e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the vertex corresponding to the specified gate.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a6cdbf6af3e642ead2bb07f790f7cf10e">More...</a><br /></td></tr>
 <tr class="separator:a6cdbf6af3e642ead2bb07f790f7cf10e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1809b66c69be895ca35d44928915b08b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a1809b66c69be895ca35d44928915b08b">get_num_vertices</a> (bool only_connected=false) const</td></tr>
+<tr class="memdesc:a1809b66c69be895ca35d44928915b08b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of vertices in the netlist graph.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a1809b66c69be895ca35d44928915b08b">More...</a><br /></td></tr>
 <tr class="separator:a1809b66c69be895ca35d44928915b08b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa8b436d499886fd2e46892a28cf67bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#aaa8b436d499886fd2e46892a28cf67bd">get_num_edges</a> () const</td></tr>
+<tr class="memdesc:aaa8b436d499886fd2e46892a28cf67bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of edges in the netlist graph.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#aaa8b436d499886fd2e46892a28cf67bd">More...</a><br /></td></tr>
 <tr class="separator:aaa8b436d499886fd2e46892a28cf67bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af023be0105fabe45836fae46e5a99fbd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#af023be0105fabe45836fae46e5a99fbd">get_vertices</a> (bool only_connected=false) const</td></tr>
+<tr class="memdesc:af023be0105fabe45836fae46e5a99fbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the vertices in the netlist graph.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#af023be0105fabe45836fae46e5a99fbd">More...</a><br /></td></tr>
 <tr class="separator:af023be0105fabe45836fae46e5a99fbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa0cc93a427a8a3f1b28e36b33ed1ac6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; std::pair&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#aaa0cc93a427a8a3f1b28e36b33ed1ac6">get_edges</a> () const</td></tr>
+<tr class="memdesc:aaa0cc93a427a8a3f1b28e36b33ed1ac6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the edges between vertices in the netlist graph.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#aaa0cc93a427a8a3f1b28e36b33ed1ac6">More...</a><br /></td></tr>
 <tr class="separator:aaa0cc93a427a8a3f1b28e36b33ed1ac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaac920154374b304559cbcdc69692b37"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; std::pair&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> *, <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#aaac920154374b304559cbcdc69692b37">get_edges_in_netlist</a> () const</td></tr>
+<tr class="memdesc:aaac920154374b304559cbcdc69692b37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the edges between gates in the netlist corresponding to the netlist graph.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#aaac920154374b304559cbcdc69692b37">More...</a><br /></td></tr>
 <tr class="separator:aaac920154374b304559cbcdc69692b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a933d03ef8deec44b8d0aa38cacbb6b30"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a933d03ef8deec44b8d0aa38cacbb6b30">add_edges</a> (const std::vector&lt; std::pair&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> *, <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&gt; &amp;edges)</td></tr>
+<tr class="memdesc:a933d03ef8deec44b8d0aa38cacbb6b30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add edges between the specified pairs of source and destination gates to the netlist graph.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a933d03ef8deec44b8d0aa38cacbb6b30">More...</a><br /></td></tr>
 <tr class="separator:a933d03ef8deec44b8d0aa38cacbb6b30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f3197970954019cd49dcd6d1a1376d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a8f3197970954019cd49dcd6d1a1376d1">add_edges</a> (const std::vector&lt; std::pair&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&gt; &amp;edges)</td></tr>
+<tr class="memdesc:a8f3197970954019cd49dcd6d1a1376d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add edges between the specified pairs of source and destination vertices to the netlist graph.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a8f3197970954019cd49dcd6d1a1376d1">More...</a><br /></td></tr>
 <tr class="separator:a8f3197970954019cd49dcd6d1a1376d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a966402c642dda1275a1d6ef40b1eda"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a6a966402c642dda1275a1d6ef40b1eda">add_edges</a> (const std::map&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> *, std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&gt; &amp;edges)</td></tr>
+<tr class="memdesc:a6a966402c642dda1275a1d6ef40b1eda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add edges between the specified pairs of source and destination gates to the netlist graph.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a6a966402c642dda1275a1d6ef40b1eda">More...</a><br /></td></tr>
 <tr class="separator:a6a966402c642dda1275a1d6ef40b1eda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad288320ab6a9207742ff581afa2cb931"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#ad288320ab6a9207742ff581afa2cb931">delete_edges</a> (const std::vector&lt; std::pair&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> *, <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&gt; &amp;edges)</td></tr>
+<tr class="memdesc:ad288320ab6a9207742ff581afa2cb931"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delete edges between the specified pairs of source and destination gates from the netlist graph.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#ad288320ab6a9207742ff581afa2cb931">More...</a><br /></td></tr>
 <tr class="separator:ad288320ab6a9207742ff581afa2cb931"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9ac753041fa357f528f7f705cceb7b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::monostate &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#ad9ac753041fa357f528f7f705cceb7b3">delete_edges</a> (const std::vector&lt; std::pair&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&gt; &amp;edges)</td></tr>
+<tr class="memdesc:ad9ac753041fa357f528f7f705cceb7b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delete edges between the specified pairs of source and destination vertices from the netlist graph.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#ad9ac753041fa357f528f7f705cceb7b3">More...</a><br /></td></tr>
 <tr class="separator:ad9ac753041fa357f528f7f705cceb7b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9641fcf8d678c37e5a015b8da133a323"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a9641fcf8d678c37e5a015b8da133a323">print</a> () const</td></tr>
+<tr class="memdesc:a9641fcf8d678c37e5a015b8da133a323"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the edge list of the graph to stdout.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a9641fcf8d678c37e5a015b8da133a323">More...</a><br /></td></tr>
 <tr class="separator:a9641fcf8d678c37e5a015b8da133a323"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a480f621220e17daefa69e4fcd6e0e1ee"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unique_ptr&lt; <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a480f621220e17daefa69e4fcd6e0e1ee">from_netlist</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, bool create_dummy_vertices=false, const std::function&lt; bool(const <a class="el" href="classhal_1_1_net.html">Net</a> *)&gt; &amp;filter=nullptr)</td></tr>
+<tr class="memdesc:a480f621220e17daefa69e4fcd6e0e1ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a directed graph from a netlist.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a480f621220e17daefa69e4fcd6e0e1ee">More...</a><br /></td></tr>
 <tr class="separator:a480f621220e17daefa69e4fcd6e0e1ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af512c96b5406c58144b44524750460c4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unique_ptr&lt; <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#af512c96b5406c58144b44524750460c4">from_netlist_no_edges</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;gates={})</td></tr>
+<tr class="memdesc:af512c96b5406c58144b44524750460c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an empty directed graph from a netlist.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#af512c96b5406c58144b44524750460c4">More...</a><br /></td></tr>
 <tr class="separator:af512c96b5406c58144b44524750460c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Holds a directed graph corresponding to a netlist. </p>
+<div class="textblock"><p>A directed graph corresponding to a netlist. </p>
+<p>This class holds all information on a netlist graph that corresponds to a gate-level netlist and provides functions to access and operate on it. </p>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8h_source.html#l00048">48</a> of file <a class="el" href="netlist__graph_8h_source.html">netlist_graph.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8h_source.html#l00056">56</a> of file <a class="el" href="netlist__graph_8h_source.html">netlist_graph.h</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a65ceac15864cd408ec0dec300413961b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a65ceac15864cd408ec0dec300413961b">&#9670;&nbsp;</a></span>Direction</h2>
@@ -201,20 +236,26 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>The direction of exploration within the graph. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a65ceac15864cd408ec0dec300413961bab50339a10e1de285ac99d4c3990b8693"></a>NONE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a65ceac15864cd408ec0dec300413961bac86ee0d9d7ed3e7b4fdbf486fa6c0ebb"></a>IN&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a65ceac15864cd408ec0dec300413961baef373774188a51f80463f37b6bd9e83a"></a>OUT&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a65ceac15864cd408ec0dec300413961ba5fb1f955b45e38e31789286a1790398d"></a>ALL&#160;</td><td class="fielddoc"></td></tr>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a65ceac15864cd408ec0dec300413961bab50339a10e1de285ac99d4c3990b8693"></a>NONE&#160;</td><td class="fielddoc"><p>No direction, invalid default setting. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a65ceac15864cd408ec0dec300413961bac86ee0d9d7ed3e7b4fdbf486fa6c0ebb"></a>IN&#160;</td><td class="fielddoc"><p>Explore through the inputs of the current node, i.e., traverse backwards. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a65ceac15864cd408ec0dec300413961baef373774188a51f80463f37b6bd9e83a"></a>OUT&#160;</td><td class="fielddoc"><p>Explore through the outputs of the current node, i.e., traverse forwards. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a65ceac15864cd408ec0dec300413961ba5fb1f955b45e38e31789286a1790398d"></a>ALL&#160;</td><td class="fielddoc"><p>Explore in both directions, i.e., treat the graph as undirected. </p>
+</td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="netlist__graph_8h_source.html#l00051">51</a> of file <a class="el" href="netlist__graph_8h_source.html">netlist_graph.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="netlist__graph_8h_source.html#l00063">63</a> of file <a class="el" href="netlist__graph_8h_source.html">netlist_graph.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a94b7e072e88d1c84e499f00d690658db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a94b7e072e88d1c84e499f00d690658db">&#9670;&nbsp;</a></span>NetlistGraph()</h2>
+<a id="a229ec0ba38595eafc670c4a7c09550ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a229ec0ba38595eafc670c4a7c09550ee">&#9670;&nbsp;</a></span>NetlistGraph()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -235,7 +276,7 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;&amp;&#160;</td>
-          <td class="paramname"><em>m_nodes_to_gates</em>&#160;</td>
+          <td class="paramname"><em>nodes_to_gates</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -244,6 +285,16 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Construct a netlist graph from a netlist, an <code>igraph</code> graph object, and a map from graph nodes to HAL gates. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>- The netlist. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>- The igrapg graph object. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nodes_to_gates</td><td>- A map from nodes to gates. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00017">17</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
@@ -263,6 +314,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Default destructor for <code><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html" title="A directed graph corresponding to a netlist.">NetlistGraph</a></code>. </p>
 
 <p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00030">30</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
 
@@ -284,7 +337,9 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Add edges between the specified pairs of source and destination gates to the netlist graph. The vertices must already exist in the graph.</p>
+
+<p>Add edges between the specified pairs of source and destination gates to the netlist graph. </p>
+<p>The vertices must already exist in the graph.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">edges</td><td>- The edges to add as a map from source gate to its destination gates. </td></tr>
@@ -314,7 +369,9 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Add edges between the specified pairs of source and destination gates to the netlist graph. The gates must already correspond to vertices in the graph.</p>
+
+<p>Add edges between the specified pairs of source and destination gates to the netlist graph. </p>
+<p>The gates must already correspond to vertices in the graph.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">edges</td><td>- The edges to add as pairs of gates. </td></tr>
@@ -344,7 +401,9 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Add edges between the specified pairs of source and destination vertices to the netlist graph. The vertices must already exist in the graph.</p>
+
+<p>Add edges between the specified pairs of source and destination vertices to the netlist graph. </p>
+<p>The vertices must already exist in the graph.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">edges</td><td>- The edges to add as pairs of vertices. </td></tr>
@@ -373,7 +432,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Creates a deep copy of the netlist graph.</p>
+
+<p>Create a deep copy of the netlist graph. </p>
 <dl class="section return"><dt>Returns</dt><dd>The copied netlist graph on success, an error otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00189">189</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
@@ -397,7 +457,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Delete edges between the specified pairs of source and destination gates from the netlist graph.</p>
+
+<p>Delete edges between the specified pairs of source and destination gates from the netlist graph. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">edges</td><td>- The edges to delete as pairs of gates. </td></tr>
@@ -427,7 +488,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Delete edges between the specified pairs of source and destination vertices from the netlist graph.</p>
+
+<p>Delete edges between the specified pairs of source and destination vertices from the netlist graph. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">edges</td><td>- The edges to delete as pairs of vertices. </td></tr>
@@ -481,7 +543,9 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Create a directed graph from a netlist. Optionally create dummy vertices at nets missing a source or destination. An optional filter can be applied to exclude undesired edges.</p>
+
+<p>Create a directed graph from a netlist. </p>
+<p>Optionally create dummy vertices at nets missing a source or destination. An optional filter can be applied to exclude undesired edges.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>- The netlist. </td></tr>
@@ -533,7 +597,9 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Create an empty directed graph from a netlist, i.e., vertices for all gates are created, but no edges are added.</p>
+
+<p>Create an empty directed graph from a netlist. </p>
+<p>Vertices for all gates are created, but no edges are added.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>- The netlist. </td></tr>
@@ -565,7 +631,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the edges between vertices in the netlist graph.</p>
+
+<p>Get the edges between vertices in the netlist graph. </p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of edges on success, an error otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00573">573</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
@@ -588,7 +655,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the edges between gates in the netlist corresponding to the netlist graph.</p>
+
+<p>Get the edges between gates in the netlist corresponding to the netlist graph. </p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of edges on success, an error otherwise. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00601">601</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
@@ -612,7 +680,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the gate corresponding to the specified vertex.</p>
+
+<p>Get the gate corresponding to the specified vertex. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">vertex</td><td>- A vertex. </td></tr>
@@ -642,7 +711,9 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the gates corresponding to the specified vertices. The result may contain <code>nullptr</code> for dummy vertices.</p>
+
+<p>Get the gates corresponding to the specified vertices. </p>
+<p>The result may contain <code>nullptr</code> for dummy vertices.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">vertices</td><td>- A set of vertices. </td></tr>
@@ -672,7 +743,9 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the gates corresponding to the specified vertices. The result may contain <code>nullptr</code> for dummy vertices.</p>
+
+<p>Get the gates corresponding to the specified vertices. </p>
+<p>The result may contain <code>nullptr</code> for dummy vertices.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">vertices</td><td>- A vector of vertices. </td></tr>
@@ -704,7 +777,9 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the gates corresponding to the specified vertices. The result may contain <code>nullptr</code> for dummy vertices.</p>
+
+<p>Get the gates corresponding to the specified vertices. </p>
+<p>The result may contain <code>nullptr</code> for dummy vertices.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">vertices</td><td>- An igraph vector of vertices. </td></tr>
@@ -736,7 +811,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the gates corresponding to the specified vertices.</p>
+
+<p>Get the gates corresponding to the specified vertices. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">vertices</td><td>- A set of vertices. </td></tr>
@@ -766,7 +842,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the gates corresponding to the specified vertices.</p>
+
+<p>Get the gates corresponding to the specified vertices. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">vertices</td><td>- A vector of vertices. </td></tr>
@@ -796,7 +873,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the gates corresponding to the specified vertices.</p>
+
+<p>Get the gates corresponding to the specified vertices. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">vertices</td><td>- An igraph vector of vertices. </td></tr>
@@ -825,7 +903,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the graph object of the netlist graph.</p>
+
+<p>Get the graph object of the netlist graph. </p>
 <dl class="section return"><dt>Returns</dt><dd>The graph object. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00210">210</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
@@ -848,7 +927,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the netlist associated with the netlist graph.</p>
+
+<p>Get the netlist associated with the netlist graph. </p>
 <dl class="section return"><dt>Returns</dt><dd>The netlist. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00205">205</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
@@ -871,7 +951,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the number of edges in the netlist graph.</p>
+
+<p>Get the number of edges in the netlist graph. </p>
 <dl class="section return"><dt>Returns</dt><dd>The number of edges in the netlist graph. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00522">522</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
@@ -895,7 +976,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the number of vertices in the netlist graph.</p>
+
+<p>Get the number of vertices in the netlist graph. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">only_connected</td><td>- Set <code>true</code> to only count vertices connected to at least one edge, <code>false</code> otherwise. Defaults to <code>false</code>. </td></tr>
@@ -925,7 +1007,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the vertex corresponding to the specified gate.</p>
+
+<p>Get the vertex corresponding to the specified gate. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>- A gate. </td></tr>
@@ -957,7 +1040,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the vertices in the netlist graph.</p>
+
+<p>Get the vertices in the netlist graph. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">only_connected</td><td>- Set <code>true</code> to only return vertices connected to at least one edge, <code>false</code> otherwise. Defaults to <code>false</code>. </td></tr>
@@ -987,7 +1071,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the vertices corresponding to the specified gates.</p>
+
+<p>Get the vertices corresponding to the specified gates. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gates</td><td>- A set of gates. </td></tr>
@@ -1017,7 +1102,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the vertices corresponding to the specified gates.</p>
+
+<p>Get the vertices corresponding to the specified gates. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gates</td><td>- A vector of gates. </td></tr>
@@ -1049,7 +1135,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the vertices corresponding to the specified gates.</p>
+
+<p>Get the vertices corresponding to the specified gates. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gates</td><td>- A set of gates. </td></tr>
@@ -1079,7 +1166,8 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the vertices corresponding to the specified gates.</p>
+
+<p>Get the vertices corresponding to the specified gates. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">gates</td><td>- A vector of gates. </td></tr>
@@ -1110,6 +1198,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
 <p>Print the edge list of the graph to stdout. </p>
 
 <p class="definition">Definition at line <a class="el" href="netlist__graph_8cpp_source.html#l00890">890</a> of file <a class="el" href="netlist__graph_8cpp_source.html">netlist_graph.cpp</a>.</p>
@@ -1128,7 +1217,7 @@ Static Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1graph__algorithm.html">graph_algorithm</a></li><li class="navelem"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a></li>
-    <li class="footer">Generated on Mon Jun 3 2024 14:15:25 for HAL by
+    <li class="footer">Generated on Mon Jun 3 2024 18:52:55 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

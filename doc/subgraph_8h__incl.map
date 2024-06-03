@@ -1,5 +1,5 @@
 <map id="/home/runner/work/hal/hal/plugins/graph_algorithm/include/graph_algorithm/algorithms/subgraph.h" name="/home/runner/work/hal/hal/plugins/graph_algorithm/include/graph_algorithm/algorithms/subgraph.h">
-<area shape="rect" id="node1" title=" " alt="" coords="333,5,592,76"/>
+<area shape="rect" id="node1" title="This file contains functions related to subgraphs." alt="" coords="333,5,592,76"/>
 <area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,303,289,329"/>
 <area shape="rect" id="node7" href="$include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="323,124,453,165"/>
 <area shape="rect" id="node12" title=" " alt="" coords="477,131,597,158"/>

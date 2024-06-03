@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Graph Algorithms &mdash; hal_py v4.2.0-440-gcee86e1c2 documentation</title>
+  <title>Graph Algorithms &mdash; hal_py v4.2.0-441-gc49bff2bb documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-440-gcee86e1c2
+                v4.2.0-441-gc49bff2bb
               </div>
             
           
@@ -177,13 +177,13 @@
 <dt id="graph_algorithm.NetlistGraph.Direction">
 <em class="property">class </em><code class="descname">Direction</code><a class="headerlink" href="#graph_algorithm.NetlistGraph.Direction" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
-<div>Defines the direction of a pin.</div></blockquote>
+<div>The direction of exploration within the graph.</div></blockquote>
 <p>Members:</p>
 <blockquote>
-<div><p>NONE : Invalid direction.</p>
-<p>IN : Vertex fan-in.</p>
-<p>OUT : Vertex fan-out.</p>
-<p>ALL : All directions.</p>
+<div><p>NONE : No direction, invalid default setting.</p>
+<p>IN : Explore through the inputs of the current node, i.e., traverse backwards.</p>
+<p>OUT : Explore through the outputs of the current node, i.e., traverse forwards.</p>
+<p>ALL : Explore in both directions, i.e., treat the graph as undirected.</p>
 </div></blockquote>
 <dl class="attribute">
 <dt id="graph_algorithm.NetlistGraph.Direction.name">
@@ -260,7 +260,7 @@ The vertices must already exist in the graph.</p>
 <dl class="method">
 <dt id="graph_algorithm.NetlistGraph.copy">
 <code class="descname">copy</code><span class="sig-paren">(</span><em>self: graph_algorithm.NetlistGraph</em><span class="sig-paren">)</span> &#x2192; graph_algorithm.NetlistGraph<a class="headerlink" href="#graph_algorithm.NetlistGraph.copy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a deep copy of the netlist graph.</p>
+<dd><p>Create a deep copy of the netlist graph.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -653,7 +653,7 @@ The result may contain <code class="docutils literal notranslate"><span class="p
 <ol class="arabic">
 <li><p class="first">get_all_shortest_paths(graph: graph_algorithm.NetlistGraph, from_gate: hal_py.Gate, to_gates: List[hal_py.Gate], direction: graph_algorithm.NetlistGraph.Direction) -&gt; Optional[List[List[int]]]</p>
 <blockquote>
-<div><p>Compute a shortest path from the specified <code class="docutils literal notranslate"><span class="pre">from_gate</span></code> to each of the given <code class="docutils literal notranslate"><span class="pre">to_gates</span></code> by traversing in the provided direction.
+<div><p>Compute shortest paths from the specified <code class="docutils literal notranslate"><span class="pre">from_gate</span></code> to each of the given <code class="docutils literal notranslate"><span class="pre">to_gates</span></code> by traversing in the provided direction.
 Returns all shortest paths for each end gate.
 Each shortest path is given as a list of vertices in the order of traversal.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -682,7 +682,7 @@ Each shortest path is given as a list of vertices in the order of traversal.</p>
 </li>
 <li><p class="first">get_all_shortest_paths(graph: graph_algorithm.NetlistGraph, from_vertex: int, to_vertices: List[int], direction: graph_algorithm.NetlistGraph.Direction) -&gt; Optional[List[List[int]]]</p>
 <blockquote>
-<div><p>Compute a shortest path from the specified <code class="docutils literal notranslate"><span class="pre">from_vertex</span></code> to each of the given <code class="docutils literal notranslate"><span class="pre">to_vertices</span></code> by traversing in the provided direction.
+<div><p>Compute shortest paths from the specified <code class="docutils literal notranslate"><span class="pre">from_vertex</span></code> to each of the given <code class="docutils literal notranslate"><span class="pre">to_vertices</span></code> by traversing in the provided direction.
 Returns all shortest paths for each end gate.
 Each shortest path is given as a list of vertices in the order of traversal.</p>
 <table class="docutils field-list" frame="void" rules="none">

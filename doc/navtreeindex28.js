@@ -1,5 +1,7 @@
 var NAVTREEINDEX28 =
 {
+"pin__event_8h.html#a727315bb04e7d8b01d1b172818a1bb56":[7,0,0,0,1,3,0,3,3],
+"pin__event_8h_source.html":[7,0,0,0,1,3,0,3],
 "pin__group_8h.html":[7,0,0,0,1,7,3],
 "pin__group_8h_source.html":[7,0,0,0,1,7,3],
 "pin__tree__model_8cpp.html":[7,0,1,3,2,38,0,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX28 =
 "project__manager_8h_source.html":[7,0,0,0,1,19],
 "project__serializer_8cpp.html":[7,0,2,0,20],
 "project__serializer_8cpp_source.html":[7,0,2,0,20],
-"project__serializer_8h.html":[7,0,0,0,1,20],
-"project__serializer_8h_source.html":[7,0,0,0,1,20],
-"py__code__provider_8cpp.html":[7,0,1,3,2,36,0]
+"project__serializer_8h.html":[7,0,0,0,1,20]
 };

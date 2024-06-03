@@ -93,39 +93,55 @@ $(document).ready(function(){initNavTree('namespacehal_1_1graph__algorithm.html'
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A directed graph corresponding to a netlist.  <a href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a342053bd60ebc4294ba58fc3f378ec6c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a342053bd60ebc4294ba58fc3f378ec6c">get_connected_components</a> (const <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> *graph, bool strong, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> min_size=0)</td></tr>
+<tr class="memdesc:a342053bd60ebc4294ba58fc3f378ec6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the (strongly) connected components of the specified graph.  <a href="namespacehal_1_1graph__algorithm.html#a342053bd60ebc4294ba58fc3f378ec6c">More...</a><br /></td></tr>
 <tr class="separator:a342053bd60ebc4294ba58fc3f378ec6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0b293f87c1d1b354258b37a6a68e058"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#ae0b293f87c1d1b354258b37a6a68e058">get_neighborhood</a> (<a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> *graph, const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;start_gates, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> order, <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a65ceac15864cd408ec0dec300413961b">NetlistGraph::Direction</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> min_dist=0)</td></tr>
+<tr class="memdesc:ae0b293f87c1d1b354258b37a6a68e058"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the neighborhood of the given order for each of the specified gates within the given netlist graph.  <a href="namespacehal_1_1graph__algorithm.html#ae0b293f87c1d1b354258b37a6a68e058">More...</a><br /></td></tr>
 <tr class="separator:ae0b293f87c1d1b354258b37a6a68e058"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0479edf1ae69e563ea0d4f85dc3c45c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#ae0479edf1ae69e563ea0d4f85dc3c45c">get_neighborhood</a> (<a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> *graph, const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;start_vertices, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> order, <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a65ceac15864cd408ec0dec300413961b">NetlistGraph::Direction</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> min_dist=0)</td></tr>
+<tr class="memdesc:ae0479edf1ae69e563ea0d4f85dc3c45c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the neighborhood of the given order for each of the specified vertices within the given netlist graph.  <a href="namespacehal_1_1graph__algorithm.html#ae0479edf1ae69e563ea0d4f85dc3c45c">More...</a><br /></td></tr>
 <tr class="separator:ae0479edf1ae69e563ea0d4f85dc3c45c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a452019f83f0f06eb5e17c038cfc9e7a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a452019f83f0f06eb5e17c038cfc9e7a9">get_neighborhood_igraph</a> (<a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> *graph, const igraph_vector_int_t *start_vertices, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> order, <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a65ceac15864cd408ec0dec300413961b">NetlistGraph::Direction</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> min_dist=0)</td></tr>
+<tr class="memdesc:a452019f83f0f06eb5e17c038cfc9e7a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the neighborhood of the given order for each of the specified vertices within the given netlist graph.  <a href="namespacehal_1_1graph__algorithm.html#a452019f83f0f06eb5e17c038cfc9e7a9">More...</a><br /></td></tr>
 <tr class="separator:a452019f83f0f06eb5e17c038cfc9e7a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41136e8a982dfac3db78892bf6152b46"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a41136e8a982dfac3db78892bf6152b46">get_shortest_paths</a> (<a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> *graph, <a class="el" href="classhal_1_1_gate.html">Gate</a> *from_gate, const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;to_gates, <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a65ceac15864cd408ec0dec300413961b">NetlistGraph::Direction</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>)</td></tr>
+<tr class="memdesc:a41136e8a982dfac3db78892bf6152b46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute a shortest path from the specified <code>from_gate</code> to each of the given <code>to_gates</code> by traversing in the provided direction.  <a href="namespacehal_1_1graph__algorithm.html#a41136e8a982dfac3db78892bf6152b46">More...</a><br /></td></tr>
 <tr class="separator:a41136e8a982dfac3db78892bf6152b46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ab3b792fb4004dc980cf99c5041f08b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a0ab3b792fb4004dc980cf99c5041f08b">get_shortest_paths</a> (<a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> *graph, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> from_vertex, const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;to_vertices, <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a65ceac15864cd408ec0dec300413961b">NetlistGraph::Direction</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>)</td></tr>
+<tr class="memdesc:a0ab3b792fb4004dc980cf99c5041f08b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute a shortest path from the specified <code>from_vertex</code> to each of the given <code>to_vertices</code> by traversing in the provided direction.  <a href="namespacehal_1_1graph__algorithm.html#a0ab3b792fb4004dc980cf99c5041f08b">More...</a><br /></td></tr>
 <tr class="separator:a0ab3b792fb4004dc980cf99c5041f08b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f46e431705e51a829ccf60fe58d8e85"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a9f46e431705e51a829ccf60fe58d8e85">get_shortest_paths_igraph</a> (<a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> *graph, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> from_vertex, const igraph_vector_int_t *to_vertices, <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a65ceac15864cd408ec0dec300413961b">NetlistGraph::Direction</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>)</td></tr>
+<tr class="memdesc:a9f46e431705e51a829ccf60fe58d8e85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute a shortest path from the specified <code>from_vertex</code> to each of the given <code>to_vertices</code> by traversing in the provided direction.  <a href="namespacehal_1_1graph__algorithm.html#a9f46e431705e51a829ccf60fe58d8e85">More...</a><br /></td></tr>
 <tr class="separator:a9f46e431705e51a829ccf60fe58d8e85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02c687a5d4cc42d2a492620ee8295ca4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a02c687a5d4cc42d2a492620ee8295ca4">get_all_shortest_paths</a> (<a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> *graph, <a class="el" href="classhal_1_1_gate.html">Gate</a> *from_gate, const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;to_gates, <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a65ceac15864cd408ec0dec300413961b">NetlistGraph::Direction</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>)</td></tr>
+<tr class="memdesc:a02c687a5d4cc42d2a492620ee8295ca4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute shortest paths from the specified <code>from_gate</code> to each of the given <code>to_gates</code> by traversing in the provided direction.  <a href="namespacehal_1_1graph__algorithm.html#a02c687a5d4cc42d2a492620ee8295ca4">More...</a><br /></td></tr>
 <tr class="separator:a02c687a5d4cc42d2a492620ee8295ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96b170e1c2dd11d73116609738942f83"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a96b170e1c2dd11d73116609738942f83">get_all_shortest_paths</a> (<a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> *graph, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> from_vertex, const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;to_vertices, <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a65ceac15864cd408ec0dec300413961b">NetlistGraph::Direction</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>)</td></tr>
+<tr class="memdesc:a96b170e1c2dd11d73116609738942f83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute shortest paths from the specified <code>from_vertex</code> to each of the given <code>to_vertices</code> by traversing in the provided direction.  <a href="namespacehal_1_1graph__algorithm.html#a96b170e1c2dd11d73116609738942f83">More...</a><br /></td></tr>
 <tr class="separator:a96b170e1c2dd11d73116609738942f83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70036e09785a70fea8abaed36f1031d4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a70036e09785a70fea8abaed36f1031d4">get_all_shortest_paths_igraph</a> (<a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> *graph, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> from_vertex, const igraph_vector_int_t *to_vertices, <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html#a65ceac15864cd408ec0dec300413961b">NetlistGraph::Direction</a> <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa">direction</a>)</td></tr>
+<tr class="memdesc:a70036e09785a70fea8abaed36f1031d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute shortest paths from the specified <code>from_vertex</code> to each of the given <code>to_vertices</code> by traversing in the provided direction. Returns all shortest paths for each end gate. Each shortest path is given as a vector of vertices in the order of traversal.  <a href="namespacehal_1_1graph__algorithm.html#a70036e09785a70fea8abaed36f1031d4">More...</a><br /></td></tr>
 <tr class="separator:a70036e09785a70fea8abaed36f1031d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0eda0a1c6ed5556e55821fa94d54967"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unique_ptr&lt; <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#aa0eda0a1c6ed5556e55821fa94d54967">get_subgraph</a> (const <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> *graph, const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;subgraph_gates)</td></tr>
+<tr class="memdesc:aa0eda0a1c6ed5556e55821fa94d54967"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.  <a href="namespacehal_1_1graph__algorithm.html#aa0eda0a1c6ed5556e55821fa94d54967">More...</a><br /></td></tr>
 <tr class="separator:aa0eda0a1c6ed5556e55821fa94d54967"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a447180e9c645a82c7f6eb471dbf039c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unique_ptr&lt; <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a447180e9c645a82c7f6eb471dbf039c4">get_subgraph</a> (const <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> *graph, const std::set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;subgraph_gates)</td></tr>
+<tr class="memdesc:a447180e9c645a82c7f6eb471dbf039c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.  <a href="namespacehal_1_1graph__algorithm.html#a447180e9c645a82c7f6eb471dbf039c4">More...</a><br /></td></tr>
 <tr class="separator:a447180e9c645a82c7f6eb471dbf039c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45e518de37423f701ab0d907e5e07a83"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unique_ptr&lt; <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a45e518de37423f701ab0d907e5e07a83">get_subgraph</a> (const <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> *graph, const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;subgraph_vertices)</td></tr>
+<tr class="memdesc:a45e518de37423f701ab0d907e5e07a83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the subgraph induced by the specified vertices, including all edges between these vertices.  <a href="namespacehal_1_1graph__algorithm.html#a45e518de37423f701ab0d907e5e07a83">More...</a><br /></td></tr>
 <tr class="separator:a45e518de37423f701ab0d907e5e07a83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74f0da8591287e3843ec6147ccaa8e96"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unique_ptr&lt; <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a74f0da8591287e3843ec6147ccaa8e96">get_subgraph</a> (const <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> *graph, const std::set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;subgraph_vertices)</td></tr>
+<tr class="memdesc:a74f0da8591287e3843ec6147ccaa8e96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the subgraph induced by the specified vertices, including all edges between these vertices.  <a href="namespacehal_1_1graph__algorithm.html#a74f0da8591287e3843ec6147ccaa8e96">More...</a><br /></td></tr>
 <tr class="separator:a74f0da8591287e3843ec6147ccaa8e96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6de3adfdb0cca775a2dff1af5f877061"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">Result</a>&lt; std::unique_ptr&lt; <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1graph__algorithm.html#a6de3adfdb0cca775a2dff1af5f877061">get_subgraph_igraph</a> (const <a class="el" href="classhal_1_1graph__algorithm_1_1_netlist_graph.html">NetlistGraph</a> *graph, const igraph_vector_int_t *subgraph_vertices)</td></tr>
+<tr class="memdesc:a6de3adfdb0cca775a2dff1af5f877061"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the subgraph induced by the specified vertices, including all edges between these vertices.  <a href="namespacehal_1_1graph__algorithm.html#a6de3adfdb0cca775a2dff1af5f877061">More...</a><br /></td></tr>
 <tr class="separator:a6de3adfdb0cca775a2dff1af5f877061"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
@@ -166,7 +182,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute a shortest path from the specified <code>from_gate</code> to each of the given <code>to_gates</code> by traversing in the provided direction. Returns all shortest paths for each end gate. Each shortest path is given as a vector of vertices in the order of traversal.</p>
+
+<p>Compute shortest paths from the specified <code>from_gate</code> to each of the given <code>to_gates</code> by traversing in the provided direction. </p>
+<p>Returns all shortest paths for each end gate. Each shortest path is given as a vector of vertices in the order of traversal.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>- The netlist graph. </td></tr>
@@ -223,7 +241,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute a shortest path from the specified <code>from_vertex</code> to each of the given <code>to_vertices</code> by traversing in the provided direction. Returns all shortest paths for each end gate. Each shortest path is given as a vector of vertices in the order of traversal.</p>
+
+<p>Compute shortest paths from the specified <code>from_vertex</code> to each of the given <code>to_vertices</code> by traversing in the provided direction. </p>
+<p>Returns all shortest paths for each end gate. Each shortest path is given as a vector of vertices in the order of traversal.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>- The netlist graph. </td></tr>
@@ -278,7 +298,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute a shortest path from the specified <code>from_vertex</code> to each of the given <code>to_vertices</code> by traversing in the provided direction. Returns all shortest paths for each end gate. Each shortest path is given as a vector of vertices in the order of traversal.</p>
+
+<p>Compute shortest paths from the specified <code>from_vertex</code> to each of the given <code>to_vertices</code> by traversing in the provided direction. Returns all shortest paths for each end gate. Each shortest path is given as a vector of vertices in the order of traversal. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>- The netlist graph. </td></tr>
@@ -329,7 +350,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute the (strongly) connected components of the specified graph. Returns each connected component as a vector of vertices in the netlist graph.</p>
+
+<p>Compute the (strongly) connected components of the specified graph. </p>
+<p>Returns each connected component as a vector of vertices in the netlist graph.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>- The netlist graph. </td></tr>
@@ -391,7 +414,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute the neighborhood of the given order for each of the specified gates within the given netlist graph. For order 0, only the vertex itself is returned. For order 1, the vertex itself and all vertices that are its direct predecessors and/or successors (depending on the specified direction). For order 2, the neighborhood of order 1 plus all direct predecessors and/or successors of the vertices in order 1 are returned, etc. Returns each neighborhood as a vector of vertices in the netlist graph.</p>
+
+<p>Compute the neighborhood of the given order for each of the specified gates within the given netlist graph. </p>
+<p>For order 0, only the vertex itself is returned. For order 1, the vertex itself and all vertices that are its direct predecessors and/or successors (depending on the specified direction). For order 2, the neighborhood of order 1 plus all direct predecessors and/or successors of the vertices in order 1 are returned, etc. Returns each neighborhood as a vector of vertices in the netlist graph.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>- The netlist graph. </td></tr>
@@ -455,7 +480,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute the neighborhood of the given order for each of the specified vertices within the given netlist graph. For order 0, only the vertex itself is returned. For order 1, the vertex itself and all vertices that are its direct predecessors and/or successors (depending on the specified direction). For order 2, the neighborhood of order 1 plus all direct predecessors and/or successors of the vertices in order 1 are returned, etc. Returns each neighborhood as a vector of vertices in the netlist graph.</p>
+
+<p>Compute the neighborhood of the given order for each of the specified vertices within the given netlist graph. </p>
+<p>For order 0, only the vertex itself is returned. For order 1, the vertex itself and all vertices that are its direct predecessors and/or successors (depending on the specified direction). For order 2, the neighborhood of order 1 plus all direct predecessors and/or successors of the vertices in order 1 are returned, etc. Returns each neighborhood as a vector of vertices in the netlist graph.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>- The netlist graph. </td></tr>
@@ -517,7 +544,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute the neighborhood of the given order for each of the specified vertices within the given netlist graph. For order 0, only the vertex itself is returned. For order 1, the vertex itself and all vertices that are its direct predecessors and/or successors (depending on the specified direction). For order 2, the neighborhood of order 1 plus all direct predecessors and/or successors of the vertices in order 1 are returned, etc. Returns each neighborhood as a vector of vertices in the netlist graph.</p>
+
+<p>Compute the neighborhood of the given order for each of the specified vertices within the given netlist graph. </p>
+<p>For order 0, only the vertex itself is returned. For order 1, the vertex itself and all vertices that are its direct predecessors and/or successors (depending on the specified direction). For order 2, the neighborhood of order 1 plus all direct predecessors and/or successors of the vertices in order 1 are returned, etc. Returns each neighborhood as a vector of vertices in the netlist graph.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>- The netlist graph. </td></tr>
@@ -575,7 +604,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute a shortest path from the specified <code>from_gate</code> to each of the given <code>to_gates</code> by traversing in the provided direction. Returns one shortest path for each end gate, even if multiple shortest paths exist. Each shortest path is given as a vector of vertices in the order of traversal.</p>
+
+<p>Compute a shortest path from the specified <code>from_gate</code> to each of the given <code>to_gates</code> by traversing in the provided direction. </p>
+<p>Returns one shortest path for each end gate, even if multiple shortest paths exist. Each shortest path is given as a vector of vertices in the order of traversal.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>- The netlist graph. </td></tr>
@@ -632,7 +663,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute a shortest path from the specified <code>from_vertex</code> to each of the given <code>to_vertices</code> by traversing in the provided direction. Returns one shortest path for each end vertex, even if multiple shortest paths exist. Each shortest path is given as a vector of vertices in the order of traversal.</p>
+
+<p>Compute a shortest path from the specified <code>from_vertex</code> to each of the given <code>to_vertices</code> by traversing in the provided direction. </p>
+<p>Returns one shortest path for each end vertex, even if multiple shortest paths exist. Each shortest path is given as a vector of vertices in the order of traversal.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>- The netlist graph. </td></tr>
@@ -687,7 +720,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute a shortest path from the specified <code>from_vertex</code> to each of the given <code>to_vertices</code> by traversing in the provided direction. Returns one shortest path for each end vertex, even if multiple shortest paths exist. Each shortest path is given as a vector of vertices in the order of traversal.</p>
+
+<p>Compute a shortest path from the specified <code>from_vertex</code> to each of the given <code>to_vertices</code> by traversing in the provided direction. </p>
+<p>Returns one shortest path for each end vertex, even if multiple shortest paths exist. Each shortest path is given as a vector of vertices in the order of traversal.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>- The netlist graph. </td></tr>
@@ -732,7 +767,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.</p>
+
+<p>Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>- The netlist graph. </td></tr>
@@ -773,7 +809,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute the subgraph induced by the specified vertices, including all edges between these vertices.</p>
+
+<p>Compute the subgraph induced by the specified vertices, including all edges between these vertices. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>- The netlist graph. </td></tr>
@@ -814,7 +851,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.</p>
+
+<p>Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>- The netlist graph. </td></tr>
@@ -857,7 +895,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute the subgraph induced by the specified vertices, including all edges between these vertices.</p>
+
+<p>Compute the subgraph induced by the specified vertices, including all edges between these vertices. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>- The netlist graph. </td></tr>
@@ -898,7 +937,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compute the subgraph induced by the specified vertices, including all edges between these vertices.</p>
+
+<p>Compute the subgraph induced by the specified vertices, including all edges between these vertices. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">graph</td><td>- The netlist graph. </td></tr>
@@ -922,7 +962,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1graph__algorithm.html">graph_algorithm</a></li>
-    <li class="footer">Generated on Mon Jun 3 2024 14:15:25 for HAL by
+    <li class="footer">Generated on Mon Jun 3 2024 18:52:55 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

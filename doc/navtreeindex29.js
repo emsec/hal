@@ -1,5 +1,7 @@
 var NAVTREEINDEX29 =
 {
+"project__serializer_8h_source.html":[7,0,0,0,1,20],
+"py__code__provider_8cpp.html":[7,0,1,3,2,36,0],
 "py__code__provider_8cpp_source.html":[7,0,1,3,2,36,0],
 "py__code__provider_8h.html":[7,0,1,3,0,0,38,0],
 "py__code__provider_8h_source.html":[7,0,1,3,0,0,38,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX29 =
 "separated__graphics__net_8cpp.html":[7,0,1,3,2,19,1,0,4],
 "separated__graphics__net_8cpp_source.html":[7,0,1,3,2,19,1,0,4],
 "separated__graphics__net_8h.html":[7,0,1,3,0,0,20,1,0,4],
-"separated__graphics__net_8h_source.html":[7,0,1,3,0,0,20,1,0,4],
-"settings__display_8cpp.html":[7,0,1,3,2,40,4],
-"settings__display_8cpp_source.html":[7,0,1,3,2,40,4]
+"separated__graphics__net_8h_source.html":[7,0,1,3,0,0,20,1,0,4]
 };
