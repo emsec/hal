@@ -1,12 +1,14 @@
 <map id="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/common/netlist_abstraction.h" name="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/common/netlist_abstraction.h">
-<area shape="rect" id="node1" title=" " alt="" coords="345,5,540,91"/>
-<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,139,289,165"/>
-<area shape="rect" id="node7" title=" " alt="" coords="313,139,356,165"/>
-<area shape="rect" id="node8" title=" " alt="" coords="381,139,505,165"/>
-<area shape="rect" id="node9" title=" " alt="" coords="529,139,644,165"/>
-<area shape="rect" id="node10" title=" " alt="" coords="669,139,731,165"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,213,96,240"/>
-<area shape="rect" id="node4" title=" " alt="" coords="121,213,207,240"/>
-<area shape="rect" id="node5" title=" " alt="" coords="231,213,318,240"/>
-<area shape="rect" id="node6" title=" " alt="" coords="342,213,413,240"/>
+<area shape="rect" id="node1" title="This file contains the struct that holds all information on the netlist abstraction used for dataflow..." alt="" coords="399,5,593,91"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title=" " alt="" coords="149,317,289,344"/>
+<area shape="rect" id="node7" href="$pin__type_8h.html" title=" " alt="" coords="206,139,397,180"/>
+<area shape="rect" id="node9" title=" " alt="" coords="421,146,464,173"/>
+<area shape="rect" id="node10" title=" " alt="" coords="489,146,613,173"/>
+<area shape="rect" id="node11" title=" " alt="" coords="637,146,752,173"/>
+<area shape="rect" id="node12" title=" " alt="" coords="777,146,839,173"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,392,96,419"/>
+<area shape="rect" id="node4" title=" " alt="" coords="121,392,207,419"/>
+<area shape="rect" id="node5" title=" " alt="" coords="231,392,318,419"/>
+<area shape="rect" id="node6" title=" " alt="" coords="342,392,413,419"/>
+<area shape="rect" id="node8" href="$enums_8h.html" title=" " alt="" coords="220,228,351,269"/>
 </map>

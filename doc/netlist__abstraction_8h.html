@@ -89,7 +89,11 @@ $(document).ready(function(){initNavTree('netlist__abstraction_8h.html',''); ini
 <div class="title">netlist_abstraction.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>This file contains the struct that holds all information on the netlist abstraction used for dataflow analysis.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="defines_8h_source.html">hal_core/defines.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="pin__type_8h_source.html">hal_core/netlist/gate_library/enums/pin_type.h</a>&quot;</code><br />
 <code>#include &lt;set&gt;</code><br />
 <code>#include &lt;unordered_map&gt;</code><br />
 <code>#include &lt;unordered_set&gt;</code><br />
@@ -99,16 +103,18 @@ Include dependency graph for netlist_abstraction.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="netlist__abstraction_8h__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2netlist__abstraction_8h" alt=""/></div>
 <map name="_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2netlist__abstraction_8h" id="_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2netlist__abstraction_8h">
-<area shape="rect" title=" " alt="" coords="345,5,540,91"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="149,139,289,165"/>
-<area shape="rect" title=" " alt="" coords="313,139,356,165"/>
-<area shape="rect" title=" " alt="" coords="381,139,505,165"/>
-<area shape="rect" title=" " alt="" coords="529,139,644,165"/>
-<area shape="rect" title=" " alt="" coords="669,139,731,165"/>
-<area shape="rect" title=" " alt="" coords="5,213,96,240"/>
-<area shape="rect" title=" " alt="" coords="121,213,207,240"/>
-<area shape="rect" title=" " alt="" coords="231,213,318,240"/>
-<area shape="rect" title=" " alt="" coords="342,213,413,240"/>
+<area shape="rect" title="This file contains the struct that holds all information on the netlist abstraction used for dataflow..." alt="" coords="399,5,593,91"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="149,317,289,344"/>
+<area shape="rect" href="pin__type_8h.html" title=" " alt="" coords="206,139,397,180"/>
+<area shape="rect" title=" " alt="" coords="421,146,464,173"/>
+<area shape="rect" title=" " alt="" coords="489,146,613,173"/>
+<area shape="rect" title=" " alt="" coords="637,146,752,173"/>
+<area shape="rect" title=" " alt="" coords="777,146,839,173"/>
+<area shape="rect" title=" " alt="" coords="5,392,96,419"/>
+<area shape="rect" title=" " alt="" coords="121,392,207,419"/>
+<area shape="rect" title=" " alt="" coords="231,392,318,419"/>
+<area shape="rect" title=" " alt="" coords="342,392,413,419"/>
+<area shape="rect" href="enums_8h.html" title=" " alt="" coords="220,228,351,269"/>
 </map>
 </div>
 </div>
@@ -117,6 +123,7 @@ Include dependency graph for netlist_abstraction.h:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html">hal::dataflow::NetlistAbstraction</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The abstraction of the netlist that only contains gates of a specified type, e.g., flip-flops.  <a href="structhal_1_1dataflow_1_1_netlist_abstraction.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -126,13 +133,17 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacehal_1_1dataflow"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1dataflow.html">hal::dataflow</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This file contains the struct that holds all information on the netlist abstraction used for dataflow analysis. </p>
+
+<p class="definition">Definition in file <a class="el" href="netlist__abstraction_8h_source.html">netlist_abstraction.h</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_b01ccb8cd28d03239d93b53568c12834.html">include</a></li><li class="navelem"><a class="el" href="dir_a4d2a34eb48283e8d6db65abafeda3a7.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_39fe09b78de67bb9f64ffe6cac3c22d9.html">common</a></li><li class="navelem"><a class="el" href="netlist__abstraction_8h.html">netlist_abstraction.h</a></li>
-    <li class="footer">Generated on Mon Jun 3 2024 19:11:13 for HAL by
+    <li class="footer">Generated on Mon Jun 3 2024 21:07:29 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

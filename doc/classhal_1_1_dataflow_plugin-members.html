@@ -63,7 +63,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('classhal_1_1plugin__dataflow.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('classhal_1_1_dataflow_plugin.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -83,36 +83,35 @@ $(document).ready(function(){initNavTree('classhal_1_1plugin__dataflow.html','')
 
 <div class="header">
   <div class="headertitle">
-<div class="title">hal::plugin_dataflow Member List</div>  </div>
+<div class="title">hal::DataflowPlugin Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="classhal_1_1plugin__dataflow.html">hal::plugin_dataflow</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="classhal_1_1_dataflow_plugin.html">hal::DataflowPlugin</a>, including all inherited members.</p>
 <table class="directory">
   <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html#ad650a0e81cc8fdcf9e59dc64d80d5ba4">BasePluginInterface</a>()=default</td><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html#a2dc79d5a3ef50879122293dc434b0acb">delete_extension</a>(AbstractExtensionInterface *aeif)</td><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classhal_1_1plugin__dataflow.html#a5ce7d03e6d0eed45518ac167088bc450">execute</a>(Netlist *nl, std::string out_path, const std::vector&lt; u32 &gt; sizes, bool draw_graph, bool create_modules=false, bool register_stage_identification=false, std::vector&lt; std::vector&lt; u32 &gt;&gt; known_groups={}, u32 min_group_size=8)</td><td class="entry"><a class="el" href="classhal_1_1plugin__dataflow.html">hal::plugin_dataflow</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html#a17ecf8929723bb20a2b154420e4e6560">get_dependencies</a>() const</td><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classhal_1_1plugin__dataflow.html#a6490e4060c08737554b768b8729036de">get_description</a>() const override</td><td class="entry"><a class="el" href="classhal_1_1plugin__dataflow.html">hal::plugin_dataflow</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="classhal_1_1_dataflow_plugin.html#a2127144b4da9aab5502f28c42a89a12e">DataflowPlugin</a>()</td><td class="entry"><a class="el" href="classhal_1_1_dataflow_plugin.html">hal::DataflowPlugin</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html#a2dc79d5a3ef50879122293dc434b0acb">delete_extension</a>(AbstractExtensionInterface *aeif)</td><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="classhal_1_1_dataflow_plugin.html#aa1b70a84a626c619fb96fb415ca12684">get_dependencies</a>() const override</td><td class="entry"><a class="el" href="classhal_1_1_dataflow_plugin.html">hal::DataflowPlugin</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_dataflow_plugin.html#ab375ed4dfacb316db812fbfb7f551d33">get_description</a>() const override</td><td class="entry"><a class="el" href="classhal_1_1_dataflow_plugin.html">hal::DataflowPlugin</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
   <tr><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html#ab695a8f41837c6b4f68081b6b5f6c095">get_extensions</a>() const</td><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html#ac271e37224ec958068b963e2a763cc96">get_first_extension</a>() const</td><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classhal_1_1plugin__dataflow.html#a902155f58f90aa60c2813cb456333f39">get_name</a>() const override</td><td class="entry"><a class="el" href="classhal_1_1plugin__dataflow.html">hal::plugin_dataflow</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classhal_1_1plugin__dataflow.html#a10faf4cad2452bb9bb3562d9245f5283">get_version</a>() const override</td><td class="entry"><a class="el" href="classhal_1_1plugin__dataflow.html">hal::plugin_dataflow</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="classhal_1_1_dataflow_plugin.html#a3f07e93bc57793f17e8726b52f07afe7">get_name</a>() const override</td><td class="entry"><a class="el" href="classhal_1_1_dataflow_plugin.html">hal::DataflowPlugin</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_dataflow_plugin.html#aad2a5008e196f3e8eb32a0c8e2b2c0bf">get_version</a>() const override</td><td class="entry"><a class="el" href="classhal_1_1_dataflow_plugin.html">hal::DataflowPlugin</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
   <tr><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html#acc2948bee96f02c5a2c1236ee1f2743a">initialize</a>()</td><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html#adc5adcc49af4d469d6641ac9f2725a54">initialize_logging</a>()</td><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
   <tr><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html#a05a8364dad5101585d352f97c98ff527">log</a>(const Args &amp;... args) const</td><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html#a52dcfaa4f1facdebbd555034e2b7e72b">m_extensions</a></td><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
   <tr><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html#a1b6ba845f5f74b505fc1d1e6326b1d17">on_load</a>()</td><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html#a69d08d279368508e2ee94efd4748c3a1">on_unload</a>()</td><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classhal_1_1plugin__dataflow.html#ae3f1b9a40cfc37ef73485fbd3a17837f">plugin_dataflow</a>()</td><td class="entry"><a class="el" href="classhal_1_1plugin__dataflow.html">hal::plugin_dataflow</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html#a4bedf0ae630ab17c244b2bbc9a345914">~BasePluginInterface</a>()</td><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classhal_1_1plugin__dataflow.html#ac3f6bc5020d3769bbe051a02bd8c47bf">~plugin_dataflow</a>()=default</td><td class="entry"><a class="el" href="classhal_1_1plugin__dataflow.html">hal::plugin_dataflow</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html#a4bedf0ae630ab17c244b2bbc9a345914">~BasePluginInterface</a>()</td><td class="entry"><a class="el" href="classhal_1_1_base_plugin_interface.html">hal::BasePluginInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classhal_1_1_dataflow_plugin.html#a92f33335bd14731370f302d547759140">~DataflowPlugin</a>()=default</td><td class="entry"><a class="el" href="classhal_1_1_dataflow_plugin.html">hal::DataflowPlugin</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Jun 3 2024 19:11:15 for HAL by
+    <li class="footer">Generated on Mon Jun 3 2024 21:07:30 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

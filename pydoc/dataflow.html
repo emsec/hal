@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Dataflow Analysis (DANA) &mdash; hal_py v4.2.0-443-gf6051d749 documentation</title>
+  <title>Dataflow Analysis (DANA) &mdash; hal_py v4.2.0-444-gbb5e17b21 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-443-gf6051d749
+                v4.2.0-444-gbb5e17b21
               </div>
             
           
@@ -166,35 +166,831 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="dataflow-analysis-dana">
-<h1>Dataflow Analysis (DANA)<a class="headerlink" href="#dataflow-analysis-dana" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-dataflow">
+<span id="dataflow-analysis-dana"></span><h1>Dataflow Analysis (DANA)<a class="headerlink" href="#module-dataflow" title="Permalink to this headline">¶</a></h1>
+<p>Dataflow analysis tool DANA to recover word-level structures such as registers from gate-level netlists.</p>
+<dl class="function">
+<dt id="dataflow.analyze">
+<code class="descclassname">dataflow.</code><code class="descname">analyze</code><span class="sig-paren">(</span><em>config: dataflow.Configuration</em><span class="sig-paren">)</span> &#x2192; Optional[hal::dataflow::Result]<a class="headerlink" href="#dataflow.analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Analyze the gate-level netlist to identify word-level registers.
+Reconstructs registers based on properties such as the control inputs of their flip-flops and common successors/predecessors.
+Operates on an abstraction of the netlist that contains only flip-flops and connections between two flip-flops only if they are connected through combinational logic.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>dataflow.Dataflow.Configuration</em>) – The dataflow analysis configuration.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The dataflow analysis result on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dataflow.Dataflow.Result or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="class">
-<dt id="dataflow.DataflowPlugin">
-<em class="property">class </em><code class="descclassname">dataflow.</code><code class="descname">DataflowPlugin</code><a class="headerlink" href="#dataflow.DataflowPlugin" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="dataflow.DataflowPlugin.execute">
-<code class="descname">execute</code><span class="sig-paren">(</span><em>self: dataflow.DataflowPlugin, netlist: hal_py.Netlist, output_path: str, sizes: List[int], draw_graph: bool = False, create_modules: bool = False, register_stage_identification: bool = False, known_groups: List[List[int]] = [], min_group_size: int = 8</em><span class="sig-paren">)</span> &#x2192; List[List[hal_py.Gate]]<a class="headerlink" href="#dataflow.DataflowPlugin.execute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Executes the dataflow analysis plugin (DANA). Starting from the netlist DANA tries to identify high-level registers.</p>
+<dt id="dataflow.Configuration">
+<em class="property">class </em><code class="descclassname">dataflow.</code><code class="descname">Configuration</code><a class="headerlink" href="#dataflow.Configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class holds all information relevant for the configuration of a dataflow analysis run, including the netlist to analyze.</p>
+<dl class="method">
+<dt id="dataflow.Configuration.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: dataflow.Configuration</em>, <em>nl: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#dataflow.Configuration.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a new dataflow analysis configuration for the given netlist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dataflow.Configuration.control_pin_types">
+<code class="descname">control_pin_types</code><a class="headerlink" href="#dataflow.Configuration.control_pin_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>The pin types of the pins to be considered control pins. Defaults to an empty set.
+:type: set[hal_py.PinType]</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dataflow.Configuration.enable_stages">
+<code class="descname">enable_stages</code><a class="headerlink" href="#dataflow.Configuration.enable_stages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable stage identification as part of dataflow analysis. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dataflow.Configuration.enforce_type_consistency">
+<code class="descname">enforce_type_consistency</code><a class="headerlink" href="#dataflow.Configuration.enforce_type_consistency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enforce gate type consistency inside of a group. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+:type: bool</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dataflow.Configuration.expected_sizes">
+<code class="descname">expected_sizes</code><a class="headerlink" href="#dataflow.Configuration.expected_sizes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expected group sizes. Groups of these sizes will be prioritized. Defaults to an empty list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dataflow.Configuration.gate_types">
+<code class="descname">gate_types</code><a class="headerlink" href="#dataflow.Configuration.gate_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>The gate types to be grouped by dataflow analysis. Defaults to an empty set.
+:type: set[hal_py.GateType]</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dataflow.Configuration.known_gate_groups">
+<code class="descname">known_gate_groups</code><a class="headerlink" href="#dataflow.Configuration.known_gate_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Groups of gates that have already been identified as word-level groups beforehand. All gates of a group must be of one of the target gate types. Defaults to an empty list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dataflow.Configuration.known_net_groups">
+<code class="descname">known_net_groups</code><a class="headerlink" href="#dataflow.Configuration.known_net_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Groups of nets that have been identified as word-level datapathes beforehand. Defaults to an empty list.
+:type: list[list[hal_py.Net]]</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dataflow.Configuration.min_group_size">
+<code class="descname">min_group_size</code><a class="headerlink" href="#dataflow.Configuration.min_group_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum size of a group. Smaller groups will be penalized during analysis. Defaults to 8.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Configuration.with_control_pin_types">
+<code class="descname">with_control_pin_types</code><span class="sig-paren">(</span><em>self: dataflow.Configuration, types: Set[hal_py.PinType], overwrite: bool = False</em><span class="sig-paren">)</span> &#x2192; dataflow.Configuration<a class="headerlink" href="#dataflow.Configuration.with_control_pin_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the pin types of the pins to be considered control pins by dataflow analysis.
+Overwrite the existing set of pin types by setting the optional <code class="docutils literal notranslate"><span class="pre">overwrite</span></code> flag to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</li>
-<li><strong>output_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Path where the dataflow graph should be written to</li>
-<li><strong>sizes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em>) – Prioritized sizes.</li>
-<li><strong>draw_graph</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Switch to turn on/off the generation of the graph.</li>
-<li><strong>create_modules</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Switch to turn on/off the creation of HAL modules for the registers.</li>
-<li><strong>register_stage_identification</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Switch to turn on/off the register stage rule. Note that this rule can be too restrictive and is turned off by default.</li>
-<li><strong>known_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em><em>]</em>) – Previously known groups that stay untouched.</li>
+<li><strong>types</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a><em>]</em>) – A set of pin types.</li>
+<li><strong>enable</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite existing set of pin types, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Register groups created by DANA</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The updated dataflow analysis configuration.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]]</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dataflow.Dataflow.Configuration</p>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Configuration.with_expected_sizes">
+<code class="descname">with_expected_sizes</code><span class="sig-paren">(</span><em>self: dataflow.Configuration, sizes: List[int]</em><span class="sig-paren">)</span> &#x2192; dataflow.Configuration<a class="headerlink" href="#dataflow.Configuration.with_expected_sizes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the expected group sizes. Groups of these sizes will be prioritized.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sizes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em>) – The expected group sizes.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The updated dataflow analysis configuration.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dataflow.Dataflow.Configuration</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Configuration.with_flip_flops">
+<code class="descname">with_flip_flops</code><span class="sig-paren">(</span><em>self: dataflow.Configuration</em><span class="sig-paren">)</span> &#x2192; dataflow.Configuration<a class="headerlink" href="#dataflow.Configuration.with_flip_flops" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use the default detection configuration for flip-flops.
+Includes all flip-flop types as target gate types and sets <code class="docutils literal notranslate"><span class="pre">clock</span></code>, <code class="docutils literal notranslate"><span class="pre">enable</span></code>, <code class="docutils literal notranslate"><span class="pre">set</span></code>, and <code class="docutils literal notranslate"><span class="pre">reset</span></code> pins as control pins.
+Overwrites any existing gate type and control pin configuration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The updated dataflow analysis configuration.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dataflow.Dataflow.Configuration</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Configuration.with_gate_types">
+<code class="descname">with_gate_types</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#dataflow.Configuration.with_gate_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">with_gate_types(self: dataflow.Configuration, types: Set[hal_py.GateType], overwrite: bool = False) -&gt; dataflow.Configuration</p>
+<blockquote>
+<div><p>Add the gate types to the set of gate types to be grouped by dataflow analysis.
+Overwrite the existing set of gate types by setting the optional <code class="docutils literal notranslate"><span class="pre">overwrite</span></code> flag to <code class="docutils literal notranslate"><span class="pre">True</span></code>.
+:param set[hal_py.GateType] types: A set of gate types.
+:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite existing set of gate types, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+:returns: The updated dataflow analysis configuration.
+:rtype: dataflow.Dataflow.Configuration</p>
+</div></blockquote>
+</li>
+<li><p class="first">with_gate_types(self: dataflow.Configuration, type_properties: Set[hal_py.GateTypeProperty], overwrite: bool = False) -&gt; dataflow.Configuration</p>
+<blockquote>
+<div><p>Add the gate types featuring the specified properties to the set of gate types to be grouped by dataflow analysis.
+Overwrite the existing set of gate types by setting the optional <code class="docutils literal notranslate"><span class="pre">overwrite</span></code> flag to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.GateTypeProperty] type_properties:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">A set of gate type properties.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool overwrite:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite existing set of gate types, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The updated dataflow analysis configuration.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">dataflow.Dataflow.Configuration</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Configuration.with_known_groups">
+<code class="descname">with_known_groups</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#dataflow.Configuration.with_known_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">with_known_groups(self: dataflow.Configuration, groups: List[hal_py.Module], overwrite: bool = False) -&gt; dataflow.Configuration</p>
+<blockquote>
+<div><p>Add modules to the set of previously identified word-level groups.
+These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored.
+The groups will be used to guide dataflow analysis, but will remain unaltered in the process.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Module] groups:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">A list of modules.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool overwrite:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing previously identified word-level groups, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The updated dataflow analysis configuration.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">dataflow.Dataflow.Configuration</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">with_known_groups(self: dataflow.Configuration, groups: List[List[hal_py.Gate]], overwrite: bool = False) -&gt; dataflow.Configuration</p>
+<blockquote>
+<div><p>Add lists of gates to the set of previously identified word-level groups.
+These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored.
+The groups will be used to guide dataflow analysis, but will remain unaltered in the process.
+:param list[list[hal_py.Gate]] groups: A list of groups, each of them given as a list of gates.
+:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing previously identified word-level groups, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+:returns: The updated dataflow analysis configuration.
+:rtype: dataflow.Dataflow.Configuration</p>
+</div></blockquote>
+</li>
+<li><p class="first">with_known_groups(self: dataflow.Configuration, groups: List[List[int]], overwrite: bool = False) -&gt; dataflow.Configuration</p>
+<blockquote>
+<div><p>Add lists of gate IDs to the set of previously identified word-level groups.
+These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored.
+The groups will be used to guide dataflow analysis, but will remain unaltered in the process.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param list[list[int]] groups:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">A list of groups, each of them given as a list of gate IDs.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param bool overwrite:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing previously identified word-level groups, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The updated dataflow analysis configuration.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">dataflow.Dataflow.Configuration</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">with_known_groups(self: dataflow.Configuration, groups: Dict[int, Set[hal_py.Gate]], overwrite: bool = False) -&gt; dataflow.Configuration</p>
+<blockquote>
+<div><p>Add groups from a previous dataflow analysis run to the set of previously identified word-level groups.
+These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored.
+The groups will be used to guide dataflow analysis, but will remain unaltered in the process.
+The group IDs will be ignored during analysis and the same group may be assigned a new ID.
+:param dict[int,set[hal_py.Gate]] groups: A dict from group IDs to groups, each of them given as a set of gates.
+:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing previously identified word-level groups, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+:returns: The updated dataflow analysis configuration.
+:rtype: dataflow.Dataflow.Configuration</p>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Configuration.with_known_structures">
+<code class="descname">with_known_structures</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#dataflow.Configuration.with_known_structures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">with_known_structures(self: dataflow.Configuration, structures: List[hal_py.Module], overwrite: bool = False) -&gt; dataflow.Configuration</p>
+<blockquote>
+<div><p>Add modules to the set of previously identified word-level structures.
+The gates contained in the modules do not have to be of the target gate types.
+The input and output pin groups of these modules will be used to guide datapath analysis.
+Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.
+:param list[hal_py.Module] structures: A list of modules.
+:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+:returns: The updated dataflow analysis configuration.
+:rtype: dataflow.Dataflow.Configuration</p>
+</div></blockquote>
+</li>
+<li><p class="first">with_known_structures(self: dataflow.Configuration, structures: List[Tuple[hal_py.Module, List[hal_py.ModulePinGroup]]], overwrite: bool = False) -&gt; dataflow.Configuration</p>
+<blockquote>
+<div><p>Add modules to the set of previously identified word-level structures.
+The gates contained in the modules do not have to be of the target gate types.
+The input and output pin groups of these modules will be used to guide datapath analysis.
+For each module, the input and output pin groups to be considered for analysis must be specified. 
+An empty pin group vector results in all pin groups of the module being considered.
+Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.
+:param list[tuple(hal_py.Module,list[hal_py.ModulePinGroup])] structures: A list of modules, each of them with a list of module pin groups.
+:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+:returns: The updated dataflow analysis configuration.
+:rtype: dataflow.Dataflow.Configuration</p>
+</div></blockquote>
+</li>
+<li><p class="first">with_known_structures(self: dataflow.Configuration, structures: List[hal_py.Gate], overwrite: bool = False) -&gt; dataflow.Configuration</p>
+<blockquote>
+<div><p>Add (typically large) gates to the set of previously identified word-level structures.
+The gates do not have to be of the target gate types.
+The input and output pin groups of these gates will be used to guide datapath analysis.
+Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.
+:param list[hal_py.Gate] structures: A list of gates.
+:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+:returns: The updated dataflow analysis configuration.
+:rtype: dataflow.Dataflow.Configuration</p>
+</div></blockquote>
+</li>
+<li><p class="first">with_known_structures(self: dataflow.Configuration, structures: List[Tuple[hal_py.Gate, List[hal_py.GatePinGroup]]], overwrite: bool = False) -&gt; dataflow.Configuration</p>
+<blockquote>
+<div><p>Add (typically large) gates to the set of previously identified word-level structures.
+The gates do not have to be of the target gate types.
+The input and output pin groups of these gates will be used to guide datapath analysis.
+For each gate, the input and output pin groups to be considered for analysis must be specified. 
+An empty pin group vector results in all pin groups of the gate being considered.
+Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.
+:param list[tuple(hal_py.Gate,list[hal_py.GatePinGroup])] structures: A list of gates, each of them with a list of gate pin groups.
+:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+:returns: The updated dataflow analysis configuration.
+:rtype: dataflow.Dataflow.Configuration</p>
+</div></blockquote>
+</li>
+<li><p class="first">with_known_structures(self: dataflow.Configuration, structures: Set[hal_py.GateType], overwrite: bool = False) -&gt; dataflow.Configuration</p>
+<blockquote>
+<div><p>Add all gates of a (typically large) gate type to the set of previously identified word-level structures.
+The gate types do not have to be part of the target gate types.
+The input and output pin groups of the gates of these types will be used to guide datapath analysis.
+Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.
+:param set[hal_py.GateType] structures: A set of gates.
+:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+:returns: The updated dataflow analysis configuration.
+:rtype: dataflow.Dataflow.Configuration</p>
+</div></blockquote>
+</li>
+<li><p class="first">with_known_structures(self: dataflow.Configuration, structures: Dict[hal_py.GateType, List[hal_py.GatePinGroup]], overwrite: bool = False) -&gt; dataflow.Configuration</p>
+<blockquote>
+<div><p>Add all gates of a (typically large) gate type to the set of previously identified word-level structures.
+The gate types do not have to be part of the target gate types.
+The input and output pin groups of the gates of these types will be used to guide datapath analysis.
+For each gate type, the input and output pin groups to be considered for analysis must be specified. 
+An empty pin group vector results in all pin groups of the gate type being considered.
+Only pin groups larger than <code class="docutils literal notranslate"><span class="pre">min_group_size</span></code> will be considered.
+:param dict[hal_py.GateType,list[hal_py.GatePinGroup]] structures: A dict from gates to a vector of a subset of their pin groups.
+:param bool overwrite: Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to overwrite the existing known word-level structures, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+:returns: The updated dataflow analysis configuration.
+:rtype: dataflow.Dataflow.Configuration</p>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Configuration.with_min_group_size">
+<code class="descname">with_min_group_size</code><span class="sig-paren">(</span><em>self: dataflow.Configuration</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; dataflow.Configuration<a class="headerlink" href="#dataflow.Configuration.with_min_group_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the minimum size of a group. Smaller groups will be penalized during analysis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The minimum group size.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The updated dataflow analysis configuration.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dataflow.Dataflow.Configuration</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Configuration.with_stage_identification">
+<code class="descname">with_stage_identification</code><span class="sig-paren">(</span><em>self: dataflow.Configuration</em>, <em>enable: bool = True</em><span class="sig-paren">)</span> &#x2192; dataflow.Configuration<a class="headerlink" href="#dataflow.Configuration.with_stage_identification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable stage identification as part of dataflow analysis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>enable</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enable stage identification, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The updated dataflow analysis configuration.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dataflow.Dataflow.Configuration</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Configuration.with_type_consistency">
+<code class="descname">with_type_consistency</code><span class="sig-paren">(</span><em>self: dataflow.Configuration</em>, <em>enable: bool = True</em><span class="sig-paren">)</span> &#x2192; dataflow.Configuration<a class="headerlink" href="#dataflow.Configuration.with_type_consistency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable type consistency as part of dataflow analysis when deciding whether two gates are allowed to merge into the same group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>enable</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enable type consistency inside of a group, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The updated dataflow analysis configuration.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dataflow.Dataflow.Configuration</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dataflow.Result">
+<em class="property">class </em><code class="descclassname">dataflow.</code><code class="descname">Result</code><a class="headerlink" href="#dataflow.Result" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class holds result of a dataflow analysis run, which contains the identified groups of sequential gates and their interconnections.
+Each such group is assigned a unique ID by which it can be addressed in many of the member functions of this class.
+Please note that this ID is not related to any other HAL ID.</p>
+<dl class="method">
+<dt id="dataflow.Result.create_modules">
+<code class="descname">create_modules</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#dataflow.Result.create_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p class="first">create_modules(self: dataflow.Result, module_suffixes: Dict[hal_py.GateType, str] = {}, pin_prefixes: Dict[Tuple[hal_py.PinDirection, str], str] = {}, group_ids: Set[int] = set()) -&gt; Optional[Dict[int, hal_py.Module]]</p>
+<blockquote>
+<div><p>Create modules for the dataflow analysis result.
+:param dict[hal_py.GateType,str] module_suffixes: The suffixes to use for modules containing only gates of a specific gate type. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;module&quot;</span></code> for mixed and unspecified gate types.
+:param dict[tuple(hal_py.PinDirection,str),str] pin_prefixes: The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name. Defaults to the gate pin name.
+:param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+:returns: A map from group IDs to Modules on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.
+:rtype: dict[int,hal_py.Module] or None</p>
+</div></blockquote>
+</li>
+<li><p class="first">create_modules(self: dataflow.Result, module_suffixes: Dict[hal_py.GateTypeProperty, str], pin_prefixes: Dict[Tuple[hal_py.PinDirection, str], str] = {}, group_ids: Set[int] = set()) -&gt; Optional[Dict[int, hal_py.Module]]</p>
+<blockquote>
+<div><p>Create modules for the dataflow analysis result.
+:param dict[hal_py.GateTypeProperty,str] module_suffixes: The suffixes to use for modules containing only gates of a specific gate type. All gate types featuring the specified gate type property are considered, but the module must still be pure (i.e., all gates must be of the same type) for the suffix to be used. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;module&quot;</span></code> for mixed and unspecified gate types.
+:param dict[tuple(hal_py.PinDirection,str),str] pin_prefixes: The prefixes to use for the module pins that (within the module) only connect to gate pins of a specific name. Defaults to the gate pin name.
+:param set[int] group_ids: The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.
+:returns: A map from group IDs to Modules on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.
+:rtype: dict[int,hal_py.Module] or None</p>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Result.get_gate_control_nets">
+<code class="descname">get_gate_control_nets</code><span class="sig-paren">(</span><em>self: dataflow.Result</em>, <em>gate: hal_py.Gate</em>, <em>type: hal_py.PinType</em><span class="sig-paren">)</span> &#x2192; Optional[Set[hal_py.Net]]<a class="headerlink" href="#dataflow.Result.get_gate_control_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the control nets of the given gate that are connected to a pin of the specified type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate.</li>
+<li><strong>type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The pin type.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A set of control nets of the gate on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Result.get_gate_predecessors">
+<code class="descname">get_gate_predecessors</code><span class="sig-paren">(</span><em>self: dataflow.Result</em>, <em>gate: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; Optional[Set[hal_py.Gate]]<a class="headerlink" href="#dataflow.Result.get_gate_predecessors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the sequential predecessor gates of the given sequential gate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The predecessors of the gate as a set of gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Result.get_gate_successors">
+<code class="descname">get_gate_successors</code><span class="sig-paren">(</span><em>self: dataflow.Result</em>, <em>gate: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; Optional[Set[hal_py.Gate]]<a class="headerlink" href="#dataflow.Result.get_gate_successors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the sequential successor gates of the given sequential gate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The successors of the gate as a set of gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Result.get_gates">
+<code class="descname">get_gates</code><span class="sig-paren">(</span><em>self: dataflow.Result</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Gate]<a class="headerlink" href="#dataflow.Result.get_gates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all gates contained in any of the groups groups.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of gates.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Result.get_gates_of_group">
+<code class="descname">get_gates_of_group</code><span class="sig-paren">(</span><em>self: dataflow.Result</em>, <em>group_id: int</em><span class="sig-paren">)</span> &#x2192; Optional[Set[hal_py.Gate]]<a class="headerlink" href="#dataflow.Result.get_gates_of_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the gates of the specified group of sequential gates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The ID of the group.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The gates of the group as a set on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Result.get_group_control_nets">
+<code class="descname">get_group_control_nets</code><span class="sig-paren">(</span><em>self: dataflow.Result</em>, <em>group_id: int</em>, <em>type: hal_py.PinType</em><span class="sig-paren">)</span> &#x2192; Optional[Set[hal_py.Net]]<a class="headerlink" href="#dataflow.Result.get_group_control_nets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the control nets of the group with the given group ID that are connected to a pin of the specified type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>group_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The group ID.</li>
+<li><strong>type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The pin type.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A set of control nets of the group on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Result.get_group_id_of_gate">
+<code class="descname">get_group_id_of_gate</code><span class="sig-paren">(</span><em>self: dataflow.Result</em>, <em>gate: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; Optional[int]<a class="headerlink" href="#dataflow.Result.get_group_id_of_gate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the group ID of the group that contains the given gate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The group ID on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Result.get_group_list">
+<code class="descname">get_group_list</code><span class="sig-paren">(</span><em>self: dataflow.Result</em>, <em>group_ids: Set[int] = set()</em><span class="sig-paren">)</span> &#x2192; List[List[hal_py.Gate]]<a class="headerlink" href="#dataflow.Result.get_group_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the groups of the dataflow analysis result as a list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em>) – The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of groups with each group being a list of gates.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Result.get_group_predecessors">
+<code class="descname">get_group_predecessors</code><span class="sig-paren">(</span><em>self: dataflow.Result</em>, <em>group_id: int</em><span class="sig-paren">)</span> &#x2192; Optional[Set[int]]<a class="headerlink" href="#dataflow.Result.get_group_predecessors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the predecessor groups of the group with the given ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The ID of the group.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The predecessors of the group as a set of group IDs on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Result.get_group_successors">
+<code class="descname">get_group_successors</code><span class="sig-paren">(</span><em>self: dataflow.Result</em>, <em>group_id: int</em><span class="sig-paren">)</span> &#x2192; Optional[Set[int]]<a class="headerlink" href="#dataflow.Result.get_group_successors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the successor groups of the group with the given ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The group ID.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The successors of the group as a set of group IDs on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Result.get_groups">
+<code class="descname">get_groups</code><span class="sig-paren">(</span><em>self: dataflow.Result</em><span class="sig-paren">)</span> &#x2192; Dict[int, Set[hal_py.Gate]]<a class="headerlink" href="#dataflow.Result.get_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the groups of sequential gates resulting from dataflow analysis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from group ID to a set of gates belonging to the respective group.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Result.get_netlist">
+<code class="descname">get_netlist</code><span class="sig-paren">(</span><em>self: dataflow.Result</em><span class="sig-paren">)</span> &#x2192; hal_py.Netlist<a class="headerlink" href="#dataflow.Result.get_netlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the netlist on which dataflow analysis has been performed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The netlist.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Result.merge_groups">
+<code class="descname">merge_groups</code><span class="sig-paren">(</span><em>self: dataflow.Result, group_ids: List[int]</em><span class="sig-paren">)</span> &#x2192; Optional[int]<a class="headerlink" href="#dataflow.Result.merge_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge multiple groups specified by ID. 
+All specified groups are merged into the first group of the provided vector and are subsequently deleted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em>) – The group IDs of the groups to merge.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The ID of the group that all other groups have been merged into on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Result.split_group">
+<code class="descname">split_group</code><span class="sig-paren">(</span><em>self: dataflow.Result, group_id: int, new_groups: List[Set[hal_py.Gate]]</em><span class="sig-paren">)</span> &#x2192; Optional[List[int]]<a class="headerlink" href="#dataflow.Result.split_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split a group into multiple smaller groups specified by sets of gates.
+All gates of the group to split must be contained in the sets exactly once and all gates in the sets must be contained in the group to split.
+The group that is being split is deleted in the process.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>group_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The group ID of the group to split.</li>
+<li><strong>new_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em><em>]</em>) – A list of groups specified as unordered sets of gates.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The group IDs of the newly created groups in the order of the provided sets.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Result.write_dot">
+<code class="descname">write_dot</code><span class="sig-paren">(</span><em>self: dataflow.Result</em>, <em>out_path: os.PathLike</em>, <em>group_ids: Set[int] = set()</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#dataflow.Result.write_dot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the dataflow graph as a DOT graph to the specified location.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>out_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a>) – The output path.</li>
+<li><strong>group_ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em>) – The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.Result.write_txt">
+<code class="descname">write_txt</code><span class="sig-paren">(</span><em>self: dataflow.Result</em>, <em>out_path: os.PathLike</em>, <em>group_ids: Set[int] = set()</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#dataflow.Result.write_txt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the groups resulting from dataflow analysis to a <cite>.txt</cite> file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>out_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a>) – The output path.</li>
+<li><strong>group_ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em>) – The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="dataflow.DataflowPlugin">
+<em class="property">class </em><code class="descclassname">dataflow.</code><code class="descname">DataflowPlugin</code><a class="headerlink" href="#dataflow.DataflowPlugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides an interface to integrate the DANA tool as a plugin within the HAL framework.</p>
+<dl class="attribute">
+<dt id="dataflow.DataflowPlugin.description">
+<code class="descname">description</code><a class="headerlink" href="#dataflow.DataflowPlugin.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>The short description of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="dataflow.DataflowPlugin.get_description">
+<code class="descname">get_description</code><span class="sig-paren">(</span><em>self: dataflow.DataflowPlugin</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#dataflow.DataflowPlugin.get_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the short description of the plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The short description of the plugin.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
 </tr>
 </tbody>
 </table>
@@ -208,7 +1004,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Plugin name.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The name of the plugin.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
 </tr>
@@ -224,7 +1020,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Plugin version.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The version of the plugin.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
 </tr>
@@ -260,589 +1056,6 @@
 </table>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="class">
-<dt id="dataflow.Dataflow.Configuration">
-<em class="property">class </em><code class="descclassname">dataflow.Dataflow.</code><code class="descname">Configuration</code><a class="headerlink" href="#dataflow.Dataflow.Configuration" title="Permalink to this definition">¶</a></dt>
-<dd><p>Holds the configuration of a dataflow analysis run.</p>
-<dl class="method">
-<dt id="dataflow.Dataflow.Configuration.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Configuration</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#dataflow.Dataflow.Configuration.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Constructs a new dataflow analysis configuration.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="dataflow.Dataflow.Configuration.enable_register_stages">
-<code class="descname">enable_register_stages</code><a class="headerlink" href="#dataflow.Dataflow.Configuration.enable_register_stages" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enable register stage identification as part of dataflow analysis. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="dataflow.Dataflow.Configuration.expected_sizes">
-<code class="descname">expected_sizes</code><a class="headerlink" href="#dataflow.Dataflow.Configuration.expected_sizes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Expected group sizes. Groups of these sizes will be prioritized. Defaults to an empty list.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="dataflow.Dataflow.Configuration.known_groups">
-<code class="descname">known_groups</code><a class="headerlink" href="#dataflow.Dataflow.Configuration.known_groups" title="Permalink to this definition">¶</a></dt>
-<dd><p>Already identified groups of sequential gates as a list of groups with each group being a list of gate IDs. Defaults to an empty list.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>]]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="dataflow.Dataflow.Configuration.min_group_size">
-<code class="descname">min_group_size</code><a class="headerlink" href="#dataflow.Dataflow.Configuration.min_group_size" title="Permalink to this definition">¶</a></dt>
-<dd><p>Minimum size of a group. Smaller groups will be penalized during analysis. Defaults to 8.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Configuration.with_expected_sizes">
-<code class="descname">with_expected_sizes</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Configuration, sizes: List[int]</em><span class="sig-paren">)</span> &#x2192; dataflow.Dataflow.Configuration<a class="headerlink" href="#dataflow.Dataflow.Configuration.with_expected_sizes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the expected group sizes. Groups of these sizes will be prioritized.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sizes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em>) – The expected group sizes.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The updated dataflow analysis configuration.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#dataflow.Dataflow.Configuration" title="dataflow.Dataflow.Configuration">dataflow.Dataflow.Configuration</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Configuration.with_known_groups">
-<code class="descname">with_known_groups</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#dataflow.Dataflow.Configuration.with_known_groups" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overloaded function.</p>
-<ol class="arabic">
-<li><p class="first">with_known_groups(self: dataflow.Dataflow.Configuration, groups: List[hal_py.Module]) -&gt; dataflow.Dataflow.Configuration</p>
-<blockquote>
-<div><p>Set already identified groups of sequential gates as a list of groups with each group being a module.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Module] groups:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">A list of groups.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The updated dataflow analysis configuration.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">dataflow.Dataflow.Configuration</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-<li><p class="first">with_known_groups(self: dataflow.Dataflow.Configuration, groups: List[hal_py.Grouping]) -&gt; dataflow.Dataflow.Configuration</p>
-<blockquote>
-<div><p>Set already identified groups of sequential gates as a vector of groups with each group being a grouping.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param list[hal_py.Grouping] groups:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">A list of groups.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The updated dataflow analysis configuration.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">dataflow.Dataflow.Configuration</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-<li><p class="first">with_known_groups(self: dataflow.Dataflow.Configuration, groups: List[List[hal_py.Gate]]) -&gt; dataflow.Dataflow.Configuration</p>
-<blockquote>
-<div><p>Set already identified groups of sequential gates as a list of groups with each group being a list of gates.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param list[list[hal_py.Gate]] groups:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">A list of groups.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The updated dataflow analysis configuration.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">dataflow.Dataflow.Configuration</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-<li><p class="first">with_known_groups(self: dataflow.Dataflow.Configuration, groups: List[List[int]]) -&gt; dataflow.Dataflow.Configuration</p>
-<blockquote>
-<div><p>Set already identified groups of sequential gates as a list of groups with each group being a list of gate IDs.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param list[list[int]] groups:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">A list of groups.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The updated dataflow analysis configuration.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">dataflow.Dataflow.Configuration</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</li>
-</ol>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Configuration.with_min_group_size">
-<code class="descname">with_min_group_size</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Configuration</em>, <em>size: int</em><span class="sig-paren">)</span> &#x2192; dataflow.Dataflow.Configuration<a class="headerlink" href="#dataflow.Dataflow.Configuration.with_min_group_size" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the minimum size of a group. Smaller groups will be penalized during analysis.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The minimum group size.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The updated dataflow analysis configuration.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#dataflow.Dataflow.Configuration" title="dataflow.Dataflow.Configuration">dataflow.Dataflow.Configuration</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Configuration.with_register_stage_identification">
-<code class="descname">with_register_stage_identification</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Configuration</em>, <em>enable: bool = True</em><span class="sig-paren">)</span> &#x2192; dataflow.Dataflow.Configuration<a class="headerlink" href="#dataflow.Dataflow.Configuration.with_register_stage_identification" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enable register stage identification as part of dataflow analysis.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>enable</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enable register stage identification, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The updated dataflow analysis configuration.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#dataflow.Dataflow.Configuration" title="dataflow.Dataflow.Configuration">dataflow.Dataflow.Configuration</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Configuration.with_type_consistency">
-<code class="descname">with_type_consistency</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Configuration</em>, <em>enable: bool = True</em><span class="sig-paren">)</span> &#x2192; dataflow.Dataflow.Configuration<a class="headerlink" href="#dataflow.Dataflow.Configuration.with_type_consistency" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enable type consistency as part of dataflow analysis when deciding whether two gates are allowed to merge into the same group.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>enable</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to enable type consistency inside of a group, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The updated dataflow analysis configuration.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#dataflow.Dataflow.Configuration" title="dataflow.Dataflow.Configuration">dataflow.Dataflow.Configuration</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="dataflow.Dataflow.Result">
-<em class="property">class </em><code class="descclassname">dataflow.Dataflow.</code><code class="descname">Result</code><a class="headerlink" href="#dataflow.Dataflow.Result" title="Permalink to this definition">¶</a></dt>
-<dd><p>The result of a dataflow analysis run containing the identified groups of sequential gates and their interconnections.</p>
-<dl class="method">
-<dt id="dataflow.Dataflow.Result.create_modules">
-<code class="descname">create_modules</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result</em>, <em>group_ids: Set[int] = set()</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[int, hal_py.Module]]<a class="headerlink" href="#dataflow.Dataflow.Result.create_modules" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create modules for the dataflow analysis result.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em>) – The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A map from group IDs to Modules on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>,<a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module">hal_py.Module</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Result.get_gate_control_nets">
-<code class="descname">get_gate_control_nets</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result</em>, <em>gate: hal_py.Gate</em>, <em>type: hal_py.PinType</em><span class="sig-paren">)</span> &#x2192; Optional[Set[hal_py.Net]]<a class="headerlink" href="#dataflow.Dataflow.Result.get_gate_control_nets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the control nets of the given gate that are connected to a pin of the specified type.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate.</li>
-<li><strong>type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The pin type.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A set of control nets of the gate on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Result.get_gate_predecessors">
-<code class="descname">get_gate_predecessors</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result</em>, <em>gate: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; Optional[Set[hal_py.Gate]]<a class="headerlink" href="#dataflow.Dataflow.Result.get_gate_predecessors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the sequential predecessor gates of the given sequential gate.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The predecessors of the gate as a set of gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Result.get_gate_successors">
-<code class="descname">get_gate_successors</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result</em>, <em>gate: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; Optional[Set[hal_py.Gate]]<a class="headerlink" href="#dataflow.Dataflow.Result.get_gate_successors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the sequential successor gates of the given sequential gate.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The successors of the gate as a set of gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Result.get_gates">
-<code class="descname">get_gates</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result</em><span class="sig-paren">)</span> &#x2192; List[hal_py.Gate]<a class="headerlink" href="#dataflow.Dataflow.Result.get_gates" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all gates contained in any of the groups groups.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of gates.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Result.get_gates_of_group">
-<code class="descname">get_gates_of_group</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result</em>, <em>group_id: int</em><span class="sig-paren">)</span> &#x2192; Optional[Set[hal_py.Gate]]<a class="headerlink" href="#dataflow.Dataflow.Result.get_gates_of_group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the gates of the specified group of sequential gates.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The ID of the group.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The gates of the group as a set on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Result.get_group_control_nets">
-<code class="descname">get_group_control_nets</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result</em>, <em>group_id: int</em>, <em>type: hal_py.PinType</em><span class="sig-paren">)</span> &#x2192; Optional[Set[hal_py.Net]]<a class="headerlink" href="#dataflow.Dataflow.Result.get_group_control_nets" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the control nets of the group with the given group ID that are connected to a pin of the specified type.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>group_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The group ID.</li>
-<li><strong>type</strong> (<a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a>) – The pin type.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A set of control nets of the group on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Result.get_group_id_of_gate">
-<code class="descname">get_group_id_of_gate</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result</em>, <em>gate: hal_py.Gate</em><span class="sig-paren">)</span> &#x2192; Optional[int]<a class="headerlink" href="#dataflow.Dataflow.Result.get_group_id_of_gate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the group ID of the group that contains the given gate.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gate</strong> (<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a>) – The gate.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The group ID on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Result.get_group_list">
-<code class="descname">get_group_list</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result</em>, <em>group_ids: Set[int] = set()</em><span class="sig-paren">)</span> &#x2192; List[List[hal_py.Gate]]<a class="headerlink" href="#dataflow.Dataflow.Result.get_group_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the groups of the dataflow analysis result as a list.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em>) – The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of groups with each group being a list of gates.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Result.get_group_predecessors">
-<code class="descname">get_group_predecessors</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result</em>, <em>group_id: int</em><span class="sig-paren">)</span> &#x2192; Optional[Set[int]]<a class="headerlink" href="#dataflow.Dataflow.Result.get_group_predecessors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the predecessor groups of the group with the given ID.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The ID of the group.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The predecessors of the group as a set of group IDs on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Result.get_group_successors">
-<code class="descname">get_group_successors</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result</em>, <em>group_id: int</em><span class="sig-paren">)</span> &#x2192; Optional[Set[int]]<a class="headerlink" href="#dataflow.Dataflow.Result.get_group_successors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the successor groups of the group with the given ID.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The group ID.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The successors of the group as a set of group IDs on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Result.get_groups">
-<code class="descname">get_groups</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result</em><span class="sig-paren">)</span> &#x2192; Dict[int, Set[hal_py.Gate]]<a class="headerlink" href="#dataflow.Dataflow.Result.get_groups" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the groups of sequential gates resulting from dataflow analysis.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A dict from group ID to a set of gates belonging to the respective group.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Result.get_netlist">
-<code class="descname">get_netlist</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result</em><span class="sig-paren">)</span> &#x2192; hal_py.Netlist<a class="headerlink" href="#dataflow.Dataflow.Result.get_netlist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the netlist on which dataflow analysis has been performed.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The netlist.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Result.merge_groups">
-<code class="descname">merge_groups</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result, group_ids: List[int]</em><span class="sig-paren">)</span> &#x2192; Optional[int]<a class="headerlink" href="#dataflow.Dataflow.Result.merge_groups" title="Permalink to this definition">¶</a></dt>
-<dd><p>Merge multiple groups specified by ID. 
-All specified groups are merged into the first group of the provided vector and are subsequently deleted.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em>) – The group IDs of the groups to merge.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The ID of the group that all over groups have been merged into on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Result.split_group">
-<code class="descname">split_group</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result, group_id: int, new_groups: List[Set[hal_py.Gate]]</em><span class="sig-paren">)</span> &#x2192; Optional[List[int]]<a class="headerlink" href="#dataflow.Dataflow.Result.split_group" title="Permalink to this definition">¶</a></dt>
-<dd><p>Split a group into multiple smaller groups specified by sets of gates.
-All gates of the group to split must be contained in the sets exactly once and all gates in the sets must be contained in the group to split.
-The group that is being split is deleted in the process.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>group_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The group ID of the group to split.</li>
-<li><strong>new_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em><em>]</em>) – A list of groups specified as unordered sets of gates.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The group IDs of the newly created groups in the order of the provided sets.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>]</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Result.write_dot">
-<code class="descname">write_dot</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result</em>, <em>out_path: os.PathLike</em>, <em>group_ids: Set[int] = set()</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#dataflow.Dataflow.Result.write_dot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write the dataflow graph as a DOT graph to the specified location.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>out_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a>) – The output path.</li>
-<li><strong>group_ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em>) – The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="dataflow.Dataflow.Result.write_txt">
-<code class="descname">write_txt</code><span class="sig-paren">(</span><em>self: dataflow.Dataflow.Result</em>, <em>out_path: os.PathLike</em>, <em>group_ids: Set[int] = set()</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#dataflow.Dataflow.Result.write_txt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write the groups resulting from dataflow analysis to a <cite>.txt</cite> file.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>out_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a>) – The output path.</li>
-<li><strong>group_ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em>) – The group IDs to consider. If no IDs are provided, all groups will be considered. Defaults to an empty set.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<span class="target" id="module-dataflow.Dataflow"></span><dl class="function">
-<dt id="dataflow.Dataflow.analyze">
-<code class="descclassname">dataflow.Dataflow.</code><code class="descname">analyze</code><span class="sig-paren">(</span><em>nl: hal_py.Netlist</em>, <em>config: dataflow.Dataflow.Configuration = &lt;dataflow.Dataflow.Configuration object at 0x7ffa24d249b0&gt;</em><span class="sig-paren">)</span> &#x2192; Optional[hal::dataflow::Result]<a class="headerlink" href="#dataflow.Dataflow.analyze" title="Permalink to this definition">¶</a></dt>
-<dd><p>Analyze the datapath to identify word-level registers in the given netlist.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist.</li>
-<li><strong>config</strong> (<a class="reference internal" href="#dataflow.Dataflow.Configuration" title="dataflow.Dataflow.Configuration"><em>dataflow.Dataflow.Configuration</em></a>) – The dataflow analysis configuration.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The dataflow analysis result on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#dataflow.Dataflow.Result" title="dataflow.Dataflow.Result">dataflow.Dataflow.Result</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 </div>

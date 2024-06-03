@@ -115,13 +115,17 @@ Collaboration diagram for hal::GuiExtensionDataflow:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2f6442c98becfb0c07f965ddd3cf5084"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_extension_dataflow.html#a2f6442c98becfb0c07f965ddd3cf5084">GuiExtensionDataflow</a> ()</td></tr>
-<tr class="separator:a2f6442c98becfb0c07f965ddd3cf5084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c0f6db712446d1dde9650921d4bf1cd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_extension_dataflow.html#a0c0f6db712446d1dde9650921d4bf1cd">GuiExtensionDataflow</a> ()=default</td></tr>
+<tr class="memdesc:a0c0f6db712446d1dde9650921d4bf1cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor for <code><a class="el" href="classhal_1_1_gui_extension_dataflow.html">GuiExtensionDataflow</a></code>.  <a href="classhal_1_1_gui_extension_dataflow.html#a0c0f6db712446d1dde9650921d4bf1cd">More...</a><br /></td></tr>
+<tr class="separator:a0c0f6db712446d1dde9650921d4bf1cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac91f739c93f0e340c729a0c40eaeaead"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhal_1_1_plugin_parameter.html">PluginParameter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_extension_dataflow.html#ac91f739c93f0e340c729a0c40eaeaead">get_parameter</a> () const override</td></tr>
+<tr class="memdesc:ac91f739c93f0e340c729a0c40eaeaead"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a vector of configurable parameters.  <a href="classhal_1_1_gui_extension_dataflow.html#ac91f739c93f0e340c729a0c40eaeaead">More...</a><br /></td></tr>
 <tr class="separator:ac91f739c93f0e340c729a0c40eaeaead"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9acd8c11a5ddd357a834adb7a9444c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_extension_dataflow.html#ad9acd8c11a5ddd357a834adb7a9444c2">set_parameter</a> (const std::vector&lt; <a class="el" href="classhal_1_1_plugin_parameter.html">PluginParameter</a> &gt; &amp;params) override</td></tr>
+<tr class="memdesc:ad9acd8c11a5ddd357a834adb7a9444c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set values for a vector of configurable parameters.  <a href="classhal_1_1_gui_extension_dataflow.html#ad9acd8c11a5ddd357a834adb7a9444c2">More...</a><br /></td></tr>
 <tr class="separator:ad9acd8c11a5ddd357a834adb7a9444c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5712e954f109aefc6a6a1a1eb833a112"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_extension_dataflow.html#a5712e954f109aefc6a6a1a1eb833a112">execute_function</a> (std::string tag, <a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl, const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;mods, const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;gats, const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;nets) override</td></tr>
+<tr class="memdesc:a5712e954f109aefc6a6a1a1eb833a112"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the plugin on the given netlist.  <a href="classhal_1_1_gui_extension_dataflow.html#a5712e954f109aefc6a6a1a1eb833a112">More...</a><br /></td></tr>
 <tr class="separator:a5712e954f109aefc6a6a1a1eb833a112"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a948b44344a3bdcaecbea355ab8d5a945"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_extension_dataflow.html#a948b44344a3bdcaecbea355ab8d5a945">register_progress_indicator</a> (std::function&lt; void(int, const std::string &amp;)&gt; pif) override</td></tr>
 <tr class="separator:a948b44344a3bdcaecbea355ab8d5a945"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -151,8 +155,8 @@ Static Public Attributes</h2></td></tr>
 <div class="textblock">
 <p class="definition">Definition at line <a class="el" href="plugin__dataflow_8h_source.html#l00053">53</a> of file <a class="el" href="plugin__dataflow_8h_source.html">plugin_dataflow.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a2f6442c98becfb0c07f965ddd3cf5084"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f6442c98becfb0c07f965ddd3cf5084">&#9670;&nbsp;</a></span>GuiExtensionDataflow()</h2>
+<a id="a0c0f6db712446d1dde9650921d4bf1cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c0f6db712446d1dde9650921d4bf1cd">&#9670;&nbsp;</a></span>GuiExtensionDataflow()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -169,12 +173,12 @@ Static Public Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8h_source.html#l00063">63</a> of file <a class="el" href="plugin__dataflow_8h_source.html">plugin_dataflow.h</a>.</p>
+<p>Default constructor for <code><a class="el" href="classhal_1_1_gui_extension_dataflow.html">GuiExtensionDataflow</a></code>. </p>
 
 </div>
 </div>
@@ -230,23 +234,25 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Call from GUI to execute function. This function gets called when user selected a plugin contribution (see get_context_contribution) in context menu of GUI graphical netlist view or when user clicked a push button in contributed plugin menu</p>
+
+<p>Execute the plugin on the given netlist. </p>
+<p>All parameters but the netlist are ignored.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">tag</td><td>- The function tagname (unique identifier) </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>- The current netlist in GUI </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mods</td><td>- List of selected modules </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">gats</td><td>- List of selected gates </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nets</td><td>- List of selected nets </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">tag</td><td>- A tag (ignored). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>- The netlist to operate on. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mods</td><td>- <a class="el" href="classhal_1_1_module.html">Module</a> IDs (ignored). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">gats</td><td>- <a class="el" href="classhal_1_1_gate.html">Gate</a> IDs (ignored). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nets</td><td>- <a class="el" href="classhal_1_1_net.html">Net</a> IDs (ignored). </td></tr>
   </table>
   </dd>
 </dl>
 
 <p>Reimplemented from <a class="el" href="classhal_1_1_gui_extension_interface.html#a4cf49aaee37a182da0f94b697ee86699">hal::GuiExtensionInterface</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8cpp_source.html#l00162">162</a> of file <a class="el" href="plugin__dataflow_8cpp_source.html">plugin_dataflow.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8cpp_source.html#l00167">167</a> of file <a class="el" href="plugin__dataflow_8cpp_source.html">plugin_dataflow.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="plugin__dataflow_8h_source.html#l00088">s_progress_indicator_function</a>, and <a class="el" href="defines_8h_source.html#l00049">UNUSED</a>.</p>
+<p class="reference">References <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3">hal::clock</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">hal::enable</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="el" href="log_8h_source.html#l00078">log_error</a>, <a class="el" href="log_8h_source.html#l00076">log_warning</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba86266ee937d97f812a8e57d22b62ee29">hal::reset</a>, <a class="el" href="plugin__dataflow_8h_source.html#l00104">s_progress_indicator_function</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">hal::set</a>, <a class="el" href="defines_8h_source.html#l00049">UNUSED</a>, <a class="el" href="configuration_8cpp_source.html#l00290">hal::dataflow::Configuration::with_control_pin_types()</a>, <a class="el" href="configuration_8cpp_source.html#l00023">hal::dataflow::Configuration::with_expected_sizes()</a>, <a class="el" href="configuration_8cpp_source.html#l00017">hal::dataflow::Configuration::with_min_group_size()</a>, and <a class="el" href="configuration_8cpp_source.html#l00312">hal::dataflow::Configuration::with_stage_identification()</a>.</p>
 
 </div>
 </div>
@@ -272,12 +278,13 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get list of configurable parameter</p>
-<dl class="section return"><dt>Returns</dt><dd>list of parameter </dd></dl>
+
+<p>Get a vector of configurable parameters. </p>
+<dl class="section return"><dt>Returns</dt><dd>The vector of parameters. </dd></dl>
 
 <p>Reimplemented from <a class="el" href="classhal_1_1_gui_extension_interface.html#af4a8e7b3dfe4c26bef3294d0d3f7eee8">hal::GuiExtensionInterface</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8cpp_source.html#l00104">104</a> of file <a class="el" href="plugin__dataflow_8cpp_source.html">plugin_dataflow.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8cpp_source.html#l00109">109</a> of file <a class="el" href="plugin__dataflow_8cpp_source.html">plugin_dataflow.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="plugin__parameter_8h_source.html#l00035">hal::PluginParameter::Boolean</a>, <a class="el" href="plugin__parameter_8h_source.html#l00035">hal::PluginParameter::ExistingDir</a>, <a class="el" href="plugin__parameter_8h_source.html#l00035">hal::PluginParameter::Integer</a>, <a class="el" href="plugin__parameter_8h_source.html#l00035">hal::PluginParameter::PushButton</a>, and <a class="el" href="plugin__parameter_8h_source.html#l00035">hal::PluginParameter::String</a>.</p>
 
@@ -315,9 +322,9 @@ Static Public Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classhal_1_1_gui_extension_interface.html#ad71442d65633cbfbc939f052ea5fa7a5">hal::GuiExtensionInterface</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8cpp_source.html#l00260">260</a> of file <a class="el" href="plugin__dataflow_8cpp_source.html">plugin_dataflow.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8cpp_source.html#l00232">232</a> of file <a class="el" href="plugin__dataflow_8cpp_source.html">plugin_dataflow.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="plugin__dataflow_8h_source.html#l00088">s_progress_indicator_function</a>.</p>
+<p class="reference">References <a class="el" href="plugin__dataflow_8h_source.html#l00104">s_progress_indicator_function</a>.</p>
 
 </div>
 </div>
@@ -344,18 +351,18 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Set configurable parameter to values </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Set values for a vector of configurable parameters. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">params</td><td>The parameter with values </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">params</td><td>- The parameters including their values. </td></tr>
   </table>
   </dd>
 </dl>
 
 <p>Reimplemented from <a class="el" href="classhal_1_1_gui_extension_interface.html#af1ca25c1234985faaabb3cc5060d2eb3">hal::GuiExtensionInterface</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8cpp_source.html#l00118">118</a> of file <a class="el" href="plugin__dataflow_8cpp_source.html">plugin_dataflow.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00063">hal::dataflow::Configuration::enable_register_stages</a>, <a class="el" href="api_2configuration_8h_source.html#l00053">hal::dataflow::Configuration::expected_sizes</a>, and <a class="el" href="api_2configuration_8h_source.html#l00048">hal::dataflow::Configuration::min_group_size</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8cpp_source.html#l00123">123</a> of file <a class="el" href="plugin__dataflow_8cpp_source.html">plugin_dataflow.cpp</a>.</p>
 
 </div>
 </div>
@@ -380,9 +387,9 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8h_source.html#l00088">88</a> of file <a class="el" href="plugin__dataflow_8h_source.html">plugin_dataflow.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugin__dataflow_8h_source.html#l00104">104</a> of file <a class="el" href="plugin__dataflow_8h_source.html">plugin_dataflow.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__dataflow_8cpp_source.html#l00162">execute_function()</a>, <a class="el" href="progress__printer_8cpp_source.html#l00027">hal::dataflow::ProgressPrinter::print_progress()</a>, and <a class="el" href="plugin__dataflow_8cpp_source.html#l00260">register_progress_indicator()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugin__dataflow_8cpp_source.html#l00167">execute_function()</a>, <a class="el" href="progress__printer_8cpp_source.html#l00027">hal::dataflow::ProgressPrinter::print_progress()</a>, and <a class="el" href="plugin__dataflow_8cpp_source.html#l00232">register_progress_indicator()</a>.</p>
 
 </div>
 </div>
@@ -396,7 +403,7 @@ Static Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_gui_extension_dataflow.html">GuiExtensionDataflow</a></li>
-    <li class="footer">Generated on Mon Jun 3 2024 19:11:15 for HAL by
+    <li class="footer">Generated on Mon Jun 3 2024 21:07:30 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

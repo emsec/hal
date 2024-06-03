@@ -113,33 +113,34 @@ $(document).ready(function(){initNavTree('pre__processing_8h_source.html',''); i
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="netlist__abstraction_8h.html">dataflow_analysis/common/netlist_abstraction.h</a>&quot;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">class </span>Netlist;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">namespace </span>dataflow</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    {</div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="namespacehal_1_1dataflow_1_1pre__processing.html">   36</a></span>&#160;        <span class="keyword">namespace </span>pre_processing</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        {</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            <a class="code" href="structhal_1_1dataflow_1_1_netlist_abstraction.html">NetlistAbstraction</a> <a class="code" href="namespacehal_1_1dataflow_1_1pre__processing.html#ad706eda09aeaef4073caa79dc8d4e847">run</a>(<a class="code" href="classhal_1_1_netlist.html">Netlist</a>* <a class="code" href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">netlist</a>, <span class="keywordtype">bool</span> register_stage_identification);</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        }    <span class="comment">// namespace pre_processing</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    }        <span class="comment">// namespace dataflow</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="api_2configuration_8h.html">dataflow_analysis/api/configuration.h</a>&quot;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="netlist__abstraction_8h.html">dataflow_analysis/common/netlist_abstraction.h</a>&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacehal.html">hal</a></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;{</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">class </span>Netlist;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">namespace </span>dataflow</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    {</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="namespacehal_1_1dataflow_1_1pre__processing.html">   37</a></span>&#160;        <span class="keyword">namespace </span>pre_processing</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            <a class="code" href="structhal_1_1dataflow_1_1_netlist_abstraction.html">NetlistAbstraction</a> <a class="code" href="namespacehal_1_1dataflow_1_1pre__processing.html#ad0161e1f1140801ca024e1359a5310f0">run</a>(<span class="keyword">const</span> <a class="code" href="structhal_1_1dataflow_1_1_configuration.html">dataflow::Configuration</a>&amp; config, std::shared_ptr&lt;dataflow::Grouping&gt;&amp; initial_grouping);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        }    <span class="comment">// namespace pre_processing</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }    <span class="comment">// namespace dataflow</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anetlist__abstraction_8h_html"><div class="ttname"><a href="netlist__abstraction_8h.html">netlist_abstraction.h</a></div></div>
+<div class="ttc" id="astructhal_1_1dataflow_1_1_configuration_html"><div class="ttname"><a href="structhal_1_1dataflow_1_1_configuration.html">hal::dataflow::Configuration</a></div><div class="ttdoc">Configuration of a dataflow analysis run.</div><div class="ttdef"><b>Definition:</b> <a href="api_2configuration_8h_source.html#l00060">configuration.h:60</a></div></div>
+<div class="ttc" id="anetlist__abstraction_8h_html"><div class="ttname"><a href="netlist__abstraction_8h.html">netlist_abstraction.h</a></div><div class="ttdoc">This file contains the struct that holds all information on the netlist abstraction used for dataflow...</div></div>
 <div class="ttc" id="anamespacehal_html"><div class="ttname"><a href="namespacehal.html">hal</a></div><div class="ttdef"><b>Definition:</b> <a href="parser__liberty_8cpp_source.html#l00009">parser_liberty.cpp:9</a></div></div>
-<div class="ttc" id="astructhal_1_1dataflow_1_1_netlist_abstraction_html"><div class="ttname"><a href="structhal_1_1dataflow_1_1_netlist_abstraction.html">hal::dataflow::NetlistAbstraction</a></div><div class="ttdef"><b>Definition:</b> <a href="netlist__abstraction_8h_source.html#l00045">netlist_abstraction.h:45</a></div></div>
-<div class="ttc" id="anamespacetest__multiple_html_aca3deff7ab8749c592308be75680f1e1"><div class="ttname"><a href="namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1">test_multiple.netlist</a></div><div class="ttdeci">netlist</div><div class="ttdef"><b>Definition:</b> <a href="test__multiple_8py_source.html#l00029">test_multiple.py:29</a></div></div>
-<div class="ttc" id="anamespacehal_1_1dataflow_1_1pre__processing_html_ad706eda09aeaef4073caa79dc8d4e847"><div class="ttname"><a href="namespacehal_1_1dataflow_1_1pre__processing.html#ad706eda09aeaef4073caa79dc8d4e847">hal::dataflow::pre_processing::run</a></div><div class="ttdeci">NetlistAbstraction run(Netlist *netlist, bool register_stage_identification)</div><div class="ttdef"><b>Definition:</b> <a href="pre__processing_8cpp_source.html#l00234">pre_processing.cpp:234</a></div></div>
-<div class="ttc" id="aclasshal_1_1_netlist_html"><div class="ttname"><a href="classhal_1_1_netlist.html">hal::Netlist</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2hal__core_2netlist_2netlist_8h_source.html#l00055">netlist.h:55</a></div></div>
+<div class="ttc" id="anamespacehal_1_1dataflow_1_1pre__processing_html_ad0161e1f1140801ca024e1359a5310f0"><div class="ttname"><a href="namespacehal_1_1dataflow_1_1pre__processing.html#ad0161e1f1140801ca024e1359a5310f0">hal::dataflow::pre_processing::run</a></div><div class="ttdeci">NetlistAbstraction run(const dataflow::Configuration &amp;config, std::shared_ptr&lt; dataflow::Grouping &gt; &amp;initial_grouping)</div><div class="ttdef"><b>Definition:</b> <a href="pre__processing_8cpp_source.html#l00320">pre_processing.cpp:320</a></div></div>
+<div class="ttc" id="astructhal_1_1dataflow_1_1_netlist_abstraction_html"><div class="ttname"><a href="structhal_1_1dataflow_1_1_netlist_abstraction.html">hal::dataflow::NetlistAbstraction</a></div><div class="ttdoc">The abstraction of the netlist that only contains gates of a specified type, e.g.,...</div><div class="ttdef"><b>Definition:</b> <a href="netlist__abstraction_8h_source.html#l00055">netlist_abstraction.h:55</a></div></div>
+<div class="ttc" id="aapi_2configuration_8h_html"><div class="ttname"><a href="api_2configuration_8h.html">configuration.h</a></div><div class="ttdoc">This file contains the struct that holds all information on a dataflow analysis configuration.</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_b01ccb8cd28d03239d93b53568c12834.html">include</a></li><li class="navelem"><a class="el" href="dir_a4d2a34eb48283e8d6db65abafeda3a7.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_4e0a37862cc7407b708ad1629646627b.html">pre_processing</a></li><li class="navelem"><a class="el" href="pre__processing_8h.html">pre_processing.h</a></li>
-    <li class="footer">Generated on Mon Jun 3 2024 19:11:10 for HAL by
+    <li class="footer">Generated on Mon Jun 3 2024 21:07:26 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -91,53 +91,190 @@ $(document).ready(function(){initNavTree('structhal_1_1dataflow_1_1_configuratio
 </div><!--header-->
 <div class="contents">
 
+<p><a class="el" href="structhal_1_1dataflow_1_1_configuration.html" title="Configuration of a dataflow analysis run.">Configuration</a> of a dataflow analysis run.  
+ <a href="structhal_1_1dataflow_1_1_configuration.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="api_2configuration_8h_source.html">configuration.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for hal::dataflow::Configuration:</div>
 <div class="dyncontent">
 <div class="center"><img src="structhal_1_1dataflow_1_1_configuration__coll__graph.png" border="0" usemap="#hal_1_1dataflow_1_1_configuration_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1dataflow_1_1_configuration_coll__map" id="hal_1_1dataflow_1_1_configuration_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,212,215"/>
+<area shape="rect" title="Configuration of a dataflow analysis run." alt="" coords="5,219,205,443"/>
+<area shape="rect" href="classhal_1_1_netlist.html" title=" " alt="" coords="43,5,167,156"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a72cd03664db81758a9156ca683cee8db"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a72cd03664db81758a9156ca683cee8db">Configuration</a> (<a class="el" href="classhal_1_1_netlist.html">Netlist</a> *nl)</td></tr>
+<tr class="memdesc:a72cd03664db81758a9156ca683cee8db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new dataflow analysis configuration for the given netlist.  <a href="structhal_1_1dataflow_1_1_configuration.html#a72cd03664db81758a9156ca683cee8db">More...</a><br /></td></tr>
+<tr class="separator:a72cd03664db81758a9156ca683cee8db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adeed2b1c81e1831eb33115e31da17f1d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#adeed2b1c81e1831eb33115e31da17f1d">with_min_group_size</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> size)</td></tr>
+<tr class="memdesc:adeed2b1c81e1831eb33115e31da17f1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the minimum size of a group. Smaller groups will be penalized during analysis.  <a href="structhal_1_1dataflow_1_1_configuration.html#adeed2b1c81e1831eb33115e31da17f1d">More...</a><br /></td></tr>
 <tr class="separator:adeed2b1c81e1831eb33115e31da17f1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab042ff6cb281a4dd5bf8c4251971ca9b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#ab042ff6cb281a4dd5bf8c4251971ca9b">with_expected_sizes</a> (const std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &amp;sizes)</td></tr>
+<tr class="memdesc:ab042ff6cb281a4dd5bf8c4251971ca9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the expected group sizes. Groups of these sizes will be prioritized.  <a href="structhal_1_1dataflow_1_1_configuration.html#ab042ff6cb281a4dd5bf8c4251971ca9b">More...</a><br /></td></tr>
 <tr class="separator:ab042ff6cb281a4dd5bf8c4251971ca9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef49588d4ea6c006249f13e9f4a79dda"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#aef49588d4ea6c006249f13e9f4a79dda">with_known_groups</a> (const std::vector&lt; <a class="el" href="classhal_1_1_module.html">Module</a> * &gt; &amp;groups)</td></tr>
-<tr class="separator:aef49588d4ea6c006249f13e9f4a79dda"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afdae027ce61de2236932db8e862bcf11"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#afdae027ce61de2236932db8e862bcf11">with_known_groups</a> (const std::vector&lt; <a class="el" href="classhal_1_1_grouping.html">hal::Grouping</a> * &gt; &amp;groups)</td></tr>
-<tr class="separator:afdae027ce61de2236932db8e862bcf11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25c407e6217cfa557aab7195401963d2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a25c407e6217cfa557aab7195401963d2">with_known_groups</a> (const std::vector&lt; std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&gt; &amp;groups)</td></tr>
-<tr class="separator:a25c407e6217cfa557aab7195401963d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92a65f07b6067c99344ccd8d55671d39"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a92a65f07b6067c99344ccd8d55671d39">with_known_groups</a> (const std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&gt; &amp;groups)</td></tr>
-<tr class="separator:a92a65f07b6067c99344ccd8d55671d39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23decf5d189b2ebfe9f0b54b4779eb9f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a23decf5d189b2ebfe9f0b54b4779eb9f">with_register_stage_identification</a> (bool enable=true)</td></tr>
-<tr class="separator:a23decf5d189b2ebfe9f0b54b4779eb9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff23226db5f15fdac64162bf83bf4117"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#aff23226db5f15fdac64162bf83bf4117">with_known_structures</a> (const std::vector&lt; <a class="el" href="classhal_1_1_module.html">Module</a> * &gt; &amp;structures, bool overwrite=false)</td></tr>
+<tr class="memdesc:aff23226db5f15fdac64162bf83bf4117"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add modules to the set of previously identified word-level structures.  <a href="structhal_1_1dataflow_1_1_configuration.html#aff23226db5f15fdac64162bf83bf4117">More...</a><br /></td></tr>
+<tr class="separator:aff23226db5f15fdac64162bf83bf4117"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7a0ac61d612e75a2aea96fa851c1291"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#ac7a0ac61d612e75a2aea96fa851c1291">with_known_structures</a> (const std::vector&lt; std::pair&lt; <a class="el" href="classhal_1_1_module.html">Module</a> *, std::vector&lt; <a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_module_pin.html">ModulePin</a> &gt; * &gt;&gt;&gt; &amp;structures, bool overwrite=false)</td></tr>
+<tr class="memdesc:ac7a0ac61d612e75a2aea96fa851c1291"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add modules to the set of previously identified word-level structures.  <a href="structhal_1_1dataflow_1_1_configuration.html#ac7a0ac61d612e75a2aea96fa851c1291">More...</a><br /></td></tr>
+<tr class="separator:ac7a0ac61d612e75a2aea96fa851c1291"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc9761fadefc52ac18838fa3861c7df2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#abc9761fadefc52ac18838fa3861c7df2">with_known_structures</a> (const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;structures, bool overwrite=false)</td></tr>
+<tr class="memdesc:abc9761fadefc52ac18838fa3861c7df2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add (typically large) gates to the set of previously identified word-level structures.  <a href="structhal_1_1dataflow_1_1_configuration.html#abc9761fadefc52ac18838fa3861c7df2">More...</a><br /></td></tr>
+<tr class="separator:abc9761fadefc52ac18838fa3861c7df2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade917139a0fd8ef40ad3ef81976182a3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#ade917139a0fd8ef40ad3ef81976182a3">with_known_structures</a> (const std::vector&lt; std::pair&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> *, std::vector&lt; <a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> &gt; * &gt;&gt;&gt; &amp;structures, bool overwrite=false)</td></tr>
+<tr class="memdesc:ade917139a0fd8ef40ad3ef81976182a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add (typically large) gates to the set of previously identified word-level structures.  <a href="structhal_1_1dataflow_1_1_configuration.html#ade917139a0fd8ef40ad3ef81976182a3">More...</a><br /></td></tr>
+<tr class="separator:ade917139a0fd8ef40ad3ef81976182a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af28cc5090d9017e3ad999615c3c7f7e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#af28cc5090d9017e3ad999615c3c7f7e2">with_known_structures</a> (const std::unordered_set&lt; const <a class="el" href="classhal_1_1_gate_type.html">GateType</a> * &gt; &amp;structures, bool overwrite=false)</td></tr>
+<tr class="memdesc:af28cc5090d9017e3ad999615c3c7f7e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add all gates of a (typically large) gate type to the set of previously identified word-level structures.  <a href="structhal_1_1dataflow_1_1_configuration.html#af28cc5090d9017e3ad999615c3c7f7e2">More...</a><br /></td></tr>
+<tr class="separator:af28cc5090d9017e3ad999615c3c7f7e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa508af1db09c45cf12200eae781a0d11"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#aa508af1db09c45cf12200eae781a0d11">with_known_structures</a> (const std::unordered_map&lt; const <a class="el" href="classhal_1_1_gate_type.html">GateType</a> *, std::vector&lt; <a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> &gt; * &gt;&gt; &amp;structures, bool overwrite=false)</td></tr>
+<tr class="memdesc:aa508af1db09c45cf12200eae781a0d11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add all gates of a (typically large) gate type to the set of previously identified word-level structures.  <a href="structhal_1_1dataflow_1_1_configuration.html#aa508af1db09c45cf12200eae781a0d11">More...</a><br /></td></tr>
+<tr class="separator:aa508af1db09c45cf12200eae781a0d11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1d4e787c4d5804d51e058f70bff2820"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#aa1d4e787c4d5804d51e058f70bff2820">with_known_groups</a> (const std::vector&lt; <a class="el" href="classhal_1_1_module.html">Module</a> * &gt; &amp;groups, bool overwrite=false)</td></tr>
+<tr class="memdesc:aa1d4e787c4d5804d51e058f70bff2820"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add modules to the set of previously identified word-level groups.  <a href="structhal_1_1dataflow_1_1_configuration.html#aa1d4e787c4d5804d51e058f70bff2820">More...</a><br /></td></tr>
+<tr class="separator:aa1d4e787c4d5804d51e058f70bff2820"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac11d0861dfa450c5e69bc8916bef72bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#ac11d0861dfa450c5e69bc8916bef72bb">with_known_groups</a> (const std::vector&lt; std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&gt; &amp;groups, bool overwrite=false)</td></tr>
+<tr class="memdesc:ac11d0861dfa450c5e69bc8916bef72bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add vectors of gates to the set of previously identified word-level groups.  <a href="structhal_1_1dataflow_1_1_configuration.html#ac11d0861dfa450c5e69bc8916bef72bb">More...</a><br /></td></tr>
+<tr class="separator:ac11d0861dfa450c5e69bc8916bef72bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e09c37391be424a5733ee3d22a8179a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a2e09c37391be424a5733ee3d22a8179a">with_known_groups</a> (const std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&gt; &amp;groups, bool overwrite=false)</td></tr>
+<tr class="memdesc:a2e09c37391be424a5733ee3d22a8179a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add vectors of gate IDs to the set of previously identified word-level groups.  <a href="structhal_1_1dataflow_1_1_configuration.html#a2e09c37391be424a5733ee3d22a8179a">More...</a><br /></td></tr>
+<tr class="separator:a2e09c37391be424a5733ee3d22a8179a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8dc0b65ab0fc0f38b40b6bb1ef143fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#ac8dc0b65ab0fc0f38b40b6bb1ef143fb">with_known_groups</a> (const std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&gt; &amp;groups, bool overwrite=false)</td></tr>
+<tr class="memdesc:ac8dc0b65ab0fc0f38b40b6bb1ef143fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add groups from a previous dataflow analysis run to the set of previously identified word-level groups.  <a href="structhal_1_1dataflow_1_1_configuration.html#ac8dc0b65ab0fc0f38b40b6bb1ef143fb">More...</a><br /></td></tr>
+<tr class="separator:ac8dc0b65ab0fc0f38b40b6bb1ef143fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7470668e97d5cc200a2beaf25b992526"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a7470668e97d5cc200a2beaf25b992526">with_gate_types</a> (const std::set&lt; const <a class="el" href="classhal_1_1_gate_type.html">GateType</a> * &gt; &amp;types, bool overwrite=false)</td></tr>
+<tr class="memdesc:a7470668e97d5cc200a2beaf25b992526"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add the gate types to the set of gate types to be grouped by dataflow analysis.  <a href="structhal_1_1dataflow_1_1_configuration.html#a7470668e97d5cc200a2beaf25b992526">More...</a><br /></td></tr>
+<tr class="separator:a7470668e97d5cc200a2beaf25b992526"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a824800f9c047cae72cb8417573d32abb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a824800f9c047cae72cb8417573d32abb">with_gate_types</a> (const std::set&lt; <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721ca">GateTypeProperty</a> &gt; &amp;type_properties, bool overwrite=false)</td></tr>
+<tr class="memdesc:a824800f9c047cae72cb8417573d32abb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add the gate types featuring the specified properties to the set of gate types to be grouped by dataflow analysis.  <a href="structhal_1_1dataflow_1_1_configuration.html#a824800f9c047cae72cb8417573d32abb">More...</a><br /></td></tr>
+<tr class="separator:a824800f9c047cae72cb8417573d32abb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d75293b46b491f342f190ff24417279"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a7d75293b46b491f342f190ff24417279">with_control_pin_types</a> (const std::set&lt; <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> &gt; &amp;types, bool overwrite=false)</td></tr>
+<tr class="memdesc:a7d75293b46b491f342f190ff24417279"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the pin types of the pins to be considered control pins by dataflow analysis.  <a href="structhal_1_1dataflow_1_1_configuration.html#a7d75293b46b491f342f190ff24417279">More...</a><br /></td></tr>
+<tr class="separator:a7d75293b46b491f342f190ff24417279"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06e3b6454930f5af7d7168925f354306"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a06e3b6454930f5af7d7168925f354306">with_flip_flops</a> ()</td></tr>
+<tr class="memdesc:a06e3b6454930f5af7d7168925f354306"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use the default detection configuration for flip-flops.  <a href="structhal_1_1dataflow_1_1_configuration.html#a06e3b6454930f5af7d7168925f354306">More...</a><br /></td></tr>
+<tr class="separator:a06e3b6454930f5af7d7168925f354306"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9011817a65762bf64b4c10b8e86e1ba6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a9011817a65762bf64b4c10b8e86e1ba6">with_stage_identification</a> (bool enable=true)</td></tr>
+<tr class="memdesc:a9011817a65762bf64b4c10b8e86e1ba6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable stage identification as part of dataflow analysis.  <a href="structhal_1_1dataflow_1_1_configuration.html#a9011817a65762bf64b4c10b8e86e1ba6">More...</a><br /></td></tr>
+<tr class="separator:a9011817a65762bf64b4c10b8e86e1ba6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ca6cecdb7810944b1eb54487d145039"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a3ca6cecdb7810944b1eb54487d145039">with_type_consistency</a> (bool enable=true)</td></tr>
+<tr class="memdesc:a3ca6cecdb7810944b1eb54487d145039"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable type consistency as part of dataflow analysis when deciding whether two gates are allowed to merge into the same group.  <a href="structhal_1_1dataflow_1_1_configuration.html#a3ca6cecdb7810944b1eb54487d145039">More...</a><br /></td></tr>
 <tr class="separator:a3ca6cecdb7810944b1eb54487d145039"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:af672b0a19db7574c088a7689755d5783"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_netlist.html">Netlist</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#af672b0a19db7574c088a7689755d5783">netlist</a></td></tr>
+<tr class="memdesc:af672b0a19db7574c088a7689755d5783"><td class="mdescLeft">&#160;</td><td class="mdescRight">The netlist to be analyzed.  <a href="structhal_1_1dataflow_1_1_configuration.html#af672b0a19db7574c088a7689755d5783">More...</a><br /></td></tr>
+<tr class="separator:af672b0a19db7574c088a7689755d5783"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacbb82235bd4d3f00940ddd50c50f2cf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#aacbb82235bd4d3f00940ddd50c50f2cf">min_group_size</a> = 8</td></tr>
+<tr class="memdesc:aacbb82235bd4d3f00940ddd50c50f2cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum size of a group. Smaller groups will be penalized during analysis. Defaults to 8.  <a href="structhal_1_1dataflow_1_1_configuration.html#aacbb82235bd4d3f00940ddd50c50f2cf">More...</a><br /></td></tr>
 <tr class="separator:aacbb82235bd4d3f00940ddd50c50f2cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c700d5c1c7d90d67372386ef1336365"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a0c700d5c1c7d90d67372386ef1336365">expected_sizes</a> = {}</td></tr>
+<tr class="memdesc:a0c700d5c1c7d90d67372386ef1336365"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expected group sizes. Groups of these sizes will be prioritized. Defaults to an empty vector.  <a href="structhal_1_1dataflow_1_1_configuration.html#a0c700d5c1c7d90d67372386ef1336365">More...</a><br /></td></tr>
 <tr class="separator:a0c700d5c1c7d90d67372386ef1336365"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a647fdd85e7274ef7cb7d7cbde0e3213c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a647fdd85e7274ef7cb7d7cbde0e3213c">known_groups</a> = {}</td></tr>
-<tr class="separator:a647fdd85e7274ef7cb7d7cbde0e3213c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a810bcff44bdce5e358278977416721b0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a810bcff44bdce5e358278977416721b0">enable_register_stages</a> = false</td></tr>
-<tr class="separator:a810bcff44bdce5e358278977416721b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adce398ef24b673496e55547798bd55f9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#adce398ef24b673496e55547798bd55f9">known_gate_groups</a> = {}</td></tr>
+<tr class="memdesc:adce398ef24b673496e55547798bd55f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Groups of gates that have already been identified as word-level groups beforehand. All gates of a group must be of one of the target gate types. Defaults to an empty vector.  <a href="structhal_1_1dataflow_1_1_configuration.html#adce398ef24b673496e55547798bd55f9">More...</a><br /></td></tr>
+<tr class="separator:adce398ef24b673496e55547798bd55f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08f45f66fea550910d1b9eba6a466775"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a08f45f66fea550910d1b9eba6a466775">known_net_groups</a> = {}</td></tr>
+<tr class="memdesc:a08f45f66fea550910d1b9eba6a466775"><td class="mdescLeft">&#160;</td><td class="mdescRight">Groups of nets that have been identified as word-level datapathes beforehand. Defaults to an empty vector.  <a href="structhal_1_1dataflow_1_1_configuration.html#a08f45f66fea550910d1b9eba6a466775">More...</a><br /></td></tr>
+<tr class="separator:a08f45f66fea550910d1b9eba6a466775"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d674c0d1a0ea85091213eb8f92ecd20"><td class="memItemLeft" align="right" valign="top">std::set&lt; const <a class="el" href="classhal_1_1_gate_type.html">GateType</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a3d674c0d1a0ea85091213eb8f92ecd20">gate_types</a> = {}</td></tr>
+<tr class="memdesc:a3d674c0d1a0ea85091213eb8f92ecd20"><td class="mdescLeft">&#160;</td><td class="mdescRight">The gate types to be grouped by dataflow analysis. Defaults to an empty set.  <a href="structhal_1_1dataflow_1_1_configuration.html#a3d674c0d1a0ea85091213eb8f92ecd20">More...</a><br /></td></tr>
+<tr class="separator:a3d674c0d1a0ea85091213eb8f92ecd20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3de3564aa64469af6c0324cdb829b0c7"><td class="memItemLeft" align="right" valign="top">std::set&lt; <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#a3de3564aa64469af6c0324cdb829b0c7">control_pin_types</a> = {}</td></tr>
+<tr class="memdesc:a3de3564aa64469af6c0324cdb829b0c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pin types of the pins to be considered control pins. Defaults to an empty set.  <a href="structhal_1_1dataflow_1_1_configuration.html#a3de3564aa64469af6c0324cdb829b0c7">More...</a><br /></td></tr>
+<tr class="separator:a3de3564aa64469af6c0324cdb829b0c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af07c6ae25da79e9e4d36fcfe866451ac"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#af07c6ae25da79e9e4d36fcfe866451ac">enable_stages</a> = false</td></tr>
+<tr class="memdesc:af07c6ae25da79e9e4d36fcfe866451ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable stage identification as part of dataflow analysis. Defaults to <code>false</code>.  <a href="structhal_1_1dataflow_1_1_configuration.html#af07c6ae25da79e9e4d36fcfe866451ac">More...</a><br /></td></tr>
+<tr class="separator:af07c6ae25da79e9e4d36fcfe866451ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa68e649ceb526265d7c7c444fc0d75b2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html#aa68e649ceb526265d7c7c444fc0d75b2">enforce_type_consistency</a> = false</td></tr>
+<tr class="memdesc:aa68e649ceb526265d7c7c444fc0d75b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enforce gate type consistency inside of a group. Defaults to <code>false</code>.  <a href="structhal_1_1dataflow_1_1_configuration.html#aa68e649ceb526265d7c7c444fc0d75b2">More...</a><br /></td></tr>
 <tr class="separator:aa68e649ceb526265d7c7c444fc0d75b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Holds the configuration of a dataflow analysis run. </p>
+<div class="textblock"><p><a class="el" href="structhal_1_1dataflow_1_1_configuration.html" title="Configuration of a dataflow analysis run.">Configuration</a> of a dataflow analysis run. </p>
+<p>This struct holds all information relevant for the configuration of a dataflow analysis run, including the netlist to analyze. </p>
 
-<p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00043">43</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+<p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00060">60</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a72cd03664db81758a9156ca683cee8db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72cd03664db81758a9156ca683cee8db">&#9670;&nbsp;</a></span>Configuration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">hal::dataflow::Configuration::Configuration </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_netlist.html">Netlist</a> *&#160;</td>
+          <td class="paramname"><em>nl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a new dataflow analysis configuration for the given netlist. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">nl</td><td>- The netlist. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00013">13</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a7d75293b46b491f342f190ff24417279"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d75293b46b491f342f190ff24417279">&#9670;&nbsp;</a></span>with_control_pin_types()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp; hal::dataflow::Configuration::with_control_pin_types </td>
+          <td>(</td>
+          <td class="paramtype">const std::set&lt; <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>types</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>overwrite</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the pin types of the pins to be considered control pins by dataflow analysis. </p>
+<p>Overwrite the existing set of pin types by setting the optional <code>overwrite</code> flag to <code>true</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">types</td><td>- A set of pin types. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">overwrite</td><td>- Set <code>true</code> to overwrite existing set of pin types, <code>false</code> otherwise. Defaults to <code>false</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00290">290</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00102">control_pin_types</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugin__dataflow_8cpp_source.html#l00167">hal::GuiExtensionDataflow::execute_function()</a>, and <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
+
+</div>
+</div>
 <a id="ab042ff6cb281a4dd5bf8c4251971ca9b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab042ff6cb281a4dd5bf8c4251971ca9b">&#9670;&nbsp;</a></span>with_expected_sizes()</h2>
 
@@ -153,7 +290,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Set the expected group sizes. Groups of these sizes will be prioritized.</p>
+
+<p>Set the expected group sizes. Groups of these sizes will be prioritized. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">sizes</td><td>- The expected group sizes. </td></tr>
@@ -162,16 +300,131 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00017">17</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00023">23</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00053">expected_sizes</a>.</p>
+<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00082">expected_sizes</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__dataflow_8cpp_source.html#l00219">hal::plugin_dataflow::execute()</a>, and <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugin__dataflow_8cpp_source.html#l00167">hal::GuiExtensionDataflow::execute_function()</a>, and <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
-<a id="afdae027ce61de2236932db8e862bcf11"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afdae027ce61de2236932db8e862bcf11">&#9670;&nbsp;</a></span>with_known_groups() <span class="overload">[1/4]</span></h2>
+<a id="a06e3b6454930f5af7d7168925f354306"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06e3b6454930f5af7d7168925f354306">&#9670;&nbsp;</a></span>with_flip_flops()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp; hal::dataflow::Configuration::with_flip_flops </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Use the default detection configuration for flip-flops. </p>
+<p>Includes all flip-flop types as target gate types and sets <code>clock</code>, <code>enable</code>, <code>set</code>, and <code>reset</code> pins as control pins. Overwrites any existing gate type and control pin configuration.</p>
+<dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00304">304</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba05531b19bb846b18c09f979eeb429ad3">hal::clock</a>, <a class="el" href="api_2configuration_8h_source.html#l00102">control_pin_types</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba208f156d4a803025c284bb595a7576b4">hal::enable</a>, <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721caa633de4b0c14ca52ea2432a3c8a5c4c31">hal::ff</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94ba86266ee937d97f812a8e57d22b62ee29">hal::reset</a>, <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94bacdaeeeba9b4a4c5ebf042c0215a7bb0e">hal::set</a>, and <a class="el" href="configuration_8cpp_source.html#l00257">with_gate_types()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
+
+</div>
+</div>
+<a id="a7470668e97d5cc200a2beaf25b992526"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7470668e97d5cc200a2beaf25b992526">&#9670;&nbsp;</a></span>with_gate_types() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp; hal::dataflow::Configuration::with_gate_types </td>
+          <td>(</td>
+          <td class="paramtype">const std::set&lt; const <a class="el" href="classhal_1_1_gate_type.html">GateType</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>types</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>overwrite</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add the gate types to the set of gate types to be grouped by dataflow analysis. </p>
+<p>Overwrite the existing set of gate types by setting the optional <code>overwrite</code> flag to <code>true</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">types</td><td>- A set of gate types. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">overwrite</td><td>- Set <code>true</code> to overwrite existing set of gate types, <code>false</code> otherwise. Defaults to <code>false</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00257">257</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00097">gate_types</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="configuration_8cpp_source.html#l00304">with_flip_flops()</a>, and <a class="el" href="configuration_8cpp_source.html#l00271">with_gate_types()</a>.</p>
+
+</div>
+</div>
+<a id="a824800f9c047cae72cb8417573d32abb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a824800f9c047cae72cb8417573d32abb">&#9670;&nbsp;</a></span>with_gate_types() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp; hal::dataflow::Configuration::with_gate_types </td>
+          <td>(</td>
+          <td class="paramtype">const std::set&lt; <a class="el" href="namespacehal.html#adb8da04d2161f277bd489e806a2721ca">GateTypeProperty</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>type_properties</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>overwrite</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add the gate types featuring the specified properties to the set of gate types to be grouped by dataflow analysis. </p>
+<p>Overwrite the existing set of gate types by setting the optional <code>overwrite</code> flag to <code>true</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">type_properties</td><td>- A set of gate type properties. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">overwrite</td><td>- Set <code>true</code> to overwrite existing set of gate types, <code>false</code> otherwise. Defaults to <code>false</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00271">271</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00132">hal::Netlist::get_gate_library()</a>, <a class="el" href="netlist_2gate__library_2gate__library_8cpp_source.html#l00095">hal::GateLibrary::get_gate_types()</a>, <a class="el" href="netlist_2gate__library_2gate__type_8cpp_source.html#l00095">hal::GateType::has_property()</a>, <a class="el" href="api_2configuration_8h_source.html#l00072">netlist</a>, and <a class="el" href="configuration_8cpp_source.html#l00257">with_gate_types()</a>.</p>
+
+</div>
+</div>
+<a id="ac8dc0b65ab0fc0f38b40b6bb1ef143fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8dc0b65ab0fc0f38b40b6bb1ef143fb">&#9670;&nbsp;</a></span>with_known_groups() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -179,29 +432,42 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp; hal::dataflow::Configuration::with_known_groups </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_grouping.html">hal::Grouping</a> * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>groups</em></td><td>)</td>
+          <td class="paramtype">const std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>groups</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>overwrite</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Set already identified groups of sequential gates as a vector of groups with each group being a grouping.</p>
+
+<p>Add groups from a previous dataflow analysis run to the set of previously identified word-level groups. </p>
+<p>These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored. The groups will be used to guide dataflow analysis, but will remain unaltered in the process. The group IDs will be ignored during analysis and the same group may be assigned a new ID.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">groups</td><td>- A vector of groups. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">groups</td><td>- A map from group IDs to groups, each of them given as a set of gates. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">overwrite</td><td>- Set <code>true</code> to overwrite existing set of identified word-level structures, <code>false</code> otherwise. Defaults to <code>false</code>. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00035">35</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00241">241</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, and <a class="el" href="api_2configuration_8h_source.html#l00058">known_groups</a>.</p>
+<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00087">known_gate_groups</a>.</p>
 
 </div>
 </div>
-<a id="aef49588d4ea6c006249f13e9f4a79dda"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aef49588d4ea6c006249f13e9f4a79dda">&#9670;&nbsp;</a></span>with_known_groups() <span class="overload">[2/4]</span></h2>
+<a id="aa1d4e787c4d5804d51e058f70bff2820"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1d4e787c4d5804d51e058f70bff2820">&#9670;&nbsp;</a></span>with_known_groups() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -210,30 +476,43 @@ Public Attributes</h2></td></tr>
           <td class="memname"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp; hal::dataflow::Configuration::with_known_groups </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_module.html">Module</a> * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>groups</em></td><td>)</td>
+          <td class="paramname"><em>groups</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>overwrite</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Set already identified groups of sequential gates as a vector of groups with each group being a module.</p>
+
+<p>Add modules to the set of previously identified word-level groups. </p>
+<p>These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored. The groups will be used to guide dataflow analysis, but will remain unaltered in the process.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">groups</td><td>- A vector of groups. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">groups</td><td>- A vector of modules. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">overwrite</td><td>- Set <code>true</code> to overwrite the existing previously identified word-level groups, <code>false</code> otherwise. Defaults to <code>false</code>. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00023">23</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00195">195</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, and <a class="el" href="api_2configuration_8h_source.html#l00058">known_groups</a>.</p>
+<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00087">known_gate_groups</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__dataflow_8cpp_source.html#l00219">hal::plugin_dataflow::execute()</a>, and <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
-<a id="a25c407e6217cfa557aab7195401963d2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a25c407e6217cfa557aab7195401963d2">&#9670;&nbsp;</a></span>with_known_groups() <span class="overload">[3/4]</span></h2>
+<a id="ac11d0861dfa450c5e69bc8916bef72bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac11d0861dfa450c5e69bc8916bef72bb">&#9670;&nbsp;</a></span>with_known_groups() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -242,28 +521,41 @@ Public Attributes</h2></td></tr>
           <td class="memname"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp; hal::dataflow::Configuration::with_known_groups </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&gt; &amp;&#160;</td>
-          <td class="paramname"><em>groups</em></td><td>)</td>
+          <td class="paramname"><em>groups</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>overwrite</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Set already identified groups of sequential gates as a vector of groups with each group being a vector of gates.</p>
+
+<p>Add vectors of gates to the set of previously identified word-level groups. </p>
+<p>These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored. The groups will be used to guide dataflow analysis, but will remain unaltered in the process.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">groups</td><td>- A vector of groups. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">groups</td><td>- A vector of groups, each of them as a vector of gates. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">overwrite</td><td>- Set <code>true</code> to overwrite existing set of identified word-level structures, <code>false</code> otherwise. Defaults to <code>false</code>. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00047">47</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00210">210</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, and <a class="el" href="api_2configuration_8h_source.html#l00058">known_groups</a>.</p>
+<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00087">known_gate_groups</a>.</p>
 
 </div>
 </div>
-<a id="a92a65f07b6067c99344ccd8d55671d39"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a92a65f07b6067c99344ccd8d55671d39">&#9670;&nbsp;</a></span>with_known_groups() <span class="overload">[4/4]</span></h2>
+<a id="a2e09c37391be424a5733ee3d22a8179a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e09c37391be424a5733ee3d22a8179a">&#9670;&nbsp;</a></span>with_known_groups() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -272,23 +564,296 @@ Public Attributes</h2></td></tr>
           <td class="memname"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp; hal::dataflow::Configuration::with_known_groups </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&gt; &amp;&#160;</td>
-          <td class="paramname"><em>groups</em></td><td>)</td>
+          <td class="paramname"><em>groups</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>overwrite</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Set already identified groups of sequential gates as a vector of groups with each group being a vector of gate IDs.</p>
+
+<p>Add vectors of gate IDs to the set of previously identified word-level groups. </p>
+<p>These groups must only contain gates of the target gate types specified for analysis and will otherwise be ignored. The groups will be used to guide dataflow analysis, but will remain unaltered in the process.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">groups</td><td>- A vector of group. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">groups</td><td>- A vector of groups, each of them given as a vector of gate IDs. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">overwrite</td><td>- Set <code>true</code> to overwrite existing set of identified word-level structures, <code>false</code> otherwise. Defaults to <code>false</code>. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00058">58</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00224">224</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00058">known_groups</a>.</p>
+<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00087">known_gate_groups</a>.</p>
+
+</div>
+</div>
+<a id="aa508af1db09c45cf12200eae781a0d11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa508af1db09c45cf12200eae781a0d11">&#9670;&nbsp;</a></span>with_known_structures() <span class="overload">[1/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp; hal::dataflow::Configuration::with_known_structures </td>
+          <td>(</td>
+          <td class="paramtype">const std::unordered_map&lt; const <a class="el" href="classhal_1_1_gate_type.html">GateType</a> *, std::vector&lt; <a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> &gt; * &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>structures</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>overwrite</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add all gates of a (typically large) gate type to the set of previously identified word-level structures. </p>
+<p>The gate types do not have to be part of the target gate types. The input and output pin groups of the gates of these types will be used to guide datapath analysis. For each gate type, the input and output pin groups to be considered for analysis must be specified. An empty pin group vector results in all pin groups of the gate type being considered. Only pin groups larger than `min_group_size´ will be considered.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">structures</td><td>- A map from gates to a vector of a subset of their pin groups. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">overwrite</td><td>- Set <code>true</code> to overwrite the existing known word-level structures, <code>false</code> otherwise. Defaults to <code>false</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00165">165</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00204">hal::Netlist::get_gates()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="api_2configuration_8h_source.html#l00092">known_net_groups</a>, <a class="el" href="api_2configuration_8h_source.html#l00072">netlist</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
+
+</div>
+</div>
+<a id="af28cc5090d9017e3ad999615c3c7f7e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af28cc5090d9017e3ad999615c3c7f7e2">&#9670;&nbsp;</a></span>with_known_structures() <span class="overload">[2/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp; hal::dataflow::Configuration::with_known_structures </td>
+          <td>(</td>
+          <td class="paramtype">const std::unordered_set&lt; const <a class="el" href="classhal_1_1_gate_type.html">GateType</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>structures</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>overwrite</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add all gates of a (typically large) gate type to the set of previously identified word-level structures. </p>
+<p>The gate types do not have to be part of the target gate types. The input and output pin groups of the gates of these types will be used to guide datapath analysis. Only pin groups larger than `min_group_size´ will be considered.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">structures</td><td>- A set of gate types. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">overwrite</td><td>- Set <code>true</code> to overwrite the existing known word-level structures, <code>false</code> otherwise. Defaults to <code>false</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00135">135</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00204">hal::Netlist::get_gates()</a>, <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="api_2configuration_8h_source.html#l00092">known_net_groups</a>, <a class="el" href="api_2configuration_8h_source.html#l00072">netlist</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
+
+</div>
+</div>
+<a id="abc9761fadefc52ac18838fa3861c7df2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc9761fadefc52ac18838fa3861c7df2">&#9670;&nbsp;</a></span>with_known_structures() <span class="overload">[3/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp; hal::dataflow::Configuration::with_known_structures </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>structures</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>overwrite</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add (typically large) gates to the set of previously identified word-level structures. </p>
+<p>The gates do not have to be of the target gate types. The input and output pin groups of these gates will be used to guide datapath analysis. Only pin groups larger than `min_group_size´ will be considered.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">structures</td><td>- A vector of gates. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">overwrite</td><td>- Set <code>true</code> to overwrite the existing known word-level structures, <code>false</code> otherwise. Defaults to <code>false</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00075">75</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="api_2configuration_8h_source.html#l00092">known_net_groups</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
+
+</div>
+</div>
+<a id="aff23226db5f15fdac64162bf83bf4117"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff23226db5f15fdac64162bf83bf4117">&#9670;&nbsp;</a></span>with_known_structures() <span class="overload">[4/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp; hal::dataflow::Configuration::with_known_structures </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_module.html">Module</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>structures</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>overwrite</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add modules to the set of previously identified word-level structures. </p>
+<p>The gates contained in the modules do not have to be of the target gate types. The input and output pin groups of these modules will be used to guide datapath analysis. Only pin groups larger than `min_group_size´ will be considered.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">structures</td><td>- A vector of modules. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">overwrite</td><td>- Set <code>true</code> to overwrite the existing known word-level structures, <code>false</code> otherwise. Defaults to <code>false</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00029">29</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00092">known_net_groups</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
+
+</div>
+</div>
+<a id="ade917139a0fd8ef40ad3ef81976182a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade917139a0fd8ef40ad3ef81976182a3">&#9670;&nbsp;</a></span>with_known_structures() <span class="overload">[5/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp; hal::dataflow::Configuration::with_known_structures </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; std::pair&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> *, std::vector&lt; <a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_gate_pin.html">GatePin</a> &gt; * &gt;&gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>structures</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>overwrite</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add (typically large) gates to the set of previously identified word-level structures. </p>
+<p>The gates do not have to be of the target gate types. The input and output pin groups of these gates will be used to guide datapath analysis. For each gate, the input and output pin groups to be considered for analysis must be specified. An empty pin group vector results in all pin groups of the gate being considered. Only pin groups larger than `min_group_size´ will be considered.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">structures</td><td>- A vector of gates, each of them with a vector of gate pin groups. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">overwrite</td><td>- Set <code>true</code> to overwrite the existing known word-level structures, <code>false</code> otherwise. Defaults to <code>false</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00105">105</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8ecaa43c1b0aa53a0c908810c06ab1ff3967">hal::input</a>, <a class="el" href="api_2configuration_8h_source.html#l00092">known_net_groups</a>, and <a class="el" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">hal::output</a>.</p>
+
+</div>
+</div>
+<a id="ac7a0ac61d612e75a2aea96fa851c1291"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7a0ac61d612e75a2aea96fa851c1291">&#9670;&nbsp;</a></span>with_known_structures() <span class="overload">[6/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp; hal::dataflow::Configuration::with_known_structures </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; std::pair&lt; <a class="el" href="classhal_1_1_module.html">Module</a> *, std::vector&lt; <a class="el" href="classhal_1_1_pin_group.html">PinGroup</a>&lt; <a class="el" href="classhal_1_1_module_pin.html">ModulePin</a> &gt; * &gt;&gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>structures</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>overwrite</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add modules to the set of previously identified word-level structures. </p>
+<p>The gates contained in the modules do not have to be of the target gate types. The input and output pin groups of these modules will be used to guide datapath analysis. For each module, the input and output pin groups to be considered for analysis must be specified. An empty pin group vector results in all pin groups of the module being considered. Only pin groups larger than `min_group_size´ will be considered.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">structures</td><td>- A vector of modules, each of them with a vector of module pin groups. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">overwrite</td><td>- Set <code>true</code> to overwrite the existing known word-level structures, <code>false</code> otherwise. Defaults to <code>false</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00052">52</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00092">known_net_groups</a>.</p>
 
 </div>
 </div>
@@ -307,7 +872,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Set the minimum size of a group. Smaller groups will be penalized during analysis.</p>
+
+<p>Set the minimum size of a group. Smaller groups will be penalized during analysis. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>- The minimum group size. </td></tr>
@@ -316,22 +882,22 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00011">11</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00017">17</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00048">min_group_size</a>.</p>
+<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00077">min_group_size</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__dataflow_8cpp_source.html#l00219">hal::plugin_dataflow::execute()</a>, and <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugin__dataflow_8cpp_source.html#l00167">hal::GuiExtensionDataflow::execute_function()</a>, and <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
-<a id="a23decf5d189b2ebfe9f0b54b4779eb9f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a23decf5d189b2ebfe9f0b54b4779eb9f">&#9670;&nbsp;</a></span>with_register_stage_identification()</h2>
+<a id="a9011817a65762bf64b4c10b8e86e1ba6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9011817a65762bf64b4c10b8e86e1ba6">&#9670;&nbsp;</a></span>with_stage_identification()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp; hal::dataflow::Configuration::with_register_stage_identification </td>
+          <td class="memname"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a> &amp; hal::dataflow::Configuration::with_stage_identification </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>enable</em> = <code>true</code></td><td>)</td>
@@ -339,20 +905,21 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Enable register stage identification as part of dataflow analysis.</p>
+
+<p>Enable stage identification as part of dataflow analysis. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td>- Set <code>true</code> to enable register stage identification, <code>false</code> otherwise. Defaults to <code>true</code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td>- Set <code>true</code> to enable stage identification, <code>false</code> otherwise. Defaults to <code>true</code>. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00064">64</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00312">312</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00063">enable_register_stages</a>.</p>
+<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00107">enable_stages</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugin__dataflow_8cpp_source.html#l00219">hal::plugin_dataflow::execute()</a>, and <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugin__dataflow_8cpp_source.html#l00167">hal::GuiExtensionDataflow::execute_function()</a>, and <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -371,7 +938,8 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Enable type consistency as part of dataflow analysis when deciding whether two gates are allowed to merge into the same group.</p>
+
+<p>Enable type consistency as part of dataflow analysis when deciding whether two gates are allowed to merge into the same group. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td>- Set <code>true</code> to enable type consistency inside of a group, <code>false</code> otherwise. Defaults to <code>true</code>. </td></tr>
@@ -380,31 +948,52 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The updated dataflow analysis configuration. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00070">70</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="configuration_8cpp_source.html#l00318">318</a> of file <a class="el" href="configuration_8cpp_source.html">configuration.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00068">enforce_type_consistency</a>.</p>
+<p class="reference">References <a class="el" href="api_2configuration_8h_source.html#l00112">enforce_type_consistency</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a810bcff44bdce5e358278977416721b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a810bcff44bdce5e358278977416721b0">&#9670;&nbsp;</a></span>enable_register_stages</h2>
+<a id="a3de3564aa64469af6c0324cdb829b0c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3de3564aa64469af6c0324cdb829b0c7">&#9670;&nbsp;</a></span>control_pin_types</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool hal::dataflow::Configuration::enable_register_stages = false</td>
+          <td class="memname">std::set&lt;<a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>&gt; hal::dataflow::Configuration::control_pin_types = {}</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Enable register stage identification as part of dataflow analysis. Defaults to <code>false</code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00063">63</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
+<p>The pin types of the pins to be considered control pins. Defaults to an empty set. </p>
 
-<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00118">hal::GuiExtensionDataflow::set_parameter()</a>, and <a class="el" href="configuration_8cpp_source.html#l00064">with_register_stage_identification()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00102">102</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="configuration_8cpp_source.html#l00290">with_control_pin_types()</a>, and <a class="el" href="configuration_8cpp_source.html#l00304">with_flip_flops()</a>.</p>
+
+</div>
+</div>
+<a id="af07c6ae25da79e9e4d36fcfe866451ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af07c6ae25da79e9e4d36fcfe866451ac">&#9670;&nbsp;</a></span>enable_stages</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::dataflow::Configuration::enable_stages = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enable stage identification as part of dataflow analysis. Defaults to <code>false</code>. </p>
+
+<p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00107">107</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="pre__processing_8cpp_source.html#l00320">hal::dataflow::pre_processing::run()</a>, and <a class="el" href="configuration_8cpp_source.html#l00312">with_stage_identification()</a>.</p>
 
 </div>
 </div>
@@ -419,11 +1008,12 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Enforce type consistency inside of a group. Defaults to <code>false</code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00068">68</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
+<p>Enforce gate type consistency inside of a group. Defaults to <code>false</code>. </p>
 
-<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, and <a class="el" href="configuration_8cpp_source.html#l00070">with_type_consistency()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00112">112</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="configuration_8cpp_source.html#l00318">with_type_consistency()</a>.</p>
 
 </div>
 </div>
@@ -438,30 +1028,72 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
 <p>Expected group sizes. Groups of these sizes will be prioritized. Defaults to an empty vector. </p>
 
-<p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00053">53</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00082">82</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00055">hal::CliExtensionDataflow::handle_cli_call()</a>, <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00118">hal::GuiExtensionDataflow::set_parameter()</a>, and <a class="el" href="configuration_8cpp_source.html#l00017">with_expected_sizes()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00060">hal::CliExtensionDataflow::handle_cli_call()</a>, <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="configuration_8cpp_source.html#l00023">with_expected_sizes()</a>.</p>
 
 </div>
 </div>
-<a id="a647fdd85e7274ef7cb7d7cbde0e3213c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a647fdd85e7274ef7cb7d7cbde0e3213c">&#9670;&nbsp;</a></span>known_groups</h2>
+<a id="a3d674c0d1a0ea85091213eb8f92ecd20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d674c0d1a0ea85091213eb8f92ecd20">&#9670;&nbsp;</a></span>gate_types</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;std::vector&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&gt; &gt; hal::dataflow::Configuration::known_groups = {}</td>
+          <td class="memname">std::set&lt;const <a class="el" href="classhal_1_1_gate_type.html">GateType</a>*&gt; hal::dataflow::Configuration::gate_types = {}</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Already identified groups of sequential gates as a vector of groups with each group being a vector of gate IDs. Defaults to an empty vector. </p>
 
-<p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00058">58</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
+<p>The gate types to be grouped by dataflow analysis. Defaults to an empty set. </p>
 
-<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="configuration_8cpp_source.html#l00023">with_known_groups()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00097">97</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="configuration_8cpp_source.html#l00257">with_gate_types()</a>.</p>
+
+</div>
+</div>
+<a id="adce398ef24b673496e55547798bd55f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adce398ef24b673496e55547798bd55f9">&#9670;&nbsp;</a></span>known_gate_groups</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::vector&lt;<a class="el" href="classhal_1_1_gate.html">Gate</a>*&gt; &gt; hal::dataflow::Configuration::known_gate_groups = {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Groups of gates that have already been identified as word-level groups beforehand. All gates of a group must be of one of the target gate types. Defaults to an empty vector. </p>
+
+<p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00087">87</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="configuration_8cpp_source.html#l00195">with_known_groups()</a>.</p>
+
+</div>
+</div>
+<a id="a08f45f66fea550910d1b9eba6a466775"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08f45f66fea550910d1b9eba6a466775">&#9670;&nbsp;</a></span>known_net_groups</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::vector&lt;<a class="el" href="classhal_1_1_net.html">Net</a>*&gt; &gt; hal::dataflow::Configuration::known_net_groups = {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Groups of nets that have been identified as word-level datapathes beforehand. Defaults to an empty vector. </p>
+
+<p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00092">92</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="configuration_8cpp_source.html#l00029">with_known_structures()</a>.</p>
 
 </div>
 </div>
@@ -476,11 +1108,32 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
 <p>Minimum size of a group. Smaller groups will be penalized during analysis. Defaults to 8. </p>
 
-<p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00048">48</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00077">77</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00055">hal::CliExtensionDataflow::handle_cli_call()</a>, <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00118">hal::GuiExtensionDataflow::set_parameter()</a>, and <a class="el" href="configuration_8cpp_source.html#l00011">with_min_group_size()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="plugin__dataflow_8cpp_source.html#l00060">hal::CliExtensionDataflow::handle_cli_call()</a>, <a class="el" href="plugins_2dataflow__analysis_2python_2python__bindings_8cpp_source.html#l00017">hal::PYBIND11_PLUGIN()</a>, and <a class="el" href="configuration_8cpp_source.html#l00017">with_min_group_size()</a>.</p>
+
+</div>
+</div>
+<a id="af672b0a19db7574c088a7689755d5783"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af672b0a19db7574c088a7689755d5783">&#9670;&nbsp;</a></span>netlist</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhal_1_1_netlist.html">Netlist</a>* hal::dataflow::Configuration::netlist</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The netlist to be analyzed. </p>
+
+<p class="definition">Definition at line <a class="el" href="api_2configuration_8h_source.html#l00072">72</a> of file <a class="el" href="api_2configuration_8h_source.html">configuration.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="pre__processing_8cpp_source.html#l00320">hal::dataflow::pre_processing::run()</a>, <a class="el" href="configuration_8cpp_source.html#l00271">with_gate_types()</a>, and <a class="el" href="configuration_8cpp_source.html#l00135">with_known_structures()</a>.</p>
 
 </div>
 </div>
@@ -494,7 +1147,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1dataflow.html">dataflow</a></li><li class="navelem"><a class="el" href="structhal_1_1dataflow_1_1_configuration.html">Configuration</a></li>
-    <li class="footer">Generated on Mon Jun 3 2024 19:11:16 for HAL by
+    <li class="footer">Generated on Mon Jun 3 2024 21:07:32 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

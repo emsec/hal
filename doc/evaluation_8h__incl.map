@@ -1,16 +1,17 @@
 <map id="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/evaluation/evaluation.h" name="/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/evaluation/evaluation.h">
-<area shape="rect" id="node1" title=" " alt="" coords="391,5,632,76"/>
-<area shape="rect" id="node2" href="$netlist__abstraction_8h.html" title=" " alt="" coords="155,392,355,433"/>
-<area shape="rect" id="node8" href="$evaluation_2configuration_8h.html" title=" " alt="" coords="797,303,1009,344"/>
-<area shape="rect" id="node9" href="$evaluation_2context_8h.html" title=" " alt="" coords="695,213,907,255"/>
-<area shape="rect" id="node12" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2evaluation_2result_8h.html" title=" " alt="" coords="13,213,225,255"/>
-<area shape="rect" id="node13" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2processing_2result_8h.html" title=" " alt="" coords="405,124,618,165"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="488,481,628,508"/>
-<area shape="rect" id="node4" title=" " alt="" coords="171,481,214,508"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,481,129,508"/>
-<area shape="rect" id="node6" title=" " alt="" coords="251,481,366,508"/>
-<area shape="rect" id="node7" title=" " alt="" coords="397,481,460,508"/>
-<area shape="rect" id="node10" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title=" " alt="" coords="299,303,499,344"/>
-<area shape="rect" id="node11" title=" " alt="" coords="582,399,633,426"/>
-<area shape="rect" id="node14" href="$pass__collection_8h.html" title=" " alt="" coords="357,213,570,255"/>
+<area shape="rect" id="node1" title=" " alt="" coords="495,5,736,76"/>
+<area shape="rect" id="node2" href="$netlist__abstraction_8h.html" title="This file contains the struct that holds all information on the netlist abstraction used for dataflow..." alt="" coords="215,392,415,433"/>
+<area shape="rect" id="node9" href="$evaluation_2configuration_8h.html" title=" " alt="" coords="917,303,1129,344"/>
+<area shape="rect" id="node10" href="$evaluation_2context_8h.html" title=" " alt="" coords="799,213,1011,255"/>
+<area shape="rect" id="node13" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2evaluation_2result_8h.html" title=" " alt="" coords="175,213,387,255"/>
+<area shape="rect" id="node14" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2processing_2result_8h.html" title=" " alt="" coords="509,124,722,165"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title=" " alt="" coords="677,489,817,515"/>
+<area shape="rect" id="node4" href="$pin__type_8h.html" title=" " alt="" coords="221,481,412,523"/>
+<area shape="rect" id="node5" title=" " alt="" coords="154,489,197,515"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,489,129,515"/>
+<area shape="rect" id="node7" title=" " alt="" coords="437,489,551,515"/>
+<area shape="rect" id="node8" title=" " alt="" coords="576,489,639,515"/>
+<area shape="rect" id="node11" href="$plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title="This file contains the class that holds all information of a dataflow analysis grouping." alt="" coords="353,303,553,344"/>
+<area shape="rect" id="node12" title=" " alt="" coords="591,399,642,426"/>
+<area shape="rect" id="node15" href="$pass__collection_8h.html" title=" " alt="" coords="461,213,674,255"/>
 </map>

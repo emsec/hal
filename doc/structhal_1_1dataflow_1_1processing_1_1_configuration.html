@@ -96,7 +96,7 @@ Collaboration diagram for hal::dataflow::processing::Configuration:</div>
 <div class="dyncontent">
 <div class="center"><img src="structhal_1_1dataflow_1_1processing_1_1_configuration__coll__graph.png" border="0" usemap="#hal_1_1dataflow_1_1processing_1_1_configuration_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1dataflow_1_1processing_1_1_configuration_coll__map" id="hal_1_1dataflow_1_1processing_1_1_configuration_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,212,127"/>
+<area shape="rect" title=" " alt="" coords="5,5,212,141"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -108,6 +108,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:aff52da8e1990e9c365e53a7609b772de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d2bcd0ff75f09a7a65d4bb0910b6810"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1processing_1_1_configuration.html#a0d2bcd0ff75f09a7a65d4bb0910b6810">enforce_type_consistency</a></td></tr>
 <tr class="separator:a0d2bcd0ff75f09a7a65d4bb0910b6810"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf36e6cfd1ad2f31be3c01b0254dc31d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1processing_1_1_configuration.html#aaf36e6cfd1ad2f31be3c01b0254dc31d">has_known_groups</a> = false</td></tr>
+<tr class="separator:aaf36e6cfd1ad2f31be3c01b0254dc31d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
@@ -127,7 +129,25 @@ Public Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="processing_2configuration_8h_source.html#l00041">41</a> of file <a class="el" href="processing_2configuration_8h_source.html">configuration.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="group__by__control__signals_8cpp_source.html#l00016">hal::dataflow::group_by_control_signals::process()</a>, <a class="el" href="group__by__input__output__size_8cpp_source.html#l00017">hal::dataflow::group_by_input_output_size::process()</a>, and <a class="el" href="group__by__successors__predecessors_8cpp_source.html#l00017">hal::dataflow::group_by_successors_predecessors::process()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, <a class="el" href="group__by__control__signals_8cpp_source.html#l00016">hal::dataflow::group_by_control_signals::process()</a>, <a class="el" href="group__by__successor__predecessor__known__groups_8cpp_source.html#l00017">hal::dataflow::group_by_successor_predecessor_known_groups::process()</a>, <a class="el" href="group__by__input__output__size_8cpp_source.html#l00017">hal::dataflow::group_by_input_output_size::process()</a>, and <a class="el" href="group__by__successors__predecessors_8cpp_source.html#l00017">hal::dataflow::group_by_successors_predecessors::process()</a>.</p>
+
+</div>
+</div>
+<a id="aaf36e6cfd1ad2f31be3c01b0254dc31d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf36e6cfd1ad2f31be3c01b0254dc31d">&#9670;&nbsp;</a></span>has_known_groups</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hal::dataflow::processing::Configuration::has_known_groups = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="processing_2configuration_8h_source.html#l00042">42</a> of file <a class="el" href="processing_2configuration_8h_source.html">configuration.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>.</p>
 
 </div>
 </div>
@@ -145,7 +165,7 @@ Public Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="processing_2configuration_8h_source.html#l00039">39</a> of file <a class="el" href="processing_2configuration_8h_source.html">configuration.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, and <a class="el" href="processing_8cpp_source.html#l00146">hal::dataflow::processing::run()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, and <a class="el" href="processing_8cpp_source.html#l00147">hal::dataflow::processing::run()</a>.</p>
 
 </div>
 </div>
@@ -163,7 +183,7 @@ Public Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="processing_2configuration_8h_source.html#l00038">38</a> of file <a class="el" href="processing_2configuration_8h_source.html">configuration.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, and <a class="el" href="processing_8cpp_source.html#l00146">hal::dataflow::processing::run()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="dataflow_8cpp_source.html#l00012">hal::dataflow::analyze()</a>, and <a class="el" href="processing_8cpp_source.html#l00147">hal::dataflow::processing::run()</a>.</p>
 
 </div>
 </div>
@@ -176,7 +196,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1dataflow.html">dataflow</a></li><li class="navelem"><a class="el" href="namespacehal_1_1dataflow_1_1processing.html">processing</a></li><li class="navelem"><a class="el" href="structhal_1_1dataflow_1_1processing_1_1_configuration.html">Configuration</a></li>
-    <li class="footer">Generated on Mon Jun 3 2024 19:11:16 for HAL by
+    <li class="footer">Generated on Mon Jun 3 2024 21:07:32 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>HAL: hal::dataflow::Grouping Struct Reference</title>
+<title>HAL: hal::dataflow::Grouping Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -87,9 +87,12 @@ $(document).ready(function(){initNavTree('structhal_1_1dataflow_1_1_grouping.htm
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structhal_1_1dataflow_1_1_grouping-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hal::dataflow::Grouping Struct Reference</div>  </div>
+<div class="title">hal::dataflow::Grouping Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><a class="el" href="structhal_1_1dataflow_1_1_grouping.html" title="Grouping used during dataflow analysis.">Grouping</a> used during dataflow analysis.  
+ <a href="structhal_1_1dataflow_1_1_grouping.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -97,8 +100,8 @@ Collaboration diagram for hal::dataflow::Grouping:</div>
 <div class="dyncontent">
 <div class="center"><img src="structhal_1_1dataflow_1_1_grouping__coll__graph.png" border="0" usemap="#hal_1_1dataflow_1_1_grouping_coll__map" alt="Collaboration graph"/></div>
 <map name="hal_1_1dataflow_1_1_grouping_coll__map" id="hal_1_1dataflow_1_1_grouping_coll__map">
-<area shape="rect" title=" " alt="" coords="5,432,241,671"/>
-<area shape="rect" href="structhal_1_1dataflow_1_1_netlist_abstraction.html" title=" " alt="" coords="8,219,239,369"/>
+<area shape="rect" title="Grouping used during dataflow analysis." alt="" coords="5,432,241,671"/>
+<area shape="rect" href="structhal_1_1dataflow_1_1_netlist_abstraction.html" title="The abstraction of the netlist that only contains gates of a specified type, e.g.,..." alt="" coords="8,219,239,369"/>
 <area shape="rect" href="classhal_1_1_netlist.html" title=" " alt="" coords="61,5,185,156"/>
 </map>
 </div>
@@ -106,32 +109,43 @@ Collaboration diagram for hal::dataflow::Grouping:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a9a7e5b1cd6762b9699e58fa660e4d68e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a9a7e5b1cd6762b9699e58fa660e4d68e">Grouping</a> (const <a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html">NetlistAbstraction</a> &amp;na)</td></tr>
+<tr class="memdesc:a9a7e5b1cd6762b9699e58fa660e4d68e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new (empty) grouping from a netlist abstraction.  <a href="structhal_1_1dataflow_1_1_grouping.html#a9a7e5b1cd6762b9699e58fa660e4d68e">More...</a><br /></td></tr>
 <tr class="separator:a9a7e5b1cd6762b9699e58fa660e4d68e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e5a0f3bd4de3837bfea9b28b0bbc879"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a6e5a0f3bd4de3837bfea9b28b0bbc879">Grouping</a> (const <a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html">NetlistAbstraction</a> &amp;na, const std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&gt; &amp;groups)</td></tr>
-<tr class="separator:a6e5a0f3bd4de3837bfea9b28b0bbc879"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2216067e8753e6bbabfa680b96ec06d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#ab2216067e8753e6bbabfa680b96ec06d">Grouping</a> (const <a class="el" href="structhal_1_1dataflow_1_1_netlist_abstraction.html">NetlistAbstraction</a> &amp;na, const std::vector&lt; std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&gt; &amp;groups)</td></tr>
+<tr class="memdesc:ab2216067e8753e6bbabfa680b96ec06d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new grouping from a netlist abstraction and a vector of groups (as a vector of gates).  <a href="structhal_1_1dataflow_1_1_grouping.html#ab2216067e8753e6bbabfa680b96ec06d">More...</a><br /></td></tr>
+<tr class="separator:ab2216067e8753e6bbabfa680b96ec06d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3368041577b46e6bdc8309d59e9709d3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a3368041577b46e6bdc8309d59e9709d3">Grouping</a> (const <a class="el" href="structhal_1_1dataflow_1_1_grouping.html">Grouping</a> &amp;other)</td></tr>
+<tr class="memdesc:a3368041577b46e6bdc8309d59e9709d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new grouping as a copy of an existing grouping.  <a href="structhal_1_1dataflow_1_1_grouping.html#a3368041577b46e6bdc8309d59e9709d3">More...</a><br /></td></tr>
 <tr class="separator:a3368041577b46e6bdc8309d59e9709d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ffe536cf98fdbaf82f47a3367950e71"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a9ffe536cf98fdbaf82f47a3367950e71">operator==</a> (const <a class="el" href="structhal_1_1dataflow_1_1_grouping.html">Grouping</a> &amp;other) const</td></tr>
+<tr class="memdesc:a9ffe536cf98fdbaf82f47a3367950e71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check two groupings for equality.  <a href="structhal_1_1dataflow_1_1_grouping.html#a9ffe536cf98fdbaf82f47a3367950e71">More...</a><br /></td></tr>
 <tr class="separator:a9ffe536cf98fdbaf82f47a3367950e71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a547a88e2e187f8a6d408c9888c4f3e02"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a547a88e2e187f8a6d408c9888c4f3e02">operator!=</a> (const <a class="el" href="structhal_1_1dataflow_1_1_grouping.html">Grouping</a> &amp;other) const</td></tr>
+<tr class="memdesc:a547a88e2e187f8a6d408c9888c4f3e02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check two groupings for inequality.  <a href="structhal_1_1dataflow_1_1_grouping.html#a547a88e2e187f8a6d408c9888c4f3e02">More...</a><br /></td></tr>
 <tr class="separator:a547a88e2e187f8a6d408c9888c4f3e02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad2fd5d1bf6f35dc0e5a25aa88be321d"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#aad2fd5d1bf6f35dc0e5a25aa88be321d">get_clock_signals_of_group</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id) const</td></tr>
-<tr class="separator:aad2fd5d1bf6f35dc0e5a25aa88be321d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0368b1c1eae265d96f53b509a0446848"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a0368b1c1eae265d96f53b509a0446848">get_control_signals_of_group</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id) const</td></tr>
-<tr class="separator:a0368b1c1eae265d96f53b509a0446848"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a608e95cf7b84991f0c261507fb921b6f"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a608e95cf7b84991f0c261507fb921b6f">get_reset_signals_of_group</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id) const</td></tr>
-<tr class="separator:a608e95cf7b84991f0c261507fb921b6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf01d576ef085c71fa07b0757dc6f501"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#adf01d576ef085c71fa07b0757dc6f501">get_set_signals_of_group</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id) const</td></tr>
-<tr class="separator:adf01d576ef085c71fa07b0757dc6f501"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2c7dfee9eb94c4e2dc21b29b4aed7f5"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>, std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#ac2c7dfee9eb94c4e2dc21b29b4aed7f5">get_control_signals_of_group</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id) const</td></tr>
+<tr class="memdesc:ac2c7dfee9eb94c4e2dc21b29b4aed7f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the control signals of a group as a map from the control pin type to the connected net IDs.  <a href="structhal_1_1dataflow_1_1_grouping.html#ac2c7dfee9eb94c4e2dc21b29b4aed7f5">More...</a><br /></td></tr>
+<tr class="separator:ac2c7dfee9eb94c4e2dc21b29b4aed7f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab51c9dd5358c657fecfa4ece4b7c7b4b"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#ab51c9dd5358c657fecfa4ece4b7c7b4b">get_successor_groups_of_group</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id) const</td></tr>
+<tr class="memdesc:ab51c9dd5358c657fecfa4ece4b7c7b4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the successor groups of a group.  <a href="structhal_1_1dataflow_1_1_grouping.html#ab51c9dd5358c657fecfa4ece4b7c7b4b">More...</a><br /></td></tr>
 <tr class="separator:ab51c9dd5358c657fecfa4ece4b7c7b4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7872e908f16318a7e5199fe02baf2b3a"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a7872e908f16318a7e5199fe02baf2b3a">get_predecessor_groups_of_group</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id) const</td></tr>
+<tr class="memdesc:a7872e908f16318a7e5199fe02baf2b3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the predecessor groups of a group.  <a href="structhal_1_1dataflow_1_1_grouping.html#a7872e908f16318a7e5199fe02baf2b3a">More...</a><br /></td></tr>
 <tr class="separator:a7872e908f16318a7e5199fe02baf2b3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7eda2bbde69f5f7243897c14d18f6465"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a7eda2bbde69f5f7243897c14d18f6465">get_known_successor_groups_of_group</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id) const</td></tr>
+<tr class="memdesc:a7eda2bbde69f5f7243897c14d18f6465"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the known successor groups of a group.  <a href="structhal_1_1dataflow_1_1_grouping.html#a7eda2bbde69f5f7243897c14d18f6465">More...</a><br /></td></tr>
+<tr class="separator:a7eda2bbde69f5f7243897c14d18f6465"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cfb0886a2c000e041437d22ea4841b3"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a4cfb0886a2c000e041437d22ea4841b3">get_known_predecessor_groups_of_group</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id) const</td></tr>
+<tr class="memdesc:a4cfb0886a2c000e041437d22ea4841b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the known predecessor groups of a group.  <a href="structhal_1_1dataflow_1_1_grouping.html#a4cfb0886a2c000e041437d22ea4841b3">More...</a><br /></td></tr>
+<tr class="separator:a4cfb0886a2c000e041437d22ea4841b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4cadaf07db321d7e0e537dda5e4ed9e"><td class="memItemLeft" align="right" valign="top">std::set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#ac4cadaf07db321d7e0e537dda5e4ed9e">get_register_stage_intersect_of_group</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id) const</td></tr>
+<tr class="memdesc:ac4cadaf07db321d7e0e537dda5e4ed9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the intersection of the register stages of all gates of the group.  <a href="structhal_1_1dataflow_1_1_grouping.html#ac4cadaf07db321d7e0e537dda5e4ed9e">More...</a><br /></td></tr>
 <tr class="separator:ac4cadaf07db321d7e0e537dda5e4ed9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c4d6c3796f53a45c7fe61dd20f30c94"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a9c4d6c3796f53a45c7fe61dd20f30c94">are_groups_allowed_to_merge</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_1_id, <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_2_id, bool enforce_type_consistency) const</td></tr>
+<tr class="memdesc:a9c4d6c3796f53a45c7fe61dd20f30c94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if two groups are allowed to be merged.  <a href="structhal_1_1dataflow_1_1_grouping.html#a9c4d6c3796f53a45c7fe61dd20f30c94">More...</a><br /></td></tr>
 <tr class="separator:a9c4d6c3796f53a45c7fe61dd20f30c94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff3634d260fb4a0a15c89cffcb00b7bd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#aff3634d260fb4a0a15c89cffcb00b7bd">is_group_allowed_to_split</a> (<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> group_id) const</td></tr>
+<tr class="memdesc:aff3634d260fb4a0a15c89cffcb00b7bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the group is allowed to be split.  <a href="structhal_1_1dataflow_1_1_grouping.html#aff3634d260fb4a0a15c89cffcb00b7bd">More...</a><br /></td></tr>
 <tr class="separator:aff3634d260fb4a0a15c89cffcb00b7bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -152,12 +166,18 @@ Public Attributes</h2></td></tr>
 <tr class="separator:aad8cb32b0a6e61f3d1ebf36d459a6eea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50edecceb17141dda467abc3c629e465"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a50edecceb17141dda467abc3c629e465">pred_cache</a></td></tr>
 <tr class="separator:a50edecceb17141dda467abc3c629e465"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a282d7bafdee826c0b726a2d8a11b97ed"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a282d7bafdee826c0b726a2d8a11b97ed">suc_known_group_cache</a></td></tr>
+<tr class="separator:a282d7bafdee826c0b726a2d8a11b97ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89ee1e0a47b1077770961a6e2f521b5e"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a89ee1e0a47b1077770961a6e2f521b5e">pred_known_group_cache</a></td></tr>
+<tr class="separator:a89ee1e0a47b1077770961a6e2f521b5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21c271a333d4f94b5d86a98fe137ead4"><td class="memItemLeft" align="right" valign="top">std::set&lt; std::set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html#a21c271a333d4f94b5d86a98fe137ead4">comparison_cache</a></td></tr>
 <tr class="separator:a21c271a333d4f94b5d86a98fe137ead4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00042">42</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
+<div class="textblock"><p><a class="el" href="structhal_1_1dataflow_1_1_grouping.html" title="Grouping used during dataflow analysis.">Grouping</a> used during dataflow analysis. </p>
+<p>This class provides access to all information related to a grouping as an (intermediate) product of dataflow analysis. Each grouping is a collection of groups of, e.g., flip-flops that result from different paths that have been executed on a previous grouping. </p>
+
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00054">54</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a9a7e5b1cd6762b9699e58fa660e4d68e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9a7e5b1cd6762b9699e58fa660e4d68e">&#9670;&nbsp;</a></span>Grouping() <span class="overload">[1/3]</span></h2>
@@ -175,12 +195,20 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Construct a new (empty) grouping from a netlist abstraction. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">na</td><td>- The netlist abstraction. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00012">12</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a6e5a0f3bd4de3837bfea9b28b0bbc879"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6e5a0f3bd4de3837bfea9b28b0bbc879">&#9670;&nbsp;</a></span>Grouping() <span class="overload">[2/3]</span></h2>
+<a id="ab2216067e8753e6bbabfa680b96ec06d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2216067e8753e6bbabfa680b96ec06d">&#9670;&nbsp;</a></span>Grouping() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -194,7 +222,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; std::vector&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt;&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>groups</em>&#160;</td>
         </tr>
         <tr>
@@ -205,9 +233,18 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Construct a new grouping from a netlist abstraction and a vector of groups (as a vector of gates). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">na</td><td>- The netlist abstraction. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">groups</td><td>- A vector of groups. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 <p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00016">16</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist__abstraction_8h_source.html#l00056">hal::dataflow::NetlistAbstraction::all_sequential_gates</a>, <a class="el" href="netlist__abstraction_8h_source.html#l00059">hal::dataflow::NetlistAbstraction::gate_to_fingerprint</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00052">gates_of_group</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00050">group_control_fingerprint_map</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00054">operations_on_group_allowed</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00053">parent_group_of_gate</a>.</p>
+<p class="reference">References <a class="el" href="test__plugin_8py_source.html#l00032">test_plugin::g</a>, <a class="el" href="netlist__abstraction_8h_source.html#l00078">hal::dataflow::NetlistAbstraction::gate_to_fingerprint</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00089">gates_of_group</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00084">group_control_fingerprint_map</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00099">operations_on_group_allowed</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00094">parent_group_of_gate</a>, and <a class="el" href="netlist__abstraction_8h_source.html#l00075">hal::dataflow::NetlistAbstraction::target_gates</a>.</p>
 
 </div>
 </div>
@@ -227,9 +264,11 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00072">72</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
+<p>Construct a new grouping as a copy of an existing grouping. </p>
 
-<p class="reference">References <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00052">gates_of_group</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00050">group_control_fingerprint_map</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00053">parent_group_of_gate</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00075">75</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00089">gates_of_group</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00084">group_control_fingerprint_map</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00094">parent_group_of_gate</a>.</p>
 
 </div>
 </div>
@@ -266,20 +305,31 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00237">237</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
+<p>Check if two groups are allowed to be merged. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">group_1_id</td><td>- The ID of the first group. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">group_2_id</td><td>- The ID of the second group. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">enforce_type_consistency</td><td>- Set <code>true</code> to enforce that the gates of both groups must be of the same type, <code>false</code> otherwise. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the groups are allowed to be joined, <code>false</code> otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00052">gates_of_group</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00141">get_register_stage_intersect_of_group()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00125">hal::Gate::get_type()</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00050">group_control_fingerprint_map</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00048">netlist_abstr</a>, <a class="el" href="netlist__abstraction_8h_source.html#l00050">hal::dataflow::NetlistAbstraction::nl</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00054">operations_on_group_allowed</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00297">297</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00089">gates_of_group</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00139">get_register_stage_intersect_of_group()</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00125">hal::Gate::get_type()</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00084">group_control_fingerprint_map</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00079">netlist_abstr</a>, <a class="el" href="netlist__abstraction_8h_source.html#l00067">hal::dataflow::NetlistAbstraction::nl</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00099">operations_on_group_allowed</a>.</p>
 
 </div>
 </div>
-<a id="aad2fd5d1bf6f35dc0e5a25aa88be321d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aad2fd5d1bf6f35dc0e5a25aa88be321d">&#9670;&nbsp;</a></span>get_clock_signals_of_group()</h2>
+<a id="ac2c7dfee9eb94c4e2dc21b29b4aed7f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2c7dfee9eb94c4e2dc21b29b4aed7f5">&#9670;&nbsp;</a></span>get_control_signals_of_group()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; hal::dataflow::Grouping::get_clock_signals_of_group </td>
+          <td class="memname">std::map&lt; <a class="el" href="namespacehal.html#ae062cd9848a7ac51bd0bb4d76f1fb94b">PinType</a>, std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; &gt; hal::dataflow::Grouping::get_control_signals_of_group </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
           <td class="paramname"><em>group_id</em></td><td>)</td>
@@ -288,22 +338,31 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00106">106</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
+<p>Get the control signals of a group as a map from the control pin type to the connected net IDs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">group_id</td><td>- The ID of the group. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The group's control signals. </dd></dl>
 
-<p class="reference">References <a class="el" href="netlist__abstraction_8h_source.html#l00060">hal::dataflow::NetlistAbstraction::gate_to_clock_signals</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00048">netlist_abstr</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00109">109</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="result_8cpp_source.html#l00028">hal::dataflow::Result::Result()</a>.</p>
+<p class="reference">References <a class="el" href="netlist__abstraction_8h_source.html#l00079">hal::dataflow::NetlistAbstraction::gate_to_control_signals</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00089">gates_of_group</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00079">netlist_abstr</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="result_8cpp_source.html#l00029">hal::dataflow::Result::Result()</a>.</p>
 
 </div>
 </div>
-<a id="a0368b1c1eae265d96f53b509a0446848"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0368b1c1eae265d96f53b509a0446848">&#9670;&nbsp;</a></span>get_control_signals_of_group()</h2>
+<a id="a4cfb0886a2c000e041437d22ea4841b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cfb0886a2c000e041437d22ea4841b3">&#9670;&nbsp;</a></span>get_known_predecessor_groups_of_group()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; hal::dataflow::Grouping::get_control_signals_of_group </td>
+          <td class="memname">std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; hal::dataflow::Grouping::get_known_predecessor_groups_of_group </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
           <td class="paramname"><em>group_id</em></td><td>)</td>
@@ -312,11 +371,51 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00111">111</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
+<p>Get the known predecessor groups of a group. </p>
+<p>The known groups have initially been fed to the dataflow analysis by the user.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">group_id</td><td>- The ID of the group. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The group's known predecessor groups. </dd></dl>
 
-<p class="reference">References <a class="el" href="netlist__abstraction_8h_source.html#l00061">hal::dataflow::NetlistAbstraction::gate_to_enable_signals</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00048">netlist_abstr</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00266">266</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="result_8cpp_source.html#l00028">hal::dataflow::Result::Result()</a>.</p>
+<p class="reference">References <a class="el" href="netlist__abstraction_8h_source.html#l00083">hal::dataflow::NetlistAbstraction::gate_to_known_predecessor_groups</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00089">gates_of_group</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00079">netlist_abstr</a>.</p>
+
+</div>
+</div>
+<a id="a7eda2bbde69f5f7243897c14d18f6465"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7eda2bbde69f5f7243897c14d18f6465">&#9670;&nbsp;</a></span>get_known_successor_groups_of_group()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; hal::dataflow::Grouping::get_known_successor_groups_of_group </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
+          <td class="paramname"><em>group_id</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the known successor groups of a group. </p>
+<p>The known groups have initially been fed to the dataflow analysis by the user.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">group_id</td><td>- The ID of the group. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The group's known successor groups. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00235">235</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="netlist__abstraction_8h_source.html#l00084">hal::dataflow::NetlistAbstraction::gate_to_known_successor_groups</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00089">gates_of_group</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00079">netlist_abstr</a>.</p>
 
 </div>
 </div>
@@ -336,11 +435,20 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00206">206</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
+<p>Get the predecessor groups of a group. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">group_id</td><td>- The ID of the group. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The group's predecessor groups. </dd></dl>
 
-<p class="reference">References <a class="el" href="netlist__abstraction_8h_source.html#l00065">hal::dataflow::NetlistAbstraction::gate_to_predecessors</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00052">gates_of_group</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00048">netlist_abstr</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00053">parent_group_of_gate</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00204">204</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="result_8cpp_source.html#l00028">hal::dataflow::Result::Result()</a>.</p>
+<p class="reference">References <a class="el" href="netlist__abstraction_8h_source.html#l00081">hal::dataflow::NetlistAbstraction::gate_to_predecessors</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00089">gates_of_group</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00079">netlist_abstr</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00094">parent_group_of_gate</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="result_8cpp_source.html#l00029">hal::dataflow::Result::Result()</a>.</p>
 
 </div>
 </div>
@@ -360,59 +468,20 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00141">141</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
+<p>Get the intersection of the register stages of all gates of the group. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">group_id</td><td>- The ID of the group. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The register stage intersection of all gates of the group. </dd></dl>
 
-<p class="reference">References <a class="el" href="netlist__abstraction_8h_source.html#l00064">hal::dataflow::NetlistAbstraction::gate_to_register_stages</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00052">gates_of_group</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00048">netlist_abstr</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00139">139</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00237">are_groups_allowed_to_merge()</a>.</p>
+<p class="reference">References <a class="el" href="netlist__abstraction_8h_source.html#l00080">hal::dataflow::NetlistAbstraction::gate_to_register_stages</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00089">gates_of_group</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00079">netlist_abstr</a>.</p>
 
-</div>
-</div>
-<a id="a608e95cf7b84991f0c261507fb921b6f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a608e95cf7b84991f0c261507fb921b6f">&#9670;&nbsp;</a></span>get_reset_signals_of_group()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; hal::dataflow::Grouping::get_reset_signals_of_group </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
-          <td class="paramname"><em>group_id</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00116">116</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="netlist__abstraction_8h_source.html#l00062">hal::dataflow::NetlistAbstraction::gate_to_reset_signals</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00048">netlist_abstr</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="result_8cpp_source.html#l00028">hal::dataflow::Result::Result()</a>.</p>
-
-</div>
-</div>
-<a id="adf01d576ef085c71fa07b0757dc6f501"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf01d576ef085c71fa07b0757dc6f501">&#9670;&nbsp;</a></span>get_set_signals_of_group()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unordered_set&lt; <a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> &gt; hal::dataflow::Grouping::get_set_signals_of_group </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&#160;</td>
-          <td class="paramname"><em>group_id</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00121">121</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
-
-<p class="reference">References <a class="el" href="netlist__abstraction_8h_source.html#l00063">hal::dataflow::NetlistAbstraction::gate_to_set_signals</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00048">netlist_abstr</a>.</p>
-
-<p class="reference">Referenced by <a class="el" href="result_8cpp_source.html#l00028">hal::dataflow::Result::Result()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00297">are_groups_allowed_to_merge()</a>.</p>
 
 </div>
 </div>
@@ -432,11 +501,20 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00175">175</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
+<p>Get the successor groups of a group. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">group_id</td><td>- The ID of the group. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The group's successor groups. </dd></dl>
 
-<p class="reference">References <a class="el" href="netlist__abstraction_8h_source.html#l00066">hal::dataflow::NetlistAbstraction::gate_to_successors</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00052">gates_of_group</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00048">netlist_abstr</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00053">parent_group_of_gate</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00173">173</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="result_8cpp_source.html#l00028">hal::dataflow::Result::Result()</a>.</p>
+<p class="reference">References <a class="el" href="netlist__abstraction_8h_source.html#l00082">hal::dataflow::NetlistAbstraction::gate_to_successors</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00089">gates_of_group</a>, <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00079">netlist_abstr</a>, and <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00094">parent_group_of_gate</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="result_8cpp_source.html#l00029">hal::dataflow::Result::Result()</a>.</p>
 
 </div>
 </div>
@@ -456,9 +534,18 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00268">268</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
+<p>Check if the group is allowed to be split. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">group_id</td><td>- The ID of the group. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the group is allowed to be split, <code>false</code> otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00054">operations_on_group_allowed</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00328">328</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00099">operations_on_group_allowed</a>.</p>
 
 </div>
 </div>
@@ -478,7 +565,17 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00101">101</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
+<p>Check two groupings for inequality. </p>
+<p>Two groupings are equal if the comprise the same number of groups and if these groups are made up from the same gates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>- The other grouping. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the groupings are unequal, <code>false</code> otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00104">104</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
 
 </div>
 </div>
@@ -498,9 +595,19 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00091">91</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
+<p>Check two groupings for equality. </p>
+<p>Two groupings are equal if the comprise the same number of groups and if these groups are made up from the same gates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">other</td><td>- The other grouping. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the groupings are equal, <code>false</code> otherwise. </dd></dl>
 
-<p class="reference">References <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00052">gates_of_group</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00094">94</a> of file <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00089">gates_of_group</a>.</p>
 
 </div>
 </div>
@@ -517,7 +624,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00079">79</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00200">200</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
 
 </div>
 </div>
@@ -532,10 +639,11 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>A map from group to all gates contained in the group. </p>
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00052">52</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00089">89</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00237">are_groups_allowed_to_merge()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00206">get_predecessor_groups_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00141">get_register_stage_intersect_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00175">get_successor_groups_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00016">Grouping()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00091">operator==()</a>, and <a class="el" href="result_8cpp_source.html#l00028">hal::dataflow::Result::Result()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00297">are_groups_allowed_to_merge()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00109">get_control_signals_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00266">get_known_predecessor_groups_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00235">get_known_successor_groups_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00204">get_predecessor_groups_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00139">get_register_stage_intersect_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00173">get_successor_groups_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00016">Grouping()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00094">operator==()</a>, and <a class="el" href="result_8cpp_source.html#l00029">hal::dataflow::Result::Result()</a>.</p>
 
 </div>
 </div>
@@ -550,10 +658,11 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>A map from group the an ordered list of control net IDs. </p>
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00050">50</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00084">84</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00237">are_groups_allowed_to_merge()</a>, and <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00016">Grouping()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00297">are_groups_allowed_to_merge()</a>, and <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00016">Grouping()</a>.</p>
 
 </div>
 </div>
@@ -569,7 +678,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00076">76</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00195">195</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
 
 </div>
 </div>
@@ -584,10 +693,11 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>The netlist abstraction associated with the grouping. </p>
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00048">48</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00079">79</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00237">are_groups_allowed_to_merge()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00106">get_clock_signals_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00111">get_control_signals_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00206">get_predecessor_groups_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00141">get_register_stage_intersect_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00116">get_reset_signals_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00121">get_set_signals_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00175">get_successor_groups_of_group()</a>, and <a class="el" href="result_8cpp_source.html#l00028">hal::dataflow::Result::Result()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00297">are_groups_allowed_to_merge()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00109">get_control_signals_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00266">get_known_predecessor_groups_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00235">get_known_successor_groups_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00204">get_predecessor_groups_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00139">get_register_stage_intersect_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00173">get_successor_groups_of_group()</a>, and <a class="el" href="result_8cpp_source.html#l00029">hal::dataflow::Result::Result()</a>.</p>
 
 </div>
 </div>
@@ -602,10 +712,11 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>A map from a group to a flag that determines whether operations on the group are allowed. </p>
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00054">54</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00099">99</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00237">are_groups_allowed_to_merge()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00016">Grouping()</a>, and <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00268">is_group_allowed_to_split()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00297">are_groups_allowed_to_merge()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00016">Grouping()</a>, and <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00328">is_group_allowed_to_split()</a>.</p>
 
 </div>
 </div>
@@ -620,10 +731,11 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>A map from gate ID to the group that this gate belongs to. </p>
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00053">53</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00094">94</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00206">get_predecessor_groups_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00175">get_successor_groups_of_group()</a>, and <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00016">Grouping()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00204">get_predecessor_groups_of_group()</a>, <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00173">get_successor_groups_of_group()</a>, and <a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html#l00016">Grouping()</a>.</p>
 
 </div>
 </div>
@@ -639,7 +751,23 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00078">78</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00197">197</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
+
+</div>
+</div>
+<a id="a89ee1e0a47b1077770961a6e2f521b5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89ee1e0a47b1077770961a6e2f521b5e">&#9670;&nbsp;</a></span>pred_known_group_cache</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&gt; &gt; hal::dataflow::Grouping::pred_known_group_cache</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00199">199</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
 
 </div>
 </div>
@@ -655,11 +783,27 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00077">77</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00196">196</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following files:<ul>
+<a id="a282d7bafdee826c0b726a2d8a11b97ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a282d7bafdee826c0b726a2d8a11b97ed">&#9670;&nbsp;</a></span>suc_known_group_cache</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>, std::unordered_set&lt;<a class="el" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a>&gt; &gt; hal::dataflow::Grouping::suc_known_group_cache</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html#l00198">198</a> of file <a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/runner/work/hal/hal/plugins/dataflow_analysis/include/dataflow_analysis/common/<a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">grouping.h</a></li>
 <li>/home/runner/work/hal/hal/plugins/dataflow_analysis/src/common/<a class="el" href="plugins_2dataflow__analysis_2src_2common_2grouping_8cpp_source.html">grouping.cpp</a></li>
 </ul>
@@ -669,7 +813,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="namespacehal_1_1dataflow.html">dataflow</a></li><li class="navelem"><a class="el" href="structhal_1_1dataflow_1_1_grouping.html">Grouping</a></li>
-    <li class="footer">Generated on Mon Jun 3 2024 19:11:16 for HAL by
+    <li class="footer">Generated on Mon Jun 3 2024 21:07:32 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -9,6 +9,6 @@ var dir_a4d2a34eb48283e8d6db65abafeda3a7 =
     [ "plugin_dataflow.h", "plugin__dataflow_8h.html", [
       [ "CliExtensionDataflow", "classhal_1_1_cli_extension_dataflow.html", "classhal_1_1_cli_extension_dataflow" ],
       [ "GuiExtensionDataflow", "classhal_1_1_gui_extension_dataflow.html", "classhal_1_1_gui_extension_dataflow" ],
-      [ "plugin_dataflow", "classhal_1_1plugin__dataflow.html", "classhal_1_1plugin__dataflow" ]
+      [ "DataflowPlugin", "classhal_1_1_dataflow_plugin.html", "classhal_1_1_dataflow_plugin" ]
     ] ]
 ];

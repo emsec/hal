@@ -8,5 +8,5 @@ var namespacehal_1_1dataflow =
     [ "measure_block_time_t", "classhal_1_1dataflow_1_1measure__block__time__t.html", "classhal_1_1dataflow_1_1measure__block__time__t" ],
     [ "NetlistAbstraction", "structhal_1_1dataflow_1_1_netlist_abstraction.html", "structhal_1_1dataflow_1_1_netlist_abstraction" ],
     [ "ProgressPrinter", "classhal_1_1dataflow_1_1_progress_printer.html", "classhal_1_1dataflow_1_1_progress_printer" ],
-    [ "Result", "structhal_1_1dataflow_1_1_result.html", "structhal_1_1dataflow_1_1_result" ]
+    [ "Result", "classhal_1_1dataflow_1_1_result.html", "classhal_1_1dataflow_1_1_result" ]
 ];

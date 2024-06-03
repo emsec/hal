@@ -89,6 +89,9 @@ $(document).ready(function(){initNavTree('dataflow_8h.html',''); initResizable()
 <div class="title">dataflow.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>This file contains the function that analyses the dataflow of a gate-level netlist.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="api_2configuration_8h_source.html">dataflow_analysis/api/configuration.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2api_2result_8h_source.html">dataflow_analysis/api/result.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h_source.html">dataflow_analysis/common/grouping.h</a>&quot;</code><br />
@@ -99,15 +102,20 @@ Include dependency graph for dataflow.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="dataflow_8h__incl.png" border="0" usemap="#_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2include_2dataflow__analysis_2api_2dataflow_8h" alt=""/></div>
 <map name="_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2include_2dataflow__analysis_2api_2dataflow_8h" id="_2home_2runner_2work_2hal_2hal_2plugins_2dataflow__analysis_2include_2dataflow__analysis_2api_2dataflow_8h">
-<area shape="rect" title=" " alt="" coords="345,5,540,76"/>
-<area shape="rect" href="api_2configuration_8h.html" title=" " alt="" coords="160,213,323,255"/>
-<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2api_2result_8h.html" title=" " alt="" coords="361,124,524,165"/>
-<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title=" " alt="" coords="563,213,763,255"/>
-<area shape="rect" title=" " alt="" coords="673,303,788,329"/>
-<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="5,213,136,255"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="171,303,311,329"/>
-<area shape="rect" title=" " alt="" coords="495,303,558,329"/>
-<area shape="rect" href="pin__type_8h.html" title=" " alt="" coords="347,213,538,255"/>
+<area shape="rect" title="This file contains the function that analyses the dataflow of a gate&#45;level netlist." alt="" coords="768,5,962,76"/>
+<area shape="rect" href="api_2configuration_8h.html" title="This file contains the struct that holds all information on a dataflow analysis configuration." alt="" coords="254,124,417,165"/>
+<area shape="rect" href="include_2hal__core_2utilities_2result_8h.html" title=" " alt="" coords="144,407,274,448"/>
+<area shape="rect" title=" " alt="" coords="1093,325,1208,351"/>
+<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2api_2result_8h.html" title="This file contains the struct that holds all information on the result of a dataflow analysis run." alt="" coords="784,124,946,165"/>
+<area shape="rect" href="plugins_2dataflow__analysis_2include_2dataflow__analysis_2common_2grouping_8h.html" title="This file contains the class that holds all information of a dataflow analysis grouping." alt="" coords="1145,221,1345,262"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="36,496,176,523"/>
+<area shape="rect" href="gate__type__property_8h.html" title=" " alt="" coords="639,213,827,269"/>
+<area shape="rect" href="pin__type_8h.html" title=" " alt="" coords="424,221,615,262"/>
+<area shape="rect" href="module__pin_8h.html" title=" " alt="" coords="43,221,196,262"/>
+<area shape="rect" href="pin__group_8h.html" title=" " alt="" coords="94,317,247,359"/>
+<area shape="rect" title=" " alt="" coords="299,414,362,441"/>
+<area shape="rect" title=" " alt="" coords="554,325,597,351"/>
+<area shape="rect" href="pin__direction_8h.html" title=" " alt="" coords="902,221,1121,262"/>
 </map>
 </div>
 </div>
@@ -122,16 +130,21 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a8d16d7d0f8f54ec18bd51cfed5af1584"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; dataflow::Result &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1dataflow.html#a8d16d7d0f8f54ec18bd51cfed5af1584">hal::dataflow::analyze</a> (Netlist *nl, const Configuration &amp;config=Configuration())</td></tr>
-<tr class="separator:a8d16d7d0f8f54ec18bd51cfed5af1584"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d7b9b5948aa361332502ed7bc255881"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_result.html">hal::Result</a>&lt; dataflow::Result &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1dataflow.html#a9d7b9b5948aa361332502ed7bc255881">hal::dataflow::analyze</a> (const Configuration &amp;config)</td></tr>
+<tr class="memdesc:a9d7b9b5948aa361332502ed7bc255881"><td class="mdescLeft">&#160;</td><td class="mdescRight">Analyze the gate-level netlist to identify word-level registers.  <a href="namespacehal_1_1dataflow.html#a9d7b9b5948aa361332502ed7bc255881">More...</a><br /></td></tr>
+<tr class="separator:a9d7b9b5948aa361332502ed7bc255881"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This file contains the function that analyses the dataflow of a gate-level netlist. </p>
+
+<p class="definition">Definition in file <a class="el" href="dataflow_8h_source.html">dataflow.h</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_161c827992f16c517fae38e8eb03f5dd.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_b01ccb8cd28d03239d93b53568c12834.html">include</a></li><li class="navelem"><a class="el" href="dir_a4d2a34eb48283e8d6db65abafeda3a7.html">dataflow_analysis</a></li><li class="navelem"><a class="el" href="dir_302078487076c66625632028faf7c059.html">api</a></li><li class="navelem"><a class="el" href="dataflow_8h.html">dataflow.h</a></li>
-    <li class="footer">Generated on Mon Jun 3 2024 19:11:13 for HAL by
+    <li class="footer">Generated on Mon Jun 3 2024 21:07:29 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
