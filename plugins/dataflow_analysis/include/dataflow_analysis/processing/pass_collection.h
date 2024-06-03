@@ -54,8 +54,9 @@ namespace hal
             namespace pass_collection
             {
                 std::vector<PassConfiguration> get_passes(const Configuration& config, const std::vector<std::vector<pass_id>>& previous_passes);
+                void clear();
             }    // namespace pass_collection
 
-        }        // namespace processing
-    }            // namespace dataflow
+        }    // namespace processing
+    }    // namespace dataflow
 }    // namespace hal

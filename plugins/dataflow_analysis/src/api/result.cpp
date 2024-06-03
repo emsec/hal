@@ -1,6 +1,7 @@
 #include "dataflow_analysis/api/result.h"
 
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/gate_library/gate_type.h"
 #include "hal_core/netlist/module.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
@@ -30,7 +31,7 @@ namespace hal
             m_netlist = nl;
 
             const auto& na = grouping.netlist_abstr;
-            for (const auto* gate : na.all_sequential_gates)
+            for (const auto* gate : na.target_gates)
             {
                 auto gate_id = gate->get_id();
 
@@ -50,35 +51,14 @@ namespace hal
                     }
                 }
 
-                if (const auto it = na.gate_to_clock_signals.find(gate_id); it != na.gate_to_clock_signals.end())
+                if (const auto it = na.gate_to_control_signals.find(gate_id); it != na.gate_to_control_signals.end())
                 {
-                    for (auto clock_net_id : std::get<1>(*it))
+                    for (const auto& [type, signals] : std::get<1>(*it))
                     {
-                        this->m_gate_signals[gate][PinType::clock].insert(nl->get_net_by_id(clock_net_id));
-                    }
-                }
-
-                if (const auto it = na.gate_to_enable_signals.find(gate_id); it != na.gate_to_enable_signals.end())
-                {
-                    for (auto enable_net_id : std::get<1>(*it))
-                    {
-                        this->m_gate_signals[gate][PinType::enable].insert(nl->get_net_by_id(enable_net_id));
-                    }
-                }
-
-                if (const auto it = na.gate_to_reset_signals.find(gate_id); it != na.gate_to_reset_signals.end())
-                {
-                    for (auto reset_net_id : std::get<1>(*it))
-                    {
-                        this->m_gate_signals[gate][PinType::reset].insert(nl->get_net_by_id(reset_net_id));
-                    }
-                }
-
-                if (const auto it = na.gate_to_set_signals.find(gate_id); it != na.gate_to_set_signals.end())
-                {
-                    for (auto set_net_id : std::get<1>(*it))
-                    {
-                        this->m_gate_signals[gate][PinType::set].insert(nl->get_net_by_id(set_net_id));
+                        for (auto signal_net_id : signals)
+                        {
+                            this->m_gate_signals[gate][type].insert(nl->get_net_by_id(signal_net_id));
+                        }
                     }
                 }
             }
@@ -94,24 +74,12 @@ namespace hal
                 }
                 m_gates_of_group[group_id] = gates;
 
-                for (const auto net_id : grouping.get_clock_signals_of_group(group_id))
+                for (const auto& [type, signals] : grouping.get_control_signals_of_group(group_id))
                 {
-                    this->m_group_signals[group_id][PinType::clock].insert(m_netlist->get_net_by_id(net_id));
-                }
-
-                for (const auto net_id : grouping.get_control_signals_of_group(group_id))
-                {
-                    this->m_group_signals[group_id][PinType::enable].insert(m_netlist->get_net_by_id(net_id));
-                }
-
-                for (const auto net_id : grouping.get_reset_signals_of_group(group_id))
-                {
-                    this->m_group_signals[group_id][PinType::reset].insert(m_netlist->get_net_by_id(net_id));
-                }
-
-                for (const auto net_id : grouping.get_set_signals_of_group(group_id))
-                {
-                    this->m_group_signals[group_id][PinType::set].insert(m_netlist->get_net_by_id(net_id));
+                    for (auto signal_net_id : signals)
+                    {
+                        this->m_group_signals[group_id][type].insert(m_netlist->get_net_by_id(signal_net_id));
+                    }
                 }
 
                 if (auto suc_ids = grouping.get_successor_groups_of_group(group_id); !suc_ids.empty())
@@ -446,21 +414,29 @@ namespace hal
             return ERR("failed to open file at '" + write_path.string() + "' for writing dataflow gate groups.");
         }
 
-        hal::Result<std::unordered_map<u32, Module*>> dataflow::Result::create_modules(const std::unordered_set<u32>& group_ids) const
+        hal::Result<std::unordered_map<u32, Module*>> dataflow::Result::create_modules(const std::map<const GateType*, std::string>& module_suffixes,
+                                                                                       const std::map<std::pair<PinDirection, std::string>, std::string>& pin_prefixes,
+                                                                                       const std::unordered_set<u32>& group_ids) const
         {
             auto* nl = this->get_netlist();
 
             // delete all modules that start with DANA
+            std::vector<Module*> modules_to_delete;
             for (const auto mod : nl->get_modules())
             {
-                if (mod->get_name().find("DANA") != std::string::npos)
+                if (utils::starts_with(mod->get_name(), std::string("DANA_")))
                 {
-                    nl->delete_module(mod);
+                    modules_to_delete.push_back(mod);
                 }
+            }
+
+            for (auto* mod : modules_to_delete)
+            {
+                nl->delete_module(mod);
             }
             log_info("dataflow", "successfully deleted old DANA modules");
 
-            // create new modules and try to keep hierachy if possible
+            // create new modules and try to keep hierarchy if possible
             std::unordered_map<u32, Module*> group_to_module;
             for (const auto& [group_id, group] : this->get_groups())
             {
@@ -470,8 +446,10 @@ namespace hal
                 }
 
                 bool gate_hierachy_matches_for_all = true;
+                bool gate_type_matches_for_all     = true;
                 bool first_run                     = true;
-                auto* reference_module             = nl->get_top_module();
+                const GateType* gate_type;
+                auto* reference_module = nl->get_top_module();
 
                 std::vector<Gate*> gates;
                 for (const auto gate : group)
@@ -481,13 +459,15 @@ namespace hal
                     if (first_run)
                     {
                         reference_module = gate->get_module();
+                        gate_type        = gate->get_type();
                         first_run        = false;
                     }
-                    else if (!gate_hierachy_matches_for_all)
-                    {
-                        continue;
-                    }
                     else if (gate->get_module() != reference_module)
+                    {
+                        gate_hierachy_matches_for_all = false;
+                    }
+
+                    if (gate_type != gate->get_type())
                     {
                         gate_hierachy_matches_for_all = false;
                     }
@@ -498,122 +478,131 @@ namespace hal
                     reference_module = nl->get_top_module();
                 }
 
-                auto* new_mod             = nl->create_module("DANA_register_" + std::to_string(group_id), reference_module, gates);
+                std::string suffix;
+                if (const auto it = module_suffixes.find(gate_type); gate_type_matches_for_all && it != module_suffixes.end())
+                {
+                    suffix = it->second;
+                }
+                else
+                {
+                    suffix = "module";
+                }
+
+                auto* new_mod             = nl->create_module("DANA_" + suffix + "_" + std::to_string(group_id), reference_module, gates);
                 group_to_module[group_id] = new_mod;
 
-                PinGroup<ModulePin>* data_in_group  = nullptr;
-                PinGroup<ModulePin>* data_out_group = nullptr;
-
+                std::map<const std::pair<PinDirection, std::string>, PinGroup<ModulePin>*> pin_groups;
                 for (auto* pin : new_mod->get_pins())
                 {
                     if (pin->get_direction() == PinDirection::input)
                     {
                         const auto destinations = pin->get_net()->get_destinations([new_mod](const Endpoint* ep) { return ep->get_gate()->get_module() == new_mod; });
-                        if (std::all_of(destinations.begin(), destinations.end(), [](const Endpoint* ep) { return ep->get_pin()->get_type() == PinType::data; }))
+
+                        const auto* first_pin = destinations.front()->get_pin();
+                        auto pin_type         = first_pin->get_type();
+                        auto pin_name         = first_pin->get_name();
+                        if (std::all_of(destinations.begin(), destinations.end(), [pin_name](const Endpoint* ep) { return ep->get_pin()->get_name() == pin_name; }))
                         {
-                            if (data_in_group == nullptr)
+                            const auto pg_key = std::make_pair(PinDirection::input, pin_name);
+
+                            std::string prefix;
+                            if (const auto prefix_it = pin_prefixes.find(pg_key); prefix_it != pin_prefixes.end())
                             {
-                                data_in_group = pin->get_group().first;
-                                new_mod->set_pin_group_name(data_in_group, "DI");
-                                new_mod->set_pin_group_type(data_in_group, PinType::data);
+                                prefix = prefix_it->second;
                             }
                             else
                             {
-                                if (!new_mod->assign_pin_to_group(data_in_group, pin))
+                                prefix = "i_" + pin_name;
+                            }
+
+                            if (const auto pg_it = pin_groups.find(pg_key); pg_it == pin_groups.end())
+                            {
+                                auto* pin_group    = pin->get_group().first;
+                                pin_groups[pg_key] = pin_group;
+                                new_mod->set_pin_group_name(pin_group, prefix);
+                                new_mod->set_pin_group_type(pin_group, pin_type);
+                            }
+                            else
+                            {
+                                if (!new_mod->assign_pin_to_group(pg_it->second, pin))
                                 {
                                     log_warning("dataflow", "Assign pin to group failed.");
                                 }
                             }
 
-                            new_mod->set_pin_name(pin, "DI(" + std::to_string(pin->get_group().second) + ")");
-                            new_mod->set_pin_type(pin, PinType::data);
+                            new_mod->set_pin_name(pin, prefix + "(" + std::to_string(pin->get_group().second) + ")");
+                            new_mod->set_pin_type(pin, pin_type);
                         }
                     }
                     else if (pin->get_direction() == PinDirection::output)
                     {
                         const auto sources = pin->get_net()->get_sources([new_mod](const Endpoint* ep) { return ep->get_gate()->get_module() == new_mod; });
-                        if (sources.size() == 1 && sources.at(0)->get_pin()->get_type() == PinType::state)
+
+                        const auto* first_pin = sources.front()->get_pin();
+                        auto pin_type         = first_pin->get_type();
+                        auto pin_name         = first_pin->get_name();
+                        if (sources.size() == 1)
                         {
-                            if (data_out_group == nullptr)
+                            const auto pg_key = std::make_pair(PinDirection::output, pin_name);
+
+                            std::string prefix;
+                            if (const auto prefix_it = pin_prefixes.find(pg_key); prefix_it != pin_prefixes.end())
                             {
-                                data_out_group = pin->get_group().first;
-                                new_mod->set_pin_group_name(data_out_group, "DO");
-                                new_mod->set_pin_group_type(data_out_group, PinType::data);
+                                prefix = prefix_it->second;
                             }
                             else
                             {
-                                if (!new_mod->assign_pin_to_group(data_out_group, pin))
+                                prefix = "o_" + pin_name;
+                            }
+
+                            if (const auto pg_it = pin_groups.find(pg_key); pg_it == pin_groups.end())
+                            {
+                                auto* pin_group    = pin->get_group().first;
+                                pin_groups[pg_key] = pin_group;
+                                new_mod->set_pin_group_name(pin_group, prefix);
+                                new_mod->set_pin_group_type(pin_group, pin_type);
+                            }
+                            else
+                            {
+                                if (!new_mod->assign_pin_to_group(pg_it->second, pin))
                                 {
                                     log_warning("dataflow", "Assign pin to group failed.");
                                 }
                             }
 
-                            new_mod->set_pin_name(pin, "DO(" + std::to_string(pin->get_group().second) + ")");
-                            new_mod->set_pin_type(pin, PinType::data);
+                            new_mod->set_pin_name(pin, prefix + "(" + std::to_string(pin->get_group().second) + ")");
+                            new_mod->set_pin_type(pin, pin_type);
                         }
                     }
                 }
 
-                for (const auto& [pin_type, nets] : m_group_signals.at(group_id))
+                for (const auto* pin_group : new_mod->get_pin_groups())
                 {
-                    std::string prefix;
-                    switch (pin_type)
+                    if (pin_group->size() == 1)
                     {
-                        case PinType::clock:
-                            prefix = "CLK";
-                            break;
-                        case PinType::enable:
-                            prefix = "EN";
-                            break;
-                        case PinType::reset:
-                            prefix = "RST";
-                            break;
-                        case PinType::set:
-                            prefix = "SET";
-                            break;
-                        default:
-                            continue;
-                    }
-
-                    PinGroup<ModulePin>* pin_group = nullptr;
-                    for (auto* net : nets)
-                    {
-                        auto* pin = new_mod->get_pin_by_net(net);
-
-                        if (pin_group == nullptr)
-                        {
-                            pin_group = pin->get_group().first;
-                            new_mod->set_pin_group_name(pin_group, prefix);
-                            new_mod->set_pin_group_type(pin_group, pin_type);
-                        }
-                        else
-                        {
-                            if (!new_mod->assign_pin_to_group(pin_group, pin))
-                            {
-                                log_warning("dataflow", "Assign pin to group failed.");
-                            }
-                        }
-
-                        if (nets.size() == 1)
-                        {
-                            new_mod->set_pin_name(pin, prefix);
-                        }
-                        else
-                        {
-                            if (const auto res = pin_group->get_index(pin); res.is_error())
-                            {
-                                log_warning("dataflow", "{}", res.get_error().get());
-                            }
-                            else
-                            {
-                                new_mod->set_pin_name(pin, prefix + "(" + std::to_string(res.get()) + ")");
-                            }
-                        }
-                        new_mod->set_pin_type(pin, pin_type);
+                        auto* pin = pin_group->get_pins().front();
+                        new_mod->set_pin_name(pin, pin_group->get_name());
                     }
                 }
             }
             return OK(group_to_module);
+        }
+
+        hal::Result<std::unordered_map<u32, Module*>> dataflow::Result::create_modules(const std::map<GateTypeProperty, std::string>& module_suffixes,
+                                                                                       const std::map<std::pair<PinDirection, std::string>, std::string>& pin_prefixes,
+                                                                                       const std::unordered_set<u32>& group_ids) const
+        {
+            const auto* gl = this->m_netlist->get_gate_library();
+            std::map<const GateType*, std::string> gate_type_suffixes;
+            for (const auto& suffix : module_suffixes)
+            {
+                for (const auto& [_, type] : gl->get_gate_types([suffix](const GateType* gt) { return gt->has_property(suffix.first); }))
+                {
+                    gate_type_suffixes[type] = suffix.second;
+                }
+            }
+
+            return this->create_modules(gate_type_suffixes, pin_prefixes, group_ids);
         }
 
         std::vector<std::vector<Gate*>> dataflow::Result::get_groups_as_list(const std::unordered_set<u32>& group_ids) const
