@@ -393,20 +393,24 @@ namespace hal
         if (ascending)
         {
             for (auto it = pins.begin(); it != pins.end(); ++it)
+            {
                 if (auto res = assign_pin_to_group(pin_group, *it, delete_empty_groups); res.is_error())
                 {
                     assert(delete_pin_group(pin_group));
                     return ERR(res.get_error());
                 }
+            }
         }
         else
         {
             for (auto it = pins.rbegin(); it != pins.rend(); ++it)
+            {
                 if (auto res = assign_pin_to_group(pin_group, *it, delete_empty_groups); res.is_error())
                 {
                     assert(delete_pin_group(pin_group));
                     return ERR(res.get_error());
                 }
+            }
         }
 
         return OK(pin_group);
@@ -462,12 +466,9 @@ namespace hal
             return false;
         }
 
-        bool removed_pins = false;
-
         std::vector<GatePin*> pins_copy = pin_group->get_pins();
         for (auto* pin : pins_copy)
         {
-            removed_pins = true;
             if (auto res = create_pin_group(pin->get_name(), {pin}, pin->get_direction(), pin->get_type(), true, 0, false); res.is_error())
             {
                 log_warning("gate", "{}", res.get_error().get());
