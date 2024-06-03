@@ -294,6 +294,16 @@ namespace hal
             Configuration& with_control_pin_types(const std::set<PinType>& types, bool overwrite = false);
 
             /**
+             * @brief Use the default detection configuration for flip-flops.
+             * 
+             * Includes all flip-flop types as target gate types and sets `clock`, `enable`, `set`, and `reset` pins as control pins.
+             * Overwrites any existing gate type and control pin configuration.
+             * 
+             * @returns The updated dataflow analysis configuration.
+             */
+            Configuration& with_flip_flops();
+
+            /**
              * @brief Enable stage identification as part of dataflow analysis.
              * 
              * @param[in] enable - Set `true` to enable stage identification, `false` otherwise. Defaults to `true`.

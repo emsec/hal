@@ -304,6 +304,15 @@ namespace hal
             :rtype: dataflow.Dataflow.Configuration
         )");
 
+        py_dataflow_configuration.def("with_flip_flops", &dataflow::Configuration::with_flip_flops, R"(
+            Use the default detection configuration for flip-flops.
+            Includes all flip-flop types as target gate types and sets ``clock``, ``enable``, ``set``, and ``reset`` pins as control pins.
+            Overwrites any existing gate type and control pin configuration.
+
+            :returns: The updated dataflow analysis configuration.
+            :rtype: dataflow.Dataflow.Configuration
+        )");
+
         py_dataflow_configuration.def("with_stage_identification", &dataflow::Configuration::with_stage_identification, py::arg("enable") = true, R"(
             Enable stage identification as part of dataflow analysis.
 

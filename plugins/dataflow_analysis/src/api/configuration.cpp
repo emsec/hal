@@ -301,6 +301,14 @@ namespace hal
             return *this;
         }
 
+        Configuration& Configuration::with_flip_flops()
+        {
+            this->with_gate_types({GateTypeProperty::ff}, true);
+            this->control_pin_types = {PinType::clock, PinType::enable, PinType::set, PinType::reset};
+
+            return *this;
+        }
+
         Configuration& Configuration::with_stage_identification(bool enable)
         {
             this->enable_stages = enable;
