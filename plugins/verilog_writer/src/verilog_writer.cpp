@@ -473,13 +473,13 @@ namespace hal
 
     std::string VerilogWriter::get_unique_alias(std::unordered_map<std::string, u32>& name_occurrences, const std::string& name) const
     {
+        name_occurrences[name]++;
+        
         // if the name only appears once, we don't have to suffix it
         if (name_occurrences[name] < 2)
         {
             return name;
         }
-
-        name_occurrences[name]++;
 
         // otherwise, add a unique string to the name
         return name + "__[" + std::to_string(name_occurrences[name]) + "]__";
