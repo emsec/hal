@@ -561,13 +561,13 @@ $(document).ready(function(){initNavTree('src_2verilog__writer_8cpp_source.html'
 <div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160; </div>
 <div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;    std::string VerilogWriter::get_unique_alias(std::unordered_map&lt;std::string, u32&gt;&amp; name_occurrences, <span class="keyword">const</span> std::string&amp; <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;        <span class="comment">// if the name only appears once, we don&#39;t have to suffix it</span></div>
-<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;        <span class="keywordflow">if</span> (name_occurrences[<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>] &lt; 2)</div>
-<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;        {</div>
-<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>;</div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;        }</div>
-<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160; </div>
-<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;        name_occurrences[<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>]++;</div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;        name_occurrences[<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>]++;</div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;        </div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;        <span class="comment">// if the name only appears once, we don&#39;t have to suffix it</span></div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;        <span class="keywordflow">if</span> (name_occurrences[<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>] &lt; 2)</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;        {</div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>;</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;        }</div>
 <div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160; </div>
 <div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;        <span class="comment">// otherwise, add a unique string to the name</span></div>
 <div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a> + <span class="stringliteral">&quot;__[&quot;</span> + std::to_string(name_occurrences[<a class="code" href="netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231">name</a>]) + <span class="stringliteral">&quot;]__&quot;</span>;</div>
@@ -636,7 +636,7 @@ $(document).ready(function(){initNavTree('src_2verilog__writer_8cpp_source.html'
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_c64d3b74fa1dd697c380b9978b739eaf.html">verilog_writer</a></li><li class="navelem"><a class="el" href="dir_a2b81aecef7af1a1fdaa27c5be69e8f3.html">src</a></li><li class="navelem"><a class="el" href="src_2verilog__writer_8cpp.html">verilog_writer.cpp</a></li>
-    <li class="footer">Generated on Tue Jun 4 2024 13:56:38 for HAL by
+    <li class="footer">Generated on Tue Jun 4 2024 16:37:05 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
