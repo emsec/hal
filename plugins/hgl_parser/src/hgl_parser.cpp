@@ -253,6 +253,12 @@ namespace hal
                     }
                     bool ascending = pg_val["ascending"].GetBool();
 
+                    bool ordered = false;
+                    if (pg_val.HasMember("ordered") && pg_val["ordered"].IsBool())
+                    {
+                        ordered = pg_val["ordered"].GetBool();
+                    }
+
                     if (!pg_val.HasMember("start_index") || !pg_val["start_index"].IsUint())
                     {
                         return ERR("could not parse pin group '" + pg_name + "': missing or start index");
@@ -354,7 +360,7 @@ namespace hal
                             }
                         }
 
-                        auto pg_res = gt->create_pin_group(pg_name, pins, pg_direction, pg_type, ascending, start_index);
+                        auto pg_res = gt->create_pin_group(pg_name, pins, pg_direction, pg_type, ascending, start_index, ordered);
                         if (pg_res.is_error())
                         {
                             return ERR_APPEND(pg_res.get_error(),

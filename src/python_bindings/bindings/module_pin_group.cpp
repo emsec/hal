@@ -81,8 +81,7 @@ namespace hal
             :rtype: hal_py.PinType
         )");
 
-        py_module_pin_group.def_property_readonly(
-            "pins", [](const PinGroup<ModulePin>& self) -> std::vector<ModulePin*> { return self.get_pins(nullptr); }, R"(
+        py_module_pin_group.def_property_readonly("pins", [](const PinGroup<ModulePin>& self) -> std::vector<ModulePin*> { return self.get_pins(nullptr); }, R"(
             The (ordered) pins of the pin groups.
 
             :type: list[hal_py.ModulePin]
@@ -179,6 +178,25 @@ namespace hal
 
             :returns: The start index. 
             :rtype: int
+        )");
+
+        py_module_pin_group.def_property_readonly("ordered", &PinGroup<ModulePin>::is_ordered, R"(
+            ``True`` if the pin group is inherently ordered, ``False`` otherwise.
+
+            :type: bool
+        )");
+
+        py_module_pin_group.def("is_ordered", &PinGroup<ModulePin>::is_ordered, R"(
+            Check whether the pin group features an inherent order.
+
+            :returns: ``True`` if the pin group is inherently ordered, ``False`` otherwise.
+            :rtype: bool
+        )");
+
+        py_module_pin_group.def("set_ordered", &PinGroup<ModulePin>::set_ordered, py::arg("ordered") = true, R"(
+            Set whether the pin group features an inherent order.
+
+            :param bool ordered: Set ``True`` if the pin group is inherently ordered, ``False`` otherwise. Defaults to ``True``.
         )");
 
         py_module_pin_group.def("empty", &PinGroup<ModulePin>::empty, R"(
