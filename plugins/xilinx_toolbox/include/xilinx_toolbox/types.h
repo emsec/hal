@@ -9,6 +9,10 @@ namespace hal
 {
     namespace xilinx_toolbox
     {
+        /**
+         * @enum BELType
+         * @brief BEL types relevant for XDC file parsing.
+         */
         enum BELType
         {
             A6LUT,
@@ -40,6 +44,10 @@ namespace hal
             OUTBUF,
         };
 
+        /**
+         * @enum LOCType
+         * @brief LOC types relevant for XDC file parsing.
+         */
         enum LOCType
         {
             SLICE,
@@ -49,6 +57,12 @@ namespace hal
             PIN,
         };
 
+        /**
+         * @enum LOC
+         * @brief Information on a LOC.
+         * 
+         * This struct contains all relevant information on a LOC that is needed to parse and apply a XDC file to an existing netlist.
+         */
         struct LOC
         {
             LOCType loc_type;
@@ -57,6 +71,12 @@ namespace hal
             u64 loc_y;
         };
 
+        /**
+         * @enum CellData
+         * @brief Data of a cell on the FPGA fabric.
+         * 
+         * This struct contains all location information on a cell on the FPGA fabric, including its LOC and BEL data.
+         */
         struct CellData
         {
             std::optional<LOC> loc;
