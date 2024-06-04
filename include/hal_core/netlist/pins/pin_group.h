@@ -75,7 +75,7 @@ namespace hal
         bool operator==(const PinGroup<T>& other) const
         {
             if (m_id != other.get_id() || m_name != other.get_name() || m_direction != other.get_direction() || m_type != other.get_type() || m_start_index != other.get_start_index()
-                || m_ascending != other.is_ascending() || m_is_ordered != other.is_ordered())
+                || m_ascending != other.is_ascending() || m_ordered != other.is_ordered())
             {
                 return false;
             }
@@ -305,7 +305,7 @@ namespace hal
          * 
          * @param[in] ordered - Set `true` if the pin group is inherently ordered, `false` otherwise. Defaults to `true`.
          */
-        void set_ordered(bool ordered = true) const
+        void set_ordered(bool ordered = true)
         {
             m_ordered = ordered;
         }
