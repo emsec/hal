@@ -3,7 +3,6 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 * **WARNING:** this release breaks compatibility with Ubuntu 20.04 LTS
-* **WARNING:** this release breaks the API of the  plugin
 * **WARNING:** this release breaks the API of the `graph_algorithm`, `dataflow`, and `xilinx_toolbox` plugins
 * GUI
   * refactored module widget
