@@ -210,8 +210,12 @@ namespace hal
                 // creates a new pin which is not valid until now nor created via gate->create_pin()
                 if(!renamePin(pinItem, input))
                     break;
-                pinItem->setFields(input, getNextId(PinItem::TreeItemType::Pin), PinDirection::none, PinType::none);
-                pinItem->setItemType(PinItem::TreeItemType::InvalidPin);
+                PinItem* parentGroup = static_cast<PinItem*>(pinItem->getParent());
+                PinDirection pdir = enum_from_string<PinDirection>(parentGroup->getDirection().toStdString());
+                PinType ptype = enum_from_string<PinType>(parentGroup->getType().toStdString());
+                pinItem->setFields(input, getNextId(PinItem::TreeItemType::Pin), pdir, ptype);
+                if(pdir != PinDirection::none) pinItem->setItemType(PinItem::TreeItemType::Pin);
+                else pinItem->setItemType(PinItem::TreeItemType::InvalidPin);
                 mInvalidPins.append(pinItem);
 
                 beginInsertRows(index.parent(),0,0);
@@ -233,6 +237,7 @@ namespace hal
                 break;
             }
         }
+        Q_EMIT dataChanged(index, index);
     }
 
     void PinModel::handleEditDirection(QModelIndex index, const QString& direction)
@@ -305,7 +310,7 @@ namespace hal
                 break;
             }
         }
-        //printGateMember();
+        Q_EMIT dataChanged(index, index);
     }
 
     void PinModel::handleEditType(QModelIndex index, const QString& type)
@@ -361,6 +366,7 @@ namespace hal
                 }
             }
         }
+        Q_EMIT dataChanged(index, index);
     }
 
 

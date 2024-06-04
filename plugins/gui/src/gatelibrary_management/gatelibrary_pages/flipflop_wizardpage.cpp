@@ -52,17 +52,9 @@ namespace hal
 
     void FlipFlopWizardPage::initializePage()
     {
-        qInfo() << field("name").toString();
-        qInfo() << field("properties").toInt();
+        //qInfo() << field("name").toString();
+        //qInfo() << field("properties").toInt();
     }
-
-//    int FlipFlopWizardPage::nextId() const
-//    {
-//        auto parentWizard = wizard();
-//        if(!parentWizard)
-//            return -1;
-//        return static_cast<GateLibraryWizard*>(parentWizard)->getNextPageId(GateLibraryWizard::FlipFlop);
-//    }
 
     void FlipFlopWizardPage::setData(GateType *gate){
         if (gate != nullptr && gate->has_component_of_type(GateTypeComponent::ComponentType::ff))

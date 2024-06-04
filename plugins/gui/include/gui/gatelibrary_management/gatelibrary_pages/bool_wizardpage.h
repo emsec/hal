@@ -25,17 +25,27 @@
 
 #pragma once
 
+#include "gui/gatelibrary_management/gatelibrary_pages/generalinfo_wizardpage.h"
+
 #include <QWizardPage>
 #include <QGridLayout>
+#include <QTabWidget>
+#include <QLineEdit>
+#include <QTextEdit>
+#include <QLabel>
 
 namespace hal {
+    class GateLibraryWizard;
     class BoolWizardPage:public QWizardPage
     {
     public:
         BoolWizardPage(QWidget* parent = nullptr);
-        //int nextId() const override;
+        void initializePage() override;
+        void setData(GateType* gate);
 
     private:
         QGridLayout* mLayout;
+        GateLibraryWizard* mWizard;
+        GateType* mGate = nullptr;
     };
 }

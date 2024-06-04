@@ -51,41 +51,9 @@ namespace hal
             ramPage->setData(mGateType);
             ramportPage->setData(mGateType);
             statePage->setData(mGateType);
+            boolPage->setData(mGateType);
             //pinsPage->setGateType(mGateType);
         }
-    }
-
-    GateLibraryWizard::GateLibraryWizard(const GateLibrary *gateLibrary, QWidget* parent): QWizard(parent)
-    {
-        generalInfoPage = new GeneralInfoWizardPage(gateLibrary, this);
-        pinsPage = new PinsWizardPage(this);
-        ffPage = new FlipFlopWizardPage(this);
-        boolPage = new BoolWizardPage(this);
-
-        latchPage = new LatchWizardPage(this);
-        lutPage = new LUTWizardPage(this);
-        initPage = new InitWizardPage(this);
-        ramPage = new RAMWizardPage(this);
-        ramportPage = new RAMPortWizardPage(this);
-        statePage = new StateWizardPage(this);
-
-        setPage(GeneralInfo, generalInfoPage);
-        setPage(Pin, pinsPage);
-        setPage(FlipFlop, ffPage);
-        setPage(Latch, latchPage);
-        setPage(LUT, lutPage);
-        setPage(RAM, ramPage);
-        setPage(RAMPort, ramportPage);
-        setPage(Init, initPage);
-        setPage(State, statePage);
-        setPage(BooleanFunction, boolPage);
-        //pinsPage->setGateType(nullptr);
-        generalInfoPage->setMode(false);
-        ffPage->setData(nullptr);
-        mGateLibrary = gateLibrary;
-
-        mPinTab = new GateLibraryTabPin(this, true);
-        mPinModel = new PinModel(this, true);
     }
 
     void GateLibraryWizard::editGate(GateType* gt)
@@ -137,12 +105,7 @@ namespace hal
             else if(properties.contains("latch")) return Latch;
             else if(properties.contains("c_lut")) return LUT;
             else if(properties.contains("ram")) return RAM;*/
-            return BooleanFunction;
-        case BooleanFunction:
-            if(properties.contains("ff")) return FlipFlop;
-            else if(properties.contains("latch")) return Latch;
-            else if(properties.contains("c_lut")) return LUT;
-            else if(properties.contains("ram")) return RAM;
+            return FlipFlop;
         case FlipFlop:
             if(properties.contains("latch")) return Latch;
             else if(properties.contains("c_lut")) return LUT;
@@ -164,6 +127,8 @@ namespace hal
             if(properties.contains("ff") || properties.contains("latch") || properties.contains("c_lut") || properties.contains("ram")) return Init;
             else return -1;
         case Init:
+            return BooleanFunction;
+        case BooleanFunction:
         default:
             return -1;
         }

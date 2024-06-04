@@ -85,7 +85,7 @@ namespace hal
         connect(mContentWidget, &GatelibraryContentWidget::triggerDeleteType, this, &GateLibraryManager::handleDeleteType);
         connect(mContentWidget, &GatelibraryContentWidget::triggerDoubleClicked, this, &GateLibraryManager::handleEditWizard);
 
-        setLayout(mLayout);
+        setLayout(mLayout);GateLibraryTabGeneral
         repolish();    // CALL FROM PARENT
     }
 
