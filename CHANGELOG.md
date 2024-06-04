@@ -3,8 +3,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 * **WARNING:** this release breaks compatibility with Ubuntu 20.04 LTS
-* **WARNING:** this release breaks the API of the `graph_algorithm` plugin
-* **WARNING:** this release breaks the API of the `dataflow_analysis` plugin
+* **WARNING:** this release breaks the API of the  plugin
+* **WARNING:** this release breaks the API of the `graph_algorithm`, `dataflow`, and `xilinx_toolbox` plugins
 * GUI
   * refactored module widget
     * added option to show gate content for each module
@@ -42,6 +42,9 @@ All notable changes to this project will be documented in this file.
     * extended maximum line with the CSV parser can handle
     * changed warning messages for waveform parsing and made them more specific
     * changed policy toward 'dangling' wires, they are no longer ignored but considered as global inputs or outputs
+  * changed `xilinx_toolbox` plugin
+    * added `split_shift_registers` function to split `SRL16E` gates into multiple flip-flops
+    * changed Python bindings for better usability
 * netlist
   * module pins
     * added qualifier for `pin_changed` core events telling receiver details about the recent modification
