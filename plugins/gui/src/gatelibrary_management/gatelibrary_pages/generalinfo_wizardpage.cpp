@@ -120,11 +120,4 @@ namespace hal
         }
         return true;
     }
-//    int GeneralInfoWizardPage::nextId() const
-//    {
-//        auto parentWizard = wizard();
-//        if(!parentWizard)
-//            return -1;
-//        return static_cast<GateLibraryWizard*>(parentWizard)->getNextPageId(GateLibraryWizard::GeneralInfo);
-//    }
 }

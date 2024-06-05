@@ -41,6 +41,7 @@ namespace hal {
     public:
         BoolWizardPage(QWidget* parent = nullptr);
         void initializePage() override;
+        bool validatePage() override;
         void setData(GateType* gate);
 
     private:

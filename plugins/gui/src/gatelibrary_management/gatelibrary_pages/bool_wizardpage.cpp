@@ -59,4 +59,24 @@ namespace hal
     void BoolWizardPage::setData(GateType *gate){
         mGate = gate;
     }
+
+    bool BoolWizardPage::validatePage(){
+
+        int rowCount = 0;
+        QList<PinItem*> inputPins = mWizard->mPinModel->getInputPins();
+        QList<PinItem*> outputPins = mWizard->mPinModel->getOutputPins();
+        while(mLayout->itemAtPosition(rowCount, 1) != nullptr){
+            QLabel* label = static_cast<QLabel*>(mLayout->itemAtPosition(rowCount, 1)->widget());
+            auto bfres = BooleanFunction::from_string(label->text().toStdString());
+            if(bfres.is_error()) return false;
+            BooleanFunction bf = bfres.get();
+            std::set<std::string> names = bf.get_variable_names();
+            for(auto item : inputPins)
+            {
+                if(names.find(item->getName().toStdString()) == names.end()) return false;
+            }
+            rowCount++;
+        }
+        return true;
+    }
 }
