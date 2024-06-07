@@ -115,7 +115,8 @@ namespace hal
                     }
                 }
 
-                std::vector<std::pair<std::shared_ptr<Grouping>, PassConfiguration>> generate_pass_combinations(Context& ctx, const Configuration& config, const std::shared_ptr<Grouping>& initial_grouping)
+                std::vector<std::pair<std::shared_ptr<Grouping>, PassConfiguration>>
+                    generate_pass_combinations(Context& ctx, const Configuration& config, const std::shared_ptr<Grouping>& initial_grouping)
                 {
                     // create current layer of pass combinations;
                     std::vector<std::pair<std::shared_ptr<Grouping>, PassConfiguration>> output;
@@ -258,10 +259,14 @@ namespace hal
                     }
                     log_info("dataflow", "  total: {} unique states", ctx.result.unique_groupings.size());
                 }
-                
+
                 return ctx.result;
             }
 
+            void clear()
+            {
+                pass_collection::clear();
+            }
         }    // namespace processing
-    }        // namespace dataflow
+    }    // namespace dataflow
 }    // namespace hal

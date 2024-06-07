@@ -1,16 +1,16 @@
 Dataflow Analysis (DANA)
 ==========================
 
-.. autoclass:: dataflow.DataflowPlugin
-    :members:
+.. automodule:: dataflow
+    :members: analyze
 
-.. autoclass:: dataflow.Dataflow.Configuration
+.. autoclass:: dataflow.Configuration
     :members:
 
     .. automethod:: __init__
 
-.. autoclass:: dataflow.Dataflow.Result
+.. autoclass:: dataflow.Result
     :members:
 
-.. automodule:: dataflow.Dataflow
-    :members: analyze
+.. autoclass:: dataflow.DataflowPlugin
+    :members:

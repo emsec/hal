@@ -33,6 +33,11 @@
  */
 
 /**
+ * @defgroup decorators Decorators
+ * @ingroup core
+ */
+
+/**
  * @defgroup pins Pins
  * @ingroup core
  */

@@ -42,7 +42,7 @@ namespace hal {
     class WaveGraphicsCanvas;
     class WaveTreeModel;
     class WaveTreeView;
-    class SelectionTreeItem;
+    class ModuleItem;
 
 //    enum SimulationState { SimulationSelectGates, SimulationClockSet, SimulationInputGenerate, SimulationShowResults };
 
@@ -76,7 +76,7 @@ namespace hal {
 
     private Q_SLOTS:
 
-        void handleSelectionHighlight(const QVector<const hal::SelectionTreeItem*>& highlight);
+        void handleSelectionHighlight(const QVector<const hal::ModuleItem*>& highlight);
         void handleNumberWaveformChanged(int count);
         void handleStateChanged(NetlistSimulatorController::SimulationState state);
         void visualizeCurrentNetState(double tCursor, int xpos);

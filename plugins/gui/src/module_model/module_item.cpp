@@ -42,14 +42,6 @@ ModuleItem::ModuleItem(const u32 id, const TreeItemType type) :
         }
     }
 
-    int ModuleItem::row() const
-    {
-        BaseTreeItem* parent = getParent();
-        if (!parent) return 0;
-        return parent->getRowForChild(this);
-    }
-
-
     void ModuleItem::appendExistingChildIfAny(const QMap<u32,ModuleItem*>& moduleMap)
     {
         if(mItemType != TreeItemType::Module) // only module can have children

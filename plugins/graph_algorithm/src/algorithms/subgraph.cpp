@@ -7,7 +7,7 @@ namespace hal
 {
     namespace graph_algorithm
     {
-        Result<std::unique_ptr<NetlistGraph>> get_subgraph(NetlistGraph* graph, const std::vector<Gate*>& subgraph_gates)
+        Result<std::unique_ptr<NetlistGraph>> get_subgraph(const NetlistGraph* graph, const std::vector<Gate*>& subgraph_gates)
         {
             if (graph == nullptr)
             {
@@ -41,7 +41,41 @@ namespace hal
             return res;
         }
 
-        Result<std::unique_ptr<NetlistGraph>> get_subgraph(NetlistGraph* graph, const std::vector<u32>& subgraph_vertices)
+        Result<std::unique_ptr<NetlistGraph>> get_subgraph(const NetlistGraph* graph, const std::set<Gate*>& subgraph_gates)
+        {
+            if (graph == nullptr)
+            {
+                return ERR("graph is a nullptr");
+            }
+
+            if (subgraph_gates.empty())
+            {
+                return ERR("no subgraph gates provided");
+            }
+
+            igraph_vector_int_t i_gates;
+            if (auto res = graph->get_vertices_from_gates_igraph(subgraph_gates); res.is_ok())
+            {
+                i_gates = std::move(res.get());
+            }
+            else
+            {
+                return ERR(res.get_error());
+            }
+
+            auto res = get_subgraph_igraph(graph, &i_gates);
+
+            igraph_vector_int_destroy(&i_gates);
+
+            if (res.is_error())
+            {
+                return ERR(res.get_error());
+            }
+
+            return res;
+        }
+
+        Result<std::unique_ptr<NetlistGraph>> get_subgraph(const NetlistGraph* graph, const std::vector<u32>& subgraph_vertices)
         {
             if (graph == nullptr)
             {
@@ -76,7 +110,44 @@ namespace hal
             return res;
         }
 
-        Result<std::unique_ptr<NetlistGraph>> get_subgraph_igraph(NetlistGraph* graph, const igraph_vector_int_t* subgraph_vertices)
+        Result<std::unique_ptr<NetlistGraph>> get_subgraph(const NetlistGraph* graph, const std::set<u32>& subgraph_vertices)
+        {
+            if (graph == nullptr)
+            {
+                return ERR("graph is a nullptr");
+            }
+
+            if (subgraph_vertices.empty())
+            {
+                return ERR("no subgraph vertices provided");
+            }
+
+            igraph_vector_int_t i_gates;
+            if (auto res = igraph_vector_int_init(&i_gates, subgraph_vertices.size()); res != IGRAPH_SUCCESS)
+            {
+                return ERR(igraph_strerror(res));
+            }
+
+            u32 i = 0;
+            for (auto it = subgraph_vertices.begin(); it != subgraph_vertices.end(); it++)
+            {
+                VECTOR(i_gates)[i] = *it;
+                i++;
+            }
+
+            auto res = get_subgraph_igraph(graph, &i_gates);
+
+            igraph_vector_int_destroy(&i_gates);
+
+            if (res.is_error())
+            {
+                return ERR(res.get_error());
+            }
+
+            return res;
+        }
+
+        Result<std::unique_ptr<NetlistGraph>> get_subgraph_igraph(const NetlistGraph* graph, const igraph_vector_int_t* subgraph_vertices)
         {
             if (graph == nullptr)
             {

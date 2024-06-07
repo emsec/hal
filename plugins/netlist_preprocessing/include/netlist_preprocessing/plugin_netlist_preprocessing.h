@@ -147,5 +147,17 @@ namespace hal
          * return OK on success, an error otherwise.
         */
         static Result<std::monostate> parse_def_file(Netlist* nl, const std::filesystem::path& def_file);
+
+        /**
+         * Iterates all flip-flops of the netlist or specified by the user.
+         * If a flip-flop has a `state` and a `neg_state` output, a new inverter gate is created and connected to the `state` output net as an additional destination.
+         * Finally, the `neg_state` output net is disconnected from the `neg_state` pin and re-connected to the new inverter gate's output. 
+         * 
+         * @param[in] nl - The netlist to operate on.
+         * @param[in] ffs - The flip-flops to operate on. Defaults to an empty vector, in which case all flip-flops of the netlist are considered.
+         * @param[in] inverter_type - The inverter gate type to use. Defaults to a `nullptr`, in which case the first inverter type found in the gate library is used.
+         * @returns OK() and the number of rerouted `neg_state` outputs on success, an error otherwise.
+         */
+        static Result<u32> unify_ff_outputs(Netlist* nl, const std::vector<Gate*>& ffs = {}, GateType* inverter_type = nullptr);
     };
 }    // namespace hal
