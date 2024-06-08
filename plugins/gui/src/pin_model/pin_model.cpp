@@ -91,21 +91,25 @@ namespace hal
         for(auto group : tempGroupList){
             auto groupItem = new PinItem(PinItem::TreeItemType::PinGroup);
             //get all infos for that group
-            QString groupDirection        = group->getDirection();
-            QString groupType             = group->getType();
+            PinDirection groupDirection        = group->getDirection();
+            PinType groupType                  = group->getPinType();
 
             //create group item
-            groupItem->setData(QList<QVariant>() << group->getId() << group->getName() << groupDirection << groupType);
+            groupItem->setName(group->getName());
+            groupItem->setDirection(groupDirection);
+            groupItem->setType(groupType);
             for (auto item : group->getChildren())
             {
                 auto pinItem = new PinItem(PinItem::TreeItemType::Pin);
                 PinItem* pin = static_cast<PinItem*>(item);
 
                 //get all infos for that pin
-                QString pinDirection        = pin->getDirection();
-                QString pinType             = pin->getType();
+                PinDirection pinDirection        = pin->getDirection();
+                PinType      pinType             = pin->getPinType();
 
-                pinItem->setData(QList<QVariant>() << pin->getId() << pin->getName() << pinDirection << pinType);
+                pinItem->setName(pin->getName());
+                pinItem->setDirection(pinDirection);
+                pinItem->setType(pinType);
 
                 groupItem->appendChild(pinItem);
 
@@ -197,7 +201,7 @@ namespace hal
                 newPinGroup->setId(pinItem->getId());
                 newPinGroup->setName(pinItem->getName());
                 newPinGroup->setDirection(pinItem->getDirection());
-                newPinGroup->setType(pinItem->getType());
+                newPinGroup->setType(pinItem->getPinType());
                 endInsertRows();
 
                 //add pin to group
@@ -211,8 +215,8 @@ namespace hal
                 if(!renamePin(pinItem, input))
                     break;
                 PinItem* parentGroup = static_cast<PinItem*>(pinItem->getParent());
-                PinDirection pdir = enum_from_string<PinDirection>(parentGroup->getDirection().toStdString());
-                PinType ptype = enum_from_string<PinType>(parentGroup->getType().toStdString());
+                PinDirection pdir = parentGroup->getDirection();
+                PinType ptype     = parentGroup->getPinType();
                 pinItem->setFields(input, getNextId(PinItem::TreeItemType::Pin), pdir, ptype);
                 if(pdir != PinDirection::none) pinItem->setItemType(PinItem::TreeItemType::Pin);
                 else pinItem->setItemType(PinItem::TreeItemType::InvalidPin);
@@ -240,12 +244,14 @@ namespace hal
         Q_EMIT dataChanged(index, index);
     }
 
-    void PinModel::handleEditDirection(QModelIndex index, const QString& direction)
+    void PinModel::handleEditDirection(QModelIndex index, const QString& directionString)
     {
         if(!index.isValid()) return;
         //TODO handle direction edited from PinDelegate
         auto pinItem = static_cast<PinItem*>(index.internalPointer());
         auto itemType = pinItem->getItemType();
+
+        PinDirection pinDirection = enum_from_string<PinDirection>(directionString.toStdString());
 
         switch(itemType){
             case PinItem::TreeItemType::PinGroup:
@@ -263,12 +269,12 @@ namespace hal
                 break;
             }*/
             case PinItem::TreeItemType::InvalidPinGroup:{
-                pinItem->setDirection(direction);
+                pinItem->setDirection(directionString);
                 for(auto child : pinItem->getChildren()) //set same direction for all pins of the pingroup
                 {
                     PinItem* pin = static_cast<PinItem*>(child);
                     if(pin->getItemType() == PinItem::TreeItemType::Pin || pin->getItemType() == PinItem::TreeItemType::InvalidPin){
-                        pin->setDirection(direction);
+                        pin->setDirection(directionString);
                         handleInvalidPinUpdate(pin);
                     }
                 }
@@ -291,19 +297,19 @@ namespace hal
                 PinItem* parentGroup = static_cast<PinItem*>(pinItem->getParent());
                 warning.setWindowTitle("New pin creation");
                 warning.setText(QString("You are about to create an %1 pin in an %2 pin group")
-                                .arg(direction)
-                                .arg(parentGroup->getDirection()));
-                if(direction != parentGroup->getDirection())
+                                .arg(directionString)
+                                .arg(parentGroup->getDirectionAsText()));
+                if(pinDirection != parentGroup->getDirection())
                 {
                     warning.exec();
                     if(warning.clickedButton() == acceptBtn){
-                        pinItem->setDirection(direction);
+                        pinItem->setDirection(pinDirection);
                         handleInvalidPinUpdate(pinItem);
                     }
                 }
                 else
                 {
-                    pinItem->setDirection(direction);
+                    pinItem->setDirection(pinDirection);
                     handleInvalidPinUpdate(pinItem);
                 }
 
@@ -313,30 +319,32 @@ namespace hal
         Q_EMIT dataChanged(index, index);
     }
 
-    void PinModel::handleEditType(QModelIndex index, const QString& type)
+    void PinModel::handleEditType(QModelIndex index, const QString& typeString)
     {
         if(!index.isValid()) return;
         auto pinItem  = static_cast<PinItem*>(index.internalPointer());
         auto itemType = pinItem->getItemType();
 
+        PinType pinType = enum_from_string<PinType>(typeString.toStdString());
+
         switch (itemType)
         {
             case PinItem::TreeItemType::InvalidPin:{
-                pinItem->setType(type);
+                pinItem->setType(pinType);
                 handleInvalidPinUpdate(pinItem);
                 break;
             }
             case PinItem::TreeItemType::Pin: {
-                pinItem->setType(type);
+                pinItem->setType(pinType);
                 break;
             }
             case PinItem::TreeItemType::InvalidPinGroup:{
-                        pinItem->setType(type);
+                        pinItem->setType(pinType);
                         for(auto child : pinItem->getChildren()) //set same type for all pins of the pingroup
                         {
                             PinItem* pin = static_cast<PinItem*>(child);
                             if(pin->getItemType() == PinItem::TreeItemType::Pin || pin->getItemType() == PinItem::TreeItemType::InvalidPin){
-                                pin->setType(type);
+                                pin->setType(pinType);
                                 handleInvalidPinUpdate(pin);
                             }
                         }
@@ -344,7 +352,7 @@ namespace hal
                         break;
                     }
             case PinItem::TreeItemType::PinGroup: {
-                pinItem->setType(type);
+                pinItem->setType(pinType);
                 //PinModel::PINGROUP* pinGroup = static_cast<PinModel::PINGROUP*>(pinItem);
 
                 /*for(auto child : pinItem->getChildren()) //set same type for all pins of the pingroup
@@ -359,7 +367,7 @@ namespace hal
                     if(group->getName() == pinItem->getName()){
                         for(auto item : group->getChildren()){
                             PinItem* pin = static_cast<PinItem*>(item);
-                            pin->setType(type);
+                            pin->setType(pinType);
                         }
                         break;
                     }
@@ -466,7 +474,7 @@ namespace hal
     void PinModel::handleInvalidPinUpdate(PinItem* pinItem)
     {
         if(!isNameAvailable(pinItem->getName(), pinItem)
-            || enum_from_string<PinDirection>(pinItem->getDirection().toStdString()) == PinDirection::none)
+            || pinItem->getDirection() == PinDirection::none)
             return;  // Pin is not valid
 
         //pin is valid
@@ -626,7 +634,11 @@ namespace hal
     {
         QList<PinItem*> retval;
         for (BaseTreeItem* bti : mRootItem->getChildren())
-            retval.append(static_cast<PinItem*>(bti));
+        {
+            PinItem* grp = static_cast<PinItem*>(bti);
+            if (grp->getItemType() != PinItem::TreeItemType::PinGroup) continue;
+            retval.append(grp);
+        }
         return retval;
     }
 
@@ -720,9 +732,11 @@ namespace hal
         QList<PinItem*> inputPins;
         for(BaseTreeItem* pinGroup : mRootItem->getChildren())
         {
+            if (static_cast<PinItem*>(pinGroup)->getItemType() != PinItem::TreeItemType::PinGroup) continue;
             for(BaseTreeItem* item : pinGroup->getChildren()){
                 PinItem* pin = static_cast<PinItem*>(item);
-                if(pin->getDirection() == "input" || pin->getDirection() == "inout") inputPins.append(pin);
+                if (pin->getItemType() != PinItem::TreeItemType::Pin) continue;
+                if (pin->getDirection() == PinDirection::input || pin->getDirection() == PinDirection::inout) inputPins.append(pin);
             }
         }
         return inputPins;
@@ -733,9 +747,11 @@ namespace hal
         QList<PinItem*> outputPins;
         for(BaseTreeItem* pinGroup : mRootItem->getChildren())
         {
+            if (static_cast<PinItem*>(pinGroup)->getItemType() != PinItem::TreeItemType::PinGroup) continue;
             for(BaseTreeItem* item : pinGroup->getChildren()){
                 PinItem* pin = static_cast<PinItem*>(item);
-                if(pin->getDirection() == "output" || pin->getDirection() == "inout") outputPins.append(pin);
+                if (pin->getItemType() != PinItem::TreeItemType::Pin) continue;
+                if (pin->getDirection() == PinDirection::output || pin->getDirection() == PinDirection::inout) outputPins.append(pin);
             }
         }
         return outputPins;

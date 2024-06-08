@@ -82,14 +82,14 @@ namespace hal
          * @param index index of the PinItem
          * @param direction new direction
          */
-        void handleEditDirection(QModelIndex index, const QString& direction);
+        void handleEditDirection(QModelIndex index, const QString& directionString);
 
         /**
          * should be called when the items type is changed via the delegate
          * @param index index of the PinItem
          * @param type new type
          */
-        void handleEditType(QModelIndex index, const QString& type);
+        void handleEditType(QModelIndex index, const QString& typeString);
 
         void handleDeleteItem(QModelIndex index);
 

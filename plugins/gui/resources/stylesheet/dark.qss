@@ -1477,6 +1477,27 @@ hal--GatelibraryManagementDialog QHeaderView::section
 background: rgb(35, 35, 35);
 }
 
+hal--BooleanFunctionEdit
+{
+    background    : black;
+    color         : #E0F0FF;
+    font-family   : "Iosevka";
+    font-size     : 15px;
+    font-style    : "Heavy";
+    font-weight   : 700;
+}
+
+hal--BooleanFunctionEdit[state="Empty"]
+{
+    background : #171e22;
+    color : #909090;
+}
+
+hal--BooleanFunctionEdit[state="Invalid"]
+{
+    background: red;
+}
+
 hal--GuiPluginManager
 {
     qproperty-loadIconPath : ":/icons/insert-plugin";

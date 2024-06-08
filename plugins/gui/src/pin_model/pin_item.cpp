@@ -83,12 +83,22 @@ namespace hal
         return mName;
     }
 
-    QString PinItem::getType() const
+    PinType PinItem::getPinType() const
+    {
+        return mType;
+    }
+
+    QString PinItem::getPinTypeAsText() const
     {
         return QString::fromStdString(enum_to_string(mType));
     }
 
-    QString PinItem::getDirection() const
+    PinDirection PinItem::getDirection() const
+    {
+        return mDirection;
+    }
+
+    QString PinItem::getDirectionAsText() const
     {
         return QString::fromStdString(enum_to_string(mDirection));
     }

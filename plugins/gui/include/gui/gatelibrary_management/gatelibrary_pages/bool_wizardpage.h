@@ -33,15 +33,44 @@
 #include <QLineEdit>
 #include <QTextEdit>
 #include <QLabel>
+#include <QSet>
 
 namespace hal {
     class GateLibraryWizard;
+
+    class BoolWizardPage;
+
+    class BooleanFunctionEdit : public QLineEdit
+    {
+        Q_OBJECT
+    public:
+
+        // Would like to define the state as enum, however,
+        // something seems to go wrong when QSS style converts it to string
+        //        enum State {Empty, Valid, Invalid};
+        //        Q_ENUM(State)
+        Q_PROPERTY(QString state READ state WRITE setState NOTIFY stateChanged);
+
+    private:
+        QString mState;
+        std::set<std::string> mLegalVariables;
+
+    Q_SIGNALS:
+        void stateChanged(QString s);
+    private Q_SLOTS:
+        void handleEditingFinished();
+    public:
+        BooleanFunctionEdit(std::set<std::string>& legalVar, QWidget* parent = nullptr);
+        QString state() const { return mState; }
+        void setState(const QString& s);
+    };
+
     class BoolWizardPage:public QWizardPage
     {
+        friend BooleanFunctionEdit;
     public:
         BoolWizardPage(QWidget* parent = nullptr);
         void initializePage() override;
-        bool validatePage() override;
         void setData(GateType* gate);
 
     private:

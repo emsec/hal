@@ -66,8 +66,10 @@ namespace hal
 
         u32 getId() const;
         QString getName() const;
-        QString getType() const;
-        QString getDirection() const;
+        PinType getPinType() const;
+        PinDirection getDirection() const;
+        QString getPinTypeAsText() const;
+        QString getDirectionAsText() const;
 
         TreeItemType getItemType() const;
 

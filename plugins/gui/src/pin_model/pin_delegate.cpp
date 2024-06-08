@@ -102,7 +102,7 @@ namespace hal
                 if(itemType != PinItem::TreeItemType::Pin && itemType != PinItem::TreeItemType::InvalidPin)
                     break;
                 auto comboBox = static_cast<QComboBox*>(editor);
-                comboBox->setCurrentText(pinItem->getDirection());
+                comboBox->setCurrentText(pinItem->getDirectionAsText());
                 break;
             }
             case 2: {
@@ -110,7 +110,7 @@ namespace hal
                 if(itemType == PinItem::TreeItemType::PinCreator || itemType == PinItem::TreeItemType::GroupCreator)
                     break;
                 auto comboBox = static_cast<QComboBox*>(editor);
-                comboBox->setCurrentText(pinItem->getType());
+                comboBox->setCurrentText(pinItem->getPinTypeAsText());
                 break;
             }
         }

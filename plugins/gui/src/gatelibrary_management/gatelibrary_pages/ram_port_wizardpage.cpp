@@ -51,8 +51,8 @@ void RAMPortWizardPage::initializePage(){
     //create empty lines for ram_port for each data/address pair
     //assumption at this point: #data fields = #address fields
     for (int i=0; i<pinGroups.length()-1; i++) { //-1 for dummy entries
-        QString type = pinGroups[i]->getType();
-        if(type == "data")
+        PinType type = pinGroups[i]->getPinType();
+        if(type == PinType::data)
         {
             ramPortCnt++;
             mLayout->addWidget(new GateLibraryLabel(false, QString("RAM Port %1").arg(ramPortCnt), this), 6*(ramPortCnt-1), 0);
