@@ -935,4 +935,40 @@ namespace hal
 
         return true;
     }
+
+    int GuiApiClasses::Directory::getCurrentDirectory()
+    {
+        auto currentDirectory = gGraphContextManager->getContextTreeModel()->getCurrentDirectory();
+        if(currentDirectory == nullptr)
+            return 0;
+        else 
+        {
+            if(currentDirectory->directory() == nullptr)
+                return 0;
+            return currentDirectory->directory()->id();
+        }
+    }
+
+    void GuiApiClasses::Directory::setCurrentDirectory(int id)
+    {
+        ContextTreeItem* directory = static_cast<ContextTreeItem*>(gGraphContextManager->getContextTreeModel()->getDirectory(id));
+        gGraphContextManager->getContextTreeModel()->setCurrentDirectory(directory);
+    }
+
+    int GuiApiClasses::Directory::createNewDirectory(const std::string& name)
+    {
+        ActionCreateObject* act = new ActionCreateObject(UserActionObjectType::ContextDir, QString::fromStdString(name));
+        act->exec();
+        auto id = act->object().id();
+        return id;
+    }
+
+    void GuiApiClasses::Directory::deleteDirectory(int id){
+        /*ContextDirectory* directory = gGraphContextManager->getDirectoryById(id);
+        if(directory)
+            gGraphContextManager->deleteContextDirectory(directory);*/
+        ActionDeleteObject* act = new ActionDeleteObject();
+        act->setObject(UserActionObject(id, UserActionObjectType::ContextDir));
+        act->exec();
+    }
 }

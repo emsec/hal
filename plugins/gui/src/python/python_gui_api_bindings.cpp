@@ -230,6 +230,31 @@ PYBIND11_PLUGIN(hal_gui)
 )");
 
 
+    py::class_<GuiApiClasses::Directory>(py_gui_api, "Directory")
+    .def_static("getCurrentDirectory", &GuiApiClasses::Directory::getCurrentDirectory,R"(
+        Gets the CurrentDirectory.
+
+        :returns: ID of the current directory. 0, if it's the top level directory.
+        :rtype: int
+)")
+    .def_static("setCurrentDirectory", &GuiApiClasses::Directory::setCurrentDirectory, py::arg("id"), R"(
+        Sets the CurrentDirectory.
+        
+        :param int id ID of the new current directory.
+)")
+    .def_static("createNewDirectory", &GuiApiClasses::Directory::createNewDirectory, py::arg("name"), R"(
+        Creates a new directory under the current directory.
+        
+        :param string name: Name of the new directory.
+        :returns: ID of the new directory.
+        :rtype: int
+)")
+    .def_static("deleteDirectory", &GuiApiClasses::Directory::deleteDirectory, py::arg("id"), R"(
+        Deletes the directory specified by a given id.
+        
+        :param int id: ID of the directory to delete.
+)");
+
 
     py_gui_api.def("getSelectedGateIds", &GuiApi::getSelectedGateIds, R"(
         Get the gate ids of currently selected gates in the graph view of the GUI.

@@ -401,11 +401,18 @@ namespace hal
 
     void ContextTreeModel::setCurrentDirectory(ContextTreeItem* currentItem)
     {
-        if(currentItem->isContext())
+        if(currentItem == nullptr)
+            mCurrentDirectory = nullptr; // top-level directory
+        else if(currentItem->isContext())
             mCurrentDirectory = (currentItem->getParent() == mRootItem) ? nullptr : static_cast<ContextTreeItem*>(currentItem->getParent());
 
         else if (currentItem->isDirectory())
             mCurrentDirectory = currentItem;
+    }
+
+    ContextTreeItem* ContextTreeModel::getCurrentDirectory()
+    {
+        return mCurrentDirectory;
     }
 
     bool ContextTreeModel::moveItem(ContextTreeItem* itemToMove, BaseTreeItem *newParent, int row)

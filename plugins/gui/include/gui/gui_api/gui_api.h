@@ -64,6 +64,14 @@ namespace hal
             static GridPlacement* getGridPlacement(int viewId);
             static bool setGridPlacement(int viewId, GridPlacement* gp);
         };
+
+        class Directory{
+        public:
+            static int getCurrentDirectory();
+            static void setCurrentDirectory(int id);
+            static int createNewDirectory(const std::string& name);
+            static void deleteDirectory(int id);
+        };
     }
 
 
@@ -561,8 +569,7 @@ namespace hal
          */
         void deselect(const std::vector<Gate*>& gates, const std::vector<Net*>& nets, const std::vector<Module*>& modules);
 
-        int isolateInNewView(const std::vector<Module*>, const std::vector<Gate*>);
-
+        
     Q_SIGNALS:
         /**
          * Q_SIGNAL that is emitted whenever the view should be moved to a new selection.

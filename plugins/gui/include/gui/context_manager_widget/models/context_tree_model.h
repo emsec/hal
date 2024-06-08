@@ -192,6 +192,13 @@ namespace hal
         void setCurrentDirectory(ContextTreeItem* currentItem);
 
         /**
+         * Gets the CurrentDirectory.
+         *
+         * @return current directory.
+         */
+        ContextTreeItem* getCurrentDirectory();
+
+        /**
          * Sets the MinDirectoryId.
          *
          * @param u32 - id to set MinDirectoryId to.
