@@ -55,6 +55,9 @@ namespace hal {
         QString mState;
         std::set<std::string> mLegalVariables;
 
+        const char* EMPTY = "Empty";
+        const char* VALID = "Valid";
+        const char* INVALID = "Invalid";
     Q_SIGNALS:
         void stateChanged(QString s);
     private Q_SLOTS:
@@ -63,6 +66,8 @@ namespace hal {
         BooleanFunctionEdit(std::set<std::string>& legalVar, QWidget* parent = nullptr);
         QString state() const { return mState; }
         void setState(const QString& s);
+        bool isValid() const { return mState == VALID; }
+        void setFunctionText(const QString& txt);
     };
 
     class BoolWizardPage:public QWizardPage

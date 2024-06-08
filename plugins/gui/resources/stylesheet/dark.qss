@@ -1495,7 +1495,8 @@ hal--BooleanFunctionEdit[state="Empty"]
 
 hal--BooleanFunctionEdit[state="Invalid"]
 {
-    background: red;
+    background: #802010;
+    color     : #F0E0C0;
 }
 
 hal--GuiPluginManager

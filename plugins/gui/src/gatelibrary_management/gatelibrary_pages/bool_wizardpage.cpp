@@ -5,10 +5,10 @@
 namespace hal
 {
     BooleanFunctionEdit::BooleanFunctionEdit(std::set<std::string> &legalVar, QWidget *parent)
-        : QLineEdit(parent), mState("Valid"), mLegalVariables(legalVar)
+        : QLineEdit(parent), mState(VALID), mLegalVariables(legalVar)
     {
         connect(this, &QLineEdit::editingFinished, this, &BooleanFunctionEdit::handleEditingFinished);
-        setState("Empty");
+        setState(EMPTY); // do an active transition to enforce style
     }
 
     void BooleanFunctionEdit::setState(const QString &s)
@@ -26,15 +26,15 @@ namespace hal
     {
         if (text().isEmpty())
         {
-            setState("Empty");
+            setState(EMPTY);
             return;
         }
 
-        QString nextState = "Valid";  // think positive
+        QString nextState = VALID;  // think positive
 
         auto bfres = BooleanFunction::from_string(text().toStdString());
         if(bfres.is_error())
-            nextState = "Invalid";
+            nextState = INVALID;
         else
         {
             BooleanFunction bf = bfres.get();
@@ -44,7 +44,7 @@ namespace hal
             {
                 if (mLegalVariables.find(vname) == mLegalVariables.end())
                 {
-                    nextState = "Invalid";
+                    nextState = INVALID;
                     break;
                 }
             }
@@ -53,6 +53,11 @@ namespace hal
             setState(nextState);
     }
 
+    void BooleanFunctionEdit::setFunctionText(const QString &txt)
+    {
+        setText(txt);
+        handleEditingFinished();
+    }
 //--------------------------------------------
     BoolWizardPage::BoolWizardPage(QWidget* parent) : QWizardPage(parent)
     {
@@ -80,7 +85,7 @@ namespace hal
                 BooleanFunctionEdit* lineEdit = new BooleanFunctionEdit(input_pins, this);
                 mLayout->addWidget(label, boolFuncCnt, 0);
                 mLayout->addWidget(lineEdit, boolFuncCnt, 1);
-                lineEdit->setText(QString::fromStdString(bf.second.to_string()));
+                lineEdit->setFunctionText(QString::fromStdString(bf.second.to_string()));
                 boolFuncCnt++;
             }
         }
