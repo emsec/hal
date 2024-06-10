@@ -5,6 +5,7 @@ var netlist_2persistent_2netlist__serializer_8cpp =
     [ "JSON_STR_HELPER", "netlist_2persistent_2netlist__serializer_8cpp.html#ad9bde63b1c828a1328bf592ad5325fa6", null ],
     [ "PRETTY_JSON_OUTPUT", "netlist_2persistent_2netlist__serializer_8cpp.html#a442c4f02c70cb01b96e1d3068b619d20", null ],
     [ "deserialize_from_file", "netlist_2persistent_2netlist__serializer_8cpp.html#af3335bf7ed9163c5fd585811fa213ab2", null ],
+    [ "deserialize_from_string", "netlist_2persistent_2netlist__serializer_8cpp.html#adab393c4f4d35b9a8d00ab719239a377", null ],
     [ "serialize_to_file", "netlist_2persistent_2netlist__serializer_8cpp.html#a71a6e82f53ef9ed518f35c56f396e838", null ],
     [ "ascending", "netlist_2persistent_2netlist__serializer_8cpp.html#a8ea27602bf4d3ec3850549a2d313ad0c", null ],
     [ "direction", "netlist_2persistent_2netlist__serializer_8cpp.html#a924ab95925fc83b38cba3ac2d8d7e9aa", null ],

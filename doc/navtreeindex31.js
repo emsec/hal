@@ -1,5 +1,9 @@
 var NAVTREEINDEX31 =
 {
+"special__log__content__manager_8h_source.html":[7,0,1,3,0,0,25,5],
+"special__strings_8h.html":[7,0,0,0,4,9],
+"special__strings_8h.html#a37f09aeed09bf8c9d56b599ffcdceef2":[7,0,0,0,4,9,3],
+"special__strings_8h.html#a939599c80f140610abb0390b66acf8a6":[7,0,0,0,4,9,2],
 "special__strings_8h_source.html":[7,0,0,0,4,9],
 "spinner__widget_8cpp.html":[7,0,1,3,2,41,0],
 "spinner__widget_8cpp_source.html":[7,0,1,3,2,41,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX31 =
 "struct_abc___obj__t__.html#adde409487536c37dc347260667640979":[6,0,4,17],
 "struct_abc___obj__t__.html#ae34a86385c083e6cd7b13204b17a1ab9":[6,0,4,12],
 "struct_abc___obj__t__.html#ae7e8759c8d2177401a402342a4650e23":[6,0,4,7],
-"struct_abc___obj__t__.html#aea66857cfe6c5cf1370a28bde565359d":[6,0,4,1],
-"struct_hop___man__t__.html":[6,0,5],
-"struct_hop___man__t__.html#a059169e3f93fdaff7e2be01661ff3223":[6,0,5,16],
-"struct_hop___man__t__.html#a0ec0d73846f28a274c22d46e0b50d4ae":[6,0,5,1],
-"struct_hop___man__t__.html#a13b456151fd49f60e5c6321b526c9e3c":[6,0,5,13]
+"struct_abc___obj__t__.html#aea66857cfe6c5cf1370a28bde565359d":[6,0,4,1]
 };
