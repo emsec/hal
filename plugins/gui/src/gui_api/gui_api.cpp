@@ -931,8 +931,7 @@ namespace hal
     bool GuiApiClasses::View::setGridPlacement(int viewId, GridPlacement *gp)
     {
         ActionMoveNode* act = new ActionMoveNode(viewId, gp);
-        act->exec();
-
+        UserActionManager::instance()->executeActionBlockThread(act);
         return true;
     }
 
@@ -958,7 +957,7 @@ namespace hal
     int GuiApiClasses::Directory::createNewDirectory(const std::string& name)
     {
         ActionCreateObject* act = new ActionCreateObject(UserActionObjectType::ContextDir, QString::fromStdString(name));
-        act->exec();
+        UserActionManager::instance()->executeActionBlockThread(act);
         auto id = act->object().id();
         return id;
     }
@@ -969,6 +968,6 @@ namespace hal
             gGraphContextManager->deleteContextDirectory(directory);*/
         ActionDeleteObject* act = new ActionDeleteObject();
         act->setObject(UserActionObject(id, UserActionObjectType::ContextDir));
-        act->exec();
+        UserActionManager::instance()->executeActionBlockThread(act);
     }
 }
