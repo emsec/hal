@@ -2,32 +2,66 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-* refactored module widget
-  * added option to show gate content for each module
-  * added option to show interior nets for each module
-  * added `Isolate in new view` feature for nets
-  * added button to expand or collapse all tree items
-  * added delete module action and shortcut
-  * added entries for context menu
-* refactored search bar
-  * changed appearance of search bar to be more intuitive
-  * added menu for extended options - e.g. option to search in selected columns only
-  * added search history
-  * added filter proxy class for trees and tables increasing the search performance
-* refactored layouter module
-  * switched to multithreaded algorithm
-  * boosted performance by using classes with faster memory access
-  * removed layouter code used prior to version 3.1.0 - thus removing the setting option to use that code
-  * added setting option to dump junction layout input data for experts to debug in case of layout errors
-* module pins
-  * added qualifier for `pin_changed` core events telling receiver details about the recent modification
-  * added event scope and stacking classes so that `pin_changed` events can be collected and prioritized
-  * added specific GUI handler for every `pin_changed` event thus replacing the reload-entire-pingroup-tree policy
-  * added class `ActionPingroup` so that UNDO function works for all pin / pin group actions issued from GUI
+* **WARNING:** this release breaks compatibility with Ubuntu 20.04 LTS
+* **WARNING:** this release breaks the API of the `graph_algorithm`, `dataflow`, and `xilinx_toolbox` plugins
+* GUI
+  * refactored module widget
+    * added option to show gate content for each module
+    * added option to show interior nets for each module
+    * added `Isolate in new view` feature for nets
+    * added button to expand or collapse all tree items
+    * added delete module action and shortcut
+    * added entries for context menu
+    * adapted appearance for menu content tree, selection details tree, grouping content tree (same model for all)
+  * refactored search bar
+    * changed appearance of search bar to be more intuitive
+    * added menu for extended options - e.g. option to search in selected columns only
+    * added search history
+    * added filter proxy class for trees and tables increasing the search performance
+  * refactored layouter module
+    * switched to multithreaded algorithm
+    * boosted performance by using classes with faster memory access
+    * removed layouter code used prior to version 3.1.0 - thus removing the setting option to use that code
+    * added setting option to dump junction layout input data for experts to debug in case of layout errors
+* plugins
+  * added `hawkeye` plugin for the detection of symmetric cryptographic implementations in gate-level netlists
+    * see publication `HAWKEYE - Recovering Symmetric Cryptography From Hardware Circuits` at CRYPTO'24 for details
+  * changed `graph_algorithm` plugin
+    * updated the igraph dependency shipped with HAL
+    * graph corresponding to a netlist is now encapsulated within an `NetlistGraph` object that allows easy interaction with the graph
+    * added new functions for computing neighborhoods, shortest paths, subgraphs, and (strongly) connected components
+    * changed the API to facilitate for the aforementioned changes and made everything accessible via Python
+  * changed `dataflow_analysis` plugin
+    * can now operate on arbitrary, user-defined gate types, not only FFs 
+    * user can now specify the pin types to be considered as control pins
+    * can now take known registers and other known word-level structures into account during analysis
+    * changed the API to facilitate for the aforementioned changes
+  * changed `simulator` plugin
+    * added feature to VCD parser: removal of leading backslash and trailing whitespace from waveform name
+    * extended maximum line with the CSV parser can handle
+    * changed warning messages for waveform parsing and made them more specific
+    * changed policy toward 'dangling' wires, they are no longer ignored but considered as global inputs or outputs
+  * changed `xilinx_toolbox` plugin
+    * added `split_shift_registers` function to split `SRL16E` gates into multiple flip-flops
+    * changed Python bindings for better usability
+* netlist
+  * module pins
+    * added qualifier for `pin_changed` core events telling receiver details about the recent modification
+    * added event scope and stacking classes so that `pin_changed` events can be collected and prioritized
+    * added specific GUI handler for every `pin_changed` event thus replacing the reload-entire-pingroup-tree policy
+    * added class `ActionPingroup` so that UNDO function works for all pin / pin group actions issued from GUI
+* decorators
+  * added `NetlistTraversalDecorator` to ease exploration of a netlist
+    * added `get_next_matching_gates` to get successor/predecessor gates matching a certain condition
+    * added `get_next_matching_gates_until` to get successor/predecessor gates until a certain condition is fulfilled
+    * added `get_next_matching_gates_until_depth` to get successor/predecessor gates up to a certain depth
+    * added `get_next_sequential_gates` and `get_next_sequential_gates_map` to get the next layer of sequential successors/predecessors
+    * added `get_next_combinational_gates` to get all combinational gates until the next non-combinational gates are reached
 * miscellaneous
+  * added support for Ubuntu 24.04 LTS
   * added INIT field declaration to FF-gate-types in example library
   * added drag'n drop feature allowing to move several nodes in graph view at same time
-  * added functions to Python GUI API to create, modifiy and delete views
+  * added functions to Python GUI API to create, modify and delete views
   * added GUI PluginParameter type `ComboBox` for parameters that can be requested from plugin
   * added GUI PluginParameter types `Module` and `Gated` for parameters that can be requested from plugin
   * added `Show content` button to `Groupings` widget to show content of grouping as a list
@@ -36,11 +70,20 @@ All notable changes to this project will be documented in this file.
   * added extended gate library picker when importing a netlist
   * added keyboard shortcut for delete-item action from toolbar
   * added parameter `force_name` to enforce pin (group) renaming to `Module::set_pin_name`, `Module::set_pin_group_name`, `Module::create_pin`, and `Module::create_pin_group`
+  * added gate type properties `fifo` and `shift_register`
+  * added pin types `status`, `error`, `error_detection`, `done`, and `control`
+  * added optional filter to `Net::get_num_of_sources` and `Net::get_num_of_destinations`
+  * added function `unify_ff_outputs` to netlist preprocessing plugin
   * changed supported input file formats for import from hard coded list to list provided by loadable parser plugins
   * changed behavior of import netlist dialog, suggest only non-existing directory names and loop until an acceptable name was entered
   * changed appearance and behavior of import project dialog, make sure existing hal projects don't get overwritten
   * changed installation script policy to install Python packages (omit 'pip install' which would need virtual environment)
+  * removed hard coded path names from CI MacOS workflow script
+  * deprecated many functions in `netlist_utils` as they have been moved somewhere else
 * bugfixes
+  * fixed saleae input data reader which gets linked into external Verilator simulation code
+  * fixed waveform viewer: opening old results will no longer generate the same view twice
+  * fixed waveform viewer: opening old results will by now also update waveform time axis
   * fixed colors in Python Console when switching between color schemes
   * fixed pybind of `Module::get_gates`
   * fixed Python script execution abort button disappearing when switching tabs
@@ -54,8 +97,12 @@ All notable changes to this project will be documented in this file.
   * fixed format string handling of enums in log outputs
   * fixed restoring user assigned module colors from project file
   * fixed no scrollbar shown in `Data` tab of `Selection Details` widget
+  * fixed declaration of FF-gate type in example gate library
+  * fixed error which could cause crashes in do-not-render-layout-until-complex-operation-finished algorithm
+  * fixed wrong placements of nodes in view by XML-macro (might even crash)
   * fixed problems in GUI plugin management caused by addressing plugins by absolute path
   * fixed several bugs related to moving node boxes in GUI by drag'n'drop
+  * fixed several bugs in automated tests, eliminate cases which produce non-deterministic results
 
 ## [4.2.0](v4.2.0) - 2023-05-24 10:02:04-07:00 (urgency: medium)
 * GUI plugin manager

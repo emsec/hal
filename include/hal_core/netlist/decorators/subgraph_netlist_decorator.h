@@ -32,6 +32,11 @@
 
 namespace hal
 {
+    /**
+     * A netlist decorator that operates on an existing subgraph of the associated netlist to, e.g., copy the subgraph as a new netlist object or compute a Boolean function describing the subgraph.
+     *
+     * @ingroup decorators
+     */
     class NETLIST_API SubgraphNetlistDecorator
     {
     public:

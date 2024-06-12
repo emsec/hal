@@ -243,9 +243,22 @@ namespace hal
         return std::find(m_sources_raw.begin(), m_sources_raw.end(), ep) != m_sources_raw.end();
     }
 
-    u32 Net::get_num_of_sources() const
+    u32 Net::get_num_of_sources(const std::function<bool(Endpoint* ep)>& filter) const
     {
-        return (u32)m_sources_raw.size();
+        if (!filter)
+        {
+            return (u32)m_sources_raw.size();
+        }
+
+        u32 num = 0;
+        for (auto dst : m_sources_raw)
+        {
+            if (filter(dst))
+            {
+                num++;
+            }
+        }
+        return num;
     }
 
     std::vector<Endpoint*> Net::get_sources(const std::function<bool(Endpoint* ep)>& filter) const
@@ -392,9 +405,22 @@ namespace hal
         return std::find(m_destinations_raw.begin(), m_destinations_raw.end(), ep) != m_destinations_raw.end();
     }
 
-    u32 Net::get_num_of_destinations() const
+    u32 Net::get_num_of_destinations(const std::function<bool(Endpoint* ep)>& filter) const
     {
-        return (u32)m_destinations_raw.size();
+        if (!filter)
+        {
+            return (u32)m_destinations_raw.size();
+        }
+
+        u32 num = 0;
+        for (auto dst : m_destinations_raw)
+        {
+            if (filter(dst))
+            {
+                num++;
+            }
+        }
+        return num;
     }
 
     std::vector<Endpoint*> Net::get_destinations(const std::function<bool(Endpoint* ep)>& filter) const

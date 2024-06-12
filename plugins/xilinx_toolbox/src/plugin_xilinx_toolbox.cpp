@@ -2,7 +2,6 @@
 
 namespace hal
 {
-
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
         return std::make_unique<XilinxToolboxPlugin>();
@@ -18,8 +17,13 @@ namespace hal
         return std::string("0.1");
     }
 
-    void XilinxToolboxPlugin::initialize()
+    std::string XilinxToolboxPlugin::get_description() const
     {
-
+        return "A collection of functions specifically designed to operate on Xilinx FPGA netlists.";
     }
-}
+
+    std::set<std::string> XilinxToolboxPlugin::get_dependencies() const
+    {
+        return {};
+    }
+}    // namespace hal

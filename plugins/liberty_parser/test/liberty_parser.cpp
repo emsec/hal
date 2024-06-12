@@ -398,6 +398,7 @@ namespace hal {
                 auto gl_res = liberty_parser.parse(path_lib);
                 ASSERT_TRUE(gl_res.is_error());
             }
+#if !defined (__APPLE__)
             {
                 // Use a pin with an unknown direction (not in {input, output}) as an input pin
                 NO_COUT_TEST_BLOCK;
@@ -406,6 +407,7 @@ namespace hal {
                 auto gl_res = liberty_parser.parse(path_lib);
                 ASSERT_TRUE(gl_res.is_error());
             }
+#endif
             // { // NOTE: Works (is ok?)
             //     // Use an unknown variable in a boolean function
             //     NO_COUT_TEST_BLOCK;

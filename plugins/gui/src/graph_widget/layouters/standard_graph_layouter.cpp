@@ -1,5 +1,6 @@
 #include "gui/graph_widget/layouters/standard_graph_layouter.h"
 
+#include "hal_core/utilities/log.h"
 #include "gui/implementations/qpoint_extension.h"
 #include "gui/graph_widget/layouters/position_generator.h"
 #include "gui/graph_widget/layouters/wait_to_be_seated.h"
@@ -27,7 +28,17 @@ namespace hal
 
     void StandardGraphLayouter::add(const QSet<u32> modules, const QSet<u32> gates, const QSet<u32> nets, PlacementHint placement)
     {
-        switch(placement.mode())
+        PlacementHint::PlacementModeType pmtype = placement.mode();
+
+        if ((pmtype == PlacementHint::PreferLeft || pmtype == PlacementHint::PreferRight) &&
+                (!placement.preferredOrigin().id() || placement.preferredOrigin().type() == Node::None))
+        {
+            log_warning("gui", "Ignoring placement hint {} since no valid reference node was provided.",
+                        (pmtype == PlacementHint::PreferLeft ? "PreferLeft" : "PreferRight"));
+            pmtype = PlacementHint::Standard;
+        }
+
+        switch(pmtype)
         {
         case PlacementHint::Standard:
             addCompact(modules, gates, nets);

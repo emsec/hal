@@ -34,22 +34,27 @@ namespace hal
      */
     enum class PinType
     {
-        none,      /**< Default pin. **/
-        power,     /**< Power pin. **/
-        ground,    /**< Ground pin. **/
-        lut,       /**< Pin that generates output from LUT initialization string. **/
-        state,     /**< Pin that generates output from internal state. **/
-        neg_state, /**< Pin that generates output from negated internal state. **/
-        clock,     /**< Clock pin. **/
-        enable,    /**< Enable pin. **/
-        set,       /**< Set/preset pin. **/
-        reset,     /**< Reset/clear pin. **/
-        data,      /**< Data pin. **/
-        address,   /**< Address pin. **/
-        io_pad,    /**< IO pad pin. **/
-        select,    /**< Select pin. **/
-        carry,     /**< Carry pin. **/
-        sum        /**< Sum pin. **/
+        none,            /**< Default pin. **/
+        power,           /**< Power pin. **/
+        ground,          /**< Ground pin. **/
+        lut,             /**< Pin that generates output from LUT initialization string. **/
+        state,           /**< Pin that generates output from internal state. **/
+        neg_state,       /**< Pin that generates output from negated internal state. **/
+        clock,           /**< Clock pin. **/
+        enable,          /**< Enable pin. **/
+        set,             /**< Set/preset pin. **/
+        reset,           /**< Reset/clear pin. **/
+        data,            /**< Data pin. **/
+        address,         /**< Address pin. **/
+        io_pad,          /**< IO pad pin. **/
+        select,          /**< Select pin. **/
+        carry,           /**< Carry pin. **/
+        sum,             /**< Sum pin. **/
+        status,          /**< Status pin.*/
+        error,           /**< Error pin.*/
+        error_detection, /**< Error detection pin.*/
+        done,            /**< Done pin.*/
+        control          /**< Control pin.*/
     };
 
     template<>

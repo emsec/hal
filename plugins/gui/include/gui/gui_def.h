@@ -141,6 +141,8 @@ namespace hal
     {
     public:
         GridPlacement() {;}
+        GridPlacement(const QHash<hal::Node,QPoint>& data) : QHash<hal::Node,QPoint>(data) {;}
+
         void setGatePosition(u32 gateId, std::pair<int,int>p, bool swap = false) {
             QPoint pos = QPoint(gatePosition(gateId)->first, gatePosition(gateId)->second); //position of current gate to move
             hal::Node nd = key(QPoint(p.first, p.second)); //find the node in the destination

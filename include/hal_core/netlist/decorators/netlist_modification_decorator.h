@@ -32,6 +32,11 @@
 
 namespace hal
 {
+    /**
+     * A netlist decorator that provides functionality to modify the associated netlist.
+     *
+     * @ingroup decorators
+     */
     class NETLIST_API NetlistModificationDecorator
     {
     public:

@@ -122,7 +122,7 @@ namespace hal
                     supported_gate_types.insert(file);
 
                     // copy gate lib to verilator folder
-                    std::filesystem::copy(model_path / entry, gate_definition_path);
+                    std::filesystem::copy(entry.path(), gate_definition_path);
                 }
 
                 if (!supported_gate_types.empty())
