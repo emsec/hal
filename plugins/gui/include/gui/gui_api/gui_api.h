@@ -35,6 +35,7 @@
 #include <QSet>
 #include <tuple>
 #include <vector>
+#include <optional>
 
 namespace hal
 {
@@ -63,14 +64,13 @@ namespace hal
             static ModuleGateIdPair getValidObjects(int viewId, const std::vector<Module*>, const std::vector<Gate*>);
             static GridPlacement* getGridPlacement(int viewId);
             static bool setGridPlacement(int viewId, GridPlacement* gp);
-        };
 
-        class Directory{
-        public:
-            static int getCurrentDirectory();
-            static void setCurrentDirectory(int id);
-            static int createNewDirectory(const std::string& name);
-            static void deleteDirectory(int id);
+            static u32 getCurrentDirectory();
+            static void setCurrentDirectory(u32 id);
+            static u32 createNewDirectory(const std::string& name);
+            static void deleteDirectory(u32 id);
+            static void moveView(u32 viewId, std::optional<u32> destinationDirectoryId, std::optional<int> row);
+            static void moveDirectory(u32 directoryId, std::optional<u32> destinationDirectoryId, std::optional<int> row);
         };
     }
 

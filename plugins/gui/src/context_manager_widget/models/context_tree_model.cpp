@@ -58,6 +58,8 @@ namespace hal
             {
             case 0:
                 return mDirectory->name();
+            case 1:
+                return mDirectory->id();
             default:
                 return "";
             }
