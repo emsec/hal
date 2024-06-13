@@ -228,7 +228,6 @@ namespace hal
 
     ContextDirectory* ContextTreeModel::addDirectory(QString name, BaseTreeItem *parent, u32 id)
     {
-
         if(id == 0)
             id = --mMinDirectoryId;
         else if (id < mMinDirectoryId)

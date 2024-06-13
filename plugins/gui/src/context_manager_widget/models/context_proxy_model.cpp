@@ -1,4 +1,4 @@
-#include "gui/context_manager_widget/models/context_proxy_model.h"
+﻿#include "gui/context_manager_widget/models/context_proxy_model.h"
 
 #include "gui/gui_utils/sort.h"
 #include "gui/basic_tree_model/base_tree_model.h"
@@ -92,22 +92,22 @@ namespace hal
         }
         QByteArray encodedData;
         QDataStream stream(&encodedData, QIODevice::WriteOnly);
-        QString type;
+        QString moveType;
         int id;
         if (item->isDirectory())
         {
             id = item->directory()->id();
-            type = "dir";
+            moveType = "dir";
         }
         else if (item->isContext())
         {
             id = item->context()->id();
-            type = "view";
+            moveType = "view";
         }
         else
             Q_ASSERT (1==0);
-        stream << type << id << row << (quintptr) parentItem;
-        retval->setText(type);
+        stream << moveType << id << row << (quintptr) parentItem;
+        retval->setText(moveType);
         retval->setData("contexttreemodel/item", encodedData);
         return retval;
 
@@ -121,14 +121,14 @@ namespace hal
         BaseTreeModel* model = static_cast<BaseTreeModel*>(sourceModel());
         if (!model) return false;
 
-        QString type;
-        int id;
+        QString moveType;
+        int moveId;
         int sourceRow = -1;
         quintptr sourceParent = 0;
 
         auto encItem = mimeData->data("contexttreemodel/item");
         QDataStream dataStream(&encItem, QIODevice::ReadOnly);
-        dataStream >> type >> id >> sourceRow >> sourceParent;
+        dataStream >> moveType >> moveId >> sourceRow >> sourceParent;
         ContextTreeItem* sourceParentItem = dynamic_cast<ContextTreeItem*>((BaseTreeItem*) sourceParent);
         u32 sourceParentId = sourceParentItem ? sourceParentItem->getId() : 0;
 
@@ -199,21 +199,27 @@ namespace hal
                 qDebug() << "drop no parent " << row << column;
         }
         */
-        BaseTreeItem* targetParentItem = model->getItemFromIndex(mapToSource(parent));
-        if (targetParentItem == model->getRootItem()) return true;
-        ContextTreeItem* parentItem = dynamic_cast<ContextTreeItem*>(targetParentItem);
-        if (!parentItem || parentItem->isContext()) return false;
+        BaseTreeItem* tpar = model->getItemFromIndex(mapToSource(parent));
+        if (tpar == model->getRootItem()) return true;
+        ContextTreeItem* targetParentItem = dynamic_cast<ContextTreeItem*>(tpar);
+        if (!targetParentItem || targetParentItem->isContext()) return false;
 
-        QString type;
-        int id;
+        QString moveType;
+        int moveId;
         auto encItem = mimeData->data("contexttreemodel/item");
         QDataStream dataStream(&encItem, QIODevice::ReadOnly);
-        dataStream >> type >> id >> moveRow >> moveParent;
+        dataStream >> moveType >> moveId >> moveRow >> moveParent;
 
-        if (type == "dir")
+        if (moveType == "dir")
         {
-            if (parentItem->isDirectory() && (int) parentItem->directory()->id() == id)
-                return false;
+            // target must not be the item itself or any (grand-)child of the item
+            ContextTreeItem* targetAnchestorItem = targetParentItem;
+            while (targetAnchestorItem)
+            {
+                if (targetAnchestorItem->isDirectory() && (int) targetAnchestorItem->directory()->id() == moveId)
+                    return false;
+                targetAnchestorItem = dynamic_cast<ContextTreeItem*>(targetAnchestorItem->getParent());
+            }
         }
 
         return true;
