@@ -2,6 +2,7 @@
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/netlist/module.h"
 #include <stdio.h>
 
 namespace hal {
@@ -18,6 +19,7 @@ namespace hal {
         compute_input_nets();
         compute_output_nets();
         compute_partial_nets();
+        compute_net_groups();
     }
 
     const std::unordered_set<const Gate*>& SimulationInput::get_gates() const
@@ -209,4 +211,111 @@ namespace hal {
         }
     }
 
+    void SimulationInput::compute_net_groups()
+    {
+        std::unordered_set<const Module*> simulated_modules;
+
+        // all nets that are part of the simulation
+        std::unordered_set<const Net*> single_nets(m_partial_nets.begin(), m_partial_nets.end());
+
+        // all modules that contain at least one simulated gate
+        for (const Gate* g : mSimulationSet)
+        {
+            const Module *m = g->get_module();
+            while (m)
+            {
+                simulated_modules.insert(m);
+                m = m->get_parent_module();
+            }
+        }
+
+        // check all pingroups from affected modules, working the module hierarchy top -> bottom
+        auto it = simulated_modules.begin();
+        for (int level = 0; ! simulated_modules.empty(); )
+        {
+           while ((*it)->get_submodule_depth() != level)
+           {
+               if (++it == simulated_modules.end())
+               {
+                   ++level;
+                   it = simulated_modules.begin();
+               }
+           }
+
+           const Module*m = (*it);
+           for (PinGroup<ModulePin>* pg : m->get_pin_groups())
+           {
+               if (pg->size() < 2) continue;
+               bool pin_group_simulated = true;
+               NetGroup group(pg->get_name());
+
+               for (ModulePin* mp : pg->get_pins())
+               {
+                   Net* n = mp->get_net();
+                   if (n)
+                   {
+                       group.nets.push_back(std::make_pair(mp->get_group().second,n));
+                       if (single_nets.find(n) == single_nets.end())
+                       {
+                           // pin : net exists and is not part of the simulation, ignore pin group
+                           pin_group_simulated = false;
+                           break;
+                       }
+                   }
+               }
+               if (pin_group_simulated)
+               {
+                    m_netgroups.push_back(group);
+                    for (auto pair : group.nets) single_nets.erase(pair.second);
+               }
+           }
+
+           simulated_modules.erase(it);
+           it = simulated_modules.begin();
+        }
+
+        for (const Gate* g : mSimulationSet)
+        {
+            const GateType* gt = g->get_type();
+
+            for (PinGroup<GatePin>* pg : gt->get_pin_groups())
+            {
+                if (pg->size() < 2) continue;
+                bool pin_group_simulated = true;
+                NetGroup group(pg->get_name());
+
+                for (GatePin* gp : pg->get_pins())
+                {
+                    Net* n = nullptr;
+                    switch (pg->get_direction())
+                    {
+                    case PinDirection::inout:
+                        n = g->get_fan_in_net(gp);
+                        break;
+                    case PinDirection::output:
+                        n = g->get_fan_out_net(gp);
+                        break;
+                    default:
+                        break;
+                    }
+                    if (n)
+                    {
+                        group.nets.push_back(std::make_pair(gp->get_group().second,n));
+                        if (single_nets.find(n) == single_nets.end())
+                        {
+                            // pin : net alreade assigned to module pin group, ignore gate pin group
+                            pin_group_simulated = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (pin_group_simulated)
+                {
+                    m_netgroups.push_back(group);
+                    for (auto pair : group.nets) single_nets.erase(pair.second);
+                }
+            }
+        }
+    }
 }

@@ -54,9 +54,18 @@ namespace hal {
             u64 period() const { return switch_time * 2; }
         };
 
+        struct NetGroup
+        {
+            std::string name;
+            std::vector<std::pair<int,Net*> > nets;
+
+            NetGroup(const std::string& nam) : name(nam) {;}
+        };
+
     private:
         std::unordered_set<const Gate*> mSimulationSet;
         std::vector<Clock> m_clocks;
+        std::vector<NetGroup> m_netgroups;
 
         std::unordered_set<const Net*> m_input_nets;
         std::vector<const Net*> m_output_nets;
@@ -67,6 +76,7 @@ namespace hal {
         void compute_input_nets();
         void compute_output_nets();
         void compute_partial_nets();
+        void compute_net_groups();
 
     public:
         SimulationInput() : mNoClockUsed(false) {;}
