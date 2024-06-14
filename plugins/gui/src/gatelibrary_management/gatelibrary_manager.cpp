@@ -168,14 +168,12 @@ namespace hal
             return;
         GateLibraryWizard wiz(mEditableGatelibrary, mTableModel->getGateTypeAtIndex(index.row()));
         wiz.exec();
-        wiz.accept();
     }
 
     void GateLibraryManager::handleAddWizard()
     {
         GateLibraryWizard wiz(mEditableGatelibrary);
         wiz.exec();
-        wiz.accept();
     }
 
     void GateLibraryManager::handleDeleteType(QModelIndex index)

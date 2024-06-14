@@ -8,7 +8,7 @@ namespace hal
 {
     FlipFlopWizardPage::FlipFlopWizardPage(QWidget* parent) : QWizardPage(parent)
     {
-        setTitle("Step 3: Flip Flop");
+        setTitle("Flip Flop");
         setSubTitle("Enter parameters for flip flop component");
         mLayout = new QGridLayout(this);
         mTabWidget = new QTabWidget(this);

@@ -7,7 +7,7 @@ namespace hal
 {
     PinsWizardPage::PinsWizardPage(QWidget* parent) : QWizardPage(parent)
     {
-        setTitle("Step 2: Pins and Pingroups");
+        setTitle("Pins and Pingroups");
         setSubTitle("Edit pins and pingroups");
         mLayout = new QGridLayout(this);
 

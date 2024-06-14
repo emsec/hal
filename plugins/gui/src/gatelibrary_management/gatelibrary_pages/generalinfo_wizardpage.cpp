@@ -7,7 +7,7 @@ namespace hal
 {
     GeneralInfoWizardPage::GeneralInfoWizardPage(const GateLibrary* gt, QWidget* parent) : QWizardPage(parent)
     {
-        setTitle("Step 1: General Information");
+        setTitle("General Information");
         setSubTitle("Add general information about the gate, such as name and properties");
         mLayout = new QGridLayout(this);
         mName = new QLineEdit(this);

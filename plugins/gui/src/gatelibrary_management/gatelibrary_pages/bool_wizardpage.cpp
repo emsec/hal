@@ -8,6 +8,7 @@ namespace hal
         : QLineEdit(parent), mState(VALID), mLegalVariables(legalVar)
     {
         connect(this, &QLineEdit::editingFinished, this, &BooleanFunctionEdit::handleEditingFinished);
+
         setState(EMPTY); // do an active transition to enforce style
     }
 
@@ -39,7 +40,7 @@ namespace hal
         {
             BooleanFunction bf = bfres.get();
             std::set<std::string> var_names = bf.get_variable_names();
-
+            std::set<std::string> leg = mLegalVariables;
             for(std::string vname : var_names)
             {
                 if (mLegalVariables.find(vname) == mLegalVariables.end())
@@ -61,8 +62,8 @@ namespace hal
 //--------------------------------------------
     BoolWizardPage::BoolWizardPage(QWidget* parent) : QWizardPage(parent)
     {
-        setTitle("Step 4: Boolean functions");
-        setSubTitle("TODO: subtitle");
+        setTitle("Boolean functions");
+        setSubTitle("Enter the boolean functions");
         mLayout = new QGridLayout(this);
     }
 
@@ -117,6 +118,20 @@ namespace hal
 
     void BoolWizardPage::setData(GateType *gate){
         mGate = gate;
+    }
+
+    bool BoolWizardPage::isComplete() const{
+
+        for(int i = 0; i<mLayout->rowCount(); i++)
+        {
+            BooleanFunctionEdit* lineEdit = static_cast<BooleanFunctionEdit*>(mLayout->itemAtPosition(i, 1)->widget());
+            connect(lineEdit, &BooleanFunctionEdit::editingFinished, this, &BoolWizardPage::completeChanged);
+            if(!lineEdit->isValid())
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

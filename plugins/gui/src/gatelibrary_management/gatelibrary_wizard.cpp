@@ -101,31 +101,30 @@ namespace hal
         case GeneralInfo:
             return Pin;
         case Pin:
-            /*if(properties.contains("ff")) return FlipFlop;
+            if(properties.contains("ff")) return FlipFlop;
             else if(properties.contains("latch")) return Latch;
             else if(properties.contains("c_lut")) return LUT;
-            else if(properties.contains("ram")) return RAM;*/
-            return FlipFlop;
+            else if(properties.contains("ram")) return RAM;
         case FlipFlop:
             if(properties.contains("latch")) return Latch;
             else if(properties.contains("c_lut")) return LUT;
             else if(properties.contains("ram")) return RAM;
-            else return Init;
+            else return BooleanFunction;
         case Latch:
             if(properties.contains("c_lut")) return LUT;
             else if(properties.contains("ram")) return RAM;
-            else return Init;
+            else return BooleanFunction;
         case LUT:
             if(properties.contains("ram")) return RAM;
-            else return Init;
+            else return BooleanFunction;
         case RAM:
-            return RAMPort; //TODO
+            return RAMPort;
         case RAMPort:
             if(properties.contains("ff") || properties.contains("latch")) return State;
-            else return Init;
+            else return BooleanFunction;
         case State:
             if(properties.contains("ff") || properties.contains("latch") || properties.contains("c_lut") || properties.contains("ram")) return Init;
-            else return -1;
+            else return BooleanFunction;
         case Init:
             return BooleanFunction;
         case BooleanFunction:
