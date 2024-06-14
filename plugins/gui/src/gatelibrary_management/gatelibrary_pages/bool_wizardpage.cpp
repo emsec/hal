@@ -4,12 +4,16 @@
 
 namespace hal
 {
-    BooleanFunctionEdit::BooleanFunctionEdit(std::set<std::string> &legalVar, QWidget *parent)
-        : QLineEdit(parent), mState(VALID), mLegalVariables(legalVar)
-    {
-        connect(this, &QLineEdit::editingFinished, this, &BooleanFunctionEdit::handleEditingFinished);
+    const char* BooleanFunctionEdit::STATE_EMPTY = "Empty";
+    const char* BooleanFunctionEdit::STATE_VALID = "Valid";
+    const char* BooleanFunctionEdit::STATE_INVALID = "Invalid";
 
-        setState(EMPTY); // do an active transition to enforce style
+    BooleanFunctionEdit::BooleanFunctionEdit(std::set<std::string> &legalVar, QWidget *parent)
+        : QLineEdit(parent), mState(STATE_VALID), mLegalVariables(legalVar)
+    {
+        connect(this, &QLineEdit::textChanged, this, &BooleanFunctionEdit::handleEditingFinished);
+
+        setState(STATE_EMPTY); // do an active transition to enforce style
     }
 
     void BooleanFunctionEdit::setState(const QString &s)
@@ -27,15 +31,15 @@ namespace hal
     {
         if (text().isEmpty())
         {
-            setState(EMPTY);
+            setState(STATE_EMPTY);
             return;
         }
 
-        QString nextState = VALID;  // think positive
+        QString nextState = STATE_VALID;  // think positive
 
         auto bfres = BooleanFunction::from_string(text().toStdString());
         if(bfres.is_error())
-            nextState = INVALID;
+            nextState = STATE_INVALID;
         else
         {
             BooleanFunction bf = bfres.get();
@@ -45,19 +49,13 @@ namespace hal
             {
                 if (mLegalVariables.find(vname) == mLegalVariables.end())
                 {
-                    nextState = INVALID;
+                    nextState = STATE_INVALID;
                     break;
                 }
             }
         }
         if (mState != nextState)
             setState(nextState);
-    }
-
-    void BooleanFunctionEdit::setFunctionText(const QString &txt)
-    {
-        setText(txt);
-        handleEditingFinished();
     }
 //--------------------------------------------
     BoolWizardPage::BoolWizardPage(QWidget* parent) : QWizardPage(parent)
@@ -86,7 +84,7 @@ namespace hal
                 BooleanFunctionEdit* lineEdit = new BooleanFunctionEdit(input_pins, this);
                 mLayout->addWidget(label, boolFuncCnt, 0);
                 mLayout->addWidget(lineEdit, boolFuncCnt, 1);
-                lineEdit->setFunctionText(QString::fromStdString(bf.second.to_string()));
+                lineEdit->setText(QString::fromStdString(bf.second.to_string()));
                 boolFuncCnt++;
             }
         }
