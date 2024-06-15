@@ -112,17 +112,18 @@ namespace hal
         QVariant data(const QModelIndex& inddex, int role = Qt::DisplayRole) const override;
         ///@}
 
+        BaseTreeItem* getDirectory(u32 directoryId) const;
+
+        BaseTreeItem* getContext(u32 contextId) const;
+
         /**
          * Adds a directory to the model.
          *
          * @param name - The name to the directory.
-         * @param parent - The Parent of the directory.
+         * @param parentItem - The parent of the directory.
+         * @param id - The id of the directory.
          */
-        ContextDirectory* addDirectory(QString name, BaseTreeItem* parent = nullptr, u32 id = 0);
-
-        BaseTreeItem* getDirectory(u32 directoryId) const;
-
-        BaseTreeItem* getContext(u32 contextId) const;
+        ContextDirectory* addDirectory(QString name, BaseTreeItem* parentItem, u32 id);
 
         /**
          * Adds a given GraphContext to the model.
@@ -199,20 +200,31 @@ namespace hal
         ContextTreeItem* getCurrentDirectory();
 
         /**
-         * Sets the MinDirectoryId.
-         *
-         * @param u32 - id to set MinDirectoryId to.
+         * Removes a tree item and inserts it under a new parent into a specific row.
+         * 
+         * @param itemToMove - The tree item to be moved.
+         * @param newParent - The parent item, under which itemToMove is placed.
+         * @param row - The row in newParent, where itemToMove is inserted. 
+         *              If -1, then itemToMove is instead just appended to newParent.
+         * @return True, if the operation succeded. False, if not.
          */
-        void setMinDirectoryId(u32 id_) { mMinDirectoryId = id_; }
+        bool moveItem(ContextTreeItem* itemToMove, BaseTreeItem* newParent, int row = -1);
 
         /**
-         * Get MinDirectoryId.
-         *
-         * @return MinDIrectoryId.
+         * Returns the ids of all direct child directories of a given parent directory.
+         * 
+         * @param directoyId - The id of the parent directory.
+         * @return List of IDs of all directories, that are ordered directly under the parent directory.
          */
-        u32 minDirectoryId() const { return mMinDirectoryId; }
+        std::vector<u32> getChildDirectoriesOf(u32 directoryId);
 
-        bool moveItem(ContextTreeItem* itemToMove, BaseTreeItem* newParent, int row = -1);
+        /**
+         * Returns the ids of all direct child contexts of a given parent directory.
+         * 
+         * @param directoyId - The id of the parent directory.
+         * @return List of IDs of all contexts, that are ordered directly under the parent directory.
+         */
+        std::vector<u32> getChildContextsOf(u32 directoryId);
 
     Q_SIGNALS:
         void directoryCreatedSignal(ContextTreeItem* item);
@@ -223,9 +235,7 @@ namespace hal
         std::map<GraphContext *, ContextTreeItem *> mContextMap;
         QVector<GraphContext*> mContextList;
         QVector<ContextDirectory*> mDirectoryList;
-        u32 mMinDirectoryId;
 
         void dumpRecursion(ContextTreeItem* parent = nullptr, int level = 0) const;
-
     };
 }    // namespace hal

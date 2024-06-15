@@ -71,6 +71,9 @@ namespace hal
             static void deleteDirectory(u32 id);
             static void moveView(u32 viewId, std::optional<u32> destinationDirectoryId, std::optional<int> row);
             static void moveDirectory(u32 directoryId, std::optional<u32> destinationDirectoryId, std::optional<int> row);
+
+            static std::optional<std::vector<u32>> getChildDirectories(u32 directoryId);
+            static std::optional<std::vector<u32>> getChildViews(u32 directoryId);
         };
     }
 

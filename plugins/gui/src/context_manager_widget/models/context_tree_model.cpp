@@ -126,7 +126,7 @@ namespace hal
         return mContext != nullptr;
     }
 
-    ContextTreeModel::ContextTreeModel(QObject* parent) : BaseTreeModel(parent), mCurrentDirectory(nullptr), mMinDirectoryId(std::numeric_limits<u32>::max())
+    ContextTreeModel::ContextTreeModel(QObject* parent) : BaseTreeModel(parent), mCurrentDirectory(nullptr)
     {
         setHeaderLabels(QStringList() << "View Name" << "ID" << "Timestamp");
     }
@@ -226,15 +226,8 @@ namespace hal
         return nullptr;
     }
 
-    ContextDirectory* ContextTreeModel::addDirectory(QString name, BaseTreeItem *parent, u32 id)
+    ContextDirectory* ContextTreeModel::addDirectory(QString name, BaseTreeItem *parentItem, u32 id)
     {
-        if(id == 0)
-            id = --mMinDirectoryId;
-        else if (id < mMinDirectoryId)
-            mMinDirectoryId = id;
-
-        BaseTreeItem* parentItem = parent;
-
         if (!parentItem)
             parentItem = mCurrentDirectory;
         if (!parentItem)
@@ -454,5 +447,43 @@ namespace hal
         if (!parent) bti = mRootItem;
         for (BaseTreeItem* cld : bti->getChildren())
             dumpRecursion(dynamic_cast<ContextTreeItem*>(cld), level+1);
+    }
+
+    std::vector<u32> ContextTreeModel::getChildDirectoriesOf(u32 directoryId)
+    {
+        BaseTreeItem* directoryItem = getDirectory(directoryId);
+        if(!directoryItem)
+            directoryItem = getRootItem();
+
+        QList<BaseTreeItem*> children = directoryItem->getChildren();
+        std::vector<u32> ids;
+
+        for(BaseTreeItem* child : children)
+        {
+            ContextTreeItem* cti = dynamic_cast<ContextTreeItem*>(child);
+            if(cti->isDirectory())
+                ids.push_back(cti->getId());
+        }
+
+        return ids;
+    }
+
+    std::vector<u32> ContextTreeModel::getChildContextsOf(u32 directoryId)
+    {
+        BaseTreeItem* directoryItem = getDirectory(directoryId);
+        if(!directoryItem)
+            directoryItem = getRootItem();
+
+        QList<BaseTreeItem*> children = directoryItem->getChildren();
+        std::vector<u32> ids;
+
+        for(BaseTreeItem* child : children)
+        {
+            ContextTreeItem* cti = dynamic_cast<ContextTreeItem*>(child);
+            if(cti->isContext())
+                ids.push_back(cti->getId());
+        }
+
+        return ids;
     }
 }

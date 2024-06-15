@@ -1014,4 +1014,22 @@ namespace hal
         act->setObject(uao);
         act->exec();
     }
+
+    std::optional<std::vector<u32>> GuiApiClasses::View::getChildDirectories(u32 directoryId)
+    {
+        ContextTreeItem* directoryItem = dynamic_cast<ContextTreeItem*>(gGraphContextManager->getContextTreeModel()->getDirectory(directoryId));
+        // Id 0 is the root item. It does not exist as a directory object, but child items can still be retrieved from it.
+        if(!directoryItem && directoryId != 0) 
+            return std::nullopt;
+        return gGraphContextManager->getContextTreeModel()->getChildDirectoriesOf(directoryId);
+    }
+
+    std::optional<std::vector<u32>> GuiApiClasses::View::getChildViews(u32 directoryId)
+    {
+        ContextTreeItem* directoryItem = dynamic_cast<ContextTreeItem*>(gGraphContextManager->getContextTreeModel()->getDirectory(directoryId));
+        // Id 0 is the root item. It does not exist as a directory object, but child items can still be retrieved from it.
+        if(!directoryItem && directoryId != 0)
+            return std::nullopt;
+        return gGraphContextManager->getContextTreeModel()->getChildContextsOf(directoryId);
+    }
 }

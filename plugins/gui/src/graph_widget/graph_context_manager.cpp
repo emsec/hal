@@ -60,7 +60,7 @@ namespace hal
 
     ContextDirectory* GraphContextManager::createNewDirectory(const QString& name, u32 parentId)
     {
-        ContextDirectory* contextDir = mContextTreeModel->addDirectory(name, mContextTreeModel->getDirectory(parentId));
+        ContextDirectory* contextDir = mContextTreeModel->addDirectory(name, mContextTreeModel->getDirectory(parentId), ++mMaxContextId);
         return contextDir;
     }
 
@@ -658,9 +658,11 @@ namespace hal
 
                 BaseTreeItem* dirParent = mContextTreeModel->getRootItem();
 
-                if (dirParentId != 0) {
+                if (dirParentId != 0)
                    dirParent =  mContextTreeModel->getDirectory(dirParentId);
-                }
+
+                if (dirId < 0 || dirId > 0x7FFFFFFF)
+                    dirId = ++mMaxContextId;
 
                 mContextTreeModel->addDirectory(dirName, dirParent, dirId);
             }

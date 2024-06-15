@@ -264,6 +264,22 @@ PYBIND11_PLUGIN(hal_gui)
         :param int destinationDirectoryId: ID of the destination directory to which the directory will be moved. 
             If None, the directory is instead moved to the current directory.
         :param int row: The row index in the parent directory, where the directory will be inserted.
+)")
+    .def_static("getChildDirectories", &GuiApiClasses::View::getChildDirectories, py::arg("directoryId"), R"(
+        Returns the ids of all direct child directories of a given directory.
+        
+        :param int directoryId: ID of the parent directory, whose direct children will be returned
+        :returns: List of the ids of all direct child directories of the specified directory. 
+            Returns None, if the given directory does not exist.
+        :rtype: list[int]|None
+)")
+    .def_static("getChildViews", &GuiApiClasses::View::getChildViews, py::arg("directoryId"), R"(
+        Returns the ids of all direct child views of a given directory.
+        
+        :param int directoryId: ID of the parent directory, whose direct children will be returned
+        :returns: List of the ids of all direct child views of the specified directory. 
+            Returns None, if the given directory does not exist.
+        :rtype: list[int]|None
 )");
 
 
