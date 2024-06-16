@@ -8,6 +8,7 @@
 #include <QFileInfo>
 #include <QProcess>
 #include <QStringList>
+#include <QCoreApplication>
 #include <QThread>
 #include <QUuid>
 #include <vector>
@@ -61,7 +62,8 @@ namespace hal
     }
 
     SimulationProcess::SimulationProcess(NetlistSimulatorController* controller, SimulationEngineScripted* engine)
-        : mEngine(engine), mLineIndex(0), mNumberLines(0), mSaleaeDirectoryFilename(controller->get_saleae_directory_filename()), mProcessLog(nullptr)
+        : mEngine(engine), mLineIndex(0), mNumberLines(0), mSaleaeDirectoryFilename(controller->get_saleae_directory_filename()),
+          mProcessLog(nullptr), mProcess(nullptr)
     {
         connect(this, &SimulationProcess::processFinished, controller, &NetlistSimulatorController::handleRunFinished);
         mProcessLog = new SimulationProcessLog(QString::fromStdString(mEngine->get_working_directory()));
@@ -69,7 +71,8 @@ namespace hal
 
     SimulationProcess::~SimulationProcess()
     {
-        mProcessLog->deleteLater();
+        if (mProcessLog) mProcessLog->deleteLater();
+        if (mProcess)    mProcess->deleteLater();
     }
 
     void SimulationProcess::abortOnError()
@@ -177,6 +180,12 @@ namespace hal
                 return abortOnError();
 
             ++mLineIndex;
+
+            if (mProcess)
+            {
+                delete mProcess;
+                mProcess = nullptr;
+            }
         }
 
         if (!mEngine->finalize())
@@ -215,7 +224,7 @@ namespace hal
         for (const QString& arg : args)
             logCommand +=  " " + arg;
         logCommand += "</font></h1>\n";
-        mProcess = new QProcess(this);
+        mProcess = new QProcess;
         mProcess->setWorkingDirectory(QString::fromStdString(mEngine->get_working_directory()));
         connect(mProcess,&QProcess::readyReadStandardError,this,&SimulationProcess::handleReadyReadStandardError);
         connect(mProcess,&QProcess::readyReadStandardOutput,this,&SimulationProcess::handleReadyReadStandardOutput);
@@ -235,8 +244,18 @@ namespace hal
             return false;
         }
 
-        if (exec())  // event loop ended with non-zero value
-            return false;
+        if (qApp)
+        {
+            if (exec())  // event loop ended with non-zero value
+                return false;
+        }
+        else
+        {
+            log_warning("simulation_plugin", "No QApplication running, event loop not entered, will poll for process to finish.");
+            if (!mProcess->waitForFinished()) return false;
+            handleReadyReadStandardError();
+            handleReadyReadStandardOutput();
+        }
 
         return true;
     }
