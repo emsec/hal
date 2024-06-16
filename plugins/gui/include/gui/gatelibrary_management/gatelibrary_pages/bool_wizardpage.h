@@ -71,16 +71,19 @@ namespace hal {
 
     class BoolWizardPage:public QWizardPage
     {
-        friend BooleanFunctionEdit;
+        Q_OBJECT
     public:
         BoolWizardPage(QWidget* parent = nullptr);
         void initializePage() override;
         bool isComplete() const override;
         void setData(GateType* gate);
+    private Q_SLOTS:
+        void handleStateChanged(const QString& stat);
 
     private:
         QGridLayout* mLayout;
         GateLibraryWizard* mWizard;
+        QList<BooleanFunctionEdit*> mEditFunctions;
         GateType* mGate = nullptr;
     };
 }
