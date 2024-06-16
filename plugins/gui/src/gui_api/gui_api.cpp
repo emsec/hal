@@ -1005,12 +1005,25 @@ namespace hal
         if(parentItem && gGraphContextManager->getContextTreeModel()->getRootItem() != parentItem)
             parentId = dynamic_cast<ContextTreeItem*>(parentItem)->getId();
 
+        u32 destId = destinationDirectoryId.value_or(getCurrentDirectory());
+        BaseTreeItem* destAnchestor =  gGraphContextManager->getContextTreeModel()->getDirectory(destId);
+        while (destAnchestor)
+        {
+            if (destAnchestor == directoryItem)
+            {
+                log_warning("gui", "Invalid attempt to move directory ID={} into dependend directory.", directoryId);
+                return;
+            }
+            destAnchestor = destAnchestor->getParent();
+        }
+
+
         UserActionObject uao = UserActionObject(directoryId, UserActionObjectType::ContextDir);
         ActionMoveItem* act;
         if(row.has_value())
-            act = new ActionMoveItem(destinationDirectoryId.value_or(getCurrentDirectory()), parentId, row.value());
+            act = new ActionMoveItem(destId, parentId, row.value());
         else
-            act = new ActionMoveItem(destinationDirectoryId.value_or(getCurrentDirectory()), parentId);
+            act = new ActionMoveItem(destId, parentId);
         act->setObject(uao);
         act->exec();
     }
