@@ -36,6 +36,7 @@
 
 namespace hal {
     class InitWizardPage:public QWizardPage{
+        friend class GateLibraryWizard;
     public:
         InitWizardPage(QWidget* parent = nullptr);
         //void initializePage() override;

@@ -77,6 +77,7 @@ namespace hal {
         void initializePage() override;
         bool isComplete() const override;
         void setData(GateType* gate);
+        std::unordered_map<std::string, BooleanFunction> getBoolFunctions();
 
     private:
         QGridLayout* mLayout;

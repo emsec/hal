@@ -42,6 +42,7 @@ namespace hal
 {
     class GateLibrary;
 
+
     /**
      * A gate type contains information about its internals such as input and output pins as well as its Boolean functions.
      *

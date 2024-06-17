@@ -132,4 +132,19 @@ namespace hal
         return true;
     }
 
+    std::unordered_map<std::string, BooleanFunction> BoolWizardPage::getBoolFunctions(){
+        std::unordered_map<std::string, BooleanFunction> retval;
+        for(int i = 0; i<mLayout->rowCount(); i++)
+        {
+            QLabel* label = static_cast<QLabel*>(mLayout->itemAtPosition(i, 0)->widget());
+            BooleanFunctionEdit* lineEdit = static_cast<BooleanFunctionEdit*>(mLayout->itemAtPosition(i, 1)->widget());
+            auto bfres = BooleanFunction::from_string(lineEdit->text().toStdString());
+            if(bfres.is_error())
+                continue;
+            else
+                retval.insert({label->text().toStdString(), bfres.get()});
+        }
+        return retval;
+    }
+
 }

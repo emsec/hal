@@ -98,6 +98,7 @@ namespace hal
         QSplitter* mSplitter;
         int mFrameWidth;
 
+        GateLibraryWizard* mWizard;
         QTabWidget* mTabWidget;
         QGridLayout* mLayout;
         GatelibraryContentWidget* mContentWidget;
