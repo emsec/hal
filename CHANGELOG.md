@@ -13,6 +13,14 @@ All notable changes to this project will be documented in this file.
     * added delete module action and shortcut
     * added entries for context menu
     * adapted appearance for menu content tree, selection details tree, grouping content tree (same model for all)
+  * refactored view widget
+    * changed appearance from tabular view to tree view
+    * added 'directory' elements to organize and manage groups of views
+    * added drag'n drop feature allowing to relocate views or directories to another branch in the tree
+    * added column for view ID
+    * added functions to Python GUI API to create, modify and delete views and directories
+    * added UNDO functionality for create/delete view and directory actions
+    * fixed sort-by-column feature. The tree is not sorted at program start thus showing elements in 'natural' order.
   * refactored search bar
     * changed appearance of search bar to be more intuitive
     * added menu for extended options - e.g. option to search in selected columns only
@@ -61,7 +69,6 @@ All notable changes to this project will be documented in this file.
   * added support for Ubuntu 24.04 LTS
   * added INIT field declaration to FF-gate-types in example library
   * added drag'n drop feature allowing to move several nodes in graph view at same time
-  * added functions to Python GUI API to create, modify and delete views
   * added GUI PluginParameter type `ComboBox` for parameters that can be requested from plugin
   * added GUI PluginParameter types `Module` and `Gated` for parameters that can be requested from plugin
   * added `Show content` button to `Groupings` widget to show content of grouping as a list
