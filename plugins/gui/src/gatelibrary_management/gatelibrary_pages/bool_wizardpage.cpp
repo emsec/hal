@@ -58,7 +58,8 @@ namespace hal
             setState(nextState);
     }
 //--------------------------------------------
-    BoolWizardPage::BoolWizardPage(QWidget* parent) : QWizardPage(parent)
+    BoolWizardPage::BoolWizardPage(QWidget* parent)
+        : QWizardPage(parent)
     {
         setTitle("Boolean functions");
         setSubTitle("Enter the boolean functions");
@@ -74,6 +75,13 @@ namespace hal
         for (PinItem* pi : inputPins)
             input_pins.insert(pi->getName().toStdString());
 
+        if (mEditFunctions.isEmpty())
+        {
+            for (BooleanFunctionEdit* bfe : mEditFunctions)
+                delete bfe;
+            mEditFunctions.clear();
+        }
+
         if(mGate != nullptr){
             auto boolFunctions = mGate->get_boolean_functions();
             auto list = QList<QPair<QString, BooleanFunction>>();
@@ -85,6 +93,8 @@ namespace hal
                 mLayout->addWidget(label, boolFuncCnt, 0);
                 mLayout->addWidget(lineEdit, boolFuncCnt, 1);
                 lineEdit->setText(QString::fromStdString(bf.second.to_string()));
+                connect(lineEdit,&BooleanFunctionEdit::stateChanged,this,&BoolWizardPage::handleStateChanged);
+                mEditFunctions.append(lineEdit);
                 boolFuncCnt++;
             }
         }
@@ -103,6 +113,8 @@ namespace hal
                                 BooleanFunctionEdit* lineEdit = new BooleanFunctionEdit(input_pins, this);
                                 mLayout->addWidget(label, rowCount, 0);
                                 mLayout->addWidget(lineEdit, rowCount, 1);
+                                connect(lineEdit,&BooleanFunctionEdit::stateChanged,this,&BoolWizardPage::handleStateChanged);
+                                mEditFunctions.append(lineEdit);
                                 rowCount++;
                             }
                         }
@@ -114,16 +126,21 @@ namespace hal
         setLayout(mLayout);
     }
 
-    void BoolWizardPage::setData(GateType *gate){
+    void BoolWizardPage::setData(GateType *gate)
+    {
         mGate = gate;
     }
 
-    bool BoolWizardPage::isComplete() const{
+    void BoolWizardPage::handleStateChanged(const QString& stat)
+    {
+        Q_UNUSED(stat);
+        Q_EMIT completeChanged();
+    }
 
-        for(int i = 0; i<mLayout->rowCount(); i++)
+    bool BoolWizardPage::isComplete() const
+    {
+        for(BooleanFunctionEdit* lineEdit : mEditFunctions)
         {
-            BooleanFunctionEdit* lineEdit = static_cast<BooleanFunctionEdit*>(mLayout->itemAtPosition(i, 1)->widget());
-            connect(lineEdit, &BooleanFunctionEdit::editingFinished, this, &BoolWizardPage::completeChanged);
             if(!lineEdit->isValid())
             {
                 return false;
