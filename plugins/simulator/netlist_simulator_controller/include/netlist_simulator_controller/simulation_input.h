@@ -30,6 +30,9 @@
 #include <unordered_map>
 #include "hal_core/defines.h"
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/netlist/pins/module_pin.h"
+#include "hal_core/netlist/pins/gate_pin.h"
+#include "hal_core/netlist/pins/pin_group.h"
 
 namespace hal {
     class Gate;
@@ -56,10 +59,11 @@ namespace hal {
 
         struct NetGroup
         {
-            std::string name;
-            std::vector<std::pair<int,Net*> > nets;
-
-            NetGroup(const std::string& nam) : name(nam) {;}
+            bool is_input;
+            const Gate* gate;
+            PinGroup<ModulePin>* module_pin_group;
+            PinGroup<GatePin>* gate_pin_group;
+            NetGroup() : is_input(true), gate(nullptr), module_pin_group(nullptr), gate_pin_group(nullptr) {;}
         };
 
     private:
@@ -76,7 +80,6 @@ namespace hal {
         void compute_input_nets();
         void compute_output_nets();
         void compute_partial_nets();
-        void compute_net_groups();
 
     public:
         SimulationInput() : mNoClockUsed(false) {;}
@@ -176,5 +179,9 @@ namespace hal {
          * @param filename name of file to be created
          */
         void dump(std::string filename = std::string()) const;
+
+        void compute_net_groups();
+
+        const std::vector<NetGroup>& get_net_groups() const { return m_netgroups; }
     };
 }

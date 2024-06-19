@@ -1,4 +1,4 @@
-#include "netlist_simulator_controller/simulation_input.h"
+﻿#include "netlist_simulator_controller/simulation_input.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/utilities/log.h"
@@ -19,7 +19,6 @@ namespace hal {
         compute_input_nets();
         compute_output_nets();
         compute_partial_nets();
-        compute_net_groups();
     }
 
     const std::unordered_set<const Gate*>& SimulationInput::get_gates() const
@@ -247,14 +246,12 @@ namespace hal {
            {
                if (pg->size() < 2) continue;
                bool pin_group_simulated = true;
-               NetGroup group(pg->get_name());
 
                for (ModulePin* mp : pg->get_pins())
                {
                    Net* n = mp->get_net();
                    if (n)
                    {
-                       group.nets.push_back(std::make_pair(mp->get_group().second,n));
                        if (single_nets.find(n) == single_nets.end())
                        {
                            // pin : net exists and is not part of the simulation, ignore pin group
@@ -265,8 +262,19 @@ namespace hal {
                }
                if (pin_group_simulated)
                {
-                    m_netgroups.push_back(group);
-                    for (auto pair : group.nets) single_nets.erase(pair.second);
+                   NetGroup group;
+                   group.module_pin_group = pg;
+                   for (ModulePin* mp : pg->get_pins())
+                   {
+                       Net* n = mp->get_net();
+                       if (n)
+                       {
+                           single_nets.erase(n);
+                           if (!is_input_net(n))
+                               group.is_input = false;
+                       }
+                   }
+                   m_netgroups.push_back(group);
                }
            }
 
@@ -282,12 +290,11 @@ namespace hal {
             {
                 if (pg->size() < 2) continue;
                 bool pin_group_simulated = true;
-                NetGroup group(pg->get_name());
 
                 for (GatePin* gp : pg->get_pins())
                 {
                     Net* n = nullptr;
-                    switch (pg->get_direction())
+                    switch (gp->get_direction())
                     {
                     case PinDirection::inout:
                         n = g->get_fan_in_net(gp);
@@ -300,7 +307,6 @@ namespace hal {
                     }
                     if (n)
                     {
-                        group.nets.push_back(std::make_pair(gp->get_group().second,n));
                         if (single_nets.find(n) == single_nets.end())
                         {
                             // pin : net alreade assigned to module pin group, ignore gate pin group
@@ -312,8 +318,24 @@ namespace hal {
 
                 if (pin_group_simulated)
                 {
+                    NetGroup group;
+                    group.gate = g;
+                    group.gate_pin_group = pg;
+                    if (pg->get_direction() == PinDirection::input)
+                    {
+                        for (GatePin* gp : pg->get_pins())
+                        {
+                            Net* n = g->get_fan_in_net(gp);
+                            if (n && !is_input_net(n))
+                            {
+                                group.is_input = false;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                        group.is_input = false;
                     m_netgroups.push_back(group);
-                    for (auto pair : group.nets) single_nets.erase(pair.second);
                 }
             }
         }

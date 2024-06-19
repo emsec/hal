@@ -136,6 +136,13 @@ public:
      */
     u32 add_waveform_group(const PinGroup<ModulePin>* pin_group);
 
+    /**
+     * Create a waveform group from the nets of a given gate pin group.
+     *
+     * @param pin_group The pin_group to create waveform group from.
+     * @return ID of new waveform group
+     */
+    u32 add_waveform_group(const Gate* gate, const PinGroup<GatePin>* pin_group);
 
     /**
      * Create a waveform group from the nets of a given module pin group.

@@ -6,6 +6,7 @@
 #include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/json_write_document.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "netlist_simulator_controller/saleae_directory.h"
 #include "netlist_simulator_controller/saleae_parser.h"
@@ -330,6 +331,30 @@ namespace hal
         for (const auto pin : pin_group->get_pins())
         {
             nets.push_back(pin->get_net());
+        }
+
+        return add_waveform_group(pin_group->get_name(), nets);
+    }
+
+    u32 NetlistSimulatorController::add_waveform_group(const Gate *gate, const PinGroup<GatePin>* pin_group)
+    {
+        std::vector<Net*> nets;
+        for (const auto pin : pin_group->get_pins())
+        {
+            Net* n = nullptr;
+            switch (pin->get_direction())
+            {
+            case PinDirection::input:
+                n = gate->get_fan_in_net(pin);
+                break;
+            case PinDirection::output:
+                n = gate->get_fan_out_net(pin);
+                break;
+            default:
+                break;
+            }
+
+            if (n) nets.push_back(n);
         }
 
         return add_waveform_group(pin_group->get_name(), nets);
@@ -880,30 +905,15 @@ namespace hal
 
     void NetlistSimulatorController::make_waveform_groups()
     {
-        std::unordered_map<Module*,std::unordered_set<const Gate*>> containedModules;
-        for (const Gate* g: mSimulationInput->get_gates())
+        mSimulationInput->compute_net_groups();
+
+        for (const SimulationInput::NetGroup& ng : mSimulationInput->get_net_groups())
         {
-            Module* m = g->get_module();
-            // test all parent modules whether gates are contained in simulation
-            while (m)
-            {
-                auto it = containedModules.find(m);
-                if (it == containedModules.end())
-                {
-                    std::vector<Gate*> gats = m->get_gates(nullptr,true);
-                    containedModules.insert(std::make_pair(m,std::unordered_set<const Gate*>(gats.begin(),gats.end())));
-                    it = containedModules.find(m);
-                }
-                auto jt = it->second.find(g);
-                if (jt!=it->second.end())
-                    it->second.erase(jt);
-                m = m->get_parent_module();
-            }
-        }
-        for (const auto &it : containedModules)
-        {
-            if (it.second.empty())
-                std::cerr << it.first->get_id() << " mod simulated <" << it.first->get_name() << ">" << std::endl;
+            if (!ng.is_input) continue;
+            if (ng.gate)
+                add_waveform_group(ng.gate, ng.gate_pin_group);
+            else
+                add_waveform_group(ng.module_pin_group);
         }
     }
 

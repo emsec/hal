@@ -155,11 +155,20 @@ namespace hal
             )")
 
             .def("add_waveform_group", py::overload_cast<const PinGroup<ModulePin>*>(&NetlistSimulatorController::add_waveform_group), py::arg("pin_group"), R"(
-                Create a waveform group from the nets of a given module pin group.
+                    Create a waveform group from the nets of a given module pin group.
 
-                :param hal_py.ModulePinGroup pin_group: The pin_group to create waveform group from.
-                :return: ID of the new waveform group.
-                :rtype: int
+                    :param hal_py.ModulePinGroup pin_group: The pin_group to create waveform group from.
+                    :return: ID of the new waveform group.
+                    :rtype: int
+            )")
+
+            .def("add_waveform_group", py::overload_cast<const Gate*, const PinGroup<GatePin>*>(&NetlistSimulatorController::add_waveform_group), py::arg("gate"), py::arg("pin_group"), R"(
+                    Create a waveform group from the nets of a given gate pin group.
+
+                    :param hal_py.Gate: The gate instance the pin_group belongs to.
+                    :param hal_py.GatePinGroup pin_group: The pin_group to create waveform group from.
+                    :return: ID of the new waveform group.
+                    :rtype: int
             )")
 
             .def("add_waveform_group", py::overload_cast<const std::string&, const PinGroup<ModulePin>*>(&NetlistSimulatorController::add_waveform_group), py::arg("name"), py::arg("pin_group"), R"(
