@@ -48,7 +48,6 @@ namespace hal
         friend class RAMPortWizardPage;
         friend class PinsWizardPage;
         friend class BoolWizardPage;
-        //friend class InitWizardPage;
     public:
         enum PAGE
         {
@@ -67,11 +66,11 @@ namespace hal
         GateLibraryWizard(GateLibrary* gateLibrary, GateType* gateType = nullptr, QWidget* parent = nullptr);
 
         void editGate(GateType* gt);
-        void addGate();
+        GateType* addGate();
         void setData(GateLibrary* gateLibrary, GateType* gateType);
-        QStringList getProperties();
         QList<PinItem*> getPingroups();
-        std::unique_ptr<GateTypeComponent> getComponents();
+        std::unique_ptr<GateTypeComponent> setComponents();
+        GateType* getRecentCreatedGate();
         void accept() override;
         int nextId() const override;
     private:
@@ -92,6 +91,7 @@ namespace hal
         QStringList mProperties;
         PinModel* mPinModel;
         GateLibraryTabPin* mPinTab;
+        GateType* mNewGateType;
 
         bool isDirty;
     };

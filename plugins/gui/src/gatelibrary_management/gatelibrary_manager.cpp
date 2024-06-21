@@ -85,7 +85,7 @@ namespace hal
         connect(mContentWidget, &GatelibraryContentWidget::triggerDeleteType, this, &GateLibraryManager::handleDeleteType);
         connect(mContentWidget, &GatelibraryContentWidget::triggerDoubleClicked, this, &GateLibraryManager::handleEditWizard);
 
-        //connect(mWizard, &GateLibraryWizard::accepted, mTableModel, &GatelibraryTableModel::dataChanged);
+        //connect(mWizard, &QDialog::accepted, this, &GateLibraryManager::handleSelectionChanged);
 
         setLayout(mLayout);GateLibraryTabGeneral
         repolish();    // CALL FROM PARENT
@@ -170,18 +170,20 @@ namespace hal
             return;
         mWizard = new GateLibraryWizard(mEditableGatelibrary, mTableModel->getGateTypeAtIndex(index.row()));
         mWizard->exec();
-        QModelIndex start = mTableModel->index(0,0);
-        QModelIndex end = mTableModel->index(mTableModel->rowCount(), mTableModel->columnCount());
-        Q_EMIT mTableModel->dataChanged(start, end);
+        initialize(mEditableGatelibrary);
     }
 
     void GateLibraryManager::handleAddWizard()
     {
         mWizard = new GateLibraryWizard(mEditableGatelibrary);
         mWizard->exec();
-        QModelIndex start = mTableModel->index(0,0);
-        QModelIndex end = mTableModel->index(mTableModel->rowCount(), mTableModel->columnCount());
-        Q_EMIT mTableModel->dataChanged(start, end);
+
+        initialize(mEditableGatelibrary);
+
+        for (int r=0; r<mTableModel->rowCount(); r++) {
+            if(mTableModel->getGateTypeAtIndex(r) == mWizard->getRecentCreatedGate())
+                mContentWidget->mTableView->selectRow(r);
+        }
     }
 
     void GateLibraryManager::handleDeleteType(QModelIndex index)

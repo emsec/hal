@@ -21,14 +21,6 @@ namespace hal
 
     }
 
-//    int LUTWizardPage::nextId() const
-//    {
-//        auto parentWizard = wizard();
-//        if(!parentWizard)
-//            return -1;
-//        return static_cast<GateLibraryWizard*>(parentWizard)->getNextPageId(GateLibraryWizard::LUT);
-//    }
-
     void LUTWizardPage::setData(GateType *gate){
         if(gate != nullptr && gate->has_component_of_type(GateTypeComponent::ComponentType::init))
         {
