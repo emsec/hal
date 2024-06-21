@@ -958,18 +958,35 @@ namespace hal
         return mSimulationInput->get_input_nets();
     }
 
-    const std::unordered_set<const Net*> NetlistSimulatorController::get_input_nets_except_clocks() const
+    std::vector<NetlistSimulatorController::InputColumnHeader> NetlistSimulatorController::get_input_column_headers() const
     {
-        std::unordered_set<const Net*> retval = mSimulationInput->get_input_nets();
-        std::vector<SimulationInput::Clock> clks = mSimulationInput->get_clocks();
-        if (clks.empty())
-            return retval;
+        std::vector<InputColumnHeader> retval;
+        std::unordered_set<const Net*> clkNets;
+        for (const SimulationInput::Clock& clk : mSimulationInput->get_clocks())
+            clkNets.insert(clk.clock_net);
 
-        for (const SimulationInput::Clock& clk : clks)
+        for (const Net* n : mSimulationInput->get_input_nets())
         {
-            auto it = retval.find(clk.clock_net);
-            if (it != retval.end())
-                retval.erase(it);
+            InputColumnHeader ipc;
+            ipc.nets.push_back(n);
+            ipc.name = n->get_name();
+            ipc.is_clock = (clkNets.find(n) != clkNets.end());
+            retval.push_back(ipc);
+        }
+
+        for (SimulationInput::NetGroup ng : mSimulationInput->get_net_groups())
+        {
+            if (!ng.is_input) continue;
+            InputColumnHeader ipc;
+            ipc.name = ng.get_name();
+            ipc.is_clock = false;
+            for (const Net* n : ng.get_nets())
+            {
+                ipc.nets.push_back(n);
+                if (clkNets.find(n) != clkNets.end()) ipc.is_clock = true;
+                retval.erase(std::remove_if(retval.begin(), retval.end(), [n](const auto& s){ return s.nets.size() == 1 && s.nets.at(0) == n ;}), retval.end());
+            }
+            retval.push_back(ipc);
         }
         return retval;
     }

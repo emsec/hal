@@ -64,6 +64,8 @@ namespace hal {
             PinGroup<ModulePin>* module_pin_group;
             PinGroup<GatePin>* gate_pin_group;
             NetGroup() : is_input(true), gate(nullptr), module_pin_group(nullptr), gate_pin_group(nullptr) {;}
+            std::vector<const Net*> get_nets() const;
+            std::string get_name() const;
         };
 
     private:

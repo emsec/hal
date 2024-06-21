@@ -11,19 +11,21 @@ namespace hal {
         : QTableWidget(parent), mMaxTime(0)
     {;}
 
-    void WavedataTableEditor::setup(const std::unordered_set<const Net *> &inpNets)
+    void WavedataTableEditor::setup(const std::vector<NetlistSimulatorController::InputColumnHeader> &inpColHeads)
     {
-        int n = inpNets.size()+1;
+        int n = inpColHeads.size()+1;
         setColumnCount(n);
         setRowCount(2);
-        for (const Net* n : inpNets)
+        QStringList headerLabel;
+        for (NetlistSimulatorController::InputColumnHeader ich : inpColHeads)
         {
-            mInputNets.insert(QString::fromStdString(n->get_name()), n);
+            QString colName = QString::fromStdString(ich.name);
+            if (ich.nets.size() > 1) colName += QString("[%1:0]").arg(ich.nets.size()-1);
+            mInputColumnHeader.append(ich);
+            headerLabel << colName;
         }
-        QStringList hlab;
-        hlab << "Time";
-        hlab << mInputNets.keys();
-        setHorizontalHeaderLabels(hlab);
+        headerLabel.prepend("Time");
+        setHorizontalHeaderLabels(headerLabel);
         for (int i=0; i<n; i++)
         {
             setItem(0,i, new QTableWidgetItem("0"));
@@ -130,46 +132,70 @@ namespace hal {
         QDir saleaeDir = QDir(workdir).absoluteFilePath("saleae");
         QString saleaeDirectoryFilename = saleaeDir.absoluteFilePath("saleae.json");
         SaleaeWriter* writer = new SaleaeWriter(saleaeDirectoryFilename.toStdString());
-        int icol = 1;
+        int iTableCol = 1;
+        QTableWidgetItem* timeCell = item(0,0);
+        mMaxTime = timeCell ? timeCell->text().toULongLong() : 0;
+        int sofIndex = 0;
+        int maxIndex = 0;
+        for (auto it = mInputColumnHeader.constBegin(); it != mInputColumnHeader.constEnd(); ++it)
+            maxIndex += it->nets.size();
 
         SaleaeOutputFile** sofArray;
         int* valArray;
-        sofArray = new SaleaeOutputFile*[columnCount()-1];
-        valArray = new int[columnCount()-1];
-        QTableWidgetItem* timeCell = item(0,0);
-        mMaxTime = timeCell ? timeCell->text().toULongLong() : 0;
+        sofArray = new SaleaeOutputFile*[maxIndex];
+        valArray = new int[maxIndex];
 
-        for (auto it = mInputNets.constBegin(); it != mInputNets.constEnd(); ++it)
+        for (auto it = mInputColumnHeader.constBegin(); it != mInputColumnHeader.constEnd(); ++it)
         {
-            SaleaeOutputFile* sof = writer->add_or_replace_waveform(it.key().toStdString(),it.value()->get_id());
-            int val = intCellValue(0,icol);
-            if (val == WavedataTableEditor::sIllegalValue)
-                val = 0;
-            sof->writeTimeValue(mMaxTime,val);
-            sofArray[icol-1] = sof;
-            valArray[icol-1] = val;
-            ++icol;
+            int tableVal = intCellValue(0,iTableCol);
+            if (tableVal == WavedataTableEditor::sIllegalValue)
+                tableVal = 0;
+            int mask = 1;
+            int iBit = 0;
+            for (const Net* n : it->nets)
+            {
+                SaleaeOutputFile* sof = writer->add_or_replace_waveform(n->get_name(),n->get_id());
+                int netVal = tableVal & mask;
+                sof->writeTimeValue(mMaxTime,netVal);
+                sofArray[sofIndex + iBit] = sof;
+                valArray[sofIndex + iBit] = netVal;
+                mask <<= 1;
+                ++iBit;
+            }
+            ++iTableCol;
+            sofIndex += it->nets.size();
         }
 
         for (int irow = 1; irow < rowCount(); irow++)
         {
+            sofIndex = 0;
             timeCell = item(irow,0);
             if (!timeCell) continue;
             uint64_t tval = timeCell->text().toULongLong();
             if (tval <= mMaxTime) continue;
             mMaxTime = tval;
-            for (int i = 1; i < columnCount(); i++)
+            iTableCol = 1;
+            for (auto it = mInputColumnHeader.constBegin(); it != mInputColumnHeader.constEnd(); ++it)
             {
-                int val = intCellValue(irow,i);
-                if (val == WavedataTableEditor::sIllegalValue)
-                    val = 0;
-                if (val != valArray[i-1])
+                int tableVal = intCellValue(irow,iTableCol);
+                if (tableVal == WavedataTableEditor::sIllegalValue)
+                    tableVal = 0;
+                int mask = 1;
+
+                for (int iBit = 0; iBit < it->nets.size(); ++iBit)
                 {
-                    SaleaeOutputFile* sof = sofArray[i-1];
-                    Q_ASSERT(sof);
-                    sof->writeTimeValue(mMaxTime,val);
-                    valArray[i-1] = val;
+                    int netVal = tableVal & mask;
+                    if (netVal != valArray[sofIndex+iBit])
+                    {
+                        SaleaeOutputFile* sof = sofArray[sofIndex + iBit];
+                        Q_ASSERT(sof);
+                        sof->writeTimeValue(mMaxTime,netVal);
+                        valArray[sofIndex + iBit] = netVal;
+                    }
+                    mask <<= 1;
                 }
+                ++iTableCol;
+                sofIndex += it->nets.size();
             }
         }
 

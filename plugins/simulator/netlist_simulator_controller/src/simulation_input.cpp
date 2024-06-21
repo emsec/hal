@@ -7,6 +7,32 @@
 
 namespace hal {
 
+    std::vector<const Net *> SimulationInput::NetGroup::get_nets() const
+    {
+        std::vector<const Net *> retval;
+        if (gate)
+        {
+            for (GatePin* gp : gate_pin_group->get_pins())
+            {
+                Net* n = gate->get_fan_in_net(gp);
+                if (n) retval.push_back(n);
+            }
+        }
+        else
+        {
+            for (ModulePin* mp : module_pin_group->get_pins())
+                retval.push_back(mp->get_net());
+        }
+        return retval;
+    }
+
+    std::string SimulationInput::NetGroup::get_name() const
+    {
+        if (gate)
+            return gate_pin_group->get_name();
+        return module_pin_group->get_name();
+    }
+
     bool SimulationInput::contains_gate(const Gate* g) const
     {
         return (mSimulationSet.find(g) != mSimulationSet.end());

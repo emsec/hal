@@ -493,11 +493,8 @@ namespace hal {
 
     void PageInputData::initializePage()
     {
-        if (mTableEditor->columnCount() < 2)
-        {
-            mTableEditor->setup(mController->get_input_nets_except_clocks());
-            handleRadioToggled(true);
-        }
+        mTableEditor->setup(mController->get_input_column_headers());
+        handleRadioToggled(true);
     }
 
     void PageInputData::handleRadioToggled(bool checked)

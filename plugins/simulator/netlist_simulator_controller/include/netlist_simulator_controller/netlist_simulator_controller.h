@@ -74,6 +74,13 @@ public:
         NoFilter
     };
 
+    struct InputColumnHeader
+    {
+        std::vector<const Net*> nets;
+        std::string name;
+        bool is_clock;
+    };
+
     NetlistSimulatorController(u32 id, const std::string nam, const std::string& workdir, QObject* parent = nullptr);
 
     NetlistSimulatorController(u32 id, Netlist* nl, const std::string& filename, QObject* parent = nullptr);
@@ -272,9 +279,9 @@ public:
     const std::unordered_set<const Net*>& get_input_nets() const;
 
     /**
-     * Convenience function to get only nets which are not listed as clock
+     * Get headers for input columns. A column might comprise a single net or a group of nets
      */
-    const std::unordered_set<const Net*> get_input_nets_except_clocks() const;
+    std::vector<InputColumnHeader> get_input_column_headers() const;
 
     /**
      * Shortcut to SimulationInput::get_output_nets

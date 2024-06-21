@@ -2,6 +2,7 @@
 #include <QTableWidget>
 #include <unordered_set>
 #include <QMap>
+#include "netlist_simulator_controller/netlist_simulator_controller.h"
 
 namespace hal {
 
@@ -11,7 +12,7 @@ namespace hal {
     {
         Q_OBJECT
 
-        QMap<QString, const Net*> mInputNets;
+        QList<NetlistSimulatorController::InputColumnHeader> mInputColumnHeader;
         qulonglong mMaxTime;
 
         static const int sIllegalValue = -99;
@@ -24,7 +25,7 @@ namespace hal {
     public:
         WavedataTableEditor(QWidget* parent = nullptr);
 
-        void setup(const std::unordered_set<const Net*>& inpNets);
+        void setup(const std::vector<NetlistSimulatorController::InputColumnHeader>& inpColHeads);
 
         int validLines() const;
 
