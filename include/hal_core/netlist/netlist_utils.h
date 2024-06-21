@@ -98,6 +98,7 @@ namespace hal
             get_partial_netlist(const Netlist* nl, const std::vector<const Gate*>& subgraph_gates);
 
         /**
+         * \deprecated
          * Find predecessors or successors of a gate. If depth is set to 1 only direct predecessors/successors will be returned. 
          * Higher number of depth causes as many steps of recursive calls. 
          * If depth is set to 0 there is no limitation and the loop continues until no more predecessors/succesors are found.
@@ -110,9 +111,11 @@ namespace hal
          * @param[in] filter - User-defined filter function.
          * @return Vector of predecessor/successor gates.
          */
-        CORE_API std::vector<Gate*> get_next_gates(const Gate* gate, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_next_matching_gates_until_depth instead.")]] CORE_API std::vector<Gate*>
+            get_next_gates(const Gate* gate, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
+         * \deprecated
          * Find predecessors or successors of a net. If depth is set to 1 only direct predecessors/successors will be returned. 
          * Higher number of depth causes as many steps of recursive calls. 
          * If depth is set to 0  there is no limitation and the loop continues until no more predecessors/succesors are found.
@@ -125,9 +128,11 @@ namespace hal
          * @param[in] filter - User-defined filter function.
          * @return Vector of predecessor/successor gates.
          */
-        CORE_API std::vector<Gate*> get_next_gates(const Net* net, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_next_matching_gates_until_depth instead.")]] CORE_API std::vector<Gate*>
+            get_next_gates(const Net* net, bool get_successors, int depth = 0, const std::function<bool(const Gate*)>& filter = nullptr);
 
         /**
+         * \deprecated
          * Find all sequential predecessors or successors of a gate.
          * Traverses combinational logic of all input or output nets until sequential gates are found.
          * The result may include the provided gate itself.
@@ -140,9 +145,11 @@ namespace hal
          * @param[inout] cache - The cache. 
          * @returns All sequential successors or predecessors of the gate.
          */
-        CORE_API std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_next_sequential_gates instead.")]] CORE_API std::vector<Gate*>
+            get_next_sequential_gates(const Gate* gate, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache);
 
         /**
+         * \deprecated
          * Find all sequential predecessors or successors of a gate.
          * Traverses combinational logic of all input or output nets until sequential gates are found.
          * The result may include the provided gate itself.
@@ -151,9 +158,11 @@ namespace hal
          * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
          * @returns All sequential successors or predecessors of the gate.
          */
-        CORE_API std::vector<Gate*> get_next_sequential_gates(const Gate* gate, bool get_successors);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_next_sequential_gates instead.")]] CORE_API std::vector<Gate*>
+            get_next_sequential_gates(const Gate* gate, bool get_successors);
 
         /**
+         * \deprecated
          * Find all sequential predecessors or successors of a net.
          * Traverses combinational logic of all input or output nets until sequential gates are found.
          * The use of the cache is recommended in case of extensive usage of this function. 
@@ -165,9 +174,11 @@ namespace hal
          * @param[inout] cache - The cache. 
          * @returns All sequential successors or predecessors of the net.
          */
-        CORE_API std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_next_sequential_gates instead.")]] CORE_API std::vector<Gate*>
+            get_next_sequential_gates(const Net* net, bool get_successors, std::unordered_map<u32, std::vector<Gate*>>& cache);
 
         /**
+         * \deprecated
          * Find all sequential predecessors or successors of a net.
          * Traverses combinational logic of all input or output nets until sequential gates are found.
          *
@@ -175,7 +186,8 @@ namespace hal
          * @param[in] get_successors - If true, sequential successors are returned, otherwise sequential predecessors are returned.
          * @returns All sequential successors or predecessors of the net.
          */
-        CORE_API std::vector<Gate*> get_next_sequential_gates(const Net* net, bool get_successors);
+        [[deprecated("Will be removed in a future version, use NetlistTraversalDecorator::get_next_sequential_gates instead.")]] CORE_API std::vector<Gate*>
+            get_next_sequential_gates(const Net* net, bool get_successors);
 
         /**
          * Find all gates on the predecessor or successor path of a gate.

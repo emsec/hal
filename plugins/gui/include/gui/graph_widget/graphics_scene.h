@@ -28,7 +28,7 @@
 #include "gui/graph_widget/items/utility_items/node_drag_shadow.h"
 #include "gui/graph_widget/shaders/graph_shader.h"
 #include "gui/gui_globals.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
+#include "gui/module_model/module_item.h"
 #include "gui/graph_widget/graphics_qss_adapter.h"
 #include "hal_core/defines.h"
 #include "hal_core/netlist/gate.h"
@@ -234,7 +234,7 @@ namespace hal
          *
          * @param highlightItems - The selection tree items to highlight
          */
-        void handleHighlight(const QVector<const SelectionTreeItem*>& highlightItems);
+        void handleHighlight(const QVector<const ModuleItem*>& highlightItems);
 
         /**
          * Q_SLOT to call whenever a module was assigned to or removed from a grouping. It is used to update the

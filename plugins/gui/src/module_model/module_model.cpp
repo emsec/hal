@@ -71,6 +71,10 @@ namespace hal
                 else
                     return QColor(QColor(255, 255, 255));    // USE STYLESHEETS
             }
+            case Qt::TextAlignmentRole:
+                return index.column() == 1
+                        ? Qt::AlignRight
+                        : Qt::AlignLeft;
             default:
                 return QVariant();
         }
@@ -93,10 +97,14 @@ namespace hal
             return nullptr;
     }
 
-    void ModuleModel::init()
+    ModuleItem* ModuleModel::getItem(u32 id, ModuleItem::TreeItemType type) const
     {
-        addRecursively(gNetlist->get_top_module());
-        moduleAssignNets();
+        return mModuleItemMaps[(int)type]->value(id);
+    }
+
+    QList<ModuleItem*> ModuleModel::getItems(u32 id, ModuleItem::TreeItemType type) const
+    {
+        return mModuleItemMaps[(int)type]->values(id);
     }
 
     void ModuleModel::clear()
@@ -107,6 +115,30 @@ namespace hal
         mModuleMap.clear();
         mGateMap.clear();
         mNetMap.clear();
+        endResetModel();
+    }
+
+    void ModuleModel::populateTree(const QVector<u32>& modIds, const QVector<u32>& gateIds, const QVector<u32>& netIds)
+    {
+        setIsModifying(true);
+        beginResetModel();
+        // Might want to add parameter for container of moduleIds that don't get recursively inserted.
+        clear();
+
+        QList<ModuleItem*> newRootList;
+        for(u32 id : modIds)
+            addRecursively(gNetlist->get_module_by_id(id));
+        moduleAssignNets();
+
+        for(u32 id : gateIds)
+            newRootList.append(new ModuleItem(id, ModuleItem::TreeItemType::Gate));
+        
+        for(u32 id : netIds)
+            newRootList.append(new ModuleItem(id, ModuleItem::TreeItemType::Net));
+
+        for(auto item : newRootList)
+            mRootItem->appendChild(item);
+        setIsModifying(false);
         endResetModel();
     }
 
@@ -199,6 +231,23 @@ namespace hal
         }
     }
 
+    ModuleItem* ModuleModel::createChildItem(u32 id, ModuleItem::TreeItemType itemType, BaseTreeItem *parentItem)
+    {
+        ModuleItem* retval = new ModuleItem(id, itemType);
+        mModuleItemMaps[(int)itemType]->insertMulti(id,retval);
+
+        if (!parentItem) parentItem = mRootItem;
+        QModelIndex index = getIndexFromItem(parentItem);
+        int row = parentItem->getChildCount();
+        mIsModifying = true;
+        beginInsertRows(index, row, row);
+        parentItem->appendChild(retval);
+        endInsertRows();
+        mIsModifying = false;
+
+        return retval;
+    }
+
     void ModuleModel::removeChildItem(ModuleItem *itemToRemove, BaseTreeItem *parentItem)
     {
         Q_ASSERT(itemToRemove);
@@ -221,7 +270,7 @@ namespace hal
 
         QModelIndex index = getIndexFromItem(parentItem);
 
-        int row = itemToRemove->row();
+        int row = itemToRemove->getOwnRow();
 
         mIsModifying = true;
         beginRemoveRows(index, row, row);
@@ -599,7 +648,7 @@ namespace hal
                     moduleItemToBeMoved = submItem;
                     QModelIndex index = getIndexFromItem(oldParentItem);
 
-                    int row = submItem->row();
+                    int row = submItem->getOwnRow();
 
                     mIsModifying = true;
                     beginRemoveRows(index, row, row);
@@ -703,32 +752,13 @@ namespace hal
         }
     }
 
-    ModuleItem* ModuleModel::getItem(u32 id, ModuleItem::TreeItemType type) const
-    {
-        return mModuleItemMaps[(int)type]->value(id);
-    }
-
-    ModuleItem* ModuleModel::createChildItem(u32 id, ModuleItem::TreeItemType itemType, BaseTreeItem *parentItem)
-    {
-        ModuleItem* retval = new ModuleItem(id, itemType);
-        mModuleItemMaps[(int)itemType]->insertMulti(id,retval);
-
-        if (!parentItem) parentItem = mRootItem;
-        QModelIndex index = getIndexFromItem(parentItem);
-        int row = parentItem->getChildCount();
-        mIsModifying = true;
-        beginInsertRows(index, row, row);
-        parentItem->appendChild(retval);
-        endInsertRows();
-        mIsModifying = false;
-
-        return retval;
-    }
-
-
     bool ModuleModel::isModifying()
     {
         return mIsModifying;
     }
-    
+
+    void ModuleModel::setIsModifying(bool pIsModifying)
+    {
+        mIsModifying = pIsModifying;
+    }
 }

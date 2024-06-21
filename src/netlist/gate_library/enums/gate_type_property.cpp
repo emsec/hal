@@ -11,6 +11,8 @@ namespace hal
                                                                                    {GateTypeProperty::ff, "ff"},
                                                                                    {GateTypeProperty::latch, "latch"},
                                                                                    {GateTypeProperty::ram, "ram"},
+                                                                                   {GateTypeProperty::fifo, "fifo"},
+                                                                                   {GateTypeProperty::shift_register, "shift_register"},
                                                                                    {GateTypeProperty::io, "io"},
                                                                                    {GateTypeProperty::dsp, "dsp"},
                                                                                    {GateTypeProperty::pll, "pll"},

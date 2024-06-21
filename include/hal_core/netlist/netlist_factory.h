@@ -65,6 +65,16 @@ namespace hal
         NETLIST_API std::unique_ptr<Netlist> load_netlist(const std::filesystem::path& netlist_file, const std::filesystem::path& gate_library_file = std::filesystem::path());
 
         /**
+         * Create a netlist from the given string. The string must contain a netlist in HAL-(JSON)-format.
+         * In the latter case the specified gate library file is mandatory.
+         *
+         * @param[in] netlist_string - The string containing the netlist.
+         * @param[in] gate_library_file - Path to the gate library file. Optional argument.
+         * @returns The netlist on success, nullptr otherwise.
+         */
+        NETLIST_API std::unique_ptr<Netlist> load_netlist_from_string(const std::string& netlist_string, const std::filesystem::path& gate_library_file = std::filesystem::path());
+
+        /**
          * Create a netlist from the given hal project.
          *
          * @param[in] project_dir - Path to the hal project directory.

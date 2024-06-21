@@ -917,6 +917,44 @@ namespace hal
 
                 return nl;
             }
+
+            std::unique_ptr<Netlist> deserialize_document(rapidjson::Document& document, GateLibrary* gatelib, std::string source,
+                                                          std::chrono::time_point<std::chrono::high_resolution_clock>& begin_time)
+            {
+                if (document.HasParseError())
+                {
+                    log_error("netlist_persistent", "invalid json string for deserialization");
+                    return nullptr;
+                }
+
+                if (document.HasMember("serialization_format_version"))
+                {
+                    encoded_format_version = document["serialization_format_version"].GetUint();
+                    if (encoded_format_version < SERIALIZATION_FORMAT_VERSION)
+                    {
+                        log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
+                    }
+                    else if (encoded_format_version > SERIALIZATION_FORMAT_VERSION)
+                    {
+                        log_warning("netlist_persistent", "the netlist was serialized with a newer version of the serializer, deserialization may contain errors.");
+                    }
+                }
+                else
+                {
+                    log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
+                }
+
+                auto netlist = deserialize(document, gatelib);
+
+                if (netlist)
+                {
+                    log_info("netlist_persistent", "deserialized '{}' in {:2.2f} seconds", source, DURATION(begin_time));
+                }
+
+                // event_controls::enable_all(true);
+                return netlist;
+            }
+
         }    // namespace
 
         bool serialize_to_file(const Netlist* nl, const std::filesystem::path& hal_file)
@@ -997,38 +1035,19 @@ namespace hal
             document.ParseStream<0, rapidjson::UTF8<>, rapidjson::FileReadStream>(is);
             fclose(pFile);
 
-            if (document.HasParseError())
-            {
-                log_error("netlist_persistent", "invalid json string for deserialization");
-                return nullptr;
-            }
+            return deserialize_document(document, gatelib, hal_file.string(), begin_time);
+        }
 
-            if (document.HasMember("serialization_format_version"))
-            {
-                encoded_format_version = document["serialization_format_version"].GetUint();
-                if (encoded_format_version < SERIALIZATION_FORMAT_VERSION)
-                {
-                    log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
-                }
-                else if (encoded_format_version > SERIALIZATION_FORMAT_VERSION)
-                {
-                    log_warning("netlist_persistent", "the netlist was serialized with a newer version of the serializer, deserialization may contain errors.");
-                }
-            }
-            else
-            {
-                log_warning("netlist_persistent", "the netlist was serialized with an older version of the serializer, deserialization may contain errors.");
-            }
+        std::unique_ptr<Netlist> deserialize_from_string(const std::string& hal_string, GateLibrary* gatelib)
+        {
+            auto begin_time = std::chrono::high_resolution_clock::now();
 
-            auto netlist = deserialize(document, gatelib);
+            // event_controls::enable_all(false);
 
-            if (netlist)
-            {
-                log_info("netlist_persistent", "deserialized '{}' in {:2.2f} seconds", hal_file.string(), DURATION(begin_time));
-            }
+            rapidjson::Document document;
+            document.Parse<0, rapidjson::UTF8<> >(hal_string.c_str());
 
-            // event_controls::enable_all(true);
-            return netlist;
+            return deserialize_document(document, gatelib, "source string", begin_time);
         }
     }    // namespace netlist_serializer
 }    // namespace hal

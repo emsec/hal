@@ -185,7 +185,7 @@ namespace hal
         return m_manager->delete_gate(gate);
     }
 
-    bool Netlist::is_gate_in_netlist(Gate* gate) const
+    bool Netlist::is_gate_in_netlist(const Gate* gate) const
     {
         return gate != nullptr && m_gates_set.find(gate) != m_gates_set.end();
     }
@@ -345,7 +345,7 @@ namespace hal
         return m_manager->delete_net(n);
     }
 
-    bool Netlist::is_net_in_netlist(Net* n) const
+    bool Netlist::is_net_in_netlist(const Net* n) const
     {
         return n != nullptr && m_nets_set.find(n) != m_nets_set.end();
     }
@@ -610,7 +610,7 @@ namespace hal
         return res;
     }
 
-    bool Netlist::is_module_in_netlist(Module* module) const
+    bool Netlist::is_module_in_netlist(const Module* module) const
     {
         return (module != nullptr) && (m_modules_set.find(module) != m_modules_set.end());
     }
@@ -649,7 +649,7 @@ namespace hal
         return m_manager->delete_grouping(g);
     }
 
-    bool Netlist::is_grouping_in_netlist(Grouping* n) const
+    bool Netlist::is_grouping_in_netlist(const Grouping* n) const
     {
         return n != nullptr && m_groupings_set.find(n) != m_groupings_set.end();
     }
@@ -667,7 +667,7 @@ namespace hal
 
     const std::vector<Grouping*>& Netlist::get_groupings() const
     {
-        return m_groupings;  
+        return m_groupings;
     }
 
     std::vector<Grouping*> Netlist::get_groupings(const std::function<bool(const Grouping*)>& filter) const

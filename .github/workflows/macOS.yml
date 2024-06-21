@@ -89,12 +89,18 @@ jobs:
         run: |
           mkdir -p build
           cd build
-          export PATH="/usr/local/opt/qt@5/bin:$PATH"
-          ls ..
-          cmake -G Ninja .. -DQt5_DIR=/usr/local/opt/qt@5/lib/cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DPL_GUI=ON -DCMAKE_C_COMPILER=/usr/local/opt/llvm@14/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm@14/bin/clang++
+          export PATH="$(brew --prefix qt@5)/bin:$PATH"
+          brew ls llvm@14
+          brew --prefix llvm@14
+          ls -l /usr/local
+          ls -l /opt/homebrew/opt
+          ls -l /opt/homebrew/opt/llvm@14
+          ls -l /opt/homebrew/opt/llvm@14/bin
+          ls -l /opt/homebrew/opt/llvm@14/bin/clang
+          cmake -G Ninja .. -DQt5_DIR="$(brew --prefix qt@5)/lib/cmake" -DCMAKE_BUILD_TYPE=Debug -DBUILD_ALL_PLUGINS=ON -DBUILD_TESTS=ON -DPL_GUI=ON -DCMAKE_C_COMPILER=$(brew --prefix llvm@14)/bin/clang -DCMAKE_CXX_COMPILER=$(brew --prefix llvm@14)/bin/clang++
         env:
-          LDFLAGS: "-L/usr/local/opt/qt@5/lib -L/usr/local/opt/llvm@14/lib -Wl,-rpath,/usr/local/opt/llvm@14/lib"
-          CPPFLAGS: "-I/usr/local/opt/llvm@14/include"
+          LDFLAGS: "-L$(brew --prefix qt@5)/lib -L$(brew --prefix llvm@14)/lib -Wl,-rpath,$(brew --prefix llvm@14)/lib"
+          CPPFLAGS: "-I$(brew --prefix llvm@14)/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true
@@ -107,12 +113,12 @@ jobs:
         # Execute the build.  You can specify a specific target with "--target <NAME>"
         run: |
           cd build
-          export PATH="/usr/local/opt/qt/bin:$PATH"
+          export PATH="$(brew --prefix qt@5)/bin:$PATH"
           export BUILD_TYPE=Debug
           cmake --build . --target all --clean-first --config $BUILD_TYPE
         env:
-          LDFLAGS: "-L/usr/local/opt/qt@5/lib -L/usr/local/opt/llvm@14/lib -Wl,-rpath,/usr/local/opt/llvm@14/lib"
-          CPPFLAGS: "-I/usr/local/opt/llvm@14/include"
+          LDFLAGS: "-L$(brew --prefix qt@5)/lib -L$(brew --prefix llvm@14)/lib -Wl,-rpath,$(brew --prefix llvm@14)/lib"
+          CPPFLAGS: "-I$(brew --prefix llvm@14)/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true
@@ -133,8 +139,8 @@ jobs:
         #  ninja -v hal_coverage
         # bash <(curl -s https://codecov.io/bash) -f hal_coverage.info.cleaned || echo "Codecov did not collect coverage reports"
         env:
-          LDFLAGS: "-L/usr/local/opt/qt@5/lib -L/usr/local/opt/llvm@14/lib -Wl,-rpath,/usr/local/opt/llvm@14/lib"
-          CPPFLAGS: "-I/usr/local/opt/llvm@14/include"
+          LDFLAGS: "-L$(brew --prefix qt@5)/lib -L$(brew --prefix llvm@14)/lib -Wl,-rpath,$(brew --prefix llvm@14)/lib"
+          CPPFLAGS: "-I$(brew --prefix llvm@14)/include"
           HAL_BASE_PATH: ${{runner.workspace}}/hal/build
           CCACHE_DIR: ${{runner.workspace}}/.ccache
           CCACHE_COMPRESS: true

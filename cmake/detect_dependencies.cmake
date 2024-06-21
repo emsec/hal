@@ -153,20 +153,33 @@ find_package(pybind11 2.7 CONFIG)
 if(${pybind11_FOUND})
     message(VERBOSE "Found pybind11 v${pybind11_VERSION}: ${pybind11_INCLUDE_DIRS}")
     message(VERBOSE "Found pybind11 >= 2.7")
-else()
+elseif(USE_VENDORED_PYBIND11)
     message(STATUS "pybind11 >= 2.7 not found, will build our provided version")
     add_subdirectory(deps/pybind11)
+else()
+    message(FATAL_ERROR "pybind11 >= 2.7 not found and USE_VENDORED_PYBIND11 is OFF")
 endif()
 
 # ###############################
 # ####   spdlog
 # ###############################
-message(STATUS "using spdlog from deps")
-set(spdlog_VERSION 1.9.2)
-add_library(spdlog::spdlog INTERFACE IMPORTED)
-set_target_properties(spdlog::spdlog PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog-${spdlog_VERSION}/include"
-)
+
+if(USE_VENDORED_SPDLOG)
+    message(STATUS "using spdlog from deps")
+    set(spdlog_VERSION 1.9.2)
+    add_library(spdlog::spdlog INTERFACE IMPORTED)
+    set_target_properties(spdlog::spdlog PROPERTIES
+        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/spdlog-${spdlog_VERSION}/include"
+    )
+else()
+    find_package(spdlog REQUIRED)
+    if(spdlog_FOUND)
+        get_target_property(SPDLOG_HEADERS_DIR spdlog::spdlog INTERFACE_INCLUDE_DIRECTORIES)
+        message(STATUS "Using system's spdlog headers at ${SPDLOG_HEADERS_DIR}")
+    else()
+        message(FATAL_ERROR "spdlog was not found and USE_VENDORED_SPDLOG is OFF")
+    endif()
+endif()
 
 # ###############################
 # ####   subprocess
@@ -259,7 +272,15 @@ endif(Z3_FOUND)
 # ###############################
 # ####   igraph
 # ###############################
-set(IGRAPH_SUBDIR "${CMAKE_SOURCE_DIR}/deps/igraph-0.9.10")
-add_subdirectory(${IGRAPH_SUBDIR})
-get_directory_property(IGRAPH_INCLUDES DIRECTORY ${IGRAPH_SUBDIR} DEFINITION IGRAPH_INCLUDES)
-get_directory_property(IGRAPH_LIB DIRECTORY ${IGRAPH_SUBDIR} DEFINITION IGRAPH_LIB)
+if(USE_VENDORED_IGRAPH)
+    set(IGRAPH_SUBDIR "${CMAKE_SOURCE_DIR}/deps/igraph-0.10.x")
+    add_subdirectory(${IGRAPH_SUBDIR})
+    get_directory_property(igraph_INCLUDES DIRECTORY ${IGRAPH_SUBDIR} DEFINITION IGRAPH_INCLUDES)
+    get_directory_property(igraph_LIBRARIES      DIRECTORY ${IGRAPH_SUBDIR} DEFINITION IGRAPH_LIB)
+    message(STATUS "Using igraph from ${IGRAPH_SUBDIR}")
+else()
+    find_package(igraph REQUIRED)
+    get_target_property(igraph_LIBRARIES igraph::igraph IMPORTED_LOCATION_RELEASE)
+    get_target_property(igraph_INCLUDES igraph::igraph INTERFACE_INCLUDE_DIRECTORIES)
+    message(STATUS "Using system's igraph from ${igraph_LIBRARIES}")
+endif()

@@ -39,8 +39,9 @@ namespace hal
                 u32 num_threads;
 
                 bool enforce_type_consistency;
+                bool has_known_groups = false;
             };
 
         }    // namespace processing
-    }        // namespace dataflow
-}
+    }    // namespace dataflow
+}    // namespace hal

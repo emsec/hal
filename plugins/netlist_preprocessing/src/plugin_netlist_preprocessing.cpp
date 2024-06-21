@@ -13,7 +13,6 @@
 #include "hal_core/netlist/netlist_utils.h"
 #include "hal_core/utilities/result.h"
 #include "hal_core/utilities/token_stream.h"
-
 #include "rapidjson/document.h"
 
 #include <fstream>
@@ -83,7 +82,8 @@ namespace hal
 
             if (original_inits.size() != 1)
             {
-                return ERR("unable to simplify lut init string for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": found " + std::to_string(original_inits.size()) + " init data strings but expected exactly 1."); 
+                return ERR("unable to simplify lut init string for gate " + g->get_name() + " with ID " + std::to_string(g->get_id()) + ": found " + std::to_string(original_inits.size())
+                           + " init data strings but expected exactly 1.");
             }
 
             const auto original_init = original_inits.front();
@@ -1275,8 +1275,10 @@ namespace hal
         return OK(counter);
     }
 
-    namespace {
-        struct ComponentData {
+    namespace
+    {
+        struct ComponentData
+        {
             std::string name;
             std::string type;
             u64 x;
@@ -1290,7 +1292,7 @@ namespace hal
             u32 line_number = 0;
 
             std::string line;
-            bool escaped    = false;
+            bool escaped = false;
 
             std::vector<Token<std::string>> parsed_tokens;
             while (std::getline(ss, line))
@@ -1339,7 +1341,7 @@ namespace hal
 
             return TokenStream(parsed_tokens, {}, {});
         }
-    
+
         Result<std::unordered_map<std::string, ComponentData>> parse_tokens(TokenStream<std::string>& ts)
         {
             ts.consume_until("COMPONENTS");
@@ -1349,7 +1351,7 @@ namespace hal
 
             u32 component_count;
             if (const auto res = utils::wrapped_stoul(component_count_str); res.is_ok())
-            {   
+            {
                 component_count = res.get();
             }
             else
@@ -1375,7 +1377,7 @@ namespace hal
                 ts.consume("PLACED");
                 ts.consume("FIXED");
                 ts.consume("(");
-                
+
                 if (const auto res = utils::wrapped_stoull(ts.consume().string); res.is_ok())
                 {
                     new_data_entry.x = res.get();
@@ -1403,7 +1405,7 @@ namespace hal
 
             return OK(component_data);
         }
-    }
+    }    // namespace
 
     Result<std::monostate> NetlistPreprocessingPlugin::parse_def_file(Netlist* nl, const std::filesystem::path& def_file)
     {
@@ -1468,4 +1470,101 @@ namespace hal
         return OK({});
     }
 
+    Result<u32> NetlistPreprocessingPlugin::unify_ff_outputs(Netlist* nl, const std::vector<Gate*>& ffs, GateType* inverter_type)
+    {
+        if (nl == nullptr)
+        {
+            return ERR("netlist is a nullptr");
+        }
+
+        if (inverter_type == nullptr)
+        {
+            const auto* gl = nl->get_gate_library();
+            const auto inv_types =
+                gl->get_gate_types([](const GateType* gt) { return gt->has_property(GateTypeProperty::c_inverter) && gt->get_input_pins().size() == 1 && gt->get_output_pins().size() == 1; });
+            if (inv_types.empty())
+            {
+                return ERR("gate library '" + gl->get_name() + "' of netlist does not contain an inverter gate");
+            }
+            inverter_type = inv_types.begin()->second;
+        }
+        else
+        {
+            if (inverter_type->get_gate_library() != nl->get_gate_library())
+            {
+                return ERR("inverter gate type '" + inverter_type->get_name() + "' of gate library '" + inverter_type->get_gate_library()->get_name() + "' does not belong to gate library '"
+                           + nl->get_gate_library()->get_name() + "' of provided netlist");
+            }
+
+            if (!inverter_type->has_property(GateTypeProperty::c_inverter))
+            {
+                return ERR("gate type '" + inverter_type->get_name() + "' of gate library '" + inverter_type->get_gate_library()->get_name() + "' is not an inverter gate type");
+            }
+
+            if (inverter_type->get_input_pins().size() != 1 || inverter_type->get_output_pins().size() != 1)
+            {
+                return ERR("inverter gate type '" + inverter_type->get_name() + "' of gate library '" + inverter_type->get_gate_library()->get_name()
+                           + "' has an invalid number of input pins or output pins");
+            }
+        }
+
+        auto inv_in_pin  = inverter_type->get_input_pins().front();
+        auto inv_out_pin = inverter_type->get_output_pins().front();
+
+        u32 ctr = 0;
+
+        const std::vector<Gate*>& gates = ffs.empty() ? nl->get_gates() : ffs;
+
+        for (auto* ff : gates)
+        {
+            auto* ff_type = ff->get_type();
+
+            if (!ff_type->has_property(GateTypeProperty::ff))
+            {
+                continue;
+            }
+
+            GatePin* state_pin     = nullptr;
+            GatePin* neg_state_pin = nullptr;
+
+            for (auto* o_pin : ff_type->get_output_pins())
+            {
+                if (o_pin->get_type() == PinType::state)
+                {
+                    state_pin = o_pin;
+                }
+                else if (o_pin->get_type() == PinType::neg_state)
+                {
+                    neg_state_pin = o_pin;
+                }
+            }
+
+            if (state_pin == nullptr || neg_state_pin == nullptr)
+            {
+                continue;
+            }
+
+            auto* neg_state_ep = ff->get_fan_out_endpoint(neg_state_pin);
+            if (neg_state_ep == nullptr)
+            {
+                continue;
+            }
+            auto* neg_state_net = neg_state_ep->get_net();
+
+            auto state_net = ff->get_fan_out_net(state_pin);
+            if (state_net == nullptr)
+            {
+                state_net = nl->create_net(ff->get_name() + "__STATE_NET__");
+                state_net->add_source(ff, state_pin);
+            }
+
+            auto* inv = nl->create_gate(inverter_type, ff->get_name() + "__NEG_STATE_INVERT__");
+            state_net->add_destination(inv, inv_in_pin);
+            neg_state_net->remove_source(neg_state_ep);
+            neg_state_net->add_source(inv, inv_out_pin);
+            ctr++;
+        }
+
+        return OK(ctr);
+    }
 }    // namespace hal

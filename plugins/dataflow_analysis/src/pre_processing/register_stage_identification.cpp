@@ -39,7 +39,7 @@ namespace hal
                     log_info("dataflow", "directional register stages: {}", ctx.name);
 
                     std::unordered_set<u32> unassigned_gates;
-                    for (const auto& g : netlist_abstr.all_sequential_gates)
+                    for (const auto& g : netlist_abstr.target_gates)
                     {
                         unassigned_gates.insert(g->get_id());
                     }
@@ -50,10 +50,10 @@ namespace hal
                         float cnt = 0;
                         std::unordered_map<u32, u32> stage_index_of_gate;
 
-                        for (const auto& sequential_gate : netlist_abstr.all_sequential_gates)
+                        for (const auto& sequential_gate : netlist_abstr.target_gates)
                         {
                             cnt++;
-                            progress_bar.print_progress(cnt / netlist_abstr.all_sequential_gates.size());
+                            progress_bar.print_progress(cnt / netlist_abstr.target_gates.size());
 
                             auto current = sequential_gate->get_id();
 
@@ -353,5 +353,5 @@ namespace hal
             }
 
         }    // namespace pre_processing
-    }        // namespace dataflow
+    }    // namespace dataflow
 }    // namespace hal

@@ -62,5 +62,15 @@ namespace hal
          * @returns The deserialized netlist on success, a `nullptr` otherwise.
          */
         NETLIST_API std::unique_ptr<Netlist> deserialize_from_file(const std::filesystem::path& hal_file, GateLibrary* gate_lib = nullptr);
+
+        /**
+         * Deserializes a string which contains a netlist in HAL-(JSON)-format using the provided gate library.
+         * If no gate library is provided, a gate library path must be specified within the string.
+         *
+         * @param[in] hal_string - The string containing the netlist in HAL-(JSON)-format.
+         * @param[in] gate_lib - The gate library. Defaults to a `nullptr`.
+         * @returns The deserialized netlist on success, a `nullptr` otherwise.
+         */
+        NETLIST_API std::unique_ptr<Netlist> deserialize_from_string(const std::string& hal_string, GateLibrary* gate_lib = nullptr);
     }    // namespace netlist_serializer
 }    // namespace hal
