@@ -134,7 +134,7 @@ namespace hal
                 if(init_comp == nullptr) //must be used with init -> create init component
                 {
                     std::string category = initPage->mCategory->text().toStdString();
-                    QStringList ids = initPage->mIdentifiers->toPlainText().split('\n', Qt::SkipEmptyParts);
+                    QStringList ids = initPage->mIdentifiers->toPlainText().split('\n', Qt::SplitBehaviorFlags::SkipEmptyParts);
                     std::vector<std::string> identifiers;
                     for(QString id : ids) identifiers.push_back(id.toStdString());
                     init_comp = parentComponent->create_init_component(category, identifiers);
