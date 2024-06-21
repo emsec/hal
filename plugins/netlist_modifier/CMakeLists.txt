@@ -9,6 +9,7 @@ if(PL_NETLIST_MODIFIER OR BUILD_ALL_PLUGINS)
         SHARED
         HEADER ${NETLIST_MODIFIER_INC}
         SOURCES ${NETLIST_MODIFIER_SRC} ${NETLIST_MODIFIER_PYTHON_SRC}
+        LINK_LIBRARIES PUBLIC gui netlist_simulator_controller
         PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/netlist_modifier.rst
     )
 endif()

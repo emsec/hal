@@ -1,8 +1,7 @@
 #pragma once
 
-#include "hal_core/plugin_system/plugin_interface_base.h"
 #include "hal_core/plugin_system/gui_extension_interface.h"
-
+#include "hal_core/plugin_system/plugin_interface_base.h"
 
 namespace hal
 {
@@ -11,10 +10,11 @@ namespace hal
 
     class PLUGIN_API NetlistSimulatorStudyPlugin : public BasePluginInterface
     {
-        GuiExtensionNetlistSimulatorStudy*      m_gui_extension;
+        GuiExtensionNetlistSimulatorStudy* m_gui_extension;
         std::unique_ptr<NetlistSimulatorController> m_simul_controller;
+
     public:
-        std::unique_ptr<Netlist>  m_original_netlist;
+        std::unique_ptr<Netlist> m_original_netlist;
         NetlistSimulatorStudyPlugin();
 
         std::string get_name() const override;
@@ -29,7 +29,6 @@ namespace hal
         std::set<std::string> get_dependencies() const override;
 
         bool simulate(std::filesystem::path sim_input, std::vector<const Net*> probes);
-
     };
 
     class GuiExtensionNetlistSimulatorStudy : public GuiExtensionInterface
@@ -44,6 +43,5 @@ namespace hal
         std::vector<PluginParameter> get_parameter() const override;
 
         void set_parameter(const std::vector<PluginParameter>& params) override;
-
     };
 }    // namespace hal

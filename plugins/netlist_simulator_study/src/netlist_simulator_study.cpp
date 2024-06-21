@@ -3,10 +3,12 @@
 #include "gui/gui_api/gui_api.h"
 #include "hal_core/netlist/netlist_factory.h"
 #include "hal_core/netlist/netlist_parser/netlist_parser_manager.h"
+#include "hal_core/netlist/project_manager.h"
 #include "hal_core/plugin_system/plugin_manager.h"
 #include "netlist_simulator_controller/netlist_simulator_controller.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 
+#include <QSettings>
 #include <algorithm>
 #include <ctime>
 #include <filesystem>
@@ -16,6 +18,8 @@
 
 namespace hal
 {
+    extern Netlist* gNetlist;
+
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
         return std::make_unique<NetlistSimulatorStudyPlugin>();
@@ -38,27 +42,9 @@ namespace hal
 
     void NetlistSimulatorStudyPlugin::on_load()
     {
-        // TODO: make this more user friendly
-        std::string netlist_path = "/home/ole/Documents/MPI/hal_project_for_testing/fulladderStructural_netlist.v";
-        std::string gatelib_path = "/home/ole/Documents/programs/hal/build/share/hal/gate_libraries/NangateOpenCellLibrary.hgl";
-
-        if (std::filesystem::exists(netlist_path) && std::filesystem::exists(gatelib_path))
-        {
-            m_original_netlist = netlist_factory::load_netlist(netlist_path, gatelib_path);
-        }
-        else
-        {
-            m_original_netlist = nullptr;
-        }
-
-        std::cout << m_original_netlist.get() << std::endl;
-
-        if (m_original_netlist)
-        {
-            m_gui_extension           = new GuiExtensionNetlistSimulatorStudy;
-            m_gui_extension->m_parent = this;
-            m_extensions.push_back(m_gui_extension);
-        }
+        m_gui_extension           = new GuiExtensionNetlistSimulatorStudy;
+        m_gui_extension->m_parent = this;
+        m_extensions.push_back(m_gui_extension);
     }
 
     void NetlistSimulatorStudyPlugin::on_unload()
@@ -84,16 +70,30 @@ namespace hal
 
     bool NetlistSimulatorStudyPlugin::simulate(std::filesystem::path sim_input, std::vector<const Net*> probes)
     {
-        if (!m_original_netlist) return false;
+        // read the original netlist
+        ProjectManager* pm = ProjectManager::instance();
+        std::filesystem::path project_dir_path(pm->get_project_directory().string());
 
-        if (!std::filesystem::exists(sim_input)) return false;
-        
+        if (!std::filesystem::exists(project_dir_path / "original/original.v"))
+        {
+            log_error("netlist_simulator_study", "Original netlist file is missing!");
+            return false;
+        }
+
+        m_original_netlist = netlist_factory::load_netlist(project_dir_path / "original/original.v", gNetlist->get_gate_library()->get_path());
+
+        if (!std::filesystem::exists(sim_input))
+        {
+            return false;
+        }
+
         enum
         {
             VCD,
             CSV,
             SAL
         } input_file_format;
+
         if (sim_input.extension() == ".vcd")
             input_file_format = VCD;
         else if (sim_input.extension() == ".csv")
@@ -105,6 +105,8 @@ namespace hal
             log_warning("netlist_simulator_study", "Simulation input file '{}’ has unknown extension.", sim_input.string());
             return false;
         }
+
+        // create new simulation controller
         NetlistSimulatorControllerPlugin* ctrlPlug = static_cast<NetlistSimulatorControllerPlugin*>(plugin_manager::get_plugin_instance("netlist_simulator_controller"));
         if (!ctrlPlug)
         {
@@ -170,6 +172,32 @@ namespace hal
 
         bool valid_inputs = true;
 
+        // read settings file and values
+        ProjectManager* pm = ProjectManager::instance();
+        std::filesystem::path project_dir_path(pm->get_project_directory().string());
+
+        if (!std::filesystem::exists(project_dir_path / "original/settings.ini"))
+        {
+            log_error("netlist_simulator_study", "Settings file is missing!");
+            return;
+        }
+
+        QSettings my_settings(QString::fromStdString(project_dir_path / "original/settings.ini"), QSettings::IniFormat);
+
+        if (!my_settings.contains("section1/t_probe"))
+        {
+            log_error("netlist_simulator_study", "Settings file is missing t_probe value!");
+            return;
+        }
+        bool PROBE_TYPE = my_settings.value("section1/t_probe").toBool();
+
+        if (!my_settings.contains("section1/max_probes"))
+        {
+            log_error("netlist_simulator_study", "Settings file is missing max_probes value!");
+            return;
+        }
+        int MAX_PROBES = my_settings.value("section1/max_probes").toInt();
+
         for (PluginParameter par : m_parameter)
         {
             if (par.get_tagname() == "net_picker" && par.get_value() == "clicked")
@@ -184,48 +212,64 @@ namespace hal
 
         if (sim_input == "")
         {
-            valid_inputs = false;
+            return;
         }
 
         std::vector<Net*> nets = guiAPI->getSelectedNets();
 
-        // get all the selected wires that are not global in or out
-        for (Net* net : nets)
+        // select only the allowed nets from the selected nets
+        if (PROBE_TYPE)
         {
-            if (net->is_global_input_net() || net->is_global_output_net())
+            // t probe model (n arbitrary probes)
+            for (Net* net : nets)
             {
-                continue;
-            }
-
-            /*std::vector<hal::Endpoint *> sources = net->get_destinations();
-            bool dff_as_source = false;
-
-            for(Endpoint* source: sources){
-                if(source->get_gate()->get_type()->get_name().find("DFF") != std::string::npos){
-                    dff_as_source = true;
-                    break;
+                if (net->is_global_input_net() || net->is_global_output_net())
+                {
+                    continue;
                 }
+                probes.push_back(net);
             }
-
-            if (!dff_as_source)
-            {
-                continue;
-            }*/
-            
-
-            probes.push_back(net);
         }
+        else
+        {
+            // scan chain model (n probes at FF output)
+            for (Net* net : nets)
+            {
+                if (net->is_global_input_net() || net->is_global_output_net())
+                {
+                    continue;
+                }
 
-        // only let the user to select at most 5 probes
-        const u8 MAX_PROBES = 5;
+                std::vector<hal::Endpoint*> sources = net->get_sources();
+                bool dff_as_source                  = false;
+
+                for (Endpoint* source : sources)
+                {
+                    if (source->get_gate()->get_type()->get_name().find("DFF") != std::string::npos)
+                    {
+                        dff_as_source = true;
+                        break;
+                    }
+                }
+
+                if (!dff_as_source)
+                {
+                    continue;
+                }
+
+                probes.push_back(net);
+            }
+        }
 
         std::vector<const Net*> probes_final_selection;
 
+        // verify that only MAX_PROBES are selected or select a random subset if checkbox is checked
         if (probes.size() > MAX_PROBES)
         {
             if (!net_picker_checkbox)
             {
-                valid_inputs = false;
+                log_error("netlist_simulator_study", "You selected more than " + std::to_string(MAX_PROBES) + " probes");
+                return;
             }
             else
             {
@@ -254,7 +298,8 @@ namespace hal
             }
         }
 
-        for (Net* net : m_parent->m_original_netlist.get()->get_nets())
+        // add all input and output nets to the selection so the results are kept in the verilator output
+        for (Net* net : gNetlist->get_nets())
         {
             if (net->is_global_input_net() || net->is_global_output_net())
             {
