@@ -49,6 +49,7 @@ namespace hal {
         }
         if (!changedItem->column())
         {
+            // time column
             int irow = changedItem->row();
             if (cur > 0 && irow == cur)
             {
@@ -70,6 +71,7 @@ namespace hal {
         }
         else
         {
+            // wave value column
             if (intCellValue(changedItem->row(),changedItem->column()) == sIllegalValue)
                 changedItem->setText("0");
         }
@@ -107,23 +109,35 @@ namespace hal {
     int WavedataTableEditor::intCellValue(int irow, int icol) const
     {
         QString txt;
-        if (item(irow,icol)) txt = item(irow,icol)->text();
-        if (txt.size() != 1) return sIllegalValue;
-
-        switch (txt.at(0).unicode())
+        int nBits = 1;
+        if (item(irow,icol))
+            txt = item(irow,icol)->text();
+        if (txt.isEmpty())
+            return sIllegalValue;
+        if (txt.size() == 1)
         {
-        case 'Z':
-        case 'z':
-            return -2;
-        case 'X':
-        case 'x':
-            return -1;
-        case '0':
-            return 0;
-        case '1':
-            return 1;
+            switch (txt.at(0).unicode())
+            {
+            case 'Z':
+            case 'z':
+                return -2;
+            case 'X':
+            case 'x':
+                return -1;
+            case '0':
+                return 0;
+            case '1':
+                return 1;
+            }
         }
-
+        if (icol > 0 && (nBits = mInputColumnHeader.at(icol-1).nets.size()) > 1)
+        {
+            int maxValue = 1 << nBits;
+            bool numberOk = true;
+            int hexVal = txt.toInt(&numberOk, 16);
+            if (numberOk && hexVal >= 0 && hexVal < maxValue)
+                return hexVal;
+        }
         return sIllegalValue;
     }
 
