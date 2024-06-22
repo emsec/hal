@@ -46,6 +46,5 @@ namespace hal
                 mIdentifiers->setText(ids);
             }
         }
-
     }
 }

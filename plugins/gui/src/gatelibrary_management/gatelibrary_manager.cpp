@@ -171,6 +171,8 @@ namespace hal
         mWizard = new GateLibraryWizard(mEditableGatelibrary, mTableModel->getGateTypeAtIndex(index.row()));
         mWizard->exec();
         initialize(mEditableGatelibrary);
+
+        mContentWidget->mTableView->selectRow(index.row());
     }
 
     void GateLibraryManager::handleAddWizard()

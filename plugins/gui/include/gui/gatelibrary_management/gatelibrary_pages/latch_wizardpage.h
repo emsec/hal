@@ -35,10 +35,9 @@
 
 namespace hal {
     class LatchWizardPage:public QWizardPage{
+        friend class GateLibraryWizard;
     public:
         LatchWizardPage(QWidget* parent = nullptr);
-        //void initializePage() override;
-        //int nextId() const override;
         void setData(GateType* gate);
 
     private:
@@ -46,8 +45,16 @@ namespace hal {
 
         QLineEdit* mDataIn;
         QLineEdit* mEnableOn;
+        QLineEdit* mAReset;
+        QLineEdit* mASet;
+        QLineEdit* mIntState;
+        QLineEdit* mNegIntState;
 
         QLabel* mLabDataIn;
         QLabel* mLabEnableOn;
+        QLabel* mLabAReset;
+        QLabel* mLabASet;
+        QLabel* mLabIntState;
+        QLabel* mLabNegIntState;
     };
 }

@@ -25,7 +25,7 @@
 
 #pragma once
 #include "gui/gatelibrary_management/gatelibrary_pages/generalinfo_wizardpage.h"
-
+#include "hal_core/netlist/gate_library/gate_type_component/ram_port_component.h"
 
 #include <QWizardPage>
 #include <QGridLayout>
@@ -39,6 +39,15 @@ namespace hal {
     class RAMPortWizardPage:public QWizardPage{
     public:
         RAMPortWizardPage(QWidget* parent = nullptr);
+
+        struct RAMPort{
+            QLineEdit* dataGroup;
+            QLineEdit* addressGroup;
+            QLineEdit* clockFunction;
+            QLineEdit* enableFunciton;
+            QLineEdit* isWritePort;
+        };
+        QList<RAMPort> getRamPorts();
         void setData(GateType* gate);
         void initializePage() override;
 
@@ -46,11 +55,7 @@ namespace hal {
         GateLibraryWizard* mWizard;
         QGridLayout* mLayout;
 
-        QLineEdit* mDataGroup;
-        QLineEdit* mAddressGroup;
-        QLineEdit* mClockFunction;
-        QLineEdit* mEnableFunciton;
-        QLineEdit* mIsWritePort;
+        QList<RAMPort> mRamPortEdits;
 
         QLabel* mLabDataGroup;
         QLabel* mLabAddressGroup;

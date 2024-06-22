@@ -36,10 +36,10 @@
 
 namespace hal {
     class FlipFlopWizardPage:public QWizardPage{
+        friend class GateLibraryWizard;
     public:
         FlipFlopWizardPage(QWidget* parent = nullptr);
         void initializePage() override;
-        //int nextId() const override;
         void setData(GateType* gate);
 
     private:

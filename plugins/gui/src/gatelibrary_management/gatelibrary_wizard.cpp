@@ -3,6 +3,8 @@
 #include "hal_core/utilities/enums.h"
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/netlist/gate_library/gate_type_component/lut_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/ff_component.h"
+#include "hal_core/netlist/gate_library/gate_type_component/latch_component.h"
 
 
 #include <QGridLayout>
@@ -67,13 +69,10 @@ namespace hal
 
     GateType* GateLibraryWizard::addGate()
     {
+        //Convert QStringList to std::set
         std::set<GateTypeProperty> properties_set;
         for(QString prop : generalInfoPage->getProperties())
-        {
-            //Convert QStringList to std::set
             properties_set.insert(enum_from_string<GateTypeProperty>(prop.toStdString()));
-
-        }
         //Set name, properties and the parent component
         mNewGateType = mGateLibrary->create_gate_type(generalInfoPage->getName().toStdString(), properties_set, setComponents());
         //Set pingroups and pins
@@ -130,78 +129,114 @@ namespace hal
             //Set components
             if(prop == "c_lut")
             {
-                std::unique_ptr<GateTypeComponent> init_comp(mGateType->get_component([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); }));
-                if(init_comp == nullptr) //must be used with init -> create init component
-                {
-                    std::string category = initPage->mCategory->text().toStdString();
-                    QStringList ids = initPage->mIdentifiers->toPlainText().split('\n', Qt::SplitBehaviorFlags::SkipEmptyParts);
-                    std::vector<std::string> identifiers;
-                    for(QString id : ids) identifiers.push_back(id.toStdString());
-                    init_comp = parentComponent->create_init_component(category, identifiers);
-
-                }
-                //create lut component
-                parentComponent->create_lut_component(std::move(init_comp), lutPage->mAscending->text()=="Ascending");
-                break;
-            }
-            if(prop == "ff")
-            {
-                //must be used with state -> create state component
-                //can be used with init -> create init if not empty
-                //create ff component
-
-
-                //std::unique_ptr<GateTypeComponent> ff_comp = GateTypeComponent::create_ff_component()
-            }
-            if(prop == "latch")
-            {
-                //must be used with state -> create state component
-                //create latch component
-                //std::unique_ptr<GateTypeComponent> latch_comp = GateTypeComponent::create_latch_component()
-                break;
-            }
-            if(prop == "ram")
-            {
-                //must be used with at least one ram_port -> create ram_port component
-                //can be used with init -> create init if not empty
-                //create ram component
-
-                //std::unique_ptr<GateTypeComponent> ram_comp = GateTypeComponent::create_ram_component();
-                break;
-            }
-            /*if(prop == "mac")
-            {
-                std::unique_ptr<GateTypeComponent> mac_comp = GateTypeComponent::create_mac_component();
-                break;
-            }*/
-
-            //INIT is NOT in enum GateTypeProperty!
-            /*if(prop == "init")
-            {
-                std::string category = initPage->mCategory->text().toStdString();
-                QStringList ids = initPage->mIdentifiers->toPlainText().split('\n', Qt::SkipEmptyParts);
                 std::vector<std::string> identifiers;
-                for(QString id : ids) identifiers.push_back(id.toStdString());
-                std::unique_ptr<GateTypeComponent> init_comp = GateTypeComponent::create_init_component(category, identifiers);
-                return init_comp;
-                break;
-            }*/
-
-            //STATE is NOT in enum GateTypeProperty!
-            /*if(prop == "state")
+                for (QString id : initPage->mIdentifiers->toPlainText().split('\n', Qt::SkipEmptyParts) ) {
+                    identifiers.push_back(id.toStdString());
+                }
+                std::unique_ptr<GateTypeComponent> init_component = GateTypeComponent::create_init_component(initPage->mCategory->text().toStdString(), identifiers);
+                parentComponent = GateTypeComponent::create_lut_component(std::move(init_component), lutPage->mAscending->text() == "Ascending");
+            }
+            else if(prop == "ff")
             {
-                //std::unique_ptr<GateTypeComponent> state_comp = GateTypeComponent::create_state_component()
-                break;
-            }*/
+                std::vector<std::string> identifiers;
+                for (QString id : initPage->mIdentifiers->toPlainText().split('\n', Qt::SkipEmptyParts) ) {
+                    identifiers.push_back(id.toStdString());
+                }
+                std::unique_ptr<GateTypeComponent> init_component = GateTypeComponent::create_init_component(initPage->mCategory->text().toStdString(), identifiers);
+                std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(std::move(init_component),
+                                                                                                               statePage->mStateIdentifier->text().toStdString(),
+                                                                                                               statePage->mNegStateIdentifier->text().toStdString());
+                BooleanFunction next_state_bf;
+                BooleanFunction clock_bf;
 
-            //RAM_PORT is NOT in enum GateTypeProperty!
-            /*if(prop == "ram_port")
+                auto next_state_res = BooleanFunction::from_string(ffPage->mNextState->text().toStdString());
+                auto clock_bf_res = BooleanFunction::from_string(ffPage->mClock->text().toStdString());
+
+                if(next_state_res.is_ok()) next_state_bf = next_state_res.get();
+                if(clock_bf_res.is_ok()) clock_bf = clock_bf_res.get();
+
+                std::unique_ptr<GateTypeComponent> component = GateTypeComponent::create_ff_component(std::move(state_component),
+                                                                                                      next_state_bf,
+                                                                                                      clock_bf);
+                FFComponent* ff_component = component->convert_to<FFComponent>();
+
+                BooleanFunction async_reset;
+                auto async_reset_res = BooleanFunction::from_string(ffPage->mAReset->text().toStdString());
+                if(async_reset_res.is_ok()) async_reset = async_reset_res.get();
+                ff_component->set_async_reset_function(async_reset);
+
+                BooleanFunction async_set;
+                auto async_set_res = BooleanFunction::from_string(ffPage->mASet->text().toStdString());
+                if(async_set_res.is_ok()) async_set = async_set_res.get();
+                ff_component->set_async_set_function(async_set);
+
+                const auto behav_state = enum_from_string<AsyncSetResetBehavior>(ffPage->mIntState->text().toStdString(), AsyncSetResetBehavior::undef);
+                const auto behav_neg_state = enum_from_string<AsyncSetResetBehavior>(ffPage->mNegIntState->text().toStdString(), AsyncSetResetBehavior::undef);
+                ff_component->set_async_set_reset_behavior(behav_state, behav_neg_state);
+                parentComponent = std::move(component);
+            }
+            else if(prop == "latch")
             {
-                //std::unique_ptr<GateTypeComponent> ram_port_comp = GateTypeComponent::create_ram_port_component()
-                break;
-            }*/
+                std::unique_ptr<GateTypeComponent> state_component = GateTypeComponent::create_state_component(nullptr,
+                                                                                                               statePage->mStateIdentifier->text().toStdString(),
+                                                                                                               statePage->mNegStateIdentifier->text().toStdString());
+                std::unique_ptr<GateTypeComponent> component = GateTypeComponent::create_latch_component(std::move(state_component));
+                LatchComponent* latch_component = component->convert_to<LatchComponent>();
+
+                BooleanFunction data_in_bf;
+                BooleanFunction enable_bf;
+
+                auto data_in_res = BooleanFunction::from_string(latchPage->mDataIn->text().toStdString());
+                auto enable_res = BooleanFunction::from_string(latchPage->mEnableOn->text().toStdString());
+
+                if(data_in_res.is_ok()) data_in_bf = data_in_res.get();
+                if(enable_res.is_ok()) enable_bf = enable_res.get();
+
+                BooleanFunction async_reset;
+                auto async_reset_res = BooleanFunction::from_string(latchPage->mAReset->text().toStdString());
+                if(async_reset_res.is_ok()) async_reset = async_reset_res.get();
+                latch_component->set_async_reset_function(async_reset);
+
+                BooleanFunction async_set;
+                auto async_set_res = BooleanFunction::from_string(latchPage->mASet->text().toStdString());
+                if(async_set_res.is_ok()) async_set = async_set_res.get();
+                latch_component->set_async_set_function(async_set);
+
+                const auto behav_state = enum_from_string<AsyncSetResetBehavior>(latchPage->mIntState->text().toStdString(), AsyncSetResetBehavior::undef);
+                const auto behav_neg_state = enum_from_string<AsyncSetResetBehavior>(latchPage->mNegIntState->text().toStdString(), AsyncSetResetBehavior::undef);
+                latch_component->set_async_set_reset_behavior(behav_state, behav_neg_state);
+
+                parentComponent = std::move(component);
+            }
+            else if(prop == "ram")
+            {
+                std::unique_ptr<GateTypeComponent> sub_component = nullptr;
+                std::vector<std::string> identifiers;
+                for (QString id : initPage->mIdentifiers->toPlainText().split('\n', Qt::SkipEmptyParts) )
+                    identifiers.push_back(id.toStdString());
+                sub_component = GateTypeComponent::create_init_component(initPage->mCategory->text().toStdString(), identifiers);
+
+                for (RAMPortWizardPage::RAMPort rpEdit : ramportPage->getRamPorts()) {
+                    BooleanFunction clocked_on_bf;
+                    auto clocked_on_res = BooleanFunction::from_string(rpEdit.clockFunction->text().toStdString());
+                    if(clocked_on_res.is_ok()) clocked_on_bf = clocked_on_res.get();
+
+                    BooleanFunction enabled_on_bf;
+                    auto enabled_on_res = BooleanFunction::from_string(rpEdit.enableFunciton->text().toStdString());
+                    if(enabled_on_res.is_ok()) enabled_on_bf = enabled_on_res.get();
+
+                    sub_component = GateTypeComponent::create_ram_port_component(
+                                std::move(sub_component),
+                                rpEdit.dataGroup->text().toStdString(),
+                                rpEdit.addressGroup->text().toStdString(),
+                                clocked_on_bf,
+                                enabled_on_bf,
+                                rpEdit.isWritePort->text().toStdString() == "True");
+                }
+                parentComponent = GateTypeComponent::create_ram_component(std::move(sub_component), ramPage->mBitSize->text().toInt());
+            }
         }
-        return parentComponent;
+        return std::move(parentComponent);
     }
 
     int GateLibraryWizard::nextId() const
@@ -220,14 +255,14 @@ namespace hal
             if(properties.contains("latch")) return Latch;
             else if(properties.contains("c_lut")) return LUT;
             else if(properties.contains("ram")) return RAM;
-            else return BoolFunc;
+            else return State;
         case Latch:
             if(properties.contains("c_lut")) return LUT;
             else if(properties.contains("ram")) return RAM;
-            else return BoolFunc;
+            else return State;
         case LUT:
             if(properties.contains("ram")) return RAM;
-            else return BoolFunc;
+            else return Init;
         case RAM:
             return RAMPort;
         case RAMPort:

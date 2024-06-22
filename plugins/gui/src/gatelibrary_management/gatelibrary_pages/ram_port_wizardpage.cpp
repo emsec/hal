@@ -1,7 +1,6 @@
 ﻿#include "gui/gatelibrary_management/gatelibrary_pages/ram_port_wizardpage.h"
 #include "gui/gatelibrary_management/gatelibrary_wizard.h"
 #include "gui/gatelibrary_management/gatelibrary_label.h"
-#include "hal_core/netlist/gate_library/gate_type_component/ram_port_component.h"
 
 namespace hal
 {
@@ -10,7 +9,6 @@ namespace hal
         setTitle("RAM Port");
         setSubTitle("Enter parameters for RAM Port component");
         mLayout = new QGridLayout(this);
-
 
         /*mDataGroup = new QLineEdit(this);
         mAddressGroup = new QLineEdit(this);
@@ -57,11 +55,12 @@ void RAMPortWizardPage::initializePage(){
             ramPortCnt++;
             mLayout->addWidget(new GateLibraryLabel(false, QString("RAM Port %1").arg(ramPortCnt), this), 6*(ramPortCnt-1), 0);
 
-            mDataGroup = new QLineEdit(this);
-            mAddressGroup = new QLineEdit(this);
-            mClockFunction = new QLineEdit(this);
-            mEnableFunciton = new QLineEdit(this);
-            mIsWritePort = new QLineEdit(this);
+            RAMPort rp;
+            rp.dataGroup = new QLineEdit(this);
+            rp.addressGroup = new QLineEdit(this);
+            rp.clockFunction = new QLineEdit(this);
+            rp.enableFunciton = new QLineEdit(this);
+            rp.isWritePort = new QLineEdit(this);
 
             mLabDataGroup = new QLabel("Name of the data pingroup: ");
             mLabAddressGroup = new QLabel("Name of the address pingroup: ");
@@ -70,23 +69,24 @@ void RAMPortWizardPage::initializePage(){
             mLabIsWritePort = new QLabel("Is a write port: ");
 
             mLayout->addWidget(mLabDataGroup, 6*(ramPortCnt-1)+1, 0);
-            mLayout->addWidget(mDataGroup, 6*(ramPortCnt-1)+1, 1);
+            mLayout->addWidget(rp.dataGroup, 6*(ramPortCnt-1)+1, 1);
             mLayout->addWidget(mLabAddressGroup, 6*(ramPortCnt-1)+2, 0);
-            mLayout->addWidget(mAddressGroup, 6*(ramPortCnt-1)+2, 1);
+            mLayout->addWidget(rp.addressGroup, 6*(ramPortCnt-1)+2, 1);
             mLayout->addWidget(mLabClockFunction, 6*(ramPortCnt-1)+3, 0);
-            mLayout->addWidget(mClockFunction, 6*(ramPortCnt-1)+3, 1);
+            mLayout->addWidget(rp.clockFunction, 6*(ramPortCnt-1)+3, 1);
             mLayout->addWidget(mLabEnableFunciton, 6*(ramPortCnt-1)+4, 0);
-            mLayout->addWidget(mEnableFunciton, 6*(ramPortCnt-1)+4, 1);
+            mLayout->addWidget(rp.enableFunciton, 6*(ramPortCnt-1)+4, 1);
             mLayout->addWidget(mLabIsWritePort, 6*(ramPortCnt-1)+5, 0);
-            mLayout->addWidget(mIsWritePort, 6*(ramPortCnt-1)+5, 1);
+            mLayout->addWidget(rp.isWritePort, 6*(ramPortCnt-1)+5, 1);
 
             if(!ram_ports.empty()) {
                 auto ram_port = ram_ports[ramPortCnt-1]->convert_to<RAMPortComponent>();
-                mDataGroup->setText(QString::fromStdString(ram_port->get_data_group()));
-                mAddressGroup->setText(QString::fromStdString(ram_port->get_address_group()));
-                mClockFunction->setText(QString::fromStdString(ram_port->get_clock_function().to_string()));
-                mEnableFunciton->setText(QString::fromStdString(ram_port->get_clock_function().to_string()));
-                mIsWritePort->setText(ram_port->is_write_port() ? "True":"False");
+                rp.dataGroup->setText(QString::fromStdString(ram_port->get_data_group()));
+                rp.addressGroup->setText(QString::fromStdString(ram_port->get_address_group()));
+                rp.clockFunction->setText(QString::fromStdString(ram_port->get_clock_function().to_string()));
+                rp.enableFunciton->setText(QString::fromStdString(ram_port->get_clock_function().to_string()));
+                rp.isWritePort->setText(ram_port->is_write_port() ? "True":"False");
+                mRamPortEdits.append(rp);
             }
         }
     }
@@ -96,5 +96,9 @@ void RAMPortWizardPage::initializePage(){
 
     void RAMPortWizardPage::setData(GateType *gate){
         mGate = gate;
+    }
+
+    QList<RAMPortWizardPage::RAMPort> RAMPortWizardPage::getRamPorts(){
+        return mRamPortEdits;
     }
 }
