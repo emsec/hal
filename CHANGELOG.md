@@ -74,6 +74,7 @@ All notable changes to this project will be documented in this file.
   * added pin types `status`, `error`, `error_detection`, `done`, and `control`
   * added optional filter to `Net::get_num_of_sources` and `Net::get_num_of_destinations`
   * added function `unify_ff_outputs` to netlist preprocessing plugin
+  * added function `replace_gate_type` to gate library
   * changed supported input file formats for import from hard coded list to list provided by loadable parser plugins
   * changed behavior of import netlist dialog, suggest only non-existing directory names and loop until an acceptable name was entered
   * changed appearance and behavior of import project dialog, make sure existing hal projects don't get overwritten
