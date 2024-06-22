@@ -493,7 +493,7 @@ namespace hal {
 
     void PageInputData::initializePage()
     {
-        mTableEditor->setup(mController->get_input_column_headers());
+        mTableEditor->setup(mController->get_input_column_headers(), mController->is_no_clock_used());
         handleRadioToggled(true);
     }
 

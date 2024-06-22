@@ -108,6 +108,11 @@ namespace hal {
         mNoClockUsed = true;
     }
 
+    bool SimulationInput::is_no_clock_used() const
+    {
+        return mNoClockUsed;
+    }
+
     void SimulationInput::dump(std::string filename) const
     {
         FILE* of = stderr;

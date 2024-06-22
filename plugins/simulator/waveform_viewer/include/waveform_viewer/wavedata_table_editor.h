@@ -25,7 +25,7 @@ namespace hal {
     public:
         WavedataTableEditor(QWidget* parent = nullptr);
 
-        void setup(const std::vector<NetlistSimulatorController::InputColumnHeader>& inpColHeads);
+        void setup(const std::vector<NetlistSimulatorController::InputColumnHeader>& inpColHeads, bool omitClock);
 
         int validLines() const;
 

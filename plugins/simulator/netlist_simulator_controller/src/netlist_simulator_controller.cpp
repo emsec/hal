@@ -261,6 +261,11 @@ namespace hal
         checkReadyState();
     }
 
+    bool NetlistSimulatorController::is_no_clock_used() const
+    {
+        return mSimulationInput->is_no_clock_used();
+    }
+
     u32 NetlistSimulatorController::add_trigger_time(const std::vector<WaveData*>& trigger_waves, const std::vector<int>& trigger_on_values)
     {
         if (trigger_waves.empty())

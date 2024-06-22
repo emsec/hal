@@ -128,6 +128,12 @@ public:
     void set_no_clock_used();
 
     /**
+     * Check wether no clock signal will be automatically generated as simulation input. Either there
+     * is no clock present or the clock signal will be passed as normal waveform input.
+     */
+    bool is_no_clock_used() const;
+
+    /**
      * Add waveform group. Netlist must not be empty. First net in list is considered the lowest significant bit.
      * @param name The waveform group name
      * @param nets List of nets for group

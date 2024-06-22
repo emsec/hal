@@ -130,6 +130,12 @@ namespace hal {
         void set_no_clock_used();
 
         /**
+         * Check wether no clock signal will be automatically generated as simulation input. Either there
+         * is no clock present or the clock signal will be passed as normal waveform input.
+         */
+        bool is_no_clock_used() const;
+
+        /**
          * Tests whether net is an input net
          * @param[in] n pointer to net
          * @return true if net is input net, false otherwise

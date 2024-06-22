@@ -11,7 +11,7 @@ namespace hal {
         : QTableWidget(parent), mMaxTime(0)
     {;}
 
-    void WavedataTableEditor::setup(const std::vector<NetlistSimulatorController::InputColumnHeader> &inpColHeads)
+    void WavedataTableEditor::setup(const std::vector<NetlistSimulatorController::InputColumnHeader> &inpColHeads, bool omitClock)
     {
         int n = inpColHeads.size()+1;
         setColumnCount(n);
@@ -19,6 +19,7 @@ namespace hal {
         QStringList headerLabel;
         for (NetlistSimulatorController::InputColumnHeader ich : inpColHeads)
         {
+            if (omitClock && ich.is_clock) continue;
             QString colName = QString::fromStdString(ich.name);
             if (ich.nets.size() > 1) colName += QString("[%1:0]").arg(ich.nets.size()-1);
             mInputColumnHeader.append(ich);
