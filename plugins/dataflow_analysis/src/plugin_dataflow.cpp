@@ -13,25 +13,30 @@ namespace hal
 {
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
-        return std::make_unique<plugin_dataflow>();
+        return std::make_unique<DataflowPlugin>();
     }
 
-    std::string plugin_dataflow::get_name() const
+    std::string DataflowPlugin::get_name() const
     {
         return std::string("dataflow");
     }
 
-    std::string plugin_dataflow::get_description() const
+    std::string DataflowPlugin::get_version() const
     {
-        return "Dataflow analysis for gate-level netlist reverse engineering";
+        return std::string("0.3");
     }
 
-    std::string plugin_dataflow::get_version() const
+    std::string DataflowPlugin::get_description() const
     {
-        return std::string("0.1");
+        return "Dataflow analysis tool DANA to recover word-level structures such as registers from gate-level netlists.";
     }
 
-    plugin_dataflow::plugin_dataflow()
+    std::set<std::string> DataflowPlugin::get_dependencies() const
+    {
+        return {};
+    }
+
+    DataflowPlugin::DataflowPlugin()
     {
         m_extensions.push_back(new CliExtensionDataflow());
         m_extensions.push_back(new GuiExtensionDataflow());
@@ -56,7 +61,7 @@ namespace hal
     {
         UNUSED(args);
 
-        dataflow::Configuration config;
+        dataflow::Configuration config(nl);
         std::string path;
 
         if (args.is_option_set("--path"))
@@ -91,7 +96,7 @@ namespace hal
             }
         }
 
-        auto grouping_res = dataflow::analyze(nl, config);
+        auto grouping_res = dataflow::analyze(config);
         if (grouping_res.is_error())
         {
             log_error("dataflow", "dataflow analysis failed:\n{}", grouping_res.get_error().get());
@@ -125,12 +130,12 @@ namespace hal
                 std::string s;
                 while (std::getline(f, s, ','))
                 {
-                    m_config.expected_sizes.emplace_back(std::stoi(s));
+                    m_expected_sizes.emplace_back(std::stoi(s));
                 }
             }
             else if (par.get_tagname() == "min_group_size")
             {
-                m_config.min_group_size = atoi(par.get_value().c_str());
+                m_min_group_size = atoi(par.get_value().c_str());
             }
             else if (par.get_tagname() == "write_txt")
             {
@@ -150,7 +155,7 @@ namespace hal
             }
             else if (par.get_tagname() == "register_stage_identification")
             {
-                m_config.enable_register_stages = (par.get_value() == "true");
+                m_enable_stages = (par.get_value() == "true");
             }
             else if (par.get_tagname() == "exec")
             {
@@ -178,7 +183,13 @@ namespace hal
 
         dataflow::GuiLayoutLocker gll;
 
-        auto grouping_res = dataflow::analyze(nl, m_config);
+        auto config = dataflow::Configuration(nl)
+                          .with_expected_sizes(m_expected_sizes)
+                          .with_min_group_size(m_min_group_size)
+                          .with_stage_identification(m_enable_stages)
+                          .with_control_pin_types({PinType::clock, PinType::enable, PinType::reset, PinType::set})
+                          .with_gate_types({GateTypeProperty::ff});
+        auto grouping_res = dataflow::analyze(config);
         if (grouping_res.is_error())
         {
             log_error("dataflow", "dataflow analysis failed:\n{}", grouping_res.get_error().get());
@@ -214,45 +225,6 @@ namespace hal
         {
             GuiExtensionDataflow::s_progress_indicator_function(100, "dataflow analysis finished");
         }
-    }
-
-    std::vector<std::vector<Gate*>> plugin_dataflow::execute(Netlist* nl,
-                                                             std::string output_path,
-                                                             const std::vector<u32> sizes,
-                                                             bool draw_graph,
-                                                             bool create_modules,
-                                                             bool register_stage_identification,
-                                                             std::vector<std::vector<u32>> known_groups,
-                                                             u32 min_group_size)
-    {
-        auto config =
-            dataflow::Configuration().with_min_group_size(min_group_size).with_expected_sizes(sizes).with_known_groups(known_groups).with_register_stage_identification(register_stage_identification);
-
-        const auto grouping_res = dataflow::analyze(nl, config);
-        if (grouping_res.is_error())
-        {
-            log_error("dataflow", "dataflow analysis failed:\n{}", grouping_res.get_error().get());
-            return {};
-        }
-        const auto grouping = grouping_res.get();
-
-        if (draw_graph)
-        {
-            if (const auto res = grouping.write_dot(output_path); res.is_error())
-            {
-                log_error("dataflow", "could not write DOT graph to file:\n{}", res.get_error().get());
-            }
-        }
-
-        if (create_modules)
-        {
-            if (const auto res = grouping.create_modules(); res.is_error())
-            {
-                log_error("dataflow", "could not create modules:\n{}", res.get_error().get());
-            }
-        }
-
-        return grouping.get_groups_as_list();
     }
 
     std::function<void(int, const std::string&)> GuiExtensionDataflow::s_progress_indicator_function = nullptr;

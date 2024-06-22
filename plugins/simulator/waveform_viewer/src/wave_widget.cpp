@@ -26,7 +26,7 @@
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
 #include "gui/selection_details_widget/selection_details_widget.h"
-#include "gui/selection_details_widget/tree_navigation/selection_tree_item.h"
+#include "gui/module_model/module_item.h"
 #include "gui/gui_globals.h"
 
 namespace hal {
@@ -163,11 +163,11 @@ namespace hal {
         qApp->processEvents();
     }
 
-    void WaveWidget::handleSelectionHighlight(const QVector<const SelectionTreeItem*>& highlight)
+    void WaveWidget::handleSelectionHighlight(const QVector<const ModuleItem*>& highlight)
     {
         QSet<u32> hlIds;
-        for (const SelectionTreeItem* sti : highlight)
-            if (sti->itemType() == SelectionTreeItem::NetItem)
+        for (const ModuleItem* sti : highlight)
+            if (sti->getType() == ModuleItem::TreeItemType::Net)
                 hlIds.insert(sti->id());
 
         mTreeView->setWaveSelection(hlIds);
@@ -270,6 +270,7 @@ namespace hal {
                         wavesToAdd.append(mWaveDataList->at(iwave));
                 }
                 mTreeModel->addWaves(wavesToAdd);
+                mGraphicsCanvas->handleTimeframeChanged(&mWaveDataList->timeFrame());
             }
         }
         if (sd) delete sd;

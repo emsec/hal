@@ -23,6 +23,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/**
+ * @file neighborhood.h 
+ * @brief This file contains functions related to neighborhoods in graphs.
+ */
+
 #pragma once
 
 #include "graph_algorithm/netlist_graph.h"
@@ -39,7 +44,8 @@ namespace hal
     namespace graph_algorithm
     {
         /**
-         * Compute the neighborhood of the given order for each of the specified gates within the given netlist graph.
+         * @brief Compute the neighborhood of the given order for each of the specified gates within the given netlist graph.
+         * 
          * For order 0, only the vertex itself is returned. For order 1, the vertex itself and all vertices that are its direct predecessors and/or successors (depending on the specified direction). For order 2, the neighborhood of order 1 plus all direct predecessors and/or successors of the vertices in order 1 are returned, etc.
          * Returns each neighborhood as a vector of vertices in the netlist graph.
          * 
@@ -53,7 +59,8 @@ namespace hal
         Result<std::vector<std::vector<u32>>> get_neighborhood(NetlistGraph* graph, const std::vector<Gate*>& start_gates, u32 order, NetlistGraph::Direction direction, u32 min_dist = 0);
 
         /**
-         * Compute the neighborhood of the given order for each of the specified vertices within the given netlist graph.
+         * @brief Compute the neighborhood of the given order for each of the specified vertices within the given netlist graph.
+         * 
          * For order 0, only the vertex itself is returned. For order 1, the vertex itself and all vertices that are its direct predecessors and/or successors (depending on the specified direction). For order 2, the neighborhood of order 1 plus all direct predecessors and/or successors of the vertices in order 1 are returned, etc.
          * Returns each neighborhood as a vector of vertices in the netlist graph.
          * 
@@ -67,7 +74,8 @@ namespace hal
         Result<std::vector<std::vector<u32>>> get_neighborhood(NetlistGraph* graph, const std::vector<u32>& start_vertices, u32 order, NetlistGraph::Direction direction, u32 min_dist = 0);
 
         /**
-         * Compute the neighborhood of the given order for each of the specified vertices within the given netlist graph.
+         * @brief Compute the neighborhood of the given order for each of the specified vertices within the given netlist graph.
+         * 
          * For order 0, only the vertex itself is returned. For order 1, the vertex itself and all vertices that are its direct predecessors and/or successors (depending on the specified direction). For order 2, the neighborhood of order 1 plus all direct predecessors and/or successors of the vertices in order 1 are returned, etc.
          * Returns each neighborhood as a vector of vertices in the netlist graph.
          * 

@@ -18,4 +18,14 @@ namespace hal
     {
         return std::string("0.2");
     }
+
+    std::string GraphAlgorithmPlugin::get_description() const
+    {
+        return "Graph algorithms based on igraph operating on a netlist graph abstraction.";
+    }
+
+    std::set<std::string> GraphAlgorithmPlugin::get_dependencies() const
+    {
+        return {};
+    }
 }    // namespace hal

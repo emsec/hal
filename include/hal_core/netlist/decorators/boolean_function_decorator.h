@@ -33,6 +33,11 @@
 
 namespace hal
 {
+    /**
+     * A Boolean function decorator that provides functionality to operate on the associated Boolean function.
+     *
+     * @ingroup decorators
+     */
     class NETLIST_API BooleanFunctionDecorator
     {
     public:

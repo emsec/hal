@@ -61,7 +61,7 @@ namespace hal
          * @param id - The id of the netlist item this ModuleItem represents
          * @param type - The type of the netlist item
          */
-        ModuleItem(const u32 id, const TreeItemType type = TreeItemType::Module);
+        ModuleItem(const u32 id, const TreeItemType type);
 
         /**
          * Given a set of ModuleItems (in a map [id]->[ModuleItem]) this function adds each ModuleItem of this set as
@@ -78,13 +78,6 @@ namespace hal
          * @returns the data in the specified column of this ModuleItem
          */
         QVariant getData(int column) const override;
-
-        /**
-         * Gets the index of this ModuleItem in the list of children ModuleItems of its parent.
-         *
-         * @returns the index in the parents ModuleItem children list
-         */
-        int row() const;
 
         /**
          * Gets the name of the netlist item this ModuleItem represents.

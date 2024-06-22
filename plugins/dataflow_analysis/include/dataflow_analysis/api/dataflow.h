@@ -23,6 +23,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/**
+ * @file dataflow.h
+ * @brief This file contains the function that analyses the dataflow of a gate-level netlist.
+ */
+
 #pragma once
 
 #include "dataflow_analysis/api/configuration.h"
@@ -39,12 +44,14 @@ namespace hal
     namespace dataflow
     {
         /**
-         * Analyze the datapath to identify word-level registers in the given netlist.
+         * @brief Analyze the gate-level netlist to identify word-level registers.
          * 
-         * @param[in] nl - The netlist.
+         * Reconstructs registers based on properties such as the control inputs of, e.g., their flip-flops and common successors/predecessors.
+         * Operates on an abstraction of the netlist that, e.g., contains only flip-flops and connections between two flip-flops only if they are connected through combinational logic.
+         * 
          * @param[in] config - The dataflow analysis configuration.
          * @returns Ok() and the dataflow analysis result on success, an error otherwise.
          */
-        hal::Result<dataflow::Result> analyze(Netlist* nl, const Configuration& config = Configuration());
+        hal::Result<dataflow::Result> analyze(const Configuration& config);
     }    // namespace dataflow
 }    // namespace hal

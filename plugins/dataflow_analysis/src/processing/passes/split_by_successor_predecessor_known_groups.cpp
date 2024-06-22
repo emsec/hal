@@ -1,0 +1,82 @@
+#include "dataflow_analysis/processing/passes/split_by_successor_predecessor_known_groups.h"
+
+#include "dataflow_analysis/common/grouping.h"
+#include "dataflow_analysis/common/netlist_abstraction.h"
+#include "dataflow_analysis/processing/configuration.h"
+
+#include <map>
+#include <set>
+
+namespace hal
+{
+    namespace dataflow
+    {
+        namespace split_by_successor_predecessor_known_groups
+        {
+            std::shared_ptr<Grouping> process(const processing::Configuration& config, const std::shared_ptr<Grouping>& state, bool successors)
+            {
+                auto new_state = std::make_shared<Grouping>(state->netlist_abstr);
+
+                u32 id_counter = -1;
+                for (const auto& [group_id, gates] : state->gates_of_group)
+                {
+                    if (!state->is_group_allowed_to_split(group_id))
+                    {
+                        u32 new_group_id = ++id_counter;
+
+                        new_state->group_control_fingerprint_map[new_group_id] = state->netlist_abstr.gate_to_fingerprint.at(*gates.begin());
+                        new_state->operations_on_group_allowed[new_group_id]   = state->operations_on_group_allowed.at(group_id);
+
+                        new_state->gates_of_group[new_group_id].insert(gates.begin(), gates.end());
+                        for (const auto& sg : gates)
+                        {
+                            new_state->parent_group_of_gate[sg] = new_group_id;
+                        }
+                    }
+                    else
+                    {
+                        std::map<std::set<u32>, std::unordered_set<u32>> characteristics_map;
+                        for (auto gate : gates)
+                        {
+                            std::set<u32> characteristics_of_gate;
+                            if (successors)
+                            {
+                                for (auto known_group_successors : state->netlist_abstr.gate_to_known_successor_groups.at(gate))
+                                {
+                                    characteristics_of_gate.insert(known_group_successors);
+                                }
+                            }
+                            else
+                            {
+                                for (auto known_group_predecessors : state->netlist_abstr.gate_to_known_predecessor_groups.at(gate))
+                                {
+                                    characteristics_of_gate.insert(known_group_predecessors);
+                                }
+                            }
+
+                            characteristics_map[characteristics_of_gate].insert(gate);
+                        }
+
+                        /* merge gates */
+                        for (auto gates_to_merge : characteristics_map)
+                        {
+                            u32 new_group_id = ++id_counter;
+
+                            new_state->group_control_fingerprint_map[new_group_id] = new_state->netlist_abstr.gate_to_fingerprint.at(*gates_to_merge.second.begin());
+                            new_state->operations_on_group_allowed[new_group_id]   = state->operations_on_group_allowed.at(group_id);
+
+                            new_state->gates_of_group[new_group_id].insert(gates_to_merge.second.begin(), gates_to_merge.second.end());
+                            for (const auto& sg : gates_to_merge.second)
+                            {
+                                new_state->parent_group_of_gate[sg] = new_group_id;
+                            }
+                        }
+                    }
+                }
+
+                return new_state;
+            }
+
+        }    // namespace split_by_successor_predecessor_known_groups
+    }    // namespace dataflow
+}    // namespace hal

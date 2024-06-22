@@ -23,6 +23,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/**
+ * @file subgraph.h 
+ * @brief This file contains functions related to subgraphs.
+ */
+
 #pragma once
 
 #include "hal_core/defines.h"
@@ -40,30 +45,48 @@ namespace hal
         class NetlistGraph;
 
         /**
-         * Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.
+         * @brief Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.
          * 
          * @param[in] graph - The netlist graph.
          * @param[in] subgraph_gates - A vector of gates that make up the subgraph.
          * @returns The subgraph as a new netlist graph on success, an error otherwise.
          */
-        Result<std::unique_ptr<NetlistGraph>> get_subgraph(NetlistGraph* graph, const std::vector<Gate*>& subgraph_gates);
+        Result<std::unique_ptr<NetlistGraph>> get_subgraph(const NetlistGraph* graph, const std::vector<Gate*>& subgraph_gates);
 
         /**
-         * Compute the subgraph induced by the specified vertices, including all edges between these vertices.
+         * @brief Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.
+         * 
+         * @param[in] graph - The netlist graph.
+         * @param[in] subgraph_gates - A set of gates that make up the subgraph.
+         * @returns The subgraph as a new netlist graph on success, an error otherwise.
+         */
+        Result<std::unique_ptr<NetlistGraph>> get_subgraph(const NetlistGraph* graph, const std::set<Gate*>& subgraph_gates);
+
+        /**
+         * @brief Compute the subgraph induced by the specified vertices, including all edges between these vertices.
          * 
          * @param[in] graph - The netlist graph.
          * @param[in] subgraph_vertices - A vector of vertices that make up the subgraph.
          * @returns The subgraph as a new netlist graph on success, an error otherwise.
          */
-        Result<std::unique_ptr<NetlistGraph>> get_subgraph(NetlistGraph* graph, const std::vector<u32>& subgraph_vertices);
+        Result<std::unique_ptr<NetlistGraph>> get_subgraph(const NetlistGraph* graph, const std::vector<u32>& subgraph_vertices);
 
         /**
-         * Compute the subgraph induced by the specified vertices, including all edges between these vertices.
+         * @brief Compute the subgraph induced by the specified vertices, including all edges between these vertices.
+         * 
+         * @param[in] graph - The netlist graph.
+         * @param[in] subgraph_vertices - A set of vertices that make up the subgraph.
+         * @returns The subgraph as a new netlist graph on success, an error otherwise.
+         */
+        Result<std::unique_ptr<NetlistGraph>> get_subgraph(const NetlistGraph* graph, const std::set<u32>& subgraph_vertices);
+
+        /**
+         * @brief Compute the subgraph induced by the specified vertices, including all edges between these vertices.
          * 
          * @param[in] graph - The netlist graph.
          * @param[in] subgraph_vertices - An igraph vector of vertices that make up the subgraph.
          * @returns The subgraph as a new netlist graph on success, an error otherwise.
          */
-        Result<std::unique_ptr<NetlistGraph>> get_subgraph_igraph(NetlistGraph* graph, const igraph_vector_int_t* subgraph_vertices);
+        Result<std::unique_ptr<NetlistGraph>> get_subgraph_igraph(const NetlistGraph* graph, const igraph_vector_int_t* subgraph_vertices);
     }    // namespace graph_algorithm
 }    // namespace hal

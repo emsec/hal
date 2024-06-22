@@ -75,6 +75,8 @@ namespace hal
 
         netlist_modification_decorator_init(m);
 
+        netlist_traversal_decorator_init(m);
+
         log_init(m);
 
 #ifndef PYBIND11_MODULE

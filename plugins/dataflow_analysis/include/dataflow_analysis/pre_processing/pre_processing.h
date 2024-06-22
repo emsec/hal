@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "dataflow_analysis/api/configuration.h"
 #include "dataflow_analysis/common/netlist_abstraction.h"
 
 namespace hal
@@ -35,7 +36,7 @@ namespace hal
     {
         namespace pre_processing
         {
-            NetlistAbstraction run(Netlist* netlist, bool register_stage_identification);
+            NetlistAbstraction run(const dataflow::Configuration& config, std::shared_ptr<dataflow::Grouping>& initial_grouping);
         }    // namespace pre_processing
-    }        // namespace dataflow
+    }    // namespace dataflow
 }    // namespace hal

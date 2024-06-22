@@ -35,11 +35,11 @@ namespace hal
 #ifdef PYBIND11_MODULE
     PYBIND11_MODULE(graph_algorithm, m)
     {
-        m.doc() = "hal GraphAlgorithmPlugin python bindings";
+        m.doc() = "Graph algorithms based on igraph operating on a netlist graph abstraction.";
 #else
     PYBIND11_PLUGIN(graph_algorithm)
     {
-        py::module m("graph_algorithm", "hal GraphAlgorithmPlugin python bindings");
+        py::module m("graph_algorithm", "Graph algorithms based on igraph operating on a netlist graph abstraction.");
 #endif    // ifdef PYBIND11_MODULE
 
         py::class_<GraphAlgorithmPlugin, RawPtrWrapper<GraphAlgorithmPlugin>, BasePluginInterface> py_graph_algorithm_plugin(m, "GraphAlgorithmPlugin");
@@ -53,7 +53,7 @@ namespace hal
         py_graph_algorithm_plugin.def("get_name", &GraphAlgorithmPlugin::get_name, R"(
             Get the name of the plugin.
 
-            :returns: Plugin name.
+            :returns: The name of the plugin.
             :rtype: str
         )");
 
@@ -66,8 +66,34 @@ namespace hal
         py_graph_algorithm_plugin.def("get_version", &GraphAlgorithmPlugin::get_version, R"(
             Get the version of the plugin.
 
-            :returns: Plugin version.
+            :returns: The version of the plugin.
             :rtype: str
+        )");
+
+        py_graph_algorithm_plugin.def_property_readonly("description", &GraphAlgorithmPlugin::get_description, R"(
+            The description of the plugin.
+
+            :type: str
+        )");
+
+        py_graph_algorithm_plugin.def("get_description", &GraphAlgorithmPlugin::get_description, R"(
+            Get the description of the plugin.
+
+            :returns: The description of the plugin.
+            :rtype: str
+        )");
+
+        py_graph_algorithm_plugin.def_property_readonly("dependencies", &GraphAlgorithmPlugin::get_dependencies, R"(
+            A set of plugin names that this plugin depends on.
+
+            :type: set[str]
+        )");
+
+        py_graph_algorithm_plugin.def("get_dependencies", &GraphAlgorithmPlugin::get_dependencies, R"(
+            Get a set of plugin names that this plugin depends on.
+
+            :returns: A set of plugin names that this plugin depends on.
+            :rtype: set[str]
         )");
 
         py::class_<graph_algorithm::NetlistGraph, RawPtrWrapper<graph_algorithm::NetlistGraph>> py_netlist_graph(m, "NetlistGraph", R"(
@@ -75,12 +101,12 @@ namespace hal
         )");
 
         py::enum_<graph_algorithm::NetlistGraph::Direction>(py_netlist_graph, "Direction", R"(
-            Defines the direction of a pin.
+            The direction of exploration within the graph.
         )")
-            .value("NONE", graph_algorithm::NetlistGraph::Direction::NONE, R"(Invalid direction.)")
-            .value("IN", graph_algorithm::NetlistGraph::Direction::IN, R"(Vertex fan-in.)")
-            .value("OUT", graph_algorithm::NetlistGraph::Direction::OUT, R"(Vertex fan-out.)")
-            .value("ALL", graph_algorithm::NetlistGraph::Direction::ALL, R"(All directions.)")
+            .value("NONE", graph_algorithm::NetlistGraph::Direction::NONE, R"(No direction, invalid default setting.)")
+            .value("IN", graph_algorithm::NetlistGraph::Direction::IN, R"(Explore through the inputs of the current node, i.e., traverse backwards.)")
+            .value("OUT", graph_algorithm::NetlistGraph::Direction::OUT, R"(Explore through the outputs of the current node, i.e., traverse forwards.)")
+            .value("ALL", graph_algorithm::NetlistGraph::Direction::ALL, R"(Explore in both directions, i.e., treat the graph as undirected.)")
             .export_values();
 
         py_netlist_graph.def_static(
@@ -111,8 +137,8 @@ namespace hal
 
         py_netlist_graph.def_static(
             "from_netlist_no_edges",
-            [](Netlist* nl) -> std::unique_ptr<graph_algorithm::NetlistGraph> {
-                auto res = graph_algorithm::NetlistGraph::from_netlist_no_edges(nl);
+            [](Netlist* nl, const std::vector<Gate*>& gates = {}) -> std::unique_ptr<graph_algorithm::NetlistGraph> {
+                auto res = graph_algorithm::NetlistGraph::from_netlist_no_edges(nl, gates);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -124,11 +150,34 @@ namespace hal
                 }
             },
             py::arg("nl"),
+            py::arg("gates") = std::vector<Gate*>(),
             R"(Create an empty directed graph from a netlist, i.e., vertices for all gates are created, but no edges are added.
              
              :param hal_py.Netlist nl: The netlist.
+             :param list[hal_py.Gate] gates: The gates to include in the graph. If omitted, all gates of the netlist will be included.
              :returns: The netlist graph on success, ``None`` otherwise.
              :rtype: graph_algorithm.NetlistGraph or None
+        )");
+
+        py_netlist_graph.def(
+            "copy",
+            [](const graph_algorithm::NetlistGraph& self) -> std::unique_ptr<graph_algorithm::NetlistGraph> {
+                auto res = self.copy();
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while copying netlist graph:\n{}", res.get_error().get());
+                    return nullptr;
+                }
+            },
+            R"(
+                Create a deep copy of the netlist graph.
+
+                :returns: The copied netlist graph on success, ``None`` otherwise.
+                :rtype: graph_algorithm.NetlistGraph or None
         )");
 
         py_netlist_graph.def("get_netlist", &graph_algorithm::NetlistGraph::get_netlist, R"(
@@ -184,6 +233,52 @@ namespace hal
                 :param set[int] vertices: A set of vertices.
                 :returns: A list of gates on success, ``None`` otherwise.
                 :rtype: list[hal_py.Gate] or None
+        )");
+
+        py_netlist_graph.def(
+            "get_gates_set_from_vertices",
+            [](const graph_algorithm::NetlistGraph& self, const std::vector<u32>& vertices) -> std::optional<std::set<Gate*>> {
+                auto res = self.get_gates_set_from_vertices(vertices);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting gates from vertices:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("vertices"),
+            R"(
+                Get the gates corresponding to the specified list of vertices.
+
+                :param list[int] vertices: A list of vertices.
+                :returns: A list of gates on success, ``None`` otherwise.
+                :rtype: set[hal_py.Gate] or None
+        )");
+
+        py_netlist_graph.def(
+            "get_gates_set_from_vertices",
+            [](const graph_algorithm::NetlistGraph& self, const std::set<u32>& vertices) -> std::optional<std::set<Gate*>> {
+                const auto res = self.get_gates_set_from_vertices(vertices);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting gates from vertices:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("vertices"),
+            R"(
+                Get the gates corresponding to the specified set of vertices.
+
+                :param set[int] vertices: A set of vertices.
+                :returns: A list of gates on success, ``None`` otherwise.
+                :rtype: set[hal_py.Gate] or None
         )");
 
         py_netlist_graph.def(
@@ -660,7 +755,7 @@ namespace hal
             py::arg("to_gates"),
             py::arg("direction"),
             R"(
-                Compute a shortest path from the specified ``from_gate`` to each of the given ``to_gates`` by traversing in the provided direction.
+                Compute shortest paths from the specified ``from_gate`` to each of the given ``to_gates`` by traversing in the provided direction.
                 Returns all shortest paths for each end gate.
                 Each shortest path is given as a list of vertices in the order of traversal.
 
@@ -692,7 +787,7 @@ namespace hal
             py::arg("to_vertices"),
             py::arg("direction"),
             R"(
-                Compute a shortest path from the specified ``from_vertex`` to each of the given ``to_vertices`` by traversing in the provided direction.
+                Compute shortest paths from the specified ``from_vertex`` to each of the given ``to_vertices`` by traversing in the provided direction.
                 Returns all shortest paths for each end gate.
                 Each shortest path is given as a list of vertices in the order of traversal.
                 
@@ -706,7 +801,7 @@ namespace hal
 
         m.def(
             "get_subgraph",
-            [](graph_algorithm::NetlistGraph* graph, const std::vector<Gate*>& subgraph_gates) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
+            [](const graph_algorithm::NetlistGraph* graph, const std::vector<Gate*>& subgraph_gates) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
                 auto res = graph_algorithm::get_subgraph(graph, subgraph_gates);
                 if (res.is_ok())
                 {
@@ -731,7 +826,32 @@ namespace hal
 
         m.def(
             "get_subgraph",
-            [](graph_algorithm::NetlistGraph* graph, const std::vector<u32>& subgraph_vertices) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
+            [](const graph_algorithm::NetlistGraph* graph, const std::set<Gate*>& subgraph_gates) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
+                auto res = graph_algorithm::get_subgraph(graph, subgraph_gates);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while computing subgraph:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("subgraph_gates"),
+            R"(
+                Compute the subgraph induced by the specified gates, including all edges between the corresponding vertices.
+
+                :param graph_algorithm.NetlistGraph graph: The netlist graph.
+                :param set[hal_py.Gate] subgraph_gates: A set of gates that make up the subgraph.
+                :returns: The subgraph as a new netlist graph on success, ``None`` otherwise.
+                :rtype: graph_algorithm.NetlistGraph or None
+        )");
+
+        m.def(
+            "get_subgraph",
+            [](const graph_algorithm::NetlistGraph* graph, const std::vector<u32>& subgraph_vertices) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
                 auto res = graph_algorithm::get_subgraph(graph, subgraph_vertices);
                 if (res.is_ok())
                 {
@@ -750,6 +870,31 @@ namespace hal
                 
                 :param graph_algorithm.NetlistGraph graph: The netlist graph.
                 :param list[int] subgraph_vertices: A list of vertices that make up the subgraph.
+                :returns: The subgraph as a new netlist graph on success, ``None`` otherwise.
+                :rtype: graph_algorithm.NetlistGraph or None
+        )");
+
+        m.def(
+            "get_subgraph",
+            [](const graph_algorithm::NetlistGraph* graph, const std::set<u32>& subgraph_vertices) -> std::optional<std::unique_ptr<graph_algorithm::NetlistGraph>> {
+                auto res = graph_algorithm::get_subgraph(graph, subgraph_vertices);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while computing subgraph:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("graph"),
+            py::arg("subgraph_vertices"),
+            R"(
+                Compute the subgraph induced by the specified vertices, including all edges between these vertices.
+                
+                :param graph_algorithm.NetlistGraph graph: The netlist graph.
+                :param set[int] subgraph_vertices: A set of vertices that make up the subgraph.
                 :returns: The subgraph as a new netlist graph on success, ``None`` otherwise.
                 :rtype: graph_algorithm.NetlistGraph or None
         )");

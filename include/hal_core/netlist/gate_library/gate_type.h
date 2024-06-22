@@ -52,6 +52,13 @@ namespace hal
     {
     public:
         /**
+         * Hash function for python binding.
+         *
+         * @return Pybind11 compatible hash.
+         */
+        ssize_t get_hash() const;
+
+        /**
          * Get all components matching the filter condition (if provided) as a vector. 
          * Returns an empty vector if (i) the gate type does not contain any components or (ii) no component matches the filter condition.
          * 

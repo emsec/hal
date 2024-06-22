@@ -31,6 +31,22 @@ namespace hal
             )")
 
             .def(
+                "load_netlist_from_string",
+                [](const std::string& hdl_string, const std::filesystem::path& gate_library_file) {
+                    return std::shared_ptr<Netlist>(netlist_factory::load_netlist_from_string(hdl_string, gate_library_file));
+                },
+                py::arg("hdl_string"),
+                py::arg("gate_library_file") = "",
+                R"(
+                Create a netlist from the given string. The string must contain a netlist in HAL-(JSON)-format.
+
+                :param pathlib.Path hdl_file: The string containing the netlist.
+                :param pathlib.Path gate_library_file: Path to the gate library file.
+                :returns: The netlist on success, None otherwise.
+                :rtype: hal_py.Netlist
+            )")
+
+            .def(
                 "load_hal_project", [](const std::filesystem::path& project_dir) { return std::shared_ptr<Netlist>(netlist_factory::load_hal_project(project_dir)); }, py::arg("project_dir"), R"(
                 Create a netlist from the given .hal file.
 

@@ -23,6 +23,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/**
+ * @file components.h 
+ * @brief This file contains functions related to graph components.
+ */
+
 #pragma once
 
 #include "hal_core/defines.h"
@@ -38,7 +43,8 @@ namespace hal
         class NetlistGraph;
 
         /** 
-         * Compute the (strongly) connected components of the specified graph.
+         * @brief Compute the (strongly) connected components of the specified graph.
+         * 
          * Returns each connected component as a vector of vertices in the netlist graph.
          * 
          * @param[in] graph - The netlist graph.
@@ -46,6 +52,6 @@ namespace hal
          * @param[in] min_size - Minimal size of a connected component to be part of the result. Set to `0` to include all components. Defaults to `0`.
          * @returns A vector of strongly connected components on success, an error otherwise.
          */
-        Result<std::vector<std::vector<u32>>> get_connected_components(NetlistGraph* graph, bool strong, u32 min_size = 0);
+        Result<std::vector<std::vector<u32>>> get_connected_components(const NetlistGraph* graph, bool strong, u32 min_size = 0);
     }    // namespace graph_algorithm
 }    // namespace hal
