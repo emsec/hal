@@ -156,6 +156,7 @@ var NAVTREEINDEX5 =
 "classhal_1_1_gate_info_table.html#afd1c6ea10c340508575232821f1ad8d4":[6,0,0,140,0],
 "classhal_1_1_gate_library.html":[4,1,0,2,3],
 "classhal_1_1_gate_library.html#a03084dff2c24ba07925c4487547fc730":[4,1,0,2,3,4],
+"classhal_1_1_gate_library.html#a0372abbc16439f3286b44e80d7edca18":[4,1,0,2,3,17],
 "classhal_1_1_gate_library.html#a203b238f213e1980b82f796763ea2ac7":[4,1,0,2,3,13],
 "classhal_1_1_gate_library.html#a31ea99ad04afe238972f0890fba6771b":[4,1,0,2,3,7],
 "classhal_1_1_gate_library.html#a365e5c3131c9a1c9d753a43468aced8d":[4,1,0,2,3,16],
@@ -163,12 +164,12 @@ var NAVTREEINDEX5 =
 "classhal_1_1_gate_library.html#a4f3f32d464c6cc8bc93704d317e86428":[4,1,0,2,3,14],
 "classhal_1_1_gate_library.html#a515857dc13b6592f77f192009d24a708":[4,1,0,2,3,8],
 "classhal_1_1_gate_library.html#a5ad57ba019b35e2ceb386c3b0be1e0b1":[4,1,0,2,3,0],
-"classhal_1_1_gate_library.html#a7bfa20c066532a2e405200b30f719348":[4,1,0,2,3,17],
+"classhal_1_1_gate_library.html#a7bfa20c066532a2e405200b30f719348":[4,1,0,2,3,18],
 "classhal_1_1_gate_library.html#a82ab1b37d4070635bc32d99e927024ae":[4,1,0,2,3,15],
 "classhal_1_1_gate_library.html#a87ff461bac5e8b03736eb909fe9eee5a":[4,1,0,2,3,3],
 "classhal_1_1_gate_library.html#a8a704f948603b277844a8f8bb20fa6a9":[4,1,0,2,3,2],
 "classhal_1_1_gate_library.html#a955208e223376a19c808f83d486311d2":[4,1,0,2,3,11],
-"classhal_1_1_gate_library.html#a97adde8cf19b82707a3b99dd1d7c2ef1":[4,1,0,2,3,18],
+"classhal_1_1_gate_library.html#a97adde8cf19b82707a3b99dd1d7c2ef1":[4,1,0,2,3,19],
 "classhal_1_1_gate_library.html#aa02f23d1517dad7a2d24b2c089cea84a":[4,1,0,2,3,5],
 "classhal_1_1_gate_library.html#abc606af53f4d9c1fc42e029851410e1e":[4,1,0,2,3,10],
 "classhal_1_1_gate_library.html#ad1f31f7dcb83c976fdaaa2bc22a9a8bf":[4,1,0,2,3,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "classhal_1_1_gate_select_proxy.html#a07ea466df44dacc7fdb8cade0704546b":[6,0,0,158,1],
 "classhal_1_1_gate_select_proxy.html#a22e259df13f602f3f0669f89de9e20a1":[6,0,0,158,5],
 "classhal_1_1_gate_select_proxy.html#a5942907cbfc55bd7c9f35bb8f7c42d78":[6,0,0,158,0],
-"classhal_1_1_gate_select_proxy.html#a9d8703ace90a546b66063632e953a328":[6,0,0,158,4],
-"classhal_1_1_gate_select_proxy.html#ae362483a81ed5b7a85f5dc065a9ac8cf":[6,0,0,158,3]
+"classhal_1_1_gate_select_proxy.html#a9d8703ace90a546b66063632e953a328":[6,0,0,158,4]
 };

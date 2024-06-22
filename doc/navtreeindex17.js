@@ -1,5 +1,6 @@
 var NAVTREEINDEX17 =
 {
+"classhal_1_1_python_syntax_highlighter.html#abfdc072d1d4c233871df0854ab9e35f7":[4,0,1,3,1],
 "classhal_1_1_python_thread.html":[6,0,0,363],
 "classhal_1_1_python_thread.html#a03fc12f4cf5fdee1f6c839c8f631bf50":[6,0,0,363,3],
 "classhal_1_1_python_thread.html#a0be99bef713b0bfa0a9a77a32b16a4de":[6,0,0,363,20],
@@ -248,6 +249,5 @@ var NAVTREEINDEX17 =
 "classhal_1_1_selection_details_widget.html#a973b3961f8a006ed97ad7be97080f707":[4,0,7,3,17,25],
 "classhal_1_1_selection_details_widget.html#aa2157c04025e1ff55a2c2d6e6ba5c70c":[4,0,7,3,17,11],
 "classhal_1_1_selection_details_widget.html#aa3d852f49cac30e3d6fb5730b50f719c":[4,0,7,3,17,21],
-"classhal_1_1_selection_details_widget.html#aa5b8c37993e3d5c95bce10aac8314880":[4,0,7,3,17,12],
-"classhal_1_1_selection_details_widget.html#aad0a40377baae57ca6e8eaeb79df4bcd":[4,0,7,3,17,14]
+"classhal_1_1_selection_details_widget.html#aa5b8c37993e3d5c95bce10aac8314880":[4,0,7,3,17,12]
 };
