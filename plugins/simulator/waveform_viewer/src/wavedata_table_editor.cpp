@@ -13,9 +13,6 @@ namespace hal {
 
     void WavedataTableEditor::setup(const std::vector<NetlistSimulatorController::InputColumnHeader> &inpColHeads, bool omitClock)
     {
-        int n = inpColHeads.size()+1;
-        setColumnCount(n);
-        setRowCount(2);
         QStringList headerLabel;
         for (NetlistSimulatorController::InputColumnHeader ich : inpColHeads)
         {
@@ -25,6 +22,9 @@ namespace hal {
             mInputColumnHeader.append(ich);
             headerLabel << colName;
         }
+        int n = mInputColumnHeader.size()+1;
+        setColumnCount(n);
+        setRowCount(2);
         headerLabel.prepend("Time");
         setHorizontalHeaderLabels(headerLabel);
         for (int i=0; i<n; i++)

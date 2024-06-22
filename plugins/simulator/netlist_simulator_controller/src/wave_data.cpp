@@ -1620,6 +1620,11 @@ namespace hal {
             add(it.value(),false);
         }
         setMaxTime(mSaleaeDirectory.get_max_time());
+
+        for (auto it = mDataGroups.begin(); it != mDataGroups.end(); ++it)
+        {
+            (*it)->recalcData();
+        }
     }
 
     void WaveDataList::addOrReplace(WaveData* wd)
