@@ -449,6 +449,18 @@ public:
     bool can_import_data() const;
 
     /**
+     * Discard all results except listed probes
+     * @param probes List of nets which will be simulated (aka probes)
+     */
+    void simulate_only_probes(const std::vector<const Net*>& probes);
+
+    /**
+     * Discard all results except listed probes
+     * @param probes Set of net IDs which will be simulated (aka probes)
+     */
+    void simulate_only_probes(const QSet<u32>& probes);
+
+    /**
      * Store significant information into working directory
      * @return True if JSON file created successfully, false otherwise.
      */
@@ -490,6 +502,7 @@ private:
     WaveDataList* mWaveDataList;
 
     SimulationInput* mSimulationInput;
+    QSet<u32> mSimulateOnlyProbes;
 
     QHash<u32,int> mBadAssignInputWarnings;
 };
