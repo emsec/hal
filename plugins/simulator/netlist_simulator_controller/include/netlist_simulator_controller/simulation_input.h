@@ -188,8 +188,17 @@ namespace hal {
          */
         void dump(std::string filename = std::string()) const;
 
+        /**
+         * Group one-bit signals to multi-bit bus according to pingroups.
+         * Pingroups are only evaluated if all connected nets are part of the simulation.
+         * Module pingroups have priority before gate pingroups.
+         */
         void compute_net_groups();
 
+        /**
+         * Get groups computed in method above.
+         * @return Vector of groups.
+         */
         const std::vector<NetGroup>& get_net_groups() const { return m_netgroups; }
     };
 }

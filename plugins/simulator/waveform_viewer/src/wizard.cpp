@@ -138,7 +138,8 @@ namespace hal {
         if (mController->get_gates().empty() || mController->get_input_nets().empty())
             return false;
 
-        mController->make_waveform_groups();
+        mController->compute_waveform_groups();
+        mController->load_waveform_groups(true);
         return true;
     }
 
@@ -783,7 +784,10 @@ namespace hal {
             selIndexList.append(mProxyModel->mapToSource(proxyInx));
         }
         if (!selIndexList.isEmpty())
+        {
             mWaveWidget->addSelectedResults(mWaveModel->entryMap(selIndexList));
+            mController->load_waveform_groups(false); // create waveform groups EXCEPT(=false) input groups
+        }
         return true;
     }
 

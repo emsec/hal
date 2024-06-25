@@ -925,13 +925,23 @@ namespace hal
         checkReadyState();
     }
 
-    void NetlistSimulatorController::make_waveform_groups()
+    void NetlistSimulatorController::compute_waveform_groups()
     {
         mSimulationInput->compute_net_groups();
+    }
 
+    void NetlistSimulatorController::load_waveform_groups(bool inputs)
+    {
         for (const SimulationInput::NetGroup& ng : mSimulationInput->get_net_groups())
         {
-            if (!ng.is_input) continue;
+            if (inputs)
+            {
+                if (!ng.is_input) continue;
+            }
+            else
+            {
+                if (ng.is_input) continue;
+            }
             if (ng.gate)
                 add_waveform_group(ng.gate, ng.gate_pin_group);
             else

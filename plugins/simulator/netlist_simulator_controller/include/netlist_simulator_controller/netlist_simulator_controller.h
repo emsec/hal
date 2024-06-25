@@ -203,7 +203,20 @@ public:
      */
     void add_gates(const std::vector<Gate*>& gates);
 
-    void make_waveform_groups();
+    /**
+     * Create groups of waveform signals. Internally the routine is evaluating whether simulated nets are
+     * connected to pins which are grouped either by module pingroups or gate pingroups.
+     * Note that this method only identifies the groups. No waveform data gets loaded at this point since
+     * the singals might not be available yet (e.g. before simulation has run)
+     */
+    void compute_waveform_groups();
+
+    /**
+     * Load waveform signal groups into container either for inputs or for everything except inputs
+     *
+     * @param inputs[in] - If true only waveform groups providing simulation input are loaded. Otherwise these groups are omitted.
+     */
+    void load_waveform_groups(bool inputs);
 
     /**
      * Set the signal for a specific wire to control input signals between simulation cycles.

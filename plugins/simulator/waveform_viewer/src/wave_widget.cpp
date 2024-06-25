@@ -243,7 +243,7 @@ namespace hal {
             }
         }
         delete sd;
-        qDebug() << "Addable entries :" << retval.size();
+//        qDebug() << "Addable entries :" << retval.size();
         return retval;
     }
 
