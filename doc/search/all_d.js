@@ -586,7 +586,7 @@ var searchData=
   ['modulecolorserializer_8639',['ModuleColorSerializer',['../classhal_1_1_module_color_serializer.html',1,'hal::ModuleColorSerializer'],['../classhal_1_1_module_color_serializer.html#ac7475c9432559b46369852adb664cf4d',1,'hal::ModuleColorSerializer::ModuleColorSerializer()']]],
   ['modulecreated_8640',['moduleCreated',['../classhal_1_1_netlist_relay.html#ac909d23f8dfc8bd143cb471e7eb8165e',1,'hal::NetlistRelay']]],
   ['moduledetailstabwidget_8641',['ModuleDetailsTabWidget',['../classhal_1_1_module_details_tab_widget.html',1,'hal::ModuleDetailsTabWidget'],['../classhal_1_1_module_details_tab_widget.html#aa3c753046b17e062f9a105e738eb627b',1,'hal::ModuleDetailsTabWidget::ModuleDetailsTabWidget()']]],
-  ['moduledialog_8642',['ModuleDialog',['../classhal_1_1_module_dialog.html',1,'hal::ModuleDialog'],['../classhal_1_1_module_dialog.html#acc66085bfcab15237f6cf5b9fefb0c67',1,'hal::ModuleDialog::ModuleDialog()']]],
+  ['moduledialog_8642',['ModuleDialog',['../classhal_1_1_module_dialog.html',1,'hal::ModuleDialog'],['../classhal_1_1_module_dialog.html#abd61748efac114e1ca690d3e72b7dd75',1,'hal::ModuleDialog::ModuleDialog()']]],
   ['moduledoubleclicked_8643',['moduleDoubleClicked',['../classhal_1_1_graph_graphics_view.html#a6452181b33c1d423394489d5c4d82b09',1,'hal::GraphGraphicsView']]],
   ['moduleelementstree_8644',['ModuleElementsTree',['../classhal_1_1_module_elements_tree.html',1,'hal::ModuleElementsTree'],['../classhal_1_1_module_elements_tree.html#ad8560c1d6bac3da6f6bfe8f081269b28',1,'hal::ModuleElementsTree::ModuleElementsTree()']]],
   ['moduleevent_8645',['ModuleEvent',['../classhal_1_1_module_event.html',1,'hal']]],

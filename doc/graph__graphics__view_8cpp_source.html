@@ -1117,7 +1117,7 @@ $(document).ready(function(){initNavTree('graph__graphics__view_8cpp_source.html
 <div class="line"><a name="l01029"></a><span class="lineno"> 1029</span>&#160;<span class="comment">//            }</span></div>
 <div class="line"><a name="l01030"></a><span class="lineno"> 1030</span>&#160;<span class="comment">//        }</span></div>
 <div class="line"><a name="l01031"></a><span class="lineno"> 1031</span>&#160; </div>
-<div class="line"><a name="l01032"></a><span class="lineno"> 1032</span>&#160;        ModuleDialog module_dialog(getNotSelectableModules(),<span class="stringliteral">&quot;Add module to view&quot;</span>, <span class="keyword">nullptr</span>, <span class="keyword">this</span>);</div>
+<div class="line"><a name="l01032"></a><span class="lineno"> 1032</span>&#160;        ModuleDialog module_dialog(getNotSelectableModules(),<span class="stringliteral">&quot;Add module to view&quot;</span>, <span class="keyword">true</span>, <span class="keyword">nullptr</span>, <span class="keyword">this</span>);</div>
 <div class="line"><a name="l01033"></a><span class="lineno"> 1033</span>&#160;        <span class="keywordflow">if</span> (module_dialog.exec() == <a class="codeRef" href="https://doc.qt.io/qt-5/qdialog.html#DialogCode-enum">QDialog::Accepted</a>)</div>
 <div class="line"><a name="l01034"></a><span class="lineno"> 1034</span>&#160;        {</div>
 <div class="line"><a name="l01035"></a><span class="lineno"> 1035</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qset.html">QSet&lt;u32&gt;</a> module_to_add;</div>
@@ -1559,7 +1559,7 @@ $(document).ready(function(){initNavTree('graph__graphics__view_8cpp_source.html
 <div class="line"><a name="l01471"></a><span class="lineno"> 1471</span>&#160;        }</div>
 <div class="line"><a name="l01472"></a><span class="lineno"> 1472</span>&#160; </div>
 <div class="line"><a name="l01473"></a><span class="lineno"> 1473</span>&#160;        AddToModuleReceiver* receiver = <span class="keyword">new</span> AddToModuleReceiver(<span class="keyword">this</span>);</div>
-<div class="line"><a name="l01474"></a><span class="lineno"> 1474</span>&#160;        ModuleDialog md(exclude_ids, <span class="stringliteral">&quot;Move to module&quot;</span>, receiver, <span class="keyword">this</span>);</div>
+<div class="line"><a name="l01474"></a><span class="lineno"> 1474</span>&#160;        ModuleDialog md(exclude_ids, <span class="stringliteral">&quot;Move to module&quot;</span>, <span class="keyword">false</span>, receiver, <span class="keyword">this</span>);</div>
 <div class="line"><a name="l01475"></a><span class="lineno"> 1475</span>&#160;        <span class="keywordflow">if</span> (md.exec() != <a class="codeRef" href="https://doc.qt.io/qt-5/qdialog.html#DialogCode-enum">QDialog::Accepted</a>) <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l01476"></a><span class="lineno"> 1476</span>&#160;        <span class="keywordflow">if</span> (md.isNewModule())</div>
 <div class="line"><a name="l01477"></a><span class="lineno"> 1477</span>&#160;        {</div>
@@ -2403,7 +2403,7 @@ $(document).ready(function(){initNavTree('graph__graphics__view_8cpp_source.html
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_62580450d675343767dbe0503393e994.html">graph_widget</a></li><li class="navelem"><a class="el" href="graph__graphics__view_8cpp.html">graph_graphics_view.cpp</a></li>
-    <li class="footer">Generated on Thu Jun 27 2024 13:30:05 for HAL by
+    <li class="footer">Generated on Thu Jun 27 2024 17:46:41 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

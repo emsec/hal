@@ -718,143 +718,147 @@ $(document).ready(function(){initNavTree('module__model_8cpp_source.html',''); i
 <div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;        <span class="keywordflow">while</span> (itSubm != mModuleMap.upperBound(<span class="keywordtype">id</span>))</div>
 <div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;        {</div>
 <div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;            <a class="code" href="classhal_1_1_module_item.html">ModuleItem</a>* submItem = itSubm.value();</div>
-<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;            <span class="keywordflow">if</span> (submItem-&gt;<a class="code" href="classhal_1_1_module_item.html#a8edd3b37443b316e260f6e338313be66">isToplevelItem</a>()) <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;            <a class="code" href="classhal_1_1_module_item.html">ModuleItem</a>* oldParentItem = <span class="keyword">static_cast&lt;</span><a class="code" href="classhal_1_1_module_item.html">ModuleItem</a>*<span class="keyword">&gt;</span>(submItem-&gt;<a class="code" href="classhal_1_1_base_tree_item.html#a13503386a6e07012046b4d173a345b5f">getParent</a>());</div>
-<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;            Q_ASSERT(oldParentItem);</div>
-<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160; </div>
-<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;            <span class="keywordflow">if</span> (oldParentItem-&gt;<a class="code" href="classhal_1_1_module_item.html#aa8eb05d41577f125ff7f03cf0e9a6dad">id</a>() != parentId)</div>
-<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;            {</div>
-<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;                <span class="keywordflow">if</span> (moduleItemToBeMoved)</div>
-<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;                {</div>
-<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;                    <span class="comment">// remove tree item recursively</span></div>
-<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;                    <a class="code" href="classhal_1_1_module_model.html#ad1fc84abc9e0ed3dd140c02cc83c75fc">removeChildItem</a>(submItem,oldParentItem);</div>
-<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;                    itSubm = mModuleMap.erase(itSubm);</div>
-<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;                }</div>
-<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;                {</div>
-<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;                    <span class="comment">// save tree item for reassignment</span></div>
-<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;                    moduleItemToBeMoved = submItem;</div>
-<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;                    <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> <a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a> = <a class="code" href="classhal_1_1_base_tree_model.html#a0c0375f46d675d30f44f12c170b27006">getIndexFromItem</a>(oldParentItem);</div>
-<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160; </div>
-<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;                    <span class="keywordtype">int</span> row = submItem-&gt;<a class="code" href="classhal_1_1_base_tree_item.html#a9e2cf91642c7d88838da658b09bb1d48">getOwnRow</a>();</div>
-<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160; </div>
-<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;                    mIsModifying = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;                    <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginRemoveRows">beginRemoveRows</a>(<a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>, row, row);</div>
-<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;                    oldParentItem-&gt;<a class="code" href="classhal_1_1_base_tree_item.html#a0e2aa3dd3bf54f6a1c9339eb26b4f122">removeChild</a>(submItem);</div>
-<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;                    <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endRemoveRows">endRemoveRows</a>();</div>
-<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;                    mIsModifying = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;                    ++itSubm;</div>
-<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;                }</div>
-<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;            }</div>
-<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;            {</div>
-<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;                parentsHandled.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(oldParentItem);</div>
-<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;                ++itSubm;</div>
-<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;            }</div>
-<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;        }</div>
-<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160; </div>
-<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;        <span class="keywordflow">if</span> (!parentId) <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> itMod = mModuleMap.lowerBound(parentId); itMod != mModuleMap.upperBound(parentId); ++itMod)</div>
-<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;        {</div>
-<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;            <a class="code" href="classhal_1_1_module_item.html">ModuleItem</a>* parentItem = itMod.value();</div>
-<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;            <span class="keywordflow">if</span> (parentsHandled.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#contains">contains</a>(parentItem)) <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;            <span class="keywordflow">if</span> (moduleItemToBeMoved &amp;&amp; !moduleItemReassigned)</div>
-<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;            {</div>
-<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> <a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a> = <a class="code" href="classhal_1_1_base_tree_model.html#a0c0375f46d675d30f44f12c170b27006">getIndexFromItem</a>(parentItem);</div>
-<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;                <span class="keywordtype">int</span> row = parentItem-&gt;<a class="code" href="classhal_1_1_base_tree_item.html#a1d8acb06aac9fab1f781fecd0ce021ee">getChildCount</a>();</div>
-<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;                mIsModifying = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginInsertRows">beginInsertRows</a>(<a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>, row, row);</div>
-<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;                parentItem-&gt;<a class="code" href="classhal_1_1_base_tree_item.html#a48496a62ce615523139d8c5327e631bc">appendChild</a>(moduleItemToBeMoved);</div>
-<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endInsertRows">endInsertRows</a>();</div>
-<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;                mIsModifying = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;                moduleItemReassigned = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;            }</div>
-<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;            {</div>
-<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;                <a class="code" href="classhal_1_1_module_model.html#a1e5a1a1dbd4f163ee61617861110d9c2">addRecursively</a>(<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, parentItem);</div>
+<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;            <span class="keywordflow">if</span> (submItem-&gt;<a class="code" href="classhal_1_1_module_item.html#a8edd3b37443b316e260f6e338313be66">isToplevelItem</a>())</div>
+<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;            {</div>
+<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;                ++itSubm;</div>
+<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;                <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;            }</div>
+<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;            <a class="code" href="classhal_1_1_module_item.html">ModuleItem</a>* oldParentItem = <span class="keyword">static_cast&lt;</span><a class="code" href="classhal_1_1_module_item.html">ModuleItem</a>*<span class="keyword">&gt;</span>(submItem-&gt;<a class="code" href="classhal_1_1_base_tree_item.html#a13503386a6e07012046b4d173a345b5f">getParent</a>());</div>
+<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;            Q_ASSERT(oldParentItem);</div>
+<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160; </div>
+<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;            <span class="keywordflow">if</span> (oldParentItem-&gt;<a class="code" href="classhal_1_1_module_item.html#aa8eb05d41577f125ff7f03cf0e9a6dad">id</a>() != parentId)</div>
+<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;            {</div>
+<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;                <span class="keywordflow">if</span> (moduleItemToBeMoved)</div>
+<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;                {</div>
+<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;                    <span class="comment">// remove tree item recursively</span></div>
+<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;                    <a class="code" href="classhal_1_1_module_model.html#ad1fc84abc9e0ed3dd140c02cc83c75fc">removeChildItem</a>(submItem,oldParentItem);</div>
+<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;                    itSubm = mModuleMap.erase(itSubm);</div>
+<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;                }</div>
+<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;                {</div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;                    <span class="comment">// save tree item for reassignment</span></div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;                    moduleItemToBeMoved = submItem;</div>
+<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;                    <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> <a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a> = <a class="code" href="classhal_1_1_base_tree_model.html#a0c0375f46d675d30f44f12c170b27006">getIndexFromItem</a>(oldParentItem);</div>
+<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160; </div>
+<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;                    <span class="keywordtype">int</span> row = submItem-&gt;<a class="code" href="classhal_1_1_base_tree_item.html#a9e2cf91642c7d88838da658b09bb1d48">getOwnRow</a>();</div>
+<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160; </div>
+<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;                    mIsModifying = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;                    <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginRemoveRows">beginRemoveRows</a>(<a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>, row, row);</div>
+<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;                    oldParentItem-&gt;<a class="code" href="classhal_1_1_base_tree_item.html#a0e2aa3dd3bf54f6a1c9339eb26b4f122">removeChild</a>(submItem);</div>
+<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;                    <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endRemoveRows">endRemoveRows</a>();</div>
+<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;                    mIsModifying = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;                    ++itSubm;</div>
+<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;                }</div>
+<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;            }</div>
+<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;            {</div>
+<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;                parentsHandled.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#insert">insert</a>(oldParentItem);</div>
+<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;                ++itSubm;</div>
+<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;            }</div>
+<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;        }</div>
+<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160; </div>
+<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;        <span class="keywordflow">if</span> (!parentId) <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> itMod = mModuleMap.lowerBound(parentId); itMod != mModuleMap.upperBound(parentId); ++itMod)</div>
+<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;        {</div>
+<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;            <a class="code" href="classhal_1_1_module_item.html">ModuleItem</a>* parentItem = itMod.value();</div>
+<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;            <span class="keywordflow">if</span> (parentsHandled.<a class="codeRef" href="https://doc.qt.io/qt-5/qset.html#contains">contains</a>(parentItem)) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;            <span class="keywordflow">if</span> (moduleItemToBeMoved &amp;&amp; !moduleItemReassigned)</div>
+<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;            {</div>
+<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> <a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a> = <a class="code" href="classhal_1_1_base_tree_model.html#a0c0375f46d675d30f44f12c170b27006">getIndexFromItem</a>(parentItem);</div>
+<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;                <span class="keywordtype">int</span> row = parentItem-&gt;<a class="code" href="classhal_1_1_base_tree_item.html#a1d8acb06aac9fab1f781fecd0ce021ee">getChildCount</a>();</div>
+<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;                mIsModifying = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginInsertRows">beginInsertRows</a>(<a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>, row, row);</div>
+<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;                parentItem-&gt;<a class="code" href="classhal_1_1_base_tree_item.html#a48496a62ce615523139d8c5327e631bc">appendChild</a>(moduleItemToBeMoved);</div>
+<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;                <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endInsertRows">endInsertRows</a>();</div>
+<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;                mIsModifying = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;                moduleItemReassigned = <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;            }</div>
-<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;        }</div>
-<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160; </div>
-<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;        <span class="keywordflow">if</span> (moduleItemToBeMoved &amp;&amp; !moduleItemReassigned)</div>
-<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;        {</div>
-<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;            <span class="comment">// stored item could not be reassigned, delete it</span></div>
-<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;            <span class="keyword">auto</span> it = mModuleMap.lowerBound(<span class="keywordtype">id</span>);</div>
-<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;            <span class="keywordflow">while</span> (it != mModuleMap.upperBound(<span class="keywordtype">id</span>))</div>
-<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;            {</div>
-<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;                <span class="keywordflow">if</span> (it.value() == moduleItemToBeMoved)</div>
-<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;                    it = mModuleMap.erase(it);</div>
-<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;                    ++it;</div>
-<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;            }</div>
-<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;            <span class="keyword">delete</span> moduleItemToBeMoved;</div>
-<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;        }</div>
-<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160; </div>
-<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;    }</div>
-<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160; </div>
-<div class="line"><a name="l00706"></a><span class="lineno"><a class="line" href="classhal_1_1_module_model.html#aba67be1ad929342450a11ff64f73c7a9">  706</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_model.html#aba67be1ad929342450a11ff64f73c7a9">ModuleModel::updateModuleName</a>(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>)</div>
-<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;    {</div>
-<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;        Q_ASSERT(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">get_module_by_id</a>(<span class="keywordtype">id</span>));</div>
+<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;            {</div>
+<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;                <a class="code" href="classhal_1_1_module_model.html#a1e5a1a1dbd4f163ee61617861110d9c2">addRecursively</a>(<a class="code" href="namespacehal_1_1_shortest_path.html#a6f60f4bfa62d51227fa5fcc3e7d838a9">module</a>, parentItem);</div>
+<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;            }</div>
+<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;        }</div>
+<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160; </div>
+<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;        <span class="keywordflow">if</span> (moduleItemToBeMoved &amp;&amp; !moduleItemReassigned)</div>
+<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;        {</div>
+<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;            <span class="comment">// stored item could not be reassigned, delete it</span></div>
+<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;            <span class="keyword">auto</span> it = mModuleMap.lowerBound(<span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;            <span class="keywordflow">while</span> (it != mModuleMap.upperBound(<span class="keywordtype">id</span>))</div>
+<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;            {</div>
+<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;                <span class="keywordflow">if</span> (it.value() == moduleItemToBeMoved)</div>
+<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;                    it = mModuleMap.erase(it);</div>
+<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;                    ++it;</div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;            }</div>
+<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;            <span class="keyword">delete</span> moduleItemToBeMoved;</div>
+<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;        }</div>
+<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160; </div>
+<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;    }</div>
 <div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160; </div>
-<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = mModuleMap.lowerBound(<span class="keywordtype">id</span>); it != mModuleMap.upperBound(<span class="keywordtype">id</span>); ++it)</div>
-<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;        {</div>
-<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;            <a class="code" href="classhal_1_1_module_item.html">ModuleItem</a>* item = it.value();</div>
-<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;            Q_ASSERT(item);</div>
-<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160; </div>
-<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;            item-&gt;<a class="code" href="classhal_1_1_module_item.html#a9a7b4c3f14ce92c7801560df822a5060">setName</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">get_module_by_id</a>(<span class="keywordtype">id</span>)-&gt;<a class="code" href="classhal_1_1_module.html#a87cf9f30579e5e461f525ab78274e1df">get_name</a>()));    <span class="comment">// REMOVE &amp; ADD AGAIN</span></div>
-<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160; </div>
-<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> <a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a> = <a class="code" href="classhal_1_1_base_tree_model.html#a0c0375f46d675d30f44f12c170b27006">getIndexFromItem</a>(item);</div>
-<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#dataChanged">dataChanged</a>(<a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>, <a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>);</div>
-<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;        }</div>
-<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;    }</div>
-<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160; </div>
-<div class="line"><a name="l00722"></a><span class="lineno"><a class="line" href="classhal_1_1_module_model.html#a8a1cfb7a8ed65b65cda4d971316e0536">  722</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_model.html#a8a1cfb7a8ed65b65cda4d971316e0536">ModuleModel::updateGateName</a>(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>)</div>
-<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;    {</div>
-<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;        Q_ASSERT(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">get_gate_by_id</a>(<span class="keywordtype">id</span>));</div>
+<div class="line"><a name="l00710"></a><span class="lineno"><a class="line" href="classhal_1_1_module_model.html#aba67be1ad929342450a11ff64f73c7a9">  710</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_model.html#aba67be1ad929342450a11ff64f73c7a9">ModuleModel::updateModuleName</a>(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>)</div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;    {</div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;        Q_ASSERT(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">get_module_by_id</a>(<span class="keywordtype">id</span>));</div>
+<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160; </div>
+<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = mModuleMap.lowerBound(<span class="keywordtype">id</span>); it != mModuleMap.upperBound(<span class="keywordtype">id</span>); ++it)</div>
+<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;        {</div>
+<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;            <a class="code" href="classhal_1_1_module_item.html">ModuleItem</a>* item = it.value();</div>
+<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;            Q_ASSERT(item);</div>
+<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160; </div>
+<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;            item-&gt;<a class="code" href="classhal_1_1_module_item.html#a9a7b4c3f14ce92c7801560df822a5060">setName</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#aa963e38a4ce49c0e440be5e36f46369a">get_module_by_id</a>(<span class="keywordtype">id</span>)-&gt;<a class="code" href="classhal_1_1_module.html#a87cf9f30579e5e461f525ab78274e1df">get_name</a>()));    <span class="comment">// REMOVE &amp; ADD AGAIN</span></div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160; </div>
+<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> <a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a> = <a class="code" href="classhal_1_1_base_tree_model.html#a0c0375f46d675d30f44f12c170b27006">getIndexFromItem</a>(item);</div>
+<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#dataChanged">dataChanged</a>(<a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>, <a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>);</div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;        }</div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;    }</div>
 <div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160; </div>
-<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = mGateMap.lowerBound(<span class="keywordtype">id</span>); it != mGateMap.upperBound(<span class="keywordtype">id</span>); ++it)</div>
-<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;        {</div>
-<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;            <a class="code" href="classhal_1_1_module_item.html">ModuleItem</a>* item = it.value();</div>
-<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;            Q_ASSERT(item);</div>
-<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160; </div>
-<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;            item-&gt;<a class="code" href="classhal_1_1_module_item.html#a9a7b4c3f14ce92c7801560df822a5060">setName</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">get_gate_by_id</a>(<span class="keywordtype">id</span>)-&gt;<a class="code" href="classhal_1_1_gate.html#a55ca16fc3905a6c0cb87a6427189de31">get_name</a>()));    <span class="comment">// REMOVE &amp; ADD AGAIN</span></div>
-<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160; </div>
-<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> <a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a> = <a class="code" href="classhal_1_1_base_tree_model.html#a0c0375f46d675d30f44f12c170b27006">getIndexFromItem</a>(item);</div>
-<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#dataChanged">dataChanged</a>(<a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>, <a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>);</div>
-<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;        }</div>
-<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;    }</div>
-<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160; </div>
-<div class="line"><a name="l00738"></a><span class="lineno"><a class="line" href="classhal_1_1_module_model.html#a14b41328dbbc86811d877c6122487f69">  738</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_model.html#a14b41328dbbc86811d877c6122487f69">ModuleModel::updateNetName</a>(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>)</div>
-<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;    {</div>
-<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;        Q_ASSERT(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#ab5e29819702448bdd0315d3282e2eaae">get_net_by_id</a>(<span class="keywordtype">id</span>));</div>
-<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;        Q_ASSERT(mNetMap.contains(<span class="keywordtype">id</span>));</div>
-<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160; </div>
-<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = mNetMap.lowerBound(<span class="keywordtype">id</span>); it != mNetMap.upperBound(<span class="keywordtype">id</span>); ++it)</div>
-<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;        {</div>
-<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;            <a class="code" href="classhal_1_1_module_item.html">ModuleItem</a>* item = it.value();</div>
-<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;            Q_ASSERT(item);</div>
-<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;        </div>
-<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;            item-&gt;<a class="code" href="classhal_1_1_module_item.html#a9a7b4c3f14ce92c7801560df822a5060">setName</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#ab5e29819702448bdd0315d3282e2eaae">get_net_by_id</a>(<span class="keywordtype">id</span>)-&gt;<a class="code" href="classhal_1_1_net.html#a4627e0be693c99fece29559be12898bd">get_name</a>()));    <span class="comment">// REMOVE &amp; ADD AGAIN</span></div>
-<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160; </div>
-<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> <a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a> = <a class="code" href="classhal_1_1_base_tree_model.html#a0c0375f46d675d30f44f12c170b27006">getIndexFromItem</a>(item);</div>
-<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#dataChanged">dataChanged</a>(<a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>, <a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>);</div>
-<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;        }</div>
-<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;    }</div>
-<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160; </div>
-<div class="line"><a name="l00755"></a><span class="lineno"><a class="line" href="classhal_1_1_module_model.html#a37147ee3ccd0f7401622dd6a8337dc4d">  755</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_module_model.html#a37147ee3ccd0f7401622dd6a8337dc4d">ModuleModel::isModifying</a>()</div>
-<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;    {</div>
-<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;        <span class="keywordflow">return</span> mIsModifying;</div>
-<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;    }</div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160; </div>
-<div class="line"><a name="l00760"></a><span class="lineno"><a class="line" href="classhal_1_1_module_model.html#aa0170922e216b32944fbbe3488482a0f">  760</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_model.html#aa0170922e216b32944fbbe3488482a0f">ModuleModel::setIsModifying</a>(<span class="keywordtype">bool</span> pIsModifying)</div>
-<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;    {</div>
-<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;        mIsModifying = pIsModifying;</div>
-<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;    }</div>
-<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;}</div>
+<div class="line"><a name="l00726"></a><span class="lineno"><a class="line" href="classhal_1_1_module_model.html#a8a1cfb7a8ed65b65cda4d971316e0536">  726</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_model.html#a8a1cfb7a8ed65b65cda4d971316e0536">ModuleModel::updateGateName</a>(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>)</div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;    {</div>
+<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;        Q_ASSERT(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">get_gate_by_id</a>(<span class="keywordtype">id</span>));</div>
+<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160; </div>
+<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = mGateMap.lowerBound(<span class="keywordtype">id</span>); it != mGateMap.upperBound(<span class="keywordtype">id</span>); ++it)</div>
+<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;        {</div>
+<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;            <a class="code" href="classhal_1_1_module_item.html">ModuleItem</a>* item = it.value();</div>
+<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;            Q_ASSERT(item);</div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160; </div>
+<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;            item-&gt;<a class="code" href="classhal_1_1_module_item.html#a9a7b4c3f14ce92c7801560df822a5060">setName</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#a26d0f67be01c66f22422f40938e29237">get_gate_by_id</a>(<span class="keywordtype">id</span>)-&gt;<a class="code" href="classhal_1_1_gate.html#a55ca16fc3905a6c0cb87a6427189de31">get_name</a>()));    <span class="comment">// REMOVE &amp; ADD AGAIN</span></div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160; </div>
+<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> <a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a> = <a class="code" href="classhal_1_1_base_tree_model.html#a0c0375f46d675d30f44f12c170b27006">getIndexFromItem</a>(item);</div>
+<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#dataChanged">dataChanged</a>(<a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>, <a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>);</div>
+<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;        }</div>
+<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;    }</div>
+<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160; </div>
+<div class="line"><a name="l00742"></a><span class="lineno"><a class="line" href="classhal_1_1_module_model.html#a14b41328dbbc86811d877c6122487f69">  742</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_model.html#a14b41328dbbc86811d877c6122487f69">ModuleModel::updateNetName</a>(<a class="code" href="net__layout__point_8h.html#aa7fe0c70576e86ca2c5f641bb47ccc9d">u32</a> <span class="keywordtype">id</span>)</div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;    {</div>
+<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;        Q_ASSERT(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#ab5e29819702448bdd0315d3282e2eaae">get_net_by_id</a>(<span class="keywordtype">id</span>));</div>
+<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;        Q_ASSERT(mNetMap.contains(<span class="keywordtype">id</span>));</div>
+<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160; </div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = mNetMap.lowerBound(<span class="keywordtype">id</span>); it != mNetMap.upperBound(<span class="keywordtype">id</span>); ++it)</div>
+<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;        {</div>
+<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;            <a class="code" href="classhal_1_1_module_item.html">ModuleItem</a>* item = it.value();</div>
+<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;            Q_ASSERT(item);</div>
+<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;        </div>
+<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;            item-&gt;<a class="code" href="classhal_1_1_module_item.html#a9a7b4c3f14ce92c7801560df822a5060">setName</a>(<a class="codeRef" href="https://doc.qt.io/qt-5/qstring.html#fromStdString">QString::fromStdString</a>(<a class="code" href="namespacehal.html#aabb4e1324f8808da9712d67be96fb614">gNetlist</a>-&gt;<a class="code" href="classhal_1_1_netlist.html#ab5e29819702448bdd0315d3282e2eaae">get_net_by_id</a>(<span class="keywordtype">id</span>)-&gt;<a class="code" href="classhal_1_1_net.html#a4627e0be693c99fece29559be12898bd">get_name</a>()));    <span class="comment">// REMOVE &amp; ADD AGAIN</span></div>
+<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160; </div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> <a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a> = <a class="code" href="classhal_1_1_base_tree_model.html#a0c0375f46d675d30f44f12c170b27006">getIndexFromItem</a>(item);</div>
+<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;            <a class="codeRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">Q_EMIT</a> <a class="codeRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#dataChanged">dataChanged</a>(<a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>, <a class="code" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>);</div>
+<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;        }</div>
+<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;    }</div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160; </div>
+<div class="line"><a name="l00759"></a><span class="lineno"><a class="line" href="classhal_1_1_module_model.html#a37147ee3ccd0f7401622dd6a8337dc4d">  759</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhal_1_1_module_model.html#a37147ee3ccd0f7401622dd6a8337dc4d">ModuleModel::isModifying</a>()</div>
+<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;    {</div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;        <span class="keywordflow">return</span> mIsModifying;</div>
+<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;    }</div>
+<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160; </div>
+<div class="line"><a name="l00764"></a><span class="lineno"><a class="line" href="classhal_1_1_module_model.html#aa0170922e216b32944fbbe3488482a0f">  764</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhal_1_1_module_model.html#aa0170922e216b32944fbbe3488482a0f">ModuleModel::setIsModifying</a>(<span class="keywordtype">bool</span> pIsModifying)</div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;    {</div>
+<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;        mIsModifying = pIsModifying;</div>
+<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;    }</div>
+<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aqlist_html_append"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#append">QList::append</a></div><div class="ttdeci">void append(const T &amp;value)</div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_relay_html_ac42e72263fd7fe300f666e4cdaea971a"><div class="ttname"><a href="classhal_1_1_netlist_relay.html#ac42e72263fd7fe300f666e4cdaea971a">hal::NetlistRelay::moduleSubmoduleAdded</a></div><div class="ttdeci">void moduleSubmoduleAdded(Module *m, const u32 added_module) const</div></div>
-<div class="ttc" id="aclasshal_1_1_module_model_html_a8a1cfb7a8ed65b65cda4d971316e0536"><div class="ttname"><a href="classhal_1_1_module_model.html#a8a1cfb7a8ed65b65cda4d971316e0536">hal::ModuleModel::updateGateName</a></div><div class="ttdeci">void updateGateName(const u32 id)</div><div class="ttdef"><b>Definition:</b> <a href="module__model_8cpp_source.html#l00722">module_model.cpp:722</a></div></div>
+<div class="ttc" id="aclasshal_1_1_module_model_html_a8a1cfb7a8ed65b65cda4d971316e0536"><div class="ttname"><a href="classhal_1_1_module_model.html#a8a1cfb7a8ed65b65cda4d971316e0536">hal::ModuleModel::updateGateName</a></div><div class="ttdeci">void updateGateName(const u32 id)</div><div class="ttdef"><b>Definition:</b> <a href="module__model_8cpp_source.html#l00726">module_model.cpp:726</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_relay_html_aab996ad30d23ed458721a333621a70e1"><div class="ttname"><a href="classhal_1_1_netlist_relay.html#aab996ad30d23ed458721a333621a70e1">hal::NetlistRelay::moduleNameChanged</a></div><div class="ttdeci">void moduleNameChanged(Module *m) const</div></div>
 <div class="ttc" id="aclasshal_1_1_module_model_html_a788da4c0a93921306f941a9a541a2c57"><div class="ttname"><a href="classhal_1_1_module_model.html#a788da4c0a93921306f941a9a541a2c57">hal::ModuleModel::getItem</a></div><div class="ttdeci">ModuleItem * getItem(const QModelIndex &amp;index) const</div><div class="ttdef"><b>Definition:</b> <a href="module__model_8cpp_source.html#l00092">module_model.cpp:92</a></div></div>
 <div class="ttc" id="aclasshal_1_1_module_html_af771e486709f93e4abab9f0fe092010b"><div class="ttname"><a href="classhal_1_1_module.html#af771e486709f93e4abab9f0fe092010b">hal::Module::get_id</a></div><div class="ttdeci">u32 get_id() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2module_8cpp_source.html#l00082">module.cpp:82</a></div></div>
@@ -875,7 +879,7 @@ $(document).ready(function(){initNavTree('module__model_8cpp_source.html',''); i
 <div class="ttc" id="aqt_html_ItemDataRole-enum"><div class="ttname"><a href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::DecorationRole</a></div><div class="ttdeci">DecorationRole</div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_relay_html_a6e1646900c7f6da6139a26fe96f7d161"><div class="ttname"><a href="classhal_1_1_netlist_relay.html#a6e1646900c7f6da6139a26fe96f7d161">hal::NetlistRelay::moduleGateRemoved</a></div><div class="ttdeci">void moduleGateRemoved(Module *m, const u32 removed_gate) const</div></div>
 <div class="ttc" id="aqabstractitemmodel_html_beginRemoveRows"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginRemoveRows">QAbstractItemModel::beginRemoveRows</a></div><div class="ttdeci">void beginRemoveRows(const QModelIndex &amp;parent, int first, int last)</div></div>
-<div class="ttc" id="aclasshal_1_1_module_model_html_aa0170922e216b32944fbbe3488482a0f"><div class="ttname"><a href="classhal_1_1_module_model.html#aa0170922e216b32944fbbe3488482a0f">hal::ModuleModel::setIsModifying</a></div><div class="ttdeci">void setIsModifying(bool pIsModifying)</div><div class="ttdef"><b>Definition:</b> <a href="module__model_8cpp_source.html#l00760">module_model.cpp:760</a></div></div>
+<div class="ttc" id="aclasshal_1_1_module_model_html_aa0170922e216b32944fbbe3488482a0f"><div class="ttname"><a href="classhal_1_1_module_model.html#aa0170922e216b32944fbbe3488482a0f">hal::ModuleModel::setIsModifying</a></div><div class="ttdeci">void setIsModifying(bool pIsModifying)</div><div class="ttdef"><b>Definition:</b> <a href="module__model_8cpp_source.html#l00764">module_model.cpp:764</a></div></div>
 <div class="ttc" id="anamespacetest__plugin_html_abd3083aec6bd8d3b9851214d6d355740"><div class="ttname"><a href="namespacetest__plugin.html#abd3083aec6bd8d3b9851214d6d355740">test_plugin.g</a></div><div class="ttdeci">g</div><div class="ttdef"><b>Definition:</b> <a href="test__plugin_8py_source.html#l00032">test_plugin.py:32</a></div></div>
 <div class="ttc" id="aqmodelindex_html_internalPointer"><div class="ttname"><a href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer</a></div><div class="ttdeci">void * internalPointer() const const</div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_relay_html_ac909d23f8dfc8bd143cb471e7eb8165e"><div class="ttname"><a href="classhal_1_1_netlist_relay.html#ac909d23f8dfc8bd143cb471e7eb8165e">hal::NetlistRelay::moduleCreated</a></div><div class="ttdeci">void moduleCreated(Module *m) const</div></div>
@@ -939,7 +943,7 @@ $(document).ready(function(){initNavTree('module__model_8cpp_source.html',''); i
 <div class="ttc" id="aqlist_html_isEmpty"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#isEmpty">QList::isEmpty</a></div><div class="ttdeci">bool isEmpty() const const</div></div>
 <div class="ttc" id="aqabstractitemmodel_html_flags"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemmodel.html#flags">QAbstractItemModel::flags</a></div><div class="ttdeci">virtual Qt::ItemFlags flags(const QModelIndex &amp;index) const const</div></div>
 <div class="ttc" id="amodule__model_8h_html"><div class="ttname"><a href="module__model_8h.html">module_model.h</a></div></div>
-<div class="ttc" id="aclasshal_1_1_module_model_html_aba67be1ad929342450a11ff64f73c7a9"><div class="ttname"><a href="classhal_1_1_module_model.html#aba67be1ad929342450a11ff64f73c7a9">hal::ModuleModel::updateModuleName</a></div><div class="ttdeci">void updateModuleName(const u32 id)</div><div class="ttdef"><b>Definition:</b> <a href="module__model_8cpp_source.html#l00706">module_model.cpp:706</a></div></div>
+<div class="ttc" id="aclasshal_1_1_module_model_html_aba67be1ad929342450a11ff64f73c7a9"><div class="ttname"><a href="classhal_1_1_module_model.html#aba67be1ad929342450a11ff64f73c7a9">hal::ModuleModel::updateModuleName</a></div><div class="ttdeci">void updateModuleName(const u32 id)</div><div class="ttdef"><b>Definition:</b> <a href="module__model_8cpp_source.html#l00710">module_model.cpp:710</a></div></div>
 <div class="ttc" id="aclasshal_1_1_net_html"><div class="ttname"><a href="classhal_1_1_net.html">hal::Net</a></div><div class="ttdef"><b>Definition:</b> <a href="net_8h_source.html#l00057">net.h:57</a></div></div>
 <div class="ttc" id="aqicon_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qicon.html">QIcon</a></div></div>
 <div class="ttc" id="aqabstractitemmodel_html_beginResetModel"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel</a></div><div class="ttdeci">void beginResetModel()</div></div>
@@ -951,7 +955,7 @@ $(document).ready(function(){initNavTree('module__model_8cpp_source.html',''); i
 <div class="ttc" id="aclasshal_1_1_netlist_relay_html_ab02f9f5376b48c985eaaa8e0fc5abf80"><div class="ttname"><a href="classhal_1_1_netlist_relay.html#ab02f9f5376b48c985eaaa8e0fc5abf80">hal::NetlistRelay::gateNameChanged</a></div><div class="ttdeci">void gateNameChanged(Gate *g) const</div></div>
 <div class="ttc" id="aclasshal_1_1_module_model_html_a95e85288c7afef01a5ec11f1117392d8"><div class="ttname"><a href="classhal_1_1_module_model.html#a95e85288c7afef01a5ec11f1117392d8">hal::ModuleModel::addModule</a></div><div class="ttdeci">void addModule(const u32 id, const u32 parentId)</div><div class="ttdef"><b>Definition:</b> <a href="module__model_8cpp_source.html#l00145">module_model.cpp:145</a></div></div>
 <div class="ttc" id="aqset_html_contains"><div class="ttname"><a href="https://doc.qt.io/qt-5/qset.html#contains">QSet::contains</a></div><div class="ttdeci">bool contains(const T &amp;value) const const</div></div>
-<div class="ttc" id="aclasshal_1_1_module_model_html_a37147ee3ccd0f7401622dd6a8337dc4d"><div class="ttname"><a href="classhal_1_1_module_model.html#a37147ee3ccd0f7401622dd6a8337dc4d">hal::ModuleModel::isModifying</a></div><div class="ttdeci">bool isModifying()</div><div class="ttdef"><b>Definition:</b> <a href="module__model_8cpp_source.html#l00755">module_model.cpp:755</a></div></div>
+<div class="ttc" id="aclasshal_1_1_module_model_html_a37147ee3ccd0f7401622dd6a8337dc4d"><div class="ttname"><a href="classhal_1_1_module_model.html#a37147ee3ccd0f7401622dd6a8337dc4d">hal::ModuleModel::isModifying</a></div><div class="ttdeci">bool isModifying()</div><div class="ttdef"><b>Definition:</b> <a href="module__model_8cpp_source.html#l00759">module_model.cpp:759</a></div></div>
 <div class="ttc" id="aclasshal_1_1_netlist_relay_html_a192a78f3a2a4b3dca8250c90fbc637f1"><div class="ttname"><a href="classhal_1_1_netlist_relay.html#a192a78f3a2a4b3dca8250c90fbc637f1">hal::NetlistRelay::moduleGatesAssignEnd</a></div><div class="ttdeci">void moduleGatesAssignEnd(Module *m, u32 number_gates) const</div></div>
 <div class="ttc" id="aclasshal_1_1_base_tree_item_html_a48496a62ce615523139d8c5327e631bc"><div class="ttname"><a href="classhal_1_1_base_tree_item.html#a48496a62ce615523139d8c5327e631bc">hal::BaseTreeItem::appendChild</a></div><div class="ttdeci">virtual void appendChild(BaseTreeItem *child)</div><div class="ttdef"><b>Definition:</b> <a href="base__tree__item_8cpp_source.html#l00039">base_tree_item.cpp:39</a></div></div>
 <div class="ttc" id="aclasshal_1_1_net_html_a4627e0be693c99fece29559be12898bd"><div class="ttname"><a href="classhal_1_1_net.html#a4627e0be693c99fece29559be12898bd">hal::Net::get_name</a></div><div class="ttdeci">const std::string &amp; get_name() const</div><div class="ttdef"><b>Definition:</b> <a href="netlist_2net_8cpp_source.html#l00098">net.cpp:98</a></div></div>
@@ -977,7 +981,7 @@ $(document).ready(function(){initNavTree('module__model_8cpp_source.html',''); i
 <div class="ttc" id="aqabstractitemmodel_html_endResetModel"><div class="ttname"><a href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel</a></div><div class="ttdeci">void endResetModel()</div></div>
 <div class="ttc" id="aclasshal_1_1_selection_details_icon_provider_html_a784bb8463c9ea4563c4031c31e070f11"><div class="ttname"><a href="classhal_1_1_selection_details_icon_provider.html#a784bb8463c9ea4563c4031c31e070f11">hal::SelectionDetailsIconProvider::instance</a></div><div class="ttdeci">static SelectionDetailsIconProvider * instance()</div><div class="ttdef"><b>Definition:</b> <a href="selection__details__icon__provider_8cpp_source.html#l00033">selection_details_icon_provider.cpp:33</a></div></div>
 <div class="ttc" id="aqvariant_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a></div></div>
-<div class="ttc" id="aclasshal_1_1_module_model_html_a14b41328dbbc86811d877c6122487f69"><div class="ttname"><a href="classhal_1_1_module_model.html#a14b41328dbbc86811d877c6122487f69">hal::ModuleModel::updateNetName</a></div><div class="ttdeci">void updateNetName(const u32 id)</div><div class="ttdef"><b>Definition:</b> <a href="module__model_8cpp_source.html#l00738">module_model.cpp:738</a></div></div>
+<div class="ttc" id="aclasshal_1_1_module_model_html_a14b41328dbbc86811d877c6122487f69"><div class="ttname"><a href="classhal_1_1_module_model.html#a14b41328dbbc86811d877c6122487f69">hal::ModuleModel::updateNetName</a></div><div class="ttdeci">void updateNetName(const u32 id)</div><div class="ttdef"><b>Definition:</b> <a href="module__model_8cpp_source.html#l00742">module_model.cpp:742</a></div></div>
 <div class="ttc" id="aqlist_html_end"><div class="ttname"><a href="https://doc.qt.io/qt-5/qlist.html#end">QList::end</a></div><div class="ttdeci">QList::iterator end()</div></div>
 <div class="ttc" id="anet_8h_html"><div class="ttname"><a href="net_8h.html">net.h</a></div></div>
 <div class="ttc" id="aqhash_html"><div class="ttname"><a href="https://doc.qt.io/qt-5/qhash.html">QHash</a></div></div>
@@ -1001,7 +1005,7 @@ $(document).ready(function(){initNavTree('module__model_8cpp_source.html',''); i
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_6bd2b93008728295189e380cf3731a95.html">gui</a></li><li class="navelem"><a class="el" href="dir_8f3a6e7567706389d7af07afaa901854.html">src</a></li><li class="navelem"><a class="el" href="dir_01dabd8fa09be66818ad5ae09846abf1.html">module_model</a></li><li class="navelem"><a class="el" href="module__model_8cpp.html">module_model.cpp</a></li>
-    <li class="footer">Generated on Thu Jun 27 2024 13:30:05 for HAL by
+    <li class="footer">Generated on Thu Jun 27 2024 17:46:41 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
