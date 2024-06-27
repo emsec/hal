@@ -254,6 +254,17 @@ namespace hal
         checkReadyState();
     }
 
+    void NetlistSimulatorController::simulate_only_probes(const std::vector<const Net*>& probes)
+    {
+        for (const Net* n : probes)
+            mSimulateOnlyProbes.insert(n->get_id());
+    }
+
+    void NetlistSimulatorController::simulate_only_probes(const QSet<u32>& probes)
+    {
+        mSimulateOnlyProbes = probes;
+    }
+
     u32 NetlistSimulatorController::add_trigger_time(const std::vector<WaveData*>& trigger_waves, const std::vector<int>& trigger_on_values)
     {
         if (trigger_waves.empty())
@@ -824,8 +835,11 @@ namespace hal
                 return false;
 
             QList<const Net*> partialNets;
-            for (const Net* n : get_partial_netlist_nets())
+            for (const Net* n : get_partial_netlist_nets()){
+                if (!mSimulateOnlyProbes.empty() && !mSimulateOnlyProbes.contains(n->get_id()))
+                    continue;
                 partialNets.append(n);
+            }
 
             if (reader.importVcd(QString::fromStdString(resultFile), mWorkDir, partialNets))
             {
@@ -833,6 +847,9 @@ namespace hal
             }
             else
                 return false;
+
+            if (!mSimulateOnlyProbes.isEmpty())
+                QFile::remove(QString::fromStdString(resultFile.string()));
         }
         return true;
     }

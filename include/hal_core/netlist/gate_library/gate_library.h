@@ -106,6 +106,18 @@ namespace hal
         GateType* create_gate_type(const std::string& name, std::set<GateTypeProperty> properties = {GateTypeProperty::combinational}, std::unique_ptr<GateTypeComponent> component = nullptr);
 
         /**
+         * TODO pybind
+         * Replace gate type with given ID, might change name, properties, component, and return it.
+         *
+         * @param[in] id - The ID of gate type
+         * @param[in] name - The name of the gate type.
+         * @param[in] properties - The properties of the gate type.
+         * @param[in] component - A component adding additional functionality to the gate type.
+         * @returns The new gate type instance on success, a nullptr otherwise.
+         */
+        GateType* replace_gate_type(u32 id, const std::string& name, std::set<GateTypeProperty> properties = {GateTypeProperty::combinational}, std::unique_ptr<GateTypeComponent> component = nullptr);
+
+        /**
          * Check whether the given gate type is contained in this library.
          *
          * @param[in] gate_type - The gate type.

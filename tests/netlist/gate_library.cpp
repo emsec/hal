@@ -121,6 +121,16 @@ namespace hal
             gl->add_include("another.include");
             gl->add_include("last.include");
             EXPECT_EQ(gl->get_includes(), std::vector<std::string>({"in.clu.de", "another.include", "last.include"}));
+
+            // Replace gate type
+            u32 repl_id = gt_and->get_id();
+            EXPECT_EQ(gl->replace_gate_type(repl_id, "gt_or"), nullptr); // must avoid name collision
+            gt_and = gl->replace_gate_type(repl_id, "gt_and");           // same name as before is ok
+            ASSERT_TRUE(gt_and != nullptr);
+            gt_and = gl->replace_gate_type(repl_id, "gt_and_repl");      // new name also ok
+            ASSERT_TRUE(gt_and != nullptr);
+            EXPECT_EQ(gl->get_gate_type_by_name("gt_and"), nullptr);     // no longer in gate library
+            EXPECT_EQ(gl->get_gate_type_by_name("gt_and_repl"), gt_and); // replaced by type with new name
         }
         TEST_END
     }
