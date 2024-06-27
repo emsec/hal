@@ -14,7 +14,7 @@
 // 
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,50 +25,51 @@
 
 #pragma once
 #include "user_action.h"
+#include <QPoint>
+#include <QString>
 
 namespace hal
 {
     /**
      * @ingroup user_action
-     * @brief Create a new item
+     * @brief Moves a node.
      *
-     * Creates a new object with a given type and name.
+     * Moves a node to another grid position in the GraphicsScene. The Context ID should be provided by passing it in
+     * the UserActionObject of type UserActionObjectType::Context.
      *
-     * Undo Action: ActionDeleteObject.
+     * Undo Action: ActionMoveItem
      */
-    class ActionCreateObject : public UserAction
+    class ActionMoveItem : public UserAction
     {
-        QString mObjectName;
-        u32 mParentId;
-        u32 mLinkedObjectId;
+        u32 mSourceParentId;
+        u32 mTargetParentId;
+        int mTargetRow;
 
     public:
         /**
-         * Action Constructor.
+         * Action constructor.
          *
-         * @param type - The UserActionObjectType of the item that should be created (default type: None)
-         * @param objName - The name of the object to create (default name: "").
+         * Will move the tree item to new parent,
+         * action object must indicate tree item
          */
-        ActionCreateObject(UserActionObjectType::ObjectType type=UserActionObjectType::None,
-                           const QString& objName = QString());
+        ActionMoveItem(u32 tgtId = 0, u32 srcId = 0, int tgtRow = -1);
+
         bool exec() override;
         QString tagname() const override;
         void writeToXml(QXmlStreamWriter& xmlOut) const override;
         void readFromXml(QXmlStreamReader& xmlIn) override;
         void addToHash(QCryptographicHash& cryptoHash) const override;
-        void setParentId(u32 pid) {mParentId = pid;}
-        void setLinkedObjectId(u32 lid) {mLinkedObjectId = lid;}
     };
 
     /**
      * @ingroup user_action
-     * @brief UserActionFactory for ActionCreateObject
+     * @brief UserActionFactory for ActionMoveItem
      */
-    class ActionCreateObjectFactory : public UserActionFactory
+    class ActionMoveItemFactory : public UserActionFactory
     {
     public:
-        ActionCreateObjectFactory();
+        ActionMoveItemFactory();
         UserAction* newAction() const;
-        static ActionCreateObjectFactory* sFactory;
+        static ActionMoveItemFactory* sFactory;
     };
 }

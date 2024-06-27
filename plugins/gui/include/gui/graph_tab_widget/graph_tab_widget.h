@@ -81,7 +81,7 @@ namespace hal
          *
          * @param context - The GraphContext to show
          */
-        void showContext(GraphContext* context);
+        void showContext(GraphContext *context);
 
         /**
          * Moves (and scales) the camera in the current GraphWidget to the current selection so that every selected
@@ -226,7 +226,7 @@ namespace hal
 
         QMap<GraphContext*, QWidget*> mContextWidgetMap;
 
-        int getContextTabIndex(GraphContext* context) const;
+        int getContextTabIndex(const GraphContext *context) const;
 
         void addGraphWidgetTab(GraphContext* context);
 
