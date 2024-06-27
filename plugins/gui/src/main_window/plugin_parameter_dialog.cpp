@@ -419,7 +419,7 @@ namespace hal {
 
     void PluginParameterNodeDialog::handleActivateModuleDialog()
     {
-        ModuleDialog md({}, "Select module", nullptr, this);
+        ModuleDialog md({}, "Select module", false, nullptr, this);
         if (md.exec() == QDialog::Accepted)
         {
             setModule(md.selectedId());

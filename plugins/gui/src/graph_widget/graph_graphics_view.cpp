@@ -1029,7 +1029,7 @@ namespace hal
 //            }
 //        }
 
-        ModuleDialog module_dialog(getNotSelectableModules(),"Add module to view", nullptr, this);
+        ModuleDialog module_dialog(getNotSelectableModules(),"Add module to view", true, nullptr, this);
         if (module_dialog.exec() == QDialog::Accepted)
         {
             QSet<u32> module_to_add;
@@ -1471,7 +1471,7 @@ namespace hal
         }
 
         AddToModuleReceiver* receiver = new AddToModuleReceiver(this);
-        ModuleDialog md(exclude_ids, "Move to module", receiver, this);
+        ModuleDialog md(exclude_ids, "Move to module", false, receiver, this);
         if (md.exec() != QDialog::Accepted) return;
         if (md.isNewModule())
         {

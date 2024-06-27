@@ -64,12 +64,12 @@ namespace hal
             std::set<std::string> get_provided_models(const std::filesystem::path model_path, const std::filesystem::path gate_definition_path);
 
             /**
-             * Get all used gate types in netlist.
+             * Get all used gate types in netlist mapped to the appropriate variable name.
              * 
              * @param[in] nl - Netlist for which the models shall be created
-             * @returns Set of used gate types.
+             * @returns Map of used gate types and variable names.
              */
-            std::set<GateType*> get_gate_gate_types_from_netlist(const Netlist* nl);
+            std::unordered_map<GateType *, std::string> get_gate_gate_types_from_netlist(const Netlist* nl);
 
             /**
              * Generate the parameters function for the simulation model of the gate.
@@ -78,6 +78,13 @@ namespace hal
              * @returns Vector of all parameters that the gate type has.
              */
             std::vector<std::string> get_parameters_for_gate(const GateType* gt);
+
+            /**
+             * Get the gate type name cleaned from characters that are not elegible in a variable name
+             * @param gt - The gate type to get the name from
+             * @return String with gate name suitable as variable name
+             */
+            std::string get_name_for_gate_type(const GateType* gt);
 
             /**
              * Generates the prologue for the simulation model.

@@ -6,6 +6,7 @@
 #include "hal_core/netlist/project_manager.h"
 #include "hal_core/utilities/json_write_document.h"
 #include "hal_core/utilities/log.h"
+#include "hal_core/netlist/gate_library/enums/pin_direction.h"
 #include "netlist_simulator_controller/plugin_netlist_simulator_controller.h"
 #include "netlist_simulator_controller/saleae_directory.h"
 #include "netlist_simulator_controller/saleae_parser.h"
@@ -30,7 +31,7 @@ namespace hal
 
     NetlistSimulatorController::NetlistSimulatorController(u32 id, const std::string nam, const std::string& workdir, QObject* parent)
         : QObject(parent), mId(id), mName(QString::fromStdString(nam)), mState(NoGatesSelected), mSimulationEngine(nullptr), mTempDir(nullptr), mWaveDataList(nullptr),
-          mSimulationInput(new SimulationInput)
+          mSimulationInput(new SimulationInput), mLogReceiver(nullptr)
     {
         if (mName.isEmpty())
             mName = QString("sim_controller%1").arg(mId);
@@ -63,7 +64,8 @@ namespace hal
     }
 
     NetlistSimulatorController::NetlistSimulatorController(u32 id, Netlist* nl, const std::string& filename, QObject* parent)
-        : QObject(parent), mId(id), mState(NoGatesSelected), mSimulationEngine(nullptr), mTempDir(nullptr), mWaveDataList(nullptr), mSimulationInput(new SimulationInput)
+        : QObject(parent), mId(id), mState(NoGatesSelected), mSimulationEngine(nullptr), mTempDir(nullptr), mWaveDataList(nullptr),
+          mSimulationInput(new SimulationInput), mLogReceiver(nullptr)
     {
         FILE* ff = fopen(filename.c_str(), "rb");
         if (!ff)
@@ -166,6 +168,11 @@ namespace hal
         //  delete mTempDir;
     }
 
+    void NetlistSimulatorController::setLogReceiver(SimulationLogReceiver *logrec)
+    {
+        mLogReceiver = logrec;
+    }
+
     void NetlistSimulatorController::setState(SimulationState stat)
     {
         if (stat == mState)
@@ -254,6 +261,11 @@ namespace hal
         checkReadyState();
     }
 
+    bool NetlistSimulatorController::is_no_clock_used() const
+    {
+        return mSimulationInput->is_no_clock_used();
+    }
+
     void NetlistSimulatorController::simulate_only_probes(const std::vector<const Net*>& probes)
     {
         for (const Net* n : probes)
@@ -340,6 +352,30 @@ namespace hal
         return add_waveform_group(pin_group->get_name(), nets);
     }
 
+    u32 NetlistSimulatorController::add_waveform_group(const Gate *gate, const PinGroup<GatePin>* pin_group)
+    {
+        std::vector<Net*> nets;
+        for (const auto pin : pin_group->get_pins())
+        {
+            Net* n = nullptr;
+            switch (pin->get_direction())
+            {
+            case PinDirection::input:
+                n = gate->get_fan_in_net(pin);
+                break;
+            case PinDirection::output:
+                n = gate->get_fan_out_net(pin);
+                break;
+            default:
+                break;
+            }
+
+            if (n) nets.push_back(n);
+        }
+
+        return add_waveform_group(pin_group->get_name(), nets);
+    }
+
     u32 NetlistSimulatorController::add_waveform_group(const std::string& name, const PinGroup<ModulePin>* pin_group)
     {
         std::vector<Net*> nets;
@@ -360,7 +396,7 @@ namespace hal
     {
         if (filename.isEmpty())
             return;
-        VcdSerializer reader(mWorkDir, this);
+        VcdSerializer reader(mWorkDir, false, this);
         QList<const Net*> onlyNets;
         for (const Net* n : mSimulationInput->get_input_nets())
             onlyNets.append(n);
@@ -512,7 +548,7 @@ namespace hal
         }
 
         // start simulation process (might be external process)
-        if (!mSimulationEngine->run(this))
+        if (!mSimulationEngine->run(this,mLogReceiver))
         {
             log_warning(get_name(), "simulation engine error during startup.");
             setState(EngineFailed);
@@ -592,7 +628,7 @@ namespace hal
 
     bool NetlistSimulatorController::import_vcd(const std::string& filename, FilterInputFlag filter)
     {
-        VcdSerializer reader(mWorkDir, this);
+        VcdSerializer reader(mWorkDir, false, this);
 
         QList<const Net*> inputNets;
         if (filter != NoFilter)
@@ -615,7 +651,7 @@ namespace hal
 
     void NetlistSimulatorController::import_csv(const std::string& filename, FilterInputFlag filter, u64 timescale)
     {
-        VcdSerializer reader(mWorkDir, this);
+        VcdSerializer reader(mWorkDir, false, this);
 
         QList<const Net*> inputNets;
         if (filter != NoFilter)
@@ -632,7 +668,7 @@ namespace hal
 
     void NetlistSimulatorController::import_saleae(const std::string& dirname, std::unordered_map<Net*, int> lookupTable, u64 timescale)
     {
-        VcdSerializer reader(mWorkDir, this);
+        VcdSerializer reader(mWorkDir, false, this);
         if (reader.importSaleae(QString::fromStdString(dirname), lookupTable, mWorkDir, timescale))
         {
             mWaveDataList->updateFromSaleae();
@@ -677,7 +713,7 @@ namespace hal
                     continue;
                 lookupTable.insert(std::make_pair((Net*)n, inx));
             }
-            VcdSerializer reader(mWorkDir, this);
+            VcdSerializer reader(mWorkDir, false, this);
             if (reader.importSaleae(QString::fromStdString(dirname), lookupTable, mWorkDir, timescale))
             {
                 mWaveDataList->updateFromSaleae();
@@ -789,16 +825,18 @@ namespace hal
         }
 
         Q_EMIT engineFinished(success);
+
+//        QObject* simulThread = sender();
+//        if (simulThread) simulThread->deleteLater();
         /*
-       for (Net* n : gNetlist->get_nets())
+        for (Net* n : gNetlist->get_nets())
         {
             WaveData* wd = WaveData::simulationResultFactory(n, mSimulator.get());
             if (wd) mResultMap.insert(wd->id(),wd);
         }
 
         mSimulator->generate_vcd("result.vcd",0,t);
-
-*/
+        */
     }
 
     bool NetlistSimulatorController::get_results()
@@ -829,7 +867,7 @@ namespace hal
             std::filesystem::path resultFile = mSimulationEngine->get_result_filename();
             if (resultFile.is_relative())
                 resultFile = get_working_directory() / resultFile;
-            VcdSerializer reader(mWorkDir, this);
+            VcdSerializer reader(mWorkDir, false, this);
             QFileInfo info(QString::fromStdString(resultFile.string()));
             if (!info.exists() || !info.isReadable())
                 return false;
@@ -887,6 +925,30 @@ namespace hal
         checkReadyState();
     }
 
+    void NetlistSimulatorController::compute_waveform_groups()
+    {
+        mSimulationInput->compute_net_groups();
+    }
+
+    void NetlistSimulatorController::load_waveform_groups(bool inputs)
+    {
+        for (const SimulationInput::NetGroup& ng : mSimulationInput->get_net_groups())
+        {
+            if (inputs)
+            {
+                if (!ng.is_input) continue;
+            }
+            else
+            {
+                if (ng.is_input) continue;
+            }
+            if (ng.gate)
+                add_waveform_group(ng.gate, ng.gate_pin_group);
+            else
+                add_waveform_group(ng.module_pin_group);
+        }
+    }
+
     void NetlistSimulatorController::add_gates(const std::vector<Gate*>& gates)
     {
         if (mState != NoGatesSelected)
@@ -926,6 +988,39 @@ namespace hal
     const std::unordered_set<const Net*>& NetlistSimulatorController::get_input_nets() const
     {
         return mSimulationInput->get_input_nets();
+    }
+
+    std::vector<NetlistSimulatorController::InputColumnHeader> NetlistSimulatorController::get_input_column_headers() const
+    {
+        std::vector<InputColumnHeader> retval;
+        std::unordered_set<const Net*> clkNets;
+        for (const SimulationInput::Clock& clk : mSimulationInput->get_clocks())
+            clkNets.insert(clk.clock_net);
+
+        for (const Net* n : mSimulationInput->get_input_nets())
+        {
+            InputColumnHeader ipc;
+            ipc.nets.push_back(n);
+            ipc.name = n->get_name();
+            ipc.is_clock = (clkNets.find(n) != clkNets.end());
+            retval.push_back(ipc);
+        }
+
+        for (SimulationInput::NetGroup ng : mSimulationInput->get_net_groups())
+        {
+            if (!ng.is_input) continue;
+            InputColumnHeader ipc;
+            ipc.name = ng.get_name();
+            ipc.is_clock = false;
+            for (const Net* n : ng.get_nets())
+            {
+                ipc.nets.push_back(n);
+                if (clkNets.find(n) != clkNets.end()) ipc.is_clock = true;
+                retval.erase(std::remove_if(retval.begin(), retval.end(), [n](const auto& s){ return s.nets.size() == 1 && s.nets.at(0) == n ;}), retval.end());
+            }
+            retval.push_back(ipc);
+        }
+        return retval;
     }
 
     const std::vector<const Net*>& NetlistSimulatorController::get_output_nets() const
@@ -1023,7 +1118,9 @@ namespace hal
 
     void NetlistSimulatorController::reset()
     {
+        mSimulationInput->clear();
         mWaveDataList->clearAll();
+        mState = NoGatesSelected;
     }
 
     void NetlistSimulatorController::simulate(u64 picoseconds)
