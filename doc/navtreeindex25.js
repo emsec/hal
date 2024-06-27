@@ -1,5 +1,7 @@
 var NAVTREEINDEX25 =
 {
+"grouping__color__delegate_8h.html":[7,0,1,3,0,0,22,0],
+"grouping__color__delegate_8h_source.html":[7,0,1,3,0,0,22,0],
 "grouping__color__serializer_8cpp.html":[7,0,1,3,2,21,1],
 "grouping__color__serializer_8cpp_source.html":[7,0,1,3,2,21,1],
 "grouping__color__serializer_8h.html":[7,0,1,3,0,0,22,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX25 =
 "module__color__manager_8cpp.html":[7,0,1,3,2,31,0],
 "module__color__manager_8cpp_source.html":[7,0,1,3,2,31,0],
 "module__color__manager_8h.html":[7,0,1,3,0,0,33,0],
-"module__color__manager_8h_source.html":[7,0,1,3,0,0,33,0],
-"module__details__tab__widget_8cpp.html":[7,0,1,3,2,38,13],
-"module__details__tab__widget_8cpp_source.html":[7,0,1,3,2,38,13]
+"module__color__manager_8h_source.html":[7,0,1,3,0,0,33,0]
 };

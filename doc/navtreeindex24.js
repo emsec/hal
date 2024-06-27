@@ -1,5 +1,7 @@
 var NAVTREEINDEX24 =
 {
+"globals_enum.html":[7,1,4],
+"globals_eval.html":[7,1,5],
 "globals_f.html":[7,1,0,6],
 "globals_func.html":[7,1,1],
 "globals_g.html":[7,1,0,7],
@@ -169,8 +171,8 @@ var NAVTREEINDEX24 =
 "group__graph-visuals.html":[4,0,0,0],
 "group__graph.html":[4,0,0],
 "group__gui.html":[4,0],
-"group__gui.html#ga077e1c5730ec712b6b5e2328edd17c56":[4,0,59],
 "group__gui.html#ga077e1c5730ec712b6b5e2328edd17c56":[7,0,1,3,0,0,56,0],
+"group__gui.html#ga077e1c5730ec712b6b5e2328edd17c56":[4,0,59],
 "group__gui.html#ga284a43cae48443fa22ac672a8b6ea8a0":[4,0,58],
 "group__gui.html#gaab0cd38a41c1215ae70822b1d501daa1":[4,0,57],
 "group__gui.html#ggaab0cd38a41c1215ae70822b1d501daa1a5012af45088eb8e999bb8350077b12ca":[4,0,57,3],
@@ -227,8 +229,8 @@ var NAVTREEINDEX24 =
 "group__unused.html":[4,0,8],
 "group__user__action.html":[4,0,5],
 "group__utilities.html":[4,1,4],
-"group__utilities.html#ga2258fcb2d8e5c8f15437e9c4dea3483d":[7,0,0,0,4,4,2],
 "group__utilities.html#ga2258fcb2d8e5c8f15437e9c4dea3483d":[4,1,4,8],
+"group__utilities.html#ga2258fcb2d8e5c8f15437e9c4dea3483d":[7,0,0,0,4,4,2],
 "group__utilities.html#ga522d6d0c8a408128993be37c86656280":[4,1,4,11],
 "group__utilities.html#ga522d6d0c8a408128993be37c86656280":[7,0,0,0,4,4,7],
 "group__utilities.html#ga59cad6336b54d8e4072e0861ce37b466":[4,1,4,10],
@@ -239,15 +241,13 @@ var NAVTREEINDEX24 =
 "group__utilities.html#ga9f09e61a5832ae08b39fde17dc9e04ce":[7,0,0,0,4,4,5],
 "group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[7,0,0,0,4,4,10],
 "group__utilities.html#gaccc921ec8323d53efb57a21a8d4be735":[4,1,4,14],
-"group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[4,1,4,13],
 "group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[7,0,0,0,4,4,9],
+"group__utilities.html#gaf7de45767abb16dd9841f83ef5dd0608":[4,1,4,13],
 "group__utility__widgets-context.html":[4,0,7,0],
 "group__utility__widgets-grouping.html":[4,0,7,2],
 "group__utility__widgets-module.html":[4,0,7,1],
 "group__utility__widgets-selection__details.html":[4,0,7,3],
 "group__utility__widgets.html":[4,0,7],
 "grouping__color__delegate_8cpp.html":[7,0,1,3,2,21,0],
-"grouping__color__delegate_8cpp_source.html":[7,0,1,3,2,21,0],
-"grouping__color__delegate_8h.html":[7,0,1,3,0,0,22,0],
-"grouping__color__delegate_8h_source.html":[7,0,1,3,0,0,22,0]
+"grouping__color__delegate_8cpp_source.html":[7,0,1,3,2,21,0]
 };

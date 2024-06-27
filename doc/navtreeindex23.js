@@ -1,5 +1,7 @@
 var NAVTREEINDEX23 =
 {
+"functions_func_e.html":[6,3,1,4],
+"functions_func_f.html":[6,3,1,5],
 "functions_func_g.html":[6,3,1,6],
 "functions_func_h.html":[6,3,1,7],
 "functions_func_i.html":[6,3,1,8],
@@ -247,7 +249,5 @@ var NAVTREEINDEX23 =
 "globals_c.html":[7,1,0,3],
 "globals_d.html":[7,1,0,4],
 "globals_defs.html":[7,1,6],
-"globals_e.html":[7,1,0,5],
-"globals_enum.html":[7,1,4],
-"globals_eval.html":[7,1,5]
+"globals_e.html":[7,1,0,5]
 };

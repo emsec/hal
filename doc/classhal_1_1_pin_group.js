@@ -1,6 +1,6 @@
 var classhal_1_1_pin_group =
 [
-    [ "PinGroup", "classhal_1_1_pin_group.html#aec50c4d67f32b3d4d621bbc116a998e6", null ],
+    [ "PinGroup", "classhal_1_1_pin_group.html#ad58b6589137aee6f2f34b0a509c910f1", null ],
     [ "~PinGroup", "classhal_1_1_pin_group.html#ac444df030e6ebf92a98fda0584577308", null ],
     [ "assign_pin", "classhal_1_1_pin_group.html#a1c73cbc250f9ff59f81b5441cca0704f", null ],
     [ "contains_pin", "classhal_1_1_pin_group.html#a479771519511c2aa3643cd4e12fa2558", null ],
@@ -15,12 +15,14 @@ var classhal_1_1_pin_group =
     [ "get_start_index", "classhal_1_1_pin_group.html#a5de8eba6c2c326d71da11b7efe120ac8", null ],
     [ "get_type", "classhal_1_1_pin_group.html#afb124e6d966ea8729c92693af1486960", null ],
     [ "is_ascending", "classhal_1_1_pin_group.html#ab4260b03031d11091200d79dd28787dc", null ],
+    [ "is_ordered", "classhal_1_1_pin_group.html#ad49a2eb434afea129266c7ef2dc4c4f1", null ],
     [ "move_pin", "classhal_1_1_pin_group.html#a45f83847945f1e8d00de2dd7c32a797c", null ],
     [ "operator!=", "classhal_1_1_pin_group.html#afe6fbd0272dedbaee39d314bf192c818", null ],
     [ "operator==", "classhal_1_1_pin_group.html#a7f1d0919b8a47042e21299595ad82681", null ],
     [ "remove_pin", "classhal_1_1_pin_group.html#a5640ea8e69852623eb2520d21f5863dc", null ],
     [ "set_direction", "classhal_1_1_pin_group.html#a4711d3f3d1da8d2722a9b809c80dcddf", null ],
     [ "set_name", "classhal_1_1_pin_group.html#aa3b9f3e58afa3dc40115fb6a40bd923d", null ],
+    [ "set_ordered", "classhal_1_1_pin_group.html#a8eda48699d495c843815115218cc5235", null ],
     [ "set_type", "classhal_1_1_pin_group.html#af40632d267c94720ea6d3139b9587223", null ],
     [ "size", "classhal_1_1_pin_group.html#a8227022a4666fb11edc922da8d675632", null ]
 ];

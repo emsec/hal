@@ -12,6 +12,7 @@ var netlist_2persistent_2netlist__serializer_8cpp =
     [ "id", "netlist_2persistent_2netlist__serializer_8cpp.html#ab832d8349a6c8a3927b85c5ada524cb2", null ],
     [ "name", "netlist_2persistent_2netlist__serializer_8cpp.html#a9b45b3e13bd9167aab02e17e08916231", null ],
     [ "net", "netlist_2persistent_2netlist__serializer_8cpp.html#a504c73ff1a68c50e5435dece66bc2772", null ],
+    [ "ordered", "netlist_2persistent_2netlist__serializer_8cpp.html#a40c532d6ba6706818b15b50db4a991fe", null ],
     [ "pins", "netlist_2persistent_2netlist__serializer_8cpp.html#a1e273622affc5aefcd63c0036e5ce1b9", null ],
     [ "start_index", "netlist_2persistent_2netlist__serializer_8cpp.html#a75c5aaa50f6193870be97c566b274281", null ],
     [ "type", "netlist_2persistent_2netlist__serializer_8cpp.html#a05e5f99d786b527ca4a260c21170c5e7", null ]

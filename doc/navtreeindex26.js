@@ -1,5 +1,7 @@
 var NAVTREEINDEX26 =
 {
+"module__details__tab__widget_8cpp.html":[7,0,1,3,2,38,13],
+"module__details__tab__widget_8cpp_source.html":[7,0,1,3,2,38,13],
 "module__details__tab__widget_8h.html":[7,0,1,3,0,0,40,13],
 "module__details__tab__widget_8h_source.html":[7,0,1,3,0,0,40,13],
 "module__dialog_8cpp.html":[7,0,1,3,2,30,2],
@@ -79,8 +81,8 @@ var NAVTREEINDEX26 =
 "namespacehal_1_1_simplification.html":[5,0,2,21],
 "namespacehal_1_1core__strings.html":[5,0,2,1],
 "namespacehal_1_1core__strings.html":[6,0,0,1],
-"namespacehal_1_1dataflow.html":[6,0,0,2],
 "namespacehal_1_1dataflow.html":[5,0,2,2],
+"namespacehal_1_1dataflow.html":[6,0,0,2],
 "namespacehal_1_1dataflow_1_1evaluation.html":[6,0,0,2,0],
 "namespacehal_1_1dataflow_1_1evaluation.html":[5,0,2,2,0],
 "namespacehal_1_1dataflow_1_1group__by__control__signals.html":[5,0,2,2,1],
@@ -129,8 +131,8 @@ var NAVTREEINDEX26 =
 "namespacemembers_enum.html":[5,1,4],
 "namespacemembers_eval.html":[5,1,5],
 "namespacemembers_f.html":[5,1,0,5],
-"namespacemembers_func.html":[5,1,1],
 "namespacemembers_func.html":[5,1,1,0],
+"namespacemembers_func.html":[5,1,1],
 "namespacemembers_func_b.html":[5,1,1,1],
 "namespacemembers_func_c.html":[5,1,1,2],
 "namespacemembers_func_d.html":[5,1,1,3],
@@ -176,8 +178,8 @@ var NAVTREEINDEX26 =
 "namespacenetlist__factory.html":[5,0,3],
 "namespacenetlist__serializer.html":[5,0,4],
 "namespaces.html":[5,0],
-"namespacestd.html":[5,0,5],
 "namespacestd.html":[6,0,1],
+"namespacestd.html":[5,0,5],
 "namespacetest.html":[5,0,6],
 "namespacetest__multiple.html":[5,0,7],
 "namespacetest__plugin.html":[5,0,8],
@@ -247,7 +249,5 @@ var NAVTREEINDEX26 =
 "netlist_2decorators_2netlist__traversal__decorator_8cpp_source.html":[7,0,2,0,1,3],
 "netlist_2decorators_2subgraph__netlist__decorator_8cpp.html":[7,0,2,0,1,4],
 "netlist_2decorators_2subgraph__netlist__decorator_8cpp_source.html":[7,0,2,0,1,4],
-"netlist_2endpoint_8cpp.html":[7,0,2,0,10],
-"netlist_2endpoint_8cpp_source.html":[7,0,2,0,10],
-"netlist_2gate_8cpp.html":[7,0,2,0,11]
+"netlist_2endpoint_8cpp.html":[7,0,2,0,10]
 };

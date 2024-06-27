@@ -365,85 +365,86 @@ $(document).ready(function(){initNavTree('src_2hgl__writer_8cpp_source.html','')
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;                pg_val.AddMember(<span class="stringliteral">&quot;type&quot;</span>, <a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(group-&gt;get_type()), allocator);</div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;                pg_val.AddMember(<span class="stringliteral">&quot;ascending&quot;</span>, group-&gt;is_ascending(), allocator);</div>
 <div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;                pg_val.AddMember(<span class="stringliteral">&quot;start_index&quot;</span>, group-&gt;get_start_index(), allocator);</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160; </div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                <span class="comment">// pins of group</span></div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                rapidjson::Value p_array(rapidjson::kArrayType);</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>* pin : group-&gt;get_pins())</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;                {</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;                    rapidjson::Value p_val(rapidjson::kObjectType);</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;                    p_val.AddMember(<span class="stringliteral">&quot;name&quot;</span>, pin-&gt;get_name(), allocator);</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;                    p_val.AddMember(<span class="stringliteral">&quot;direction&quot;</span>, <a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(pin-&gt;get_direction()), allocator);</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;                    p_val.AddMember(<span class="stringliteral">&quot;type&quot;</span>, <a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(pin-&gt;get_type()), allocator);</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160; </div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;                    <span class="comment">// check pin function</span></div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;                    <span class="keywordflow">if</span> (pin-&gt;get_direction() == <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">PinDirection::output</a> || pin-&gt;get_direction() == <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">PinDirection::inout</a>)</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;                    {</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;                        <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = functions.find(pin-&gt;get_name()); it != functions.end())</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;                        {</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;                            p_val.AddMember(<span class="stringliteral">&quot;function&quot;</span>, it-&gt;second.to_string(), allocator);</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;                        }</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160; </div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;                        <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = functions.find(pin-&gt;get_name() + <span class="stringliteral">&quot;_undefined&quot;</span>); it != functions.end())</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;                        {</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;                            p_val.AddMember(<span class="stringliteral">&quot;x_function&quot;</span>, it-&gt;second.to_string(), allocator);</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;                        }</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160; </div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;                        <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = functions.find(pin-&gt;get_name() + <span class="stringliteral">&quot;_tristate&quot;</span>); it != functions.end())</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;                        {</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;                            p_val.AddMember(<span class="stringliteral">&quot;z_function&quot;</span>, it-&gt;second.to_string(), allocator);</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;                        }</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;                    }</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160; </div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;                    p_array.PushBack(p_val, allocator);</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;                }</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160; </div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;                pg_val.AddMember(<span class="stringliteral">&quot;pins&quot;</span>, p_array, allocator);</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;                pg_array.PushBack(pg_val, allocator);</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;            }</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160; </div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;            cell.AddMember(<span class="stringliteral">&quot;pin_groups&quot;</span>, pg_array, allocator);</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            cells.PushBack(cell, allocator);</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        }</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160; </div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        document.AddMember(<span class="stringliteral">&quot;cells&quot;</span>, cells, allocator);</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160; </div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    }</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160; </div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    std::vector&lt;HGLWriter::PinCtx&gt; HGLWriter::get_pins(GateType* gt, <span class="keyword">const</span> std::unordered_map&lt;std::string, BooleanFunction&gt;&amp; functions)</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    {</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        std::vector&lt;PinCtx&gt; res;</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>* pin : gt-&gt;get_pins())</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        {</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;            PinCtx res_pin;</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;            res_pin.name      = pin-&gt;get_name();</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;            res_pin.direction = <a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(pin-&gt;get_direction());</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;            res_pin.type      = <a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(pin-&gt;get_type());</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160; </div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;            <span class="keywordflow">if</span> (pin-&gt;get_direction() == <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">PinDirection::output</a> || pin-&gt;get_direction() == <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">PinDirection::inout</a>)</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;            {</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = functions.find(pin-&gt;get_name()); it != functions.end())</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;                {</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;                    res_pin.function = it-&gt;second.to_string();</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;                }</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160; </div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = functions.find(pin-&gt;get_name() + <span class="stringliteral">&quot;_undefined&quot;</span>); it != functions.end())</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;                {</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;                    res_pin.x_function = it-&gt;second.to_string();</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;                }</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160; </div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = functions.find(pin-&gt;get_name() + <span class="stringliteral">&quot;_tristate&quot;</span>); it != functions.end())</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;                {</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                    res_pin.z_function = it-&gt;second.to_string();</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;                }</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;            }</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160; </div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;            res.push_back(res_pin);</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        }</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160; </div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        <span class="keywordflow">return</span> res;</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    }</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;}    <span class="comment">// namespace hal</span></div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;                pg_val.AddMember(<span class="stringliteral">&quot;ordered&quot;</span>, group-&gt;is_ordered(), allocator);</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160; </div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                <span class="comment">// pins of group</span></div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;                rapidjson::Value p_array(rapidjson::kArrayType);</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>* pin : group-&gt;get_pins())</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;                {</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;                    rapidjson::Value p_val(rapidjson::kObjectType);</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;                    p_val.AddMember(<span class="stringliteral">&quot;name&quot;</span>, pin-&gt;get_name(), allocator);</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;                    p_val.AddMember(<span class="stringliteral">&quot;direction&quot;</span>, <a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(pin-&gt;get_direction()), allocator);</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;                    p_val.AddMember(<span class="stringliteral">&quot;type&quot;</span>, <a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(pin-&gt;get_type()), allocator);</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;                    <span class="comment">// check pin function</span></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;                    <span class="keywordflow">if</span> (pin-&gt;get_direction() == <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">PinDirection::output</a> || pin-&gt;get_direction() == <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">PinDirection::inout</a>)</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;                    {</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;                        <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = functions.find(pin-&gt;get_name()); it != functions.end())</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;                        {</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;                            p_val.AddMember(<span class="stringliteral">&quot;function&quot;</span>, it-&gt;second.to_string(), allocator);</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;                        }</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;                        <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = functions.find(pin-&gt;get_name() + <span class="stringliteral">&quot;_undefined&quot;</span>); it != functions.end())</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;                        {</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;                            p_val.AddMember(<span class="stringliteral">&quot;x_function&quot;</span>, it-&gt;second.to_string(), allocator);</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;                        }</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;                        <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = functions.find(pin-&gt;get_name() + <span class="stringliteral">&quot;_tristate&quot;</span>); it != functions.end())</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;                        {</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;                            p_val.AddMember(<span class="stringliteral">&quot;z_function&quot;</span>, it-&gt;second.to_string(), allocator);</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;                        }</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;                    }</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160; </div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;                    p_array.PushBack(p_val, allocator);</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;                }</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160; </div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;                pg_val.AddMember(<span class="stringliteral">&quot;pins&quot;</span>, p_array, allocator);</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;                pg_array.PushBack(pg_val, allocator);</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;            }</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160; </div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            cell.AddMember(<span class="stringliteral">&quot;pin_groups&quot;</span>, pg_array, allocator);</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            cells.PushBack(cell, allocator);</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        }</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160; </div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        document.AddMember(<span class="stringliteral">&quot;cells&quot;</span>, cells, allocator);</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160; </div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    }</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160; </div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    std::vector&lt;HGLWriter::PinCtx&gt; HGLWriter::get_pins(GateType* gt, <span class="keyword">const</span> std::unordered_map&lt;std::string, BooleanFunction&gt;&amp; functions)</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    {</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        std::vector&lt;PinCtx&gt; res;</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>* pin : gt-&gt;get_pins())</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        {</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;            PinCtx res_pin;</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;            res_pin.name      = pin-&gt;get_name();</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;            res_pin.direction = <a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(pin-&gt;get_direction());</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;            res_pin.type      = <a class="code" href="namespacehal.html#afe11c53f9f94ae23527944574e1f5df3">enum_to_string</a>(pin-&gt;get_type());</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160; </div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;            <span class="keywordflow">if</span> (pin-&gt;get_direction() == <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca78e6221f6393d1356681db398f14ce6d">PinDirection::output</a> || pin-&gt;get_direction() == <a class="code" href="namespacehal.html#a119eb4e25d047caa41d83e762cbed8eca54c9ccb45f5ee60133cca31fca024432">PinDirection::inout</a>)</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;            {</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = functions.find(pin-&gt;get_name()); it != functions.end())</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;                {</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;                    res_pin.function = it-&gt;second.to_string();</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;                }</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160; </div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = functions.find(pin-&gt;get_name() + <span class="stringliteral">&quot;_undefined&quot;</span>); it != functions.end())</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;                {</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;                    res_pin.x_function = it-&gt;second.to_string();</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;                }</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160; </div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;                <span class="keywordflow">if</span> (<span class="keyword">const</span> <span class="keyword">auto</span> it = functions.find(pin-&gt;get_name() + <span class="stringliteral">&quot;_tristate&quot;</span>); it != functions.end())</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                {</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;                    res_pin.z_function = it-&gt;second.to_string();</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;                }</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;            }</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160; </div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;            res.push_back(res_pin);</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        }</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160; </div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    }</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;}    <span class="comment">// namespace hal</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aram__component_8h_html"><div class="ttname"><a href="ram__component_8h.html">ram_component.h</a></div></div>
@@ -474,7 +475,7 @@ $(document).ready(function(){initNavTree('src_2hgl__writer_8cpp_source.html','')
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_38c8d24aef3972a7f87b834274e76e31.html">plugins</a></li><li class="navelem"><a class="el" href="dir_e9911a0b44cff824f6f3de584be6e205.html">hgl_writer</a></li><li class="navelem"><a class="el" href="dir_c7f946f84d3aa9d21c98e837fde7f0ce.html">src</a></li><li class="navelem"><a class="el" href="src_2hgl__writer_8cpp.html">hgl_writer.cpp</a></li>
-    <li class="footer">Generated on Mon Jun 24 2024 12:02:21 for HAL by
+    <li class="footer">Generated on Thu Jun 27 2024 12:36:44 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

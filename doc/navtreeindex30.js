@@ -1,5 +1,8 @@
 var NAVTREEINDEX30 =
 {
+"searchbar_8h.html":[7,0,1,3,0,0,39,2],
+"searchbar_8h_source.html":[7,0,1,3,0,0,39,2],
+"searchcolumndialog_8cpp.html":[7,0,1,3,2,37,3],
 "searchcolumndialog_8cpp_source.html":[7,0,1,3,2,37,3],
 "searchcolumndialog_8h.html":[7,0,1,3,0,0,39,3],
 "searchcolumndialog_8h_source.html":[7,0,1,3,0,0,39,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX30 =
 "sort_8h.html#a6fda9608ea4fedbaf83dc3e15dc6dd95a67a196d7c8ad218a624f114f8de3162a":[7,0,1,3,0,0,25,4,1,2],
 "sort_8h.html#a6fda9608ea4fedbaf83dc3e15dc6dd95acc67434fb814cddc41b10f1542773bea":[7,0,1,3,0,0,25,4,1,1],
 "sort_8h.html#ae6ccc351f66906dee7470b40fda9ce14":[7,0,1,3,0,0,25,4,2],
-"sort_8h.html#aeacb51281299c97ba69b4152275bc686":[7,0,1,3,0,0,25,4,3],
-"sort_8h_source.html":[7,0,1,3,0,0,25,4],
-"special__log__content__manager_8cpp.html":[7,0,1,3,2,24,5],
-"special__log__content__manager_8cpp_source.html":[7,0,1,3,2,24,5]
+"sort_8h.html#aeacb51281299c97ba69b4152275bc686":[7,0,1,3,0,0,25,4,3]
 };

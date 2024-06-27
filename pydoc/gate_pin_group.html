@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Gate Pin Group &mdash; hal_py v4.2.0-450-gee758d66c documentation</title>
+  <title>Gate Pin Group &mdash; hal_py v4.2.0-455-g60ea67a3c documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                v4.2.0-450-gee758d66c
+                v4.2.0-455-g60ea67a3c
               </div>
             
           
@@ -196,7 +196,7 @@
 <dl class="attribute">
 <dt id="hal_py.GatePinGroup.ascending">
 <code class="descname">ascending</code><a class="headerlink" href="#hal_py.GatePinGroup.ascending" title="Permalink to this definition">¶</a></dt>
-<dd><p>True if the pin order of a pin group comprising n pins is ascending (from 0 to n-1), False if it is descending (from n-1 to 0).</p>
+<dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the pin order of a pin group comprising n pins is ascending (from 0 to n-1), <code class="docutils literal notranslate"><span class="pre">False</span></code> if it is descending (from n-1 to 0).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -414,7 +414,23 @@ Note that the start index for a pin group comprising n pins is 0 independent of 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True for ascending bit order, False otherwise.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> for ascending bit order, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hal_py.GatePinGroup.is_ordered">
+<code class="descname">is_ordered</code><span class="sig-paren">(</span><em>self: hal_py.GatePinGroup</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#hal_py.GatePinGroup.is_ordered" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the pin group features an inherent order.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the pin group is inherently ordered, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></td>
 </tr>
@@ -431,6 +447,20 @@ Note that the start index for a pin group comprising n pins is 0 independent of 
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hal_py.GatePinGroup.ordered">
+<code class="descname">ordered</code><a class="headerlink" href="#hal_py.GatePinGroup.ordered" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the pin group is inherently ordered, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></td>
 </tr>
 </tbody>
 </table>

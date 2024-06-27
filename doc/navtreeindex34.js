@@ -1,5 +1,8 @@
 var NAVTREEINDEX34 =
 {
+"translator_8h.html":[7,0,0,0,1,0,5],
+"translator_8h.html#a1f5025c43fbfe4675f2b8b8be739f2fa":[7,0,0,0,1,0,5,0],
+"translator_8h_source.html":[7,0,0,0,1,0,5],
 "types_8cpp.html":[7,0,2,0,0,9],
 "types_8cpp.html#a04ea14e7af004d0e444ea51a2667bcb6":[7,0,2,0,0,9,17],
 "types_8cpp.html#a0efe29c3d392a657118e17f689b16a42":[7,0,2,0,0,9,1],
