@@ -1,6 +1,6 @@
 #include "gui/graph_widget/graph_context_manager.h"
 
-#include "gui/context_manager_widget/models/context_table_model.h"
+#include "gui/context_manager_widget/models/context_tree_model.h"
 #include "gui/file_manager/file_manager.h"
 #include "gui/graph_widget/contexts/graph_context.h"
 #include "gui/graph_widget/graphics_scene.h"
@@ -37,8 +37,10 @@ namespace hal
                                                                                                     "If enabled middle mouse button will pan the graphics.\n"
                                                                                                     "If disabled middle mouse button can be used for rubber band selection.");
 
-    GraphContextManager::GraphContextManager() : mContextTableModel(new ContextTableModel()), mMaxContextId(0)
+    GraphContextManager::GraphContextManager()
+        : mMaxContextId(0)
     {
+        mContextTreeModel = new ContextTreeModel(this);
         mSettingDebugGrid = new SettingsItemCheckbox("GUI Debug Grid",
                                                      "debug/grid",
                                                      false,
@@ -56,7 +58,52 @@ namespace hal
         mSettingLayoutBoxes = new SettingsItemCheckbox("Optimize Box Layout", "graph_view/layout_boxes", true, "Graph View", "If disabled faster randomized placement.");
     }
 
-    GraphContext* GraphContextManager::createNewContext(const QString& name)
+    ContextDirectory* GraphContextManager::createNewDirectory(const QString& name, u32 parentId)
+    {
+        ContextDirectory* contextDir = mContextTreeModel->addDirectory(name, mContextTreeModel->getDirectory(parentId), ++mMaxContextId);
+        return contextDir;
+    }
+
+
+    bool GraphContextManager::moveItem(u32 itemId, bool isDirectory, u32 parentId, int row)
+    {
+        ContextTreeItem* itemToMove = nullptr;
+        if (isDirectory)
+            itemToMove = dynamic_cast<ContextTreeItem*>(mContextTreeModel->getDirectory(itemId));
+        else
+            itemToMove = dynamic_cast<ContextTreeItem*>(mContextTreeModel->getContext(itemId));
+
+        BaseTreeItem* parentItem = parentId
+                ? mContextTreeModel->getDirectory(parentId)
+                : mContextTreeModel->getRootItem();
+        if (!parentItem || !itemToMove) return false;
+
+        return mContextTreeModel->moveItem(itemToMove, parentItem, row);
+    }
+
+
+
+    u32 GraphContextManager::getParentId(u32 childId, bool isDirectory) const
+    {
+        if (isDirectory)
+        {
+            BaseTreeItem* bti = mContextTreeModel->getDirectory(childId);
+            ContextTreeItem* parentItem = dynamic_cast<ContextTreeItem*>(bti->getParent());
+            if (parentItem) return parentItem->getId();
+            return 0;
+        }
+        GraphContext* context = getContextById(childId);
+        if (!context) return 0;
+        QModelIndex inx = mContextTreeModel->getIndexFromContext(context);
+        if (!inx.isValid()) return 0;
+        BaseTreeItem* bti =mContextTreeModel->getItemFromIndex(inx);
+        if (!bti) return 0;
+        ContextTreeItem* parentItem = dynamic_cast<ContextTreeItem*>(bti->getParent());
+        if (parentItem) return parentItem->getId();
+        return 0;
+    }
+
+    GraphContext* GraphContextManager::createNewContext(const QString& name, u32 parentId)
     {
         GraphContext* context = new GraphContext(++mMaxContextId, name);
         context->setLayouter(getDefaultLayouter(context));
@@ -65,9 +112,7 @@ namespace hal
         context->scene()->setDebugGridEnabled(mSettingDebugGrid->value().toBool());
         connect(mSettingDebugGrid, &SettingsItemCheckbox::boolChanged, context->scene(), &GraphicsScene::setDebugGridEnabled);
 
-        mContextTableModel->beginInsertContext(context);
-        mContextTableModel->addContext(context);
-        mContextTableModel->endInsertContext();
+        mContextTreeModel->addContext(context, mContextTreeModel->getDirectory(parentId));
 
         Q_EMIT contextCreated(context);
 
@@ -92,25 +137,39 @@ namespace hal
         Q_EMIT contextRenamed(ctx);
     }
 
+    void GraphContextManager::renameContextDirectoryAction(ContextDirectory *ctxDir, const QString &newName)
+    {
+        ctxDir->setName(newName);
+
+        Q_EMIT directoryRenamed(ctxDir);
+    }
+
     void GraphContextManager::deleteGraphContext(GraphContext* ctx)
     {
         Q_EMIT deletingContext(ctx);
 
-        mContextTableModel->beginRemoveContext(ctx);
-        mContextTableModel->removeContext(ctx);
-        mContextTableModel->endRemoveContext();
+        mContextTreeModel->removeContext(ctx);
 
         delete ctx;
     }
 
+    void GraphContextManager::deleteContextDirectory(ContextDirectory *ctxDir)
+    {
+        Q_EMIT deletingDirectory(ctxDir);
+
+        mContextTreeModel->removeDirectory(ctxDir);
+
+        delete ctxDir;
+    }
+
     QVector<GraphContext*> GraphContextManager::getContexts() const
     {
-        return mContextTableModel->list();
+        return mContextTreeModel->list();
     }
 
     GraphContext* GraphContextManager::getContextById(u32 id) const
     {
-        for (GraphContext* ctx : mContextTableModel->list())
+        for (GraphContext* ctx : mContextTreeModel->list())
         {
             if (ctx->id() == id)
                 return ctx;
@@ -118,9 +177,21 @@ namespace hal
         return nullptr;
     }
 
+    ContextDirectory *GraphContextManager::getDirectoryById(u32 id) const
+    {
+        BaseTreeItem* bti = mContextTreeModel->getDirectory(id);
+        if (bti)
+        {
+            ContextDirectory* directory = static_cast<ContextTreeItem*>(bti)->directory();
+            if (directory) return directory;
+        }
+
+        return nullptr;
+    }
+
     GraphContext* GraphContextManager::getCleanContext(const QString& name) const
     {
-        for (GraphContext* ctx : mContextTableModel->list())
+        for (GraphContext* ctx : mContextTreeModel->list())
         {
             if (ctx->name() == name && !ctx->isDirty())
                 return ctx;
@@ -130,7 +201,7 @@ namespace hal
 
     GraphContext* GraphContextManager::getContextByExclusiveModuleId(u32 module_id) const
     {
-        for (GraphContext* ctx : mContextTableModel->list())
+        for (GraphContext* ctx : mContextTreeModel->list())
         {
             if (ctx->getExclusiveModuleId() == module_id)
                 return ctx;
@@ -151,7 +222,7 @@ namespace hal
 
     bool GraphContextManager::contextWithNameExists(const QString& name) const
     {
-        for (GraphContext* ctx : mContextTableModel->list())
+        for (GraphContext* ctx : mContextTreeModel->list())
         {
             if (ctx->name() == name)
             {
@@ -163,7 +234,7 @@ namespace hal
 
     void GraphContextManager::handleModuleCreated(Module* m) const
     {
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
             if (context->getSpecialUpdate())
             {
                 context->add({m->get_id()}, {});
@@ -173,7 +244,7 @@ namespace hal
 
     void GraphContextManager::handleModuleRemoved(Module* m)
     {
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
         {
             if (context->getExclusiveModuleId() == m->get_id())
             {
@@ -192,14 +263,14 @@ namespace hal
 
     void GraphContextManager::handleModuleNameChanged(Module* m) const
     {
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
             if (context->modules().contains(m->get_id()))
                 context->scheduleSceneUpdate();
     }
 
     void GraphContextManager::handleModuleTypeChanged(Module* m) const
     {
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
             if (context->modules().contains(m->get_id()))
                 context->scheduleSceneUpdate();
     }
@@ -210,7 +281,7 @@ namespace hal
         QSet<u32> gateIDs;
         for (auto g : gates)
             gateIDs.insert(g->get_id());
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
             if (context->modules().contains(m->get_id())    // contains module
                 || context->gates().intersects(gateIDs))    // contains gate from module
                 context->scheduleSceneUpdate();
@@ -231,7 +302,7 @@ namespace hal
             current_module = current_module->get_parent_module();
         } while (current_module);
 
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
         {
             if (context->isShowingFoldedTopModule()) continue;
             if (context->isShowingModule(m->get_id(), {added_module}, {}, {}, {}) && !context->isShowingModule(added_module, {}, {}, {}, {}))
@@ -266,7 +337,7 @@ namespace hal
         // and collides with handleModuleRemoved
         //        dump("ModuleSubmoduleRemoved", m->get_id(), removed_module);
 
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
         {
             if (context->isShowingFoldedTopModule()) continue;
             if (context->isScheduledRemove(Node(removed_module,Node::Module)) ||
@@ -293,7 +364,7 @@ namespace hal
             current_module = current_module->get_parent_module();
         } while (current_module);
 
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
         {
             if (context->isShowingFoldedTopModule()) continue;
             if (context->isShowingModule(m->get_id(), {}, {inserted_gate}, {}, {}))
@@ -318,7 +389,7 @@ namespace hal
     void GraphContextManager::handleModuleGateRemoved(Module* m, const u32 removed_gate)
     {
         //        dump("ModuleGateRemoved", m->get_id(), removed_gate);
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
         {
             if (context->isShowingFoldedTopModule()) continue;
             if (context->isScheduledRemove(Node(removed_gate,Node::Gate)) ||
@@ -366,7 +437,7 @@ namespace hal
             xout << " " << g->get_id();
         xout << "\n";
 
-        for (GraphContext* ctx : mContextTableModel->list())
+        for (GraphContext* ctx : mContextTreeModel->list())
         {
             xout << "ctx " << ctx->id() << ":";
             for (hal::Node nd : ctx->getLayouter()->positionToNodeMap().values())
@@ -382,7 +453,7 @@ namespace hal
     {
         Q_UNUSED(pev);
         Q_UNUSED(pgid);
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
             if (context->modules().contains(m->get_id()))
             {
                 context->updateNets();
@@ -392,14 +463,14 @@ namespace hal
 
     void GraphContextManager::handleGateRemoved(Gate* g) const
     {
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
             if (context->gates().contains(g->get_id()))
                 context->remove({}, {g->get_id()});
     }
 
     void GraphContextManager::handleGateNameChanged(Gate* g) const
     {
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
             if (context->gates().contains(g->get_id()))
                 context->scheduleSceneUpdate();
     }
@@ -414,21 +485,21 @@ namespace hal
 
     void GraphContextManager::handleNetRemoved(Net* n) const
     {
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
             if (context->nets().contains(n->get_id()))
                 context->scheduleSceneUpdate();
     }
 
     void GraphContextManager::handleNetNameChanged(Net* n) const
     {
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
             if (context->nets().contains(n->get_id()))
                 context->scheduleSceneUpdate();
     }
 
     void GraphContextManager::handleNetSourceAdded(Net* n, const u32 src_gate_id) const
     {
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
         {
             if (context->nets().contains(n->get_id()) || context->gates().contains(src_gate_id))
             {
@@ -443,7 +514,7 @@ namespace hal
     {
         UNUSED(src_gate_id);
 
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
         {
             if (context->nets().contains(n->get_id()))
             {
@@ -456,7 +527,7 @@ namespace hal
 
     void GraphContextManager::handleNetDestinationAdded(Net* n, const u32 dst_gate_id) const
     {
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
         {
             if (context->nets().contains(n->get_id()) || context->gates().contains(dst_gate_id))
             {
@@ -471,7 +542,7 @@ namespace hal
     {
         UNUSED(dst_gate_id);
 
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
         {
             if (context->nets().contains(n->get_id()))
             {
@@ -484,7 +555,7 @@ namespace hal
 
     void GraphContextManager::handleMarkedGlobalInput(u32 mNetId)
     {
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
         {
             if (context->nets().contains(mNetId) || context->isShowingNetDestination(mNetId))
             {
@@ -496,7 +567,7 @@ namespace hal
 
     void GraphContextManager::handleMarkedGlobalOutput(u32 mNetId)
     {
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
         {
             if (context->nets().contains(mNetId) || context->isShowingNetSource(mNetId))
             {
@@ -508,7 +579,7 @@ namespace hal
 
     void GraphContextManager::handleUnmarkedGlobalInput(u32 mNetId)
     {
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
             if (context->nets().contains(mNetId))
             {
                 context->applyChanges();
@@ -518,7 +589,7 @@ namespace hal
 
     void GraphContextManager::handleUnmarkedGlobalOutput(u32 mNetId)
     {
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
             if (context->nets().contains(mNetId))
             {
                 context->applyChanges();
@@ -545,17 +616,17 @@ namespace hal
         return new ModuleShader(context);
     }
 
-    ContextTableModel* GraphContextManager::getContextTableModel() const
+    ContextTreeModel* GraphContextManager::getContextTreeModel() const
     {
-        return mContextTableModel;
+        return mContextTreeModel;
     }
 
     void GraphContextManager::clear()
     {
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
             delete context;
 
-        mContextTableModel->clear();
+        mContextTreeModel->clear();
     }
 
     GraphContext* GraphContextManager::restoreFromFile(const QString& filename)
@@ -568,6 +639,34 @@ namespace hal
         GraphContext* firstContext = nullptr;
         GraphContext* selectedContext = nullptr;
 
+        if (json.contains("directories") && json["directories"].isArray())
+        {
+            QJsonArray jsonDirectories = json["directories"].toArray();
+            int ndir = jsonDirectories.size();
+            for (int idir = 0; idir < ndir; idir++)
+            {
+                QJsonObject jsondir = jsonDirectories.at(idir).toObject();
+                if (!jsondir.contains("id") || !jsondir["id"].isDouble())
+                    continue;
+                u32 dirId = jsondir["id"].toInt();
+                if (!jsondir.contains("name") || !jsondir["name"].isString())
+                    continue;
+                QString dirName = jsondir["name"].toString();
+                if (!jsondir.contains("parentId"))
+                    continue;
+                u32 dirParentId = jsondir["parentId"].toInt();
+
+                BaseTreeItem* dirParent = mContextTreeModel->getRootItem();
+
+                if (dirParentId != 0)
+                   dirParent =  mContextTreeModel->getDirectory(dirParentId);
+
+                if (dirId < 0 || dirId > 0x7FFFFFFF)
+                    dirId = ++mMaxContextId;
+
+                mContextTreeModel->addDirectory(dirName, dirParent, dirId);
+            }
+        }
         if (json.contains("views") && json["views"].isArray())
         {
             QJsonArray jsonViews = json["views"].toArray();
@@ -586,6 +685,17 @@ namespace hal
                 int visibleFlag = 1; // default to visible before flag was invented
                 if (jsonView.contains("visible"))
                     visibleFlag = jsonView["visible"].toInt();
+                if (!jsonView.contains("parentId"))
+                    continue;
+                u32 viewParentId = jsonView["parentId"].toInt();
+
+                BaseTreeItem* viewParent = mContextTreeModel->getRootItem();
+
+                if (viewParentId != 0) {
+                    viewParent = mContextTreeModel->getDirectory(viewParentId);
+                }
+
+
                 GraphContext* context = gGraphContextManager->getContextById(viewId);
                 if (context)
                 {
@@ -616,9 +726,7 @@ namespace hal
                         continue;
                     }
 
-                    mContextTableModel->beginInsertContext(context);
-                    mContextTableModel->addContext(context);
-                    mContextTableModel->endInsertContext();
+                    mContextTreeModel->addContext(context, viewParent);
                     if (visibleFlag)
                         Q_EMIT contextCreated(context);
                 }
@@ -646,13 +754,27 @@ namespace hal
 
         QJsonObject json;
         QJsonArray jsonViews;
-        for (GraphContext* context : mContextTableModel->list())
+        for (GraphContext* context : mContextTreeModel->list())
             {
+                BaseTreeItem* parent = mContextTreeModel->getItemFromIndex(mContextTreeModel->getIndexFromContext(context))->getParent();
+                int parentId = 0;
+                if (parent != mContextTreeModel->getRootItem())
+                    parentId = static_cast<ContextTreeItem*>(parent)->directory()->id();
+
                 QJsonObject jsonView;
-                context->writeToFile(jsonView);
+                context->writeToFile(jsonView, parentId);
                 jsonViews.append(jsonView);
             }
         json["views"] = jsonViews;
+
+        QJsonArray jsonDirectories;
+        for (ContextDirectory* directory : mContextTreeModel->directoryList())
+            {
+                QJsonObject jsonDirectory;
+                directory->writeToFile(jsonDirectory);
+                jsonDirectories.append(jsonDirectory);
+            }
+        json["directories"] = jsonDirectories;
         return (jsFile.write(QJsonDocument(json).toJson(QJsonDocument::Compact)) >= 0); // neg return value indicates error
     }
 }    // namespace hal

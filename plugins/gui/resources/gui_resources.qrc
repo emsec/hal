@@ -64,6 +64,7 @@
         <file alias="new-file">icons/new-file.svg</file>
         <file alias="pen">icons/pen.svg</file>
         <file alias="plus">icons/plus.svg</file>
+        <file alias="plusdir">icons/plusdir.svg</file>
         <file alias="trashcan">icons/trashcan.svg</file>
         <file alias="graph">icons/0189-tree.svg</file>
         <file alias="keyboard">icons/0086-keyboard.svg</file>
@@ -104,6 +105,8 @@
         <file alias="invoke-gui">icons/0503-invoke-gui.svg</file>
 	<file alias="tree-collapsed">icons/tree-collapsed.svg</file>
 	<file alias="tree-expanded">icons/tree-expanded.svg</file>
+        <file alias="view-ctx">icons/view-ctx.svg</file>
+        <file alias="view-dir">icons/view-dir.svg</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="spinner">images/oval.svg</file>

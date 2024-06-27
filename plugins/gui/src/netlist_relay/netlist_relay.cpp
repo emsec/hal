@@ -184,7 +184,7 @@ namespace hal
             // module exclusively connected to context, so delete context too
             UserActionCompound* compnd = new UserActionCompound;
             ActionDeleteObject* delCtx = new ActionDeleteObject;
-            delCtx->setObject(UserActionObject(ctx->id(), UserActionObjectType::Context));
+            delCtx->setObject(UserActionObject(ctx->id(), UserActionObjectType::ContextView));
             compnd->addAction(delCtx);
             compnd->addAction(delMod);
             compnd->exec();

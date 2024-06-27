@@ -13,8 +13,9 @@
 #include "gui/user_action/action_fold_module.h"
 #include "gui/user_action/action_unfold_module.h"
 #include "gui/user_action/action_move_node.h"
+#include "gui/user_action/action_move_item.h"
 #include "gui/graph_widget/graph_context_manager.h"
-#include "gui/context_manager_widget/models/context_table_model.h"
+#include "gui/context_manager_widget/models/context_tree_model.h"
 #include "hal_core/utilities/log.h"
 
 #include <algorithm>
@@ -503,7 +504,7 @@ namespace hal
 
         UserActionCompound* act = new UserActionCompound;
         act->setUseCreatedObject();
-        act->addAction(new ActionCreateObject(UserActionObjectType::Context, name));
+        act->addAction(new ActionCreateObject(UserActionObjectType::ContextView, name));
         act->addAction(new ActionAddItemsToObject(moduleIds, gateIds));
         UserActionManager::instance()->executeActionBlockThread(act);
 
@@ -524,7 +525,7 @@ namespace hal
         }
 
         ActionDeleteObject* act = new ActionDeleteObject();
-        act->setObject(UserActionObject(id, UserActionObjectType::Context));
+        act->setObject(UserActionObject(id, UserActionObjectType::ContextView));
         UserActionManager::instance()->executeActionBlockThread(act);
         return true;
     }
@@ -564,7 +565,7 @@ namespace hal
         QSet<u32> gateIds = pair.gateIds;
 
         ActionAddItemsToObject* act = new ActionAddItemsToObject(moduleIds,gateIds);
-        act->setObject(UserActionObject(id,UserActionObjectType::Context));
+        act->setObject(UserActionObject(id,UserActionObjectType::ContextView));
         UserActionManager::instance()->executeActionBlockThread(act);
         return true;
     }
@@ -601,7 +602,7 @@ namespace hal
             gateIds.insert(gate->get_id());
 
         ActionRemoveItemsFromObject* act = new ActionRemoveItemsFromObject(moduleIds,gateIds);
-        act->setObject(UserActionObject(id,UserActionObjectType::Context));
+        act->setObject(UserActionObject(id,UserActionObjectType::ContextView));
         UserActionManager::instance()->executeActionBlockThread(act);
         return true;
     }
@@ -620,7 +621,7 @@ namespace hal
 
         //get context matching id and rename it
         ActionRenameObject* act = new ActionRenameObject(QString::fromStdString(name));
-        act->setObject(UserActionObject(id,UserActionObjectType::Context));
+        act->setObject(UserActionObject(id,UserActionObjectType::ContextView));
         UserActionManager::instance()->executeActionBlockThread(act);
         return true;
     }
@@ -931,8 +932,117 @@ namespace hal
     bool GuiApiClasses::View::setGridPlacement(int viewId, GridPlacement *gp)
     {
         ActionMoveNode* act = new ActionMoveNode(viewId, gp);
-        act->exec();
-
+        UserActionManager::instance()->executeActionBlockThread(act);
         return true;
+    }
+
+    u32 GuiApiClasses::View::getCurrentDirectory()
+    {
+        auto currentDirectory = gGraphContextManager->getContextTreeModel()->getCurrentDirectory();
+        if(currentDirectory == nullptr)
+            return 0;
+        else 
+        {
+            if(currentDirectory->directory() == nullptr)
+                return 0;
+            return currentDirectory->directory()->id();
+        }
+    }
+
+    void GuiApiClasses::View::setCurrentDirectory(u32 id)
+    {
+        ContextTreeItem* directory = static_cast<ContextTreeItem*>(gGraphContextManager->getContextTreeModel()->getDirectory(id));
+        gGraphContextManager->getContextTreeModel()->setCurrentDirectory(directory);
+    }
+
+    u32 GuiApiClasses::View::createNewDirectory(const std::string& name)
+    {
+        ActionCreateObject* act = new ActionCreateObject(UserActionObjectType::ContextDir, QString::fromStdString(name));
+        UserActionManager::instance()->executeActionBlockThread(act);
+        auto id = act->object().id();
+        return id;
+    }
+
+    void GuiApiClasses::View::deleteDirectory(u32 id)
+    {
+        /*ContextDirectory* directory = gGraphContextManager->getDirectoryById(id);
+        if(directory)
+            gGraphContextManager->deleteContextDirectory(directory);*/
+        ActionDeleteObject* act = new ActionDeleteObject();
+        act->setObject(UserActionObject(id, UserActionObjectType::ContextDir));
+        UserActionManager::instance()->executeActionBlockThread(act);
+    }
+
+    void GuiApiClasses::View::moveView(u32 viewId, std::optional<u32> destinationDirectoryId, std::optional<int> row)
+    {
+        BaseTreeItem* viewItem = gGraphContextManager->getContextTreeModel()->getContext(viewId);
+        if(!viewItem)
+            return;
+
+        u32 parentId = 0;
+        BaseTreeItem* parentItem = viewItem->getParent();
+        if(parentItem && gGraphContextManager->getContextTreeModel()->getRootItem() != parentItem)
+            parentId = dynamic_cast<ContextTreeItem*>(parentItem)->getId();
+
+        UserActionObject uao = UserActionObject(viewId, UserActionObjectType::ContextView);
+        ActionMoveItem* act;
+        if(row.has_value())
+            act = new ActionMoveItem(destinationDirectoryId.value_or(getCurrentDirectory()), parentId, row.value());
+        else
+            act = new ActionMoveItem(destinationDirectoryId.value_or(getCurrentDirectory()), parentId);
+        act->setObject(uao);
+        act->exec();
+    }
+
+    void GuiApiClasses::View::moveDirectory(u32 directoryId, std::optional<u32> destinationDirectoryId, std::optional<int> row)
+    {
+        BaseTreeItem* directoryItem = gGraphContextManager->getContextTreeModel()->getDirectory(directoryId);
+        if(!directoryItem)
+            return;
+
+        u32 parentId = 0;
+        BaseTreeItem* parentItem = directoryItem->getParent();
+        if(parentItem && gGraphContextManager->getContextTreeModel()->getRootItem() != parentItem)
+            parentId = dynamic_cast<ContextTreeItem*>(parentItem)->getId();
+
+        u32 destId = destinationDirectoryId.value_or(getCurrentDirectory());
+        BaseTreeItem* destAnchestor =  gGraphContextManager->getContextTreeModel()->getDirectory(destId);
+        while (destAnchestor)
+        {
+            if (destAnchestor == directoryItem)
+            {
+                log_warning("gui", "Invalid attempt to move directory ID={} into dependend directory.", directoryId);
+                return;
+            }
+            destAnchestor = destAnchestor->getParent();
+        }
+
+
+        UserActionObject uao = UserActionObject(directoryId, UserActionObjectType::ContextDir);
+        ActionMoveItem* act;
+        if(row.has_value())
+            act = new ActionMoveItem(destId, parentId, row.value());
+        else
+            act = new ActionMoveItem(destId, parentId);
+        act->setObject(uao);
+        act->exec();
+    }
+
+    std::optional<std::vector<u32>> GuiApiClasses::View::getChildDirectories(u32 directoryId)
+    {
+        ContextTreeItem* directoryItem = dynamic_cast<ContextTreeItem*>(gGraphContextManager->getContextTreeModel()->getDirectory(directoryId));
+        // Id 0 is the root item. It does not exist as a directory object, but child items can still be retrieved from it.
+        if(!directoryItem && directoryId != 0) 
+            return std::nullopt;
+        return gGraphContextManager->getContextTreeModel()->getChildDirectoriesOf(directoryId);
+    }
+
+    std::optional<std::vector<u32>> GuiApiClasses::View::getChildViews(u32 directoryId)
+    {
+        ContextTreeItem* directoryItem = dynamic_cast<ContextTreeItem*>(gGraphContextManager->getContextTreeModel()->getDirectory(directoryId));
+        // Id 0 is the root item. It does not exist as a directory object, but child items can still be retrieved from it.
+        if(!directoryItem && directoryId != 0)
+            return std::nullopt;
+        return gGraphContextManager->getContextTreeModel()->getChildContextsOf(directoryId);
     }
 }
