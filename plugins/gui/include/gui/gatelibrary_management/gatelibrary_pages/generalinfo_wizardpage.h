@@ -45,6 +45,7 @@ namespace hal {
         QString getName();
         QStringList getProperties();
         void setMode(bool edit);
+        bool isEdit();
         bool validatePage() override;
     public Q_SLOTS:
         void addProperty();

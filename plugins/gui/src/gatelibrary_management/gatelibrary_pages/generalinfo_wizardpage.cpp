@@ -33,9 +33,6 @@ namespace hal
 
         setLayout(mLayout);
 
-        registerField("name*", mName);
-        registerField("properties", mProperties);
-
         //TODO: fetch data from enum GateTypeProperty
         mAddProperty->addItems(QStringList{
                                    "combinational",
@@ -77,6 +74,11 @@ namespace hal
         mIsEdit = edit;
     }
 
+    bool GeneralInfoWizardPage::isEdit()
+    {
+        return mIsEdit;
+    }
+
     void GeneralInfoWizardPage::setData(QString name, QStringList properties)
     {
         mName->setText(name);
@@ -93,7 +95,6 @@ namespace hal
     {
         QStringList res;
         for (int i = 0; i < mProperties->count(); i++) {
-            //qInfo()<<mProperties->item(i)->text();
             res.append(mProperties->item(i)->text());
         }
         return res;

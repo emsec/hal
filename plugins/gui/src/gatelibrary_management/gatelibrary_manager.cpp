@@ -126,14 +126,8 @@ namespace hal
 
                 if (gPluginRelay->mGuiPluginTable)
                     gPluginRelay->mGuiPluginTable->loadFeature(FacExtensionInterface::FacGatelibParser);
-                //qInfo() << "selected file: " << fileName;
 
                 auto gateLibrary = gate_library_manager::load(std::filesystem::path(fileName.toStdString()));
-
-                /*for (auto const elem : gateLibrary->get_gate_types())
-                {
-                    qInfo() << QString::fromStdString(elem.second->get_name());
-                }*/
 
                 mEditableGatelibrary = gateLibrary;
                 mDemoNetlist = netlist_factory::create_netlist(mEditableGatelibrary);

@@ -62,38 +62,15 @@ namespace hal
         }
     }
 
-    void GateLibraryWizard::editGate(GateType* gt)
+    void GateLibraryWizard::editGate()
     {
 
     }
 
     GateType* GateLibraryWizard::addGate()
     {
-        //Convert QStringList to std::set
-        std::set<GateTypeProperty> properties_set;
-        for(QString prop : generalInfoPage->getProperties())
-            properties_set.insert(enum_from_string<GateTypeProperty>(prop.toStdString()));
-        //Set name, properties and the parent component
-        mNewGateType = mGateLibrary->create_gate_type(generalInfoPage->getName().toStdString(), properties_set, setComponents());
-        //Set pingroups and pins
-        for(PinItem* pingroup : getPingroups())
-        {
-            std::vector<GatePin*> gatepins;
-            for (auto it : pingroup->getChildren()) {
-                PinItem* pin = static_cast<PinItem*>(it);
-                if(pin->getItemType() != PinItem::TreeItemType::PinCreator)
-                {
-                    auto res = mNewGateType->create_pin(pin->getName().toStdString(), pin->getDirection(), pin->getPinType());
-                    if(res.is_ok()) gatepins.push_back(res.get());
-                }
-            }
-            if(pingroup->getItemType() != PinItem::TreeItemType::GroupCreator)
-                mNewGateType->create_pin_group(pingroup->getName().toStdString(), gatepins, pingroup->getDirection(), pingroup->getPinType());
-        }
 
-        //Set boolean functions
-        mNewGateType->add_boolean_functions(boolPage->getBoolFunctions());
-        return mNewGateType;
+
     }
 
     void GateLibraryWizard::setData(GateLibrary *gateLibrary, GateType* gateType)
@@ -104,10 +81,61 @@ namespace hal
 
     void GateLibraryWizard::accept()
     {
-        //TODO: get all the data after user finishes
+        /*if(generalInfoPage->isEdit()) editGate();
+        else addGate();*/
 
-        if(!mGateLibrary->contains_gate_type_by_name(generalInfoPage->getName().toStdString())) addGate();
-        else editGate(mGateLibrary->get_gate_type_by_name(generalInfoPage->getName().toStdString()));
+        //Convert QStringList to std::set
+        std::set<GateTypeProperty> properties_set;
+        for(QString prop : generalInfoPage->getProperties())
+            properties_set.insert(enum_from_string<GateTypeProperty>(prop.toStdString()));
+
+        if(generalInfoPage->isEdit())
+        {
+            mGateType = mGateLibrary->replace_gate_type(mGateType->get_id(), generalInfoPage->getName().toStdString(), properties_set, setComponents());
+            //Set pingroups and pins
+            for(PinItem* pingroup : getPingroups())
+            {
+                std::vector<GatePin*> gatepins;
+                for (auto it : pingroup->getChildren()) {
+                    PinItem* pin = static_cast<PinItem*>(it);
+                    if(pin->getItemType() != PinItem::TreeItemType::PinCreator)
+                    {
+                        auto res = mGateType->create_pin(pin->getName().toStdString(), pin->getDirection(), pin->getPinType());
+                        if(res.is_ok()) gatepins.push_back(res.get());
+                    }
+                }
+                if(pingroup->getItemType() != PinItem::TreeItemType::GroupCreator)
+                    mGateType->create_pin_group(pingroup->getName().toStdString(), gatepins, pingroup->getDirection(), pingroup->getPinType());
+            }
+
+            //TODO: Set boolean functions without adding the same double
+            //also: boolean functions may be removed
+            mGateType->add_boolean_functions(boolPage->getBoolFunctions());
+        }
+        else
+        {
+            //Set name, properties and the parent component
+            mNewGateType = mGateLibrary->create_gate_type(generalInfoPage->getName().toStdString(), properties_set, setComponents());
+            //Set pingroups and pins
+            for(PinItem* pingroup : getPingroups())
+            {
+                std::vector<GatePin*> gatepins;
+                for (auto it : pingroup->getChildren()) {
+                    PinItem* pin = static_cast<PinItem*>(it);
+                    if(pin->getItemType() != PinItem::TreeItemType::PinCreator)
+                    {
+                        auto res = mNewGateType->create_pin(pin->getName().toStdString(), pin->getDirection(), pin->getPinType());
+                        if(res.is_ok()) gatepins.push_back(res.get());
+                    }
+                }
+                if(pingroup->getItemType() != PinItem::TreeItemType::GroupCreator)
+                    mNewGateType->create_pin_group(pingroup->getName().toStdString(), gatepins, pingroup->getDirection(), pingroup->getPinType());
+            }
+
+            //Set boolean functions
+            mNewGateType->add_boolean_functions(boolPage->getBoolFunctions());
+        }
+
 
         this->close();
     }
@@ -251,6 +279,7 @@ namespace hal
             else if(properties.contains("latch")) return Latch;
             else if(properties.contains("c_lut")) return LUT;
             else if(properties.contains("ram")) return RAM;
+            else return BoolFunc;
         case FlipFlop:
             if(properties.contains("latch")) return Latch;
             else if(properties.contains("c_lut")) return LUT;
