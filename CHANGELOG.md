@@ -44,19 +44,23 @@ All notable changes to this project will be documented in this file.
   * changed `xilinx_toolbox` plugin
     * added `split_shift_registers` function to split `SRL16E` gates into multiple flip-flops
     * changed Python bindings for better usability
-* netlist
-  * module pins
-    * added qualifier for `pin_changed` core events telling receiver details about the recent modification
-    * added event scope and stacking classes so that `pin_changed` events can be collected and prioritized
-    * added specific GUI handler for every `pin_changed` event thus replacing the reload-entire-pingroup-tree policy
+* core
+  * pin (groups)
+    * added optional flag to determine whether a pin group has an inherent order (defaults to `false`)
+    * added `GateType::delete_pin_group` and `GateType::assign_pin_to_group` to enable more operations on pin groups of gate pins
+    * added parameter `force_name` to enforce pin (group) renaming to `Module::set_pin_name`, `Module::set_pin_group_name`, `Module::create_pin`, and `Module::create_pin_group`
+    * added pin types `status`, `error`, `error_detection`, `done`, and `control`
+    * added qualifier for module `pin_changed` core events telling receiver details about the recent modification
+    * added event scope and stacking classes so that module `pin_changed` events can be collected and prioritized
+    * added specific GUI handler for every module `pin_changed` event thus replacing the reload-entire-pingroup-tree policy
     * added class `ActionPingroup` so that UNDO function works for all pin / pin group actions issued from GUI
-* decorators
-  * added `NetlistTraversalDecorator` to ease exploration of a netlist
-    * added `get_next_matching_gates` to get successor/predecessor gates matching a certain condition
-    * added `get_next_matching_gates_until` to get successor/predecessor gates until a certain condition is fulfilled
-    * added `get_next_matching_gates_until_depth` to get successor/predecessor gates up to a certain depth
-    * added `get_next_sequential_gates` and `get_next_sequential_gates_map` to get the next layer of sequential successors/predecessors
-    * added `get_next_combinational_gates` to get all combinational gates until the next non-combinational gates are reached
+  * decorators
+    * added `NetlistTraversalDecorator` to ease exploration of a netlist
+      * added `get_next_matching_gates` to get successor/predecessor gates matching a certain condition
+      * added `get_next_matching_gates_until` to get successor/predecessor gates until a certain condition is fulfilled
+      * added `get_next_matching_gates_until_depth` to get successor/predecessor gates up to a certain depth
+      * added `get_next_sequential_gates` and `get_next_sequential_gates_map` to get the next layer of sequential successors/predecessors
+      * added `get_next_combinational_gates` to get all combinational gates until the next non-combinational gates are reached
 * miscellaneous
   * added support for Ubuntu 24.04 LTS
   * added INIT field declaration to FF-gate-types in example library
@@ -66,12 +70,9 @@ All notable changes to this project will be documented in this file.
   * added GUI PluginParameter types `Module` and `Gated` for parameters that can be requested from plugin
   * added `Show content` button to `Groupings` widget to show content of grouping as a list
   * added flag which Python editor tab is active when serializing project
-  * added `GateType::delete_pin_group` and `GateType::assign_pin_to_group` to enable more operations on pin groups of gate pins
   * added extended gate library picker when importing a netlist
   * added keyboard shortcut for delete-item action from toolbar
-  * added parameter `force_name` to enforce pin (group) renaming to `Module::set_pin_name`, `Module::set_pin_group_name`, `Module::create_pin`, and `Module::create_pin_group`
   * added gate type properties `fifo` and `shift_register`
-  * added pin types `status`, `error`, `error_detection`, `done`, and `control`
   * added optional filter to `Net::get_num_of_sources` and `Net::get_num_of_destinations`
   * added function `unify_ff_outputs` to netlist preprocessing plugin
   * added function `replace_gate_type` to gate library
