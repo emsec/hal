@@ -9,6 +9,12 @@
 
 #include <QGridLayout>
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+#define SKIP_EMPTY_PARTS Qt::SkipEmptyParts
+#else
+#define SKIP_EMPTY_PARTS QString::SkipEmptyParts
+#endif
+
 namespace hal
 {
     GateLibraryWizard::GateLibraryWizard(GateLibrary *gateLibrary, GateType *gateType, QWidget* parent): QWizard(parent)
@@ -158,7 +164,7 @@ namespace hal
             if(prop == "c_lut")
             {
                 std::vector<std::string> identifiers;
-                for (QString id : initPage->mIdentifiers->toPlainText().split('\n', Qt::SkipEmptyParts) ) {
+                for (QString id : initPage->mIdentifiers->toPlainText().split('\n', SKIP_EMPTY_PARTS) ) {
                     identifiers.push_back(id.toStdString());
                 }
                 std::unique_ptr<GateTypeComponent> init_component = GateTypeComponent::create_init_component(initPage->mCategory->text().toStdString(), identifiers);
@@ -167,7 +173,7 @@ namespace hal
             else if(prop == "ff")
             {
                 std::vector<std::string> identifiers;
-                for (QString id : initPage->mIdentifiers->toPlainText().split('\n', Qt::SkipEmptyParts) ) {
+                for (QString id : initPage->mIdentifiers->toPlainText().split('\n', SKIP_EMPTY_PARTS) ) {
                     identifiers.push_back(id.toStdString());
                 }
                 std::unique_ptr<GateTypeComponent> init_component = GateTypeComponent::create_init_component(initPage->mCategory->text().toStdString(), identifiers);
@@ -240,7 +246,7 @@ namespace hal
             {
                 std::unique_ptr<GateTypeComponent> sub_component = nullptr;
                 std::vector<std::string> identifiers;
-                for (QString id : initPage->mIdentifiers->toPlainText().split('\n', Qt::SkipEmptyParts) )
+                for (QString id : initPage->mIdentifiers->toPlainText().split('\n', SKIP_EMPTY_PARTS) )
                     identifiers.push_back(id.toStdString());
                 sub_component = GateTypeComponent::create_init_component(initPage->mCategory->text().toStdString(), identifiers);
 
