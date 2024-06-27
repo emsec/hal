@@ -3,7 +3,9 @@ var classhal_1_1_selection_details_icon_provider =
     [ "IconCategory", "classhal_1_1_selection_details_icon_provider.html#a5b0d410fc7e98ab341009ed087fd8711", [
       [ "ModuleIcon", "classhal_1_1_selection_details_icon_provider.html#a5b0d410fc7e98ab341009ed087fd8711a012f87398c9660934dfaf7e7c997b1c1", null ],
       [ "GateIcon", "classhal_1_1_selection_details_icon_provider.html#a5b0d410fc7e98ab341009ed087fd8711af50b51decf902824574cdd0868b88ba7", null ],
-      [ "NetIcon", "classhal_1_1_selection_details_icon_provider.html#a5b0d410fc7e98ab341009ed087fd8711a4f541d46a2fa17a7f38d5bec8727468a", null ]
+      [ "NetIcon", "classhal_1_1_selection_details_icon_provider.html#a5b0d410fc7e98ab341009ed087fd8711a4f541d46a2fa17a7f38d5bec8727468a", null ],
+      [ "ViewDir", "classhal_1_1_selection_details_icon_provider.html#a5b0d410fc7e98ab341009ed087fd8711a39cfead27c30659a913d040d98e5c9e3", null ],
+      [ "ViewCtx", "classhal_1_1_selection_details_icon_provider.html#a5b0d410fc7e98ab341009ed087fd8711a191fab7fd0638d687d62e1301323add5", null ]
     ] ],
     [ "IconSize", "classhal_1_1_selection_details_icon_provider.html#a2dc2f5f1be67bbc7c31462f906ae1851", [
       [ "NoIcon", "classhal_1_1_selection_details_icon_provider.html#a2dc2f5f1be67bbc7c31462f906ae1851a14d2cb17088059bcdd37ab3f310645fd", null ],

@@ -1,20 +1,20 @@
 <map id="hal::UserActionFactory" name="hal::UserActionFactory">
-<area shape="rect" id="node1" title="The UserActionFactory is the abstract base class for registration." alt="" coords="2011,5,2179,112"/>
+<area shape="rect" id="node1" title="The UserActionFactory is the abstract base class for registration." alt="" coords="1996,5,2164,112"/>
 <area shape="rect" id="node2" href="$classhal_1_1_action_add_boolean_function_factory.html" title="The ActionAddBooleanFunctionFactory class." alt="" coords="5,160,229,281"/>
 <area shape="rect" id="node3" href="$classhal_1_1_action_add_items_to_object_factory.html" title="UserActionFactory for ActionAddItemsToObject." alt="" coords="253,167,507,274"/>
 <area shape="rect" id="node4" href="$classhal_1_1_action_create_object_factory.html" title="UserActionFactory for ActionCreateObject." alt="" coords="531,175,754,267"/>
 <area shape="rect" id="node5" href="$classhal_1_1_action_delete_object_factory.html" title="UserActionFactory for ActionDeleteObject." alt="" coords="778,175,1001,267"/>
 <area shape="rect" id="node6" href="$classhal_1_1_action_fold_module_factory.html" title="UserActionFactory for ActionFoldModule." alt="" coords="1025,175,1239,267"/>
-<area shape="rect" id="node7" href="$classhal_1_1_action_move_node_factory.html" title="UserActionFactory for ActionMoveNode." alt="" coords="1263,175,1471,267"/>
-<area shape="rect" id="node8" href="$classhal_1_1_action_open_netlist_file_factory.html" title="UserActionFactory for ActionOpenNetlistFile." alt="" coords="1495,167,1729,274"/>
-<area shape="rect" id="node9" href="$classhal_1_1_action_pingroup_factory.html" title="UserActionFactory for ActionPingroup." alt="" coords="1753,175,1948,267"/>
-<area shape="rect" id="node10" href="$classhal_1_1_action_remove_items_from_object_factory.html" title="UserActionFactory for ActionRemoveItemsFromObject." alt="" coords="1973,160,2217,281"/>
-<area shape="rect" id="node11" href="$classhal_1_1_action_rename_object_factory.html" title="UserActionFactory for ActionRenameObject." alt="" coords="2241,175,2476,267"/>
-<area shape="rect" id="node12" href="$classhal_1_1_action_reorder_object_factory.html" title="UserActionFactory for ActionReorderObject." alt="" coords="2501,167,2729,274"/>
-<area shape="rect" id="node13" href="$classhal_1_1_action_set_object_color_factory.html" title="UserActionFactory for ActionSetObjectColor." alt="" coords="2753,167,2985,274"/>
-<area shape="rect" id="node14" href="$classhal_1_1_action_set_object_data_factory.html" title="The ActionSetObjectDataFactory class." alt="" coords="3009,167,3239,274"/>
-<area shape="rect" id="node15" href="$classhal_1_1_action_set_object_type_factory.html" title="UserActionFactory for ActionSetObjectType." alt="" coords="3263,167,3491,274"/>
-<area shape="rect" id="node16" href="$classhal_1_1_action_set_selection_focus_factory.html" title="UserActionFactory for ActionSetSelectionFocus." alt="" coords="3516,167,3769,274"/>
-<area shape="rect" id="node17" href="$classhal_1_1_action_unfold_module_factory.html" title="UserActionFactory for ActionUnfoldModule." alt="" coords="3793,175,4023,267"/>
-<area shape="rect" id="node18" href="$classhal_1_1_user_action_compound_factory.html" title=" " alt="" coords="4047,175,4286,267"/>
+<area shape="rect" id="node7" href="$classhal_1_1_action_move_item_factory.html" title="UserActionFactory for ActionMoveItem." alt="" coords="1263,175,1467,267"/>
+<area shape="rect" id="node8" href="$classhal_1_1_action_move_node_factory.html" title="UserActionFactory for ActionMoveNode." alt="" coords="1492,175,1700,267"/>
+<area shape="rect" id="node9" href="$classhal_1_1_action_open_netlist_file_factory.html" title="UserActionFactory for ActionOpenNetlistFile." alt="" coords="1724,167,1959,274"/>
+<area shape="rect" id="node10" href="$classhal_1_1_action_pingroup_factory.html" title="UserActionFactory for ActionPingroup." alt="" coords="1983,175,2177,267"/>
+<area shape="rect" id="node11" href="$classhal_1_1_action_remove_items_from_object_factory.html" title="UserActionFactory for ActionRemoveItemsFromObject." alt="" coords="2202,160,2446,281"/>
+<area shape="rect" id="node12" href="$classhal_1_1_action_rename_object_factory.html" title="UserActionFactory for ActionRenameObject." alt="" coords="2471,175,2705,267"/>
+<area shape="rect" id="node13" href="$classhal_1_1_action_set_object_color_factory.html" title="UserActionFactory for ActionSetObjectColor." alt="" coords="2729,167,2961,274"/>
+<area shape="rect" id="node14" href="$classhal_1_1_action_set_object_data_factory.html" title="The ActionSetObjectDataFactory class." alt="" coords="2985,167,3215,274"/>
+<area shape="rect" id="node15" href="$classhal_1_1_action_set_object_type_factory.html" title="UserActionFactory for ActionSetObjectType." alt="" coords="3239,167,3467,274"/>
+<area shape="rect" id="node16" href="$classhal_1_1_action_set_selection_focus_factory.html" title="UserActionFactory for ActionSetSelectionFocus." alt="" coords="3492,167,3745,274"/>
+<area shape="rect" id="node17" href="$classhal_1_1_action_unfold_module_factory.html" title="UserActionFactory for ActionUnfoldModule." alt="" coords="3769,175,3999,267"/>
+<area shape="rect" id="node18" href="$classhal_1_1_user_action_compound_factory.html" title=" " alt="" coords="4023,175,4262,267"/>
 </map>

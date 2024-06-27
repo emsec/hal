@@ -100,12 +100,13 @@ Inheritance diagram for hal::BaseTreeModel:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_base_tree_model__inherit__graph.png" border="0" usemap="#hal_1_1_base_tree_model_inherit__map" alt="Inheritance graph"/></div>
 <map name="hal_1_1_base_tree_model_inherit__map" id="hal_1_1_base_tree_model_inherit__map">
-<area shape="rect" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="258,755,414,1111"/>
-<area shape="rect" href="classhal_1_1_gate_pins_tree_model.html" title="A model to display the pins of a gate." alt="" coords="5,1173,232,1368"/>
-<area shape="rect" href="classhal_1_1_module_model.html" title="A model for displaying multiple netlist elements." alt="" coords="256,1173,416,1368"/>
-<area shape="rect" href="classhal_1_1_module_pins_tree_model.html" title="A model to represent the ports of a module." alt="" coords="440,1159,669,1383"/>
-<area shape="rect" href="https://doc.qt.io/qt-5/qabstractitemmodel.html" title=" " alt="" coords="240,395,432,707"/>
-<area shape="rect" href="https://doc.qt.io/qt-5/qobject.html" title=" " alt="" coords="253,5,419,347"/>
+<area shape="rect" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="341,755,497,1111"/>
+<area shape="rect" href="classhal_1_1_context_tree_model.html" title="Base model for the ContextManagerWidget to manage GraphContexts." alt="" coords="5,1181,173,1361"/>
+<area shape="rect" href="classhal_1_1_gate_pins_tree_model.html" title="A model to display the pins of a gate." alt="" coords="197,1173,424,1368"/>
+<area shape="rect" href="classhal_1_1_module_model.html" title="A model for displaying multiple netlist elements." alt="" coords="448,1173,608,1368"/>
+<area shape="rect" href="classhal_1_1_module_pins_tree_model.html" title="A model to represent the ports of a module." alt="" coords="632,1159,861,1383"/>
+<area shape="rect" href="https://doc.qt.io/qt-5/qabstractitemmodel.html" title=" " alt="" coords="323,395,515,707"/>
+<area shape="rect" href="https://doc.qt.io/qt-5/qobject.html" title=" " alt="" coords="335,5,502,347"/>
 </map>
 </div>
 <div class="dynheader">
@@ -139,6 +140,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab5007e8f297014b1e49a08138fda4f45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad1c0bb30462fadbdb45ba048823f4f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_model.html#aad1c0bb30462fadbdb45ba048823f4f5">getRootItem</a> () const</td></tr>
 <tr class="separator:aad1c0bb30462fadbdb45ba048823f4f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa575b262938e8ceb382cd3065a8d7595"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_model.html#aa575b262938e8ceb382cd3065a8d7595">insertChildItem</a> (<a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *childItem, <a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *parentItem=nullptr, int row=-1)</td></tr>
+<tr class="separator:aa575b262938e8ceb382cd3065a8d7595"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Overwritten model functions</div></td></tr>
 <tr class="memitem:aac6235e965fcc2fb3af1efb842edeaf6"><td class="memItemLeft" align="right" valign="top">virtual <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_base_tree_model.html#aac6235e965fcc2fb3af1efb842edeaf6">data</a> (const <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html">QModelIndex</a> &amp;<a class="el" href="classhal_1_1_base_tree_model.html#a66ebe82b0eb6537c47af030dd7f8d24a">index</a>, int role=<a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::DisplayRole</a>) const override</td></tr>
 <tr class="separator:aac6235e965fcc2fb3af1efb842edeaf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -561,7 +564,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="base__tree__model_8cpp_source.html#l00007">7</a> of file <a class="el" href="base__tree__model_8cpp_source.html">base_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="base__tree__model_8h_source.html#l00150">mRootItem</a>.</p>
+<p class="reference">References <a class="el" href="base__tree__model_8h_source.html#l00152">mRootItem</a>.</p>
 
 </div>
 </div>
@@ -590,13 +593,13 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Resets the model (deletes the tree). </p>
 
-<p>Reimplemented in <a class="el" href="classhal_1_1_module_model.html#abc15230240d0186e45a8dd7ee5a25924">hal::ModuleModel</a>, <a class="el" href="classhal_1_1_module_pins_tree_model.html#a68a8c7a8d0efb778590a0032ab12698e">hal::ModulePinsTreeModel</a>, and <a class="el" href="classhal_1_1_gate_pins_tree_model.html#a901e16ade95a44d0c9840e2e93f7de63">hal::GatePinsTreeModel</a>.</p>
+<p>Reimplemented in <a class="el" href="classhal_1_1_context_tree_model.html#a146acc5f2f5b056499885bab2b4c68ec">hal::ContextTreeModel</a>, <a class="el" href="classhal_1_1_module_model.html#abc15230240d0186e45a8dd7ee5a25924">hal::ModuleModel</a>, <a class="el" href="classhal_1_1_module_pins_tree_model.html#a68a8c7a8d0efb778590a0032ab12698e">hal::ModulePinsTreeModel</a>, and <a class="el" href="classhal_1_1_gate_pins_tree_model.html#a901e16ade95a44d0c9840e2e93f7de63">hal::GatePinsTreeModel</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="base__tree__model_8cpp_source.html#l00089">89</a> of file <a class="el" href="base__tree__model_8cpp_source.html">base_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00075">hal::BaseTreeItem::getChildCount()</a>, <a class="el" href="base__tree__model_8h_source.html#l00150">mRootItem</a>, and <a class="el" href="base__tree__item_8cpp_source.html#l00051">hal::BaseTreeItem::removeChildAtPos()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginResetModel">QAbstractItemModel::beginResetModel()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endResetModel">QAbstractItemModel::endResetModel()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00075">hal::BaseTreeItem::getChildCount()</a>, <a class="el" href="base__tree__model_8h_source.html#l00152">mRootItem</a>, and <a class="el" href="base__tree__item_8cpp_source.html#l00051">hal::BaseTreeItem::removeChildAtPos()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="pin__tree__model_8cpp_source.html#l00099">hal::GatePinsTreeModel::clear()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00387">hal::ModulePinsTreeModel::clear()</a>, and <a class="el" href="module__model_8cpp_source.html#l00110">hal::ModuleModel::clear()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="pin__tree__model_8cpp_source.html#l00099">hal::GatePinsTreeModel::clear()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00260">hal::ModulePinsTreeModel::clear()</a>, <a class="el" href="module__model_8cpp_source.html#l00110">hal::ModuleModel::clear()</a>, and <a class="el" href="context__tree__model_8cpp_source.html#l00257">hal::ContextTreeModel::clear()</a>.</p>
 
 </div>
 </div>
@@ -629,9 +632,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="base__tree__model_8cpp_source.html#l00077">77</a> of file <a class="el" href="base__tree__model_8cpp_source.html">base_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="base__tree__item_8h_source.html#l00243">hal::RootTreeItem::getColumnCount()</a>, <a class="el" href="base__tree__model_8h_source.html#l00150">mRootItem</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent()</a>.</p>
+<p class="reference">References <a class="el" href="base__tree__item_8h_source.html#l00243">hal::RootTreeItem::getColumnCount()</a>, <a class="el" href="base__tree__model_8h_source.html#l00152">mRootItem</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="port__tree__model_8cpp_source.html#l00508">hal::ModulePinsTreeModel::handleModulePortsChanged()</a>, and <a class="el" href="base__tree__model_8cpp_source.html#l00101">headerLabels()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="port__tree__model_8cpp_source.html#l00381">hal::ModulePinsTreeModel::handleModulePortsChanged()</a>, and <a class="el" href="base__tree__model_8cpp_source.html#l00101">headerLabels()</a>.</p>
 
 </div>
 </div>
@@ -672,13 +675,13 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#data">QAbstractItemModel</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classhal_1_1_module_model.html#a99479fd9bf082b812515289f4a2e3e59">hal::ModuleModel</a>.</p>
+<p>Reimplemented in <a class="el" href="classhal_1_1_module_model.html#a99479fd9bf082b812515289f4a2e3e59">hal::ModuleModel</a>, and <a class="el" href="classhal_1_1_context_tree_model.html#a5e6d0b19796aab637ea29e2c5fe4a6be">hal::ContextTreeModel</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="base__tree__model_8cpp_source.html#l00012">12</a> of file <a class="el" href="base__tree__model_8cpp_source.html">base_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#column">QModelIndex::column()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::DisplayRole</a>, <a class="el" href="classhal_1_1_base_tree_item.html#aa97e392edd168532523c61756e7c3d9c">hal::BaseTreeItem::getData()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00141">getItemFromIndex()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">index()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="port__tree__model_8cpp_source.html#l00335">hal::ModulePinsTreeModel::canDropMimeData()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00149">hal::ModulePinsTreeModel::dropMimeData()</a>, and <a class="el" href="port__tree__model_8cpp_source.html#l00133">hal::ModulePinsTreeModel::mimeData()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="port__tree__model_8cpp_source.html#l00208">hal::ModulePinsTreeModel::canDropMimeData()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00148">hal::ModulePinsTreeModel::dropMimeData()</a>, and <a class="el" href="port__tree__model_8cpp_source.html#l00132">hal::ModulePinsTreeModel::mimeData()</a>.</p>
 
 </div>
 </div>
@@ -709,13 +712,13 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented from <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#flags">QAbstractItemModel</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classhal_1_1_module_model.html#a129509c2c741b517a0bbbfcc1b2f0a0f">hal::ModuleModel</a>, and <a class="el" href="classhal_1_1_module_pins_tree_model.html#a95a545a07f1ae68ee0ec0c33d090862c">hal::ModulePinsTreeModel</a>.</p>
+<p>Reimplemented in <a class="el" href="classhal_1_1_context_tree_model.html#a3307d03a9adb81fbf9004981bcdaba36">hal::ContextTreeModel</a>, <a class="el" href="classhal_1_1_module_model.html#a129509c2c741b517a0bbbfcc1b2f0a0f">hal::ModuleModel</a>, and <a class="el" href="classhal_1_1_module_pins_tree_model.html#a95a545a07f1ae68ee0ec0c33d090862c">hal::ModulePinsTreeModel</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="base__tree__model_8cpp_source.html#l00062">62</a> of file <a class="el" href="base__tree__model_8cpp_source.html">base_tree_model.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#flags">QAbstractItemModel::flags()</a>, and <a class="el" href="base__tree__model_8cpp_source.html#l00036">index()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="port__tree__model_8cpp_source.html#l00096">hal::ModulePinsTreeModel::flags()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="port__tree__model_8cpp_source.html#l00095">hal::ModulePinsTreeModel::flags()</a>, and <a class="el" href="context__tree__model_8cpp_source.html#l00172">hal::ContextTreeModel::flags()</a>.</p>
 
 </div>
 </div>
@@ -747,7 +750,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00019">hal::BaseTreeItem::getParent()</a>, and <a class="el" href="base__tree__item_8cpp_source.html#l00080">hal::BaseTreeItem::getRowForChild()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00234">hal::ModuleModel::createChildItem()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00508">hal::ModulePinsTreeModel::handleModulePortsChanged()</a>, <a class="el" href="module__widget_8cpp_source.html#l00603">hal::ModuleWidget::handleSelectionChanged()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00046">parent()</a>, <a class="el" href="module__model_8cpp_source.html#l00251">hal::ModuleModel::removeChildItem()</a>, <a class="el" href="module__elements__tree_8cpp_source.html#l00041">hal::ModuleElementsTree::setModule()</a>, <a class="el" href="module__model_8cpp_source.html#l00722">hal::ModuleModel::updateGateName()</a>, <a class="el" href="module__model_8cpp_source.html#l00706">hal::ModuleModel::updateModuleName()</a>, <a class="el" href="module__model_8cpp_source.html#l00616">hal::ModuleModel::updateModuleParent()</a>, and <a class="el" href="module__model_8cpp_source.html#l00738">hal::ModuleModel::updateNetName()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="context__tree__model_8cpp_source.html#l00267">hal::ContextTreeModel::addContext()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00229">hal::ContextTreeModel::addDirectory()</a>, <a class="el" href="module__model_8cpp_source.html#l00234">hal::ModuleModel::createChildItem()</a>, <a class="el" href="context__proxy__model_8cpp_source.html#l00116">hal::ContextProxyModel::dropMimeData()</a>, <a class="el" href="action__move__item_8cpp_source.html#l00055">hal::ActionMoveItem::exec()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00361">hal::ContextTreeModel::getIndexFromContext()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00381">hal::ModulePinsTreeModel::handleModulePortsChanged()</a>, <a class="el" href="module__widget_8cpp_source.html#l00603">hal::ModuleWidget::handleSelectionChanged()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00151">insertChildItem()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00412">hal::ContextTreeModel::moveItem()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00046">parent()</a>, <a class="el" href="module__model_8cpp_source.html#l00251">hal::ModuleModel::removeChildItem()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00294">hal::ContextTreeModel::removeContext()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00316">hal::ContextTreeModel::removeDirectory()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00364">hal::ContextManagerWidget::selectDirectory()</a>, <a class="el" href="module__elements__tree_8cpp_source.html#l00041">hal::ModuleElementsTree::setModule()</a>, <a class="el" href="module__model_8cpp_source.html#l00722">hal::ModuleModel::updateGateName()</a>, <a class="el" href="module__model_8cpp_source.html#l00706">hal::ModuleModel::updateModuleName()</a>, <a class="el" href="module__model_8cpp_source.html#l00616">hal::ModuleModel::updateModuleParent()</a>, and <a class="el" href="module__model_8cpp_source.html#l00738">hal::ModuleModel::updateNetName()</a>.</p>
 
 </div>
 </div>
@@ -779,7 +782,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="reference">References <a class="el" href="base__tree__model_8cpp_source.html#l00036">index()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#internalPointer">QModelIndex::internalPointer()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="port__tree__model_8cpp_source.html#l00335">hal::ModulePinsTreeModel::canDropMimeData()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00012">data()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00149">hal::ModulePinsTreeModel::dropMimeData()</a>, <a class="el" href="module__elements__tree_8cpp_source.html#l00057">hal::ModuleElementsTree::handleContextMenuRequested()</a>, <a class="el" href="module__ports__tree_8cpp_source.html#l00084">hal::ModulePinsTree::handleContextMenuRequested()</a>, <a class="el" href="gate__pin__tree_8cpp_source.html#l00093">hal::GatePinTree::handleContextMenuRequested()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">index()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00133">hal::ModulePinsTreeModel::mimeData()</a>, <a class="el" href="gate__pin__tree_8cpp_source.html#l00064">hal::GatePinTree::mouseDoubleClickEvent()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00046">parent()</a>, and <a class="el" href="base__tree__model_8cpp_source.html#l00067">rowCount()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="context__proxy__model_8cpp_source.html#l00172">hal::ContextProxyModel::canDropMimeData()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00208">hal::ModulePinsTreeModel::canDropMimeData()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00012">data()</a>, <a class="el" href="context__proxy__model_8cpp_source.html#l00116">hal::ContextProxyModel::dropMimeData()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00148">hal::ModulePinsTreeModel::dropMimeData()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00172">hal::ContextTreeModel::flags()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00366">hal::ContextTreeModel::getContext()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00394">hal::ContextManagerWidget::getCurrentItem()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00086">hal::GraphContextManager::getParentId()</a>, <a class="el" href="module__elements__tree_8cpp_source.html#l00057">hal::ModuleElementsTree::handleContextMenuRequested()</a>, <a class="el" href="module__ports__tree_8cpp_source.html#l00084">hal::ModulePinsTree::handleContextMenuRequested()</a>, <a class="el" href="gate__pin__tree_8cpp_source.html#l00093">hal::GatePinTree::handleContextMenuRequested()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00193">hal::ContextManagerWidget::handleItemClicked()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00176">hal::ContextManagerWidget::handleItemDoubleClicked()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00749">hal::GraphContextManager::handleSaveTriggered()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">index()</a>, <a class="el" href="context__proxy__model_8cpp_source.html#l00022">hal::ContextProxyModel::lessThan()</a>, <a class="el" href="context__proxy__model_8cpp_source.html#l00065">hal::ContextProxyModel::mimeData()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00132">hal::ModulePinsTreeModel::mimeData()</a>, <a class="el" href="gate__pin__tree_8cpp_source.html#l00064">hal::GatePinTree::mouseDoubleClickEvent()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00046">parent()</a>, and <a class="el" href="base__tree__model_8cpp_source.html#l00067">rowCount()</a>.</p>
 
 </div>
 </div>
@@ -802,7 +805,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="base__tree__model_8cpp_source.html#l00146">146</a> of file <a class="el" href="base__tree__model_8cpp_source.html">base_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="base__tree__model_8h_source.html#l00150">mRootItem</a>.</p>
+<p class="reference">References <a class="el" href="base__tree__model_8h_source.html#l00152">mRootItem</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="context__proxy__model_8cpp_source.html#l00172">hal::ContextProxyModel::canDropMimeData()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00471">hal::ContextTreeModel::getChildContextsOf()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00452">hal::ContextTreeModel::getChildDirectoriesOf()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00394">hal::ContextManagerWidget::getCurrentItem()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00749">hal::GraphContextManager::handleSaveTriggered()</a>, <a class="el" href="gui__api_8cpp_source.html#l00997">hal::GuiApiClasses::View::moveDirectory()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00068">hal::GraphContextManager::moveItem()</a>, <a class="el" href="gui__api_8cpp_source.html#l00976">hal::GuiApiClasses::View::moveView()</a>, and <a class="el" href="graph__context__manager_8cpp_source.html#l00632">hal::GraphContextManager::restoreFromFile()</a>.</p>
 
 </div>
 </div>
@@ -851,7 +856,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="base__tree__model_8cpp_source.html#l00028">28</a> of file <a class="el" href="base__tree__model_8cpp_source.html">base_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::DisplayRole</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00102">hal::RootTreeItem::getData()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Orientation-enum">Qt::Horizontal</a>, and <a class="el" href="base__tree__model_8h_source.html#l00150">mRootItem</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#ItemDataRole-enum">Qt::DisplayRole</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00102">hal::RootTreeItem::getData()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qt.html#Orientation-enum">Qt::Horizontal</a>, and <a class="el" href="base__tree__model_8h_source.html#l00152">mRootItem</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="base__tree__model_8cpp_source.html#l00101">headerLabels()</a>.</p>
 
@@ -926,9 +931,49 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="base__tree__model_8cpp_source.html#l00036">36</a> of file <a class="el" href="base__tree__model_8cpp_source.html">base_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00029">hal::BaseTreeItem::getChild()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00141">getItemFromIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#hasIndex">QAbstractItemModel::hasIndex()</a>, <a class="el" href="base__tree__model_8h_source.html#l00150">mRootItem</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#createIndex">QAbstractItemModel::createIndex()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00029">hal::BaseTreeItem::getChild()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00141">getItemFromIndex()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#hasIndex">QAbstractItemModel::hasIndex()</a>, <a class="el" href="base__tree__model_8h_source.html#l00152">mRootItem</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00234">hal::ModuleModel::createChildItem()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00012">data()</a>, <a class="el" href="module__model_8cpp_source.html#l00036">hal::ModuleModel::data()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00062">flags()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00096">hal::ModulePinsTreeModel::flags()</a>, <a class="el" href="module__model_8cpp_source.html#l00084">hal::ModuleModel::flags()</a>, <a class="el" href="module__model_8cpp_source.html#l00092">hal::ModuleModel::getItem()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00141">getItemFromIndex()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00046">parent()</a>, <a class="el" href="module__model_8cpp_source.html#l00251">hal::ModuleModel::removeChildItem()</a>, <a class="el" href="module__model_8cpp_source.html#l00722">hal::ModuleModel::updateGateName()</a>, <a class="el" href="module__model_8cpp_source.html#l00706">hal::ModuleModel::updateModuleName()</a>, <a class="el" href="module__model_8cpp_source.html#l00616">hal::ModuleModel::updateModuleParent()</a>, and <a class="el" href="module__model_8cpp_source.html#l00738">hal::ModuleModel::updateNetName()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="context__tree__model_8cpp_source.html#l00267">hal::ContextTreeModel::addContext()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00229">hal::ContextTreeModel::addDirectory()</a>, <a class="el" href="module__model_8cpp_source.html#l00234">hal::ModuleModel::createChildItem()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00012">data()</a>, <a class="el" href="module__model_8cpp_source.html#l00036">hal::ModuleModel::data()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00134">hal::ContextTreeModel::data()</a>, <a class="el" href="context__proxy__model_8cpp_source.html#l00116">hal::ContextProxyModel::dropMimeData()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00062">flags()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00095">hal::ModulePinsTreeModel::flags()</a>, <a class="el" href="module__model_8cpp_source.html#l00084">hal::ModuleModel::flags()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00172">hal::ContextTreeModel::flags()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00366">hal::ContextTreeModel::getContext()</a>, <a class="el" href="module__model_8cpp_source.html#l00092">hal::ModuleModel::getItem()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00141">getItemFromIndex()</a>, <a class="el" href="context__manager__widget_8cpp_source.html#l00146">hal::ContextManagerWidget::handleRowsInserted()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00151">insertChildItem()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00046">parent()</a>, <a class="el" href="module__model_8cpp_source.html#l00251">hal::ModuleModel::removeChildItem()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00294">hal::ContextTreeModel::removeContext()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00316">hal::ContextTreeModel::removeDirectory()</a>, <a class="el" href="module__model_8cpp_source.html#l00722">hal::ModuleModel::updateGateName()</a>, <a class="el" href="module__model_8cpp_source.html#l00706">hal::ModuleModel::updateModuleName()</a>, <a class="el" href="module__model_8cpp_source.html#l00616">hal::ModuleModel::updateModuleParent()</a>, and <a class="el" href="module__model_8cpp_source.html#l00738">hal::ModuleModel::updateNetName()</a>.</p>
+
+</div>
+</div>
+<a id="aa575b262938e8ceb382cd3065a8d7595"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa575b262938e8ceb382cd3065a8d7595">&#9670;&nbsp;</a></span>insertChildItem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hal::BaseTreeModel::insertChildItem </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *&#160;</td>
+          <td class="paramname"><em>childItem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a> *&#160;</td>
+          <td class="paramname"><em>parentItem</em> = <code>nullptr</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>row</em> = <code>-1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="base__tree__model_8cpp_source.html#l00151">151</a> of file <a class="el" href="base__tree__model_8cpp_source.html">base_tree_model.cpp</a>.</p>
+
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#beginInsertRows">QAbstractItemModel::beginInsertRows()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qabstractitemmodel.html#endInsertRows">QAbstractItemModel::endInsertRows()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00075">hal::BaseTreeItem::getChildCount()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00123">getIndexFromItem()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">index()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00045">hal::BaseTreeItem::insertChild()</a>, and <a class="el" href="base__tree__model_8h_source.html#l00152">mRootItem</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="context__tree__model_8cpp_source.html#l00412">hal::ContextTreeModel::moveItem()</a>.</p>
 
 </div>
 </div>
@@ -961,7 +1006,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="base__tree__model_8cpp_source.html#l00046">46</a> of file <a class="el" href="base__tree__model_8cpp_source.html">base_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="base__tree__model_8cpp_source.html#l00123">getIndexFromItem()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00141">getItemFromIndex()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00019">hal::BaseTreeItem::getParent()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">index()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, and <a class="el" href="base__tree__model_8h_source.html#l00150">mRootItem</a>.</p>
+<p class="reference">References <a class="el" href="base__tree__model_8cpp_source.html#l00123">getIndexFromItem()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00141">getItemFromIndex()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00019">hal::BaseTreeItem::getParent()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">index()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qmodelindex.html#isValid">QModelIndex::isValid()</a>, and <a class="el" href="base__tree__model_8h_source.html#l00152">mRootItem</a>.</p>
 
 </div>
 </div>
@@ -994,7 +1039,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="base__tree__model_8cpp_source.html#l00067">67</a> of file <a class="el" href="base__tree__model_8cpp_source.html">base_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="base__tree__item_8cpp_source.html#l00075">hal::BaseTreeItem::getChildCount()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00141">getItemFromIndex()</a>, <a class="el" href="base__tree__model_8h_source.html#l00150">mRootItem</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent()</a>.</p>
+<p class="reference">References <a class="el" href="base__tree__item_8cpp_source.html#l00075">hal::BaseTreeItem::getChildCount()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00141">getItemFromIndex()</a>, <a class="el" href="base__tree__model_8h_source.html#l00152">mRootItem</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#parent">QObject::parent()</a>.</p>
 
 </div>
 </div>
@@ -1023,7 +1068,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="base__tree__model_8cpp_source.html#l00083">83</a> of file <a class="el" href="base__tree__model_8cpp_source.html">base_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="base__tree__item_8cpp_source.html#l00039">hal::BaseTreeItem::appendChild()</a>, and <a class="el" href="base__tree__model_8h_source.html#l00150">mRootItem</a>.</p>
+<p class="reference">References <a class="el" href="base__tree__item_8cpp_source.html#l00039">hal::BaseTreeItem::appendChild()</a>, and <a class="el" href="base__tree__model_8h_source.html#l00152">mRootItem</a>.</p>
 
 </div>
 </div>
@@ -1051,9 +1096,9 @@ Additional Inherited Members</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="base__tree__model_8cpp_source.html#l00110">110</a> of file <a class="el" href="base__tree__model_8cpp_source.html">base_tree_model.cpp</a>.</p>
 
-<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#at">QList::at()</a>, <a class="el" href="base__tree__model_8h_source.html#l00150">mRootItem</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00117">hal::RootTreeItem::setDataAtIndex()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#size">QList::size()</a>.</p>
+<p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#at">QList::at()</a>, <a class="el" href="base__tree__model_8h_source.html#l00152">mRootItem</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00117">hal::RootTreeItem::setDataAtIndex()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qlist.html#size">QList::size()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="pin__tree__model_8cpp_source.html#l00082">hal::GatePinsTreeModel::GatePinsTreeModel()</a>, <a class="el" href="module__model_8cpp_source.html#l00012">hal::ModuleModel::ModuleModel()</a>, and <a class="el" href="port__tree__model_8cpp_source.html#l00079">hal::ModulePinsTreeModel::ModulePinsTreeModel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="context__tree__model_8cpp_source.html#l00129">hal::ContextTreeModel::ContextTreeModel()</a>, <a class="el" href="pin__tree__model_8cpp_source.html#l00082">hal::GatePinsTreeModel::GatePinsTreeModel()</a>, <a class="el" href="module__model_8cpp_source.html#l00012">hal::ModuleModel::ModuleModel()</a>, and <a class="el" href="port__tree__model_8cpp_source.html#l00078">hal::ModulePinsTreeModel::ModulePinsTreeModel()</a>.</p>
 
 </div>
 </div>
@@ -1078,9 +1123,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="base__tree__model_8h_source.html#l00150">150</a> of file <a class="el" href="base__tree__model_8h_source.html">base_tree_model.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="base__tree__model_8h_source.html#l00152">152</a> of file <a class="el" href="base__tree__model_8h_source.html">base_tree_model.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00180">hal::ModuleModel::addRecursively()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00007">BaseTreeModel()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00089">clear()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00077">columnCount()</a>, <a class="el" href="module__model_8cpp_source.html#l00234">hal::ModuleModel::createChildItem()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00146">getRootItem()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00508">hal::ModulePinsTreeModel::handleModulePortsChanged()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00028">headerData()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">index()</a>, <a class="el" href="module__model_8cpp_source.html#l00533">hal::ModuleModel::moduleAssignNets()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00046">parent()</a>, <a class="el" href="module__model_8cpp_source.html#l00121">hal::ModuleModel::populateTree()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00067">rowCount()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00083">setContent()</a>, <a class="el" href="pin__tree__model_8cpp_source.html#l00106">hal::GatePinsTreeModel::setGate()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00110">setHeaderLabels()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00397">hal::ModulePinsTreeModel::setModule()</a>, <a class="el" href="pin__tree__model_8cpp_source.html#l00094">hal::GatePinsTreeModel::~GatePinsTreeModel()</a>, and <a class="el" href="port__tree__model_8cpp_source.html#l00091">hal::ModulePinsTreeModel::~ModulePinsTreeModel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="context__tree__model_8cpp_source.html#l00267">hal::ContextTreeModel::addContext()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00229">hal::ContextTreeModel::addDirectory()</a>, <a class="el" href="module__model_8cpp_source.html#l00180">hal::ModuleModel::addRecursively()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00007">BaseTreeModel()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00089">clear()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00077">columnCount()</a>, <a class="el" href="module__model_8cpp_source.html#l00234">hal::ModuleModel::createChildItem()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00202">hal::ContextTreeModel::getContext()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00197">hal::ContextTreeModel::getDirectory()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00146">getRootItem()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00381">hal::ModulePinsTreeModel::handleModulePortsChanged()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00028">headerData()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00036">index()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00151">insertChildItem()</a>, <a class="el" href="module__model_8cpp_source.html#l00533">hal::ModuleModel::moduleAssignNets()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00412">hal::ContextTreeModel::moveItem()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00046">parent()</a>, <a class="el" href="module__model_8cpp_source.html#l00121">hal::ModuleModel::populateTree()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00067">rowCount()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00083">setContent()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00396">hal::ContextTreeModel::setCurrentDirectory()</a>, <a class="el" href="pin__tree__model_8cpp_source.html#l00106">hal::GatePinsTreeModel::setGate()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00110">setHeaderLabels()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00270">hal::ModulePinsTreeModel::setModule()</a>, <a class="el" href="pin__tree__model_8cpp_source.html#l00094">hal::GatePinsTreeModel::~GatePinsTreeModel()</a>, and <a class="el" href="port__tree__model_8cpp_source.html#l00090">hal::ModulePinsTreeModel::~ModulePinsTreeModel()</a>.</p>
 
 </div>
 </div>
@@ -1094,7 +1139,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_base_tree_model.html">BaseTreeModel</a></li>
-    <li class="footer">Generated on Thu Jun 27 2024 12:36:45 for HAL by
+    <li class="footer">Generated on Thu Jun 27 2024 13:30:07 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

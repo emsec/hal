@@ -1,0 +1,5 @@
+<map id="hal::ActionMoveItemFactory" name="hal::ActionMoveItemFactory">
+<area shape="rect" id="node1" title="UserActionFactory for ActionMoveItem." alt="" coords="5,536,209,628"/>
+<area shape="rect" id="node2" href="$classhal_1_1_user_action_factory.html" title="The UserActionFactory is the abstract base class for registration." alt="" coords="23,380,191,487"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qstring.html" title=" " alt="" coords="38,5,177,317"/>
+</map>

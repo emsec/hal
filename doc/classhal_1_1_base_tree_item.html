@@ -100,11 +100,12 @@ Inheritance diagram for hal::BaseTreeItem:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhal_1_1_base_tree_item__inherit__graph.png" border="0" usemap="#hal_1_1_base_tree_item_inherit__map" alt="Inheritance graph"/></div>
 <map name="hal_1_1_base_tree_item_inherit__map" id="hal_1_1_base_tree_item_inherit__map">
-<area shape="rect" title="(Future) Base class for all tree models related to the details widget." alt="" coords="271,5,418,171"/>
-<area shape="rect" href="classhal_1_1_module_item.html" title="An item in the ModuleModel." alt="" coords="5,219,161,369"/>
-<area shape="rect" href="classhal_1_1_pin_tree_item.html" title=" " alt="" coords="185,219,333,369"/>
-<area shape="rect" href="classhal_1_1_port_tree_item.html" title=" " alt="" coords="357,219,505,369"/>
-<area shape="rect" href="classhal_1_1_root_tree_item.html" title=" " alt="" coords="529,219,685,369"/>
+<area shape="rect" title="(Future) Base class for all tree models related to the details widget." alt="" coords="369,5,515,171"/>
+<area shape="rect" href="classhal_1_1_context_tree_item.html" title=" " alt="" coords="5,219,164,369"/>
+<area shape="rect" href="classhal_1_1_module_item.html" title="An item in the ModuleModel." alt="" coords="188,219,344,369"/>
+<area shape="rect" href="classhal_1_1_pin_tree_item.html" title=" " alt="" coords="368,219,516,369"/>
+<area shape="rect" href="classhal_1_1_port_tree_item.html" title=" " alt="" coords="540,219,688,369"/>
+<area shape="rect" href="classhal_1_1_root_tree_item.html" title=" " alt="" coords="712,219,868,369"/>
 </map>
 </div>
 <div class="dynheader">
@@ -282,7 +283,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="reference">References <a class="el" href="base__tree__item_8h_source.html#l00194">mChildren</a>, and <a class="el" href="base__tree__item_8cpp_source.html#l00024">setParent()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__item_8cpp_source.html#l00045">hal::ModuleItem::appendExistingChildIfAny()</a>, <a class="el" href="module__model_8cpp_source.html#l00234">hal::ModuleModel::createChildItem()</a>, <a class="el" href="module__model_8cpp_source.html#l00121">hal::ModuleModel::populateTree()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00083">hal::BaseTreeModel::setContent()</a>, <a class="el" href="pin__tree__model_8cpp_source.html#l00106">hal::GatePinsTreeModel::setGate()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00397">hal::ModulePinsTreeModel::setModule()</a>, and <a class="el" href="module__model_8cpp_source.html#l00616">hal::ModuleModel::updateModuleParent()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="context__tree__model_8cpp_source.html#l00267">hal::ContextTreeModel::addContext()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00229">hal::ContextTreeModel::addDirectory()</a>, <a class="el" href="module__item_8cpp_source.html#l00045">hal::ModuleItem::appendExistingChildIfAny()</a>, <a class="el" href="module__model_8cpp_source.html#l00234">hal::ModuleModel::createChildItem()</a>, <a class="el" href="module__model_8cpp_source.html#l00121">hal::ModuleModel::populateTree()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00083">hal::BaseTreeModel::setContent()</a>, <a class="el" href="pin__tree__model_8cpp_source.html#l00106">hal::GatePinsTreeModel::setGate()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00270">hal::ModulePinsTreeModel::setModule()</a>, and <a class="el" href="module__model_8cpp_source.html#l00616">hal::ModuleModel::updateModuleParent()</a>.</p>
 
 </div>
 </div>
@@ -317,7 +318,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classhal_1_1_root_tree_item.html#a88e9575183c4ffdf6bf7ca0c91624c14">hal::RootTreeItem</a>, <a class="el" href="classhal_1_1_port_tree_item.html#a2c1c1d58ed43c17ebf6931dfc04899ea">hal::PortTreeItem</a>, <a class="el" href="classhal_1_1_pin_tree_item.html#abab6bc0fb9a8746bab846ab49f4d1574">hal::PinTreeItem</a>, and <a class="el" href="classhal_1_1_module_item.html#a97b2cf4a8f36aba02dcc402b1d186881">hal::ModuleItem</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_root_tree_item.html#a88e9575183c4ffdf6bf7ca0c91624c14">hal::RootTreeItem</a>, <a class="el" href="classhal_1_1_context_tree_item.html#a79266b7a9c6c3cb987ddc3e7081dd4d8">hal::ContextTreeItem</a>, <a class="el" href="classhal_1_1_port_tree_item.html#a2c1c1d58ed43c17ebf6931dfc04899ea">hal::PortTreeItem</a>, <a class="el" href="classhal_1_1_pin_tree_item.html#abab6bc0fb9a8746bab846ab49f4d1574">hal::PinTreeItem</a>, and <a class="el" href="classhal_1_1_module_item.html#a97b2cf4a8f36aba02dcc402b1d186881">hal::ModuleItem</a>.</p>
 
 </div>
 </div>
@@ -390,7 +391,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="reference">References <a class="el" href="base__tree__item_8h_source.html#l00194">mChildren</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="base__tree__model_8cpp_source.html#l00089">hal::BaseTreeModel::clear()</a>, <a class="el" href="module__model_8cpp_source.html#l00234">hal::ModuleModel::createChildItem()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00482">hal::ModulePinsTreeModel::getNetFromItem()</a>, <a class="el" href="module__model_8cpp_source.html#l00251">hal::ModuleModel::removeChildItem()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00067">hal::BaseTreeModel::rowCount()</a>, and <a class="el" href="module__model_8cpp_source.html#l00616">hal::ModuleModel::updateModuleParent()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="context__tree__model_8cpp_source.html#l00267">hal::ContextTreeModel::addContext()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00229">hal::ContextTreeModel::addDirectory()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00089">hal::BaseTreeModel::clear()</a>, <a class="el" href="module__model_8cpp_source.html#l00234">hal::ModuleModel::createChildItem()</a>, <a class="el" href="action__delete__object_8cpp_source.html#l00036">hal::ActionDeleteObject::exec()</a>, <a class="el" href="port__tree__model_8cpp_source.html#l00355">hal::ModulePinsTreeModel::getNetFromItem()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00151">hal::BaseTreeModel::insertChildItem()</a>, <a class="el" href="module__model_8cpp_source.html#l00251">hal::ModuleModel::removeChildItem()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00067">hal::BaseTreeModel::rowCount()</a>, and <a class="el" href="module__model_8cpp_source.html#l00616">hal::ModuleModel::updateModuleParent()</a>.</p>
 
 </div>
 </div>
@@ -423,7 +424,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="reference">References <a class="el" href="base__tree__item_8h_source.html#l00194">mChildren</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gate__pin__tree_8cpp_source.html#l00093">hal::GatePinTree::handleContextMenuRequested()</a>, and <a class="el" href="module__model_8cpp_source.html#l00251">hal::ModuleModel::removeChildItem()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="context__tree__model_8cpp_source.html#l00471">hal::ContextTreeModel::getChildContextsOf()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00452">hal::ContextTreeModel::getChildDirectoriesOf()</a>, <a class="el" href="gate__pin__tree_8cpp_source.html#l00093">hal::GatePinTree::handleContextMenuRequested()</a>, <a class="el" href="module__model_8cpp_source.html#l00251">hal::ModuleModel::removeChildItem()</a>, and <a class="el" href="context__tree__model_8cpp_source.html#l00316">hal::ContextTreeModel::removeDirectory()</a>.</p>
 
 </div>
 </div>
@@ -452,7 +453,7 @@ Protected Attributes</h2></td></tr>
 <p>Get the number of currently stored column data.</p>
 <dl class="section return"><dt>Returns</dt><dd>The column count. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhal_1_1_root_tree_item.html#a09bcd79e0edc26a512817642da0439d9">hal::RootTreeItem</a>, <a class="el" href="classhal_1_1_port_tree_item.html#a76b245e4becbb2c369299c2eab9469a4">hal::PortTreeItem</a>, <a class="el" href="classhal_1_1_pin_tree_item.html#a3e2988af1643d1db7819235afc364ac0">hal::PinTreeItem</a>, and <a class="el" href="classhal_1_1_module_item.html#a92bfd214ea29198702a1df25ed36f288">hal::ModuleItem</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_root_tree_item.html#a09bcd79e0edc26a512817642da0439d9">hal::RootTreeItem</a>, <a class="el" href="classhal_1_1_context_tree_item.html#a39a38d4f357466578a5281bc59c6ccc3">hal::ContextTreeItem</a>, <a class="el" href="classhal_1_1_port_tree_item.html#a76b245e4becbb2c369299c2eab9469a4">hal::PortTreeItem</a>, <a class="el" href="classhal_1_1_pin_tree_item.html#a3e2988af1643d1db7819235afc364ac0">hal::PinTreeItem</a>, and <a class="el" href="classhal_1_1_module_item.html#a92bfd214ea29198702a1df25ed36f288">hal::ModuleItem</a>.</p>
 
 </div>
 </div>
@@ -488,7 +489,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The data if within the column count. Empty <a class="elRef" href="https://doc.qt.io/qt-5/qvariant.html">QVariant</a> otherwise. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhal_1_1_root_tree_item.html#a321102b71b7d880bc4738e969ad7f69a">hal::RootTreeItem</a>, <a class="el" href="classhal_1_1_module_item.html#a0d68308899092dfe13c50d6ed679fc45">hal::ModuleItem</a>, <a class="el" href="classhal_1_1_port_tree_item.html#af6ec2f86634e0432718bb6dfe2d939ff">hal::PortTreeItem</a>, and <a class="el" href="classhal_1_1_pin_tree_item.html#a3a3e805d4065d2d70308771987c6c814">hal::PinTreeItem</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_root_tree_item.html#a321102b71b7d880bc4738e969ad7f69a">hal::RootTreeItem</a>, <a class="el" href="classhal_1_1_module_item.html#a0d68308899092dfe13c50d6ed679fc45">hal::ModuleItem</a>, <a class="el" href="classhal_1_1_context_tree_item.html#a2698dcc38ff52d873e8600f634b33ab6">hal::ContextTreeItem</a>, <a class="el" href="classhal_1_1_port_tree_item.html#af6ec2f86634e0432718bb6dfe2d939ff">hal::PortTreeItem</a>, and <a class="el" href="classhal_1_1_pin_tree_item.html#a3a3e805d4065d2d70308771987c6c814">hal::PinTreeItem</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="base__tree__model_8cpp_source.html#l00012">hal::BaseTreeModel::data()</a>.</p>
 
@@ -523,7 +524,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="reference">References <a class="el" href="base__tree__item_8cpp_source.html#l00080">getRowForChild()</a>, and <a class="el" href="base__tree__item_8h_source.html#l00193">mParent</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="port__tree__model_8cpp_source.html#l00335">hal::ModulePinsTreeModel::canDropMimeData()</a>, <a class="el" href="module__model_8cpp_source.html#l00251">hal::ModuleModel::removeChildItem()</a>, and <a class="el" href="module__model_8cpp_source.html#l00616">hal::ModuleModel::updateModuleParent()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="port__tree__model_8cpp_source.html#l00208">hal::ModulePinsTreeModel::canDropMimeData()</a>, <a class="el" href="module__model_8cpp_source.html#l00251">hal::ModuleModel::removeChildItem()</a>, and <a class="el" href="module__model_8cpp_source.html#l00616">hal::ModuleModel::updateModuleParent()</a>.</p>
 
 </div>
 </div>
@@ -556,7 +557,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="reference">References <a class="el" href="base__tree__item_8h_source.html#l00193">mParent</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="base__tree__model_8cpp_source.html#l00123">hal::BaseTreeModel::getIndexFromItem()</a>, <a class="el" href="module__model_8cpp_source.html#l00494">hal::ModuleModel::moduleAssignGate()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00046">hal::BaseTreeModel::parent()</a>, <a class="el" href="module__model_8cpp_source.html#l00206">hal::ModuleModel::removeGate()</a>, <a class="el" href="module__model_8cpp_source.html#l00192">hal::ModuleModel::removeModule()</a>, <a class="el" href="module__model_8cpp_source.html#l00220">hal::ModuleModel::removeNet()</a>, <a class="el" href="module__model_8cpp_source.html#l00616">hal::ModuleModel::updateModuleParent()</a>, and <a class="el" href="module__model_8cpp_source.html#l00565">hal::ModuleModel::updateNetParent()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="context__proxy__model_8cpp_source.html#l00172">hal::ContextProxyModel::canDropMimeData()</a>, <a class="el" href="action__move__item_8cpp_source.html#l00055">hal::ActionMoveItem::exec()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00123">hal::BaseTreeModel::getIndexFromItem()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00086">hal::GraphContextManager::getParentId()</a>, <a class="el" href="graph__context__manager_8cpp_source.html#l00749">hal::GraphContextManager::handleSaveTriggered()</a>, <a class="el" href="context__proxy__model_8cpp_source.html#l00065">hal::ContextProxyModel::mimeData()</a>, <a class="el" href="module__model_8cpp_source.html#l00494">hal::ModuleModel::moduleAssignGate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00997">hal::GuiApiClasses::View::moveDirectory()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00412">hal::ContextTreeModel::moveItem()</a>, <a class="el" href="gui__api_8cpp_source.html#l00976">hal::GuiApiClasses::View::moveView()</a>, <a class="el" href="base__tree__model_8cpp_source.html#l00046">hal::BaseTreeModel::parent()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00294">hal::ContextTreeModel::removeContext()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00316">hal::ContextTreeModel::removeDirectory()</a>, <a class="el" href="module__model_8cpp_source.html#l00206">hal::ModuleModel::removeGate()</a>, <a class="el" href="module__model_8cpp_source.html#l00192">hal::ModuleModel::removeModule()</a>, <a class="el" href="module__model_8cpp_source.html#l00220">hal::ModuleModel::removeNet()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00112">hal::ContextTreeItem::row()</a>, <a class="el" href="context__tree__model_8cpp_source.html#l00396">hal::ContextTreeModel::setCurrentDirectory()</a>, <a class="el" href="module__model_8cpp_source.html#l00616">hal::ModuleModel::updateModuleParent()</a>, and <a class="el" href="module__model_8cpp_source.html#l00565">hal::ModuleModel::updateNetParent()</a>.</p>
 
 </div>
 </div>
@@ -596,7 +597,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="reference">References <a class="el" href="base__tree__item_8h_source.html#l00194">mChildren</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="base__tree__model_8cpp_source.html#l00123">hal::BaseTreeModel::getIndexFromItem()</a>, and <a class="el" href="base__tree__item_8cpp_source.html#l00094">getOwnRow()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="base__tree__model_8cpp_source.html#l00123">hal::BaseTreeModel::getIndexFromItem()</a>, <a class="el" href="base__tree__item_8cpp_source.html#l00094">getOwnRow()</a>, and <a class="el" href="context__tree__model_8cpp_source.html#l00112">hal::ContextTreeItem::row()</a>.</p>
 
 </div>
 </div>
@@ -646,6 +647,8 @@ Protected Attributes</h2></td></tr>
 
 <p class="reference">References <a class="el" href="base__tree__item_8h_source.html#l00194">mChildren</a>, and <a class="el" href="base__tree__item_8cpp_source.html#l00024">setParent()</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="base__tree__model_8cpp_source.html#l00151">hal::BaseTreeModel::insertChildItem()</a>.</p>
+
 </div>
 </div>
 <a id="a0e2aa3dd3bf54f6a1c9339eb26b4f122"></a>
@@ -684,7 +687,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="reference">References <a class="el" href="base__tree__item_8h_source.html#l00194">mChildren</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="module__model_8cpp_source.html#l00251">hal::ModuleModel::removeChildItem()</a>, and <a class="el" href="module__model_8cpp_source.html#l00616">hal::ModuleModel::updateModuleParent()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="context__tree__model_8cpp_source.html#l00412">hal::ContextTreeModel::moveItem()</a>, <a class="el" href="module__model_8cpp_source.html#l00251">hal::ModuleModel::removeChildItem()</a>, and <a class="el" href="module__model_8cpp_source.html#l00616">hal::ModuleModel::updateModuleParent()</a>.</p>
 
 </div>
 </div>
@@ -759,7 +762,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classhal_1_1_root_tree_item.html#ac6e354b8b9d650ae73c7c22657782260">hal::RootTreeItem</a>, <a class="el" href="classhal_1_1_port_tree_item.html#a727f37e8122bb5cd8ba2d0b5f0222ac7">hal::PortTreeItem</a>, <a class="el" href="classhal_1_1_pin_tree_item.html#ac3c467fb4e1211139c4102743591a353">hal::PinTreeItem</a>, and <a class="el" href="classhal_1_1_module_item.html#a414fb66f33e15959aadc21d0113c0d18">hal::ModuleItem</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_root_tree_item.html#ac6e354b8b9d650ae73c7c22657782260">hal::RootTreeItem</a>, <a class="el" href="classhal_1_1_context_tree_item.html#a758f2f586cda3fa32248429fffcf12cd">hal::ContextTreeItem</a>, <a class="el" href="classhal_1_1_port_tree_item.html#a727f37e8122bb5cd8ba2d0b5f0222ac7">hal::PortTreeItem</a>, <a class="el" href="classhal_1_1_pin_tree_item.html#ac3c467fb4e1211139c4102743591a353">hal::PinTreeItem</a>, and <a class="el" href="classhal_1_1_module_item.html#a414fb66f33e15959aadc21d0113c0d18">hal::ModuleItem</a>.</p>
 
 </div>
 </div>
@@ -805,7 +808,7 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classhal_1_1_root_tree_item.html#a5849920e4403331043c0e8b6675e6660">hal::RootTreeItem</a>, <a class="el" href="classhal_1_1_port_tree_item.html#a7104f6a890b5498b2952fbc37693a9ad">hal::PortTreeItem</a>, <a class="el" href="classhal_1_1_pin_tree_item.html#a5c777ded502e03c0f4ee4dfc0e97b4e8">hal::PinTreeItem</a>, and <a class="el" href="classhal_1_1_module_item.html#a030a4d5fdbff4f218db0c2db86dd8460">hal::ModuleItem</a>.</p>
+<p>Implemented in <a class="el" href="classhal_1_1_root_tree_item.html#a5849920e4403331043c0e8b6675e6660">hal::RootTreeItem</a>, <a class="el" href="classhal_1_1_context_tree_item.html#a89fa1b3d582197f0696763a5135d27f3">hal::ContextTreeItem</a>, <a class="el" href="classhal_1_1_port_tree_item.html#a7104f6a890b5498b2952fbc37693a9ad">hal::PortTreeItem</a>, <a class="el" href="classhal_1_1_pin_tree_item.html#a5c777ded502e03c0f4ee4dfc0e97b4e8">hal::PinTreeItem</a>, and <a class="el" href="classhal_1_1_module_item.html#a030a4d5fdbff4f218db0c2db86dd8460">hal::ModuleItem</a>.</p>
 
 </div>
 </div>
@@ -911,7 +914,7 @@ Protected Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_base_tree_item.html">BaseTreeItem</a></li>
-    <li class="footer">Generated on Thu Jun 27 2024 12:36:45 for HAL by
+    <li class="footer">Generated on Thu Jun 27 2024 13:30:07 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,7 +1,0 @@
-<map id="hal::ContextTableProxyModel" name="hal::ContextTableProxyModel">
-<area shape="rect" id="node1" title="A proxy model to filter the ContextTableModel by a given string." alt="" coords="197,580,409,701"/>
-<area shape="rect" id="node2" href="$classhal_1_1_search_proxy_model.html" title=" " alt="" coords="215,380,392,531"/>
-<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qsortfilterproxymodel.html" title=" " alt="" coords="5,13,209,310"/>
-<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qstring.html" title=" " alt="" coords="234,5,373,317"/>
-<area shape="rect" id="node5" href="$classhal_1_1_search_options.html" title=" " alt="" coords="397,79,541,244"/>
-</map>

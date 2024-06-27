@@ -98,12 +98,12 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 : <a class="el" href="classhal_1_1_action_add_boolean_function.html#a191776b049d9c7177309b29cdaea18b4">hal::ActionAddBooleanFunction</a>
 , <a class="el" href="classhal_1_1_action_add_items_to_object.html#ac2f544b4001353c823f184219b34344e">hal::ActionAddItemsToObject</a>
 , <a class="el" href="classhal_1_1_action_create_object.html#a317bb080382a27fa25966672ec7586b5">hal::ActionCreateObject</a>
+, <a class="el" href="classhal_1_1_action_move_item.html#ad3c5a9b844b5f872ea6fb0cc3b6fb813">hal::ActionMoveItem</a>
 , <a class="el" href="classhal_1_1_action_move_node.html#a94d156e1c414fdf738ab0cb552d49030">hal::ActionMoveNode</a>
 , <a class="el" href="classhal_1_1_action_open_netlist_file.html#a2a49efecbb641a6de29ecbdd82b652c5">hal::ActionOpenNetlistFile</a>
 , <a class="el" href="classhal_1_1_action_pingroup.html#a59f267d5317415dfeeba0c2fc497eecb">hal::ActionPingroup</a>
 , <a class="el" href="classhal_1_1_action_remove_items_from_object.html#ac4e0ef4389f68aedf4f63d3d0325430c">hal::ActionRemoveItemsFromObject</a>
 , <a class="el" href="classhal_1_1_action_rename_object.html#a1f9ff521741c785859da7af9437154ef">hal::ActionRenameObject</a>
-, <a class="el" href="classhal_1_1_action_reorder_object.html#abeb5eea2aee7035f15e6ed51e5150718">hal::ActionReorderObject</a>
 , <a class="el" href="classhal_1_1_action_set_object_color.html#a6f4f2ce97823690eef511566cc857359">hal::ActionSetObjectColor</a>
 , <a class="el" href="classhal_1_1_action_set_object_data.html#af4cf9dce981e56db34610ce804296c90">hal::ActionSetObjectData</a>
 , <a class="el" href="classhal_1_1_action_set_object_type.html#a06bcc12f134d15d0dd1ec867ac3cd88a">hal::ActionSetObjectType</a>
@@ -296,10 +296,13 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 , <a class="el" href="classhal_1_1_net_module_table.html#af88add71c76099b0877682fd0ca5eb0d">hal::NetModuleTable</a>
 </li>
 <li>removeContext()
-: <a class="el" href="classhal_1_1_context_table_model.html#ad4eb8214498fc996696f19b2b19a6428">hal::ContextTableModel</a>
+: <a class="el" href="classhal_1_1_context_tree_model.html#ab7e44e659fe086adeb8be1940fecec5b">hal::ContextTreeModel</a>
 </li>
 <li>removed()
 : <a class="el" href="classhal_1_1_content_widget.html#a90ba2df3b6f51f27a41dece20a350d29">hal::ContentWidget</a>
+</li>
+<li>removeDirectory()
+: <a class="el" href="classhal_1_1_context_tree_model.html#a0bf633be208073564978e853e98c4ad9">hal::ContextTreeModel</a>
 </li>
 <li>removeFrom()
 : <a class="el" href="classhal_1_1_gui_api_classes_1_1_view.html#a68001bef25a50ad99228090f2c0f618e">hal::GuiApiClasses::View</a>
@@ -354,24 +357,27 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 <li>removeWaitingContext()
 : <a class="el" href="classhal_1_1_layout_locker_manager.html#ad5c33fcc60e6b126b600248df2664411">hal::LayoutLockerManager</a>
 </li>
+<li>renameContextDirectoryAction()
+: <a class="el" href="classhal_1_1_graph_context_manager.html#a17dfed423365d3d65654b85be4fdb4fc">hal::GraphContextManager</a>
+</li>
 <li>renameGraphContextAction()
 : <a class="el" href="classhal_1_1_graph_context_manager.html#a2809e7e6154892eff9f191080a109098">hal::GraphContextManager</a>
 </li>
 <li>renameGrouping()
 : <a class="el" href="classhal_1_1_grouping_table_model.html#a3e924cdd7e59ac0bb04c804814fa557f">hal::GroupingTableModel</a>
 </li>
-<li>renameGroupingIconPath()
-: <a class="el" href="classhal_1_1_grouping_manager_widget.html#a7c1b04accc5ed3973841b2c6cbb74c78">hal::GroupingManagerWidget</a>
+<li>renameGroupingIconPath
+: <a class="el" href="classhal_1_1_grouping_manager_widget.html#a1660a3d7ce3b6d8e93bd0ee7adc3e181">hal::GroupingManagerWidget</a>
 </li>
-<li>renameGroupingIconStyle
-: <a class="el" href="classhal_1_1_grouping_manager_widget.html#a5b1e5a9b693f846629e09f275b243b39">hal::GroupingManagerWidget</a>
+<li>renameGroupingIconStyle()
+: <a class="el" href="classhal_1_1_grouping_manager_widget.html#a36a893ff3ac968936ae50664fbaf7265">hal::GroupingManagerWidget</a>
 </li>
-<li>renameIconPath()
-: <a class="el" href="classhal_1_1_context_manager_widget.html#a93a648fab79c44dcfb57d01f0b18f628">hal::ContextManagerWidget</a>
-, <a class="el" href="classhal_1_1_module_widget.html#a2202948d3186da1956ca5eb56884aa0a">hal::ModuleWidget</a>
+<li>renameIconPath
+: <a class="el" href="classhal_1_1_context_manager_widget.html#a4c9bcac5cd529f1d2b0bc035ac120869">hal::ContextManagerWidget</a>
+, <a class="el" href="classhal_1_1_module_widget.html#a36226f6e1ef99edf76d92f029a6e8b62">hal::ModuleWidget</a>
 </li>
-<li>renameIconStyle()
-: <a class="el" href="classhal_1_1_context_manager_widget.html#ac34c10cff49a8d665b5bb9ad57721358">hal::ContextManagerWidget</a>
+<li>renameIconStyle
+: <a class="el" href="classhal_1_1_context_manager_widget.html#a48f7f53f553a622e0bae95bba5d80933">hal::ContextManagerWidget</a>
 </li>
 <li>replace_gate()
 : <a class="el" href="classhal_1_1_netlist_modification_decorator.html#af022a3cd42d2e2ee59be8f88afe837e1">hal::NetlistModificationDecorator</a>
@@ -463,7 +469,7 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 : <a class="el" href="classhal_1_1_python_thread.html#a3b49ef960eac1d3de38b6426c0173de5">hal::PythonThread</a>
 </li>
 <li>Result()
-: <a class="el" href="classhal_1_1_result.html#a214567a2d7951e57f58aa9fda152a595">hal::Result&lt; T &gt;</a>
+: <a class="el" href="classhal_1_1_result.html#ab209352718eb5599536adfab9d7bee22">hal::Result&lt; T &gt;</a>
 </li>
 <li>result_mutex
 : <a class="el" href="structhal_1_1dataflow_1_1processing_1_1_context.html#ae81975178fc6b4f9c2f327a184428782">hal::dataflow::processing::Context</a>
@@ -474,8 +480,8 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 <li>Right
 : <a class="el" href="classhal_1_1_net_layout_direction.html#a804a82ac3192d771ed7a64fe9137f142a2ee571671a1dd9ef6944fcd0773adc19">hal::NetLayoutDirection</a>
 </li>
-<li>rightOffset
-: <a class="el" href="classhal_1_1_line_number_area.html#ac0afa5b321899bfc0007b44e17cf9723">hal::LineNumberArea</a>
+<li>rightOffset()
+: <a class="el" href="classhal_1_1_line_number_area.html#a2b3e676a2b7cd3e8e4de506b82ebd86d">hal::LineNumberArea</a>
 </li>
 <li>Rol
 : <a class="el" href="structhal_1_1_boolean_function_1_1_node_type.html#a1dc6e161f5ce2d98d5b17962708ab48e">hal::BooleanFunction::NodeType</a>
@@ -491,11 +497,13 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 : <a class="el" href="structhal_1_1_boolean_function_1_1_node_type.html#a7ae7dbc15e28bf14be72cd18c66d09cc">hal::BooleanFunction::NodeType</a>
 , <a class="el" href="classhal_1_1_boolean_function.html#ab89a8b133b47393ac34d007f26d93b47">hal::BooleanFunction</a>
 </li>
+<li>row()
+: <a class="el" href="classhal_1_1_context_tree_item.html#a6b93aa3277befe2f95028ddb02ad0eaa">hal::ContextTreeItem</a>
+</li>
 <li>rowCount()
 : <a class="el" href="classhal_1_1_base_tree_model.html#afceba1b11b5bd81fc4017ba85b46ab1e">hal::BaseTreeModel</a>
 , <a class="el" href="classhal_1_1_boolean_function_table_model.html#a9279575b4ac94f1eb161abacfdf07b1e">hal::BooleanFunctionTableModel</a>
 , <a class="el" href="classhal_1_1_channel_model.html#a27fd1f8f08eef9209ad69c628454641c">hal::ChannelModel</a>
-, <a class="el" href="classhal_1_1_context_table_model.html#aa1de0c7f54c3d568221cf1c699fc9a2b">hal::ContextTableModel</a>
 , <a class="el" href="classhal_1_1_data_table_model.html#afe4127671e9f5045744d961e98679c53">hal::DataTableModel</a>
 , <a class="el" href="classhal_1_1_endpoint_table_model.html#a8609b8c90cf4a110f1fd5db8a6eb9bc1">hal::EndpointTableModel</a>
 , <a class="el" href="classhal_1_1_gate_library_selection_table.html#af9484aea8c8dc3a0eb5ac29c746a9f09">hal::GateLibrarySelectionTable</a>
@@ -528,7 +536,7 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Jun 27 2024 12:36:48 for HAL by
+    <li class="footer">Generated on Thu Jun 27 2024 13:30:10 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

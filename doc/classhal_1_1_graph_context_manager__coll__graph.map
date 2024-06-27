@@ -1,6 +1,6 @@
 <map id="hal::GraphContextManager" name="hal::GraphContextManager">
-<area shape="rect" id="node1" title="User interface to manage all GraphContexts." alt="" coords="5,824,233,975"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="31,5,197,347"/>
-<area shape="rect" id="node4" href="$classhal_1_1_settings_item.html" title="The interface for the logical part of a setting." alt="" coords="148,396,293,547"/>
-<area shape="rect" id="node3" href="$classhal_1_1_settings_item_checkbox.html" title="A SettingsItem representing a Checkbox." alt="" coords="135,596,333,747"/>
+<area shape="rect" id="node1" title="User interface to manage all GraphContexts." alt="" coords="5,824,255,975"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qobject.html" title=" " alt="" coords="41,5,208,347"/>
+<area shape="rect" id="node4" href="$classhal_1_1_settings_item.html" title="The interface for the logical part of a setting." alt="" coords="159,396,304,547"/>
+<area shape="rect" id="node3" href="$classhal_1_1_settings_item_checkbox.html" title="A SettingsItem representing a Checkbox." alt="" coords="146,596,343,747"/>
 </map>

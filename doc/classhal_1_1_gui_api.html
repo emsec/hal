@@ -221,8 +221,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af0cbd295b84233923b228029971d3cd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3071fd2746191ff96be66e1da5f6d7ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api.html#a3071fd2746191ff96be66e1da5f6d7ca">deselect</a> (const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt; &amp;gates, const std::vector&lt; <a class="el" href="classhal_1_1_net.html">Net</a> * &gt; &amp;nets, const std::vector&lt; <a class="el" href="classhal_1_1_module.html">Module</a> * &gt; &amp;modules)</td></tr>
 <tr class="separator:a3071fd2746191ff96be66e1da5f6d7ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afddd3e3d1932b2fd870712bc82a09bcb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhal_1_1_gui_api.html#afddd3e3d1932b2fd870712bc82a09bcb">isolateInNewView</a> (const std::vector&lt; <a class="el" href="classhal_1_1_module.html">Module</a> * &gt;, const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;)</td></tr>
-<tr class="separator:afddd3e3d1932b2fd870712bc82a09bcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_qobject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_qobject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el"  href="https://doc.qt.io/qt-5/qobject.html">QObject</a></td></tr>
 <tr class="memitem:metaObject inherit pub_methods_qobject"><td class="memItemLeft" align="right" valign="top">virtual const <a class="elRef" href="https://doc.qt.io/qt-5/qmetaobject.html">QMetaObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#metaObject">metaObject</a> () const const</td></tr>
 <tr class="separator:metaObject inherit pub_methods_qobject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -419,7 +417,7 @@ Additional Inherited Members</h2></td></tr>
 <p>The <a class="el" href="classhal_1_1_gui_api.html" title="Interface to interact with the gui itself.">GuiApi</a> is a class that contains several functions to simulate various actions within the gui like selecting a graphical item (e.g. a gate) or to get a list of all currently selected items.</p>
 <p>Its main purpose is NOT to create an easier interface for other gui classes. Instead it implements the API that is used by the python context to provide access to the gui features in the python console and the python code editor execution. </p>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8h_source.html#l00081">81</a> of file <a class="el" href="gui__api_8h_source.html">gui_api.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8h_source.html#l00092">92</a> of file <a class="el" href="gui__api_8h_source.html">gui_api.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3fff1aea43da474f2b8c62d0e5b8117d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3fff1aea43da474f2b8c62d0e5b8117d">&#9670;&nbsp;</a></span>GuiApi()</h2>
@@ -437,7 +435,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Constructor. </p>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00026">26</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00027">27</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, and <a class="el" href="selection__relay_8cpp_source.html#l00161">hal::SelectionRelay::registerSender()</a>.</p>
 
@@ -467,9 +465,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00414">414</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00415">415</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00296">deselectGate()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00297">deselectGate()</a>.</p>
 
 </div>
 </div>
@@ -514,9 +512,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00435">435</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00436">436</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00296">deselectGate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00372">deselectModule()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00334">deselectNet()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00297">deselectGate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00373">deselectModule()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00335">deselectNet()</a>.</p>
 
 </div>
 </div>
@@ -543,9 +541,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00423">423</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00424">424</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00372">deselectModule()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00373">deselectModule()</a>.</p>
 
 </div>
 </div>
@@ -572,9 +570,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00418">418</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00419">419</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00334">deselectNet()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00335">deselectNet()</a>.</p>
 
 </div>
 </div>
@@ -619,9 +617,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00428">428</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00429">429</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00296">deselectGate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00372">deselectModule()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00334">deselectNet()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00297">deselectGate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00373">deselectModule()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00335">deselectNet()</a>.</p>
 
 </div>
 </div>
@@ -648,9 +646,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00400">400</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00401">401</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00296">deselectGate()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00297">deselectGate()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -679,9 +677,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00409">409</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00410">410</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00372">deselectModule()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00946">hal::ShortestPath::module()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00373">deselectModule()</a>, and <a class="el" href="graph__graphics__view_8cpp_source.html#l00946">hal::ShortestPath::module()</a>.</p>
 
 </div>
 </div>
@@ -708,9 +706,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00405">405</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00406">406</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00334">deselectNet()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00335">deselectNet()</a>, and <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>.</p>
 
 </div>
 </div>
@@ -730,7 +728,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Clears the current selection. </p>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00442">442</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00443">443</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="selection__relay_8cpp_source.html#l00155">hal::SelectionRelay::clearAndUpdate()</a>, and <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>.</p>
 
@@ -761,7 +759,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00301">301</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00302">302</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#end-1">QSet::end()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#erase-1">QSet::erase()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#find-1">QSet::find()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00188">hal::Netlist::is_gate_in_netlist()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00175">hal::SelectionRelay::relaySelectionChanged()</a>, <a class="el" href="selection__relay_8h_source.html#l00298">hal::SelectionRelay::selectedGates()</a>, and <a class="el" href="selection__relay_8cpp_source.html#l00095">hal::SelectionRelay::setSelectedGates()</a>.</p>
 
@@ -790,9 +788,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00318">318</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00319">319</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00296">deselectGate()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00297">deselectGate()</a>.</p>
 
 </div>
 </div>
@@ -819,7 +817,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00287">287</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00288">288</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00188">hal::Netlist::is_gate_in_netlist()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00175">hal::SelectionRelay::relaySelectionChanged()</a>, and <a class="el" href="selection__relay_8cpp_source.html#l00121">hal::SelectionRelay::removeGate()</a>.</p>
 
@@ -848,11 +846,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00296">296</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00297">297</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, and <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00400">deselect()</a>, <a class="el" href="gui__api_8cpp_source.html#l00318">deselectGate()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00401">deselect()</a>, <a class="el" href="gui__api_8cpp_source.html#l00319">deselectGate()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -879,7 +877,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00377">377</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00378">378</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#end-1">QSet::end()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#erase-1">QSet::erase()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#find-1">QSet::find()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::is_module_in_netlist()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00946">hal::ShortestPath::module()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00175">hal::SelectionRelay::relaySelectionChanged()</a>, <a class="el" href="selection__relay_8h_source.html#l00318">hal::SelectionRelay::selectedModules()</a>, and <a class="el" href="selection__relay_8cpp_source.html#l00107">hal::SelectionRelay::setSelectedModules()</a>.</p>
 
@@ -908,9 +906,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00393">393</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00394">394</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00372">deselectModule()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00373">deselectModule()</a>.</p>
 
 </div>
 </div>
@@ -937,7 +935,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00363">363</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00364">364</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::is_module_in_netlist()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00946">hal::ShortestPath::module()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00175">hal::SelectionRelay::relaySelectionChanged()</a>, and <a class="el" href="selection__relay_8cpp_source.html#l00133">hal::SelectionRelay::removeModule()</a>.</p>
 
@@ -966,11 +964,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00372">372</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00373">373</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, and <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00409">deselect()</a>, <a class="el" href="gui__api_8cpp_source.html#l00393">deselectModule()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00410">deselect()</a>, <a class="el" href="gui__api_8cpp_source.html#l00394">deselectModule()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -997,7 +995,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00339">339</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00340">340</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#end-1">QSet::end()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#erase-1">QSet::erase()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#find-1">QSet::find()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">hal::Netlist::is_net_in_netlist()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, <a class="el" href="selection__relay_8cpp_source.html#l00175">hal::SelectionRelay::relaySelectionChanged()</a>, <a class="el" href="selection__relay_8h_source.html#l00308">hal::SelectionRelay::selectedNets()</a>, and <a class="el" href="selection__relay_8cpp_source.html#l00101">hal::SelectionRelay::setSelectedNets()</a>.</p>
 
@@ -1026,9 +1024,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00356">356</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00357">357</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00334">deselectNet()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00335">deselectNet()</a>.</p>
 
 </div>
 </div>
@@ -1055,7 +1053,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00325">325</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00326">326</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">hal::Netlist::is_net_in_netlist()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, <a class="el" href="selection__relay_8cpp_source.html#l00175">hal::SelectionRelay::relaySelectionChanged()</a>, and <a class="el" href="selection__relay_8cpp_source.html#l00127">hal::SelectionRelay::removeNet()</a>.</p>
 
@@ -1084,11 +1082,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00334">334</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00335">335</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00353">hal::Netlist::get_net_by_id()</a>, and <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00405">deselect()</a>, <a class="el" href="gui__api_8cpp_source.html#l00356">deselectNet()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00406">deselect()</a>, <a class="el" href="gui__api_8cpp_source.html#l00357">deselectNet()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -1109,11 +1107,11 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets a list that contains the ids of all currently selected gates. The ids are not sorted in any way.</p>
 <dl class="section return"><dt>Returns</dt><dd>the ids of all selected gates </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00031">31</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00032">32</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, and <a class="el" href="selection__relay_8h_source.html#l00268">hal::SelectionRelay::selectedGatesVector()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00046">getSelectedItemIds()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00047">getSelectedItemIds()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -1134,11 +1132,11 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets a list of all currently selected gates. The gates are not sorted in any meaningful way.</p>
 <dl class="section return"><dt>Returns</dt><dd>all selected gates </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00051">51</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00052">52</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, and <a class="el" href="selection__relay_8h_source.html#l00231">hal::SelectionRelay::selectedGatesList()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00075">getSelectedItems()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00076">getSelectedItems()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -1159,9 +1157,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets a tuple [selectedGateIds, selectedNetIds, selectedModuleIds]. The element selectedGate/-Net/-ModuleIds is a list that contains the ids of all currently selected gates/nets/modules. The ids are not sorted in any meaningful way.</p>
 <dl class="section return"><dt>Returns</dt><dd>the tuple [selectedGateIds, selectedNetIds, selectedModuleIds] </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00046">46</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00047">47</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00031">getSelectedGateIds()</a>, <a class="el" href="gui__api_8cpp_source.html#l00041">getSelectedModuleIds()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00036">getSelectedNetIds()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00032">getSelectedGateIds()</a>, <a class="el" href="gui__api_8cpp_source.html#l00042">getSelectedModuleIds()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00037">getSelectedNetIds()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -1184,9 +1182,9 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets a tuple [selectedGates, selectedNets, selectedModules]. The element selectedGate/-Net/-Modules is a list of all currently selected gates/nets/modules. The items are not sorted in any meaningful way.</p>
 <dl class="section return"><dt>Returns</dt><dd>the tuple [selectedGates, selectedNets, selectedModules] </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00075">75</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00076">76</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00051">getSelectedGates()</a>, <a class="el" href="gui__api_8cpp_source.html#l00067">getSelectedModules()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00059">getSelectedNets()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00052">getSelectedGates()</a>, <a class="el" href="gui__api_8cpp_source.html#l00068">getSelectedModules()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00060">getSelectedNets()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -1209,11 +1207,11 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets a list that contains the ids of all currently selected modules. The ids are not sorted in any meaningful way.</p>
 <dl class="section return"><dt>Returns</dt><dd>the ids of all selected modules </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00041">41</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00042">42</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, and <a class="el" href="selection__relay_8h_source.html#l00288">hal::SelectionRelay::selectedModulesVector()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00046">getSelectedItemIds()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00047">getSelectedItemIds()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -1234,11 +1232,11 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets a list of all currently selected modules. The modules are not sorted in any meaningful way.</p>
 <dl class="section return"><dt>Returns</dt><dd>all selected modules </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00067">67</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00068">68</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, and <a class="el" href="selection__relay_8h_source.html#l00251">hal::SelectionRelay::selectedModulesList()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00075">getSelectedItems()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00076">getSelectedItems()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -1259,11 +1257,11 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets a list that contains the ids of all currently selected nets. The ids are not sorted in any way.</p>
 <dl class="section return"><dt>Returns</dt><dd>the ids of all selected nets </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00036">36</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00037">37</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, and <a class="el" href="selection__relay_8h_source.html#l00278">hal::SelectionRelay::selectedNetsVector()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00046">getSelectedItemIds()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00047">getSelectedItemIds()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -1284,39 +1282,11 @@ Additional Inherited Members</h2></td></tr>
 <p>Gets a list of all currently selected nets. The nets are not sorted in any meaningful way.</p>
 <dl class="section return"><dt>Returns</dt><dd>all selected nets </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00059">59</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00060">60</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00353">hal::Netlist::get_net_by_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, and <a class="el" href="selection__relay_8h_source.html#l00241">hal::SelectionRelay::selectedNetsList()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00075">getSelectedItems()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
-
-</div>
-</div>
-<a id="afddd3e3d1932b2fd870712bc82a09bcb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afddd3e3d1932b2fd870712bc82a09bcb">&#9670;&nbsp;</a></span>isolateInNewView()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int hal::GuiApi::isolateInNewView </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_module.html">Module</a> * &gt;&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classhal_1_1_gate.html">Gate</a> * &gt;&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p class="reference">Referenced by <a class="el" href="gui__api_8cpp_source.html#l00076">getSelectedItems()</a>, and <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
 </div>
 </div>
@@ -1344,7 +1314,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Q_SIGNAL that is emitted whenever the view should be moved to a new selection. </p>
 
-<p class="reference">Referenced by <a class="el" href="graph__tab__widget_8cpp_source.html#l00107">hal::GraphTabWidget::GraphTabWidget()</a>, <a class="el" href="gui__api_8cpp_source.html#l00261">select()</a>, <a class="el" href="gui__api_8cpp_source.html#l00080">selectGate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00182">selectModule()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00131">selectNet()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="graph__tab__widget_8cpp_source.html#l00107">hal::GraphTabWidget::GraphTabWidget()</a>, <a class="el" href="gui__api_8cpp_source.html#l00262">select()</a>, <a class="el" href="gui__api_8cpp_source.html#l00081">selectGate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00183">selectModule()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00132">selectNet()</a>.</p>
 
 </div>
 </div>
@@ -1391,9 +1361,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00247">247</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00248">248</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00096">selectGate()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00097">selectGate()</a>.</p>
 
 </div>
 </div>
@@ -1454,9 +1424,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00274">274</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00275">275</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="selection__relay_8cpp_source.html#l00022">hal::SelectionRelay::clear()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="classhal_1_1_gui_api.html#a8b99127cadfa881522186c3c33b86450">navigationRequested()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="gui__api_8cpp_source.html#l00096">selectGate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00198">selectModule()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00147">selectNet()</a>.</p>
+<p class="reference">References <a class="el" href="selection__relay_8cpp_source.html#l00022">hal::SelectionRelay::clear()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="classhal_1_1_gui_api.html#a8b99127cadfa881522186c3c33b86450">navigationRequested()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="gui__api_8cpp_source.html#l00097">selectGate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00199">selectModule()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00148">selectNet()</a>.</p>
 
 </div>
 </div>
@@ -1503,9 +1473,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00256">256</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00257">257</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00198">selectModule()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00199">selectModule()</a>.</p>
 
 </div>
 </div>
@@ -1552,9 +1522,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00251">251</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00252">252</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00147">selectNet()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00148">selectNet()</a>.</p>
 
 </div>
 </div>
@@ -1615,9 +1585,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00261">261</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00262">262</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="selection__relay_8cpp_source.html#l00022">hal::SelectionRelay::clear()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="classhal_1_1_gui_api.html#a8b99127cadfa881522186c3c33b86450">navigationRequested()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="gui__api_8cpp_source.html#l00096">selectGate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00198">selectModule()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00147">selectNet()</a>.</p>
+<p class="reference">References <a class="el" href="selection__relay_8cpp_source.html#l00022">hal::SelectionRelay::clear()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="classhal_1_1_gui_api.html#a8b99127cadfa881522186c3c33b86450">navigationRequested()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="gui__api_8cpp_source.html#l00097">selectGate()</a>, <a class="el" href="gui__api_8cpp_source.html#l00199">selectModule()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00148">selectNet()</a>.</p>
 
 </div>
 </div>
@@ -1664,9 +1634,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00233">233</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00234">234</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00096">selectGate()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00097">selectGate()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>.</p>
 
@@ -1715,9 +1685,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00242">242</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00243">243</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="graph__graphics__view_8cpp_source.html#l00946">hal::ShortestPath::module()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00198">selectModule()</a>.</p>
+<p class="reference">References <a class="el" href="graph__graphics__view_8cpp_source.html#l00946">hal::ShortestPath::module()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00199">selectModule()</a>.</p>
 
 </div>
 </div>
@@ -1764,9 +1734,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00238">238</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00239">239</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, and <a class="el" href="gui__api_8cpp_source.html#l00147">selectNet()</a>.</p>
+<p class="reference">References <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, and <a class="el" href="gui__api_8cpp_source.html#l00148">selectNet()</a>.</p>
 
 </div>
 </div>
@@ -1813,7 +1783,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00101">101</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00102">102</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="selection__relay_8cpp_source.html#l00022">hal::SelectionRelay::clear()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00188">hal::Netlist::is_gate_in_netlist()</a>, <a class="el" href="classhal_1_1_gui_api.html#a8b99127cadfa881522186c3c33b86450">navigationRequested()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00175">hal::SelectionRelay::relaySelectionChanged()</a>, <a class="el" href="selection__relay_8h_source.html#l00298">hal::SelectionRelay::selectedGates()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00095">hal::SelectionRelay::setSelectedGates()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#unite">QSet::unite()</a>.</p>
 
@@ -1862,9 +1832,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00124">124</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00125">125</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00096">selectGate()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00097">selectGate()</a>.</p>
 
 </div>
 </div>
@@ -1911,7 +1881,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00080">80</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00081">81</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="selection__relay_8cpp_source.html#l00065">hal::SelectionRelay::addGate()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00022">hal::SelectionRelay::clear()</a>, <a class="el" href="classhal_1_1_selection_relay.html#ae8fbb1a1150eb6e68ba34cdb2f499c8aad25b4bd4c72aa2c07ee87adb10b59f16">hal::SelectionRelay::Gate</a>, <a class="el" href="netlist_2gate_8cpp_source.html#l00095">hal::Gate::get_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00188">hal::Netlist::is_gate_in_netlist()</a>, <a class="el" href="classhal_1_1_gui_api.html#a8b99127cadfa881522186c3c33b86450">navigationRequested()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00175">hal::SelectionRelay::relaySelectionChanged()</a>, and <a class="el" href="selection__relay_8cpp_source.html#l00139">hal::SelectionRelay::setFocus()</a>.</p>
 
@@ -1960,11 +1930,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00096">96</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00097">97</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00193">hal::Netlist::get_gate_by_id()</a>, and <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="gui__api_8cpp_source.html#l00233">select()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00124">selectGate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="gui__api_8cpp_source.html#l00234">select()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00125">selectGate()</a>.</p>
 
 </div>
 </div>
@@ -2011,7 +1981,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00203">203</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00204">204</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="selection__relay_8cpp_source.html#l00022">hal::SelectionRelay::clear()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::is_module_in_netlist()</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00946">hal::ShortestPath::module()</a>, <a class="el" href="classhal_1_1_gui_api.html#a8b99127cadfa881522186c3c33b86450">navigationRequested()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00175">hal::SelectionRelay::relaySelectionChanged()</a>, <a class="el" href="selection__relay_8h_source.html#l00318">hal::SelectionRelay::selectedModules()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00107">hal::SelectionRelay::setSelectedModules()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#unite">QSet::unite()</a>.</p>
 
@@ -2060,9 +2030,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00226">226</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00227">227</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00198">selectModule()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00199">selectModule()</a>.</p>
 
 </div>
 </div>
@@ -2109,7 +2079,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00182">182</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00183">183</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="selection__relay_8cpp_source.html#l00077">hal::SelectionRelay::addModule()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00022">hal::SelectionRelay::clear()</a>, <a class="el" href="netlist_2module_8cpp_source.html#l00082">hal::Module::get_id()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00613">hal::Netlist::is_module_in_netlist()</a>, <a class="el" href="classhal_1_1_selection_relay.html#ae8fbb1a1150eb6e68ba34cdb2f499c8aae55f75a29310d7b60f7ac1d390c8ae42">hal::SelectionRelay::Module</a>, <a class="el" href="graph__graphics__view_8cpp_source.html#l00946">hal::ShortestPath::module()</a>, <a class="el" href="classhal_1_1_gui_api.html#a8b99127cadfa881522186c3c33b86450">navigationRequested()</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00175">hal::SelectionRelay::relaySelectionChanged()</a>, and <a class="el" href="selection__relay_8cpp_source.html#l00139">hal::SelectionRelay::setFocus()</a>.</p>
 
@@ -2158,11 +2128,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00198">198</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00199">199</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00579">hal::Netlist::get_module_by_id()</a>, and <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="gui__api_8cpp_source.html#l00242">select()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00226">selectModule()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="gui__api_8cpp_source.html#l00243">select()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00227">selectModule()</a>.</p>
 
 </div>
 </div>
@@ -2209,7 +2179,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00152">152</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00153">153</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="selection__relay_8cpp_source.html#l00022">hal::SelectionRelay::clear()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#insert">QSet::insert()</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">hal::Netlist::is_net_in_netlist()</a>, <a class="el" href="classhal_1_1_gui_api.html#a8b99127cadfa881522186c3c33b86450">navigationRequested()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00175">hal::SelectionRelay::relaySelectionChanged()</a>, <a class="el" href="selection__relay_8h_source.html#l00308">hal::SelectionRelay::selectedNets()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00101">hal::SelectionRelay::setSelectedNets()</a>, and <a class="elRef" href="https://doc.qt.io/qt-5/qset.html#unite">QSet::unite()</a>.</p>
 
@@ -2258,9 +2228,9 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00175">175</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00176">176</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00147">selectNet()</a>.</p>
+<p class="reference">References <a class="el" href="gui__api_8cpp_source.html#l00148">selectNet()</a>.</p>
 
 </div>
 </div>
@@ -2307,7 +2277,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00131">131</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00132">132</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="selection__relay_8cpp_source.html#l00071">hal::SelectionRelay::addNet()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00022">hal::SelectionRelay::clear()</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>, <a class="el" href="plugin__gui_8cpp_source.html#l00083">hal::gSelectionRelay</a>, <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00348">hal::Netlist::is_net_in_netlist()</a>, <a class="el" href="classhal_1_1_gui_api.html#a8b99127cadfa881522186c3c33b86450">navigationRequested()</a>, <a class="el" href="netlist_2persistent_2netlist__serializer_8cpp_source.html#l00057">net</a>, <a class="el" href="classhal_1_1_selection_relay.html#ae8fbb1a1150eb6e68ba34cdb2f499c8aa5012af45088eb8e999bb8350077b12ca">hal::SelectionRelay::Net</a>, <a class="elRef" href="https://doc.qt.io/qt-5/qobject.html#Q_EMIT">QObject::Q_EMIT()</a>, <a class="el" href="selection__relay_8cpp_source.html#l00175">hal::SelectionRelay::relaySelectionChanged()</a>, and <a class="el" href="selection__relay_8cpp_source.html#l00139">hal::SelectionRelay::setFocus()</a>.</p>
 
@@ -2356,11 +2326,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00147">147</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gui__api_8cpp_source.html#l00148">148</a> of file <a class="el" href="gui__api_8cpp_source.html">gui_api.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="src_2netlist_2netlist_8cpp_source.html#l00353">hal::Netlist::get_net_by_id()</a>, and <a class="el" href="plugin__gui_8cpp_source.html#l00080">hal::gNetlist</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="gui__api_8cpp_source.html#l00238">select()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00175">selectNet()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="python__gui__api__bindings_8cpp_source.html#l00030">hal::PYBIND11_PLUGIN()</a>, <a class="el" href="gui__api_8cpp_source.html#l00239">select()</a>, and <a class="el" href="gui__api_8cpp_source.html#l00176">selectNet()</a>.</p>
 
 </div>
 </div>
@@ -2374,7 +2344,7 @@ Additional Inherited Members</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehal.html">hal</a></li><li class="navelem"><a class="el" href="classhal_1_1_gui_api.html">GuiApi</a></li>
-    <li class="footer">Generated on Thu Jun 27 2024 12:36:46 for HAL by
+    <li class="footer">Generated on Thu Jun 27 2024 13:30:08 for HAL by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

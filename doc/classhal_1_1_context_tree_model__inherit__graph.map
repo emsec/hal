@@ -1,0 +1,5 @@
+<map id="hal::ContextTreeModel" name="hal::ContextTreeModel">
+<area shape="rect" id="node1" title="Base model for the ContextManagerWidget to manage GraphContexts." alt="" coords="17,769,185,949"/>
+<area shape="rect" id="node2" href="$classhal_1_1_base_tree_model.html" title="The BaseTreeModel implements generic standard functions of a tree model." alt="" coords="23,365,179,721"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractitemmodel.html" title=" " alt="" coords="5,5,197,317"/>
+</map>

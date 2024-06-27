@@ -1,12 +1,12 @@
 <map id="hal::SearchProxyModel" name="hal::SearchProxyModel">
-<area shape="rect" id="node1" title=" " alt="" coords="669,564,847,729"/>
-<area shape="rect" id="node4" href="$classhal_1_1_context_table_proxy_model.html" title="A proxy model to filter the ContextTableModel by a given string." alt="" coords="5,814,217,935"/>
-<area shape="rect" id="node5" href="$classhal_1_1_gatelibrary_proxy_model.html" title="Helper model to make filtering available." alt="" coords="241,799,441,950"/>
-<area shape="rect" id="node6" href="$classhal_1_1_gate_select_proxy.html" title="The GateSelectProxy class allows sorting and filtering of module tables." alt="" coords="465,799,640,950"/>
-<area shape="rect" id="node7" href="$classhal_1_1_grouping_proxy_model.html" title="Helper model to make filtering available." alt="" coords="665,799,851,950"/>
-<area shape="rect" id="node8" href="$classhal_1_1_module_proxy_model.html" title="Enables filtering in the ModuleModel." alt="" coords="876,777,1053,972"/>
-<area shape="rect" id="node9" href="$classhal_1_1_module_select_proxy.html" title="The ModuleSelectProxy class allows sorting and filtering of module tables." alt="" coords="1077,799,1252,950"/>
-<area shape="rect" id="node10" href="$classhal_1_1_selection_tree_proxy_model.html" title="Enables filtering of the SelectionTreeModel." alt="" coords="1276,792,1491,957"/>
-<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qsortfilterproxymodel.html" title=" " alt="" coords="656,219,860,516"/>
-<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractproxymodel.html" title=" " alt="" coords="659,5,857,171"/>
+<area shape="rect" id="node1" title=" " alt="" coords="637,564,814,729"/>
+<area shape="rect" id="node4" href="$classhal_1_1_context_proxy_model.html" title="A proxy model to filter the ContextTableModel by a given string." alt="" coords="5,785,184,965"/>
+<area shape="rect" id="node5" href="$classhal_1_1_gatelibrary_proxy_model.html" title="Helper model to make filtering available." alt="" coords="208,799,408,950"/>
+<area shape="rect" id="node6" href="$classhal_1_1_gate_select_proxy.html" title="The GateSelectProxy class allows sorting and filtering of module tables." alt="" coords="433,799,607,950"/>
+<area shape="rect" id="node7" href="$classhal_1_1_grouping_proxy_model.html" title="Helper model to make filtering available." alt="" coords="632,799,819,950"/>
+<area shape="rect" id="node8" href="$classhal_1_1_module_proxy_model.html" title="Enables filtering in the ModuleModel." alt="" coords="843,777,1021,972"/>
+<area shape="rect" id="node9" href="$classhal_1_1_module_select_proxy.html" title="The ModuleSelectProxy class allows sorting and filtering of module tables." alt="" coords="1045,799,1219,950"/>
+<area shape="rect" id="node10" href="$classhal_1_1_selection_tree_proxy_model.html" title="Enables filtering of the SelectionTreeModel." alt="" coords="1243,792,1458,957"/>
+<area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qsortfilterproxymodel.html" title=" " alt="" coords="623,219,827,516"/>
+<area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qabstractproxymodel.html" title=" " alt="" coords="626,5,825,171"/>
 </map>
