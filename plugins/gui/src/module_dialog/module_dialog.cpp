@@ -22,7 +22,7 @@
 #include <QApplication>
 
 namespace hal {
-    ModuleDialog::ModuleDialog(const QSet<u32>& excludeIds, const QString &title, ModuleSelectReceiver* receiver, QWidget* parent)
+    ModuleDialog::ModuleDialog(const QSet<u32>& excludeIds, const QString &title, bool omitCreateNew, ModuleSelectReceiver* receiver, QWidget* parent)
         : QDialog(parent),
           mSelectedId(0),
           mExcludeIds(excludeIds),
@@ -46,7 +46,7 @@ namespace hal {
         QPushButton* butSearch = new QPushButton("Search", this);
         connect(butSearch, &QPushButton::pressed, this, &ModuleDialog::handleToggleSearchbar);
 
-        if (title == "Add module to view")
+        if (omitCreateNew)
         {
             layout->addWidget(mButtonPick, 0, 0);
             layout->addWidget(butSearch, 0, 1);
