@@ -40,7 +40,7 @@ public:
     smallset_t operator^(const smallset_t& other) const;
     smallset_t shuffle(u8 shift) const;
 
-    void to_array(u64* arr) const;
+    void to_array(u64* arr, bool swap = false) const;
 
     u8 least_bit() const;
     static int least_bit(u64 dw);
@@ -169,11 +169,11 @@ smallset_t smallset_t::shuffle(u8 shift) const
     return retval;
 }
 
-void smallset_t::to_array(u64* arr) const
+void smallset_t::to_array(u64* arr, bool swap) const
 {
-    for (int i = 0; i < 4; i++)
+    for (int i=0; i<4; i++)
     {
-        arr[i] = dw64[3 - i];
+        arr[i] = dw64[swap ? 3-i : i];
     }
 }
 
@@ -526,7 +526,7 @@ namespace hal
                 elements[2] = a.val[0][1];
                 elements[3] = a.val[0][0];
 #else
-                a.to_array(elements);
+                a.to_array(elements, true);
 #endif
                 std::cout << name << ": 0b";
                 for (u32 i = 0; i < 4; i++)
@@ -651,7 +651,7 @@ namespace hal
                     return {a.val[0], vorrq_u64(a.val[1], _mask)};
                 }
 #else
-                smallset_t retval;
+                smallset_t retval(a);
                 retval.set(elm);
                 return retval;
 #endif
