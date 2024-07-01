@@ -166,7 +166,8 @@ smallset_t smallset_t::shuffle(u8 shift) const
 
 void smallset_t::to_array(u64* arr) const
 {
-    memcpy(arr, dw64, sizeof(dw64));
+    for (int i=0; i<3; i++)
+        arr[i] = dw64[3-i];
 }
 
 void smallset_t::set(u8 bit)
