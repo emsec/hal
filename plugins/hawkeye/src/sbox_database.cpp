@@ -128,7 +128,7 @@ smallset_t smallset_t::shuffle(u8 shift) const
     {
         for (int i = 0; i < 4; i++)
         {
-            retval.dw64[i] = ((retval.dw64[i] & 0xFFFFFFFF00000000ULL) >> 16) | ((retval.dw64[i] & 0x00000000FFFFFFFFULL) << 16);
+            retval.dw64[i] = ((retval.dw64[i] & 0xFFFFFFFF00000000ULL) >> 32) | ((retval.dw64[i] & 0x00000000FFFFFFFFULL) << 32);
         }
     }
     if (shift & 0x10)
@@ -920,11 +920,12 @@ namespace hal
             {
 #if !defined(__AVX2__) && !defined(__ARM_NEON)
                 return a.is_set(e);
-#endif
+#else
                 smallset_t b = smallset_init_empty();
                 b            = smallset_add_element(b, e);
                 b            = smallset_intersect(a, b);
                 return !smallset_is_empty(b);
+#endif
             }
             // END OF SMALL SET //
 
