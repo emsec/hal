@@ -44,11 +44,18 @@ All notable changes to this project will be documented in this file.
     * user can now specify the pin types to be considered as control pins
     * can now take known registers and other known word-level structures into account during analysis
     * changed the API to facilitate for the aforementioned changes
-  * changed `simulator` plugin
+  * changed `netlist_simulator_controller` plugin
     * added feature to VCD parser: removal of leading backslash and trailing whitespace from waveform name
+    * added converter for net names which don't qualify as C++ variable name
     * extended maximum line with the CSV parser can handle
     * changed warning messages for waveform parsing and made them more specific
     * changed policy toward 'dangling' wires, they are no longer ignored but considered as global inputs or outputs
+  * changed `waveform_viewer` plugin
+    * added GUI wizard to structure input steps when launching a new simulation
+    * added table widget to enter engine parameter
+    * added table widget to enter simulation input data
+    * added viewer to show output of simulation process while running
+    * added algorithm to identify simulated pin groups and bundle apropriate waveform to groups
   * changed `xilinx_toolbox` plugin
     * added `split_shift_registers` function to split `SRL16E` gates into multiple flip-flops
     * changed Python bindings for better usability
