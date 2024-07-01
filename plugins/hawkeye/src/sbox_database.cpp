@@ -171,9 +171,9 @@ smallset_t smallset_t::shuffle(u8 shift) const
 
 void smallset_t::to_array(u64* arr, bool swap) const
 {
-    for (int i=0; i<4; i++)
+    for (int i = 0; i < 4; i++)
     {
-        arr[i] = dw64[swap ? 3-i : i];
+        arr[i] = dw64[swap ? 3 - i : i];
     }
 }
 
@@ -184,7 +184,7 @@ void smallset_t::set(u8 bit)
 
 bool smallset_t::is_set(u8 bit) const
 {
-    return (dw64[bit / 64] & (_ONE_ << (bit % 64)) != 0);
+    return (dw64[bit / 64] & (_ONE_ << (bit % 64))) != 0;
 }
 
 int smallset_t::size() const
