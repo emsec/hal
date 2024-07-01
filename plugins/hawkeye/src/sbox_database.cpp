@@ -10,8 +10,9 @@
 #include <iostream>
 #include <vector>
 
-#undef __AVX2__
-#undef __ARM_NEON
+// TODO remove
+// #undef __AVX2__
+// #undef __ARM_NEON
 
 #ifdef __AVX2__
 #include <immintrin.h>
@@ -465,6 +466,8 @@ namespace hal
                 {
                     return OK(rep_it->second.front().first);
                 }
+
+                // break;
             }
 
             return ERR("no match found within database");
