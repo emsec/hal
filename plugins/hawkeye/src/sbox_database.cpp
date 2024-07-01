@@ -10,6 +10,9 @@
 #include <iostream>
 #include <vector>
 
+#undef __AVX2__
+#undef __ARM_NEON
+
 #ifdef __AVX2__
 #include <immintrin.h>
 
@@ -255,7 +258,7 @@ smallset_t smallset_t::operator^(const smallset_t& other) const
 {
     smallset_t retval = other;
     for (int i = 0; i < 4; i++)
-        retval.dw64[i] = dw64[i];
+        retval.dw64[i] ^= dw64[i];
     return retval;
 }
 
@@ -987,12 +990,14 @@ namespace hal
                 {
                     u8 x = smallset_least_element(N_A);
                     u8 y = smallset_least_element(U_B);
+
                     B[y] = S[A[x]];
                     if (!update_linear(B, y, len))
                         return false;
                     smallset_t D_B_new = smallset_shift(D_B, y);
                     D_B                = smallset_union(D_B, D_B_new);
                     U_B                = smallset_setminus(U_B, D_B_new, len);
+
                     smallset_t SoA_N_A = smallset_init_empty();
                     for (u8 x : smallset_get_elements(N_A))
                     {
@@ -1035,7 +1040,10 @@ namespace hal
                         R_S[x] = y;
                     }
                     if (is_greater(R_S, R_S_best, len))
+                    {
                         return false;
+                    }
+
                     while (smallset_is_empty(N_A) && !smallset_is_empty(N_B))
                     {
                         u8 x = smallset_least_element(U_A);
@@ -1090,7 +1098,9 @@ namespace hal
                             R_S[x] = y;
                         }
                         if (is_greater(R_S, R_S_best, len))
+                        {
                             return false;
+                        }
                     }
                 }
                 if (smallset_is_empty(U_A) && smallset_is_empty(U_B))
