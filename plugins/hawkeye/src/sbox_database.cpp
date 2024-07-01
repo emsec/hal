@@ -10,7 +10,7 @@
 #include <iostream>
 #include <vector>
 
-// TODO remove
+// debug options to enforce using default implementation
 // #undef __AVX2__
 // #undef __ARM_NEON
 
@@ -466,8 +466,6 @@ namespace hal
                 {
                     return OK(rep_it->second.front().first);
                 }
-
-                // break;
             }
 
             return ERR("no match found within database");

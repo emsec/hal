@@ -520,8 +520,6 @@ namespace hal
                         sbox_name = sbox_res.get();
                         break;
                     }
-
-                    // return ERR("");
                 }
             }
 
