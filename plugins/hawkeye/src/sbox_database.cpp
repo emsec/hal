@@ -84,7 +84,9 @@ bool smallset_t::empty() const
     for (int i = 0; i < 4; i++)
     {
         if (dw64[i])
+        {
             return false;
+        }
     }
     return true;
 }
@@ -94,7 +96,9 @@ u8 smallset_t::least_bit() const
     for (int i = 0; i < 4; i++)
     {
         if (dw64[i])
+        {
             return i * 64 + least_bit(dw64[i]);
+        }
     }
     std::cerr << "Called smallset_t::least_bit() on empty set\n" << std::endl;
     return 0;
@@ -167,7 +171,9 @@ smallset_t smallset_t::shuffle(u8 shift) const
 void smallset_t::to_array(u64* arr, bool swap) const
 {
     for (int i=0; i<4; i++)
+    {
         arr[i] = dw64[swap ? 3-i : i];
+    }
 }
 
 void smallset_t::set(u8 bit)
