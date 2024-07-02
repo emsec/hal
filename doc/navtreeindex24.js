@@ -1,6 +1,5 @@
 var NAVTREEINDEX24 =
 {
-"gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caad85794454679ce47ec639fe85b32200e":[7,0,0,0,1,3,0,1,0,16],
 "gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caaf3d6b70c12864b0ccaa58d3e02d18fd3":[7,0,0,0,1,3,0,1,0,28],
 "gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caaf98ed07a4d5f50f7de1410d905f1477f":[7,0,0,0,1,3,0,1,0,10],
 "gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caafca1cb482dae82380c8aa1ea812e0759":[7,0,0,0,1,3,0,1,0,23],
@@ -249,5 +248,6 @@ var NAVTREEINDEX24 =
 "group__pins.html":[4,1,2],
 "group__plugins.html":[4,1,3],
 "group__pybind.html":[4,1,5],
-"group__pybind.html#ga0b8291fb8af058d824b23bcd16a86821":[5,0,2,501]
+"group__pybind.html#ga0b8291fb8af058d824b23bcd16a86821":[5,0,2,501],
+"group__pybind.html#ga0b8291fb8af058d824b23bcd16a86821":[4,1,5,17]
 };

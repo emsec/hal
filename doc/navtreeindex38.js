@@ -1,6 +1,5 @@
 var NAVTREEINDEX38 =
 {
-"settings__widget__checkbox_8h_source.html":[7,0,1,3,0,0,42,1,1],
 "settings__widget__dropdown_8cpp.html":[7,0,1,3,2,40,1,2],
 "settings__widget__dropdown_8cpp_source.html":[7,0,1,3,2,40,1,2],
 "settings__widget__dropdown_8h.html":[7,0,1,3,0,0,42,1,2],
@@ -249,5 +248,6 @@ var NAVTREEINDEX38 =
 "standard__graphics__module_8cpp.html":[7,0,1,3,2,19,1,1,1,1],
 "standard__graphics__module_8cpp_source.html":[7,0,1,3,2,19,1,1,1,1],
 "standard__graphics__module_8h.html":[7,0,1,3,0,0,20,1,1,1,1],
-"standard__graphics__module_8h_source.html":[7,0,1,3,0,0,20,1,1,1,1]
+"standard__graphics__module_8h_source.html":[7,0,1,3,0,0,20,1,1,1,1],
+"standard__graphics__net_8cpp.html":[7,0,1,3,2,19,1,0,6]
 };
