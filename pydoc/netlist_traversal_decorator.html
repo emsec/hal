@@ -1,69 +1,32 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Netlist Traversal Decorator &mdash; hal_py v4.2.0-582-g78d6d0aaa documentation</title>
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Netlist Traversal Decorator &mdash; hal_py v4.2.0-584-gf5e06274d documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
-  
-  
-  
-
-  
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> hal_py
-          
-
-          
           </a>
-
-          
-            
-            
               <div class="version">
-                v4.2.0-582-g78d6d0aaa
+                v4.2.0-584-gf5e06274d
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -71,332 +34,269 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">hal_py</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Netlist Traversal Decorator</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/netlist_traversal_decorator.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="netlist-traversal-decorator">
-<h1>Netlist Traversal Decorator<a class="headerlink" href="#netlist-traversal-decorator" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="hal_py.NetlistTraversalDecorator">
-<em class="property">class </em><code class="descclassname">hal_py.</code><code class="descname">NetlistTraversalDecorator</code><a class="headerlink" href="#hal_py.NetlistTraversalDecorator" title="Permalink to this definition">¶</a></dt>
+             
+  <section id="netlist-traversal-decorator">
+<h1>Netlist Traversal Decorator<a class="headerlink" href="#netlist-traversal-decorator" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="hal_py.NetlistTraversalDecorator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hal_py.</span></span><span class="sig-name descname"><span class="pre">NetlistTraversalDecorator</span></span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator" title="Permalink to this definition"></a></dt>
 <dd><p>A netlist decorator that provides functionality to traverse the associated netlist without making any modifications.</p>
-<dl class="method">
-<dt id="hal_py.NetlistTraversalDecorator.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>self: hal_py.NetlistTraversalDecorator</em>, <em>netlist: hal_py.Netlist</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#hal_py.NetlistTraversalDecorator.__init__" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.NetlistTraversalDecorator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.NetlistTraversalDecorator" title="hal_py.NetlistTraversalDecorator"><span class="pre">hal_py.NetlistTraversalDecorator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">netlist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.__init__" title="Permalink to this definition"></a></dt>
 <dd><p>Construct new NetlistTraversalDecorator object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="hal_py.NetlistTraversalDecorator.get_next_combinational_gates">
-<code class="descname">get_next_combinational_gates</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_next_combinational_gates" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.NetlistTraversalDecorator.get_next_combinational_gates">
+<span class="sig-name descname"><span class="pre">get_next_combinational_gates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_next_combinational_gates" title="Permalink to this definition"></a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p class="first">get_next_combinational_gates(self: hal_py.NetlistTraversalDecorator, net: hal_py.Net, successors: bool, forbidden_pins: Set[hal_py.PinType]) -&gt; Optional[Set[hal_py.Gate]]</p>
+<li><p>get_next_combinational_gates(self: hal_py.NetlistTraversalDecorator, net: hal_py.Net, successors: bool, forbidden_pins: Set[hal_py.PinType]) -&gt; Optional[Set[hal_py.Gate]]</p>
 <blockquote>
 <div><p>Starting from the given net, traverse the netlist and return all combinational successor/predecessor gates.
 Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
 All combinational gates found during traversal are added to the result.
 Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front of flip-flop control inputs.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Net net:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Start net.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param bool successors:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.PinType] forbidden_pins:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Netlist traversal stops at these pins.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The next combinational gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">set[hal_py.Gate] or None</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Net net</dt>
+<dd class="field-odd"><p>Start net.</p>
+</dd>
+<dt class="field-even">param bool successors</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</p>
+</dd>
+<dt class="field-odd">param set[hal_py.PinType] forbidden_pins</dt>
+<dd class="field-odd"><p>Netlist traversal stops at these pins.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>The next combinational gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>set[hal_py.Gate] or None</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
-<li><p class="first">get_next_combinational_gates(self: hal_py.NetlistTraversalDecorator, gate: hal_py.Gate, successors: bool, forbidden_pins: Set[hal_py.PinType]) -&gt; Optional[Set[hal_py.Gate]]</p>
+<li><p>get_next_combinational_gates(self: hal_py.NetlistTraversalDecorator, gate: hal_py.Gate, successors: bool, forbidden_pins: Set[hal_py.PinType]) -&gt; Optional[Set[hal_py.Gate]]</p>
 <blockquote>
 <div><p>Starting from the given gate, traverse the netlist and return all combinational successor/predecessor gates.
 Continue traversal as long as further combinational gates are found and stop at gates that are not combinational.
 All combinational gates found during traversal are added to the result.
 Forbidden pins can be provided to, e.g., avoid the inclusion of logic in front of flip-flop control inputs.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate gate:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Start gate.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param bool successors:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.PinType] forbidden_pins:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Netlist traversal stops at these pins.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The next combinational gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">set[hal_py.Gate] or None</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Gate gate</dt>
+<dd class="field-odd"><p>Start gate.</p>
+</dd>
+<dt class="field-even">param bool successors</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</p>
+</dd>
+<dt class="field-odd">param set[hal_py.PinType] forbidden_pins</dt>
+<dd class="field-odd"><p>Netlist traversal stops at these pins.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>The next combinational gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>set[hal_py.Gate] or None</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 </ol>
 </dd></dl>
 
-<dl class="method">
-<dt id="hal_py.NetlistTraversalDecorator.get_next_matching_gates">
-<code class="descname">get_next_matching_gates</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_next_matching_gates" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.NetlistTraversalDecorator.get_next_matching_gates">
+<span class="sig-name descname"><span class="pre">get_next_matching_gates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_next_matching_gates" title="Permalink to this definition"></a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p class="first">get_next_matching_gates(self: hal_py.NetlistTraversalDecorator, net: hal_py.Net, successors: bool, target_gate_filter: Callable[[hal_py.Gate], bool], continue_on_match: bool = False, exit_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None, entry_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None) -&gt; Optional[Set[hal_py.Gate]]</p>
+<li><p>get_next_matching_gates(self: hal_py.NetlistTraversalDecorator, net: hal_py.Net, successors: bool, target_gate_filter: Callable[[hal_py.Gate], bool], continue_on_match: bool = False, exit_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None, entry_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None) -&gt; Optional[Set[hal_py.Gate]]</p>
 <blockquote>
 <div><p>Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">True</span></code>.
 Traverse over gates that do not meet the <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> condition.
 Stop traversal if (1) <code class="docutils literal notranslate"><span class="pre">continue_on_match</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code> the <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">True</span></code>, (2) the <code class="docutils literal notranslate"><span class="pre">exit_endpoint_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">False</span></code> on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the <code class="docutils literal notranslate"><span class="pre">entry_endpoint_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">False</span></code> on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
 Both the <code class="docutils literal notranslate"><span class="pre">entry_endpoint_filter</span></code> and the <code class="docutils literal notranslate"><span class="pre">exit_endpoint_filter</span></code> may be omitted.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Net net:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Start net.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param bool successors:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param lambda target_gate_filter:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Filter condition that must be met for the target gates.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param bool continue_on_match:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to continue even if <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluated to <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param lambda exit_endpoint_filter:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Filter condition that determines whether to stop traversal on a fan-in/out endpoint.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param lambda entry_endpoint_filter:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The next gates fulfilling the target gate filter condition on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">set[hal_py.Gate] or None</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Net net</dt>
+<dd class="field-odd"><p>Start net.</p>
+</dd>
+<dt class="field-even">param bool successors</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</p>
+</dd>
+<dt class="field-odd">param lambda target_gate_filter</dt>
+<dd class="field-odd"><p>Filter condition that must be met for the target gates.</p>
+</dd>
+<dt class="field-even">param bool continue_on_match</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to continue even if <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluated to <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-odd">param lambda exit_endpoint_filter</dt>
+<dd class="field-odd"><p>Filter condition that determines whether to stop traversal on a fan-in/out endpoint.</p>
+</dd>
+<dt class="field-even">param lambda entry_endpoint_filter</dt>
+<dd class="field-even"><p>Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The next gates fulfilling the target gate filter condition on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>set[hal_py.Gate] or None</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
-<li><p class="first">get_next_matching_gates(self: hal_py.NetlistTraversalDecorator, gate: hal_py.Gate, successors: bool, target_gate_filter: Callable[[hal_py.Gate], bool], continue_on_match: bool = False, exit_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None, entry_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None) -&gt; Optional[Set[hal_py.Gate]]</p>
+<li><p>get_next_matching_gates(self: hal_py.NetlistTraversalDecorator, gate: hal_py.Gate, successors: bool, target_gate_filter: Callable[[hal_py.Gate], bool], continue_on_match: bool = False, exit_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None, entry_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None) -&gt; Optional[Set[hal_py.Gate]]</p>
 <blockquote>
 <div><p>Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">True</span></code>.
 Traverse over gates that do not meet the <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> condition.
 Stop traversal if (1) <code class="docutils literal notranslate"><span class="pre">continue_on_match</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code> the <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">True</span></code>, (2) the <code class="docutils literal notranslate"><span class="pre">exit_endpoint_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">False</span></code> on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the <code class="docutils literal notranslate"><span class="pre">entry_endpoint_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">False</span></code> on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
 Both the <code class="docutils literal notranslate"><span class="pre">entry_endpoint_filter</span></code> and the <code class="docutils literal notranslate"><span class="pre">exit_endpoint_filter</span></code> may be omitted.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate gate:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Start gate.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param bool successors:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param lambda target_gate_filter:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Filter condition that must be met for the target gates.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param bool continue_on_match:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to continue even if <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluated to <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param lambda exit_endpoint_filter:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Filter condition that determines whether to stop traversal on a fan-in/out endpoint.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param lambda entry_endpoint_filter:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The next gates fulfilling the target gate filter condition on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">set[hal_py.Gate] or None</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Gate gate</dt>
+<dd class="field-odd"><p>Start gate.</p>
+</dd>
+<dt class="field-even">param bool successors</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</p>
+</dd>
+<dt class="field-odd">param lambda target_gate_filter</dt>
+<dd class="field-odd"><p>Filter condition that must be met for the target gates.</p>
+</dd>
+<dt class="field-even">param bool continue_on_match</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to continue even if <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluated to <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-odd">param lambda exit_endpoint_filter</dt>
+<dd class="field-odd"><p>Filter condition that determines whether to stop traversal on a fan-in/out endpoint.</p>
+</dd>
+<dt class="field-even">param lambda entry_endpoint_filter</dt>
+<dd class="field-even"><p>Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The next gates fulfilling the target gate filter condition on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>set[hal_py.Gate] or None</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 </ol>
 </dd></dl>
 
-<dl class="method">
-<dt id="hal_py.NetlistTraversalDecorator.get_next_matching_gates_until">
-<code class="descname">get_next_matching_gates_until</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_next_matching_gates_until" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.NetlistTraversalDecorator.get_next_matching_gates_until">
+<span class="sig-name descname"><span class="pre">get_next_matching_gates_until</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_next_matching_gates_until" title="Permalink to this definition"></a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p class="first">get_next_matching_gates_until(self: hal_py.NetlistTraversalDecorator, net: hal_py.Net, successors: bool, target_gate_filter: Callable[[hal_py.Gate], bool], continue_on_mismatch: bool = False, exit_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None, entry_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None) -&gt; Optional[Set[hal_py.Gate]]</p>
+<li><p>get_next_matching_gates_until(self: hal_py.NetlistTraversalDecorator, net: hal_py.Net, successors: bool, target_gate_filter: Callable[[hal_py.Gate], bool], continue_on_mismatch: bool = False, exit_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None, entry_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None) -&gt; Optional[Set[hal_py.Gate]]</p>
 <blockquote>
 <div><p>Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">True</span></code>.
 Continue traversal independent of whatever <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluates to.
 Stop traversal if (1) <code class="docutils literal notranslate"><span class="pre">continue_on_mismatch</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code> the <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">False</span></code>, (2) the <code class="docutils literal notranslate"><span class="pre">exit_endpoint_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">False</span></code> on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the <code class="docutils literal notranslate"><span class="pre">entry_endpoint_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">False</span></code> on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
 Both <code class="docutils literal notranslate"><span class="pre">entry_endpoint_filter</span></code> and the <code class="docutils literal notranslate"><span class="pre">exit_endpoint_filter</span></code> may be omitted.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Net net:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Start net.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param bool successors:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param lambda target_gate_filter:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Filter condition that must be met for the target gates.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param bool continue_on_mismatch:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to continue even if <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluated to <code class="docutils literal notranslate"><span class="pre">False</span></code>, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param lambda exit_endpoint_filter:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Filter condition that determines whether to stop traversal on a fan-in/out endpoint.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param lambda entry_endpoint_filter:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The next gates fulfilling the target gate filter condition on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">set[hal_py.Gate] or None</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Net net</dt>
+<dd class="field-odd"><p>Start net.</p>
+</dd>
+<dt class="field-even">param bool successors</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</p>
+</dd>
+<dt class="field-odd">param lambda target_gate_filter</dt>
+<dd class="field-odd"><p>Filter condition that must be met for the target gates.</p>
+</dd>
+<dt class="field-even">param bool continue_on_mismatch</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to continue even if <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluated to <code class="docutils literal notranslate"><span class="pre">False</span></code>, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-odd">param lambda exit_endpoint_filter</dt>
+<dd class="field-odd"><p>Filter condition that determines whether to stop traversal on a fan-in/out endpoint.</p>
+</dd>
+<dt class="field-even">param lambda entry_endpoint_filter</dt>
+<dd class="field-even"><p>Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The next gates fulfilling the target gate filter condition on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>set[hal_py.Gate] or None</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
-<li><p class="first">get_next_matching_gates_until(self: hal_py.NetlistTraversalDecorator, gate: hal_py.Gate, successors: bool, target_gate_filter: Callable[[hal_py.Gate], bool], continue_on_mismatch: bool = False, exit_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None, entry_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None) -&gt; Optional[Set[hal_py.Gate]]</p>
+<li><p>get_next_matching_gates_until(self: hal_py.NetlistTraversalDecorator, gate: hal_py.Gate, successors: bool, target_gate_filter: Callable[[hal_py.Gate], bool], continue_on_mismatch: bool = False, exit_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None, entry_endpoint_filter: Callable[[hal_py.Endpoint, int], bool] = None) -&gt; Optional[Set[hal_py.Gate]]</p>
 <blockquote>
 <div><p>Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">True</span></code>.
 Continue traversal independent of whatever <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluates to.
 Stop traversal if (1) <code class="docutils literal notranslate"><span class="pre">continue_on_mismatch</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code> the <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">False</span></code>, (2) the <code class="docutils literal notranslate"><span class="pre">exit_endpoint_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">False</span></code> on a fan-in/out endpoint (i.e., when exiting the current gate during traversal), or (3) the <code class="docutils literal notranslate"><span class="pre">entry_endpoint_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">False</span></code> on a successor/predecessor endpoint (i.e., when entering the next gate during traversal).
 Both <code class="docutils literal notranslate"><span class="pre">entry_endpoint_filter</span></code> and the <code class="docutils literal notranslate"><span class="pre">exit_endpoint_filter</span></code> may be omitted.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate gate:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Start gate.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param bool successors:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param lambda target_gate_filter:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Filter condition that must be met for the target gates.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param bool continue_on_mismatch:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to continue even if <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluated to <code class="docutils literal notranslate"><span class="pre">False</span></code>, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param lambda exit_endpoint_filter:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Filter condition that determines whether to stop traversal on a fan-in/out endpoint.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param lambda entry_endpoint_filter:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The next gates fulfilling the target gate filter condition on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">set[hal_py.Gate] or None</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Gate gate</dt>
+<dd class="field-odd"><p>Start gate.</p>
+</dd>
+<dt class="field-even">param bool successors</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</p>
+</dd>
+<dt class="field-odd">param lambda target_gate_filter</dt>
+<dd class="field-odd"><p>Filter condition that must be met for the target gates.</p>
+</dd>
+<dt class="field-even">param bool continue_on_mismatch</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to continue even if <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluated to <code class="docutils literal notranslate"><span class="pre">False</span></code>, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-odd">param lambda exit_endpoint_filter</dt>
+<dd class="field-odd"><p>Filter condition that determines whether to stop traversal on a fan-in/out endpoint.</p>
+</dd>
+<dt class="field-even">param lambda entry_endpoint_filter</dt>
+<dd class="field-even"><p>Filter condition that determines whether to stop traversal on a successor/predecessor endpoint.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The next gates fulfilling the target gate filter condition on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>set[hal_py.Gate] or None</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 </ol>
 </dd></dl>
 
-<dl class="method">
-<dt id="hal_py.NetlistTraversalDecorator.get_next_matching_gates_until_depth">
-<code class="descname">get_next_matching_gates_until_depth</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_next_matching_gates_until_depth" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.NetlistTraversalDecorator.get_next_matching_gates_until_depth">
+<span class="sig-name descname"><span class="pre">get_next_matching_gates_until_depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_next_matching_gates_until_depth" title="Permalink to this definition"></a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p class="first">get_next_matching_gates_until_depth(self: hal_py.NetlistTraversalDecorator, net: hal_py.Net, successors: bool, max_depth: int, target_gate_filter: Callable[[hal_py.Gate], bool] = None) -&gt; Optional[Set[hal_py.Gate]]</p>
+<li><p>get_next_matching_gates_until_depth(self: hal_py.NetlistTraversalDecorator, net: hal_py.Net, successors: bool, max_depth: int, target_gate_filter: Callable[[hal_py.Gate], bool] = None) -&gt; Optional[Set[hal_py.Gate]]</p>
 <blockquote>
 <div><p>Starting from the given net, traverse the netlist and return only the successor/predecessor gates for which the <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">True</span></code>.
 Continue traversal independent of whatever <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluates to.
@@ -404,31 +304,29 @@ Stop traversal if the specified depth is reached.
 The current depth is counted starting at 1 for the destinations of the provided net. 
 For a <code class="docutils literal notranslate"><span class="pre">max_depth</span></code> of <code class="docutils literal notranslate"><span class="pre">0</span></code>, all gates between the start net and the global netlist outputs will be traversed.
 The target_gate_filter may be omitted in which case all traversed gates will be returned.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Net net:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Start net.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param bool successors:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param int max_depth:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The maximum depth for netlist traversal starting from the start net.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param lambda target_gate_filter:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Filter condition that must be met for the target gates.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The next gates fulfilling the target gate filter condition on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">set[hal_py.Gate] or None</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Net net</dt>
+<dd class="field-odd"><p>Start net.</p>
+</dd>
+<dt class="field-even">param bool successors</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</p>
+</dd>
+<dt class="field-odd">param int max_depth</dt>
+<dd class="field-odd"><p>The maximum depth for netlist traversal starting from the start net.</p>
+</dd>
+<dt class="field-even">param lambda target_gate_filter</dt>
+<dd class="field-even"><p>Filter condition that must be met for the target gates.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The next gates fulfilling the target gate filter condition on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>set[hal_py.Gate] or None</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
-<li><p class="first">get_next_matching_gates_until_depth(self: hal_py.NetlistTraversalDecorator, gate: hal_py.Gate, successors: bool, max_depth: int, target_gate_filter: Callable[[hal_py.Gate], bool] = None) -&gt; Optional[Set[hal_py.Gate]]</p>
+<li><p>get_next_matching_gates_until_depth(self: hal_py.NetlistTraversalDecorator, gate: hal_py.Gate, successors: bool, max_depth: int, target_gate_filter: Callable[[hal_py.Gate], bool] = None) -&gt; Optional[Set[hal_py.Gate]]</p>
 <blockquote>
 <div><p>Starting from the given gate, traverse the netlist and return only the successor/predecessor gates for which the <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">True</span></code>.
 Continue traversal independent of whatever <code class="docutils literal notranslate"><span class="pre">target_gate_filter</span></code> evaluates to.
@@ -436,161 +334,139 @@ Stop traversal if the specified depth is reached.
 The current depth is counted starting at 1 for the direct successors/predecessors of the provided gate. 
 For a <code class="docutils literal notranslate"><span class="pre">max_depth</span></code> of <code class="docutils literal notranslate"><span class="pre">0</span></code>, all gates between the start gate and the global netlist outputs will be traversed.
 The target_gate_filter may be omitted in which case all traversed gates will be returned.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate gate:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Start gate.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param bool successors:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param int max_depth:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">The maximum depth for netlist traversal starting from the start gate.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param lambda target_gate_filter:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Filter condition that must be met for the target gates.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">returns:</th><td class="field-body">The next gates fulfilling the target gate filter condition on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">set[hal_py.Gate] or None</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Gate gate</dt>
+<dd class="field-odd"><p>Start gate.</p>
+</dd>
+<dt class="field-even">param bool successors</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</p>
+</dd>
+<dt class="field-odd">param int max_depth</dt>
+<dd class="field-odd"><p>The maximum depth for netlist traversal starting from the start gate.</p>
+</dd>
+<dt class="field-even">param lambda target_gate_filter</dt>
+<dd class="field-even"><p>Filter condition that must be met for the target gates.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The next gates fulfilling the target gate filter condition on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>set[hal_py.Gate] or None</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 </ol>
 </dd></dl>
 
-<dl class="method">
-<dt id="hal_py.NetlistTraversalDecorator.get_next_sequential_gates">
-<code class="descname">get_next_sequential_gates</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_next_sequential_gates" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.NetlistTraversalDecorator.get_next_sequential_gates">
+<span class="sig-name descname"><span class="pre">get_next_sequential_gates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_next_sequential_gates" title="Permalink to this definition"></a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
-<li><p class="first">get_next_sequential_gates(self: hal_py.NetlistTraversalDecorator, net: hal_py.Net, successors: bool, forbidden_pins: Set[hal_py.PinType]) -&gt; Optional[Set[hal_py.Gate]]</p>
+<li><p>get_next_sequential_gates(self: hal_py.NetlistTraversalDecorator, net: hal_py.Net, successors: bool, forbidden_pins: Set[hal_py.PinType]) -&gt; Optional[Set[hal_py.Gate]]</p>
 <blockquote>
 <div><p>Starting from the given net, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
 Traverse over gates that are not sequential until a sequential gate is found.
 Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Net net:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Start net.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param bool successors:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.PinType] forbidden_pins:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Sequential gates reached through these pins will not be part of the result. Defaults to an empty set.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The next sequential gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">set[hal_py.Gate] or None</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Net net</dt>
+<dd class="field-odd"><p>Start net.</p>
+</dd>
+<dt class="field-even">param bool successors</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</p>
+</dd>
+<dt class="field-odd">param set[hal_py.PinType] forbidden_pins</dt>
+<dd class="field-odd"><p>Sequential gates reached through these pins will not be part of the result. Defaults to an empty set.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>The next sequential gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>set[hal_py.Gate] or None</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
-<li><p class="first">get_next_sequential_gates(self: hal_py.NetlistTraversalDecorator, gate: hal_py.Gate, successors: bool, forbidden_pins: Set[hal_py.PinType]) -&gt; Optional[Set[hal_py.Gate]]</p>
+<li><p>get_next_sequential_gates(self: hal_py.NetlistTraversalDecorator, gate: hal_py.Gate, successors: bool, forbidden_pins: Set[hal_py.PinType]) -&gt; Optional[Set[hal_py.Gate]]</p>
 <blockquote>
 <div><p>Starting from the given gate, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
 Traverse over gates that are not sequential until a sequential gate is found.
 Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">param hal_py.Gate gate:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Start gate.</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">param bool successors:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">param set[hal_py.PinType] forbidden_pins:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Sequential gates reached through these pins will not be part of the result.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">returns:</th><td class="field-body">The next sequential gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">set[hal_py.Gate] or None</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Gate gate</dt>
+<dd class="field-odd"><p>Start gate.</p>
+</dd>
+<dt class="field-even">param bool successors</dt>
+<dd class="field-even"><p>Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</p>
+</dd>
+<dt class="field-odd">param set[hal_py.PinType] forbidden_pins</dt>
+<dd class="field-odd"><p>Sequential gates reached through these pins will not be part of the result.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>The next sequential gates on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>set[hal_py.Gate] or None</p>
+</dd>
+</dl>
 </div></blockquote>
 </li>
 </ol>
 </dd></dl>
 
-<dl class="method">
-<dt id="hal_py.NetlistTraversalDecorator.get_next_sequential_gates_map">
-<code class="descname">get_next_sequential_gates_map</code><span class="sig-paren">(</span><em>self: hal_py.NetlistTraversalDecorator, successors: bool, forbidden_pins: Set[hal_py.PinType]</em><span class="sig-paren">)</span> &#x2192; Optional[Dict[hal_py.Gate, Set[hal_py.Gate]]]<a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_next_sequential_gates_map" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.NetlistTraversalDecorator.get_next_sequential_gates_map">
+<span class="sig-name descname"><span class="pre">get_next_sequential_gates_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.NetlistTraversalDecorator" title="hal_py.NetlistTraversalDecorator"><span class="pre">hal_py.NetlistTraversalDecorator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">successors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">forbidden_pins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><span class="pre">hal_py.PinType</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.NetlistTraversalDecorator.get_next_sequential_gates_map" title="Permalink to this definition"></a></dt>
 <dd><p>Get the next sequential gates for all sequential gates in the netlist by traversing through remaining logic (e.g., combinational logic).
 Compute a dict from a sequential gate to all its successors.
 Stop traversal at all sequential gates, but only adds those to the result that have not been reached through a pin of one of the forbidden types.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>successors</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</li>
-<li><strong>forbidden_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a><em>]</em>) – Sequential gates reached through these pins will not be part of the result.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>successors</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set <code class="docutils literal notranslate"><span class="pre">True</span></code> to get successors, set <code class="docutils literal notranslate"><span class="pre">False</span></code> to get predecessors.</p></li>
+<li><p><strong>forbidden_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference internal" href="pin_type.html#hal_py.PinType" title="hal_py.PinType"><em>hal_py.PinType</em></a><em>]</em>) – Sequential gates reached through these pins will not be part of the result.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A dict from each sequential gate to all its sequential successors on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dict from each sequential gate to all its sequential successors on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2024, Marc Fyrbiak, Sebastian Wallat, Max Hoffmann
-
-    </p>
+    <p>&#169; Copyright 2024, Marc Fyrbiak, Sebastian Wallat, Max Hoffmann.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

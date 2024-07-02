@@ -1,6 +1,5 @@
 var group__persistent =
 [
-    [ "netlist_serializer", "namespacenetlist__serializer.html", null ],
     [ "ProjectManager", "classhal_1_1_project_manager.html", [
       [ "ProjectStatus", "classhal_1_1_project_manager.html#a4149a3813ef19d7236afad54ec4469bf", [
         [ "NONE", "classhal_1_1_project_manager.html#a4149a3813ef19d7236afad54ec4469bfa3bf233b90a22e289c515af9c8dcd2032", null ],

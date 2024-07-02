@@ -1,6 +1,5 @@
 var group__netlist__writer =
 [
-    [ "netlist_writer_manager", "namespacehal_1_1netlist__writer__manager.html", null ],
     [ "VerilogWriter", "classhal_1_1_verilog_writer.html", [
       [ "VerilogWriter", "classhal_1_1_verilog_writer.html#ad13fe35b61f1e73bc02faea1932275fd", null ],
       [ "~VerilogWriter", "classhal_1_1_verilog_writer.html#a4315596753d22349d61b69c6ae074543", null ],

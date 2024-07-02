@@ -1,9 +1,9 @@
 <map id="hal::LabeledFrame" name="hal::LabeledFrame">
-<area shape="rect" id="node1" title="A QFrame with a label." alt="" coords="249,1293,392,1385"/>
+<area shape="rect" id="node1" title="A QFrame with a label." alt="" coords="245,1293,388,1385"/>
 <area shape="rect" id="node2" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qframe.html" title=" " alt="" coords="37,499,181,869"/>
-<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qlabel.html" title=" " alt="" coords="239,919,402,1231"/>
+<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qlabel.html" title=" " alt="" coords="235,919,398,1231"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qwidget.html" title=" " alt="" coords="5,5,212,449"/>
-<area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qvboxlayout.html" title=" " alt="" coords="426,1021,573,1128"/>
-<area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qboxlayout.html" title=" " alt="" coords="516,572,653,796"/>
-<area shape="rect" id="node7" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qhboxlayout.html" title=" " alt="" coords="597,1021,743,1128"/>
+<area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qvboxlayout.html" title=" " alt="" coords="422,1021,569,1128"/>
+<area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qboxlayout.html" title=" " alt="" coords="512,572,649,796"/>
+<area shape="rect" id="node7" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qhboxlayout.html" title=" " alt="" coords="593,1021,739,1128"/>
 </map>

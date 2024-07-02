@@ -1,7 +1,5 @@
 var group__utilities =
 [
-    [ "core_strings", "namespacehal_1_1core__strings.html", null ],
-    [ "utils", "namespacehal_1_1utils.html", null ],
     [ "CallbackHook< R(ArgTypes...)>", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html", [
       [ "add_callback", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#ad25b213d27b6ff208e1e2e1563f3fc45", null ],
       [ "add_callback", "classhal_1_1_callback_hook_3_01_r_07_arg_types_8_8_8_08_4.html#a7e2b511bcaa4178194695b83b04898bd", null ],

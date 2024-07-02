@@ -1,8 +1,8 @@
 <map id="hal::SearchProxyModel" name="hal::SearchProxyModel">
 <area shape="rect" id="node1" title=" " alt="" coords="637,564,814,729"/>
 <area shape="rect" id="node4" href="$classhal_1_1_context_proxy_model.html" title="A proxy model to filter the ContextTableModel by a given string." alt="" coords="5,785,184,965"/>
-<area shape="rect" id="node5" href="$classhal_1_1_gatelibrary_proxy_model.html" title="Helper model to make filtering available." alt="" coords="208,799,408,950"/>
-<area shape="rect" id="node6" href="$classhal_1_1_gate_select_proxy.html" title="The GateSelectProxy class allows sorting and filtering of module tables." alt="" coords="433,799,607,950"/>
+<area shape="rect" id="node5" href="$classhal_1_1_gate_select_proxy.html" title="The GateSelectProxy class allows sorting and filtering of module tables." alt="" coords="209,799,383,950"/>
+<area shape="rect" id="node6" href="$classhal_1_1_gatelibrary_proxy_model.html" title="Helper model to make filtering available." alt="" coords="408,799,608,950"/>
 <area shape="rect" id="node7" href="$classhal_1_1_grouping_proxy_model.html" title="Helper model to make filtering available." alt="" coords="632,799,819,950"/>
 <area shape="rect" id="node8" href="$classhal_1_1_module_proxy_model.html" title="Enables filtering in the ModuleModel." alt="" coords="843,777,1021,972"/>
 <area shape="rect" id="node9" href="$classhal_1_1_module_select_proxy.html" title="The ModuleSelectProxy class allows sorting and filtering of module tables." alt="" coords="1045,799,1219,950"/>

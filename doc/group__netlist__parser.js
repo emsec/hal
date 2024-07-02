@@ -1,6 +1,5 @@
 var group__netlist__parser =
 [
-    [ "netlist_parser_manager", "namespacehal_1_1netlist__parser__manager.html", null ],
     [ "VerilogParser", "classhal_1_1_verilog_parser.html", [
       [ "VerilogParser", "classhal_1_1_verilog_parser.html#a704fc8862c2feedcbb89cbb38393a7ca", null ],
       [ "~VerilogParser", "classhal_1_1_verilog_parser.html#a5d3bc195109cb550bb08b5840391a4b6", null ],

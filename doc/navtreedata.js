@@ -1,24 +1,26 @@
 /*
-@licstart  The following is the entire license notice for the
-JavaScript code in this file.
+ @licstart  The following is the entire license notice for the JavaScript code in this file.
 
-Copyright (C) 1997-2019 by Dimitri van Heesch
+ The MIT License (MIT)
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of version 2 of the GNU General Public License as published by
-the Free Software Foundation
+ Copyright (C) 1997-2020 by Dimitri van Heesch
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ and associated documentation files (the "Software"), to deal in the Software without restriction,
+ including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
 
-You should have received a copy of the GNU General Public License along
-with this program; if not, write to the Free Software Foundation, Inc.,
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ The above copyright notice and this permission notice shall be included in all copies or
+ substantial portions of the Software.
 
-@licend  The above is the entire license notice
-for the JavaScript code in this file
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+ @licend  The above is the entire license notice for the JavaScript code in this file
 */
 var NAVTREE =
 [
@@ -101,41 +103,49 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"about__dialog_8cpp.html",
-"classhal_1_1_action_move_item.html#a2ad6ec069ff33b66d655d224a915ce49",
-"classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fba65f3ff6b5989443249c6173d99e8815e",
-"classhal_1_1_comment_item.html#a13471fa20a565b9538582b7eabfe758d",
-"classhal_1_1_context_tree_model.html#a76ae141d7ab33217ea3af5068c8a1d1a",
-"classhal_1_1_export_project_dialog.html#a8aa5e616e585291b23c0bca36ca2ff47aa9d2f49028e45d059f4f96c6017be070",
-"classhal_1_1_gate_library_writer.html#a5f1aa897e5dd51e2690680f31b25553b",
-"classhal_1_1_graph_context.html#afc3db090653def123d9a6180e9e4b1ad",
-"classhal_1_1_graphics_net.html#a4de5dcda9c70058ce361fc56ba27a943",
-"classhal_1_1_grouping_proxy_model.html#a4872feac8ad19b87781baff9b2167bef",
-"classhal_1_1_h_g_l_parser_test.html#a477f0ec338eb9d072a8deb1f36782187",
-"classhal_1_1_log_manager.html#a2141d31e95e066170a1e3658faeca830",
-"classhal_1_1_module.html#a226c897a79cede1793d8a780417cff39",
-"classhal_1_1_module_table_model.html#ae097de66f202f51463ec4bc9f2fda834",
-"classhal_1_1_net_layout_metric.html#abfeecf1dabcf380845c39bc8dd571a24",
-"classhal_1_1_node.html#a02ddf20f9b36959ab76865b4dfe9ee25",
-"classhal_1_1_program_options.html#a7946b5dc6662a17e747bdcc65537459b",
-"classhal_1_1_python_module_selection_receiver.html#ac28943f3f6e64f280c270b54ce7eca2e",
-"classhal_1_1_searchbar.html#aad2a4e2d9b47ef4d68ad30c333f0f118",
-"classhal_1_1_settings_manager.html#add001bf6cbff37262612014f4239c871",
-"classhal_1_1_user_action.html#ad3e183ca84db2229ea52015ecf81b502",
-"color__selection_8cpp_source.html",
-"dir_5a37b91ad729d978f48b50fcc843fc3d.html",
-"expanding__list__widget_8cpp.html",
-"gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caaf3d6b70c12864b0ccaa58d3e02d18fd3",
-"group__pybind.html#ga6f399ac0514c1e1adff48f88ee349380",
-"lut__table__widget_8h.html",
-"net__details__tab__widget_8h_source.html",
-"open__file__widget_8cpp_source.html",
-"plugins_2dataflow__analysis_2python_2python__bindings_8cpp.html",
-"qpoint__extension_8h.html",
-"simplification__abc_8cpp.html#ad41323d6d6203ea58a57fe273f8a02c8acaaf4b74175086e60a3d84bb3f056b5e",
-"struct_abc___ntk__t__.html#a76f5701637d54a5a44cec517f9345221",
-"structhal_1_1_s_m_t_1_1_query_config.html#a7f8c0079b23b7dacbf1e8607e3972b89",
-"test_2vhdl__parser_8cpp.html#a68932182daae80646b9aa4b52aef314b"
+"",
+"classhal_1_1_action_move_item.html",
+"classhal_1_1_boolean_function.html#aac7bb4fda3bf06664f6bc717c3be92fba2253448caf5f40b7ce887c337f7da14a",
+"classhal_1_1_comment_item.html#a10e919b4a23456dd3e2e9ed3be4c10d0",
+"classhal_1_1_context_tree_model.html#a6c4879c32cd42a9b798074be42cfc48c",
+"classhal_1_1_export_project_dialog.html#a8aa5e616e585291b23c0bca36ca2ff47a4f5ea908902d0bf4949759ff9cc2f8c8",
+"classhal_1_1_gate_library_writer.html#a32859d7ef821e7343caaf64f40e24d10",
+"classhal_1_1_graph_context.html#afb1c916ca177184eb92ff02bedd8209c",
+"classhal_1_1_graphics_net.html#a4a277a42c6bdd527a66a8b9fce7b5246",
+"classhal_1_1_grouping_proxy_model.html#a25f9b98de8183d012f12a38351c74a74",
+"classhal_1_1_h_g_l_parser_test.html#a385726d840fe993823dc9a7a42059a5e",
+"classhal_1_1_log_manager.html#a1af82acd668588c8a9e31ae61e166ce2",
+"classhal_1_1_module.html#a220173f927815a8acc900856bfe6735b",
+"classhal_1_1_module_table_model.html#ad817538352f1f03293fb8b16b462915c",
+"classhal_1_1_net_layout_metric.html#a7b67459474e6d437093e3bc3ce312a6c",
+"classhal_1_1_node.html",
+"classhal_1_1_program_options.html#a751129e8ad6e0b07d7258279e3c59b85",
+"classhal_1_1_python_module_selection_receiver.html#aab2cd8aadeabd127dc1f70355b982113",
+"classhal_1_1_searchbar.html#aa86bc3136c9e7175ebe1bde159537068",
+"classhal_1_1_settings_manager.html#ab0f2583b40115764c9189074b9ac40bf",
+"classhal_1_1_user_action.html#acbb007a480acf0f847434e86d71cf5bf",
+"color__selection_8cpp.html",
+"dir_594a98e1743b93d37981ce1884e7f583.html",
+"expanding__list__item_8h_source.html",
+"gate__type__property_8h.html#adb8da04d2161f277bd489e806a2721caad85794454679ce47ec639fe85b32200e",
+"group__pybind.html#ga0b8291fb8af058d824b23bcd16a86821",
+"labeled__separated__net_8h.html",
+"namespacehal.html#a6007f8f2910f5088da2c4c9b31ff24a1",
+"namespacehal_1_1event__log.html",
+"namespacetest__multiple.html#acc4677858c72770ae76519b4ccc47178",
+"netlist__utils_8h.html#af2c5370e1cfb407c98dd5c855e1e9022",
+"plugin__system_2plugin__manager_8cpp.html#acb6d1f3c164b832fb19257b1df06aa53",
+"python__console__widget_8cpp.html",
+"qt.html#EnterKeyType-enum",
+"qt.html#Key-enum",
+"qt.html#Key-enum",
+"qt.html#MouseEventSource-enum",
+"qt.html#WidgetAttribute-enum",
+"settings__widget__checkbox_8h_source.html",
+"standard__graphics__net_8cpp.html",
+"structhal_1_1_boolean_function_parser_1_1_token.html#a263010999adfeb13424c1f19aeba9aac",
+"structhal_1_1dataflow_1_1processing_1_1_context.html#a93c4f6671d95403f18db03749d53f2a1",
+"utils_8h.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

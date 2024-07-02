@@ -1,10 +1,10 @@
 <map id="hal::GraphicsNet" name="hal::GraphicsNet">
-<area shape="rect" id="node1" title="The basic net class all other nets inherit from." alt="" coords="445,711,581,905"/>
+<area shape="rect" id="node1" title="The basic net class all other nets inherit from." alt="" coords="441,711,577,905"/>
 <area shape="rect" id="node2" href="$classhal_1_1_graphics_item.html" title="Superclass for all graphic items used ins the GraphicsScene. It contains information about the underl..." alt="" coords="64,409,204,648"/>
 <area shape="rect" id="node3" href="/home/runner/work/hal/hal/documentation/tagfiles/qtwidgets.tags$qgraphicsitem.html" title=" " alt="" coords="5,5,175,317"/>
-<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qcolor.html" title=" " alt="" coords="203,5,329,317"/>
-<area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qrectf.html" title=" " alt="" coords="377,446,504,611"/>
-<area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qpen.html" title=" " alt="" coords="528,453,644,604"/>
-<area shape="rect" id="node7" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qpainterpath.html" title=" " alt="" coords="668,431,843,626"/>
-<area shape="rect" id="node8" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qbrush.html" title=" " alt="" coords="867,453,983,604"/>
+<area shape="rect" id="node4" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qcolor.html" title=" " alt="" coords="202,5,327,317"/>
+<area shape="rect" id="node5" href="/home/runner/work/hal/hal/documentation/tagfiles/qtcore.tags$qrectf.html" title=" " alt="" coords="373,446,500,611"/>
+<area shape="rect" id="node6" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qpen.html" title=" " alt="" coords="524,453,640,604"/>
+<area shape="rect" id="node7" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qpainterpath.html" title=" " alt="" coords="664,431,839,626"/>
+<area shape="rect" id="node8" href="/home/runner/work/hal/hal/documentation/tagfiles/qtgui.tags$qbrush.html" title=" " alt="" coords="863,453,979,604"/>
 </map>

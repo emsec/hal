@@ -1,6 +1,5 @@
 var group__plugins =
 [
-    [ "plugin_manager", "namespacehal_1_1plugin__manager.html", null ],
     [ "BasePluginInterface", "classhal_1_1_base_plugin_interface.html", [
       [ "BasePluginInterface", "classhal_1_1_base_plugin_interface.html#ad650a0e81cc8fdcf9e59dc64d80d5ba4", null ],
       [ "~BasePluginInterface", "classhal_1_1_base_plugin_interface.html#a4bedf0ae630ab17c244b2bbc9a345914", null ],

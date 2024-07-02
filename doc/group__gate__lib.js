@@ -2,7 +2,6 @@ var group__gate__lib =
 [
     [ "Gate Library Parser", "group__gate__lib__parser.html", "group__gate__lib__parser" ],
     [ "Gate Library Writer", "group__gate__lib__writer.html", "group__gate__lib__writer" ],
-    [ "gate_library_manager", "namespacehal_1_1gate__library__manager.html", null ],
     [ "GateLibrary", "classhal_1_1_gate_library.html", [
       [ "GateLibrary", "classhal_1_1_gate_library.html#a5ad57ba019b35e2ceb386c3b0be1e0b1", null ],
       [ "~GateLibrary", "classhal_1_1_gate_library.html#ad1f31f7dcb83c976fdaaa2bc22a9a8bf", null ],

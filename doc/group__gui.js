@@ -9,8 +9,6 @@ var group__gui =
     [ "File Management", "group__file__management.html", "group__file__management" ],
     [ "Utility Widgets", "group__utility__widgets.html", "group__utility__widgets" ],
     [ "Unused", "group__unused.html", "group__unused" ],
-    [ "gui_utility", "namespacehal_1_1gui__utility.html", null ],
-    [ "style", "namespacehal_1_1style.html", null ],
     [ "Action", "classhal_1_1_action.html", [
       [ "Action", "classhal_1_1_action.html#a89639cf253f1421c07ad26d47754f994", null ],
       [ "Action", "classhal_1_1_action.html#a082ad65bf857dac9a8d59fd96eeb8401", null ],

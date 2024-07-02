@@ -3,8 +3,6 @@ var group__graph =
     [ "Visuals", "group__graph-visuals.html", "group__graph-visuals" ],
     [ "Context Management", "group__graph-contexts.html", "group__graph-contexts" ],
     [ "Layouters", "group__graph-layouter.html", "group__graph-layouter" ],
-    [ "graph_widget_constants", "namespacehal_1_1graph__widget__constants.html", null ],
-    [ "GraphicsFactory", "namespacehal_1_1_graphics_factory.html", null ],
     [ "GraphTabWidget", "classhal_1_1_graph_tab_widget.html", [
       [ "GraphCursor", "classhal_1_1_graph_tab_widget.html#ad16b8bead63eca83f1744a4855b138c5", [
         [ "Select", "classhal_1_1_graph_tab_widget.html#ad16b8bead63eca83f1744a4855b138c5ada209b726af014ecbab7ab4863f70a99", null ],

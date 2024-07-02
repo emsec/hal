@@ -11,9 +11,9 @@ var hierarchy =
         [ "hal::HGLParserExtension", "classhal_1_1_h_g_l_parser_extension.html", null ],
         [ "hal::HGLWriterExtension", "classhal_1_1_h_g_l_writer_extension.html", null ],
         [ "hal::LibertyParserExtension", "classhal_1_1_liberty_parser_extension.html", null ],
+        [ "hal::VHDLParserExtension", "classhal_1_1_v_h_d_l_parser_extension.html", null ],
         [ "hal::VerilogParserExtension", "classhal_1_1_verilog_parser_extension.html", null ],
-        [ "hal::VerilogWriterExtension", "classhal_1_1_verilog_writer_extension.html", null ],
-        [ "hal::VHDLParserExtension", "classhal_1_1_v_h_d_l_parser_extension.html", null ]
+        [ "hal::VerilogWriterExtension", "classhal_1_1_verilog_writer_extension.html", null ]
       ] ],
       [ "hal::GuiExtensionInterface", "classhal_1_1_gui_extension_interface.html", [
         [ "hal::GuiExtensionDataflow", "classhal_1_1_gui_extension_dataflow.html", null ]
@@ -24,7 +24,7 @@ var hierarchy =
     ] ],
     [ "hal::NetLayoutJunctionOccupiedHash::AddOrMerge", "classhal_1_1_net_layout_junction_occupied_hash_1_1_add_or_merge.html", null ],
     [ "hal::AssignedKeybindMap", "classhal_1_1_assigned_keybind_map.html", null ],
-    [ "base_sink", null, [
+    [ "spdlog::sinks::base_sink", null, [
       [ "hal::log_gui_sink", "classhal_1_1log__gui__sink.html", null ]
     ] ],
     [ "hal::BasePin< T >", "classhal_1_1_base_pin.html", null ],
@@ -44,9 +44,9 @@ var hierarchy =
       [ "hal::PyBasePluginInterface", "classhal_1_1_py_base_plugin_interface.html", null ],
       [ "hal::SolveFsmPlugin", "classhal_1_1_solve_fsm_plugin.html", null ],
       [ "hal::UIPluginInterface", "classhal_1_1_u_i_plugin_interface.html", null ],
+      [ "hal::VHDLParserPlugin", "classhal_1_1_v_h_d_l_parser_plugin.html", null ],
       [ "hal::VerilogParserPlugin", "classhal_1_1_verilog_parser_plugin.html", null ],
-      [ "hal::VerilogWriterPlugin", "classhal_1_1_verilog_writer_plugin.html", null ],
-      [ "hal::VHDLParserPlugin", "classhal_1_1_v_h_d_l_parser_plugin.html", null ]
+      [ "hal::VerilogWriterPlugin", "classhal_1_1_verilog_writer_plugin.html", null ]
     ] ],
     [ "hal::BaseTreeItem", "classhal_1_1_base_tree_item.html", [
       [ "hal::ContextTreeItem", "classhal_1_1_context_tree_item.html", null ],
@@ -75,7 +75,7 @@ var hierarchy =
     [ "hal::CallbackHook< void(NetlistEvent::event, hal::Netlist *, u32)>", "classhal_1_1_callback_hook.html", null ],
     [ "hal::ChannelEntry", "structhal_1_1_channel_entry.html", null ],
     [ "hal::ChannelItem", "classhal_1_1_channel_item.html", null ],
-    [ "char_traits", null, [
+    [ "std::char_traits", null, [
       [ "hal::core_strings::CaseInsensitiveCharTraits", "structhal_1_1core__strings_1_1_case_insensitive_char_traits.html", null ]
     ] ],
     [ "hal::utils::Color", "structhal_1_1utils_1_1_color.html", null ],
@@ -124,8 +124,8 @@ var hierarchy =
     [ "hal::GateTypeComponent", "classhal_1_1_gate_type_component.html", [
       [ "hal::FFComponent", "classhal_1_1_f_f_component.html", null ],
       [ "hal::InitComponent", "classhal_1_1_init_component.html", null ],
-      [ "hal::LatchComponent", "classhal_1_1_latch_component.html", null ],
       [ "hal::LUTComponent", "classhal_1_1_l_u_t_component.html", null ],
+      [ "hal::LatchComponent", "classhal_1_1_latch_component.html", null ],
       [ "hal::MACComponent", "classhal_1_1_m_a_c_component.html", null ],
       [ "hal::RAMComponent", "classhal_1_1_r_a_m_component.html", null ],
       [ "hal::RAMPortComponent", "classhal_1_1_r_a_m_port_component.html", null ],
@@ -184,8 +184,8 @@ var hierarchy =
     [ "hal::NetlistInternalManager", "classhal_1_1_netlist_internal_manager.html", null ],
     [ "hal::NetlistModificationDecorator", "classhal_1_1_netlist_modification_decorator.html", null ],
     [ "hal::NetlistParser", "classhal_1_1_netlist_parser.html", [
-      [ "hal::VerilogParser", "classhal_1_1_verilog_parser.html", null ],
-      [ "hal::VHDLParser", "classhal_1_1_v_h_d_l_parser.html", null ]
+      [ "hal::VHDLParser", "classhal_1_1_v_h_d_l_parser.html", null ],
+      [ "hal::VerilogParser", "classhal_1_1_verilog_parser.html", null ]
     ] ],
     [ "hal::NetlistTraversalDecorator", "classhal_1_1_netlist_traversal_decorator.html", null ],
     [ "hal::NetlistWriter", "classhal_1_1_netlist_writer.html", [
@@ -198,7 +198,7 @@ var hierarchy =
     [ "hal::result_constructor_type::OK", "classhal_1_1result__constructor__type_1_1_o_k.html", null ],
     [ "hal::SMT::ModelParser::ParserContext", "structhal_1_1_s_m_t_1_1_model_parser_1_1_parser_context.html", null ],
     [ "hal::dataflow::processing::PassConfiguration", "structhal_1_1dataflow_1_1processing_1_1_pass_configuration.html", null ],
-    [ "path", null, [
+    [ "std::filesystem::path", null, [
       [ "hal::ProjectDirectory", "classhal_1_1_project_directory.html", null ]
     ] ],
     [ "hal::PinChangedEvent", "classhal_1_1_pin_changed_event.html", null ],
@@ -299,6 +299,256 @@ var hierarchy =
       [ "hal::SupportedFileFormats", "classhal_1_1_supported_file_formats.html", null ]
     ] ],
     [ "QObject", "https://doc.qt.io/qt-5/qobject.html", [
+      [ "QAbstractItemDelegate", "https://doc.qt.io/qt-5/qabstractitemdelegate.html", [
+        [ "QItemDelegate", "https://doc.qt.io/qt-5/qitemdelegate.html", [
+          [ "hal::GuiPluginDelegate", "classhal_1_1_gui_plugin_delegate.html", null ]
+        ] ],
+        [ "QStyledItemDelegate", "https://doc.qt.io/qt-5/qstyleditemdelegate.html", [
+          [ "hal::GroupingColorDelegate", "classhal_1_1_grouping_color_delegate.html", null ]
+        ] ]
+      ] ],
+      [ "QAbstractItemModel", "https://doc.qt.io/qt-5/qabstractitemmodel.html", [
+        [ "QAbstractProxyModel", "https://doc.qt.io/qt-5/qabstractproxymodel.html", [
+          [ "QSortFilterProxyModel", "https://doc.qt.io/qt-5/qsortfilterproxymodel.html", [
+            [ "hal::FilterElementsProxyModel", "classhal_1_1_filter_elements_proxy_model.html", null ],
+            [ "hal::SearchProxyModel", "classhal_1_1_search_proxy_model.html", [
+              [ "hal::ContextProxyModel", "classhal_1_1_context_proxy_model.html", null ],
+              [ "hal::GateSelectProxy", "classhal_1_1_gate_select_proxy.html", null ],
+              [ "hal::GatelibraryProxyModel", "classhal_1_1_gatelibrary_proxy_model.html", null ],
+              [ "hal::GroupingProxyModel", "classhal_1_1_grouping_proxy_model.html", null ],
+              [ "hal::ModuleProxyModel", "classhal_1_1_module_proxy_model.html", null ],
+              [ "hal::ModuleSelectProxy", "classhal_1_1_module_select_proxy.html", null ],
+              [ "hal::SelectionTreeProxyModel", "classhal_1_1_selection_tree_proxy_model.html", null ]
+            ] ]
+          ] ]
+        ] ],
+        [ "QAbstractTableModel", "https://doc.qt.io/qt-5/qabstracttablemodel.html", [
+          [ "hal::BooleanFunctionTableModel", "classhal_1_1_boolean_function_table_model.html", null ],
+          [ "hal::ChannelModel", "classhal_1_1_channel_model.html", null ],
+          [ "hal::DataTableModel", "classhal_1_1_data_table_model.html", null ],
+          [ "hal::EndpointTableModel", "classhal_1_1_endpoint_table_model.html", null ],
+          [ "hal::GateLibrarySelectionTable", "classhal_1_1_gate_library_selection_table.html", null ],
+          [ "hal::GateSelectModel", "classhal_1_1_gate_select_model.html", null ],
+          [ "hal::GatelibraryTableModel", "classhal_1_1_gatelibrary_table_model.html", null ],
+          [ "hal::GroupingTableModel", "classhal_1_1_grouping_table_model.html", null ],
+          [ "hal::GroupingsOfItemModel", "classhal_1_1_groupings_of_item_model.html", null ],
+          [ "hal::GuiPluginTable", "classhal_1_1_gui_plugin_table.html", null ],
+          [ "hal::LUTTableModel", "classhal_1_1_l_u_t_table_model.html", null ],
+          [ "hal::ModuleSelectModel", "classhal_1_1_module_select_model.html", null ],
+          [ "hal::ModuleTableModel", "classhal_1_1_module_table_model.html", null ]
+        ] ],
+        [ "hal::BaseTreeModel", "classhal_1_1_base_tree_model.html", [
+          [ "hal::ContextTreeModel", "classhal_1_1_context_tree_model.html", null ],
+          [ "hal::GatePinsTreeModel", "classhal_1_1_gate_pins_tree_model.html", null ],
+          [ "hal::ModuleModel", "classhal_1_1_module_model.html", null ],
+          [ "hal::ModulePinsTreeModel", "classhal_1_1_module_pins_tree_model.html", null ]
+        ] ]
+      ] ],
+      [ "QAction", "https://doc.qt.io/qt-5/qaction.html", [
+        [ "hal::Action", "classhal_1_1_action.html", null ]
+      ] ],
+      [ "QGraphicsEffect", "https://doc.qt.io/qt-5/qgraphicseffect.html", [
+        [ "hal::ShadowEffect", "classhal_1_1_shadow_effect.html", null ]
+      ] ],
+      [ "QGraphicsScene", "https://doc.qt.io/qt-5/qgraphicsscene.html", [
+        [ "hal::GraphicsScene", "classhal_1_1_graphics_scene.html", null ]
+      ] ],
+      [ "QMimeData", "https://doc.qt.io/qt-5/qmimedata.html", [
+        [ "hal::DockMimeData", "classhal_1_1_dock_mime_data.html", null ]
+      ] ],
+      [ "QSyntaxHighlighter", "https://doc.qt.io/qt-5/qsyntaxhighlighter.html", [
+        [ "hal::PythonSyntaxHighlighter", "classhal_1_1_python_syntax_highlighter.html", null ]
+      ] ],
+      [ "QThread", "https://doc.qt.io/qt-5/qthread.html", [
+        [ "hal::DrawNetThread", "classhal_1_1_draw_net_thread.html", null ],
+        [ "hal::JunctionThread", "classhal_1_1_junction_thread.html", null ],
+        [ "hal::PythonThread", "classhal_1_1_python_thread.html", null ]
+      ] ],
+      [ "QWidget", "https://doc.qt.io/qt-5/qwidget.html", [
+        [ "QAbstractButton", "https://doc.qt.io/qt-5/qabstractbutton.html", [
+          [ "QCheckBox", "https://doc.qt.io/qt-5/qcheckbox.html", [
+            [ "hal::SeveritySelector", "classhal_1_1_severity_selector.html", null ]
+          ] ],
+          [ "QPushButton", "https://doc.qt.io/qt-5/qpushbutton.html", [
+            [ "hal::ColorSelection", "classhal_1_1_color_selection.html", null ]
+          ] ],
+          [ "QToolButton", "https://doc.qt.io/qt-5/qtoolbutton.html", [
+            [ "hal::DockButton", "classhal_1_1_dock_button.html", null ]
+          ] ]
+        ] ],
+        [ "QAbstractSlider", "https://doc.qt.io/qt-5/qabstractslider.html", [
+          [ "QScrollBar", "https://doc.qt.io/qt-5/qscrollbar.html", [
+            [ "hal::CodeEditorScrollbar", "classhal_1_1_code_editor_scrollbar.html", null ]
+          ] ]
+        ] ],
+        [ "QComboBox", "https://doc.qt.io/qt-5/qcombobox.html", [
+          [ "hal::ChannelSelector", "classhal_1_1_channel_selector.html", null ]
+        ] ],
+        [ "QDialog", "https://doc.qt.io/qt-5/qdialog.html", [
+          [ "QFileDialog", "https://doc.qt.io/qt-5/qfiledialog.html", [
+            [ "hal::ExportProjectDialog", "classhal_1_1_export_project_dialog.html", null ],
+            [ "hal::ProjectDirDialog", "classhal_1_1_project_dir_dialog.html", null ]
+          ] ],
+          [ "hal::AboutDialog", "classhal_1_1_about_dialog.html", null ],
+          [ "hal::ComboboxDialog", "classhal_1_1_combobox_dialog.html", [
+            [ "hal::PingroupSelectorDialog", "classhal_1_1_pingroup_selector_dialog.html", null ]
+          ] ],
+          [ "hal::CommentColorPicker", "classhal_1_1_comment_color_picker.html", null ],
+          [ "hal::CommentDialog", "classhal_1_1_comment_dialog.html", null ],
+          [ "hal::GateDialog", "classhal_1_1_gate_dialog.html", null ],
+          [ "hal::GatelibraryManagementDialog", "classhal_1_1_gatelibrary_management_dialog.html", null ],
+          [ "hal::GroupingDialog", "classhal_1_1_grouping_dialog.html", null ],
+          [ "hal::ImportNetlistDialog", "classhal_1_1_import_netlist_dialog.html", null ],
+          [ "hal::ImportProjectDialog", "classhal_1_1_import_project_dialog.html", null ],
+          [ "hal::InputDialog", "classhal_1_1_input_dialog.html", null ],
+          [ "hal::ModuleDialog", "classhal_1_1_module_dialog.html", null ],
+          [ "hal::NewProjectDialog", "classhal_1_1_new_project_dialog.html", null ],
+          [ "hal::PluginParameterDialog", "classhal_1_1_plugin_parameter_dialog.html", null ],
+          [ "hal::PythonEditorCodeCompletionDialog", "classhal_1_1_python_editor_code_completion_dialog.html", null ],
+          [ "hal::SearchColumnDialog", "classhal_1_1_search_column_dialog.html", null ],
+          [ "hal::SearchOptionsDialog", "classhal_1_1_search_options_dialog.html", null ]
+        ] ],
+        [ "QFrame", "https://doc.qt.io/qt-5/qframe.html", [
+          [ "QAbstractScrollArea", "https://doc.qt.io/qt-5/qabstractscrollarea.html", [
+            [ "QAbstractItemView", "https://doc.qt.io/qt-5/qabstractitemview.html", [
+              [ "QTableView", "https://doc.qt.io/qt-5/qtableview.html", [
+                [ "QTableWidget", "https://doc.qt.io/qt-5/qtablewidget.html", [
+                  [ "hal::GeneralTableWidget", "classhal_1_1_general_table_widget.html", [
+                    [ "hal::GateInfoTable", "classhal_1_1_gate_info_table.html", null ],
+                    [ "hal::ModuleInfoTable", "classhal_1_1_module_info_table.html", null ],
+                    [ "hal::NetInfoTable", "classhal_1_1_net_info_table.html", null ]
+                  ] ],
+                  [ "hal::GraphNavigationTableWidget", "classhal_1_1_graph_navigation_table_widget.html", null ]
+                ] ],
+                [ "hal::BooleanFunctionTable", "classhal_1_1_boolean_function_table.html", null ],
+                [ "hal::DataTableWidget", "classhal_1_1_data_table_widget.html", null ],
+                [ "hal::GateSelectView", "classhal_1_1_gate_select_view.html", null ],
+                [ "hal::GatelibraryTableView", "classhal_1_1_gatelibrary_table_view.html", null ],
+                [ "hal::GroupingTableView", "classhal_1_1_grouping_table_view.html", null ],
+                [ "hal::GroupingsOfItemWidget", "classhal_1_1_groupings_of_item_widget.html", null ],
+                [ "hal::GuiPluginView", "classhal_1_1_gui_plugin_view.html", null ],
+                [ "hal::LUTTableWidget", "classhal_1_1_l_u_t_table_widget.html", null ],
+                [ "hal::ModuleSelectView", "classhal_1_1_module_select_view.html", null ],
+                [ "hal::NetEndpointTable", "classhal_1_1_net_endpoint_table.html", null ],
+                [ "hal::NetModuleTable", "classhal_1_1_net_module_table.html", null ]
+              ] ],
+              [ "QTreeView", "https://doc.qt.io/qt-5/qtreeview.html", [
+                [ "QTreeWidget", "https://doc.qt.io/qt-5/qtreewidget.html", [
+                  [ "hal::GraphNavigationTreeWidget", "classhal_1_1_graph_navigation_tree_widget.html", null ]
+                ] ],
+                [ "hal::GatePinTree", "classhal_1_1_gate_pin_tree.html", null ],
+                [ "hal::ModuleElementsTree", "classhal_1_1_module_elements_tree.html", null ],
+                [ "hal::ModulePinsTree", "classhal_1_1_module_pins_tree.html", null ],
+                [ "hal::ModuleTreeView", "classhal_1_1_module_tree_view.html", null ],
+                [ "hal::SelectionTreeView", "classhal_1_1_selection_tree_view.html", null ]
+              ] ]
+            ] ],
+            [ "QGraphicsView", "https://doc.qt.io/qt-5/qgraphicsview.html", [
+              [ "hal::GraphGraphicsView", "classhal_1_1_graph_graphics_view.html", null ]
+            ] ],
+            [ "QPlainTextEdit", "https://doc.qt.io/qt-5/qplaintextedit.html", [
+              [ "hal::CodeEditor", "classhal_1_1_code_editor.html", [
+                [ "hal::PythonCodeEditor", "classhal_1_1_python_code_editor.html", null ]
+              ] ]
+            ] ],
+            [ "QScrollArea", "https://doc.qt.io/qt-5/qscrollarea.html", [
+              [ "hal::ExpandingListWidget", "classhal_1_1_expanding_list_widget.html", null ],
+              [ "hal::SettingsDisplay", "classhal_1_1_settings_display.html", null ]
+            ] ],
+            [ "QTextEdit", "https://doc.qt.io/qt-5/qtextedit.html", [
+              [ "hal::PythonConsole", "classhal_1_1_python_console.html", null ]
+            ] ]
+          ] ],
+          [ "QLabel", "https://doc.qt.io/qt-5/qlabel.html", [
+            [ "hal::LabelButton", "classhal_1_1_label_button.html", null ],
+            [ "hal::SearchableLabel", "classhal_1_1_searchable_label.html", null ]
+          ] ],
+          [ "QSplitter", "https://doc.qt.io/qt-5/qsplitter.html", [
+            [ "hal::Splitter", "classhal_1_1_splitter.html", null ]
+          ] ],
+          [ "hal::AbstractBusyIndicator", "classhal_1_1_abstract_busy_indicator.html", [
+            [ "hal::BusyIndicator", "classhal_1_1_busy_indicator.html", null ],
+            [ "hal::ProgressBar", "classhal_1_1_progress_bar.html", null ]
+          ] ],
+          [ "hal::CommentItem", "classhal_1_1_comment_item.html", null ],
+          [ "hal::DockBar", "classhal_1_1_dock_bar.html", null ],
+          [ "hal::ExpandingListButton", "classhal_1_1_expanding_list_button.html", null ],
+          [ "hal::ExpandingListItem", "classhal_1_1_expanding_list_item.html", null ],
+          [ "hal::FileModifiedBar", "classhal_1_1_file_modified_bar.html", null ],
+          [ "hal::FileSelectWidget", "classhal_1_1_file_select_widget.html", null ],
+          [ "hal::GateLibrarySelection", "classhal_1_1_gate_library_selection.html", null ],
+          [ "hal::GetInTouchItem", "classhal_1_1_get_in_touch_item.html", null ],
+          [ "hal::GetInTouchWidget", "classhal_1_1_get_in_touch_widget.html", null ],
+          [ "hal::LabeledFrame", "classhal_1_1_labeled_frame.html", null ],
+          [ "hal::OpenFileWidget", "classhal_1_1_open_file_widget.html", null ],
+          [ "hal::Overlay", "classhal_1_1_overlay.html", [
+            [ "hal::WidgetOverlay", "classhal_1_1_widget_overlay.html", null ]
+          ] ],
+          [ "hal::PreviewWidget", "classhal_1_1_preview_widget.html", null ],
+          [ "hal::ProjectDirDialogStatus", "classhal_1_1_project_dir_dialog_status.html", null ],
+          [ "hal::PythonConsoleAbortThread", "classhal_1_1_python_console_abort_thread.html", null ],
+          [ "hal::RecentFileItem", "classhal_1_1_recent_file_item.html", null ],
+          [ "hal::RecentFilesWidget", "classhal_1_1_recent_files_widget.html", null ],
+          [ "hal::Searchbar", "classhal_1_1_searchbar.html", null ],
+          [ "hal::SettingsWidget", "classhal_1_1_settings_widget.html", [
+            [ "hal::SettingsWidgetCheckbox", "classhal_1_1_settings_widget_checkbox.html", null ],
+            [ "hal::SettingsWidgetDropdown", "classhal_1_1_settings_widget_dropdown.html", null ],
+            [ "hal::SettingsWidgetKeybind", "classhal_1_1_settings_widget_keybind.html", null ],
+            [ "hal::SettingsWidgetSlider", "classhal_1_1_settings_widget_slider.html", null ],
+            [ "hal::SettingsWidgetSpinbox", "classhal_1_1_settings_widget_spinbox.html", null ],
+            [ "hal::SettingsWidgetText", "classhal_1_1_settings_widget_text.html", null ]
+          ] ],
+          [ "hal::WelcomeScreen", "classhal_1_1_welcome_screen.html", null ]
+        ] ],
+        [ "QKeySequenceEdit", "https://doc.qt.io/qt-5/qkeysequenceedit.html", [
+          [ "hal::KeybindEdit", "classhal_1_1_keybind_edit.html", null ]
+        ] ],
+        [ "QTabWidget", "https://doc.qt.io/qt-5/qtabwidget.html", [
+          [ "hal::DetailsTabWidget", "classhal_1_1_details_tab_widget.html", [
+            [ "hal::GateDetailsTabWidget", "classhal_1_1_gate_details_tab_widget.html", null ],
+            [ "hal::ModuleDetailsTabWidget", "classhal_1_1_module_details_tab_widget.html", null ],
+            [ "hal::NetDetailsTabWidget", "classhal_1_1_net_details_tab_widget.html", null ]
+          ] ]
+        ] ],
+        [ "QToolBar", "https://doc.qt.io/qt-5/qtoolbar.html", [
+          [ "hal::Toolbar", "classhal_1_1_toolbar.html", null ]
+        ] ],
+        [ "hal::BusyAnimation", "classhal_1_1_busy_animation.html", null ],
+        [ "hal::CodeEditorMinimap", "classhal_1_1_code_editor_minimap.html", null ],
+        [ "hal::CommentWidget", "classhal_1_1_comment_widget.html", null ],
+        [ "hal::ContentFrame", "classhal_1_1_content_frame.html", null ],
+        [ "hal::ContentLayoutArea", "classhal_1_1_content_layout_area.html", null ],
+        [ "hal::DetailsFrameWidget", "classhal_1_1_details_frame_widget.html", null ],
+        [ "hal::GraphNavigationWidget", "classhal_1_1_graph_navigation_widget.html", null ],
+        [ "hal::GraphicsQssAdapter", "classhal_1_1_graphics_qss_adapter.html", null ],
+        [ "hal::GuiPluginManager", "classhal_1_1_gui_plugin_manager.html", null ],
+        [ "hal::KeyValueTable", "classhal_1_1_key_value_table.html", null ],
+        [ "hal::LineNumberArea", "classhal_1_1_line_number_area.html", null ],
+        [ "hal::LoggerQssAdapter", "classhal_1_1_logger_qss_adapter.html", null ],
+        [ "hal::MainSettingsWidget", "classhal_1_1_main_settings_widget.html", null ],
+        [ "hal::MainWindow", "classhal_1_1_main_window.html", null ],
+        [ "hal::MinimapScrollbar", "classhal_1_1_minimap_scrollbar.html", null ],
+        [ "hal::PluginParameterFileDialog", "classhal_1_1_plugin_parameter_file_dialog.html", null ],
+        [ "hal::PluginParameterNodeDialog", "classhal_1_1_plugin_parameter_node_dialog.html", null ],
+        [ "hal::PythonConsoleQssAdapter", "classhal_1_1_python_console_qss_adapter.html", null ],
+        [ "hal::PythonQssAdapter", "classhal_1_1_python_qss_adapter.html", null ],
+        [ "hal::SpinnerWidget", "classhal_1_1_spinner_widget.html", null ],
+        [ "hal::Widget", "classhal_1_1_widget.html", [
+          [ "hal::ContentWidget", "classhal_1_1_content_widget.html", [
+            [ "hal::ContextManagerWidget", "classhal_1_1_context_manager_widget.html", null ],
+            [ "hal::ExternalContentWidget", "classhal_1_1_external_content_widget.html", null ],
+            [ "hal::GraphTabWidget", "classhal_1_1_graph_tab_widget.html", null ],
+            [ "hal::GraphWidget", "classhal_1_1_graph_widget.html", null ],
+            [ "hal::GroupingManagerWidget", "classhal_1_1_grouping_manager_widget.html", null ],
+            [ "hal::LoggerWidget", "classhal_1_1_logger_widget.html", null ],
+            [ "hal::ModuleWidget", "classhal_1_1_module_widget.html", null ],
+            [ "hal::PythonConsoleWidget", "classhal_1_1_python_console_widget.html", null ],
+            [ "hal::PythonEditor", "classhal_1_1_python_editor.html", null ],
+            [ "hal::SelectionDetailsWidget", "classhal_1_1_selection_details_widget.html", null ]
+          ] ],
+          [ "hal::TabWidget", "classhal_1_1_tab_widget.html", null ]
+        ] ]
+      ] ],
       [ "hal::CommentManager", "classhal_1_1_comment_manager.html", null ],
       [ "hal::ContentDragRelay", "classhal_1_1_content_drag_relay.html", null ],
       [ "hal::ContentManager", "classhal_1_1_content_manager.html", null ],
@@ -341,257 +591,7 @@ var hierarchy =
       [ "hal::SpecialLogContentManager", "classhal_1_1_special_log_content_manager.html", null ],
       [ "hal::SplitterAnchor", "classhal_1_1_splitter_anchor.html", null ],
       [ "hal::UserActionManager", "classhal_1_1_user_action_manager.html", null ],
-      [ "hal::UserActionObjectType", "classhal_1_1_user_action_object_type.html", null ],
-      [ "QAbstractItemDelegate", "https://doc.qt.io/qt-5/qabstractitemdelegate.html", [
-        [ "QItemDelegate", "https://doc.qt.io/qt-5/qitemdelegate.html", [
-          [ "hal::GuiPluginDelegate", "classhal_1_1_gui_plugin_delegate.html", null ]
-        ] ],
-        [ "QStyledItemDelegate", "https://doc.qt.io/qt-5/qstyleditemdelegate.html", [
-          [ "hal::GroupingColorDelegate", "classhal_1_1_grouping_color_delegate.html", null ]
-        ] ]
-      ] ],
-      [ "QAbstractItemModel", "https://doc.qt.io/qt-5/qabstractitemmodel.html", [
-        [ "hal::BaseTreeModel", "classhal_1_1_base_tree_model.html", [
-          [ "hal::ContextTreeModel", "classhal_1_1_context_tree_model.html", null ],
-          [ "hal::GatePinsTreeModel", "classhal_1_1_gate_pins_tree_model.html", null ],
-          [ "hal::ModuleModel", "classhal_1_1_module_model.html", null ],
-          [ "hal::ModulePinsTreeModel", "classhal_1_1_module_pins_tree_model.html", null ]
-        ] ],
-        [ "QAbstractProxyModel", "https://doc.qt.io/qt-5/qabstractproxymodel.html", [
-          [ "QSortFilterProxyModel", "https://doc.qt.io/qt-5/qsortfilterproxymodel.html", [
-            [ "hal::FilterElementsProxyModel", "classhal_1_1_filter_elements_proxy_model.html", null ],
-            [ "hal::SearchProxyModel", "classhal_1_1_search_proxy_model.html", [
-              [ "hal::ContextProxyModel", "classhal_1_1_context_proxy_model.html", null ],
-              [ "hal::GatelibraryProxyModel", "classhal_1_1_gatelibrary_proxy_model.html", null ],
-              [ "hal::GateSelectProxy", "classhal_1_1_gate_select_proxy.html", null ],
-              [ "hal::GroupingProxyModel", "classhal_1_1_grouping_proxy_model.html", null ],
-              [ "hal::ModuleProxyModel", "classhal_1_1_module_proxy_model.html", null ],
-              [ "hal::ModuleSelectProxy", "classhal_1_1_module_select_proxy.html", null ],
-              [ "hal::SelectionTreeProxyModel", "classhal_1_1_selection_tree_proxy_model.html", null ]
-            ] ]
-          ] ]
-        ] ],
-        [ "QAbstractTableModel", "https://doc.qt.io/qt-5/qabstracttablemodel.html", [
-          [ "hal::BooleanFunctionTableModel", "classhal_1_1_boolean_function_table_model.html", null ],
-          [ "hal::ChannelModel", "classhal_1_1_channel_model.html", null ],
-          [ "hal::DataTableModel", "classhal_1_1_data_table_model.html", null ],
-          [ "hal::EndpointTableModel", "classhal_1_1_endpoint_table_model.html", null ],
-          [ "hal::GateLibrarySelectionTable", "classhal_1_1_gate_library_selection_table.html", null ],
-          [ "hal::GatelibraryTableModel", "classhal_1_1_gatelibrary_table_model.html", null ],
-          [ "hal::GateSelectModel", "classhal_1_1_gate_select_model.html", null ],
-          [ "hal::GroupingsOfItemModel", "classhal_1_1_groupings_of_item_model.html", null ],
-          [ "hal::GroupingTableModel", "classhal_1_1_grouping_table_model.html", null ],
-          [ "hal::GuiPluginTable", "classhal_1_1_gui_plugin_table.html", null ],
-          [ "hal::LUTTableModel", "classhal_1_1_l_u_t_table_model.html", null ],
-          [ "hal::ModuleSelectModel", "classhal_1_1_module_select_model.html", null ],
-          [ "hal::ModuleTableModel", "classhal_1_1_module_table_model.html", null ]
-        ] ]
-      ] ],
-      [ "QAction", "https://doc.qt.io/qt-5/qaction.html", [
-        [ "hal::Action", "classhal_1_1_action.html", null ]
-      ] ],
-      [ "QGraphicsEffect", "https://doc.qt.io/qt-5/qgraphicseffect.html", [
-        [ "hal::ShadowEffect", "classhal_1_1_shadow_effect.html", null ]
-      ] ],
-      [ "QGraphicsScene", "https://doc.qt.io/qt-5/qgraphicsscene.html", [
-        [ "hal::GraphicsScene", "classhal_1_1_graphics_scene.html", null ]
-      ] ],
-      [ "QMimeData", "https://doc.qt.io/qt-5/qmimedata.html", [
-        [ "hal::DockMimeData", "classhal_1_1_dock_mime_data.html", null ]
-      ] ],
-      [ "QSyntaxHighlighter", "https://doc.qt.io/qt-5/qsyntaxhighlighter.html", [
-        [ "hal::PythonSyntaxHighlighter", "classhal_1_1_python_syntax_highlighter.html", null ]
-      ] ],
-      [ "QThread", "https://doc.qt.io/qt-5/qthread.html", [
-        [ "hal::DrawNetThread", "classhal_1_1_draw_net_thread.html", null ],
-        [ "hal::JunctionThread", "classhal_1_1_junction_thread.html", null ],
-        [ "hal::PythonThread", "classhal_1_1_python_thread.html", null ]
-      ] ],
-      [ "QWidget", "https://doc.qt.io/qt-5/qwidget.html", [
-        [ "hal::BusyAnimation", "classhal_1_1_busy_animation.html", null ],
-        [ "hal::CodeEditorMinimap", "classhal_1_1_code_editor_minimap.html", null ],
-        [ "hal::CommentWidget", "classhal_1_1_comment_widget.html", null ],
-        [ "hal::ContentFrame", "classhal_1_1_content_frame.html", null ],
-        [ "hal::ContentLayoutArea", "classhal_1_1_content_layout_area.html", null ],
-        [ "hal::DetailsFrameWidget", "classhal_1_1_details_frame_widget.html", null ],
-        [ "hal::GraphicsQssAdapter", "classhal_1_1_graphics_qss_adapter.html", null ],
-        [ "hal::GraphNavigationWidget", "classhal_1_1_graph_navigation_widget.html", null ],
-        [ "hal::GuiPluginManager", "classhal_1_1_gui_plugin_manager.html", null ],
-        [ "hal::KeyValueTable", "classhal_1_1_key_value_table.html", null ],
-        [ "hal::LineNumberArea", "classhal_1_1_line_number_area.html", null ],
-        [ "hal::LoggerQssAdapter", "classhal_1_1_logger_qss_adapter.html", null ],
-        [ "hal::MainSettingsWidget", "classhal_1_1_main_settings_widget.html", null ],
-        [ "hal::MainWindow", "classhal_1_1_main_window.html", null ],
-        [ "hal::MinimapScrollbar", "classhal_1_1_minimap_scrollbar.html", null ],
-        [ "hal::PluginParameterFileDialog", "classhal_1_1_plugin_parameter_file_dialog.html", null ],
-        [ "hal::PluginParameterNodeDialog", "classhal_1_1_plugin_parameter_node_dialog.html", null ],
-        [ "hal::PythonConsoleQssAdapter", "classhal_1_1_python_console_qss_adapter.html", null ],
-        [ "hal::PythonQssAdapter", "classhal_1_1_python_qss_adapter.html", null ],
-        [ "hal::SpinnerWidget", "classhal_1_1_spinner_widget.html", null ],
-        [ "hal::Widget", "classhal_1_1_widget.html", [
-          [ "hal::ContentWidget", "classhal_1_1_content_widget.html", [
-            [ "hal::ContextManagerWidget", "classhal_1_1_context_manager_widget.html", null ],
-            [ "hal::ExternalContentWidget", "classhal_1_1_external_content_widget.html", null ],
-            [ "hal::GraphTabWidget", "classhal_1_1_graph_tab_widget.html", null ],
-            [ "hal::GraphWidget", "classhal_1_1_graph_widget.html", null ],
-            [ "hal::GroupingManagerWidget", "classhal_1_1_grouping_manager_widget.html", null ],
-            [ "hal::LoggerWidget", "classhal_1_1_logger_widget.html", null ],
-            [ "hal::ModuleWidget", "classhal_1_1_module_widget.html", null ],
-            [ "hal::PythonConsoleWidget", "classhal_1_1_python_console_widget.html", null ],
-            [ "hal::PythonEditor", "classhal_1_1_python_editor.html", null ],
-            [ "hal::SelectionDetailsWidget", "classhal_1_1_selection_details_widget.html", null ]
-          ] ],
-          [ "hal::TabWidget", "classhal_1_1_tab_widget.html", null ]
-        ] ],
-        [ "QAbstractButton", "https://doc.qt.io/qt-5/qabstractbutton.html", [
-          [ "QCheckBox", "https://doc.qt.io/qt-5/qcheckbox.html", [
-            [ "hal::SeveritySelector", "classhal_1_1_severity_selector.html", null ]
-          ] ],
-          [ "QPushButton", "https://doc.qt.io/qt-5/qpushbutton.html", [
-            [ "hal::ColorSelection", "classhal_1_1_color_selection.html", null ]
-          ] ],
-          [ "QToolButton", "https://doc.qt.io/qt-5/qtoolbutton.html", [
-            [ "hal::DockButton", "classhal_1_1_dock_button.html", null ]
-          ] ]
-        ] ],
-        [ "QAbstractSlider", "https://doc.qt.io/qt-5/qabstractslider.html", [
-          [ "QScrollBar", "https://doc.qt.io/qt-5/qscrollbar.html", [
-            [ "hal::CodeEditorScrollbar", "classhal_1_1_code_editor_scrollbar.html", null ]
-          ] ]
-        ] ],
-        [ "QComboBox", "https://doc.qt.io/qt-5/qcombobox.html", [
-          [ "hal::ChannelSelector", "classhal_1_1_channel_selector.html", null ]
-        ] ],
-        [ "QDialog", "https://doc.qt.io/qt-5/qdialog.html", [
-          [ "hal::AboutDialog", "classhal_1_1_about_dialog.html", null ],
-          [ "hal::ComboboxDialog", "classhal_1_1_combobox_dialog.html", [
-            [ "hal::PingroupSelectorDialog", "classhal_1_1_pingroup_selector_dialog.html", null ]
-          ] ],
-          [ "hal::CommentColorPicker", "classhal_1_1_comment_color_picker.html", null ],
-          [ "hal::CommentDialog", "classhal_1_1_comment_dialog.html", null ],
-          [ "hal::GateDialog", "classhal_1_1_gate_dialog.html", null ],
-          [ "hal::GatelibraryManagementDialog", "classhal_1_1_gatelibrary_management_dialog.html", null ],
-          [ "hal::GroupingDialog", "classhal_1_1_grouping_dialog.html", null ],
-          [ "hal::ImportNetlistDialog", "classhal_1_1_import_netlist_dialog.html", null ],
-          [ "hal::ImportProjectDialog", "classhal_1_1_import_project_dialog.html", null ],
-          [ "hal::InputDialog", "classhal_1_1_input_dialog.html", null ],
-          [ "hal::ModuleDialog", "classhal_1_1_module_dialog.html", null ],
-          [ "hal::NewProjectDialog", "classhal_1_1_new_project_dialog.html", null ],
-          [ "hal::PluginParameterDialog", "classhal_1_1_plugin_parameter_dialog.html", null ],
-          [ "hal::PythonEditorCodeCompletionDialog", "classhal_1_1_python_editor_code_completion_dialog.html", null ],
-          [ "hal::SearchColumnDialog", "classhal_1_1_search_column_dialog.html", null ],
-          [ "hal::SearchOptionsDialog", "classhal_1_1_search_options_dialog.html", null ],
-          [ "QFileDialog", "https://doc.qt.io/qt-5/qfiledialog.html", [
-            [ "hal::ExportProjectDialog", "classhal_1_1_export_project_dialog.html", null ],
-            [ "hal::ProjectDirDialog", "classhal_1_1_project_dir_dialog.html", null ]
-          ] ]
-        ] ],
-        [ "QFrame", "https://doc.qt.io/qt-5/qframe.html", [
-          [ "hal::AbstractBusyIndicator", "classhal_1_1_abstract_busy_indicator.html", [
-            [ "hal::BusyIndicator", "classhal_1_1_busy_indicator.html", null ],
-            [ "hal::ProgressBar", "classhal_1_1_progress_bar.html", null ]
-          ] ],
-          [ "hal::CommentItem", "classhal_1_1_comment_item.html", null ],
-          [ "hal::DockBar", "classhal_1_1_dock_bar.html", null ],
-          [ "hal::ExpandingListButton", "classhal_1_1_expanding_list_button.html", null ],
-          [ "hal::ExpandingListItem", "classhal_1_1_expanding_list_item.html", null ],
-          [ "hal::FileModifiedBar", "classhal_1_1_file_modified_bar.html", null ],
-          [ "hal::FileSelectWidget", "classhal_1_1_file_select_widget.html", null ],
-          [ "hal::GateLibrarySelection", "classhal_1_1_gate_library_selection.html", null ],
-          [ "hal::GetInTouchItem", "classhal_1_1_get_in_touch_item.html", null ],
-          [ "hal::GetInTouchWidget", "classhal_1_1_get_in_touch_widget.html", null ],
-          [ "hal::LabeledFrame", "classhal_1_1_labeled_frame.html", null ],
-          [ "hal::OpenFileWidget", "classhal_1_1_open_file_widget.html", null ],
-          [ "hal::Overlay", "classhal_1_1_overlay.html", [
-            [ "hal::WidgetOverlay", "classhal_1_1_widget_overlay.html", null ]
-          ] ],
-          [ "hal::PreviewWidget", "classhal_1_1_preview_widget.html", null ],
-          [ "hal::ProjectDirDialogStatus", "classhal_1_1_project_dir_dialog_status.html", null ],
-          [ "hal::PythonConsoleAbortThread", "classhal_1_1_python_console_abort_thread.html", null ],
-          [ "hal::RecentFileItem", "classhal_1_1_recent_file_item.html", null ],
-          [ "hal::RecentFilesWidget", "classhal_1_1_recent_files_widget.html", null ],
-          [ "hal::Searchbar", "classhal_1_1_searchbar.html", null ],
-          [ "hal::SettingsWidget", "classhal_1_1_settings_widget.html", [
-            [ "hal::SettingsWidgetCheckbox", "classhal_1_1_settings_widget_checkbox.html", null ],
-            [ "hal::SettingsWidgetDropdown", "classhal_1_1_settings_widget_dropdown.html", null ],
-            [ "hal::SettingsWidgetKeybind", "classhal_1_1_settings_widget_keybind.html", null ],
-            [ "hal::SettingsWidgetSlider", "classhal_1_1_settings_widget_slider.html", null ],
-            [ "hal::SettingsWidgetSpinbox", "classhal_1_1_settings_widget_spinbox.html", null ],
-            [ "hal::SettingsWidgetText", "classhal_1_1_settings_widget_text.html", null ]
-          ] ],
-          [ "hal::WelcomeScreen", "classhal_1_1_welcome_screen.html", null ],
-          [ "QAbstractScrollArea", "https://doc.qt.io/qt-5/qabstractscrollarea.html", [
-            [ "QAbstractItemView", "https://doc.qt.io/qt-5/qabstractitemview.html", [
-              [ "QTableView", "https://doc.qt.io/qt-5/qtableview.html", [
-                [ "hal::BooleanFunctionTable", "classhal_1_1_boolean_function_table.html", null ],
-                [ "hal::DataTableWidget", "classhal_1_1_data_table_widget.html", null ],
-                [ "hal::GatelibraryTableView", "classhal_1_1_gatelibrary_table_view.html", null ],
-                [ "hal::GateSelectView", "classhal_1_1_gate_select_view.html", null ],
-                [ "hal::GroupingsOfItemWidget", "classhal_1_1_groupings_of_item_widget.html", null ],
-                [ "hal::GroupingTableView", "classhal_1_1_grouping_table_view.html", null ],
-                [ "hal::GuiPluginView", "classhal_1_1_gui_plugin_view.html", null ],
-                [ "hal::LUTTableWidget", "classhal_1_1_l_u_t_table_widget.html", null ],
-                [ "hal::ModuleSelectView", "classhal_1_1_module_select_view.html", null ],
-                [ "hal::NetEndpointTable", "classhal_1_1_net_endpoint_table.html", null ],
-                [ "hal::NetModuleTable", "classhal_1_1_net_module_table.html", null ],
-                [ "QTableWidget", "https://doc.qt.io/qt-5/qtablewidget.html", [
-                  [ "hal::GeneralTableWidget", "classhal_1_1_general_table_widget.html", [
-                    [ "hal::GateInfoTable", "classhal_1_1_gate_info_table.html", null ],
-                    [ "hal::ModuleInfoTable", "classhal_1_1_module_info_table.html", null ],
-                    [ "hal::NetInfoTable", "classhal_1_1_net_info_table.html", null ]
-                  ] ],
-                  [ "hal::GraphNavigationTableWidget", "classhal_1_1_graph_navigation_table_widget.html", null ]
-                ] ]
-              ] ],
-              [ "QTreeView", "https://doc.qt.io/qt-5/qtreeview.html", [
-                [ "hal::GatePinTree", "classhal_1_1_gate_pin_tree.html", null ],
-                [ "hal::ModuleElementsTree", "classhal_1_1_module_elements_tree.html", null ],
-                [ "hal::ModulePinsTree", "classhal_1_1_module_pins_tree.html", null ],
-                [ "hal::ModuleTreeView", "classhal_1_1_module_tree_view.html", null ],
-                [ "hal::SelectionTreeView", "classhal_1_1_selection_tree_view.html", null ],
-                [ "QTreeWidget", "https://doc.qt.io/qt-5/qtreewidget.html", [
-                  [ "hal::GraphNavigationTreeWidget", "classhal_1_1_graph_navigation_tree_widget.html", null ]
-                ] ]
-              ] ]
-            ] ],
-            [ "QGraphicsView", "https://doc.qt.io/qt-5/qgraphicsview.html", [
-              [ "hal::GraphGraphicsView", "classhal_1_1_graph_graphics_view.html", null ]
-            ] ],
-            [ "QPlainTextEdit", "https://doc.qt.io/qt-5/qplaintextedit.html", [
-              [ "hal::CodeEditor", "classhal_1_1_code_editor.html", [
-                [ "hal::PythonCodeEditor", "classhal_1_1_python_code_editor.html", null ]
-              ] ]
-            ] ],
-            [ "QScrollArea", "https://doc.qt.io/qt-5/qscrollarea.html", [
-              [ "hal::ExpandingListWidget", "classhal_1_1_expanding_list_widget.html", null ],
-              [ "hal::SettingsDisplay", "classhal_1_1_settings_display.html", null ]
-            ] ],
-            [ "QTextEdit", "https://doc.qt.io/qt-5/qtextedit.html", [
-              [ "hal::PythonConsole", "classhal_1_1_python_console.html", null ]
-            ] ]
-          ] ],
-          [ "QLabel", "https://doc.qt.io/qt-5/qlabel.html", [
-            [ "hal::LabelButton", "classhal_1_1_label_button.html", null ],
-            [ "hal::SearchableLabel", "classhal_1_1_searchable_label.html", null ]
-          ] ],
-          [ "QSplitter", "https://doc.qt.io/qt-5/qsplitter.html", [
-            [ "hal::Splitter", "classhal_1_1_splitter.html", null ]
-          ] ]
-        ] ],
-        [ "QKeySequenceEdit", "https://doc.qt.io/qt-5/qkeysequenceedit.html", [
-          [ "hal::KeybindEdit", "classhal_1_1_keybind_edit.html", null ]
-        ] ],
-        [ "QTabWidget", "https://doc.qt.io/qt-5/qtabwidget.html", [
-          [ "hal::DetailsTabWidget", "classhal_1_1_details_tab_widget.html", [
-            [ "hal::GateDetailsTabWidget", "classhal_1_1_gate_details_tab_widget.html", null ],
-            [ "hal::ModuleDetailsTabWidget", "classhal_1_1_module_details_tab_widget.html", null ],
-            [ "hal::NetDetailsTabWidget", "classhal_1_1_net_details_tab_widget.html", null ]
-          ] ]
-        ] ],
-        [ "QToolBar", "https://doc.qt.io/qt-5/qtoolbar.html", [
-          [ "hal::Toolbar", "classhal_1_1_toolbar.html", null ]
-        ] ]
-      ] ]
+      [ "hal::UserActionObjectType", "classhal_1_1_user_action_object_type.html", null ]
     ] ],
     [ "QPaintDevice", "https://doc.qt.io/qt-5/qpaintdevice.html", [
       [ "QWidget", "https://doc.qt.io/qt-5/qwidget.html", null ]
@@ -620,16 +620,16 @@ var hierarchy =
     [ "hal::SubgraphNetlistDecorator", "classhal_1_1_subgraph_netlist_decorator.html", null ],
     [ "hal::SMT::SymbolicExecution", "classhal_1_1_s_m_t_1_1_symbolic_execution.html", null ],
     [ "hal::SMT::SymbolicState", "classhal_1_1_s_m_t_1_1_symbolic_state.html", null ],
-    [ "Test", null, [
+    [ "testing::Test", null, [
       [ "hal::HGLParserTest", "classhal_1_1_h_g_l_parser_test.html", null ],
       [ "hal::HGLWriterTest", "classhal_1_1_h_g_l_writer_test.html", null ],
       [ "hal::LibertyParserTest", "classhal_1_1_liberty_parser_test.html", null ],
+      [ "hal::VHDLParserTest", "classhal_1_1_v_h_d_l_parser_test.html", null ],
       [ "hal::VerilogParserTest", "classhal_1_1_verilog_parser_test.html", null ],
-      [ "hal::VerilogWriterTest", "classhal_1_1_verilog_writer_test.html", null ],
-      [ "hal::VHDLParserTest", "classhal_1_1_v_h_d_l_parser_test.html", null ]
+      [ "hal::VerilogWriterTest", "classhal_1_1_verilog_writer_test.html", null ]
     ] ],
-    [ "hal::Token< T >", "structhal_1_1_token.html", null ],
     [ "hal::BooleanFunctionParser::Token", "structhal_1_1_boolean_function_parser_1_1_token.html", null ],
+    [ "hal::Token< T >", "structhal_1_1_token.html", null ],
     [ "hal::TokenStream< T >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< ci_string >", "classhal_1_1_token_stream.html", null ],
     [ "hal::TokenStream< std::string >", "classhal_1_1_token_stream.html", null ],
@@ -685,8 +685,8 @@ var hierarchy =
     [ "Vec_Ptr_t_", "struct_vec___ptr__t__.html", null ],
     [ "Vec_Vec_t_", "struct_vec___vec__t__.html", null ],
     [ "hal::GuiApiClasses::View", "classhal_1_1_gui_api_classes_1_1_view.html", null ],
-    [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::GraphicsNet::Visuals", "structhal_1_1_graphics_net_1_1_visuals.html", null ],
+    [ "hal::GraphicsNode::Visuals", "structhal_1_1_graphics_node_1_1_visuals.html", null ],
     [ "hal::StandardGraphicsNet::VLine", "structhal_1_1_standard_graphics_net_1_1_v_line.html", null ],
     [ "hal::WaitToBeSeatedEntry", "classhal_1_1_wait_to_be_seated_entry.html", null ]
 ];
