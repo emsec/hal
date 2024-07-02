@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [4.3.0](v4.3.0) - 2024-07-02 13:42:55+02:00 (urgency: medium)
 * **WARNING:** this release breaks compatibility with Ubuntu 20.04 LTS
 * **WARNING:** this release breaks the API of the `graph_algorithm`, `dataflow`, and `xilinx_toolbox` plugins
 * GUI
