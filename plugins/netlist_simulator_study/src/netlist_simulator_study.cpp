@@ -116,28 +116,9 @@ namespace hal
         std::vector<std::tuple<std::string, std::string>> read_data;
         std::vector<std::tuple<std::string, std::string>> empty_result;
 
-        // read content of encrypted zip file
-        if (!std::filesystem::exists(zip_path))
-        {
-            log_error("netlist_simulator_study", "Zip file is missing!");
-            return empty_result;
-        }
+        std::cout << zip_path << std::endl;
 
-        std::ifstream in_file_zip(zip_path);
-        std::stringstream buffer;
-        buffer << in_file_zip.rdbuf();
-
-        std::string key = "0123456789abcdef"; // 16-byte key for AES-128
-        std::string dec_content_zip;
-        try{
-            dec_content_zip = decryptAES(buffer.str(), key);
-        } catch (const CryptoPP::InvalidCiphertext& e){
-            log_error("netlist_simulator_study", "Given encrypted zip path is not a valid encryption!");
-            return empty_result;
-        }
-        QByteArray byteArray = QByteArray::fromStdString(dec_content_zip);
-        QBuffer q_buffer(&byteArray);
-        QuaZip zip_file(&q_buffer);
+        QuaZip zip_file(QString::fromStdString(zip_path));
 
         if (!zip_file.open(QuaZip::mdUnzip))
         {
@@ -153,32 +134,54 @@ namespace hal
 
         QuaZipFile toExtract(&zip_file);
 
+        filename = "";
+
         for (bool more = zip_file.goToFirstFile(); more; more = zip_file.goToNextFile()) {
-            if (!toExtract.open(QIODevice::ReadOnly)) {
+            std::cout << "file reading..." << std::endl;
+            if (!toExtract.open(QIODevice::ReadOnly, "test123")) {
                 log_error("netlist_simulator_study", "Cannot unzip file");
                 return empty_result;
             }
 
+            QByteArray data_test = toExtract.readAll();
+            std::cout << data_test.constData() << std::endl;
+            std::cout << data_test.size() << std::endl;
+            std::string data_string_test = std::string(data_test.constData(), data_test.size());
+
+            std::cout << data_string_test << std::endl;
+            std::cout << toExtract.size() << std::endl;
+
             QuaZipFileInfo info;
             if (!zip_file.getCurrentFileInfo(&info)) {
                 log_warning("netlist_simulator_study", "Failed to get current file info");
+                toExtract.close();
                 continue;
             }
 
+            std::cout << info.name.toStdString() << std::endl;
+
             if(filename != ""){
                 if(info.name.toStdString() != filename){
+                    std::cout << "Not the searched file" << std::endl;
                     toExtract.close();
                     continue;
                 }
             }
+            std::cout << "Searched file found" << std::endl;
 
             QByteArray data = toExtract.readAll();
             std::string data_string = std::string(data.constData(), data.size());
+
+            std::cout << data_string << std::endl;
 
             read_data.push_back(std::make_tuple(info.name.toStdString(), data_string));
 
             toExtract.close();
         }
+
+        zip_file.close();
+
+        std::cout << read_data.size() << " files found." << std::endl;
 
         return read_data;
     }
@@ -332,7 +335,18 @@ namespace hal
         ProjectManager* pm = ProjectManager::instance();
         std::filesystem::path project_dir_path(pm->get_project_directory().string());
 
+        read_all_zip_files_decrypted(project_dir_path / "original/original.zip", "");
+
+
+        return;
+
+
+
+
+
         std::string ini_data = read_named_zip_file_decrypted(project_dir_path / "original/original.encrypted", "settings.ini");
+
+        std::cout << ini_data << std::endl;
 
         QSettings my_settings;
         q_setting_from_string(ini_data, &my_settings);
