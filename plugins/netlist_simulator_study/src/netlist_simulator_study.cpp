@@ -15,6 +15,20 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <fstream>
+
+#include <JlCompress.h>
+
+#include <QTemporaryFile>
+#include <QTextStream>
+
+#include <QBuffer>
+#include <QByteArray>
+
+#include <cryptopp/aes.h>
+#include <cryptopp/modes.h>
+#include <cryptopp/filters.h>
+#include <cryptopp/osrng.h>
 
 namespace hal
 {
@@ -67,6 +81,120 @@ namespace hal
         retval.insert("verilog_parser");
         return retval;
     }
+    
+    std::string encryptAES(const std::string& plaintext, const std::string& key) {
+        if(key.size() != static_cast<int>(CryptoPP::AES::DEFAULT_KEYLENGTH)){
+            log_error("netlist_modifier", "Key needs to be "+std::to_string(static_cast<int>(CryptoPP::AES::DEFAULT_KEYLENGTH))+" bytes long!");
+            return "";
+        }
+        std::string ciphertext;
+
+        CryptoPP::AES::Encryption aesEncryption((const CryptoPP::byte*)key.data(), CryptoPP::AES::DEFAULT_KEYLENGTH);
+        CryptoPP::CBC_Mode_ExternalCipher::Encryption cbcEncryption(aesEncryption, (const CryptoPP::byte*)key.data());
+
+        CryptoPP::StringSource encryptor(plaintext, true, new CryptoPP::StreamTransformationFilter(cbcEncryption, new CryptoPP::StringSink(ciphertext)));
+
+        return ciphertext;
+    }
+
+    std::string decryptAES(const std::string& ciphertext, const std::string& key) {
+        if(key.size() != static_cast<int>(CryptoPP::AES::DEFAULT_KEYLENGTH)){
+            log_error("netlist_modifier", "Key needs to be "+std::to_string(static_cast<int>(CryptoPP::AES::DEFAULT_KEYLENGTH))+" bytes long!");
+            return "";
+        }
+        std::string decryptedtext;
+        CryptoPP::AES::Decryption aesDecryption((const CryptoPP::byte*)key.data(), CryptoPP::AES::DEFAULT_KEYLENGTH);
+        CryptoPP::CBC_Mode_ExternalCipher::Decryption cbcDecryption(aesDecryption, (const CryptoPP::byte*)key.data());
+
+        CryptoPP::StringSource decryptor(ciphertext, true, new CryptoPP::StreamTransformationFilter(cbcDecryption, new CryptoPP::StringSink(decryptedtext)));
+
+        return decryptedtext;
+    }
+
+    
+    std::vector<std::tuple<std::string, std::string>> read_all_zip_files_decrypted(std::filesystem::path zip_path, std::string filename){
+        std::vector<std::tuple<std::string, std::string>> read_data;
+        std::vector<std::tuple<std::string, std::string>> empty_result;
+
+        // read content of encrypted zip file
+        if (!std::filesystem::exists(zip_path))
+        {
+            log_error("netlist_simulator_study", "Zip file is missing!");
+            return empty_result;
+        }
+
+        std::ifstream in_file_zip(zip_path);
+        std::stringstream buffer;
+        buffer << in_file_zip.rdbuf();
+
+        std::string key = "0123456789abcdef"; // 16-byte key for AES-128
+        std::string dec_content_zip;
+        try{
+            dec_content_zip = decryptAES(buffer.str(), key);
+        } catch (const CryptoPP::InvalidCiphertext& e){
+            log_error("netlist_simulator_study", "Given encrypted zip path is not a valid encryption!");
+            return empty_result;
+        }
+        QByteArray byteArray = QByteArray::fromStdString(dec_content_zip);
+        QBuffer q_buffer(&byteArray);
+        QuaZip zip_file(&q_buffer);
+
+        if (!zip_file.open(QuaZip::mdUnzip))
+        {
+            log_error("netlist_simulator_study", "Zip library cannot handle file, does it exist?");
+            return empty_result;
+        }
+
+        if (!zip_file.goToFirstFile())
+        {
+            log_error("netlist_simulator_study", "Cannot find first compressed file in zip file");
+            return empty_result;
+        }
+
+        QuaZipFile toExtract(&zip_file);
+
+        for (bool more = zip_file.goToFirstFile(); more; more = zip_file.goToNextFile()) {
+            if (!toExtract.open(QIODevice::ReadOnly)) {
+                log_error("netlist_simulator_study", "Cannot unzip file");
+                return empty_result;
+            }
+
+            QuaZipFileInfo info;
+            if (!zip_file.getCurrentFileInfo(&info)) {
+                log_warning("netlist_simulator_study", "Failed to get current file info");
+                continue;
+            }
+
+            if(filename != ""){
+                if(info.name.toStdString() != filename){
+                    toExtract.close();
+                    continue;
+                }
+            }
+
+            QByteArray data = toExtract.readAll();
+            std::string data_string = std::string(data.constData(), data.size());
+
+            read_data.push_back(std::make_tuple(info.name.toStdString(), data_string));
+
+            toExtract.close();
+        }
+
+        return read_data;
+    }
+
+    std::vector<std::tuple<std::string, std::string>> read_all_zip_files_decrypted(std::filesystem::path zip_path){
+        return read_all_zip_files_decrypted(zip_path, "");
+    }
+
+    std::string read_named_zip_file_decrypted(std::filesystem::path zip_path, std::string filename){
+        std::vector<std::tuple<std::string, std::string>> result_data = read_all_zip_files_decrypted(zip_path, filename);
+
+        if (result_data.size() > 0){
+            return std::get<1>(result_data[0]);
+        }
+        return "";
+    }
 
     bool NetlistSimulatorStudyPlugin::simulate(std::filesystem::path sim_input, std::vector<const Net*> probes)
     {
@@ -74,13 +202,14 @@ namespace hal
         ProjectManager* pm = ProjectManager::instance();
         std::filesystem::path project_dir_path(pm->get_project_directory().string());
 
-        if (!std::filesystem::exists(project_dir_path / "original/original.v"))
-        {
-            log_error("netlist_simulator_study", "Original netlist file is missing!");
+        std::string netlist_data = read_named_zip_file_decrypted(project_dir_path / "original/original.encrypted", "original.hal");
+
+        if (netlist_data == ""){
+            log_error("netlist_simulator_study", "No valid netlist file in zip!");
             return false;
         }
 
-        m_original_netlist = netlist_factory::load_netlist(project_dir_path / "original/original.v", gNetlist->get_gate_library()->get_path());
+        m_original_netlist = netlist_factory::load_netlist_from_string(netlist_data, gNetlist->get_gate_library()->get_path());
 
         if (!std::filesystem::exists(sim_input))
         {
@@ -159,6 +288,33 @@ namespace hal
         return m_parameter;
     }
 
+    void q_setting_from_string(std::string data, QSettings* settings){
+        QTemporaryFile tempFile;
+        if (tempFile.open()) {
+            // Write INI data to the temporary file
+            QTextStream out(&tempFile);
+            out << QString::fromStdString(data);
+            tempFile.close();
+
+            // Read and parse INI data from the temporary file using QSettings
+            QSettings tmp_settings(tempFile.fileName(), QSettings::IniFormat);
+
+            // Remove the temporary file
+            tempFile.remove();
+
+            settings->clear();
+
+            for (const QString& key : tmp_settings.allKeys()) {
+                settings->setValue(key, tmp_settings.value(key));
+            }
+
+            return;
+        }
+
+        log_error("netlist_simulator_study", "Can't create tmp ini file!");
+        return;
+    }
+
     void GuiExtensionNetlistSimulatorStudy::set_parameter(const std::vector<PluginParameter>& params)
     {
         m_parameter    = params;
@@ -176,13 +332,10 @@ namespace hal
         ProjectManager* pm = ProjectManager::instance();
         std::filesystem::path project_dir_path(pm->get_project_directory().string());
 
-        if (!std::filesystem::exists(project_dir_path / "original/settings.ini"))
-        {
-            log_error("netlist_simulator_study", "Settings file is missing!");
-            return;
-        }
+        std::string ini_data = read_named_zip_file_decrypted(project_dir_path / "original/original.encrypted", "settings.ini");
 
-        QSettings my_settings(QString::fromStdString(project_dir_path / "original/settings.ini"), QSettings::IniFormat);
+        QSettings my_settings;
+        q_setting_from_string(ini_data, &my_settings);
 
         if (!my_settings.contains("section1/t_probe"))
         {
@@ -245,7 +398,7 @@ namespace hal
 
                 for (Endpoint* source : sources)
                 {
-                    if (source->get_gate()->get_type()->get_name().find("DFF") != std::string::npos)
+                    if (source->get_gate()->get_type()->has_property(GateTypeProperty::ff))
                     {
                         dff_as_source = true;
                         break;

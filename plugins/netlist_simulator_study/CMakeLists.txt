@@ -5,11 +5,13 @@ if(PL_NETLIST_SIMULATOR_STUDY OR BUILD_ALL_PLUGINS)
     file(GLOB_RECURSE NETLIST_SIMULATOR_STUDY_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
     file(GLOB_RECURSE NETLIST_SIMULATOR_STUDY_PYTHON_SRC ${CMAKE_CURRENT_SOURCE_DIR}/python/*.cpp)
 
+    pkg_check_modules(Cryptopp REQUIRED IMPORTED_TARGET libcrypto++)
+
     hal_add_plugin(netlist_simulator_study
         SHARED
         HEADER ${NETLIST_SIMULATOR_STUDY_INC}
         SOURCES ${NETLIST_SIMULATOR_STUDY_SRC} ${NETLIST_SIMULATOR_STUDY_PYTHON_SRC}
-        LINK_LIBRARIES PUBLIC gui netlist_simulator_controller
+        LINK_LIBRARIES PUBLIC gui netlist_simulator_controller PkgConfig::Cryptopp
         PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/netlist_simulator_study.rst
     )
 endif()
