@@ -65,8 +65,6 @@ namespace hal
 
         GateLibraryWizard(GateLibrary* gateLibrary, GateType* gateType = nullptr, QWidget* parent = nullptr);
 
-        void editGate();
-        GateType* addGate();
         void setData(GateLibrary* gateLibrary, GateType* gateType);
         QList<PinItem*> getPingroups();
         std::unique_ptr<GateTypeComponent> setComponents();

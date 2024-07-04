@@ -95,6 +95,7 @@ namespace hal
                 lineEdit->setText(QString::fromStdString(bf.second.to_string()));
                 connect(lineEdit,&BooleanFunctionEdit::stateChanged,this,&BoolWizardPage::handleStateChanged);
                 mEditFunctions.append(lineEdit);
+                mOutputPins.append(label->text());
                 boolFuncCnt++;
             }
         }
@@ -115,6 +116,7 @@ namespace hal
                                 mLayout->addWidget(lineEdit, rowCount, 1);
                                 connect(lineEdit,&BooleanFunctionEdit::stateChanged,this,&BoolWizardPage::handleStateChanged);
                                 mEditFunctions.append(lineEdit);
+                                mOutputPins.append(label->text());
                                 rowCount++;
                             }
                         }
@@ -151,15 +153,13 @@ namespace hal
 
     std::unordered_map<std::string, BooleanFunction> BoolWizardPage::getBoolFunctions(){
         std::unordered_map<std::string, BooleanFunction> retval;
-        for(int i = 0; i<mLayout->rowCount(); i++)
+        for(int i = 0; i<mEditFunctions.length(); i++)
         {
-            QLabel* label = static_cast<QLabel*>(mLayout->itemAtPosition(i, 0)->widget());
-            BooleanFunctionEdit* lineEdit = static_cast<BooleanFunctionEdit*>(mLayout->itemAtPosition(i, 1)->widget());
-            auto bfres = BooleanFunction::from_string(lineEdit->text().toStdString());
+            auto bfres = BooleanFunction::from_string(mEditFunctions[i]->text().toStdString());
             if(bfres.is_error())
                 continue;
             else
-                retval.insert({label->text().toStdString(), bfres.get()});
+                retval.insert({mOutputPins[i].toStdString(), bfres.get()});
         }
         return retval;
     }

@@ -278,7 +278,7 @@ QAbstractScrollArea::corner
 
 QListWidget
 {
-    background-color : rgb(14, 17, 20);
+    background-color : rgb(224, 240, 255);
     min-width        : 200px;
     max-width        : 200px;
 }
@@ -913,6 +913,27 @@ hal--OpenFileWidget #icon-label
     margin-top : 220px;
 }
 
+hal--GateLibraryLabel
+{
+    background : #E0F0FF;
+}
+
+hal--GateLibraryLabel[isValue="false"]
+{
+    background : white;
+    color : #171e22;
+}
+
+hal--GateLibraryLabel[isValue="true"]
+{
+    background    : #E0F0FF;
+    color         : #171e22;
+    font-family   : "Iosevka";
+    font-size     : 15px;
+    font-style    : "Heavy";
+    font-weight   : 700;
+}
+
 hal--GateLibrarySelection
 {
     qproperty-saveIconStyle: "all->#3192C5";
@@ -921,7 +942,7 @@ hal--GateLibrarySelection
 
 hal--GateLibrarySelection QLabel
 {
-    background: white;
+    background: #E0F0FF;
 }
 
 hal--GateLibrarySelection QLabel#warningMsg
@@ -1465,6 +1486,28 @@ hal--DetailsFrameWidget QPushButton:checked
 hal--DetailsFrameWidget QPushButton:hover
 {
     background-color : rgba(220, 220, 220, 1);
+}
+
+hal--BooleanFunctionEdit
+{
+    background    : #E0F0FF;
+    color         : #222222;
+    font-family   : "Iosevka";
+    font-size     : 15px;
+    font-style    : "Heavy";
+    font-weight   : 700;
+}
+
+hal--BooleanFunctionEdit[state="Empty"]
+{
+    background : #909090;
+    color : #171e22;
+}
+
+hal--BooleanFunctionEdit[state="Invalid"]
+{
+    background: #F0C8C0;
+    color     : #802010;
 }
 
 hal--GuiPluginManager

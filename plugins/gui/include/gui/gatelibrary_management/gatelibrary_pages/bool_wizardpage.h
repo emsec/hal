@@ -85,6 +85,7 @@ namespace hal {
         QGridLayout* mLayout;
         GateLibraryWizard* mWizard;
         QList<BooleanFunctionEdit*> mEditFunctions;
+        QList<QString> mOutputPins;
         GateType* mGate = nullptr;
     };
 }

@@ -68,17 +68,6 @@ namespace hal
         }
     }
 
-    void GateLibraryWizard::editGate()
-    {
-
-    }
-
-    GateType* GateLibraryWizard::addGate()
-    {
-
-
-    }
-
     void GateLibraryWizard::setData(GateLibrary *gateLibrary, GateType* gateType)
     {
         mGateLibrary = gateLibrary;
@@ -87,9 +76,6 @@ namespace hal
 
     void GateLibraryWizard::accept()
     {
-        /*if(generalInfoPage->isEdit()) editGate();
-        else addGate();*/
-
         //Convert QStringList to std::set
         std::set<GateTypeProperty> properties_set;
         for(QString prop : generalInfoPage->getProperties())
@@ -285,28 +271,29 @@ namespace hal
             else if(properties.contains("latch")) return Latch;
             else if(properties.contains("c_lut")) return LUT;
             else if(properties.contains("ram")) return RAM;
-            else return BoolFunc;
+            return BoolFunc;
         case FlipFlop:
             if(properties.contains("latch")) return Latch;
             else if(properties.contains("c_lut")) return LUT;
             else if(properties.contains("ram")) return RAM;
-            else return State;
+            return State;
         case Latch:
             if(properties.contains("c_lut")) return LUT;
             else if(properties.contains("ram")) return RAM;
-            else return State;
+            return State;
         case LUT:
             if(properties.contains("ram")) return RAM;
-            else return Init;
+            return Init;
         case RAM:
             return RAMPort;
         case RAMPort:
             if(properties.contains("ff") || properties.contains("latch")) return State;
-            else return BoolFunc;
+            return BoolFunc;
         case State:
             if(properties.contains("ff") || properties.contains("latch") || properties.contains("c_lut") || properties.contains("ram")) return Init;
-            else return BoolFunc;
+            return BoolFunc;
         case Init:
+            if(properties.contains("c_lut")) return -1;
             return BoolFunc;
         case BoolFunc:
         default:
