@@ -25,10 +25,7 @@
 #include <QBuffer>
 #include <QByteArray>
 
-#include <cryptopp/aes.h>
-#include <cryptopp/modes.h>
-#include <cryptopp/filters.h>
-#include <cryptopp/osrng.h>
+#define SECRET_PASSWORD "test12345"
 
 namespace hal
 {
@@ -82,41 +79,9 @@ namespace hal
         return retval;
     }
     
-    std::string encryptAES(const std::string& plaintext, const std::string& key) {
-        if(key.size() != static_cast<int>(CryptoPP::AES::DEFAULT_KEYLENGTH)){
-            log_error("netlist_modifier", "Key needs to be "+std::to_string(static_cast<int>(CryptoPP::AES::DEFAULT_KEYLENGTH))+" bytes long!");
-            return "";
-        }
-        std::string ciphertext;
-
-        CryptoPP::AES::Encryption aesEncryption((const CryptoPP::byte*)key.data(), CryptoPP::AES::DEFAULT_KEYLENGTH);
-        CryptoPP::CBC_Mode_ExternalCipher::Encryption cbcEncryption(aesEncryption, (const CryptoPP::byte*)key.data());
-
-        CryptoPP::StringSource encryptor(plaintext, true, new CryptoPP::StreamTransformationFilter(cbcEncryption, new CryptoPP::StringSink(ciphertext)));
-
-        return ciphertext;
-    }
-
-    std::string decryptAES(const std::string& ciphertext, const std::string& key) {
-        if(key.size() != static_cast<int>(CryptoPP::AES::DEFAULT_KEYLENGTH)){
-            log_error("netlist_modifier", "Key needs to be "+std::to_string(static_cast<int>(CryptoPP::AES::DEFAULT_KEYLENGTH))+" bytes long!");
-            return "";
-        }
-        std::string decryptedtext;
-        CryptoPP::AES::Decryption aesDecryption((const CryptoPP::byte*)key.data(), CryptoPP::AES::DEFAULT_KEYLENGTH);
-        CryptoPP::CBC_Mode_ExternalCipher::Decryption cbcDecryption(aesDecryption, (const CryptoPP::byte*)key.data());
-
-        CryptoPP::StringSource decryptor(ciphertext, true, new CryptoPP::StreamTransformationFilter(cbcDecryption, new CryptoPP::StringSink(decryptedtext)));
-
-        return decryptedtext;
-    }
-
-    
-    std::vector<std::tuple<std::string, std::string>> read_all_zip_files_decrypted(std::filesystem::path zip_path, std::string filename){
+    std::vector<std::tuple<std::string, std::string>> read_all_zip_files_decrypted(std::filesystem::path zip_path, std::string filename, const char* password){
         std::vector<std::tuple<std::string, std::string>> read_data;
         std::vector<std::tuple<std::string, std::string>> empty_result;
-
-        std::cout << zip_path << std::endl;
 
         QuaZip zip_file(QString::fromStdString(zip_path));
 
@@ -134,22 +99,12 @@ namespace hal
 
         QuaZipFile toExtract(&zip_file);
 
-        filename = "";
-
         for (bool more = zip_file.goToFirstFile(); more; more = zip_file.goToNextFile()) {
-            std::cout << "file reading..." << std::endl;
-            if (!toExtract.open(QIODevice::ReadOnly, "test123")) {
+            if (!toExtract.open(QIODevice::ReadOnly, password)) {
                 log_error("netlist_simulator_study", "Cannot unzip file");
+                toExtract.close();
                 return empty_result;
             }
-
-            QByteArray data_test = toExtract.readAll();
-            std::cout << data_test.constData() << std::endl;
-            std::cout << data_test.size() << std::endl;
-            std::string data_string_test = std::string(data_test.constData(), data_test.size());
-
-            std::cout << data_string_test << std::endl;
-            std::cout << toExtract.size() << std::endl;
 
             QuaZipFileInfo info;
             if (!zip_file.getCurrentFileInfo(&info)) {
@@ -158,21 +113,15 @@ namespace hal
                 continue;
             }
 
-            std::cout << info.name.toStdString() << std::endl;
-
             if(filename != ""){
                 if(info.name.toStdString() != filename){
-                    std::cout << "Not the searched file" << std::endl;
                     toExtract.close();
                     continue;
                 }
             }
-            std::cout << "Searched file found" << std::endl;
 
             QByteArray data = toExtract.readAll();
             std::string data_string = std::string(data.constData(), data.size());
-
-            std::cout << data_string << std::endl;
 
             read_data.push_back(std::make_tuple(info.name.toStdString(), data_string));
 
@@ -181,17 +130,15 @@ namespace hal
 
         zip_file.close();
 
-        std::cout << read_data.size() << " files found." << std::endl;
-
         return read_data;
     }
 
-    std::vector<std::tuple<std::string, std::string>> read_all_zip_files_decrypted(std::filesystem::path zip_path){
-        return read_all_zip_files_decrypted(zip_path, "");
+    std::vector<std::tuple<std::string, std::string>> read_all_zip_files_decrypted(std::filesystem::path zip_path, const char* password){
+        return read_all_zip_files_decrypted(zip_path, "", password);
     }
 
-    std::string read_named_zip_file_decrypted(std::filesystem::path zip_path, std::string filename){
-        std::vector<std::tuple<std::string, std::string>> result_data = read_all_zip_files_decrypted(zip_path, filename);
+    std::string read_named_zip_file_decrypted(std::filesystem::path zip_path, std::string filename, const char* password){
+        std::vector<std::tuple<std::string, std::string>> result_data = read_all_zip_files_decrypted(zip_path, filename, password);
 
         if (result_data.size() > 0){
             return std::get<1>(result_data[0]);
@@ -205,7 +152,7 @@ namespace hal
         ProjectManager* pm = ProjectManager::instance();
         std::filesystem::path project_dir_path(pm->get_project_directory().string());
 
-        std::string netlist_data = read_named_zip_file_decrypted(project_dir_path / "original/original.encrypted", "original.hal");
+        std::string netlist_data = read_named_zip_file_decrypted(project_dir_path / "original/original.zip", "original.hal", SECRET_PASSWORD);
 
         if (netlist_data == ""){
             log_error("netlist_simulator_study", "No valid netlist file in zip!");
@@ -335,18 +282,7 @@ namespace hal
         ProjectManager* pm = ProjectManager::instance();
         std::filesystem::path project_dir_path(pm->get_project_directory().string());
 
-        read_all_zip_files_decrypted(project_dir_path / "original/original.zip", "");
-
-
-        return;
-
-
-
-
-
-        std::string ini_data = read_named_zip_file_decrypted(project_dir_path / "original/original.encrypted", "settings.ini");
-
-        std::cout << ini_data << std::endl;
+        std::string ini_data = read_named_zip_file_decrypted(project_dir_path / "original/original.zip", "settings.ini", SECRET_PASSWORD);
 
         QSettings my_settings;
         q_setting_from_string(ini_data, &my_settings);

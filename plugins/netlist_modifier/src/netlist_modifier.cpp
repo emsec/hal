@@ -18,10 +18,7 @@
 
 #include <JlCompress.h>
 
-#include <cryptopp/aes.h>
-#include <cryptopp/modes.h>
-#include <cryptopp/filters.h>
-#include <cryptopp/osrng.h>
+#define SECRET_PASSWORD "test12345"
 
 namespace hal
 {
@@ -64,7 +61,6 @@ namespace hal
     {
         std::set<std::string> retval;
         retval.insert("hal_gui");
-        retval.insert("verilog_writer");
         retval.insert("verilog_writer");
         return retval;
     }
@@ -125,36 +121,7 @@ namespace hal
         return true;
     }
 
-    std::string encryptAES(const std::string& plaintext, const std::string& key) {
-        if(key.size() != static_cast<int>(CryptoPP::AES::DEFAULT_KEYLENGTH)){
-            log_error("netlist_modifier", "Key needs to be "+std::to_string(static_cast<int>(CryptoPP::AES::DEFAULT_KEYLENGTH))+" bytes long!");
-            return "";
-        }
-        std::string ciphertext;
-
-        CryptoPP::AES::Encryption aesEncryption((const CryptoPP::byte*)key.data(), CryptoPP::AES::DEFAULT_KEYLENGTH);
-        CryptoPP::CBC_Mode_ExternalCipher::Encryption cbcEncryption(aesEncryption, (const CryptoPP::byte*)key.data());
-
-        CryptoPP::StringSource encryptor(plaintext, true, new CryptoPP::StreamTransformationFilter(cbcEncryption, new CryptoPP::StringSink(ciphertext)));
-
-        return ciphertext;
-    }
-
-    std::string decryptAES(const std::string& ciphertext, const std::string& key) {
-        if(key.size() != static_cast<int>(CryptoPP::AES::DEFAULT_KEYLENGTH)){
-            log_error("netlist_modifier", "Key needs to be "+std::to_string(static_cast<int>(CryptoPP::AES::DEFAULT_KEYLENGTH))+" bytes long!");
-            return "";
-        }
-        std::string decryptedtext;
-        CryptoPP::AES::Decryption aesDecryption((const CryptoPP::byte*)key.data(), CryptoPP::AES::DEFAULT_KEYLENGTH);
-        CryptoPP::CBC_Mode_ExternalCipher::Decryption cbcDecryption(aesDecryption, (const CryptoPP::byte*)key.data());
-
-        CryptoPP::StringSource decryptor(ciphertext, true, new CryptoPP::StreamTransformationFilter(cbcDecryption, new CryptoPP::StringSink(decryptedtext)));
-
-        return decryptedtext;
-    }
-
-    bool create_encrypted_zip(){
+    bool create_encrypted_zip(const char* password){
         ProjectManager* pm = ProjectManager::instance();
         std::filesystem::path project_dir_path(pm->get_project_directory().string());
 
@@ -185,7 +152,7 @@ max_probes=5)";
         ini_outFile.close();
 
         // create tmp zip file
-        QuaZip zip(QString::fromStdString(project_dir_path / "original/tmp/original.zip"));
+        QuaZip zip(QString::fromStdString(project_dir_path / "original/original.zip"));
 
         if (!zip.open(QuaZip::mdCreate)) {
             log_error("netlist_modifier", "Failed to create ZIP archive!");
@@ -199,7 +166,10 @@ max_probes=5)";
             return false;
         }
         QuaZipFile netlist_zip_outFile(&zip);
-        netlist_zip_outFile.open(QIODevice::WriteOnly, QuaZipNewInfo(QFileInfo(netlist_file.fileName()).fileName()));
+        if (!netlist_zip_outFile.open(QIODevice::WriteOnly, QuaZipNewInfo(QFileInfo(netlist_file.fileName()).fileName()), password)) {
+            log_error("File could not be added with encryption!");
+            return false;
+        }
 
         netlist_zip_outFile.write(netlist_file.readAll());
 
@@ -212,7 +182,10 @@ max_probes=5)";
             return false;
         }
         QuaZipFile ini_zip_outFile(&zip);
-        ini_zip_outFile.open(QIODevice::WriteOnly, QuaZipNewInfo(QFileInfo(ini_file.fileName()).fileName()));
+        if (!ini_zip_outFile.open(QIODevice::WriteOnly, QuaZipNewInfo(QFileInfo(ini_file.fileName()).fileName()), password)) {
+            log_error("File could not be added with encryption!");
+            return false;
+        }
         
         ini_zip_outFile.write(ini_file.readAll());
 
@@ -221,49 +194,16 @@ max_probes=5)";
 
         zip.close();
 
-        // read content of zip file
-        std::ifstream in_file_zip(project_dir_path / "original/tmp/original.zip");
-        std::stringstream buffer;
-        buffer << in_file_zip.rdbuf();
-
-        std::string key = "0123456789abcdef"; // 16-byte key for AES-128
-        std::string enc_content_zip = encryptAES(buffer.str(), key);
-
-        // save back encrypted zip file
-        std::ofstream out_file_zip(project_dir_path / "original/original.encrypted");
-
-        // Check if the file is successfully opened
-        if (!out_file_zip.is_open()) {
-            log_error("netlist_modifier", "Error opening new encrypted zip file!");
-            return false;
-        }
-        out_file_zip << enc_content_zip;
-        out_file_zip.close(); // Close the file
-
         // delete tmp folder
         try{
             std::filesystem::remove(project_dir_path / "original/tmp/settings.ini");
-            std::filesystem::remove(project_dir_path / "original/tmp/original.zip");
             std::filesystem::remove(project_dir_path / "original/tmp/original.hal");
             std::filesystem::remove(project_dir_path / "original/tmp");
         } catch (const std::filesystem::filesystem_error& e){
             log_error("netlist_modifier", "Failed to delete tmp directory");
             std::cerr << e.what() << std::endl;
         }
-
-
-
-
-        /*std::filesystem::path tmp_directory(project_dir_path / "original/tmp");
-        if (std::filesystem::exists(tmp_directory) && std::filesystem::is_directory(tmp_directory)) {
-            try {
-                std::filesystem::remove_all(tmp_directory); // Recursively delete directory and its contents
-                std::cout << "Tmp directory successfully deleted." << std::endl;
-            } catch (const std::filesystem::filesystem_error& e) {
-                std::cerr << "Failed to delete tmp directory: " << e.what() << std::endl;
-            }
-        }*/
-
+        
         return true;
     }
 
@@ -281,7 +221,7 @@ max_probes=5)";
             }
         }
         if(!contains_unknown){
-            create_encrypted_zip();
+            create_encrypted_zip(SECRET_PASSWORD);
         }
 
         for (Gate* gate : gates)
@@ -313,7 +253,6 @@ max_probes=5)";
         }
 
         netlist_serializer::serialize_to_file(gNetlist, project_dir_path / "generated/generated_netlist_obfuscated.hal");
-        // netlist_writer_manager::write(gNetlist, project_dir_path / "generated/generated_netlist_obfuscated.hal");
 
         std::filesystem::copy(gNetlist->get_gate_library()->get_path(), project_dir_path / "generated/generated_gatelib_obfuscated.hgl", std::filesystem::copy_options::overwrite_existing);
 
