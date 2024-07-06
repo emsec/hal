@@ -13,6 +13,9 @@ namespace hal
     {
         GuiExtensionNetlistModifier* m_gui_extension;
 
+        static bool replace_gate_in_netlist(Netlist* netlist, Gate* gate);
+        static std::string obfuscated_gate_name(int num_in, int num_out, int num_io=0);
+        bool modify_gatelibrary();
     public:
         std::string get_name() const override;
         std::string get_version() const override;
