@@ -74,11 +74,11 @@ namespace hal
         }
 
         ActionRemoveItemsFromObject* actr = new ActionRemoveItemsFromObject(mods,gats);
-        actr->setObject(UserActionObject(ctx->id(),UserActionObjectType::Context));
+        actr->setObject(UserActionObject(ctx->id(),UserActionObjectType::ContextView));
         addAction(actr);
 
         ActionAddItemsToObject* acta = new ActionAddItemsToObject({mObject.id()});
-        acta->setObject(UserActionObject(ctx->id(),UserActionObjectType::Context));
+        acta->setObject(UserActionObject(ctx->id(),UserActionObjectType::ContextView));
         PlacementHint plc(PlacementHint::GridPosition);
         plc.addGridPosition(moduleToFold,polePosition);
         acta->setPlacementHint(plc);

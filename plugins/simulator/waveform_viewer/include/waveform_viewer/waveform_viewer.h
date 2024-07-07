@@ -85,22 +85,23 @@ namespace hal
          */
         virtual void setupToolbar(Toolbar* toolbar) override;
 
+        void setGates(std::vector<Gate*> gates);
         /**
          * Restore previous controller and waveform viewer from saved data files.
          */
         void restoreFromProject() override;
+
+        WaveWidget* mCurrentWaveWidget;
     private Q_SLOTS:
         void handleCreateControl();
         void handleSimulSettings();
         void handleOpenInputFile();
         void handleSaveWaveforms();
+        void handleInvokeWizzard();
         void handleAddResultWave();
         void handleToggleMaxZoom();
         void handleUndoZoomShift();
 
-        void handleSelectGates();
-        void handleClockSet();
-        void handleEngineSelected(bool checked);
         void handleOpenSettingsDialog();
         void handleShowEngineOutput();
 
@@ -129,7 +130,7 @@ namespace hal
         QAction* mSimulSettingsAction;
         QAction* mOpenInputfileAction;
         QAction* mSaveWaveformsAction;
-        QAction* mRunSimulationAction;
+        QAction* mInvokeSWizardAction;
         QAction* mAddResultWaveAction;
         QAction* mToggleMaxZoomAction;
         QAction* mUndoZoomShiftAction;
@@ -137,7 +138,7 @@ namespace hal
         QTabWidget* mTabWidget;
         QStatusBar* mStatusBar;
         QProgressBar* mProgress;
-        WaveWidget* mCurrentWaveWidget;
+
 
         void takeControllerOwnership(std::unique_ptr<NetlistSimulatorController>& ctrlRef, bool create);
         void showCloseButton();

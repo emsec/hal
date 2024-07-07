@@ -1,5 +1,7 @@
 #include "gui/user_action/action_delete_object.h"
 
+#include "gui/graph_widget/contexts/graph_context.h"
+#include "gui/context_manager_widget/models/context_tree_model.h"
 #include "gui/graph_widget/layout_locker.h"
 #include "gui/grouping/grouping_manager_widget.h"
 #include "gui/grouping/grouping_table_model.h"
@@ -37,36 +39,12 @@ namespace hal
         Gate* gat;
         Net* net;
         GraphContext* ctx;
+        ContextDirectory* ctxDir;
 
         LayoutLocker llock;
 
         switch (mObject.type())
         {
-        /* TODO PIN
-            case UserActionObjectType::PinGroup: {
-                mod            = gNetlist->get_module_by_id(mParentObject.id());
-                auto* pinGroup = mod->get_pin_group_by_id(mObject.id());
-                if (mod != nullptr && pinGroup != nullptr)
-                {
-                    QSet<u32> pins;
-                    for (const auto& pin : pinGroup->get_pins())
-                    {
-                        pins.insert(pin->get_id());
-                    }
-                    UserActionCompound* act = new UserActionCompound;
-                    act->setUseCreatedObject();
-                    ActionCreateObject* actCreate = new ActionCreateObject(UserActionObjectType::PinGroup, QString::fromStdString(pinGroup->get_name()));
-                    actCreate->setParentObject(mParentObject);
-                    act->addAction(actCreate);
-                    act->addAction(new ActionAddItemsToObject(QSet<u32>(), QSet<u32>(), QSet<u32>(), pins));    //setting of obj/parentobj handled in compound
-                    mUndoAction = act;
-                    auto res    = mod->delete_pin_group(pinGroup);
-                }
-                else
-                    return false;
-            }
-            break;
-            */
             case UserActionObjectType::Module:
                 mod = gNetlist->get_module_by_id(mObject.id());
                 if (mod)
@@ -138,12 +116,52 @@ namespace hal
                 }
             }
             break;
-            case UserActionObjectType::Context:
+            case UserActionObjectType::ContextView:
                 ctx = gGraphContextManager->getContextById(mObject.id());
                 if (ctx)
                 {
-                    // TODO : Undo action
+                    UserActionCompound* act = new UserActionCompound;
+                    act->setUseCreatedObject();
+
+                    ActionCreateObject* actCreate = new ActionCreateObject(UserActionObjectType::ContextView, ctx->name());
+                    actCreate->setObject(UserActionObject(ctx->id(),UserActionObjectType::ContextView));
+                    if (ctx->isShowingModuleExclusively())
+                        actCreate->setLinkedObjectId(ctx->getExclusiveModuleId());
+                    actCreate->setParentId(gGraphContextManager->getParentId(ctx->id(),false));
+                    act->addAction(actCreate);
+
+                    ActionAddItemsToObject* actAddItems = new ActionAddItemsToObject(ctx->modules(), ctx->gates());
+                    GridPlacement plc;
+                    QMap<Node, QPoint> contextNodeMap = ctx->getLayouter()->nodeToPositionMap();
+                    for (auto it = contextNodeMap.begin(); it != contextNodeMap.end(); it++)
+                        plc.insert(it.key(), it.value());
+                    actAddItems->setPlacementHint(plc);
+                    act->addAction(actAddItems);
+
+                    mUndoAction = act;
                     gGraphContextManager->deleteGraphContext(ctx);
+                }
+                else
+                    return false;
+                break;
+            case UserActionObjectType::ContextDir:
+                ctxDir = gGraphContextManager->getDirectoryById(mObject.id());
+                if (ctxDir)
+                {
+                    if (gGraphContextManager->getContextTreeModel()->getDirectory(ctxDir->id())->getChildCount() != 0) {
+                        mUndoAction = nullptr;
+                    } else {
+                        UserActionCompound* act = new UserActionCompound;
+                        act->setUseCreatedObject();
+                        ActionCreateObject* actCreate = new ActionCreateObject(UserActionObjectType::ContextDir, ctxDir->name());
+                        actCreate->setObject(UserActionObject(ctxDir->id(),UserActionObjectType::ContextDir));
+                        actCreate->setParentId(gGraphContextManager->getParentId(ctxDir->id(),true));
+                        act->addAction(actCreate);
+                        act->addAction(new ActionAddItemsToObject({gNetlist->get_top_module()->get_id()}, {}));
+
+                        mUndoAction = act;
+                    }
+                    gGraphContextManager->deleteContextDirectory(ctxDir);
                 }
                 else
                     return false;

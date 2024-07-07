@@ -417,14 +417,14 @@ namespace hal
             if (!remove_modules.isEmpty() || !remove_gates.isEmpty())
             {
                 ActionRemoveItemsFromObject* act = new ActionRemoveItemsFromObject(remove_modules, remove_gates);
-                act->setObject(UserActionObject(mContext->id(), UserActionObjectType::Context));
+                act->setObject(UserActionObject(mContext->id(), UserActionObjectType::ContextView));
                 act->exec();
             }
             if (!nonvisible_modules.isEmpty() || !nonvisible_gates.isEmpty())
             {
                 ActionAddItemsToObject* act = new ActionAddItemsToObject(nonvisible_modules, nonvisible_gates);
                 act->setPlacementHint(PlacementHint(placementMode, origin));
-                act->setObject(UserActionObject(mContext->id(), UserActionObjectType::Context));
+                act->setObject(UserActionObject(mContext->id(), UserActionObjectType::ContextView));
                 act->exec();
             }
 

@@ -219,16 +219,68 @@ PYBIND11_PLUGIN(hal_gui)
             :returns: GridPlacement of the specified view.
             :rtype: GridPlacement
 )")
-
-
     .def_static("setGridPlacement", &GuiApiClasses::View::setGridPlacement, py::arg("view_id"), py::arg("grid placement"), R"(
             Set grid placement to the view specified by id
 
             :param int viewId ID of the view.
             :param GridPlacement* gp: grid placement.
             :rtype: bool
-)");
+)")
+    .def_static("getCurrentDirectory", &GuiApiClasses::View::getCurrentDirectory,R"(
+        Gets the CurrentDirectory.
 
+        :returns: ID of the current directory. 0, if it's the top level directory.
+        :rtype: int
+)")
+    .def_static("setCurrentDirectory", &GuiApiClasses::View::setCurrentDirectory, py::arg("id"), R"(
+        Sets the CurrentDirectory.
+        
+        :param int id ID of the new current directory.
+)")
+    .def_static("createNewDirectory", &GuiApiClasses::View::createNewDirectory, py::arg("name"), R"(
+        Creates a new directory under the current directory.
+        
+        :param string name: Name of the new directory.
+        :returns: ID of the new directory.
+        :rtype: int
+)")
+    .def_static("deleteDirectory", &GuiApiClasses::View::deleteDirectory, py::arg("id"), R"(
+        Deletes the directory specified by a given id.
+        
+        :param int id: ID of the directory to delete.
+)")
+    .def_static("moveView", &GuiApiClasses::View::moveView, py::arg("viewId"), py::arg("destinationDirectoryId") = py::none(), py::arg("row") = py::none(), R"(
+        Moves a view to a directory.
+        
+        :param int viewId: ID of the view to move.
+        :param int destinationDirectoryId: ID of the destination directory to which the view will be moved. 
+            If None, the view is instead moved to the current directory.
+        :param int row: The row index in the parent directory, where the view will be inserted.
+)")
+    .def_static("moveDirectory", &GuiApiClasses::View::moveDirectory, py::arg("directoryId"), py::arg("destinationDirectoryId") = py::none(), py::arg("row") = py::none(), R"(
+        Moves a directory under another directory.
+        
+        :param int directoryId: ID of the directory to move.
+        :param int destinationDirectoryId: ID of the destination directory to which the directory will be moved. 
+            If None, the directory is instead moved to the current directory.
+        :param int row: The row index in the parent directory, where the directory will be inserted.
+)")
+    .def_static("getChildDirectories", &GuiApiClasses::View::getChildDirectories, py::arg("directoryId"), R"(
+        Returns the ids of all direct child directories of a given directory.
+        
+        :param int directoryId: ID of the parent directory, whose direct children will be returned
+        :returns: List of the ids of all direct child directories of the specified directory. 
+            Returns None, if the given directory does not exist.
+        :rtype: list[int]|None
+)")
+    .def_static("getChildViews", &GuiApiClasses::View::getChildViews, py::arg("directoryId"), R"(
+        Returns the ids of all direct child views of a given directory.
+        
+        :param int directoryId: ID of the parent directory, whose direct children will be returned
+        :returns: List of the ids of all direct child views of the specified directory. 
+            Returns None, if the given directory does not exist.
+        :rtype: list[int]|None
+)");
 
 
     py_gui_api.def("getSelectedGateIds", &GuiApi::getSelectedGateIds, R"(

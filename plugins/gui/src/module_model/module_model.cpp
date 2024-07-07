@@ -630,7 +630,11 @@ namespace hal
         while (itSubm != mModuleMap.upperBound(id))
         {
             ModuleItem* submItem = itSubm.value();
-            if (submItem->isToplevelItem()) continue;
+            if (submItem->isToplevelItem())
+            {
+                ++itSubm;
+                continue;
+            }
             ModuleItem* oldParentItem = static_cast<ModuleItem*>(submItem->getParent());
             Q_ASSERT(oldParentItem);
 

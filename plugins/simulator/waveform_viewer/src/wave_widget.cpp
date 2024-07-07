@@ -212,15 +212,14 @@ namespace hal {
         }
     }
 
-    void WaveWidget::addResults()
+    QMap<WaveSelectionEntry,int> WaveWidget::addableEntries() const
     {
-        if (!canImportWires()) return;
         QSet<int> alreadyShownInx = mTreeModel->waveDataIndexSet();
         QSet<QString> alreadyShownNames;
 
         // Which wavedata container entries are not shown yet
         int n = mWaveDataList->size();
-        QMap<WaveSelectionEntry,int> wseMap;
+        QMap<WaveSelectionEntry,int> retval;
         for (int i=0; i<n; i++)
         {
             if (alreadyShownInx.contains(i))
@@ -228,7 +227,7 @@ namespace hal {
             else
             {
                 WaveData* wd = mWaveDataList->at(i);
-                wseMap.insert(WaveSelectionEntry(wd->id(),wd->name(),wd->fileSize()),i);
+                retval.insert(WaveSelectionEntry(wd->id(),wd->name(),wd->fileSize()),i);
             }
         }
 
@@ -241,40 +240,56 @@ namespace hal {
                 QString netName = QString::fromStdString(sdle.name);
                 if (alreadyShownNames.contains(netName)) continue; // already shown
                 if (mWaveDataList->waveIndexByNetId(sdle.id)>=0) continue; // already added to selection list by previous loop
-                wseMap.insert(WaveSelectionEntry(sdle.id,netName,sdle.size),-1);
+                retval.insert(WaveSelectionEntry(sdle.id,netName,sdle.size),-1);
             }
         }
+        delete sd;
+//        qDebug() << "Addable entries :" << retval.size();
+        return retval;
+    }
+
+    void WaveWidget::addSelectedResults(const QMap<WaveSelectionEntry,int>& sel)
+    {
+        SaleaeDirectory* sd = mController ? new SaleaeDirectory(mController->get_saleae_directory_filename()) : nullptr;
+
+        QVector<WaveData*> wavesToAdd;
+        wavesToAdd.reserve(sel.size());
+
+        for (auto it = sel.constBegin(); it!=sel.constEnd(); ++it)
+        {
+            int iwave = it.value();
+            if (iwave<0 && sd)
+            {
+                iwave = mWaveDataList->size();
+                WaveData* wd = new WaveData(it.key().id(),it.key().name());
+                if (wd->loadSaleae(mWaveDataList->timeFrame()))
+                {
+                    mWaveDataList->add(wd,false);
+                    wavesToAdd.append(wd);
+                }
+            }
+            else if (iwave >= 0)
+                wavesToAdd.append(mWaveDataList->at(iwave));
+        }
+        mTreeModel->addWaves(wavesToAdd);
+		
+		if (sd) delete sd;
+    }
+
+    void WaveWidget::addResults()
+    {
+        if (!canImportWires()) return;
+
+        QMap<WaveSelectionEntry,int> wseMap = addableEntries();
 
         WaveSelectionDialog wsd(wseMap,this);
         if (wsd.exec() == QDialog::Accepted)
         {
             wseMap = wsd.selectedWaves();
             if (!wseMap.isEmpty())
-            {
-                QVector<WaveData*> wavesToAdd;
-                wavesToAdd.reserve(wseMap.size());
-
-                for (auto it = wseMap.constBegin(); it!=wseMap.constEnd(); ++it)
-                {
-                    int iwave = it.value();
-                    if (iwave<0 && sd)
-                    {
-                        iwave = mWaveDataList->size();
-                        WaveData* wd = new WaveData(it.key().id(),it.key().name());
-                        if (wd->loadSaleae(mWaveDataList->timeFrame()))
-                        {
-                            mWaveDataList->add(wd,false);
-                            wavesToAdd.append(wd);
-                        }
-                    }
-                    else if (iwave >= 0)
-                        wavesToAdd.append(mWaveDataList->at(iwave));
-                }
-                mTreeModel->addWaves(wavesToAdd);
-                mGraphicsCanvas->handleTimeframeChanged(&mWaveDataList->timeFrame());
-            }
+                addSelectedResults(wseMap);
         }
-        if (sd) delete sd;
+        mGraphicsCanvas->handleTimeframeChanged(&mWaveDataList->timeFrame());
     }
 
     void WaveWidget::setGates(const std::vector<Gate*>& gats)
@@ -298,13 +313,6 @@ namespace hal {
         int w = event->size().width() - 320;
         if (w < 100) return;
         setSizes({320,w});
-    }
-
-    void WaveWidget::handleEngineFinished(bool success)
-    {
-        if (!success) return;
-        if (!mController->get_results())
-            log_warning(mControllerName, "Cannot get simulation results");
     }
 
     void WaveWidget::visualizeCurrentNetState(double tCursor, int xpos)

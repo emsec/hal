@@ -1128,6 +1128,7 @@ hal--ContextManagerWidget
 
     qproperty-newViewIconStyle: "all->#e8e8e8";
     qproperty-newViewIconPath: ":/icons/plus";
+    qproperty-newDirIconPath: ":/icons/plusdir";
 
     qproperty-renameIconStyle: "all->#e8e8e8";
     qproperty-renameIconPath: ":/icons/pen";

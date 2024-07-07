@@ -148,4 +148,14 @@ namespace hal
         return mRootItem;
     }
 
+    void BaseTreeModel::insertChildItem(BaseTreeItem* childItem, BaseTreeItem* parentItem, int row)
+    {
+        if (!parentItem) parentItem = mRootItem;
+        if (row < 0) row = parentItem->getChildCount();
+        QModelIndex index = getIndexFromItem(parentItem);
+        beginInsertRows(index, row, row);
+        parentItem->insertChild(row,childItem);
+        endInsertRows();
+    }
+
 }

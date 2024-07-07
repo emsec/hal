@@ -30,8 +30,8 @@
 #include "hal_core/defines.h"
 
 #include "gui/graph_widget/contexts/graph_context.h"
-#include "gui/context_manager_widget/models/context_table_model.h"
-#include "gui/context_manager_widget/models/context_table_proxy_model.h"
+#include "gui/context_manager_widget/models/context_tree_model.h"
+#include "gui/context_manager_widget/models/context_proxy_model.h"
 #include "gui/searchbar/searchbar.h"
 #include "gui/settings/settings_items/settings_item_keybind.h"
 
@@ -40,6 +40,8 @@
 #include <QTableView>
 #include <QPushButton>
 #include <QMenu>
+#include <QTreeView>
+
 
 
 namespace hal
@@ -60,6 +62,7 @@ namespace hal
         Q_OBJECT
         Q_PROPERTY(QString disabledIconStyle READ disabledIconStyle WRITE setDisabledIconStyle)
         Q_PROPERTY(QString newViewIconPath READ newViewIconPath WRITE setNewViewIconPath)
+        Q_PROPERTY(QString newDirIconPath READ newDirIconPath WRITE setNewDirIconPath)
         Q_PROPERTY(QString newViewIconStyle READ newViewIconStyle WRITE setNewViewIconStyle)
         Q_PROPERTY(QString renameIconPath READ renameIconPath WRITE setRenameIconPath)
         Q_PROPERTY(QString renameIconStyle READ renameIconStyle WRITE setRenameIconStyle)
@@ -84,7 +87,7 @@ namespace hal
         ContextManagerWidget(GraphTabWidget* tab_view, QWidget* parent = nullptr);
 
         /**
-         * Selects the given context if possible (if it is indeed in the widget's ContextTableModel).
+         * Selects the given context if possible (if it is indeed in the widget's ContextTreeModel).
          *
          * @param context - The context to select.
          */
@@ -98,9 +101,26 @@ namespace hal
         GraphContext* getCurrentContext();
 
         /**
+         * Get the currently selected directory in the table.
+         *
+         * @return The ContextTreeItem.
+         */
+        ContextTreeItem* getCurrentItem();
+
+        /**
          * Opens the currently selected GraphContext in hal's GraphTabWidget
          */
         void handleOpenContextClicked();
+
+        /**
+         * Handle double clicked
+         */
+        void handleItemDoubleClicked(const QModelIndex &proxyIndex);
+
+        /**
+         * Handle clicked
+         */
+        void handleItemClicked(const QModelIndex &proxyIndex);
 
         /**
          * Initializes the Toolbar of the ContextManagerWidget.
@@ -119,6 +139,7 @@ namespace hal
         ///@{
         QString disabledIconStyle() const;
         QString newViewIconPath() const;
+        QString newDirIconPath() const;
         QString newViewIconStyle() const;
         QString renameIconPath() const;
         QString renameIconStyle() const;
@@ -139,6 +160,7 @@ namespace hal
         void setDisabledIconStyle(const QString &path);
         void setNewViewIconPath(const QString &path);
         void setNewViewIconStyle(const QString &style);
+        void setNewDirIconPath(const QString &path);
         void setRenameIconPath(const QString &path);
         void setRenameIconStyle(const QString &style);
         void setDeleteIconPath(const QString &path);
@@ -167,29 +189,47 @@ namespace hal
          */
         void updateSearchIcon();
 
+        /**
+         * Q_SLOT to select the Directory.
+         */
+        void selectDirectory(ContextTreeItem* item);
+
+        void handleRowsInserted(const QModelIndex &parent, int first, int last);
+
     private Q_SLOTS:
 
-        void handleDeleteShortcutOnFocusChanged(QWidget* oldWidget, QWidget* newWidget);
+        void handleFocusChanged(QWidget* oldWidget, QWidget* newWidget);
+        void handleCreateContextClicked();
+        void handleCreateDirectoryClicked();
+        void handleRenameClicked();
+        void handleDuplicateContextClicked();
+        void handleDeleteClicked();
 
+        void handleContextMenuRequest(const QPoint& point);
+        void handleSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
     private:
         GraphTabWidget* mTabView;
 
-        QTableView* mContextTableView;
-        ContextTableModel* mContextTableModel;
-        ContextTableProxyModel* mContextTableProxyModel;
+        QTreeView* mContextTreeView;
+        ContextTreeModel* mContextTreeModel;
+        ContextProxyModel* mContextTreeProxyModel;
 
         Searchbar* mSearchbar;
 
         QString mDisabledIconStyle;
 
+        QAction* mNewDirectoryAction;
+
         QAction* mNewViewAction;
         QString mNewViewIconPath;
+        QString mNewDirIconPath;
         QString mNewViewIconStyle;
 
         QAction* mRenameAction;
         QString mRenameIconPath;
         QString mRenameIconStyle;
+
 
         QAction* mDuplicateAction;
         QString mDuplicateIconPath;
@@ -208,14 +248,6 @@ namespace hal
         QString mSearchActiveIconStyle;
 
         QShortcut* mShortCutDeleteItem;
-
-        void handleCreateContextClicked();
-        void handleRenameContextClicked();
-        void handleDuplicateContextClicked();
-        void handleDeleteContextClicked();
-
-        void handleContextMenuRequest(const QPoint& point);
-        void handleSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
         void setToolbarButtonsEnabled(bool enabled);
 

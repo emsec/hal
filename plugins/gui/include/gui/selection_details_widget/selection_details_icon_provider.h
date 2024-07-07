@@ -42,7 +42,7 @@ namespace hal
         SelectionDetailsIconProvider(QObject* parent = nullptr);
         static SelectionDetailsIconProvider* inst;
     public:
-        enum IconCategory { ModuleIcon = -1, GateIcon = -2, NetIcon = -3};
+        enum IconCategory { ModuleIcon = -1, GateIcon = -2, NetIcon = -3, ViewDir = -4, ViewCtx = -5};
         enum IconSize { NoIcon, SmallIcon, BigIcon };
         Q_ENUM(IconSize)
 

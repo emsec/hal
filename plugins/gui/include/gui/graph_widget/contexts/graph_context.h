@@ -28,6 +28,7 @@
 #include "gui/graph_widget/layouters/graph_layouter.h"
 #include "gui/graph_widget/shaders/graph_shader.h"
 #include "gui/gui_def.h"
+#include "gui/basic_tree_model/base_tree_item.h"
 
 #include <QDateTime>
 #include <QJsonObject>
@@ -360,9 +361,10 @@ namespace hal
         /**
          * Writes the context (its modules, gates, nets) to a given json object.
          *
-         * @param json - The object to write to.
+         * @param json - The object to write to
+         * @param int - ParentId of the graphContext.
          */
-        void writeToFile(QJsonObject& json);
+        void writeToFile(QJsonObject& json, int parentId);
 
         /**
          * Reads a context from a given json object.
@@ -418,7 +420,7 @@ namespace hal
          *
          * @return The exclusive module id.
          */
-        u32 getExclusiveModuleId()
+        u32 getExclusiveModuleId() const
         {
             return mExclusiveModuleId;
         }

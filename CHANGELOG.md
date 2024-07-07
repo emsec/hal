@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [4.3.0](v4.3.0) - 2024-07-02 13:42:55+02:00 (urgency: medium)
 * **WARNING:** this release breaks compatibility with Ubuntu 20.04 LTS
 * **WARNING:** this release breaks the API of the `graph_algorithm`, `dataflow`, and `xilinx_toolbox` plugins
 * GUI
@@ -13,6 +15,14 @@ All notable changes to this project will be documented in this file.
     * added delete module action and shortcut
     * added entries for context menu
     * adapted appearance for menu content tree, selection details tree, grouping content tree (same model for all)
+  * refactored view widget
+    * changed appearance from tabular view to tree view
+    * added 'directory' elements to organize and manage groups of views
+    * added drag'n drop feature allowing to relocate views or directories to another branch in the tree
+    * added column for view ID
+    * added functions to Python GUI API to create, modify and delete views and directories
+    * added UNDO functionality for create/delete view and directory actions
+    * fixed sort-by-column feature. The tree is not sorted at program start thus showing elements in 'natural' order.
   * refactored search bar
     * changed appearance of search bar to be more intuitive
     * added menu for extended options - e.g. option to search in selected columns only
@@ -36,44 +46,52 @@ All notable changes to this project will be documented in this file.
     * user can now specify the pin types to be considered as control pins
     * can now take known registers and other known word-level structures into account during analysis
     * changed the API to facilitate for the aforementioned changes
-  * changed `simulator` plugin
+  * changed `netlist_simulator_controller` plugin
     * added feature to VCD parser: removal of leading backslash and trailing whitespace from waveform name
+    * added converter for net names which don't qualify as C++ variable name
     * extended maximum line with the CSV parser can handle
     * changed warning messages for waveform parsing and made them more specific
     * changed policy toward 'dangling' wires, they are no longer ignored but considered as global inputs or outputs
+  * changed `waveform_viewer` plugin
+    * added GUI wizard to structure input steps when launching a new simulation
+    * added table widget to enter engine parameter
+    * added table widget to enter simulation input data
+    * added viewer to show output of simulation process while running
+    * added algorithm to identify simulated pin groups and bundle apropriate waveform to groups
   * changed `xilinx_toolbox` plugin
     * added `split_shift_registers` function to split `SRL16E` gates into multiple flip-flops
     * changed Python bindings for better usability
-* netlist
-  * module pins
-    * added qualifier for `pin_changed` core events telling receiver details about the recent modification
-    * added event scope and stacking classes so that `pin_changed` events can be collected and prioritized
-    * added specific GUI handler for every `pin_changed` event thus replacing the reload-entire-pingroup-tree policy
+* core
+  * pin (groups)
+    * added optional flag to determine whether a pin group has an inherent order (defaults to `false`)
+    * added `GateType::delete_pin_group` and `GateType::assign_pin_to_group` to enable more operations on pin groups of gate pins
+    * added parameter `force_name` to enforce pin (group) renaming to `Module::set_pin_name`, `Module::set_pin_group_name`, `Module::create_pin`, and `Module::create_pin_group`
+    * added pin types `status`, `error`, `error_detection`, `done`, and `control`
+    * added qualifier for module `pin_changed` core events telling receiver details about the recent modification
+    * added event scope and stacking classes so that module `pin_changed` events can be collected and prioritized
+    * added specific GUI handler for every module `pin_changed` event thus replacing the reload-entire-pingroup-tree policy
     * added class `ActionPingroup` so that UNDO function works for all pin / pin group actions issued from GUI
-* decorators
-  * added `NetlistTraversalDecorator` to ease exploration of a netlist
-    * added `get_next_matching_gates` to get successor/predecessor gates matching a certain condition
-    * added `get_next_matching_gates_until` to get successor/predecessor gates until a certain condition is fulfilled
-    * added `get_next_matching_gates_until_depth` to get successor/predecessor gates up to a certain depth
-    * added `get_next_sequential_gates` and `get_next_sequential_gates_map` to get the next layer of sequential successors/predecessors
-    * added `get_next_combinational_gates` to get all combinational gates until the next non-combinational gates are reached
+  * decorators
+    * added `NetlistTraversalDecorator` to ease exploration of a netlist
+      * added `get_next_matching_gates` to get successor/predecessor gates matching a certain condition
+      * added `get_next_matching_gates_until` to get successor/predecessor gates until a certain condition is fulfilled
+      * added `get_next_matching_gates_until_depth` to get successor/predecessor gates up to a certain depth
+      * added `get_next_sequential_gates` and `get_next_sequential_gates_map` to get the next layer of sequential successors/predecessors
+      * added `get_next_combinational_gates` to get all combinational gates until the next non-combinational gates are reached
 * miscellaneous
   * added support for Ubuntu 24.04 LTS
   * added INIT field declaration to FF-gate-types in example library
   * added drag'n drop feature allowing to move several nodes in graph view at same time
-  * added functions to Python GUI API to create, modify and delete views
   * added GUI PluginParameter type `ComboBox` for parameters that can be requested from plugin
   * added GUI PluginParameter types `Module` and `Gated` for parameters that can be requested from plugin
   * added `Show content` button to `Groupings` widget to show content of grouping as a list
   * added flag which Python editor tab is active when serializing project
-  * added `GateType::delete_pin_group` and `GateType::assign_pin_to_group` to enable more operations on pin groups of gate pins
   * added extended gate library picker when importing a netlist
   * added keyboard shortcut for delete-item action from toolbar
-  * added parameter `force_name` to enforce pin (group) renaming to `Module::set_pin_name`, `Module::set_pin_group_name`, `Module::create_pin`, and `Module::create_pin_group`
   * added gate type properties `fifo` and `shift_register`
-  * added pin types `status`, `error`, `error_detection`, `done`, and `control`
   * added optional filter to `Net::get_num_of_sources` and `Net::get_num_of_destinations`
   * added function `unify_ff_outputs` to netlist preprocessing plugin
+  * added function `replace_gate_type` to gate library
   * changed supported input file formats for import from hard coded list to list provided by loadable parser plugins
   * changed behavior of import netlist dialog, suggest only non-existing directory names and loop until an acceptable name was entered
   * changed appearance and behavior of import project dialog, make sure existing hal projects don't get overwritten

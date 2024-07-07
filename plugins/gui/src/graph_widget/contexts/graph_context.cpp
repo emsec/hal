@@ -722,7 +722,7 @@ namespace hal
         {
             QString name = QString::fromStdString(m->get_name()) + " (ID: " + QString::number(m->get_id()) + ")";
             ActionRenameObject* act = new ActionRenameObject(name);
-            act->setObject(UserActionObject(this->id(), UserActionObjectType::Context));
+            act->setObject(UserActionObject(this->id(), UserActionObjectType::ContextView));
             act->exec();
         }
         Q_EMIT(dataChanged());
@@ -818,14 +818,14 @@ namespace hal
         return true;
     }
 
-    void GraphContext::writeToFile(QJsonObject& json)
+    void GraphContext::writeToFile(QJsonObject& json, int parentId)
     {
         json["id"] = (int) mId;
         json["name"] = mName;
         json["timestamp"] = mTimestamp.toString();
         json["exclusiveModuleId"] = (int) mExclusiveModuleId;
         json["visible"] = gContentManager->getGraphTabWidget()->visibleStatus(this);
-
+        json["parentId"] = (int) parentId;
         /// modules
         QJsonArray jsonMods;
         for (u32 id : mModules)
@@ -955,7 +955,7 @@ namespace hal
             if (!found)
             {
                 ActionRenameObject* act = new ActionRenameObject(new_name);
-                act->setObject(UserActionObject(this->id(),UserActionObjectType::Context));
+                act->setObject(UserActionObject(this->id(),UserActionObjectType::ContextView));
                 act->exec();
                 break;
             }
