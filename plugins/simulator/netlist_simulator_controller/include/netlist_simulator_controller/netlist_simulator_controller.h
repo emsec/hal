@@ -555,8 +555,6 @@ private:
     SimulationInput* mSimulationInput;
     QSet<u32> mSimulateOnlyProbes;
 
-    QSet<u32> mSimulateOnlyProbes;
-
     QHash<u32,int> mBadAssignInputWarnings;
     SimulationLogReceiver* mLogReceiver;
 };

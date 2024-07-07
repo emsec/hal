@@ -114,7 +114,7 @@ namespace hal
         void handleControllerAdded(u32 controllerId);
         void handleControllerRemoved(u32 controllerId);
         void handleParseComplete();
-        void handleRunSimulation();
+//         void handleRunSimulation();    // TODO : new strategy to trigger load simulation results
         void displayStatusMessage(const QString& msg = QString());
         void closeEvent(QCloseEvent *event) override;
         void currentTabChanged(int inx);

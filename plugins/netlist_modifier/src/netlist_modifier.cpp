@@ -321,6 +321,8 @@ max_probes=5)";
         rapidjson::Writer<rapidjson::FileWriteStream> writer(fws);
         doc.Accept(writer);
         fclose(of);
+        gl->set_path(modifiedGateLibraryPath);
+        pm->set_gate_library_path(modifiedGateLibraryPath.filename().string());
 
         return true;
     }
