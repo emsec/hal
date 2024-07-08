@@ -23,6 +23,9 @@
 #include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
 
+#include "hal_core/plugin_system/plugin_manager.h"
+#include "hal_core/plugin_system/plugin_interface_ui.h"
+
 #define SECRET_PASSWORD "test12345"
 
 namespace hal
@@ -89,14 +92,15 @@ namespace hal
     bool NetlistModifierPlugin::replace_gate_in_netlist(Netlist* netlist, Gate* gate)
     {
         // get the number of input pins
-        int num_of_in  = gate->get_fan_in_endpoints().size();
-        int num_of_out = gate->get_fan_out_endpoints().size();
+        int in_pins = gate->get_type()->get_pins([](const GatePin* gp) { return gp->get_direction() == PinDirection::input; }).size();
+        int out_pins = gate->get_type()->get_pins([](const GatePin* gp) { return gp->get_direction() == PinDirection::output; }).size();
+        int in_out_pins = gate->get_type()->get_pins([](const GatePin* gp) { return gp->get_direction() == PinDirection::inout; }).size();
 
-        GateType* new_gate_type = netlist->get_gate_library()->get_gate_type_by_name(obfuscated_gate_name(num_of_in,num_of_out));
+        GateType* new_gate_type = netlist->get_gate_library()->get_gate_type_by_name(obfuscated_gate_name(in_pins,out_pins, in_out_pins));
 
         if (!new_gate_type)
         {
-            log_error("netlist_modifier", "No gatetype called '{}' in gatelib", obfuscated_gate_name(num_of_in,num_of_out));
+            log_error("netlist_modifier", "No gatetype called '{}' in gatelib", obfuscated_gate_name(in_pins,out_pins, in_out_pins));
             return false;
         }
 
@@ -107,13 +111,13 @@ namespace hal
         std::vector<Net*> out_nets;
 
         // save the input and output nets
-        for (Endpoint* ep : gate->get_fan_in_endpoints())
+        for (Net* net : gate->get_fan_in_nets())
         {
-            in_nets.push_back(ep->get_net());
+            in_nets.push_back(net);
         }
-        for (Endpoint* ep : gate->get_fan_out_endpoints())
+        for (Net* net : gate->get_fan_out_nets())
         {
-            out_nets.push_back(ep->get_net());
+            out_nets.push_back(net);
         }
 
         // delete old gate and add new one
@@ -329,7 +333,16 @@ max_probes=5)";
 
     bool NetlistModifierPlugin::modify_in_place()
     {
-        if (!modify_gatelibrary()) return false;
+
+        UIPluginInterface* mGuiPlugin = plugin_manager::get_plugin_instance<UIPluginInterface>("hal_gui");
+        if (mGuiPlugin)
+            mGuiPlugin->set_layout_locker(true);        
+
+        if (!modify_gatelibrary()){
+            if (mGuiPlugin)
+                mGuiPlugin->set_layout_locker(false);
+            return false;
+        }
 
         std::vector<Gate*> gates = GuiApi().getSelectedGates();
 
@@ -348,9 +361,14 @@ max_probes=5)";
         {
             if (!replace_gate_in_netlist(gNetlist, gate))
             {
+                if (mGuiPlugin)
+                    mGuiPlugin->set_layout_locker(false);
                 return false;
             }
         }
+
+        if (mGuiPlugin)
+            mGuiPlugin->set_layout_locker(false);
 
         return true;
     }
