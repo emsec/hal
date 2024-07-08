@@ -685,9 +685,10 @@ namespace hal
                 int visibleFlag = 1; // default to visible before flag was invented
                 if (jsonView.contains("visible"))
                     visibleFlag = jsonView["visible"].toInt();
+
+                u32 viewParentId = 0;
                 if (!jsonView.contains("parentId"))
-                    continue;
-                u32 viewParentId = jsonView["parentId"].toInt();
+                    viewParentId = jsonView["parentId"].toInt();
 
                 BaseTreeItem* viewParent = mContextTreeModel->getRootItem();
 
