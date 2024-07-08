@@ -1,5 +1,6 @@
 var NAVTREEINDEX21 =
 {
+"color__selection_8cpp.html":[7,0,1,3,2,29,1],
 "color__selection_8cpp_source.html":[7,0,1,3,2,29,1],
 "color__selection_8h.html":[7,0,1,3,0,0,31,1],
 "color__selection_8h_source.html":[7,0,1,3,0,0,31,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX21 =
 "dir_539ac5279f0a39925bc60c9637fe80c0.html":[7,0,1,1,0,0,5],
 "dir_5773e10c6e932edf79438e139c1c774d.html":[7,0,1,3,2,40,1],
 "dir_57cefed6324eeec697d12746846e3873.html":[7,0,1,3,0],
-"dir_58be482ae90996595342e629b14c1292.html":[7,0,1,3,2,27],
-"dir_594a98e1743b93d37981ce1884e7f583.html":[7,0,1,3,0,0,2]
+"dir_58be482ae90996595342e629b14c1292.html":[7,0,1,3,2,27]
 };

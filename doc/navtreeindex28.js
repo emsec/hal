@@ -1,5 +1,6 @@
 var NAVTREEINDEX28 =
 {
+"namespacehal_1_1event__log.html":[5,0,2,3],
 "namespacehal_1_1event__log.html#a6479a1ef5747ac3ea868e14d808ceef5":[5,0,2,3,4],
 "namespacehal_1_1event__log.html#a6a6b73c923956b16b893065851018de5":[5,0,2,3,1],
 "namespacehal_1_1event__log.html#a7265c534b5272bea85516cda491be3bc":[5,0,2,3,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX28 =
 "namespacetest__multiple.html#a543d66d31f760784516bf673780bf12b":[5,0,8,3],
 "namespacetest__multiple.html#aa1726891f96105ae41d3f40a15e96b75":[5,0,8,1],
 "namespacetest__multiple.html#ab7dba87eb770cbd8b3e2ae79f8266f9b":[5,0,8,6],
-"namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1":[5,0,8,5],
-"namespacetest__multiple.html#acc4677858c72770ae76519b4ccc47178":[5,0,8,0]
+"namespacetest__multiple.html#aca3deff7ab8749c592308be75680f1e1":[5,0,8,5]
 };
