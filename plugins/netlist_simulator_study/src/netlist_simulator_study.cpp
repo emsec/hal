@@ -148,7 +148,7 @@ namespace hal
 
     bool NetlistSimulatorStudyPlugin::simulate(std::filesystem::path sim_input, std::vector<const Net*> probes)
     {
-        // read the original netlist
+        // read the original netlist        
         ProjectManager* pm = ProjectManager::instance();
         std::filesystem::path project_dir_path(pm->get_project_directory().string());
 
@@ -214,18 +214,42 @@ namespace hal
                 break;
         }
 
+        int simulProgress = 0;
+        if (GuiExtensionNetlistSimulatorStudy::s_progress_indicator_function)
+            GuiExtensionNetlistSimulatorStudy::s_progress_indicator_function(simulProgress++, "Wait for simulation to finish...");
+
         m_simul_controller.get()->simulate_only_probes(probes);
 
         m_simul_controller.get()->run_simulation();
 
+        if (GuiExtensionNetlistSimulatorStudy::s_progress_indicator_function)
+            GuiExtensionNetlistSimulatorStudy::s_progress_indicator_function(simulProgress++, "Wait for simulation to finish...");
+
         while (m_simul_controller.get()->get_simulation_engine()->get_state() > 0)
         {
-            std::cerr << "simulation running" << std::endl;
-            sleep(1);
+            if (GuiExtensionNetlistSimulatorStudy::s_progress_indicator_function)
+                GuiExtensionNetlistSimulatorStudy::s_progress_indicator_function(simulProgress, "Wait for simulation to finish...");
+            if (simulProgress % 10 == 0)
+                log_info("netlist_simulator_study", "Waiting for simulation to finish...");
+            if (++simulProgress >= 100) simulProgress = 0;
         }
 
-        std::cerr << "simulation result " << (int)  m_simul_controller.get()->get_simulation_engine()->get_state() << std::endl;
+        if (GuiExtensionNetlistSimulatorStudy::s_progress_indicator_function)
+            GuiExtensionNetlistSimulatorStudy::s_progress_indicator_function(100, "Simulation process ended.");
 
+        if (m_simul_controller.get()->get_simulation_engine()->get_state() == SimulationEngine::Done)
+        {
+            log_info("netlist_simulator_study", "Simulation successful.");
+            m_simul_controller.get()->get_results();
+
+            for (const Net* n : probes)
+                m_simul_controller.get()->get_waveform_by_net(n);
+        }
+        else
+        {
+            log_info("netlist_simulator_study", "Simulation failed, please check engine log in directory '{}'.", m_simul_controller.get()->get_working_directory());
+            return false;
+        }
         return true;
     }
 
@@ -422,6 +446,13 @@ namespace hal
         {
             m_parent->simulate(sim_input, probes_final_selection);
         }
+    }
+
+    std::function<void(int, const std::string&)> GuiExtensionNetlistSimulatorStudy::s_progress_indicator_function = nullptr;
+
+    void GuiExtensionNetlistSimulatorStudy::register_progress_indicator(std::function<void(int, const std::string&)> pif)
+    {
+        s_progress_indicator_function = pif;
     }
 
 }    // namespace hal

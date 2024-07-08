@@ -36,6 +36,8 @@ namespace hal
         std::vector<PluginParameter> m_parameter;
 
     public:
+        static std::function<void(int, const std::string&)> s_progress_indicator_function;
+
         NetlistSimulatorStudyPlugin* m_parent;
 
         GuiExtensionNetlistSimulatorStudy();
@@ -43,5 +45,11 @@ namespace hal
         std::vector<PluginParameter> get_parameter() const override;
 
         void set_parameter(const std::vector<PluginParameter>& params) override;
+
+        /**
+         * Register function to indicate work progress when busy
+         * @param pif Progress Indicator Function to register
+         */
+        virtual void register_progress_indicator(std::function<void(int, const std::string&)> pif) override;
     };
 }    // namespace hal

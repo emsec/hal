@@ -102,7 +102,7 @@ namespace hal
                     log_warning("simulation_plugin", "Simulated gate ID={} not found in netlist.", gateId);
                     return;
                 }
-                if (jgate.HasMember("name") && jgate["name"].GetString() != g->get_name())
+                if (jgate.HasMember("name") && jgate["name"].GetString() != g->get_name() && g->get_name().find("UNKNOWN") != 0)
                 {
                     log_warning("simulation_plugin", "Gate name for ID={} differs in simulation '{}' and netlist '{}'", gateId, jgate["name"].GetString(), g->get_name());
                     return;
