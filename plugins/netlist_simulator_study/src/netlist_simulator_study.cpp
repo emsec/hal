@@ -216,7 +216,15 @@ namespace hal
 
         m_simul_controller.get()->simulate_only_probes(probes);
 
-        m_simul_controller.get()->emit_run_simulation();
+        m_simul_controller.get()->run_simulation();
+
+        while (m_simul_controller.get()->get_simulation_engine()->get_state() > 0)
+        {
+            std::cerr << "simulation running" << std::endl;
+            sleep(1);
+        }
+
+        std::cerr << "simulation result " << (int)  m_simul_controller.get()->get_simulation_engine()->get_state() << std::endl;
 
         return true;
     }
