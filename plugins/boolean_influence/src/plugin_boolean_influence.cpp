@@ -3,6 +3,7 @@
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist_utils.h"
+#include "z3_utils/include/subgraph_function_generation.h"
 #include "z3_utils/include/z3_utils.h"
 
 #include <filesystem>

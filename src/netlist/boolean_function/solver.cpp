@@ -430,7 +430,12 @@ namespace hal
             }
 
             auto input_str = input.get();
-            auto query     = spec2query.at({config.solver, config.call})(input_str, config);
+            return query_local(config, input_str);
+        }
+
+        Result<SolverResult> Solver::query_local(const QueryConfig& config, std::string& smt2)
+        {
+            auto query = spec2query.at({config.solver, config.call})(smt2, config);
             if (query.is_ok())
             {
                 auto [was_killed, output] = query.get();
@@ -438,7 +443,7 @@ namespace hal
             }
             return ERR_APPEND(query.get_error(), "could not query local SMT solver: unable to parse SMT result from string");
         }
-
+        
         Result<SolverResult> Solver::query_remote(const QueryConfig& /* config */) const
         {
             // unimplemented as this is feature not required at the moment

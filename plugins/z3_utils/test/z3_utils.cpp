@@ -37,7 +37,7 @@ namespace hal
                 auto a    = BooleanFunction::Var("A", bits);
                 auto b    = BooleanFunction::Var("B", bits);
                 auto c    = BooleanFunction::Var("C", bits);
-                auto cond = BooleanFunction::Var("cond", 1);
+                auto cond = BooleanFunction::Eq(a.clone(), b.clone(), 1).get();
 
                 auto bf_not_res = BooleanFunction::Not(a.clone(), bits);
                 ASSERT_TRUE(bf_not_res.is_ok());
@@ -192,14 +192,14 @@ namespace hal
                 auto bft_ult = bft_ult_res.get();
                 EXPECT_EQ(bf_ult, bft_ult);
 
-                // auto bf_ite_res = BooleanFunction::Ite(cond.clone(), b.clone(), c.clone(), bits);
-                // ASSERT_TRUE(bf_ite_res.is_ok());
-                // auto bf_ite      = bf_ite_res.get();
-                // auto z3_ite      = z3_utils::from_bf(bf_ite, ctx);
-                // auto bft_ite_res = z3_utils::to_bf(z3_ite);
-                // ASSERT_TRUE(bft_ite_res.is_ok());
-                // auto bft_ite = bft_ite_res.get();
-                // EXPECT_EQ(bf_ite, bft_ite);
+                auto bf_ite_res = BooleanFunction::Ite(cond.clone(), b.clone(), c.clone(), bits);
+                ASSERT_TRUE(bf_ite_res.is_ok());
+                auto bf_ite      = bf_ite_res.get();
+                auto z3_ite      = z3_utils::from_bf(bf_ite, ctx);
+                auto bft_ite_res = z3_utils::to_bf(z3_ite);
+                ASSERT_TRUE(bft_ite_res.is_ok());
+                auto bft_ite = bft_ite_res.get();
+                EXPECT_EQ(bf_ite, bft_ite);
             }
         }
         {

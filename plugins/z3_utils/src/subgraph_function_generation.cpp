@@ -3,6 +3,7 @@
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/utilities/log.h"
+#include "z3_utils/include/subgraph_function_generation.h"
 #include "z3_utils/include/z3_utils.h"
 
 #include <queue>
@@ -151,7 +152,7 @@ namespace hal
             return get_subgraph_z3_function_internal(subgraph_gates, subgraph_output, ctx, net_cache, gate_cache);
         }
 
-        Result<std::vector<z3::expr>> get_subgraph_z3_functions(const std::vector<Gate*>& subgraph_gates, const std::vector<Net*> subgraph_outputs, z3::context& ctx)
+        Result<std::vector<z3::expr>> get_subgraph_z3_functions(const std::vector<Gate*>& subgraph_gates, const std::vector<Net*>& subgraph_outputs, z3::context& ctx)
         {
             std::map<u32, z3::expr> net_cache;
             std::map<std::pair<u32, const GatePin*>, BooleanFunction> gate_cache;

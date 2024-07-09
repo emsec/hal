@@ -26,6 +26,7 @@ namespace hal
             }
 
             log_error("z3_utils", "Unkown operand format for {}!", operand);
+            exit(0);
             return "NOT IMPLEMENTED REACHED";
         }
 

@@ -3,7 +3,7 @@
 // Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
 // Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
 // Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
-// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
+// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,18 +25,34 @@
 
 #pragma once
 
-#include "hal_core/netlist/netlist.h"
-#include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/utilities/result.h"
+
 #include "z3++.h"
+
+#include <unordered_map>
 
 namespace hal
 {
-    class PLUGIN_API Z3UtilsPlugin : public BasePluginInterface
+    namespace z3_utils
     {
-    public:
-        std::string get_name() const override;
-        std::string get_version() const override;
+        /**
+         * @brief Applies hand-crafted simplification rules iteratively until no further simplifications can be made.
+         * 
+         * @param[in] e The Z3 expression to be simplified.
+         * @param[in] cache A cache to store simplified (sub)expressions.
+         * @param[in] check_correctness A flag to check the correctness of each simplification step. Default is false.
+         * @returns OK() and the simplified Z3 expression in case of success, an error otherwise.
+         */
+        Result<z3::expr> simplify_local(const z3::expr& e, std::unordered_map<u32, z3::expr>& cache, const bool check_correctness=false);
 
-        void initialize() override;
-    };
+        /**
+         * @brief Applies hand-crafted simplification rules iteratively until no further simplifications can be made.
+         * 
+         * @param[in] e The Z3 expression to be simplified.
+         * @param[in] check_correctness A flag to check the correctness of each simplification step. Default is false.
+         * @returns OK() and the simplified Z3 expression in case of success, an error otherwise.
+         */
+        Result<z3::expr> simplify_local(const z3::expr& e, const bool check_correctness=false);
+
+    }    // namespace z3_utils
 }    // namespace hal

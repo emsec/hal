@@ -399,7 +399,22 @@ namespace hal
             :rtype: hal_py.SMT.Result or str
         )");
 
-        py_smt_solver.def("query_local", &SMT::Solver::query_local, py::arg("config"), R"(
+        py_smt_solver.def(
+            "query_local",
+            [](const SMT::Solver& self, const SMT::QueryConfig& config = SMT::QueryConfig()) -> std::optional<SMT::SolverResult> {
+                auto res = self.query_local(config);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("config"),
+            R"(
             Queries a local SMT solver with the specified query configuration.
 
             :param hal_py.SMT.QueryConfig config: The SMT solver query configuration.
