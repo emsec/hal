@@ -69,10 +69,10 @@ namespace hal
 
         m.def(
             "propagate_module_pingroup_bitorder",
-            [](const std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>& known_bitorders,
-               const std::set<std::pair<Module*, PinGroup<ModulePin>*>>& unknown_bitorders,
-               const bool strict_consens_finding = false) -> std::optional<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> {
-                const auto res = bitorder_propagation::propagate_module_pingroup_bitorder(known_bitorders, unknown_bitorders, strict_consens_finding);
+            [](const std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>& src,
+               const std::set<std::pair<Module*, PinGroup<ModulePin>*>>& dst,
+               const bool enforce_continuous_bitorders = true) -> std::optional<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> {
+                const auto res = bitorder_propagation::propagate_module_pingroup_bitorder(src, dst, enforce_continuous_bitorders);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -83,17 +83,18 @@ namespace hal
                     return std::nullopt;
                 }
             },
-            py::arg("known_bitorders"),
-            py::arg("unknown_bitorders"),
-            py::arg("strict_consens_finding") = false,
+            py::arg("src"),
+            py::arg("dst"),
+            py::arg("enforce_continuous_bitorders") = true,
             R"(
-                    Propagates known bit order information to module pin groups with unknown bit order.
-                    Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.
-            
-                    :param dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] known_bitorders: The known indices for the nets belonging to module pin groups. 
-                    :param set[tuple(hal_py.Module,hal_py.ModulePinGroup)] unknown_bitorders: The module pin groups with yet unknown bit order.
-                    :param bool strict_consens_finding: When set to true this option only allows for complete and continous bitorders, while false would allow for bit orders to be formed that are either not complete or not continous.
-                    :returns: A mapping of all the known bit orders consisting of the new and already known ones on success, ``None`` otherwise.
+                    Propagate known bit-order information from the given module pin groups to module pin groups of unknown bit order.
+                    The known bit-order information is taken from the map from net to index given for each pair of module and pin group in ``src``.
+                    After propagation, the algorithm tries to reconstruct valid bit orders from the propagated information.
+         
+                    :param dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] src: The known indices for the nets belonging to the given module pin groups. 
+                    :param set[tuple(hal_py.Module,hal_py.ModulePinGroup)] dst: The pairs of module ID and pin group name with unknown bit order.
+                    :param bool enforce_continuous_bitorders: Set ``True`` to only allow for continuous bit orders, ``^`` to also allow bit orders that are not continuous. Defaults to ``True``.
+                    :returns: A dict containing all known bit orders (including new and already known ones) on success, ``None`` otherwise.
                     :rtype: dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] or None
                 )");
 
