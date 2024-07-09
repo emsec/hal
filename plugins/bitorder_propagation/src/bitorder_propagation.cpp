@@ -28,7 +28,7 @@ namespace hal
          * By building a chain of known origin-offset pairs we try to find offsets even for origins that do not share an already known offset.
          * During the chain building we populate the matrix along the way incase we find a valid offset.
          */
-            Result<i32> get_offset(MPG& org1, MPG& org2, std::map<MPG, std::map<MPG, i32>>& m, std::set<std::set<MPG>>& v)
+            Result<i32> get_offset(const MPG& org1, const MPG& org2, std::map<MPG, std::map<MPG, i32>>& m, std::set<std::set<MPG>>& v)
             {
                 if (v.find({org1, org2}) != v.end())
                 {
@@ -55,9 +55,7 @@ namespace hal
 
                 for (auto& [dst_c, first_proxy_offset] : m.at(org1))
                 {
-                    // dirty workaround to lose the const qualifier
-                    MPG dst                      = {dst_c.first, dst_c.second};
-                    auto second_proxy_offset_res = get_offset(dst, org2, m, v);
+                    auto second_proxy_offset_res = get_offset(dst_c, org2, m, v);
                     if (second_proxy_offset_res.is_error())
                     {
                         continue;
