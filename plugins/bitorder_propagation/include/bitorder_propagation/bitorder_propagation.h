@@ -45,19 +45,20 @@ namespace hal
 
     namespace bitorder_propagation
     {
-        /** TODO fix documentation
-         * Propagates known bit order information to module pin groups with unknown bit order.
-         * Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.
+        /** 
+         * Propagate known bit-order information from the given module pin groups to module pin groups of unknown bit order.
+         * The known bit-order information is taken from the map from net to index given for each pair of module and pin group in `src`.
+         * After propagation, the algorithm tries to reconstruct valid bit orders from the propagated information.
          *
-         * @param[in] known_bitorders - The known indices for the nets belonging to module pin groups. 
-         * @param[in] unknown_bitorders - The module pin groups with yet unknown bit order.
-         * @param[in] strict_consens_finding - When set to true this option only allows for complete and continous bitorders, while false would allow for bit orders to be formed that are either not complete or not continous.
-         * @returns OK and a mapping of all the known bit orders consisting of the new and already known.
+         * @param[in] src - The known indices for the nets belonging to the given module pin groups. 
+         * @param[in] dst - The pairs of module ID and pin group name with unknown bit order.
+         * @param[in] enforce_continuous_bitorders - Set `true` to only allow for continuous bit orders, `false` to also allow bit orders that are not continuous. Defaults to `true`.
+         * @returns OK and a map containing all known bit orders (including new and already known ones) on success, an error otherwise.
          */
         Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>>
-            propagate_module_pingroup_bitorder(const std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>& known_bitorders,
-                                               const std::set<std::pair<Module*, PinGroup<ModulePin>*>>& unknown_bitorders,
-                                               const bool strict_consens_finding = true);
+            propagate_module_pingroup_bitorder(const std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>& src,
+                                               const std::set<std::pair<Module*, PinGroup<ModulePin>*>>& dst,
+                                               const bool enforce_continuous_bitorders = true);
 
         /**
          * Reorder and rename the pins of the pin groups according to the provided bit-order information. 
