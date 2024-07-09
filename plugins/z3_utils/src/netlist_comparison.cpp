@@ -10,7 +10,6 @@
 #include "z3_utils/include/netlist_comparison.h"
 #include "z3_utils/include/z3_utils.h"
 
-
 namespace hal
 {
     namespace z3_utils
@@ -138,15 +137,6 @@ namespace hal
                 {
                     return ERR("could not get subgraph z3 function of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": net has more than one source");
                 }
-                // else if (net->is_global_input_net())
-                // {
-                //     const auto net_dec = BooleanFunctionNetDecorator(*net);
-                //     return OK(ctx.bv_const(net_dec.get_boolean_variable_name().c_str(), 1));
-                // }
-                // else if (net->get_num_of_sources() == 0)
-                // {
-                //     return ERR("could not get subgraph function of net '" + net->get_name() + "' with ID " + std::to_string(net->get_id()) + ": net has no sources");
-                // }
 
                 return get_prefixed_function_of_net(subgraph_gates, net, variable_prefix, ctx, net_cache, gate_cache);
             }
@@ -206,9 +196,6 @@ namespace hal
                         const z3::expr new_expr = ctx.bv_const(("GLOBAL_IN_" + pin->get_name()).c_str(), 1);
                         const z3::expr net_expr = ctx.bv_const(var_name.c_str(), 1);
 
-                        // TODO remove
-                        // std::cout << "Added global IO constraint: " << (net_expr == new_expr) << std::endl;
-
                         s.add(net_expr == new_expr);
                         continue;
                     }
@@ -220,9 +207,6 @@ namespace hal
 
                         const z3::expr new_expr = ctx.bv_const(net->get_name().c_str(), 1);
                         const z3::expr net_expr = ctx.bv_const(var_name.c_str(), 1);
-
-                        // TODO remove
-                        // std::cout << "Added constraint: " << (net_expr == new_expr) << std::endl;
 
                         s.add(net_expr == new_expr);
                         continue;
@@ -252,31 +236,6 @@ namespace hal
 
                 return OK({});
             }
-
-            /*
-            Result<std::monostate> substitute_net_ids(z3::context& ctx, z3::solver& s, const z3::expr& bf, const std::string& variable_prefix, const Netlist* nl)
-            {
-                const auto input_vars = z3_utils::get_variable_names(bf);
-
-                std::vector<Net*> nets;
-
-                // replace nets form netlist_b
-                for (const std::string var : input_vars)
-                {
-                    auto net_id_res = BooleanFunctionNetDecorator::get_net_id_from(utils::replace(var, variable_prefix, std::string("")));
-                    if (net_id_res.is_error())
-                    {
-                        return ERR_APPEND(net_id_res.get_error(), "cannot replace net id for unknown net: failed to extract id from variable name.");
-                    }
-                    const u32 net_id = net_id_res.get();
-
-                    Net* net = nl->get_net_by_id(net_id);
-                    nets.push_back(net);
-                }
-
-                return substitute_net_ids(ctx, s, nets, variable_prefix, nl);
-            }
-            */
 
             void add_replacements_equal_constraints(z3::context& ctx, z3::solver& s, const std::unordered_map<Gate*, std::vector<std::string>>& replacements)
             {
@@ -340,8 +299,6 @@ namespace hal
 
             Result<bool> compare_nets_internal(z3::context& ctx,
                                                z3::solver& s,
-                                               //    const Netlist* netlist_a,
-                                               //    const Netlist* netlist_b,
                                                const Net* net_a,
                                                const Net* net_b,
                                                const std::vector<Gate*>& gates_a,
@@ -349,15 +306,6 @@ namespace hal
                                                const bool fail_on_unknown,
                                                const u32 solver_timeout)
             {
-                // TODO Debug printing remove
-                /*
-                std::cout << "Comparing net A: " << net_a->get_id() << " / " << net_a->get_name() << " with " << net_b->get_id() << " / " << net_b->get_name() << std::endl;
-                const auto inputs_a = SubgraphNetlistDecorator(*netlist_a).get_subgraph_function_inputs(gates_a, net_a).get();
-                std::cout << "Function A inputs: " << inputs_a.size() << std::endl;
-                const auto inputs_b = SubgraphNetlistDecorator(*netlist_b).get_subgraph_function_inputs(gates_b, net_b).get();
-                std::cout << "Function B inputs: " << inputs_b.size() << std::endl;
-                */
-
                 const auto bf_res_a = z3_utils::get_prefixed_subgraph_z3_function(gates_a, net_a, "netlist_a_", ctx);
                 if (bf_res_a.is_error())
                 {
@@ -377,12 +325,6 @@ namespace hal
                 const auto bf_b = bf_res_b.get();
 
                 auto config = hal::SMT::QueryConfig().with_timeout(solver_timeout).without_model_generation();
-
-                // TODO we can enable this again after we add time out capabilities to the bitwuzla call
-                // if (SMT::Solver::has_local_solver_for(hal::SMT::SolverType::Bitwuzla, hal::SMT::SolverCall::Library))
-                // {
-                //     config = config.with_solver(hal::SMT::SolverType::Bitwuzla).with_call(hal::SMT::SolverCall::Library);
-                // }
 
                 s.add(bf_a != bf_b);
                 auto smt2_str = s.to_smt2();
