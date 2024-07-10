@@ -226,12 +226,14 @@ namespace hal
         std::unordered_map<std::string, BooleanFunction> get_boolean_functions(bool only_custom_functions = false) const;
 
         /**
-          * Get the resolved Boolean function corresponding to the given output pin, i.e., a Boolean function that is only dependent on input nets and no internal or output pins.
+          * Get the resolved Boolean function corresponding to the given output pin, i.e., a Boolean function that only depends on input pins (or nets) and no internal or output pins.
+          * If fan-in nets are used to derive variable names, the variable names are generated using the `BooleanFunctionNetDecorator`.
           *
           * @param[in] pin - The output pin.
+          * @param[in] use_net_variables - Set `true` to use variable names derived from fan-in nets of the gate, `false` to use input pin names instead. Defaults to `false`.
           * @returns The Boolean function on success, an error otherwise.
           */
-        Result<BooleanFunction> get_resolved_boolean_function(const GatePin* pin) const;
+        Result<BooleanFunction> get_resolved_boolean_function(const GatePin* pin, const bool use_net_variables = false) const;
 
         /**
          * Add a Boolean function with the given name to the gate.
