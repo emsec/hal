@@ -1,6 +1,5 @@
 var NAVTREEINDEX20 =
 {
-"classhal_1_1_user_action.html#acbb007a480acf0f847434e86d71cf5bf":[4,0,5,28,11],
 "classhal_1_1_user_action.html#ad3e183ca84db2229ea52015ecf81b502":[4,0,5,28,21],
 "classhal_1_1_user_action.html#ad4976d95d07011dd9be187ddbcf75fde":[4,0,5,28,9],
 "classhal_1_1_user_action.html#ad7a49a6a643395eb9b8ab136c6ac36a9":[4,0,5,28,20],
@@ -249,5 +248,6 @@ var NAVTREEINDEX20 =
 "code__editor__scrollbar_8cpp.html":[7,0,1,3,2,3,3],
 "code__editor__scrollbar_8cpp_source.html":[7,0,1,3,2,3,3],
 "code__editor__scrollbar_8h.html":[7,0,1,3,0,0,3,3],
-"code__editor__scrollbar_8h_source.html":[7,0,1,3,0,0,3,3]
+"code__editor__scrollbar_8h_source.html":[7,0,1,3,0,0,3,3],
+"color__selection_8cpp.html":[7,0,1,3,2,29,1]
 };

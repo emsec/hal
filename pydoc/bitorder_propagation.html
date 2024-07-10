@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bitorder Propagation &mdash; hal_py v4.3.0-2-g72ede2fee documentation</title>
+  <title>Bit-Order Propagation &mdash; hal_py v4.3.0-3-g396aed5cb documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.3.0-2-g72ede2fee
+                v4.3.0-3-g396aed5cb
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -40,7 +40,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="hal_py.html">HAL Core Documentation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="plugins.html">HAL Plugins Documentation</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Bitorder Propagation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Bit-Order Propagation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boolean_influence.html">Boolean Influence</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataflow.html">Dataflow Analysis (DANA)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="graph_algorithm.html">Graph Algorithms</a></li>
@@ -71,7 +71,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="plugins.html">HAL Plugins Documentation</a> &raquo;</li>
-      <li>Bitorder Propagation</li>
+      <li>Bit-Order Propagation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/bitorder_propagation.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -81,43 +81,32 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="bitorder-propagation">
-<h1>Bitorder Propagation<a class="headerlink" href="#bitorder-propagation" title="Permalink to this headline"></a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="bitorder_propagation.BitorderPropagationPlugin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bitorder_propagation.</span></span><span class="sig-name descname"><span class="pre">BitorderPropagationPlugin</span></span><a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin" title="Permalink to this definition"></a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="bitorder_propagation.BitorderPropagationPlugin.get_name">
-<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bitorder_propagation.BitorderPropagationPlugin" title="bitorder_propagation.BitorderPropagationPlugin"><span class="pre">bitorder_propagation.BitorderPropagationPlugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin.get_name" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="bitorder_propagation.BitorderPropagationPlugin.get_version">
-<span class="sig-name descname"><span class="pre">get_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bitorder_propagation.BitorderPropagationPlugin" title="bitorder_propagation.BitorderPropagationPlugin"><span class="pre">bitorder_propagation.BitorderPropagationPlugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin.get_version" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="bitorder_propagation.BitorderPropagationPlugin.propagate_bitorder">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">propagate_bitorder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin.propagate_bitorder" title="Permalink to this definition"></a></dt>
+  <section id="module-bitorder_propagation">
+<span id="bit-order-propagation"></span><h1>Bit-Order Propagation<a class="headerlink" href="#module-bitorder_propagation" title="Permalink to this headline"></a></h1>
+<p>Tool to automatically propagate known bit orders to module pin groups of unknown bit order.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="bitorder_propagation.propagate_bitorder">
+<span class="sig-prename descclassname"><span class="pre">bitorder_propagation.</span></span><span class="sig-name descname"><span class="pre">propagate_bitorder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bitorder_propagation.propagate_bitorder" title="Permalink to this definition"></a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic">
 <li><p>propagate_bitorder(nl: hal_py.Netlist, src: Tuple[int, str], dst: Tuple[int, str]) -&gt; Optional[Dict[Tuple[hal_py.Module, hal_py.ModulePinGroup], Dict[hal_py.Net, int]]]</p>
 <blockquote>
-<div><p>Propagates known bit order information to module pin groups with unknown bit order.
-Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.
-The valid bit orders are then annotated to the module pin groups.</p>
+<div><p>Propagate known bit-order information from one module pin group to another module pin group of unknown bit order.
+The known bit-order information is taken from the order of pins in the pin group of <code class="docutils literal notranslate"><span class="pre">src</span></code>.
+After propagation, the algorithm tries to reconstruct a valid bit order from the propagated information.
+The valid bit order is then annotated to the module pin group, i.e., the pins of the respective pin group are renamed and reordered.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param hal_py.netlist nl</dt>
-<dd class="field-odd"><p>The netlist.</p>
+<dd class="field-odd"><p>The netlist containing the module.</p>
 </dd>
 <dt class="field-even">param tuple(int,str) src</dt>
-<dd class="field-even"><p>A pair of module id and pin group name representing the source.</p>
+<dd class="field-even"><p>The pair of module ID and pin group name with known bit order.</p>
 </dd>
 <dt class="field-odd">param tuple(int,str) dst</dt>
-<dd class="field-odd"><p>A pair of module id and pin group name representing the destination.</p>
+<dd class="field-odd"><p>The pair of module ID and pin group name with unknown bit order.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>All wellformed bitorders on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+<dd class="field-even"><p>A dict containing all known bit orders (including new and already known ones) on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] or None</p>
@@ -127,45 +116,44 @@ The valid bit orders are then annotated to the module pin groups.</p>
 </li>
 <li><p>propagate_bitorder(src: Tuple[hal_py.Module, hal_py.ModulePinGroup], dst: Tuple[hal_py.Module, hal_py.ModulePinGroup]) -&gt; Optional[Dict[Tuple[hal_py.Module, hal_py.ModulePinGroup], Dict[hal_py.Net, int]]]</p>
 <blockquote>
-<div><p>Propagates known bit order information to module pin groups with unknown bit order.
-Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.
-The valid bit orders are then annotated to the module pin groups.</p>
+<div><p>Propagate known bit-order information from one module pin group to another module pin group of unknown bit order.
+The known bit-order information is taken from the order of pins in the pin group of <code class="docutils literal notranslate"><span class="pre">src</span></code>.
+After propagation, the algorithm tries to reconstruct a valid bit order from the propagated information.
+The valid bit order is then annotated to the module pin group, i.e., the pins of the respective pin group are renamed and reordered.</p>
 <dl class="field-list simple">
-<dt class="field-odd">param hal_py.netlist nl</dt>
-<dd class="field-odd"><p>The netlist.</p>
+<dt class="field-odd">param tuple(hal_py.Module,hal_py.ModulePinGroup) src</dt>
+<dd class="field-odd"><p>The pair of module and pin group with known bit order.</p>
 </dd>
-<dt class="field-even">param tuple(hal_py.Module,hal_py.ModulePinGroup) src</dt>
-<dd class="field-even"><p>A pair of module and pin group representing the source.</p>
+<dt class="field-even">param tuple(hal_py.Module,hal_py.ModulePinGroup) dst</dt>
+<dd class="field-even"><p>The pair of module and pin group with unknown bit order.</p>
 </dd>
-<dt class="field-odd">param tuple(hal_py.Module,hal_py.ModulePinGroup) dst</dt>
-<dd class="field-odd"><p>A pair of module and pin group representing the destination.</p>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>A dict containing all known bit orders (including new and already known ones) on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
-<dt class="field-even">returns</dt>
-<dd class="field-even"><p>All wellformed bitorders on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
-</dd>
-<dt class="field-odd">rtype</dt>
-<dd class="field-odd"><p>dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] or None</p>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] or None</p>
 </dd>
 </dl>
 </div></blockquote>
 </li>
 <li><p>propagate_bitorder(nl: hal_py.Netlist, src: List[Tuple[int, str]], dst: List[Tuple[int, str]]) -&gt; Optional[Dict[Tuple[hal_py.Module, hal_py.ModulePinGroup], Dict[hal_py.Net, int]]]</p>
 <blockquote>
-<div><p>Propagates known bit order information to module pin groups with unknown bit order.
-Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.
-The valid bit orders are then annotated to the module pin groups.</p>
+<div><p>Propagate known bit-order information from the given module pin groups to module pin groups of unknown bit order.
+The known bit-order information is taken from the order of pins in the pin groups of <code class="docutils literal notranslate"><span class="pre">src</span></code>.
+After propagation, the algorithm tries to reconstruct valid bit orders from the propagated information.
+The valid bit orders are then annotated to the module pin groups, i.e., the pins of the respective pin groups are renamed and reordered.</p>
 <dl class="field-list simple">
 <dt class="field-odd">param hal_py.netlist nl</dt>
-<dd class="field-odd"><p>The netlist.</p>
+<dd class="field-odd"><p>The netlist containing the modules.</p>
 </dd>
 <dt class="field-even">param list[tuple(int,str)] src</dt>
-<dd class="field-even"><p>A list of pairs of module id and pin group name representing the sources.</p>
+<dd class="field-even"><p>The pairs of module ID and pin group name with known bit order.</p>
 </dd>
 <dt class="field-odd">param list[tuple(int,str)] dst</dt>
-<dd class="field-odd"><p>A list of pairs of module id and pin group name representing the destinations.</p>
+<dd class="field-odd"><p>The pairs of module ID and pin group name with unknown bit order.</p>
 </dd>
 <dt class="field-even">returns</dt>
-<dd class="field-even"><p>All wellformed bitorders on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+<dd class="field-even"><p>A dict containing all known bit orders (including new and already known ones) on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">rtype</dt>
 <dd class="field-odd"><p>dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] or None</p>
@@ -175,24 +163,22 @@ The valid bit orders are then annotated to the module pin groups.</p>
 </li>
 <li><p>propagate_bitorder(src: List[Tuple[hal_py.Module, hal_py.ModulePinGroup]], dst: List[Tuple[hal_py.Module, hal_py.ModulePinGroup]]) -&gt; Optional[Dict[Tuple[hal_py.Module, hal_py.ModulePinGroup], Dict[hal_py.Net, int]]]</p>
 <blockquote>
-<div><p>Propagates known bit order information to module pin groups with unknown bit order.
-Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.
-The valid bit orders are then annotated to the module pin groups.</p>
+<div><p>Propagate known bit-order information from the given module pin groups to module pin groups of unknown bit order.
+The known bit-order information is taken from the order of pins in the pin groups of <code class="docutils literal notranslate"><span class="pre">src</span></code>.
+After propagation, the algorithm tries to reconstruct valid bit orders from the propagated information.
+The valid bit orders are then annotated to the module pin groups, i.e., the pins of the respective pin groups are renamed and reordered.</p>
 <dl class="field-list simple">
-<dt class="field-odd">param hal_py.netlist nl</dt>
-<dd class="field-odd"><p>The netlist.</p>
+<dt class="field-odd">param list[tuple(hal_py.Module,hal_py.ModulePinGroup)] src</dt>
+<dd class="field-odd"><p>The pairs of module and pin group with known bit order.</p>
 </dd>
-<dt class="field-even">param list[tuple(hal_py.Module,hal_py.ModulePinGroup)] src</dt>
-<dd class="field-even"><p>A list of pairs of modules and pin groups representing the sources.</p>
+<dt class="field-even">param list[tuple(hal_py.Module,hal_py.ModulePinGroup)] dst</dt>
+<dd class="field-even"><p>The pairs of module and pin group with unknown bit order.</p>
 </dd>
-<dt class="field-odd">param list[tuple(hal_py.Module,hal_py.ModulePinGroup)] dst</dt>
-<dd class="field-odd"><p>A list of pairs of modules and pin groups representing the destinations.</p>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>A dict containing all known bit orders (including new and already known ones) on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
-<dt class="field-even">returns</dt>
-<dd class="field-even"><p>All wellformed bitorders on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
-</dd>
-<dt class="field-odd">rtype</dt>
-<dd class="field-odd"><p>dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] or None</p>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>dict[tuple(hal_py.Module,hal_py.ModulePinGroup),dict[hal_py.Net,int]] or None</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -200,41 +186,98 @@ The valid bit orders are then annotated to the module pin groups.</p>
 </ol>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="bitorder_propagation.BitorderPropagationPlugin.propagate_module_pingroup_bitorder">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">propagate_module_pingroup_bitorder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">known_bitorders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module"><span class="pre">hal_py.Module</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><span class="pre">hal_py.ModulePinGroup</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_bitorders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module"><span class="pre">hal_py.Module</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><span class="pre">hal_py.ModulePinGroup</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_consens_finding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module"><span class="pre">hal_py.Module</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><span class="pre">hal_py.ModulePinGroup</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin.propagate_module_pingroup_bitorder" title="Permalink to this definition"></a></dt>
-<dd><p>Propagates known bit order information to module pin groups with unknown bit order.
-Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="bitorder_propagation.reorder_module_pin_groups">
+<span class="sig-prename descclassname"><span class="pre">bitorder_propagation.</span></span><span class="sig-name descname"><span class="pre">reorder_module_pin_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ordered_module_pin_groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module"><span class="pre">hal_py.Module</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><span class="pre">hal_py.ModulePinGroup</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#bitorder_propagation.reorder_module_pin_groups" title="Permalink to this definition"></a></dt>
+<dd><p>Reorder and rename the pins of the pin groups according to the provided bit-order information.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>known_bitorders</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em>(</em><a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a><em>,</em><a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a><em>)</em><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>[</em><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em><em>]</em>) – The known indices for the nets belonging to module pin groups.</p></li>
-<li><p><strong>unknown_bitorders</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)"><em>set</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em>(</em><a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a><em>,</em><a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a><em>)</em><em>]</em>) – The module pin groups with yet unknown bit order.</p></li>
-<li><p><strong>strict_consens_finding</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – When set to true this option only allows for complete and continous bitorders, while false would allow for bit orders to be formed that are either not complete or not continous.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>ordered_module_pin_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em>(</em><a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a><em>,</em><a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a><em>)</em><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>[</em><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em><em>]</em>) – A mapping from pairs of modules and their pin groups to known bit-order information given as a mapping from nets to their index.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A mapping of all the known bit orders consisting of the new and already known ones on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on success, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a>(<a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module">hal_py.Module</a>,<a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup">hal_py.ModulePinGroup</a>),<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>]] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bitorder_propagation.BitorderPropagationPlugin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bitorder_propagation.</span></span><span class="sig-name descname"><span class="pre">BitorderPropagationPlugin</span></span><a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin" title="Permalink to this definition"></a></dt>
+<dd><p>This class provides an interface to integrate the bit-order propagation as a plugin within the HAL framework.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="bitorder_propagation.BitorderPropagationPlugin.description">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin.description" title="Permalink to this definition"></a></dt>
+<dd><p>The description of the plugin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="bitorder_propagation.BitorderPropagationPlugin.reorder_module_pin_groups">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reorder_module_pin_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ordered_module_pin_groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module"><span class="pre">hal_py.Module</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><span class="pre">hal_py.ModulePinGroup</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin.reorder_module_pin_groups" title="Permalink to this definition"></a></dt>
-<dd><p>This funtion tries to propagate the bit order of the src pin groups to the dst pin groups</p>
+<dt class="sig sig-object py" id="bitorder_propagation.BitorderPropagationPlugin.get_description">
+<span class="sig-name descname"><span class="pre">get_description</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bitorder_propagation.BitorderPropagationPlugin" title="bitorder_propagation.BitorderPropagationPlugin"><span class="pre">bitorder_propagation.BitorderPropagationPlugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin.get_description" title="Permalink to this definition"></a></dt>
+<dd><p>Get the description of the plugin.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>ordered_module_pin_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a><em>(</em><a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module"><em>hal_py.Module</em></a><em>,</em><a class="reference internal" href="module_pin_group.html#hal_py.ModulePinGroup" title="hal_py.ModulePinGroup"><em>hal_py.ModulePinGroup</em></a><em>)</em><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>[</em><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em><em>]</em>) – A mapping from all the modules and pin groups with known bit order information to the knonw bit order information mapping every net to its corresponding index.</p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The description of the plugin.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> on sucess, <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bitorder_propagation.BitorderPropagationPlugin.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bitorder_propagation.BitorderPropagationPlugin" title="bitorder_propagation.BitorderPropagationPlugin"><span class="pre">bitorder_propagation.BitorderPropagationPlugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin.get_name" title="Permalink to this definition"></a></dt>
+<dd><p>Get the name of the plugin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The name of the plugin.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bitorder_propagation.BitorderPropagationPlugin.get_version">
+<span class="sig-name descname"><span class="pre">get_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#bitorder_propagation.BitorderPropagationPlugin" title="bitorder_propagation.BitorderPropagationPlugin"><span class="pre">bitorder_propagation.BitorderPropagationPlugin</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin.get_version" title="Permalink to this definition"></a></dt>
+<dd><p>Get the version of the plugin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The version of the plugin.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="bitorder_propagation.BitorderPropagationPlugin.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin.name" title="Permalink to this definition"></a></dt>
+<dd><p>The name of the plugin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="bitorder_propagation.BitorderPropagationPlugin.version">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#bitorder_propagation.BitorderPropagationPlugin.version" title="Permalink to this definition"></a></dt>
+<dd><p>The version of the plugin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
