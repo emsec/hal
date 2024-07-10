@@ -74,7 +74,8 @@ namespace hal
             const auto VariableIndexRoundBracketRule =
                 x3::lexeme[(-(x3::char_("\\")) >> x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_") >> x3::char_("(") >> x3::int_ >> x3::char_(")"))][VariableIndexAction];
             const auto VariableIndexSquareBracketRule =
-                x3::lexeme[(-(x3::char_("\\")) >> x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_") >> x3::char_("[") >> x3::int_ >> x3::char_("]"))][
+                x3::lexeme[(-(x3::char_("\\")) >> x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_") >> x3::char_("[") >> x3::int_ >> x3::char_("]"))][VariableIndexAction];
+            const auto VariableIndexRule = VariableIndexRoundBracketRule | VariableIndexSquareBracketRule;
 
             const auto ConstantRule       = x3::lexeme[x3::char_("0-1")][ConstantAction];
             const auto ConstantPrefixRule = x3::lit("0b") >> x3::lexeme[x3::char_("0-1")][ConstantAction];
