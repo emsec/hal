@@ -4,7 +4,6 @@
 #include <boost/fusion/include/at_c.hpp>
 #include <boost/fusion/sequence/intrinsic/at_c.hpp>
 #include <boost/spirit/home/x3.hpp>
-
 #include <sstream>
 
 namespace hal
@@ -31,7 +30,7 @@ namespace hal
 
             const auto VariableAction = [&tokens](auto& ctx) {
                 // # Developer Note
-                // We combine the first matched character with the remaining 
+                // We combine the first matched character with the remaining
                 // string and do not remove any preceding '/' character.
                 std::stringstream name;
                 name << std::string(1, boost::fusion::at_c<0>(_attr(ctx)));
@@ -40,9 +39,9 @@ namespace hal
                 tokens.emplace_back(BooleanFunctionParser::Token::Variable(name.str(), 1));
             };
             const auto VariableIndexAction = [&tokens](auto& ctx) {
-                // # Developer Note 
-                // Since the first character is an optional '\' character and 
-                // generally escaped a.k.a. removed within HAL, we also do not 
+                // # Developer Note
+                // Since the first character is an optional '\' character and
+                // generally escaped a.k.a. removed within HAL, we also do not
                 // touch the part and only assemble the remaining string.
                 std::stringstream name;
                 name << std::string(1, boost::fusion::at_c<1>(_attr(ctx)));
@@ -71,10 +70,11 @@ namespace hal
             const auto BracketOpenRule  = x3::lit("(")[BracketOpenAction];
             const auto BracketCloseRule = x3::lit(")")[BracketCloseAction];
 
-            const auto VariableRule      = x3::lexeme[(x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_"))][VariableAction];
-            const auto VariableIndexRoundBracketRule = x3::lexeme[(-(x3::char_("\\")) >> x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_") >> x3::char_("(") >> x3::int_ >> x3::char_(")"))] [VariableIndexAction];
-            const auto VariableIndexSquareBracketRule = x3::lexeme[(-(x3::char_("\\")) >> x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_") >> x3::char_("[") >> x3::int_ >> x3::char_("]"))] [VariableIndexAction];
-            const auto VariableIndexRule = VariableIndexRoundBracketRule | VariableIndexSquareBracketRule;
+            const auto VariableRule = x3::lexeme[(x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_"))][VariableAction];
+            const auto VariableIndexRoundBracketRule =
+                x3::lexeme[(-(x3::char_("\\")) >> x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_") >> x3::char_("(") >> x3::int_ >> x3::char_(")"))][VariableIndexAction];
+            const auto VariableIndexSquareBracketRule =
+                x3::lexeme[(-(x3::char_("\\")) >> x3::char_("a-zA-Z") >> *x3::char_("a-zA-Z0-9_") >> x3::char_("[") >> x3::int_ >> x3::char_("]"))][
 
             const auto ConstantRule       = x3::lexeme[x3::char_("0-1")][ConstantAction];
             const auto ConstantPrefixRule = x3::lit("0b") >> x3::lexeme[x3::char_("0-1")][ConstantAction];
