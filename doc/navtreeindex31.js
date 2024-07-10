@@ -1,5 +1,6 @@
 var NAVTREEINDEX31 =
 {
+"plugin__system_2plugin__manager_8cpp.html#acb6d1f3c164b832fb19257b1df06aa53":[7,0,2,1,4,14],
 "plugin__system_2plugin__manager_8cpp.html#acfef91bcd7b9db938f10e4b705cf3bfb":[7,0,2,1,4,7],
 "plugin__system_2plugin__manager_8cpp.html#ad34e384af419d40a22d5486356772c24":[7,0,2,1,4,3],
 "plugin__system_2plugin__manager_8cpp.html#ad66fea3d4017a3c7b058436924d3dda3":[7,0,2,1,4,12],
@@ -248,6 +249,5 @@ var NAVTREEINDEX31 =
 "python__console__qss__adapter_8cpp.html":[7,0,1,3,2,36,4],
 "python__console__qss__adapter_8cpp_source.html":[7,0,1,3,2,36,4],
 "python__console__qss__adapter_8h.html":[7,0,1,3,0,0,38,4],
-"python__console__qss__adapter_8h_source.html":[7,0,1,3,0,0,38,4],
-"python__console__widget_8cpp.html":[7,0,1,3,2,36,5]
+"python__console__qss__adapter_8h_source.html":[7,0,1,3,0,0,38,4]
 };
