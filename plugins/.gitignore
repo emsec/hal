@@ -27,6 +27,8 @@
 !netlist_preprocessing/**/*
 !python_shell*
 !python_shell/**/*
+!resynthesis*
+!resynthesis/**/*
 !simulator
 !solve_fsm*
 !solve_fsm/**/*

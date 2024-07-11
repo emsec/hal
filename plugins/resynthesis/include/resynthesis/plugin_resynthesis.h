@@ -37,23 +37,23 @@ namespace hal
     class Netlist;
 
     /**
-     * @class XilinxToolboxPlugin
-     * @brief Plugin interface for the Xilinx toolbox.
+     * @class ResynthesisPlugin
+     * @brief Plugin interface for the netlist resynthesis plugin.
      * 
-     * This class provides an interface to integrate the Xilinx toolbox as a plugin within the HAL framework.
+     * This class provides an interface to integrate the netlist resynthesis as a plugin within the HAL framework.
      */
-    class PLUGIN_API XilinxToolboxPlugin : public BasePluginInterface
+    class PLUGIN_API ResynthesisPlugin : public BasePluginInterface
     {
     public:
         /** 
-         * @brief Default constructor for `XilinxToolboxPlugin`.
+         * @brief Default constructor for `ResynthesisPlugin`.
          */
-        XilinxToolboxPlugin() = default;
+        ResynthesisPlugin() = default;
 
         /** 
-         * @brief Default destructor for `XilinxToolboxPlugin`.
+         * @brief Default destructor for `ResynthesisPlugin`.
          */
-        ~XilinxToolboxPlugin() = default;
+        ~ResynthesisPlugin() = default;
 
         /**
          * @brief Get the name of the plugin.
