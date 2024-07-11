@@ -1,92 +1,80 @@
+// MIT License
+//
+// Copyright (c) 2019 Ruhr University Bochum, Chair for Embedded Security. All Rights reserved.
+// Copyright (c) 2019 Marc Fyrbiak, Sebastian Wallat, Max Hoffmann ("ORIGINAL AUTHORS"). All rights reserved.
+// Copyright (c) 2021 Max Planck Institute for Security and Privacy. All Rights reserved.
+// Copyright (c) 2021 Jörn Langheinrich, Julian Speith, Nils Albartus, René Walendy, Simon Klix ("ORIGINAL AUTHORS"). All Rights reserved.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+/**
+ * @file plugin_bitorder_propagation.h 
+ * @brief This file contains all functions related to the HAL plugin API.
+ */
+
 #pragma once
 
 #include "hal_core/defines.h"
 #include "hal_core/plugin_system/plugin_interface_base.h"
-#include "hal_core/utilities/result.h"
-#include "hal_core/netlist/netlist.h"
 
 namespace hal
 {
     class ModulePin;
 
+    /**
+     * @class BitorderPropagationPlugin
+     * @brief Plugin interface for bit order propoagation.
+     * 
+     * This class provides an interface to integrate the bit-order propagation as a plugin within the HAL framework.
+     */
     class PLUGIN_API BitorderPropagationPlugin : public BasePluginInterface
     {
     public:
+        /** 
+         * @brief Default constructor for `BitorderPropagationPlugin`.
+         */
+        BitorderPropagationPlugin() = default;
+
+        /** 
+         * @brief Default destructor for `BitorderPropagationPlugin`.
+         */
+        ~BitorderPropagationPlugin() = default;
+
+        /**
+         * @brief Get the name of the plugin.
+         *
+         * @returns The name of the plugin.
+         */
         std::string get_name() const override;
+
+        /**
+         * @brief Get the version of the plugin.
+         *
+         * @returns The version of the plugin.
+         */
         std::string get_version() const override;
 
-        void initialize() override;
-
         /**
-         * Propagates known bit order information to module pin groups with unknown bit order.
-         * Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.
+         * @brief Get a short description of the plugin.
          *
-         * @param[in] known_bitorders - The known indices for the nets belonging to module pin groups. 
-         * @param[in] unknown_bitorders - The module pin groups with yet unknown bit order.
-         * @param[in] strict_consens_finding - When set to true this option only allows for complete and continous bitorders, while false would allow for bit orders to be formed that are either not complete or not continous.
-         * @returns OK and a mapping of all the known bit orders consisting of the new and already known.
+         * @returns The short description of the plugin.
          */
-        static Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>>
-            propagate_module_pingroup_bitorder(const std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>& known_bitorders,
-                                               const std::set<std::pair<Module*, PinGroup<ModulePin>*>>& unknown_bitorders,
-                                               const bool strict_consens_finding = true);
-
-        /**
-         * This function reorders and renames the pins of the pin groups according to the corresponding bit order information. 
-         *
-         * @param[in] ordered_module_pin_groups - A mapping from all the modules and pin groups with known bit order information to the knonw bit order information mapping every net to its corresponding index.
-         * @returns OK if everything worked, Error otherwise.
-         */
-        static Result<std::monostate> reorder_module_pin_groups(const std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>& ordered_module_pin_groups);
-
-        /**
-         * Propagates known bit order information to module pin groups with unknown bit order.
-         * Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.
-         * The valid bit orders are then annotated to the module pin groups.
-         *
-         * @param[in] nl  - The netlist containing the modules.
-         * @param[in] src - The module id / pin group name pair with known bit order. (The pins of the pin group have to be in the right order already) 
-         * @param[in] dst - The module / pin group pair with unknown bit order.
-         * @returns OK and a map containing all known bitorders consisting of the new and already known ones or an Error.
-         */
-        static Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>>
-            propagate_bitorder(Netlist* nl, const std::pair<u32, std::string>& src, const std::pair<u32, std::string>& dst);
-
-        /**
-         * Propagates known bit order information to module pin groups with unknown bit order.
-         * Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.
-         * The valid bit orders are then annotated to the module pin groups.
-         *
-         * @param[in] src - The module / pin group pair with known bit order. (The pins of the pin group have to be in the right order already) 
-         * @param[in] dst - The module / pin group pair with unknown bit order.
-         * @returns OK and a map containing all known bitorders consisting of the new and already known ones or an Error.
-         */
-        static Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> propagate_bitorder(const std::pair<Module*, PinGroup<ModulePin>*>& src,
-                                                                                                                  const std::pair<Module*, PinGroup<ModulePin>*>& dst);
-
-        /**
-         * Propagates known bit order information to module pin groups with unknown bit order.
-         * Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.
-         * The valid bit orders are then annotated to the module pin groups.
-         *
-         * @param[in] nl  - The netlist containing the modules.
-         * @param[in] src - The module id / pin group name pairs with known bit order. (The pins of the pin group have to be in the right order already) 
-         * @param[in] dst - The module / pin group pairs with unknown bit order.
-         * @returns OK and a map containing all known bitorders consisting of the new and already known ones or an Error.
-         */
-        static Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>>
-            propagate_bitorder(Netlist* nl, const std::vector<std::pair<u32, std::string>>& src, const std::vector<std::pair<u32, std::string>>& dst);
-
-        /**
-         * Propagates known bit order information to module pin groups with unknown bit order.
-         * Afterwards the algorithm tries to reconstruct valid bit orders from the propagated information.
-         * The valid bit orders are then annotated to the module pin groups.
-         *
-         * @param[in] src - The module / pin group pairs with known bit order. (The pins of the pin group have to be in the right order already) 
-         * @param[in] dst - The module / pin group pairs with unknown bit order.
-         * @returns OK and a map containing all known bitorders consisting of the new and already known ones or an Error.
-         */
-        static Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> propagate_bitorder(const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& src,
-                                                                                                                  const std::vector<std::pair<Module*, PinGroup<ModulePin>*>>& dst);
+        std::string get_description() const override;
     };
 }    // namespace hal
