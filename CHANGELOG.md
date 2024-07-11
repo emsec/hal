@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file.
   * fixed incompatibility between shipped zlib and QuaZip libraries
   * fixed a bug when checking whether one Boolean function is just a negated version of another one during symbolic execution
   * fixed bugs related to the Boolean function SLICE operation 
+  * fixed VCD writer of `netlist_simulation_controller` plugin
+  * fixed handling of const `0` and `1` nets in `verilog_parser`, `vhdl_parser`, and `verilog_writer` plugins
 
 ## [4.3.0](v4.3.0) - 2024-07-02 13:42:55+02:00 (urgency: medium)
 * **WARNING:** this release breaks compatibility with Ubuntu 20.04 LTS
