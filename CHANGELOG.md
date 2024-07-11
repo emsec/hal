@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
   * added backward compatibility for view management
 * bugfixes
   * fixed incompatibility between shipped zlib and QuaZip libraries
+  * fixed layout bug which occured when leftmost node had no inputs
 
 ## [4.3.0](v4.3.0) - 2024-07-02 13:42:55+02:00 (urgency: medium)
 * **WARNING:** this release breaks compatibility with Ubuntu 20.04 LTS
