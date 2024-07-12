@@ -45,7 +45,8 @@ namespace hal {
     private:
         QGridLayout* mLayout;
 
-        QLineEdit* mAscending;
+        QComboBox* mAscending;
+        //QLineEdit* mAscending;
 
         QLabel* mLabAscending;
     };

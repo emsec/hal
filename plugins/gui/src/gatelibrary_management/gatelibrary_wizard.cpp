@@ -154,7 +154,7 @@ namespace hal
                     identifiers.push_back(id.toStdString());
                 }
                 std::unique_ptr<GateTypeComponent> init_component = GateTypeComponent::create_init_component(initPage->mCategory->text().toStdString(), identifiers);
-                parentComponent = GateTypeComponent::create_lut_component(std::move(init_component), lutPage->mAscending->text() == "Ascending");
+                parentComponent = GateTypeComponent::create_lut_component(std::move(init_component), lutPage->mAscending->currentText() == "Ascending");
             }
             else if(prop == "ff")
             {
@@ -251,7 +251,7 @@ namespace hal
                                 rpEdit.addressGroup->text().toStdString(),
                                 clocked_on_bf,
                                 enabled_on_bf,
-                                rpEdit.isWritePort->text().toStdString() == "True");
+                                rpEdit.isWritePort->currentText() == "True");
                 }
                 parentComponent = GateTypeComponent::create_ram_component(std::move(sub_component), ramPage->mBitSize->text().toInt());
             }
@@ -288,7 +288,7 @@ namespace hal
             return RAMPort;
         case RAMPort:
             if(properties.contains("ff") || properties.contains("latch")) return State;
-            return BoolFunc;
+            return Init;
         case State:
             if(properties.contains("ff") || properties.contains("latch") || properties.contains("c_lut") || properties.contains("ram")) return Init;
             return BoolFunc;

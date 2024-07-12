@@ -45,7 +45,7 @@ namespace hal {
             QLineEdit* addressGroup;
             QLineEdit* clockFunction;
             QLineEdit* enableFunciton;
-            QLineEdit* isWritePort;
+            QComboBox* isWritePort;
         };
         QList<RAMPort> getRamPorts();
         void setData(GateType* gate);

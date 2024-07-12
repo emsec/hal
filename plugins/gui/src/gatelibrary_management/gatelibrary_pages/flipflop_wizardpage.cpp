@@ -43,8 +43,8 @@ namespace hal
         //TODO:
         //mTabWidget->addTab(mStateTableTab, "State Table");
 
-        mAReset->setDisabled(true);
-        mASet->setDisabled(true);
+        //mAReset->setDisabled(true);
+        //mASet->setDisabled(true);
 
         setLayout(mLayout);
 

@@ -71,9 +71,9 @@ namespace hal
         QList<PinItem*> pinGroups = mWizard->getPingroups();
 
         QList<PinItem*> inputPins = mWizard->mPinModel->getInputPins();
-        std::set<std::string> input_pins;
+        std::set<std::string> legVars;
         for (PinItem* pi : inputPins)
-            input_pins.insert(pi->getName().toStdString());
+            legVars.insert(pi->getName().toStdString());
 
         if (mEditFunctions.isEmpty())
         {
@@ -89,7 +89,13 @@ namespace hal
 
             for(std::pair<const std::basic_string<char>, BooleanFunction> bf : boolFunctions){
                 QLabel* label = new QLabel(QString::fromStdString(bf.first));
-                BooleanFunctionEdit* lineEdit = new BooleanFunctionEdit(input_pins, this);
+                BooleanFunctionEdit* lineEdit;
+                if(mWizard->generalInfoPage->getProperties().contains("ff"))
+                {
+                    legVars.insert(mWizard->statePage->mStateIdentifier->text().toStdString());
+                    lineEdit = new BooleanFunctionEdit(legVars, this);
+                }
+                else lineEdit = new BooleanFunctionEdit(legVars, this);
                 mLayout->addWidget(label, boolFuncCnt, 0);
                 mLayout->addWidget(lineEdit, boolFuncCnt, 1);
                 lineEdit->setText(QString::fromStdString(bf.second.to_string()));
@@ -111,7 +117,13 @@ namespace hal
                             if(pin->getItemType() != PinItem::TreeItemType::PinCreator){
                                 QLabel* label = new QLabel(pin->getName());
                                 QString name = label->text();
-                                BooleanFunctionEdit* lineEdit = new BooleanFunctionEdit(input_pins, this);
+                                BooleanFunctionEdit* lineEdit;
+                                if(mWizard->generalInfoPage->getProperties().contains("ff"))
+                                {
+                                    legVars.insert(mWizard->statePage->mStateIdentifier->text().toStdString());
+                                    lineEdit = new BooleanFunctionEdit(legVars, this);
+                                }
+                                else lineEdit = new BooleanFunctionEdit(legVars, this);
                                 mLayout->addWidget(label, rowCount, 0);
                                 mLayout->addWidget(lineEdit, rowCount, 1);
                                 connect(lineEdit,&BooleanFunctionEdit::stateChanged,this,&BoolWizardPage::handleStateChanged);

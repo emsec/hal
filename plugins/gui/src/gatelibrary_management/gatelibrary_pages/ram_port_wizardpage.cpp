@@ -10,29 +10,6 @@ namespace hal
         setSubTitle("Enter parameters for RAM Port component");
         mLayout = new QGridLayout(this);
 
-        /*mDataGroup = new QLineEdit(this);
-        mAddressGroup = new QLineEdit(this);
-        mClockFunction = new QLineEdit(this);
-        mEnableFunciton = new QLineEdit(this);
-        mIsWritePort = new QLineEdit(this);
-
-        mLabDataGroup = new QLabel("Name of the data pingroup: ");
-        mLabAddressGroup = new QLabel("Name of the address pingroup: ");
-        mLabClockFunction = new QLabel("Clock boolean function: ");
-        mLabEnableFunciton = new QLabel("Enable boolean function: ");
-        mLabIsWritePort = new QLabel("Is a write port: ");
-
-        mLayout->addWidget(mLabDataGroup, 0, 0);
-        mLayout->addWidget(mDataGroup, 0, 1);
-        mLayout->addWidget(mLabAddressGroup, 1, 0);
-        mLayout->addWidget(mAddressGroup, 1, 1);
-        mLayout->addWidget(mLabClockFunction, 2, 0);
-        mLayout->addWidget(mClockFunction, 2, 1);
-        mLayout->addWidget(mLabEnableFunciton, 3, 0);
-        mLayout->addWidget(mEnableFunciton, 3, 1);
-        mLayout->addWidget(mLabIsWritePort, 4, 0);
-        mLayout->addWidget(mIsWritePort, 4, 1);*/
-
         setLayout(mLayout);
     }
 
@@ -48,7 +25,8 @@ void RAMPortWizardPage::initializePage(){
 
     //create empty lines for ram_port for each data/address pair
     //assumption at this point: #data fields = #address fields
-    for (int i=0; i<pinGroups.length()-1; i++) { //-1 for dummy entries
+    for (int i=0; i<pinGroups.length(); i++) { //-1 for dummy entries
+        if(pinGroups[i]->getItemType() == PinItem::TreeItemType::GroupCreator) continue;
         PinType type = pinGroups[i]->getPinType();
         if(type == PinType::data)
         {
@@ -60,7 +38,8 @@ void RAMPortWizardPage::initializePage(){
             rp.addressGroup = new QLineEdit(this);
             rp.clockFunction = new QLineEdit(this);
             rp.enableFunciton = new QLineEdit(this);
-            rp.isWritePort = new QLineEdit(this);
+            rp.isWritePort = new QComboBox(this);
+            rp.isWritePort->addItems({"True", "False"});
 
             mLabDataGroup = new QLabel("Name of the data pingroup: ");
             mLabAddressGroup = new QLabel("Name of the address pingroup: ");
@@ -85,9 +64,9 @@ void RAMPortWizardPage::initializePage(){
                 rp.addressGroup->setText(QString::fromStdString(ram_port->get_address_group()));
                 rp.clockFunction->setText(QString::fromStdString(ram_port->get_clock_function().to_string()));
                 rp.enableFunciton->setText(QString::fromStdString(ram_port->get_clock_function().to_string()));
-                rp.isWritePort->setText(ram_port->is_write_port() ? "True":"False");
-                mRamPortEdits.append(rp);
+                rp.isWritePort->setCurrentText(ram_port->is_write_port() ? "True":"False");
             }
+            mRamPortEdits.append(rp);
         }
     }
 

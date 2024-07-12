@@ -10,7 +10,8 @@ namespace hal
         setSubTitle("Enter parameters for LUT component");
         mLayout = new QGridLayout(this);
 
-        mAscending = new QLineEdit(this);
+        mAscending = new QComboBox(this);
+        mAscending->addItems({"Ascending", "Descending"});
 
         mLabAscending = new QLabel("Bit order: ");
 
@@ -26,7 +27,7 @@ namespace hal
         {
             auto lutc = gate->get_component_as<LUTComponent>([](const GateTypeComponent* c) { return LUTComponent::is_class_of(c); });
 
-            if(lutc != nullptr) mAscending->setText(QString::fromStdString(lutc->is_init_ascending() ? "Ascending" : "Descending"));
+            if(lutc != nullptr) mAscending->setCurrentText(QString::fromStdString(lutc->is_init_ascending() ? "Ascending" : "Descending"));
         }
 
     }

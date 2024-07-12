@@ -37,6 +37,7 @@
 namespace hal {
     class StateWizardPage:public QWizardPage{
         friend class GateLibraryWizard;
+        friend class BoolWizardPage;
     public:
         StateWizardPage(QWidget* parent = nullptr);
         void setData(GateType* gate);

@@ -85,12 +85,8 @@ namespace hal
         StateWizardPage* statePage;
         BoolWizardPage* boolPage;
 
-        QString mName;
-        QStringList mProperties;
         PinModel* mPinModel;
         GateLibraryTabPin* mPinTab;
         GateType* mNewGateType;
-
-        bool isDirty;
     };
 }
