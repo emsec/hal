@@ -19,6 +19,6 @@ if(PL_LOGIC_EVALUATOR OR BUILD_ALL_PLUGINS)
                    SHARED
                    HEADER ${LOGIC_EVALUATOR_INC}
                    SOURCES ${LOGIC_EVALUATOR_SRC} ${LOGIC_EVALUATOR_PYTHON_SRC}  ${MOC_HDR}
-                   LINK_LIBRARIES PUBLIC gui Qt5::Core Qt5::Gui Qt5::Widgets)
+                   LINK_LIBRARIES PUBLIC gui netlist_simulator_controller Qt5::Core Qt5::Gui Qt5::Widgets)
 
 endif()

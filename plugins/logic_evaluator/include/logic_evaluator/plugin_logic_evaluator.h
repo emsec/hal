@@ -26,6 +26,7 @@
 #pragma once
 
 #include "hal_core/plugin_system/plugin_interface_base.h"
+#include "hal_core/plugin_system/gui_extension_interface.h"
 #include <QMetaType>
 
 Q_DECLARE_METATYPE(std::string)
@@ -39,6 +40,8 @@ namespace hal
     class PLUGIN_API LogicEvaluatorPlugin : public BasePluginInterface
     {
     public:
+        LogicEvaluatorPlugin();
+
         std::string get_name() const override;
         std::string get_version() const override;
         std::string get_description() const override;
@@ -46,5 +49,30 @@ namespace hal
         void on_load() override;
         void on_unload() override;
         std::set<std::string> get_dependencies() const override;
+    };
+
+    class GuiExtensionLogicEvaluator : public GuiExtensionInterface
+    {
+
+        static bool acceptGate(const Gate* g);
+    public:
+        /**
+         * @brief Default constructor for `GuiExtensionEvaluator`.
+         */
+        GuiExtensionLogicEvaluator() = default;
+
+        /**
+         * @brief Get a vector of configurable parameters.
+         *
+         * @returns The vector of parameters.
+         */
+        std::vector<PluginParameter> get_parameter() const override;
+
+        /**
+         * @brief Set values for a vector of configurable parameters.
+         *
+         * @param[in] params - The parameters including their values.
+         */
+        void set_parameter(const std::vector<PluginParameter>& params) override;
     };
 }    // namespace hal

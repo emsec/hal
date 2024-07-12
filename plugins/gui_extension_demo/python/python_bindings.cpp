@@ -60,6 +60,7 @@ namespace hal
                 .value("Module",      PluginParameter::Gate,        R"(Module ID.)")
                 .value("NewFile",     PluginParameter::NewFile,     R"(New file name.)")
                 .value("PushButton",  PluginParameter::PushButton,  R"(Push Button.)")
+                .value("Label",       PluginParameter::Label,       R"(Text Label.)")
                 .value("String",      PluginParameter::String,      R"(String value.)")
                 .value("TabName",     PluginParameter::TabName,     R"(Tab name for structuring other elements.)")
                 .export_values();

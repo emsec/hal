@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
     * changed API so that no instance of the plugin needs to be created anymore to apply its algorithms
     * changed propagation logic for better results
 * miscellaneous
+  * added logic evaluator plugin
   * added backward compatibility for view management
 * bugfixes
   * fixed incompatibility between shipped zlib and QuaZip libraries
