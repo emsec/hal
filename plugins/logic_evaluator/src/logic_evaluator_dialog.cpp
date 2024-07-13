@@ -129,7 +129,7 @@ namespace hal {
         ngates->setAlignment(Qt::AlignHCenter);
         labLayout->addWidget(ngates,0,0);
         mCheckCompiled = new QCheckBox("Run compiled logic", bbox);
-        mCheckCompiled->setChecked(!skipCompile);
+        mCheckCompiled->setChecked(mSharedLib.handle!=nullptr);
         mCheckIndicate = new QCheckBox("Show in graphic view", bbox);
         labLayout->addWidget(mCheckCompiled,2,0);
         labLayout->addWidget(mCheckIndicate,3,0);
@@ -152,7 +152,11 @@ namespace hal {
     void LogicEvaluatorDialog::handleCompiledStateChanged(int state)
     {
         if (state==Qt::Checked && !mSharedLib.handle)
+        {
             compile();
+            if (!mSharedLib.handle)
+                mCheckCompiled->setChecked(false);
+        }
     }
 
     void LogicEvaluatorDialog::handleIndicateStateChanged(int state)
@@ -313,6 +317,8 @@ namespace hal {
             mSharedLib.close();
             return false;
         }
+
+        log_info("logic_evaluator", "Temporary shared library '{}' successfully build and loaded.", mSharedLib.fnSharedLib.toStdString());
 
         return true;
     }

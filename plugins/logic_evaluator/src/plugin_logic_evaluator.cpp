@@ -46,6 +46,7 @@ namespace hal
     void LogicEvaluatorPlugin::on_load()
     {
         qRegisterMetaType<std::string>();
+        LogManager::get_instance()->add_channel("logic_evaluator", {LogManager::create_stdout_sink(), LogManager::create_file_sink(), LogManager::create_gui_sink()}, "info");
     }
 
     void LogicEvaluatorPlugin::on_unload()
