@@ -350,7 +350,7 @@ namespace hal
         if (clicked == &extractPythonAction){
             switch(type)
             {
-                case ModuleItem::TreeItemType::Module: QApplication::clipboard()->setText("netlist.get_Module_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")"); break;
+                case ModuleItem::TreeItemType::Module: QApplication::clipboard()->setText("netlist.get_module_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")"); break;
                 case ModuleItem::TreeItemType::Gate: QApplication::clipboard()->setText("netlist.get_gate_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")"); break;
                 case ModuleItem::TreeItemType::Net: QApplication::clipboard()->setText("netlist.get_net_by_id(" + QString::number(getModuleItemFromIndex(index)->id()) + ")"); break;
             }

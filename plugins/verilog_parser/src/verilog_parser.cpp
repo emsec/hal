@@ -1311,6 +1311,16 @@ namespace hal
             {
                 continue;
             }
+            else if (slave_net == m_zero_net || slave_net == m_one_net)
+            {
+                auto* tmp_net = master_net;
+                master_net    = slave_net;
+                slave_net     = tmp_net;
+
+                auto tmp_name = master;
+                master        = slave;
+                slave         = tmp_name;
+            }
 
             // merge sources
             if (slave_net->is_global_input_net())
@@ -1444,7 +1454,7 @@ namespace hal
         // add global GND gate if required by any instance
         if (m_netlist->get_gnd_gates().empty())
         {
-            if (!m_zero_net->get_destinations().empty())
+            if (m_zero_net->get_num_of_destinations() > 0)
             {
                 GateType* gnd_type  = m_gnd_gate_types.begin()->second;
                 GatePin* output_pin = gnd_type->get_output_pins().front();
@@ -1470,7 +1480,7 @@ namespace hal
         // add global VCC gate if required by any instance
         if (m_netlist->get_vcc_gates().empty())
         {
-            if (!m_one_net->get_destinations().empty())
+            if (m_one_net->get_num_of_destinations() > 0)
             {
                 GateType* vcc_type  = m_vcc_gate_types.begin()->second;
                 GatePin* output_pin = vcc_type->get_output_pins().front();
@@ -1593,7 +1603,9 @@ namespace hal
             {
                 std::string unique_net_name = get_unique_alias(module->get_name(), expanded_name, m_net_name_occurences);
                 if (unique_net_name != expanded_name)
+                {
                     m_net_name_occurences[unique_net_name]++;
+                }
                 signal_alias[expanded_name] = unique_net_name;
 
                 // create new net for the signal
@@ -1641,18 +1653,11 @@ namespace hal
             {
                 b = alias_it->second;
             }
-            else if (b == "'0'" || b == "'1'")
-            {
-                // '0' or '1' is assigned, make sure that '0' or '1' net does not get deleted by merging
-                const auto tmp = a;
-                a              = b;
-                b              = tmp;
-            }
             else if (b == "'Z'" || b == "'X'")
             {
                 continue;
             }
-            else
+            else if (b != "'0'" && b != "'1'")
             {
                 return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to find alias for net '" + b + "'");
             }
@@ -1734,7 +1739,7 @@ namespace hal
             {
                 // create the new gate
                 instance_alias[instance->m_name] = get_unique_alias(module->get_name(), instance->m_name, m_instance_name_occurences);
-                Gate* new_gate = m_netlist->create_gate(gate_type_it->second, instance_alias.at(instance->m_name));
+                Gate* new_gate                   = m_netlist->create_gate(gate_type_it->second, instance_alias.at(instance->m_name));
                 if (new_gate == nullptr)
                 {
                     return ERR("could not create instance '" + instance_identifier + "' of type '" + instance_type + "': failed to create gate '" + instance->m_name + "'");
@@ -1924,8 +1929,6 @@ namespace hal
             {'Z', {BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z, BooleanFunction::Value::Z}}};
     }    // namespace
 
-    const std::string instance_name_seperator = "/";
-
     // generate a unique name for a gate/module instance
     std::string VerilogParser::get_unique_alias(const std::string& parent_name, const std::string& name, const std::unordered_map<std::string, u32>& name_occurences) const
     {
@@ -1941,14 +1944,14 @@ namespace hal
 
             // it is OK if base name (first loop cnt=0) is already in name_occurences once
             // unique_alias (cnt > 0) must not be in name_occurences
-            while (instance_name_it != name_occurences.end() && (cnt || instance_name_it->second > 1) )
+            while (instance_name_it != name_occurences.end() && (cnt || instance_name_it->second > 1))
             {
                 std::string extension;
                 if (cnt++)
                 {
                     extension = "_u" + std::to_string(cnt);
                 }
-                unique_alias = parent_name + instance_name_seperator + unique_alias + extension;
+                unique_alias     = parent_name + instance_name_seperator + unique_alias + extension;
                 instance_name_it = name_occurences.find(unique_alias);
             }
         }

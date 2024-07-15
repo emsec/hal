@@ -2,8 +2,28 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-* added backward compatibility for view management
-* fixed incompatibility between shipped zlib and QuaZip libraries
+* **WARNING:** this release breaks the API of the `bitorder_propagation` plugin
+* plugins
+  * changed `bitorder_propagation` plugin
+    * changed API so that no instance of the plugin needs to be created anymore to apply its algorithms
+    * changed propagation logic for better results
+* miscellaneous
+  * added backward compatibility for view management
+  * slightly improved symbolic execution engine
+  * added a version of `netlist_factory::load_netlist` that takes a path to a netlist file as well as a pointer to a gate library
+  * added `use_net_variables` parameter to `Gate::get_resolved_boolean_function` to choose whether to use input pins or nets as variable names
+  * added `utils::get_unique_temp_directory`
+  * added `base` parameter to `utils::wrapped_stoull` and `utils::wrapped_stoul`
+  * added datatype 'ExistingFile' to plugin parameter 
+* bugfixes
+  * fixed incompatibility between shipped zlib and QuaZip libraries
+  * fixed a bug when checking whether one Boolean function is just a negated version of another one during symbolic execution
+  * fixed bugs related to the Boolean function SLICE operation 
+  * fixed VCD writer of `netlist_simulation_controller` plugin
+  * fixed handling of const `0` and `1` nets in `verilog_parser`, `vhdl_parser`, and `verilog_writer` plugins
+  * fixed layout bug which occured when leftmost node had no inputs
+  * fixed missing sort indicator when sorting entries in 'Views' widget
+  * fixed bug loading simulation data by cleaning map before loading controller from project
 
 ## [4.3.0](v4.3.0) - 2024-07-02 13:42:55+02:00 (urgency: medium)
 * **WARNING:** this release breaks compatibility with Ubuntu 20.04 LTS
