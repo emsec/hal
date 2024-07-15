@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
   * fixed handling of const `0` and `1` nets in `verilog_parser`, `vhdl_parser`, and `verilog_writer` plugins
   * fixed layout bug which occured when leftmost node had no inputs
   * fixed missing sort indicator when sorting entries in 'Views' widget
+  * fixed bug loading simulation data by cleaning map before loading controller from project
 
 ## [4.3.0](v4.3.0) - 2024-07-02 13:42:55+02:00 (urgency: medium)
 * **WARNING:** this release breaks compatibility with Ubuntu 20.04 LTS
