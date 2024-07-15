@@ -401,7 +401,7 @@ namespace hal
 
         py_smt_solver.def(
             "query_local",
-            [](const SMT::Solver& self, const SMT::QueryConfig& config = SMT::QueryConfig()) -> std::optional<SMT::SolverResult> {
+            [](const SMT::Solver& self, const SMT::QueryConfig& config) -> std::optional<SMT::SolverResult> {
                 auto res = self.query_local(config);
                 if (res.is_ok())
                 {
@@ -418,6 +418,31 @@ namespace hal
             Queries a local SMT solver with the specified query configuration.
 
             :param hal_py.SMT.QueryConfig config: The SMT solver query configuration.
+            :returns: The result on success, a string error message otherwise.
+            :rtype: hal_py.SMT.Result or str
+        )");
+
+        py_smt_solver.def(
+            "query_local",
+            [](const SMT::Solver& self, const SMT::QueryConfig& config, const std::string& smt2) -> std::optional<SMT::SolverResult> {
+                auto res = self.query_local(config);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("config"),
+            py::arg("smt2"),
+            R"(
+            Queries a local SMT solver with the specified query configuration and the smt2 formatted query.
+
+            :param hal_py.SMT.QueryConfig config: The SMT solver query configuration.
+            :param string smt2: A solver query formatted in smt2 style.
             :returns: The result on success, a string error message otherwise.
             :rtype: hal_py.SMT.Result or str
         )");

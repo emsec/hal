@@ -110,15 +110,13 @@ namespace hal
             :param str divice_name: The name of the target device.
         )");
 
-        py_netlist.def_property_readonly(
-            "gate_library", [](Netlist* nl) { return RawPtrWrapper<const GateLibrary>(nl->get_gate_library()); }, R"(
+        py_netlist.def_property_readonly("gate_library", [](Netlist* nl) { return RawPtrWrapper<const GateLibrary>(nl->get_gate_library()); }, R"(
             The gate library associated with the netlist.
 
             :type: hal_py.GateLibrary
         )");
 
-        py_netlist.def(
-            "get_gate_library", [](Netlist* nl) { return RawPtrWrapper<const GateLibrary>(nl->get_gate_library()); }, R"(
+        py_netlist.def("get_gate_library", [](Netlist* nl) { return RawPtrWrapper<const GateLibrary>(nl->get_gate_library()); }, R"(
             Get the gate library associated with the netlist.
 
             :returns: The gate library.
@@ -318,6 +316,32 @@ namespace hal
 
             :returns: A list of gates.
             :rtype: list[hal_py.Gate]
+        )");
+
+        py_netlist.def_property_readonly("vcc_nets", &Netlist::get_vcc_nets, R"(
+            All global VCC nets.
+
+            :type: list[hal_py.Net]
+        )");
+
+        py_netlist.def("get_vcc_nets", &Netlist::get_vcc_nets, R"(
+            Get all global VCC nets.
+
+            :returns: A list of nets.
+            :rtype: list[hal_py.Net]
+        )");
+
+        py_netlist.def_property_readonly("gnd_nets", &Netlist::get_gnd_nets, R"(
+            All global GND nets.
+
+            :type: list[hal_py.Net]
+        )");
+
+        py_netlist.def("get_gnd_nets", &Netlist::get_gnd_nets, R"(
+            Get all global GND nets.
+
+            :returns: A list of nets.
+            :rtype: list[hal_py.Net]
         )");
 
         py_netlist.def("get_unique_net_id", &Netlist::get_unique_net_id, R"(
