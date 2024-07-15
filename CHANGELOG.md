@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
   * fixed bugs related to the Boolean function SLICE operation 
   * fixed VCD writer of `netlist_simulation_controller` plugin
   * fixed handling of const `0` and `1` nets in `verilog_parser`, `vhdl_parser`, and `verilog_writer` plugins
+  * fixed layout bug which occured when leftmost node had no inputs
 
 ## [4.3.0](v4.3.0) - 2024-07-02 13:42:55+02:00 (urgency: medium)
 * **WARNING:** this release breaks compatibility with Ubuntu 20.04 LTS

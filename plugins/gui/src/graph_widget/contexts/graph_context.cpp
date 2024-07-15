@@ -786,6 +786,12 @@ namespace hal
             }
         }
 
+        if (nodesToPlace.isEmpty())
+        {
+            log_warning("gui", "Cannot restore view id={}, there are no nodes to place.", mId);
+            return false;
+        }
+
         mModules.clear();
         mGates.clear();
         for (const QPair<Node,QPoint>& box : nodesToPlace)
