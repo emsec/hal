@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
   * added `use_net_variables` parameter to `Gate::get_resolved_boolean_function` to choose whether to use input pins or nets as variable names
   * added `utils::get_unique_temp_directory`
   * added `base` parameter to `utils::wrapped_stoull` and `utils::wrapped_stoul`
+  * added `all_global_io` parameter to `SubgraphNetlistDecorator::copy_subgraph_netlist` to configure labeling of global inputs and outputs
 * bugfixes
   * fixed incompatibility between shipped zlib and QuaZip libraries
   * fixed a bug when checking whether one Boolean function is just a negated version of another one during symbolic execution
