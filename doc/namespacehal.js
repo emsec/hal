@@ -57,8 +57,9 @@ var namespacehal =
       [ "create_netlist", "namespacehal_1_1netlist__factory.html#a02885346f0ee983f70af158fdb0f3968", null ],
       [ "load_hal_project", "namespacehal_1_1netlist__factory.html#a29f519d89089b47622ae2eeaf1e76a13", null ],
       [ "load_netlist", "namespacehal_1_1netlist__factory.html#a55e30d51a833c10779ce28eb7a398e52", null ],
-      [ "load_netlist", "namespacehal_1_1netlist__factory.html#a74a2d2b0a04f6ead59258aa0875c654d", null ],
-      [ "load_netlist_from_string", "namespacehal_1_1netlist__factory.html#a4d5f0423615823bf78c07253dd948956", null ],
+      [ "load_netlist", "namespacehal_1_1netlist__factory.html#ad1936406d857961060f9d68f062f42fb", null ],
+      [ "load_netlist", "namespacehal_1_1netlist__factory.html#a6b3635b1b1984783eb47789ae043e246", null ],
+      [ "load_netlist_from_string", "namespacehal_1_1netlist__factory.html#a561fda40b97dc6a3816c7a34ceb0a5bf", null ],
       [ "load_netlists", "namespacehal_1_1netlist__factory.html#adde865496a1d7f325a4801e3cbfd8533", null ]
     ] ],
     [ "netlist_parser_manager", "namespacehal_1_1netlist__parser__manager.html", [
@@ -789,7 +790,6 @@ var namespacehal =
     [ "gPluginRelay", "namespacehal.html#a4cd901560b6cb156908e4cb43a1ea812", null ],
     [ "gPythonContext", "namespacehal.html#a178bb1ac9a8ee6bbbec41ddb2e84250a", null ],
     [ "gSelectionRelay", "namespacehal.html#a6ba6e6ec49eb58d0b35a604e16187112", null ],
-    [ "instance_name_seperator", "namespacehal.html#ad656b9f82ebb44f977d04bbca3783bad", null ],
     [ "mGSettings", "namespacehal.html#a87977efcac4fda277a7ee8cc0eb1c83c", null ],
     [ "MSG_PROJECT_ALREADY_OPEN", "namespacehal.html#a0e50ae83293af552d8b06e2de9881b59", null ],
     [ "sOpenMethodsPersist", "namespacehal.html#a2920c40f8d677cd4749e841f24654f89", null ]

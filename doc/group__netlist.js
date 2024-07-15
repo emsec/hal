@@ -1,5 +1,7 @@
 var group__netlist =
 [
+    [ "Decorators", "group__decorators.html", "group__decorators" ],
+    [ "Pins", "group__pins.html", "group__pins" ],
     [ "Netlist Parser", "group__netlist__parser.html", "group__netlist__parser" ],
     [ "Netlist Writer", "group__netlist__writer.html", "group__netlist__writer" ],
     [ "Gate Library", "group__gate__lib.html", "group__gate__lib" ],
@@ -168,7 +170,7 @@ var group__netlist =
       [ "get_predecessor", "classhal_1_1_gate.html#ad1e7415916bb54dfde18b30fbb547f77", null ],
       [ "get_predecessor", "classhal_1_1_gate.html#a629e2777724153ea0819e11b2a71d970", null ],
       [ "get_predecessors", "classhal_1_1_gate.html#a356c25e40e9121a35f479ef1a14d768d", null ],
-      [ "get_resolved_boolean_function", "classhal_1_1_gate.html#a204ad3ffdd015cfb74455ba97256c364", null ],
+      [ "get_resolved_boolean_function", "classhal_1_1_gate.html#a4d6bacb0e0a429895c0f38cfbde43b24", null ],
       [ "get_successor", "classhal_1_1_gate.html#a8774b931a46ce3c96d05cb0cfd49e351", null ],
       [ "get_successor", "classhal_1_1_gate.html#aa5fb025fba52e715cdb47203d31b96c6", null ],
       [ "get_successors", "classhal_1_1_gate.html#a515a1ba7f4f74ec80bf68856cfa8d2aa", null ],

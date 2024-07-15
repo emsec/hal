@@ -1,5 +1,8 @@
 var NAVTREEINDEX31 =
 {
+"plugin__system_2plugin__manager_8cpp.html#ab7b612656ec8fc57b2df14bc0d44668f":[7,0,2,1,4,5],
+"plugin__system_2plugin__manager_8cpp.html#ac3ea4574499d7a7ec9a879f1a1a5b685":[7,0,2,1,4,2],
+"plugin__system_2plugin__manager_8cpp.html#ac7195b40f8ac66e68cfe5f8e6cf6f074":[7,0,2,1,4,8],
 "plugin__system_2plugin__manager_8cpp.html#acb6d1f3c164b832fb19257b1df06aa53":[7,0,2,1,4,14],
 "plugin__system_2plugin__manager_8cpp.html#acfef91bcd7b9db938f10e4b705cf3bfb":[7,0,2,1,4,7],
 "plugin__system_2plugin__manager_8cpp.html#ad34e384af419d40a22d5486356772c24":[7,0,2,1,4,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX31 =
 "python__console__history_8cpp_source.html":[7,0,1,3,2,36,3],
 "python__console__history_8h.html":[7,0,1,3,0,0,38,3],
 "python__console__history_8h_source.html":[7,0,1,3,0,0,38,3],
-"python__console__qss__adapter_8cpp.html":[7,0,1,3,2,36,4],
-"python__console__qss__adapter_8cpp_source.html":[7,0,1,3,2,36,4],
-"python__console__qss__adapter_8h.html":[7,0,1,3,0,0,38,4],
-"python__console__qss__adapter_8h_source.html":[7,0,1,3,0,0,38,4]
+"python__console__qss__adapter_8cpp.html":[7,0,1,3,2,36,4]
 };

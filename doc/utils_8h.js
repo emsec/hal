@@ -19,6 +19,7 @@ var utils_8h =
     [ "get_open_source_licenses", "utils_8h.html#a7b4623be57665e39318991c7344de89d", null ],
     [ "get_plugin_directories", "utils_8h.html#aa84f04771420e5c67784826253d48901", null ],
     [ "get_share_directory", "utils_8h.html#a56092ec04728c373dc56e7b6dd9f162a", null ],
+    [ "get_unique_temp_directory", "utils_8h.html#a57de478cba76d9207aeed95d5f2982f5", null ],
     [ "get_user_config_directory", "utils_8h.html#a90b1bccb0d75d10c94b959cdebf2ce36", null ],
     [ "get_user_share_directory", "utils_8h.html#a38383c74e49cb831f05ce87992e69c9d", null ],
     [ "is_digits", "utils_8h.html#a0fc4367e2b10cb8ed7c83998e231797d", null ],
@@ -42,6 +43,6 @@ var utils_8h =
     [ "unordered_vector_erase", "utils_8h.html#a99d0bad47b8889780fe90db4c3308b77", null ],
     [ "vectors_have_same_content", "utils_8h.html#a387d8f01579a42674ccd58d8651d9342", null ],
     [ "which", "utils_8h.html#abe865cd13e526c5228f269a9c7b2629b", null ],
-    [ "wrapped_stoul", "utils_8h.html#a91c042ba653895c25f31a95e8050cb5b", null ],
-    [ "wrapped_stoull", "utils_8h.html#aa9335da615de06a7a371e86cb8ca10a0", null ]
+    [ "wrapped_stoul", "utils_8h.html#a9394b4d75f96d92ca9ed37e34a0ae281", null ],
+    [ "wrapped_stoull", "utils_8h.html#a8a1df8fc6d689dc2e7f74a050282b9f7", null ]
 ];

@@ -1,5 +1,8 @@
 var NAVTREEINDEX38 =
 {
+"settings__widget__checkbox_8cpp.html":[7,0,1,3,2,40,1,1],
+"settings__widget__checkbox_8cpp_source.html":[7,0,1,3,2,40,1,1],
+"settings__widget__checkbox_8h.html":[7,0,1,3,0,0,42,1,1],
 "settings__widget__checkbox_8h_source.html":[7,0,1,3,0,0,42,1,1],
 "settings__widget__dropdown_8cpp.html":[7,0,1,3,2,40,1,2],
 "settings__widget__dropdown_8cpp_source.html":[7,0,1,3,2,40,1,2],
@@ -224,7 +227,6 @@ var NAVTREEINDEX38 =
 "src_2python__bindings_2python__bindings_8cpp.html#a034467b937d9c580d84c198167d00929":[7,0,2,2,1,0],
 "src_2python__bindings_2python__bindings_8cpp_source.html":[7,0,2,2,1],
 "src_2verilog__parser_8cpp.html":[7,0,1,8,1,1],
-"src_2verilog__parser_8cpp.html#ad656b9f82ebb44f977d04bbca3783bad":[7,0,1,8,1,1,0],
 "src_2verilog__parser_8cpp_source.html":[7,0,1,8,1,1],
 "src_2verilog__writer_8cpp.html":[7,0,1,9,1,1],
 "src_2verilog__writer_8cpp_source.html":[7,0,1,9,1,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX38 =
 "standard__graphics__gate_8h.html":[7,0,1,3,0,0,20,1,1,0,1],
 "standard__graphics__gate_8h_source.html":[7,0,1,3,0,0,20,1,1,0,1],
 "standard__graphics__module_8cpp.html":[7,0,1,3,2,19,1,1,1,1],
-"standard__graphics__module_8cpp_source.html":[7,0,1,3,2,19,1,1,1,1],
-"standard__graphics__module_8h.html":[7,0,1,3,0,0,20,1,1,1,1],
-"standard__graphics__module_8h_source.html":[7,0,1,3,0,0,20,1,1,1,1]
+"standard__graphics__module_8cpp_source.html":[7,0,1,3,2,19,1,1,1,1]
 };

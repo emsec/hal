@@ -94,9 +94,9 @@ $(document).ready(function(){initNavTree('netlist_2netlist__factory_8cpp.html','
 <code>#include &quot;<a class="el" href="include_2hal__core_2netlist_2netlist_8h_source.html">hal_core/netlist/netlist.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="netlist__parser__manager_8h_source.html">hal_core/netlist/netlist_parser/netlist_parser_manager.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="netlist__serializer_8h_source.html">hal_core/netlist/persistent/netlist_serializer.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="project__manager_8h_source.html">hal_core/netlist/project_manager.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="log_8h_source.html">hal_core/utilities/log.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="program__arguments_8h_source.html">hal_core/utilities/program_arguments.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="project__manager_8h_source.html">hal_core/netlist/project_manager.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="project__directory_8h_source.html">hal_core/utilities/project_directory.h</a>&quot;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
 <code>#include &lt;unistd.h&gt;</code><br />
@@ -105,26 +105,26 @@ Include dependency graph for netlist_factory.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="netlist_2netlist__factory_8cpp__incl.png" border="0" usemap="#a_2home_2runner_2work_2hal_2hal_2src_2netlist_2netlist__factory_8cpp" alt=""/></div>
 <map name="a_2home_2runner_2work_2hal_2hal_2src_2netlist_2netlist__factory_8cpp" id="a_2home_2runner_2work_2hal_2hal_2src_2netlist_2netlist__factory_8cpp">
-<area shape="rect" title=" " alt="" coords="897,5,1067,61"/>
-<area shape="rect" href="netlist__factory_8h.html" title=" " alt="" coords="497,206,664,247"/>
-<area shape="rect" href="gate__library__manager_8h.html" title=" " alt="" coords="1023,303,1178,359"/>
-<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="715,213,894,240"/>
-<area shape="rect" href="netlist__parser__manager_8h.html" title=" " alt="" coords="1020,199,1187,255"/>
-<area shape="rect" href="netlist__serializer_8h.html" title=" " alt="" coords="5,109,196,151"/>
-<area shape="rect" href="log_8h.html" title=" " alt="" coords="1211,206,1342,247"/>
-<area shape="rect" href="program__arguments_8h.html" title=" " alt="" coords="1538,310,1709,351"/>
-<area shape="rect" href="project__manager_8h.html" title=" " alt="" coords="301,109,471,151"/>
-<area shape="rect" href="project__directory_8h.html" title=" " alt="" coords="202,310,349,351"/>
-<area shape="rect" title=" " alt="" coords="1417,117,1491,143"/>
-<area shape="rect" title=" " alt="" coords="1515,117,1590,143"/>
-<area shape="rect" href="defines_8h.html" title=" " alt="" coords="544,407,684,433"/>
-<area shape="rect" href="gate__library_8h.html" title=" " alt="" coords="474,310,637,351"/>
-<area shape="rect" href="program__options_8h.html" title=" " alt="" coords="1203,310,1351,351"/>
-<area shape="rect" title=" " alt="" coords="469,481,559,508"/>
-<area shape="rect" title=" " alt="" coords="1069,407,1132,433"/>
-<area shape="rect" title=" " alt="" coords="1467,407,1545,433"/>
-<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="712,310,897,351"/>
-<area shape="rect" title=" " alt="" coords="1427,317,1513,344"/>
+<area shape="rect" title=" " alt="" coords="1084,5,1253,61"/>
+<area shape="rect" href="netlist__factory_8h.html" title="This file contains various functions to create and load netlists." alt="" coords="657,206,824,247"/>
+<area shape="rect" href="gate__library__manager_8h.html" title=" " alt="" coords="1379,303,1534,359"/>
+<area shape="rect" href="include_2hal__core_2netlist_2netlist_8h.html" title=" " alt="" coords="849,213,1027,240"/>
+<area shape="rect" href="netlist__parser__manager_8h.html" title=" " alt="" coords="453,199,620,255"/>
+<area shape="rect" href="netlist__serializer_8h.html" title=" " alt="" coords="1476,109,1667,151"/>
+<area shape="rect" href="project__manager_8h.html" title=" " alt="" coords="1206,109,1377,151"/>
+<area shape="rect" href="project__directory_8h.html" title=" " alt="" coords="1158,310,1305,351"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="250,206,381,247"/>
+<area shape="rect" href="program__arguments_8h.html" title=" " alt="" coords="29,310,199,351"/>
+<area shape="rect" title=" " alt="" coords="1691,117,1764,143"/>
+<area shape="rect" title=" " alt="" coords="1789,117,1863,143"/>
+<area shape="rect" href="defines_8h.html" title=" " alt="" coords="819,407,959,433"/>
+<area shape="rect" href="gate__library_8h.html" title=" " alt="" coords="659,310,822,351"/>
+<area shape="rect" href="program__options_8h.html" title=" " alt="" coords="275,310,423,351"/>
+<area shape="rect" title=" " alt="" coords="1326,481,1417,508"/>
+<area shape="rect" title=" " alt="" coords="709,407,772,433"/>
+<area shape="rect" title=" " alt="" coords="193,407,270,433"/>
+<area shape="rect" href="event__handler_8h.html" title=" " alt="" coords="948,310,1133,351"/>
+<area shape="rect" title=" " alt="" coords="447,317,533,344"/>
 </map>
 </div>
 </div>
@@ -140,16 +140,25 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a02885346f0ee983f70af158fdb0f3968"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a02885346f0ee983f70af158fdb0f3968">hal::netlist_factory::create_netlist</a> (const GateLibrary *gate_library)</td></tr>
+<tr class="memdesc:a02885346f0ee983f70af158fdb0f3968"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new empty netlist using the specified gate library.  <a href="namespacehal_1_1netlist__factory.html#a02885346f0ee983f70af158fdb0f3968">More...</a><br /></td></tr>
 <tr class="separator:a02885346f0ee983f70af158fdb0f3968"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d5f0423615823bf78c07253dd948956"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a4d5f0423615823bf78c07253dd948956">hal::netlist_factory::load_netlist_from_string</a> (const std::string &amp;netlist_string, const std::filesystem::path &amp;gate_library_file)</td></tr>
-<tr class="separator:a4d5f0423615823bf78c07253dd948956"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74a2d2b0a04f6ead59258aa0875c654d"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a74a2d2b0a04f6ead59258aa0875c654d">hal::netlist_factory::load_netlist</a> (const std::filesystem::path &amp;netlist_file, const std::filesystem::path &amp;gate_library_file)</td></tr>
-<tr class="separator:a74a2d2b0a04f6ead59258aa0875c654d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a561fda40b97dc6a3816c7a34ceb0a5bf"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a561fda40b97dc6a3816c7a34ceb0a5bf">hal::netlist_factory::load_netlist_from_string</a> (const std::string &amp;netlist_string, const std::filesystem::path &amp;gate_library_file=std::filesystem::path())</td></tr>
+<tr class="memdesc:a561fda40b97dc6a3816c7a34ceb0a5bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist from the given string.  <a href="namespacehal_1_1netlist__factory.html#a561fda40b97dc6a3816c7a34ceb0a5bf">More...</a><br /></td></tr>
+<tr class="separator:a561fda40b97dc6a3816c7a34ceb0a5bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1936406d857961060f9d68f062f42fb"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#ad1936406d857961060f9d68f062f42fb">hal::netlist_factory::load_netlist</a> (const std::filesystem::path &amp;netlist_file, const std::filesystem::path &amp;gate_library_file=std::filesystem::path())</td></tr>
+<tr class="memdesc:ad1936406d857961060f9d68f062f42fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist from the given file.  <a href="namespacehal_1_1netlist__factory.html#ad1936406d857961060f9d68f062f42fb">More...</a><br /></td></tr>
+<tr class="separator:ad1936406d857961060f9d68f062f42fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b3635b1b1984783eb47789ae043e246"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a6b3635b1b1984783eb47789ae043e246">hal::netlist_factory::load_netlist</a> (const std::filesystem::path &amp;netlist_file, GateLibrary *gate_library)</td></tr>
+<tr class="memdesc:a6b3635b1b1984783eb47789ae043e246"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist from the given file trying to parse it with the specified gate library.  <a href="namespacehal_1_1netlist__factory.html#a6b3635b1b1984783eb47789ae043e246">More...</a><br /></td></tr>
+<tr class="separator:a6b3635b1b1984783eb47789ae043e246"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29f519d89089b47622ae2eeaf1e76a13"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a29f519d89089b47622ae2eeaf1e76a13">hal::netlist_factory::load_hal_project</a> (const std::filesystem::path &amp;project_dir)</td></tr>
+<tr class="memdesc:a29f519d89089b47622ae2eeaf1e76a13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist from the given hal project.  <a href="namespacehal_1_1netlist__factory.html#a29f519d89089b47622ae2eeaf1e76a13">More...</a><br /></td></tr>
 <tr class="separator:a29f519d89089b47622ae2eeaf1e76a13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55e30d51a833c10779ce28eb7a398e52"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Netlist &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#a55e30d51a833c10779ce28eb7a398e52">hal::netlist_factory::load_netlist</a> (const ProjectDirectory &amp;pdir, const ProgramArguments &amp;args)</td></tr>
+<tr class="memdesc:a55e30d51a833c10779ce28eb7a398e52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist using information specified in command line arguments on startup.  <a href="namespacehal_1_1netlist__factory.html#a55e30d51a833c10779ce28eb7a398e52">More...</a><br /></td></tr>
 <tr class="separator:a55e30d51a833c10779ce28eb7a398e52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adde865496a1d7f325a4801e3cbfd8533"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; Netlist &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehal_1_1netlist__factory.html#adde865496a1d7f325a4801e3cbfd8533">hal::netlist_factory::load_netlists</a> (const std::filesystem::path &amp;netlist_file)</td></tr>
+<tr class="memdesc:adde865496a1d7f325a4801e3cbfd8533"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a netlist from a given file for each matching pre-loaded gate library.  <a href="namespacehal_1_1netlist__factory.html#adde865496a1d7f325a4801e3cbfd8533">More...</a><br /></td></tr>
 <tr class="separator:adde865496a1d7f325a4801e3cbfd8533"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
@@ -158,7 +167,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2b1fe3a00210b132c6a6c3a6780f4f6e.html">netlist</a></li><li class="navelem"><a class="el" href="netlist_2netlist__factory_8cpp.html">netlist_factory.cpp</a></li>
-    <li class="footer">Generated on Thu Jul 11 2024 10:08:55 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Jul 15 2024 12:56:10 for HAL by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
