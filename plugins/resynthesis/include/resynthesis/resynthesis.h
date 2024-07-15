@@ -91,10 +91,11 @@ namespace hal
         /**
          * Re-synthesize all specified combinational gates by calling Yosys on a functional description of the gates using a reduced gate library.
          * For all output pins of each gate, the resolved Boolean function (only dependent on input pins) is determined.
-         * All these Boolean functions are then written to an HDL file that is functionally equivalent to the target gates.
-         * This file is fed to Yosys and subsequently synthesized to a netlist again by using the provided gate library.
+         * All Boolean functions of a gate are then written to an HDL file that is functionally equivalent to the gate.
+         * These files are fed to Yosys and subsequently synthesized to a netlist again by using the provided gate library.
          * The provided gate library should be a subset of the gate library that was used to parse the netlist.
-         * The target gates are then replaced in the original netlist with the circuit that was just generated.
+         * The gate is then replaced in the original netlist with the circuit that was just generated.
+         * This process is repeated for every gate, hence they are re-synthesized in isolation.
          * 
          * @param[in] nl - The netlist to operate on. 
          * @param[in] gates -  The gates to re-synthesize.
@@ -106,10 +107,11 @@ namespace hal
         /**
          * Re-synthesize all combinational gates of the specified types by calling Yosys on a functional description of the gates using a reduced gate library.
          * For all output pins of each gate, the resolved Boolean function (only dependent on input pins) is determined.
-         * All these Boolean functions are then written to an HDL file that is functionally equivalent to the target gates.
-         * This file is fed to Yosys and subsequently synthesized to a netlist again by using the provided gate library.
+         * All Boolean functions of a gate are then written to an HDL file that is functionally equivalent to the gate.
+         * These files are fed to Yosys and subsequently synthesized to a netlist again by using the provided gate library.
          * The provided gate library should be a subset of the gate library that was used to parse the netlist.
-         * The target gates are then replaced in the original netlist with the circuit that was just generated.
+         * The gate is then replaced in the original netlist with the circuit that was just generated.
+         * This process is repeated for every gate, hence they are re-synthesized in isolation.
          * 
          * @param[in] nl - The netlist to operate on. 
          * @param[in] gate_types - The gate types to be re-synthesized.
