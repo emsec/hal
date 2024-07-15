@@ -79,7 +79,11 @@ namespace hal
         return retval;
     }
     
-    std::vector<std::tuple<std::string, std::string>> read_all_zip_files_decrypted(std::filesystem::path zip_path, std::string filename, const char* password){
+    std::string gen_salted_password(std::string password, std::string salt){
+        return password + salt;
+    }
+
+    std::vector<std::tuple<std::string, std::string>> read_all_zip_files_decrypted(std::filesystem::path zip_path, std::string filename, std::string password){
         std::vector<std::tuple<std::string, std::string>> read_data;
         std::vector<std::tuple<std::string, std::string>> empty_result;
 
@@ -100,12 +104,6 @@ namespace hal
         QuaZipFile toExtract(&zip_file);
 
         for (bool more = zip_file.goToFirstFile(); more; more = zip_file.goToNextFile()) {
-            if (!toExtract.open(QIODevice::ReadOnly, password)) {
-                log_error("netlist_simulator_study", "Cannot unzip file");
-                toExtract.close();
-                return empty_result;
-            }
-
             QuaZipFileInfo info;
             if (!zip_file.getCurrentFileInfo(&info)) {
                 log_warning("netlist_simulator_study", "Failed to get current file info");
@@ -118,6 +116,12 @@ namespace hal
                     toExtract.close();
                     continue;
                 }
+            }
+
+            if (!toExtract.open(QIODevice::ReadOnly, password.c_str())) {
+                log_error("netlist_simulator_study", "Cannot unzip file");
+                toExtract.close();
+                return empty_result;
             }
 
             QByteArray data = toExtract.readAll();
@@ -133,11 +137,11 @@ namespace hal
         return read_data;
     }
 
-    std::vector<std::tuple<std::string, std::string>> read_all_zip_files_decrypted(std::filesystem::path zip_path, const char* password){
+    std::vector<std::tuple<std::string, std::string>> read_all_zip_files_decrypted(std::filesystem::path zip_path, std::string password){
         return read_all_zip_files_decrypted(zip_path, "", password);
     }
 
-    std::string read_named_zip_file_decrypted(std::filesystem::path zip_path, std::string filename, const char* password){
+    std::string read_named_zip_file_decrypted(std::filesystem::path zip_path, std::string filename, std::string password){
         std::vector<std::tuple<std::string, std::string>> result_data = read_all_zip_files_decrypted(zip_path, filename, password);
 
         if (result_data.size() > 0){
@@ -152,7 +156,9 @@ namespace hal
         ProjectManager* pm = ProjectManager::instance();
         std::filesystem::path project_dir_path(pm->get_project_directory().string());
 
-        std::string netlist_data = read_named_zip_file_decrypted(project_dir_path / "original/original.zip", "original.hal", SECRET_PASSWORD);
+        std::string salt = read_named_zip_file_decrypted(project_dir_path / "original/original.zip", "salt.encrypt", SECRET_PASSWORD);
+
+        std::string netlist_data = read_named_zip_file_decrypted(project_dir_path / "original/original.zip", "original.hal", gen_salted_password(SECRET_PASSWORD, salt));
 
         if (netlist_data == ""){
             log_error("netlist_simulator_study", "No valid netlist file in zip!");
@@ -258,10 +264,6 @@ namespace hal
     GuiExtensionNetlistSimulatorStudy::GuiExtensionNetlistSimulatorStudy()
     {
         m_parameter.push_back(PluginParameter(PluginParameter::ExistingFile, "sim_input", "Simulation input file"));
-        m_parameter.push_back(PluginParameter(PluginParameter::Boolean,
-                                              "net_picker",
-                                              "You are only allowed to select 5 nets to probe.\nSelect up to 5 at random if more then 5 are selected?\nOtherwise the execution just stops.",
-                                              "true"));
         m_parameter.push_back(PluginParameter(PluginParameter::PushButton, "simulate", "Start Simulation"));
     }
 
@@ -297,6 +299,28 @@ namespace hal
         return;
     }
 
+    std::vector<ContextMenuContribution> GuiExtensionNetlistSimulatorStudy::get_context_contribution(const Netlist* nl,
+                                                                      const std::vector<u32>& mods,
+                                                                      const std::vector<u32>& gates,
+                                                                      const std::vector<u32>& nets){
+        std::vector<ContextMenuContribution> additions;
+        
+        additions.push_back({this,"sim_study_execute","Execute simulation using selected probes"});
+
+        return additions;
+    }
+
+     void GuiExtensionNetlistSimulatorStudy::execute_function(std::string tag,
+                         Netlist *nl,
+                         const std::vector<u32>& mods,
+                         const std::vector<u32>& gates,
+                         const std::vector<u32>& nets){
+
+        if(tag == "sim_study_execute"){
+            std::cout << "testing" << std::endl;
+        }
+    }
+
     void GuiExtensionNetlistSimulatorStudy::set_parameter(const std::vector<PluginParameter>& params)
     {
         m_parameter    = params;
@@ -305,7 +329,6 @@ namespace hal
         std::vector<const Net*> probes;
 
         bool simulate            = false;
-        bool net_picker_checkbox = false;
         std::filesystem::path sim_input;
 
         bool valid_inputs = true;
@@ -314,7 +337,9 @@ namespace hal
         ProjectManager* pm = ProjectManager::instance();
         std::filesystem::path project_dir_path(pm->get_project_directory().string());
 
-        std::string ini_data = read_named_zip_file_decrypted(project_dir_path / "original/original.zip", "settings.ini", SECRET_PASSWORD);
+        std::string salt = read_named_zip_file_decrypted(project_dir_path / "original/original.zip", "salt.encrypt", SECRET_PASSWORD);
+
+        std::string ini_data = read_named_zip_file_decrypted(project_dir_path / "original/original.zip", "settings.ini", gen_salted_password(SECRET_PASSWORD, salt));
 
         QSettings my_settings;
         q_setting_from_string(ini_data, &my_settings);
@@ -335,11 +360,7 @@ namespace hal
 
         for (PluginParameter par : m_parameter)
         {
-            if (par.get_tagname() == "net_picker" && par.get_value() == "clicked")
-            {
-                net_picker_checkbox = true;
-            }
-            else if (par.get_tagname() == "simulate" && par.get_value() == "clicked")
+            if (par.get_tagname() == "simulate" && par.get_value() == "clicked")
                 simulate = true;
             else if (par.get_tagname() == "sim_input")
                 sim_input = par.get_value();
@@ -396,41 +417,11 @@ namespace hal
             }
         }
 
-        std::vector<const Net*> probes_final_selection;
-
-        // verify that only MAX_PROBES are selected or select a random subset if checkbox is checked
+        // verify that only MAX_PROBES are selected
         if (probes.size() > MAX_PROBES)
         {
-            if (!net_picker_checkbox)
-            {
-                log_error("netlist_simulator_study", "You selected more than " + std::to_string(MAX_PROBES) + " probes");
-                return;
-            }
-            else
-            {
-                std::vector<int> indices(probes.size());
-
-                std::iota(indices.begin(), indices.end(), 0);
-
-                // Shuffle the indices
-                std::random_device rd;
-                std::mt19937 gen(rd());
-                std::shuffle(indices.begin(), indices.end(), gen);
-
-                // Pick the first subsetSize elements from the shuffled indices
-                std::vector<int> subset;
-                for (int i = 0; i < MAX_PROBES; ++i)
-                {
-                    probes_final_selection.push_back(probes[indices[i]]);
-                }
-            }
-        }
-        else
-        {
-            for (const Net* net : probes)
-            {
-                probes_final_selection.push_back(net);
-            }
+            log_error("netlist_simulator_study", "You selected more than " + std::to_string(MAX_PROBES) + " probes");
+            return;
         }
 
         // add all input and output nets to the selection so the results are kept in the verilator output
@@ -438,13 +429,13 @@ namespace hal
         {
             if (net->is_global_input_net() || net->is_global_output_net())
             {
-                probes_final_selection.push_back(net);
+                probes.push_back(net);
             }
         }
 
         if (simulate && m_parent && valid_inputs)
         {
-            m_parent->simulate(sim_input, probes_final_selection);
+            m_parent->simulate(sim_input, probes);
         }
     }
 

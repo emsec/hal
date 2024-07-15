@@ -107,6 +107,10 @@ namespace hal
         std::string gate_name = "UNKNOWN_" + std::to_string(gate->get_id());
         u32 gate_id           = gate->get_id();
 
+        std::pair position = gate->get_location();
+
+        Module* module = gate->get_module();
+
         std::vector<Net*> in_nets;
         std::vector<Net*> out_nets;
 
@@ -139,12 +143,83 @@ namespace hal
             counter++;
         }
 
+        if (position.first > 0 && position.second > 0){
+            new_gate->set_location(position);
+        }
+
+        module->assign_gate(new_gate);
+
         return true;
     }
 
-    bool create_encrypted_zip(const char* password){
+    std::string gen_random_string(int len){
+        const std::string characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        std::string random_string;
+        random_string.reserve(len);
+        
+        srand((unsigned)time(NULL)); 
+
+        for (int i = 0; i < len; i++)
+        {
+            random_string += characters[rand() % (sizeof(characters) - 1)];
+        }
+        
+        return random_string;
+    }
+
+    std::string gen_salted_password(std::string password, std::string salt){
+        return password + salt;
+    }
+
+    bool create_encrypted_zip(std::string password){
         ProjectManager* pm = ProjectManager::instance();
         std::filesystem::path project_dir_path(pm->get_project_directory().string());
+
+        std::string salt = gen_random_string(20);
+        std::string salted_password = gen_salted_password(password, salt);
+
+        // create original folder if missing
+        if (std::filesystem::exists(project_dir_path / "original/")){
+            if (!std::filesystem::is_directory(project_dir_path / "original/")) {
+                log_error("netlist_modifier", "A file with the name 'original' already exists.");
+                return false;
+            }
+        }else{
+            if (!std::filesystem::create_directory(project_dir_path / "original/")) {
+                log_error("netlist_modifier", "Could not create original folder!");
+                return false;
+            }
+        }
+
+        // create tmp folder if missing
+        if (std::filesystem::exists(project_dir_path / "original/tmp/")){
+            if (!std::filesystem::is_directory(project_dir_path / "original/tmp/")) {
+                log_error("netlist_modifier", "A file with the name 'original/tmp' already exists.");
+                return false;
+            }
+        }else{
+            
+            if (!std::filesystem::create_directory(project_dir_path / "original/tmp/")) {
+                log_error("netlist_modifier", "Could not create original folder!");
+                return false;
+            }
+        }
+
+        // create tmp salt file
+        // Open the file for writing
+        std::ofstream salt_outFile((project_dir_path / "original/tmp/salt.encrypt").c_str());
+
+        // Check if the file is successfully opened
+        if (!salt_outFile.is_open()) {
+            log_error("netlist_modifier", "Error opening new salt file!");
+            return false;
+        }
+
+        // Write the content to the file
+        salt_outFile << salt;
+
+        // Close the file
+        salt_outFile.close();
 
         // create tmp original netlist file
         netlist_serializer::serialize_to_file(gNetlist, project_dir_path / "original/tmp/original.hal");
@@ -187,7 +262,7 @@ max_probes=5)";
             return false;
         }
         QuaZipFile netlist_zip_outFile(&zip);
-        if (!netlist_zip_outFile.open(QIODevice::WriteOnly, QuaZipNewInfo(QFileInfo(netlist_file.fileName()).fileName()), password)) {
+        if (!netlist_zip_outFile.open(QIODevice::WriteOnly, QuaZipNewInfo(QFileInfo(netlist_file.fileName()).fileName()), salted_password.c_str())) {
             log_error("File could not be added with encryption!");
             return false;
         }
@@ -203,7 +278,7 @@ max_probes=5)";
             return false;
         }
         QuaZipFile ini_zip_outFile(&zip);
-        if (!ini_zip_outFile.open(QIODevice::WriteOnly, QuaZipNewInfo(QFileInfo(ini_file.fileName()).fileName()), password)) {
+        if (!ini_zip_outFile.open(QIODevice::WriteOnly, QuaZipNewInfo(QFileInfo(ini_file.fileName()).fileName()), salted_password.c_str())) {
             log_error("File could not be added with encryption!");
             return false;
         }
@@ -213,12 +288,29 @@ max_probes=5)";
         ini_zip_outFile.close();
         ini_file.close();
 
+        QFile salt_file(QString::fromStdString(project_dir_path / "original/tmp/salt.encrypt"));
+        if (!salt_file.open(QIODevice::ReadOnly)) {
+            log_error("netlist_modifier", "Failed to open file!");
+            return false;
+        }
+        QuaZipFile salt_zip_outFile(&zip);
+        if (!salt_zip_outFile.open(QIODevice::WriteOnly, QuaZipNewInfo(QFileInfo(salt_file.fileName()).fileName()), password.c_str())) {
+            log_error("File could not be added with encryption!");
+            return false;
+        }
+        
+        salt_zip_outFile.write(salt_file.readAll());
+
+        salt_zip_outFile.close();
+        salt_file.close();
+
         zip.close();
 
         // delete tmp folder
         try{
             std::filesystem::remove(project_dir_path / "original/tmp/settings.ini");
             std::filesystem::remove(project_dir_path / "original/tmp/original.hal");
+            std::filesystem::remove(project_dir_path / "original/tmp/salt.encrypt");
             std::filesystem::remove(project_dir_path / "original/tmp");
         } catch (const std::filesystem::filesystem_error& e){
             log_error("netlist_modifier", "Failed to delete tmp directory");
@@ -333,7 +425,6 @@ max_probes=5)";
 
     bool NetlistModifierPlugin::modify_in_place()
     {
-
         UIPluginInterface* mGuiPlugin = plugin_manager::get_plugin_instance<UIPluginInterface>("hal_gui");
         if (mGuiPlugin)
             mGuiPlugin->set_layout_locker(true);        

@@ -42,6 +42,19 @@ namespace hal
 
         GuiExtensionNetlistSimulatorStudy();
 
+        std::vector<ContextMenuContribution> get_context_contribution(const Netlist* nl,
+                                                                      const std::vector<u32>& mods,
+                                                                      const std::vector<u32>& gates,
+                                                                      const std::vector<u32>& nets) override;
+        
+        void execute_function(std::string tag,
+                              Netlist* nl,
+                              const std::vector<u32>& mods,
+                              const std::vector<u32>& gates,
+                              const std::vector<u32>& nets) override;
+
+
+
         std::vector<PluginParameter> get_parameter() const override;
 
         void set_parameter(const std::vector<PluginParameter>& params) override;
