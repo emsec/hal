@@ -1,8 +1,8 @@
-#include "z3_utils/include/simplification.h"
+#include "z3_utils/simplification.h"
 
 #include "hal_core/netlist/boolean_function.h"
 #include "hal_core/utilities/log.h"
-#include "z3_utils/include/z3_utils.h"
+#include "z3_utils/z3_utils.h"
 
 #include <deque>
 

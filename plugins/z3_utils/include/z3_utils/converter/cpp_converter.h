@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "z3_utils/include/converter/converter.h"
+#include "z3_utils/converter/converter.h"
 
 namespace hal
 {

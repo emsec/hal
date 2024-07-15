@@ -1,4 +1,4 @@
-#include "z3_utils/include/netlist_comparison.h"
+#include "z3_utils/netlist_comparison.h"
 
 #include "hal_core/netlist/boolean_function/solver.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
@@ -9,7 +9,7 @@
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
 #include "nlohmann_json/json.hpp"
-#include "z3_utils/include/z3_utils.h"
+#include "z3_utils/z3_utils.h"
 
 namespace hal
 {

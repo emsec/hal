@@ -175,7 +175,7 @@ namespace hal
          * @returns The next sequential gates on success, an error otherwise.
          */
         Result<std::set<Gate*>>
-            get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+            get_next_sequential_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
 
         /**
          * Starting from the given gate, traverse the netlist and return only the next layer of sequential successor/predecessor gates.
@@ -190,7 +190,7 @@ namespace hal
          * @returns The next sequential gates on success, an error otherwise.
          */
         Result<std::set<Gate*>>
-            get_next_sequential_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+            get_next_sequential_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
 
         /**
          * Get the next sequential gates for all sequential gates in the netlist by traversing through remaining logic (e.g., combinational logic).
@@ -215,7 +215,7 @@ namespace hal
          * @returns The next combinational gates on success, an error otherwise.
          */
         Result<std::set<Gate*>>
-            get_next_combinational_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+            get_next_combinational_gates(const Net* net, bool successors, const std::set<PinType>& forbidden_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
 
         /**
          * Starting from the given gate, traverse the netlist and return all combinational successor/predecessor gates.
@@ -229,7 +229,7 @@ namespace hal
          * @returns The next combinational gates on success, an error otherwise.
          */
         Result<std::set<Gate*>>
-            get_next_combinational_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
+            get_next_combinational_gates(const Gate* gate, bool successors, const std::set<PinType>& forbidden_pins = {}, std::unordered_map<const Net*, std::set<Gate*>>* cache = nullptr) const;
 
         // TODO move get_path and get_shortest_path here
 

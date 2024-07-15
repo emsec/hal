@@ -1,6 +1,4 @@
-#include "plugin_z3_utils.h"
-
-#include "z3_utils.h"
+#include "z3_utils/plugin_z3_utils.h"
 
 namespace hal
 {

@@ -1,14 +1,14 @@
 #include "hal_core/python_bindings/python_bindings.h"
 
-#include "plugin_z3_utils.h"
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 #include "pybind11/stl_bind.h"
-#include "z3_utils.h"
-#include "z3_utils/include/subgraph_function_generation.h"
-#include "z3_utils/include/netlist_comparison.h"
-#include "z3_utils/include/simplification.h"
+#include "z3_utils/netlist_comparison.h"
+#include "z3_utils/plugin_z3_utils.h"
+#include "z3_utils/simplification.h"
+#include "z3_utils/subgraph_function_generation.h"
+#include "z3_utils/z3_utils.h"
 
 namespace py = pybind11;
 
@@ -34,20 +34,22 @@ namespace hal
         py_z3_utils.def_property_readonly("version", &Z3UtilsPlugin::get_version);
         py_z3_utils.def("get_version", &Z3UtilsPlugin::get_version);
 
-        m.def("get_subgraph_function", [](const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output) -> std::optional<hal::BooleanFunction> {
-            z3::context ctx;
+        m.def(
+            "get_subgraph_function",
+            [](const std::vector<Gate*>& subgraph_gates, const Net* subgraph_output) -> std::optional<hal::BooleanFunction> {
+                z3::context ctx;
 
-            const auto res = z3_utils::get_subgraph_z3_function(subgraph_gates, subgraph_output, ctx);
-            if (res.is_error())
-            {
-                log_error("z3_utils", "{}", res.get_error().get());
-                return std::nullopt;
-            }
+                const auto res = z3_utils::get_subgraph_z3_function(subgraph_gates, subgraph_output, ctx);
+                if (res.is_error())
+                {
+                    log_error("z3_utils", "{}", res.get_error().get());
+                    return std::nullopt;
+                }
 
-            BooleanFunction bf = z3_utils::to_bf(res.get()).get();
+                BooleanFunction bf = z3_utils::to_bf(res.get()).get();
 
-            return bf;
-        },
+                return bf;
+            },
             py::arg("subgraph_gates"),
             py::arg("subgraph_output"),
             R"(

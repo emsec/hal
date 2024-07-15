@@ -1,9 +1,8 @@
 #include "module_identification/candidates/candidate_context.h"
-#include "boolean_influence/plugin_boolean_influence.h"
 
+#include "boolean_influence/boolean_influence.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/netlist/netlist.h"
-
 
 namespace hal
 {
@@ -23,7 +22,7 @@ namespace hal
                 if (bf_res.is_error())
                 {
                     return ERR_APPEND(bf_res.get_error(),
-                                        "cannot populate context with Boolean functions: failed to generate subgraph function for net " + n->get_name() + " with ID " + std::to_string(n->get_id()));
+                                      "cannot populate context with Boolean functions: failed to generate subgraph function for net " + n->get_name() + " with ID " + std::to_string(n->get_id()));
                 }
                 auto bf = bf_res.get();
 
@@ -31,8 +30,8 @@ namespace hal
                 if (sub_res.is_error())
                 {
                     return ERR_APPEND(sub_res.get_error(),
-                                        "cannot populate context with Boolean functions: failed to substitute power and ground nets for net " + n->get_name() + " with ID "
-                                            + std::to_string(n->get_id()));
+                                      "cannot populate context with Boolean functions: failed to substitute power and ground nets for net " + n->get_name() + " with ID "
+                                          + std::to_string(n->get_id()));
                 }
 
                 m_boolean_function_cache.insert({{n, {}}, sub_res.get().simplify_local()});
@@ -80,7 +79,7 @@ namespace hal
                 if (func_res.is_error())
                 {
                     return ERR_APPEND(func_res.get_error(),
-                                        "cannot get Boolean function from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed subgraph function generation");
+                                      "cannot get Boolean function from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed subgraph function generation");
                 }
                 auto bf = func_res.get();
 
@@ -88,7 +87,7 @@ namespace hal
                 if (sub_res.is_error())
                 {
                     return ERR_APPEND(sub_res.get_error(),
-                                        "cannot get Boolean function from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to substitute power/ground nets");
+                                      "cannot get Boolean function from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to substitute power/ground nets");
                 }
                 auto sub_bf = sub_res.get().simplify_local();
 
@@ -112,7 +111,7 @@ namespace hal
             if (sub_res.is_error())
             {
                 return ERR_APPEND(sub_res.get_error(),
-                                    "cannot get Boolean function from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to substitute with input mapping");
+                                  "cannot get Boolean function from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to substitute with input mapping");
             }
             const auto sub_bf = sub_res.get().simplify_local();
 
@@ -147,8 +146,7 @@ namespace hal
             if (bf_res.is_error())
             {
                 return ERR_APPEND(bf_res.get_error(),
-                                    "cannot get variable names from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id())
-                                        + ": failed to retrieve Boolean function from context");
+                                  "cannot get variable names from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to retrieve Boolean function from context");
             }
             const auto& bf = bf_res.get();
 
@@ -162,8 +160,7 @@ namespace hal
             if (var_names_res.is_error())
             {
                 return ERR_APPEND(var_names_res.get_error(),
-                                    "cannot get variable nets from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id())
-                                        + ": failed to retrieve variable names from context");
+                                  "cannot get variable nets from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to retrieve variable names from context");
             }
             const auto& var_names = var_names_res.get();
 
@@ -187,17 +184,17 @@ namespace hal
             if (bf_res.is_error())
             {
                 return ERR_APPEND(bf_res.get_error(),
-                                    "cannot get Boolean influence from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id())
-                                        + ": failed to retrieve Boolean function from context");
+                                  "cannot get Boolean influence from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id())
+                                      + ": failed to retrieve Boolean function from context");
             }
             const auto& bf = bf_res.get();
 
-            const auto res = BooleanInfluencePlugin::get_boolean_influence(bf, 1024);
-            // const auto res = BooleanInfluencePlugin::get_boolean_influence(bf, 32000);
+            const auto res = boolean_influence::get_boolean_influence(bf, 1024);
+            // const auto res = boolean_influence::get_boolean_influence(bf, 32000);
             if (res.is_error())
             {
                 return ERR_APPEND(res.get_error(),
-                                    "cannot get Boolean influence from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to calculate Boolean influence");
+                                  "cannot get Boolean influence from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to calculate Boolean influence");
             }
 
             const auto [it, _] = m_boolean_influence_cache.insert({{n, ctrl_mapping}, res.get()});
@@ -206,11 +203,11 @@ namespace hal
 
         Result<std::vector<BooleanFunction::Value>>
             CandidateContext::evaluate(const Net* n, const std::map<Net*, BooleanFunction::Value>& ctrl_mapping, const std::map<std::string, BooleanFunction::Value>& eval_mapping)
-            {
-                const auto bf                                                                  = get_boolean_function(n, ctrl_mapping).get();
-                std::unordered_map<std::string, BooleanFunction::Value> unordered_eval_mapping = {eval_mapping.begin(), eval_mapping.end()};
-                return OK({bf.evaluate(unordered_eval_mapping).get()});
-            }
+        {
+            const auto bf                                                                  = get_boolean_function(n, ctrl_mapping).get();
+            std::unordered_map<std::string, BooleanFunction::Value> unordered_eval_mapping = {eval_mapping.begin(), eval_mapping.end()};
+            return OK({bf.evaluate(unordered_eval_mapping).get()});
+        }
 #endif
 
 #ifdef Z3_CANDIDATE_CONTEXT
@@ -465,8 +462,7 @@ namespace hal
             if (bf_res.is_error())
             {
                 return ERR_APPEND(bf_res.get_error(),
-                                    "cannot get variable names from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id())
-                                        + ": failed to retrieve Boolean function from context");
+                                  "cannot get variable names from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to retrieve Boolean function from context");
             }
             const auto& bf = bf_res.get();
 
@@ -480,8 +476,7 @@ namespace hal
             if (var_names_res.is_error())
             {
                 return ERR_APPEND(var_names_res.get_error(),
-                                    "cannot get variable nets from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id())
-                                        + ": failed to retrieve variable names from context");
+                                  "cannot get variable nets from context for net " + n->get_name() + " with ID " + std::to_string(n->get_id()) + ": failed to retrieve variable names from context");
             }
             const auto& var_names = var_names_res.get();
 
@@ -507,7 +502,7 @@ namespace hal
             ss << rand();
             std::string idstr                                   = ss.str();
             const auto& bf                                      = get_boolean_function(n, ctrl_mapping).get();
-            Result<std::unordered_map<std::string, double>> res = BooleanInfluencePlugin::get_boolean_influence(bf, 1024, idstr);
+            Result<std::unordered_map<std::string, double>> res = boolean_influence::get_boolean_influence(bf, 1024, idstr);
             if (res.is_error())
             {
                 return ERR_APPEND(res.get_error(), "failed to create boolean influence");

@@ -1,10 +1,10 @@
-#include "z3_utils.h"
+#include "z3_utils/z3_utils.h"
 
-#include "converter/cpp_converter.h"
-#include "converter/verilog_converter.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/utilities/log.h"
 #include "z3_api.h"
+#include "z3_utils/converter/cpp_converter.h"
+#include "z3_utils/converter/verilog_converter.h"
 
 #include <sstream>
 
