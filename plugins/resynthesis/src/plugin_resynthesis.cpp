@@ -19,11 +19,13 @@ namespace hal
 
     std::string ResynthesisPlugin::get_description() const
     {
-        return "Provides functions to re-synthesize (parts of) a gate-level netlist.";
+        return "Provides functions to decompose or re-synthesize combinational parts of a gate-level netlist.";
     }
 
     std::set<std::string> ResynthesisPlugin::get_dependencies() const
     {
-        return {};
+        std::set<std::string> retval;
+        retval.insert("genlib_writer");
+        return retval;
     }
 }    // namespace hal

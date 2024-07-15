@@ -24,7 +24,7 @@
 // SOFTWARE.
 
 /**
- * @file plugin_xilinx_toolbox.h 
+ * @file plugin_resynthesis.h 
  * @brief This file contains all functions related to the HAL plugin API.
  */
 
