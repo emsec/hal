@@ -9,8 +9,17 @@ All notable changes to this project will be documented in this file.
     * changed propagation logic for better results
 * miscellaneous
   * added backward compatibility for view management
+  * slightly improved symbolic execution engine
+  * added a version of `netlist_factory::load_netlist` that takes a path to a netlist file as well as a pointer to a gate library
+  * added `use_net_variables` parameter to `Gate::get_resolved_boolean_function` to choose whether to use input pins or nets as variable names
+  * added `utils::get_unique_temp_directory`
+  * added `base` parameter to `utils::wrapped_stoull` and `utils::wrapped_stoul`
 * bugfixes
   * fixed incompatibility between shipped zlib and QuaZip libraries
+  * fixed a bug when checking whether one Boolean function is just a negated version of another one during symbolic execution
+  * fixed bugs related to the Boolean function SLICE operation 
+  * fixed VCD writer of `netlist_simulation_controller` plugin
+  * fixed handling of const `0` and `1` nets in `verilog_parser`, `vhdl_parser`, and `verilog_writer` plugins
   * fixed layout bug which occured when leftmost node had no inputs
 
 ## [4.3.0](v4.3.0) - 2024-07-02 13:42:55+02:00 (urgency: medium)
