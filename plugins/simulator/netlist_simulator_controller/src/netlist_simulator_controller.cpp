@@ -1194,4 +1194,13 @@ namespace hal
         Q_EMIT controllerRemoved(id);
     }
 
+    void NetlistSimulatorControllerMap::clearAll()
+    {
+        for (auto it=mMap.begin(); it!=mMap.end(); ++it)
+        {
+            Q_EMIT controllerRemoved(it.key());
+        }
+        mMap.clear();
+    }
+
 }    // namespace hal
