@@ -454,11 +454,6 @@ namespace hal
         return jwd.serialize(QDir(mWorkDir).absoluteFilePath(sPersistFile).toStdString());
     }
 
-    void NetlistSimulatorController::emit_run_simulation()
-    {
-        Q_EMIT triggerRunSimulation();
-    }
-
     bool NetlistSimulatorController::run_simulation()
     {
         if (!mSimulationEngine)
