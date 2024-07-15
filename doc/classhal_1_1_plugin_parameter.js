@@ -7,6 +7,7 @@ var classhal_1_1_plugin_parameter =
       [ "ComboBox", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3a13699b827f61d66ab54de4a54c3fbd24", null ],
       [ "Dictionary", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3a1bf50e09b50020b936175d874a06fd01", null ],
       [ "ExistingDir", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3a22eb6523661c264761b5c587c65a8fba", null ],
+      [ "ExistingFile", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3aacf6394f4d109c4fbb1d1f34a585f3a5", null ],
       [ "Float", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3a64911c89f3f485ff0ae51f0121129599", null ],
       [ "Gate", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3ab42f70edfee84b9b60cb31400e0459dd", null ],
       [ "Integer", "classhal_1_1_plugin_parameter.html#aadb50bdf7184f23943e3cd995adeeec3a4195f8457db73a0026d759cde17117fd", null ],
