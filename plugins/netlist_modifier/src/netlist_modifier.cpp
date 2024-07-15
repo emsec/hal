@@ -161,7 +161,7 @@ namespace hal
 
         for (int i = 0; i < len; i++)
         {
-            random_string += characters[rand() % (sizeof(characters) - 1)];
+            random_string += characters[rand() % (characters.size())];
         }
         
         return random_string;
