@@ -635,6 +635,15 @@ namespace hal
         CORE_API std::filesystem::path get_file(std::string file_name, std::vector<std::filesystem::path> path_hints);
 
         /**
+         * Try to generate a unique temporary directory.
+         * 
+         * @param[in] prefix - A prefix that is added in front of the unique identifier. Defaults to an empty string.
+         * @param[in] max_attmeps - The maximum amount of attempts before the function fails. Defaults to `5`.
+         * @returns OK and the created directory path on success, an error otherwise.
+         */
+        CORE_API Result<std::filesystem::path> get_unique_temp_directory(const std::string& prefix = "", const u32 max_attempts = 5);
+
+        /**
          * Get the licenses of all embedded OpenSource Projects.
          *
          * @returns The open source licenses.
@@ -750,18 +759,20 @@ namespace hal
          * A safe wrapper around the std::stoull function that provides a Result<> for error handling instead of exceptions.
          * 
          * @param[in] s - The string represntation of the number.
+         * @param[in] base - The base of the integer, defaults to 10.
          *
          * @returns OK and an integer on success, an ERROR otherwise.
          */
-        CORE_API Result<u64> wrapped_stoull(const std::string& s);
+        CORE_API Result<u64> wrapped_stoull(const std::string& s, const u32 base = 10);
 
         /**
          * A safe wrapper around the std::stoul function that provides a Result<> for error handling instead of exceptions.
          * 
          * @param[in] s - The string represntation of the number.
+         * @param[in] base - The base of the integer, defaults to 10.
          *
          * @returns OK and an integer on success, an ERROR otherwise.
          */
-        CORE_API Result<u32> wrapped_stoul(const std::string& s);
+        CORE_API Result<u32> wrapped_stoul(const std::string& s, const u32 base = 10);
     }    // namespace utils
 }    // namespace hal

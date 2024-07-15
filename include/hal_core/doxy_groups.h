@@ -34,12 +34,12 @@
 
 /**
  * @defgroup decorators Decorators
- * @ingroup core
+ * @ingroup netlist
  */
 
 /**
  * @defgroup pins Pins
- * @ingroup core
+ * @ingroup netlist
  */
 
 /**

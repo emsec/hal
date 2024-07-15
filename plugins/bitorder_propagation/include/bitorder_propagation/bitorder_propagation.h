@@ -46,7 +46,8 @@ namespace hal
     namespace bitorder_propagation
     {
         /** 
-         * Propagate known bit-order information from the given module pin groups to module pin groups of unknown bit order.
+         * @brief Propagate known bit-order information from the given module pin groups to module pin groups of unknown bit order.
+         * 
          * The known bit-order information is taken from the map from net to index given for each pair of module and pin group in `src`.
          * After propagation, the algorithm tries to reconstruct valid bit orders from the propagated information.
          *
@@ -61,7 +62,7 @@ namespace hal
                                                const bool enforce_continuous_bitorders = true);
 
         /**
-         * Reorder and rename the pins of the pin groups according to the provided bit-order information. 
+         * @brief Reorder and rename the pins of the pin groups according to the provided bit-order information. 
          *
          * @param[in] ordered_module_pin_groups - A mapping from pairs of modules and their pin groups to known bit-order information given as a mapping from nets to their index.
          * @returns OK on success, an error otherwise.
@@ -69,7 +70,8 @@ namespace hal
         Result<std::monostate> reorder_module_pin_groups(const std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>& ordered_module_pin_groups);
 
         /**
-         * Propagate known bit-order information from one module pin group to another module pin group of unknown bit order.
+         * @brief Propagate known bit-order information from one module pin group to another module pin group of unknown bit order.
+         * 
          * The known bit-order information is taken from the order of pins in the pin group of `src`.
          * After propagation, the algorithm tries to reconstruct a valid bit order from the propagated information.
          * The valid bit order is then annotated to the module pin group, i.e., the pins of the respective pin group are renamed and reordered.
@@ -82,7 +84,8 @@ namespace hal
         Result<std::map<std::pair<Module*, PinGroup<ModulePin>*>, std::map<Net*, u32>>> propagate_bitorder(Netlist* nl, const std::pair<u32, std::string>& src, const std::pair<u32, std::string>& dst);
 
         /**
-         * Propagate known bit-order information from one module pin group to another module pin group of unknown bit order.
+         * @brief Propagate known bit-order information from one module pin group to another module pin group of unknown bit order.
+         * 
          * The known bit-order information is taken from the order of pins in the pin group of `src`.
          * After propagation, the algorithm tries to reconstruct a valid bit order from the propagated information.
          * The valid bit order is then annotated to the module pin group, i.e., the pins of the respective pin group are renamed and reordered.
@@ -95,7 +98,8 @@ namespace hal
                                                                                                            const std::pair<Module*, PinGroup<ModulePin>*>& dst);
 
         /**
-         * Propagate known bit-order information from the given module pin groups to module pin groups of unknown bit order.
+         * @brief Propagate known bit-order information from the given module pin groups to module pin groups of unknown bit order.
+         * 
          * The known bit-order information is taken from the order of pins in the pin groups of `src`.
          * After propagation, the algorithm tries to reconstruct valid bit orders from the propagated information.
          * The valid bit orders are then annotated to the module pin groups, i.e., the pins of the respective pin groups are renamed and reordered.
@@ -109,7 +113,8 @@ namespace hal
             propagate_bitorder(Netlist* nl, const std::vector<std::pair<u32, std::string>>& src, const std::vector<std::pair<u32, std::string>>& dst);
 
         /**
-         * Propagate known bit-order information from the given module pin groups to module pin groups of unknown bit order.
+         * @brief Propagate known bit-order information from the given module pin groups to module pin groups of unknown bit order.
+         * 
          * The known bit-order information is taken from the order of pins in the pin groups of `src`.
          * After propagation, the algorithm tries to reconstruct valid bit orders from the propagated information.
          * The valid bit orders are then annotated to the module pin groups, i.e., the pins of the respective pin groups are renamed and reordered.

@@ -255,8 +255,6 @@ namespace hal
                 return OK(Model(ModelParser::parser_context.model));
             }
 
-            std::cout << "Model: " << s << std::endl; 
-            exit(0);
             return ERR("could not parse SMT-Lib model");
         }
 
@@ -358,9 +356,7 @@ namespace hal
                                                                                  {SMT::SolverType::Unknown, "Unknown"}};
 
     template<>
-    std::map<SMT::SolverCall, std::string> EnumStrings<SMT::SolverCall>::data = {{SMT::SolverCall::Library, "Library"},
-                                                                                 {SMT::SolverCall::Binary, "Binary"}};
-
+    std::map<SMT::SolverCall, std::string> EnumStrings<SMT::SolverCall>::data = {{SMT::SolverCall::Library, "Library"}, {SMT::SolverCall::Binary, "Binary"}};
 
     template<>
     std::map<SMT::SolverResultType, std::string> EnumStrings<SMT::SolverResultType>::data = {{SMT::SolverResultType::Sat, "sat"},
