@@ -1,9 +1,10 @@
+#include "z3_utils/include/subgraph_function_generation.h"
+
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
 #include "hal_core/netlist/endpoint.h"
 #include "hal_core/netlist/gate.h"
 #include "hal_core/utilities/log.h"
-#include "z3_utils/include/subgraph_function_generation.h"
 #include "z3_utils/include/z3_utils.h"
 
 #include <queue>

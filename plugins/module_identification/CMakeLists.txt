@@ -14,7 +14,7 @@ if(PL_MODULE_IDENTIFICATION OR BUILD_ALL_PLUGINS)
         SHARED
         HEADER ${MODULE_IDENTIFICATION_INC}
         SOURCES ${MODULE_IDENTIFICATION_SRC} ${MODULE_IDENTIFICATION_PYTHON_SRC}
-        LINK_LIBRARIES boolean_influence dataflow
+        LINK_LIBRARIES boolean_influence dataflow nlohmann_json::nlohmann_json
     )
 
     add_subdirectory(test)

@@ -1,7 +1,8 @@
 #include "z3_utils/include/simplification.h"
-#include "z3_utils/include/z3_utils.h"
-#include "hal_core/utilities/log.h"
+
 #include "hal_core/netlist/boolean_function.h"
+#include "hal_core/utilities/log.h"
+#include "z3_utils/include/z3_utils.h"
 
 #include <deque>
 
@@ -641,7 +642,7 @@ namespace hal
          */
         bool check_simplification_for_correctness(const z3::expr& org, const z3::expr& smp)
         {
-           log_warning("z3_utils", "Checking simplification for correctness. This is slow and expensive!");
+            log_warning("z3_utils", "Checking simplification for correctness. This is slow and expensive!");
 
             z3::solver s(org.ctx());
             s.add(org != smp);
@@ -687,7 +688,7 @@ namespace hal
                     // CONCAT(SLICE(X, j+1, k), SLICE(X, i, j)) => SLICE(X, i, k)
                     if (p1.lo() == (p0.hi() + 1))
                     {
-                        const auto res = p0_parameter[0].extract(p1.hi(), p0.lo()); 
+                        const auto res = p0_parameter[0].extract(p1.hi(), p0.lo());
                         return {res};
                     }
 
@@ -722,7 +723,7 @@ namespace hal
                     if ((p1.lo() == p1.hi()) && (p1.lo() == p0_parameter[0].hi()))
                     {
                         const u32 extend_by = p0.get_sort().bv_size() - p0_parameter[0].get_sort().bv_size() + 1;
-                        auto res = z3::expr(ctx, Z3_mk_sign_ext(ctx, extend_by, p0_parameter[0]));
+                        auto res            = z3::expr(ctx, Z3_mk_sign_ext(ctx, extend_by, p0_parameter[0]));
                         return {res};
                     }
                 }
@@ -741,7 +742,7 @@ namespace hal
                     return {res};
                 }
             }
-            
+
             return {p0, p1};
         }
 

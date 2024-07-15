@@ -1,11 +1,10 @@
 #pragma once
 
 #include "hal_core/defines.h"
-
 #include "module_identification/candidates/base_candidate.h"
 #include "module_identification/candidates/functional_candidate.h"
 #include "module_identification/types/candidate_types.h"
-#include "module_identification/utils/json.hpp"
+#include "nlohmann_json/json.hpp"
 
 #include <map>
 #include <mutex>

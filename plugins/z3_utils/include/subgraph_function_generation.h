@@ -26,7 +26,6 @@
 #pragma once
 
 #include "hal_core/utilities/result.h"
-
 #include "z3++.h"
 
 #include <vector>

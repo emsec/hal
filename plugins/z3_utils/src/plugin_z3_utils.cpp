@@ -23,5 +23,4 @@ namespace hal
     {
     }
 
-
 }    // namespace hal

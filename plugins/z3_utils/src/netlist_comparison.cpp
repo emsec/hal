@@ -1,13 +1,14 @@
+#include "z3_utils/include/netlist_comparison.h"
+
 #include "hal_core/netlist/boolean_function/solver.h"
 #include "hal_core/netlist/decorators/boolean_function_net_decorator.h"
 #include "hal_core/netlist/decorators/subgraph_netlist_decorator.h"
-#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/gate.h"
+#include "hal_core/netlist/module.h"
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/log.h"
-#include "z3_utils/include/utils/json.hpp"
-#include "z3_utils/include/netlist_comparison.h"
+#include "nlohmann_json/json.hpp"
 #include "z3_utils/include/z3_utils.h"
 
 namespace hal
@@ -190,7 +191,8 @@ namespace hal
 
                         if (pin == nullptr)
                         {
-                            return ERR("cannot replace net id for net " + net->get_name() + " with ID " + std::to_string(net->get_id()) + ": net is global input but unable to find pin at top module!");
+                            return ERR("cannot replace net id for net " + net->get_name() + " with ID " + std::to_string(net->get_id())
+                                       + ": net is global input but unable to find pin at top module!");
                         }
 
                         const z3::expr new_expr = ctx.bv_const(("GLOBAL_IN_" + pin->get_name()).c_str(), 1);
@@ -199,7 +201,7 @@ namespace hal
                         s.add(net_expr == new_expr);
                         continue;
                     }
-                    
+
                     if (sources.empty())
                     {
                         // TODO this is not an ideal solution, but i dont know a better one
@@ -259,12 +261,18 @@ namespace hal
                 return;
             }
 
-            Result<std::monostate> setup_solver(z3::context& ctx, z3::solver& s, const Netlist* netlist_a, const Netlist* netlist_b, const std::unordered_map<hal::Gate *, std::vector<std::string>>& ff_replacements_a, const std::unordered_map<hal::Gate *, std::vector<std::string>>& ff_replacements_b)
+            Result<std::monostate> setup_solver(z3::context& ctx,
+                                                z3::solver& s,
+                                                const Netlist* netlist_a,
+                                                const Netlist* netlist_b,
+                                                const std::unordered_map<hal::Gate*, std::vector<std::string>>& ff_replacements_a,
+                                                const std::unordered_map<hal::Gate*, std::vector<std::string>>& ff_replacements_b)
             {
                 std::vector<Net*> sub_nets_a;
                 for (const auto& n : netlist_a->get_nets())
                 {
-                    const auto comb_sources = n->get_sources([](const Endpoint* ep) { return (ep->get_gate() != nullptr) && (ep->get_gate()->get_type()->has_property(GateTypeProperty::combinational)); });
+                    const auto comb_sources =
+                        n->get_sources([](const Endpoint* ep) { return (ep->get_gate() != nullptr) && (ep->get_gate()->get_type()->has_property(GateTypeProperty::combinational)); });
                     if (comb_sources.empty())
                     {
                         sub_nets_a.push_back(n);
@@ -273,7 +281,8 @@ namespace hal
                 std::vector<Net*> sub_nets_b;
                 for (const auto& n : netlist_b->get_nets())
                 {
-                    const auto comb_sources = n->get_sources([](const Endpoint* ep) { return (ep->get_gate() != nullptr) && (ep->get_gate()->get_type()->has_property(GateTypeProperty::combinational)); });
+                    const auto comb_sources =
+                        n->get_sources([](const Endpoint* ep) { return (ep->get_gate() != nullptr) && (ep->get_gate()->get_type()->has_property(GateTypeProperty::combinational)); });
                     if (comb_sources.empty())
                     {
                         sub_nets_b.push_back(n);
@@ -327,11 +336,12 @@ namespace hal
                 auto config = hal::SMT::QueryConfig().with_timeout(solver_timeout).without_model_generation();
 
                 s.add(bf_a != bf_b);
-                auto smt2_str = s.to_smt2();
+                auto smt2_str  = s.to_smt2();
                 auto query_res = SMT::Solver::query_local(config, smt2_str);
                 if (query_res.is_error())
                 {
-                    return ERR_APPEND(query_res.get_error(), "cannot compare net A " + net_a->get_name() + " with ID " + std::to_string(net_a->get_id()) + " with net B " + net_b->get_name() + " with ID "
+                    return ERR_APPEND(query_res.get_error(),
+                                      "cannot compare net A " + net_a->get_name() + " with ID " + std::to_string(net_a->get_id()) + " with net B " + net_b->get_name() + " with ID "
                                           + std::to_string(net_b->get_id()) + ": failed solver_check");
                 }
                 const auto check_result = query_res.get();
@@ -384,7 +394,8 @@ namespace hal
             auto setup_res = setup_solver(ctx, s, netlist_a, netlist_b, ff_replacements_a, ff_replacements_b);
             if (setup_res.is_error())
             {
-                return ERR_APPEND(setup_res.get_error(), "cannot compare netlist a with ID " + std::to_string(netlist_a->get_id()) + " netlist b with ID " + std::to_string(netlist_b->get_id()) + ": failed to setup solver");
+                return ERR_APPEND(setup_res.get_error(),
+                                  "cannot compare netlist a with ID " + std::to_string(netlist_a->get_id()) + " netlist b with ID " + std::to_string(netlist_b->get_id()) + ": failed to setup solver");
             }
 
             return compare_nets_internal(ctx, s, net_a, net_b, comb_gates_a, comb_gates_b, fail_on_unknown, solver_timeout);
@@ -414,7 +425,8 @@ namespace hal
             auto setup_res = setup_solver(ctx, s, netlist_a, netlist_b, ff_replacements_a, ff_replacements_b);
             if (setup_res.is_error())
             {
-                return ERR_APPEND(setup_res.get_error(), "cannot compare netlist a with ID " + std::to_string(netlist_a->get_id()) + " netlist b with ID " + std::to_string(netlist_b->get_id()) + ": failed to setup solver");
+                return ERR_APPEND(setup_res.get_error(),
+                                  "cannot compare netlist a with ID " + std::to_string(netlist_a->get_id()) + " netlist b with ID " + std::to_string(netlist_b->get_id()) + ": failed to setup solver");
             }
 
             for (const auto& [net_a, net_b] : nets)
@@ -432,7 +444,7 @@ namespace hal
                 s.push();
                 auto comp_res = compare_nets_internal(ctx, s, net_a, net_b, comb_gates_a, comb_gates_b, fail_on_unknown, solver_timeout);
                 s.pop();
-                
+
                 if (comp_res.is_error())
                 {
                     return ERR_APPEND(comp_res.get_error(),
@@ -526,7 +538,8 @@ namespace hal
             auto setup_res = setup_solver(ctx, s, netlist_a, netlist_b, ff_replacements_a, ff_replacements_b);
             if (setup_res.is_error())
             {
-                return ERR_APPEND(setup_res.get_error(), "cannot compare netlist a with ID " + std::to_string(netlist_a->get_id()) + " netlist b with ID " + std::to_string(netlist_b->get_id()) + ": failed to setup solver");
+                return ERR_APPEND(setup_res.get_error(),
+                                  "cannot compare netlist a with ID " + std::to_string(netlist_a->get_id()) + " netlist b with ID " + std::to_string(netlist_b->get_id()) + ": failed to setup solver");
             }
 
             std::set<std::pair<Net*, Net*>> to_compare;
@@ -544,10 +557,10 @@ namespace hal
                 if (it_a == out_pins_a.end())
                 {
                     log_warning("z3_utils",
-                            "netlist a with ID {} and netlist b with ID {} might not be equal: netlist a has output pin {} that does not exist in netlist b!",
-                            netlist_a->get_id(),
-                            netlist_b->get_id(),
-                            pin);
+                                "netlist a with ID {} and netlist b with ID {} might not be equal: netlist a has output pin {} that does not exist in netlist b!",
+                                netlist_a->get_id(),
+                                netlist_b->get_id(),
+                                pin);
                     continue;
                 }
 
@@ -555,16 +568,16 @@ namespace hal
                 if (it_b == out_pins_b.end())
                 {
                     log_warning("z3_utils",
-                            "netlist a with ID {} and netlist b with ID {} might not be equal: netlist a has output pin {} that does not exist in netlist b!",
-                            netlist_a->get_id(),
-                            netlist_b->get_id(),
-                            pin);
+                                "netlist a with ID {} and netlist b with ID {} might not be equal: netlist a has output pin {} that does not exist in netlist b!",
+                                netlist_a->get_id(),
+                                netlist_b->get_id(),
+                                pin);
                     continue;
                 }
 
                 Net* net_a = netlist_a->get_top_module()->get_pin_by_name(pin)->get_net();
                 Net* net_b = netlist_b->get_top_module()->get_pin_by_name(pin)->get_net();
-            
+
                 to_compare.insert({net_a, net_b});
             }
 
