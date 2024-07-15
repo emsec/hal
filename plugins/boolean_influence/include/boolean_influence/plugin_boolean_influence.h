@@ -38,22 +38,5 @@ namespace hal
         std::string get_version() const override;
 
         void initialize() override;
-
-       
-
-    // private:
-    //     static const std::string probabilistic_function;
-    //     static const std::string deterministic_function;
-
-    //     static Result<std::unordered_map<std::string, double>>
-    //         get_boolean_influence_internal(const z3::expr& e, const u32 num_evaluations, const bool deterministic, const std::string& unique_identifier);
-
-    //     static Result<std::map<Net*, double>> get_boolean_influences_of_subcircuit_internal(const std::vector<Gate*>& gates,
-    //                                                                                         const Net* start_net,
-    //                                                                                         const u32 num_evaluations,
-    //                                                                                         const bool deterministic,
-    //                                                                                         const std::string& unique_identifier);
-
-    //     static Result<std::map<Net*, double>> get_boolean_influences_of_gate_internal(const Gate* gate, const u32 num_evaluations, const bool deterministic, const std::string& unique_identifier);
     };
 }    // namespace hal

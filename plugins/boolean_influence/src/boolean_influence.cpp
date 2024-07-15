@@ -137,8 +137,7 @@ int main(int argc, char *argv[]) {
                 return z;
             }
 
-            Result<std::unordered_map<std::string, double>>
-                get_boolean_influence_internal(const z3::expr& expr, const u32 num_evaluations, const bool deterministic, const std::string& unique_identifier)
+            Result<std::unordered_map<std::string, double>> get_boolean_influence_internal(const z3::expr& expr, const u32 num_evaluations, const bool deterministic)
             {
                 const auto to_replacement_var = [](const u32 var_idx) -> std::string { return "var_" + std::to_string(var_idx); };
 
@@ -222,8 +221,7 @@ int main(int argc, char *argv[]) {
                 }
                 const std::filesystem::path directory = directory_res.get();
                 std::filesystem::create_directory(directory);
-
-                const std::filesystem::path file_path = directory / (unique_identifier.empty() ? ("boolean_func.cpp") : ("boolean_func_" + unique_identifier + ".cpp"));
+                const std::filesystem::path file_path = directory / "boolean_func.cpp";
 
                 std::string cpp_program = deterministic ? deterministic_function : probabilistic_function;
                 cpp_program             = utils::replace(cpp_program, std::string("<C_FUNCTION>"), z3_utils::to_cpp(replaced_e));
@@ -296,11 +294,7 @@ int main(int argc, char *argv[]) {
                 return OK(influences);
             }
 
-            Result<std::map<Net*, double>> get_boolean_influences_of_subcircuit_internal(const std::vector<Gate*>& gates,
-                                                                                         const Net* start_net,
-                                                                                         const u32 num_evaluations,
-                                                                                         const bool deterministic,
-                                                                                         const std::string& unique_identifier)
+            Result<std::map<Net*, double>> get_boolean_influences_of_subcircuit_internal(const std::vector<Gate*>& gates, const Net* start_net, const u32 num_evaluations, const bool deterministic)
             {
                 for (const auto* gate : gates)
                 {
@@ -333,7 +327,7 @@ int main(int argc, char *argv[]) {
                 }
 
                 // Generate Boolean influences
-                const auto inf_res = get_boolean_influence_internal(func, num_evaluations, deterministic, unique_identifier);
+                const auto inf_res = get_boolean_influence_internal(func, num_evaluations, deterministic);
                 if (inf_res.is_error())
                 {
                     return ERR_APPEND(inf_res.get_error(),
@@ -363,7 +357,7 @@ int main(int argc, char *argv[]) {
                 return OK(nets_to_inf);
             }
 
-            Result<std::map<Net*, double>> get_boolean_influences_of_gate_internal(const Gate* gate, const u32 num_evaluations, const bool deterministic, const std::string& unique_identifier)
+            Result<std::map<Net*, double>> get_boolean_influences_of_gate_internal(const Gate* gate, const u32 num_evaluations, const bool deterministic)
             {
                 if (!gate->get_type()->has_property(GateTypeProperty::ff))
                 {
@@ -397,7 +391,7 @@ int main(int argc, char *argv[]) {
                 const auto function_gates = utils::to_vector(function_gates_res.get());
 
                 // Generate Boolean influences
-                const auto inf_res = get_boolean_influences_of_subcircuit_internal(function_gates, data_net, num_evaluations, deterministic, unique_identifier);
+                const auto inf_res = get_boolean_influences_of_subcircuit_internal(function_gates, data_net, num_evaluations, deterministic);
                 if (inf_res.is_error())
                 {
                     return ERR_APPEND(inf_res.get_error(),
@@ -410,50 +404,50 @@ int main(int argc, char *argv[]) {
 
         }    // namespace
 
-        Result<std::unordered_map<std::string, double>> get_boolean_influence(const BooleanFunction& bf, const u32 num_evaluations, const std::string& unique_identifier)
+        Result<std::unordered_map<std::string, double>> get_boolean_influence(const BooleanFunction& bf, const u32 num_evaluations)
         {
             auto ctx         = z3::context();
             const auto z3_bf = z3_utils::from_bf(bf, ctx);
 
-            return get_boolean_influence(z3_bf, num_evaluations, unique_identifier);
+            return get_boolean_influence(z3_bf, num_evaluations);
         }
 
-        Result<std::unordered_map<std::string, double>> get_boolean_influence(const z3::expr& expr, const u32 num_evaluations, const std::string& unique_identifier)
+        Result<std::unordered_map<std::string, double>> get_boolean_influence(const z3::expr& expr, const u32 num_evaluations)
         {
-            return get_boolean_influence_internal(expr, num_evaluations, false, unique_identifier);
+            return get_boolean_influence_internal(expr, num_evaluations, false);
         }
 
-        Result<std::unordered_map<std::string, double>> get_boolean_influence_deterministic(const BooleanFunction& bf, const std::string& unique_identifier)
+        Result<std::unordered_map<std::string, double>> get_boolean_influence_deterministic(const BooleanFunction& bf)
         {
             auto ctx         = z3::context();
             const auto z3_bf = z3_utils::from_bf(bf, ctx);
 
-            return get_boolean_influence_deterministic(z3_bf, unique_identifier);
+            return get_boolean_influence_deterministic(z3_bf);
         }
 
-        Result<std::unordered_map<std::string, double>> get_boolean_influence_deterministic(const z3::expr& expr, const std::string& unique_identifier)
+        Result<std::unordered_map<std::string, double>> get_boolean_influence_deterministic(const z3::expr& expr)
         {
-            return get_boolean_influence_internal(expr, 0, true, unique_identifier);
+            return get_boolean_influence_internal(expr, 0, true);
         }
 
-        Result<std::map<Net*, double>> get_boolean_influences_of_subcircuit(const std::vector<Gate*>& gates, const Net* start_net, const u32 num_evaluations, const std::string& unique_identifier)
+        Result<std::map<Net*, double>> get_boolean_influences_of_subcircuit(const std::vector<Gate*>& gates, const Net* start_net, const u32 num_evaluations)
         {
-            return get_boolean_influences_of_subcircuit_internal(gates, start_net, num_evaluations, false, unique_identifier);
+            return get_boolean_influences_of_subcircuit_internal(gates, start_net, num_evaluations, false);
         }
 
-        Result<std::map<Net*, double>> get_boolean_influences_of_gate(const Gate* gate, const u32 num_evaluations, const std::string& unique_identifier)
+        Result<std::map<Net*, double>> get_boolean_influences_of_gate(const Gate* gate, const u32 num_evaluations)
         {
-            return get_boolean_influences_of_gate_internal(gate, num_evaluations, false, unique_identifier);
+            return get_boolean_influences_of_gate_internal(gate, num_evaluations, false);
         }
 
-        Result<std::map<Net*, double>> get_boolean_influences_of_subcircuit_deterministic(const std::vector<Gate*>& gates, const Net* start_net, const std::string& unique_identifier)
+        Result<std::map<Net*, double>> get_boolean_influences_of_subcircuit_deterministic(const std::vector<Gate*>& gates, const Net* start_net)
         {
-            return get_boolean_influences_of_subcircuit_internal(gates, start_net, 0, true, unique_identifier);
+            return get_boolean_influences_of_subcircuit_internal(gates, start_net, 0, true);
         }
 
-        Result<std::map<Net*, double>> get_boolean_influences_of_gate_deterministic(const Gate* gate, const std::string& unique_identifier)
+        Result<std::map<Net*, double>> get_boolean_influences_of_gate_deterministic(const Gate* gate)
         {
-            return get_boolean_influences_of_gate_internal(gate, 0, true, unique_identifier);
+            return get_boolean_influences_of_gate_internal(gate, 0, true);
         }
 
         Result<std::unordered_map<std::string, double>> get_boolean_influence_with_hal_boolean_function_class(const BooleanFunction& bf, const u32 num_evaluations)
