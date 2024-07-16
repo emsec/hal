@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GUI API &mdash; hal_py v4.3.0-33-g1e8b5de4b documentation</title>
+  <title>GUI API &mdash; hal_py v4.3.0-39-g49487972c documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.3.0-33-g1e8b5de4b
+                v4.3.0-39-g49487972c
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -425,14 +425,14 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_gui.GuiApi.getSelectedGates">
-<span class="sig-name descname"><span class="pre">getSelectedGates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_gui.GuiApi" title="hal_gui.GuiApi"><span class="pre">hal_gui.GuiApi</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Gate</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_gui.GuiApi.getSelectedGates" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getSelectedGates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_gui.GuiApi" title="hal_gui.GuiApi"><span class="pre">hal_gui.GuiApi</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_gui.GuiApi.getSelectedGates" title="Permalink to this definition"></a></dt>
 <dd><p>Get the gates which are currently selected in the graph view of the GUI.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>List of currently selected gates.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[hal_py.Gate]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -453,14 +453,14 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_gui.GuiApi.getSelectedItems">
-<span class="sig-name descname"><span class="pre">getSelectedItems</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_gui.GuiApi" title="hal_gui.GuiApi"><span class="pre">hal_gui.GuiApi</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Gate</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Net</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Module</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_gui.GuiApi.getSelectedItems" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getSelectedItems</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_gui.GuiApi" title="hal_gui.GuiApi"><span class="pre">hal_gui.GuiApi</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module"><span class="pre">hal_py.Module</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_gui.GuiApi.getSelectedItems" title="Permalink to this definition"></a></dt>
 <dd><p>Get all selected items which are currently selected in the graph view of the GUI.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Tuple of currently selected items.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a>(hal_py.Gate, hal_py.Net, hal_py.module)</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a>(<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>, <a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>, hal_py.module)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -481,7 +481,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_gui.GuiApi.getSelectedModules">
-<span class="sig-name descname"><span class="pre">getSelectedModules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_gui.GuiApi" title="hal_gui.GuiApi"><span class="pre">hal_gui.GuiApi</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Module</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_gui.GuiApi.getSelectedModules" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getSelectedModules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_gui.GuiApi" title="hal_gui.GuiApi"><span class="pre">hal_gui.GuiApi</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="module.html#hal_py.Module" title="hal_py.Module"><span class="pre">hal_py.Module</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_gui.GuiApi.getSelectedModules" title="Permalink to this definition"></a></dt>
 <dd><p>Get the modules which are currently selected in the graph view of the GUI.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -509,14 +509,14 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_gui.GuiApi.getSelectedNets">
-<span class="sig-name descname"><span class="pre">getSelectedNets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_gui.GuiApi" title="hal_gui.GuiApi"><span class="pre">hal_gui.GuiApi</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Net</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_gui.GuiApi.getSelectedNets" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getSelectedNets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_gui.GuiApi" title="hal_gui.GuiApi"><span class="pre">hal_gui.GuiApi</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_gui.GuiApi.getSelectedNets" title="Permalink to this definition"></a></dt>
 <dd><p>Get the nets which are currently selected in the graph view of the GUI.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>List of currently selected nets.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[hal_py.Net]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</p>
 </dd>
 </dl>
 </dd></dl>

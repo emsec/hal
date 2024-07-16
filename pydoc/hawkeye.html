@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HAWKEYE &mdash; hal_py v4.3.0-33-g1e8b5de4b documentation</title>
+  <title>HAWKEYE &mdash; hal_py v4.3.0-39-g49487972c documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.3.0-33-g1e8b5de4b
+                v4.3.0-39-g49487972c
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -88,7 +88,7 @@
 <p>Automated tool to locate arbitrary symmetric cryptographic implementations in gate-level netlists.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="hawkeye.detect_candidates">
-<span class="sig-prename descclassname"><span class="pre">hawkeye.</span></span><span class="sig-name descname"><span class="pre">detect_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Netlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hawkeye.DetectionConfiguration" title="hawkeye.DetectionConfiguration"><span class="pre">hawkeye.DetectionConfiguration</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_state_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_ffs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Gate</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hawkeye.RegisterCandidate" title="hawkeye.RegisterCandidate"><span class="pre">hawkeye.RegisterCandidate</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.detect_candidates" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">hawkeye.</span></span><span class="sig-name descname"><span class="pre">detect_candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">configs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hawkeye.DetectionConfiguration" title="hawkeye.DetectionConfiguration"><span class="pre">hawkeye.DetectionConfiguration</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_state_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_ffs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hawkeye.RegisterCandidate" title="hawkeye.RegisterCandidate"><span class="pre">hawkeye.RegisterCandidate</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.detect_candidates" title="Permalink to this definition"></a></dt>
 <dd><p>Attempt to locate candidates for symmetric cryptographic implementations within a gate-level netlist.
 Search operates only on an abstraction of the netlist that contains only flip-flops as nodes and connections through combinational logic as edges.
 The algorithm computes the k-neighborhood of each flip-flop for <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">=</span> <span class="pre">1,</span> <span class="pre">...,</span> <span class="pre">config.timeout</span></code> and stops when the neighborhood size saturates.
@@ -99,10 +99,10 @@ To this end, large candidates that fully contain a smaller candidate and candida
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nl</strong> (<em>hal_py.Netlist</em>) – The netlist to operate on.</p></li>
+<li><p><strong>nl</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to operate on.</p></li>
 <li><p><strong>configs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="#hawkeye.DetectionConfiguration" title="hawkeye.DetectionConfiguration"><em>hawkeye.DetectionConfiguration</em></a><em>]</em>) – The configurations of the detection approaches to be executed one after another on each start flip-flop.</p></li>
 <li><p><strong>min_state_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The minimum size of a register candidate to be considered a cryptographic state register. Defaults to <code class="docutils literal notranslate"><span class="pre">40</span></code>.</p></li>
-<li><p><strong>start_ffs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><em>hal_py.Gate</em><em>]</em>) – The flip-flops to analyze. Defaults to an empty list, i.e., all flip-flops in the netlist will be analyzed.</p></li>
+<li><p><strong>start_ffs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em>) – The flip-flops to analyze. Defaults to an empty list, i.e., all flip-flops in the netlist will be analyzed.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -299,42 +299,42 @@ Create S-box candidates for these sub-components after determining the respectiv
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hawkeye.RegisterCandidate.get_input_reg">
-<span class="sig-name descname"><span class="pre">get_input_reg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RegisterCandidate" title="hawkeye.RegisterCandidate"><span class="pre">hawkeye.RegisterCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Gate</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RegisterCandidate.get_input_reg" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_input_reg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RegisterCandidate" title="hawkeye.RegisterCandidate"><span class="pre">hawkeye.RegisterCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RegisterCandidate.get_input_reg" title="Permalink to this definition"></a></dt>
 <dd><p>Get the candidate’s input register.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The input register of the candidate.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[hal_py.Gate]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hawkeye.RegisterCandidate.get_netlist">
-<span class="sig-name descname"><span class="pre">get_netlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RegisterCandidate" title="hawkeye.RegisterCandidate"><span class="pre">hawkeye.RegisterCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal_py.Netlist</span></span></span><a class="headerlink" href="#hawkeye.RegisterCandidate.get_netlist" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_netlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RegisterCandidate" title="hawkeye.RegisterCandidate"><span class="pre">hawkeye.RegisterCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></span><a class="headerlink" href="#hawkeye.RegisterCandidate.get_netlist" title="Permalink to this definition"></a></dt>
 <dd><p>Get the netlist associated with the candidate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The netlist of the candidate.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>hal_py.Netlist</p>
+<dd class="field-even"><p><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hawkeye.RegisterCandidate.get_output_reg">
-<span class="sig-name descname"><span class="pre">get_output_reg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RegisterCandidate" title="hawkeye.RegisterCandidate"><span class="pre">hawkeye.RegisterCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Gate</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RegisterCandidate.get_output_reg" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_output_reg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RegisterCandidate" title="hawkeye.RegisterCandidate"><span class="pre">hawkeye.RegisterCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RegisterCandidate.get_output_reg" title="Permalink to this definition"></a></dt>
 <dd><p>Get the candidate’s output register.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The output register of the candidate.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[hal_py.Gate]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -403,14 +403,14 @@ All data structures of the round candidate will be initialized in the process.</
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hawkeye.RoundCandidate.get_control_inputs">
-<span class="sig-name descname"><span class="pre">get_control_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Net</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_control_inputs" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_control_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_control_inputs" title="Permalink to this definition"></a></dt>
 <dd><p>Get the candidate’s control inputs to the logic computing the next state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The control inputs of the candidate.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[hal_py.Net]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -431,84 +431,84 @@ All data structures of the round candidate will be initialized in the process.</
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hawkeye.RoundCandidate.get_input_ffs_of_gate">
-<span class="sig-name descname"><span class="pre">get_input_ffs_of_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Gate</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Gate</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_input_ffs_of_gate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_input_ffs_of_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_input_ffs_of_gate" title="Permalink to this definition"></a></dt>
 <dd><p>Get a dict from each combinational gate of the round function to all the input flip-flops it depends on.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A dict from gates to sets of input flip-flops.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a>[hal_py.Gate,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[hal_py.Gate]]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hawkeye.RoundCandidate.get_input_reg">
-<span class="sig-name descname"><span class="pre">get_input_reg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Gate</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_input_reg" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_input_reg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_input_reg" title="Permalink to this definition"></a></dt>
 <dd><p>Get the candidate’s input register.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The input register of the candidate.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[hal_py.Gate]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hawkeye.RoundCandidate.get_longest_distance_to_gate">
-<span class="sig-name descname"><span class="pre">get_longest_distance_to_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Gate</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_longest_distance_to_gate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_longest_distance_to_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_longest_distance_to_gate" title="Permalink to this definition"></a></dt>
 <dd><p>Get a dict from an integer distance to all gates that are reachable within at most that distance when starting at any input flip-flop.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A dict from longest distance to a set of gates being reachable in at most that distance.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[hal_py.Gate]]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>,<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hawkeye.RoundCandidate.get_netlist">
-<span class="sig-name descname"><span class="pre">get_netlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal_py.Netlist</span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_netlist" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_netlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_netlist" title="Permalink to this definition"></a></dt>
 <dd><p>Get the netlist of the round candidate. The netlist is a partial copy of the netlist of the register candidate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The netlist of the candidate.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>hal_py.Netlist</p>
+<dd class="field-even"><p><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hawkeye.RoundCandidate.get_other_inputs">
-<span class="sig-name descname"><span class="pre">get_other_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Net</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_other_inputs" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_other_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_other_inputs" title="Permalink to this definition"></a></dt>
 <dd><p>Get the candidate’s other inputs to the logic computing the next state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The other inputs of the candidate.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[hal_py.Net]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hawkeye.RoundCandidate.get_output_reg">
-<span class="sig-name descname"><span class="pre">get_output_reg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Gate</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_output_reg" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_output_reg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_output_reg" title="Permalink to this definition"></a></dt>
 <dd><p>Get the candidate’s output register.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The output register of the candidate.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[hal_py.Gate]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -529,42 +529,42 @@ All data structures of the round candidate will be initialized in the process.</
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hawkeye.RoundCandidate.get_state_inputs">
-<span class="sig-name descname"><span class="pre">get_state_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Net</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_state_inputs" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_state_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_state_inputs" title="Permalink to this definition"></a></dt>
 <dd><p>Get the candidate’s state inputs to the logic computing the next state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The state inputs of the candidate.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[hal_py.Net]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hawkeye.RoundCandidate.get_state_logic">
-<span class="sig-name descname"><span class="pre">get_state_logic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Gate</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_state_logic" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_state_logic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_state_logic" title="Permalink to this definition"></a></dt>
 <dd><p>Get the candidate’s combinational logic computing the next state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The state logic of the candidate.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[hal_py.Gate]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hawkeye.RoundCandidate.get_state_outputs">
-<span class="sig-name descname"><span class="pre">get_state_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.Net</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_state_outputs" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_state_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hawkeye.RoundCandidate" title="hawkeye.RoundCandidate"><span class="pre">hawkeye.RoundCandidate</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hawkeye.RoundCandidate.get_state_outputs" title="Permalink to this definition"></a></dt>
 <dd><p>Get the candidate’s state outputs from the logic computing the next state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The state outputs of the candidate.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[hal_py.Net]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#set" title="(in Python v3.12)">set</a>[<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a>]</p>
 </dd>
 </dl>
 </dd></dl>

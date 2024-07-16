@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Endpoint &mdash; hal_py v4.3.0-33-g1e8b5de4b documentation</title>
+  <title>Endpoint &mdash; hal_py v4.3.0-39-g49487972c documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.3.0-33-g1e8b5de4b
+                v4.3.0-39-g49487972c
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -104,6 +104,142 @@
              
   <section id="endpoint">
 <h1>Endpoint<a class="headerlink" href="#endpoint" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="hal_py.Endpoint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hal_py.</span></span><span class="sig-name descname"><span class="pre">Endpoint</span></span><a class="headerlink" href="#hal_py.Endpoint" title="Permalink to this definition"></a></dt>
+<dd><p>An endpoint comprises the pin of a gate, the respective gate, and the connected net.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.Endpoint.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.Endpoint.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hal_py.Endpoint.destination_pin">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">destination_pin</span></span><a class="headerlink" href="#hal_py.Endpoint.destination_pin" title="Permalink to this definition"></a></dt>
+<dd><p>True if the pin of the endpoint is a destination (input) pin, False otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hal_py.Endpoint.gate">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gate</span></span><a class="headerlink" href="#hal_py.Endpoint.gate" title="Permalink to this definition"></a></dt>
+<dd><p>The gate associated with the endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.Endpoint.get_gate">
+<span class="sig-name descname"><span class="pre">get_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Endpoint" title="hal_py.Endpoint"><span class="pre">hal_py.Endpoint</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::Gate</span></span></span><a class="headerlink" href="#hal_py.Endpoint.get_gate" title="Permalink to this definition"></a></dt>
+<dd><p>Get the gate associated with the endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The gate.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.Endpoint.get_net">
+<span class="sig-name descname"><span class="pre">get_net</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Endpoint" title="hal_py.Endpoint"><span class="pre">hal_py.Endpoint</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::Net</span></span></span><a class="headerlink" href="#hal_py.Endpoint.get_net" title="Permalink to this definition"></a></dt>
+<dd><p>Get the net associated with the endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The net.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.Endpoint.get_pin">
+<span class="sig-name descname"><span class="pre">get_pin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Endpoint" title="hal_py.Endpoint"><span class="pre">hal_py.Endpoint</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::GatePin</span></span></span><a class="headerlink" href="#hal_py.Endpoint.get_pin" title="Permalink to this definition"></a></dt>
+<dd><p>Get pin associated with the endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The pin.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.Endpoint.is_destination_pin">
+<span class="sig-name descname"><span class="pre">is_destination_pin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Endpoint" title="hal_py.Endpoint"><span class="pre">hal_py.Endpoint</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.Endpoint.is_destination_pin" title="Permalink to this definition"></a></dt>
+<dd><p>Checks whether the pin of the endpoint is a destination (input) pin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the endpoint is an destination (input) pin, False otherwise.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.Endpoint.is_source_pin">
+<span class="sig-name descname"><span class="pre">is_source_pin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.Endpoint" title="hal_py.Endpoint"><span class="pre">hal_py.Endpoint</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.Endpoint.is_source_pin" title="Permalink to this definition"></a></dt>
+<dd><p>Checks whether the pin of the endpoint is a source (output) pin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the endpoint is an source (output) pin, False otherwise.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hal_py.Endpoint.net">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">net</span></span><a class="headerlink" href="#hal_py.Endpoint.net" title="Permalink to this definition"></a></dt>
+<dd><p>The net associated with the endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net">hal_py.Net</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hal_py.Endpoint.pin">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pin</span></span><a class="headerlink" href="#hal_py.Endpoint.pin" title="Permalink to this definition"></a></dt>
+<dd><p>The pin associated with the endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="gate_pin.html#hal_py.GatePin" title="hal_py.GatePin">hal_py.GatePin</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hal_py.Endpoint.source_pin">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source_pin</span></span><a class="headerlink" href="#hal_py.Endpoint.source_pin" title="Permalink to this definition"></a></dt>
+<dd><p>True if the pin of the endpoint is a source (output) pin, False otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 

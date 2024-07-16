@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SMT &mdash; hal_py v4.3.0-33-g1e8b5de4b documentation</title>
+  <title>SMT &mdash; hal_py v4.3.0-39-g49487972c documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.3.0-33-g1e8b5de4b
+                v4.3.0-39-g49487972c
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -110,6 +110,11 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hal_py.SMT.</span></span><span class="sig-name descname"><span class="pre">Constraint</span></span><a class="headerlink" href="#hal_py.SMT.Constraint" title="Permalink to this definition"></a></dt>
 <dd><p>Represents a constraint to the SMT query.
 A constraint is either an assignment of two Boolean functions or a single Boolean function, e.g., an equality check or similar.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hal_py.SMT.Constraint.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#hal_py.SMT.Constraint.__annotations__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.SMT.Constraint.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SMT.Constraint.__init__" title="Permalink to this definition"></a></dt>
@@ -152,35 +157,35 @@ A constraint is either an assignment of two Boolean functions or a single Boolea
 <dd><p>A constraint that is either an assignment of two Boolean functions or a single Boolean function, e.g., an equality check or similar.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>hal_py.BooleanFunction or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a>(hal_py.BooleanFunction, hal_py.BooleanFunction)</p>
+<dd class="field-odd"><p><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a>(<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>, <a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.SMT.Constraint.get_assignment">
-<span class="sig-name descname"><span class="pre">get_assignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.Constraint" title="hal_py.SMT.Constraint"><span class="pre">hal_py.SMT.Constraint</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.BooleanFunction</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">hal_py.BooleanFunction</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.SMT.Constraint.get_assignment" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_assignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.Constraint" title="hal_py.SMT.Constraint"><span class="pre">hal_py.SMT.Constraint</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><span class="pre">hal_py.BooleanFunction</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><span class="pre">hal_py.BooleanFunction</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.SMT.Constraint.get_assignment" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the assignment constraint as a pair of Boolean functions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The assignment constraint on success, None otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a>(hal_py.BooleanFunction,hal_py.BooleanFunction) or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a>(<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>,<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a>) or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.SMT.Constraint.get_function">
-<span class="sig-name descname"><span class="pre">get_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.Constraint" title="hal_py.SMT.Constraint"><span class="pre">hal_py.SMT.Constraint</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.BooleanFunction</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.SMT.Constraint.get_function" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.Constraint" title="hal_py.SMT.Constraint"><span class="pre">hal_py.SMT.Constraint</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><span class="pre">hal_py.BooleanFunction</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.SMT.Constraint.get_function" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the function constraint as a Boolean function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The function constraint on success, None otherwise.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>hal_py.BooleanFunction or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
+<dd class="field-even"><p><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -261,17 +266,17 @@ A constraint is either an assignment of two Boolean functions or a single Boolea
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.SMT.Model.evaluate">
-<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.Model" title="hal_py.SMT.Model"><span class="pre">hal_py.SMT.Model</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.BooleanFunction</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">hal_py.BooleanFunction</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.SMT.Model.evaluate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.Model" title="hal_py.SMT.Model"><span class="pre">hal_py.SMT.Model</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><span class="pre">hal_py.BooleanFunction</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><span class="pre">hal_py.BooleanFunction</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.SMT.Model.evaluate" title="Permalink to this definition"></a></dt>
 <dd><p>Evaluates the given Boolean function by replacing all variables contained in the model with their corresponding value and simplifying the result.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>bf</strong> (<em>hal_py.BooleanFunction</em>) – The Boolean function to evaluate.</p>
+<dd class="field-odd"><p><strong>bf</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – The Boolean function to evaluate.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The evaluated function on success, None otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>hal_py.BooleanFunction or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -554,7 +559,7 @@ A constraint is either an assignment of two Boolean functions or a single Boolea
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hal_py.SMT.Solver.query">
-<span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.SMT.Solver</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config:</span> <span class="pre">hal_py.SMT.QueryConfig</span> <span class="pre">=</span> <span class="pre">&lt;hal_py.SMT.QueryConfig</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x7f341b2890b0&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hal_py.SMT.SolverResult" title="hal_py.SMT.SolverResult"><span class="pre">hal_py.SMT.SolverResult</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.SMT.Solver.query" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self:</span> <span class="pre">hal_py.SMT.Solver</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config:</span> <span class="pre">hal_py.SMT.QueryConfig</span> <span class="pre">=</span> <span class="pre">&lt;hal_py.SMT.QueryConfig</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x7f9423f07530&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hal_py.SMT.SolverResult" title="hal_py.SMT.SolverResult"><span class="pre">hal_py.SMT.SolverResult</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.SMT.Solver.query" title="Permalink to this definition"></a></dt>
 <dd><p>Queries an SMT solver with the specified query configuration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -573,6 +578,44 @@ A constraint is either an assignment of two Boolean functions or a single Boolea
 <dt class="sig sig-object py" id="hal_py.SMT.Solver.query_local">
 <span class="sig-name descname"><span class="pre">query_local</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.Solver" title="hal_py.SMT.Solver"><span class="pre">hal_py.SMT.Solver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig"><span class="pre">hal_py.SMT.QueryConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hal_py.SMT.SolverResult" title="hal_py.SMT.SolverResult"><span class="pre">hal_py.SMT.SolverResult</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.SMT.Solver.query_local" title="Permalink to this definition"></a></dt>
 <dd><p>Queries a local SMT solver with the specified query configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong> (<a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig"><em>hal_py.SMT.QueryConfig</em></a>) – The SMT solver query configuration.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The result on success, a string error message otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>hal_py.SMT.Result or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.SMT.Solver.query_local_with_smt2">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query_local_with_smt2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig"><span class="pre">hal_py.SMT.QueryConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">smt2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hal_py.SMT.SolverResult" title="hal_py.SMT.SolverResult"><span class="pre">hal_py.SMT.SolverResult</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#hal_py.SMT.Solver.query_local_with_smt2" title="Permalink to this definition"></a></dt>
+<dd><p>Queries a local SMT solver with the specified query configuration and the smt2 formatted query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig"><em>hal_py.SMT.QueryConfig</em></a>) – The SMT solver query configuration.</p></li>
+<li><p><strong>smt2</strong> (<em>string</em>) – A solver query formatted in smt2 style.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The result on success, a string error message otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>hal_py.SMT.Result or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.SMT.Solver.query_remote">
+<span class="sig-name descname"><span class="pre">query_remote</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.Solver" title="hal_py.SMT.Solver"><span class="pre">hal_py.SMT.Solver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig"><span class="pre">hal_py.SMT.QueryConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::Result&lt;hal::SMT::SolverResult&gt;</span></span></span><a class="headerlink" href="#hal_py.SMT.Solver.query_remote" title="Permalink to this definition"></a></dt>
+<dd><p>Queries a remote SMT solver with the specified query configuration.</p>
+<p>WARNING: This function is not yet implemented.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>config</strong> (<a class="reference internal" href="#hal_py.SMT.QueryConfig" title="hal_py.SMT.QueryConfig"><em>hal_py.SMT.QueryConfig</em></a>) – The SMT solver query configuration.</p>
@@ -976,6 +1019,142 @@ A constraint is either an assignment of two Boolean functions or a single Boolea
 <dt class="sig sig-object py" id="hal_py.SMT.SolverType.value">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#hal_py.SMT.SolverType.value" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hal_py.SMT.SymbolicExecution">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hal_py.SMT.</span></span><span class="sig-name descname"><span class="pre">SymbolicExecution</span></span><a class="headerlink" href="#hal_py.SMT.SymbolicExecution" title="Permalink to this definition"></a></dt>
+<dd><p>Represents the symbolic execution engine that handles the evaluation and simplification of Boolean function abstract syntax trees.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hal_py.SMT.SymbolicExecution.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#hal_py.SMT.SymbolicExecution.__annotations__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.SMT.SymbolicExecution.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.SymbolicExecution" title="hal_py.SMT.SymbolicExecution"><span class="pre">hal_py.SMT.SymbolicExecution</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><span class="pre">hal_py.BooleanFunction</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.SMT.SymbolicExecution.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a symbolic execution engine and (optionally) initializes the variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>variables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a><em>]</em>) – The (optional) list of variables.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hal_py.SMT.SymbolicExecution.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'hal_py.SMT'</span></em><a class="headerlink" href="#hal_py.SMT.SymbolicExecution.__module__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.SMT.SymbolicExecution.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.SMT.SymbolicExecution.evaluate" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p>evaluate(self: hal_py.SMT.SymbolicExecution, function: hal_py.BooleanFunction) -&gt; hal::Result&lt;hal::BooleanFunction&gt;</p>
+<blockquote>
+<div><p>Evaluates a Boolean function within the symbolic state of the symbolic execution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.BooleanFunction function</dt>
+<dd class="field-odd"><p>The Boolean function to evaluate.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>The evaluated Boolean function on success, a string error message otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>hal_py.BooleanFunction or str</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>evaluate(self: hal_py.SMT.SymbolicExecution, constraint: hal_py.SMT.Constraint) -&gt; hal::Result&lt;std::monostate&gt;</p>
+<blockquote>
+<div><p>Evaluates an equality constraint and applies it to the symbolic state of the symbolic execution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.SMT.Constraint constraint</dt>
+<dd class="field-odd"><p>The equality constraint to evaluate.</p>
+</dd>
+<dt class="field-even">returns</dt>
+<dd class="field-even"><p>None on success, a string error message otherwise.</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>None or str</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hal_py.SMT.SymbolicExecution.state">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">state</span></span><a class="headerlink" href="#hal_py.SMT.SymbolicExecution.state" title="Permalink to this definition"></a></dt>
+<dd><p>The current symbolic state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#hal_py.SMT.SymbolicState" title="hal_py.SMT.SymbolicState">hal_py.SMT.SymbolicState</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hal_py.SMT.SymbolicState">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hal_py.SMT.</span></span><span class="sig-name descname"><span class="pre">SymbolicState</span></span><a class="headerlink" href="#hal_py.SMT.SymbolicState" title="Permalink to this definition"></a></dt>
+<dd><p>Represents the data structure that keeps track of symbolic variable values (e.g., required for symbolic simplification).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hal_py.SMT.SymbolicState.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#hal_py.SMT.SymbolicState.__annotations__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.SMT.SymbolicState.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.SymbolicState" title="hal_py.SMT.SymbolicState"><span class="pre">hal_py.SMT.SymbolicState</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><span class="pre">hal_py.BooleanFunction</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.SMT.SymbolicState.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Constructs a symbolic state and (optionally) initializes the variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>variables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a><em>]</em>) – The (optional) list of variables.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hal_py.SMT.SymbolicState.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'hal_py.SMT'</span></em><a class="headerlink" href="#hal_py.SMT.SymbolicState.__module__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.SMT.SymbolicState.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.SymbolicState" title="hal_py.SMT.SymbolicState"><span class="pre">hal_py.SMT.SymbolicState</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><span class="pre">hal_py.BooleanFunction</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><span class="pre">hal_py.BooleanFunction</span></a></span></span><a class="headerlink" href="#hal_py.SMT.SymbolicState.get" title="Permalink to this definition"></a></dt>
+<dd><p>Looks up the Boolean function equivalent in the symbolic state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – The Boolean function to look up.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The Boolean function equivalent from the symbolic state or the key itself if it is not contained in the symbolic state.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.SMT.SymbolicState.set">
+<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.SMT.SymbolicState" title="hal_py.SMT.SymbolicState"><span class="pre">hal_py.SMT.SymbolicState</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><span class="pre">hal_py.BooleanFunction</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><span class="pre">hal_py.BooleanFunction</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.SMT.SymbolicState.set" title="Permalink to this definition"></a></dt>
+<dd><p>Sets a Boolean function equivalent in the symbolic state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – The Boolean function.</p></li>
+<li><p><strong>value</strong> (<a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><em>hal_py.BooleanFunction</em></a>) – The equivalent Boolean function.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

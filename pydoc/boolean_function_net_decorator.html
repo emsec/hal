@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Boolean Function Net Decorator &mdash; hal_py v4.3.0-33-g1e8b5de4b documentation</title>
+  <title>Boolean Function Net Decorator &mdash; hal_py v4.3.0-39-g49487972c documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.3.0-33-g1e8b5de4b
+                v4.3.0-39-g49487972c
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -104,6 +104,96 @@
              
   <section id="boolean-function-net-decorator">
 <h1>Boolean Function Net Decorator<a class="headerlink" href="#boolean-function-net-decorator" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="hal_py.BooleanFunctionNetDecorator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hal_py.</span></span><span class="sig-name descname"><span class="pre">BooleanFunctionNetDecorator</span></span><a class="headerlink" href="#hal_py.BooleanFunctionNetDecorator" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="hal_py.BooleanFunctionNetDecorator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.BooleanFunctionNetDecorator" title="hal_py.BooleanFunctionNetDecorator"><span class="pre">hal_py.BooleanFunctionNetDecorator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">net</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><span class="pre">hal_py.Net</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#hal_py.BooleanFunctionNetDecorator.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Construct new BooleanFunctionNetDecorator object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>net</strong> (<a class="reference internal" href="net.html#hal_py.Net" title="hal_py.Net"><em>hal_py.Net</em></a>) – The net to operate on.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.BooleanFunctionNetDecorator.get_boolean_variable">
+<span class="sig-name descname"><span class="pre">get_boolean_variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.BooleanFunctionNetDecorator" title="hal_py.BooleanFunctionNetDecorator"><span class="pre">hal_py.BooleanFunctionNetDecorator</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction"><span class="pre">hal_py.BooleanFunction</span></a></span></span><a class="headerlink" href="#hal_py.BooleanFunctionNetDecorator.get_boolean_variable" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a unique Boolean variable representing the given net.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The Boolean variable.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="boolean_function.html#hal_py.BooleanFunction" title="hal_py.BooleanFunction">hal_py.BooleanFunction</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.BooleanFunctionNetDecorator.get_boolean_variable_name">
+<span class="sig-name descname"><span class="pre">get_boolean_variable_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hal_py.BooleanFunctionNetDecorator" title="hal_py.BooleanFunctionNetDecorator"><span class="pre">hal_py.BooleanFunctionNetDecorator</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#hal_py.BooleanFunctionNetDecorator.get_boolean_variable_name" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a unique Boolean variable name representing the given net.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The Boolean variable name.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hal_py.BooleanFunctionNetDecorator.get_net_from">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_net_from</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hal_py.BooleanFunctionNetDecorator.get_net_from" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic">
+<li><p>get_net_from(netlist: hal_py.Netlist, var: hal_py.BooleanFunction) -&gt; hal_py.Net</p>
+<blockquote>
+<div><p>Get the net represented by a unique Boolean variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Netlist netlist</dt>
+<dd class="field-odd"><p>The netlist on which to operate.</p>
+</dd>
+<dt class="field-even">param hal_py.BooleanFunction var</dt>
+<dd class="field-even"><p>The Boolean variable.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The specified net on success, None otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>hal_py.Net or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+<li><p>get_net_from(netlist: hal_py.Netlist, var_name: str) -&gt; hal_py.Net</p>
+<blockquote>
+<div><p>Get the net represented by a unique Boolean variable name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">param hal_py.Netlist netlist</dt>
+<dd class="field-odd"><p>The netlist on which to operate.</p>
+</dd>
+<dt class="field-even">param str var_name</dt>
+<dd class="field-even"><p>The Boolean variable name.</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>The specified net on success, None otherwise.</p>
+</dd>
+<dt class="field-even">rtype</dt>
+<dd class="field-even"><p>hal_py.Net or None</p>
+</dd>
+</dl>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Netlist Serializer &mdash; hal_py v4.3.0-33-g1e8b5de4b documentation</title>
+  <title>Netlist Serializer &mdash; hal_py v4.3.0-39-g49487972c documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.3.0-33-g1e8b5de4b
+                v4.3.0-39-g49487972c
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -107,54 +107,54 @@
 <p>HAL Netlist Serializer functions.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="hal_py.NetlistSerializer.deserialize_from_file">
-<span class="sig-prename descclassname"><span class="pre">hal_py.NetlistSerializer.</span></span><span class="sig-name descname"><span class="pre">deserialize_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hal_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.12)"><span class="pre">os.PathLike</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_lib</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.GateLibrary</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal_py.Netlist</span></span></span><a class="headerlink" href="#hal_py.NetlistSerializer.deserialize_from_file" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">hal_py.NetlistSerializer.</span></span><span class="sig-name descname"><span class="pre">deserialize_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hal_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.12)"><span class="pre">os.PathLike</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_lib</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary"><span class="pre">hal_py.GateLibrary</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></span><a class="headerlink" href="#hal_py.NetlistSerializer.deserialize_from_file" title="Permalink to this definition"></a></dt>
 <dd><p>Deserializes a netlist from a <code class="docutils literal notranslate"><span class="pre">.hal</span></code> file using the provided gate library.
 If no gate library is provided, a gate library path must be specified within the <code class="docutils literal notranslate"><span class="pre">.hal</span></code> file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>hal_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a>) – The path to the <code class="docutils literal notranslate"><span class="pre">.hal</span></code> file.</p></li>
-<li><p><strong>gate_lib</strong> (<em>hal_py.GateLibrary</em>) – The gate library. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>gate_lib</strong> (<a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary"><em>hal_py.GateLibrary</em></a>) – The gate library. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The deserialized netlist on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>hal_py.Netlist or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hal_py.NetlistSerializer.deserialize_from_string">
-<span class="sig-prename descclassname"><span class="pre">hal_py.NetlistSerializer.</span></span><span class="sig-name descname"><span class="pre">deserialize_from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hal_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_lib</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.GateLibrary</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal_py.Netlist</span></span></span><a class="headerlink" href="#hal_py.NetlistSerializer.deserialize_from_string" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">hal_py.NetlistSerializer.</span></span><span class="sig-name descname"><span class="pre">deserialize_from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hal_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_lib</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary"><span class="pre">hal_py.GateLibrary</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></span><a class="headerlink" href="#hal_py.NetlistSerializer.deserialize_from_string" title="Permalink to this definition"></a></dt>
 <dd><p>Deserializes a string which contains a netlist in HAL-(JSON)-format using the provided gate library.
 If no gate library is provided, a gate library path must be specified within the <code class="docutils literal notranslate"><span class="pre">.hal</span></code> file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>hal_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a>) – The string containing the netlist in HAL-(JSON)-format.</p></li>
-<li><p><strong>gate_lib</strong> (<em>hal_py.GateLibrary</em>) – The gate library. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>gate_lib</strong> (<a class="reference internal" href="gate_library.html#hal_py.GateLibrary" title="hal_py.GateLibrary"><em>hal_py.GateLibrary</em></a>) – The gate library. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The deserialized netlist on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>hal_py.Netlist or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist">hal_py.Netlist</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hal_py.NetlistSerializer.serialize_to_file">
-<span class="sig-prename descclassname"><span class="pre">hal_py.NetlistSerializer.</span></span><span class="sig-name descname"><span class="pre">serialize_to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">netlist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">hal_py.Netlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hal_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.12)"><span class="pre">os.PathLike</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.NetlistSerializer.serialize_to_file" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">hal_py.NetlistSerializer.</span></span><span class="sig-name descname"><span class="pre">serialize_to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">netlist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><span class="pre">hal_py.Netlist</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">hal_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.12)"><span class="pre">os.PathLike</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#hal_py.NetlistSerializer.serialize_to_file" title="Permalink to this definition"></a></dt>
 <dd><p>Serializes a netlist into a <code class="docutils literal notranslate"><span class="pre">.hal</span></code> file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>netlist</strong> (<em>hal_py.Netlist</em>) – The netlist to serialize.</p></li>
+<li><p><strong>netlist</strong> (<a class="reference internal" href="netlist.html#hal_py.Netlist" title="hal_py.Netlist"><em>hal_py.Netlist</em></a>) – The netlist to serialize.</p></li>
 <li><p><strong>hal_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a>) – The path to the <code class="docutils literal notranslate"><span class="pre">.hal</span></code> file.</p></li>
 </ul>
 </dd>
