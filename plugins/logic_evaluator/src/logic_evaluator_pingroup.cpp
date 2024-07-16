@@ -131,7 +131,12 @@ namespace hal {
         {
             LogicEvaluatorCheckBox* lecb = new LogicEvaluatorCheckBox(net, this);
             connect(lecb, &QCheckBox::stateChanged, this, &LogicEvaluatorPingroup::handleCheckStateChanged);
-            if (mOutput) lecb->setDisabled(true);
+            if (mOutput)
+                lecb->setDisabled(true);
+            else
+            {
+                lecb->setLayoutDirection(Qt::RightToLeft);
+            }
             mPinList.prepend(lecb);
             pinLayout->addWidget(lecb);
         }

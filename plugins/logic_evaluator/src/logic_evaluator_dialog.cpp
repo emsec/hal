@@ -26,7 +26,7 @@ namespace hal {
     const char* COMPILER = "gcc";
 
     LogicEvaluatorDialog::LogicEvaluatorDialog(std::vector<Gate *> &gates, bool skipCompile, QWidget *parent)
-        : QDialog(parent), mSimulationInput(new SimulationInput), mCheckCompiled(nullptr), mCheckIndicate(nullptr)
+        : QDialog(parent), mSimulationInput(new SimulationInput), mActionCompile(nullptr), mActionIndicate(nullptr)
     {
         setAttribute(Qt::WA_DeleteOnClose);
         setWindowTitle("Logic Evaluator");
@@ -112,29 +112,27 @@ namespace hal {
             outLayout->addWidget(lep);
         }
 
-        QLabel* bbox = new QLabel(this);
+        QLabel* bbox = new QLabel(QString("%1 Gate%2").arg(gates.size()).arg(gates.size()==1?"":"s"),this);
         bbox->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+
+        mMenuBar = new QMenuBar(this);
+        QMenu* options = mMenuBar->addMenu("Options");
+        mActionCompile = options->addAction("Run compiled logic");
+        connect(mActionCompile, &QAction::toggled, this, &LogicEvaluatorDialog::handleCompiledToggled);
+        mActionCompile->setCheckable(true);
+        mActionIndicate = options->addAction("Show in graphic view");
+        connect(mActionIndicate, &QAction::toggled, this, &LogicEvaluatorDialog::handleIndicateToggled);
+        mActionIndicate->setCheckable(true);
 
         inpLayout->addStretch();
         outLayout->addStretch();
         topLayout->addLayout(inpLayout);
         topLayout->addWidget(bbox);
         topLayout->addLayout(outLayout);
+        topLayout->setMenuBar(mMenuBar);
 
         if (!skipCompile)
             compile();
-
-        QGridLayout* labLayout = new QGridLayout(bbox);
-        QLabel* ngates = new QLabel(QString("%1 Gate%2").arg(gates.size()).arg(gates.size()==1?"":"s"),bbox);
-        ngates->setAlignment(Qt::AlignHCenter);
-        labLayout->addWidget(ngates,0,0);
-        mCheckCompiled = new QCheckBox("Run compiled logic", bbox);
-        mCheckCompiled->setChecked(mSharedLib.handle!=nullptr);
-        mCheckIndicate = new QCheckBox("Show in graphic view", bbox);
-        labLayout->addWidget(mCheckCompiled,2,0);
-        labLayout->addWidget(mCheckIndicate,3,0);
-        connect(mCheckCompiled, &QCheckBox::stateChanged, this, &LogicEvaluatorDialog::handleCompiledStateChanged);
-        connect(mCheckIndicate, &QCheckBox::stateChanged, this, &LogicEvaluatorDialog::handleIndicateStateChanged);
 
         QStyle* s = style();
 
@@ -149,19 +147,19 @@ namespace hal {
         delete mSimulationInput;
     }
 
-    void LogicEvaluatorDialog::handleCompiledStateChanged(int state)
+    void LogicEvaluatorDialog::handleCompiledToggled(bool checked)
     {
-        if (state==Qt::Checked && !mSharedLib.handle)
+        if (checked && !mSharedLib.handle)
         {
             compile();
             if (!mSharedLib.handle)
-                mCheckCompiled->setChecked(false);
+                mActionCompile->setChecked(false);
         }
     }
 
-    void LogicEvaluatorDialog::handleIndicateStateChanged(int state)
+    void LogicEvaluatorDialog::handleIndicateToggled(bool checked)
     {
-        if (state==Qt::Checked)
+        if (checked)
             recalc();
         else
             omitNetlistVisualization();
@@ -326,7 +324,7 @@ namespace hal {
     void LogicEvaluatorDialog::recalc()
     {
         mSignals.clear();
-        if (mCheckCompiled->isChecked() && mSharedLib.handle)
+        if (mActionCompile->isChecked() && mSharedLib.handle)
             recalcCompiled();
         else
             recalcInterpreted();
@@ -341,7 +339,7 @@ namespace hal {
             }
         }
 
-        if (mCheckIndicate->isChecked())
+        if (mActionIndicate->isChecked())
             visualizeResultsInNetlist();
     }
 

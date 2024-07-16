@@ -31,6 +31,8 @@
 #include <dlfcn.h>
 #include <QTemporaryFile>
 #include <QCheckBox>
+#include <QMenuBar>
+#include <QAction>
 #include "hal_core/netlist/boolean_function.h"
 
 namespace hal {
@@ -65,8 +67,9 @@ namespace hal {
         SharedLibHandle mSharedLib;
         QHash<const Net*, int> mExternalArrayIndex;
         QHash<const Net*, BooleanFunction::Value> mSignals;
-        QCheckBox* mCheckCompiled;
-        QCheckBox* mCheckIndicate;
+        QMenuBar* mMenuBar;
+        QAction* mActionCompile;
+        QAction* mActionIndicate;
 
         void calculateEvaluationOrder();
         void recalcCompiled();
@@ -76,8 +79,8 @@ namespace hal {
     public Q_SLOTS:
         void recalc();
     private Q_SLOTS:
-        void handleCompiledStateChanged(int state);
-        void handleIndicateStateChanged(int state);
+        void handleCompiledToggled(bool checked);
+        void handleIndicateToggled(bool checked);
     public:
         LogicEvaluatorDialog(std::vector<Gate*>& gates, bool skipCompile, QWidget* parent = nullptr);
         ~LogicEvaluatorDialog();
