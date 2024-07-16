@@ -83,12 +83,18 @@ namespace hal
         for (GateTypeProperty gtp : m_properties)
         {
             if (gtp >= GateTypeProperty::c_buffer)
+            {
                 ctype_properties.push_back(gtp);
+            }
             else
+            {
                 other_properties.push_back(gtp);
+            }
         }
         if (!other_properties.empty())
+        {
             ctype_properties.insert(ctype_properties.end(), other_properties.begin(), other_properties.end());
+        }
         return ctype_properties;
     }
 

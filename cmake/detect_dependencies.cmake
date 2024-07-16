@@ -191,6 +191,16 @@ set_target_properties(subprocess::subprocess PROPERTIES
 )
 
 # ###############################
+# ####   nlohmann_json
+# ###############################
+message(STATUS "using nlohmann_json from deps")
+add_library(nlohmann_json::nlohmann_json INTERFACE IMPORTED)
+set_target_properties(nlohmann_json::nlohmann_json PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/deps/nlohmann_json"
+)
+
+
+# ###############################
 # ####   Python support
 # ###############################
 
