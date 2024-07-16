@@ -9,8 +9,8 @@ if(PL_NETLIST_PREPROCESSING OR BUILD_ALL_PLUGINS)
         SHARED
         HEADER ${NETLIST_PREPROCESSING_INC}
         SOURCES ${NETLIST_PREPROCESSING_SRC} ${NETLIST_PREPROCESSING_PYTHON_SRC}
-        LINK_LIBRARIES PUBLIC ${Z3_LIBRARIES} z3_utils OpenMP::OpenMP_CXX
         PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/netlist_preprocessing.rst
+        LINK_LIBRARIES PUBLIC ${Z3_LIBRARIES} z3_utils resynthesis OpenMP::OpenMP_CXX nlohmann_json::nlohmann_json
     )
 
     add_subdirectory(test)

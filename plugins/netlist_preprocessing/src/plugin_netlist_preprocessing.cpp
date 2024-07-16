@@ -25,7 +25,7 @@ namespace hal
     std::set<std::string> NetlistPreprocessingPlugin::get_dependencies() const
     {
         std::set<std::string> retval;
-        // retval.insert("graph_algorithm");
+        retval.insert("resynthesis");
         return retval;
     }
 }    // namespace hal

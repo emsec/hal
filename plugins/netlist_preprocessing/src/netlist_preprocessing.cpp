@@ -11,8 +11,10 @@
 #include "hal_core/netlist/net.h"
 #include "hal_core/netlist/netlist.h"
 #include "hal_core/utilities/token_stream.h"
+#include "nlohmann_json/json.hpp"
 #include "rapidjson/document.h"
-#include "z3_utils.h"
+#include "resynthesis/resynthesis.h"
+#include "z3_utils/netlist_comparison.h"
 
 #include <fstream>
 #include <queue>
@@ -1347,7 +1349,7 @@ namespace hal
                                 bfs.insert({ep->get_pin()->get_name(), std::move(bf)});
                             }
 
-                            auto resynth_res = generate_resynth_netlist_for_boolean_functions(bfs, genlib_path, mux_inv_gl, true);
+                            auto resynth_res = resynthesis::generate_resynth_netlist_for_boolean_functions(bfs, genlib_path, mux_inv_gl, true);
                             if (resynth_res.is_error())
                             {
                                 return ERR_APPEND(resynth_res.get_error(), "unable to unify  select signals of muxes: failed to resynthesize mux subgraph to netlist");
@@ -1383,7 +1385,7 @@ namespace hal
                             global_io_mapping[pin->get_net()].push_back(net);
                         }
 
-                        auto replace_res = replace_subgraph_with_netlist(subgraph, global_io_mapping, resynth_nl, nl, false);
+                        auto replace_res = resynthesis::replace_subgraph_with_netlist(subgraph, global_io_mapping, resynth_nl, nl, false);
                         if (replace_res.is_error())
                         {
                             return ERR("unable to unify muxes select signals: failed to replace mux subgraph with resynthesized netlist");

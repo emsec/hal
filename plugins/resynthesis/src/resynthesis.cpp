@@ -222,157 +222,6 @@ namespace hal
             return OK({});
         }
 
-        // NOTE there are about a hundred more checks that we could do here
-        Result<std::monostate> replace_subgraph_with_netlist(const std::vector<Gate*>& subgraph,
-                                                             const std::unordered_map<Net*, std::vector<Net*>>& global_io_mapping,
-                                                             const Netlist* src_nl,
-                                                             Netlist* dst_nl,
-                                                             const bool delete_subgraph_gates)
-        {
-            std::unordered_map<std::string, Gate*> gate_name_to_gate;
-
-            const auto dst_gl = dst_nl->get_gate_library();
-
-            // add all gates of the source netlist to the destination netlist
-            for (const auto src_g : src_nl->get_gates())
-            {
-                const auto src_gt = src_g->get_type();
-                const auto dst_gt = dst_gl->get_gate_type_by_name(src_gt->get_name());
-                if (!dst_gt)
-                {
-                    return ERR("unable to replace subgraph with netlist: gate library '" + dst_gl->get_name() + "' does not contain the required gate type " + src_gt->get_name());
-                }
-
-                auto new_gate              = dst_nl->create_gate(dst_gt, "TEMP");
-                const std::string new_name = new_gate_name(new_gate, src_g);
-                new_gate->set_name(new_name);
-
-                gate_name_to_gate.insert({src_g->get_name(), new_gate});
-            }
-
-            // connect all nets of the source netlist to the destination netlist
-            for (const auto src_n : src_nl->get_nets())
-            {
-                Net* new_net = nullptr;
-
-                // edge case for global inputs
-                if (src_n->is_global_input_net())
-                {
-                    if (const auto it = global_io_mapping.find(src_n); it != global_io_mapping.end())
-                    {
-                        const auto& net_connections = global_io_mapping.at(src_n);
-                        if (net_connections.size() != 1)
-                        {
-                            return ERR("unable to replace subgraph with netlist: found " + std::to_string(net_connections.size()) + " net connections to the global input " + src_n->get_name()
-                                       + ", this would lead to multi-driven nets");
-                        }
-                        new_net = net_connections.front();
-                    }
-                    else
-                    {
-                        return ERR("unable to replace subgraph with netlist: failed to locate mapped net in destination netlist for global I/O net '" + src_n->get_name() + "' with ID "
-                                   + std::to_string(src_n->get_id()));
-                    }
-                }
-                else if (src_n->is_global_output_net())
-                {
-                    if (const auto it = global_io_mapping.find(src_n); it != global_io_mapping.end())
-                    {
-                        const auto& net_connections = global_io_mapping.at(src_n);
-                        new_net                     = net_connections.front();
-
-                        if (net_connections.size() != 1)
-                        {
-                            log_warning("resynthesis", "found multiple io connections for net '{}' with ID {}, this might lead to missing nets in the netlist", src_n->get_name(), src_n->get_id());
-                            // for (const auto& net : net_connections)
-                            // {
-                            //     std::cout << net->get_id() << " - " << net->get_name() << std::endl;
-                            // }
-
-                            // if a single global output of the src netlist leads to multiple nets in the dst netlist, that means that the nets are functionally equivalent and we can connect/merge them.
-                            // however this can lead to nets disappearing from the dst netlist which might be unexpected behavior.
-
-                            for (u32 i = 1; i < net_connections.size(); i++)
-                            {
-                                const auto& res = NetlistModificationDecorator(*dst_nl).connect_nets(new_net, net_connections.at(i));
-                                if (res.is_error())
-                                {
-                                    return ERR("unable to replace subgraph with netlist: failed to connect/merge all the net connections of net '" + src_n->get_name() + "' with ID "
-                                               + std::to_string(src_n->get_id()));
-                                }
-                            }
-                        }
-                        else
-                        {
-                            new_net = net_connections.front();
-                        }
-                    }
-                    else
-                    {
-                        return ERR("unable to replace subgraph with netlist: failed to locate mapped net in destination netlist for global I/O net '" + src_n->get_name() + "' with ID "
-                                   + std::to_string(src_n->get_id()));
-                    }
-                }
-                else if (src_n->is_gnd_net())
-                {
-                    // set new net to an existing gnd net
-                    const auto gnd_gate = dst_nl->get_gnd_gates().front();
-                    const auto out_net  = gnd_gate->get_fan_out_nets().front();
-                    new_net             = out_net;
-                }
-                else if (src_n->is_vcc_net())
-                {
-                    const auto vcc_gate = dst_nl->get_vcc_gates().front();
-                    const auto out_net  = vcc_gate->get_fan_out_nets().front();
-                    new_net             = out_net;
-                }
-                else
-                {
-                    new_net                    = dst_nl->create_net("TEMP");
-                    const std::string new_name = new_net_name(new_net, src_n);
-                    new_net->set_name(new_name);
-                }
-
-                // connect net to sources
-                for (const auto src_ep : src_n->get_sources())
-                {
-                    const auto org_src_name     = src_ep->get_gate()->get_name();
-                    const auto org_src_pin_name = src_ep->get_pin()->get_name();
-                    auto new_src_g              = gate_name_to_gate.at(org_src_name);
-                    if (new_net->add_source(new_src_g, org_src_pin_name) == nullptr)
-                    {
-                        return ERR("unable to replace subgraph with netlist: failed to add gate '" + new_src_g->get_name() + "' with ID " + std::to_string(new_src_g->get_id()) + " at pin '"
-                                   + org_src_pin_name + "' as new source to net '" + new_net->get_name() + "' with ID " + std::to_string(new_net->get_id()));
-                    }
-                }
-
-                // connect net to destinations
-                for (const auto src_ep : src_n->get_destinations())
-                {
-                    const auto org_dst_name     = src_ep->get_gate()->get_name();
-                    const auto org_dst_pin_name = src_ep->get_pin()->get_name();
-                    auto new_dst_g              = gate_name_to_gate.at(org_dst_name);
-                    if (!new_net->add_destination(new_dst_g, org_dst_pin_name))
-                    {
-                        return ERR("unable to replace subgraph with netlist: failed to add gate '" + new_dst_g->get_name() + "' with ID " + std::to_string(new_dst_g->get_id()) + " at pin '"
-                                   + org_dst_pin_name + "' as new destination to net '" + new_net->get_name() + "' with ID " + std::to_string(new_net->get_id()));
-                    }
-                }
-            }
-
-            // delete subgraph gates if flag is set
-            if (delete_subgraph_gates)
-            {
-                auto delete_res = delete_subgraph(dst_nl, subgraph);
-                if (delete_res.is_error())
-                {
-                    return ERR_APPEND(delete_res.get_error(), "unable to replace subgraph with netlist: failed to delete subgraph");
-                }
-            }
-
-            return OK({});
-        }
-
         Result<std::monostate> replace_gate_with_netlist(Gate* g, const Netlist* src_nl, Netlist* dst_nl, const bool delete_gate = true)
         {
             std::unordered_map<Net*, std::vector<Net*>> global_io_mapping;
@@ -403,7 +252,7 @@ namespace hal
                 global_io_mapping[g_o->get_net()].push_back(o_net);
             }
 
-            return replace_subgraph_with_netlist({g}, global_io_mapping, src_nl, dst_nl, delete_gate);
+            return resynthesis::replace_subgraph_with_netlist({g}, global_io_mapping, src_nl, dst_nl, delete_gate);
         }
 
         Result<std::tuple<GateType*, std::vector<GatePin*>, std::vector<GatePin*>>>
@@ -675,62 +524,6 @@ namespace hal
             return verilog_str;
         }
 
-        Result<std::unique_ptr<Netlist>> generate_resynth_netlist_for_boolean_functions(const std::unordered_map<std::string, BooleanFunction>& bfs,
-                                                                                        const std::filesystem::path& genlib_path,
-                                                                                        GateLibrary* target_gl,
-                                                                                        const bool optimize_area)
-        {
-            const auto verilog_module = build_functional_verilog_module_from(bfs);
-
-            auto base_path_res = utils::get_unique_temp_directory("resynthesis_");
-            if (base_path_res.is_error())
-            {
-                return ERR_APPEND(base_path_res.get_error(), "unable to resynthesize Boolean functions with yosys: failed to get unique temp directory");
-            }
-            const std::filesystem::path base_path                  = base_path_res.get();
-            const std::filesystem::path functional_netlist_path    = base_path / "func_netlist.v";
-            const std::filesystem::path resynthesized_netlist_path = base_path / "resynth_netlist.v";
-
-            std::filesystem::create_directory(base_path);
-
-            std::ofstream out(functional_netlist_path);
-            out << verilog_module;
-            out.close();
-
-            auto yosys_query_res = yosys::query_binary_path();
-            if (yosys_query_res.is_error())
-            {
-                return ERR_APPEND(yosys_query_res.get_error(), "unable to resynthesize Boolean functions with yosys: failed to find yosys path");
-            }
-
-            const auto yosys_path     = yosys_query_res.get();
-            const std::string command = yosys_path + " -q -p " + "\"read -sv " + functional_netlist_path.string() + "; hierarchy -top top; proc; fsm; opt; memory; opt; techmap; opt; abc -genlib "
-                                        + genlib_path.string() + "; " + "write_verilog " + resynthesized_netlist_path.string() + "; clean\"";
-
-            // TODO check again the proper way to start a subprocess
-            system(command.c_str());
-
-            auto resynth_nl = netlist_factory::load_netlist(resynthesized_netlist_path, target_gl);
-
-            if (resynth_nl == nullptr)
-            {
-                return ERR("unable to resynthesize Boolean functions with yosys: failed to load re-synthesized netlist at " + resynthesized_netlist_path.string());
-            }
-
-            // TODO check whether this is needed here or maybe move this somewhere else
-            // yosys workaround for stupid net renaming
-            for (const auto& pin : resynth_nl->get_top_module()->get_input_pins())
-            {
-                auto net = pin->get_net();
-                net->set_name(pin->get_name());
-            }
-
-            // delete the created directory and the contained files
-            std::filesystem::remove_all(base_path);
-
-            return OK(std::move(resynth_nl));
-        }
-
         Result<std::unique_ptr<Netlist>> generate_resynth_netlist_for_gate_level_subgraph(const Netlist* nl,
                                                                                           const std::vector<Gate*>& subgraph,
                                                                                           const std::filesystem::path& genlib_path,
@@ -867,7 +660,7 @@ namespace hal
                 output_pin_name_to_bf.insert({pin->get_name(), bf});
             }
 
-            auto resynth_res = generate_resynth_netlist_for_boolean_functions(output_pin_name_to_bf, genlib_path, target_gl, true);
+            auto resynth_res = resynthesis::generate_resynth_netlist_for_boolean_functions(output_pin_name_to_bf, genlib_path, target_gl, true);
             if (resynth_res.is_error())
             {
                 return ERR_APPEND(resynth_res.get_error(),
@@ -1273,6 +1066,213 @@ namespace hal
             }
 
             return resynthesize_subgraph(nl, subgraph, target_gl);
+        }
+
+        // NOTE there are about a hundred more checks that we could do here
+        Result<std::monostate> replace_subgraph_with_netlist(const std::vector<Gate*>& subgraph,
+                                                             const std::unordered_map<Net*, std::vector<Net*>>& global_io_mapping,
+                                                             const Netlist* src_nl,
+                                                             Netlist* dst_nl,
+                                                             const bool delete_subgraph_gates)
+        {
+            std::unordered_map<std::string, Gate*> gate_name_to_gate;
+
+            const auto dst_gl = dst_nl->get_gate_library();
+
+            // add all gates of the source netlist to the destination netlist
+            for (const auto src_g : src_nl->get_gates())
+            {
+                const auto src_gt = src_g->get_type();
+                const auto dst_gt = dst_gl->get_gate_type_by_name(src_gt->get_name());
+                if (!dst_gt)
+                {
+                    return ERR("unable to replace subgraph with netlist: gate library '" + dst_gl->get_name() + "' does not contain the required gate type " + src_gt->get_name());
+                }
+
+                auto new_gate              = dst_nl->create_gate(dst_gt, "TEMP");
+                const std::string new_name = new_gate_name(new_gate, src_g);
+                new_gate->set_name(new_name);
+
+                gate_name_to_gate.insert({src_g->get_name(), new_gate});
+            }
+
+            // connect all nets of the source netlist to the destination netlist
+            for (const auto src_n : src_nl->get_nets())
+            {
+                Net* new_net = nullptr;
+
+                // edge case for global inputs
+                if (src_n->is_global_input_net())
+                {
+                    if (const auto it = global_io_mapping.find(src_n); it != global_io_mapping.end())
+                    {
+                        const auto& net_connections = global_io_mapping.at(src_n);
+                        if (net_connections.size() != 1)
+                        {
+                            return ERR("unable to replace subgraph with netlist: found " + std::to_string(net_connections.size()) + " net connections to the global input " + src_n->get_name()
+                                       + ", this would lead to multi-driven nets");
+                        }
+                        new_net = net_connections.front();
+                    }
+                    else
+                    {
+                        return ERR("unable to replace subgraph with netlist: failed to locate mapped net in destination netlist for global I/O net '" + src_n->get_name() + "' with ID "
+                                   + std::to_string(src_n->get_id()));
+                    }
+                }
+                else if (src_n->is_global_output_net())
+                {
+                    if (const auto it = global_io_mapping.find(src_n); it != global_io_mapping.end())
+                    {
+                        const auto& net_connections = global_io_mapping.at(src_n);
+                        new_net                     = net_connections.front();
+
+                        if (net_connections.size() != 1)
+                        {
+                            log_warning("resynthesis", "found multiple io connections for net '{}' with ID {}, this might lead to missing nets in the netlist", src_n->get_name(), src_n->get_id());
+                            // for (const auto& net : net_connections)
+                            // {
+                            //     std::cout << net->get_id() << " - " << net->get_name() << std::endl;
+                            // }
+
+                            // if a single global output of the src netlist leads to multiple nets in the dst netlist, that means that the nets are functionally equivalent and we can connect/merge them.
+                            // however this can lead to nets disappearing from the dst netlist which might be unexpected behavior.
+
+                            for (u32 i = 1; i < net_connections.size(); i++)
+                            {
+                                const auto& res = NetlistModificationDecorator(*dst_nl).connect_nets(new_net, net_connections.at(i));
+                                if (res.is_error())
+                                {
+                                    return ERR("unable to replace subgraph with netlist: failed to connect/merge all the net connections of net '" + src_n->get_name() + "' with ID "
+                                               + std::to_string(src_n->get_id()));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            new_net = net_connections.front();
+                        }
+                    }
+                    else
+                    {
+                        return ERR("unable to replace subgraph with netlist: failed to locate mapped net in destination netlist for global I/O net '" + src_n->get_name() + "' with ID "
+                                   + std::to_string(src_n->get_id()));
+                    }
+                }
+                else if (src_n->is_gnd_net())
+                {
+                    // set new net to an existing gnd net
+                    const auto gnd_gate = dst_nl->get_gnd_gates().front();
+                    const auto out_net  = gnd_gate->get_fan_out_nets().front();
+                    new_net             = out_net;
+                }
+                else if (src_n->is_vcc_net())
+                {
+                    const auto vcc_gate = dst_nl->get_vcc_gates().front();
+                    const auto out_net  = vcc_gate->get_fan_out_nets().front();
+                    new_net             = out_net;
+                }
+                else
+                {
+                    new_net                    = dst_nl->create_net("TEMP");
+                    const std::string new_name = new_net_name(new_net, src_n);
+                    new_net->set_name(new_name);
+                }
+
+                // connect net to sources
+                for (const auto src_ep : src_n->get_sources())
+                {
+                    const auto org_src_name     = src_ep->get_gate()->get_name();
+                    const auto org_src_pin_name = src_ep->get_pin()->get_name();
+                    auto new_src_g              = gate_name_to_gate.at(org_src_name);
+                    if (new_net->add_source(new_src_g, org_src_pin_name) == nullptr)
+                    {
+                        return ERR("unable to replace subgraph with netlist: failed to add gate '" + new_src_g->get_name() + "' with ID " + std::to_string(new_src_g->get_id()) + " at pin '"
+                                   + org_src_pin_name + "' as new source to net '" + new_net->get_name() + "' with ID " + std::to_string(new_net->get_id()));
+                    }
+                }
+
+                // connect net to destinations
+                for (const auto src_ep : src_n->get_destinations())
+                {
+                    const auto org_dst_name     = src_ep->get_gate()->get_name();
+                    const auto org_dst_pin_name = src_ep->get_pin()->get_name();
+                    auto new_dst_g              = gate_name_to_gate.at(org_dst_name);
+                    if (!new_net->add_destination(new_dst_g, org_dst_pin_name))
+                    {
+                        return ERR("unable to replace subgraph with netlist: failed to add gate '" + new_dst_g->get_name() + "' with ID " + std::to_string(new_dst_g->get_id()) + " at pin '"
+                                   + org_dst_pin_name + "' as new destination to net '" + new_net->get_name() + "' with ID " + std::to_string(new_net->get_id()));
+                    }
+                }
+            }
+
+            // delete subgraph gates if flag is set
+            if (delete_subgraph_gates)
+            {
+                auto delete_res = delete_subgraph(dst_nl, subgraph);
+                if (delete_res.is_error())
+                {
+                    return ERR_APPEND(delete_res.get_error(), "unable to replace subgraph with netlist: failed to delete subgraph");
+                }
+            }
+
+            return OK({});
+        }
+
+        Result<std::unique_ptr<Netlist>> generate_resynth_netlist_for_boolean_functions(const std::unordered_map<std::string, BooleanFunction>& bfs,
+                                                                                        const std::filesystem::path& genlib_path,
+                                                                                        GateLibrary* target_gl,
+                                                                                        const bool optimize_area)
+        {
+            const auto verilog_module = build_functional_verilog_module_from(bfs);
+
+            auto base_path_res = utils::get_unique_temp_directory("resynthesis_");
+            if (base_path_res.is_error())
+            {
+                return ERR_APPEND(base_path_res.get_error(), "unable to resynthesize Boolean functions with yosys: failed to get unique temp directory");
+            }
+            const std::filesystem::path base_path                  = base_path_res.get();
+            const std::filesystem::path functional_netlist_path    = base_path / "func_netlist.v";
+            const std::filesystem::path resynthesized_netlist_path = base_path / "resynth_netlist.v";
+
+            std::filesystem::create_directory(base_path);
+
+            std::ofstream out(functional_netlist_path);
+            out << verilog_module;
+            out.close();
+
+            auto yosys_query_res = yosys::query_binary_path();
+            if (yosys_query_res.is_error())
+            {
+                return ERR_APPEND(yosys_query_res.get_error(), "unable to resynthesize Boolean functions with yosys: failed to find yosys path");
+            }
+
+            const auto yosys_path     = yosys_query_res.get();
+            const std::string command = yosys_path + " -q -p " + "\"read -sv " + functional_netlist_path.string() + "; hierarchy -top top; proc; fsm; opt; memory; opt; techmap; opt; abc -genlib "
+                                        + genlib_path.string() + "; " + "write_verilog " + resynthesized_netlist_path.string() + "; clean\"";
+
+            // TODO check again the proper way to start a subprocess
+            system(command.c_str());
+
+            auto resynth_nl = netlist_factory::load_netlist(resynthesized_netlist_path, target_gl);
+
+            if (resynth_nl == nullptr)
+            {
+                return ERR("unable to resynthesize Boolean functions with yosys: failed to load re-synthesized netlist at " + resynthesized_netlist_path.string());
+            }
+
+            // TODO check whether this is needed here or maybe move this somewhere else
+            // yosys workaround for stupid net renaming
+            for (const auto& pin : resynth_nl->get_top_module()->get_input_pins())
+            {
+                auto net = pin->get_net();
+                net->set_name(pin->get_name());
+            }
+
+            // delete the created directory and the contained files
+            std::filesystem::remove_all(base_path);
+
+            return OK(std::move(resynth_nl));
         }
     }    // namespace resynthesis
 
