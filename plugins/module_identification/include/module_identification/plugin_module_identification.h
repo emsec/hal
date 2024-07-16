@@ -16,7 +16,7 @@ namespace hal
     {
         class BaseCandidate;
         class StructuralCandidate;
-    }
+    }    // namespace module_identification
 
     /**
      * @class GuiExtensionModuleIdentification
@@ -164,8 +164,10 @@ namespace hal
         std::string get_version() const override;
 
         /**
-         * @brief Initialize the plugin.
+         * @brief Get the plugin dependencies.
+         * 
+         * @returns A set of plugin names that this plugin depends on.
          */
-        void initialize() override;
+        std::set<std::string> get_dependencies() const override;
     };
 }    // namespace hal

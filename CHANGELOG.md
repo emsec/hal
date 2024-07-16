@@ -10,14 +10,15 @@ All notable changes to this project will be documented in this file.
   * changed `bitorder_propagation` plugin
     * changed API so that no instance of the plugin needs to be created anymore to apply its algorithms
     * changed propagation logic for better results
-  * updatedd `z3_utils`plugin
+  * updated `z3_utils`plugin
     * general code and file structure clean up as well as more documentation
     * added comprehensive simplification logic that is able to simplify `z3::expr` using an extended rule set as the simplification of `hal::BooleanFunction`
-  * added `ModuleIdentification` plugin that allows a user to automatically search for arithmetic structures in the netlist 
+  * added `module_identification` plugin 
+    * allows a user to automatically search for arithmetic structures in the netlist
 * core
   * decorators
-    * added `NetlistModificationDecorator::add_vcc/gnd_nets()` to create ground and power nets for netlists that do not have a ground/power net already.
-  * added `SMT::Solver::query_local()` variant that directly takes an SMT representation of a Solver query.
+    * added `NetlistModificationDecorator::add_vcc/gnd_nets()` to create ground and power nets for netlists that do not have a ground/power net already
+  * added `SMT::Solver::query_local()` variant that directly takes an SMT representation of a Solver query
   * added `Netlist::get_gnd/vcc_nets()` to get all global ground and power nets
 * deps
     * added `json.hpp` from nlohmann to deps to offer a light weight json api

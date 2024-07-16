@@ -1,5 +1,6 @@
 #include "module_identification/plugin_module_identification.h"
 
+#include "hal_core/defines.h"
 #include "hal_core/utilities/result.h"
 #include "module_identification/api/configuration.h"
 #include "module_identification/api/module_identification.h"
@@ -12,6 +13,11 @@
 
 namespace hal
 {
+    ModuleIdentificationPlugin::ModuleIdentificationPlugin()
+    {
+        m_extensions.push_back(new GuiExtensionModuleIdentification());
+    }
+
     extern std::unique_ptr<BasePluginInterface> create_plugin_instance()
     {
         return std::make_unique<ModuleIdentificationPlugin>();
@@ -19,7 +25,7 @@ namespace hal
 
     std::string ModuleIdentificationPlugin::get_name() const
     {
-        return std::string("Module Identification");
+        return std::string("module_identification");
     }
 
     std::string ModuleIdentificationPlugin::get_version() const
@@ -29,16 +35,15 @@ namespace hal
 
     std::string ModuleIdentificationPlugin::get_description() const
     {
-        return std::string("Plugin for Module Classification against a library of predefined types.");
+        return std::string("Plugin for module classification against a library of predefined types.");
     }
 
-    ModuleIdentificationPlugin::ModuleIdentificationPlugin()
+    std::set<std::string> ModuleIdentificationPlugin::get_dependencies() const
     {
-        m_extensions.push_back(new GuiExtensionModuleIdentification());
-    }
-
-    void ModuleIdentificationPlugin::initialize()
-    {
+        std::set<std::string> retval;
+        retval.insert("boolean_influence");
+        retval.insert("z3_utils");
+        return retval;
     }
 
     /**
@@ -174,7 +179,9 @@ namespace hal
         else
         {
             if (!m_button_clicked)
+            {
                 return;
+            }
 
             types_to_check = m_types_to_check;
         }

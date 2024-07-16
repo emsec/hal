@@ -4,6 +4,7 @@
 #include "module_identification/api/configuration.h"
 #include "module_identification/api/module_identification.h"
 #include "module_identification/api/result.h"
+#include "module_identification/plugin_module_identification.h"
 #include "module_identification/types/architecture_types.h"
 #include "module_identification/types/candidate_types.h"
 #include "module_identification/types/multithreading_types.h"
@@ -13,9 +14,70 @@ namespace hal
 {
     namespace module_identification
     {
-        PYBIND11_MODULE(module_identification, m)
+#ifdef PYBIND11_MODULE
+        PYBIND11_MODULE(hawkeye, m)
         {
-            m.doc() = R"(Module Identification plugin in HAL.)";
+            m.doc() = "Plugin for module classification against a library of predefined types.";
+#else
+        PYBIND11_PLUGIN(hawkeye)
+        {
+            py::module m("hawkeye", "Plugin for module classification against a library of predefined types.");
+#endif    // ifdef PYBIND11_MODULE
+
+            py::class_<ModuleIdentificationPlugin, RawPtrWrapper<ModuleIdentificationPlugin>, BasePluginInterface> py_module_identification_plugin(
+                m, "ModuleIdentificationPlugin", R"(This class provides an interface to integrate the module identification tool as a plugin within the HAL framework.)");
+
+            py_module_identification_plugin.def_property_readonly("name", &ModuleIdentificationPlugin::get_name, R"(
+                The name of the plugin.
+
+                :type: str
+            )");
+
+            py_module_identification_plugin.def("get_name", &ModuleIdentificationPlugin::get_name, R"(
+                Get the name of the plugin.
+
+                :returns: The name of the plugin.
+                :rtype: str
+            )");
+
+            py_module_identification_plugin.def_property_readonly("version", &ModuleIdentificationPlugin::get_version, R"(
+                The version of the plugin.
+
+                :type: str
+            )");
+
+            py_module_identification_plugin.def("get_version", &ModuleIdentificationPlugin::get_version, R"(
+                Get the version of the plugin.
+
+                :returns: The version of the plugin.
+                :rtype: str
+            )");
+
+            py_module_identification_plugin.def_property_readonly("description", &ModuleIdentificationPlugin::get_description, R"(
+                The description of the plugin.
+
+                :type: str
+            )");
+
+            py_module_identification_plugin.def("get_description", &ModuleIdentificationPlugin::get_description, R"(
+                Get the description of the plugin.
+
+                :returns: The description of the plugin.
+                :rtype: str
+            )");
+
+            py_module_identification_plugin.def_property_readonly("dependencies", &ModuleIdentificationPlugin::get_dependencies, R"(
+                A set of plugin names that this plugin depends on.
+
+                :type: set[str]
+            )");
+
+            py_module_identification_plugin.def("get_dependencies", &ModuleIdentificationPlugin::get_dependencies, R"(
+                Get a set of plugin names that this plugin depends on.
+
+                :returns: A set of plugin names that this plugin depends on.
+                :rtype: set[str]
+            )");
 
             // Define Configuration class
             py::class_<Configuration> py_configuration(m, "Configuration", R"(
@@ -144,8 +206,11 @@ namespace hal
                 The result of a module identification run containing the candidates.
             )");
 
-            py_result.def(
-                py::init<hal::Netlist*, const std::vector<std::pair<BaseCandidate, VerifiedCandidate>>&, const std::string&>(), py::arg("nl"), py::arg("result"), py::arg("timing_stats_json") = "", R"(
+            py_result.def(py::init<hal::Netlist*, const std::vector<std::pair<BaseCandidate, VerifiedCandidate>>&, const std::string&>(),
+                          py::arg("nl"),
+                          py::arg("result"),
+                          py::arg("timing_stats_json") = "",
+                          R"(
                 Constructor for `Result`.
 
                 :param hal_py.Netlist nl: The netlist on which module identification has been performed.

@@ -14,7 +14,8 @@ if(PL_MODULE_IDENTIFICATION OR BUILD_ALL_PLUGINS)
         SHARED
         HEADER ${MODULE_IDENTIFICATION_INC}
         SOURCES ${MODULE_IDENTIFICATION_SRC} ${MODULE_IDENTIFICATION_PYTHON_SRC}
-        LINK_LIBRARIES boolean_influence dataflow nlohmann_json::nlohmann_json
+        PYDOC SPHINX_DOC_INDEX_FILE ${CMAKE_CURRENT_SOURCE_DIR}/documentation/module_identification.rst
+        LINK_LIBRARIES boolean_influence nlohmann_json::nlohmann_json
     )
 
     add_subdirectory(test)
