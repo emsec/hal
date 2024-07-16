@@ -264,20 +264,50 @@ namespace hal
                 :rtype: dict[int, module_identification.VerifiedCandidate]
             )");
 
-        py_result.def("get_candidate_gates_by_id", &module_identification::Result::get_candidate_gates_by_id, py::arg("id"), R"(
+        py_result.def(
+            "get_candidate_gates_by_id",
+            [](module_identification::Result& self, const u32 id) -> std::optional<std::vector<Gate*>> {
+                auto res = self.get_candidate_gates_by_id(id);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting gates of candidate:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("id"),
+            R"(
                 Get the gates of the candidate with the corresponding ID.
 
                 :param int id: The ID of the requested candidate.
-                :returns: The gates of the candidate on success.
-                :rtype: list[hal_py.Gate]
+                :returns: The gates of the candidate on success, ``None`` otherwise.
+                :rtype: list[hal_py.Gate] or None
             )");
 
-        py_result.def("get_candidate_by_id", &module_identification::Result::get_candidate_by_id, py::arg("id"), R"(
+        py_result.def(
+            "get_candidate_by_id",
+            [](module_identification::Result& self, const u32 id) -> std::optional<module_identification::VerifiedCandidate> {
+                auto res = self.get_candidate_by_id(id);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while getting candidate:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("id"),
+            R"(
                 Get the candidate with the corresponding ID.
 
                 :param int id: The ID of the requested candidate.
-                :returns: The verified candidate on success.
-                :rtype: module_identification.VerifiedCandidate
+                :returns: The verified candidate on success, ``None`` otherwise.
+                :rtype: module_identification.VerifiedCandidate or None
             )");
 
         py_result.def("get_all_gates", &module_identification::Result::get_all_gates, R"(
