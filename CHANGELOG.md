@@ -4,9 +4,24 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 * **WARNING:** this release breaks the API of the `bitorder_propagation` plugin
 * plugins
+  * updated `boolean_influence` plugin
+    * changed API so that no instance of the plugin needs to be created anymore to apply its algorithms
+    * file structure and namespace clean up
   * changed `bitorder_propagation` plugin
     * changed API so that no instance of the plugin needs to be created anymore to apply its algorithms
     * changed propagation logic for better results
+  * updatedd `z3_utils`plugin
+    * general code and file structure clean up as well as more documentation
+    * added comprehensive simplification logic that is able to simplify `z3::expr` using an extended rule set as the simplification of `hal::BooleanFunction`
+  * added `ModuleIdentification` plugin that allows a user to automatically search for arithmetic structures in the netlist 
+* core
+  * decorators
+    * added `NetlistModificationDecorator::add_vcc/gnd_nets()` to create ground and power nets for netlists that do not have a ground/power net already.
+  * added `SMT::Solver::query_local()` variant that directly takes an SMT representation of a Solver query.
+  * added `Netlist::get_gnd/vcc_nets()` to get all global ground and power nets
+* deps
+    * added `json.hpp` from nlohmann to deps to offer a light weight json api
+    * adapted cmake to consider the correct flags when finding and linking against the new version of Bitwuzla
 * miscellaneous
   * added backward compatibility for view management
   * slightly improved symbolic execution engine
@@ -24,6 +39,7 @@ All notable changes to this project will be documented in this file.
   * fixed layout bug which occured when leftmost node had no inputs
   * fixed missing sort indicator when sorting entries in 'Views' widget
   * fixed bug loading simulation data by cleaning map before loading controller from project
+  * fixed bug that occured when trying to generate the Boolean influence for a constant Boolean function  
 
 ## [4.3.0](v4.3.0) - 2024-07-02 13:42:55+02:00 (urgency: medium)
 * **WARNING:** this release breaks compatibility with Ubuntu 20.04 LTS
