@@ -267,7 +267,7 @@ namespace hal
         py_result.def(
             "get_candidate_gates_by_id",
             [](module_identification::Result& self, const u32 id) -> std::optional<std::vector<Gate*>> {
-                auto res = self.get_candidate_gates_by_id(id);
+                const auto res = self.get_candidate_gates_by_id(id);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -290,7 +290,7 @@ namespace hal
         py_result.def(
             "get_candidate_by_id",
             [](module_identification::Result& self, const u32 id) -> std::optional<module_identification::VerifiedCandidate> {
-                auto res = self.get_candidate_by_id(id);
+                const auto res = self.get_candidate_by_id(id);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -324,7 +324,22 @@ namespace hal
                 :rtype: set[hal_py.Gate]
             )");
 
-        py_result.def("create_modules_in_netlist", &module_identification::Result::create_modules_in_netlist, R"(
+        py_result.def(
+            "create_modules_in_netlist",
+            [](module_identification::Result& self) -> std::optional<bool> {
+                const auto res = self.create_modules_in_netlist();
+
+                if (res.is_ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while merging results:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            R"(
                 Creates a HAL module for each candidate of the result.
 
                 :returns: ```True``` on success, ```False``` otherwise.
@@ -338,16 +353,32 @@ namespace hal
                 :rtype: str
             )");
 
-        py_result.def("merge", &module_identification::Result::merge, py::arg("other"), py::arg("dana_cache"), R"(
+        py_result.def(
+            "merge",
+            [](module_identification::Result& self, const module_identification::Result& other, const std::vector<std::vector<Gate*>>& registers) -> std::optional<module_identification::Result> {
+                const auto res = self.merge(other, registers);
+                if (res.is_ok())
+                {
+                    return res.get();
+                }
+                else
+                {
+                    log_error("python_context", "error encountered while merging results:\n{}", res.get_error().get());
+                    return std::nullopt;
+                }
+            },
+            py::arg("other"),
+            py::arg("registers"),
+            R"(
                 Merges two results by combining the found verified candidates.
 
-                When both results contain a verified candidate for the same base candidate, the better one is chosen via the same post-processing used in the orignal module identificaion process.
+                When both results contain a verified candidate for the same base candidate, the better one is chosen via the same post-processing used in the original module identification process.
                 This requires that the base candidates are identical and that all gates of all candidates still exist in the netlist!
 
                 :param module_identification.Result other: Another module identification result that is merged with this one.
-                :param list[list[hal_py.Gate]] dana_cache: A list of previously identified register groupings that is used in the post-processing.
-                :returns: The merged module identification result on success.
-                :rtype: module_identification.Result
+                :param list[list[hal_py.Gate]] registers: A list of previously identified register groupings that is used in the post-processing.
+                :returns: The merged module identification result on success, ``None`` otherwise.
+                :rtype: module_identification.Result or None
             )");
 
         py_result.def_static(
@@ -366,7 +397,7 @@ namespace hal
         m.def(
             "execute",
             [](const module_identification::Configuration& config) -> std::optional<module_identification::Result> {
-                auto res = module_identification::execute(config);
+                const auto res = module_identification::execute(config);
                 if (res.is_ok())
                 {
                     return res.get();
@@ -391,7 +422,7 @@ namespace hal
         m.def(
             "execute_on_gates",
             [](const std::vector<hal::Gate*>& gates, const module_identification::Configuration& config) -> std::optional<module_identification::Result> {
-                auto res = module_identification::execute_on_gates(gates, config);
+                const auto res = module_identification::execute_on_gates(gates, config);
                 if (res.is_ok())
                 {
                     return res.get();

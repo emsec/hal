@@ -157,10 +157,10 @@ namespace hal
              * This requires that the base candidates are identical and that all gates of all candidates still exist in the netlist!
              *
              * @param[in] other - Another module identification result that is merged with this one.
-             * @param[in] dana_cache - A list of previously identified register groupings that is used in the post-processing.
+             * @param[in] registers - A list of previously identified register groupings that is used in the post-processing.
              * @returns OK() and a new merged module identification result on success, an error otherwise.
              */
-            hal::Result<Result> merge(const Result& other, const std::vector<std::vector<Gate*>>& dana_cache) const;
+            hal::Result<Result> merge(const Result& other, const std::vector<std::vector<Gate*>>& registers) const;
 
             /**
              * @brief For different runs of the plugin figure out in which iteration the plugin found the highest quality result for each candidate.

@@ -425,16 +425,6 @@ namespace hal
         {
             auto [gate_to_candidates, conflicts] = check_for_conflicting_gates(m_candidates);
 
-            // TODO remove debug printing
-            // for (const auto& [g, candidates] : conflicts)
-            // {
-            //     std::cout << "Conflicts for gate " << g->get_name() << " / " << std::to_string(g->get_id()) << ": " << std::endl;
-            //     for (const auto c_idx : candidates)
-            //     {
-            //         std::cout << "\t" << c_idx << std::endl;
-            //     }
-            // }
-
             resolve_conflicts_by_cloning(m_netlist, conflicts, gate_to_candidates, m_candidates);
 
             std::map<std::string, u32> type_counter;
@@ -442,9 +432,6 @@ namespace hal
             for (u32 candidate_idx = 0; candidate_idx < m_candidates.size(); candidate_idx++)
             {
                 auto& [base_candidate, selected_candidate] = m_candidates.at(candidate_idx);
-
-                // TODO remove debug printing
-                // std::cout << selected_candidate.get_candidate_info() << std::endl;
 
                 const std::string candidate_name = selected_candidate.get_name();
 
@@ -461,7 +448,6 @@ namespace hal
                 std::set<u32> ctrl_mapping_values;
                 for (const auto& cm : selected_candidate.m_control_signal_mappings)
                 {
-                    // u32 idx      = 0;
                     u32 ctrl_val = 0;
                     for (const auto& [net, val] : cm)
                     {
@@ -480,7 +466,6 @@ namespace hal
                 std::string word_level_operation_str = "";
                 for (const auto& [cm, bf] : selected_candidate.m_word_level_operations)
                 {
-                    // u32 idx      = 0;
                     u32 ctrl_val = 0;
                     for (const auto& [net, val] : cm)
                     {
@@ -616,19 +601,11 @@ namespace hal
 
         hal::Result<Result> Result::merge(const Result& other, const std::vector<std::vector<Gate*>>& dana_cache) const
         {
-            // TODO remove debug printing
-            // std::cout << "Starting merge with other verified candidates" << std::endl;
-
             std::unordered_set<Gate*> base_gates;
             std::map<const std::set<Gate*>, std::vector<VerifiedCandidate>> base_candidate_to_verified_candidate;
 
             for (const auto& [bc, vc] : other.m_candidates)
             {
-                // if (!vc.is_verified())
-                // {
-                //     continue;
-                // }
-
                 const std::set<Gate*> bc_set = {bc.m_gates.begin(), bc.m_gates.end()};
 
                 // check whether base candidate is already in map
@@ -664,16 +641,8 @@ namespace hal
                 base_candidate_to_verified_candidate[bc_set].push_back(vc);
             }
 
-            // TODO remove debug printing
-            // std::cout << "Continuing merge with own verified modules." << std::endl;
-
             for (const auto& [bc, vc] : m_candidates)
             {
-                // if (!vc.is_verified())
-                // {
-                //     continue;
-                // }
-
                 const std::set<Gate*> bc_set = {bc.m_gates.begin(), bc.m_gates.end()};
 
                 // check whether base candidate is already in map
@@ -712,18 +681,8 @@ namespace hal
             std::vector<std::pair<BaseCandidate, VerifiedCandidate>> result_candidates;
             for (auto& [bc_set, vc] : base_candidate_to_verified_candidate)
             {
-                // std::cout << "Found " << vc.size() << " verified candidates for base candidate " << (*bc_set.begin())->get_id() << std::endl;
-                // for (const auto& v : vc)
-                // {
-                //     std::cout << "Verified Candidate: " << std::endl;
-                //     std::cout << "\t" << enum_to_string(*(v.m_types.begin())) << std::endl;
-                // }
-
                 result_candidates.push_back(std::make_pair(BaseCandidate({bc_set.begin(), bc_set.end()}), post_processing(vc, this->m_netlist, dana_cache)));
             }
-
-            // TODO: remove debug printing
-            // std::cout << "Merged results and found " << result_candidates.size() << " verified canidates." << std::endl;
 
             return OK(Result{this->m_netlist, result_candidates});
         }
