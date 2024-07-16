@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Module Identification &mdash; hal_py v4.3.0-40-g282431504 documentation</title>
+  <title>Module Identification &mdash; hal_py v4.3.0-43-g02a1176e8 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
@@ -27,7 +27,7 @@
             <a href="index.html" class="icon icon-home"> hal_py
           </a>
               <div class="version">
-                v4.3.0-40-g282431504
+                v4.3.0-43-g02a1176e8
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -405,7 +405,7 @@ This struct holds important parameters that configure the module identification 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="module_identification.Result.create_modules_in_netlist">
-<span class="sig-name descname"><span class="pre">create_modules_in_netlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#module_identification.Result" title="module_identification.Result"><span class="pre">module_identification.Result</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::Result&lt;std::monostate&gt;</span></span></span><a class="headerlink" href="#module_identification.Result.create_modules_in_netlist" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">create_modules_in_netlist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#module_identification.Result" title="module_identification.Result"><span class="pre">module_identification.Result</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#module_identification.Result.create_modules_in_netlist" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a HAL module for each candidate of the result.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -447,17 +447,17 @@ This struct holds important parameters that configure the module identification 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="module_identification.Result.get_candidate_by_id">
-<span class="sig-name descname"><span class="pre">get_candidate_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#module_identification.Result" title="module_identification.Result"><span class="pre">module_identification.Result</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::Result&lt;hal::module_identification::VerifiedCandidate&gt;</span></span></span><a class="headerlink" href="#module_identification.Result.get_candidate_by_id" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_candidate_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#module_identification.Result" title="module_identification.Result"><span class="pre">module_identification.Result</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional[hal::module_identification::VerifiedCandidate]</span></span></span><a class="headerlink" href="#module_identification.Result.get_candidate_by_id" title="Permalink to this definition"></a></dt>
 <dd><p>Get the candidate with the corresponding ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The ID of the requested candidate.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The verified candidate on success.</p>
+<dd class="field-even"><p>The verified candidate on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#module_identification.VerifiedCandidate" title="module_identification.VerifiedCandidate">module_identification.VerifiedCandidate</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#module_identification.VerifiedCandidate" title="module_identification.VerifiedCandidate">module_identification.VerifiedCandidate</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -480,17 +480,17 @@ The ID is only unique for this result.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="module_identification.Result.get_candidate_gates_by_id">
-<span class="sig-name descname"><span class="pre">get_candidate_gates_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#module_identification.Result" title="module_identification.Result"><span class="pre">module_identification.Result</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::Result&lt;std::vector&lt;hal::Gate*,</span> <span class="pre">std::allocator&lt;hal::Gate*&gt;</span> <span class="pre">&gt;</span> <span class="pre">&gt;</span></span></span><a class="headerlink" href="#module_identification.Result.get_candidate_gates_by_id" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_candidate_gates_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#module_identification.Result" title="module_identification.Result"><span class="pre">module_identification.Result</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#module_identification.Result.get_candidate_gates_by_id" title="Permalink to this definition"></a></dt>
 <dd><p>Get the gates of the candidate with the corresponding ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The ID of the requested candidate.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The gates of the candidate on success.</p>
+<dd class="field-even"><p>The gates of the candidate on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a>[<a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate">hal_py.Gate</a>] or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -573,22 +573,22 @@ The ID is only unique for this result.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="module_identification.Result.merge">
-<span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#module_identification.Result" title="module_identification.Result"><span class="pre">module_identification.Result</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#module_identification.Result" title="module_identification.Result"><span class="pre">module_identification.Result</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dana_cache</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">hal::Result&lt;hal::module_identification::Result&gt;</span></span></span><a class="headerlink" href="#module_identification.Result.merge" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#module_identification.Result" title="module_identification.Result"><span class="pre">module_identification.Result</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#module_identification.Result" title="module_identification.Result"><span class="pre">module_identification.Result</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">registers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><span class="pre">hal_py.Gate</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#module_identification.Result" title="module_identification.Result"><span class="pre">module_identification.Result</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#module_identification.Result.merge" title="Permalink to this definition"></a></dt>
 <dd><p>Merges two results by combining the found verified candidates.</p>
-<p>When both results contain a verified candidate for the same base candidate, the better one is chosen via the same post-processing used in the orignal module identificaion process.
+<p>When both results contain a verified candidate for the same base candidate, the better one is chosen via the same post-processing used in the original module identification process.
 This requires that the base candidates are identical and that all gates of all candidates still exist in the netlist!</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>other</strong> (<a class="reference internal" href="#module_identification.Result" title="module_identification.Result"><em>module_identification.Result</em></a>) – Another module identification result that is merged with this one.</p></li>
-<li><p><strong>dana_cache</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em><em>]</em>) – A list of previously identified register groupings that is used in the post-processing.</p></li>
+<li><p><strong>registers</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><a class="reference internal" href="gate.html#hal_py.Gate" title="hal_py.Gate"><em>hal_py.Gate</em></a><em>]</em><em>]</em>) – A list of previously identified register groupings that is used in the post-processing.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The merged module identification result on success.</p>
+<dd class="field-even"><p>The merged module identification result on success, <code class="docutils literal notranslate"><span class="pre">None</span></code> otherwise.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#module_identification.Result" title="module_identification.Result">module_identification.Result</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#module_identification.Result" title="module_identification.Result">module_identification.Result</a> or <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)">None</a></p>
 </dd>
 </dl>
 </dd></dl>
