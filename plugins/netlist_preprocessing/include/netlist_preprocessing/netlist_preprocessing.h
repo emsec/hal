@@ -29,6 +29,7 @@
 #include "hal_core/utilities/result.h"
 
 #include <map>
+#include <vector>
 
 namespace hal
 {
